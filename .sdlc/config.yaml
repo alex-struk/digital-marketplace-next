@@ -1,4 +1,4 @@
-pipeline: { repo: bcgov/agentic-sdlc, ref: main }
+pipeline: { repo: alex-struk/agentic-sdlc, ref: main }
 profile: rebuild
 stack: openshift-ts
 project:
@@ -20,12 +20,12 @@ targets:
   new: { base_url: http://localhost:8080, identity: sandbox-idp }
 policy:
   gates:
-    G0: { holder: "agent:product-owner", escalate_to: tech-lead }
-    G1: { holder: tech-lead }
-    G-DESIGN: { holder: ux-reviewer }
-    G2: { holder: "agent:architect", escalate_to: tech-lead }
+    G0: { holder: "agent:product-owner", escalate_to: tech-lead, human_sample_per_week: 5 }
+    G1: { holder: "agent:product-owner", escalate_to: tech-lead, human_sample_per_week: 5 }
+    G-DESIGN: { holder: "agent:ux-reviewer", escalate_to: tech-lead, human_sample_per_week: 5 }
+    G2: { holder: "agent:architect", escalate_to: tech-lead, human_sample_per_week: 5 }
     G3: { holder: "agent:reviewer", escalate_to: tech-lead, human_sample_per_week: 5 }
-    G-POL: { holder: tech-lead }
+    G-POL: { holder: "agent:tech-lead", escalate_to: tech-lead, human_sample_per_week: 5 }
   default_tier: STANDARD
   rungs: {}
   triage: { direct_max_files: 3, direct_allowed_paths: [app/] }
