@@ -1,0 +1,45 @@
+{
+  "pipeline": {
+    "repo": "bcgov/agentic-sdlc",
+    "ref": "main",
+    "commit": "f079e5592848ca3ca7dca6bb3611b7e09ca3f5ae"
+  },
+  "packs": [
+    {
+      "repo": "mattpocock/skills",
+      "url": "https://github.com/mattpocock/skills.git",
+      "ref": "3cca18b368ae95cdbdebbff572ccafa662551015",
+      "commit": "3cca18b368ae95cdbdebbff572ccafa662551015",
+      "skills": [
+        "grilling",
+        "domain-modeling",
+        "prototype",
+        "tdd",
+        "code-review"
+      ],
+      "name": "skills"
+    },
+    {
+      "repo": "bcgov/crow",
+      "url": "https://github.com/bcgov/crow.git",
+      "ref": "e0808300c45ef750c59b3a1df194872353ee539b",
+      "commit": "e0808300c45ef750c59b3a1df194872353ee539b",
+      "skills": [
+        "crow-bcgov-ux"
+      ],
+      "name": "crow"
+    },
+    {
+      "repo": "bcgov/agent-skills",
+      "url": "https://github.com/bcgov/agent-skills.git",
+      "ref": "e48c2a7f9f981980338ba46305e481c43087a15b",
+      "commit": "e48c2a7f9f981980338ba46305e481c43087a15b",
+      "skills": [
+        "github-actions",
+        "openshift-deployment"
+      ],
+      "name": "agent-skills"
+    }
+  ],
+  "created": "2026-09-06T08:26:39.837Z"
+}
