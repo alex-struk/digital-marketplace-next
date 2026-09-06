@@ -1,0 +1,7 @@
+# Gate log
+
+| When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-06T16:18:34.048Z | probe-ruling | G3 | approve | agent:reviewer | agent-held, unsampled |  | sample |
+| 2026-09-06T09:25:55.241Z | gates-simulated-v1 | G-POL | approve | tech-lead | human |  |  |
+| 2026-09-06T09:25:53.831Z | constitution-v1 | G-POL | approve | tech-lead | human |  |  |

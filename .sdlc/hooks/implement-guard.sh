@@ -24,6 +24,15 @@ let s=""; process.stdin.on("data",d=>s+=d).on("end",()=>{
 case "$rel" in ..|../*) exit 0 ;; esac
 
 stage="${SDLC_STAGE:-build}"
+
+# Two shapes of rule. `blocked` is a deny list: everything matching it is refused and
+# everything else allowed. `allowed` is the inverse, for a stage whose territory is one
+# directory — writing "everything except app/" as a deny regex is not expressible in the
+# POSIX ERE `[[ =~ ]]` uses, which has no negative lookahead. A stage sets one or the
+# other, never both. `.` as a deny pattern matches every non-empty path: block all.
+allowed=''
+blocked=''
+reason=''
 case "$stage" in
   build|verify|review-and-ship)
     blocked='^(spec/|tests/acceptance/|constitution\.md$|\.sdlc/config\.yaml$|\.github/workflows/)' ;;
@@ -33,12 +42,28 @@ case "$stage" in
     blocked='^(app/|tests/acceptance/|spec/|constitution\.md$|\.sdlc/)' ;;
   intent|archaeology|ratify|design|plan)
     blocked='^(app/|tests/acceptance/|tests/adapters/|\.github/workflows/|\.sdlc/config\.yaml$)' ;;
+  probe)
+    # The probe stage exists to prove the runner: one file under app/, nothing else.
+    allowed='^app/' ;;
+  rule)
+    # A persona ruling on a proposal reads and answers. It writes nothing at all.
+    blocked='.' ;;
   *)
-    blocked='^$' ;;
+    # A stage nobody wrote a row for gets no territory. The previous default allowed
+    # every path, so a typo in SDLC_STAGE silently turned the guard off.
+    blocked='.'
+    reason="unknown stage '$stage'; add it to the guard table" ;;
 esac
 
-if [[ "$rel" =~ $blocked ]]; then
-  echo "sdlc implement guard: stage '$stage' may not edit '$rel'. Run the stage that owns this path, or set SDLC_STAGE." >&2
-  exit 2
+if [[ -n "$allowed" ]]; then
+  [[ "$rel" =~ $allowed ]] && exit 0
+elif [[ ! "$rel" =~ $blocked ]]; then
+  exit 0
 fi
-exit 0
+
+if [[ -n "$reason" ]]; then
+  echo "sdlc implement guard: $reason" >&2
+else
+  echo "sdlc implement guard: stage '$stage' may not edit '$rel'. Run the stage that owns this path, or set SDLC_STAGE." >&2
+fi
+exit 2
