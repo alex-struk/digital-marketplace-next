@@ -1,0 +1,6 @@
+# Roles a test can act as, and how a test signs in as each on every target.
+# identity: sandbox-idp means a Keycloak (or OIDC mock) container seeded with these users.
+personas: []
+# - id: public-sector-admin
+#   can: [create opportunity, publish opportunity, score proposals]
+#   sign_in: { sandbox-idp: { username: admin-1 }, session-route: { role: admin } }

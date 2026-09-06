@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "deny": [
+      "Bash(git push*)", "Bash(git merge*)", "Bash(git rebase*)", "Bash(git reset --hard*)",
+      "Bash(git commit --no-verify*)", "Bash(git commit -n *)",
+      "Bash(gh pr merge*)", "Bash(gh pr review*)", "Bash(gh pr close*)", "Bash(gh release*)", "Bash(gh secret*)",
+      "Bash(oc *)", "Bash(kubectl *)", "Bash(helm *)",
+      "Bash(npm publish*)", "Bash(docker push*)",
+      "Read(.env*)", "Read(**/*.pem)", "Read(**/*.key)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      { "matcher": "Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [{ "type": "command", "command": "bash .sdlc/hooks/implement-guard.sh" }] }
+    ]
+  }
+}

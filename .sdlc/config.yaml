@@ -1,0 +1,41 @@
+pipeline: { repo: bcgov/agentic-sdlc, ref: main }
+profile: rebuild
+stack: openshift-ts
+project:
+  name: digital-marketplace-next
+  domains: [opportunities, proposals, organizations, users, evaluation, notifications, content, files]
+sources:
+  old:
+    repo: https://github.com/bcgov/digital_marketplace
+    commit: b0f0c99c768b528b9397925478d8185e2cd0b179
+    docs: [README.md, docs/]
+    exclude: [cypress/, tests/]
+oracle:
+  target: old
+  compose: sources/old/docker-compose.yml
+  seed: tests/seed/
+  base_url: http://localhost:3000
+  identity: session-route
+targets:
+  new: { base_url: http://localhost:8080, identity: sandbox-idp }
+policy:
+  gates:
+    G0: { holder: "agent:product-owner", escalate_to: tech-lead }
+    G1: { holder: tech-lead }
+    G-DESIGN: { holder: ux-reviewer }
+    G2: { holder: "agent:architect", escalate_to: tech-lead }
+    G3: { holder: "agent:reviewer", escalate_to: tech-lead, human_sample_per_week: 5 }
+    G-POL: { holder: tech-lead }
+  default_tier: STANDARD
+  rungs: {}
+  triage: { direct_max_files: 3, direct_allowed_paths: [app/] }
+  budgets: { archaeology: 4000000, derive-tests: 2000000, build: 3000000, review: 1000000 }
+skills:
+  packs:
+    - { repo: mattpocock/skills, ref: 3cca18b368ae95cdbdebbff572ccafa662551015, skills: [grilling, domain-modeling, prototype, tdd, code-review] }
+    - { repo: bcgov/crow, ref: e0808300c45ef750c59b3a1df194872353ee539b, skills: [crow-bcgov-ux] }
+    - { repo: bcgov/agent-skills, ref: e48c2a7f9f981980338ba46305e481c43087a15b, skills: [github-actions, openshift-deployment] }
+    - { repo: DietrichGebert/ponytail, ref: 974d940a1c5344210874150b98ff0d2c861fab6a, skills: [ponytail], enabled: false }
+  extra: []
+egress:
+  rules: [E-1, E-2, E-3, E-4]

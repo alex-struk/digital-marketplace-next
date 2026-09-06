@@ -1,0 +1,7 @@
+# Pages, and the actions and observations each offers. Test IDs are filled at the design gate.
+pages: []
+# - id: opportunity
+#   route: /opportunities/:id
+#   title: "Opportunity"
+#   actions: { publish: { test_id: null } }
+#   observations: { status: { test_id: null } }
