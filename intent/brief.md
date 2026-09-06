@@ -1,0 +1,7 @@
+# Digital Marketplace rebuild
+
+The Digital Marketplace administers three procurement programs for the BC Public Service: Code With Us, Sprint With Us and Team With Us. Public sector staff create and publish procurement opportunities; vendors register organisations, affiliate team members, and submit proposals; staff evaluate proposals through defined stages and award the opportunity. The existing application is a full-stack TypeScript system on a custom Elm-style front-end framework, Express and Knex over PostgreSQL, with Keycloak sign-in, deployed on OpenShift.
+
+We are rebuilding it on a modern, opinionated stack while keeping its behaviour and its PostgreSQL schema. The rebuild runs only in sandbox environments; nothing ships to the live service. The purpose is twofold: prove that an agentic pipeline can recover a specification from an existing system and rebuild it to that specification with measurable parity, and produce a modern code base that could later replace the old one if the product owners choose to.
+
+Constraints: the existing database schema is kept unless a criterion requires a change; sign-in stays Keycloak; accessibility to WCAG 2.1 AA; the BC Design System for the user interface; no personal data in fixtures; the old application's own tests are not consulted when writing the specification. Open questions we expect the pipeline to surface rather than answer: which recovered behaviours are bugs rather than intent, and which programs' variants differ only by configuration.
