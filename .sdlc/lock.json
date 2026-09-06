@@ -2,7 +2,7 @@
   "pipeline": {
     "repo": "bcgov/agentic-sdlc",
     "ref": "main",
-    "commit": "f079e5592848ca3ca7dca6bb3611b7e09ca3f5ae"
+    "commit": "779a920c13ef75e1a2c2db9ee2a6facdcd6b819c"
   },
   "packs": [
     {
@@ -17,7 +17,7 @@
         "tdd",
         "code-review"
       ],
-      "name": "skills"
+      "name": "mattpocock-skills"
     },
     {
       "repo": "bcgov/crow",
@@ -27,7 +27,7 @@
       "skills": [
         "crow-bcgov-ux"
       ],
-      "name": "crow"
+      "name": "bcgov-crow"
     },
     {
       "repo": "bcgov/agent-skills",
@@ -38,8 +38,8 @@
         "github-actions",
         "openshift-deployment"
       ],
-      "name": "agent-skills"
+      "name": "bcgov-agent-skills"
     }
   ],
-  "created": "2026-09-06T08:26:39.837Z"
+  "created": "2026-09-06T09:09:15.034Z"
 }

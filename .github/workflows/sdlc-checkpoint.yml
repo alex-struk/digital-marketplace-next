@@ -9,4 +9,6 @@ jobs:
         with: { fetch-depth: 0 }
       - uses: actions/setup-node@v4
         with: { node-version: "24" }
-      - run: npx --yes github:bcgov/agentic-sdlc#main checks --json
+      # Pinned by `sdlc init` to the commit recorded in .sdlc/lock.json.
+      # Configured ref: main
+      - run: npx --yes github:bcgov/agentic-sdlc#779a920c13ef75e1a2c2db9ee2a6facdcd6b819c checks --json

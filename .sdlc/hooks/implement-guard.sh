@@ -4,13 +4,24 @@
 # Stage comes from SDLC_STAGE; unset means "build", the most restrictive default.
 set -uo pipefail
 
-path="$(node -e '
+# The blocked-path table below is written in project-relative form, so the incoming
+# path is normalised to that form first: "./spec/spec.md", "spec/../spec/spec.md" and
+# an absolute path inside the project all reduce to "spec/spec.md".
+rel="$(node -e '
+const path = require("node:path");
 let s=""; process.stdin.on("data",d=>s+=d).on("end",()=>{
-  try { const j=JSON.parse(s); const t=j.tool_input||{}; console.log(t.file_path||t.path||t.notebook_path||""); }
-  catch { console.log(""); }
+  let p = "";
+  try { const j=JSON.parse(s); const t=j.tool_input||{}; p = t.file_path||t.path||t.notebook_path||""; }
+  catch { p = ""; }
+  if (!p) { console.log(""); return; }
+  const base = process.env.PWD || process.cwd();
+  console.log(path.relative(base, path.resolve(base, p)));
 });')"
-[[ -z "$path" ]] && exit 0
-rel="${path#"$PWD"/}"
+[[ -z "$rel" ]] && exit 0
+
+# A path that resolves outside the project is none of the pipeline stage's business:
+# agents legitimately write scratch files to temp directories.
+case "$rel" in ..|../*) exit 0 ;; esac
 
 stage="${SDLC_STAGE:-build}"
 case "$stage" in

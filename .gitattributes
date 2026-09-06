@@ -1,0 +1,4 @@
+# The run record is one append-only file per day. Two proposals opened on the same
+# day both append to it, so merging the second one into main is a content conflict
+# on a file where both sides are simply correct. A union merge keeps both lines.
+.sdlc/runs/*.md merge=union
