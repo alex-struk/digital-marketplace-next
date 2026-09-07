@@ -4,41 +4,41 @@
 
 | id | test |
 | --- | --- |
-| R-3.1 | — |
-| R-3.2 | — |
-| R-3.3 | — |
+| R-3.1 | acceptance/organizations/R-3.1.spec.ts |
+| R-3.2 | acceptance/organizations/R-3.2.spec.ts |
+| R-3.3 | acceptance/organizations/R-3.3.spec.ts |
 | R-3.4 | — |
 | R-3.5 | — |
-| R-3.6 | — |
-| R-3.7 | — |
-| R-3.8 | — |
-| R-3.9 | — |
-| R-3.10 | — |
-| R-3.11 | — |
-| R-3.12 | — |
-| R-3.13 | — |
-| R-3.14 | — |
-| R-3.15 | — |
+| R-3.6 | acceptance/organizations/R-3.6.spec.ts |
+| R-3.7 | acceptance/organizations/R-3.7.spec.ts |
+| R-3.8 | acceptance/organizations/R-3.8.spec.ts |
+| R-3.9 | acceptance/organizations/R-3.9.spec.ts |
+| R-3.10 | acceptance/organizations/R-3.10.spec.ts |
+| R-3.11 | acceptance/organizations/R-3.11.spec.ts |
+| R-3.12 | acceptance/organizations/R-3.12.spec.ts |
+| R-3.13 | acceptance/organizations/R-3.13.spec.ts |
+| R-3.14 | acceptance/organizations/R-3.14.spec.ts |
+| R-3.15 | acceptance/organizations/R-3.15.spec.ts |
 | R-3.16 | — |
-| R-3.17 | — |
-| R-3.18 | — |
-| R-3.19 | — |
-| R-3.20 | — |
-| R-3.21 | — |
-| R-3.22 | — |
-| R-3.23 | — |
-| R-3.24 | — |
-| R-3.25 | — |
-| R-3.26 | — |
-| R-3.27 | — |
-| R-3.28 | — |
+| R-3.17 | not testable: The only way the surface creates an invitation is organization-edit's add_team_members, whose subject is email addresses; no page in the contract offers a membership type on an invitation, so a test cannot send one other than the "member" the team surface always sends, and therefore cannot reach the rejection of any other type. Needs an add_team_members that carries a membership type, and an observation of the invalid-membership-type refusal. |
+| R-3.18 | acceptance/organizations/R-3.18.spec.ts |
+| R-3.19 | acceptance/organizations/R-3.19.spec.ts |
+| R-3.20 | not testable: The criterion turns entirely on telling a refusal apart from an empty answer, and no page in the organizations domain carries a refusal observation — organization-list offers organization_name, owner_name, the two qualification marks and pagination, none of which distinguishes "you are not permitted" from "you may act for nothing". Needs an observation such as organization-list.refused_when_not_permitted, or a page of its own for the organizations one may act on behalf of. |
+| R-3.21 | acceptance/organizations/R-3.21.spec.ts |
+| R-3.22 | acceptance/organizations/R-3.22.spec.ts |
+| R-3.23 | acceptance/organizations/R-3.23.spec.ts |
+| R-3.24 | acceptance/organizations/R-3.24.spec.ts |
+| R-3.25 | acceptance/organizations/R-3.25.spec.ts |
+| R-3.26 | acceptance/organizations/R-3.26.spec.ts |
+| R-3.27 | acceptance/organizations/R-3.27.spec.ts |
+| R-3.28 | acceptance/organizations/R-3.28.spec.ts |
 | R-3.29 | — |
-| R-3.30 | — |
-| R-3.31 | — |
-| R-3.32 | — |
-| R-3.33 | — |
-| R-3.34 | — |
-| R-3.35 | — |
+| R-3.30 | acceptance/organizations/R-3.30.spec.ts |
+| R-3.31 | acceptance/organizations/R-3.31.spec.ts |
+| R-3.32 | acceptance/organizations/R-3.32.spec.ts |
+| R-3.33 | acceptance/organizations/R-3.33.spec.ts |
+| R-3.34 | acceptance/organizations/R-3.34.spec.ts |
+| R-3.35 | not testable: The claim is about where the accept and the decline choice inside an invitation email lead. The email observable reaches a message's subject, snippet and recipient through the mail catcher, and the Mail fixture exposes only those, so a test cannot read the message body or follow either choice; organization-user-memberships also carries no observation of an accept or a decline confirmation standing ready. Needs a mail observation of the message body or its links, and an observation of the prepared confirmation on organization-user-memberships. |
 
 ### R-3.1 · v1 · confirmed · accepted
 

@@ -8,7 +8,7 @@ Profile: rebuild
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 36/50 (n/t 14) |
 | proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 |  |
-| organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 |  |
+| organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 | 28/31 (n/t 3) |
 | users | 0 | 34 | 0 | 0 | 0 | 2 | 1 | 36 |  |
 | evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 |  |
 | notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 8/21 (n/t 13) |
@@ -44,6 +44,8 @@ Profile: rebuild
 - [derive-tests-opportunities-2](proposals/derive-tests-opportunities-2.md)
 - [derive-tests-organizations](proposals/derive-tests-organizations.md)
 - [derive-tests-organizations-2](proposals/derive-tests-organizations-2.md)
+- [derive-tests-organizations-3](proposals/derive-tests-organizations-3.md)
+- [derive-tests-organizations-4](proposals/derive-tests-organizations-4.md)
 - [derive-tests-proposals](proposals/derive-tests-proposals.md)
 - [derive-tests-proposals-2](proposals/derive-tests-proposals-2.md)
 - [derive-tests-proposals-3](proposals/derive-tests-proposals-3.md)
@@ -78,9 +80,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $110.53683
-- Rulings cost: $66.258852
-- Total cost: $176.795682
-- Agent-held rulings: 37
+- Journal cost: $112.365867
+- Rulings cost: $69.625548
+- Total cost: $181.991415
+- Agent-held rulings: 39
 - Open escalations: 0
 - Open proposals: 0
