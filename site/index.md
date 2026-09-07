@@ -6,7 +6,7 @@ Profile: rebuild
 
 | Domain | proposed | accepted | implemented | verified | monitored | obsolete | open questions | total |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| opportunities | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| opportunities | 45 | 6 | 0 | 0 | 0 | 0 | 5 | 51 |
 | proposals | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | organizations | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | users | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -14,7 +14,7 @@ Profile: rebuild
 | notifications | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | content | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | files | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **Totals** | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| **Totals** | 45 | 6 | 0 | 0 | 0 | 0 | 5 | 51 |
 
 ## Pages
 
@@ -32,6 +32,7 @@ Profile: rebuild
 
 ## Criteria
 
+- [opportunities](criteria/opportunities.md)
 
 ## Totals
 
