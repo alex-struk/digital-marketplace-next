@@ -1,5 +1,5 @@
 {
-  "generated_from": "3ef23088389d183a0850dc4e57f031b815baeef3",
+  "generated_from": "8db1c00f8672de810e4440a8a59780616fd45112",
   "criteria": [
     {
       "id": "R-1.1",
@@ -4288,6 +4288,1332 @@
       "line": 489,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
+    },
+    {
+      "id": "R-4.1",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "The first time a person signs in, the service creates an account for them and decides its kind from the identity they signed in with: a government identity makes a public sector employee, a code-hosting identity makes a vendor.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/routers/auth.ts",
+          "line": 426
+        },
+        {
+          "path": "src/back-end/lib/routers/auth.ts",
+          "line": 450
+        },
+        {
+          "path": "src/back-end/lib/routers/auth.ts",
+          "line": 476
+        },
+        {
+          "path": "src/shared/lib/resources/user.ts",
+          "line": 16
+        },
+        {
+          "path": "docs/local-development/admin-creation.md",
+          "line": 5
+        },
+        {
+          "path": "README.md",
+          "line": 67
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a person with no account on the service",
+      "when": "they sign in for the first time with their government identity",
+      "then": "an active public sector employee account exists for them carrying the name and email address the identity provider supplied and their government username, and signing in the same way again reuses that account rather than making a second one",
+      "notes": [
+        "the account is created with no job title and no profile picture; a person whose identity provider shared no email address gets an account without one, which the service allows deliberately.",
+        "an identity the service does not recognise as either kind is refused, and the person is shown the sign-in failure notice."
+      ],
+      "state": "accepted",
+      "raw": "### R-4.1 · v1 · confirmed · recovered",
+      "line": 11,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.2",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A person whose account has just been created is sent a welcome message, unless no email address is known for them.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/routers/auth.ts",
+          "line": 490
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/user.tsx",
+          "line": 11
+        },
+        {
+          "path": "CHANGELOG.md",
+          "line": 153
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a person signing in for the first time whose identity provider shared an email address",
+      "when": "their account is created",
+      "then": "they receive a message welcoming them to the service and offering a link back to sign in, and no message is attempted for a person whose account has no email address",
+      "notes": [
+        "only the tolerance of accounts without an email address is corroborated outside the code; the message itself rests on the code alone."
+      ],
+      "state": "accepted",
+      "raw": "### R-4.2 · v1 · confirmed · recovered",
+      "line": 27,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "D-users-3",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "After signing in, a person who already had an account is taken to their dashboard and a person whose account has just been created is taken to the page that completes their profile, unless they began signing in from a particular page, in which case they are returned to it.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/routers/auth.ts",
+          "line": 169
+        },
+        {
+          "path": "src/back-end/lib/routers/auth.ts",
+          "line": 87
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a returning person and a person signing in for the first time",
+      "when": "each completes sign-in without having started from a particular page",
+      "then": "the returning person lands on their dashboard and the new person lands on the profile-completion page",
+      "notes": [
+        "when sign-in was started from a page that requires signing in, that page is where both land instead."
+      ],
+      "state": "proposed",
+      "raw": "### D-users-3 · v1 · inferred · recovered",
+      "line": 39,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.3",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A vendor cannot finish signing up until they confirm they have read and agree to the service's terms and conditions and its privacy policy; a public sector employee is never asked to, and the moment of acceptance is recorded on the vendor's account.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/sign-up/step-two.tsx",
+          "line": 184
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/sign-up/step-two.tsx",
+          "line": 229
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/sign-up/step-two.tsx",
+          "line": 244
+        },
+        {
+          "path": "src/shared/lib/resources/user.ts",
+          "line": 103
+        },
+        {
+          "path": "src/back-end/lib/resources/user.ts",
+          "line": 289
+        },
+        {
+          "path": "CHANGELOG.md",
+          "line": 133
+        }
+      ],
+      "reconciliation": "aligned",
+      "given": "a vendor on the profile-completion page with the agreement box unticked",
+      "when": "they try to complete their profile",
+      "then": "the completion control is unavailable until they tick the box, and once they complete it their account records the date and time they agreed",
+      "notes": [
+        "acceptance is remembered twice — as the acceptance that currently stands and as the date terms were last accepted at all; the second survives a later withdrawal of the first (see R-4.15)."
+      ],
+      "state": "accepted",
+      "raw": "### R-4.3 · v1 · confirmed · recovered",
+      "line": 50,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "D-users-4",
+      "version": 1,
+      "confidence": "open",
+      "origin": "recovered",
+      "statement": "The profile-completion page is offered only to vendors; anyone else who reaches it is sent to their dashboard, as is a vendor who has completed it before.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/sign-up/step-two.tsx",
+          "line": 61
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/sign-up/step-two.tsx",
+          "line": 65
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a public sector employee signing in for the first time, and a vendor who has already agreed to the terms once",
+      "when": "each is sent to the profile-completion page",
+      "then": "both are moved straight on to their dashboard without being asked to confirm anything",
+      "notes": [
+        "every newly created account is sent to this page regardless of kind, so a public sector employee is never asked to confirm their details and never sees the notification choice offered there. Whether that is intended could not be settled from the source.",
+        "Should a public sector employee be asked to confirm their name, email address and job title, and be offered the new-opportunity notification choice, when their account is first created - or should they continue to be sent straight to the dashboard? The profile-completion page is where that notification choice is first offered and a public sector employee never sees it there, so answering this decides whether the page admits them or the choice moves elsewhere."
+      ],
+      "state": "proposed",
+      "raw": "### D-users-4 · v1 · open · recovered",
+      "line": 65,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.4",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A person whose account an administrator deactivated cannot sign in; they are shown a sign-in failure notice instead of being let in.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/routers/auth.ts",
+          "line": 504
+        },
+        {
+          "path": "src/back-end/lib/routers/auth.ts",
+          "line": 526
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/notice.tsx",
+          "line": 37
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an account an administrator has deactivated",
+      "when": "that person signs in through the identity provider",
+      "then": "no session is created and they are shown a page saying sign-in failed and inviting them to try again",
+      "notes": [
+        "outside production the service also offers direct sign-in routes that create a session without checking whether the account is active (see D-users-29), so this rule cannot be exercised through them."
+      ],
+      "state": "accepted",
+      "raw": "### R-4.4 · v1 · confirmed · recovered",
+      "line": 77,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.5",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A person who deactivated their own account is let back in the next time they sign in, their account becomes active again, and they are told by email that it has been reactivated.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/routers/auth.ts",
+          "line": 494
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/user.tsx",
+          "line": 126
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/user.tsx",
+          "line": 82
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a person who deactivated their own account",
+      "when": "they sign in again",
+      "then": "they are signed in, their account is active once more, and they receive a message saying they have successfully reactivated it",
+      "notes": [
+        "the message sent when a person deactivates their own account tells them this is how to come back, so signing in is the only route back for a self-deactivated account."
+      ],
+      "state": "accepted",
+      "raw": "### R-4.5 · v1 · confirmed · recovered",
+      "line": 89,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "D-users-6",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "While completing their profile a person may choose to be told about new opportunities, and the choice is saved with their account.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/sign-up/step-two.tsx",
+          "line": 186
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/sign-up/step-two.tsx",
+          "line": 270
+        },
+        {
+          "path": "src/back-end/lib/resources/user.ts",
+          "line": 234
+        },
+        {
+          "path": "src/shared/lib/resources/user.ts",
+          "line": 183
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a vendor completing their profile",
+      "when": "they tick the box offering notice of new opportunities and complete the profile",
+      "then": "their account records that notifications are on, with the moment the choice was made",
+      "notes": [
+        "turning notifications off does not record a date; the record simply becomes empty, so the service cannot say when somebody stopped wanting them."
+      ],
+      "state": "proposed",
+      "raw": "### D-users-6 · v1 · inferred · recovered",
+      "line": 101,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.6",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A person may hold only one account for a given identity and kind, and two accounts of the same kind may not share an email address.",
+      "cites": [
+        {
+          "path": "src/migrations/tasks/20191110222844_init.ts",
+          "line": 28
+        },
+        {
+          "path": "src/migrations/tasks/20200922153512_idp_id.ts",
+          "line": 19
+        },
+        {
+          "path": "src/migrations/tasks/20200118194855_user_email_constraint.ts",
+          "line": 9
+        },
+        {
+          "path": "docs/database-schema.md",
+          "line": 518
+        },
+        {
+          "path": "src/back-end/lib/db/user.ts",
+          "line": 301
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an existing vendor account using a given email address",
+      "when": "a second vendor signs in for the first time carrying the same email address, or an existing vendor edits their profile to that address",
+      "then": "neither the new account nor the change is saved",
+      "notes": [
+        "accounts with no email address do not collide with each other. Neither failure is explained to the person: the first shows a generic sign-in failure and the second a generic save failure, so a duplicate email address is indistinguishable from any other fault."
+      ],
+      "state": "accepted",
+      "raw": "### R-4.6 · v1 · confirmed · recovered",
+      "line": 114,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.7",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Whether an administrator may change another person's profile details cannot be settled: the service accepts such a change while the interface never offers it.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 163
+        },
+        {
+          "path": "src/back-end/lib/resources/user.ts",
+          "line": 174
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/profile.tsx",
+          "line": 469
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/profile.tsx",
+          "line": 626
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "an administrator viewing another person's profile",
+      "when": "they look for a way to change that person's name, email address or job title",
+      "then": "no editing control and no profile heading is shown to them, although a change submitted directly to the service would be accepted",
+      "notes": [
+        "the two sources disagree about intent. The permission rule reads \"own account or administrator\", which is the same rule used for deactivating an account, but the interface deliberately suppresses the form with the comment that administrators cannot edit other profiles. Whether the new system should widen the interface or narrow the permission is a decision, not a finding.",
+        "superseded by R-4.18"
+      ],
+      "state": "accepted",
+      "supersededBy": "R-4.18",
+      "raw": "### R-4.7 · v1 · confirmed · recovered",
+      "line": 128,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.8",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A vendor records which of the service's listed capabilities they hold by turning each on or off on their own profile, and only they may change them.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/capabilities.tsx",
+          "line": 44
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/capabilities.tsx",
+          "line": 57
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/capabilities.tsx",
+          "line": 184
+        },
+        {
+          "path": "src/shared/lib/data/capabilities.ts",
+          "line": 1
+        },
+        {
+          "path": "src/shared/lib/validation/user.ts",
+          "line": 18
+        },
+        {
+          "path": "src/migrations/tasks/20200309204727_user_capabilities.ts",
+          "line": 9
+        },
+        {
+          "path": "src/back-end/docs/user.yaml",
+          "line": 102
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a vendor with no capabilities recorded and an administrator viewing that vendor's profile",
+      "when": "the vendor turns two capabilities on and the administrator tries to turn a third on",
+      "then": "the vendor's two capabilities are saved and shown as held, and the administrator is offered no working control",
+      "notes": [
+        "each capability carries a description a person can expand before choosing it, and only capabilities from the service's own list are accepted. These are the capabilities an organization's Sprint With Us qualification counts across its team.",
+        "a person may hold no capabilities at all; an empty selection is valid."
+      ],
+      "state": "accepted",
+      "raw": "### R-4.8 · v1 · confirmed · recovered",
+      "line": 143,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.9",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A person may deactivate their own account, which ends their session at once, records the date, marks the account as deactivated by them, tells them by email and keeps the record rather than erasing it.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/user.ts",
+          "line": 360
+        },
+        {
+          "path": "src/back-end/lib/resources/user.ts",
+          "line": 368
+        },
+        {
+          "path": "src/back-end/lib/resources/user.ts",
+          "line": 386
+        },
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 167
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/profile.tsx",
+          "line": 227
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/notice.tsx",
+          "line": 24
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/user.tsx",
+          "line": 67
+        },
+        {
+          "path": "src/migrations/tasks/20191203143238_alter_columns.ts",
+          "line": 24
+        },
+        {
+          "path": "src/back-end/docs/user.yaml",
+          "line": 75
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a signed-in person on their own profile",
+      "when": "they choose to deactivate their account and confirm",
+      "then": "they are signed out, shown a page confirming the deactivation, sent a message telling them they can return by signing in again, and their account is kept with the date of deactivation and the fact that they did it themselves",
+      "notes": [
+        "the published description says the account simply becomes \"Inactive\"; the service actually distinguishes an account deactivated by its owner from one deactivated by an administrator, and only the second can be reactivated by an administrator."
+      ],
+      "state": "accepted",
+      "raw": "### R-4.9 · v1 · confirmed · recovered",
+      "line": 160,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "D-users-10",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "A person's account record may be read only by that person or by an administrator; anyone else is refused and, in the interface, is shown a missing-page instead of a refusal.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 159
+        },
+        {
+          "path": "src/back-end/lib/resources/user.ts",
+          "line": 67
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/index.tsx",
+          "line": 133
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/index.tsx",
+          "line": 149
+        },
+        {
+          "path": "src/back-end/docs/user.yaml",
+          "line": 14
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "two vendors and an administrator",
+      "when": "one vendor opens the other vendor's profile, and separately an administrator opens it",
+      "then": "the vendor is shown a missing page and the administrator sees the profile",
+      "notes": [
+        "the published interface description of this route mentions no restriction at all."
+      ],
+      "state": "proposed",
+      "raw": "### D-users-10 · v1 · inferred · recovered",
+      "line": 178,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.10",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Only an administrator may reactivate somebody else's account, and only an account that an administrator deactivated; a request to reactivate an account the person deactivated themselves is refused, although the interface offers the control.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 175
+        },
+        {
+          "path": "src/back-end/lib/resources/user.ts",
+          "line": 245
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/profile.tsx",
+          "line": 519
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/profile.tsx",
+          "line": 523
+        },
+        {
+          "path": "src/back-end/docs/user.yaml",
+          "line": 118
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "one account deactivated by an administrator and one the person deactivated themselves",
+      "when": "an administrator uses the reactivate control on each",
+      "then": "the first becomes active and the second is refused, with the interface showing only a general failure message",
+      "notes": [
+        "the interface offers a \"Reactivate Account\" control for every inactive account, without distinguishing the two kinds of inactivity, so an administrator is invited to perform an action the service will always refuse. No corrected criterion has been written because it is undecided whether an administrator should be able to reactivate a self-deactivated account or the control should simply be hidden for one.",
+        "superseded by R-4.19"
+      ],
+      "state": "accepted",
+      "supersededBy": "R-4.19",
+      "raw": "### R-4.10 · v1 · confirmed · recovered",
+      "line": 192,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "D-users-11",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "A signed-in person can open their own profile through a fixed address that stands for whoever is signed in, without knowing their own account identifier.",
+      "cites": [
+        {
+          "path": "src/shared/lib/resources/user.ts",
+          "line": 6
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/index.tsx",
+          "line": 81
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "any signed-in person",
+      "when": "they open the profile address that stands for the current person",
+      "then": "their own profile is shown",
+      "notes": [
+        "a visitor who is not signed in is sent to sign in first and returned to the profile afterwards."
+      ],
+      "state": "proposed",
+      "raw": "### D-users-11 · v1 · inferred · recovered",
+      "line": 208,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.11",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A person whose account an administrator reactivates is told that they themselves successfully reactivated it.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/user.ts",
+          "line": 310
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/user.tsx",
+          "line": 126
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/user.tsx",
+          "line": 146
+        },
+        {
+          "path": "src/back-end/lib/routers/admin/index.tsx",
+          "line": 164
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "an account an administrator deactivated",
+      "when": "an administrator reactivates it",
+      "then": "the person receives a message saying \"You have successfully reactivated your Digital Marketplace account\", which is not what happened",
+      "notes": [
+        "a correctly worded message for administrator reactivation exists and appears in the service's internal preview of every notification, but nothing sends it. No corrected criterion has been written; the fix is to send the message that already exists.",
+        "superseded by R-4.20"
+      ],
+      "state": "accepted",
+      "supersededBy": "R-4.20",
+      "raw": "### R-4.11 · v1 · confirmed · recovered",
+      "line": 219,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "D-users-12",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "A profile requires a name of between one and one hundred characters and an email address in a valid format, while the job title may be left blank and is limited to one hundred characters, and the profile picture is optional.",
+      "cites": [
+        {
+          "path": "src/shared/lib/validation/user.ts",
+          "line": 22
+        },
+        {
+          "path": "src/shared/lib/validation/user.ts",
+          "line": 26
+        },
+        {
+          "path": "src/shared/lib/validation/index.ts",
+          "line": 218
+        },
+        {
+          "path": "src/shared/lib/validation/index.ts",
+          "line": 444
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/lib/components/profile-form.tsx",
+          "line": 77
+        },
+        {
+          "path": "src/back-end/lib/resources/user.ts",
+          "line": 157
+        },
+        {
+          "path": "src/back-end/docs/user.yaml",
+          "line": 93
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a person editing their own profile",
+      "when": "they clear the name, or enter an email address that is not in a valid format",
+      "then": "the profile is not saved and the offending field is reported as invalid, while the same profile saves with the job title and picture left empty",
+      "notes": [
+        "the published interface description lists the same fields but says nothing about which are required or how long they may be, and it gives this operation a different request method than the service accepts, so it cannot be followed literally.",
+        "the sign-in username is shown on the profile as a permanently read-only field, so a person can see which identity their account belongs to but cannot change it."
+      ],
+      "state": "proposed",
+      "raw": "### D-users-12 · v1 · inferred · recovered",
+      "line": 234,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.12",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Only an administrator may grant or withdraw administrator rights, only over a public sector employee's account, and a vendor can never be granted them; withdrawing the rights returns the person to an ordinary public sector employee account.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 179
+        },
+        {
+          "path": "src/back-end/lib/resources/user.ts",
+          "line": 254
+        },
+        {
+          "path": "src/back-end/lib/resources/user.ts",
+          "line": 259
+        },
+        {
+          "path": "src/shared/lib/resources/user.ts",
+          "line": 179
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/profile.tsx",
+          "line": 302
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/profile.tsx",
+          "line": 420
+        },
+        {
+          "path": "docs/local-development/admin-creation.md",
+          "line": 15
+        },
+        {
+          "path": "src/back-end/docs/user.yaml",
+          "line": 122
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an administrator, a public sector employee and a vendor",
+      "when": "the administrator opens each of the other two profiles and ticks the administrator box",
+      "then": "the public sector employee becomes an administrator immediately, and the request against the vendor is refused with a message saying vendors cannot be granted administrator permissions",
+      "notes": [
+        "an administrator is never shown the box on their own profile, but the service would accept an administrator withdrawing their own rights, and nothing prevents the last administrator from being demoted.",
+        "an ordinary public sector employee viewing their own profile is shown their permissions as a read-only label rather than a control."
+      ],
+      "state": "accepted",
+      "raw": "### R-4.12 · v1 · confirmed · recovered",
+      "line": 251,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "D-users-13",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "The job title is asked for and shown only on a public sector employee's profile; a vendor is never asked for one.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/user/lib/components/profile-form.tsx",
+          "line": 283
+        },
+        {
+          "path": "src/shared/lib/resources/user.ts",
+          "line": 99
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a vendor and a public sector employee each editing their own profile",
+      "when": "each opens the profile form",
+      "then": "the public sector employee is offered a job title field and the vendor is not",
+      "notes": [
+        "the service accepts a job title on any account, so a vendor's stored job title, if one ever existed, is carried through their profile edits unchanged and unseen."
+      ],
+      "state": "proposed",
+      "raw": "### D-users-13 · v1 · inferred · recovered",
+      "line": 269,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.13",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "The service offers no way to create the first administrator: an administrator can only be made by another administrator, and where none exists the account kind has to be changed directly in the stored data.",
+      "cites": [
+        {
+          "path": "docs/local-development/admin-creation.md",
+          "line": 7
+        },
+        {
+          "path": "docs/local-development/admin-creation.md",
+          "line": 17
+        },
+        {
+          "path": "docs/local-development/admin-creation.md",
+          "line": 44
+        },
+        {
+          "path": "src/back-end/lib/resources/user.ts",
+          "line": 254
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a service with no administrator account at all",
+      "when": "someone looks for a way to create one through the service",
+      "then": "no such way exists, and the only route documented is to change the stored account kind outside the service",
+      "notes": [
+        "this criterion states what the service does not offer; it is corroborated by the operating instructions the application carries, which describe the manual route in detail."
+      ],
+      "state": "accepted",
+      "raw": "### R-4.13 · v1 · confirmed · recovered",
+      "line": 280,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.14",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "An administrator can browse everyone registered with the service, listed by status, then account kind, then name, showing each person's status, account kind, name and whether they are an administrator, and can narrow the list by typing part of a name.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/user/list.tsx",
+          "line": 258
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/list.tsx",
+          "line": 274
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/list.tsx",
+          "line": 452
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/list.tsx",
+          "line": 104
+        },
+        {
+          "path": "src/front-end/typescript/lib/app/view/index.tsx",
+          "line": 791
+        },
+        {
+          "path": "docs/local-development/admin-creation.md",
+          "line": 15
+        },
+        {
+          "path": "src/back-end/docs/user.yaml",
+          "line": 2
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an active vendor, a deactivated vendor and a public sector employee registered with the service",
+      "when": "an administrator opens the list of users and then types part of one person's name",
+      "then": "all three are listed with the active accounts before the inactive ones, and the list narrows to the people whose names match what was typed",
+      "notes": [
+        "the link to this list appears in the main navigation only for an administrator; the search matches words in any order within the name and ignores every other field."
+      ],
+      "state": "accepted",
+      "raw": "### R-4.14 · v1 · confirmed · recovered",
+      "line": 293,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.15",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Whether a public sector employee who is not an administrator may see the list of everyone registered cannot be settled: the service answers their request while the interface refuses to show them the page.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 152
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/list.tsx",
+          "line": 258
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/list.tsx",
+          "line": 296
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "a signed-in public sector employee who is not an administrator",
+      "when": "they open the list of users",
+      "then": "they are shown a missing page, although the same request made directly to the service returns every account",
+      "notes": [
+        "the permission rule admits both administrators and ordinary public sector employees, while the page admits administrators alone and the navigation link is offered to administrators alone. The list carries every person's email address and status, so the wider of the two readings discloses more than the interface ever intended.",
+        "superseded by R-4.21"
+      ],
+      "state": "accepted",
+      "supersededBy": "R-4.21",
+      "raw": "### R-4.15 · v1 · confirmed · recovered",
+      "line": 309,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "D-users-16",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "A person may turn the notice of new opportunities on or off at any time from their profile, and following the unsubscribe link in such a message opens their profile and asks them to confirm before stopping.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/notifications.tsx",
+          "line": 44
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/notifications.tsx",
+          "line": 101
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/notifications.tsx",
+          "line": 194
+        },
+        {
+          "path": "src/back-end/lib/resources/user.ts",
+          "line": 234
+        },
+        {
+          "path": "src/front-end/typescript/lib/app/router.ts",
+          "line": 546
+        },
+        {
+          "path": "src/back-end/docs/user.yaml",
+          "line": 113
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a person who is being told about new opportunities",
+      "when": "they follow the unsubscribe link from one of those messages",
+      "then": "their notification settings open with a question asking whether they are sure, naming the email address that would stop receiving them, and the setting changes only once they confirm",
+      "notes": [
+        "the settings page states the address notifications are sent to and tells the person to correct their profile if it is wrong; there is no separate notification address."
+      ],
+      "state": "proposed",
+      "raw": "### D-users-16 · v1 · inferred · recovered",
+      "line": 323,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.16",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "When an administrator announces that the service's terms and conditions have changed, every vendor's standing acceptance is withdrawn and each of them is asked to read and agree to the new terms before continuing; the date they last accepted any terms is kept.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/db/user.ts",
+          "line": 320
+        },
+        {
+          "path": "src/back-end/lib/resources/email-notifications.ts",
+          "line": 76
+        },
+        {
+          "path": "src/front-end/typescript/lib/components/accept-new-app-terms.tsx",
+          "line": 39
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/legal.tsx",
+          "line": 173
+        },
+        {
+          "path": "src/migrations/tasks/20201028102241_reaccept-terms.ts",
+          "line": 10
+        },
+        {
+          "path": "CHANGELOG.md",
+          "line": 133
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a vendor who accepted the terms some time ago",
+      "when": "an administrator announces that the terms have been updated",
+      "then": "the vendor's legal section shows the terms as needing attention and offers a way to review and agree to them, and agreeing records a fresh acceptance date",
+      "notes": [
+        "a person may accept the terms only for their own account; the service refuses an acceptance made on somebody else's behalf, including by an administrator. Re-accepting terms already accepted is allowed rather than refused."
+      ],
+      "state": "accepted",
+      "raw": "### R-4.16 · v1 · confirmed · recovered",
+      "line": 338,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.17",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Signing out ends the person's session both with the service and with the identity provider, and the person is told they have been signed out or, if it could not be done, that it failed.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/session.ts",
+          "line": 21
+        },
+        {
+          "path": "src/back-end/lib/resources/session.ts",
+          "line": 65
+        },
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 189
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/sign-out.tsx",
+          "line": 31
+        },
+        {
+          "path": "src/back-end/docs/session.yaml",
+          "line": 20
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a signed-in person",
+      "when": "they sign out",
+      "then": "they are told they have successfully signed out, their session no longer exists, and the pages that require signing in send them back to sign in",
+      "notes": [
+        "a person may end only their own session; a request to end anybody else's is refused."
+      ],
+      "state": "accepted",
+      "raw": "### R-4.17 · v1 · confirmed · recovered",
+      "line": 353,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "D-users-18",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "An administrator may deactivate another person's account, which records the date and who did it and tells that person by email that an administrator has removed their access.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/user.ts",
+          "line": 368
+        },
+        {
+          "path": "src/back-end/lib/resources/user.ts",
+          "line": 393
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/user.tsx",
+          "line": 96
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/profile.tsx",
+          "line": 593
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an administrator viewing an active person's profile",
+      "when": "they deactivate that account and confirm",
+      "then": "the account is marked as deactivated by an administrator, carries the date and the identity of the administrator who did it, and the person receives a message saying their access has been removed and whom to contact with questions",
+      "notes": [],
+      "state": "proposed",
+      "raw": "### D-users-18 · v1 · inferred · recovered",
+      "line": 367,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.18",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "A person's profile details - name, email address, job title and picture - may be changed only by that person. An administrator viewing somebody else's profile is offered no editing control, and the service refuses a profile change submitted against an account that is not the requester's own; an administrator's powers over another person's account are limited to deactivating it, reactivating it, and granting or withdrawing administrator rights.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-4.7",
+      "raw": "### R-4.18 · v1 · confirmed · authored",
+      "line": 379,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "D-users-19",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "A request to deactivate an account that is already inactive is refused, and an administrator is never offered the option of deactivating their own account.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/user.ts",
+          "line": 357
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/profile.tsx",
+          "line": 516
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an already deactivated account, and an administrator viewing their own profile",
+      "when": "a second deactivation is requested for the first, and the administrator looks for a deactivation control on their own profile",
+      "then": "the second request is refused with a message saying the account is already inactive, and the administrator's own profile offers no such control",
+      "notes": [
+        "nothing prevents an administrator from deactivating the last remaining administrator account other than their own, so the service can be left with no usable administrator."
+      ],
+      "state": "proposed",
+      "raw": "### D-users-19 · v1 · inferred · recovered",
+      "line": 384,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.19",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "The control to reactivate an account is offered only for an account that an administrator deactivated. An account its owner deactivated carries no reactivation control; the profile states instead that the person reactivates it themselves by signing in again, and the service continues to refuse a reactivation request made against such an account.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-4.10",
+      "raw": "### R-4.19 · v1 · confirmed · authored",
+      "line": 395,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.20",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "A person whose account an administrator reactivates is told that an administrator has reactivated their Digital Marketplace account and whom to contact with questions; the message telling a person they reactivated the account themselves is sent only when they did so by signing in again.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-4.11",
+      "raw": "### R-4.20 · v1 · confirmed · authored",
+      "line": 400,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "R-4.21",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "The list of everyone registered with the service may be read only by an administrator. The same request made by a public sector employee who is not an administrator, or by anyone else, is refused rather than answered, so the email address and account status of every registered person are never disclosed more widely than the interface offers them.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-4.15",
+      "raw": "### R-4.21 · v1 · confirmed · authored",
+      "line": 405,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "D-users-26",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "An administrator may export a contact list of active accounts as a spreadsheet file, choosing whether to include public sector employees, vendors or both, and which of first name, last name, email address and organization name to include; at least one kind and one field must be chosen.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/contact-list.ts",
+          "line": 34
+        },
+        {
+          "path": "src/back-end/lib/resources/contact-list.ts",
+          "line": 63
+        },
+        {
+          "path": "src/back-end/lib/resources/contact-list.ts",
+          "line": 91
+        },
+        {
+          "path": "src/back-end/lib/db/user.ts",
+          "line": 192
+        },
+        {
+          "path": "src/back-end/lib/validation.ts",
+          "line": 1222
+        },
+        {
+          "path": "src/back-end/lib/validation.ts",
+          "line": 1241
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/list.tsx",
+          "line": 518
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "one active vendor belonging to an active organization, one deactivated vendor and one administrator",
+      "when": "an administrator exports the contact list with both kinds and all four fields chosen",
+      "then": "the file contains the active vendor and the administrator but not the deactivated vendor, the administrator is labelled as such, and the vendor's row carries their organization's legal name",
+      "notes": [
+        "a person's name is split into a first name and a last name at the first space, so a single-word name yields an empty last name and a three-word name puts two words in the last-name column. The account-kind column appears only when both kinds were chosen. Administrators are exported whenever public sector employees are chosen. Only organizations that are still active and memberships that are still current are named, joined into one field.",
+        "the export is refused to anyone who is not an administrator, and the export control itself is unavailable until at least one kind and one field are ticked."
+      ],
+      "state": "proposed",
+      "raw": "### D-users-26 · v1 · inferred · recovered",
+      "line": 410,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "D-users-28",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "A vendor's profile carries a section setting out the privacy policy, the service's terms and conditions with the date and time they agreed to them, and the terms of each of the three programs; nobody but a vendor is shown it.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/legal.tsx",
+          "line": 23
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/legal.tsx",
+          "line": 122
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/legal.tsx",
+          "line": 173
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/index.tsx",
+          "line": 174
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a vendor who has agreed to the terms and a public sector employee",
+      "when": "each opens their own profile",
+      "then": "the vendor sees the legal section stating the date and time they agreed, and the public sector employee is not offered the section at all and is shown their profile instead if they ask for it",
+      "notes": [
+        "the privacy policy is shown as text on the page and states that agreement to it was given when the account was created, so it is never separately accepted."
+      ],
+      "state": "proposed",
+      "raw": "### D-users-28 · v1 · inferred · recovered",
+      "line": 427,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "D-users-29",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "Outside production the service offers direct sign-in routes for fixed test accounts, which create a session without consulting the identity provider and without checking whether the account is active.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/routers/auth.ts",
+          "line": 194
+        },
+        {
+          "path": "src/back-end/lib/routers/auth.ts",
+          "line": 253
+        },
+        {
+          "path": "src/back-end/lib/routers/auth.ts",
+          "line": 313
+        },
+        {
+          "path": "src/back-end/lib/routers/auth.ts",
+          "line": 218
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "a service not running in production and a fixed test account that an administrator has deactivated",
+      "when": "someone opens the direct sign-in route for that account",
+      "then": "a session is created and they are taken to the dashboard, without the identity provider being involved and without the deactivation being noticed",
+      "notes": [
+        "these routes exist only to let tests sign in, and they bypass the account-status rule in R-4.4. No corrected criterion has been written because how the new system lets tests establish an identity is a decision for its own environment arrangements rather than something to recover from here.",
+        "These routes are gated on NODE_ENV being exactly 'development' rather than on being outside production as the recovered statement has it, but either way they are test-only entrances of precisely the kind constitution article J3 forbids. The rebuilt system carries no route that establishes a session without the identity provider; tests sign in through the sandbox identity provider, which is also what makes R-4.4 testable at all, since the old routes bypass the account-status check."
+      ],
+      "state": "obsolete",
+      "raw": "### D-users-29 · v1 · inferred · recovered",
+      "line": 440,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "D-users-30",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "A profile shows different sections depending on whose it is: a vendor's own profile offers profile, capabilities, organizations, notifications and legal sections, a public sector employee's offers profile and notifications, and an administrator looking at somebody else's account sees the profile section alone.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/index.ts",
+          "line": 174
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/index.tsx",
+          "line": 163
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/profile.tsx",
+          "line": 448
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a vendor, a public sector employee and an administrator",
+      "when": "each opens their own profile, and the administrator then opens the vendor's",
+      "then": "each own profile shows the sections belonging to that kind of account, and the vendor's profile seen by the administrator shows only the profile section",
+      "notes": [
+        "asking for a section that does not belong to the profile being viewed silently shows the profile section instead of refusing. An account's status is shown only to an administrator; everyone else sees the account kind alone."
+      ],
+      "state": "proposed",
+      "raw": "### D-users-30 · v1 · inferred · recovered",
+      "line": 454,
+      "domain": "users",
+      "file": "spec/domains/users.md"
+    },
+    {
+      "id": "D-users-32",
+      "version": 1,
+      "confidence": "open",
+      "origin": "recovered",
+      "statement": "The service offers no way to take over an account or a session by presenting a shared token, although its own documentation describes one.",
+      "cites": [
+        {
+          "path": "README.md",
+          "line": 279
+        },
+        {
+          "path": "src/back-end/config.ts",
+          "line": 82
+        },
+        {
+          "path": "src/back-end/index.ts",
+          "line": 150
+        }
+      ],
+      "reconciliation": "documented-only",
+      "given": "a service configured with the shared token the documentation describes",
+      "when": "someone tries to use it to override an account or a session",
+      "then": "no route accepts it, because none is registered",
+      "notes": [
+        "the documentation describes \"service API endpoints that are only enabled in development and test environments\" which \"can be used to override user accounts and sessions\", and the setting it names is read into the configuration, but nothing else in the application refers to it and no such route is assembled. Either the feature was removed and the documentation was not, or it was documented ahead of being built; the source cannot say which.",
+        "The facility does not exist. SERVICE_TOKEN_HASH appears exactly twice in the whole of the old repository - its definition at src/back-end/config.ts:82 and its README row at README.md:279 - and no route, handler or middleware refers to it. The criterion records that the old repository's documentation is stale rather than a behaviour the rebuilt system must exhibit, and a shared token overriding user accounts and sessions would be a test-only entrance forbidden by J3 in any case, so it is carried forward in neither direction."
+      ],
+      "state": "obsolete",
+      "raw": "### D-users-32 · v1 · open · recovered",
+      "line": 466,
+      "domain": "users",
+      "file": "spec/domains/users.md"
     }
   ]
 }
