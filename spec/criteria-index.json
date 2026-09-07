@@ -1,5 +1,5 @@
 {
-  "generated_from": "b0e565f47d477cc483646add3fb27902537c22eb",
+  "generated_from": "0c9ae470a737b749560dd3a467beffe43e7d12f6",
   "criteria": [
     {
       "id": "R-5.1",
@@ -55,36 +55,6 @@
       "file": "spec/domains/evaluation.md"
     },
     {
-      "id": "D-evaluation-2",
-      "version": 1,
-      "confidence": "open",
-      "origin": "recovered",
-      "statement": "Every panel member must be an evaluator, a chair, or both; a member who is neither is rejected.",
-      "cites": [
-        {
-          "path": "src/migrations/tasks/20240527213854_add-evaluation-committee-panel-tables.ts",
-          "line": 57
-        },
-        {
-          "path": "src/migrations/tasks/20240527213854_add-evaluation-committee-panel-tables.ts",
-          "line": 149
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "an opportunity with an evaluation panel",
-      "when": "a panel member is recorded who is neither an evaluator nor the chair",
-      "then": "the panel is rejected",
-      "notes": [
-        "this rule is held only in the database, not in the code that validates a submitted panel, so the observable failure is a stored-data error rather than a field-level message. What a person actually sees when it happens could not be determined without running the old application.",
-        "the chair is allowed not to be an evaluator. The browser form offers the chair as a separate choice from the list of evaluators and marks that person as chair-but-not-evaluator unless one of the evaluators has been ticked as chair, so a panel of two evaluators plus a separate chair holds three people."
-      ],
-      "state": "proposed",
-      "raw": "### D-evaluation-2 · v1 · open · recovered",
-      "line": 34,
-      "domain": "evaluation",
-      "file": "spec/domains/evaluation.md"
-    },
-    {
       "id": "R-5.2",
       "version": 1,
       "confidence": "confirmed",
@@ -119,7 +89,7 @@
       "state": "accepted",
       "supersededBy": "R-5.9",
       "raw": "### R-5.2 · v1 · confirmed · recovered",
-      "line": 46,
+      "line": 34,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -148,44 +118,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.3 · v1 · confirmed · recovered",
-      "line": 61,
-      "domain": "evaluation",
-      "file": "spec/domains/evaluation.md"
-    },
-    {
-      "id": "D-evaluation-4",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "The evaluation panel may be set or changed while an opportunity is a draft, under review, published, or in individual question evaluation, and is fixed from the consensus stage onwards.",
-      "cites": [
-        {
-          "path": "src/shared/lib/resources/opportunity/sprint-with-us.ts",
-          "line": 631
-        },
-        {
-          "path": "src/back-end/lib/resources/opportunity/sprint-with-us/index.ts",
-          "line": 1998
-        },
-        {
-          "path": "src/shared/lib/resources/opportunity/team-with-us.ts",
-          "line": 585
-        },
-        {
-          "path": "src/back-end/lib/resources/opportunity/team-with-us/index.ts",
-          "line": 1382
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "an opportunity whose questions are being evaluated individually",
-      "when": "its owner changes the evaluation panel, and then tries again once the opportunity has moved to consensus",
-      "then": "the first change is accepted and the second is refused",
-      "notes": [
-        "because the panel is recorded against a version of the opportunity and changing it writes a new version, a panel change also appears in the opportunity's history as an edit, and the count of evaluators the service waits for changes with it."
-      ],
-      "state": "proposed",
-      "raw": "### D-evaluation-4 · v1 · inferred · recovered",
-      "line": 72,
+      "line": 49,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -228,36 +161,7 @@
       "state": "accepted",
       "supersededBy": "R-5.10",
       "raw": "### R-5.4 · v1 · confirmed · recovered",
-      "line": 85,
-      "domain": "evaluation",
-      "file": "spec/domains/evaluation.md"
-    },
-    {
-      "id": "D-evaluation-5",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "When people are added to an evaluation panel, only the people newly added are notified, and only once the opportunity has left draft.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx",
-          "line": 147
-        },
-        {
-          "path": "src/back-end/lib/resources/opportunity/sprint-with-us/index.ts",
-          "line": 2216
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "a published opportunity whose panel already names two people",
-      "when": "a third person is added to the panel",
-      "then": "only the third person is notified, and the two already on the panel are not",
-      "notes": [
-        "the same change made while the opportunity is still a draft notifies nobody."
-      ],
-      "state": "proposed",
-      "raw": "### D-evaluation-5 · v1 · inferred · recovered",
-      "line": 101,
+      "line": 60,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -296,34 +200,7 @@
       "state": "accepted",
       "supersededBy": "R-5.11",
       "raw": "### R-5.5 · v1 · confirmed · recovered",
-      "line": 112,
-      "domain": "evaluation",
-      "file": "spec/domains/evaluation.md"
-    },
-    {
-      "id": "D-evaluation-6",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "The membership of an evaluation panel is shown only to an administrator, the opportunity's owner, and the people on the panel itself.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/db/opportunity/sprint-with-us.ts",
-          "line": 892
-        },
-        {
-          "path": "src/back-end/lib/db/opportunity/sprint-with-us.ts",
-          "line": 934
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "an opportunity with an evaluation panel",
-      "when": "a vendor, or a public sector employee who is neither the owner nor on the panel, opens the opportunity",
-      "then": "no panel membership is shown to them, while an administrator, the owner and each panel member all see it",
-      "notes": [],
-      "state": "proposed",
-      "raw": "### D-evaluation-6 · v1 · inferred · recovered",
-      "line": 127,
+      "line": 76,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -362,46 +239,7 @@
       "state": "accepted",
       "supersededBy": "R-5.12",
       "raw": "### R-5.6 · v1 · confirmed · recovered",
-      "line": 137,
-      "domain": "evaluation",
-      "file": "spec/domains/evaluation.md"
-    },
-    {
-      "id": "D-evaluation-7",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "A panel member may open an opportunity they sit on the panel for even before it is public, and it is listed for them under a separate heading for work they are evaluating.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/db/opportunity/sprint-with-us.ts",
-          "line": 793
-        },
-        {
-          "path": "src/back-end/lib/db/opportunity/sprint-with-us.ts",
-          "line": 640
-        },
-        {
-          "path": "src/back-end/lib/resources/opportunity/sprint-with-us/index.ts",
-          "line": 172
-        },
-        {
-          "path": "src/front-end/typescript/lib/pages/dashboard.tsx",
-          "line": 524
-        },
-        {
-          "path": "src/front-end/typescript/lib/pages/dashboard.tsx",
-          "line": 789
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "a draft opportunity whose panel names a public sector employee who did not create it",
-      "when": "that person opens their dashboard and then the opportunity",
-      "then": "the opportunity is listed under \"Evaluations\" and they can open it, whereas another public sector employee cannot see it at all",
-      "notes": [],
-      "state": "proposed",
-      "raw": "### D-evaluation-7 · v1 · inferred · recovered",
-      "line": 152,
+      "line": 91,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -436,44 +274,7 @@
       "state": "accepted",
       "supersededBy": "R-5.13",
       "raw": "### R-5.7 · v1 · confirmed · recovered",
-      "line": 165,
-      "domain": "evaluation",
-      "file": "spec/domains/evaluation.md"
-    },
-    {
-      "id": "D-evaluation-8",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "When an opportunity closes it enters individual question evaluation, and every evaluator on its panel is told it is ready to evaluate.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/db/opportunity/sprint-with-us.ts",
-          "line": 1455
-        },
-        {
-          "path": "src/back-end/lib/db/opportunity/sprint-with-us.ts",
-          "line": 1525
-        },
-        {
-          "path": "src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx",
-          "line": 172
-        },
-        {
-          "path": "src/back-end/lib/db/opportunity/team-with-us.ts",
-          "line": 1631
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "a published opportunity with a panel of two evaluators and a separate chair, and submitted proposals against it",
-      "when": "its proposal deadline passes",
-      "then": "the opportunity moves to individual question evaluation and the two evaluators are notified, while the chair who is not an evaluator is not",
-      "notes": [
-        "this is the same closing event that moves the submitted proposals into review and gives each an anonymous proponent name; the evaluation domain inherits that from the proposals domain rather than restating it."
-      ],
-      "state": "proposed",
-      "raw": "### D-evaluation-8 · v1 · inferred · recovered",
-      "line": 179,
+      "line": 106,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -512,14 +313,305 @@
       "state": "accepted",
       "supersededBy": "R-5.14",
       "raw": "### R-5.8 · v1 · confirmed · recovered",
+      "line": 120,
+      "domain": "evaluation",
+      "file": "spec/domains/evaluation.md"
+    },
+    {
+      "id": "R-5.9",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "The service must reject an evaluation panel that names no chair, applying the same rule the browser form already applies, so that no opportunity can enter consensus with nobody able to record the agreed score.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-5.2",
+      "raw": "### R-5.9 · v1 · confirmed · authored",
+      "line": 135,
+      "domain": "evaluation",
+      "file": "spec/domains/evaluation.md"
+    },
+    {
+      "id": "R-5.10",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "The refusal shown when no proponent clears every question's minimum score must name the stage that actually follows — the Code Challenge for Sprint With Us and the Challenge for Team With Us.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-5.4",
+      "raw": "### R-5.10 · v1 · confirmed · authored",
+      "line": 140,
+      "domain": "evaluation",
+      "file": "spec/domains/evaluation.md"
+    },
+    {
+      "id": "R-5.11",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "An individual evaluation may be read only by an administrator, the opportunity's owner, and the members of that opportunity's evaluation panel, at every stage; passing the question stages does not open it to public sector employees with no connection to the opportunity.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-5.5",
+      "raw": "### R-5.11 · v1 · confirmed · authored",
+      "line": 145,
+      "domain": "evaluation",
+      "file": "spec/domains/evaluation.md"
+    },
+    {
+      "id": "R-5.12",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "When the consensus list is withheld from the opportunity's owner because they are not on the evaluation panel, the page must say so rather than opening as an empty list with no explanation.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-5.6",
+      "raw": "### R-5.12 · v1 · confirmed · authored",
+      "line": 150,
+      "domain": "evaluation",
+      "file": "spec/domains/evaluation.md"
+    },
+    {
+      "id": "R-5.13",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "Finalising the consensus scores must be refused unless every proponent still under review of the questions has a submitted consensus, so that no proponent is left neither screened in nor screened out.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-5.7",
+      "raw": "### R-5.13 · v1 · confirmed · authored",
+      "line": 155,
+      "domain": "evaluation",
+      "file": "spec/domains/evaluation.md"
+    },
+    {
+      "id": "R-5.14",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "The action that finalises consensus scores must be offered to whoever the service accepts it from — the opportunity's owner as well as an administrator — so that the browser and the service agree on who may finalise.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-5.8",
+      "raw": "### R-5.14 · v1 · confirmed · authored",
+      "line": 160,
+      "domain": "evaluation",
+      "file": "spec/domains/evaluation.md"
+    },
+    {
+      "id": "R-5.15",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Every panel member must be an evaluator, a chair, or both; a member who is neither is rejected.",
+      "cites": [
+        {
+          "path": "src/migrations/tasks/20240527213854_add-evaluation-committee-panel-tables.ts",
+          "line": 57
+        },
+        {
+          "path": "src/migrations/tasks/20240527213854_add-evaluation-committee-panel-tables.ts",
+          "line": 149
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "an opportunity with an evaluation panel",
+      "when": "a panel member is recorded who is neither an evaluator nor the chair",
+      "then": "the panel is rejected",
+      "notes": [
+        "this rule is held only in the database, not in the code that validates a submitted panel, so the observable failure is a stored-data error rather than a field-level message. What a person actually sees when it happens could not be determined without running the old application.",
+        "the chair is allowed not to be an evaluator. The browser form offers the chair as a separate choice from the list of evaluators and marks that person as chair-but-not-evaluator unless one of the evaluators has been ticked as chair, so a panel of two evaluators plus a separate chair holds three people.",
+        "superseded by R-5.37"
+      ],
+      "state": "accepted",
+      "supersededBy": "R-5.37",
+      "raw": "### R-5.15 · v1 · confirmed · recovered",
+      "line": 165,
+      "domain": "evaluation",
+      "file": "spec/domains/evaluation.md"
+    },
+    {
+      "id": "R-5.16",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "The evaluation panel may be set or changed while an opportunity is a draft, under review, published, or in individual question evaluation, and is fixed from the consensus stage onwards.",
+      "cites": [
+        {
+          "path": "src/shared/lib/resources/opportunity/sprint-with-us.ts",
+          "line": 631
+        },
+        {
+          "path": "src/back-end/lib/resources/opportunity/sprint-with-us/index.ts",
+          "line": 1998
+        },
+        {
+          "path": "src/shared/lib/resources/opportunity/team-with-us.ts",
+          "line": 585
+        },
+        {
+          "path": "src/back-end/lib/resources/opportunity/team-with-us/index.ts",
+          "line": 1382
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an opportunity whose questions are being evaluated individually",
+      "when": "its owner changes the evaluation panel, and then tries again once the opportunity has moved to consensus",
+      "then": "the first change is accepted and the second is refused",
+      "notes": [
+        "because the panel is recorded against a version of the opportunity and changing it writes a new version, a panel change also appears in the opportunity's history as an edit, and the count of evaluators the service waits for changes with it."
+      ],
+      "state": "accepted",
+      "raw": "### R-5.16 · v1 · confirmed · recovered",
+      "line": 179,
+      "domain": "evaluation",
+      "file": "spec/domains/evaluation.md"
+    },
+    {
+      "id": "R-5.17",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "When people are added to an evaluation panel, only the people newly added are notified, and only once the opportunity has left draft.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx",
+          "line": 147
+        },
+        {
+          "path": "src/back-end/lib/resources/opportunity/sprint-with-us/index.ts",
+          "line": 2216
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a published opportunity whose panel already names two people",
+      "when": "a third person is added to the panel",
+      "then": "only the third person is notified, and the two already on the panel are not",
+      "notes": [
+        "the same change made while the opportunity is still a draft notifies nobody."
+      ],
+      "state": "accepted",
+      "raw": "### R-5.17 · v1 · confirmed · recovered",
       "line": 192,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
     {
-      "id": "D-evaluation-9",
+      "id": "R-5.18",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "The membership of an evaluation panel is shown only to an administrator, the opportunity's owner, and the people on the panel itself.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/db/opportunity/sprint-with-us.ts",
+          "line": 892
+        },
+        {
+          "path": "src/back-end/lib/db/opportunity/sprint-with-us.ts",
+          "line": 934
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an opportunity with an evaluation panel",
+      "when": "a vendor, or a public sector employee who is neither the owner nor on the panel, opens the opportunity",
+      "then": "no panel membership is shown to them, while an administrator, the owner and each panel member all see it",
+      "notes": [],
+      "state": "accepted",
+      "raw": "### R-5.18 · v1 · confirmed · recovered",
+      "line": 203,
+      "domain": "evaluation",
+      "file": "spec/domains/evaluation.md"
+    },
+    {
+      "id": "R-5.19",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A panel member may open an opportunity they sit on the panel for even before it is public, and it is listed for them under a separate heading for work they are evaluating.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/db/opportunity/sprint-with-us.ts",
+          "line": 793
+        },
+        {
+          "path": "src/back-end/lib/db/opportunity/sprint-with-us.ts",
+          "line": 640
+        },
+        {
+          "path": "src/back-end/lib/resources/opportunity/sprint-with-us/index.ts",
+          "line": 172
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/dashboard.tsx",
+          "line": 524
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/dashboard.tsx",
+          "line": 789
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a draft opportunity whose panel names a public sector employee who did not create it",
+      "when": "that person opens their dashboard and then the opportunity",
+      "then": "the opportunity is listed under \"Evaluations\" and they can open it, whereas another public sector employee cannot see it at all",
+      "notes": [],
+      "state": "accepted",
+      "raw": "### R-5.19 · v1 · confirmed · recovered",
+      "line": 213,
+      "domain": "evaluation",
+      "file": "spec/domains/evaluation.md"
+    },
+    {
+      "id": "R-5.20",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "When an opportunity closes it enters individual question evaluation, and every evaluator on its panel is told it is ready to evaluate.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/db/opportunity/sprint-with-us.ts",
+          "line": 1455
+        },
+        {
+          "path": "src/back-end/lib/db/opportunity/sprint-with-us.ts",
+          "line": 1525
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx",
+          "line": 172
+        },
+        {
+          "path": "src/back-end/lib/db/opportunity/team-with-us.ts",
+          "line": 1631
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a published opportunity with a panel of two evaluators and a separate chair, and submitted proposals against it",
+      "when": "its proposal deadline passes",
+      "then": "the opportunity moves to individual question evaluation and the two evaluators are notified, while the chair who is not an evaluator is not",
+      "notes": [
+        "this is the same closing event that moves the submitted proposals into review and gives each an anonymous proponent name; the evaluation domain inherits that from the proposals domain rather than restating it."
+      ],
+      "state": "accepted",
+      "raw": "### R-5.20 · v1 · confirmed · recovered",
+      "line": 226,
+      "domain": "evaluation",
+      "file": "spec/domains/evaluation.md"
+    },
+    {
+      "id": "R-5.21",
+      "version": 1,
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "Only a person marked as an evaluator on the panel may record an individual evaluation, and only while the opportunity is in individual question evaluation.",
       "cites": [
@@ -543,46 +635,16 @@
       "notes": [
         "an evaluator who tries the same thing once the opportunity has moved to consensus is refused as well."
       ],
-      "state": "proposed",
-      "raw": "### D-evaluation-9 · v1 · inferred · recovered",
-      "line": 207,
+      "state": "accepted",
+      "raw": "### R-5.21 · v1 · confirmed · recovered",
+      "line": 239,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
     {
-      "id": "R-5.9",
+      "id": "R-5.22",
       "version": 1,
       "confidence": "confirmed",
-      "origin": "authored",
-      "statement": "The service must reject an evaluation panel that names no chair, applying the same rule the browser form already applies, so that no opportunity can enter consensus with nobody able to record the agreed score.",
-      "cites": [],
-      "notes": [],
-      "state": "accepted",
-      "replaces": "R-5.2",
-      "raw": "### R-5.9 · v1 · confirmed · authored",
-      "line": 219,
-      "domain": "evaluation",
-      "file": "spec/domains/evaluation.md"
-    },
-    {
-      "id": "R-5.10",
-      "version": 1,
-      "confidence": "confirmed",
-      "origin": "authored",
-      "statement": "The refusal shown when no proponent clears every question's minimum score must name the stage that actually follows — the Code Challenge for Sprint With Us and the Challenge for Team With Us.",
-      "cites": [],
-      "notes": [],
-      "state": "accepted",
-      "replaces": "R-5.4",
-      "raw": "### R-5.10 · v1 · confirmed · authored",
-      "line": 224,
-      "domain": "evaluation",
-      "file": "spec/domains/evaluation.md"
-    },
-    {
-      "id": "D-evaluation-11",
-      "version": 1,
-      "confidence": "inferred",
       "origin": "recovered",
       "statement": "An evaluation carries one score and one comment per question, the score being between zero and that question's maximum with at most two decimal places, and the comment being at least one word.",
       "cites": [
@@ -612,31 +674,16 @@
       "when": "they enter six, or a score with three decimal places, or leave the comment empty",
       "then": "the entry is rejected and the evaluation cannot be submitted until every question has a score in range and a comment",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-evaluation-11 · v1 · inferred · recovered",
-      "line": 229,
+      "state": "accepted",
+      "raw": "### R-5.22 · v1 · confirmed · recovered",
+      "line": 251,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
     {
-      "id": "R-5.11",
+      "id": "R-5.23",
       "version": 1,
       "confidence": "confirmed",
-      "origin": "authored",
-      "statement": "An individual evaluation may be read only by an administrator, the opportunity's owner, and the members of that opportunity's evaluation panel, at every stage; passing the question stages does not open it to public sector employees with no connection to the opportunity.",
-      "cites": [],
-      "notes": [],
-      "state": "accepted",
-      "replaces": "R-5.5",
-      "raw": "### R-5.11 · v1 · confirmed · authored",
-      "line": 242,
-      "domain": "evaluation",
-      "file": "spec/domains/evaluation.md"
-    },
-    {
-      "id": "D-evaluation-12",
-      "version": 1,
-      "confidence": "inferred",
       "origin": "recovered",
       "statement": "Scores and comments are checked when an evaluation is submitted, not when it is saved as a draft.",
       "cites": [
@@ -660,31 +707,16 @@
       "notes": [
         "the browser form checks each field as it is typed, so this is reachable through the service rather than through the form. Nothing in the code says whether unchecked drafts are intended; a human may want to rule on it."
       ],
-      "state": "proposed",
-      "raw": "### D-evaluation-12 · v1 · inferred · recovered",
-      "line": 247,
+      "state": "accepted",
+      "raw": "### R-5.23 · v1 · confirmed · recovered",
+      "line": 264,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
     {
-      "id": "R-5.12",
+      "id": "R-5.24",
       "version": 1,
       "confidence": "confirmed",
-      "origin": "authored",
-      "statement": "When the consensus list is withheld from the opportunity's owner because they are not on the evaluation panel, the page must say so rather than opening as an empty list with no explanation.",
-      "cites": [],
-      "notes": [],
-      "state": "accepted",
-      "replaces": "R-5.6",
-      "raw": "### R-5.12 · v1 · confirmed · authored",
-      "line": 259,
-      "domain": "evaluation",
-      "file": "spec/domains/evaluation.md"
-    },
-    {
-      "id": "D-evaluation-13",
-      "version": 1,
-      "confidence": "inferred",
       "origin": "recovered",
       "statement": "An evaluator may change their own evaluation only while it is still a draft and the opportunity is still in individual question evaluation; once submitted it cannot be changed at all.",
       "cites": [
@@ -712,33 +744,18 @@
       "notes": [
         "one evaluator cannot edit another's evaluation at any point, whatever its state."
       ],
-      "state": "proposed",
-      "raw": "### D-evaluation-13 · v1 · inferred · recovered",
-      "line": 264,
-      "domain": "evaluation",
-      "file": "spec/domains/evaluation.md"
-    },
-    {
-      "id": "R-5.13",
-      "version": 1,
-      "confidence": "confirmed",
-      "origin": "authored",
-      "statement": "Finalising the consensus scores must be refused unless every proponent still under review of the questions has a submitted consensus, so that no proponent is left neither screened in nor screened out.",
-      "cites": [],
-      "notes": [],
       "state": "accepted",
-      "replaces": "R-5.7",
-      "raw": "### R-5.13 · v1 · confirmed · authored",
-      "line": 277,
+      "raw": "### R-5.24 · v1 · confirmed · recovered",
+      "line": 276,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
     {
-      "id": "D-evaluation-14",
-      "version": 1,
-      "confidence": "inferred",
+      "id": "R-5.25",
+      "version": 2,
+      "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "An evaluator submits every one of their evaluations for an opportunity in a single action, and the submission is refused unless each one scores every question of every proponent.",
+      "statement": "An evaluator submits all of their existing draft evaluations for an opportunity in a single action, and the whole set is refused with \"This evaluation could not be submitted for review because it is incomplete. Please edit, complete and save the appropriate form before trying to submit it again.\" — none of it submitted — unless every evaluation in the set carries an in-range score and a comment for every question of the opportunity; the service does not check that the evaluator holds an evaluation for every proponent, so a proponent they never opened is simply absent from the set rather than blocking the submission.",
       "cites": [
         {
           "path": "src/back-end/lib/resources/opportunity/sprint-with-us/index.ts",
@@ -766,31 +783,16 @@
       "when": "they submit their scores for consensus",
       "then": "the submission is refused with \"This evaluation could not be submitted for review because it is incomplete. Please edit, complete and save the appropriate form before trying to submit it again.\" and none of the three is submitted",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-evaluation-14 · v1 · inferred · recovered",
-      "line": 282,
+      "state": "accepted",
+      "raw": "### R-5.25 · v2 · confirmed · recovered",
+      "line": 289,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
     {
-      "id": "R-5.14",
+      "id": "R-5.26",
       "version": 1,
       "confidence": "confirmed",
-      "origin": "authored",
-      "statement": "The action that finalises consensus scores must be offered to whoever the service accepts it from — the opportunity's owner as well as an administrator — so that the browser and the service agree on who may finalise.",
-      "cites": [],
-      "notes": [],
-      "state": "accepted",
-      "replaces": "R-5.8",
-      "raw": "### R-5.14 · v1 · confirmed · authored",
-      "line": 295,
-      "domain": "evaluation",
-      "file": "spec/domains/evaluation.md"
-    },
-    {
-      "id": "D-evaluation-15",
-      "version": 1,
-      "confidence": "inferred",
       "origin": "recovered",
       "statement": "A request to submit one evaluation on its own is refused; submission is only accepted as the whole set for the opportunity.",
       "cites": [
@@ -810,18 +812,18 @@
       "notes": [
         "the shared description of the evaluation interface declares a \"submit\" action on the single-evaluation route, but the service's own parser accepts only \"edit\" there and treats anything else as unreadable. The declared interface and the running service therefore disagree; the service is the stricter of the two."
       ],
-      "state": "proposed",
-      "raw": "### D-evaluation-15 · v1 · inferred · recovered",
-      "line": 300,
+      "state": "accepted",
+      "raw": "### R-5.26 · v1 · confirmed · recovered",
+      "line": 302,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
     {
-      "id": "D-evaluation-16",
-      "version": 1,
-      "confidence": "inferred",
+      "id": "R-5.27",
+      "version": 2,
+      "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "An opportunity moves from individual evaluation to consensus by itself, once every evaluator has submitted a score for every question of every proponent, and the chair and the opportunity's owner are told it is ready.",
+      "statement": "An opportunity moves from individual evaluation to consensus by itself once the submitted individual scores number one per question per proponent per evaluator, counted against the panel and the questions of the opportunity's most recent version but only over the proponents named in the submission that triggers the check, and the chair and the opportunity's owner are then told it is ready.",
       "cites": [
         {
           "path": "src/back-end/lib/db/opportunity/sprint-with-us.ts",
@@ -847,18 +849,18 @@
       "notes": [
         "the count is taken against the panel and the questions of the opportunity's most recent version, so changing the panel during individual evaluation changes how many submissions are awaited."
       ],
-      "state": "proposed",
-      "raw": "### D-evaluation-16 · v1 · inferred · recovered",
-      "line": 311,
+      "state": "accepted",
+      "raw": "### R-5.27 · v2 · confirmed · recovered",
+      "line": 313,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
     {
-      "id": "D-evaluation-17",
-      "version": 1,
-      "confidence": "inferred",
+      "id": "R-5.28",
+      "version": 2,
+      "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "Once an opportunity reaches consensus, every member of its panel can read every evaluator's individual scores and comments for a proponent, and before then no one but the evaluator who wrote them can.",
+      "statement": "Once an opportunity reaches consensus, every member of its panel can read every evaluator's individual scores and comments for a proponent, and before then no one but the evaluator who wrote them can; an administrator who is not on the panel gains access to individual evaluations only after the question stages have passed, at code challenge, team scenario or awarded, whereas a consensus may be read by an administrator at any stage.",
       "cites": [
         {
           "path": "src/back-end/lib/permissions.ts",
@@ -884,16 +886,16 @@
       "notes": [
         "an administrator can read an individual evaluation at any stage."
       ],
-      "state": "proposed",
-      "raw": "### D-evaluation-17 · v1 · inferred · recovered",
-      "line": 324,
+      "state": "accepted",
+      "raw": "### R-5.28 · v2 · confirmed · recovered",
+      "line": 326,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
     {
-      "id": "D-evaluation-18",
+      "id": "R-5.29",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "Only the chair may record and change the consensus, one consensus per proponent, and only while the opportunity is in consensus.",
       "cites": [
@@ -929,16 +931,16 @@
       "notes": [
         "a consensus is scored against the same rules as an individual evaluation — one score and one comment per question, within the question's maximum."
       ],
-      "state": "proposed",
-      "raw": "### D-evaluation-18 · v1 · inferred · recovered",
-      "line": 337,
+      "state": "accepted",
+      "raw": "### R-5.29 · v1 · confirmed · recovered",
+      "line": 339,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
     {
-      "id": "D-evaluation-19",
+      "id": "R-5.30",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "The chair may reopen and resubmit a consensus as often as they like until it is finalised, unlike an individual evaluation, which is fixed once submitted.",
       "cites": [
@@ -964,16 +966,16 @@
       "when": "the chair changes an agreed score and submits again",
       "then": "the change is accepted and the consensus is recorded as submitted afresh",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-evaluation-19 · v1 · inferred · recovered",
-      "line": 352,
+      "state": "accepted",
+      "raw": "### R-5.30 · v1 · confirmed · recovered",
+      "line": 354,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
     {
-      "id": "D-evaluation-20",
+      "id": "R-5.31",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "When the chair submits the consensus, the opportunity's owner and every administrator are told.",
       "cites": [
@@ -991,16 +993,16 @@
       "when": "the chair submits them",
       "then": "the opportunity's owner and all administrators are notified that the consensus has been submitted",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-evaluation-20 · v1 · inferred · recovered",
-      "line": 364,
+      "state": "accepted",
+      "raw": "### R-5.31 · v1 · confirmed · recovered",
+      "line": 366,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
     {
-      "id": "D-evaluation-22",
+      "id": "R-5.32",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "Finalising the consensus records the agreed scores against each proponent, screens in the highest-scoring proponents that met every minimum score — at most four for Sprint With Us and at most three for Team With Us — and moves the opportunity to its next stage.",
       "cites": [
@@ -1040,16 +1042,16 @@
       "notes": [
         "a proponent that is no longer under review of the questions — withdrawn or disqualified, say — is passed over even if their agreed scores would have placed them."
       ],
-      "state": "proposed",
-      "raw": "### D-evaluation-22 · v1 · inferred · recovered",
-      "line": 374,
+      "state": "accepted",
+      "raw": "### R-5.32 · v1 · confirmed · recovered",
+      "line": 376,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
     {
-      "id": "D-evaluation-23",
+      "id": "R-5.33",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "When the consensus scores are finalised, the chair and the opportunity's owner are told.",
       "cites": [
@@ -1067,18 +1069,18 @@
       "when": "they are finalised",
       "then": "the chair and the opportunity's owner are notified that the consensus has been finalised",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-evaluation-23 · v1 · inferred · recovered",
-      "line": 390,
+      "state": "accepted",
+      "raw": "### R-5.33 · v1 · confirmed · recovered",
+      "line": 392,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
     {
-      "id": "D-evaluation-24",
-      "version": 1,
-      "confidence": "inferred",
+      "id": "R-5.34",
+      "version": 2,
+      "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "The tools for evaluating an opportunity are split by role: only an evaluator sees the evaluation instructions and the individual evaluation list, only the chair or the opportunity's owner sees the consensus list, and only the owner sees the panel itself.",
+      "statement": "The tools for evaluating an opportunity are split by role: only an evaluator sees the evaluation instructions and the individual evaluation list, only the chair or the opportunity's owner or an administrator sees the consensus list, and only the owner or an administrator sees the panel itself.",
       "cites": [
         {
           "path": "src/front-end/typescript/lib/pages/opportunity/sprint-with-us/edit/tab/index.ts",
@@ -1104,16 +1106,16 @@
       "notes": [
         "the evaluation instructions are a fixed piece of editable site content, one for each program, so what an evaluator is told can be changed without changing the service."
       ],
-      "state": "proposed",
-      "raw": "### D-evaluation-24 · v1 · inferred · recovered",
-      "line": 400,
+      "state": "accepted",
+      "raw": "### R-5.34 · v2 · confirmed · recovered",
+      "line": 402,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
     {
-      "id": "D-evaluation-25",
+      "id": "R-5.35",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "An evaluator works through the proponents one after another in anonymous-proponent order, saving as they move between them.",
       "cites": [
@@ -1137,16 +1139,16 @@
       "notes": [
         "the proponents are ordered by their anonymous names, so an evaluator never sees which organization they are scoring while the questions are being evaluated."
       ],
-      "state": "proposed",
-      "raw": "### D-evaluation-25 · v1 · inferred · recovered",
-      "line": 413,
+      "state": "accepted",
+      "raw": "### R-5.35 · v1 · confirmed · recovered",
+      "line": 415,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
     {
-      "id": "D-evaluation-30",
+      "id": "R-5.36",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "The two programs run the same evaluation from end to end, differing only in what the questions are called, how many proponents are carried forward, and what the stage that follows is named.",
       "cites": [
@@ -1178,9 +1180,24 @@
       "notes": [
         "Sprint With Us calls them team questions and carries four proponents forward; Team With Us calls them resource questions and carries three. Team With Us gained its panel about ten months after Sprint With Us did, and its tables were copied from the Sprint With Us ones."
       ],
-      "state": "proposed",
-      "raw": "### D-evaluation-30 · v1 · inferred · recovered",
-      "line": 425,
+      "state": "accepted",
+      "raw": "### R-5.36 · v1 · confirmed · recovered",
+      "line": 427,
+      "domain": "evaluation",
+      "file": "spec/domains/evaluation.md"
+    },
+    {
+      "id": "R-5.37",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "A panel member who is neither an evaluator nor the chair must be refused by the service when the panel is submitted, with a field-level message identifying the offending member, rather than being allowed through to a database constraint violation.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-5.15",
+      "raw": "### R-5.37 · v1 · confirmed · authored",
+      "line": 441,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
