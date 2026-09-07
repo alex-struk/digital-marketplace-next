@@ -1,0 +1,15 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The diff deletes all 33 notifications (R-6.*) and files (R-8.*) entries from tests/acceptance/not-testable.yaml, replacing the file's contents with 9 R-5.* entries rather than appending to it; both domains still have spec directories, so those criteria lose their recorded not-testable reasons and would report as missing tests. The receipt states the file is untouched, which holds only against the previously returned branch, not against main. Separately, R-5.9.spec.ts asserts the browser form's missingChairError, which the branch's own R-5.2 not-testable reason identifies as the pre-existing form behaviour the surface can reach — so the test cannot observe the service-level rule the criterion is about, and it additionally asserts chairField() is absent, which the criterion does not state. Condition 2 remains genuinely unmet, and the author is right to say so, but nothing checked that this file edit dropped nothing.
+conditions:
+  - "Restore the 33 R-6.* and R-8.* entries in tests/acceptance/not-testable.yaml verbatim from main and keep the 9 new R-5.* entries alongside them — the file is one registry for the whole acceptance suite, not a per-domain one — and correct the receipt sentence claiming it was untouched."
+  - "R-5.9: either add a not-testable entry on the same reasoning the branch already gives for R-5.2 (the only path to the service is the form, which refuses first), or reach the service outside the form. If the test is kept, drop the chairField() assertion, which the criterion does not state, and rename the second test, which promises a service-level claim it does not test."
+  - "R-5.14: the criterion is about who is offered the finalise action. Drop the /code challenge/i status assertion in both tests, or replace it with an observation that the action was offered and accepted — the resulting stage is R-5.32's claim."
+  - "Run `npm run typecheck` from `tests/` (or have whoever can install dependencies run it) against the 26 spec files and record the result in the receipt; the not-testable regression above is exactly the kind of thing an unverified receipt lets through."
+cost: 1.7549505
+turns: 12
+session: "fc0d148c-1319-4d21-a368-f8ac19fc769a"
+at: 2026-09-07T15:20:04.898Z
