@@ -1,3 +1,1383 @@
+# recovered from sources/old/src/back-end/docs/affiliation.yaml, avatar.yaml, counters.yaml,
+# file.yaml, metrics.yaml, organization.yaml, session.yaml, subscribers.yaml, user.yaml,
+# opportunities/code-with-us.yaml, opportunities/sprint-with-us.yaml,
+# proposals/code-with-us.yaml and proposals/sprint-with-us.yaml — the thirteen partial
+# documents sources/old/src/back-end/lib/swagger.ts assembles at run time — completed from
+# the route registrations in sources/old/src/back-end/index.ts,
+# sources/old/src/back-end/lib/crud.ts, sources/old/src/back-end/lib/routers/auth.ts,
+# sources/old/src/back-end/lib/routers/admin/index.tsx and
+# sources/old/src/back-end/lib/routers/status.ts, at commit
+# b0f0c99c768b528b9397925478d8185e2cd0b179.
+#
+# Three things about the recovered documents a reader needs:
+#
+#  - They cover thirteen of the twenty-nine resources. Every path below that they do not
+#    describe is marked "recovered from routes" and carries no summary of theirs.
+#  - Where they disagree with the running service, this document follows the service.
+#    They name POST for updates; the framework registers PUT for every update route.
+#    Their request-body tags are in places stale. The disagreements themselves are
+#    recorded as criteria R-2.7 and D-opportunities-51, which are the account of them.
+#  - Their own server was the application's origin plus "/api". This document's server is
+#    the application's origin, because the authentication, status and administrator
+#    routes sit outside that prefix, and every path below is written in full.
+
 openapi: 3.1.0
-info: { title: "digital-marketplace-next API", version: "0.0.0" }
-paths: {}
+info:
+  title: Digital Marketplace
+  version: "1.0"
+  description: >-
+    Server API for the Digital Marketplace, recovered as the contract the acceptance
+    suite and the oracle act through. Every route the application registers appears
+    here exactly once, with one operationId apiece.
+servers:
+  - url: "{base_url}"
+    description: The application under test.
+    variables:
+      base_url:
+        default: http://localhost:3000
+
+tags:
+  - name: Affiliations
+  - name: Authentication
+  - name: Avatars
+  - name: Content
+  - name: Contact list
+  - name: Counters
+  - name: Email notifications
+  - name: Evaluations
+  - name: Files
+  - name: Metrics
+  - name: Opportunities
+  - name: Organizations
+  - name: Proposals
+  - name: Service status
+  - name: Sessions
+  - name: Subscribers
+  - name: Users
+
+paths:
+  # ---------------------------------------------------------------- service status
+  /status:
+    get:
+      operationId: readStatus
+      tags: [Service status]
+      summary: Reports that the service is up.
+      description: >-
+        Answers "OK" and needs no session. Recovered from routes. The three
+        opportunity auto-update hooks run in front of this route as they do in front of
+        every route, so a request here is also what advances an opportunity whose
+        proposal deadline has passed.
+      responses:
+        "200": { description: The service is up. }
+
+  # ---------------------------------------------------------------- authentication
+  /auth/sign-in:
+    get:
+      operationId: startSignIn
+      tags: [Authentication]
+      summary: Begins sign-in with the identity provider.
+      description: Recovered from routes.
+      parameters:
+        - name: provider
+          in: query
+          required: false
+          schema: { type: string }
+          description: Which identity provider to hint to, by its suffix.
+        - name: redirectOnSuccess
+          in: query
+          required: false
+          schema: { type: string }
+          description: Where to send the person once they are signed in.
+      responses:
+        "302": { description: Redirect to the identity provider. }
+
+  /auth/callback:
+    get:
+      operationId: completeSignIn
+      tags: [Authentication]
+      summary: Completes sign-in and establishes a session.
+      description: >-
+        Recovered from routes. Creates the account on a first sign-in, reactivates one
+        the person had deactivated themselves, and refuses one an administrator has
+        deactivated.
+      parameters:
+        - name: code
+          in: query
+          required: true
+          schema: { type: string }
+        - name: redirectOnSuccess
+          in: query
+          required: false
+          schema: { type: string }
+      responses:
+        "302":
+          description: >-
+            Redirect to the dashboard for a returning person, to profile completion for a
+            new one, or to the sign-in failure notice.
+
+  /auth/createsessionadmin:
+    get:
+      operationId: createTestSessionAsAdministrator
+      tags: [Authentication]
+      summary: Signs in as the fixed administrator test account.
+      description: >-
+        Recovered from routes. Registered only when the process environment names the
+        development environment, so it does not exist in production. Looks up the ADMIN
+        account whose identity-provider id is "test-admin" and mints a session for it. It
+        does not check the account's status.
+      responses:
+        "302": { description: "Redirect to the dashboard, with a session established." }
+        "404": { description: The route is not registered outside a non-production environment. }
+
+  /auth/createsessiongov:
+    get:
+      operationId: createTestSessionAsPublicSectorEmployee
+      tags: [Authentication]
+      summary: Signs in as the fixed public sector test account.
+      description: >-
+        Recovered from routes. Registered only outside production. Looks up the GOV
+        account whose identity-provider id is "test-gov". There is exactly one such
+        account, so this route reaches one public sector identity and no other.
+      responses:
+        "302": { description: "Redirect to the dashboard, with a session established." }
+        "404": { description: The route is not registered outside a non-production environment. }
+
+  /auth/createsessionvendor/{id}:
+    get:
+      operationId: createTestSessionAsVendor
+      tags: [Authentication]
+      summary: Signs in as one of the fixed vendor test accounts.
+      description: >-
+        Recovered from routes. Registered only outside production. Looks up the VENDOR
+        account whose identity-provider id is "test-vendor-{id}". It does not check the
+        account's status, so it establishes a session for a deactivated account that the
+        identity provider would have refused.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+          description: The suffix of the test account's identity-provider id.
+      responses:
+        "302": { description: "Redirect to the dashboard, with a session established." }
+        "404": { description: The route is not registered outside a non-production environment. }
+
+  # ---------------------------------------------------------------- sessions
+  /api/sessions/{id}:
+    get:
+      operationId: readSession
+      tags: [Sessions]
+      summary: Retrieves an existing Session.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the Session. }
+    delete:
+      operationId: deleteSession
+      tags: [Sessions]
+      summary: Deletes an existing Session (sign out).
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the deleted Session. }
+
+  # ---------------------------------------------------------------- users
+  /api/users:
+    get:
+      operationId: listUsers
+      tags: [Users]
+      summary: Retrieves all Users.
+      description: This route returns all available Users.
+      responses:
+        "200": { description: Receive the array of Users. }
+
+  /api/users/{id}:
+    get:
+      operationId: readUser
+      tags: [Users]
+      summary: Retrieves an individual User.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the requested User. }
+    put:
+      operationId: updateUser
+      tags: [Users]
+      summary: Updates an existing User.
+      description: >-
+        Takes a User id and applies the tagged action in the request body. The recovered
+        description names this route as POST; the service registers PUT.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/TaggedRequestBody"
+                - properties:
+                    tag:
+                      enum:
+                        [
+                          updateProfile,
+                          updateCapabilities,
+                          acceptTerms,
+                          updateNotifications,
+                          reactivateUser,
+                          updateAdminPermissions
+                        ]
+      responses:
+        "200": { description: Receive back the updated User. }
+    delete:
+      operationId: deactivateUser
+      tags: [Users]
+      summary: Deactivates an existing User account.
+      description: >-
+        Changes the corresponding User to an inactive status. Which inactive status is
+        recorded depends on whether a person deactivated their own account or an
+        administrator deactivated somebody else's.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive back the deactivated User. }
+
+  /api/contact-list:
+    get:
+      operationId: exportContactList
+      tags: [Contact list]
+      summary: Exports contact details for the chosen account types as a document.
+      description: Recovered from routes. Administrators only.
+      parameters:
+        - name: userTypes
+          in: query
+          required: true
+          schema: { type: string }
+          description: Comma-separated account types to include.
+        - name: fields
+          in: query
+          required: true
+          schema: { type: string }
+          description: Comma-separated fields to include.
+      responses:
+        "200": { description: Receive the exported document. }
+        "400": { description: The account types or fields were not valid. }
+        "401": { description: The requester is not an administrator. }
+
+  # ---------------------------------------------------------------- organizations
+  /api/organizations:
+    get:
+      operationId: listOrganizations
+      tags: [Organizations]
+      summary: Retrieves all Organizations.
+      description: Return all active Organizations.
+      responses:
+        "200": { description: Receive the array of Organizations. }
+    post:
+      operationId: createOrganization
+      tags: [Organizations]
+      summary: Creates a new Organization.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/Organization" }
+      responses:
+        "201": { description: Receive the created Organization. }
+
+  /api/organizations/{id}:
+    get:
+      operationId: readOrganization
+      tags: [Organizations]
+      summary: Retrieves an individual Organization.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the requested Organization. }
+    put:
+      operationId: updateOrganization
+      tags: [Organizations]
+      summary: Updates an existing Organization.
+      description: The recovered description names this route as POST; the service registers PUT.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/TaggedRequestBody"
+                - properties:
+                    tag:
+                      enum: [updateProfile, acceptSWUTerms, acceptTWUTerms, qualifyServiceAreas]
+      responses:
+        "200": { description: Receive the updated Organization. }
+    delete:
+      operationId: archiveOrganization
+      tags: [Organizations]
+      summary: Deactivates an existing Organization.
+      description: Marks the specified Organization as inactive.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive back the deactivated Organization. }
+
+  /api/ownedOrganizations:
+    get:
+      operationId: listOwnedOrganizations
+      tags: [Organizations]
+      summary: Retrieves the Organizations the signed-in person owns.
+      description: Recovered from routes.
+      responses:
+        "200": { description: Receive the array of owned Organizations. }
+
+  # ---------------------------------------------------------------- affiliations
+  /api/affiliations:
+    get:
+      operationId: listAffiliations
+      tags: [Affiliations]
+      summary: Retrieves multiple Affiliations.
+      description: Return all Affiliations for the given Organization or User.
+      parameters:
+        - name: organization
+          in: query
+          required: false
+          schema: { type: string, format: uuid }
+          description: Optional Organization id to retrieve affiliations for.
+      responses:
+        "200": { description: Receive the array of Affiliations. }
+    post:
+      operationId: createAffiliation
+      tags: [Affiliations]
+      summary: Creates a new Affiliation.
+      description: Creates a new Affiliation for the given User email and Organization.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateAffiliationRequestBody" }
+      responses:
+        "201": { description: Receive the created Affiliation. }
+
+  /api/affiliations/{id}:
+    put:
+      operationId: updateAffiliation
+      tags: [Affiliations]
+      summary: Updates an existing Affiliation.
+      description: >-
+        Approves a pending Affiliation, grants or withdraws organization administrator
+        rights, or transfers ownership. The recovered description names this route as
+        POST and describes only the approval; the service registers PUT and accepts three
+        actions.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/TaggedRequestBody"
+                - properties:
+                    tag: { enum: [approve, updateAdminStatus, changeOwner] }
+      responses:
+        "200": { description: Receive the updated Affiliation. }
+    delete:
+      operationId: deleteAffiliation
+      tags: [Affiliations]
+      summary: Deactivates an existing Affiliation.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the deactivated Affiliation. }
+
+  # ---------------------------------------------------------------- content
+  /api/content:
+    get:
+      operationId: listContent
+      tags: [Content]
+      summary: Retrieves every page.
+      description: Recovered from routes. Administrators only.
+      responses:
+        "200": { description: Receive the array of pages. }
+    post:
+      operationId: createContent
+      tags: [Content]
+      summary: Creates a page.
+      description: Recovered from routes. Administrators only.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ContentBody" }
+      responses:
+        "201": { description: Receive the created page. }
+
+  /api/content/{id}:
+    get:
+      operationId: readContent
+      tags: [Content]
+      summary: Retrieves a page by its identifier or its address.
+      description: >-
+        Recovered from routes. Needs no session. The value is read as an identifier
+        first, and falls back to being read as an address when no page carries it as an
+        identifier. A value that is neither a well-formed identifier nor a well-formed
+        address is refused as malformed rather than answered as not found.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+          description: The page's identifier or its address.
+      responses:
+        "200": { description: "Receive the page, its body, and its published and updated dates." }
+        "400": { description: The value was not a well-formed identifier or address. }
+        "404": { description: No page carries that identifier or address. }
+    put:
+      operationId: updateContent
+      tags: [Content]
+      summary: Publishes a new version of a page.
+      description: >-
+        Recovered from routes. Administrators only. A page the service needs for itself
+        may be re-worded but not renamed.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ContentBody" }
+      responses:
+        "200": { description: Receive the updated page. }
+    delete:
+      operationId: deleteContent
+      tags: [Content]
+      summary: Removes a page.
+      description: >-
+        Recovered from routes. Administrators only, and refused for a page the service
+        needs for itself.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the removed page. }
+
+  # ---------------------------------------------------------------- files
+  /api/files:
+    post:
+      operationId: createFile
+      tags: [Files]
+      summary: Creates a new File with provided metadata.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema: { $ref: "#/components/schemas/FileUpload" }
+      responses:
+        "201": { description: Receive the created File record. }
+
+  /api/files/{id}:
+    get:
+      operationId: readFile
+      tags: [Files]
+      summary: Retrieve an existing File or File record.
+      description: Retrieves an existing File (blob) or File record.
+      parameters:
+        - $ref: "#/components/parameters/PathId"
+        - name: type
+          in: query
+          required: false
+          schema: { type: string, enum: [blob] }
+          description: Whether to receive the File blob itself ('blob') or the File record.
+      responses:
+        "200": { description: Receive the File or File record. }
+        "401": { description: Not authorized to retrieve this File. }
+        "404": { description: The specified File was not found. }
+        "503": { description: A database error has occurred or the file is not retrievable. }
+
+  /api/avatars:
+    post:
+      operationId: createAvatar
+      tags: [Avatars]
+      summary: Creates a new Avatar.
+      description: >-
+        Creates a new Avatar using the supplied image file. Compresses to the maximum
+        image dimensions if necessary.
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema: { $ref: "#/components/schemas/FileUpload" }
+      responses:
+        "201": { description: Receive the created Avatar file record. }
+
+  # ---------------------------------------------------------------- opportunities
+  /api/opportunities/code-with-us:
+    get:
+      operationId: listCodeWithUsOpportunities
+      tags: [Opportunities]
+      summary: Retrieve all Code-With-Us Opportunities.
+      description: >-
+        What the caller sees depends on who they are: everyone sees published and later
+        opportunities, staff also see their own drafts and their own opportunities under
+        review, and an administrator sees every one.
+      responses:
+        "200": { description: Receive the array of Opportunities. }
+    post:
+      operationId: createCodeWithUsOpportunity
+      tags: [Opportunities]
+      summary: Create a new Code-With-Us Opportunity.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        "201": { description: Receive the created Opportunity. }
+
+  /api/opportunities/code-with-us/{id}:
+    get:
+      operationId: readCodeWithUsOpportunity
+      tags: [Opportunities]
+      summary: Retrieve a single Code-With-Us Opportunity.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the requested Opportunity. }
+    put:
+      operationId: updateCodeWithUsOpportunity
+      tags: [Opportunities]
+      summary: Update an existing Code-With-Us Opportunity.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/TaggedRequestBody"
+                - properties:
+                    tag: { enum: [edit, submitForReview, publish, cancel, addAddendum, addNote] }
+      responses:
+        "200": { description: Receive the updated Opportunity. }
+    delete:
+      operationId: deleteCodeWithUsOpportunity
+      tags: [Opportunities]
+      summary: Delete a draft or under-review Code-With-Us Opportunity.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the deleted Opportunity. }
+
+  /api/opportunities/sprint-with-us:
+    get:
+      operationId: listSprintWithUsOpportunities
+      tags: [Opportunities]
+      summary: Retrieve all Sprint-With-Us Opportunities.
+      responses:
+        "200": { description: Receive the array of Opportunities. }
+    post:
+      operationId: createSprintWithUsOpportunity
+      tags: [Opportunities]
+      summary: Create a new Sprint-With-Us Opportunity.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        "201": { description: Receive the created Opportunity. }
+
+  /api/opportunities/sprint-with-us/{id}:
+    get:
+      operationId: readSprintWithUsOpportunity
+      tags: [Opportunities]
+      summary: Retrieve a single Sprint-With-Us Opportunity.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the requested Opportunity. }
+    put:
+      operationId: updateSprintWithUsOpportunity
+      tags: [Opportunities]
+      summary: Update an existing Sprint-With-Us Opportunity.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/TaggedRequestBody"
+                - properties:
+                    tag:
+                      enum:
+                        [
+                          edit,
+                          submitForReview,
+                          publish,
+                          startCodeChallenge,
+                          startTeamScenario,
+                          cancel,
+                          addAddendum,
+                          addNote,
+                          submitIndividualQuestionEvaluations,
+                          submitConsensusQuestionEvaluations,
+                          editEvaluationPanel,
+                          finalizeQuestionConsensuses
+                        ]
+      responses:
+        "200": { description: Receive the updated Opportunity. }
+    delete:
+      operationId: deleteSprintWithUsOpportunity
+      tags: [Opportunities]
+      summary: Delete a draft or under-review Sprint-With-Us Opportunity.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the deleted Opportunity. }
+
+  /api/opportunities/team-with-us:
+    get:
+      operationId: listTeamWithUsOpportunities
+      tags: [Opportunities]
+      summary: Retrieve all Team-With-Us Opportunities.
+      description: Recovered from routes; the recovered descriptions omit this program entirely.
+      responses:
+        "200": { description: Receive the array of Opportunities. }
+    post:
+      operationId: createTeamWithUsOpportunity
+      tags: [Opportunities]
+      summary: Create a new Team-With-Us Opportunity.
+      description: Recovered from routes.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        "201": { description: Receive the created Opportunity. }
+
+  /api/opportunities/team-with-us/{id}:
+    get:
+      operationId: readTeamWithUsOpportunity
+      tags: [Opportunities]
+      summary: Retrieve a single Team-With-Us Opportunity.
+      description: Recovered from routes.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the requested Opportunity. }
+    put:
+      operationId: updateTeamWithUsOpportunity
+      tags: [Opportunities]
+      summary: Update an existing Team-With-Us Opportunity.
+      description: Recovered from routes.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/TaggedRequestBody"
+                - properties:
+                    tag:
+                      enum:
+                        [
+                          edit,
+                          submitForReview,
+                          publish,
+                          startChallenge,
+                          cancel,
+                          addAddendum,
+                          submitIndividualQuestionEvaluations,
+                          submitConsensusQuestionEvaluations,
+                          editEvaluationPanel,
+                          finalizeQuestionConsensuses
+                        ]
+      responses:
+        "200": { description: Receive the updated Opportunity. }
+    delete:
+      operationId: deleteTeamWithUsOpportunity
+      tags: [Opportunities]
+      summary: Delete a draft or under-review Team-With-Us Opportunity.
+      description: Recovered from routes.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the deleted Opportunity. }
+
+  # ---------------------------------------------------------------- proposals
+  /api/proposals/code-with-us:
+    get:
+      operationId: listCodeWithUsProposals
+      tags: [Proposals]
+      summary: Retrieve all Code-With-Us Proposals for a specific Opportunity or the current User.
+      parameters:
+        - name: opportunity
+          in: query
+          required: false
+          schema: { type: string, format: uuid }
+      responses:
+        "200": { description: Receive the array of Proposals. }
+    post:
+      operationId: createCodeWithUsProposal
+      tags: [Proposals]
+      summary: Create a new Code-With-Us Proposal.
+      description: >-
+        A proposal may be created as a draft or as a submission and in no other state.
+        The recovered description names a "PUBLISHED" state the service rejects.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        "201": { description: Receive the created Proposal. }
+
+  /api/proposals/code-with-us/{id}:
+    get:
+      operationId: readCodeWithUsProposal
+      tags: [Proposals]
+      summary: Retrieve a single Code-With-Us Proposal.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the requested Proposal. }
+    put:
+      operationId: updateCodeWithUsProposal
+      tags: [Proposals]
+      summary: Update an existing Code-With-Us Proposal.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/TaggedRequestBody"
+                - properties:
+                    tag: { enum: [edit, submit, score, award, disqualify, withdraw] }
+      responses:
+        "200": { description: Receive the updated Proposal. }
+    delete:
+      operationId: deleteCodeWithUsProposal
+      tags: [Proposals]
+      summary: Delete a draft Code-With-Us Proposal.
+      description: >-
+        The service requires only that the proposal itself be a draft. The recovered
+        description additionally requires the opportunity to be in draft; the service does
+        not look at the opportunity at all.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the deleted Proposal. }
+
+  /api/proposals/sprint-with-us:
+    get:
+      operationId: listSprintWithUsProposals
+      tags: [Proposals]
+      summary: Retrieve all Sprint-With-Us Proposals for a specific Opportunity or the current User.
+      parameters:
+        - name: opportunity
+          in: query
+          required: false
+          schema: { type: string, format: uuid }
+      responses:
+        "200": { description: Receive the array of Proposals. }
+    post:
+      operationId: createSprintWithUsProposal
+      tags: [Proposals]
+      summary: Create a new Sprint-With-Us Proposal.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        "201": { description: Receive the created Proposal. }
+
+  /api/proposals/sprint-with-us/{id}:
+    get:
+      operationId: readSprintWithUsProposal
+      tags: [Proposals]
+      summary: Retrieve a single Sprint-With-Us Proposal.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the requested Proposal. }
+    put:
+      operationId: updateSprintWithUsProposal
+      tags: [Proposals]
+      summary: Update an existing Sprint-With-Us Proposal.
+      description: >-
+        The recovered description also lists "scoreQuestions", "screenInToCodeChallenge"
+        and "screenOutFromCodeChallenge", which the service no longer accepts: question
+        scoring happens through the evaluation panel.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/TaggedRequestBody"
+                - properties:
+                    tag:
+                      enum:
+                        [
+                          edit,
+                          submit,
+                          scoreCodeChallenge,
+                          screenInToTeamScenario,
+                          screenOutFromTeamScenario,
+                          scoreTeamScenario,
+                          award,
+                          disqualify,
+                          withdraw
+                        ]
+      responses:
+        "200": { description: Receive the updated Proposal. }
+    delete:
+      operationId: deleteSprintWithUsProposal
+      tags: [Proposals]
+      summary: Delete a draft Sprint-With-Us Proposal.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the deleted Proposal. }
+
+  /api/proposals/team-with-us:
+    get:
+      operationId: listTeamWithUsProposals
+      tags: [Proposals]
+      summary: Retrieve all Team-With-Us Proposals for a specific Opportunity or the current User.
+      description: Recovered from routes.
+      parameters:
+        - name: opportunity
+          in: query
+          required: false
+          schema: { type: string, format: uuid }
+      responses:
+        "200": { description: Receive the array of Proposals. }
+    post:
+      operationId: createTeamWithUsProposal
+      tags: [Proposals]
+      summary: Create a new Team-With-Us Proposal.
+      description: Recovered from routes.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        "201": { description: Receive the created Proposal. }
+
+  /api/proposals/team-with-us/{id}:
+    get:
+      operationId: readTeamWithUsProposal
+      tags: [Proposals]
+      summary: Retrieve a single Team-With-Us Proposal.
+      description: Recovered from routes.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the requested Proposal. }
+    put:
+      operationId: updateTeamWithUsProposal
+      tags: [Proposals]
+      summary: Update an existing Team-With-Us Proposal.
+      description: Recovered from routes.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/TaggedRequestBody"
+                - properties:
+                    tag:
+                      enum:
+                        [
+                          edit,
+                          submit,
+                          scoreQuestions,
+                          screenInToChallenge,
+                          screenOutFromChallenge,
+                          scoreChallenge,
+                          award,
+                          disqualify,
+                          withdraw
+                        ]
+      responses:
+        "200": { description: Receive the updated Proposal. }
+    delete:
+      operationId: deleteTeamWithUsProposal
+      tags: [Proposals]
+      summary: Delete a draft Team-With-Us Proposal.
+      description: Recovered from routes.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the deleted Proposal. }
+
+  # ---------------------------------------------------------------- evaluations
+  # One evaluator's own scores for one proponent, and the panel chair's agreed scores.
+  # All eight paths below are recovered from routes; the recovered descriptions say
+  # nothing about evaluation.
+  /api/proposal/sprint-with-us/{proposalId}/team-questions/evaluations:
+    get:
+      operationId: listSprintWithUsProposalQuestionEvaluations
+      tags: [Evaluations]
+      summary: Retrieves every panel member's individual scores for one proponent.
+      parameters: [{ $ref: "#/components/parameters/PathProposalId" }]
+      responses:
+        "200": { description: Receive the array of evaluations. }
+    post:
+      operationId: createSprintWithUsProposalQuestionEvaluation
+      tags: [Evaluations]
+      summary: Starts an evaluator's own scores for one proponent.
+      parameters: [{ $ref: "#/components/parameters/PathProposalId" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        "201": { description: Receive the created evaluation. }
+
+  /api/proposal/sprint-with-us/{proposalId}/team-questions/evaluations/{id}:
+    get:
+      operationId: readSprintWithUsProposalQuestionEvaluation
+      tags: [Evaluations]
+      summary: Retrieves one panel member's scores for one proponent.
+      parameters:
+        - $ref: "#/components/parameters/PathProposalId"
+        - $ref: "#/components/parameters/PathEvaluatorId"
+      responses:
+        "200": { description: Receive the evaluation. }
+    put:
+      operationId: updateSprintWithUsProposalQuestionEvaluation
+      tags: [Evaluations]
+      summary: Changes one panel member's scores for one proponent.
+      parameters:
+        - $ref: "#/components/parameters/PathProposalId"
+        - $ref: "#/components/parameters/PathEvaluatorId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/TaggedRequestBody"
+                - properties:
+                    tag: { enum: [edit, submit] }
+      responses:
+        "200": { description: Receive the updated evaluation. }
+
+  /api/opportunity/sprint-with-us/{opportunityId}/team-questions/evaluations:
+    get:
+      operationId: listSprintWithUsOpportunityQuestionEvaluations
+      tags: [Evaluations]
+      summary: Retrieves the individual scores across every proponent of one opportunity.
+      parameters: [{ $ref: "#/components/parameters/PathOpportunityId" }]
+      responses:
+        "200": { description: Receive the array of evaluations. }
+
+  /api/proposal/sprint-with-us/{proposalId}/team-questions/consensus:
+    post:
+      operationId: createSprintWithUsProposalQuestionConsensus
+      tags: [Evaluations]
+      summary: Records the chair's agreed scores for one proponent.
+      parameters: [{ $ref: "#/components/parameters/PathProposalId" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        "201": { description: Receive the created consensus. }
+
+  /api/proposal/sprint-with-us/{proposalId}/team-questions/consensus/{id}:
+    get:
+      operationId: readSprintWithUsProposalQuestionConsensus
+      tags: [Evaluations]
+      summary: Retrieves the agreed scores for one proponent.
+      parameters:
+        - $ref: "#/components/parameters/PathProposalId"
+        - $ref: "#/components/parameters/PathEvaluatorId"
+      responses:
+        "200": { description: Receive the consensus. }
+    put:
+      operationId: updateSprintWithUsProposalQuestionConsensus
+      tags: [Evaluations]
+      summary: Changes the agreed scores for one proponent.
+      parameters:
+        - $ref: "#/components/parameters/PathProposalId"
+        - $ref: "#/components/parameters/PathEvaluatorId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/TaggedRequestBody"
+                - properties:
+                    tag: { enum: [edit, submit] }
+      responses:
+        "200": { description: Receive the updated consensus. }
+
+  /api/opportunity/sprint-with-us/{opportunityId}/team-questions/consensus:
+    get:
+      operationId: listSprintWithUsOpportunityQuestionConsensuses
+      tags: [Evaluations]
+      summary: Retrieves the agreed scores across every proponent of one opportunity.
+      parameters: [{ $ref: "#/components/parameters/PathOpportunityId" }]
+      responses:
+        "200": { description: Receive the array of consensuses. }
+
+  /api/proposal/team-with-us/{proposalId}/resource-questions/evaluations:
+    get:
+      operationId: listTeamWithUsProposalQuestionEvaluations
+      tags: [Evaluations]
+      summary: Retrieves every panel member's individual scores for one proponent.
+      parameters: [{ $ref: "#/components/parameters/PathProposalId" }]
+      responses:
+        "200": { description: Receive the array of evaluations. }
+    post:
+      operationId: createTeamWithUsProposalQuestionEvaluation
+      tags: [Evaluations]
+      summary: Starts an evaluator's own scores for one proponent.
+      parameters: [{ $ref: "#/components/parameters/PathProposalId" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        "201": { description: Receive the created evaluation. }
+
+  /api/proposal/team-with-us/{proposalId}/resource-questions/evaluations/{id}:
+    get:
+      operationId: readTeamWithUsProposalQuestionEvaluation
+      tags: [Evaluations]
+      summary: Retrieves one panel member's scores for one proponent.
+      parameters:
+        - $ref: "#/components/parameters/PathProposalId"
+        - $ref: "#/components/parameters/PathEvaluatorId"
+      responses:
+        "200": { description: Receive the evaluation. }
+    put:
+      operationId: updateTeamWithUsProposalQuestionEvaluation
+      tags: [Evaluations]
+      summary: Changes one panel member's scores for one proponent.
+      parameters:
+        - $ref: "#/components/parameters/PathProposalId"
+        - $ref: "#/components/parameters/PathEvaluatorId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/TaggedRequestBody"
+                - properties:
+                    tag: { enum: [edit, submit] }
+      responses:
+        "200": { description: Receive the updated evaluation. }
+
+  /api/opportunity/team-with-us/{opportunityId}/resource-questions/evaluations:
+    get:
+      operationId: listTeamWithUsOpportunityQuestionEvaluations
+      tags: [Evaluations]
+      summary: Retrieves the individual scores across every proponent of one opportunity.
+      parameters: [{ $ref: "#/components/parameters/PathOpportunityId" }]
+      responses:
+        "200": { description: Receive the array of evaluations. }
+
+  /api/proposal/team-with-us/{proposalId}/resource-questions/consensus:
+    post:
+      operationId: createTeamWithUsProposalQuestionConsensus
+      tags: [Evaluations]
+      summary: Records the chair's agreed scores for one proponent.
+      parameters: [{ $ref: "#/components/parameters/PathProposalId" }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { type: object }
+      responses:
+        "201": { description: Receive the created consensus. }
+
+  /api/proposal/team-with-us/{proposalId}/resource-questions/consensus/{id}:
+    get:
+      operationId: readTeamWithUsProposalQuestionConsensus
+      tags: [Evaluations]
+      summary: Retrieves the agreed scores for one proponent.
+      parameters:
+        - $ref: "#/components/parameters/PathProposalId"
+        - $ref: "#/components/parameters/PathEvaluatorId"
+      responses:
+        "200": { description: Receive the consensus. }
+    put:
+      operationId: updateTeamWithUsProposalQuestionConsensus
+      tags: [Evaluations]
+      summary: Changes the agreed scores for one proponent.
+      parameters:
+        - $ref: "#/components/parameters/PathProposalId"
+        - $ref: "#/components/parameters/PathEvaluatorId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/TaggedRequestBody"
+                - properties:
+                    tag: { enum: [edit, submit] }
+      responses:
+        "200": { description: Receive the updated consensus. }
+
+  /api/opportunity/team-with-us/{opportunityId}/resource-questions/consensus:
+    get:
+      operationId: listTeamWithUsOpportunityQuestionConsensuses
+      tags: [Evaluations]
+      summary: Retrieves the agreed scores across every proponent of one opportunity.
+      parameters: [{ $ref: "#/components/parameters/PathOpportunityId" }]
+      responses:
+        "200": { description: Receive the array of consensuses. }
+
+  # ---------------------------------------------------------------- subscribers
+  /api/subscribers/code-with-us:
+    post:
+      operationId: watchCodeWithUsOpportunity
+      tags: [Subscribers]
+      summary: Creates a new Subscription to a Code-With-Us opportunity.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateSubscriptionRequestBody" }
+      responses:
+        "201": { description: Receive the created Subscription. }
+        "400": { description: An invalid opportunity was provided. }
+        "401": { description: Invalid permissions provided. }
+        "503": { description: A database error has occurred. }
+
+  /api/subscribers/code-with-us/{id}:
+    delete:
+      operationId: unwatchCodeWithUsOpportunity
+      tags: [Subscribers]
+      summary: Deletes an existing Subscription to a Code-With-Us opportunity.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the deleted Subscription. }
+        "400": { description: An invalid Subscription id was provided. }
+        "401": { description: Invalid permissions provided. }
+        "503": { description: A database error has occurred or the Subscription could not be deleted. }
+
+  /api/subscribers/sprint-with-us:
+    post:
+      operationId: watchSprintWithUsOpportunity
+      tags: [Subscribers]
+      summary: Creates a new Subscription to a Sprint-With-Us opportunity.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateSubscriptionRequestBody" }
+      responses:
+        "201": { description: Receive the created Subscription. }
+        "400": { description: An invalid opportunity was provided. }
+        "401": { description: Invalid permissions provided. }
+        "503": { description: A database error has occurred. }
+
+  /api/subscribers/sprint-with-us/{id}:
+    delete:
+      operationId: unwatchSprintWithUsOpportunity
+      tags: [Subscribers]
+      summary: Deletes an existing Subscription to a Sprint-With-Us opportunity.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the deleted Subscription. }
+        "400": { description: An invalid Subscription id was provided. }
+        "401": { description: Invalid permissions provided. }
+        "503": { description: A database error has occurred or the Subscription could not be deleted. }
+
+  /api/subscribers/team-with-us:
+    post:
+      operationId: watchTeamWithUsOpportunity
+      tags: [Subscribers]
+      summary: Creates a new Subscription to a Team-With-Us opportunity.
+      description: Recovered from routes.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateSubscriptionRequestBody" }
+      responses:
+        "201": { description: Receive the created Subscription. }
+
+  /api/subscribers/team-with-us/{id}:
+    delete:
+      operationId: unwatchTeamWithUsOpportunity
+      tags: [Subscribers]
+      summary: Deletes an existing Subscription to a Team-With-Us opportunity.
+      description: Recovered from routes.
+      parameters: [{ $ref: "#/components/parameters/PathId" }]
+      responses:
+        "200": { description: Receive the deleted Subscription. }
+
+  # ---------------------------------------------------------------- counters and metrics
+  /api/counters:
+    get:
+      operationId: listCounters
+      tags: [Counters]
+      summary: Retrieves Counters for multiple resources.
+      description: >-
+        Return Counters for the specified resources. Counter names are of the form
+        '<resource-type>.<resource-sub-type>.<resource-id>.<counter-type>'.
+      parameters:
+        - name: counters
+          in: query
+          required: false
+          schema: { type: array, items: { type: string } }
+      responses:
+        "200": { description: Receive the array of Counters. }
+        "400": { description: Invalid Counter names provided. }
+        "401": { description: Insufficient permissions provided. }
+        "503": { description: A database error has occurred or the Counter(s) are not retrievable. }
+
+  /api/counters/{id}:
+    put:
+      operationId: incrementCounter
+      tags: [Counters]
+      summary: Increments an existing Counter.
+      description: >-
+        Recorded here as PUT because the framework registers every update route as PUT;
+        the recovered description names POST.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+          description: Name of the Counter to increment.
+      responses:
+        "200": { description: Receive the incremented Counter. }
+        "400": { description: An invalid Counter name was provided. }
+        "503": { description: A database error has occurred or the Counter is not updatable. }
+
+  /api/metrics:
+    get:
+      operationId: listMetrics
+      tags: [Metrics]
+      summary: Retrieves metrics related to various resources (e.g. Opportunities).
+      responses:
+        "200": { description: An array of metric objects. }
+
+  # ---------------------------------------------------------------- notifications
+  /api/emailNotifications:
+    post:
+      operationId: announceUpdatedTerms
+      tags: [Email notifications]
+      summary: Withdraws every vendor's acceptance of the terms and tells them so.
+      description: >-
+        Recovered from routes. Administrators only. The single action it accepts resets
+        every vendor's acceptance of the terms and sends the announcement.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+                - $ref: "#/components/schemas/TaggedRequestBody"
+                - properties:
+                    tag: { enum: [updateTerms] }
+      responses:
+        "200": { description: The announcement was accepted. }
+        "400": { description: "The body was not understood, or the requester is not an administrator." }
+
+  /admin/email-notification-reference:
+    get:
+      operationId: readEmailNotificationReference
+      tags: [Email notifications]
+      summary: Shows every message the service can send, rendered from sample data.
+      description: Recovered from routes. Administrators only.
+      responses:
+        "200": { description: The reference page. }
+
+components:
+  parameters:
+    PathId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+      description: The identifier of the resource.
+    PathProposalId:
+      name: proposalId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+      description: The proposal being evaluated.
+    PathOpportunityId:
+      name: opportunityId
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+      description: The opportunity being evaluated.
+    PathEvaluatorId:
+      name: id
+      in: path
+      required: true
+      schema: { type: string, format: uuid }
+      description: The panel member whose scores these are.
+
+  schemas:
+    TaggedRequestBody:
+      type: object
+      description: >-
+        Every update route takes one tagged action. The tag names which action, and the
+        value carries whatever that action needs. Which tags a route accepts is listed on
+        that route.
+      required: [tag]
+      properties:
+        tag: { type: string }
+        value:
+          oneOf:
+            - type: object
+            - type: boolean
+            - type: number
+            - type: string
+            - type: "null"
+            - type: array
+              items: {}
+
+    CreateAffiliationRequestBody:
+      type: object
+      properties:
+        userEmail: { type: string }
+        organization: { type: string, format: uuid }
+        membershipType: { type: string, enum: [MEMBER, OWNER, ADMIN] }
+
+    CreateSubscriptionRequestBody:
+      type: object
+      required: [opportunity]
+      properties:
+        opportunity: { type: string, format: uuid }
+
+    ContentBody:
+      type: object
+      description: Recovered from routes; the recovered descriptions say nothing about pages.
+      properties:
+        title: { type: string }
+        slug: { type: string }
+        body: { type: string }
+        fixed: { type: boolean }
+
+    FileUpload:
+      type: object
+      properties:
+        name: { type: string }
+        metadata:
+          type: object
+          description: Who may read the file once it is stored.
+          properties:
+            tag: { type: string, enum: [any, user, userType] }
+            value: { type: string }
+        file: { type: string, format: binary }
+
+    Organization:
+      type: object
+      properties:
+        legalName: { type: string }
+        logoImageFile: { type: string, format: uuid }
+        websiteUrl: { type: string }
+        streetAddress1: { type: string }
+        streetAddress2: { type: string }
+        city: { type: string }
+        region: { type: string }
+        mailCode: { type: string }
+        country: { type: string }
+        contactName: { type: string }
+        contactTitle: { type: string }
+        contactEmail: { type: string }
+        contactPhone: { type: string }

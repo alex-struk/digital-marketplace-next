@@ -1,0 +1,154 @@
+# Oracle override, layered on top of sources/old/docker-compose.yml.
+#
+#   docker compose -f sources/old/docker-compose.yml -f .sdlc/oracle/compose.yml up
+#
+# Relative paths resolve against the first file's directory, which is sources/old, the
+# same way the base file's own "context: ." does.
+#
+# What this file changes and why:
+#
+#  - Ports. The base file publishes fixed ports; the harness chooses them at run time, so
+#    every published port here comes from an environment variable and the base list is
+#    replaced rather than added to.
+#
+#  - The environment. The base file loads an .env for the app that a fresh checkout does
+#    not have, and Compose merges an env_file underneath a later environment block rather
+#    than the other way round, so both are replaced outright with !override. The values
+#    below are the whole configuration the application needs.
+#
+#  - Two environment names, not one. The application reads two, and they are not the same
+#    variable. NODE_ENV is what the three test sign-in routes are gated on — set it to
+#    "development" and /auth/createsessionadmin, /auth/createsessiongov and
+#    /auth/createsessionvendor/:id exist. VITE_NODE_ENV is what the mail settings are
+#    chosen by, and its "development" branch is hard-wired to Gmail and cannot be pointed
+#    anywhere else; "test" selects the host-and-port branch, which is what lets the
+#    application send to mailpit. So NODE_ENV=development and VITE_NODE_ENV=test together,
+#    which reads oddly and is correct.
+#
+#  - Mail. A mailpit container receives everything the application sends and offers it
+#    back over its own HTTP API, which is what spec/contract/observables.yaml reads.
+#
+#  - The base file's second database, test-db, is put behind a profile so it does not
+#    start. It belongs to the old repository's own test tooling, is not the oracle's
+#    database, and would otherwise take a port for nothing.
+#
+# Two things this file does not settle, both recorded in the contract stage's journal:
+#
+#  - The application's image does not migrate on start-up, and .sdlc/config.yaml names no
+#    oracle.migrate_service, so nothing in the configured pipeline creates the schema.
+#    A one-off "migrate" service is defined below behind a profile, so that it changes
+#    nothing about an ordinary "up" and is there to be named once the configuration wants
+#    it. Run it before the seed:
+#      docker compose -f sources/old/docker-compose.yml -f .sdlc/oracle/compose.yml \
+#        --profile migrate run --rm migrate
+#
+#  - The database keeps the base file's named volume, so it survives between runs. The
+#    seed is a plain set of inserts and is not idempotent: applying it twice fails on the
+#    primary keys. Remove the volume to start over.
+
+services:
+  app:
+    # A fresh checkout of the old application carries no .env. Replace the base file's
+    # required one with an optional one so a missing file is not an error, and replace
+    # the environment outright so these values win rather than merging underneath it.
+    env_file: !override
+      - path: .env
+        required: false
+
+    ports: !override
+      - "${SDLC_APP_PORT}:3000"
+
+    environment: !override
+      # Registers the three test sign-in routes. Nothing else reads this variable.
+      NODE_ENV: development
+      # Selects the host-and-port mail settings, and keeps the configuration check from
+      # demanding either the Gmail credentials or the production mail server.
+      VITE_NODE_ENV: test
+
+      SERVER_HOST: 0.0.0.0
+      SERVER_PORT: "3000"
+      # The address a test's browser uses. The application builds its own redirects from
+      # this, so a sign-in route sends the browser back to a port it can reach.
+      ORIGIN: http://localhost:${SDLC_APP_PORT}
+
+      POSTGRES_URL: postgresql://digmkt:digmkt@db:5432/digmkt
+      COOKIE_SECRET: oracle-cookie-secret-not-a-real-secret
+      FILE_STORAGE_DIR: ./tmp
+
+      # Mail goes to the mailpit container below and nowhere else.
+      MAILER_HOST: mailpit
+      MAILER_PORT: "1025"
+      MAILER_USERNAME: ""
+      MAILER_PASSWORD: ""
+      MAILER_FROM: Digital Marketplace <donotreply@example.test>
+      MAILER_REPLY: donotreply@example.test
+      MAILER_BATCH_SIZE: "50"
+      DISABLE_NOTIFICATIONS: "0"
+      # Marks every subject as a test message, which is itself a recovered behaviour.
+      VITE_SHOW_TEST_INDICATOR: "1"
+
+      # The transitions that look time-driven run as a hook in front of each request,
+      # normally throttled to once a minute. Zero makes one request enough, so a test can
+      # close a lapsed opportunity deliberately rather than by waiting.
+      UPDATE_HOOK_THROTTLE: "0"
+
+      SCHEDULED_DOWNTIME: "0"
+      BASIC_AUTH_USERNAME: ""
+      BASIC_AUTH_PASSWORD_HASH: ""
+      SERVICE_TOKEN_HASH: ""
+      LOG_LEVEL: debug
+      KNEX_DEBUG: "false"
+      SWAGGER_ENABLE: "true"
+      SWAGGER_UI_PATH: /docs/api
+
+  db:
+    ports: !override
+      - "${SDLC_DB_PORT}:5432"
+
+  # Belongs to the old repository's own test tooling, not to the oracle.
+  test-db:
+    profiles: ["disabled"]
+
+  mailpit:
+    image: axllent/mailpit:v1.28.0
+    container_name: dm_mailpit
+    restart: always
+    ports:
+      # The HTTP API and web interface. spec/contract/observables.yaml reads this as
+      # ${SDLC_MAIL_API}.
+      - "${SDLC_MAIL_API_PORT}:8025"
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: "1"
+      MP_SMTP_AUTH_ALLOW_INSECURE: "1"
+      MP_MAX_MESSAGES: "5000"
+
+  # A one-off that runs the application's own migrations. It is behind a profile, so it
+  # takes no part in an ordinary "up"; run it explicitly, once, before the seed.
+  #
+  # It uses the application's image, which carries the source and the lock file but has
+  # had its development dependencies stripped, so it reinstalls them before running the
+  # migration script the repository documents. That needs network access the first time.
+  migrate:
+    profiles: ["migrate"]
+    image: dm_app_image
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    env_file: !override
+      - path: .env
+        required: false
+    environment: !override
+      NODE_ENV: development
+      VITE_NODE_ENV: test
+      SERVER_HOST: 0.0.0.0
+      SERVER_PORT: "3000"
+      ORIGIN: http://localhost:${SDLC_APP_PORT}
+      POSTGRES_URL: postgresql://digmkt:digmkt@db:5432/digmkt
+      COOKIE_SECRET: oracle-cookie-secret-not-a-real-secret
+      FILE_STORAGE_DIR: ./tmp
+      MAILER_FROM: Digital Marketplace <donotreply@example.test>
+    depends_on:
+      - db
+    entrypoint: ["sh", "-c"]
+    command:
+      - "yarn install --frozen-lockfile && npm run migrations:latest"

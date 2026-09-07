@@ -1,5 +1,41 @@
 # Pages, and the actions and observations each offers. Test IDs are filled at the design gate.
+#
+# Actions and observations are named in the vocabulary the criteria use. A route with a
+# query string in it (".../edit?tab=consensus") names a tab of a page rather than a
+# separate address; the tab is part of how a test reaches the surface, not a selector.
+# Several routes appear twice under different ids where two domains own different parts
+# of the same screen; each such entry says so in a comment above it.
 pages:
+  - id: home
+    domain: opportunities
+    route: /
+    title: "Digital Marketplace"
+    actions:
+      browse_opportunities: { test_id: null }
+      sign_in: { test_id: null }
+      sign_up: { test_id: null }
+    observations:
+      total_awarded_opportunity_count: { test_id: null }
+      total_awarded_opportunity_value: { test_id: null }
+      readable_when_signed_out: { test_id: null }
+
+  # The dashboard as public sector staff and administrators see it. The same route is
+  # listed again as proposal-vendor-dashboard, which is what a vendor sees there, and as
+  # evaluation-panel-dashboard, which is the panel tab.
+  - id: opportunity-dashboard
+    domain: opportunities
+    route: /dashboard
+    title: "Dashboard"
+    actions:
+      create_opportunity: { test_id: null }
+      open_opportunity: { test_id: null }
+    observations:
+      my_opportunities_table: { test_id: null }
+      opportunity_status: { test_id: null }
+      own_opportunities_only: { test_id: null }
+      all_opportunities_for_administrator: { test_id: null }
+      empty_my_opportunities_message: { test_id: null }
+
   - id: opportunity-list
     domain: opportunities
     route: /opportunities
@@ -1052,6 +1088,28 @@ pages:
       message_summary: { test_id: null }
       message_body: { test_id: null }
       refused_for_non_administrator: { test_id: null }
+
+  # The footer, which every screen carries. Listed as a surface of its own because the
+  # five links on it are the service's whole standing offer of its own legal and
+  # informational prose, and a test reaches them from wherever it happens to be. The
+  # route names the one screen a test can always reach without signing in.
+  - id: content-footer
+    domain: content
+    route: /
+    title: "Footer"
+    actions:
+      open_about: { test_id: null }
+      open_disclaimer: { test_id: null }
+      open_privacy: { test_id: null }
+      open_accessibility: { test_id: null }
+      open_copyright: { test_id: null }
+    observations:
+      about_link: { test_id: null }
+      disclaimer_link: { test_id: null }
+      privacy_link: { test_id: null }
+      accessibility_link: { test_id: null }
+      copyright_link: { test_id: null }
+      present_when_signed_out: { test_id: null }
 
   - id: content-list
     domain: content

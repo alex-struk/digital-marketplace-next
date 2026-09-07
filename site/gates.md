@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-07T11:52:04.374Z | contract-v1 | G1 | approve | agent:product-owner | agent-held, unsampled | $0.8271335 |  |
 | 2026-09-07T11:06:06.838Z | policy-v3 | G-POL | approve | agent:tech-lead | agent-held, unsampled | $0.722108 | sample |
 | 2026-09-07T08:48:15.694Z | ratify-files-1 | G1 | approve | agent:product-owner | agent-held, unsampled | $1.6447765 |  |
 | 2026-09-07T08:44:52.769Z | archaeology-files | G1 | approve | agent:product-owner | agent-held, unsampled | $1.1771920000000002 |  |
