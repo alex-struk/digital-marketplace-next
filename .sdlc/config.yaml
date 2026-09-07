@@ -16,6 +16,8 @@ oracle:
   seed: tests/seed/
   base_url: http://localhost:3000
   identity: session-route
+  service: app
+  db: { service: db, user: digmkt, database: digmkt }
 targets:
   new: { base_url: http://localhost:8080, identity: sandbox-idp }
 policy:
@@ -29,7 +31,7 @@ policy:
   default_tier: STANDARD
   rungs: {}
   triage: { direct_max_files: 3, direct_allowed_paths: [app/] }
-  budgets: { archaeology: 120, derive-tests: 2000000, build: 3000000, review: 1000000 }
+  budgets: { archaeology: 120, contract: 200, derive-tests: 300, bind-adapter: 200, rule: 80, build: 3000000, review: 1000000 }
 skills:
   packs:
     - { repo: mattpocock/skills, ref: 3cca18b368ae95cdbdebbff572ccafa662551015, skills: [grilling, domain-modeling, prototype, tdd, code-review] }
