@@ -36,3 +36,17 @@ The third is a set of specific, small additions I needed and did not find, named
 - **An observation of whether the signed-in person watches an opportunity.** For R-6.17 I had to prove watch retention through the owner's `reporting_watchers` count, signing in as an administrator to read it. A watch-state observation on the opportunity view would say directly what the criterion claims.
 
 One last thing the next contract revision should settle: every observation is `Promise<string>` with no stated vocabulary for the many that read as yes/no predicates. I asserted them affirmatively (`toBeTruthy`) and avoided asserting their negation anywhere, because a wrong guess at "no" versus "false" versus rendered text would fail a correct implementation. That convention is why R-6.27 is an entry rather than a file.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+All twenty-eight accepted criteria are accounted for (twelve spec files, sixteen not-testable entries) with versions matching the spec. No implementation reaches: no route, selector, status code or table/column name appears in any test; the only asserted literals are the spec's own vocabulary. The not-testable reasons were verified against the real artefacts rather than taken on trust — observables.yaml names from/bcc/HTML/Text and a read-one-message route that tests/fixtures/mail.ts does not implement, so the ten mail-gap entries are real, as are the environment-configuration entries and R-6.20's absence of a first-time identity. The four partial tests declare their narrowing at the top of each file. R-6.14 and R-6.19 asserting opposite things about the same page is by design: the suite runs against either target, so recovered-defect criteria hold against the oracle and authored replacements against the new service.
+
+**Conditions:**
+- R-6.13 asserts messageSummary() is present, where the criterion says a summary exists only 'where one is written' — tighten or drop that assertion when a per-message observation exists.
+- R-6.17's second test compares reportingWatchers() before and after deactivation without establishing that the count includes the vendor under test; if toggleWatch() turns an existing watch off, the equality holds vacuously. Assert the count increased on watching before using it as the baseline.
+- Next contract revision: add mail accessors for from, bcc, Text, HTML and one message by id (observables.yaml already names them). That converts ten of the sixteen not-testable entries into real tests and is the single highest-value change for this domain.
+- Also for the contract: an action to open one message on the reference page, an observation of the opt-in control offered at a narrow width (R-6.27), an observation of watch state on the opportunity view (R-6.17), and a stated yes/no vocabulary for observations that read as predicates.
+- Neither npm run typecheck nor the suite was run — tests/node_modules is absent and tests/adapters is empty, so no run is possible before bind-adapter. Typecheck must pass at that stage before any of this counts as verified.
