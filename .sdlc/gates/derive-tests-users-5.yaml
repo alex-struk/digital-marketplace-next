@@ -1,0 +1,16 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The receipt's Condition-1 and Condition-2 claims are contradicted by the branch. spec/domains/users.md lines 153 and 168 still read '- state: accepted' for R-4.10 v1 and R-4.11 v1; git diff --name-only main...HEAD contains no spec/ path; and the tally across spec/domains/ is still 288 accepted / 7 obsolete, the exact figure the proposal claims to have moved away from to 286/9. The proposal verified against a workspace it describes as having no .git and no .sdlc/, while the branch it produced contains .sdlc/ files — so the verification was run against a different tree. An outcome asserted without a check behind it is the one thing this gate refuses, and here the check available to the reviewer disproves it. The derived tests themselves were read against their criteria and pass: no assertion goes beyond what its criterion states, no selector, route, table or status code leaks in, and each of the nine not-testable reasons names a real missing persona, action or observation.
+conditions:
+  - "Make the two state edits in the branch under review: spec/domains/users.md R-4.10 v1 (line 153) and R-4.11 v1 (line 168) from '- state: accepted' to '- state: obsolete', leaving both superseded-by lines and all four note lines untouched. Confirm by a diff against main that shows spec/domains/users.md changed, and by a re-run tally reading 286 accepted / 9 obsolete across spec/domains/."
+  - "If the edit genuinely cannot be made from the working environment, report the condition as not performed rather than as done, and say which tree was inspected. A verification run against a workspace that is not the branch is not evidence about the branch."
+  - "Keep the deferral of spec/spec.md and spec/criteria-index.json to 'sdlc run ratify' as stated, and keep the reasoning about the generated_from provenance stamp — that part of the receipt is correct and should not be hand-patched."
+  - "Optional, for the same pass: R-4.14's search test passes a whole name where the criterion says 'part of a name', and the criterion's ordering clause (status, then account kind, then name) is not asserted at all. Both are under-testing rather than over-assertion, so neither blocks approval on its own."
+  - "Carry the supersession flag to whoever authors the contract next: R-4.10 and R-4.11 becoming obsolete while R-8.14, R-6.10, R-6.14, R-6.22 and R-6.26 remain accepted with tests — as the five 'tests' check warnings show — should be a recorded decision rather than an inconsistency that accumulates."
+cost: 0.8361945
+turns: 10
+session: "42d4efc5-bba9-4e52-bb90-82f04b67e18a"
+at: 2026-09-07T16:39:02.945Z
