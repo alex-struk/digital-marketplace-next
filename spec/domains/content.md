@@ -21,9 +21,10 @@ needed page can be opened, and announcing changed terms from the terms page.
 
 The service's published interface description covers a dozen other parts of the service and says
 nothing at all about pages, so every criterion below that concerns a request rather than a screen
-rests on the code alone. Two mismatches inside the code are recorded as criteria rather than
-hidden: seven pages the service creates for itself are linked from nowhere in it, and one page it
-links to from five places is never created. Where a criterion touches the announcement of changed
+rests on the code alone. Three mismatches inside the code are recorded as criteria rather than
+hidden: seven pages the service creates for itself are linked from nowhere in it, one page it
+links to from five places is never created, and a program's qualification terms can be agreed to
+when nothing was shown in place of them. Where a criterion touches the announcement of changed
 terms, it records only what the page offers; who is notified and what they are told already sits
 with the notifications domain.
 
@@ -346,18 +347,26 @@ The managing screen of a page names who first published it and who last changed 
 - state: proposed
 - note: these names are disclosed only to an administrator; the same page read by anybody else carries no authorship at all. Authorship is recorded per version, so the last editor is the author of the current wording rather than of the page.
 
-### D-content-24 · v1 · open · recovered
-Two administrators editing the same page at once do not see each other's work, and the later of them to publish silently replaces the earlier's wording.
+### D-content-24 · v2 · inferred · recovered
+Two administrators editing the same page at once do not see each other's work, and the later of them to publish silently replaces the earlier's wording unless the two publishes overlap, in which case the later is refused outright.
+- cites: src/back-end/lib/resources/content.ts:223
 - cites: src/back-end/lib/resources/content.ts:241
 - cites: src/back-end/lib/resources/content.ts:293
+- cites: src/back-end/lib/db/content.ts:187
+- cites: src/migrations/tasks/20201028131858_admin-content-mgmt.ts:30
 - cites: src/front-end/typescript/lib/pages/content/edit.tsx:254
+- cites: src/front-end/typescript/lib/pages/content/edit.tsx:309
 - reconciliation: implemented-only
 - given: two administrators who both opened the same page for editing before either saved
 - when: the first publishes their change and then the second publishes theirs
 - then: both are told their changes were published, the page shows only the second administrator's wording, and the first's survives only as an earlier version nothing in the service can show
+- given: those same two administrators
+- when: the second publishes while the first is still being written
+- then: the second is refused, its author is told the change could not be published, none of their wording is saved, and the first administrator's change stands
 - state: proposed
 - note: the submission carries no record of which version it was based on, so the service cannot tell an overwrite from an ordinary change and no warning is possible. The consequence is not lost data — every version is kept — but silently reverted wording, and D-content-13 means the person whose text was replaced has no way to see that it happened.
-- note: Exercise two simultaneous edits of one page against the running old application: does the second publish succeed on stale state, is the first author's wording replaced with no warning to either administrator, and is the replaced version recoverable through anything the service offers?
+- note: the two outcomes differ only in timing. The service works out which version a change will become by re-reading the page for itself after the submission arrives and before writing, and that read is not held together with the write, so a change published after another has finished simply takes the next number and wins. Two changes published inside the same window take the same number, and because a page's versions are held one to a number with no two sharing it, the second write is rejected and the whole publish fails.
+- note: this needs no exercise of a running installation to settle; the ordinary case is a plain last-writer-wins and the overlapping case is a refusal, both readable from the source.
 
 ### D-content-25 · v1 · inferred · recovered
 Where a screen embeds the body of a page beside its own material, a page that is missing or unreadable leaves that part of the screen empty and the screen otherwise works.
@@ -370,18 +379,33 @@ Where a screen embeds the body of a page beside its own material, a page that is
 - then: the opportunity is shown in full and the scope section is empty, with nothing said about why
 - state: proposed
 - note: the same silent-empty handling covers the evaluation instructions an evaluation panel reads, so a panel can be shown a blank instruction screen and told nothing.
+- note: the screens on which a program's qualification terms are accepted do the same thing, so leaving the space empty is the service's single handling of a page it cannot read wherever a page's body appears beside other material. The one exception is the screen that exists to show a page by its address, which answers as not found.
 
-### D-content-26 · v1 · inferred · recovered
-Where a screen exists in order to show the body of a page, a page that is missing or unreadable turns the whole screen into the not-found screen and the action it carried cannot be taken.
-- cites: src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:89
+### D-content-26 · v2 · inferred · recovered
+When a program's qualification terms cannot be read, the screen on which those terms are accepted still opens and shows the program's terms heading with nothing in place of the terms.
+- cites: src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:81
 - cites: src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:136
-- cites: src/front-end/typescript/lib/pages/organization/team-with-us-terms.tsx:90
+- cites: src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:147
+- cites: src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:149
+- cites: src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:218
+- cites: src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:220
+- cites: src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:231
+- cites: src/front-end/typescript/lib/pages/organization/team-with-us-terms.tsx:136
+- cites: src/front-end/typescript/lib/pages/organization/team-with-us-terms.tsx:149
+- cites: src/front-end/typescript/lib/pages/organization/team-with-us-terms.tsx:220
+- cites: src/front-end/typescript/lib/framework/component/cmd.ts:96
+- cites: src/shared/lib/validation/index.ts:28
+- cites: src/shared/lib/http.ts:14
+- cites: src/front-end/typescript/lib/pages/content/view.tsx:75
+- cites: src/front-end/typescript/lib/pages/content/view.tsx:81
 - reconciliation: implemented-only
-- given: an organisation owner about to accept a program's qualification terms, and that program's terms page missing
-- when: they open the screen where the terms are accepted
-- then: they are shown the not-found screen, are told nothing about why, and cannot accept the terms
+- given: an organisation owner opening the screen where a program's qualification terms are accepted, and that program's terms page missing or the request for it failing
+- when: the screen finishes loading
+- then: the screen is shown in full, headed with the program's terms title, the place where the terms would stand is empty, nothing is said about why, and the action that accepts the terms is offered exactly as it would be if the terms had been shown
 - state: proposed
-- note: this and D-content-25 are the two opposite handlings of the same failure, chosen screen by screen. Here the consequence reaches beyond wording: a missing or mis-addressed page blocks a business action, and the person blocked is given no reason and no route to one.
+- note: both program terms screens carry a check that reads as though a terms page which could not be read would send the visitor to the not-found screen. It can never fire: the answer to a request for a page is always a wrapper carrying either the page or the reason it could not be had, and that wrapper is present whichever it carries, so the check only ever catches a missing organisation. A page that is absent, refused or malformed falls past it, the body the screen was initialised with — the empty string — is never replaced, and the screen renders around it.
+- note: the only screen that genuinely becomes the not-found screen when the page it wants cannot be read is the one whose whole purpose is showing a single page by its address, recorded here as R-7.2. Nowhere else in the service does an unreadable page stop a screen; the handling is uniform, not chosen screen by screen.
+- note: what follows from the terms being accepted anyway is recorded separately as D-content-28.
 
 ### D-content-27 · v1 · inferred · recovered
 Seven of the pages the service creates for itself are linked from nowhere within it and can be reached only by knowing their address.
@@ -396,3 +420,20 @@ Seven of the pages the service creates for itself are linked from nowhere within
 - state: obsolete
 - note: the seven are code-with-us-opportunity-guide, code-with-us-proposal-guide, sprint-with-us-opportunity-guide, sprint-with-us-proposal-guide, team-with-us-opportunity-guide, team-with-us-proposal-guide and team-with-us-opportunity-scope. They are still marked as needed by the service, so an administrator cannot remove them and the list of pages gives no hint that they are unused; the equivalent explanatory material is now built into the service's own learn-more screens instead. A human should rule on whether the rebuild seeds them at all.
 - note: The rebuild does not create pages for itself that nothing in it links to. The seven concerned — the opportunity and proposal guides of all three programs and the Team With Us opportunity scope page — were superseded by the built-in learn-more screens and survive only as unremovable rows an administrator cannot clean up. Rows already present in an existing installation are untouched, since the schema is kept.
+
+### D-content-28 · v1 · inferred · recovered
+An organisation's agreement to a program's qualification terms is accepted and recorded even when no terms were shown to the person agreeing.
+- cites: src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:220
+- cites: src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:231
+- cites: src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:161
+- cites: src/front-end/typescript/lib/pages/organization/team-with-us-terms.tsx:231
+- cites: src/back-end/lib/resources/organization.ts:509
+- cites: src/back-end/lib/resources/organization.ts:518
+- cites: src/back-end/lib/resources/organization.ts:591
+- reconciliation: defect
+- given: an organisation owner on the screen where a program's qualification terms are accepted, and that program's terms page missing or unreadable, so the terms appear as blank
+- when: they take the action that accepts the terms
+- then: the acceptance succeeds, the organisation is recorded as having agreed to that program's terms at that moment, the owner is told the terms were accepted, and nothing records that no terms were ever shown
+- state: proposed
+- note: the only thing the service checks before recording the agreement is that this organisation has not already agreed; it never checks that the terms being agreed to exist, could be read, or were put in front of the person agreeing. The record that results is indistinguishable from one made against terms the vendor actually read, and the organisation goes on to be treated as qualified for that program on the strength of it.
+- note: there is no corrected criterion to replace this one with. Whether the rebuild refuses the acceptance, withholds the action, or turns the screen away when the terms cannot be read is a decision for a human, and it interacts with the announcement of changed terms recorded at R-7.13, which asks vendors to accept again.

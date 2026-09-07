@@ -1,13 +1,11 @@
 ---
-gate: G1
-question: "Is the revised content domain right where the return said it was wrong?"
-recommendation: "Revision is complete."
-opened: 2026-09-07T08:24:36.231Z
+stage: "archaeology"
+title: "archaeology content (revise)"
+at: "2026-09-07T08:24:36.212Z"
+cost: 2.7375315
+turns: 37
+session: "400de0f1-dcc6-41dd-a2cc-9abbf54f66a5"
 ---
-
-# Is the revised content domain right where the return said it was wrong?
-
-**Recommendation.** Revision is complete.
 
 Revision is complete. `spec/domains/content.md` is the only file I touched.
 
