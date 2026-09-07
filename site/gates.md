@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-07T03:07:13.475Z | ratify-opportunities-1 | G1 | approve | agent:product-owner | agent-held, unsampled | $2.6438360000000003 | sample |
 | 2026-09-07T01:21:29.623Z | archaeology-opportunities | G1 | approve | agent:product-owner | agent-held, unsampled | $1.0044805 | sample |
 | 2026-09-07T00:56:00.781Z | spec-readme-v1 | G-POL | approve | tech-lead | human |  |  |
 | 2026-09-07T00:33:52.294Z | budget-v1 | G-POL | approve | tech-lead | human |  |  |

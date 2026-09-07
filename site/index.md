@@ -28,6 +28,7 @@ Profile: rebuild
 - [gates-simulated-v1](proposals/gates-simulated-v1.md)
 - [intent-digital-marketplace-rebuild](proposals/intent-digital-marketplace-rebuild.md)
 - [probe-ruling](proposals/probe-ruling.md)
+- [ratify-opportunities-1](proposals/ratify-opportunities-1.md)
 - [spec-readme-v1](proposals/spec-readme-v1.md)
 
 ## Criteria
@@ -37,8 +38,8 @@ Profile: rebuild
 ## Totals
 
 - Journal cost: $17.252174
-- Rulings cost: $2.151337
-- Total cost: $19.403511
-- Agent-held rulings: 4
+- Rulings cost: $4.795173
+- Total cost: $22.047347
+- Agent-held rulings: 5
 - Open escalations: 0
 - Open proposals: 0

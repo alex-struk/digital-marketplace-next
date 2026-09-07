@@ -1,0 +1,56 @@
+gate: G1
+verdict: approve
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  The question is which of the 45 opportunities criteria still inferred or open become the contract, and the ruling is approve with a condition on every one of them. I confirmed 36 because I read the cited lines at the pinned commit myself rather than accepting the recovery's report, and in each case a second witness independent of the recovery exists in the code: the enforcing check and the call site that applies it. Concretely — permissions.ts:345 gates creation to admin or government and the create endpoint at code-with-us.ts:188 additionally requires a signed-in session (D-1); validation/opportunity/utility.ts sets title 1-200, teaser 0-500, description 1-10,000, location minimum 1, and remote description 1-if-remote-else-0 to 500 (D-4, D-5); config.ts fixes CWU_MAX_BUDGET at 70,000 and SWU_MAX_BUDGET at 5,000,000 while validateMaxBudget for Team With Us passes undefined as its ceiling (D-6, D-7); the date chain at code-with-us.ts:238-255 feeds each validated date as the next one's minimum and setDateTo4PM with TIMEZONE America/Vancouver records them at 4 p.m. Pacific (D-8); isValidStatusChange in all three shared resource files reads exactly as the note describes (D-14, D-15); submitForReview at code-with-us.ts:705 checks only title, teaser, remote fields, location and description (D-16); publishCWUOpportunity and cancelCWUOpportunity are isAdmin alone (D-17, D-24); processForRole at db/opportunity/code-with-us.ts:243 deletes createdBy and updatedBy for anyone who is neither admin nor either of those people (D-28); the same file takes the earliest Published status row as publishedAt (D-18), withholds email and createdBy on the successful proponent unless the score is present (D-23), and gates history and reporting counts on admin-or-owner with the counts further gated on publicOpportunityStatuses (D-29); the mailer handlers match the notification criteria one for one (D-35 to D-38); the list groups and sorts as described and offers exactly the five status filters named (D-39, D-40); canChangeEvaluationPanel allows draft, under review, published and the first questions stage only (D-45); finalizeQuestionConsensuses and startTeamScenario carry the guards claimed (D-43, D-44); addNote appears in only the four Code With Us and Sprint With Us files, confirming the Team With Us omission by absence (D-33). D-2 is confirmed on a different witness: constitution article J1, adopted by the tech lead at G-POL, states that the service administers all three programs, so the README and generated schema document naming two are stale documentation rather than an open scope question — and no criterion here was raised on the strength of those documents, which my earlier ruling ruled out. D-3 is edited rather than confirmed because the recovered wording overstates the defaulting: code-with-us.ts:259-272 defaults the proposal deadline, assignment date and start date to fourteen days ahead but coerces the completion date to null. Four are defects the rebuild must not inherit and I rule them without escalating, because in each the code leaves one reading: the Code With Us create path applies only createCWUOpportunity before accepting status Published and then fires the published-subscriber notifications at :394, while the other two programs refuse it, so it is a hole rather than a policy (D-46); the Team With Us transition table permits only cancellation out of processing while canTWUOpportunityBeAwarded returns true for it and the award path never consults the table, and both other programs' tables allow the award, so the table is the outlier (D-47); startCodeChallenge carries the application's own 'todo: remove - not needed any more - the block is deprecated' comment and checks only the screened-in count while finalizeQuestionConsensuses checks the consensuses, so two paths out of one stage enforce different rules (D-48); and 'SUSPENDED' is named DeprecatedSuspended in the enum, is unreachable in every transition table and is still accepted by the store's constraint (D-50). Three I will not decide, because two readings of the intent are each plausible and the disagreement is about what the service should do rather than what it does: whether an evaluation panel requires a chair, where the code's own comment contradicts the code (D-11); which deletion rule carries forward, where the three programs disagree with each other and with the OpenAPI (D-25); and whether the author of a published opportunity may edit it, where the service accepts what the interface withholds (D-49) — each is spiked with the question that would settle it. D-51 is obsoleted: it records that the old application's documentation is incomplete, which is a property of the recovered sources rather than a behaviour the rebuilt system must exhibit, and the behaviours behind it are already stated by the criteria above. I am not escalating the gate: the tier is STANDARD, the stage reported no confidence shortfall, and the per-criterion ambiguities have their own mechanism in the three spikes. The ruling would change if any confirm here rested on the old README, generated schema document or OpenAPI files rather than on the enforcing code, or if a spiked criterion came back on the next follow-up still unanswered and were then confirmed rather than decided on evidence.
+conditions:
+  - "confirm D-opportunities-1"
+  - "confirm D-opportunities-2"
+  - "edit D-opportunities-3: An opportunity saved as a draft is accepted with incomplete content; when its proposal deadline, assignment date or start date is missing or invalid it is set to fourteen days from the day of saving, and its completion date is left empty."
+  - "confirm D-opportunities-4"
+  - "confirm D-opportunities-5"
+  - "confirm D-opportunities-6"
+  - "confirm D-opportunities-7"
+  - "confirm D-opportunities-8"
+  - "confirm D-opportunities-9"
+  - "confirm D-opportunities-10"
+  - "spike D-opportunities-11: Must a Sprint With Us or Team With Us evaluation panel have exactly one chair, as the application's own comment states, or is a chair optional, as the code allows?"
+  - "confirm D-opportunities-12"
+  - "confirm D-opportunities-13"
+  - "confirm D-opportunities-14"
+  - "confirm D-opportunities-15"
+  - "confirm D-opportunities-16"
+  - "confirm D-opportunities-17"
+  - "confirm D-opportunities-18"
+  - "confirm D-opportunities-20"
+  - "confirm D-opportunities-21"
+  - "confirm D-opportunities-22"
+  - "confirm D-opportunities-23"
+  - "confirm D-opportunities-24"
+  - "spike D-opportunities-25: Which single deletion rule carries forward across all three programs: may an administrator delete an opportunity that is under review as well as one in draft, and may the creating public sector employee delete one that is under review, or only a draft?"
+  - "confirm D-opportunities-28"
+  - "confirm D-opportunities-29"
+  - "confirm D-opportunities-30"
+  - "confirm D-opportunities-32"
+  - "confirm D-opportunities-33"
+  - "confirm D-opportunities-35"
+  - "confirm D-opportunities-36"
+  - "confirm D-opportunities-37"
+  - "confirm D-opportunities-38"
+  - "confirm D-opportunities-39"
+  - "confirm D-opportunities-40"
+  - "confirm D-opportunities-42"
+  - "confirm D-opportunities-43"
+  - "confirm D-opportunities-44"
+  - "confirm D-opportunities-45"
+  - "defect D-opportunities-46: Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs."
+  - "defect D-opportunities-47: The permitted state changes for a Team With Us opportunity in processing are awarded and cancelled, matching Code With Us and Sprint With Us, so the recorded transitions and the award path agree."
+  - "defect D-opportunities-48: There is exactly one path out of a questions consensus stage, and it refuses to advance unless every consensus evaluation has been submitted and at least one proponent has met the minimum score on every question that sets one."
+  - "spike D-opportunities-49: May the author of a published opportunity who is not an administrator change its details, as the service accepts, or is editing after publication administrator-only, as the interface enforces?"
+  - "defect D-opportunities-50: The rebuilt system defines no suspended state for an opportunity: none can be created in it, moved to it or stored in it, and any historical record carrying it is mapped to a defined state before the rebuilt system reads it."
+  - "obsolete D-opportunities-51: It records that the old application's own interface description is incomplete, which is a property of the recovered sources rather than a behaviour the rebuilt system must exhibit; the behaviours it points at are already carried by the criteria above, and the documentation's unreliability belongs in the archaeology journal."
+cost: 2.6438360000000003
+turns: 46
+session: "c94d8e8c-aaec-40ac-b765-3c488e6abbab"
+at: 2026-09-07T03:07:13.475Z
