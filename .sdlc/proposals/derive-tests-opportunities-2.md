@@ -22,3 +22,13 @@ For the second condition, I corrected only the comment block at the top of `R-1.
 For the third condition I changed nothing: the other 35 spec files in the domain and all 14 not-testable entries are exactly as they were. I re-derived nothing and rewrote no "derived" date — as it happens both files I did change carry today's date already, so nothing moved there either. I confirmed R-1.7 and R-1.55 are not listed in `not-testable.yaml`, and no criterion in this run turned out to be unreachable through the surface, so no entry needed adding.
 
 Nothing was missing from the contract for this work. The one gap worth carrying forward to whoever writes the contract next is the one R-1.55's comment now records: an evaluation panel error observation that names a second chair — something alongside `minimumMembersError`, `duplicateMemberError`, `missingChairError` and `nonPublicSectorMemberError` on both `EvaluationPanelSwuPage` and `EvaluationPanelTwuPage`. Without it, the fifth fault R-1.55 lists stays unassertable, since the criterion demands the reason be named and no observation can read that particular reason.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Both conditions are met and nothing else moved: the diff against the returned proposal touches only R-1.7.spec.ts and R-1.55.spec.ts, 26 lines. R-1.7 now attempts the creation the criterion names and reads the refusal from whether an opportunity was created, checked as an administrator against opportunityList.unpublishedGroup(); the programCard() and myOpportunitiesTable() shape assertions are gone, so nothing is asserted beyond 'the request is refused and no opportunity is created'. R-1.55's header now gives the real reason, verified against spec/contract/surface.yaml:781-798, which carries minimum_members_error, duplicate_member_error, missing_chair_error and non_public_sector_member_error but no second-chair error, while also carrying choose_panel_chair and chair_field: the fifth fault is unassertable because the criterion requires the reason to be named and no observation reads it. The four R-1.55 test bodies and the other 34 specs and 14 not-testable entries are unchanged from the set the previous ruling verified. No implementation detail leaks into any assertion. The receipt names what it could not check (tests/node_modules absent, so no local typecheck or separation run) and the harness ran separation and tests green; the five tests warnings are pre-existing and belong to the files and notifications domains. STANDARD tier, no unaccepted residual risk, so no escalation.
+
+**Conditions:**
+none
