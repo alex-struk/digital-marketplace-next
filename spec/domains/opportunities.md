@@ -1,7 +1,7 @@
 # opportunities
 
-### R-1.1 · v1 · confirmed · recovered
-A published opportunity whose proposal deadline has passed closes on its own: it moves to the first evaluation stage of its program, every proposal submitted against it moves to review, and its author is notified that it is ready for evaluation.
+### R-1.1 · v2 · confirmed · recovered
+A published opportunity whose proposal deadline has passed closes on its own at the next request the service handles under /api or /status: it moves to the first evaluation stage of its program, every proposal submitted against it moves to review, and its author is notified that it is ready for evaluation.
 - cites: src/back-end/lib/db/opportunity/code-with-us.ts:898
 - cites: src/back-end/lib/db/opportunity/sprint-with-us.ts:1442
 - cites: src/back-end/lib/db/opportunity/team-with-us.ts:1433

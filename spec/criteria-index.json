@@ -1,5 +1,5 @@
 {
-  "generated_from": "40605384759bd10724c1411fdc448dfd99c70aee",
+  "generated_from": "897abf82ff1b013b15ba65777ea1336a8f5e50f6",
   "criteria": [
     {
       "id": "R-7.1",
@@ -4171,10 +4171,10 @@
     },
     {
       "id": "R-1.1",
-      "version": 1,
+      "version": 2,
       "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "A published opportunity whose proposal deadline has passed closes on its own: it moves to the first evaluation stage of its program, every proposal submitted against it moves to review, and its author is notified that it is ready for evaluation.",
+      "statement": "A published opportunity whose proposal deadline has passed closes on its own at the next request the service handles under /api or /status: it moves to the first evaluation stage of its program, every proposal submitted against it moves to review, and its author is notified that it is ready for evaluation.",
       "cites": [
         {
           "path": "src/back-end/lib/db/opportunity/code-with-us.ts",
@@ -4209,7 +4209,7 @@
         "closure is driven by ordinary traffic rather than a clock, throttled so it runs at most once a minute, and additionally attached to the health-check route so that it still runs when the site is idle. An opportunity therefore closes at the first request after its deadline, not at the deadline itself."
       ],
       "state": "accepted",
-      "raw": "### R-1.1 · v1 · confirmed · recovered",
+      "raw": "### R-1.1 · v2 · confirmed · recovered",
       "line": 3,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
