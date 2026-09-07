@@ -1,41 +1,6 @@
 {
-  "generated_from": "b0010ed59e6316c12f0b3ce82b6bed02fdea3e47",
+  "generated_from": "09bfa71db4296bce9c472e82ed846be45ddf7a5f",
   "criteria": [
-    {
-      "id": "D-opportunities-1",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "Only signed-in public sector staff and administrators may create an opportunity; a request from a vendor or an anonymous visitor is refused.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/permissions.ts",
-          "line": 345
-        },
-        {
-          "path": "src/back-end/lib/permissions.ts",
-          "line": 604
-        },
-        {
-          "path": "src/back-end/lib/permissions.ts",
-          "line": 1099
-        },
-        {
-          "path": "src/front-end/typescript/lib/pages/opportunity/create.tsx",
-          "line": 37
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "a visitor who is not signed in, or is signed in as a vendor",
-      "when": "they attempt to create an opportunity",
-      "then": "the request is refused and no opportunity is created",
-      "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-1 · v1 · inferred · recovered",
-      "line": 3,
-      "domain": "opportunities",
-      "file": "spec/domains/opportunities.md"
-    },
     {
       "id": "R-1.1",
       "version": 1,
@@ -77,48 +42,7 @@
       ],
       "state": "accepted",
       "raw": "### R-1.1 · v1 · confirmed · recovered",
-      "line": 15,
-      "domain": "opportunities",
-      "file": "spec/domains/opportunities.md"
-    },
-    {
-      "id": "D-opportunities-2",
-      "version": 1,
-      "confidence": "open",
-      "origin": "recovered",
-      "statement": "Every opportunity belongs to exactly one of three procurement programs — Code With Us, Sprint With Us or Team With Us — chosen when it is created and never changed afterwards.",
-      "cites": [
-        {
-          "path": "src/front-end/typescript/lib/pages/opportunity/create.tsx",
-          "line": 77
-        },
-        {
-          "path": "src/shared/lib/resources/opportunity/code-with-us.ts",
-          "line": 14
-        },
-        {
-          "path": "src/shared/lib/resources/opportunity/sprint-with-us.ts",
-          "line": 56
-        },
-        {
-          "path": "src/shared/lib/resources/opportunity/team-with-us.ts",
-          "line": 19
-        },
-        {
-          "path": "README.md",
-          "line": 5
-        }
-      ],
-      "reconciliation": "conflicting",
-      "given": "a member of public sector staff creating a new opportunity",
-      "when": "they choose a program and complete creation",
-      "then": "the opportunity is filed under that program and offers only that program's fields, stages and actions",
-      "notes": [
-        "the running code implements three programs, but the application's own README describes only Code With Us and Sprint With Us, and its generated database-schema document lists no Team With Us tables at all. Both documents predate Team With Us; a human should confirm that all three programs carry forward rather than assuming the documents are merely stale."
-      ],
-      "state": "proposed",
-      "raw": "### D-opportunities-2 · v1 · open · recovered",
-      "line": 30,
+      "line": 3,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -157,34 +81,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.2 · v1 · confirmed · recovered",
-      "line": 44,
-      "domain": "opportunities",
-      "file": "spec/domains/opportunities.md"
-    },
-    {
-      "id": "D-opportunities-3",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "An opportunity saved as a draft is accepted with incomplete content, and any missing or invalid dates are defaulted to fourteen days ahead.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/resources/opportunity/code-with-us.ts",
-          "line": 257
-        },
-        {
-          "path": "src/back-end/lib/resources/opportunity/sprint-with-us/index.ts",
-          "line": 412
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "a member of public sector staff filling in a new opportunity",
-      "when": "they save it as a draft with fields still blank",
-      "then": "the draft is stored, no content validation error is raised, and absent dates are set to fourteen days from the day of saving",
-      "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-3 · v1 · inferred · recovered",
-      "line": 57,
+      "line": 18,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -215,42 +112,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.3 · v1 · confirmed · recovered",
-      "line": 67,
-      "domain": "opportunities",
-      "file": "spec/domains/opportunities.md"
-    },
-    {
-      "id": "D-opportunities-4",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters.",
-      "cites": [
-        {
-          "path": "src/shared/lib/validation/opportunity/utility.ts",
-          "line": 89
-        },
-        {
-          "path": "src/shared/lib/validation/opportunity/utility.ts",
-          "line": 98
-        },
-        {
-          "path": "src/shared/lib/validation/opportunity/utility.ts",
-          "line": 137
-        },
-        {
-          "path": "src/shared/lib/validation/opportunity/utility.ts",
-          "line": 147
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "a member of public sector staff creating or editing an opportunity that is not a draft",
-      "when": "they submit it with a missing title, a title over 200 characters, a teaser over 500 characters, a missing location, or a description that is missing or over 10,000 characters",
-      "then": "the submission is rejected and the offending field is named in the response",
-      "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-4 · v1 · inferred · recovered",
-      "line": 78,
+      "line": 31,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -281,36 +143,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.4 · v1 · confirmed · recovered",
-      "line": 90,
-      "domain": "opportunities",
-      "file": "spec/domains/opportunities.md"
-    },
-    {
-      "id": "D-opportunities-5",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "An opportunity that is not a draft must state whether remote work is acceptable, and must carry a remote-work description of up to 500 characters whenever remote work is acceptable.",
-      "cites": [
-        {
-          "path": "src/shared/lib/validation/opportunity/utility.ts",
-          "line": 107
-        },
-        {
-          "path": "src/shared/lib/validation/opportunity/utility.ts",
-          "line": 120
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "a member of public sector staff creating or editing an opportunity that is not a draft",
-      "when": "they mark it as accepting remote work but leave the remote-work description empty",
-      "then": "the submission is rejected",
-      "notes": [
-        "when remote work is not acceptable the remote-work description may be empty, and any value over 500 characters is rejected either way."
-      ],
-      "state": "proposed",
-      "raw": "### D-opportunities-5 · v1 · inferred · recovered",
-      "line": 101,
+      "line": 42,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -343,40 +176,7 @@
       ],
       "state": "accepted",
       "raw": "### R-1.5 · v1 · confirmed · recovered",
-      "line": 112,
-      "domain": "opportunities",
-      "file": "spec/domains/opportunities.md"
-    },
-    {
-      "id": "D-opportunities-6",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "A Code With Us opportunity must offer a reward of at least $1 and at most $70,000, and must name at least one skill.",
-      "cites": [
-        {
-          "path": "src/shared/lib/validation/opportunity/code-with-us.ts",
-          "line": 49
-        },
-        {
-          "path": "src/shared/lib/validation/opportunity/code-with-us.ts",
-          "line": 53
-        },
-        {
-          "path": "src/shared/config.ts",
-          "line": 28
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "a member of public sector staff creating or editing a Code With Us opportunity that is not a draft",
-      "when": "they submit a reward outside $1 to $70,000, or submit no skills",
-      "then": "the submission is rejected",
-      "notes": [
-        "duplicate skills are silently collapsed rather than rejected."
-      ],
-      "state": "proposed",
-      "raw": "### D-opportunities-6 · v1 · inferred · recovered",
-      "line": 124,
+      "line": 53,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -403,14 +203,252 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.6 · v1 · confirmed · recovered",
-      "line": 136,
+      "line": 65,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-7",
+      "id": "R-1.7",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Only signed-in public sector staff and administrators may create an opportunity; a request from a vendor or an anonymous visitor is refused.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 345
+        },
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 604
+        },
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 1099
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/opportunity/create.tsx",
+          "line": 37
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a visitor who is not signed in, or is signed in as a vendor",
+      "when": "they attempt to create an opportunity",
+      "then": "the request is refused and no opportunity is created",
+      "notes": [],
+      "state": "accepted",
+      "raw": "### R-1.7 · v1 · confirmed · recovered",
+      "line": 75,
+      "domain": "opportunities",
+      "file": "spec/domains/opportunities.md"
+    },
+    {
+      "id": "R-1.8",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Every opportunity belongs to exactly one of three procurement programs — Code With Us, Sprint With Us or Team With Us — chosen when it is created and never changed afterwards.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/opportunity/create.tsx",
+          "line": 77
+        },
+        {
+          "path": "src/shared/lib/resources/opportunity/code-with-us.ts",
+          "line": 14
+        },
+        {
+          "path": "src/shared/lib/resources/opportunity/sprint-with-us.ts",
+          "line": 56
+        },
+        {
+          "path": "src/shared/lib/resources/opportunity/team-with-us.ts",
+          "line": 19
+        },
+        {
+          "path": "README.md",
+          "line": 5
+        }
+      ],
+      "reconciliation": "conflicting",
+      "given": "a member of public sector staff creating a new opportunity",
+      "when": "they choose a program and complete creation",
+      "then": "the opportunity is filed under that program and offers only that program's fields, stages and actions",
+      "notes": [
+        "the running code implements three programs, but the application's own README describes only Code With Us and Sprint With Us, and its generated database-schema document lists no Team With Us tables at all. Both documents predate Team With Us; a human should confirm that all three programs carry forward rather than assuming the documents are merely stale."
+      ],
+      "state": "accepted",
+      "raw": "### R-1.8 · v1 · confirmed · recovered",
+      "line": 87,
+      "domain": "opportunities",
+      "file": "spec/domains/opportunities.md"
+    },
+    {
+      "id": "R-1.9",
+      "version": 2,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "An opportunity saved as a draft is accepted with incomplete content; when its proposal deadline, assignment date or start date is missing or invalid it is set to fourteen days from the day of saving, and its completion date is left empty.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/opportunity/code-with-us.ts",
+          "line": 257
+        },
+        {
+          "path": "src/back-end/lib/resources/opportunity/sprint-with-us/index.ts",
+          "line": 412
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a member of public sector staff filling in a new opportunity",
+      "when": "they save it as a draft with fields still blank",
+      "then": "the draft is stored, no content validation error is raised, and absent dates are set to fourteen days from the day of saving",
+      "notes": [],
+      "state": "accepted",
+      "raw": "### R-1.9 · v2 · confirmed · recovered",
+      "line": 101,
+      "domain": "opportunities",
+      "file": "spec/domains/opportunities.md"
+    },
+    {
+      "id": "R-1.10",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters.",
+      "cites": [
+        {
+          "path": "src/shared/lib/validation/opportunity/utility.ts",
+          "line": 89
+        },
+        {
+          "path": "src/shared/lib/validation/opportunity/utility.ts",
+          "line": 98
+        },
+        {
+          "path": "src/shared/lib/validation/opportunity/utility.ts",
+          "line": 137
+        },
+        {
+          "path": "src/shared/lib/validation/opportunity/utility.ts",
+          "line": 147
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a member of public sector staff creating or editing an opportunity that is not a draft",
+      "when": "they submit it with a missing title, a title over 200 characters, a teaser over 500 characters, a missing location, or a description that is missing or over 10,000 characters",
+      "then": "the submission is rejected and the offending field is named in the response",
+      "notes": [],
+      "state": "accepted",
+      "raw": "### R-1.10 · v1 · confirmed · recovered",
+      "line": 111,
+      "domain": "opportunities",
+      "file": "spec/domains/opportunities.md"
+    },
+    {
+      "id": "D-opportunities-11",
+      "version": 1,
+      "confidence": "open",
+      "origin": "recovered",
+      "statement": "A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, with at most one of them marked as chair.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/validation.ts",
+          "line": 900
+        },
+        {
+          "path": "src/back-end/lib/validation.ts",
+          "line": 847
+        },
+        {
+          "path": "src/shared/config.ts",
+          "line": 32
+        },
+        {
+          "path": "src/shared/config.ts",
+          "line": 34
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a member of public sector staff creating or editing a Sprint With Us or Team With Us opportunity",
+      "when": "they submit fewer than two panel members, the same person twice, more than one chair, or anyone who is not a public sector employee",
+      "then": "the submission is rejected and the reason is named",
+      "notes": [
+        "the rule as written in the application's own comment says \"one and only one chair\", but the code accepts a panel with no chair at all and rejects only a second chair. A human should rule on which was intended.",
+        "Must a Sprint With Us or Team With Us evaluation panel have exactly one chair, as the application's own comment states, or is a chair optional, as the code allows?"
+      ],
+      "state": "proposed",
+      "raw": "### D-opportunities-11 · v1 · open · recovered",
+      "line": 123,
+      "domain": "opportunities",
+      "file": "spec/domains/opportunities.md"
+    },
+    {
+      "id": "R-1.11",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "An opportunity that is not a draft must state whether remote work is acceptable, and must carry a remote-work description of up to 500 characters whenever remote work is acceptable.",
+      "cites": [
+        {
+          "path": "src/shared/lib/validation/opportunity/utility.ts",
+          "line": 107
+        },
+        {
+          "path": "src/shared/lib/validation/opportunity/utility.ts",
+          "line": 120
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a member of public sector staff creating or editing an opportunity that is not a draft",
+      "when": "they mark it as accepting remote work but leave the remote-work description empty",
+      "then": "the submission is rejected",
+      "notes": [
+        "when remote work is not acceptable the remote-work description may be empty, and any value over 500 characters is rejected either way."
+      ],
+      "state": "accepted",
+      "raw": "### R-1.11 · v1 · confirmed · recovered",
+      "line": 137,
+      "domain": "opportunities",
+      "file": "spec/domains/opportunities.md"
+    },
+    {
+      "id": "R-1.12",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A Code With Us opportunity must offer a reward of at least $1 and at most $70,000, and must name at least one skill.",
+      "cites": [
+        {
+          "path": "src/shared/lib/validation/opportunity/code-with-us.ts",
+          "line": 49
+        },
+        {
+          "path": "src/shared/lib/validation/opportunity/code-with-us.ts",
+          "line": 53
+        },
+        {
+          "path": "src/shared/config.ts",
+          "line": 28
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a member of public sector staff creating or editing a Code With Us opportunity that is not a draft",
+      "when": "they submit a reward outside $1 to $70,000, or submit no skills",
+      "then": "the submission is rejected",
+      "notes": [
+        "duplicate skills are silently collapsed rather than rejected."
+      ],
+      "state": "accepted",
+      "raw": "### R-1.12 · v1 · confirmed · recovered",
+      "line": 148,
+      "domain": "opportunities",
+      "file": "spec/domains/opportunities.md"
+    },
+    {
+      "id": "R-1.13",
+      "version": 1,
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "A Sprint With Us opportunity must state a total maximum budget of at least $1 and at most $5,000,000, while a Team With Us opportunity must state a maximum budget of at least $1 with no upper limit.",
       "cites": [
@@ -434,16 +472,16 @@
       "notes": [
         "the absence of an upper budget limit on Team With Us is a difference from the other two programs, not a stated policy; nothing in the application explains it, so a human should rule on whether it carries forward."
       ],
-      "state": "proposed",
-      "raw": "### D-opportunities-7 · v1 · inferred · recovered",
-      "line": 146,
+      "state": "accepted",
+      "raw": "### R-1.13 · v1 · confirmed · recovered",
+      "line": 160,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-8",
+      "id": "R-1.14",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "An opportunity's key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen.",
       "cites": [
@@ -471,16 +509,16 @@
       "notes": [
         "when an already-published opportunity's deadline has passed, an edit is measured against that past deadline instead of today, so a closed opportunity can be edited without its dates being forced forward."
       ],
-      "state": "proposed",
-      "raw": "### D-opportunities-8 · v1 · inferred · recovered",
-      "line": 158,
+      "state": "accepted",
+      "raw": "### R-1.14 · v1 · confirmed · recovered",
+      "line": 172,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-9",
+      "id": "R-1.15",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "A Sprint With Us or Team With Us opportunity is rejected unless its evaluation weights total exactly one hundred per cent.",
       "cites": [
@@ -500,16 +538,16 @@
       "notes": [
         "Sprint With Us weights four stages (questions, code challenge, team scenario, price); Team With Us weights three (questions, challenge, price). Each individual weight is separately required to fall between 0 and 100."
       ],
-      "state": "proposed",
-      "raw": "### D-opportunities-9 · v1 · inferred · recovered",
-      "line": 171,
+      "state": "accepted",
+      "raw": "### R-1.15 · v1 · confirmed · recovered",
+      "line": 185,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-10",
+      "id": "R-1.16",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "A Sprint With Us opportunity must have an implementation phase, and may only have an inception phase if it also has a prototype phase.",
       "cites": [
@@ -527,53 +565,16 @@
       "when": "they include an inception phase but no prototype phase",
       "then": "the submission is rejected with a message saying a prototype phase must follow an inception phase",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-10 · v1 · inferred · recovered",
-      "line": 182,
+      "state": "accepted",
+      "raw": "### R-1.16 · v1 · confirmed · recovered",
+      "line": 196,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-11",
+      "id": "R-1.17",
       "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, with at most one of them marked as chair.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/validation.ts",
-          "line": 900
-        },
-        {
-          "path": "src/back-end/lib/validation.ts",
-          "line": 847
-        },
-        {
-          "path": "src/shared/config.ts",
-          "line": 32
-        },
-        {
-          "path": "src/shared/config.ts",
-          "line": 34
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "a member of public sector staff creating or editing a Sprint With Us or Team With Us opportunity",
-      "when": "they submit fewer than two panel members, the same person twice, more than one chair, or anyone who is not a public sector employee",
-      "then": "the submission is rejected and the reason is named",
-      "notes": [
-        "the rule as written in the application's own comment says \"one and only one chair\", but the code accepts a panel with no chair at all and rejects only a second chair. A human should rule on which was intended."
-      ],
-      "state": "proposed",
-      "raw": "### D-opportunities-11 · v1 · inferred · recovered",
-      "line": 192,
-      "domain": "opportunities",
-      "file": "spec/domains/opportunities.md"
-    },
-    {
-      "id": "D-opportunities-12",
-      "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question, a guideline, a maximum score, a response word limit and a position, and an optional minimum score that must be lower than the question's maximum score.",
       "cites": [
@@ -597,16 +598,16 @@
       "notes": [
         "the same limits apply to Sprint With Us \"team questions\" and Team With Us \"resource questions\"; the two differ only in name."
       ],
-      "state": "proposed",
-      "raw": "### D-opportunities-12 · v1 · inferred · recovered",
-      "line": 205,
+      "state": "accepted",
+      "raw": "### R-1.17 · v1 · confirmed · recovered",
+      "line": 206,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-13",
+      "id": "R-1.18",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "Each resource on a Team With Us opportunity names one service area and a target allocation between 1 and 100 per cent of full time.",
       "cites": [
@@ -628,16 +629,16 @@
       "when": "they submit a resource with a target allocation outside 1 to 100, or a service area that is not one of the five recognised areas",
       "then": "the submission is rejected",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-13 · v1 · inferred · recovered",
-      "line": 217,
+      "state": "accepted",
+      "raw": "### R-1.18 · v1 · confirmed · recovered",
+      "line": 218,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-14",
+      "id": "R-1.19",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "An opportunity moves through the states draft, under review, published, one or more program-specific evaluation stages, processing, and finally awarded or cancelled.",
       "cites": [
@@ -665,16 +666,16 @@
       "notes": [
         "Code With Us has a single evaluation stage; Sprint With Us has four (team questions individual, team questions consensus, code challenge, team scenario); Team With Us has three (resource questions individual, resource questions consensus, challenge)."
       ],
-      "state": "proposed",
-      "raw": "### D-opportunities-14 · v1 · inferred · recovered",
-      "line": 228,
+      "state": "accepted",
+      "raw": "### R-1.19 · v1 · confirmed · recovered",
+      "line": 229,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-15",
+      "id": "R-1.20",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "An opportunity may only change state along the permitted path for its program, and a request for any other change is refused.",
       "cites": [
@@ -698,16 +699,16 @@
       "notes": [
         "a draft may go to under review or straight to published; under review may only go to published; published and every evaluation stage may go to the next stage or to cancelled; awarded and cancelled are final."
       ],
-      "state": "proposed",
-      "raw": "### D-opportunities-15 · v1 · inferred · recovered",
-      "line": 241,
+      "state": "accepted",
+      "raw": "### R-1.20 · v1 · confirmed · recovered",
+      "line": 242,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-16",
+      "id": "R-1.21",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "Submitting a draft opportunity for review is refused unless the opportunity is complete, and the person is told the opportunity is incomplete rather than which field is missing.",
       "cites": [
@@ -727,16 +728,16 @@
       "notes": [
         "Code With Us checks only title, teaser, remote-work fields, location and description at this point, while Sprint With Us additionally checks budget, skills, weights and every phase — so a Code With Us opportunity can reach \"under review\" with a missing reward or missing skills and be caught only at publication."
       ],
-      "state": "proposed",
-      "raw": "### D-opportunities-16 · v1 · inferred · recovered",
-      "line": 253,
+      "state": "accepted",
+      "raw": "### R-1.21 · v1 · confirmed · recovered",
+      "line": 254,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-17",
+      "id": "R-1.22",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "Only an administrator may publish an opportunity.",
       "cites": [
@@ -762,16 +763,16 @@
       "when": "a member of public sector staff who is not an administrator asks to publish it",
       "then": "the request is refused and the opportunity stays unpublished",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-17 · v1 · inferred · recovered",
-      "line": 264,
+      "state": "accepted",
+      "raw": "### R-1.22 · v1 · confirmed · recovered",
+      "line": 265,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-18",
+      "id": "R-1.23",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "Publishing an opportunity records the moment of publication, which is thereafter shown as the opportunity's published date.",
       "cites": [
@@ -789,16 +790,16 @@
       "when": "anyone views it",
       "then": "the date shown as its publication date is the moment of the first publication, even if it was later republished",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-18 · v1 · inferred · recovered",
-      "line": 276,
+      "state": "accepted",
+      "raw": "### R-1.23 · v1 · confirmed · recovered",
+      "line": 277,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-20",
+      "id": "R-1.24",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "On closing a Sprint With Us or Team With Us opportunity, each submitted proposal is given an anonymous proponent name for use during evaluation.",
       "cites": [
@@ -818,131 +819,9 @@
       "notes": [
         "Code With Us does not anonymise proponents."
       ],
-      "state": "proposed",
-      "raw": "### D-opportunities-20 · v1 · inferred · recovered",
-      "line": 286,
-      "domain": "opportunities",
-      "file": "spec/domains/opportunities.md"
-    },
-    {
-      "id": "D-opportunities-21",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "An opportunity moves to processing on its own once every proposal still in contention has been scored at its program's final evaluation stage.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/db/proposal/code-with-us.ts",
-          "line": 1064
-        },
-        {
-          "path": "src/back-end/lib/db/proposal/sprint-with-us.ts",
-          "line": 2136
-        },
-        {
-          "path": "src/back-end/lib/db/proposal/team-with-us.ts",
-          "line": 1789
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "an opportunity at its final evaluation stage with at least one proposal still in contention",
-      "when": "the last of those proposals is scored",
-      "then": "the opportunity moves to processing and the change is recorded with a note saying it was moved automatically because all proposals have been evaluated",
-      "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-21 · v1 · inferred · recovered",
-      "line": 297,
-      "domain": "opportunities",
-      "file": "spec/domains/opportunities.md"
-    },
-    {
-      "id": "D-opportunities-22",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "Awarding a proposal moves its opportunity to awarded and records the winning proponent against it; every other proposal still in contention is marked not awarded.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/db/proposal/code-with-us.ts",
-          "line": 1159
-        },
-        {
-          "path": "src/back-end/lib/db/proposal/sprint-with-us.ts",
-          "line": 1733
-        },
-        {
-          "path": "src/back-end/lib/db/proposal/team-with-us.ts",
-          "line": 1463
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "an opportunity in processing with proposals against it",
-      "when": "an administrator awards one of those proposals",
-      "then": "the opportunity moves to awarded, the winning proponent is recorded against it, and the remaining proposals are marked not awarded",
-      "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-22 · v1 · inferred · recovered",
-      "line": 308,
-      "domain": "opportunities",
-      "file": "spec/domains/opportunities.md"
-    },
-    {
-      "id": "D-opportunities-23",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "An awarded opportunity shows its successful proponent's name to everyone, and shows the proponent's contact details and score only to those permitted to see the proposal's score.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/db/opportunity/code-with-us.ts",
-          "line": 445
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "an awarded opportunity",
-      "when": "a visitor who may not see proposal scores views it",
-      "then": "the successful proponent's name is shown and their contact details and score are withheld",
-      "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-23 · v1 · inferred · recovered",
-      "line": 319,
-      "domain": "opportunities",
-      "file": "spec/domains/opportunities.md"
-    },
-    {
-      "id": "D-opportunities-24",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "Only an administrator may cancel an opportunity, and only once it has been published.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/permissions.ts",
-          "line": 415
-        },
-        {
-          "path": "src/back-end/lib/permissions.ts",
-          "line": 676
-        },
-        {
-          "path": "src/back-end/lib/permissions.ts",
-          "line": 1178
-        },
-        {
-          "path": "src/back-end/lib/resources/opportunity/code-with-us.ts",
-          "line": 823
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "an opportunity that is published or at any evaluation stage or in processing",
-      "when": "an administrator cancels it, giving an optional note of up to 1,000 characters",
-      "then": "the opportunity moves to cancelled and stops accepting proposals",
-      "notes": [
-        "a draft or under-review opportunity cannot be cancelled — it is deleted instead."
-      ],
-      "state": "proposed",
-      "raw": "### D-opportunities-24 · v1 · inferred · recovered",
-      "line": 328,
+      "state": "accepted",
+      "raw": "### R-1.24 · v1 · confirmed · recovered",
+      "line": 287,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -975,18 +854,141 @@
       "when": "anyone asks to delete it",
       "then": "the request is refused and the opportunity remains",
       "notes": [
-        "the application's own interface documentation says deletion is permitted only for a draft, while the code also permits an administrator to delete an opportunity that is under review. The three programs also disagree with each other: for Code With Us and Sprint With Us the creating staff member may delete only a draft, but for Team With Us they may also delete one that is under review. A human should rule on the intended rule before it is carried forward."
+        "the application's own interface documentation says deletion is permitted only for a draft, while the code also permits an administrator to delete an opportunity that is under review. The three programs also disagree with each other: for Code With Us and Sprint With Us the creating staff member may delete only a draft, but for Team With Us they may also delete one that is under review. A human should rule on the intended rule before it is carried forward.",
+        "Which single deletion rule carries forward across all three programs: may an administrator delete an opportunity that is under review as well as one in draft, and may the creating public sector employee delete one that is under review, or only a draft?"
       ],
       "state": "proposed",
       "raw": "### D-opportunities-25 · v1 · open · recovered",
-      "line": 341,
+      "line": 298,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-28",
+      "id": "R-1.25",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "An opportunity moves to processing on its own once every proposal still in contention has been scored at its program's final evaluation stage.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/db/proposal/code-with-us.ts",
+          "line": 1064
+        },
+        {
+          "path": "src/back-end/lib/db/proposal/sprint-with-us.ts",
+          "line": 2136
+        },
+        {
+          "path": "src/back-end/lib/db/proposal/team-with-us.ts",
+          "line": 1789
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an opportunity at its final evaluation stage with at least one proposal still in contention",
+      "when": "the last of those proposals is scored",
+      "then": "the opportunity moves to processing and the change is recorded with a note saying it was moved automatically because all proposals have been evaluated",
+      "notes": [],
+      "state": "accepted",
+      "raw": "### R-1.25 · v1 · confirmed · recovered",
+      "line": 312,
+      "domain": "opportunities",
+      "file": "spec/domains/opportunities.md"
+    },
+    {
+      "id": "R-1.26",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Awarding a proposal moves its opportunity to awarded and records the winning proponent against it; every other proposal still in contention is marked not awarded.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/db/proposal/code-with-us.ts",
+          "line": 1159
+        },
+        {
+          "path": "src/back-end/lib/db/proposal/sprint-with-us.ts",
+          "line": 1733
+        },
+        {
+          "path": "src/back-end/lib/db/proposal/team-with-us.ts",
+          "line": 1463
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an opportunity in processing with proposals against it",
+      "when": "an administrator awards one of those proposals",
+      "then": "the opportunity moves to awarded, the winning proponent is recorded against it, and the remaining proposals are marked not awarded",
+      "notes": [],
+      "state": "accepted",
+      "raw": "### R-1.26 · v1 · confirmed · recovered",
+      "line": 323,
+      "domain": "opportunities",
+      "file": "spec/domains/opportunities.md"
+    },
+    {
+      "id": "R-1.27",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "An awarded opportunity shows its successful proponent's name to everyone, and shows the proponent's contact details and score only to those permitted to see the proposal's score.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/db/opportunity/code-with-us.ts",
+          "line": 445
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an awarded opportunity",
+      "when": "a visitor who may not see proposal scores views it",
+      "then": "the successful proponent's name is shown and their contact details and score are withheld",
+      "notes": [],
+      "state": "accepted",
+      "raw": "### R-1.27 · v1 · confirmed · recovered",
+      "line": 334,
+      "domain": "opportunities",
+      "file": "spec/domains/opportunities.md"
+    },
+    {
+      "id": "R-1.28",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Only an administrator may cancel an opportunity, and only once it has been published.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 415
+        },
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 676
+        },
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 1178
+        },
+        {
+          "path": "src/back-end/lib/resources/opportunity/code-with-us.ts",
+          "line": 823
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an opportunity that is published or at any evaluation stage or in processing",
+      "when": "an administrator cancels it, giving an optional note of up to 1,000 characters",
+      "then": "the opportunity moves to cancelled and stops accepting proposals",
+      "notes": [
+        "a draft or under-review opportunity cannot be cancelled — it is deleted instead."
+      ],
+      "state": "accepted",
+      "raw": "### R-1.28 · v1 · confirmed · recovered",
+      "line": 343,
+      "domain": "opportunities",
+      "file": "spec/domains/opportunities.md"
+    },
+    {
+      "id": "R-1.29",
+      "version": 1,
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "The names of the people who created and last changed an opportunity are shown only to administrators and to those people themselves.",
       "cites": [
@@ -1000,16 +1002,16 @@
       "when": "it is viewed by someone who is neither an administrator nor the person who created or last changed it",
       "then": "the creating and changing people's names are absent from what is shown",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-28 · v1 · inferred · recovered",
-      "line": 354,
+      "state": "accepted",
+      "raw": "### R-1.29 · v1 · confirmed · recovered",
+      "line": 356,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-29",
+      "id": "R-1.30",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "An opportunity's administrator and its author can see its full change history, how many times it has been viewed, how many people are watching it and how many proposals have been submitted; nobody else can.",
       "cites": [
@@ -1033,16 +1035,16 @@
       "notes": [
         "the reporting counts are withheld while the opportunity is still a draft or under review, even from the author."
       ],
-      "state": "proposed",
-      "raw": "### D-opportunities-29 · v1 · inferred · recovered",
-      "line": 363,
+      "state": "accepted",
+      "raw": "### R-1.30 · v1 · confirmed · recovered",
+      "line": 365,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-30",
+      "id": "R-1.31",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "Public sector staff cannot see the proposals submitted against an opportunity until it has left the published state.",
       "cites": [
@@ -1060,16 +1062,16 @@
       "when": "its author or an administrator asks to see the proposals",
       "then": "the request is refused until the opportunity has closed and moved to an evaluation stage",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-30 · v1 · inferred · recovered",
-      "line": 375,
+      "state": "accepted",
+      "raw": "### R-1.31 · v1 · confirmed · recovered",
+      "line": 377,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-32",
+      "id": "R-1.32",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "An addendum of 1 to 5,000 characters may be added to any opportunity that is no longer a draft, by an administrator or by the staff member who created it, and cannot be removed afterwards.",
       "cites": [
@@ -1095,16 +1097,16 @@
       "when": "its author adds an addendum",
       "then": "the addendum is appended to the opportunity with its author and date, an entry is added to the opportunity's history, and there is no action that removes it",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-32 · v1 · inferred · recovered",
-      "line": 385,
+      "state": "accepted",
+      "raw": "### R-1.32 · v1 · confirmed · recovered",
+      "line": 387,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-33",
+      "id": "R-1.33",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "An administrator or an opportunity's author may attach a private note, with files, to a Code With Us or Sprint With Us opportunity's history at any point in its life.",
       "cites": [
@@ -1128,16 +1130,16 @@
       "notes": [
         "Team With Us offers no such action at all. Nothing in the application explains the omission, so a human should decide whether it is a gap to close or a deliberate difference."
       ],
-      "state": "proposed",
-      "raw": "### D-opportunities-33 · v1 · inferred · recovered",
-      "line": 397,
+      "state": "accepted",
+      "raw": "### R-1.33 · v1 · confirmed · recovered",
+      "line": 399,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-35",
+      "id": "R-1.34",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "Publishing an opportunity notifies everyone who has asked for new-opportunity notifications, and separately confirms the publication to the opportunity's author.",
       "cites": [
@@ -1151,16 +1153,16 @@
       "when": "an administrator publishes it",
       "then": "each of those people receives a notice that a new opportunity has been posted, and the opportunity's author receives a confirmation",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-35 · v1 · inferred · recovered",
-      "line": 409,
+      "state": "accepted",
+      "raw": "### R-1.34 · v1 · confirmed · recovered",
+      "line": 411,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-36",
+      "id": "R-1.35",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "Changing or adding an addendum to an opportunity that is neither a draft nor cancelled notifies everyone watching it, everyone who has submitted a proposal to it, and its author.",
       "cites": [
@@ -1180,16 +1182,16 @@
       "notes": [
         "nobody is notified when the opportunity is a draft or has been cancelled."
       ],
-      "state": "proposed",
-      "raw": "### D-opportunities-36 · v1 · inferred · recovered",
-      "line": 418,
+      "state": "accepted",
+      "raw": "### R-1.35 · v1 · confirmed · recovered",
+      "line": 420,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-37",
+      "id": "R-1.36",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "Cancelling an opportunity notifies everyone watching it and everyone who has submitted a proposal to it, and separately notifies its author.",
       "cites": [
@@ -1203,16 +1205,16 @@
       "when": "an administrator cancels it",
       "then": "its watchers and proponents are told it has been cancelled, and its author is told separately that the cancellation was actioned",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-37 · v1 · inferred · recovered",
-      "line": 429,
+      "state": "accepted",
+      "raw": "### R-1.36 · v1 · confirmed · recovered",
+      "line": 431,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-38",
+      "id": "R-1.37",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "Submitting an opportunity for review notifies every administrator, and confirms the submission to its author.",
       "cites": [
@@ -1230,16 +1232,16 @@
       "when": "its author submits it for review",
       "then": "every administrator is notified that an opportunity awaits review, and the author receives a confirmation",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-38 · v1 · inferred · recovered",
-      "line": 438,
+      "state": "accepted",
+      "raw": "### R-1.37 · v1 · confirmed · recovered",
+      "line": 440,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-39",
+      "id": "R-1.38",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "The opportunity list groups opportunities into unpublished, open and closed, showing open opportunities with the nearest proposal deadline first, closed ones most recently closed first, and unpublished ones most recently changed first.",
       "cites": [
@@ -1259,16 +1261,16 @@
       "notes": [
         "an opportunity counts as open only while it is published and its proposal deadline is still in the future; everything published and past its deadline, including cancelled and awarded opportunities, counts as closed."
       ],
-      "state": "proposed",
-      "raw": "### D-opportunities-39 · v1 · inferred · recovered",
-      "line": 448,
+      "state": "accepted",
+      "raw": "### R-1.38 · v1 · confirmed · recovered",
+      "line": 450,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-40",
+      "id": "R-1.39",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location.",
       "cites": [
@@ -1288,16 +1290,16 @@
       "notes": [
         "the state filter offers draft, under review, published, evaluation and awarded; there is no option for opportunities in processing or cancelled, so those can only be found by clearing the filter."
       ],
-      "state": "proposed",
-      "raw": "### D-opportunities-40 · v1 · inferred · recovered",
-      "line": 459,
+      "state": "accepted",
+      "raw": "### R-1.39 · v1 · confirmed · recovered",
+      "line": 461,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-42",
+      "id": "R-1.40",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "Only an administrator can open the full report of a completed opportunity, which shows the opportunity, its addenda, its history and every proposal in one continuous document.",
       "cites": [
@@ -1315,16 +1317,16 @@
       "when": "a member of public sector staff who is not an administrator opens its report address",
       "then": "they are refused, while an administrator opening the same address sees the whole record in one document",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-42 · v1 · inferred · recovered",
-      "line": 470,
+      "state": "accepted",
+      "raw": "### R-1.40 · v1 · confirmed · recovered",
+      "line": 472,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-43",
+      "id": "R-1.41",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "Advancing a Sprint With Us or Team With Us opportunity out of the consensus stage is refused unless every consensus evaluation has been submitted and at least one proponent has met the minimum score on every question that sets one.",
       "cites": [
@@ -1342,16 +1344,16 @@
       "when": "its author asks to move it on while a consensus is unsubmitted, or while no proponent has cleared every question's minimum score",
       "then": "the request is refused and the reason is named",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-43 · v1 · inferred · recovered",
-      "line": 480,
+      "state": "accepted",
+      "raw": "### R-1.41 · v1 · confirmed · recovered",
+      "line": 482,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-44",
+      "id": "R-1.42",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "Advancing a Sprint With Us opportunity to the team scenario stage is refused unless every proponent in the code challenge has been scored or disqualified and at least one remains screened in.",
       "cites": [
@@ -1365,16 +1367,16 @@
       "when": "its author asks to move it to the team scenario stage while a proponent is unscored and not disqualified",
       "then": "the request is refused with a message saying all proponents must be scored first",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-44 · v1 · inferred · recovered",
-      "line": 490,
+      "state": "accepted",
+      "raw": "### R-1.42 · v1 · confirmed · recovered",
+      "line": 492,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-45",
+      "id": "R-1.43",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "The evaluation panel of a Sprint With Us or Team With Us opportunity may be changed only while the opportunity is a draft, under review, published, or at the first questions stage.",
       "cites": [
@@ -1392,16 +1394,16 @@
       "when": "its author asks to change the evaluation panel",
       "then": "the request is refused and the panel stays as it was",
       "notes": [],
-      "state": "proposed",
-      "raw": "### D-opportunities-45 · v1 · inferred · recovered",
-      "line": 499,
+      "state": "accepted",
+      "raw": "### R-1.43 · v1 · confirmed · recovered",
+      "line": 501,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-46",
+      "id": "R-1.44",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "A member of public sector staff who is not an administrator can publish a Code With Us opportunity directly, by creating it as published rather than by publishing an existing one.",
       "cites": [
@@ -1427,18 +1429,20 @@
       "when": "they create a Code With Us opportunity with its state set to published",
       "then": "the opportunity is created and published, and the subscriber notifications for a published opportunity are sent",
       "notes": [
-        "this contradicts the administrator-only publication rule recovered as D-opportunities-17. The equivalent Sprint With Us and Team With Us creation checks refuse this case explicitly, so the Code With Us omission reads as an oversight rather than an intended difference. There is no replacement criterion because the corrected behaviour is already stated by D-opportunities-17; a human should rule on whether the rebuild simply closes the hole."
+        "this contradicts the administrator-only publication rule recovered as R-1.22. The equivalent Sprint With Us and Team With Us creation checks refuse this case explicitly, so the Code With Us omission reads as an oversight rather than an intended difference. There is no replacement criterion because the corrected behaviour is already stated by R-1.22; a human should rule on whether the rebuild simply closes the hole.",
+        "superseded by R-1.48"
       ],
-      "state": "proposed",
-      "raw": "### D-opportunities-46 · v1 · inferred · recovered",
-      "line": 509,
+      "state": "accepted",
+      "supersededBy": "R-1.48",
+      "raw": "### R-1.44 · v1 · confirmed · recovered",
+      "line": 511,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-47",
+      "id": "R-1.45",
       "version": 1,
-      "confidence": "open",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "A Team With Us opportunity in processing can be awarded, even though the recorded set of permitted state changes does not include that step.",
       "cites": [
@@ -1455,23 +1459,25 @@
           "line": 1463
         }
       ],
-      "reconciliation": "conflicting",
+      "reconciliation": "defect",
       "given": "a Team With Us opportunity in processing",
       "when": "an administrator awards one of its proposals",
       "then": "the opportunity becomes awarded",
       "notes": [
-        "the permitted-change table for Team With Us allows only cancellation out of processing, while the equivalent tables for the other two programs allow the award. Awarding does not consult that table, so the award succeeds anyway. Whether the table or the award path is wrong cannot be determined from the application; a human should rule."
+        "the permitted-change table for Team With Us allows only cancellation out of processing, while the equivalent tables for the other two programs allow the award. Awarding does not consult that table, so the award succeeds anyway. Whether the table or the award path is wrong cannot be determined from the application; a human should rule.",
+        "superseded by R-1.49"
       ],
-      "state": "proposed",
-      "raw": "### D-opportunities-47 · v1 · open · recovered",
-      "line": 522,
+      "state": "accepted",
+      "supersededBy": "R-1.49",
+      "raw": "### R-1.45 · v1 · confirmed · recovered",
+      "line": 526,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-48",
+      "id": "R-1.46",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "A Sprint With Us or Team With Us opportunity can be moved out of its consensus stage by a second, older action that does not check whether the consensus evaluations have been submitted.",
       "cites": [
@@ -1493,11 +1499,63 @@
       "when": "its author uses the older \"start code challenge\" action rather than the newer \"finalize consensuses\" action",
       "then": "the opportunity advances to the code challenge stage without the consensus check being applied",
       "notes": [
-        "the application marks the Sprint With Us version of this action as deprecated in a comment but still accepts it; the Team With Us equivalent carries no such comment. There is no replacement criterion because the intended guard is already stated by D-opportunities-43; a human should rule on removing the older path."
+        "the application marks the Sprint With Us version of this action as deprecated in a comment but still accepts it; the Team With Us equivalent carries no such comment. There is no replacement criterion because the intended guard is already stated by R-1.41; a human should rule on removing the older path.",
+        "superseded by R-1.50"
       ],
-      "state": "proposed",
-      "raw": "### D-opportunities-48 · v1 · inferred · recovered",
-      "line": 534,
+      "state": "accepted",
+      "supersededBy": "R-1.50",
+      "raw": "### R-1.46 · v1 · confirmed · recovered",
+      "line": 540,
+      "domain": "opportunities",
+      "file": "spec/domains/opportunities.md"
+    },
+    {
+      "id": "R-1.47",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "\"Suspended\" remains a permitted stored state for an opportunity although no action can put an opportunity into it.",
+      "cites": [
+        {
+          "path": "src/shared/lib/resources/opportunity/code-with-us.ts",
+          "line": 21
+        },
+        {
+          "path": "src/shared/lib/resources/opportunity/code-with-us.ts",
+          "line": 246
+        },
+        {
+          "path": "src/migrations/tasks/20240421120000_add_cwu_processing_status.ts",
+          "line": 14
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "the set of states an opportunity may hold",
+      "when": "any state change is attempted",
+      "then": "no path leads to the suspended state, and no listing, filter or transition treats it as reachable",
+      "notes": [
+        "the state is named \"deprecated suspended\" in the application's own code but is still accepted by the store's constraint, so historical records may hold it. There is no replacement criterion: whether the rebuild must still display an opportunity left in this state from the old data is a question for a human, not something the application answers.",
+        "superseded by R-1.51"
+      ],
+      "state": "accepted",
+      "supersededBy": "R-1.51",
+      "raw": "### R-1.47 · v1 · confirmed · recovered",
+      "line": 554,
+      "domain": "opportunities",
+      "file": "spec/domains/opportunities.md"
+    },
+    {
+      "id": "R-1.48",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-1.44",
+      "raw": "### R-1.48 · v1 · confirmed · authored",
+      "line": 568,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -1530,44 +1588,42 @@
       "when": "that person submits a change to its details",
       "then": "the change is accepted and a new version is recorded",
       "notes": [
-        "the interface offers the edit only to administrators once an opportunity is published, but the underlying service accepts it from the author too. The two disagree, and nothing in the application says which is intended."
+        "the interface offers the edit only to administrators once an opportunity is published, but the underlying service accepts it from the author too. The two disagree, and nothing in the application says which is intended.",
+        "May the author of a published opportunity who is not an administrator change its details, as the service accepts, or is editing after publication administrator-only, as the interface enforces?"
       ],
       "state": "proposed",
       "raw": "### D-opportunities-49 · v1 · open · recovered",
-      "line": 546,
+      "line": 573,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
     {
-      "id": "D-opportunities-50",
+      "id": "R-1.49",
       "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "\"Suspended\" remains a permitted stored state for an opportunity although no action can put an opportunity into it.",
-      "cites": [
-        {
-          "path": "src/shared/lib/resources/opportunity/code-with-us.ts",
-          "line": 21
-        },
-        {
-          "path": "src/shared/lib/resources/opportunity/code-with-us.ts",
-          "line": 246
-        },
-        {
-          "path": "src/migrations/tasks/20240421120000_add_cwu_processing_status.ts",
-          "line": 14
-        }
-      ],
-      "reconciliation": "defect",
-      "given": "the set of states an opportunity may hold",
-      "when": "any state change is attempted",
-      "then": "no path leads to the suspended state, and no listing, filter or transition treats it as reachable",
-      "notes": [
-        "the state is named \"deprecated suspended\" in the application's own code but is still accepted by the store's constraint, so historical records may hold it. There is no replacement criterion: whether the rebuild must still display an opportunity left in this state from the old data is a question for a human, not something the application answers."
-      ],
-      "state": "proposed",
-      "raw": "### D-opportunities-50 · v1 · inferred · recovered",
-      "line": 559,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "The permitted state changes for a Team With Us opportunity in processing are awarded and cancelled, matching Code With Us and Sprint With Us, so the recorded transitions and the award path agree.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-1.45",
+      "raw": "### R-1.49 · v1 · confirmed · authored",
+      "line": 587,
+      "domain": "opportunities",
+      "file": "spec/domains/opportunities.md"
+    },
+    {
+      "id": "R-1.50",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "There is exactly one path out of a questions consensus stage, and it refuses to advance unless every consensus evaluation has been submitted and at least one proponent has met the minimum score on every question that sets one.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-1.46",
+      "raw": "### R-1.50 · v1 · confirmed · authored",
+      "line": 592,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -1604,11 +1660,27 @@
       "when": "they compare it against what the service actually accepts",
       "then": "they find actions and states the description does not mention, and no description at all for one of the three programs",
       "notes": [
-        "recorded so that the gap is not mistaken for absent behaviour by a later reader. The behaviours themselves are stated in the criteria above; this criterion is about the documentation being an unreliable second source, which is why several criteria here are graded on code alone."
+        "recorded so that the gap is not mistaken for absent behaviour by a later reader. The behaviours themselves are stated in the criteria above; this criterion is about the documentation being an unreliable second source, which is why several criteria here are graded on code alone.",
+        "It records that the old application's own interface description is incomplete, which is a property of the recovered sources rather than a behaviour the rebuilt system must exhibit; the behaviours it points at are already carried by the criteria above, and the documentation's unreliability belongs in the archaeology journal."
       ],
-      "state": "proposed",
+      "state": "obsolete",
       "raw": "### D-opportunities-51 · v1 · open · recovered",
-      "line": 571,
+      "line": 597,
+      "domain": "opportunities",
+      "file": "spec/domains/opportunities.md"
+    },
+    {
+      "id": "R-1.51",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "The rebuilt system defines no suspended state for an opportunity: none can be created in it, moved to it or stored in it, and any historical record carrying it is mapped to a defined state before the rebuilt system reads it.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-1.47",
+      "raw": "### R-1.51 · v1 · confirmed · authored",
+      "line": 612,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     }
