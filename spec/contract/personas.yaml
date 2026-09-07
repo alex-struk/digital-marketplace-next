@@ -57,3 +57,29 @@ personas:
         view the completed-opportunity report
       ]
     sign_in: { sandbox-idp: { username: admin-1 }, session-route: { role: admin } }
+
+  - id: organization-admin
+    domain: proposals
+    can:
+      [
+        submit a proposal on behalf of an organization they own or administer,
+        edit a proposal belonging to that organization,
+        withdraw a proposal belonging to that organization,
+        delete a draft proposal belonging to that organization,
+        view proposals belonging to organizations they own or administer
+      ]
+    sign_in:
+      {
+        sandbox-idp: { username: vendor-org-admin-1 },
+        session-route: { role: vendor }
+      }
+
+  - id: evaluation-panel-member
+    domain: proposals
+    can:
+      [
+        view proposals of an opportunity they sit on the panel for once it has closed,
+        view the anonymous proponent name rather than the organization
+      ]
+    sign_in:
+      { sandbox-idp: { username: gov-panel-1 }, session-route: { role: government } }

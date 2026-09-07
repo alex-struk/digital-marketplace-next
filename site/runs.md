@@ -37,6 +37,9 @@ Automatic merge failed; fix conflicts and then commit the result.
 - 20:07:24 propose ratify-opportunities-2 at G1
 - 20:10:55 rule ratify-opportunities-2 approve at G1 by agent:product-owner (agent)
 - 20:10:55 run ratify: ok, cost 0, turns 0
+- 20:22:16 run archaeology: ok, cost 11.763324, turns 101
+- 20:22:16 propose archaeology-proposals at G1
+- 20:26:07 rule archaeology-proposals approve at G1 by agent:product-owner (agent)
 
 # Run record 2026-09-06
 
