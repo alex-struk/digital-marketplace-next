@@ -12,9 +12,9 @@ Profile: rebuild
 | users | 0 | 34 | 0 | 0 | 0 | 2 | 1 | 36 |
 | evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 |
 | notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 |
-| content | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| content | 12 | 18 | 0 | 0 | 0 | 1 | 1 | 31 |
 | files | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **Totals** | 0 | 228 | 0 | 0 | 0 | 5 | 3 | 233 |
+| **Totals** | 12 | 246 | 0 | 0 | 0 | 6 | 4 | 264 |
 
 ## Pages
 
@@ -51,6 +51,7 @@ Profile: rebuild
 - [users](criteria/users.md)
 - [evaluation](criteria/evaluation.md)
 - [notifications](criteria/notifications.md)
+- [content](criteria/content.md)
 
 ## Totals
 

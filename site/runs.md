@@ -77,6 +77,7 @@ Automatic merge failed; fix conflicts and then commit the result.
 - 22:16:36 run archaeology: ok, cost 6.568516000000001, turns 106
 - 22:16:36 propose archaeology-content at G1
 - 22:20:01 rule archaeology-content approve at G1 by agent:product-owner (agent)
+- 22:20:01 run ratify: ok, cost 0, turns 0
 
 # Run record 2026-09-06
 
