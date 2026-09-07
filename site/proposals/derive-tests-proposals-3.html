@@ -19,8 +19,7 @@
 <main id="main">
 <div class="page-head"><h1>derive-tests-proposals-3</h1>
 <p class="lede">G3 · <span class="chip return">return</span></p></div>
-<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-07T14:43:29.571Z</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
-<p class="note">Ruled return by tech-lead.</p>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-07 14:43</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
 <div class="body"><h2>Do the revised proposals tests now follow from their criteria and from nothing else?</h2>
 <p><strong>Recommendation.</strong> I made no change to any file in the workspace.</p>
 <p>I made no change to any file in the workspace. Here is why.</p>
@@ -34,6 +33,9 @@
 <p>I did confirm the review&#39;s enumeration is exactly right, which should make the mechanical fix safe for whoever holds the repo. Notifications is R-6.1–R-6.28: twelve have spec files (R-6.6, R-6.7, R-6.10, R-6.13, R-6.14, R-6.17, R-6.19, R-6.21, R-6.22, R-6.23, R-6.26, R-6.28), and the sixteen named in the condition are the exact remainder. Files is R-8.1–R-8.31: thirteen have spec files (R-8.1, R-8.2, R-8.10, R-8.12, R-8.14, R-8.20, R-8.21, R-8.23, R-8.25, R-8.27, R-8.28, R-8.29, R-8.30), and the eighteen named are the exact remainder. Both sets partition their domain cleanly, so no criterion is unaccounted for and none is listed twice. From <code>spec/criteria-index.json</code>, three of the 34 are at version 2 — R-6.4, R-6.25 and R-8.24 — and the other 31 are at version 1; a restore that carries a wrong <code>version</code> would fail calibrate just as a missing row does, so that is worth checking against main&#39;s text rather than trusting my list.</p>
 <p>What is needed to close this: take <code>tests/acceptance/not-testable.yaml</code> as it stands on main, append the three proposals rows R-2.6, R-2.7 and R-2.8 exactly as they read in this workspace, and change nothing else. That is a mechanical operation for anyone with the repo, and it makes the file&#39;s diff additive as the condition requires. The more durable fix is upstream of me: this stage should be handed a workspace built from main with the slice applied on top, or at least a readable base revision, so that a shared file like this one cannot be regenerated out from under other slices without the stage being able to notice or repair it.</p>
 <p>I also recorded two notes for future runs: that <code>not-testable.yaml</code> is shared across every domain slice and must be appended to rather than regenerated, and that this workspace has no access to main, so &quot;restore from main&quot; conditions cannot be honoured inside it.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by tech-lead on 2026-09-07 16:14.</p>
+</section>
 </main>
 </div>
 <footer class="site">

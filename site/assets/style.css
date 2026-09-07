@@ -484,6 +484,22 @@ td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
 }
 .body .scroll { margin-bottom: var(--layout-margin-medium); }
 
+/* ===== legend and ruling ===== */
+dl.legend { display: grid; grid-template-columns: 11rem 1fr; gap: var(--layout-margin-xsmall) var(--layout-margin-medium); margin: 0; max-width: var(--sdlc-measure); }
+dl.legend dt { font-weight: var(--typography-font-weights-bold); }
+dl.legend dd { margin: 0; color: var(--typography-color-secondary); }
+
+.ruling {
+  background: var(--surface-color-background-white);
+  border: var(--layout-border-width-small) solid var(--surface-color-border-default);
+  border-left: var(--layout-border-width-large) solid var(--surface-color-background-dark-blue);
+  padding: var(--layout-padding-medium) var(--layout-padding-large);
+}
+.ruling h2 { border-bottom: 0; padding-bottom: 0; }
+.ruling h3 { font-size: var(--typography-font-size-large-body); margin: var(--layout-margin-medium) 0 var(--layout-margin-xsmall); }
+.ruling ol.conditions { margin: 0; padding-left: var(--layout-padding-large); max-width: var(--sdlc-measure); }
+.ruling ol.conditions li { margin-bottom: var(--layout-margin-small); }
+
 footer.site {
   border-top: var(--layout-border-width-small) solid var(--surface-color-border-default);
   padding: var(--layout-padding-medium) var(--layout-padding-large);
