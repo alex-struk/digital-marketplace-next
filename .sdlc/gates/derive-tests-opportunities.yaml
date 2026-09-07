@@ -1,0 +1,14 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  R-1.7.spec.ts asserts what its criterion does not say and skips the act it is about: both tests assert opportunityProgramSelect.programCard() and opportunityDashboard.myOpportunitiesTable() are falsy without ever attempting to create an opportunity. R-1.7 states only that a create request from a vendor or anonymous visitor is refused and no opportunity is created; it says nothing about the program chooser rendering no cards or the dashboard omitting a my-opportunities table, and the surface's own emptyMyOpportunitiesMessage() observation implies an empty table is a representable state. A conformant rebuild that shows the program cards and refuses on submit would fail this test. A faithful route exists on the surface — create as a vendor via opportunityCwuCreate.saveDraft, then read back as an administrator that no such opportunity exists — the same shape R-1.48's first test already uses. Separately, R-1.55's file header gives a reason that is not real: it says marking a member as chair is the only action, but EvaluationPanelSwuPage names choosePanelChair as well as markMemberAsChair and a chairField() observation; the sound reason is that no error observation names a second chair while R-1.55 requires the reason to be named. Everything else holds: the R-1.1 closure gap and its ten dependants verify against the seed (published deadline 2030-06-01, R-1.14 refuses a past deadline, R-1.9 v2 gives fourteen days), the management surfaces genuinely carry no fieldError, coverage is 36 specs plus 14 not-testable across the 50 accepted criteria, the four superseded criteria in this domain correctly have no tests, the tests-check warnings are pre-existing and in other domains, and no implementation detail leaks into any assertion.
+conditions:
+  - "Rewrite tests/acceptance/opportunities/R-1.7.spec.ts to perform the creation attempt the criterion names and read the refusal from whether an opportunity was created, dropping the programCard() and myOpportunitiesTable() shape assertions"
+  - "Correct the R-1.55 file header: the fifth fault is unassertable because no error observation names a second chair while the criterion requires the reason to be named, not because markMemberAsChair is the only chair action"
+  - "Leave the other 35 spec files and all 14 not-testable entries as they stand"
+cost: 2.4990725000000005
+turns: 19
+session: "e9356a70-29cd-4e5f-a86c-41967306d509"
+at: 2026-09-07T15:57:25.227Z
