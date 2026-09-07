@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-07T08:31:47.620Z | ratify-content-3 | G1 | approve | agent:product-owner | agent-held, unsampled | $1.735584 |  |
 | 2026-09-07T05:24:09.848Z | ratify-content-1 | G1 | return | agent:product-owner | agent-held, unsampled | $2.0596085000000004 |  |
 | 2026-09-07T05:20:01.631Z | archaeology-content | G1 | approve | agent:product-owner | agent-held, unsampled | $1.4539885000000001 |  |
 | 2026-09-07T05:06:31.038Z | ratify-notifications-1 | G1 | approve | agent:product-owner | agent-held, unsampled | $2.5982749999999997 |  |
