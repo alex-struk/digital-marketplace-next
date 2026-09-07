@@ -1,0 +1,15 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The not-testable reasons are all real and the suite is free of implementation leakage, but two tests assert what their criteria do not say and the receipt's restoration claim is untrue. R-4.27.spec.ts:50 reads job_title_field as a stored value (falsy after clearing) while R-4.28.spec.ts:9 reads the same observation as the field being offered (truthy) for the same account, and R-4.27 runs first and leaves that job title cleared — under either consistent meaning one of the two asserts something its criterion does not state, and R-4.28's presence reading is the one its criterion supports. Separately, the receipt states that every mutating test restores what it changed, while the proposal itself records that vendor-with-terms-reset is one-shot across R-4.3, R-4.23 and R-4.24; in alphabetical file order R-4.24 completes and accepts terms on that account before R-4.3 runs, so R-4.3's first two tests cannot pass. Coverage, the nine not-testable reasons and the separation of test from implementation would all have carried an approval on their own.
+conditions:
+  - "Settle what job_title_field observes — presence of the field or its value — and make R-4.27 and R-4.28 agree on it; R-4.27's blank-job-title case is already carried by the fieldError assertion, and R-4.28's criterion needs the presence reading."
+  - "Restore staffOne's job title in R-4.27 test 4, or stop asserting on job_title_field there, so R-4.28 does not inherit a cleared field."
+  - "Resolve the vendor-with-terms-reset one-shot across R-4.3, R-4.23 and R-4.24 — restore the state within each file, or record the ordering dependency as an attestation rather than a note in the proposal."
+  - "Replace emptyMyProposalsMessage() in R-4.23 with myProposalsTable(), so landing on the vendor dashboard is not proved by asserting the vendor has no proposals."
+cost: 1.7253394999999996
+turns: 9
+session: "8e5b9e0b-e5c2-46d8-8646-87b787502f27"
+at: 2026-09-07T13:26:33.373Z
