@@ -1,3 +1,98 @@
-# Side effects a test may observe, and how.
-email: { via: mail-catcher, api: http://localhost:8025 }
-files: { via: api }
+# Side effects a test may observe without reading the application's internals.
+#
+# Every address below is either a route of the application under test, reached at that
+# target's own base URL, or an environment variable the harness sets at run time. No
+# literal host or port appears here: the oracle chooses its ports when it starts.
+
+email:
+  # Every message the application sends leaves it over SMTP. The oracle points the
+  # application's mail settings at a mailpit container (.sdlc/oracle/compose.yml), and a
+  # test reads what arrived through mailpit's own HTTP API.
+  via: mail-catcher
+  api: ${SDLC_MAIL_API}
+  catcher: mailpit
+  read_messages: GET ${SDLC_MAIL_API}/api/v1/messages
+  read_one_message: GET ${SDLC_MAIL_API}/api/v1/message/{id}
+  search_messages: GET ${SDLC_MAIL_API}/api/v1/search?query={query}
+  delete_all_messages: DELETE ${SDLC_MAIL_API}/api/v1/messages
+  observable:
+    # What a test may assert about a message it finds.
+    recipient: to
+    copied_recipients: bcc
+    sender: from
+    subject: subject
+    html_body: HTML
+    plain_text_body: Text
+    sent_at: Date
+  notes:
+    - A message is addressed to one person and every other recipient is a blind copy, so
+      a test that reads only the visible recipient of a batch sees one address and not
+      the group. Read the blind-copy list to count who a batch reached.
+    - The application never fails a request because a message could not be sent; a mail
+      server that is unreachable produces a logged error and nothing in the catcher.
+      Absence of a message is therefore evidence of what the application decided, not of
+      whether the mail server was up, and a test asserting absence should first prove
+      the catcher is reachable.
+    - Subjects carry a leading test marker when the application is configured to show
+      one. The oracle turns that marker on, so assert on subjects by what they contain
+      rather than by what they equal.
+    - Announcements to large groups are sent in batches, so several messages may carry
+      the same subject and between them cover the whole group.
+
+files:
+  # A stored file is reached at its own address, whatever page put it there. The
+  # application decides on each request whether the requester may read it.
+  via: http
+  download: GET {base_url}/api/files/{fileId}?type=blob
+  read_record: GET {base_url}/api/files/{fileId}
+  upload: POST {base_url}/api/files
+  upload_avatar: POST {base_url}/api/avatars
+  observable:
+    file_name: the name the response offers the file under
+    content_type: the type the response declares, derived from the file's name
+    disposition: whether the response offers the file as a download or displays it
+    refusal: the status the application answers with when the requester may not read it
+  notes:
+    - A file that no stored record carries and a file the requester may not read are
+      answered differently, and which of the two a given requester sees is itself a
+      thing the criteria turn on.
+
+exports:
+  # Two surfaces hand a test a document rather than a screen. Both are reached as
+  # ordinary addresses and both answer with a file.
+  via: http
+  contact_list: GET {base_url}/api/contact-list?userTypes={types}&fields={fields}
+  proposal_export: >-
+    The export routes named in spec/contract/surface.yaml as proposal-cwu-export-one,
+    proposal-cwu-export-all and their Sprint With Us and Team With Us equivalents,
+    reached at the target's own base URL.
+  observable:
+    document_contents: the rows or text of the returned document
+    document_name: the name the response offers the document under
+    refusal: the status returned when the requester is not an administrator
+
+scheduled_transitions:
+  # The application has no scheduler. The transitions that look time-driven — an
+  # opportunity closing when its proposal deadline passes, and the equivalents for the
+  # other two programs — run as a hook in front of every request, throttled by a
+  # configured interval.
+  via: http
+  trigger: GET {base_url}/status
+  observable:
+    opportunity_status: read back from the opportunity's own page or list entry
+  notes:
+    - The oracle sets the throttle interval to zero, so one request to the trigger is
+      enough to run the transitions. Any request would do; the trigger above is named
+      because it needs no session and changes nothing else.
+    - The transition happens inside the request that triggers it, so a test should
+      trigger and then read, rather than reading and waiting.
+
+counters:
+  # Views and watchers of an opportunity are counted, and the counts appear on the
+  # opportunity's own reporting surface. They can also be read directly.
+  via: http
+  read: GET {base_url}/api/counters?counters={name}
+  name_shape: "{resource-type}.{program}.{opportunity-id}.{counter-type}"
+  observable:
+    view_count: the number of times an opportunity has been opened
+    watcher_count: the number of people watching an opportunity

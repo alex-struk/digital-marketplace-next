@@ -1,5 +1,29 @@
-# Roles a test can act as, and how a test signs in as each on every target.
-# identity: sandbox-idp means a Keycloak (or OIDC mock) container seeded with these users.
+# Roles a test can act as, and how a test signs in as each on every target this
+# project configures.
+#
+# Two identity mechanisms are configured (.sdlc/config.yaml):
+#
+#   session-route  — the oracle (the old application). It carries three sign-in
+#                    routes that exist only outside production, each of which
+#                    mints a session for a fixed account looked up by its
+#                    identity-provider id:
+#                      /auth/createsessionadmin      -> the ADMIN account whose idpId is "test-admin"
+#                      /auth/createsessiongov        -> the GOV account whose idpId is "test-gov"
+#                      /auth/createsessionvendor/:n  -> the VENDOR account whose idpId is "test-vendor-<n>"
+#                    tests/seed/ inserts exactly those accounts.
+#
+#   sandbox-idp    — the rebuilt target. A synthetic identity provider seeded
+#                    with one account per username below. The usernames are the
+#                    same strings as the oracle's identity-provider ids, so one
+#                    name identifies a persona on both targets.
+#
+# A route is not an identity: /auth/createsessiongov reaches ONE public sector
+# account. Every government persona below therefore names the same route, and
+# only two public-sector identities are separable on the oracle at all — the
+# government one and the administrator one, since an administrator also counts
+# as a public sector employee and may sit on an evaluation panel. Personas that
+# need a third distinct public sector session can be signed in as on the rebuilt
+# target but not on the oracle; each such persona says so on its own entry.
 personas:
   - id: anonymous-visitor
     domain: opportunities
@@ -7,7 +31,9 @@ personas:
       [
         browse published opportunities,
         view a published opportunity,
-        count as a view of an opportunity
+        count as a view of an opportunity,
+        read a published page,
+        read a file marked readable by anyone
       ]
     sign_in: null
 
@@ -18,9 +44,12 @@ personas:
         browse published opportunities,
         view a published opportunity,
         watch an opportunity,
-        unwatch an opportunity
+        unwatch an opportunity,
+        turn new-opportunity notices on or off
       ]
-    sign_in: { sandbox-idp: { username: vendor-1 }, session-route: { role: vendor } }
+    sign_in:
+      session-route: { route: /auth/createsessionvendor/1 }
+      sandbox-idp: { username: test-vendor-1 }
 
   - id: public-sector-staff
     domain: opportunities
@@ -38,7 +67,8 @@ personas:
         watch an opportunity created by somebody else
       ]
     sign_in:
-      { sandbox-idp: { username: gov-1 }, session-route: { role: government } }
+      session-route: { route: /auth/createsessiongov }
+      sandbox-idp: { username: test-gov }
 
   - id: administrator
     domain: opportunities
@@ -54,9 +84,36 @@ personas:
         view all opportunities,
         view reporting for any opportunity,
         award an opportunity,
-        view the completed-opportunity report
+        view the completed-opportunity report,
+        manage pages,
+        announce changed terms to vendors,
+        view the email notification reference,
+        export the contact list,
+        deactivate and reactivate another person's account,
+        grant and withdraw administrator rights
       ]
-    sign_in: { sandbox-idp: { username: admin-1 }, session-route: { role: admin } }
+    sign_in:
+      session-route: { route: /auth/createsessionadmin }
+      sandbox-idp: { username: test-admin }
+
+  - id: organization-owner
+    domain: organizations
+    can:
+      [
+        register an organization,
+        edit the profile of an organization they own,
+        archive an organization they own,
+        invite team members to an organization they own,
+        remove a team member from an organization they own,
+        grant or withdraw organization administrator rights,
+        accept the Sprint With Us terms for an organization they own,
+        accept the Team With Us terms for an organization they own,
+        choose the service areas of an organization they own,
+        view the team list and changelog of an organization they own
+      ]
+    sign_in:
+      session-route: { route: /auth/createsessionvendor/2 }
+      sandbox-idp: { username: test-vendor-2 }
 
   - id: organization-admin
     domain: proposals
@@ -73,10 +130,110 @@ personas:
         grant or withdraw organization administrator rights
       ]
     sign_in:
-      {
-        sandbox-idp: { username: vendor-org-admin-1 },
-        session-route: { role: vendor }
-      }
+      session-route: { route: /auth/createsessionvendor/3 }
+      sandbox-idp: { username: test-vendor-3 }
+
+  - id: organization-member
+    domain: organizations
+    can:
+      [
+        accept an invitation to join an organization,
+        decline an invitation to join an organization,
+        leave an organization they belong to,
+        see the organizations they are affiliated with,
+        record their own capabilities
+      ]
+    sign_in:
+      session-route: { route: /auth/createsessionvendor/4 }
+      sandbox-idp: { username: test-vendor-4 }
+
+  # An account state rather than a new role, but the users domain's sign-in rules
+  # cannot be exercised without one: the account must already be deactivated by an
+  # administrator before the test signs in. Note that on the oracle the session
+  # route does not check account status, so a test that signs in through it reaches
+  # a session the identity provider would have refused; the refusal itself is only
+  # observable where sign-in goes through an identity provider.
+  - id: deactivated-vendor
+    domain: users
+    can: [attempt to sign in and be refused]
+    sign_in:
+      session-route: { route: /auth/createsessionvendor/5 }
+      sandbox-idp: { username: test-vendor-5 }
+
+  # A relationship to a particular file rather than a new role, but the files domain's
+  # read rules cannot be exercised without one: whoever uploaded a file may always read
+  # it back, whatever account type they hold and whatever read access was recorded on it.
+  # A test needs an account that has uploaded a file and holds no other grounds to read
+  # it, which is why this is a persona and not simply "a vendor".
+  - id: file-uploader
+    domain: files
+    can:
+      [
+        upload a file,
+        read back a file they uploaded whatever read access was recorded on it,
+        attach an existing file to something they may edit,
+        be refused a file somebody else uploaded and did not share
+      ]
+    sign_in:
+      session-route: { route: /auth/createsessionvendor/6 }
+      sandbox-idp: { username: test-vendor-6 }
+
+  # A vendor whose account holds no email address, because the identity provider
+  # supplied none. Needed by the notifications domain, which must reach everybody
+  # else in a group and silently skip this one.
+  - id: vendor-without-email
+    domain: notifications
+    can: [receive nothing, because there is no address to send to]
+    sign_in:
+      session-route: { route: /auth/createsessionvendor/7 }
+      sandbox-idp: { username: test-vendor-7 }
+
+  # A vendor who has turned new-opportunity notices off. An account state, but the
+  # notifications domain's opt-out rules need an account that already holds it before
+  # the test begins rather than one that turns it off mid-test.
+  - id: vendor-with-notices-off
+    domain: notifications
+    can:
+      [
+        browse published opportunities,
+        turn new-opportunity notices back on,
+        be left out of a new-opportunity announcement
+      ]
+    sign_in:
+      session-route: { route: /auth/createsessionvendor/8 }
+      sandbox-idp: { username: test-vendor-8 }
+
+  # A vendor holding an outstanding invitation to an organization they are not yet a
+  # member of. The organizations domain's accept, decline and pending-member rules all
+  # start from this state.
+  - id: invited-vendor
+    domain: organizations
+    can:
+      [
+        accept an invitation to join an organization,
+        decline an invitation to join an organization,
+        see a pending invitation among their organizations
+      ]
+    sign_in:
+      session-route: { route: /auth/createsessionvendor/9 }
+      sandbox-idp: { username: test-vendor-9 }
+
+  # A vendor who agreed to the terms once and whose agreement to the current terms has
+  # since been withdrawn — the state an administrator's terms announcement leaves every
+  # vendor in. The proposals domain refuses a submission from this account until the
+  # terms are agreed again, which is why it is a starting state and not something a test
+  # arranges mid-way.
+  - id: vendor-with-terms-reset
+    domain: proposals
+    can:
+      [
+        edit a draft proposal,
+        be refused a submission until the current terms are agreed,
+        agree to the current terms again
+      ]
+    sign_in:
+      session-route: { route: /auth/createsessionvendor/10 }
+      sandbox-idp: { username: test-vendor-10 }
 
   - id: evaluation-panel-member
     domain: proposals
@@ -86,62 +243,16 @@ personas:
         view the anonymous proponent name rather than the organization
       ]
     sign_in:
-      { sandbox-idp: { username: gov-panel-1 }, session-route: { role: government } }
-
-  - id: organization-owner
-    domain: organizations
-    can:
-      [
-        register an organization,
-        edit the profile of an organization they own,
-        archive an organization they own,
-        invite team members to an organization they own,
-        remove a team member from an organization they own,
-        grant or withdraw organization administrator rights,
-        accept the Sprint With Us terms for an organization they own,
-        accept the Team With Us terms for an organization they own,
-        view the team list and changelog of an organization they own
-      ]
-    sign_in:
-      {
-        sandbox-idp: { username: vendor-org-owner-1 },
-        session-route: { role: vendor }
-      }
-
-  # An account state rather than a new role, but the users domain's sign-in rules
-  # cannot be exercised without one: the account must already be deactivated by an
-  # administrator before the test signs in. Note that on the old application the
-  # session-route sign-in does not check account status, so this persona is only
-  # meaningful where sign-in goes through the identity provider.
-  - id: deactivated-vendor
-    domain: users
-    can: [attempt to sign in and be refused]
-    sign_in:
-      {
-        sandbox-idp: { username: vendor-deactivated-1 },
-        session-route: { role: vendor }
-      }
-
-  - id: organization-member
-    domain: organizations
-    can:
-      [
-        accept an invitation to join an organization,
-        decline an invitation to join an organization,
-        leave an organization they belong to,
-        see the organizations they are affiliated with
-      ]
-    sign_in:
-      {
-        sandbox-idp: { username: vendor-org-member-1 },
-        session-route: { role: vendor }
-      }
+      session-route: { route: /auth/createsessiongov }
+      sandbox-idp: { username: test-gov }
 
   # The evaluation domain splits the panel in two. A member may be an evaluator, the
   # chair, or both, and the two roles below are the extremes: an evaluator who is not
-  # the chair, and a chair who does not score. The existing evaluation-panel-member
-  # persona covers what any panel member may see of a proposal; these two cover what
-  # each may do to an evaluation.
+  # the chair, and a chair who does not score. On the oracle these are the government
+  # account and the administrator account respectively, because those are the only two
+  # public sector identities a session route can reach and a panel needs at least two
+  # members. On the rebuilt target they are separate accounts that hold no
+  # administrator rights, which is the arrangement the criteria describe.
   - id: evaluation-panel-evaluator
     domain: evaluation
     can:
@@ -154,10 +265,8 @@ personas:
         read every panel member's individual scores once consensus has begun
       ]
     sign_in:
-      {
-        sandbox-idp: { username: gov-panel-evaluator-1 },
-        session-route: { role: government }
-      }
+      session-route: { route: /auth/createsessiongov }
+      sandbox-idp: { username: gov-panel-evaluator }
 
   - id: evaluation-panel-chair
     domain: evaluation
@@ -170,28 +279,29 @@ personas:
         submit the agreed scores for the opportunity
       ]
     sign_in:
-      {
-        sandbox-idp: { username: gov-panel-chair-1 },
-        session-route: { role: government }
-      }
+      session-route: { route: /auth/createsessionadmin }
+      sandbox-idp: { username: gov-panel-chair }
 
-  # A relationship to a particular file rather than a new role, but the files domain's
-  # read rules cannot be exercised without one: whoever uploaded a file may always read
-  # it back, whatever account type they hold and whatever read access was recorded on it.
-  # A test needs an account that has uploaded a file and holds no other grounds to read
-  # it, which is why this is a persona and not simply "a vendor". Any of the three
-  # account types already listed above may upload, so any of them can stand in here.
-  - id: file-uploader
-    domain: files
+  # A second member of public sector staff, needed wherever a criterion turns on one
+  # staff member not seeing another's work. The oracle carries the account — it owns a
+  # seeded draft opportunity — but has no session route that reaches it, so on the
+  # oracle this persona can be observed and not acted as. On the rebuilt target it
+  # signs in like any other.
+  - id: public-sector-staff-other
+    domain: opportunities
     can:
       [
-        upload a file,
-        read back a file they uploaded whatever read access was recorded on it,
-        attach an existing file to something they may edit,
-        be refused a file somebody else uploaded and did not share
+        create opportunity,
+        edit own opportunity,
+        view own unpublished opportunities
       ]
     sign_in:
-      {
-        sandbox-idp: { username: vendor-file-owner-1 },
-        session-route: { role: vendor }
-      }
+      session-route:
+        unavailable: >-
+          The oracle carries exactly three sign-in routes outside production —
+          /auth/createsessionadmin, /auth/createsessiongov and
+          /auth/createsessionvendor/:n — and the two public sector ones each mint a
+          session for one fixed account. No route, and no parameter on the government
+          route, reaches a second non-administrator public sector account, so this
+          persona can be seeded and observed on the oracle but never acted as.
+      sandbox-idp: { username: gov-second }
