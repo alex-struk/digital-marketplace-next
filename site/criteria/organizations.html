@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>organizations — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">50</span></a></li><li><a href="../proposals.html">Proposals <span class="count">50</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">52</span></a></li><li><a href="../runs.html">Run log <span class="count">2</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html" aria-current="page">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>organizations</h1>
+<p class="lede">35 criteria, 28 with a derived acceptance test, 3 recorded as not testable through the contract surface.</p></div>
+<div class="filters" hidden><button type="button" data-filter="all" aria-pressed="true">All (35)</button><button type="button" data-filter="tested" aria-pressed="false">Has a test (28)</button><button type="button" data-filter="not-testable" aria-pressed="false">Not testable (3)</button><button type="button" data-filter="untested" aria-pressed="false">No test yet (0)</button><button type="button" data-filter="obsolete" aria-pressed="false">Obsolete (0)</button></div>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.1</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Anyone, signed in or not, can browse the list of registered organizations, which shows only organizations that have not been archived, ordered by legal name and split into pages.</p>
+  <dl><dt>given</dt><dd>three registered organizations, one of which has been archived</dd><dt>when</dt><dd>a visitor who is not signed in opens the organization list</dd><dt>then</dt><dd>the two organizations that are not archived are listed in alphabetical order by legal name, and the archived one is absent</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.1.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/organization.ts:78</code><br><code>src/back-end/lib/db/organization.ts:232</code><br><code>src/back-end/lib/db/organization.ts:457</code><br><code>src/front-end/typescript/lib/pages/organization/list.tsx:86</code><br><code>src/back-end/docs/organization.yaml:9</code><br><code>CHANGELOG.md:137</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the page requests fifty organizations at a time; asking for a page beyond the last one returns the first page instead of an empty one.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.2</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Only a signed-in vendor who has already accepted the service&#39;s terms and conditions may register a new organization; a request from anyone else is refused.</p>
+  <dl><dt>given</dt><dd>a signed-in member of public sector staff and a signed-in vendor who has accepted the terms</dd><dt>when</dt><dd>each tries to register an organization</dd><dt>then</dt><dd>the vendor&#39;s organization is created and the public sector staff member&#39;s request is refused as not permitted</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.2.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:195</code><br><code>src/back-end/lib/resources/organization.ts:236</code><br><code>src/front-end/typescript/lib/pages/organization/create.tsx:57</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.3</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An organization&#39;s full record can be opened only by an administrator or by a member who owns or administers that organization; anyone else is refused.</p>
+  <dl><dt>given</dt><dd>an organization with an owner, one administrator and one ordinary member</dd><dt>when</dt><dd>the ordinary member, and separately a member of public sector staff, opens that organization&#39;s management page</dd><dt>then</dt><dd>both are refused, while the owner, the organization&#39;s administrator and a service administrator each see the organization</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.3.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:204</code><br><code>src/back-end/lib/resources/organization.ts:127</code><br><code>src/front-end/typescript/lib/pages/organization/edit/index.tsx:66</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the ordinary member is shown a &quot;not found&quot; page rather than a refusal, because the front end turns the refused read into a missing page.</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-3.4</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An organization&#39;s profile details may be changed only by an administrator or by the organization&#39;s owner; an organization administrator who is not the owner cannot save changes to them.</p>
+  <dl><dt>given</dt><dd>an organization whose owner has granted administrator rights to another member</dd><dt>when</dt><dd>that organization administrator opens the organization&#39;s profile, edits the legal name and saves</dd><dt>then</dt><dd>the change is refused and an error is shown</dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:218</code><br><code>src/back-end/lib/resources/organization.ts:377</code><br><code>src/front-end/typescript/lib/pages/organization/edit/tab/organization.tsx:372</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-3.18</dd><dt>note</dt><dd>the management page offers the Edit and Archive controls to anyone who can open it, including an organization administrator, but the service only accepts profile changes and archiving from the owner or a service administrator, so the controls are visible to a person who cannot use them. No corrected criterion has been written because it is unclear whether the intent is to widen the permission or to hide the controls.</dd><dt>note</dt><dd>superseded by R-3.18</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-3.5</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A change to an organization&#39;s contact phone number made while editing its profile is not saved.</p>
+  <dl><dt>given</dt><dd>an organization whose owner is editing its profile</dd><dt>when</dt><dd>they change the contact phone number and save</dd><dt>then</dt><dd>every other edited field is saved but the contact phone number is not updated</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/organization.ts:357</code><br><code>src/front-end/typescript/lib/pages/organization/lib/components/form.tsx:760</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-3.19</dd><dt>note</dt><dd>the profile-update request is read field by field, and the contact phone is read from a differently named field than the one the form sends, so the submitted value never reaches the stored record. Whether the stored number is left as it was or cleared could not be settled from the source alone, because it depends on how the database layer treats a value it was not given.</dd><dt>note</dt><dd>superseded by R-3.19</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.6</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An administrator or an organization&#39;s owner may archive the organization, after which it no longer appears in the organization list, cannot be used on proposals, and disappears from its members&#39; lists of organizations; the archiving is recorded with the date and the person who did it.</p>
+  <dl><dt>given</dt><dd>an active organization with an owner and one other active member</dd><dt>when</dt><dd>the owner archives it</dd><dt>then</dt><dd>it is gone from the public organization list, gone from the other member&#39;s affiliated organizations, and its record carries the date it was archived and the identity of the person who archived it</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.6.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:232</code><br><code>src/back-end/lib/resources/organization.ts:674</code><br><code>src/back-end/lib/db/affiliation.ts:169</code><br><code>src/front-end/typescript/lib/pages/organization/edit/tab/organization.tsx:294</code><br><code>src/back-end/docs/organization.yaml:88</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>archiving does not delete the organization or its memberships; the record is retained and simply marked inactive.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.7</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An organization&#39;s owner, its administrators and a service administrator may invite people to the team by email address, and each invitation is created as a pending membership.</p>
+  <dl><dt>given</dt><dd>an organization with an owner and no other members</dd><dt>when</dt><dd>the owner invites two email addresses at once from the team page</dd><dt>then</dt><dd>both people appear on the team list marked as pending, and neither counts towards the organization&#39;s team size until they accept</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.7.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:271</code><br><code>src/back-end/lib/resources/affiliation.ts:233</code><br><code>src/front-end/typescript/lib/pages/organization/edit/tab/team.tsx:243</code><br><code>src/back-end/docs/affiliation.yaml:25</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>an ordinary member of the organization is not permitted to invite anybody.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.8</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A person may only be invited to an organization if they hold an active vendor account, and cannot be invited twice to the same organization.</p>
+  <dl><dt>given</dt><dd>an organization with one pending invitation outstanding for a given person</dd><dt>when</dt><dd>the owner invites that same person again, and separately invites a member of public sector staff</dd><dt>then</dt><dd>the repeat invitation is refused as the person already being a member of the organization, and the invitation to public sector staff is refused because only vendors may be invited</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.8.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/affiliation.ts:208</code><br><code>src/back-end/lib/resources/affiliation.ts:214</code><br><code>src/back-end/lib/resources/affiliation.ts:219</code><br><code>src/back-end/lib/db/affiliation.ts:112</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>a person whose membership was previously ended can be invited again, because ended memberships are not counted when checking for an existing one; this was read from the shape of the duplicate check rather than observed.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.9</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A pending invitation becomes an active membership only when the invited person accepts it, or when an administrator accepts it on their behalf; nobody else can accept it and an invitation that is not pending cannot be accepted.</p>
+  <dl><dt>given</dt><dd>a person with a pending invitation to an organization</dd><dt>when</dt><dd>the organization&#39;s owner tries to accept it on their behalf, and then the invited person accepts it themselves</dd><dt>then</dt><dd>the owner&#39;s attempt is refused, the invited person&#39;s acceptance makes the membership active, and a further attempt to accept the now-active membership is refused as not pending</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.9.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:284</code><br><code>src/back-end/lib/resources/affiliation.ts:347</code><br><code>src/back-end/lib/db/affiliation.ts:246</code><br><code>src/front-end/typescript/lib/pages/user/profile/tab/organizations.tsx:216</code><br><code>src/back-end/docs/affiliation.yaml:46</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the published interface description gives this operation a different request method than the service actually accepts, so the description cannot be followed literally.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.10</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A membership can be ended by the member themselves, by the organization&#39;s owner or administrators, or by a service administrator; the membership becomes inactive rather than being erased, and the person stops counting towards the organization&#39;s team.</p>
+  <dl><dt>given</dt><dd>an organization with an owner and one further active member</dd><dt>when</dt><dd>that member chooses to leave the organization</dd><dt>then</dt><dd>they no longer appear on the organization&#39;s team list, the organization&#39;s team size falls to one, and the organization is no longer listed among their affiliated organizations</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.10.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:306</code><br><code>src/back-end/lib/db/affiliation.ts:421</code><br><code>src/front-end/typescript/lib/pages/organization/edit/tab/team.tsx:372</code><br><code>src/front-end/typescript/lib/pages/user/profile/tab/organizations.tsx:169</code><br><code>src/back-end/docs/affiliation.yaml:63</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.11</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An organization&#39;s last remaining owner cannot be removed from it.</p>
+  <dl><dt>given</dt><dd>an organization with exactly one owner and two other active members</dd><dt>when</dt><dd>an administrator tries to end the owner&#39;s membership</dd><dt>then</dt><dd>the request is refused with a message saying this is the sole owner for the organization, and the membership remains</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.11.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/affiliation.ts:518</code><br><code>src/back-end/lib/db/affiliation.ts:492</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.12</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An organization&#39;s owner, its administrators and a service administrator may grant or withdraw administrator rights over the organization to an active member, but nobody may change their own rights and the owner&#39;s own membership cannot be changed this way.</p>
+  <dl><dt>given</dt><dd>an organization with an owner and two other active members, one of whom already has administrator rights</dd><dt>when</dt><dd>the owner grants administrator rights to the second member, that administrator tries to withdraw their own rights, and someone tries to change the owner&#39;s</dd><dt>then</dt><dd>the second member gains administrator rights, and both the self-change and the change to the owner are refused</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.12.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:294</code><br><code>src/back-end/lib/resources/affiliation.ts:370</code><br><code>src/back-end/lib/db/affiliation.ts:272</code><br><code>src/front-end/typescript/lib/pages/organization/edit/tab/team.tsx:630</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>granting administrator rights requires the person granting them to confirm a statement about what those rights allow before the change is offered.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.13</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Only a service administrator may transfer ownership of an organization, and only to a member whose membership is already active; the previous owner becomes an ordinary member.</p>
+  <dl><dt>given</dt><dd>an organization with an owner, one active member and one member whose invitation is still pending</dd><dt>when</dt><dd>an administrator transfers ownership to the active member</dd><dt>then</dt><dd>that member becomes the organization&#39;s owner, the previous owner becomes an ordinary member, and the pending member cannot be chosen as the new owner</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.13.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/affiliation.ts:408</code><br><code>src/back-end/lib/db/affiliation.ts:353</code><br><code>src/front-end/typescript/lib/pages/organization/edit/tab/team.tsx:1047</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the organization&#39;s own owner is not offered this action; it is offered only to a service administrator, and only when the organization has at least one member other than the owner.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.14</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The list of an organization&#39;s team members can be read only by a service administrator or by someone who owns or administers that organization.</p>
+  <dl><dt>given</dt><dd>an organization with an owner and one ordinary member</dd><dt>when</dt><dd>that ordinary member, and separately a vendor unconnected to the organization, asks for the organization&#39;s team list</dd><dt>then</dt><dd>both are refused, while the owner and a service administrator receive the list</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.14.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:258</code><br><code>src/back-end/lib/resources/affiliation.ts:98</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.15</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The organizations a vendor may act on behalf of are those they own and those they administer, excluding any that have been archived.</p>
+  <dl><dt>given</dt><dd>a vendor who owns one organization, administers a second, is an ordinary member of a third, and owns a fourth that has been archived</dd><dt>when</dt><dd>they ask for the organizations they can act for</dd><dt>then</dt><dd>the first two are returned and the third and fourth are not</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.15.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/db/organization.ts:541</code><br><code>src/back-end/lib/resources/owned-organization.ts:28</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-3.16</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Asking for the organizations one may act on behalf of as anyone other than a vendor returns an empty list rather than being refused.</p>
+  <dl><dt>given</dt><dd>a signed-in member of public sector staff, and a visitor who is not signed in</dd><dt>when</dt><dd>each asks for the organizations they may act on behalf of</dd><dt>then</dt><dd>each receives an empty list and neither is told they are not permitted</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/owned-organization.ts:25</code><br><code>src/back-end/lib/db/organization.ts:542</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-3.20</dd><dt>note</dt><dd>the permission rule for this request is written but never applied — the check tests that the rule exists rather than running it — so nothing is refused here. No harm follows, because the underlying lookup returns nothing for anyone who is not a vendor, but the outcome is an empty success where a refusal was intended. No corrected criterion has been written because it has not been decided whether the new system should refuse or should keep answering with an empty list.</dd><dt>note</dt><dd>superseded by R-3.20</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-3.17</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An invitation may name the invited person as an ordinary member or as an owner, and any other membership type is rejected.</p>
+  <dl><dt>given</dt><dd>an organization whose owner is inviting a team member</dd><dt>when</dt><dd>the invitation names a membership type other than member or owner</dd><dt>then</dt><dd>the invitation is refused as an invalid membership type</dd><dt>not testable</dt><dd>The only way the surface creates an invitation is organization-edit&#39;s add_team_members, whose subject is email addresses; no page in the contract offers a membership type on an invitation, so a test cannot send one other than the &quot;member&quot; the team surface always sends, and therefore cannot reach the rejection of any other type. Needs an add_team_members that carries a membership type, and an observation of the invalid-membership-type refusal.</dd><dt>cites</dt><dd><code>src/shared/lib/resources/affiliation.ts:85</code><br><code>src/back-end/lib/resources/affiliation.ts:186</code><br><code>src/back-end/docs/affiliation.yaml:83</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>administrator rights are never granted by an invitation; they are granted afterwards to a member who has already joined, as in R-3.12. In practice the team page always sends &quot;member&quot;.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.18</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The Edit and Archive controls on an organization&#39;s management page are offered only to a person permitted to use them — the organization&#39;s owner or a service administrator; an organization administrator who is not the owner sees the organization&#39;s profile as read-only, with no Edit and no Archive control, and the service continues to refuse a profile change or an archive request from anyone other than the owner or a service administrator.</p>
+  <dl><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.18.spec.ts</code></dd><dt>replaces</dt><dd>R-3.4</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.19</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A change to an organization&#39;s contact phone number made while editing its profile is saved along with every other profile field, and clearing the field removes the stored number.</p>
+  <dl><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.19.spec.ts</code></dd><dt>replaces</dt><dd>R-3.5</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-3.20</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Asking for the organizations one may act on behalf of is refused as not permitted for anyone who is not a signed-in vendor, rather than answered with an empty list.</p>
+  <dl><dt>not testable</dt><dd>The criterion turns entirely on telling a refusal apart from an empty answer, and no page in the organizations domain carries a refusal observation — organization-list offers organization_name, owner_name, the two qualification marks and pagination, none of which distinguishes &quot;you are not permitted&quot; from &quot;you may act for nothing&quot;. Needs an observation such as organization-list.refused_when_not_permitted, or a page of its own for the organizations one may act on behalf of.</dd><dt>replaces</dt><dd>R-3.16</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.21</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v2</span>
+  </header>
+  <p class="statement">In the organization list, the owner&#39;s name, the team size and both qualification marks are shown only to a service administrator and, for a given organization, to the vendors who own or administer it; every other viewer sees that organization&#39;s legal name, logo, active state and service areas alone, and the owner and qualification columns are not offered at all to a visitor who is not signed in or to public sector staff.</p>
+  <dl><dt>given</dt><dd>an organization owned by one vendor</dd><dt>when</dt><dd>a different vendor, who is neither its owner nor one of its administrators, opens the organization list</dd><dt>then</dt><dd>that organization&#39;s row shows its legal name only, with no owner, no team size and no qualification marks, while the same row shown to an administrator carries all of them</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.21.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/db/organization.ts:502</code><br><code>src/back-end/lib/db/organization.ts:251</code><br><code>src/front-end/typescript/lib/pages/organization/list.tsx:163</code><br><code>src/front-end/typescript/lib/pages/organization/list.tsx:204</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the owner and qualification columns are hidden entirely from a visitor who is not signed in and from public sector staff, so only vendors and administrators ever see them.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.22</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v2</span>
+  </header>
+  <p class="statement">Registering an organization requires a legal name, street address, city, region, mail code, country and contact name, each between one and one hundred characters, together with a contact email in a valid email format and of any length; a website address, second address line, contact title and contact phone number may be left out, but each is rejected if given in an invalid format, with the second address line and contact title also limited to one hundred characters.</p>
+  <dl><dt>given</dt><dd>a signed-in vendor filling in the organization registration form</dd><dt>when</dt><dd>they submit it with the legal name left blank, or with a contact email of &quot;not-an-email&quot;</dd><dt>then</dt><dd>the organization is not created and the offending field is reported as invalid, while the same submission with the optional website, second address line, contact title and phone left empty succeeds</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.22.spec.ts</code></dd><dt>cites</dt><dd><code>src/shared/lib/validation/organization.ts:10</code><br><code>src/shared/lib/validation/organization.ts:56</code><br><code>src/shared/lib/validation/organization.ts:60</code><br><code>src/shared/lib/validation/index.ts:218</code><br><code>src/shared/lib/validation/index.ts:423</code><br><code>src/shared/lib/validation/index.ts:436</code><br><code>src/back-end/docs/organization.yaml:102</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the published interface description lists the same set of fields but says nothing about which are required or how long they may be, so the required/optional split and the hundred-character limit rest on the code alone.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.23</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The vendor who registers an organization becomes its owner immediately, and the organization is active from the moment it is registered.</p>
+  <dl><dt>given</dt><dd>a signed-in vendor with no organizations</dd><dt>when</dt><dd>they register a new organization</dd><dt>then</dt><dd>the organization appears under their owned organizations with them recorded as its owner and its team counted as one member, and they are taken to that organization&#39;s management page</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.23.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/db/organization.ts:595</code><br><code>src/back-end/lib/db/organization.ts:618</code><br><code>src/front-end/typescript/lib/pages/organization/create.tsx:148</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.24</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">When an administrator archives an organization they do not own, its owner is told by email that the organization has been archived.</p>
+  <dl><dt>given</dt><dd>an active organization owned by a vendor</dd><dt>when</dt><dd>an administrator archives it</dd><dt>then</dt><dd>the owner receives a message telling them their organization has been archived by an administrator and that they can no longer use it, and no such message is sent when the owner archives their own organization</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.24.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/organization.ts:692</code><br><code>src/back-end/lib/mailer/notifications/organization.tsx:11</code><br><code>src/back-end/lib/mailer/notifications/organization.tsx:32</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.25</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An organization is qualified for Sprint With Us once it has at least two active team members, those members between them hold every capability the service recognises, and its Sprint With Us terms have been accepted.</p>
+  <dl><dt>given</dt><dd>an organization with an owner and one further active member who between them hold every capability, and whose Sprint With Us terms have not yet been accepted</dd><dt>when</dt><dd>the owner opens the organization&#39;s Sprint With Us qualification page</dd><dt>then</dt><dd>the team-size and capability requirements are shown as met, the terms requirement as unmet, and the organization is marked as not qualified</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.25.spec.ts</code></dd><dt>cites</dt><dd><code>src/shared/lib/resources/organization.ts:125</code><br><code>src/shared/lib/resources/organization.ts:131</code><br><code>src/back-end/lib/db/organization.ts:199</code><br><code>src/front-end/typescript/lib/pages/organization/edit/tab/swu-qualification.tsx:74</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>only active members count towards the capability total; a member who has been invited but has not yet accepted is excluded.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.26</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An organization is qualified for Team With Us once it has been approved for at least one service area and its Team With Us terms have been accepted.</p>
+  <dl><dt>given</dt><dd>an organization approved for one service area whose Team With Us terms have not been accepted</dd><dt>when</dt><dd>the owner opens the organization&#39;s Team With Us qualification page</dd><dt>then</dt><dd>the service-area requirement is shown as met, the terms requirement as unmet, and the organization is marked as not qualified</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.26.spec.ts</code></dd><dt>cites</dt><dd><code>src/shared/lib/resources/organization.ts:141</code><br><code>src/back-end/lib/db/organization.ts:386</code><br><code>src/front-end/typescript/lib/pages/organization/edit/tab/twu-qualification.tsx:301</code><br><code>src/migrations/tasks/20230327102038_accept-twu-terms.ts</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the database description carried by the old application does not list the Team With Us terms field, the service-area approvals or the membership-rights history at all, so it is behind the schema the application actually uses.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.27</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Accepting an organization&#39;s Sprint With Us or Team With Us terms records the date of acceptance, and a second attempt to accept the same terms for the same organization is refused.</p>
+  <dl><dt>given</dt><dd>an organization whose Sprint With Us terms have not been accepted</dd><dt>when</dt><dd>its owner reads the terms and accepts them, and then tries to accept them again</dd><dt>then</dt><dd>the first acceptance is recorded with its date and shown on the qualification page, and the second is refused with a message saying the terms have already been accepted</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.27.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/organization.ts:509</code><br><code>src/back-end/lib/resources/organization.ts:524</code><br><code>src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:155</code><br><code>src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:224</code><br><code>src/back-end/docs/organization.yaml:148</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>an administrator reading the terms page is not offered the accept control, so acceptance is in practice an act of the organization&#39;s own people.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.28</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Only an administrator may set which service areas an organization is approved for, and saving a selection replaces the organization&#39;s previous approvals entirely.</p>
+  <dl><dt>given</dt><dd>an organization approved for two service areas</dd><dt>when</dt><dd>an administrator edits the service areas, leaves one of the two ticked, ticks a third, and saves</dd><dt>then</dt><dd>the organization is approved for exactly the two areas that were ticked and no longer for the one that was cleared, and the same page offers no editing control to the organization&#39;s own owner</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.28.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/organization.ts:545</code><br><code>src/back-end/lib/db/organization.ts:691</code><br><code>src/front-end/typescript/lib/pages/organization/edit/tab/twu-qualification.tsx:400</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-3.29</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An invited person is told by email that the organization has asked them to join, and is offered a way to accept or decline from that message.</p>
+  <dl><dt>given</dt><dd>a registered vendor who is not a member of a given organization</dd><dt>when</dt><dd>that organization invites them</dd><dt>then</dt><dd>they receive a message naming the organization and offering an accept and a decline choice, and following either choice opens their own organizations page with that decision ready to confirm</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/affiliation.ts:264</code><br><code>src/back-end/lib/mailer/notifications/affiliation.tsx:65</code><br><code>src/back-end/lib/mailer/notifications/affiliation.tsx:247</code><br><code>src/front-end/typescript/lib/pages/user/profile/tab/organizations.tsx:122</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-3.35</dd><dt>note</dt><dd>superseded by R-3.35</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.30</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Inviting an email address that belongs to nobody registered with the service creates no membership; the address is instead sent an invitation to register, and the inviter is told the person was not registered but has been notified.</p>
+  <dl><dt>given</dt><dd>an organization whose owner is inviting team members</dd><dt>when</dt><dd>they invite an email address that no registered account uses</dd><dt>then</dt><dd>no pending membership appears on the team list, the address receives an invitation to register with the service, and the owner is shown a warning naming that address</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.30.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/affiliation.ts:196</code><br><code>src/front-end/typescript/lib/pages/organization/edit/tab/team.tsx:270</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.31</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">When a person accepts an invitation, the organization&#39;s owner is told they have joined and the new member is told they may now be put forward on the organization&#39;s proposals.</p>
+  <dl><dt>given</dt><dd>a person with a pending invitation to an organization</dd><dt>when</dt><dd>they accept it</dd><dt>then</dt><dd>the organization&#39;s owner receives a message saying the person approved the request, and the person receives a message saying they have joined the organization&#39;s team</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.31.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/affiliation.ts:450</code><br><code>src/back-end/lib/mailer/notifications/affiliation.tsx:18</code><br><code>src/back-end/lib/mailer/notifications/affiliation.tsx:106</code><br><code>src/back-end/lib/mailer/notifications/affiliation.tsx:168</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.32</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">When an invited person declines an invitation rather than accepting it, the organization&#39;s owner is told the request was rejected.</p>
+  <dl><dt>given</dt><dd>a person with a pending invitation to an organization</dd><dt>when</dt><dd>they decline it</dd><dt>then</dt><dd>the pending membership is gone from the organization&#39;s team list and the owner receives a message saying the person rejected the team request</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.32.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/affiliation.ts:562</code><br><code>src/back-end/lib/mailer/notifications/affiliation.tsx:35</code><br><code>src/back-end/lib/mailer/notifications/affiliation.tsx:140</code><br><code>src/front-end/typescript/lib/pages/user/profile/tab/organizations.tsx:270</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>no message is sent when the organization&#39;s own owner or administrator withdraws a pending invitation, nor when an established member leaves; the code that would tell the owner about a member leaving is present but nothing invokes it.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.33</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An organization keeps a changelog of every grant and withdrawal of administrator rights and every transfer of ownership, showing what happened, to whom, when and by whom, most recent first.</p>
+  <dl><dt>given</dt><dd>an organization whose owner has granted administrator rights to a member and then withdrawn them</dd><dt>when</dt><dd>the owner opens the organization&#39;s changelog</dd><dt>then</dt><dd>two entries are shown, &quot;Admin Rights Removed&quot; above &quot;Admin Rights Given&quot;, each naming the member it concerns, the time it happened and the person who made the change</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.33.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/db/organization.ts:388</code><br><code>src/back-end/lib/db/affiliation.ts:300</code><br><code>src/back-end/lib/db/affiliation.ts:367</code><br><code>src/front-end/typescript/lib/pages/organization/lib/index.tsx:4</code><br><code>src/migrations/tasks/20231108161232_affiliation-events.ts:13</code><br><code>src/migrations/tasks/20240410182955_update-affiliation-events.ts:7</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-3.34</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An organization&#39;s summary of team capabilities counts only members who have accepted their invitation.</p>
+  <dl><dt>given</dt><dd>an organization whose only member holding a given capability has been invited but has not yet accepted</dd><dt>when</dt><dd>the owner opens the organization&#39;s team page</dd><dt>then</dt><dd>that capability is shown as one the team does not have, and it becomes shown as held once the invitation is accepted</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.34.spec.ts</code></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/organization/edit/tab/team.tsx:104</code><br><code>src/back-end/lib/db/organization.ts:211</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-3.35</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The accept and the decline choice offered in an invitation email both open the invited person&#39;s own organizations page with the matching confirmation ready, so a person can decline from the message as readily as they can accept.</p>
+  <dl><dt>not testable</dt><dd>The claim is about where the accept and the decline choice inside an invitation email lead. The email observable reaches a message&#39;s subject, snippet and recipient through the mail catcher, and the Mail fixture exposes only those, so a test cannot read the message body or follow either choice; organization-user-memberships also carries no observation of an accept or a decline confirmation standing ready. Needs a mail observation of the message body or its links, and an observation of the prepared confirmation on organization-user-memberships.</dd><dt>replaces</dt><dd>R-3.29</dd></dl>
+</article>
+<script>
+(function () {
+  var bar = document.querySelector(".filters");
+  if (!bar) return;
+  bar.hidden = false;
+  var cards = Array.prototype.slice.call(document.querySelectorAll(".criterion"));
+  bar.addEventListener("click", function (event) {
+    var button = event.target.closest("button[data-filter]");
+    if (!button) return;
+    var want = button.getAttribute("data-filter");
+    Array.prototype.forEach.call(bar.querySelectorAll("button"), function (b) {
+      b.setAttribute("aria-pressed", String(b === button));
+    });
+    cards.forEach(function (card) {
+      card.hidden = want !== "all" && card.getAttribute("data-state") !== want;
+    });
+  });
+})();
+</script>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

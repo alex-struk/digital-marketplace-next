@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>files — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">50</span></a></li><li><a href="../proposals.html">Proposals <span class="count">50</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">52</span></a></li><li><a href="../runs.html">Run log <span class="count">2</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html" aria-current="page">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>files</h1>
+<p class="lede">31 criteria, 12 with a derived acceptance test, 12 recorded as not testable through the contract surface.</p></div>
+<div class="filters" hidden><button type="button" data-filter="all" aria-pressed="true">All (31)</button><button type="button" data-filter="tested" aria-pressed="false">Has a test (12)</button><button type="button" data-filter="not-testable" aria-pressed="false">Not testable (12)</button><button type="button" data-filter="untested" aria-pressed="false">No test yet (0)</button><button type="button" data-filter="obsolete" aria-pressed="false">Obsolete (0)</button></div>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-8.1</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Any person who is signed in may upload a file, and a visitor who is not signed in cannot.</p>
+  <dl><dt>given</dt><dd>a visitor who is not signed in</dd><dt>when</dt><dd>they submit a file for upload</dd><dt>then</dt><dd>the upload is refused as not permitted and no file is stored</dd><dt>test</dt><dd><code>tests/acceptance/files/R-8.1.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:326</code><br><code>src/back-end/lib/resources/file.ts:131</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>no account type, role or membership is checked beyond being signed in, so a vendor, public sector staff and an administrator all have exactly the same ability to upload. The interface description documents the upload request but says nothing about who may make it, so this rests on the code alone.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-8.2</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An upload carries the file itself, a name to store it under, and a statement of who may read it, all in one submission.</p>
+  <dl><dt>given</dt><dd>a signed-in person with a document to upload</dd><dt>when</dt><dd>they submit the document together with a name and a read-access statement</dd><dt>then</dt><dd>the file is stored and its record — its identifier, its name and the date it was stored — is returned</dd><dt>test</dt><dd><code>tests/acceptance/files/R-8.2.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/docs/file.yaml:2</code><br><code>src/back-end/docs/file.yaml:13</code><br><code>src/back-end/lib/server/adapters.ts:168</code><br><code>src/back-end/lib/resources/file.ts:136</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>only the first file in a submission is taken; any further files and any fields other than the name and the read-access statement are discarded silently rather than refused.</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-8.3</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An upload larger than 10 megabytes is refused, and so is one that does not declare its size in advance.</p>
+  <dl><dt>given</dt><dd>a signed-in person uploading a file</dd><dt>when</dt><dd>the submission declares a size above 10 megabytes, or declares no size at all</dd><dt>then</dt><dd>the upload does not succeed and the service reports a fault of its own rather than telling the person the file is too large</dd><dt>cites</dt><dd><code>src/shared/lib/resources/file.ts:7</code><br><code>src/back-end/index.ts:300</code><br><code>src/back-end/lib/server/adapters.ts:154</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-8.17</dd><dt>note</dt><dd>classed as a defect for the way the refusal is reported, not for the limit. The limit is applied to the declared size of the whole submission before any of it is read, so a submission that understates its size is not stopped by this check and nothing downstream applies a second one; a submission that declares no size at all is treated as too large. The 10 megabyte figure appears nowhere outside the code — not in the setup guide, not in the interface description, and nowhere in the interface a person sees before they choose a file.</dd><dt>note</dt><dd>superseded by R-8.17</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-8.4</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An upload that is malformed — no file part, or read-access information that is not well-formed data — fails as a fault of the service rather than as a rejected request.</p>
+  <dl><dt>given</dt><dd>a signed-in person or another system submitting an upload</dd><dt>when</dt><dd>the submission carries no file part, or read-access information that is not well-formed</dd><dt>then</dt><dd>the request fails as an unexpected fault of the service and is recorded in the service&#39;s error log as one</dd><dt>cites</dt><dd><code>src/back-end/lib/server/adapters.ts:212</code><br><code>src/back-end/lib/server/adapters.ts:240</code><br><code>src/back-end/lib/server/adapters.ts:336</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-8.18</dd><dt>note</dt><dd>no corrected criterion has been written because the two cases want different answers — a submission with no file is a bad request, whereas read-access information that is not well-formed is already reported properly when it is well-formed but wrong (see R-8.24). Both are indistinguishable to the caller from the service being broken, and both fill the error log with entries caused by callers rather than by the service. A file already written to temporary storage when one of these fails is not cleaned up, because the clean-up step is only reached on the success path.</dd><dt>note</dt><dd>superseded by R-8.18</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-8.5</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Two uploads of identical content are stored once, while each upload remains its own record with its own name, its own uploader and its own read access.</p>
+  <dl><dt>given</dt><dd>a file already stored by one person</dd><dt>when</dt><dd>a second person uploads a file with byte-for-byte identical content under a different name</dd><dt>then</dt><dd>a second, separate record is created that shares the stored content, and the second person&#39;s read access does not extend to the first record</dd><dt>not testable</dt><dd>Both halves need something the surface never returns. That identical content is stored once is visible only in the fingerprint the file record carries, and no observation returns a file record or a fingerprint; that the second uploader&#39;s read access does not reach the first record needs the first record to be addressed by identifier, and no observation returns a stored file&#39;s identifier, so a file can be reached only by following a download offered on a screen the requester can already open.</dd><dt>cites</dt><dd><code>src/back-end/lib/db/file.ts:60</code><br><code>src/back-end/lib/db/file.ts:66</code><br><code>src/back-end/lib/db/file.ts:77</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the content is matched by a fingerprint of the bytes alone; the name is deliberately not part of it. Because read access hangs off the record and never off the shared content, sharing storage does not leak anything. It does mean the stored content outlives every record that refers to it, since nothing ever removes it.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-8.6</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Every stored file records who uploaded it and when, and neither can be changed afterwards.</p>
+  <dl><dt>given</dt><dd>a signed-in person</dd><dt>when</dt><dd>they upload a file</dd><dt>then</dt><dd>the file is permanently marked as theirs and stamped with the moment it was stored</dd><dt>not testable</dt><dd>No observation returns who uploaded a file or when it was stored. file_download names contents, name on save, disposition, content type and refusals; the attachment control names rows and errors. With neither value readable, neither the recording of them nor their being unchangeable afterwards can be asserted.</dd><dt>cites</dt><dd><code>src/migrations/tasks/20191123120154_files.ts:17</code><br><code>docs/database-schema.md:261</code><br><code>src/back-end/lib/db/file.ts:77</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>there is no operation anywhere in the service that changes a stored file&#39;s name, content, uploader or date. A file is written once and read thereafter.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-8.7</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A file is readable by anyone if it was marked readable by anyone, by a person it names, by anyone holding an account type it names, by whoever uploaded it, and by any administrator.</p>
+  <dl><dt>given</dt><dd>a file uploaded by one vendor and marked readable by no one else</dd><dt>when</dt><dd>a second vendor asks for it, and then an administrator asks for it</dd><dt>then</dt><dd>the second vendor is refused and the administrator receives it</dd><dt>not testable</dt><dd>The given/when/then needs a file that exists, that one person may read and another may not, addressed by both. No observation returns a stored file&#39;s identifier, and the only way the surface reaches a file is by following a download offered on a screen the requester can already open — which is by construction a file they may read. So refused_when_not_permitted cannot be reached for a file that exists, and the administrator&#39;s override cannot be told from the administrator simply being able to open the screen the download hangs on.</dd><dt>cites</dt><dd><code>src/back-end/lib/db/file.ts:124</code><br><code>src/back-end/lib/db/file.ts:131</code><br><code>src/back-end/lib/db/file.ts:140</code><br><code>src/back-end/lib/db/file.ts:148</code><br><code>src/back-end/lib/db/file.ts:156</code><br><code>src/back-end/lib/permissions.ts:336</code><br><code>src/migrations/tasks/20191217200136_file_permissions.ts:14</code><br><code>docs/database-schema.md:241</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>a file marked readable by anyone is readable by a visitor who is not signed in. These five ways of being allowed are checked in turn and any one is enough.</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-8.8</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An attachment added to a Sprint With Us or Team With Us opportunity is marked readable by anyone at the moment it is uploaded, so it can be read by a visitor who is not signed in while the opportunity is still a draft.</p>
+  <dl><dt>given</dt><dd>a Sprint With Us opportunity saved as a draft with a document attached</dd><dt>when</dt><dd>a visitor who is not signed in asks for that document by its identifier</dd><dt>then</dt><dd>the document is returned, even though the opportunity it belongs to is not visible to them</dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/opportunity/sprint-with-us/lib/components/form.tsx:510</code><br><code>src/front-end/typescript/lib/pages/opportunity/team-with-us/lib/components/form.tsx:422</code><br><code>src/front-end/typescript/lib/pages/opportunity/code-with-us/lib/components/form.tsx:61</code><br><code>src/back-end/lib/db/file.ts:94</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-8.19</dd><dt>note</dt><dd>no corrected criterion has been written because the correct behaviour is already described by R-8.25 — the association check would grant exactly the right access on its own, and the marking is what defeats it. The three programs disagree with each other: Code With Us attachments and Code With Us proposal attachments are uploaded with no read access recorded, and rely on the association check; Sprint With Us and Team With Us attachments are marked readable by anyone. The identifier of a draft opportunity&#39;s attachment is not published anywhere, so this is a matter of guessing or retaining an identifier rather than of browsing.</dd><dt>note</dt><dd>superseded by R-8.19</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-8.9</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Nothing makes a Team With Us attachment readable by virtue of what it is attached to, so a Team With Us proposal attachment is readable only by the person who uploaded it and by an administrator.</p>
+  <dl><dt>given</dt><dd>a Team With Us proposal carrying an attachment, and the public sector staff member who owns the opportunity</dd><dt>when</dt><dd>that staff member asks for the attachment</dd><dt>then</dt><dd>they are refused, although they may read the proposal it belongs to</dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:330</code><br><code>src/back-end/lib/db/proposal/team-with-us.ts:63</code><br><code>src/migrations/tasks/20230321113754_add-twu-proposals.ts:67</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-8.20</dd><dt>note</dt><dd>no corrected criterion has been written because the missing behaviour is R-8.25 extended to the third program, and whether the new system should carry three separate association rules or one is a design decision rather than a finding. Nothing in the interface offers a way to attach a file to a Team With Us proposal, so this is reachable only by a caller working against the service directly; the service accepts such attachments and stores them. The Team With Us opportunity case is masked rather than fixed by R-8.8, which marks those attachments readable by anyone.</dd><dt>note</dt><dd>superseded by R-8.20</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-8.10</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Asking for a file with its content requested returns the bytes, described by a content type worked out from the file&#39;s name and offered to the browser as something to save rather than to display.</p>
+  <dl><dt>given</dt><dd>a stored file named &quot;terms.pdf&quot; that the requester may read</dd><dt>when</dt><dd>they ask for it with its content requested</dd><dt>then</dt><dd>the bytes are returned, described as a PDF, and named &quot;terms.pdf&quot; for saving</dd><dt>test</dt><dd><code>tests/acceptance/files/R-8.10.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/docs/file.yaml:50</code><br><code>src/back-end/docs/file.yaml:53</code><br><code>src/back-end/lib/resources/file.ts:59</code><br><code>src/back-end/lib/resources/file.ts:92</code><br><code>src/back-end/lib/resources/file.ts:93</code><br><code>src/front-end/typescript/lib/index.tsx:179</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the content type is guessed from the name alone; the actual content is never inspected, on upload or on retrieval. A file whose name carries no recognised ending, or an ending that does not match its content, is described as unspecified binary data. Every download link in the interface is this same request.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-8.11</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Asking for a file without requesting its content returns a description of it — its identifier, its name and the date it was stored — under the same permission rules as the content itself.</p>
+  <dl><dt>given</dt><dd>a stored file the requester may read</dd><dt>when</dt><dd>they ask for it without requesting its content</dd><dt>then</dt><dd>its identifier, name and stored date are returned, and its content is not</dd><dt>not testable</dt><dd>The surface has one address for a stored file, file-download, and its route asks for the content. No page, action or observation makes the without-content request or returns what it answers with: nothing names a file&#39;s identifier, and nothing names the date it was stored, so the description the criterion says comes back cannot be read.</dd><dt>cites</dt><dd><code>src/back-end/docs/file.yaml:37</code><br><code>src/back-end/docs/file.yaml:43</code><br><code>src/back-end/lib/resources/file.ts:77</code><br><code>src/back-end/lib/db/file.ts:21</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the description also carries the fingerprint of the stored content, which is how identical uploads are recognised; a person who may read two files can therefore tell whether they hold the same content without downloading either.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-8.12</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A request for a file the requester may not read is answered as not authorized, and so is a request for a file that does not exist — unless the requester is an administrator, who is told it was not found.</p>
+  <dl><dt>given</dt><dd>an identifier that no stored file carries</dd><dt>when</dt><dd>a vendor asks for it, and then an administrator asks for it</dd><dt>then</dt><dd>the vendor is told they are not authorized and the administrator is told it was not found</dd><dt>test</dt><dd><code>tests/acceptance/files/R-8.12.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/file.ts:62</code><br><code>src/back-end/lib/resources/file.ts:75</code><br><code>src/back-end/lib/resources/file.ts:97</code><br><code>src/back-end/lib/permissions.ts:336</code><br><code>src/back-end/docs/file.yaml:58</code><br><code>src/back-end/docs/file.yaml:60</code></dd><dt>reconciliation</dt><dd>conflicting</dd><dt>note</dt><dd>the two sources disagree. The interface description documents &quot;not found&quot; as the answer for a file that does not exist, without qualification; the code reaches that answer only for an administrator, because for everyone else the permission check runs first and cannot find any grounds to allow a file that is not there. The same is true of a malformed identifier. Which of the two is intended could not be settled: refusing to distinguish &quot;you may not&quot; from &quot;there is nothing here&quot; is a recognised way of not leaking which identifiers exist, and could be deliberate, but nothing in the code or the documentation says so, and the administrator exception means the distinction is leaked to exactly the people who least need it hidden. Left open for a ruling on which answer the new system should give.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-8.13</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A profile picture or an organization logo wider than 500 pixels is narrowed to 500 pixels before it is stored, and one taller than 500 pixels is shortened to 500 pixels, in both cases keeping its proportions.</p>
+  <dl><dt>given</dt><dd>a signed-in person choosing a new profile picture</dd><dt>when</dt><dd>they upload an image 2000 pixels wide and 300 pixels tall</dd><dt>then</dt><dd>it is stored 500 pixels wide, still in its original proportions</dd><dt>not testable</dt><dd>No observation reports the dimensions of a stored image. The image picker names current_image and chosen_image_preview, both free text, and no action states the size of the image it uploads, so neither the 2000-by-300 given nor the 500-pixel outcome can be established or read.</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/avatar.ts:23</code><br><code>src/back-end/lib/resources/avatar.ts:80</code><br><code>src/back-end/config.ts:219</code><br><code>src/back-end/config.ts:224</code><br><code>README.md:276</code><br><code>README.md:277</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the two limits are settings rather than fixed rules and both default to 500 pixels, which the setup guide records. An organization&#39;s logo is uploaded through this same route and is held to the same rule. What happens when an image exceeds both limits at once could not be settled from the source: the two reductions are applied one after the other to the same working image, and whether the second replaces the first or adds to it depends on the behaviour of the image library rather than on anything this service states. An image that exceeds only one limit — the common case, and the one written above — is unambiguous.</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-8.14</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A profile picture or logo that cannot be read as an image is stored as it was uploaded rather than refused.</p>
+  <dl><dt>given</dt><dd>a signed-in person with a file that is not an image but is named &quot;portrait.png&quot;</dd><dt>when</dt><dd>they upload it as their profile picture</dd><dt>then</dt><dd>the resizing step fails quietly, the file is stored unchanged, and it is set as their profile picture</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/avatar.ts:42</code><br><code>src/back-end/lib/resources/avatar.ts:80</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-8.21</dd><dt>note</dt><dd>no corrected criterion has been written because tolerating a resize failure and rejecting a non-image are two different decisions and only the first is what the code intends — the failure is caught and logged as a warning so that an image the resizer merely cannot handle is still accepted. The side effect is that the ending in the name is the only thing standing between an arbitrary file and the profile picture slot. What is served back is described by that same name, so it is offered to browsers as a PNG whatever it holds.</dd><dt>note</dt><dd>superseded by R-8.21</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-8.15</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Attaching a file to an opportunity or a proposal checks only that the file exists, not that the person attaching it uploaded it or may read it.</p>
+  <dl><dt>given</dt><dd>a file uploaded by one person and readable only by them</dd><dt>when</dt><dd>a second person saves a proposal naming that file&#39;s identifier as an attachment</dd><dt>then</dt><dd>the attachment is accepted, and the file becomes readable to everyone who may read that proposal</dd><dt>cites</dt><dd><code>src/back-end/lib/validation.ts:589</code><br><code>src/back-end/lib/validation.ts:614</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-8.22</dd><dt>note</dt><dd>no corrected criterion has been written because the right rule is not obvious — requiring that the attacher be the uploader would be the narrow fix, but a file legitimately shared between two members of an organization would fail it. Reaching this needs the identifier of somebody else&#39;s file, which the service hands out only to people already allowed to read it, so the practical effect is that read access can be widened by someone who has it rather than gained by someone who has not.</dd><dt>note</dt><dd>superseded by R-8.22</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-8.16</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An uploaded file is written to a working directory on the service&#39;s own machine before it is stored, and is removed from there once the upload has been answered.</p>
+  <dl><dt>given</dt><dd>a signed-in person uploading a file</dd><dt>when</dt><dd>the upload succeeds, and separately when it is refused for a bad name or bad read-access information</dd><dt>then</dt><dd>in both cases the working copy is removed once the answer has been sent</dd><dt>not testable</dt><dd>The working directory is on the service&#39;s own machine. Nothing in the surface or in observables.yaml reads that machine&#39;s filesystem — the observables are email, file addresses, exports, a status trigger and counters — so neither the working copy being written nor its being removed afterwards can be seen.</dd><dt>cites</dt><dd><code>src/back-end/lib/server/adapters.ts:173</code><br><code>src/back-end/lib/server/adapters.ts:428</code><br><code>src/back-end/config.ts:230</code><br><code>src/back-end/config.ts:233</code><br><code>README.md:278</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the working directory is a setting the setup guide records, and the service creates it at start-up and refuses to start if it cannot. The removal step is only reached when the request is answered normally, so the cases in R-8.4 — where the upload fails as a fault of the service — leave their working copy behind.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-8.17</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An upload larger than the service&#39;s size limit is refused as the requester&#39;s error, with a message naming the limit, and the limit is stated in the interface before a person chooses a file rather than only after they submit it.</p>
+  <dl><dt>not testable</dt><dd>Two observations are missing. No observation reports an upload refused for size or the message such a refusal carries — file_name_error is about the name, and the file-download refusals are about reading rather than uploading — and no observation reports the size limit stated on the attachment control or the image picker before a file is chosen, which is the half of the criterion about what a person is told in advance.</dd><dt>replaces</dt><dd>R-8.3</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-8.18</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A submission carrying no file part, or read-access information that is not well-formed, is refused as a bad request naming what was wrong with it, and is not recorded in the service&#39;s error log as a fault of the service; any working copy already written is removed whether the upload succeeds or fails.</p>
+  <dl><dt>not testable</dt><dd>Same reach as R-8.4: every upload in the surface is assembled by a control, so a submission with no file part or with malformed read-access information cannot be made. The refusal naming what was wrong, the absence of an entry in the service&#39;s error log, and the removal of the working copy are each unobservable as well — no observation names an upload refusal message, and neither the log nor the working directory is an observable.</dd><dt>replaces</dt><dd>R-8.4</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-8.19</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An attachment on an opportunity is uploaded with no read access recorded against the file itself, for all three programs alike, so that what the opportunity is attached to decides who may read it.</p>
+  <dl><dt>not testable</dt><dd>That no read access is recorded against the file itself is visible only as its consequence: somebody who may not read the opportunity being refused its attachment. That request cannot be made — a visitor cannot open an unpublished opportunity to follow a download, and no observation returns a file&#39;s identifier to ask for it directly — and the surface has no observation reporting what was recorded against a file.</dd><dt>replaces</dt><dd>R-8.8</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-8.20</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A file attached to an opportunity or a proposal is readable by whoever may read the thing it is attached to, under one rule covering Code With Us, Sprint With Us and Team With Us alike rather than a separate rule per program.</p>
+  <dl><dt>test</dt><dd><code>tests/acceptance/files/R-8.20.spec.ts</code></dd><dt>replaces</dt><dd>R-8.9</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-8.21</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A profile picture or organization logo is accepted only if its content can be read as a JPEG or a PNG, and a file whose content is neither is refused whatever its name says; an image that reads successfully but cannot be resized is stored at its original size rather than refused.</p>
+  <dl><dt>test</dt><dd><code>tests/acceptance/files/R-8.21.spec.ts</code></dd><dt>replaces</dt><dd>R-8.14</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-8.22</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A file may be attached to an opportunity or a proposal only by someone who is permitted to read that file.</p>
+  <dl><dt>not testable</dt><dd>The criterion is about who may attach a file, which needs a file uploaded by somebody else to be named as an attachment. No observation returns a stored file&#39;s identifier, and no action attaches a file by identifier: add_attachment chooses a file to upload rather than naming one already stored, so the attempt the criterion refuses cannot be made.</dd><dt>replaces</dt><dd>R-8.15</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-8.23</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v2</span>
+  </header>
+  <p class="statement">An upload whose name is longer than 255 characters is refused as a bad request, and the person is told the file name must be between 1 and 255 characters long; an upload carrying no usable name at all never reaches this check and instead fails as the service fault described by R-8.4.</p>
+  <dl><dt>given</dt><dd>a signed-in person uploading a file</dd><dt>when</dt><dd>they give it a name of 256 characters</dd><dt>then</dt><dd>the upload is refused and the message names the permitted length</dd><dt>test</dt><dd><code>tests/acceptance/files/R-8.23.spec.ts</code></dd><dt>cites</dt><dd><code>src/shared/lib/validation/file.ts:25</code><br><code>src/shared/lib/validation/file.ts:30</code><br><code>src/back-end/lib/resources/file.ts:137</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the limit is the length an ordinary file system will accept, not a rule of this service. Nothing else about the name is checked — no character restriction, no extension requirement, and no check that the name matches the content — except on the profile picture and logo route.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-8.24</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v2</span>
+  </header>
+  <p class="statement">An upload that carries no read-access statement, or one that is well-formed data but names a kind of access the service does not recognise, is refused as a bad request reporting that the information provided was invalid, and no file is stored; read-access information that is not well-formed data at all fails instead as the service fault described by R-8.4.</p>
+  <dl><dt>given</dt><dd>a signed-in person uploading a file</dd><dt>when</dt><dd>they omit the read-access statement, or give one naming a kind of access the service does not recognise</dd><dt>then</dt><dd>the upload is refused as having invalid read-access information and no file is stored</dd><dt>not testable</dt><dd>No action submits an upload without a read-access statement, or with one naming a kind of access the service does not recognise: the controls that upload settle that statement themselves and offer no way to set or omit it. Nor does any observation report an upload refused as carrying invalid information, so neither the given nor the outcome is reachable.</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/file.ts:138</code><br><code>src/shared/lib/validation/file.ts:64</code><br><code>src/back-end/index.ts:301</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the three kinds recognised are &quot;anyone&quot;, &quot;this one named person&quot; and &quot;anyone of this account type&quot;; a statement naming a person must carry a well-formed identifier and one naming an account type must name a type the service knows. Repeated entries are reduced to one before they are recorded.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-8.25</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A file is also readable through what it is attached to: an attachment on a Code With Us or Sprint With Us opportunity is readable by anyone once that opportunity is publicly visible and by the opportunity&#39;s creator before then, and an attachment on a proposal is readable by whoever may read that proposal.</p>
+  <dl><dt>given</dt><dd>an attachment on a Code With Us opportunity that has not yet been published</dd><dt>when</dt><dd>a vendor asks for it, and then the opportunity is published and the same vendor asks again</dd><dt>then</dt><dd>the vendor is refused the first time and receives the file the second time</dd><dt>test</dt><dd><code>tests/acceptance/files/R-8.25.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:338</code><br><code>src/back-end/lib/permissions.ts:339</code><br><code>src/back-end/lib/db/proposal/code-with-us.ts:282</code><br><code>src/back-end/lib/db/proposal/code-with-us.ts:314</code><br><code>src/back-end/lib/db/proposal/sprint-with-us.ts:2020</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>this is what makes a Code With Us attachment behave correctly without any read access recorded against the file itself — the attachment is checked against the state of the thing it hangs on, every time it is asked for, so the file becomes readable exactly when its opportunity does.</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-8.26</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A file is never removed, and deleting the opportunity or proposal it was attached to removes only the attachment, leaving the file and its content stored and still readable by whoever could read them.</p>
+  <dl><dt>given</dt><dd>a draft opportunity with a document attached, marked readable by anyone</dd><dt>when</dt><dd>the opportunity is deleted</dd><dt>then</dt><dd>the attachment link is removed with it, and the document remains stored and remains readable by anyone who has its identifier</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/file.ts:201</code><br><code>src/migrations/tasks/20230116114550_twu_opportunities.ts:102</code><br><code>src/migrations/tasks/20200201235459_cwu_cascades.ts:35</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-8.31</dd><dt>note</dt><dd>no corrected criterion has been written because there is no removal operation to correct — the service offers no way to delete a file at all, so what a rebuild should do about withdrawn attachments, about a person removing an attachment while editing, and about the storage that accumulates is an unanswered question rather than a broken rule. Removing an attachment in the interface only stops the record referring to it; the file itself is untouched. This bites hardest with R-8.8, where the file was marked readable by anyone and there is no longer an opportunity whose state could take that back.</dd><dt>note</dt><dd>When an attachment is removed from an opportunity or a proposal, or the opportunity or proposal it hangs on is deleted, is the file itself removed, and what removes stored content once no record refers to it? Answering this needs the records-retention rule that applies to procurement attachments, which is stated in neither the code nor the documentation.</dd><dt>note</dt><dd>superseded by R-8.31</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-8.27</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An attachment can be given a different display name before it is uploaded, and the ending of the original file is put back on if the person leaves it off.</p>
+  <dl><dt>given</dt><dd>a person attaching a file called &quot;scan0001.pdf&quot; to an opportunity</dd><dt>when</dt><dd>they type &quot;Statement of work&quot; as its name and save</dd><dt>then</dt><dd>the attachment is stored as &quot;Statement of work.pdf&quot;</dd><dt>test</dt><dd><code>tests/acceptance/files/R-8.27.spec.ts</code></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/components/attachments.tsx:91</code><br><code>src/shared/lib/resources/file.ts:67</code><br><code>src/shared/lib/resources/file.ts:72</code><br><code>src/front-end/typescript/lib/components/attachments.tsx:35</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>leaving the name box empty keeps the original name unchanged. The typed name is held to the same length rule as any other file name, and the error is shown against the attachment rather than against the form as a whole. Only attachments not yet uploaded can be renamed; an attachment already stored is shown read-only.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-8.28</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Profile pictures and organization logos are marked readable by anyone.</p>
+  <dl><dt>given</dt><dd>an organization with a logo</dd><dt>when</dt><dd>a visitor who is not signed in opens the organization list</dd><dt>then</dt><dd>the logo is shown to them</dd><dt>test</dt><dd><code>tests/acceptance/files/R-8.28.spec.ts</code></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/user/lib/components/profile-form.tsx:369</code><br><code>src/front-end/typescript/lib/pages/organization/lib/components/form.tsx:719</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>this is what lets a logo appear on the public organization list and a profile picture appear beside a person&#39;s name to any viewer. It also means the image stays readable by anyone after the profile or organization it belonged to has changed picture, since nothing takes the marking back and nothing removes the file.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-8.29</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An image placed into a piece of formatted text is stored as an ordinary file marked readable by anyone, and the text refers to it by an internal marker that is turned into a download address only when the text is displayed.</p>
+  <dl><dt>given</dt><dd>an administrator editing a page&#39;s body with the image control</dd><dt>when</dt><dd>they choose an image and it is accepted</dd><dt>then</dt><dd>the image is inserted into the text as a reference the service resolves for itself, and a reader of the finished page sees the image</dd><dt>test</dt><dd><code>tests/acceptance/files/R-8.29.spec.ts</code></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/http/api/file/markdown-image.ts:7</code><br><code>src/front-end/typescript/lib/http/api/file/markdown-image.ts:21</code><br><code>src/shared/lib/resources/file.ts:85</code><br><code>src/shared/lib/resources/file.ts:89</code><br><code>src/front-end/typescript/lib/views/markdown.tsx:45</code></dd><dt>reconciliation</dt><dd>aligned</dd><dt>note</dt><dd>the stored text never contains a web address, so the same text renders correctly wherever the service is running and whatever address it answers on. A marker that does not resolve to a known file identifier is left alone and treated as an ordinary address, so text written elsewhere still works. The content domain already expects image upload in the editor and defers what may be uploaded to here; this criterion is the other half of that.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-8.30</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A profile picture or an organization logo whose name does not end in .jpg, .jpeg or .png is refused.</p>
+  <dl><dt>given</dt><dd>a signed-in person choosing a new profile picture</dd><dt>when</dt><dd>they upload a file named &quot;portrait.gif&quot;</dd><dt>then</dt><dd>the upload is refused for having an ending that is not allowed, and no file is stored</dd><dt>test</dt><dd><code>tests/acceptance/files/R-8.30.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/avatar.ts:72</code><br><code>src/shared/lib/validation/file.ts:21</code><br><code>src/shared/lib/validation/file.ts:31</code><br><code>src/shared/lib/resources/file.ts:9</code><br><code>src/front-end/typescript/lib/pages/user/lib/components/profile-form.tsx:242</code><br><code>src/front-end/typescript/lib/pages/organization/lib/components/form.tsx:502</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the ending is compared without regard to capitalisation. The file choosers for a profile picture and for a logo both offer only these three endings, but the check on the service side is what actually enforces it. Nothing looks at the content, which is what makes R-8.14 possible.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-8.31</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Removing an attachment from an opportunity or a proposal, or deleting the opportunity or proposal it hangs on, withdraws every read path the file held through that association, and a file that no record refers to any longer is identifiable as detached so that stored content can be disposed of under the records-retention rule for procurement attachments, which is set outside this domain.</p>
+  <dl><dt>not testable</dt><dd>Withdrawing the read paths a file held through an association can only be seen by asking for the file after the association is gone, which needs the file&#39;s identifier — no observation returns one. The second half, a file that no record refers to being identifiable as detached, names no surface at all: nothing in the pages, and nothing in observables.yaml, reports whether a stored file is still referred to.</dd><dt>replaces</dt><dd>R-8.26</dd></dl>
+</article>
+<script>
+(function () {
+  var bar = document.querySelector(".filters");
+  if (!bar) return;
+  bar.hidden = false;
+  var cards = Array.prototype.slice.call(document.querySelectorAll(".criterion"));
+  bar.addEventListener("click", function (event) {
+    var button = event.target.closest("button[data-filter]");
+    if (!button) return;
+    var want = button.getAttribute("data-filter");
+    Array.prototype.forEach.call(bar.querySelectorAll("button"), function (b) {
+      b.setAttribute("aria-pressed", String(b === button));
+    });
+    cards.forEach(function (card) {
+      card.hidden = want !== "all" && card.getAttribute("data-state") !== want;
+    });
+  });
+})();
+</script>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

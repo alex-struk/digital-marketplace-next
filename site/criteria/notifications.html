@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>notifications — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">50</span></a></li><li><a href="../proposals.html">Proposals <span class="count">50</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">52</span></a></li><li><a href="../runs.html">Run log <span class="count">2</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html" aria-current="page">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>notifications</h1>
+<p class="lede">28 criteria, 8 with a derived acceptance test, 13 recorded as not testable through the contract surface.</p></div>
+<div class="filters" hidden><button type="button" data-filter="all" aria-pressed="true">All (28)</button><button type="button" data-filter="tested" aria-pressed="false">Has a test (8)</button><button type="button" data-filter="not-testable" aria-pressed="false">Not testable (13)</button><button type="button" data-filter="untested" aria-pressed="false">No test yet (0)</button><button type="button" data-filter="obsolete" aria-pressed="false">Obsolete (0)</button></div>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-6.1</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">When notifications are switched off for an environment, nothing the service does sends a message, and every action that would have sent one still completes normally.</p>
+  <dl><dt>given</dt><dd>a service configured with notifications disabled</dd><dt>when</dt><dd>a person does something that would ordinarily notify somebody, such as publishing an opportunity</dd><dt>then</dt><dd>the action succeeds and reports success, and no message is sent to anybody</dd><dt>not testable</dt><dd>The given is an environment with notifications switched off, read once at start-up. No page, action or observation configures the running target&#39;s notification setting, and the fixtures set no environment beyond the target URL and the mail catcher, so the condition the criterion is about cannot be established.</dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/transport.ts:54</code><br><code>src/back-end/config.ts:63</code><br><code>README.md:285</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the switch is read once at start-up and applies to every message the service can send; there is no per-message or per-recipient exemption.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-6.2</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">When a message cannot be composed or cannot be delivered, the action that triggered it still succeeds, nobody is told, and no further attempt is made.</p>
+  <dl><dt>given</dt><dd>a service whose mail server is unreachable</dd><dt>when</dt><dd>a person publishes an opportunity that would notify everyone who asked for new-opportunity notices</dd><dt>then</dt><dd>the opportunity is published and the person is told it succeeded, no notice reaches anybody, and nothing in the service records for that person that delivery failed</dd><dt>not testable</dt><dd>The given is a service whose mail server is unreachable. Nothing in the surface or the mail fixture can stop, break or intercept delivery — `mail` can only clear the catcher and search it — so a failed send cannot be produced, and the claim that nothing in the service records the failure has nothing to be asserted against.</dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/transport.ts:34</code><br><code>src/back-end/lib/mailer/transport.ts:44</code><br><code>src/back-end/lib/mailer/transport.ts:60</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the failure is written to the service&#39;s own operational log only. There is no queue, no retry and no reporting back to the person who triggered the action, so from every point of view inside the service a message that was never delivered is indistinguishable from one that was.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-6.3</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">When an environment is marked as a test environment, every message it sends is marked as a test in its subject line and carries a test variant of the service&#39;s logo.</p>
+  <dl><dt>given</dt><dd>a non-production environment marked as being for testing</dd><dt>when</dt><dd>any message is sent from it</dd><dt>then</dt><dd>its subject begins with a test marker and the logo at the top of the message is the test variant, so a reader can tell it apart from a message from the real service</dd><dt>not testable</dt><dd>Neither half is observable. The test marker is never named — the contract says only that subjects may carry one — so no assertion can tell a marked subject from an unmarked one; and the test variant of the logo lives in the message body, which the mail fixture does not expose (observables.yaml names html_body, but Mail returns only Subject, Snippet, To and ID).</dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/transport.ts:31</code><br><code>src/back-end/lib/mailer/templates.tsx:396</code><br><code>src/shared/config.ts:12</code><br><code>README.md:283</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the marking is applied by the sending machinery, so it covers every message without any individual message having to ask for it.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-6.4</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v2</span>
+  </header>
+  <p class="statement">Every message the service sends comes from a single configured sender — a display name followed by one do-not-reply address, the same for every kind of message — and carries no reply-to address distinct from that sender.</p>
+  <dl><dt>given</dt><dd>a person who receives any message from the service</dd><dt>when</dt><dd>they look at who it came from, or reply to it</dd><dt>then</dt><dd>it comes from one address bearing the service&#39;s name, the same for every kind of message, and a reply to it reaches nobody</dd><dt>not testable</dt><dd>The sender and the reply-to of a message are not reachable: observables.yaml names `sender: from`, but the mail fixture returns only Subject, Snippet, To and ID and offers no way to read one message&#39;s headers.</dd><dt>cites</dt><dd><code>src/back-end/config.ts:17</code><br><code>src/back-end/config.ts:187</code><br><code>src/back-end/lib/mailer/transport.ts:29</code><br><code>README.md:267</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the configured sender must be given as a display name followed by an address in angle brackets, and the service refuses to start if it is not. Messages carry no reply-to address distinct from the sender, so a person&#39;s only route back is the contact address printed in the body of some messages.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-6.5</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Every message is sent in both a formatted and a plain-text form, the plain text being a rendering of the formatted version rather than separately written copy.</p>
+  <dl><dt>given</dt><dd>a reader whose mail program shows plain text only</dd><dt>when</dt><dd>they open any message from the service</dd><dt>then</dt><dd>they see a readable plain-text rendering carrying the same words and links as the formatted version</dd><dt>not testable</dt><dd>Comparing the plain-text form of a message with the formatted one needs both bodies. The mail fixture exposes neither html_body nor plain_text_body, only a snippet, which is a summary the catcher makes and not evidence that a plain-text part was sent at all.</dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/transport.ts:30</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>nothing in the service composes plain-text copy of its own, so the plain-text form can only ever be as good as the automatic rendering of the formatted one.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-6.6</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v2</span>
+  </header>
+  <p class="statement">Every message the service sends ends with an offer labelled Unsubscribe, which opens the reader&#39;s own notification settings with the unsubscribe confirmation already asked.</p>
+  <dl><dt>given</dt><dd>a person who receives any message from the service</dd><dt>when</dt><dd>they read to the end of it</dd><dt>then</dt><dd>they are offered an unsubscribe choice that opens their own notification settings with the question already asked</dd><dt>test</dt><dd><code>tests/acceptance/notifications/R-6.6.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/templates.tsx:410</code><br><code>src/back-end/lib/mailer/templates.tsx:414</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the offer appears on every message the service sends, including the ones the notification preference does not govern — see R-6.10.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-6.7</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The unsubscribe offer in a message is not tied to the person it was addressed to: it acts on whoever is signed in when it is opened, and it cannot be used without signing in.</p>
+  <dl><dt>given</dt><dd>a message sent to one person and forwarded to another</dd><dt>when</dt><dd>the second person opens the unsubscribe offer while signed in to their own account</dd><dt>then</dt><dd>they are shown their own notification settings, with the confirmation naming their own address, and confirming stops their own notifications rather than the original recipient&#39;s</dd><dt>test</dt><dd><code>tests/acceptance/notifications/R-6.7.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/templates.tsx:414</code><br><code>src/shared/lib/resources/user.ts:6</code><br><code>src/front-end/typescript/lib/pages/user/profile/index.tsx:81</code><br><code>src/front-end/typescript/lib/pages/user/profile/index.tsx:93</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the offer carries no recipient identity of any kind; it names the reader as &quot;me&quot; and the service resolves that from the session. A reader who is not signed in is sent to sign in first and returned afterwards, so there is no way to unsubscribe without an account and a working sign-in.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-6.8</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A notice that goes to many people at once is split into batches of at most fifty and addressed so that no recipient can see who else received it.</p>
+  <dl><dt>given</dt><dd>an opportunity about to be published and one hundred and twenty people who have asked for new-opportunity notices</dd><dt>when</dt><dd>it is published</dd><dt>then</dt><dd>three messages are sent, each carrying at most fifty of those people as hidden recipients and showing the service&#39;s own address as the visible one, and no recipient&#39;s address appears to any other recipient</dd><dt>not testable</dt><dd>Two things are missing. The batch&#39;s recipients are blind copies and the mail fixture has no accessor for them (observables.yaml names `copied_recipients: bcc`), so neither the batch size nor the hiding can be counted; and one hundred and twenty accounts that have asked for new-opportunity notices can be produced neither by the seed nor by any surface action, since accounts arrive only through sign-in as a seeded persona.</dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx:256</code><br><code>src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx:260</code><br><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:275</code><br><code>src/back-end/config.ts:192</code><br><code>README.md:268</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the batch size is configurable and defaults to fifty. The same batching and hiding is used for the new-opportunity announcement, for the notice that an opportunity has been changed, and for the notice sent to an evaluation panel when it is named or altered.</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-6.9</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Four of the notices sent during evaluation put every recipient in the batch in the visible address line instead of hiding them, so each recipient sees the addresses of all the others.</p>
+  <dl><dt>given</dt><dd>an opportunity whose proposal deadline has just passed and an evaluation panel of four people</dd><dt>when</dt><dd>the notice that it is ready to be evaluated is sent</dd><dt>then</dt><dd>each panel member receives a message whose visible address line lists all four of them</dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:564</code><br><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:635</code><br><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:666</code><br><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:697</code><br><code>src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx:230</code><br><code>src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx:261</code><br><code>src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx:292</code><br><code>src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx:639</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-6.15</dd><dt>note</dt><dd>the four are the notice that an opportunity is ready to be evaluated, the notice that it is ready for consensus, the notice that a consensus has been submitted, and the notice that a consensus has been finalised — in both programs that have panels. Every other multi-recipient notice in the same code hides its recipients, so the disclosure looks like an oversight rather than a decision. The recipients are public sector staff rather than vendors, which limits the harm without removing it. No corrected criterion is offered: whether the new service should hide these recipients too is a ruling for a human, though the rest of the service&#39;s own behaviour points that way.</dd><dt>note</dt><dd>superseded by R-6.15</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-6.10</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The only notification a person can choose to stop is the announcement of newly published opportunities; every other message is sent regardless of that choice.</p>
+  <dl><dt>given</dt><dd>a person who has turned notifications off</dd><dt>when</dt><dd>an opportunity they are watching is changed, or a proposal of theirs is awarded, or an organization asks them to join its team</dd><dt>then</dt><dd>they receive each of those messages, and only the announcement of a newly published opportunity is withheld</dd><dt>cites</dt><dd><code>src/back-end/lib/db/user.ts:161</code><br><code>src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx:150</code><br><code>src/front-end/typescript/lib/pages/user/profile/tab/notifications.tsx:169</code><br><code>src/back-end/lib/mailer/notifications/proposal/code-with-us.tsx:21</code><br><code>src/back-end/lib/mailer/notifications/affiliation.tsx:11</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-6.16</dd><dt>note</dt><dd>the notification settings page offers exactly one choice and labels it &quot;New opportunities&quot;, so the settings page itself is honest about its scope. The defect is that every message the service sends ends with an unsubscribe offer that leads to that one choice, so a person who unsubscribes from a message the choice does not govern will keep receiving messages of that kind with no indication why. No corrected criterion is offered, because whether the new service should let a person decline the other kinds of notice — and which of them may be declined at all, given that some carry decisions a person needs — is a ruling for a human.</dd><dt>note</dt><dd>superseded by R-6.16</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-6.11</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A deactivated account receives no announcement of newly published opportunities, but still receives every notice about an opportunity it was watching.</p>
+  <dl><dt>given</dt><dd>a person who was watching an opportunity and has since had their account deactivated</dd><dt>when</dt><dd>that opportunity is changed or cancelled</dd><dt>then</dt><dd>they receive the notice, although they cannot sign in to act on it, while a newly published opportunity produces no notice for them</dd><dt>cites</dt><dd><code>src/back-end/lib/db/user.ts:164</code><br><code>src/back-end/lib/db/user.ts:165</code><br><code>src/back-end/lib/db/subscribers/code-with-us.ts:66</code><br><code>src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx:197</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-6.17</dd><dt>note</dt><dd>the two recipient lists are built differently — the announcement list excludes deactivated accounts explicitly, the watcher list applies no such filter and no notification-preference filter either. A person who deactivated their own account therefore keeps receiving mail about opportunities they can no longer open. No corrected criterion is offered: whether deactivation should also end watching, or only suppress the messages, is a ruling for a human.</dd><dt>note</dt><dd>superseded by R-6.17</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-6.12</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The message announcing changed terms tells vendors the new terms must be accepted before submitting to two of the service&#39;s three programs, although all three require it.</p>
+  <dl><dt>given</dt><dd>a vendor who has proposals in progress against all three programs</dd><dt>when</dt><dd>an administrator announces changed terms</dd><dt>then</dt><dd>the vendor is told the new terms are needed for Code With Us and Sprint With Us, and is not told they are equally needed for Team With Us</dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/terms-updated.tsx:40</code><br><code>src/back-end/lib/permissions.ts:581</code><br><code>src/back-end/lib/permissions.ts:838</code><br><code>src/back-end/lib/permissions.ts:1375</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-6.18</dd><dt>note</dt><dd>the service refuses a submission to any of the three programs from a vendor who has not accepted the current terms; the message names only the two programs that existed when it was written. No corrected criterion is offered separately, because the fix is to name all three programs, or none of them, in that one sentence.</dd><dt>note</dt><dd>superseded by R-6.18</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-6.13</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An administrator can open a single page showing a sample of each message the service sends, with its subject and, where one is written, a one-line summary of who receives it and why.</p>
+  <dl><dt>given</dt><dd>a signed-in administrator</dd><dt>when</dt><dd>they open the notification reference page</dd><dt>then</dt><dd>they see each message rendered as a recipient would receive it, grouped and titled by the event that sends it, built from sample data rather than from any real person&#39;s record</dd><dt>test</dt><dd><code>tests/acceptance/notifications/R-6.13.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/routers/admin/index.tsx:490</code><br><code>src/back-end/lib/routers/admin/index.tsx:502</code><br><code>src/back-end/lib/routers/admin/index.tsx:81</code><br><code>README.md:75</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the same page requested by anybody who is not an administrator is refused. The samples carry invented names and addresses, so opening the page discloses nothing about any real account.</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-6.14</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The reference page does not show every message the service can send: twelve of them appear nowhere on it, although the service&#39;s own documentation describes the page as covering all of them.</p>
+  <dl><dt>given</dt><dd>an administrator using the reference page to check what a message says before an event happens</dd><dt>when</dt><dd>they look for the message sent when a Code With Us opportunity is submitted for review, or any of the messages sent to an evaluation panel</dd><dt>then</dt><dd>neither appears anywhere on the page, and nothing on the page indicates that anything is missing</dd><dt>cites</dt><dd><code>README.md:75</code><br><code>src/back-end/lib/routers/admin/index.tsx:136</code><br><code>src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx:57</code><br><code>src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx:111</code><br><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:414</code><br><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:589</code><br><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:621</code><br><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:652</code><br><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:683</code><br><code>src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx:185</code><br><code>src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx:216</code><br><code>src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx:247</code><br><code>src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx:278</code><br><code>src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx:665</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-6.19</dd><dt>note</dt><dd>sixty-two distinct messages exist and fifty appear on the page. The twelve absent are the pair sent when a Code With Us opportunity is submitted for review, the notices sent when an evaluation panel is named or altered in either program, and the notices sent when either program&#39;s opportunity becomes ready for consensus, has a consensus submitted, or has one finalised. The pattern fits the page having been maintained alongside earlier work and not updated when the evaluation panel arrived, but the source cannot say whether the omissions are oversight or deliberate. Graded open because a human must rule on what the page is for before it can be said what &quot;all of them&quot; should mean: a complete catalogue that must be kept in step, or a sample that never claimed to be complete and whose documentation is simply overstated.</dd><dt>note</dt><dd>superseded by R-6.19</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-6.15</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service&#39;s own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity&#39;s owner exactly as it does to every other multi-recipient notice.</p>
+  <dl><dt>not testable</dt><dd>Requires reading, for one multi-recipient notice, both the visible recipient and the list of blind copies. The mail fixture offers neither: it searches by a single visible address and returns no blind-copy list, so hiding cannot be told from not sending.</dd><dt>replaces</dt><dd>R-6.9</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-6.16</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A message that the notification preference does not govern must not offer to unsubscribe; it links to the reader&#39;s notification settings without implying that any choice there will stop messages of that kind.</p>
+  <dl><dt>not testable</dt><dd>The claim is about what stands at the foot of a particular message — an unsubscribe offer, or a plain link to the notification settings. The mail fixture exposes no message body, and the reference page cannot be asked for one message&#39;s body, so the two endings cannot be told apart.</dd><dt>replaces</dt><dd>R-6.10</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-6.17</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A deactivated account receives no notification of any kind, including notices about opportunities it was watching, while the watch itself is retained so that reactivating the account restores it.</p>
+  <dl><dt>test</dt><dd><code>tests/acceptance/notifications/R-6.17.spec.ts</code></dd><dt>replaces</dt><dd>R-6.11</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-6.18</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The message announcing changed terms names every program whose proposals require a current acceptance — Code With Us, Sprint With Us and Team With Us — or names none of them rather than a subset.</p>
+  <dl><dt>not testable</dt><dd>Same missing observation as R-6.12: naming all three programs or none is a fact about the body of the changed-terms message, and no surface observation or mail accessor returns that one body.</dd><dt>replaces</dt><dd>R-6.12</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-6.19</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The administrator&#39;s notification reference page shows every message the service can send, so that no message exists which cannot be previewed there before the event that sends it.</p>
+  <dl><dt>test</dt><dd><code>tests/acceptance/notifications/R-6.19.spec.ts</code></dd><dt>replaces</dt><dd>R-6.14</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-6.20</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A newly created account has new-opportunity notifications off until its holder asks for them.</p>
+  <dl><dt>given</dt><dd>a person signing in to the service for the first time</dd><dt>when</dt><dd>their account is created</dd><dt>then</dt><dd>it records no request for new-opportunity notices, and none is sent to them until they ask</dd><dt>not testable</dt><dd>The given is an account being created for the first time. Every persona signs in as an account the seed already holds, and no surface action creates one, so the sign-up completion page cannot be reached with a first-time identity and the state of a never-before-seen account cannot be read.</dd><dt>cites</dt><dd><code>src/back-end/lib/routers/auth.ts:478</code><br><code>src/shared/lib/resources/user.ts:56</code><br><code>src/migrations/tasks/20191203143238_alter_columns.ts:14</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the record holds the moment the request was made rather than a yes or no, so an account that has never asked and an account that has asked and then changed its mind are indistinguishable afterwards. Combined with the profile-completion page never being shown to a public sector employee, this means such a person is never offered the choice at the point where it is first offered and receives no new-opportunity notices unless they later find the setting themselves.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-6.21</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A signed-in person can turn new-opportunity notices on and off from the list of opportunities itself, without opening their settings.</p>
+  <dl><dt>given</dt><dd>a signed-in person browsing the list of opportunities with notices turned off</dd><dt>when</dt><dd>they choose to be notified about new opportunities</dd><dt>then</dt><dd>the control changes to offer the opposite choice, their account records the request, and the change takes effect for the next opportunity published</dd><dt>test</dt><dd><code>tests/acceptance/notifications/R-6.21.spec.ts</code></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/opportunity/list.tsx:503</code><br><code>src/front-end/typescript/lib/pages/opportunity/list.tsx:886</code><br><code>src/front-end/typescript/lib/pages/opportunity/list.tsx:894</code><br><code>src/front-end/typescript/lib/pages/opportunity/list.tsx:997</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the control is offered without a confirmation in either direction here, whereas the same choice made from the notification settings asks the person to confirm before turning notices off.</dd><dt>note</dt><dd>it sits at the top of the first group of opportunities on the page, which is the unpublished group for a person who has unpublished opportunities and the open group for everybody else, so it appears exactly once wherever the reader is looking first.</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-6.22</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The notification control on the list of opportunities is not shown on a narrow screen.</p>
+  <dl><dt>given</dt><dd>a signed-in person browsing the list of opportunities on a phone</dd><dt>when</dt><dd>they look for the control that turns new-opportunity notices on</dd><dt>then</dt><dd>no such control appears anywhere on the page, and the only route to the choice is the notification settings on their own profile</dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/opportunity/list.tsx:877</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-6.27</dd><dt>note</dt><dd>the control is hidden below the medium breakpoint and shown above it. The choice itself remains reachable from the notification settings, so nothing is unreachable, but the shortcut is silently absent rather than moved. No corrected criterion is offered; whether the new service shows this control at every width is a design decision rather than a recovered rule.</dd><dt>note</dt><dd>superseded by R-6.27</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-6.23</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An administrator viewing the service&#39;s terms and conditions can announce that they have changed, which withdraws every vendor&#39;s standing acceptance and sends each active vendor a message asking them to read and accept the new terms.</p>
+  <dl><dt>given</dt><dd>an administrator on the page holding the service&#39;s terms and conditions, and a mix of active and deactivated vendors who had all accepted the previous terms</dd><dt>when</dt><dd>the administrator chooses to notify vendors and confirms</dd><dt>then</dt><dd>every vendor&#39;s acceptance is withdrawn and each active vendor receives a message naming the change and offering a link to read and accept the new terms</dd><dt>test</dt><dd><code>tests/acceptance/notifications/R-6.23.spec.ts</code></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/content/edit.tsx:114</code><br><code>src/front-end/typescript/lib/pages/content/edit.tsx:555</code><br><code>src/front-end/typescript/lib/pages/content/edit.tsx:619</code><br><code>src/back-end/lib/resources/email-notifications.ts:52</code><br><code>src/back-end/lib/resources/email-notifications.ts:76</code><br><code>src/back-end/lib/mailer/notifications/terms-updated.tsx:11</code><br><code>src/back-end/lib/permissions.ts:1646</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the announcement is offered only on the terms and conditions page and nowhere else, and only to an administrator; the same request made by anybody else, signed in or not, is refused. Acceptance is withdrawn for every vendor including deactivated ones, while only active vendors are told, so a vendor deactivated at the time of the change learns of it only on returning. This route appears in no published interface description.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-6.24</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An announcement of changed terms is reported as successful as soon as the acceptances are withdrawn, before any message has been sent.</p>
+  <dl><dt>given</dt><dd>an administrator announcing changed terms to a large body of vendors</dd><dt>when</dt><dd>they confirm</dd><dt>then</dt><dd>they are told at once that vendors have been notified, while the messages are still being sent one at a time in the background, and nothing later tells them whether every message was sent</dd><dt>not testable</dt><dd>What distinguishes this criterion from R-6.23 is ordering — success reported before any message has been sent. Nothing in the surface reports send progress, and nothing can hold delivery, so the only available check (that the catcher is empty at the moment success appears) is a race against the background sending rather than a test of it.</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/email-notifications.ts:76</code><br><code>src/back-end/lib/resources/email-notifications.ts:80</code><br><code>src/back-end/lib/mailer/notifications/terms-updated.tsx:16</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the withdrawal of acceptances is completed before the response, so the part of the action a vendor will notice on their next visit is reliable; only the messages are not. Delivery failures are invisible for the reason given in R-6.2, so a run that reaches nobody looks exactly like one that reaches everybody.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-6.25</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v2</span>
+  </header>
+  <p class="statement">The message telling a vendor that an opportunity they proposed on has been awarded to somebody else leads with the opportunity&#39;s title and the name of the winning proponent — the winning organization for Sprint With Us and Team With Us, and for Code With Us the legal name of the winning organization or individual, or an em dash where no successful proponent is recorded — and offers the reader a way to sign in and see their own score.</p>
+  <dl><dt>given</dt><dd>three vendors who submitted proposals to one opportunity, one of which has just been awarded</dd><dt>when</dt><dd>the decision is sent to the two who were not chosen</dd><dt>then</dt><dd>each is told the opportunity was awarded, is shown the name of the organization it was awarded to, and is offered a way to sign in and see their own score</dd><dt>not testable</dt><dd>Every part of the claim — the opportunity&#39;s title and the winner&#39;s name leading the message, the em dash where no successful proponent is recorded, the offer to sign in and see one&#39;s own score — is content of the message body, which no mail accessor returns and which the reference page cannot be asked for one message at a time.</dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/proposal/code-with-us.tsx:277</code><br><code>src/back-end/lib/mailer/notifications/proposal/code-with-us.tsx:281</code><br><code>src/back-end/lib/mailer/notifications/proposal/sprint-with-us.tsx:287</code><br><code>src/back-end/lib/mailer/notifications/proposal/team-with-us.tsx:287</code><br><code>src/back-end/lib/mailer/templates.tsx:499</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>this message uses a layout of its own rather than the layout every other message uses, leading with the opportunity&#39;s title and the winner&#39;s name. Where no successful proponent is recorded the name is replaced by a dash rather than the sentence being omitted, so a reader can be shown &quot;awarded to —&quot;.</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-6.26</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v2</span>
+  </header>
+  <p class="statement">When the service notifies an account that holds no email address it composes the message all the same and hands it over with an empty list of recipients; any resulting failure is written to the operational log only, nothing in the service records that the person was not reached, and a broadcast to many vendors always continues to the next recipient because no failure in composing or sending can interrupt it.</p>
+  <dl><dt>given</dt><dd>a vendor whose account holds no email address, because the identity provider supplied none</dd><dt>when</dt><dd>an administrator announces changed terms</dd><dt>then</dt><dd>the service composes a message for that account addressed to nobody and hands it on to be sent, and what follows depends on the sending machinery rather than on anything the service decides</dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/terms-updated.tsx:32</code><br><code>src/back-end/lib/mailer/notifications/user.tsx:72</code><br><code>src/shared/lib/resources/user.ts:53</code><br><code>src/back-end/lib/mailer/transport.ts:26</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-6.28</dd><dt>note</dt><dd>accounts without an email address are allowed deliberately, and most messages guard against one only by substituting an empty list of recipients where the address would go — the message is still composed and still handed over to be sent. Whether that produces a rejected send, a silently discarded one, or an error that stops the rest of a broadcast is not decidable from the source, and because delivery failures are only logged, nothing inside the service would show which. The one place that does check is account creation, which skips the welcome message when there is no address. A human should rule on whether the new service must skip a recipient with no address everywhere, and on whether one such recipient may stop a broadcast to the rest.</dd><dt>note</dt><dd>Must the service skip a recipient that holds no email address rather than composing a message addressed to nobody, and must a broadcast to many vendors always continue past such a recipient rather than being able to stop the run on one?</dd><dt>note</dt><dd>superseded by R-6.28</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-6.27</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The choice to be notified about newly published opportunities is offered on the list of opportunities itself at every screen width, so a person reading the list on a phone reaches it the same way as a person reading it on a desktop.</p>
+  <dl><dt>not testable</dt><dd>The only width-aware observation is notification_control_hidden_on_narrow_screen, which is worded for the old service&#39;s behaviour. Asserting its negation is not reliable, since observations return free text with no stated yes/no vocabulary, and nothing names an observation reporting the control as offered at a narrow width or a way to ask a page to open at one.</dd><dt>replaces</dt><dd>R-6.22</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-6.28</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The service skips a recipient that holds no email address rather than composing a message addressed to nobody, and a broadcast to many people always continues past a recipient it cannot address or cannot reach.</p>
+  <dl><dt>test</dt><dd><code>tests/acceptance/notifications/R-6.28.spec.ts</code></dd><dt>replaces</dt><dd>R-6.26</dd></dl>
+</article>
+<script>
+(function () {
+  var bar = document.querySelector(".filters");
+  if (!bar) return;
+  bar.hidden = false;
+  var cards = Array.prototype.slice.call(document.querySelectorAll(".criterion"));
+  bar.addEventListener("click", function (event) {
+    var button = event.target.closest("button[data-filter]");
+    if (!button) return;
+    var want = button.getAttribute("data-filter");
+    Array.prototype.forEach.call(bar.querySelectorAll("button"), function (b) {
+      b.setAttribute("aria-pressed", String(b === button));
+    });
+    cards.forEach(function (card) {
+      card.hidden = want !== "all" && card.getAttribute("data-state") !== want;
+    });
+  });
+})();
+</script>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

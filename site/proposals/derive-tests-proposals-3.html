@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-proposals-3 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">50</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">50</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">52</span></a></li><li><a href="../runs.html">Run log <span class="count">2</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-proposals-3</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-07T14:43:29.571Z</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<p class="note">Ruled return by tech-lead.</p>
+<div class="body"><h2>Do the revised proposals tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I made no change to any file in the workspace.</p>
+<p>I made no change to any file in the workspace. Here is why.</p>
+<hr>
+<p><strong>Journal</strong></p>
+<p>The two conditions attached to the return are narrow, and only one of them called for an edit.</p>
+<p><strong>Condition 2 — leave <code>tests/acceptance/proposals/</code> unchanged.</strong> Done, by doing nothing. I opened no proposals spec file for editing and rewrote no header date. I did confirm the domain&#39;s coverage arithmetic independently: <code>spec/domains/proposals.md</code> carries 38 accepted criteria, R-2.1 through R-2.38; there are 35 files under <code>tests/acceptance/proposals/</code> and three not-testable rows (R-2.6, R-2.7, R-2.8), which accounts for all 38 with nothing double-counted. The derivation needed no further work, as the review found.</p>
+<p><strong>Condition 1 — restore the 34 deleted <code>not-testable.yaml</code> entries byte for byte as they stand on main.</strong> I could not act on this, and I want to be precise about why rather than approximate it.</p>
+<p>This workspace is not a git repository, and the shell is confined to the workspace root — an attempt to list anything outside it is refused. What the workspace holds is the returned proposal&#39;s working tree, not main: <code>tests/acceptance/not-testable.yaml</code> here contains the header comment, the three proposals rows, and the trailing example comment, and nothing else. I searched the whole workspace for the missing text — every <code>.md</code>, <code>.json</code> and <code>.yaml</code>, plus <code>tests/generated/</code>, <code>tests/seed/</code> and <code>attestations.yaml</code>. The strings <code>R-6.1</code> and <code>R-8.3</code> appear only in <code>spec/criteria-index.json</code>, <code>spec/spec.md</code>, <code>spec/domains/notifications.md</code> and <code>spec/domains/files.md</code>, all of which state the criteria themselves, never a not-testable reason. The reasons written by the notifications and files slices exist nowhere I can reach. There is no <code>.orig</code>, no backup, no run artifact.</p>
+<p>So the byte-for-byte restore the condition asks for is not available to me. The alternative — writing 34 rows with reasons I derive myself from the spec and <code>tests/generated/surface.d.ts</code> — I deliberately did not do. It would miss the condition&#39;s actual point twice over: the resulting diff against main would modify those rows rather than leave them untouched, which is the opposite of the &quot;purely additive&quot; property the condition exists to guarantee; and it would replace two already-approved slices&#39; recorded reasoning with my own words under their name, in domains outside my slice. A silent substitution of that kind is harder for the next reviewer to spot than an honest gap, so I left the gap and am naming it here.</p>
+<p>I did confirm the review&#39;s enumeration is exactly right, which should make the mechanical fix safe for whoever holds the repo. Notifications is R-6.1–R-6.28: twelve have spec files (R-6.6, R-6.7, R-6.10, R-6.13, R-6.14, R-6.17, R-6.19, R-6.21, R-6.22, R-6.23, R-6.26, R-6.28), and the sixteen named in the condition are the exact remainder. Files is R-8.1–R-8.31: thirteen have spec files (R-8.1, R-8.2, R-8.10, R-8.12, R-8.14, R-8.20, R-8.21, R-8.23, R-8.25, R-8.27, R-8.28, R-8.29, R-8.30), and the eighteen named are the exact remainder. Both sets partition their domain cleanly, so no criterion is unaccounted for and none is listed twice. From <code>spec/criteria-index.json</code>, three of the 34 are at version 2 — R-6.4, R-6.25 and R-8.24 — and the other 31 are at version 1; a restore that carries a wrong <code>version</code> would fail calibrate just as a missing row does, so that is worth checking against main&#39;s text rather than trusting my list.</p>
+<p>What is needed to close this: take <code>tests/acceptance/not-testable.yaml</code> as it stands on main, append the three proposals rows R-2.6, R-2.7 and R-2.8 exactly as they read in this workspace, and change nothing else. That is a mechanical operation for anyone with the repo, and it makes the file&#39;s diff additive as the condition requires. The more durable fix is upstream of me: this stage should be handed a workspace built from main with the slice applied on top, or at least a readable base revision, so that a shared file like this one cannot be regenerated out from under other slices without the stage being able to notice or repair it.</p>
+<p>I also recorded two notes for future runs: that <code>not-testable.yaml</code> is shared across every domain slice and must be appended to rather than regenerated, and that this workspace has no access to main, so &quot;restore from main&quot; conditions cannot be honoured inside it.</p></div>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

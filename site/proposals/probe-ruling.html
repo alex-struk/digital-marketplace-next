@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>probe-ruling — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">50</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">50</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">52</span></a></li><li><a href="../runs.html">Run log <span class="count">2</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>probe-ruling</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-06T16:16:32.331Z</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+
+<div class="body"><h2>Does the probe prove the runner?</h2>
+<p><strong>Recommendation.</strong> Yes: the isolated session created app/PROBE.md and the post-check passed.</p>
+<h3>Ruling</h3>
+<p><strong>Verdict:</strong> approve <strong>By:</strong> agent:reviewer</p>
+<p>The question is whether the probe proves the runner, and it does on independently verified evidence rather than on the receipt&#39;s assertion: app/PROBE.md exists on main via commit f30c8ac with contents exactly as described (2026-09-06 / &#39;the runner works&#39;), and .sdlc/journal/001-probe.md attests provenance with session c74ea0cb, cost 0.224672 and 2 turns, matching the run-log line &#39;run probe: ok, cost 0.224672, turns 2&#39; for the same execution. The receipt also states what could not be checked, flagging that the date came from the session&#39;s stated current date rather than a clock read and scoping that caveat to clock-behaviour use, which this probe is not. All four checks (config, layout, constitution, egress) are green and were generated today at 09:16, so none are stale; the diff touches only .sdlc/proposals/probe-ruling.md and one appended run-log line, reaching no application code or protected path. Tier is STANDARD, no residual risk is left unaccepted, and this is the first agent-held ruling against human_sample_per_week: 5, so no escalation trigger fires. One overstatement does not reach the evidence-only refusal but is recorded as a condition: the recommendation&#39;s clause &#39;the post-check passed&#39; has no recorded post-check result behind it anywhere in .sdlc — run-state.json is left at phase &#39;post-checks&#39; for stage &#39;probe&#39;, which is a phase marker rather than an outcome, so that clause rests on &#39;run probe: ok&#39; alone while the load-bearing claim about the isolated session is fully checkable.</p>
+<p><strong>Conditions:</strong></p>
+<ul><li>Record the post-check as a result artifact naming what it asserted and what it returned, rather than leaving run-state.json at phase &#39;post-checks&#39; as the only trace; &#39;the post-check passed&#39; currently rests on the run-log&#39;s &#39;run probe: ok&#39; alone.</li><li>Advance or close run-state.json for the probe run so a stalled phase marker is not later read as an in-flight run.</li><li>Future evidence receipts state only what a named check covers, keeping verified claims and inferred ones distinct in the recommendation line.</li><li>Carry forward the receipt&#39;s own caveat that the probe establishes runner liveness only, not clock behaviour, so it is not cited later as evidence of the latter.</li></ul></div>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

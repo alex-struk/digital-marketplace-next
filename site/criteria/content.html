@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>content — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">50</span></a></li><li><a href="../proposals.html">Proposals <span class="count">50</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">52</span></a></li><li><a href="../runs.html">Run log <span class="count">2</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html" aria-current="page">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>content</h1>
+<p class="lede">31 criteria, 22 with a derived acceptance test, 4 recorded as not testable through the contract surface.</p></div>
+<div class="filters" hidden><button type="button" data-filter="all" aria-pressed="true">All (31)</button><button type="button" data-filter="tested" aria-pressed="false">Has a test (22)</button><button type="button" data-filter="not-testable" aria-pressed="false">Not testable (4)</button><button type="button" data-filter="untested" aria-pressed="false">No test yet (0)</button><button type="button" data-filter="obsolete" aria-pressed="false">Obsolete (2)</button></div>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.1</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Anyone, including a visitor who has not signed in, can read a page by its address and sees its title, its body as formatted text, and the dates it was first published and last updated.</p>
+  <dl><dt>given</dt><dd>a page that exists at the address &quot;privacy&quot;</dd><dt>when</dt><dd>a visitor who is not signed in opens that address</dd><dt>then</dt><dd>the page&#39;s title, its body as formatted text, and its published and updated dates are shown</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.1.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/content.ts:66</code><br><code>src/front-end/typescript/lib/pages/content/view.tsx:94</code><br><code>src/front-end/typescript/lib/app/router.ts:650</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>reading is the only thing this domain lets anybody but an administrator do; no permission is checked on the way in, so a page is public from the moment it is created and there is no way to hold one back as a draft or restrict it to signed-in people.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.2</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A request for a page at an address that no page holds is answered as not found.</p>
+  <dl><dt>given</dt><dd>no page at the address &quot;nothing-here&quot;</dd><dt>when</dt><dd>a visitor opens that address</dd><dt>then</dt><dd>they are shown the service&#39;s not-found page and no page content</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.2.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/content.ts:102</code><br><code>src/front-end/typescript/lib/pages/content/view.tsx:77</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.3</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A request for a page at an address that is not a well-formed one is refused as an invalid request rather than reported as not found, though a visitor using the service sees the not-found screen either way.</p>
+  <dl><dt>given</dt><dd>no page at the address &quot;Not_A_Slug&quot;</dd><dt>when</dt><dd>that address is requested</dd><dt>then</dt><dd>the request is refused for being malformed rather than answered as not found, and a visitor browsing the service is shown the not-found screen in both cases</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.3.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/content.ts:87</code><br><code>src/shared/lib/validation/content.ts:16</code><br><code>src/front-end/typescript/lib/pages/content/view.tsx:77</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the difference is only visible to something reading the service&#39;s answers directly; the browsing experience is identical, so this matters for anything built against the service rather than for a person.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.4</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A page can also be read by its identifier, and the service falls back to treating the same value as an address when no page carries that identifier.</p>
+  <dl><dt>given</dt><dd>a page whose identifier is known</dd><dt>when</dt><dd>that identifier is used in place of the page&#39;s address</dd><dt>then</dt><dd>the same page is returned</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.4.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/content.ts:76</code><br><code>src/back-end/lib/db/content.ts:110</code><br><code>src/back-end/lib/db/content.ts:119</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the two lookups are tried in order, identifier first and address second, so a page whose address happens to be shaped like an identifier is still reachable by that address.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.5</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Only an administrator can see the list of pages, and it names every page with its title, its public address, whether the service needs it, and when it was created and last updated, ordered by title.</p>
+  <dl><dt>given</dt><dd>an administrator signed in, and pages existing in the service</dd><dt>when</dt><dd>they open the content area from the navigation menu</dd><dt>then</dt><dd>every page is listed once, in order of title, showing its title, its public address, whether it is one the service needs, and its created and updated dates</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.5.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:1628</code><br><code>src/front-end/typescript/lib/pages/content/list.tsx:56</code><br><code>src/front-end/typescript/lib/pages/content/list.tsx:105</code><br><code>src/front-end/typescript/lib/pages/content/list.tsx:125</code><br><code>CHANGELOG.md:131</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the release notes record the same area and the same route into it from the navigation menu. A defect in the created and updated dates shown here was corrected in an earlier release, so the dates on this list are the page&#39;s own creation date and the date of its most recent change.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.6</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The route into the content area is offered only to an administrator, and anybody else who reaches any of the managing screens directly is shown the not-found screen.</p>
+  <dl><dt>given</dt><dd>a signed-in vendor or public sector employee</dd><dt>when</dt><dd>they look at the navigation menu, and then open the address of the content area directly</dd><dt>then</dt><dd>no route into the content area is offered to them, and opening it directly shows the not-found screen</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.6.spec.ts</code></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/app/view/index.tsx:800</code><br><code>src/front-end/typescript/lib/pages/content/list.tsx:56</code><br><code>src/front-end/typescript/lib/pages/content/create.tsx:66</code><br><code>src/front-end/typescript/lib/pages/content/edit.tsx:101</code><br><code>CHANGELOG.md:131</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.7</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An administrator can create a page by giving it a title, an address and a body, and once published it is readable by anyone at that address.</p>
+  <dl><dt>given</dt><dd>an administrator in the content area</dd><dt>when</dt><dd>they create a page, fill in its title, address and body, and confirm publishing it</dd><dt>then</dt><dd>the page exists, they are taken to its managing screen, and any visitor opening its address sees it</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.7.spec.ts</code></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/content/create.tsx:118</code><br><code>src/back-end/lib/resources/content.ts:111</code><br><code>src/back-end/lib/db/content.ts:128</code><br><code>docs/smoke-testing/2022-12-02.md:48</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.8</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Publishing a change to a page keeps the text it replaces as an earlier version of that page and shows the new text to every reader from that moment.</p>
+  <dl><dt>given</dt><dd>a published page an administrator has changed the body of</dd><dt>when</dt><dd>they confirm publishing the change</dd><dt>then</dt><dd>readers of the page&#39;s address see the new body, the page&#39;s updated date becomes the moment of the change, and the replaced title and body are kept as an earlier version</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.8.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/db/content.ts:181</code><br><code>src/back-end/lib/db/content.ts:67</code><br><code>src/back-end/lib/resources/content.ts:293</code><br><code>docs/database-schema.md:93</code><br><code>docs/smoke-testing/2022-12-02.md:50</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>each version carries its own title and body, so the whole wording of a page at any past moment is retained, not only the changed part.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.9</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Removing an ordinary page removes it and every version of it permanently, and its address stops answering.</p>
+  <dl><dt>given</dt><dd>an ordinary page with several versions behind it</dd><dt>when</dt><dd>an administrator confirms removing it</dd><dt>then</dt><dd>they are returned to the list of pages, told it was removed, its address is answered as not found, and no version of its text survives anywhere in the service</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.9.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/content.ts:335</code><br><code>src/back-end/lib/db/content.ts:233</code><br><code>src/migrations/tasks/20201028131858_admin-content-mgmt.ts:29</code><br><code>docs/smoke-testing/2022-12-02.md:51</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>removal is immediate and unrecoverable; there is no archive, no restore and no confirmation beyond the one dialogue.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.10</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Only an administrator may create, change or remove a page; the same request from anybody else, signed in or not, changes nothing.</p>
+  <dl><dt>given</dt><dd>a signed-in vendor, a signed-in public sector employee, and a visitor who is not signed in</dd><dt>when</dt><dd>each of them asks the service to create, change or remove a page</dd><dt>then</dt><dd>each request is refused and no page is created, changed or removed</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.10.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:1632</code><br><code>src/back-end/lib/permissions.ts:1636</code><br><code>src/back-end/lib/permissions.ts:1640</code><br><code>src/back-end/lib/resources/content.ts:130</code><br><code>CHANGELOG.md:131</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-7.11</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A request to create, change or remove a page that is refused for lack of permission is reported in the same shape as one refused for a malformed submission.</p>
+  <dl><dt>given</dt><dd>a vendor who is not permitted to change pages</dd><dt>when</dt><dd>they ask the service to change one</dd><dt>then</dt><dd>the refusal comes back as though the submission were faulty rather than as a refusal of permission</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/content.ts:204</code><br><code>src/back-end/lib/resources/content.ts:324</code><br><code>src/back-end/lib/resources/content.ts:385</code><br><code>src/back-end/lib/resources/content.ts:55</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-7.16</dd><dt>note</dt><dd>the same resource answers a refused request for the list of pages as a permission refusal, so the two halves of this domain disagree with each other and with the rest of the service, where creating or changing something one may not touch is answered as a permission refusal. Nothing is wrongly permitted — the refusal is correct, only mislabelled — so there is no corrected criterion to replace this one with; a human should rule on whether the rebuild reports it as a permission refusal.</dd><dt>note</dt><dd>superseded by R-7.16</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.12</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A fresh installation carries a full set of the pages the service needs, each holding placeholder text and titled by its own address until somebody writes it.</p>
+  <dl><dt>given</dt><dd>a newly prepared installation of the service that nobody has edited and an administrator looking at the list of pages on that installation</dd><dt>when</dt><dd>a visitor opens any of the pages the service needs, such as its terms and conditions and they read it</dd><dt>then</dt><dd>the page exists and answers, its title is its own address, and its body reads &quot;Initial version&quot; and twenty-two pages are listed, all marked as needed by the service</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.12.spec.ts</code></dd><dt>cites</dt><dd><code>src/migrations/tasks/20201202094826_admin-content-stubs.ts:8</code><br><code>src/migrations/tasks/20201202094826_admin-content-stubs.ts:26</code><br><code>src/migrations/tasks/20221130162144_twu-admin-content-stub.ts:8</code><br><code>src/migrations/tasks/20230213120034_twu-opportunity-scope.ts:8</code><br><code>src/migrations/tasks/20230321113754_add-twu-proposals.ts:8</code><br><code>src/migrations/tasks/20240607173220_admin-evaluation-content-stubs.ts:8</code><br><code>CHANGELOG.md:132</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the twenty-two are seven service-wide pages — about, accessibility, copyright, disclaimer, privacy, the markdown guidance page and the service&#39;s own terms and conditions — an opportunity guide, a proposal guide and a terms and conditions page for each of the three programs, an opportunity scope and a proposal evaluation page for Sprint With Us and for Team With Us but for neither of Code With Us, and an evaluation instructions page for Sprint With Us and Team With Us. The set grew program by program as each was added, which is why it is uneven. The release notes warn explicitly that these arrive as stubs and must be written before use, so a rebuild that seeds them the same way inherits an installation whose legal pages are placeholders.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.13</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The service&#39;s own terms and conditions page carries, for an administrator, the action that announces changed terms to vendors, and no other page carries it.</p>
+  <dl><dt>given</dt><dd>an administrator on the managing screen of the service&#39;s terms and conditions page and an administrator on the managing screen of any other page</dd><dt>when</dt><dd>they look at what they can do with it and they look at what they can do with it</dd><dt>then</dt><dd>alongside editing they are offered an action announcing the change to vendors, warned first that vendors will have to accept the new terms before submitting again and no such action is offered</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.13.spec.ts</code></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/content/edit.tsx:114</code><br><code>src/front-end/typescript/lib/pages/content/edit.tsx:540</code><br><code>src/front-end/typescript/lib/pages/content/edit.tsx:619</code><br><code>docs/smoke-testing/2022-12-02.md:94</code><br><code>CHANGELOG.md:134</code></dd><dt>reconciliation</dt><dd>aligned</dd><dt>note</dt><dd>what the announcement does to vendors&#39; acceptances and who receives a message is recorded with the notifications domain. Recorded here only is that the terms page is the one place the action is offered, and that the page and the action are matched by the page&#39;s address, so renaming that page — which the service forbids — would take the action away with it. Announcing and editing are independent: an administrator may announce without having changed a word, and may change the terms without announcing.</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-7.14</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Raw markup embedded in a page&#39;s body is rendered as markup on the page itself, and is not rendered where the same body is embedded in another screen.</p>
+  <dl><dt>given</dt><dd>a page whose body contains raw markup rather than formatting marks</dd><dt>when</dt><dd>a visitor opens the page&#39;s own address, and then opens a screen that embeds the same body</dd><dt>then</dt><dd>the markup takes effect on the page&#39;s own address, and is shown as literal text where it is embedded</dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/content/view.tsx:115</code><br><code>src/front-end/typescript/lib/views/markdown.tsx:144</code><br><code>src/front-end/typescript/lib/views/markdown.tsx:64</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-7.17</dd><dt>note</dt><dd>the body is rendered on the page&#39;s own address without any filtering of what the markup may contain, which makes page authorship an unusually powerful permission — everything a page can do to a reader&#39;s browser is available to whoever may edit one. Only an administrator can author a page, so this is not reachable by an untrusted person today, but it should not be carried into the rebuild unchanged; there is no corrected criterion yet because whether the rebuild keeps raw markup at all is a decision for a human. The inconsistency between the two renderings is itself worth ruling on, since an author previewing their page cannot tell which one another screen will use.</dd><dt>note</dt><dd>superseded by R-7.17</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-7.15</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The service links from five places to a service level agreement page that it never creates for itself.</p>
+  <dl><dt>given</dt><dd>an installation carrying only the pages the service creates for itself</dd><dt>when</dt><dd>a public sector employee follows the service level agreement link offered beside the cost of a program</dd><dt>then</dt><dd>they are shown the not-found screen</dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/learn-more/index.tsx:25</code><br><code>src/front-end/typescript/lib/views/program-card.tsx:63</code><br><code>src/front-end/typescript/lib/pages/opportunity/code-with-us/lib/components/form.tsx:1055</code><br><code>src/front-end/typescript/lib/pages/opportunity/sprint-with-us/lib/components/form.tsx:1500</code><br><code>src/migrations/tasks/20201202094826_admin-content-stubs.ts:8</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-7.18</dd><dt>note</dt><dd>no migration creates a page at &quot;service-level-agreement&quot;, and it is named in none of the addresses the service holds as its own, so on the evidence in the source the link is broken. It cannot be settled from the source alone, because an administrator can create an ordinary page at that address by hand and a running installation may well have one — which is why this is recorded as unresolved rather than as a plain break. Either way the page would be an ordinary one: removable, renameable, and absent from a fresh installation, unlike every other page the service links to from its own screens. A human should rule on whether the rebuild adds it to the pages the service creates for itself.</dd><dt>note</dt><dd>superseded by R-7.18</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-7.16</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A request refused for lack of permission is reported as a permission refusal, in the same shape for every page request, whether it reads the list, reads one page, or creates, changes or removes one.</p>
+  <dl><dt>not testable</dt><dd>Same missing observation as R-7.11, across a wider set of requests: the criterion is about every page request answering a permission refusal in one shape, and no observation returns the shape or status of a refused page request. refused_for_non_administrator is free text on each surface, so two refusals cannot be shown to be the same shape, only to have both happened.</dd><dt>replaces</dt><dd>R-7.11</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.17</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A page&#39;s body is rendered as formatted text only; markup embedded in it is never executed, and the same body renders identically on the page&#39;s own address and wherever another screen embeds it.</p>
+  <dl><dt>test</dt><dd><code>tests/acceptance/content/R-7.17.spec.ts</code></dd><dt>replaces</dt><dd>R-7.14</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.18</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The service level agreement page is one the service creates for itself, so every screen that links to it — the learn-more index, the program cards, and the Code With Us, Sprint With Us and Team With Us opportunity forms — resolves on a fresh installation.</p>
+  <dl><dt>test</dt><dd><code>tests/acceptance/content/R-7.18.spec.ts</code></dd><dt>replaces</dt><dd>R-7.15</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.19</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The service links its own footer to five of its pages, so every screen offers the about, disclaimer, privacy, accessibility and copyright pages to any visitor.</p>
+  <dl><dt>given</dt><dd>any screen of the service, seen by a visitor who is not signed in</dd><dt>when</dt><dd>the visitor reaches the bottom of it</dd><dt>then</dt><dd>links labelled About, Disclaimer, Privacy, Accessibility and Copyright each open the corresponding page</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.19.spec.ts</code></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/app/view/footer.tsx:22</code><br><code>src/migrations/tasks/20201202094826_admin-content-stubs.ts:8</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>these five are the service&#39;s whole standing offer of its own legal and informational prose; nothing outside the code describes them, and each is a page an administrator can re-word at any time.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.20</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named.</p>
+  <dl><dt>given</dt><dd>an administrator creating or changing a page</dd><dt>when</dt><dd>they submit it with an empty title, or with a body longer than fifty thousand characters</dd><dt>then</dt><dd>nothing is saved and the failing field is marked with the reason</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.20.spec.ts</code></dd><dt>cites</dt><dd><code>src/shared/lib/validation/content.ts:8</code><br><code>src/shared/lib/validation/content.ts:12</code><br><code>src/back-end/lib/resources/content.ts:141</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.21</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A page&#39;s address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused.</p>
+  <dl><dt>given</dt><dd>an administrator creating a page</dd><dt>when</dt><dd>they give it an address containing a capital letter, a space, an underscore, or a leading or trailing hyphen</dd><dt>then</dt><dd>the page is not created and the address is marked as invalid</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.21.spec.ts</code></dd><dt>cites</dt><dd><code>src/shared/lib/validation/content.ts:16</code><br><code>src/front-end/typescript/lib/pages/content/lib/components/form.tsx:174</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the rule is stated to the administrator on the form as well as enforced on submission, and the form shows the full public address the page will have.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.22</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">No two pages may share an address, whether the clash arises on creating a page or on renaming one.</p>
+  <dl><dt>given</dt><dd>a page already published at the address &quot;about&quot;</dd><dt>when</dt><dd>an administrator creates another page at that address, or renames a different page to it</dd><dt>then</dt><dd>neither is accepted, the existing page is untouched, and the address is reported as already in use</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.22.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/content.ts:146</code><br><code>src/back-end/lib/resources/content.ts:267</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-7.23</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Nothing in the service shows, compares or restores an earlier version of a page.</p>
+  <dl><dt>given</dt><dd>a page changed several times, so several earlier versions of it are kept</dd><dt>when</dt><dd>an administrator opens its managing screen</dd><dt>then</dt><dd>only the current title and body are shown, with no history, no earlier version and no way back to one</dd><dt>not testable</dt><dd>Asserting that nothing shows, compares or restores an earlier version needs an observation naming what must be absent, and content-edit names none: it has no observation of the wording it is showing, none of a history, an earlier version or a comparison, and no restore action. A test can neither find a route to a past version nor show that none exists.</dd><dt>cites</dt><dd><code>src/back-end/lib/db/content.ts:67</code><br><code>src/front-end/typescript/lib/pages/content/edit.tsx:410</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the versions accumulate with no route to them and no limit on their number. Recovering superseded wording is possible only from outside the service, which makes the retention useful for audit but not for undoing a mistaken edit.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.24</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Renaming a page moves it to its new address at once and leaves nothing at the old one.</p>
+  <dl><dt>given</dt><dd>a page published at the address &quot;about-us&quot; and links to it from elsewhere</dd><dt>when</dt><dd>an administrator changes its address to &quot;about&quot;</dd><dt>then</dt><dd>the page answers at &quot;about&quot;, the old address is answered as not found, and no redirection is offered</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.24.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/db/content.ts:189</code><br><code>src/front-end/typescript/lib/pages/content/edit.tsx:287</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>nothing warns the administrator that a rename breaks existing links, and nothing in the service records the address a page used to have.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.25</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A page the service itself depends on may have its title and body changed but may not be renamed or removed, and its managing screen says so.</p>
+  <dl><dt>given</dt><dd>an administrator on the managing screen of a page the service needs</dd><dt>when</dt><dd>they look for the ways to change it</dd><dt>then</dt><dd>a warning explains that the service needs this page at this address, the address cannot be typed over, no removal is offered, and a request to rename or remove it made another way is refused</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.25.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/content.ts:258</code><br><code>src/back-end/lib/resources/content.ts:360</code><br><code>src/front-end/typescript/lib/pages/content/edit.tsx:507</code><br><code>src/front-end/typescript/lib/pages/content/lib/components/form.tsx:183</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>whether a page is one the service needs is fixed when the page is created by migration and cannot be set or cleared through the service, so an administrator can neither promote an ordinary page to a needed one nor demote a needed one.</dd></dl>
+</article>
+<article class="criterion is-obsolete" data-state="obsolete">
+  <header>
+    <span class="id">D-content-26</span>
+    <span class="chip muted">obsolete</span>
+    <span class="chip muted">inferred</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Where a screen exists in order to show the body of a page, a page that is missing or unreadable turns the whole screen into the not-found screen and the action it carried cannot be taken.</p>
+  <dl><dt>given</dt><dd>an organisation owner about to accept a program&#39;s qualification terms, and that program&#39;s terms page missing</dd><dt>when</dt><dd>they open the screen where the terms are accepted</dd><dt>then</dt><dd>they are shown the not-found screen, are told nothing about why, and cannot accept the terms</dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:89</code><br><code>src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:136</code><br><code>src/front-end/typescript/lib/pages/organization/team-with-us-terms.tsx:90</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>this and R-7.29 are the two opposite handlings of the same failure, chosen screen by screen. Here the consequence reaches beyond wording: a missing or mis-addressed page blocks a business action, and the person blocked is given no reason and no route to one.</dd><dt>note</dt><dd>The screens this was recovered from do not behave this way - the !body guard at sprint-with-us-terms.tsx:136 and team-with-us-terms.tsx:135 is dead code, because cmd.ts:93-96 maps a 404 to an always-truthy invalid value, so a missing terms page falls through to the else branch, keeps the empty body it was initialised with, and renders the title, an empty block and a live Accept Terms and Conditions button; the only screen that genuinely becomes the not-found screen when its page cannot be read is pages/content/view.tsx:75-86, which carries no action to block. Nothing of this row is carried forward, and two criteria are owed in its place - the content view screen&#39;s not-found handling, and the defect that a program&#39;s qualification terms can be accepted with nothing shown in place of them.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.26</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A page&#39;s body is written as marked-up text with an editor offering formatting shortcuts, a link to the guidance page, and image upload that places the uploaded image into the body.</p>
+  <dl><dt>given</dt><dd>an administrator editing a page&#39;s body</dd><dt>when</dt><dd>they use the image control to choose an image file</dd><dt>then</dt><dd>the image is stored by the service and a reference to it is inserted into the body at the cursor, and the published page shows the image</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.26.spec.ts</code></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/content/lib/components/form.tsx:88</code><br><code>src/front-end/typescript/lib/components/form-field/rich-markdown-editor.tsx:287</code><br><code>src/front-end/typescript/lib/components/form-field/rich-markdown-editor.tsx:471</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the editor&#39;s guidance link points at the page held at the address &quot;markdown-guide&quot;, so the help an author is offered is itself an editable page and reads &quot;Initial version&quot; until somebody writes it. What may be uploaded and who may then read it belongs to the files domain.</dd></dl>
+</article>
+<article class="criterion is-obsolete" data-state="obsolete">
+  <header>
+    <span class="id">D-content-27</span>
+    <span class="chip muted">obsolete</span>
+    <span class="chip muted">inferred</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Seven of the pages the service creates for itself are linked from nowhere within it and can be reached only by knowing their address.</p>
+  <dl><dt>given</dt><dd>an installation carrying the full set of pages the service needs</dd><dt>when</dt><dd>a visitor uses the service without typing addresses by hand</dd><dt>then</dt><dd>the opportunity guide and proposal guide pages of all three programs, and the Team With Us opportunity scope page, are never offered to them</dd><dt>cites</dt><dd><code>src/migrations/tasks/20201202094826_admin-content-stubs.ts:11</code><br><code>src/migrations/tasks/20221130162144_twu-admin-content-stub.ts:8</code><br><code>src/migrations/tasks/20230213120034_twu-opportunity-scope.ts:8</code><br><code>src/front-end/typescript/lib/pages/learn-more/index.tsx:18</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the seven are code-with-us-opportunity-guide, code-with-us-proposal-guide, sprint-with-us-opportunity-guide, sprint-with-us-proposal-guide, team-with-us-opportunity-guide, team-with-us-proposal-guide and team-with-us-opportunity-scope. They are still marked as needed by the service, so an administrator cannot remove them and the list of pages gives no hint that they are unused; the equivalent explanatory material is now built into the service&#39;s own learn-more screens instead. A human should rule on whether the rebuild seeds them at all.</dd><dt>note</dt><dd>The rebuild does not create pages for itself that nothing in it links to. The seven concerned — the opportunity and proposal guides of all three programs and the Team With Us opportunity scope page — were superseded by the built-in learn-more screens and survive only as unremovable rows an administrator cannot clean up. Rows already present in an existing installation are untouched, since the schema is kept.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-7.27</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The managing screen of a page names who first published it and who last changed it, and names the service itself where no person is recorded.</p>
+  <dl><dt>given</dt><dd>a page the service created for itself and has never been edited, and a page an administrator created and another administrator later changed</dd><dt>when</dt><dd>an administrator opens each page&#39;s managing screen</dd><dt>then</dt><dd>the first names &quot;System&quot; as both publisher and last editor, and the second names the two people, each linked to their profile</dd><dt>test</dt><dd><code>tests/acceptance/content/R-7.27.spec.ts</code></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/content/edit.tsx:408</code><br><code>src/front-end/typescript/lib/pages/content/edit.tsx:426</code><br><code>src/back-end/lib/db/content.ts:93</code><br><code>src/migrations/tasks/20201202094826_admin-content-stubs.ts:30</code><br><code>docs/database-schema.md:83</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>these names are disclosed only to an administrator; the same page read by anybody else carries no authorship at all. Authorship is recorded per version, so the last editor is the author of the current wording rather than of the page.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-7.28</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v2</span>
+  </header>
+  <p class="statement">A change carries no record of the version it was based on, so an administrator who publishes over a page another has changed since it was opened silently replaces that wording and is told the change was published; only two publishes interleaving inside a single read-then-write window collide on the version key, and there the second is refused with a service error rather than silently winning.</p>
+  <dl><dt>given</dt><dd>two administrators who both opened the same page for editing before either saved</dd><dt>when</dt><dd>the first publishes their change and then the second publishes theirs</dd><dt>then</dt><dd>both are told their changes were published, the page shows only the second administrator&#39;s wording, and the first&#39;s survives only as an earlier version nothing in the service can show</dd><dt>not testable</dt><dd>The given is two administrators who both opened the same page before either saved. The target carries one administrator sign-in and no second one, and the surface drives a single session, so two people cannot hold the page open at once and no stale read-then-write window can be produced. The collision half needs two publishes interleaving inside one such window, and nothing in the surface reports a version-key collision or a service error on the content-edit screen.</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/content.ts:241</code><br><code>src/back-end/lib/resources/content.ts:293</code><br><code>src/front-end/typescript/lib/pages/content/edit.tsx:254</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the submission carries no record of which version it was based on, so the service cannot tell an overwrite from an ordinary change and no warning is possible. The consequence is not lost data — every version is kept — but silently reverted wording, and R-7.23 means the person whose text was replaced has no way to see that it happened.</dd><dt>note</dt><dd>Exercise two simultaneous edits of one page against the running old application: does the second publish succeed on stale state, is the first author&#39;s wording replaced with no warning to either administrator, and is the replaced version recoverable through anything the service offers?</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-7.29</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Where a screen embeds the body of a page beside its own material, a page that is missing or unreadable leaves that part of the screen empty and the screen otherwise works.</p>
+  <dl><dt>given</dt><dd>an opportunity whose screen embeds the scope page&#39;s body, and that page having been removed</dd><dt>when</dt><dd>a vendor opens the opportunity</dd><dt>then</dt><dd>the opportunity is shown in full and the scope section is empty, with nothing said about why</dd><dt>not testable</dt><dd>The given is a page whose body another screen embeds having been removed. The embedded pages — an opportunity&#39;s scope page, a program&#39;s evaluation instructions — are ones the service needs, which R-7.25 records the service refuses to remove: content-edit withholds the removal and a request made another way is refused, so there is no path through the surface to the state the criterion starts from.</dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/opportunity/sprint-with-us/view.tsx:144</code><br><code>src/front-end/typescript/lib/pages/opportunity/sprint-with-us/view.tsx:202</code><br><code>src/front-end/typescript/lib/pages/opportunity/sprint-with-us/edit/tab/instructions.tsx:58</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the same silent-empty handling covers the evaluation instructions an evaluation panel reads, so a panel can be shown a blank instruction screen and told nothing.</dd></dl>
+</article>
+<script>
+(function () {
+  var bar = document.querySelector(".filters");
+  if (!bar) return;
+  bar.hidden = false;
+  var cards = Array.prototype.slice.call(document.querySelectorAll(".criterion"));
+  bar.addEventListener("click", function (event) {
+    var button = event.target.closest("button[data-filter]");
+    if (!button) return;
+    var want = button.getAttribute("data-filter");
+    Array.prototype.forEach.call(bar.querySelectorAll("button"), function (b) {
+      b.setAttribute("aria-pressed", String(b === button));
+    });
+    cards.forEach(function (card) {
+      card.hidden = want !== "all" && card.getAttribute("data-state") !== want;
+    });
+  });
+})();
+</script>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

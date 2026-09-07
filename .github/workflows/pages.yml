@@ -1,0 +1,40 @@
+# Publishes the generated state site to GitHub Pages.
+#
+# The site lives in `site/`, and Pages' branch-based publishing can only serve a
+# repository's root or its `docs/` directory, so the upload step names the directory
+# explicitly instead. Nothing is built here: `site/` is already complete static HTML,
+# committed by whichever stage or ruling last regenerated it.
+name: Publish the state site
+
+on:
+  push:
+    branches: [main]
+    paths: ["site/**"]
+  workflow_dispatch: {}
+
+# One deployment at a time, and a newer push supersedes a queued one rather than
+# queueing behind it — the site is a lens on current state, so the latest is the only
+# version worth publishing.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deploy
+        uses: actions/deploy-pages@v4

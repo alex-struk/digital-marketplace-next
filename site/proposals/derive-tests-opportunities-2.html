@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-2 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">50</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">50</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">52</span></a></li><li><a href="../runs.html">Run log <span class="count">2</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-2</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-07T15:58:52.887Z</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+
+<div class="body"><h2>Do the revised opportunities tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> No dependencies are installed in this workspace (<code>tests/node_modules</code> is absent), so I could not run the typecheck or the separation check; both files use only the same imports and call shapes as the …</p>
+<p>No dependencies are installed in this workspace (<code>tests/node_modules</code> is absent), so I could not run the typecheck or the separation check; both files use only the same imports and call shapes as the neighbouring specs that already pass.</p>
+<p><strong>Journal</strong></p>
+<p>I acted on two of the three conditions and left the third alone by doing nothing, which is what it asked for.</p>
+<p>For the first condition, I rewrote <code>tests/acceptance/opportunities/R-1.7.spec.ts</code> so that each of its two tests actually attempts the creation the criterion is about, instead of inspecting what the requester was offered. Both tests now open the Code With Us create page and call <code>saveDraft</code> with a title of their own — as a vendor in the first test, signed out entirely in the second — and then sign in as an administrator and assert that the title does not appear in <code>opportunityList.unpublishedGroup()</code>. That is the route the review named, and the same shape R-1.48&#39;s first test uses: an administrator is the one requester certain to see an opportunity whatever state it reached, and a draft that had been created would stand in the unpublished group. The <code>programCard()</code> and <code>myOpportunitiesTable()</code> assertions are gone, along with the reasoning comment that justified them; the replacement comment says why the reading is done by an administrator and notes that R-1.48 already establishes that a title-alone draft is accepted from a permitted requester, so nothing but the requester&#39;s standing is left to refuse it here. The vendor test signs out before the administrator reads back; the anonymous test has no session to drop. The header lines are untouched apart from being the same two lines they were.</p>
+<p>For the second condition, I corrected only the comment block at the top of <code>R-1.55.spec.ts</code>. It had claimed that marking a member as chair is the only chair action there is, which is not true — the panel surface also carries <code>choosePanelChair</code> and a <code>chairField()</code> observation. The reason it now gives is the real one: the surface names errors for too few members, a duplicate member, a missing chair and a non-public-sector member, but none that names a second chair, and since the criterion requires the reason for the refusal to be named, a refusal for a second chair could not be told apart from a refusal for anything else. The four test bodies in that file are byte-for-byte as I found them.</p>
+<p>For the third condition I changed nothing: the other 35 spec files in the domain and all 14 not-testable entries are exactly as they were. I re-derived nothing and rewrote no &quot;derived&quot; date — as it happens both files I did change carry today&#39;s date already, so nothing moved there either. I confirmed R-1.7 and R-1.55 are not listed in <code>not-testable.yaml</code>, and no criterion in this run turned out to be unreachable through the surface, so no entry needed adding.</p>
+<p>Nothing was missing from the contract for this work. The one gap worth carrying forward to whoever writes the contract next is the one R-1.55&#39;s comment now records: an evaluation panel error observation that names a second chair — something alongside <code>minimumMembersError</code>, <code>duplicateMemberError</code>, <code>missingChairError</code> and <code>nonPublicSectorMemberError</code> on both <code>EvaluationPanelSwuPage</code> and <code>EvaluationPanelTwuPage</code>. Without it, the fifth fault R-1.55 lists stays unassertable, since the criterion demands the reason be named and no observation can read that particular reason.</p>
+<h3>Ruling</h3>
+<p><strong>Verdict:</strong> approve <strong>By:</strong> agent:reviewer</p>
+<p>Both conditions are met and nothing else moved: the diff against the returned proposal touches only R-1.7.spec.ts and R-1.55.spec.ts, 26 lines. R-1.7 now attempts the creation the criterion names and reads the refusal from whether an opportunity was created, checked as an administrator against opportunityList.unpublishedGroup(); the programCard() and myOpportunitiesTable() shape assertions are gone, so nothing is asserted beyond &#39;the request is refused and no opportunity is created&#39;. R-1.55&#39;s header now gives the real reason, verified against spec/contract/surface.yaml:781-798, which carries minimum_members_error, duplicate_member_error, missing_chair_error and non_public_sector_member_error but no second-chair error, while also carrying choose_panel_chair and chair_field: the fifth fault is unassertable because the criterion requires the reason to be named and no observation reads it. The four R-1.55 test bodies and the other 34 specs and 14 not-testable entries are unchanged from the set the previous ruling verified. No implementation detail leaks into any assertion. The receipt names what it could not check (tests/node_modules absent, so no local typecheck or separation run) and the harness ran separation and tests green; the five tests warnings are pre-existing and belong to the files and notifications domains. STANDARD tier, no unaccepted residual risk, so no escalation.</p>
+<p><strong>Conditions:</strong> none</p></div>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

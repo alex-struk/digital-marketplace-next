@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>opportunities — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">50</span></a></li><li><a href="../proposals.html">Proposals <span class="count">50</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">52</span></a></li><li><a href="../runs.html">Run log <span class="count">2</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html" aria-current="page">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>opportunities</h1>
+<p class="lede">57 criteria, 36 with a derived acceptance test, 14 recorded as not testable through the contract surface.</p></div>
+<div class="filters" hidden><button type="button" data-filter="all" aria-pressed="true">All (57)</button><button type="button" data-filter="tested" aria-pressed="false">Has a test (36)</button><button type="button" data-filter="not-testable" aria-pressed="false">Not testable (14)</button><button type="button" data-filter="untested" aria-pressed="false">No test yet (0)</button><button type="button" data-filter="obsolete" aria-pressed="false">Obsolete (1)</button></div>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-1.1</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v2</span>
+  </header>
+  <p class="statement">A published opportunity whose proposal deadline has passed closes on its own at the next request the service handles under /api or /status: it moves to the first evaluation stage of its program, every proposal submitted against it moves to review, and its author is notified that it is ready for evaluation.</p>
+  <dl><dt>given</dt><dd>a published opportunity whose proposal deadline has passed</dd><dt>when</dt><dd>the service next handles any request</dd><dt>then</dt><dd>the opportunity moves to its program&#39;s first evaluation stage with the note &quot;This opportunity has closed.&quot;, its submitted proposals move to review, and its author receives a notification</dd><dt>not testable</dt><dd>The given is a published opportunity whose proposal deadline has passed, and no such opportunity can be had. The seed&#39;s only published opportunity has a deadline in 2030; an opportunity that is not a draft is refused a deadline earlier than today (R-1.14), and a draft left without one is given a deadline fourteen days out (R-1.9). The when is out of reach as well: observables.yaml names the status route as the request that runs the closing hook, but no page, action or observation in the surface makes that request.</dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/code-with-us.ts:898</code><br><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:1442</code><br><code>src/back-end/lib/db/opportunity/team-with-us.ts:1433</code><br><code>src/back-end/lib/hooks/code-with-us.ts:20</code><br><code>CHANGELOG.md:96</code><br><code>README.md:275</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>closure is driven by ordinary traffic rather than a clock, throttled so it runs at most once a minute, and additionally attached to the health-check route so that it still runs when the site is idle. An opportunity therefore closes at the first request after its deadline, not at the deadline itself.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.2</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An anonymous visitor or a vendor sees only opportunities that have been published; drafts and opportunities under review are not listed to them and cannot be opened by them.</p>
+  <dl><dt>given</dt><dd>an opportunity in draft or under review</dd><dt>when</dt><dd>an anonymous visitor or a vendor lists opportunities, or opens that opportunity&#39;s address directly</dd><dt>then</dt><dd>the opportunity does not appear in the list, and opening it directly reports that it was not found</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.2.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/code-with-us.ts:606</code><br><code>src/back-end/lib/db/opportunity/code-with-us.ts:387</code><br><code>src/shared/lib/resources/opportunity/code-with-us.ts:303</code><br><code>src/back-end/docs/opportunities/code-with-us.yaml:9</code><br><code>src/back-end/docs/opportunities/sprint-with-us.yaml:9</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.3</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A member of public sector staff sees every published opportunity plus their own drafts and opportunities under review, and an administrator sees every opportunity.</p>
+  <dl><dt>given</dt><dd>two members of public sector staff, each with an unpublished opportunity of their own</dd><dt>when</dt><dd>each lists opportunities</dd><dt>then</dt><dd>each sees their own unpublished opportunity and not the other&#39;s, while an administrator listing opportunities sees both</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.3.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/code-with-us.ts:612</code><br><code>src/back-end/lib/db/opportunity/code-with-us.ts:406</code><br><code>src/back-end/docs/opportunities/code-with-us.yaml:9</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.4</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Every change to an opportunity&#39;s content creates a new version of it and records an edit in its history; the opportunity always shows its most recent version.</p>
+  <dl><dt>given</dt><dd>a published opportunity</dd><dt>when</dt><dd>an administrator changes its description and saves</dd><dt>then</dt><dd>the opportunity shows the new description, its history gains an entry recording that it was edited, by whom and when, and the previous content is retained</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.4.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/code-with-us.ts:747</code><br><code>docs/database-schema.md:156</code><br><code>docs/database-schema.md:136</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.5</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Any signed-in person may watch an opportunity they did not create, may stop watching it, and cannot watch the same opportunity twice.</p>
+  <dl><dt>given</dt><dd>a signed-in person viewing an opportunity created by somebody else and not yet watched by them</dd><dt>when</dt><dd>they choose to watch it, and then choose to watch it again</dd><dt>then</dt><dd>the first request records them as watching it and the second is refused as a duplicate</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.5.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/subscribers/code-with-us.ts:52</code><br><code>src/back-end/lib/resources/subscribers/code-with-us.ts:149</code><br><code>docs/database-schema.md:148</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>a person is refused when they try to watch their own opportunity, with the message &quot;You cannot subscribe to your own opportunity.&quot;</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.6</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Opening an opportunity&#39;s public page counts as a view of that opportunity.</p>
+  <dl><dt>given</dt><dd>an opportunity that has been viewed a known number of times</dd><dt>when</dt><dd>anyone, signed in or not, opens its public page</dd><dt>then</dt><dd>the recorded view count for that opportunity increases by one</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.6.spec.ts</code></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/opportunity/code-with-us/view.tsx:98</code><br><code>docs/database-schema.md:69</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.7</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Only signed-in public sector staff and administrators may create an opportunity; a request from a vendor or an anonymous visitor is refused.</p>
+  <dl><dt>given</dt><dd>a visitor who is not signed in, or is signed in as a vendor</dd><dt>when</dt><dd>they attempt to create an opportunity</dd><dt>then</dt><dd>the request is refused and no opportunity is created</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.7.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:345</code><br><code>src/back-end/lib/permissions.ts:604</code><br><code>src/back-end/lib/permissions.ts:1099</code><br><code>src/front-end/typescript/lib/pages/opportunity/create.tsx:37</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.8</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Every opportunity belongs to exactly one of three procurement programs — Code With Us, Sprint With Us or Team With Us — chosen when it is created and never changed afterwards.</p>
+  <dl><dt>given</dt><dd>a member of public sector staff creating a new opportunity</dd><dt>when</dt><dd>they choose a program and complete creation</dd><dt>then</dt><dd>the opportunity is filed under that program and offers only that program&#39;s fields, stages and actions</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.8.spec.ts</code></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/opportunity/create.tsx:77</code><br><code>src/shared/lib/resources/opportunity/code-with-us.ts:14</code><br><code>src/shared/lib/resources/opportunity/sprint-with-us.ts:56</code><br><code>src/shared/lib/resources/opportunity/team-with-us.ts:19</code><br><code>README.md:5</code></dd><dt>reconciliation</dt><dd>conflicting</dd><dt>note</dt><dd>the running code implements three programs, but the application&#39;s own README describes only Code With Us and Sprint With Us, and its generated database-schema document lists no Team With Us tables at all. Both documents predate Team With Us; a human should confirm that all three programs carry forward rather than assuming the documents are merely stale.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.9</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v2</span>
+  </header>
+  <p class="statement">An opportunity saved as a draft is accepted with incomplete content; when its proposal deadline, assignment date or start date is missing or invalid it is set to fourteen days from the day of saving, and its completion date is left empty.</p>
+  <dl><dt>given</dt><dd>a member of public sector staff filling in a new opportunity</dd><dt>when</dt><dd>they save it as a draft with fields still blank</dd><dt>then</dt><dd>the draft is stored, no content validation error is raised, and absent dates are set to fourteen days from the day of saving</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.9.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/code-with-us.ts:257</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:412</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.10</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters.</p>
+  <dl><dt>given</dt><dd>a member of public sector staff creating or editing an opportunity that is not a draft</dd><dt>when</dt><dd>they submit it with a missing title, a title over 200 characters, a teaser over 500 characters, a missing location, or a description that is missing or over 10,000 characters</dd><dt>then</dt><dd>the submission is rejected and the offending field is named in the response</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.10.spec.ts</code></dd><dt>cites</dt><dd><code>src/shared/lib/validation/opportunity/utility.ts:89</code><br><code>src/shared/lib/validation/opportunity/utility.ts:98</code><br><code>src/shared/lib/validation/opportunity/utility.ts:137</code><br><code>src/shared/lib/validation/opportunity/utility.ts:147</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.11</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An opportunity that is not a draft must state whether remote work is acceptable, and must carry a remote-work description of up to 500 characters whenever remote work is acceptable.</p>
+  <dl><dt>given</dt><dd>a member of public sector staff creating or editing an opportunity that is not a draft</dd><dt>when</dt><dd>they mark it as accepting remote work but leave the remote-work description empty</dd><dt>then</dt><dd>the submission is rejected</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.11.spec.ts</code></dd><dt>cites</dt><dd><code>src/shared/lib/validation/opportunity/utility.ts:107</code><br><code>src/shared/lib/validation/opportunity/utility.ts:120</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>when remote work is not acceptable the remote-work description may be empty, and any value over 500 characters is rejected either way.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.12</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A Code With Us opportunity must offer a reward of at least $1 and at most $70,000, and must name at least one skill.</p>
+  <dl><dt>given</dt><dd>a member of public sector staff creating or editing a Code With Us opportunity that is not a draft</dd><dt>when</dt><dd>they submit a reward outside $1 to $70,000, or submit no skills</dd><dt>then</dt><dd>the submission is rejected</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.12.spec.ts</code></dd><dt>cites</dt><dd><code>src/shared/lib/validation/opportunity/code-with-us.ts:49</code><br><code>src/shared/lib/validation/opportunity/code-with-us.ts:53</code><br><code>src/shared/config.ts:28</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>duplicate skills are silently collapsed rather than rejected.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.13</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A Sprint With Us opportunity must state a total maximum budget of at least $1 and at most $5,000,000, while a Team With Us opportunity must state a maximum budget of at least $1 with no upper limit.</p>
+  <dl><dt>given</dt><dd>a member of public sector staff creating or editing an opportunity that is not a draft</dd><dt>when</dt><dd>they submit a Sprint With Us budget above $5,000,000, or any budget below $1</dd><dt>then</dt><dd>the submission is rejected</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.13.spec.ts</code></dd><dt>cites</dt><dd><code>src/shared/lib/validation/opportunity/sprint-with-us.ts:436</code><br><code>src/shared/lib/validation/opportunity/team-with-us.ts:176</code><br><code>src/shared/config.ts:30</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the absence of an upper budget limit on Team With Us is a difference from the other two programs, not a stated policy; nothing in the application explains it, so a human should rule on whether it carries forward.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.14</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An opportunity&#39;s key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen.</p>
+  <dl><dt>given</dt><dd>a member of public sector staff creating or editing an opportunity that is not a draft</dd><dt>when</dt><dd>they submit a proposal deadline in the past, or any later date that falls before the date preceding it</dd><dt>then</dt><dd>the submission is rejected</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.14.spec.ts</code></dd><dt>cites</dt><dd><code>src/shared/lib/validation/opportunity/code-with-us.ts:65</code><br><code>src/shared/lib/validation/opportunity/utility.ts:29</code><br><code>src/shared/lib/index.ts:275</code><br><code>src/shared/config.ts:26</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>when an already-published opportunity&#39;s deadline has passed, an edit is measured against that past deadline instead of today, so a closed opportunity can be edited without its dates being forced forward.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.15</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A Sprint With Us or Team With Us opportunity is rejected unless its evaluation weights total exactly one hundred per cent.</p>
+  <dl><dt>given</dt><dd>a member of public sector staff creating or editing a Sprint With Us or Team With Us opportunity that is not a draft</dd><dt>when</dt><dd>they submit weights that do not total one hundred per cent</dd><dt>then</dt><dd>the submission is rejected with a message saying the scoring weights must total 100%</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.15.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:615</code><br><code>src/back-end/lib/resources/opportunity/team-with-us/index.ts:436</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>Sprint With Us weights four stages (questions, code challenge, team scenario, price); Team With Us weights three (questions, challenge, price). Each individual weight is separately required to fall between 0 and 100.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.16</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A Sprint With Us opportunity must have an implementation phase, and may only have an inception phase if it also has a prototype phase.</p>
+  <dl><dt>given</dt><dd>a member of public sector staff creating or editing a Sprint With Us opportunity that is not a draft</dd><dt>when</dt><dd>they include an inception phase but no prototype phase</dd><dt>then</dt><dd>the submission is rejected with a message saying a prototype phase must follow an inception phase</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.16.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:628</code><br><code>src/shared/lib/resources/opportunity/sprint-with-us.ts:206</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.17</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question, a guideline, a maximum score, a response word limit and a position, and an optional minimum score that must be lower than the question&#39;s maximum score.</p>
+  <dl><dt>given</dt><dd>a member of public sector staff adding an evaluation question to an opportunity</dd><dt>when</dt><dd>they submit a question or guideline outside 1 to 1,000 characters, a score below 1, a word limit outside 1 to 3,000, a position outside 0 to 100, or a minimum score equal to or above the question&#39;s score</dd><dt>then</dt><dd>the submission is rejected and the offending field is named</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.17.spec.ts</code></dd><dt>cites</dt><dd><code>src/shared/lib/validation/opportunity/sprint-with-us.ts:371</code><br><code>src/shared/lib/validation/opportunity/team-with-us.ts:111</code><br><code>src/shared/lib/resources/opportunity/sprint-with-us.ts:16</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the same limits apply to Sprint With Us &quot;team questions&quot; and Team With Us &quot;resource questions&quot;; the two differ only in name.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.18</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Each resource on a Team With Us opportunity names one service area and a target allocation between 1 and 100 per cent of full time.</p>
+  <dl><dt>given</dt><dd>a member of public sector staff creating or editing a Team With Us opportunity that is not a draft</dd><dt>when</dt><dd>they submit a resource with a target allocation outside 1 to 100, or a service area that is not one of the five recognised areas</dd><dt>then</dt><dd>the submission is rejected</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.18.spec.ts</code></dd><dt>cites</dt><dd><code>src/shared/lib/validation/opportunity/team-with-us.ts:213</code><br><code>src/shared/lib/resources/opportunity/team-with-us.ts:38</code><br><code>src/shared/lib/resources/opportunity/team-with-us.ts:239</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.19</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An opportunity moves through the states draft, under review, published, one or more program-specific evaluation stages, processing, and finally awarded or cancelled.</p>
+  <dl><dt>given</dt><dd>any opportunity</dd><dt>when</dt><dd>its state is read at any point in its life</dd><dt>then</dt><dd>the state is one of the values recognised for its program, and no other value is accepted by the store</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.19.spec.ts</code></dd><dt>cites</dt><dd><code>src/shared/lib/resources/opportunity/code-with-us.ts:14</code><br><code>src/shared/lib/resources/opportunity/sprint-with-us.ts:56</code><br><code>src/shared/lib/resources/opportunity/team-with-us.ts:19</code><br><code>src/migrations/tasks/20240421120000_add_cwu_processing_status.ts:36</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>Code With Us has a single evaluation stage; Sprint With Us has four (team questions individual, team questions consensus, code challenge, team scenario); Team With Us has three (resource questions individual, resource questions consensus, challenge).</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.20</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An opportunity may only change state along the permitted path for its program, and a request for any other change is refused.</p>
+  <dl><dt>given</dt><dd>an opportunity in a given state</dd><dt>when</dt><dd>someone requests a change to a state that is not reachable from it — for example from draft straight to an evaluation stage, or out of an awarded or cancelled opportunity</dd><dt>then</dt><dd>the request is refused and the opportunity&#39;s state is unchanged</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.20.spec.ts</code></dd><dt>cites</dt><dd><code>src/shared/lib/resources/opportunity/code-with-us.ts:246</code><br><code>src/shared/lib/resources/opportunity/sprint-with-us.ts:487</code><br><code>src/shared/lib/resources/opportunity/team-with-us.ts:451</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>a draft may go to under review or straight to published; under review may only go to published; published and every evaluation stage may go to the next stage or to cancelled; awarded and cancelled are final.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.21</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Submitting a draft opportunity for review is refused unless the opportunity is complete, and the person is told the opportunity is incomplete rather than which field is missing.</p>
+  <dl><dt>given</dt><dd>a draft opportunity with a field still blank</dd><dt>when</dt><dd>its author submits it for review</dd><dt>then</dt><dd>the request is refused with a message saying the opportunity is incomplete and asking the author to complete and save the form</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.21.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/code-with-us.ts:705</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1354</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>Code With Us checks only title, teaser, remote-work fields, location and description at this point, while Sprint With Us additionally checks budget, skills, weights and every phase — so a Code With Us opportunity can reach &quot;under review&quot; with a missing reward or missing skills and be caught only at publication.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.22</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Only an administrator may publish an opportunity.</p>
+  <dl><dt>given</dt><dd>an opportunity in draft or under review</dd><dt>when</dt><dd>a member of public sector staff who is not an administrator asks to publish it</dd><dt>then</dt><dd>the request is refused and the opportunity stays unpublished</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.22.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:390</code><br><code>src/back-end/lib/permissions.ts:632</code><br><code>src/back-end/lib/permissions.ts:1354</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1463</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-1.23</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Publishing an opportunity records the moment of publication, which is thereafter shown as the opportunity&#39;s published date.</p>
+  <dl><dt>given</dt><dd>an opportunity that has been published</dd><dt>when</dt><dd>anyone views it</dd><dt>then</dt><dd>the date shown as its publication date is the moment of the first publication, even if it was later republished</dd><dt>not testable</dt><dd>No observation returns an opportunity&#39;s published date. The three opportunity views name status, proposal deadline, reward or budget, addenda and successful proponent; published_date exists only on the content pages. Nor is there a when for the second half: no action republishes an opportunity that is already published, so &#39;even if it was later republished&#39; cannot be set up.</dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/code-with-us.ts:430</code><br><code>docs/database-schema.md:136</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-1.24</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">On closing a Sprint With Us or Team With Us opportunity, each submitted proposal is given an anonymous proponent name for use during evaluation.</p>
+  <dl><dt>given</dt><dd>a published Sprint With Us or Team With Us opportunity with submitted proposals</dd><dt>when</dt><dd>it closes at its proposal deadline</dd><dt>then</dt><dd>each submitted proposal is labelled &quot;Proponent 1&quot;, &quot;Proponent 2&quot; and so on</dd><dt>not testable</dt><dd>The when is the opportunity closing at its proposal deadline, which cannot be brought about — see R-1.1 for the two things missing. Without the closure no submitted proposal is ever labelled, and the anonymous_proponent_name observations on the proposal surfaces have nothing to return.</dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:1498</code><br><code>src/back-end/lib/db/opportunity/team-with-us.ts:1488</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>Code With Us does not anonymise proponents.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-1.25</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An opportunity moves to processing on its own once every proposal still in contention has been scored at its program&#39;s final evaluation stage.</p>
+  <dl><dt>given</dt><dd>an opportunity at its final evaluation stage with at least one proposal still in contention</dd><dt>when</dt><dd>the last of those proposals is scored</dd><dt>then</dt><dd>the opportunity moves to processing and the change is recorded with a note saying it was moved automatically because all proposals have been evaluated</dd><dt>not testable</dt><dd>The given is an opportunity at its program&#39;s final evaluation stage. An opportunity reaches any evaluation stage only by closing at its proposal deadline, which cannot be brought about (see R-1.1), so neither the last proposal&#39;s scoring nor the move to processing can be reached.</dd><dt>cites</dt><dd><code>src/back-end/lib/db/proposal/code-with-us.ts:1064</code><br><code>src/back-end/lib/db/proposal/sprint-with-us.ts:2136</code><br><code>src/back-end/lib/db/proposal/team-with-us.ts:1789</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-1.26</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Awarding a proposal moves its opportunity to awarded and records the winning proponent against it; every other proposal still in contention is marked not awarded.</p>
+  <dl><dt>given</dt><dd>an opportunity in processing with proposals against it</dd><dt>when</dt><dd>an administrator awards one of those proposals</dd><dt>then</dt><dd>the opportunity moves to awarded, the winning proponent is recorded against it, and the remaining proposals are marked not awarded</dd><dt>not testable</dt><dd>The given is an opportunity in processing. Processing lies beyond the evaluation stages, which are reached only by a closure the surface cannot bring about (see R-1.1), so award_proposal has no opportunity to act on and no proposal to mark not awarded.</dd><dt>cites</dt><dd><code>src/back-end/lib/db/proposal/code-with-us.ts:1159</code><br><code>src/back-end/lib/db/proposal/sprint-with-us.ts:1733</code><br><code>src/back-end/lib/db/proposal/team-with-us.ts:1463</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-1.27</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score.</p>
+  <dl><dt>given</dt><dd>an awarded opportunity</dd><dt>when</dt><dd>a visitor who may not see proposal scores views it</dd><dt>then</dt><dd>the successful proponent&#39;s name is shown and their contact details and score are withheld</dd><dt>not testable</dt><dd>The given is an awarded opportunity. Awarding needs processing, processing needs the evaluation stages, and those need a closure the surface cannot bring about (see R-1.1). The successful_proponent observation therefore has nothing to return, and the proponent&#39;s contact details, which the criterion says are withheld, are named by no observation either.</dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/code-with-us.ts:445</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.28</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Only an administrator may cancel an opportunity, and only once it has been published.</p>
+  <dl><dt>given</dt><dd>an opportunity that is published or at any evaluation stage or in processing</dd><dt>when</dt><dd>an administrator cancels it, giving an optional note of up to 1,000 characters</dd><dt>then</dt><dd>the opportunity moves to cancelled and stops accepting proposals</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.28.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:415</code><br><code>src/back-end/lib/permissions.ts:676</code><br><code>src/back-end/lib/permissions.ts:1178</code><br><code>src/back-end/lib/resources/opportunity/code-with-us.ts:823</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>a draft or under-review opportunity cannot be cancelled — it is deleted instead.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-1.29</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The names of the people who created and last changed an opportunity are shown only to administrators and to those people themselves.</p>
+  <dl><dt>given</dt><dd>a published opportunity</dd><dt>when</dt><dd>it is viewed by someone who is neither an administrator nor the person who created or last changed it</dd><dt>then</dt><dd>the creating and changing people&#39;s names are absent from what is shown</dd><dt>not testable</dt><dd>No observation returns the name of the person who created or last changed an opportunity. The opportunity views name status, dates, money, addenda and the successful proponent; the management surface names tabs and the three reporting counts. With the names unreadable, neither their presence for an administrator nor their absence for anybody else can be asserted.</dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/code-with-us.ts:243</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.30</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An opportunity&#39;s administrator and its author can see its full change history, how many times it has been viewed, how many people are watching it and how many proposals have been submitted; nobody else can.</p>
+  <dl><dt>given</dt><dd>a published opportunity that has been viewed, watched and proposed against</dd><dt>when</dt><dd>its author or an administrator opens it</dd><dt>then</dt><dd>they see its history of state changes and events and its counts of views, watchers and submitted proposals</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.30.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/code-with-us.ts:477</code><br><code>src/back-end/lib/db/opportunity/code-with-us.ts:515</code><br><code>docs/database-schema.md:136</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the reporting counts are withheld while the opportunity is still a draft or under review, even from the author.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.31</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Public sector staff cannot see the proposals submitted against an opportunity until it has left the published state.</p>
+  <dl><dt>given</dt><dd>a published opportunity that has received proposals</dd><dt>when</dt><dd>its author or an administrator asks to see the proposals</dd><dt>then</dt><dd>the request is refused until the opportunity has closed and moved to an evaluation stage</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.31.spec.ts</code></dd><dt>cites</dt><dd><code>src/shared/lib/resources/opportunity/code-with-us.ts:344</code><br><code>src/back-end/lib/permissions.ts:426</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.32</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An addendum of 1 to 5,000 characters may be added to any opportunity that is no longer a draft, by an administrator or by the staff member who created it, and cannot be removed afterwards.</p>
+  <dl><dt>given</dt><dd>a published opportunity</dd><dt>when</dt><dd>its author adds an addendum</dd><dt>then</dt><dd>the addendum is appended to the opportunity with its author and date, an entry is added to the opportunity&#39;s history, and there is no action that removes it</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.32.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/code-with-us.ts:846</code><br><code>src/back-end/lib/permissions.ts:403</code><br><code>src/shared/lib/validation/addendum.ts:3</code><br><code>src/back-end/docs/opportunities/code-with-us.yaml:98</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.33</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">An administrator or an opportunity&#39;s author may attach a private note, with files, to a Code With Us or Sprint With Us opportunity&#39;s history at any point in its life.</p>
+  <dl><dt>given</dt><dd>a Code With Us or Sprint With Us opportunity in any state</dd><dt>when</dt><dd>its author adds a note of up to 1,000 characters with attachments</dd><dt>then</dt><dd>the note and its attachments appear in the opportunity&#39;s history, which only the author and administrators can see</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.33.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/code-with-us.ts:873</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1721</code><br><code>src/shared/lib/resources/opportunity/team-with-us.ts:374</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>Team With Us offers no such action at all. Nothing in the application explains the omission, so a human should decide whether it is a gap to close or a deliberate difference.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.34</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Publishing an opportunity notifies everyone who has asked for new-opportunity notifications, and separately confirms the publication to the opportunity&#39;s author.</p>
+  <dl><dt>given</dt><dd>an opportunity ready to be published and people who have turned notifications on</dd><dt>when</dt><dd>an administrator publishes it</dd><dt>then</dt><dd>each of those people receives a notice that a new opportunity has been posted, and the opportunity&#39;s author receives a confirmation</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.34.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx:146</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.35</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Changing or adding an addendum to an opportunity that is neither a draft nor cancelled notifies everyone watching it, everyone who has submitted a proposal to it, and its author.</p>
+  <dl><dt>given</dt><dd>a published opportunity with watchers and submitted proposals</dd><dt>when</dt><dd>an administrator edits it or adds an addendum</dd><dt>then</dt><dd>its watchers, its proponents and its author are each notified once</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.35.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx:168</code><br><code>src/back-end/lib/resources/opportunity/code-with-us.ts:919</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>nobody is notified when the opportunity is a draft or has been cancelled.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.36</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Cancelling an opportunity notifies everyone watching it and everyone who has submitted a proposal to it, and separately notifies its author.</p>
+  <dl><dt>given</dt><dd>a published opportunity with watchers and submitted proposals</dd><dt>when</dt><dd>an administrator cancels it</dd><dt>then</dt><dd>its watchers and proponents are told it has been cancelled, and its author is told separately that the cancellation was actioned</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.36.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx:197</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.37</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Submitting an opportunity for review notifies every administrator, and confirms the submission to its author.</p>
+  <dl><dt>given</dt><dd>a complete draft opportunity</dd><dt>when</dt><dd>its author submits it for review</dd><dt>then</dt><dd>every administrator is notified that an opportunity awaits review, and the author receives a confirmation</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.37.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx:14</code><br><code>src/back-end/lib/resources/opportunity/code-with-us.ts:386</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.38</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The opportunity list groups opportunities into unpublished, open and closed, showing open opportunities with the nearest proposal deadline first, closed ones most recently closed first, and unpublished ones most recently changed first.</p>
+  <dl><dt>given</dt><dd>a set of opportunities in a mix of states</dd><dt>when</dt><dd>someone opens the opportunity list</dd><dt>then</dt><dd>each opportunity appears in exactly one of the three groups, ordered as described</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.38.spec.ts</code></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/opportunity/list.tsx:162</code><br><code>src/front-end/typescript/lib/pages/opportunity/list.tsx:194</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>an opportunity counts as open only while it is published and its proposal deadline is still in the future; everything published and past its deadline, including cancelled and awarded opportunities, counts as closed.</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.39</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location.</p>
+  <dl><dt>given</dt><dd>a list of opportunities across all three programs</dd><dt>when</dt><dd>someone selects a program, selects a state, ticks remote-only, or types words into the search box</dd><dt>then</dt><dd>only opportunities matching every chosen condition remain visible</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.39.spec.ts</code></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/opportunity/list.tsx:314</code><br><code>src/front-end/typescript/lib/pages/opportunity/list.tsx:60</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the state filter offers draft, under review, published, evaluation and awarded; there is no option for opportunities in processing or cancelled, so those can only be found by clearing the filter.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-1.40</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Only an administrator can open the full report of a completed opportunity, which shows the opportunity, its addenda, its history and every proposal in one continuous document.</p>
+  <dl><dt>given</dt><dd>an opportunity that has been evaluated</dd><dt>when</dt><dd>a member of public sector staff who is not an administrator opens its report address</dd><dt>then</dt><dd>they are refused, while an administrator opening the same address sees the whole record in one document</dd><dt>not testable</dt><dd>The given is an opportunity that has been evaluated, which cannot be reached: an opportunity leaves the published state only by closing at its proposal deadline (see R-1.1). The full_report observation would return nothing for an administrator as well as for a member of staff, so the contrast the criterion turns on cannot be told from the report simply not existing yet.</dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/opportunity/code-with-us/complete/index.tsx:184</code><br><code>src/front-end/typescript/lib/app/router.ts:741</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-1.41</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Advancing a Sprint With Us or Team With Us opportunity out of the consensus stage is refused unless every consensus evaluation has been submitted and at least one proponent has met the minimum score on every question that sets one.</p>
+  <dl><dt>given</dt><dd>a Sprint With Us or Team With Us opportunity at the questions consensus stage</dd><dt>when</dt><dd>its author asks to move it on while a consensus is unsubmitted, or while no proponent has cleared every question&#39;s minimum score</dd><dt>then</dt><dd>the request is refused and the reason is named</dd><dt>not testable</dt><dd>The given is a Sprint With Us or Team With Us opportunity at the questions consensus stage, which is reached only after the opportunity closes at its proposal deadline (see R-1.1). The observations for both refusals exist — not_all_consensuses_submitted_error and no_screenable_proponent_error — but nothing in the surface can put an opportunity in front of them.</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1481</code><br><code>src/back-end/lib/resources/opportunity/team-with-us/index.ts:973</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-1.42</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Advancing a Sprint With Us opportunity to the team scenario stage is refused unless every proponent in the code challenge has been scored or disqualified and at least one remains screened in.</p>
+  <dl><dt>given</dt><dd>a Sprint With Us opportunity at the code challenge stage</dd><dt>when</dt><dd>its author asks to move it to the team scenario stage while a proponent is unscored and not disqualified</dd><dt>then</dt><dd>the request is refused with a message saying all proponents must be scored first</dd><dt>not testable</dt><dd>The given is a Sprint With Us opportunity at the code challenge stage, which lies two stages beyond a closure the surface cannot bring about (see R-1.1). start_team_scenario therefore has no opportunity to be refused on, and the proponents whose scoring the refusal turns on cannot be created either.</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1593</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-1.43</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The evaluation panel of a Sprint With Us or Team With Us opportunity may be changed only while the opportunity is a draft, under review, published, or at the first questions stage.</p>
+  <dl><dt>given</dt><dd>a Sprint With Us or Team With Us opportunity that has reached the consensus stage or beyond</dd><dt>when</dt><dd>its author asks to change the evaluation panel</dd><dt>then</dt><dd>the request is refused and the panel stays as it was</dd><dt>not testable</dt><dd>The given is an opportunity that has reached the consensus stage or beyond, which cannot be reached (see R-1.1). The panel_locked_after_consensus observation names exactly this outcome but no opportunity can be brought to the state in which it applies. The permitted half of the rule — changing the panel while the opportunity is a draft — is exercised by R-1.55.</dd><dt>cites</dt><dd><code>src/shared/lib/resources/opportunity/sprint-with-us.ts:631</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1997</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-1.44</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A member of public sector staff who is not an administrator can publish a Code With Us opportunity directly, by creating it as published rather than by publishing an existing one.</p>
+  <dl><dt>given</dt><dd>a member of public sector staff who is not an administrator</dd><dt>when</dt><dd>they create a Code With Us opportunity with its state set to published</dd><dt>then</dt><dd>the opportunity is created and published, and the subscriber notifications for a published opportunity are sent</dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:345</code><br><code>src/back-end/lib/resources/opportunity/code-with-us.ts:188</code><br><code>src/back-end/lib/resources/opportunity/code-with-us.ts:394</code><br><code>src/back-end/lib/permissions.ts:604</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-1.48</dd><dt>note</dt><dd>this contradicts the administrator-only publication rule recovered as R-1.22. The equivalent Sprint With Us and Team With Us creation checks refuse this case explicitly, so the Code With Us omission reads as an oversight rather than an intended difference. There is no replacement criterion because the corrected behaviour is already stated by R-1.22; a human should rule on whether the rebuild simply closes the hole.</dd><dt>note</dt><dd>superseded by R-1.48</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-1.45</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A Team With Us opportunity in processing can be awarded, even though the recorded set of permitted state changes does not include that step.</p>
+  <dl><dt>given</dt><dd>a Team With Us opportunity in processing</dd><dt>when</dt><dd>an administrator awards one of its proposals</dd><dt>then</dt><dd>the opportunity becomes awarded</dd><dt>cites</dt><dd><code>src/shared/lib/resources/opportunity/team-with-us.ts:483</code><br><code>src/shared/lib/resources/opportunity/team-with-us.ts:501</code><br><code>src/back-end/lib/db/proposal/team-with-us.ts:1463</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-1.49</dd><dt>note</dt><dd>the permitted-change table for Team With Us allows only cancellation out of processing, while the equivalent tables for the other two programs allow the award. Awarding does not consult that table, so the award succeeds anyway. Whether the table or the award path is wrong cannot be determined from the application; a human should rule.</dd><dt>note</dt><dd>superseded by R-1.49</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-1.46</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A Sprint With Us or Team With Us opportunity can be moved out of its consensus stage by a second, older action that does not check whether the consensus evaluations have been submitted.</p>
+  <dl><dt>given</dt><dd>a Sprint With Us opportunity at the questions consensus stage with consensus evaluations still unsubmitted</dd><dt>when</dt><dd>its author uses the older &quot;start code challenge&quot; action rather than the newer &quot;finalize consensuses&quot; action</dd><dt>then</dt><dd>the opportunity advances to the code challenge stage without the consensus check being applied</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1550</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1481</code><br><code>src/back-end/lib/resources/opportunity/team-with-us/index.ts:1043</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-1.50</dd><dt>note</dt><dd>the application marks the Sprint With Us version of this action as deprecated in a comment but still accepts it; the Team With Us equivalent carries no such comment. There is no replacement criterion because the intended guard is already stated by R-1.41; a human should rule on removing the older path.</dd><dt>note</dt><dd>superseded by R-1.50</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-1.47</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">&quot;Suspended&quot; remains a permitted stored state for an opportunity although no action can put an opportunity into it.</p>
+  <dl><dt>given</dt><dd>the set of states an opportunity may hold</dd><dt>when</dt><dd>any state change is attempted</dd><dt>then</dt><dd>no path leads to the suspended state, and no listing, filter or transition treats it as reachable</dd><dt>cites</dt><dd><code>src/shared/lib/resources/opportunity/code-with-us.ts:21</code><br><code>src/shared/lib/resources/opportunity/code-with-us.ts:246</code><br><code>src/migrations/tasks/20240421120000_add_cwu_processing_status.ts:14</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-1.51</dd><dt>note</dt><dd>the state is named &quot;deprecated suspended&quot; in the application&#39;s own code but is still accepted by the store&#39;s constraint, so historical records may hold it. There is no replacement criterion: whether the rebuild must still display an opportunity left in this state from the old data is a question for a human, not something the application answers.</dd><dt>note</dt><dd>superseded by R-1.51</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.48</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs.</p>
+  <dl><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.48.spec.ts</code></dd><dt>replaces</dt><dd>R-1.44</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-1.49</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The permitted state changes for a Team With Us opportunity in processing are awarded and cancelled, matching Code With Us and Sprint With Us, so the recorded transitions and the award path agree.</p>
+  <dl><dt>not testable</dt><dd>The claim is about which state changes are permitted out of processing for a Team With Us opportunity. Processing lies beyond the evaluation stages and cannot be reached (see R-1.1), and no observation returns the set of transitions an opportunity records, so neither the award nor the cancellation out of processing can be requested or read.</dd><dt>replaces</dt><dd>R-1.45</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-1.50</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">There is exactly one path out of a questions consensus stage, and it refuses to advance unless every consensus evaluation has been submitted and at least one proponent has met the minimum score on every question that sets one.</p>
+  <dl><dt>not testable</dt><dd>Both halves are out of reach. The questions consensus stage cannot be reached (see R-1.1), so the refusal has no opportunity to act on; and the uniqueness claim is about there being no second way out, which the surface can only show by not naming one — the absence of an action is not an observation.</dd><dt>replaces</dt><dd>R-1.46</dd></dl>
+</article>
+<article class="criterion is-obsolete" data-state="obsolete">
+  <header>
+    <span class="id">D-opportunities-51</span>
+    <span class="chip muted">obsolete</span>
+    <span class="chip escalated">open</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The application&#39;s published interface description for opportunities is incomplete: it omits the Team With Us program entirely, omits the &quot;submit for review&quot; and &quot;add note&quot; actions, and describes only two of the three states an opportunity may be created in.</p>
+  <dl><dt>given</dt><dd>someone reading the application&#39;s own interface description to learn what an opportunity supports</dd><dt>when</dt><dd>they compare it against what the service actually accepts</dd><dt>then</dt><dd>they find actions and states the description does not mention, and no description at all for one of the three programs</dd><dt>cites</dt><dd><code>src/back-end/docs/opportunities/code-with-us.yaml:88</code><br><code>src/back-end/docs/opportunities/code-with-us.yaml:180</code><br><code>src/back-end/docs/opportunities/sprint-with-us.yaml:86</code><br><code>src/shared/lib/resources/opportunity/code-with-us.ts:205</code><br><code>src/shared/lib/validation/opportunity/code-with-us.ts:39</code></dd><dt>reconciliation</dt><dd>documented-only</dd><dt>note</dt><dd>recorded so that the gap is not mistaken for absent behaviour by a later reader. The behaviours themselves are stated in the criteria above; this criterion is about the documentation being an unreliable second source, which is why several criteria here are graded on code alone.</dd><dt>note</dt><dd>It records that the old application&#39;s own interface description is incomplete, which is a property of the recovered sources rather than a behaviour the rebuilt system must exhibit; the behaviours it points at are already carried by the criteria above, and the documentation&#39;s unreliability belongs in the archaeology journal.</dd></dl>
+</article>
+<article class="criterion is-not-testable" data-state="not-testable">
+  <header>
+    <span class="id">R-1.51</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The rebuilt system defines no suspended state for an opportunity: none can be created in it, moved to it or stored in it, and any historical record carrying it is mapped to a defined state before the rebuilt system reads it.</p>
+  <dl><dt>not testable</dt><dd>Nothing in the surface reaches a suspended state to show it is gone. No action requests a move to one, no observation returns the states an opportunity may hold or the states the list&#39;s state filter offers, and the seed holds no opportunity carrying the historical value, so the mapping of such a record to a defined state has nothing to be read on.</dd><dt>replaces</dt><dd>R-1.47</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-1.52</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, with at most one of them marked as chair.</p>
+  <dl><dt>given</dt><dd>a member of public sector staff creating or editing a Sprint With Us or Team With Us opportunity</dd><dt>when</dt><dd>they submit fewer than two panel members, the same person twice, more than one chair, or anyone who is not a public sector employee</dd><dt>then</dt><dd>the submission is rejected and the reason is named</dd><dt>cites</dt><dd><code>src/back-end/lib/validation.ts:900</code><br><code>src/back-end/lib/validation.ts:847</code><br><code>src/shared/config.ts:32</code><br><code>src/shared/config.ts:34</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-1.55</dd><dt>note</dt><dd>the rule as written in the application&#39;s own comment says &quot;one and only one chair&quot;, but the code accepts a panel with no chair at all and rejects only a second chair. A human should rule on which was intended.</dd><dt>note</dt><dd>Must a Sprint With Us or Team With Us evaluation panel have exactly one chair, as the application&#39;s own comment states, or is a chair optional, as the code allows?</dd><dt>note</dt><dd>superseded by R-1.55</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.53</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v2</span>
+  </header>
+  <p class="statement">An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains.</p>
+  <dl><dt>given</dt><dd>an opportunity that has been published at any point</dd><dt>when</dt><dd>anyone asks to delete it</dd><dt>then</dt><dd>the request is refused and the opportunity remains</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.53.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:367</code><br><code>src/back-end/lib/permissions.ts:636</code><br><code>src/back-end/lib/resources/opportunity/team-with-us/index.ts:1680</code><br><code>src/back-end/docs/opportunities/code-with-us.yaml:112</code></dd><dt>reconciliation</dt><dd>conflicting</dd><dt>note</dt><dd>the application&#39;s own interface documentation says deletion is permitted only for a draft, while the code also permits an administrator to delete an opportunity that is under review. The three programs also disagree with each other: for Code With Us and Sprint With Us the creating staff member may delete only a draft, but for Team With Us they may also delete one that is under review. A human should rule on the intended rule before it is carried forward.</dd><dt>note</dt><dd>Which single deletion rule carries forward across all three programs: may an administrator delete an opportunity that is under review as well as one in draft, and may the creating public sector employee delete one that is under review, or only a draft?</dd></dl>
+</article>
+<article class="criterion" data-state="untested">
+  <header>
+    <span class="id">R-1.54</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">The author of a published opportunity, who is not an administrator, can change its details.</p>
+  <dl><dt>given</dt><dd>a published opportunity created by a member of public sector staff who is not an administrator</dd><dt>when</dt><dd>that person submits a change to its details</dd><dt>then</dt><dd>the change is accepted and a new version is recorded</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/code-with-us.ts:517</code><br><code>src/back-end/lib/permissions.ts:349</code><br><code>src/shared/lib/resources/opportunity/code-with-us.ts:288</code><br><code>src/front-end/typescript/lib/pages/opportunity/code-with-us/lib/components/form.tsx:582</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-1.56</dd><dt>note</dt><dd>the interface offers the edit only to administrators once an opportunity is published, but the underlying service accepts it from the author too. The two disagree, and nothing in the application says which is intended.</dd><dt>note</dt><dd>May the author of a published opportunity who is not an administrator change its details, as the service accepts, or is editing after publication administrator-only, as the interface enforces?</dd><dt>note</dt><dd>superseded by R-1.56</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.55</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named.</p>
+  <dl><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.55.spec.ts</code></dd><dt>replaces</dt><dd>R-1.52</dd></dl>
+</article>
+<article class="criterion" data-state="tested">
+  <header>
+    <span class="id">R-1.56</span>
+    <span class="chip open">accepted</span>
+    <span class="chip muted">confirmed</span>
+    <span class="chip muted">v1</span>
+  </header>
+  <p class="statement">Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike.</p>
+  <dl><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.56.spec.ts</code></dd><dt>replaces</dt><dd>R-1.54</dd></dl>
+</article>
+<script>
+(function () {
+  var bar = document.querySelector(".filters");
+  if (!bar) return;
+  bar.hidden = false;
+  var cards = Array.prototype.slice.call(document.querySelectorAll(".criterion"));
+  bar.addEventListener("click", function (event) {
+    var button = event.target.closest("button[data-filter]");
+    if (!button) return;
+    var want = button.getAttribute("data-filter");
+    Array.prototype.forEach.call(bar.querySelectorAll("button"), function (b) {
+      b.setAttribute("aria-pressed", String(b === button));
+    });
+    cards.forEach(function (card) {
+      card.hidden = want !== "all" && card.getAttribute("data-state") !== want;
+    });
+  });
+})();
+</script>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
