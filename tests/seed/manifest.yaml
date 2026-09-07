@@ -1,0 +1,5 @@
+# Handles the generated tests use to refer to seed data, named by the `contract` stage
+# as it writes tests/seed/*.sql. Each group below (users, opportunities, ...) maps a
+# handle to the identifier the seed SQL inserts.
+description: seed data handles for the acceptance suite
+users: {}

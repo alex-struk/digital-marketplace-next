@@ -4,3 +4,5 @@ node_modules/
 .sdlc/*.local.txt
 .sdlc/run-state.json
 sources/
+tests/test-results/
+tests/playwright-report/

@@ -4,23 +4,24 @@ Profile: rebuild
 
 ## Coverage
 
-| Domain | proposed | accepted | implemented | verified | monitored | obsolete | open questions | total |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 |
-| proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 |
-| organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 |
-| users | 0 | 34 | 0 | 0 | 0 | 2 | 1 | 36 |
-| evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 |
-| notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 |
-| content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 |
-| files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 |
-| **Totals** | 0 | 288 | 0 | 0 | 0 | 7 | 3 | 295 |
+| Domain | proposed | accepted | implemented | verified | monitored | obsolete | open questions | total | tests |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 |  |
+| proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 |  |
+| organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 |  |
+| users | 0 | 34 | 0 | 0 | 0 | 2 | 1 | 36 |  |
+| evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 |  |
+| notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 |  |
+| content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 |  |
+| files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 |  |
+| **Totals** | 0 | 288 | 0 | 0 | 0 | 7 | 3 | 295 |  |
 
 ## Pages
 
 - [Journal](journal.md)
 - [Gates](gates.md)
 - [Runs](runs.md)
+- [Results](results.md)
 - [archaeology-content](proposals/archaeology-content.md)
 - [archaeology-evaluation](proposals/archaeology-evaluation.md)
 - [archaeology-files](proposals/archaeology-files.md)

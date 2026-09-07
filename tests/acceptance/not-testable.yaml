@@ -1,0 +1,7 @@
+# Accepted criteria the acceptance suite cannot exercise through the surface, and why —
+# written by `derive-tests` when a criterion has no path through any page's actions and
+# observations, or added by hand when a person makes the same call. An entry here stands
+# in for a spec file: `sdlc run calibrate` reports it as a `not-testable` row rather than
+# a missing test.
+criteria: []
+# - { id: R-1.4, version: 1, reason: "..." }

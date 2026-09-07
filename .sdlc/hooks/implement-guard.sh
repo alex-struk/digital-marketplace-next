@@ -37,9 +37,20 @@ case "$stage" in
   build|verify|review-and-ship)
     blocked='^(spec/|tests/acceptance/|constitution\.md$|\.sdlc/config\.yaml$|\.github/workflows/|sources/)' ;;
   derive-tests)
-    blocked='^(app/|tests/adapters/|tests/seed/|spec/|constitution\.md$|\.sdlc/|sources/)' ;;
+    # derive-tests is blind: its workspace never even materialises app/, tests/adapters/
+    # or spec/, and its own territory is only the acceptance suite it writes.
+    #
+    # These two stages run in a temporary workspace built by `git archive`, which carries
+    # no .claude/settings.json and therefore never installs this hook. Containment for
+    # them is the workspace itself (what is not there cannot be edited) plus the scope
+    # post-checks the runner applies to what comes back. The rows stay here because they
+    # document the intent, and because the same stage name can be run in the project.
+    allowed='^tests/acceptance/' ;;
   bind-adapter)
-    blocked='^(app/|tests/acceptance/|spec/|constitution\.md$|\.sdlc/|sources/)' ;;
+    # bind-adapter is blind the same way: its workspace never materialises app/,
+    # tests/acceptance/ or spec/ (only spec/contract/, read-only, for `prepare` to
+    # regenerate tests/generated/ from) — its own territory is the adapter it writes.
+    allowed='^tests/adapters/' ;;
   intent)
     # intent may write intent/ and the constitution glossary, and nothing else. Written
     # as an allow rule rather than a deny list: a deny list only refuses the paths
@@ -50,8 +61,14 @@ case "$stage" in
     # archaeology reads the old app under sources/ read-only and may write only spec/ —
     # every other path, named or not, is out of its territory.
     allowed='^spec/' ;;
-  ratify)
-    # A deterministic gate with no agent: nothing is written here at all.
+  contract)
+    # contract completes spec/contract/, writes synthetic seed data under tests/seed/, and
+    # writes the oracle's compose override under .sdlc/oracle/ — nothing else, including
+    # sources/old, which stays read-only the same way it does for archaeology.
+    allowed='^(spec/contract/|tests/seed/|\.sdlc/oracle/)' ;;
+  ratify|calibrate)
+    # Deterministic stages with no agent: nothing is written by a session at all. What
+    # they do write, they write from the runner's own process, never through a tool call.
     blocked='^' ;;
   design|plan)
     blocked='^(app/|tests/acceptance/|tests/adapters/|\.github/workflows/|\.sdlc/config\.yaml$|sources/)' ;;

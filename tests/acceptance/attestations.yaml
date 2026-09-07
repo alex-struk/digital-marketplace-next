@@ -1,0 +1,6 @@
+# A spec file whose last commit did not come from `derive-tests` carries `unverified`
+# provenance. At the LOW and STANDARD tiers an entry here lets it stand, naming who
+# reviewed the hand edit and why; at HIGH and CRITICAL an unverified file fails
+# regardless of an attestation.
+attestations: []
+# - { file: tests/acceptance/opportunities/R-1.4.spec.ts, by: tech-lead, reason: "..." }
