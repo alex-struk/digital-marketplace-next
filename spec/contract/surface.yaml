@@ -1052,3 +1052,88 @@ pages:
       message_summary: { test_id: null }
       message_body: { test_id: null }
       refused_for_non_administrator: { test_id: null }
+
+  - id: content-list
+    domain: content
+    route: /content
+    title: "Content Management"
+    actions:
+      open_page_for_editing: { test_id: null }
+      open_public_page: { test_id: null }
+      create_page: { test_id: null }
+    observations:
+      page_title: { test_id: null }
+      page_public_address: { test_id: null }
+      page_is_fixed: { test_id: null }
+      page_created_date: { test_id: null }
+      page_updated_date: { test_id: null }
+      ordered_by_title: { test_id: null }
+      refused_for_non_administrator: { test_id: null }
+
+  - id: content-create
+    domain: content
+    route: /content/create
+    title: "Create a New Page"
+    actions:
+      enter_title: { test_id: null }
+      enter_slug: { test_id: null }
+      enter_body: { test_id: null }
+      upload_body_image: { test_id: null }
+      publish_page: { test_id: null }
+      confirm_publish: { test_id: null }
+      cancel: { test_id: null }
+    observations:
+      field_error: { test_id: null }
+      slug_rule_help: { test_id: null }
+      resulting_public_address: { test_id: null }
+      publish_disabled_until_valid: { test_id: null }
+      publish_confirmation: { test_id: null }
+      published_success: { test_id: null }
+      duplicate_slug_error: { test_id: null }
+      refused_for_non_administrator: { test_id: null }
+
+  # The same route the notifications domain lists as notification-terms-broadcast,
+  # which covers only the announce-changed-terms action offered on the one page held
+  # at "terms-and-conditions". This entry is the editing surface every page has.
+  - id: content-edit
+    domain: content
+    route: /content/:slug/edit
+    title: "Manage a page"
+    actions:
+      start_editing: { test_id: null }
+      edit_title: { test_id: null }
+      edit_slug: { test_id: null }
+      edit_body: { test_id: null }
+      upload_body_image: { test_id: null }
+      publish_changes: { test_id: null }
+      confirm_publish_changes: { test_id: null }
+      cancel_editing: { test_id: null }
+      delete_page: { test_id: null }
+      confirm_delete_page: { test_id: null }
+    observations:
+      published_date: { test_id: null }
+      updated_date: { test_id: null }
+      published_by: { test_id: null }
+      updated_by: { test_id: null }
+      fixed_page_warning: { test_id: null }
+      slug_locked_for_fixed_page: { test_id: null }
+      delete_withheld_for_fixed_page: { test_id: null }
+      field_error: { test_id: null }
+      duplicate_slug_error: { test_id: null }
+      changes_published_success: { test_id: null }
+      deleted_success: { test_id: null }
+      refused_for_non_administrator: { test_id: null }
+
+  - id: content-view
+    domain: content
+    route: /content/:slug
+    title: "A published page"
+    actions:
+      follow_body_link: { test_id: null }
+    observations:
+      page_title: { test_id: null }
+      page_body: { test_id: null }
+      published_date: { test_id: null }
+      updated_date: { test_id: null }
+      readable_when_signed_out: { test_id: null }
+      not_found_for_unknown_address: { test_id: null }
