@@ -46,6 +46,7 @@ Profile: rebuild
 - [derive-tests-organizations-2](proposals/derive-tests-organizations-2.md)
 - [derive-tests-proposals](proposals/derive-tests-proposals.md)
 - [derive-tests-proposals-2](proposals/derive-tests-proposals-2.md)
+- [derive-tests-proposals-3](proposals/derive-tests-proposals-3.md)
 - [derive-tests-users](proposals/derive-tests-users.md)
 - [derive-tests-users-2](proposals/derive-tests-users-2.md)
 - [gates-simulated-v1](proposals/gates-simulated-v1.md)
