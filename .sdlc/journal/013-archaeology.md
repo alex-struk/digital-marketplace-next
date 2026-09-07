@@ -1,0 +1,24 @@
+---
+stage: "archaeology"
+title: "archaeology"
+at: "2026-09-07T03:39:38.252Z"
+cost: 7.864792999999998
+turns: 89
+session: "03e15e6c-1f84-433f-b4cb-a4c0e541ad71"
+---
+
+Work is complete. Three files touched, all within `spec/`.
+
+---
+
+## Journal
+
+The organizations domain is how a vendor gets a company onto the Digital Marketplace and staffs it. A vendor who has accepted the service's terms registers an organization — legal name, address, contact details, optional logo — and becomes its owner on the spot; from there they invite other registered vendors by email address, each invitation sitting as a pending membership until the invited person accepts or declines it. The organization then earns the right to bid: it becomes Sprint With Us qualified once it has two active members who between them hold every capability the service recognises and has accepted the Sprint With Us terms, and Team With Us qualified once a service administrator has approved it for at least one service area and it has accepted the Team With Us terms. Everything else in the domain hangs off the affiliation record, which carries both a type (owner, administrator, member) and a status (pending, active, inactive), and which is never deleted — leaving, being removed, and declining an invitation all mark it inactive.
+
+I recovered 31 criteria into `spec/domains/organizations.md`, six pages into `spec/contract/surface.yaml`, and two new roles — organization owner and organization member — into `spec/contract/personas.yaml`, plus organization-side abilities added to the organization administrator role that was already listed for the proposals domain. Four criteria are graded `confirmed` because the published interface description or the changelog says the same thing the code does; the rest are `inferred` on code alone. Three are marked `defect`.
+
+**What conflicted.** The application's own database description is behind its schema: it does not list the Team With Us terms field on organizations, and it has no entry at all for the service-area approvals or for the membership-rights history, both of which later migrations added and which the running code reads on every organization page. The interface description and the code also disagree on how a membership is updated — the description gives the operation one request method and the service accepts another, so the description cannot be followed literally. On the substance of what happens, though, the two agree everywhere I could check them: archiving marks an organization inactive rather than deleting it, ending a membership deactivates it, accepting an invitation moves a pending membership to active, and an invitation may name only a member or an owner.
+
+Three places where the code disagrees with itself rather than with a document. Editing an organization's profile silently discards the contact phone number, because the request is unpacked field by field and the phone is read from a differently named field than the form sends. The management page shows the Edit and Archive controls to anyone who can open the page, including an organization's administrators, but the service accepts those two actions only from the owner or a service administrator — so a person can see controls they cannot use. And the permission rule guarding the list of organizations one may act for is written but never actually invoked; the check asks whether the rule exists rather than running it. Nothing leaks as a result, because the underlying lookup returns nothing to a non-vendor, but the outcome is an empty success where a refusal was intended.
+
+**What I could not determine.** For the contact phone defect I could establish that the submitted value never reaches the stored record, but not whether the stored number is left as it was or cleared — that turns on how the database layer treats a field it was not handed, which the source does not settle. Whether a person whose membership was previously ended can be invited back is read off the shape of the duplicate check, not observed, and I have flagged it as such. I also could not tell whether the three defects are defects in anyone's eyes but mine: each carries a note saying no corrected criterion has been written, because deciding between widening a permission and hiding a control is a product judgement, not an archaeological one. Finally, one notification path — telling an owner that an established member has left — exists in the code but nothing calls it, so the owner is told when an invitation is declined and not when a member departs; I recorded the asymmetry rather than guessing which half was intended.
