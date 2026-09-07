@@ -404,3 +404,40 @@ The ID is the criterion's own id exactly as the domain file spells it. `contract
 take no text; every other verb requires a colon and text on the same line. A condition may not
 span more than one line.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+
+The question is which of the 28 still-inferred proposals criteria become the contract. I approve, and I rule on every one: 23 are confirmed and 5 are edited into wording the code actually supports. What tipped the 23 is that each was checked against its cited lines in sources/old and the code leaves no second reading — the refusal strings are verbatim in the source and unique to their guard ("Please select a different organization." on both the create and edit paths of all three programs; "An organization must be specified before submitting."; "The selected organization does not satisfy this opportunity's service areas."; "The opportunity is not in the correct stage of evaluation to perform that action.", ten occurrences across the Sprint and Team resources; "Automatically moved to Processing as all proposals have been evaluated."), the arithmetic is literal in the source (price score is lowestBid/ownBid*100 over proposals in UnderReview/EvaluatedTeamScenario, so the 100k/200k example is 50; total score is the four stage scores weighted /100; screen-in counts are SWU_CODE_CHALLENGE_SCREEN_IN_COUNT=4 and TWU=3 applied after the per-question minimum-score filter), and the visibility rules are single functions with no alternate path (isCWUProposalStatusVisibleToGovernment hides draft and submitted and shows withdrawn to Admin only, matching the note on D-proposals-19; vendors get scores only at Awarded/NotAwarded in both readOwnSWUProposals and the readMany loop; the export anonymity flag is literally viewer-is-not-a-vendor AND not-yet-in-code-challenge). Five criteria I did not confirm because the code contradicts them: the Code With Us proponent organization is checked only for existence, never for the vendor's membership; the friendly deadline message exists once, on the Code With Us create path only, with no equivalent guard on Sprint or Team With Us creation; the duplicate-member refusal is Team With Us only; the server rejects more than one scrum master but accepts none; and a Team With Us resource is only checked to exist, not to belong to the opportunity. Each is edited to state what is enforced and to name the gap, so the next stage does not build on a guarantee that is not there. What would change this ruling: a test or a second call site showing that any of those five gaps is in fact closed elsewhere would turn that edit back into a plain confirmation, and conversely, evidence that any confirmed criterion has a bypass path I did not read would send it back to inferred.
+
+**Conditions:**
+- confirm D-proposals-3
+- confirm D-proposals-4
+- confirm D-proposals-5
+- edit D-proposals-6: A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name.
+- edit D-proposals-8: A proposal cannot move from draft to submitted once the opportunity's proposal deadline has passed, and a Code With Us proposal cannot be created already marked as submitted after that deadline, which is refused with "This opportunity is no longer accepting proposals."; the equivalent guard is absent from Sprint With Us and Team With Us creation, where the only barrier is that a closed opportunity is no longer visible to a vendor.
+- confirm D-proposals-9
+- confirm D-proposals-10
+- edit D-proposals-11: Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, refused with "User is not an active member of the organization.", and a Team With Us proposal additionally refuses the same person named twice with "Please select unique team members.", while a Sprint With Us phase applies no such uniqueness check.
+- edit D-proposals-12: A Sprint With Us proposal must offer a team for every phase the opportunity requires and no phase it does not, name no more than one scrum master in each phase, cover every capability the opportunity requires across its phases, and stay within each phase's budget and the opportunity's total budget.
+- edit D-proposals-13: A Team With Us proposal must name at least one team member, each with an hourly rate of at least one dollar and each against a resource that exists, though the service does not check that the resource belongs to the opportunity being bid on.
+- confirm D-proposals-14
+- confirm D-proposals-15
+- confirm D-proposals-16
+- confirm D-proposals-18
+- confirm D-proposals-19
+- confirm D-proposals-21
+- confirm D-proposals-22
+- confirm D-proposals-23
+- confirm D-proposals-24
+- confirm D-proposals-25
+- confirm D-proposals-26
+- confirm D-proposals-27
+- confirm D-proposals-28
+- confirm D-proposals-29
+- confirm D-proposals-30
+- confirm D-proposals-32
+- confirm D-proposals-33
+- confirm D-proposals-38
