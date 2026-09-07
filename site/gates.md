@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-07T00:56:00.781Z | spec-readme-v1 | G-POL | approve | tech-lead | human |  |  |
 | 2026-09-07T00:33:52.294Z | budget-v1 | G-POL | approve | tech-lead | human |  |  |
 | 2026-09-07T00:19:15.459Z | intent-digital-marketplace-rebuild | G0 | approve | agent:product-owner | agent-held, unsampled | $0.6074485 | sample |
 | 2026-09-07T00:17:45.636Z | brief-v1 | G0 | approve | agent:product-owner | agent-held, unsampled | $0.539408 | sample |

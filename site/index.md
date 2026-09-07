@@ -27,6 +27,7 @@ Profile: rebuild
 - [gates-simulated-v1](proposals/gates-simulated-v1.md)
 - [intent-digital-marketplace-rebuild](proposals/intent-digital-marketplace-rebuild.md)
 - [probe-ruling](proposals/probe-ruling.md)
+- [spec-readme-v1](proposals/spec-readme-v1.md)
 
 ## Criteria
 

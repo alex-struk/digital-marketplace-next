@@ -20,6 +20,10 @@ Automatic merge failed; fix conflicts and then commit the result.
 - 17:32:52 run archaeology: agent turn failed
 - 17:33:20 propose budget-v1 at G-POL
 - 17:33:52 rule budget-v1 approve at G-POL by tech-lead (human)
+- 17:43:21 run archaeology: post-checks failed
+- 17:53:43 run archaeology: post-checks failed
+- 17:55:42 propose spec-readme-v1 at G-POL
+- 17:56:00 rule spec-readme-v1 approve at G-POL by tech-lead (human)
 
 # Run record 2026-09-06
 
