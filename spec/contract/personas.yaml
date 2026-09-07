@@ -174,3 +174,24 @@ personas:
         sandbox-idp: { username: gov-panel-chair-1 },
         session-route: { role: government }
       }
+
+  # A relationship to a particular file rather than a new role, but the files domain's
+  # read rules cannot be exercised without one: whoever uploaded a file may always read
+  # it back, whatever account type they hold and whatever read access was recorded on it.
+  # A test needs an account that has uploaded a file and holds no other grounds to read
+  # it, which is why this is a persona and not simply "a vendor". Any of the three
+  # account types already listed above may upload, so any of them can stand in here.
+  - id: file-uploader
+    domain: files
+    can:
+      [
+        upload a file,
+        read back a file they uploaded whatever read access was recorded on it,
+        attach an existing file to something they may edit,
+        be refused a file somebody else uploaded and did not share
+      ]
+    sign_in:
+      {
+        sandbox-idp: { username: vendor-file-owner-1 },
+        session-route: { role: vendor }
+      }

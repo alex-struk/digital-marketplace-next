@@ -1137,3 +1137,79 @@ pages:
       updated_date: { test_id: null }
       readable_when_signed_out: { test_id: null }
       not_found_for_unknown_address: { test_id: null }
+
+  # Files. This domain has no page of its own — a stored file is reached by its own
+  # address, and everything a person does to a file they do through a control that
+  # sits on a page another domain owns. The first entry below is that address; the
+  # three after it are the shared controls, listed once each rather than repeated on
+  # every host page, with the routes they appear on named in the entry.
+  - id: file-download
+    domain: files
+    route: /api/files/:fileId?type=blob
+    title: "A stored file"
+    actions:
+      download_file: { test_id: null }
+    observations:
+      file_contents: { test_id: null }
+      file_name_on_save: { test_id: null }
+      offered_as_download_not_displayed: { test_id: null }
+      content_type_from_name: { test_id: null }
+      readable_when_signed_out_if_public: { test_id: null }
+      refused_when_not_permitted: { test_id: null }
+      refused_for_unknown_file: { test_id: null }
+      not_found_for_administrator: { test_id: null }
+
+  # The attachment control, shared by the three opportunity forms and the Code With
+  # Us proposal form. Appears at /opportunities/code-with-us/create and .../edit and
+  # the Sprint With Us and Team With Us equivalents, and at
+  # /opportunities/code-with-us/:opportunityId/proposals/create and .../edit.
+  - id: file-attachment-control
+    domain: files
+    route: /opportunities/:program/:opportunityId/edit?tab=attachments
+    title: "Attachments"
+    actions:
+      add_attachment: { test_id: null }
+      rename_new_attachment: { test_id: null }
+      remove_new_attachment: { test_id: null }
+      remove_existing_attachment: { test_id: null }
+      download_attachment: { test_id: null }
+    observations:
+      new_attachment_row: { test_id: null }
+      existing_attachment_row: { test_id: null }
+      existing_attachment_name_read_only: { test_id: null }
+      original_extension_restored: { test_id: null }
+      file_name_error: { test_id: null }
+      remove_control_hidden_when_not_removable: { test_id: null }
+      attachment_list_on_public_view: { test_id: null }
+
+  # The image picker for a profile picture and an organization logo. Appears at
+  # /sign-up/complete, /users/:userId, /organizations/create and
+  # /organizations/:orgId/edit.
+  - id: file-image-picker
+    domain: files
+    route: /users/:userId
+    title: "Profile picture and organization logo"
+    actions:
+      choose_image: { test_id: null }
+    observations:
+      current_image: { test_id: null }
+      chosen_image_preview: { test_id: null }
+      only_jpeg_and_png_offered: { test_id: null }
+      rejected_image_error: { test_id: null }
+      image_readable_when_signed_out: { test_id: null }
+
+  # The image control inside the formatted-text editor, shared by every page that
+  # embeds one — /content/create, /content/:slug/edit, the three opportunity forms
+  # and the addendum control.
+  - id: file-embedded-image
+    domain: files
+    route: /content/:slug/edit
+    title: "Image in formatted text"
+    actions:
+      upload_body_image: { test_id: null }
+    observations:
+      image_inserted_into_text: { test_id: null }
+      only_jpeg_and_png_offered: { test_id: null }
+      uploading_indicator: { test_id: null }
+      image_rendered_in_published_text: { test_id: null }
+      upload_failure_leaves_text_unchanged: { test_id: null }
