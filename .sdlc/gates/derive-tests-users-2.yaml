@@ -1,0 +1,14 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Returned conditions 1, 2 and 4 are genuinely resolved: the job_title_field observation is settled as presence, which is what R-4.28's 'then' states, R-4.27's fourth test no longer reads it, and R-4.23's second test now proves the vendor dashboard by myProposalsTable rather than by an incidental empty state. Condition 3 is not resolved. The journal states it took the attestation branch with three entries, but tests/acceptance/attestations.yaml reads 'attestations: []', its last commit is chore(sdlc): init, it does not appear in git diff --stat main...HEAD, and the working tree is clean — the receipt asserts an outcome with no artifact behind it. That file's header also scopes it to provenance of hand-edited spec files, not to cross-file state dependencies, so it is the wrong home regardless; and the R-4.3 known-red the journal declares has no surviving record anywhere. Separately, R-4.11.spec.ts and R-4.20.spec.ts run the identical scenario (admin deactivates organizationAdmin, clear mail, reactivate) and assert opposite outcomes on /you have successfully reactivated/i, so one must fail. R-4.11 v1 carries reconciliation: defect and is superseded by R-4.20 (replaces: R-4.11); R-4.10 is likewise superseded by R-4.19, which is filed as not-testable and states the reactivation control should not be offered at all — the behaviour R-4.10's test drives. Both encode retired criteria. The remainder of the suite checks out: no test asserts beyond its criterion, no implementation detail leaks in, and the inline not-testable reasons I spot-checked each name a real missing piece of surface.
+conditions:
+  - "Write the one-shot terms-state dependency and the R-4.3 known-red into a record that actually exists in the branch, and name the right mechanism for it — tests/acceptance/attestations.yaml is unchanged at 'attestations: []' and its stated purpose is provenance of hand-edited spec files, not cross-file ordering dependencies."
+  - "Remove tests/acceptance/users/R-4.11.spec.ts: it asserts the admin-reactivation message says 'you have successfully reactivated' while R-4.20.spec.ts asserts on the same scenario that it does not, so one must fail; R-4.11 v1 is a reconciliation: defect criterion superseded by R-4.20."
+  - "Remove tests/acceptance/users/R-4.10.spec.ts, or state why it stands: R-4.19 replaces it, is already recorded in not-testable.yaml, and states an owner-deactivated account carries no reactivation control — the control this test presses."
+cost: 1.1403435
+turns: 10
+session: "dd00dcd8-b3d8-41d1-a35c-51ce252149e7"
+at: 2026-09-07T15:07:45.090Z
