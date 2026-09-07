@@ -112,6 +112,7 @@ Automatic merge failed; fix conflicts and then commit the result.
 - 05:27:34 run derive-tests: agent turn failed
 - 05:27:38 run derive-tests: agent turn failed
 - 06:10:27 run derive-tests: proposal derive-tests-organizations still open
+- 06:26:33 run derive-tests: proposal derive-tests-users still open
 
 # Run record 2026-09-06
 
