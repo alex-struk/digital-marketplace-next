@@ -1,0 +1,14 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Conditions 1, 2 and 4 are satisfied and verified: the ledger is additive with all 34 R-6/R-8 entries intact, both false cross-references are corrected, and the R-4.3 known-red is named and correctly attributed to a one-shot seed fixture rather than to the behaviour under test. Every not-testable reason names a real gap in spec/contract/surface.yaml or personas.yaml, and all 23 tests assert only what their criteria state, with no implementation detail leaking in. Condition 3 is the sole reason for return: the journal states that spec/domains/users.md now carries 'state: obsolete' on R-4.10 v1 and R-4.11 v1, but the branch contains no spec change at all — git diff main...HEAD -- spec/ is empty, the working tree is clean, and both criteria still read 'state: accepted' at lines 153 and 168. The two criteria therefore still have neither a test nor a ledger entry (34 R-4 criteria against 23 tests plus 9 entries). The reasoning for choosing obsolescence over a ledger entry is sound; the edit simply was not made, and a receipt asserting an outcome no check supports is not something to wave through with a note.
+conditions:
+  - "Make the change Condition 3 describes and the journal already claims: set '- state: obsolete' in place of '- state: accepted' on R-4.10 v1 and R-4.11 v1 in spec/domains/users.md, leaving the existing superseded-by and note lines untouched."
+  - "Correct the Condition 3 paragraph so it describes the workspace as it actually stands after the edit, and confirm the change is present in the branch diff rather than only in the journal."
+  - "Re-run 'sdlc run ratify' so spec/spec.md and spec/criteria-index.json agree with the domain file, or state explicitly in the receipt that the regeneration is deferred and to which stage."
+cost: 1.4303275000000002
+turns: 21
+session: "3d9df29a-1ae2-4654-ae82-a296445c58d3"
+at: 2026-09-07T16:34:54.476Z
