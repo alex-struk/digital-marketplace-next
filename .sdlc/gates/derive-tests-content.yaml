@@ -1,0 +1,15 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Three tests and two not-testable reasons do not follow from their criteria. R-7.17 asserts that raw markup survives verbatim in the rendered body; the criterion says only that it is rendered as formatted text and never executed, so a conforming rebuild that strips the tag fails the test. R-7.12 asserts the 'marked as needed' half through contentEdit.fixedPageWarning(), which is R-7.25's claim about the managing screen, when the criterion states the marking on the list and contentList.pageIsFixed() exists for it. R-7.18's not-testable reason is real for the five links but covers a half that is not missing from the surface: that the page is one the service creates for itself is readable with the same contentView/contentEdit calls used for copyright and disclaimer, and the address is named in R-7.15's note. R-7.14 and R-7.29 both assert that no observation reports an embedded page body, but organizationSwuTerms.termsBody(), organizationTwuTerms.termsBody() and evaluationInstructionsSwu/Twu.instructionsBody() are exactly that; their real blockers (no addressable handle, and a page the service needs cannot be removed) stand alone. The rest of the batch is sound - literals trace to criterion text, partial coverage is declared in comments rather than hidden, and no implementation detail leaks in.
+conditions:
+  - "R-7.17: drop the assertion that the raw markup appears verbatim in the rendered body, or replace it with one that only shows the markup did not take effect."
+  - "R-7.12: assert the needed-by-the-service marking through contentList.pageIsFixed(), as the criterion's then states it, rather than through contentEdit.fixedPageWarning()."
+  - "R-7.18: either write the testable half - that a page stands at service-level-agreement as one the service creates for itself - with the unfollowable links documented in the file, or state in the not-testable reason why that address may not be written out here when copyright, disclaimer and accessibility were."
+  - "R-7.14 and R-7.29: strike the claim that no observation reports the embedded body, and rest each reason on the blocker that is real - no handle addresses the embedded page, and a page the service needs cannot be removed."
+cost: 1.3792719999999998
+turns: 12
+session: "324eb7bf-9355-4a91-9c43-ef01a8aba516"
+at: 2026-09-07T14:21:45.559Z
