@@ -993,3 +993,62 @@ pages:
       editable_after_submitted: { test_id: null }
       panel_member_score: { test_id: null }
       panel_member_notes: { test_id: null }
+
+  # Notifications. The one page a person can act on directly is their own
+  # notification settings, which the users domain already lists as
+  # user-profile-notifications; the entry below is the same settings page reached
+  # from the unsubscribe offer in a message, which arrives with the confirmation
+  # already asked and so behaves differently on arrival.
+  - id: notification-unsubscribe-landing
+    domain: notifications
+    route: /users/me?tab=notifications&unsubscribe
+    title: "Unsubscribe"
+    actions:
+      confirm_unsubscribe: { test_id: null }
+      cancel_unsubscribe: { test_id: null }
+    observations:
+      unsubscribe_confirmation: { test_id: null }
+      confirmation_names_signed_in_address: { test_id: null }
+      resolves_to_signed_in_person: { test_id: null }
+      sign_in_required: { test_id: null }
+
+  # The same route as opportunity-list, which the opportunities domain owns. Listed
+  # separately because the new-opportunity notification control on that page belongs
+  # to this domain and is not part of the opportunity browsing surface.
+  - id: notification-optin-opportunity-list
+    domain: notifications
+    route: /opportunities
+    title: "New-opportunity notification control"
+    actions:
+      toggle_new_opportunity_notifications: { test_id: null }
+    observations:
+      notification_control: { test_id: null }
+      notification_control_state: { test_id: null }
+      notification_control_hidden_on_narrow_screen: { test_id: null }
+
+  - id: notification-terms-broadcast
+    domain: notifications
+    route: /content/terms-and-conditions/edit
+    title: "Terms and conditions"
+    actions:
+      notify_vendors_of_updated_terms: { test_id: null }
+      confirm_notify_vendors: { test_id: null }
+      cancel_notify_vendors: { test_id: null }
+    observations:
+      notify_vendors_control: { test_id: null }
+      notify_vendors_confirmation: { test_id: null }
+      notify_vendors_success: { test_id: null }
+      notify_vendors_failure: { test_id: null }
+
+  - id: notification-email-reference
+    domain: notifications
+    route: /admin/email-notification-reference
+    title: "Email Notification Reference"
+    actions:
+      open_reference: { test_id: null }
+    observations:
+      message_group_title: { test_id: null }
+      message_subject: { test_id: null }
+      message_summary: { test_id: null }
+      message_body: { test_id: null }
+      refused_for_non_administrator: { test_id: null }

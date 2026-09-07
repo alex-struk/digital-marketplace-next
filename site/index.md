@@ -22,6 +22,7 @@ Profile: rebuild
 - [Gates](gates.md)
 - [Runs](runs.md)
 - [archaeology-evaluation](proposals/archaeology-evaluation.md)
+- [archaeology-notifications](proposals/archaeology-notifications.md)
 - [archaeology-opportunities](proposals/archaeology-opportunities.md)
 - [archaeology-organizations](proposals/archaeology-organizations.md)
 - [archaeology-proposals](proposals/archaeology-proposals.md)
@@ -50,9 +51,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $61.08694
-- Rulings cost: $22.815995
-- Total cost: $83.902935
-- Agent-held rulings: 14
+- Journal cost: $69.778906
+- Rulings cost: $24.703624
+- Total cost: $94.48253
+- Agent-held rulings: 15
 - Open escalations: 0
 - Open proposals: 0
