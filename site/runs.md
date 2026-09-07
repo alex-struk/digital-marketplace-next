@@ -91,6 +91,8 @@ Automatic merge failed; fix conflicts and then commit the result.
 - 01:48:15 run ratify: ok, cost 0, turns 0
 - 03:59:34 init: pipeline 0556580, packs 3, skills installed 0, skipped 0
 - 04:02:15 init: pipeline b7f642f, packs 3, skills installed 0, skipped 0
+- 04:04:14 propose policy-v3 at G-POL
+- 04:06:06 rule policy-v3 approve at G-POL by agent:tech-lead (agent)
 
 # Run record 2026-09-06
 
