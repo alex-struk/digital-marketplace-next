@@ -1,0 +1,26 @@
+---
+stage: "archaeology"
+title: "archaeology"
+at: "2026-09-07T03:22:16.827Z"
+cost: 11.763324
+turns: 101
+session: "c3a18986-7545-4219-bac4-93f82f4ef4c8"
+---
+
+The proposals domain is recovered and written. Journal entry follows.
+
+---
+
+**Journal — archaeology, proposals domain**
+
+A proposal is one vendor's bid against one procurement opportunity, and the old application treats it as a small object with a long life: a vendor drafts it privately, submits it before the opportunity's deadline, and from that moment it is out of their hands except that they may withdraw it. When the opportunity closes, every submitted proposal is stripped of its identity — renamed "Proponent 1", "Proponent 2" and so on — and moves into that program's first review stage, where public sector staff score it through a fixed sequence of stages until one proposal is awarded and every other proposal still in contention is automatically marked not awarded. All three programs share that spine; what differs between them is what a proposal contains (free text and a named proponent for Code With Us, a phased team with proposed costs for Sprint With Us, named people at hourly rates against resources for Team With Us) and how many evaluation stages sit between closing and awarding.
+
+I recovered 38 criteria into `spec/domains/proposals.md`, all provisional `D-proposals-n` IDs with `recovered` origin. Five are `confirmed` — corroborated by the README, the CHANGELOG, the generated database-schema document or the application's own interface descriptions; the rest are `inferred` from code alone, which is the honest grade for most of this domain because the old application documents almost none of its proposal rules in prose. I also appended twenty-one pages under `domain: proposals` to `spec/contract/surface.yaml` and two roles to `spec/contract/personas.yaml` — an organization owner or administrator, who can act on proposals belonging to their organization rather than only their own, and an evaluation panel member, who can read a closed opportunity's proposals under their anonymous names.
+
+**What conflicted.** Three things, and in each case the running code is the stricter or later source. The published interface descriptions say a proposal is created as "DRAFT" or "PUBLISHED"; the service accepts only draft or submitted, and rejects "PUBLISHED" outright. The Sprint With Us description still lists actions for scoring questions and screening into and out of the code challenge that the service no longer accepts at all — question scoring moved to a panel and a consensus, and the only screening actions left are into and out of the team scenario. Both descriptions say deleting a proposal requires the opportunity to be in draft; the code requires only that the proposal itself be a draft and never looks at the opportunity. There is no interface description for Team With Us proposals at all, though the program has been running long enough to have its own migrations. All of that is recorded as one `open` criterion with a note per disagreement, because "the documents are merely stale" is a ruling a human should make rather than an assumption I should bake in.
+
+**What I could not determine.** Whether the Sprint With Us stage between reviewing team questions and the code challenge is still reachable. The running code still offers the move and labels the stage with one value; the migration that introduced the evaluation panel rewrote every stored occurrence of that value to a differently-spelled "deprecated" one and narrowed the permitted stored values to a list that no longer contains the old spelling, and no later migration puts it back. On that reading the code offers a move the store would reject — but I cannot run the application, and the live path bypasses the stage entirely, so I left it `open` with the reasoning written out rather than guessing.
+
+Two further things I found and marked as defects rather than behaviour to carry forward, each needing a ruling. Team With Us has a rule that computes a proposal's total cost from its hourly rates over the contract's working days and rejects it when that exceeds the opportunity's budget — and nothing calls that rule, on either the create or the edit path, so a Team With Us proposal is accepted at any price. Sprint With Us enforces the equivalent ceiling, which is what makes this look like an oversight rather than a decision. And a vendor can see the history of their own Sprint With Us and Team With Us proposals but not of their own Code With Us one; the three permission rules are otherwise identical, and only the Code With Us one omits the proposal's own author. I have not proposed replacements for either, because which way to correct them is a product question.
+
+One smaller gap worth flagging: the address that ought to list proposals renders the words "Proposal List" and nothing else. The working place for a vendor to see their bids is the dashboard, which separates their own proposals from their organizations'. Nothing should carry that address forward without a decision about what belongs on it.

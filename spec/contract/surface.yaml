@@ -211,3 +211,256 @@ pages:
     actions: {}
     observations:
       full_report: { test_id: null }
+
+  - id: proposal-cwu-create
+    domain: proposals
+    route: /opportunities/code-with-us/:opportunityId/proposals/create
+    title: "Create a Code With Us proposal"
+    actions:
+      choose_proponent_individual: { test_id: null }
+      choose_proponent_organization: { test_id: null }
+      add_attachment: { test_id: null }
+      save_draft: { test_id: null }
+      submit_proposal: { test_id: null }
+      accept_program_terms: { test_id: null }
+      accept_app_terms: { test_id: null }
+      cancel: { test_id: null }
+    observations:
+      field_error: { test_id: null }
+      opportunity_summary: { test_id: null }
+      terms_modal: { test_id: null }
+      submit_disabled_until_terms_accepted: { test_id: null }
+
+  - id: proposal-cwu-edit
+    domain: proposals
+    route: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit
+    title: "Manage a Code With Us proposal"
+    actions:
+      start_editing: { test_id: null }
+      save_changes: { test_id: null }
+      save_changes_and_submit: { test_id: null }
+      submit_proposal: { test_id: null }
+      withdraw_proposal: { test_id: null }
+      delete_proposal: { test_id: null }
+      add_attachment: { test_id: null }
+      remove_attachment: { test_id: null }
+    observations:
+      proposal_tab: { test_id: null }
+      status: { test_id: null }
+      submitted_at: { test_id: null }
+      score: { test_id: null }
+      rank: { test_id: null }
+      available_actions: { test_id: null }
+
+  - id: proposal-cwu-view
+    domain: proposals
+    route: /opportunities/code-with-us/:opportunityId/proposals/:proposalId
+    title: "Code With Us proposal"
+    actions:
+      enter_score: { test_id: null }
+      award_proposal: { test_id: null }
+      disqualify_proposal: { test_id: null }
+    observations:
+      proposal_tab: { test_id: null }
+      history_tab: { test_id: null }
+      proponent: { test_id: null }
+      score: { test_id: null }
+      rank: { test_id: null }
+      export_link: { test_id: null }
+
+  - id: proposal-cwu-export-one
+    domain: proposals
+    route: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/export
+    title: "Export a Code With Us proposal"
+    actions: {}
+    observations:
+      exported_proposal: { test_id: null }
+
+  - id: proposal-cwu-export-all
+    domain: proposals
+    route: /opportunities/code-with-us/:opportunityId/proposals/export
+    title: "Export all Code With Us proposals"
+    actions: {}
+    observations:
+      exported_proposal: { test_id: null }
+
+  - id: proposal-swu-create
+    domain: proposals
+    route: /opportunities/sprint-with-us/:opportunityId/proposals/create
+    title: "Create a Sprint With Us proposal"
+    actions:
+      choose_organization: { test_id: null }
+      add_phase_team_member: { test_id: null }
+      set_scrum_master: { test_id: null }
+      set_phase_proposed_cost: { test_id: null }
+      answer_team_question: { test_id: null }
+      add_reference: { test_id: null }
+      add_attachment: { test_id: null }
+      save_draft: { test_id: null }
+      submit_proposal: { test_id: null }
+      accept_program_terms: { test_id: null }
+      accept_app_terms: { test_id: null }
+    observations:
+      field_error: { test_id: null }
+      capability_gap_error: { test_id: null }
+      budget_exceeded_error: { test_id: null }
+      unqualified_organization_notice: { test_id: null }
+      pending_team_member: { test_id: null }
+
+  - id: proposal-swu-edit
+    domain: proposals
+    route: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit
+    title: "Manage a Sprint With Us proposal"
+    actions:
+      start_editing: { test_id: null }
+      save_changes: { test_id: null }
+      save_changes_and_submit: { test_id: null }
+      submit_proposal: { test_id: null }
+      withdraw_proposal: { test_id: null }
+      delete_proposal: { test_id: null }
+    observations:
+      proposal_tab: { test_id: null }
+      scoresheet_tab: { test_id: null }
+      status: { test_id: null }
+      anonymous_proponent_name: { test_id: null }
+      total_score: { test_id: null }
+      rank: { test_id: null }
+
+  - id: proposal-swu-view
+    domain: proposals
+    route: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId
+    title: "Sprint With Us proposal"
+    actions:
+      score_code_challenge: { test_id: null }
+      screen_in_to_team_scenario: { test_id: null }
+      screen_out_from_team_scenario: { test_id: null }
+      score_team_scenario: { test_id: null }
+      award_proposal: { test_id: null }
+      disqualify_proposal: { test_id: null }
+    observations:
+      proposal_tab: { test_id: null }
+      team_questions_tab: { test_id: null }
+      code_challenge_tab: { test_id: null }
+      team_scenario_tab: { test_id: null }
+      history_tab: { test_id: null }
+      wrong_stage_error: { test_id: null }
+      questions_score: { test_id: null }
+      challenge_score: { test_id: null }
+      scenario_score: { test_id: null }
+      price_score: { test_id: null }
+      total_score: { test_id: null }
+
+  - id: proposal-swu-export-one
+    domain: proposals
+    route: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export
+    title: "Export a Sprint With Us proposal"
+    actions: {}
+    observations:
+      exported_proposal: { test_id: null }
+      anonymous_proponent_name: { test_id: null }
+
+  - id: proposal-swu-export-all
+    domain: proposals
+    route: /opportunities/sprint-with-us/:opportunityId/proposals/export
+    title: "Export all Sprint With Us proposals"
+    actions: {}
+    observations:
+      exported_proposal: { test_id: null }
+
+  - id: proposal-twu-create
+    domain: proposals
+    route: /opportunities/team-with-us/:opportunityId/proposals/create
+    title: "Create a Team With Us proposal"
+    actions:
+      choose_organization: { test_id: null }
+      add_team_member_for_resource: { test_id: null }
+      set_hourly_rate: { test_id: null }
+      answer_resource_question: { test_id: null }
+      add_attachment: { test_id: null }
+      save_draft: { test_id: null }
+      submit_proposal: { test_id: null }
+      accept_program_terms: { test_id: null }
+      accept_app_terms: { test_id: null }
+    observations:
+      field_error: { test_id: null }
+      service_area_error: { test_id: null }
+      unqualified_organization_notice: { test_id: null }
+
+  - id: proposal-twu-edit
+    domain: proposals
+    route: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit
+    title: "Manage a Team With Us proposal"
+    actions:
+      start_editing: { test_id: null }
+      save_changes: { test_id: null }
+      save_changes_and_submit: { test_id: null }
+      submit_proposal: { test_id: null }
+      withdraw_proposal: { test_id: null }
+      delete_proposal: { test_id: null }
+    observations:
+      proposal_tab: { test_id: null }
+      scoresheet_tab: { test_id: null }
+      status: { test_id: null }
+      anonymous_proponent_name: { test_id: null }
+      total_score: { test_id: null }
+      rank: { test_id: null }
+
+  - id: proposal-twu-view
+    domain: proposals
+    route: /opportunities/team-with-us/:opportunityId/proposals/:proposalId
+    title: "Team With Us proposal"
+    actions:
+      score_resource_questions: { test_id: null }
+      screen_in_to_challenge: { test_id: null }
+      screen_out_from_challenge: { test_id: null }
+      score_challenge: { test_id: null }
+      award_proposal: { test_id: null }
+      disqualify_proposal: { test_id: null }
+    observations:
+      proposal_tab: { test_id: null }
+      resource_questions_tab: { test_id: null }
+      challenge_tab: { test_id: null }
+      history_tab: { test_id: null }
+      wrong_stage_error: { test_id: null }
+      questions_score: { test_id: null }
+      challenge_score: { test_id: null }
+      price_score: { test_id: null }
+      total_score: { test_id: null }
+
+  - id: proposal-twu-export-one
+    domain: proposals
+    route: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/export
+    title: "Export a Team With Us proposal"
+    actions: {}
+    observations:
+      exported_proposal: { test_id: null }
+
+  - id: proposal-twu-export-all
+    domain: proposals
+    route: /opportunities/team-with-us/:opportunityId/proposals/export
+    title: "Export all Team With Us proposals"
+    actions: {}
+    observations:
+      exported_proposal: { test_id: null }
+
+  - id: proposal-vendor-dashboard
+    domain: proposals
+    route: /dashboard
+    title: "Vendor dashboard"
+    actions:
+      show_my_proposals: { test_id: null }
+      show_org_proposals: { test_id: null }
+    observations:
+      my_proposals_table: { test_id: null }
+      org_proposals_table: { test_id: null }
+      proposal_status: { test_id: null }
+      empty_my_proposals_message: { test_id: null }
+      empty_org_proposals_message: { test_id: null }
+
+  - id: proposal-list-stub
+    domain: proposals
+    route: /proposals
+    title: "Proposals"
+    actions: {}
+    observations:
+      placeholder_text: { test_id: null }
