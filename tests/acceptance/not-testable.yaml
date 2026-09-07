@@ -104,6 +104,83 @@ criteria:
       opportunity may hold or the states the list's state filter offers, and the
       seed holds no opportunity carrying the historical value, so the mapping of
       such a record to a defined state has nothing to be read on.
+  - id: R-5.2
+    version: 1
+    reason: The criterion turns on a chairless panel reaching the service without
+      going through the browser form. The only way the surface submits a panel
+      is save_evaluation_panel on evaluation-panel-swu/twu, which is that form;
+      it answers with missing_chair_error, so the acceptance the criterion
+      describes has no path. A surface action that submits a panel outside the
+      form would be needed.
+  - id: R-5.5
+    version: 1
+    reason: Nothing observes one panel member's individual scores and comments as
+      read by somebody who did not write them.
+      evaluation-individual-edit-swu/twu offer only evaluation_status,
+      read_only_after_submitted, score_out_of_range_error and empty_notes_error;
+      panel_member_score and panel_member_notes exist only on the consensus
+      pages, which are chair-only. There is no refusal observation there either,
+      so neither the wide access nor its absence can be read back.
+  - id: R-5.7
+    version: 1
+    reason: "The criterion records an unresolved question rather than a behaviour:
+      its outcome is that it is unclear whether a proponent with no agreed
+      scores should block finalising or be passed over. There is no stated
+      outcome to assert. The rule a test can assert is its replacement, R-5.13."
+  - id: R-5.8
+    version: 1
+    reason: Neither half is reachable. No observation reports which actions the
+      consensus list offers — evaluation-consensus-list-swu/twu have no
+      available_actions of the kind proposal-cwu-edit carries — so 'no finalise
+      action is offered to the owner' cannot be observed; and the second half
+      needs the finalise request to reach the service without the browser, which
+      no surface action does.
+  - id: R-5.9
+    version: 1
+    reason: "Same missing action as R-5.2, which this criterion replaces. R-5.9 is a
+      rule about the service: it must refuse a chairless panel the way the
+      browser form already does. The only way the surface submits a panel is
+      save_evaluation_panel on evaluation-panel-swu/twu, which is that form, and
+      its missing_chair_error is the form behaviour R-5.2 already records as
+      pre-existing — so a test through the surface can only re-observe the form
+      refusing, never the service. A surface action that submits a panel outside
+      the form would be needed."
+  - id: R-5.11
+    version: 1
+    reason: "Same missing observations as R-5.5: no page returns an individual
+      evaluation's scores and comments to a reader other than their author
+      (panel_member_score and panel_member_notes belong to the chair-only
+      consensus pages), and no evaluation page has an observation for being
+      refused, so neither the permitted readers nor the refused ones can be told
+      apart."
+  - id: R-5.15
+    version: 1
+    reason: "A member who is neither an evaluator nor the chair cannot be expressed:
+      add_panel_member and choose_panel_chair/mark_member_as_chair are the only
+      ways to name one. Nor is the rejection observable — the panel pages carry
+      only minimum_members_error, duplicate_member_error,
+      non_public_sector_member_error and missing_chair_error — and the criterion
+      itself records that what a person sees was never determined."
+  - id: R-5.23
+    version: 1
+    reason: The given needs a draft saved with an out-of-range score and an empty
+      comment. The only ways to enter either are enter_question_score and
+      enter_question_notes on the evaluation forms, which reject the entry as it
+      is typed (score_out_of_range_error, empty_notes_error), and no surface
+      action saves a draft that has not been through them.
+  - id: R-5.26
+    version: 1
+    reason: The surface has no action that submits one evaluation on its own;
+      submit_scores_for_consensus on evaluation-individual-list-swu/twu submits
+      the whole set for the opportunity. The single-evaluation request the
+      criterion says is rejected can only be sent outside the browser.
+  - id: R-5.37
+    version: 1
+    reason: As R-5.15, the offending member cannot be named through add_panel_member
+      and choose_panel_chair, and the panel pages carry no field-level error
+      observation for a member who is neither an evaluator nor the chair — only
+      the four errors listed there — so the required message cannot be read
+      back.
   - id: R-6.1
     version: 1
     reason: The given is an environment with notifications switched off, read once
