@@ -7,14 +7,14 @@ Profile: rebuild
 | Domain | proposed | accepted | implemented | verified | monitored | obsolete | open questions | total |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 |
-| proposals | 28 | 10 | 0 | 0 | 0 | 2 | 1 | 40 |
+| proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 |
 | organizations | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | users | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | evaluation | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | notifications | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | content | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | files | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **Totals** | 28 | 66 | 0 | 0 | 0 | 3 | 2 | 97 |
+| **Totals** | 0 | 94 | 0 | 0 | 0 | 3 | 2 | 97 |
 
 ## Pages
 
