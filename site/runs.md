@@ -63,6 +63,7 @@ Automatic merge failed; fix conflicts and then commit the result.
 - 21:38:57 run archaeology: ok, cost 0, turns 0
 - 21:38:57 propose archaeology-evaluation at G1
 - 21:41:56 rule archaeology-evaluation approve at G1 by agent:product-owner (agent)
+- 21:41:56 run ratify: ok, cost 0, turns 0
 
 # Run record 2026-09-06
 

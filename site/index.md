@@ -10,11 +10,11 @@ Profile: rebuild
 | proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 |
 | organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 |
 | users | 0 | 34 | 0 | 0 | 0 | 2 | 1 | 36 |
-| evaluation | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| evaluation | 22 | 14 | 0 | 0 | 0 | 0 | 1 | 36 |
 | notifications | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | content | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | files | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **Totals** | 0 | 163 | 0 | 0 | 0 | 5 | 3 | 168 |
+| **Totals** | 22 | 177 | 0 | 0 | 0 | 5 | 4 | 204 |
 
 ## Pages
 
@@ -45,6 +45,7 @@ Profile: rebuild
 - [proposals](criteria/proposals.md)
 - [organizations](criteria/organizations.md)
 - [users](criteria/users.md)
+- [evaluation](criteria/evaluation.md)
 
 ## Totals
 
