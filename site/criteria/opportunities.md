@@ -4,63 +4,63 @@
 
 | id | test |
 | --- | --- |
-| R-1.1 | — |
-| R-1.2 | — |
-| R-1.3 | — |
-| R-1.4 | — |
-| R-1.5 | — |
-| R-1.6 | — |
-| R-1.7 | — |
-| R-1.8 | — |
-| R-1.9 | — |
-| R-1.10 | — |
-| R-1.11 | — |
-| R-1.12 | — |
-| R-1.13 | — |
-| R-1.14 | — |
-| R-1.15 | — |
-| R-1.16 | — |
-| R-1.17 | — |
-| R-1.18 | — |
-| R-1.19 | — |
-| R-1.20 | — |
-| R-1.21 | — |
-| R-1.22 | — |
-| R-1.23 | — |
-| R-1.24 | — |
-| R-1.25 | — |
-| R-1.26 | — |
-| R-1.27 | — |
-| R-1.28 | — |
-| R-1.29 | — |
-| R-1.30 | — |
-| R-1.31 | — |
-| R-1.32 | — |
-| R-1.33 | — |
-| R-1.34 | — |
-| R-1.35 | — |
-| R-1.36 | — |
-| R-1.37 | — |
-| R-1.38 | — |
-| R-1.39 | — |
-| R-1.40 | — |
-| R-1.41 | — |
-| R-1.42 | — |
-| R-1.43 | — |
+| R-1.1 | not testable: The given is a published opportunity whose proposal deadline has passed, and no such opportunity can be had. The seed's only published opportunity has a deadline in 2030; an opportunity that is not a draft is refused a deadline earlier than today (R-1.14), and a draft left without one is given a deadline fourteen days out (R-1.9). The when is out of reach as well: observables.yaml names the status route as the request that runs the closing hook, but no page, action or observation in the surface makes that request. |
+| R-1.2 | acceptance/opportunities/R-1.2.spec.ts |
+| R-1.3 | acceptance/opportunities/R-1.3.spec.ts |
+| R-1.4 | acceptance/opportunities/R-1.4.spec.ts |
+| R-1.5 | acceptance/opportunities/R-1.5.spec.ts |
+| R-1.6 | acceptance/opportunities/R-1.6.spec.ts |
+| R-1.7 | acceptance/opportunities/R-1.7.spec.ts |
+| R-1.8 | acceptance/opportunities/R-1.8.spec.ts |
+| R-1.9 | acceptance/opportunities/R-1.9.spec.ts |
+| R-1.10 | acceptance/opportunities/R-1.10.spec.ts |
+| R-1.11 | acceptance/opportunities/R-1.11.spec.ts |
+| R-1.12 | acceptance/opportunities/R-1.12.spec.ts |
+| R-1.13 | acceptance/opportunities/R-1.13.spec.ts |
+| R-1.14 | acceptance/opportunities/R-1.14.spec.ts |
+| R-1.15 | acceptance/opportunities/R-1.15.spec.ts |
+| R-1.16 | acceptance/opportunities/R-1.16.spec.ts |
+| R-1.17 | acceptance/opportunities/R-1.17.spec.ts |
+| R-1.18 | acceptance/opportunities/R-1.18.spec.ts |
+| R-1.19 | acceptance/opportunities/R-1.19.spec.ts |
+| R-1.20 | acceptance/opportunities/R-1.20.spec.ts |
+| R-1.21 | acceptance/opportunities/R-1.21.spec.ts |
+| R-1.22 | acceptance/opportunities/R-1.22.spec.ts |
+| R-1.23 | not testable: No observation returns an opportunity's published date. The three opportunity views name status, proposal deadline, reward or budget, addenda and successful proponent; published_date exists only on the content pages. Nor is there a when for the second half: no action republishes an opportunity that is already published, so 'even if it was later republished' cannot be set up. |
+| R-1.24 | not testable: The when is the opportunity closing at its proposal deadline, which cannot be brought about — see R-1.1 for the two things missing. Without the closure no submitted proposal is ever labelled, and the anonymous_proponent_name observations on the proposal surfaces have nothing to return. |
+| R-1.25 | not testable: The given is an opportunity at its program's final evaluation stage. An opportunity reaches any evaluation stage only by closing at its proposal deadline, which cannot be brought about (see R-1.1), so neither the last proposal's scoring nor the move to processing can be reached. |
+| R-1.26 | not testable: The given is an opportunity in processing. Processing lies beyond the evaluation stages, which are reached only by a closure the surface cannot bring about (see R-1.1), so award_proposal has no opportunity to act on and no proposal to mark not awarded. |
+| R-1.27 | not testable: The given is an awarded opportunity. Awarding needs processing, processing needs the evaluation stages, and those need a closure the surface cannot bring about (see R-1.1). The successful_proponent observation therefore has nothing to return, and the proponent's contact details, which the criterion says are withheld, are named by no observation either. |
+| R-1.28 | acceptance/opportunities/R-1.28.spec.ts |
+| R-1.29 | not testable: No observation returns the name of the person who created or last changed an opportunity. The opportunity views name status, dates, money, addenda and the successful proponent; the management surface names tabs and the three reporting counts. With the names unreadable, neither their presence for an administrator nor their absence for anybody else can be asserted. |
+| R-1.30 | acceptance/opportunities/R-1.30.spec.ts |
+| R-1.31 | acceptance/opportunities/R-1.31.spec.ts |
+| R-1.32 | acceptance/opportunities/R-1.32.spec.ts |
+| R-1.33 | acceptance/opportunities/R-1.33.spec.ts |
+| R-1.34 | acceptance/opportunities/R-1.34.spec.ts |
+| R-1.35 | acceptance/opportunities/R-1.35.spec.ts |
+| R-1.36 | acceptance/opportunities/R-1.36.spec.ts |
+| R-1.37 | acceptance/opportunities/R-1.37.spec.ts |
+| R-1.38 | acceptance/opportunities/R-1.38.spec.ts |
+| R-1.39 | acceptance/opportunities/R-1.39.spec.ts |
+| R-1.40 | not testable: The given is an opportunity that has been evaluated, which cannot be reached: an opportunity leaves the published state only by closing at its proposal deadline (see R-1.1). The full_report observation would return nothing for an administrator as well as for a member of staff, so the contrast the criterion turns on cannot be told from the report simply not existing yet. |
+| R-1.41 | not testable: The given is a Sprint With Us or Team With Us opportunity at the questions consensus stage, which is reached only after the opportunity closes at its proposal deadline (see R-1.1). The observations for both refusals exist — not_all_consensuses_submitted_error and no_screenable_proponent_error — but nothing in the surface can put an opportunity in front of them. |
+| R-1.42 | not testable: The given is a Sprint With Us opportunity at the code challenge stage, which lies two stages beyond a closure the surface cannot bring about (see R-1.1). start_team_scenario therefore has no opportunity to be refused on, and the proponents whose scoring the refusal turns on cannot be created either. |
+| R-1.43 | not testable: The given is an opportunity that has reached the consensus stage or beyond, which cannot be reached (see R-1.1). The panel_locked_after_consensus observation names exactly this outcome but no opportunity can be brought to the state in which it applies. The permitted half of the rule — changing the panel while the opportunity is a draft — is exercised by R-1.55. |
 | R-1.44 | — |
 | R-1.45 | — |
 | R-1.46 | — |
 | R-1.47 | — |
-| R-1.48 | — |
-| R-1.49 | — |
-| R-1.50 | — |
+| R-1.48 | acceptance/opportunities/R-1.48.spec.ts |
+| R-1.49 | not testable: The claim is about which state changes are permitted out of processing for a Team With Us opportunity. Processing lies beyond the evaluation stages and cannot be reached (see R-1.1), and no observation returns the set of transitions an opportunity records, so neither the award nor the cancellation out of processing can be requested or read. |
+| R-1.50 | not testable: Both halves are out of reach. The questions consensus stage cannot be reached (see R-1.1), so the refusal has no opportunity to act on; and the uniqueness claim is about there being no second way out, which the surface can only show by not naming one — the absence of an action is not an observation. |
 | D-opportunities-51 | — |
-| R-1.51 | — |
+| R-1.51 | not testable: Nothing in the surface reaches a suspended state to show it is gone. No action requests a move to one, no observation returns the states an opportunity may hold or the states the list's state filter offers, and the seed holds no opportunity carrying the historical value, so the mapping of such a record to a defined state has nothing to be read on. |
 | R-1.52 | — |
-| R-1.53 | — |
+| R-1.53 | acceptance/opportunities/R-1.53.spec.ts |
 | R-1.54 | — |
-| R-1.55 | — |
-| R-1.56 | — |
+| R-1.55 | acceptance/opportunities/R-1.55.spec.ts |
+| R-1.56 | acceptance/opportunities/R-1.56.spec.ts |
 
 ### R-1.1 · v2 · confirmed · accepted
 

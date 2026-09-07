@@ -6,7 +6,7 @@ Profile: rebuild
 
 | Domain | proposed | accepted | implemented | verified | monitored | obsolete | open questions | total | tests |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 |  |
+| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 36/50 (n/t 14) |
 | proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 |  |
 | organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 |  |
 | users | 0 | 34 | 0 | 0 | 0 | 2 | 1 | 36 |  |
@@ -40,6 +40,8 @@ Profile: rebuild
 - [derive-tests-evaluation-2](proposals/derive-tests-evaluation-2.md)
 - [derive-tests-files](proposals/derive-tests-files.md)
 - [derive-tests-notifications](proposals/derive-tests-notifications.md)
+- [derive-tests-opportunities](proposals/derive-tests-opportunities.md)
+- [derive-tests-opportunities-2](proposals/derive-tests-opportunities-2.md)
 - [derive-tests-organizations](proposals/derive-tests-organizations.md)
 - [derive-tests-organizations-2](proposals/derive-tests-organizations-2.md)
 - [derive-tests-proposals](proposals/derive-tests-proposals.md)
@@ -75,9 +77,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $109.83133
-- Rulings cost: $61.909539
-- Total cost: $171.740869
-- Agent-held rulings: 35
+- Journal cost: $110.53683
+- Rulings cost: $66.258852
+- Total cost: $176.795682
+- Agent-held rulings: 37
 - Open escalations: 0
 - Open proposals: 0
