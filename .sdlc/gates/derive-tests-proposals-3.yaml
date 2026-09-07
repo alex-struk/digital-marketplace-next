@@ -1,0 +1,11 @@
+gate: G3
+verdict: escalated
+by: agent:reviewer
+held_by: agent
+escalate_to: tech-lead
+rationale: |2-
+  The proposals derivation is sound and needs no further work: 35 spec files plus 3 not-testable rows account for all 38 accepted criteria in spec/domains/proposals.md with nothing double-counted, no test asserts beyond its criterion, no implementation detail leaks into a spec file, and condition 2 of the previous return (leave tests/acceptance/proposals/ unchanged) was honoured. Condition 1 was not met: tests/acceptance/not-testable.yaml still drops the 34 rows written by the approved derive-tests-notifications and derive-tests-files slices (verified against main -- 34 rows there, 3 here, 26 insertions against 101 deletions), leaving R-6.1..R-6.27 and R-8.3..R-8.31 with neither a spec file nor a not-testable row, so calibrate will report them as missing tests and their recorded reasoning is lost. This is escalated rather than returned because the receipt marks that residual as unaccepted and explains a workspace constraint the stage cannot resolve: it has no access to main, so a byte-for-byte restore is unavailable to it, and it correctly refused to substitute 34 reasons of its own invention under two other slices' names. A third return on the same condition would loop. The remaining fix is mechanical and belongs to whoever holds the repo; the enumeration and the three version-2 ids (R-6.4, R-6.25, R-8.24) in the proposal check out against main.
+cost: 0.9564079999999999
+turns: 5
+session: "3f3113bf-19ff-4005-984e-13118481e435"
+at: 2026-09-07T14:44:32.746Z
