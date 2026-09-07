@@ -1,0 +1,6 @@
+gate: G-POL
+verdict: approve
+by: tech-lead
+held_by: human
+note: "ruled by the tech lead: spec/README.md was missing from project setup and is required by the archaeology skill; added from the pipeline template before retrying archaeology"
+at: 2026-09-07T00:56:00.781Z
