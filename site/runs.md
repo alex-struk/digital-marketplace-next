@@ -98,6 +98,19 @@ Automatic merge failed; fix conflicts and then commit the result.
 - 04:47:33 propose contract-v1 at G1
 - 04:52:04 rule contract-v1 approve at G1 by agent:product-owner (agent)
 - 05:18:01 rule --pending derive-tests-proposals: failed — spawn E2BIG
+- 05:18:01 run derive-tests: proposal derive-tests-proposals still open
+- 05:26:37 run derive-tests: agent turn failed
+- 05:26:42 run derive-tests: agent turn failed
+- 05:26:49 run derive-tests: agent turn failed
+- 05:26:54 run derive-tests: agent turn failed
+- 05:27:00 run derive-tests: agent turn failed
+- 05:27:05 run derive-tests: agent turn failed
+- 05:27:11 run derive-tests: agent turn failed
+- 05:27:15 run derive-tests: agent turn failed
+- 05:27:22 run derive-tests: agent turn failed
+- 05:27:27 run derive-tests: agent turn failed
+- 05:27:34 run derive-tests: agent turn failed
+- 05:27:38 run derive-tests: agent turn failed
 
 # Run record 2026-09-06
 
