@@ -22,3 +22,16 @@ All 37 criteria are accounted for: 28 spec files under `tests/acceptance/evaluat
 **Seed gaps.** Only one organization is qualified for Sprint With Us, so an opportunity cannot easily have two proponents. R-5.35 needs two and brings a second seeded organization up to qualification through its own pages first — about fifteen lines of scaffolding that a second qualified organization in the seed would delete. The same shortage stopped me testing the second half of R-5.25 (a proponent never opened being absent from the set rather than blocking it) and the caps in R-5.32 (at most four proponents carried forward for Sprint With Us, three for Team With Us), which would need five or six proponents. Separately, `persona.publicSectorStaffOther` — the only public sector employee who is neither owner nor panel member — is declared to have no sign-in route on the oracle; R-5.18, R-5.19 and R-5.34 use it because the criteria require someone unconnected to the opportunity, and they will not run there until such a route exists.
 
 **One caveat on verification.** I could not typecheck: `tests/node_modules` is absent and installing was not permitted in this session, so `npm run typecheck` has not been run against these files. I checked every page, action and observation name by hand against `tests/generated/surface.d.ts`, and every `open()` argument against its `Record<string, string>` signature, but a compile pass is still owed.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+
+Coverage, separation and surface fidelity are all sound: 26 spec files plus 4 not-testable entries account for every live evaluation criterion, no routes/selectors/status codes/table names appear anywhere, every page, action and observation resolves against tests/generated/surface.d.ts, every open() argument is a string, and each not-testable reason names a gap I confirmed is real. Returned because two spec files are written against superseded criteria — R-5.4.spec.ts (superseded by R-5.10) and R-5.6.spec.ts (superseded by R-5.12) — which sdlc's own coverage read excludes and the tests check warns can only contradict their replacements. R-5.6.spec.ts asserts the owner not on the panel sees no proponent rows and gains the list after the question stages; no live criterion says either, and an implementation that correctly satisfies R-5.12 could fail it. Both replacements are already tested, so the fix is deletion, not new work.
+
+**Conditions:**
+- Delete tests/acceptance/evaluation/R-5.4.spec.ts and tests/acceptance/evaluation/R-5.6.spec.ts; R-5.10 and R-5.12, their live replacements, are already covered.
+- Run npm run typecheck against tests/acceptance/evaluation once tests/node_modules can be installed, and record the result in the receipt; no pipeline check compiles these files.
+- R-5.22's decimal-places test reads score_out_of_range_error for a violation that is not a range violation — keep it if that is the only observation the surface offers, but say so in the receipt rather than leaving it implied.
+- Carry into the adapter stage: on the oracle session-route binding, evaluationPanelEvaluator collapses onto publicSectorStaff (/auth/createsessiongov) and evaluationPanelChair onto administrator (/auth/createsessionadmin), so the role-separation branches in R-5.21, R-5.34 and R-5.12 need the sandbox-idp binding to distinguish their actors.
