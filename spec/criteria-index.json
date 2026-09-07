@@ -1,5 +1,5 @@
 {
-  "generated_from": "0c9ae470a737b749560dd3a467beffe43e7d12f6",
+  "generated_from": "7214e11fe5805605dff5a5f5c20d4e2896f33753",
   "criteria": [
     {
       "id": "R-5.1",
@@ -1200,6 +1200,902 @@
       "line": 441,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
+    },
+    {
+      "id": "R-6.1",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "When notifications are switched off for an environment, nothing the service does sends a message, and every action that would have sent one still completes normally.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/mailer/transport.ts",
+          "line": 54
+        },
+        {
+          "path": "src/back-end/config.ts",
+          "line": 63
+        },
+        {
+          "path": "README.md",
+          "line": 285
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a service configured with notifications disabled",
+      "when": "a person does something that would ordinarily notify somebody, such as publishing an opportunity",
+      "then": "the action succeeds and reports success, and no message is sent to anybody",
+      "notes": [
+        "the switch is read once at start-up and applies to every message the service can send; there is no per-message or per-recipient exemption."
+      ],
+      "state": "accepted",
+      "raw": "### R-6.1 · v1 · confirmed · recovered",
+      "line": 25,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.2",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "When a message cannot be composed or cannot be delivered, the action that triggered it still succeeds, nobody is told, and no further attempt is made.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/mailer/transport.ts",
+          "line": 34
+        },
+        {
+          "path": "src/back-end/lib/mailer/transport.ts",
+          "line": 44
+        },
+        {
+          "path": "src/back-end/lib/mailer/transport.ts",
+          "line": 60
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a service whose mail server is unreachable",
+      "when": "a person publishes an opportunity that would notify everyone who asked for new-opportunity notices",
+      "then": "the opportunity is published and the person is told it succeeded, no notice reaches anybody, and nothing in the service records for that person that delivery failed",
+      "notes": [
+        "the failure is written to the service's own operational log only. There is no queue, no retry and no reporting back to the person who triggered the action, so from every point of view inside the service a message that was never delivered is indistinguishable from one that was."
+      ],
+      "state": "accepted",
+      "raw": "### R-6.2 · v1 · confirmed · recovered",
+      "line": 37,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.3",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "When an environment is marked as a test environment, every message it sends is marked as a test in its subject line and carries a test variant of the service's logo.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/mailer/transport.ts",
+          "line": 31
+        },
+        {
+          "path": "src/back-end/lib/mailer/templates.tsx",
+          "line": 396
+        },
+        {
+          "path": "src/shared/config.ts",
+          "line": 12
+        },
+        {
+          "path": "README.md",
+          "line": 283
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a non-production environment marked as being for testing",
+      "when": "any message is sent from it",
+      "then": "its subject begins with a test marker and the logo at the top of the message is the test variant, so a reader can tell it apart from a message from the real service",
+      "notes": [
+        "the marking is applied by the sending machinery, so it covers every message without any individual message having to ask for it."
+      ],
+      "state": "accepted",
+      "raw": "### R-6.3 · v1 · confirmed · recovered",
+      "line": 49,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.4",
+      "version": 2,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Every message the service sends comes from a single configured sender — a display name followed by one do-not-reply address, the same for every kind of message — and carries no reply-to address distinct from that sender.",
+      "cites": [
+        {
+          "path": "src/back-end/config.ts",
+          "line": 17
+        },
+        {
+          "path": "src/back-end/config.ts",
+          "line": 187
+        },
+        {
+          "path": "src/back-end/lib/mailer/transport.ts",
+          "line": 29
+        },
+        {
+          "path": "README.md",
+          "line": 267
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a person who receives any message from the service",
+      "when": "they look at who it came from, or reply to it",
+      "then": "it comes from one address bearing the service's name, the same for every kind of message, and a reply to it reaches nobody",
+      "notes": [
+        "the configured sender must be given as a display name followed by an address in angle brackets, and the service refuses to start if it is not. Messages carry no reply-to address distinct from the sender, so a person's only route back is the contact address printed in the body of some messages."
+      ],
+      "state": "accepted",
+      "raw": "### R-6.4 · v2 · confirmed · recovered",
+      "line": 62,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.5",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Every message is sent in both a formatted and a plain-text form, the plain text being a rendering of the formatted version rather than separately written copy.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/mailer/transport.ts",
+          "line": 30
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a reader whose mail program shows plain text only",
+      "when": "they open any message from the service",
+      "then": "they see a readable plain-text rendering carrying the same words and links as the formatted version",
+      "notes": [
+        "nothing in the service composes plain-text copy of its own, so the plain-text form can only ever be as good as the automatic rendering of the formatted one."
+      ],
+      "state": "accepted",
+      "raw": "### R-6.5 · v1 · confirmed · recovered",
+      "line": 75,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.6",
+      "version": 2,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Every message the service sends ends with an offer labelled Unsubscribe, which opens the reader's own notification settings with the unsubscribe confirmation already asked.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/mailer/templates.tsx",
+          "line": 410
+        },
+        {
+          "path": "src/back-end/lib/mailer/templates.tsx",
+          "line": 414
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a person who receives any message from the service",
+      "when": "they read to the end of it",
+      "then": "they are offered an unsubscribe choice that opens their own notification settings with the question already asked",
+      "notes": [
+        "the offer appears on every message the service sends, including the ones the notification preference does not govern — see R-6.10."
+      ],
+      "state": "accepted",
+      "raw": "### R-6.6 · v2 · confirmed · recovered",
+      "line": 85,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.7",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "The unsubscribe offer in a message is not tied to the person it was addressed to: it acts on whoever is signed in when it is opened, and it cannot be used without signing in.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/mailer/templates.tsx",
+          "line": 414
+        },
+        {
+          "path": "src/shared/lib/resources/user.ts",
+          "line": 6
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/index.tsx",
+          "line": 81
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/index.tsx",
+          "line": 93
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a message sent to one person and forwarded to another",
+      "when": "the second person opens the unsubscribe offer while signed in to their own account",
+      "then": "they are shown their own notification settings, with the confirmation naming their own address, and confirming stops their own notifications rather than the original recipient's",
+      "notes": [
+        "the offer carries no recipient identity of any kind; it names the reader as \"me\" and the service resolves that from the session. A reader who is not signed in is sent to sign in first and returned afterwards, so there is no way to unsubscribe without an account and a working sign-in."
+      ],
+      "state": "accepted",
+      "raw": "### R-6.7 · v1 · confirmed · recovered",
+      "line": 96,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.8",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A notice that goes to many people at once is split into batches of at most fifty and addressed so that no recipient can see who else received it.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx",
+          "line": 256
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx",
+          "line": 260
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx",
+          "line": 275
+        },
+        {
+          "path": "src/back-end/config.ts",
+          "line": 192
+        },
+        {
+          "path": "README.md",
+          "line": 268
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an opportunity about to be published and one hundred and twenty people who have asked for new-opportunity notices",
+      "when": "it is published",
+      "then": "three messages are sent, each carrying at most fifty of those people as hidden recipients and showing the service's own address as the visible one, and no recipient's address appears to any other recipient",
+      "notes": [
+        "the batch size is configurable and defaults to fifty. The same batching and hiding is used for the new-opportunity announcement, for the notice that an opportunity has been changed, and for the notice sent to an evaluation panel when it is named or altered."
+      ],
+      "state": "accepted",
+      "raw": "### R-6.8 · v1 · confirmed · recovered",
+      "line": 109,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.9",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Four of the notices sent during evaluation put every recipient in the batch in the visible address line instead of hiding them, so each recipient sees the addresses of all the others.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx",
+          "line": 564
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx",
+          "line": 635
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx",
+          "line": 666
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx",
+          "line": 697
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx",
+          "line": 230
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx",
+          "line": 261
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx",
+          "line": 292
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx",
+          "line": 639
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "an opportunity whose proposal deadline has just passed and an evaluation panel of four people",
+      "when": "the notice that it is ready to be evaluated is sent",
+      "then": "each panel member receives a message whose visible address line lists all four of them",
+      "notes": [
+        "the four are the notice that an opportunity is ready to be evaluated, the notice that it is ready for consensus, the notice that a consensus has been submitted, and the notice that a consensus has been finalised — in both programs that have panels. Every other multi-recipient notice in the same code hides its recipients, so the disclosure looks like an oversight rather than a decision. The recipients are public sector staff rather than vendors, which limits the harm without removing it. No corrected criterion is offered: whether the new service should hide these recipients too is a ruling for a human, though the rest of the service's own behaviour points that way.",
+        "superseded by R-6.15"
+      ],
+      "state": "accepted",
+      "supersededBy": "R-6.15",
+      "raw": "### R-6.9 · v1 · confirmed · recovered",
+      "line": 123,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.10",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "The only notification a person can choose to stop is the announcement of newly published opportunities; every other message is sent regardless of that choice.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/db/user.ts",
+          "line": 161
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx",
+          "line": 150
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/notifications.tsx",
+          "line": 169
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/proposal/code-with-us.tsx",
+          "line": 21
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/affiliation.tsx",
+          "line": 11
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "a person who has turned notifications off",
+      "when": "an opportunity they are watching is changed, or a proposal of theirs is awarded, or an organization asks them to join its team",
+      "then": "they receive each of those messages, and only the announcement of a newly published opportunity is withheld",
+      "notes": [
+        "the notification settings page offers exactly one choice and labels it \"New opportunities\", so the settings page itself is honest about its scope. The defect is that every message the service sends ends with an unsubscribe offer that leads to that one choice, so a person who unsubscribes from a message the choice does not govern will keep receiving messages of that kind with no indication why. No corrected criterion is offered, because whether the new service should let a person decline the other kinds of notice — and which of them may be declined at all, given that some carry decisions a person needs — is a ruling for a human.",
+        "superseded by R-6.16"
+      ],
+      "state": "accepted",
+      "supersededBy": "R-6.16",
+      "raw": "### R-6.10 · v1 · confirmed · recovered",
+      "line": 142,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "D-notifications-11",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "A newly created account has new-opportunity notifications off until its holder asks for them.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/routers/auth.ts",
+          "line": 478
+        },
+        {
+          "path": "src/shared/lib/resources/user.ts",
+          "line": 56
+        },
+        {
+          "path": "src/migrations/tasks/20191203143238_alter_columns.ts",
+          "line": 14
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a person signing in to the service for the first time",
+      "when": "their account is created",
+      "then": "it records no request for new-opportunity notices, and none is sent to them until they ask",
+      "notes": [
+        "the record holds the moment the request was made rather than a yes or no, so an account that has never asked and an account that has asked and then changed its mind are indistinguishable afterwards. Combined with the profile-completion page never being shown to a public sector employee, this means such a person is never offered the choice at the point where it is first offered and receives no new-opportunity notices unless they later find the setting themselves."
+      ],
+      "state": "proposed",
+      "raw": "### D-notifications-11 · v1 · inferred · recovered",
+      "line": 158,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.11",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A deactivated account receives no announcement of newly published opportunities, but still receives every notice about an opportunity it was watching.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/db/user.ts",
+          "line": 164
+        },
+        {
+          "path": "src/back-end/lib/db/user.ts",
+          "line": 165
+        },
+        {
+          "path": "src/back-end/lib/db/subscribers/code-with-us.ts",
+          "line": 66
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx",
+          "line": 197
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "a person who was watching an opportunity and has since had their account deactivated",
+      "when": "that opportunity is changed or cancelled",
+      "then": "they receive the notice, although they cannot sign in to act on it, while a newly published opportunity produces no notice for them",
+      "notes": [
+        "the two recipient lists are built differently — the announcement list excludes deactivated accounts explicitly, the watcher list applies no such filter and no notification-preference filter either. A person who deactivated their own account therefore keeps receiving mail about opportunities they can no longer open. No corrected criterion is offered: whether deactivation should also end watching, or only suppress the messages, is a ruling for a human.",
+        "superseded by R-6.17"
+      ],
+      "state": "accepted",
+      "supersededBy": "R-6.17",
+      "raw": "### R-6.11 · v1 · confirmed · recovered",
+      "line": 170,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "D-notifications-12",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "A signed-in person can turn new-opportunity notices on and off from the list of opportunities itself, without opening their settings.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/opportunity/list.tsx",
+          "line": 503
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/opportunity/list.tsx",
+          "line": 886
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/opportunity/list.tsx",
+          "line": 894
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/opportunity/list.tsx",
+          "line": 997
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a signed-in person browsing the list of opportunities with notices turned off",
+      "when": "they choose to be notified about new opportunities",
+      "then": "the control changes to offer the opposite choice, their account records the request, and the change takes effect for the next opportunity published",
+      "notes": [
+        "the control is offered without a confirmation in either direction here, whereas the same choice made from the notification settings asks the person to confirm before turning notices off.",
+        "it sits at the top of the first group of opportunities on the page, which is the unpublished group for a person who has unpublished opportunities and the open group for everybody else, so it appears exactly once wherever the reader is looking first."
+      ],
+      "state": "proposed",
+      "raw": "### D-notifications-12 · v1 · inferred · recovered",
+      "line": 185,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.12",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "The message announcing changed terms tells vendors the new terms must be accepted before submitting to two of the service's three programs, although all three require it.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/mailer/notifications/terms-updated.tsx",
+          "line": 40
+        },
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 581
+        },
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 838
+        },
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 1375
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "a vendor who has proposals in progress against all three programs",
+      "when": "an administrator announces changed terms",
+      "then": "the vendor is told the new terms are needed for Code With Us and Sprint With Us, and is not told they are equally needed for Team With Us",
+      "notes": [
+        "the service refuses a submission to any of the three programs from a vendor who has not accepted the current terms; the message names only the two programs that existed when it was written. No corrected criterion is offered separately, because the fix is to name all three programs, or none of them, in that one sentence.",
+        "superseded by R-6.18"
+      ],
+      "state": "accepted",
+      "supersededBy": "R-6.18",
+      "raw": "### R-6.12 · v1 · confirmed · recovered",
+      "line": 199,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "D-notifications-13",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "The notification control on the list of opportunities is not shown on a narrow screen.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/opportunity/list.tsx",
+          "line": 877
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "a signed-in person browsing the list of opportunities on a phone",
+      "when": "they look for the control that turns new-opportunity notices on",
+      "then": "no such control appears anywhere on the page, and the only route to the choice is the notification settings on their own profile",
+      "notes": [
+        "the control is hidden below the medium breakpoint and shown above it. The choice itself remains reachable from the notification settings, so nothing is unreachable, but the shortcut is silently absent rather than moved. No corrected criterion is offered; whether the new service shows this control at every width is a design decision rather than a recovered rule."
+      ],
+      "state": "proposed",
+      "raw": "### D-notifications-13 · v1 · inferred · recovered",
+      "line": 214,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.13",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "An administrator can open a single page showing a sample of each message the service sends, with its subject and, where one is written, a one-line summary of who receives it and why.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/routers/admin/index.tsx",
+          "line": 490
+        },
+        {
+          "path": "src/back-end/lib/routers/admin/index.tsx",
+          "line": 502
+        },
+        {
+          "path": "src/back-end/lib/routers/admin/index.tsx",
+          "line": 81
+        },
+        {
+          "path": "README.md",
+          "line": 75
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a signed-in administrator",
+      "when": "they open the notification reference page",
+      "then": "they see each message rendered as a recipient would receive it, grouped and titled by the event that sends it, built from sample data rather than from any real person's record",
+      "notes": [
+        "the same page requested by anybody who is not an administrator is refused. The samples carry invented names and addresses, so opening the page discloses nothing about any real account."
+      ],
+      "state": "accepted",
+      "raw": "### R-6.13 · v1 · confirmed · recovered",
+      "line": 224,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.14",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "The reference page does not show every message the service can send: twelve of them appear nowhere on it, although the service's own documentation describes the page as covering all of them.",
+      "cites": [
+        {
+          "path": "README.md",
+          "line": 75
+        },
+        {
+          "path": "src/back-end/lib/routers/admin/index.tsx",
+          "line": 136
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx",
+          "line": 57
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx",
+          "line": 111
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx",
+          "line": 414
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx",
+          "line": 589
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx",
+          "line": 621
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx",
+          "line": 652
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx",
+          "line": 683
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx",
+          "line": 185
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx",
+          "line": 216
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx",
+          "line": 247
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx",
+          "line": 278
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/opportunity/team-with-us.tsx",
+          "line": 665
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "an administrator using the reference page to check what a message says before an event happens",
+      "when": "they look for the message sent when a Code With Us opportunity is submitted for review, or any of the messages sent to an evaluation panel",
+      "then": "neither appears anywhere on the page, and nothing on the page indicates that anything is missing",
+      "notes": [
+        "sixty-two distinct messages exist and fifty appear on the page. The twelve absent are the pair sent when a Code With Us opportunity is submitted for review, the notices sent when an evaluation panel is named or altered in either program, and the notices sent when either program's opportunity becomes ready for consensus, has a consensus submitted, or has one finalised. The pattern fits the page having been maintained alongside earlier work and not updated when the evaluation panel arrived, but the source cannot say whether the omissions are oversight or deliberate. Graded open because a human must rule on what the page is for before it can be said what \"all of them\" should mean: a complete catalogue that must be kept in step, or a sample that never claimed to be complete and whose documentation is simply overstated.",
+        "superseded by R-6.19"
+      ],
+      "state": "accepted",
+      "supersededBy": "R-6.19",
+      "raw": "### R-6.14 · v1 · confirmed · recovered",
+      "line": 237,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "D-notifications-15",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "An administrator viewing the service's terms and conditions can announce that they have changed, which withdraws every vendor's standing acceptance and sends each active vendor a message asking them to read and accept the new terms.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/content/edit.tsx",
+          "line": 114
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/content/edit.tsx",
+          "line": 555
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/content/edit.tsx",
+          "line": 619
+        },
+        {
+          "path": "src/back-end/lib/resources/email-notifications.ts",
+          "line": 52
+        },
+        {
+          "path": "src/back-end/lib/resources/email-notifications.ts",
+          "line": 76
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/terms-updated.tsx",
+          "line": 11
+        },
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 1646
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an administrator on the page holding the service's terms and conditions, and a mix of active and deactivated vendors who had all accepted the previous terms",
+      "when": "the administrator chooses to notify vendors and confirms",
+      "then": "every vendor's acceptance is withdrawn and each active vendor receives a message naming the change and offering a link to read and accept the new terms",
+      "notes": [
+        "the announcement is offered only on the terms and conditions page and nowhere else, and only to an administrator; the same request made by anybody else, signed in or not, is refused. Acceptance is withdrawn for every vendor including deactivated ones, while only active vendors are told, so a vendor deactivated at the time of the change learns of it only on returning. This route appears in no published interface description."
+      ],
+      "state": "proposed",
+      "raw": "### D-notifications-15 · v1 · inferred · recovered",
+      "line": 262,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.15",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service's own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity's owner exactly as it does to every other multi-recipient notice.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-6.9",
+      "raw": "### R-6.15 · v1 · confirmed · authored",
+      "line": 278,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.16",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "A message that the notification preference does not govern must not offer to unsubscribe; it links to the reader's notification settings without implying that any choice there will stop messages of that kind.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-6.10",
+      "raw": "### R-6.16 · v1 · confirmed · authored",
+      "line": 283,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "D-notifications-17",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "An announcement of changed terms is reported as successful as soon as the acceptances are withdrawn, before any message has been sent.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/email-notifications.ts",
+          "line": 76
+        },
+        {
+          "path": "src/back-end/lib/resources/email-notifications.ts",
+          "line": 80
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/terms-updated.tsx",
+          "line": 16
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an administrator announcing changed terms to a large body of vendors",
+      "when": "they confirm",
+      "then": "they are told at once that vendors have been notified, while the messages are still being sent one at a time in the background, and nothing later tells them whether every message was sent",
+      "notes": [
+        "the withdrawal of acceptances is completed before the response, so the part of the action a vendor will notice on their next visit is reliable; only the messages are not. Delivery failures are invisible for the reason given in R-6.2, so a run that reaches nobody looks exactly like one that reaches everybody."
+      ],
+      "state": "proposed",
+      "raw": "### D-notifications-17 · v1 · inferred · recovered",
+      "line": 288,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.17",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "A deactivated account receives no notification of any kind, including notices about opportunities it was watching, while the watch itself is retained so that reactivating the account restores it.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-6.11",
+      "raw": "### R-6.17 · v1 · confirmed · authored",
+      "line": 300,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.18",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "The message announcing changed terms names every program whose proposals require a current acceptance — Code With Us, Sprint With Us and Team With Us — or names none of them rather than a subset.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-6.12",
+      "raw": "### R-6.18 · v1 · confirmed · authored",
+      "line": 305,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.19",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "The administrator's notification reference page shows every message the service can send, so that no message exists which cannot be previewed there before the event that sends it.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-6.14",
+      "raw": "### R-6.19 · v1 · confirmed · authored",
+      "line": 310,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "D-notifications-20",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "The message telling a vendor that an opportunity they proposed on has been awarded to somebody else names the organization that won it.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/mailer/notifications/proposal/code-with-us.tsx",
+          "line": 277
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/proposal/code-with-us.tsx",
+          "line": 281
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/proposal/sprint-with-us.tsx",
+          "line": 287
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/proposal/team-with-us.tsx",
+          "line": 287
+        },
+        {
+          "path": "src/back-end/lib/mailer/templates.tsx",
+          "line": 499
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "three vendors who submitted proposals to one opportunity, one of which has just been awarded",
+      "when": "the decision is sent to the two who were not chosen",
+      "then": "each is told the opportunity was awarded, is shown the name of the organization it was awarded to, and is offered a way to sign in and see their own score",
+      "notes": [
+        "this message uses a layout of its own rather than the layout every other message uses, leading with the opportunity's title and the winner's name. Where no successful proponent is recorded the name is replaced by a dash rather than the sentence being omitted, so a reader can be shown \"awarded to —\"."
+      ],
+      "state": "proposed",
+      "raw": "### D-notifications-20 · v1 · inferred · recovered",
+      "line": 315,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "D-notifications-21",
+      "version": 1,
+      "confidence": "open",
+      "origin": "recovered",
+      "statement": "What happens when the service tries to notify an account that has no email address cannot be determined from the code.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/mailer/notifications/terms-updated.tsx",
+          "line": 32
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/user.tsx",
+          "line": 72
+        },
+        {
+          "path": "src/shared/lib/resources/user.ts",
+          "line": 53
+        },
+        {
+          "path": "src/back-end/lib/mailer/transport.ts",
+          "line": 26
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a vendor whose account holds no email address, because the identity provider supplied none",
+      "when": "an administrator announces changed terms",
+      "then": "the service composes a message for that account addressed to nobody and hands it on to be sent, and what follows depends on the sending machinery rather than on anything the service decides",
+      "notes": [
+        "accounts without an email address are allowed deliberately, and most messages guard against one only by substituting an empty list of recipients where the address would go — the message is still composed and still handed over to be sent. Whether that produces a rejected send, a silently discarded one, or an error that stops the rest of a broadcast is not decidable from the source, and because delivery failures are only logged, nothing inside the service would show which. The one place that does check is account creation, which skips the welcome message when there is no address. A human should rule on whether the new service must skip a recipient with no address everywhere, and on whether one such recipient may stop a broadcast to the rest.",
+        "Must the service skip a recipient that holds no email address rather than composing a message addressed to nobody, and must a broadcast to many vendors always continue past such a recipient rather than being able to stop the run on one?"
+      ],
+      "state": "proposed",
+      "raw": "### D-notifications-21 · v1 · open · recovered",
+      "line": 329,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
     },
     {
       "id": "R-1.1",

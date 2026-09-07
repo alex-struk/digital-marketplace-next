@@ -70,6 +70,7 @@ Automatic merge failed; fix conflicts and then commit the result.
 - 21:57:45 run archaeology: ok, cost 8.691965999999995, turns 112
 - 21:57:45 propose archaeology-notifications at G1
 - 22:01:46 rule archaeology-notifications approve at G1 by agent:product-owner (agent)
+- 22:01:47 run ratify: ok, cost 0, turns 0
 
 # Run record 2026-09-06
 
