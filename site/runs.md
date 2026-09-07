@@ -82,6 +82,9 @@ Automatic merge failed; fix conflicts and then commit the result.
 - 01:27:06 propose ratify-content-3 at G1
 - 01:31:47 rule ratify-content-3 approve at G1 by agent:product-owner (agent)
 - 01:31:47 run ratify: ok, cost 0, turns 0
+- 01:41:05 run archaeology: ok, cost 6.7348845, turns 95
+- 01:41:05 propose archaeology-files at G1
+- 01:44:52 rule archaeology-files approve at G1 by agent:product-owner (agent)
 
 # Run record 2026-09-06
 
