@@ -1,8 +1,12 @@
-# Journal
+| Field | Value |
+| --- | --- |
+| gate | G0 |
+| opened | 2026-09-07T00:15:57.203Z |
+| holder | agent:product-owner |
 
-## 002 · intent · 2026-09-07
+# Is this the right problem and outcome?
 
-cost $0.6139335 · turns 8
+**Recommendation.** Two files touched, both inside my boundary: one new intent document and one row added to the constitution.
 
 Two files touched, both inside my boundary: one new intent document and one row added to the constitution.
 
@@ -26,12 +30,17 @@ The second is the outcome. "Measurable parity" is the brief's own phrase, and it
 
 **What I could not do.** Nobody is available to answer the fifteen questions, so none of them are closed; the intent goes forward with its outcome not yet measurable, and a later stage or the brief's author will have to settle at least the parity measure before anything downstream can claim success against it. I did not look outside the brief — no reading of the existing application, no inference from similar procurement systems — so if the brief is itself wrong or incomplete about the service, that error is faithfully reproduced in the intent and the open questions are the only place it will surface.
 
-## 001 · probe · 2026-09-06
+## Ruling
 
-cost $0.224672 · turns 2
+**Verdict:** approve
+**By:** agent:product-owner
 
-I wrote `app/PROBE.md` in the digital-marketplace-next repository. It holds two lines: today's date, 2026-09-06, and the sentence "the runner works" — nothing else, since the instruction asked for exactly that content and no more.
+The intent reproduces the brief without invention: users, systems and all eight constraints are the brief's own, the two questions the brief reserves for the pipeline are carried forward unresolved, and every gap the stage found is listed as one of fifteen open questions rather than filled by guesswork. The problem section states in its own text that the brief names no user or operator pain, which is the honest form of a thin brief rather than a hidden assumption. Scope is consistent with J2 — sandbox-only, live service untouched, old repository read as reference only — and the single constitution row ('Digital Marketplace') uses the brief's own words and agrees with J1. The material weakness is that the outcome is not measurable: 'measurable parity' carries no measure, threshold or judge. I do not return on it because the gap belongs to the brief rather than to this stage, and because the parity measure cannot be defined before the specification it compares against has been recovered, so a return would block G0 on a question no one available can answer. Two conditions on the diff itself: the layout check fails on a missing spec/domains, which pre-dates this branch and is outside the intent stage's boundary, and the recommendation declares two files touched when three content files changed — the .gitignore also gained 'sources/', a correct and J2-consistent change that was left undeclared. Tier is STANDARD, no escalation trigger fires: the ambiguities are documented rather than requiring me to choose between two readings, and the producing stage reports no confidence below threshold.
 
-The `app/` directory already existed, so the file simply landed alongside whatever else lives there; I did not inspect or touch any neighbouring files. Nothing was staged, committed, or pushed, and no gate was touched — the working tree now carries this new untracked file plus the pre-existing untracked `.sdlc/run-state.json` that was there when I started.
-
-One thing worth flagging for whoever picks this up: the date came from the session's stated current date rather than from a system clock reading, so if this probe is ever used to verify clock behaviour rather than just runner liveness, that distinction matters. There was nothing to verify beyond the write itself, and the instruction was to stop afterwards, so I did.
+**Conditions:**
+- The parity measure, its threshold and the named judge must be settled before G1 sign-off. A specification signed off with 'how is measurable parity measured' and 'who judges it' still open is a return at G1, not a caution — nothing downstream can claim success against an undefined criterion.
+- Program scope must be recorded before the archaeology stage spends its budget: whether all three programs (Code With Us, Sprint With Us, Team With Us) are in scope, and in what order. If the brief's author does not answer, the stage must state and record the scope it assumed as an explicit decision rather than proceed on an unstated one.
+- Fix the failing layout check by creating spec/domains for the eight domains declared in .sdlc/config.yaml before G1. The failure is pre-existing and not this stage's doing, but spec/ is where the recovered specification lands, so it must be green before the specification is written into it.
+- If 'what is wrong with the existing application today' is never answered, the intent's problem stands as recorded — proving the pipeline can recover and rebuild, and producing a code base the product owners could later adopt. No downstream artifact may cite user or operator pain as justification, because no one has claimed any.
+- Declare every content file a stage touches in its recommendation line, including .gitignore. The 'sources/' addition is correct and J2-consistent, but 'two files touched' did not describe the diff.
+- The 'modern, opinionated stack' is named only by adjective. Choosing it is an architecture decision that belongs at G2 with a decision record, not something a later stage settles in passing while writing code.

@@ -3,6 +3,20 @@
 # Run record 2026-09-07
 
 - 17:17:45 rule brief-v1 approve at G0 by agent:product-owner (agent)
+- 17:19:15 rule --pending intent-digital-marketplace-rebuild: failed — merging proposal/intent-digital-marketplace-rebuild into main failed; main was left unchanged and you are back on proposal/intent-digital-marketplace-rebuild.
+conflicted files:
+  site/index.md
+  site/runs.md
+git -c user.name=sdlc -c user.email=sdlc@localhost merge -q --no-ff -m merge: intent-digital-marketplace-rebuild approved at G0 by agent:product-owner proposal/intent-digital-marketplace-rebuild failed:
+Auto-merging .sdlc/runs/2026-09-07.md
+Auto-merging site/index.md
+CONFLICT (content): Merge conflict in site/index.md
+Auto-merging site/runs.md
+CONFLICT (content): Merge conflict in site/runs.md
+Automatic merge failed; fix conflicts and then commit the result.
+- 17:15:57 run intent: ok, cost 0.6139335, turns 8
+- 17:15:57 propose intent-digital-marketplace-rebuild at G0
+- 17:19:15 rule intent-digital-marketplace-rebuild approve at G0 by agent:product-owner (agent)
 
 # Run record 2026-09-06
 
