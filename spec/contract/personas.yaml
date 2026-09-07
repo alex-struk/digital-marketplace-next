@@ -66,7 +66,11 @@ personas:
         edit a proposal belonging to that organization,
         withdraw a proposal belonging to that organization,
         delete a draft proposal belonging to that organization,
-        view proposals belonging to organizations they own or administer
+        view proposals belonging to organizations they own or administer,
+        view an organization they administer and its team list and changelog,
+        invite team members to an organization they administer,
+        remove a team member from an organization they administer,
+        grant or withdraw organization administrator rights
       ]
     sign_in:
       {
@@ -83,3 +87,38 @@ personas:
       ]
     sign_in:
       { sandbox-idp: { username: gov-panel-1 }, session-route: { role: government } }
+
+  - id: organization-owner
+    domain: organizations
+    can:
+      [
+        register an organization,
+        edit the profile of an organization they own,
+        archive an organization they own,
+        invite team members to an organization they own,
+        remove a team member from an organization they own,
+        grant or withdraw organization administrator rights,
+        accept the Sprint With Us terms for an organization they own,
+        accept the Team With Us terms for an organization they own,
+        view the team list and changelog of an organization they own
+      ]
+    sign_in:
+      {
+        sandbox-idp: { username: vendor-org-owner-1 },
+        session-route: { role: vendor }
+      }
+
+  - id: organization-member
+    domain: organizations
+    can:
+      [
+        accept an invitation to join an organization,
+        decline an invitation to join an organization,
+        leave an organization they belong to,
+        see the organizations they are affiliated with
+      ]
+    sign_in:
+      {
+        sandbox-idp: { username: vendor-org-member-1 },
+        session-route: { role: vendor }
+      }

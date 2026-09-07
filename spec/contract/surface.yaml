@@ -464,3 +464,113 @@ pages:
     actions: {}
     observations:
       placeholder_text: { test_id: null }
+
+  - id: organization-list
+    domain: organizations
+    route: /organizations
+    title: "Digital Marketplace Organizations"
+    actions:
+      change_page: { test_id: null }
+      open_organization: { test_id: null }
+      create_organization: { test_id: null }
+      my_organizations: { test_id: null }
+    observations:
+      organization_name: { test_id: null }
+      owner_name: { test_id: null }
+      swu_qualified_mark: { test_id: null }
+      twu_qualified_mark: { test_id: null }
+      pagination: { test_id: null }
+
+  - id: organization-create
+    domain: organizations
+    route: /organizations/create
+    title: "Create Organization"
+    actions:
+      create_organization: { test_id: null }
+      cancel: { test_id: null }
+      change_logo: { test_id: null }
+    observations:
+      field_error: { test_id: null }
+      submit_disabled_until_valid: { test_id: null }
+
+  - id: organization-edit
+    domain: organizations
+    route: /organizations/:orgId/edit
+    title: "Edit Organization"
+    actions:
+      edit_organization: { test_id: null }
+      save_changes: { test_id: null }
+      cancel_editing: { test_id: null }
+      archive_organization: { test_id: null }
+      add_team_members: { test_id: null }
+      approve_pending_member: { test_id: null }
+      remove_team_member: { test_id: null }
+      toggle_member_admin_status: { test_id: null }
+      accept_org_admin_terms: { test_id: null }
+      change_owner: { test_id: null }
+      edit_service_areas: { test_id: null }
+      save_service_areas: { test_id: null }
+      view_swu_terms: { test_id: null }
+      view_twu_terms: { test_id: null }
+    observations:
+      organization_tab: { test_id: null }
+      team_tab: { test_id: null }
+      swu_qualification_tab: { test_id: null }
+      twu_qualification_tab: { test_id: null }
+      changelog_tab: { test_id: null }
+      swu_qualified_badge: { test_id: null }
+      twu_qualified_badge: { test_id: null }
+      owner_badge: { test_id: null }
+      pending_badge: { test_id: null }
+      team_member_row: { test_id: null }
+      team_capabilities: { test_id: null }
+      swu_requirement_two_members: { test_id: null }
+      swu_requirement_all_capabilities: { test_id: null }
+      swu_requirement_terms_accepted: { test_id: null }
+      twu_requirement_service_area: { test_id: null }
+      twu_requirement_terms_accepted: { test_id: null }
+      service_area_checkbox: { test_id: null }
+      not_qualified_notice: { test_id: null }
+      changelog_entry: { test_id: null }
+      field_error: { test_id: null }
+
+  - id: organization-swu-terms
+    domain: organizations
+    route: /organizations/:orgId/sprint-with-us-terms-and-conditions
+    title: "Sprint With Us Terms & Conditions"
+    actions:
+      accept_terms: { test_id: null }
+      cancel: { test_id: null }
+    observations:
+      terms_body: { test_id: null }
+      accepted_on_notice: { test_id: null }
+
+  - id: organization-twu-terms
+    domain: organizations
+    route: /organizations/:orgId/team-with-us-terms-and-conditions
+    title: "Team With Us Terms & Conditions"
+    actions:
+      accept_terms: { test_id: null }
+      cancel: { test_id: null }
+    observations:
+      terms_body: { test_id: null }
+      accepted_on_notice: { test_id: null }
+
+  - id: organization-user-memberships
+    domain: organizations
+    route: /users/:userId?tab=organizations
+    title: "My Organizations"
+    actions:
+      approve_invitation: { test_id: null }
+      reject_invitation: { test_id: null }
+      leave_organization: { test_id: null }
+      create_organization: { test_id: null }
+      open_organization: { test_id: null }
+    observations:
+      owned_organizations_table: { test_id: null }
+      affiliated_organizations_table: { test_id: null }
+      pending_badge: { test_id: null }
+      team_member_count: { test_id: null }
+      swu_qualified_mark: { test_id: null }
+      empty_owned_message: { test_id: null }
+      empty_affiliated_message: { test_id: null }
