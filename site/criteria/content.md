@@ -4,37 +4,37 @@
 
 | id | test |
 | --- | --- |
-| R-7.1 | — |
-| R-7.2 | — |
-| R-7.3 | — |
-| R-7.4 | — |
-| R-7.5 | — |
-| R-7.6 | — |
-| R-7.7 | — |
-| R-7.8 | — |
-| R-7.9 | — |
-| R-7.10 | — |
+| R-7.1 | acceptance/content/R-7.1.spec.ts |
+| R-7.2 | acceptance/content/R-7.2.spec.ts |
+| R-7.3 | acceptance/content/R-7.3.spec.ts |
+| R-7.4 | acceptance/content/R-7.4.spec.ts |
+| R-7.5 | acceptance/content/R-7.5.spec.ts |
+| R-7.6 | acceptance/content/R-7.6.spec.ts |
+| R-7.7 | acceptance/content/R-7.7.spec.ts |
+| R-7.8 | acceptance/content/R-7.8.spec.ts |
+| R-7.9 | acceptance/content/R-7.9.spec.ts |
+| R-7.10 | acceptance/content/R-7.10.spec.ts |
 | R-7.11 | — |
-| R-7.12 | — |
-| R-7.13 | — |
+| R-7.12 | acceptance/content/R-7.12.spec.ts |
+| R-7.13 | acceptance/content/R-7.13.spec.ts |
 | R-7.14 | — |
 | R-7.15 | — |
-| R-7.16 | — |
-| R-7.17 | — |
-| R-7.18 | — |
-| R-7.19 | — |
-| R-7.20 | — |
-| R-7.21 | — |
-| R-7.22 | — |
-| R-7.23 | — |
-| R-7.24 | — |
-| R-7.25 | — |
+| R-7.16 | not testable: Same missing observation as R-7.11, across a wider set of requests: the criterion is about every page request answering a permission refusal in one shape, and no observation returns the shape or status of a refused page request. refused_for_non_administrator is free text on each surface, so two refusals cannot be shown to be the same shape, only to have both happened. |
+| R-7.17 | acceptance/content/R-7.17.spec.ts |
+| R-7.18 | acceptance/content/R-7.18.spec.ts |
+| R-7.19 | acceptance/content/R-7.19.spec.ts |
+| R-7.20 | acceptance/content/R-7.20.spec.ts |
+| R-7.21 | acceptance/content/R-7.21.spec.ts |
+| R-7.22 | acceptance/content/R-7.22.spec.ts |
+| R-7.23 | not testable: Asserting that nothing shows, compares or restores an earlier version needs an observation naming what must be absent, and content-edit names none: it has no observation of the wording it is showing, none of a history, an earlier version or a comparison, and no restore action. A test can neither find a route to a past version nor show that none exists. |
+| R-7.24 | acceptance/content/R-7.24.spec.ts |
+| R-7.25 | acceptance/content/R-7.25.spec.ts |
 | D-content-26 | — |
-| R-7.26 | — |
+| R-7.26 | acceptance/content/R-7.26.spec.ts |
 | D-content-27 | — |
-| R-7.27 | — |
-| R-7.28 | — |
-| R-7.29 | — |
+| R-7.27 | acceptance/content/R-7.27.spec.ts |
+| R-7.28 | not testable: The given is two administrators who both opened the same page before either saved. The target carries one administrator sign-in and no second one, and the surface drives a single session, so two people cannot hold the page open at once and no stale read-then-write window can be produced. The collision half needs two publishes interleaving inside one such window, and nothing in the surface reports a version-key collision or a service error on the content-edit screen. |
+| R-7.29 | not testable: The given is a page whose body another screen embeds having been removed. The embedded pages — an opportunity's scope page, a program's evaluation instructions — are ones the service needs, which R-7.25 records the service refuses to remove: content-edit withholds the removal and a request made another way is refused, so there is no path through the surface to the state the criterion starts from. |
 
 ### R-7.1 · v1 · confirmed · accepted
 

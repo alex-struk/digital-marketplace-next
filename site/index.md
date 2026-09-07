@@ -12,7 +12,7 @@ Profile: rebuild
 | users | 0 | 34 | 0 | 0 | 0 | 2 | 1 | 36 |  |
 | evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 |  |
 | notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 8/21 (n/t 13) |
-| content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 |  |
+| content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 | 22/26 (n/t 4) |
 | files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 12/24 (n/t 12) |
 | **Totals** | 0 | 288 | 0 | 0 | 0 | 7 | 3 | 295 |  |
 
@@ -36,6 +36,8 @@ Profile: rebuild
 - [contract-v1](proposals/contract-v1.md)
 - [derive-tests-content](proposals/derive-tests-content.md)
 - [derive-tests-content-2](proposals/derive-tests-content-2.md)
+- [derive-tests-content-3](proposals/derive-tests-content-3.md)
+- [derive-tests-content-4](proposals/derive-tests-content-4.md)
 - [derive-tests-evaluation](proposals/derive-tests-evaluation.md)
 - [derive-tests-evaluation-2](proposals/derive-tests-evaluation-2.md)
 - [derive-tests-evaluation-3](proposals/derive-tests-evaluation-3.md)
@@ -84,9 +86,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $112.365867
-- Rulings cost: $78.106672
-- Total cost: $190.472539
-- Agent-held rulings: 43
+- Journal cost: $113.358342
+- Rulings cost: $81.2444
+- Total cost: $194.602742
+- Agent-held rulings: 45
 - Open escalations: 0
 - Open proposals: 0
