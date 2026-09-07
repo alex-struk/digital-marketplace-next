@@ -1,5 +1,11 @@
 # Journal
 
+## 003 · archaeology · 2026-09-07
+
+cost $4.454979999999998 · turns 41
+
+the agent turn reported failure with no output
+
 ## 002 · intent · 2026-09-07
 
 cost $0.6139335 · turns 8

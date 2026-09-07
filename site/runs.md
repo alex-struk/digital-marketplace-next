@@ -17,6 +17,9 @@ Automatic merge failed; fix conflicts and then commit the result.
 - 17:15:57 run intent: ok, cost 0.6139335, turns 8
 - 17:15:57 propose intent-digital-marketplace-rebuild at G0
 - 17:19:15 rule intent-digital-marketplace-rebuild approve at G0 by agent:product-owner (agent)
+- 17:32:52 run archaeology: agent turn failed
+- 17:33:20 propose budget-v1 at G-POL
+- 17:33:52 rule budget-v1 approve at G-POL by tech-lead (human)
 
 # Run record 2026-09-06
 
