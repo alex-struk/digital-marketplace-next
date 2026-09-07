@@ -6,7 +6,7 @@ Profile: rebuild
 
 | Domain | proposed | accepted | implemented | verified | monitored | obsolete | open questions | total |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| opportunities | 3 | 51 | 0 | 0 | 0 | 1 | 4 | 55 |
+| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 |
 | proposals | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | organizations | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | users | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
@@ -14,7 +14,7 @@ Profile: rebuild
 | notifications | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | content | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | files | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **Totals** | 3 | 51 | 0 | 0 | 0 | 1 | 4 | 55 |
+| **Totals** | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 |
 
 ## Pages
 

@@ -122,20 +122,6 @@ An opportunity that is not a draft is rejected unless it carries a title of 1 to
 - when: they submit it with a missing title, a title over 200 characters, a teaser over 500 characters, a missing location, or a description that is missing or over 10,000 characters
 - then: the submission is rejected and the offending field is named in the response
 
-### D-opportunities-11 · v1 · open · proposed
-
-A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, with at most one of them marked as chair.
-- cites: src/back-end/lib/validation.ts:900
-- cites: src/back-end/lib/validation.ts:847
-- cites: src/shared/config.ts:32
-- cites: src/shared/config.ts:34
-- reconciliation: implemented-only
-- given: a member of public sector staff creating or editing a Sprint With Us or Team With Us opportunity
-- when: they submit fewer than two panel members, the same person twice, more than one chair, or anyone who is not a public sector employee
-- then: the submission is rejected and the reason is named
-- note: the rule as written in the application's own comment says "one and only one chair", but the code accepts a panel with no chair at all and rejects only a second chair. A human should rule on which was intended.
-- note: Must a Sprint With Us or Team With Us evaluation panel have exactly one chair, as the application's own comment states, or is a chair optional, as the code allows?
-
 ### R-1.11 · v1 · confirmed · accepted
 
 An opportunity that is not a draft must state whether remote work is acceptable, and must carry a remote-work description of up to 500 characters whenever remote work is acceptable.
@@ -296,20 +282,6 @@ On closing a Sprint With Us or Team With Us opportunity, each submitted proposal
 - when: it closes at its proposal deadline
 - then: each submitted proposal is labelled "Proponent 1", "Proponent 2" and so on
 - note: Code With Us does not anonymise proponents.
-
-### D-opportunities-25 · v1 · open · proposed
-
-An opportunity may be deleted only while it is a draft or under review, and only by an administrator or, for a draft, by the member of public sector staff who created it.
-- cites: src/back-end/lib/permissions.ts:367
-- cites: src/back-end/lib/permissions.ts:636
-- cites: src/back-end/lib/resources/opportunity/team-with-us/index.ts:1680
-- cites: src/back-end/docs/opportunities/code-with-us.yaml:112
-- reconciliation: conflicting
-- given: an opportunity that has been published at any point
-- when: anyone asks to delete it
-- then: the request is refused and the opportunity remains
-- note: the application's own interface documentation says deletion is permitted only for a draft, while the code also permits an administrator to delete an opportunity that is under review. The three programs also disagree with each other: for Code With Us and Sprint With Us the creating staff member may delete only a draft, but for Team With Us they may also delete one that is under review. A human should rule on the intended rule before it is carried forward.
-- note: Which single deletion rule carries forward across all three programs: may an administrator delete an opportunity that is under review as well as one in draft, and may the creating public sector employee delete one that is under review, or only a draft?
 
 ### R-1.25 · v1 · confirmed · accepted
 
@@ -572,20 +544,6 @@ A Sprint With Us or Team With Us opportunity can be moved out of its consensus s
 Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs.
 - replaces: R-1.44
 
-### D-opportunities-49 · v1 · open · proposed
-
-The author of a published opportunity, who is not an administrator, can change its details.
-- cites: src/back-end/lib/resources/opportunity/code-with-us.ts:517
-- cites: src/back-end/lib/permissions.ts:349
-- cites: src/shared/lib/resources/opportunity/code-with-us.ts:288
-- cites: src/front-end/typescript/lib/pages/opportunity/code-with-us/lib/components/form.tsx:582
-- reconciliation: conflicting
-- given: a published opportunity created by a member of public sector staff who is not an administrator
-- when: that person submits a change to its details
-- then: the change is accepted and a new version is recorded
-- note: the interface offers the edit only to administrators once an opportunity is published, but the underlying service accepts it from the author too. The two disagree, and nothing in the application says which is intended.
-- note: May the author of a published opportunity who is not an administrator change its details, as the service accepts, or is editing after publication administrator-only, as the interface enforces?
-
 ### R-1.49 · v1 · confirmed · accepted
 
 The permitted state changes for a Team With Us opportunity in processing are awarded and cancelled, matching Code With Us and Sprint With Us, so the recorded transitions and the award path agree.
@@ -615,3 +573,59 @@ The application's published interface description for opportunities is incomplet
 
 The rebuilt system defines no suspended state for an opportunity: none can be created in it, moved to it or stored in it, and any historical record carrying it is mapped to a defined state before the rebuilt system reads it.
 - replaces: R-1.47
+
+### R-1.52 · v1 · confirmed · accepted
+
+A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, with at most one of them marked as chair.
+- cites: src/back-end/lib/validation.ts:900
+- cites: src/back-end/lib/validation.ts:847
+- cites: src/shared/config.ts:32
+- cites: src/shared/config.ts:34
+- reconciliation: defect
+- given: a member of public sector staff creating or editing a Sprint With Us or Team With Us opportunity
+- when: they submit fewer than two panel members, the same person twice, more than one chair, or anyone who is not a public sector employee
+- then: the submission is rejected and the reason is named
+- superseded-by: R-1.55
+- note: the rule as written in the application's own comment says "one and only one chair", but the code accepts a panel with no chair at all and rejects only a second chair. A human should rule on which was intended.
+- note: Must a Sprint With Us or Team With Us evaluation panel have exactly one chair, as the application's own comment states, or is a chair optional, as the code allows?
+- note: superseded by R-1.55
+
+### R-1.53 · v2 · confirmed · accepted
+
+An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains.
+- cites: src/back-end/lib/permissions.ts:367
+- cites: src/back-end/lib/permissions.ts:636
+- cites: src/back-end/lib/resources/opportunity/team-with-us/index.ts:1680
+- cites: src/back-end/docs/opportunities/code-with-us.yaml:112
+- reconciliation: conflicting
+- given: an opportunity that has been published at any point
+- when: anyone asks to delete it
+- then: the request is refused and the opportunity remains
+- note: the application's own interface documentation says deletion is permitted only for a draft, while the code also permits an administrator to delete an opportunity that is under review. The three programs also disagree with each other: for Code With Us and Sprint With Us the creating staff member may delete only a draft, but for Team With Us they may also delete one that is under review. A human should rule on the intended rule before it is carried forward.
+- note: Which single deletion rule carries forward across all three programs: may an administrator delete an opportunity that is under review as well as one in draft, and may the creating public sector employee delete one that is under review, or only a draft?
+
+### R-1.54 · v1 · confirmed · accepted
+
+The author of a published opportunity, who is not an administrator, can change its details.
+- cites: src/back-end/lib/resources/opportunity/code-with-us.ts:517
+- cites: src/back-end/lib/permissions.ts:349
+- cites: src/shared/lib/resources/opportunity/code-with-us.ts:288
+- cites: src/front-end/typescript/lib/pages/opportunity/code-with-us/lib/components/form.tsx:582
+- reconciliation: defect
+- given: a published opportunity created by a member of public sector staff who is not an administrator
+- when: that person submits a change to its details
+- then: the change is accepted and a new version is recorded
+- superseded-by: R-1.56
+- note: the interface offers the edit only to administrators once an opportunity is published, but the underlying service accepts it from the author too. The two disagree, and nothing in the application says which is intended.
+- note: May the author of a published opportunity who is not an administrator change its details, as the service accepts, or is editing after publication administrator-only, as the interface enforces?
+- note: superseded by R-1.56
+
+### R-1.55 · v1 · confirmed · accepted
+
+A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named.
+- replaces: R-1.52
+
+### R-1.56 · v1 · confirmed · accepted
+
+Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike.
+- replaces: R-1.54
