@@ -1,0 +1,6 @@
+gate: G3
+verdict: return
+by: tech-lead
+held_by: human
+note: "Escalation received; returned for revision: restore every not-testable entry of the notifications and files domains exactly as main holds them, and change nothing else. The tests themselves were found sound."
+at: 2026-09-07T16:14:22.186Z
