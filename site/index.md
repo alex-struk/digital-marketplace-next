@@ -9,12 +9,12 @@ Profile: rebuild
 | opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 |
 | proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 |
 | organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 |
-| users | 13 | 21 | 0 | 0 | 0 | 2 | 2 | 36 |
+| users | 0 | 34 | 0 | 0 | 0 | 2 | 1 | 36 |
 | evaluation | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | notifications | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | content | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | files | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **Totals** | 13 | 150 | 0 | 0 | 0 | 5 | 4 | 168 |
+| **Totals** | 0 | 163 | 0 | 0 | 0 | 5 | 3 | 168 |
 
 ## Pages
 

@@ -30,17 +30,6 @@ A person whose account has just been created is sent a welcome message, unless n
 - then: they receive a message welcoming them to the service and offering a link back to sign in, and no message is attempted for a person whose account has no email address
 - note: only the tolerance of accounts without an email address is corroborated outside the code; the message itself rests on the code alone.
 
-### D-users-3 · v1 · inferred · proposed
-
-After signing in, a person who already had an account is taken to their dashboard and a person whose account has just been created is taken to the page that completes their profile, unless they began signing in from a particular page, in which case they are returned to it.
-- cites: src/back-end/lib/routers/auth.ts:169
-- cites: src/back-end/lib/routers/auth.ts:87
-- reconciliation: implemented-only
-- given: a returning person and a person signing in for the first time
-- when: each completes sign-in without having started from a particular page
-- then: the returning person lands on their dashboard and the new person lands on the profile-completion page
-- note: when sign-in was started from a page that requires signing in, that page is where both land instead.
-
 ### R-4.3 · v1 · confirmed · accepted
 
 A vendor cannot finish signing up until they confirm they have read and agree to the service's terms and conditions and its privacy policy; a public sector employee is never asked to, and the moment of acceptance is recorded on the vendor's account.
@@ -55,18 +44,6 @@ A vendor cannot finish signing up until they confirm they have read and agree to
 - when: they try to complete their profile
 - then: the completion control is unavailable until they tick the box, and once they complete it their account records the date and time they agreed
 - note: acceptance is remembered twice — as the acceptance that currently stands and as the date terms were last accepted at all; the second survives a later withdrawal of the first (see R-4.15).
-
-### D-users-4 · v1 · open · proposed
-
-The profile-completion page is offered only to vendors; anyone else who reaches it is sent to their dashboard, as is a vendor who has completed it before.
-- cites: src/front-end/typescript/lib/pages/sign-up/step-two.tsx:61
-- cites: src/front-end/typescript/lib/pages/sign-up/step-two.tsx:65
-- reconciliation: implemented-only
-- given: a public sector employee signing in for the first time, and a vendor who has already agreed to the terms once
-- when: each is sent to the profile-completion page
-- then: both are moved straight on to their dashboard without being asked to confirm anything
-- note: every newly created account is sent to this page regardless of kind, so a public sector employee is never asked to confirm their details and never sees the notification choice offered there. Whether that is intended could not be settled from the source.
-- note: Should a public sector employee be asked to confirm their name, email address and job title, and be offered the new-opportunity notification choice, when their account is first created - or should they continue to be sent straight to the dashboard? The profile-completion page is where that notification choice is first offered and a public sector employee never sees it there, so answering this decides whether the page admits them or the choice moves elsewhere.
 
 ### R-4.4 · v1 · confirmed · accepted
 
@@ -91,19 +68,6 @@ A person who deactivated their own account is let back in the next time they sig
 - when: they sign in again
 - then: they are signed in, their account is active once more, and they receive a message saying they have successfully reactivated it
 - note: the message sent when a person deactivates their own account tells them this is how to come back, so signing in is the only route back for a self-deactivated account.
-
-### D-users-6 · v1 · inferred · proposed
-
-While completing their profile a person may choose to be told about new opportunities, and the choice is saved with their account.
-- cites: src/front-end/typescript/lib/pages/sign-up/step-two.tsx:186
-- cites: src/front-end/typescript/lib/pages/sign-up/step-two.tsx:270
-- cites: src/back-end/lib/resources/user.ts:234
-- cites: src/shared/lib/resources/user.ts:183
-- reconciliation: implemented-only
-- given: a vendor completing their profile
-- when: they tick the box offering notice of new opportunities and complete the profile
-- then: their account records that notifications are on, with the moment the choice was made
-- note: turning notifications off does not record a date; the record simply becomes empty, so the service cannot say when somebody stopped wanting them.
 
 ### R-4.6 · v1 · confirmed · accepted
 
@@ -169,20 +133,6 @@ A person may deactivate their own account, which ends their session at once, rec
 - then: they are signed out, shown a page confirming the deactivation, sent a message telling them they can return by signing in again, and their account is kept with the date of deactivation and the fact that they did it themselves
 - note: the published description says the account simply becomes "Inactive"; the service actually distinguishes an account deactivated by its owner from one deactivated by an administrator, and only the second can be reactivated by an administrator.
 
-### D-users-10 · v1 · inferred · proposed
-
-A person's account record may be read only by that person or by an administrator; anyone else is refused and, in the interface, is shown a missing-page instead of a refusal.
-- cites: src/back-end/lib/permissions.ts:159
-- cites: src/back-end/lib/resources/user.ts:67
-- cites: src/front-end/typescript/lib/pages/user/profile/index.tsx:133
-- cites: src/front-end/typescript/lib/pages/user/profile/index.tsx:149
-- cites: src/back-end/docs/user.yaml:14
-- reconciliation: implemented-only
-- given: two vendors and an administrator
-- when: one vendor opens the other vendor's profile, and separately an administrator opens it
-- then: the vendor is shown a missing page and the administrator sees the profile
-- note: the published interface description of this route mentions no restriction at all.
-
 ### R-4.10 · v1 · confirmed · accepted
 
 Only an administrator may reactivate somebody else's account, and only an account that an administrator deactivated; a request to reactivate an account the person deactivated themselves is refused, although the interface offers the control.
@@ -199,17 +149,6 @@ Only an administrator may reactivate somebody else's account, and only an accoun
 - note: the interface offers a "Reactivate Account" control for every inactive account, without distinguishing the two kinds of inactivity, so an administrator is invited to perform an action the service will always refuse. No corrected criterion has been written because it is undecided whether an administrator should be able to reactivate a self-deactivated account or the control should simply be hidden for one.
 - note: superseded by R-4.19
 
-### D-users-11 · v1 · inferred · proposed
-
-A signed-in person can open their own profile through a fixed address that stands for whoever is signed in, without knowing their own account identifier.
-- cites: src/shared/lib/resources/user.ts:6
-- cites: src/front-end/typescript/lib/pages/user/profile/index.tsx:81
-- reconciliation: implemented-only
-- given: any signed-in person
-- when: they open the profile address that stands for the current person
-- then: their own profile is shown
-- note: a visitor who is not signed in is sent to sign in first and returned to the profile afterwards.
-
 ### R-4.11 · v1 · confirmed · accepted
 
 A person whose account an administrator reactivates is told that they themselves successfully reactivated it.
@@ -224,23 +163,6 @@ A person whose account an administrator reactivates is told that they themselves
 - superseded-by: R-4.20
 - note: a correctly worded message for administrator reactivation exists and appears in the service's internal preview of every notification, but nothing sends it. No corrected criterion has been written; the fix is to send the message that already exists.
 - note: superseded by R-4.20
-
-### D-users-12 · v1 · inferred · proposed
-
-A profile requires a name of between one and one hundred characters and an email address in a valid format, while the job title may be left blank and is limited to one hundred characters, and the profile picture is optional.
-- cites: src/shared/lib/validation/user.ts:22
-- cites: src/shared/lib/validation/user.ts:26
-- cites: src/shared/lib/validation/index.ts:218
-- cites: src/shared/lib/validation/index.ts:444
-- cites: src/front-end/typescript/lib/pages/user/lib/components/profile-form.tsx:77
-- cites: src/back-end/lib/resources/user.ts:157
-- cites: src/back-end/docs/user.yaml:93
-- reconciliation: implemented-only
-- given: a person editing their own profile
-- when: they clear the name, or enter an email address that is not in a valid format
-- then: the profile is not saved and the offending field is reported as invalid, while the same profile saves with the job title and picture left empty
-- note: the published interface description lists the same fields but says nothing about which are required or how long they may be, and it gives this operation a different request method than the service accepts, so it cannot be followed literally.
-- note: the sign-in username is shown on the profile as a permanently read-only field, so a person can see which identity their account belongs to but cannot change it.
 
 ### R-4.12 · v1 · confirmed · accepted
 
@@ -259,17 +181,6 @@ Only an administrator may grant or withdraw administrator rights, only over a pu
 - then: the public sector employee becomes an administrator immediately, and the request against the vendor is refused with a message saying vendors cannot be granted administrator permissions
 - note: an administrator is never shown the box on their own profile, but the service would accept an administrator withdrawing their own rights, and nothing prevents the last administrator from being demoted.
 - note: an ordinary public sector employee viewing their own profile is shown their permissions as a read-only label rather than a control.
-
-### D-users-13 · v1 · inferred · proposed
-
-The job title is asked for and shown only on a public sector employee's profile; a vendor is never asked for one.
-- cites: src/front-end/typescript/lib/pages/user/lib/components/profile-form.tsx:283
-- cites: src/shared/lib/resources/user.ts:99
-- reconciliation: implemented-only
-- given: a vendor and a public sector employee each editing their own profile
-- when: each opens the profile form
-- then: the public sector employee is offered a job title field and the vendor is not
-- note: the service accepts a job title on any account, so a vendor's stored job title, if one ever existed, is carried through their profile edits unchanged and unseen.
 
 ### R-4.13 · v1 · confirmed · accepted
 
@@ -314,21 +225,6 @@ Whether a public sector employee who is not an administrator may see the list of
 - note: the permission rule admits both administrators and ordinary public sector employees, while the page admits administrators alone and the navigation link is offered to administrators alone. The list carries every person's email address and status, so the wider of the two readings discloses more than the interface ever intended.
 - note: superseded by R-4.21
 
-### D-users-16 · v1 · inferred · proposed
-
-A person may turn the notice of new opportunities on or off at any time from their profile, and following the unsubscribe link in such a message opens their profile and asks them to confirm before stopping.
-- cites: src/front-end/typescript/lib/pages/user/profile/tab/notifications.tsx:44
-- cites: src/front-end/typescript/lib/pages/user/profile/tab/notifications.tsx:101
-- cites: src/front-end/typescript/lib/pages/user/profile/tab/notifications.tsx:194
-- cites: src/back-end/lib/resources/user.ts:234
-- cites: src/front-end/typescript/lib/app/router.ts:546
-- cites: src/back-end/docs/user.yaml:113
-- reconciliation: implemented-only
-- given: a person who is being told about new opportunities
-- when: they follow the unsubscribe link from one of those messages
-- then: their notification settings open with a question asking whether they are sure, naming the email address that would stop receiving them, and the setting changes only once they confirm
-- note: the settings page states the address notifications are sent to and tells the person to correct their profile if it is wrong; there is no separate notification address.
-
 ### R-4.16 · v1 · confirmed · accepted
 
 When an administrator announces that the service's terms and conditions have changed, every vendor's standing acceptance is withdrawn and each of them is asked to read and agree to the new terms before continuing; the date they last accepted any terms is kept.
@@ -358,33 +254,10 @@ Signing out ends the person's session both with the service and with the identit
 - then: they are told they have successfully signed out, their session no longer exists, and the pages that require signing in send them back to sign in
 - note: a person may end only their own session; a request to end anybody else's is refused.
 
-### D-users-18 · v1 · inferred · proposed
-
-An administrator may deactivate another person's account, which records the date and who did it and tells that person by email that an administrator has removed their access.
-- cites: src/back-end/lib/resources/user.ts:368
-- cites: src/back-end/lib/resources/user.ts:393
-- cites: src/back-end/lib/mailer/notifications/user.tsx:96
-- cites: src/front-end/typescript/lib/pages/user/profile/tab/profile.tsx:593
-- reconciliation: implemented-only
-- given: an administrator viewing an active person's profile
-- when: they deactivate that account and confirm
-- then: the account is marked as deactivated by an administrator, carries the date and the identity of the administrator who did it, and the person receives a message saying their access has been removed and whom to contact with questions
-
 ### R-4.18 · v1 · confirmed · accepted
 
 A person's profile details - name, email address, job title and picture - may be changed only by that person. An administrator viewing somebody else's profile is offered no editing control, and the service refuses a profile change submitted against an account that is not the requester's own; an administrator's powers over another person's account are limited to deactivating it, reactivating it, and granting or withdrawing administrator rights.
 - replaces: R-4.7
-
-### D-users-19 · v1 · inferred · proposed
-
-A request to deactivate an account that is already inactive is refused, and an administrator is never offered the option of deactivating their own account.
-- cites: src/back-end/lib/resources/user.ts:357
-- cites: src/front-end/typescript/lib/pages/user/profile/tab/profile.tsx:516
-- reconciliation: implemented-only
-- given: an already deactivated account, and an administrator viewing their own profile
-- when: a second deactivation is requested for the first, and the administrator looks for a deactivation control on their own profile
-- then: the second request is refused with a message saying the account is already inactive, and the administrator's own profile offers no such control
-- note: nothing prevents an administrator from deactivating the last remaining administrator account other than their own, so the service can be left with no usable administrator.
 
 ### R-4.19 · v1 · confirmed · accepted
 
@@ -401,7 +274,162 @@ A person whose account an administrator reactivates is told that an administrato
 The list of everyone registered with the service may be read only by an administrator. The same request made by a public sector employee who is not an administrator, or by anyone else, is refused rather than answered, so the email address and account status of every registered person are never disclosed more widely than the interface offers them.
 - replaces: R-4.15
 
-### D-users-26 · v1 · inferred · proposed
+### R-4.22 · v1 · confirmed · accepted
+
+After signing in, a person who already had an account is taken to their dashboard and a person whose account has just been created is taken to the page that completes their profile, unless they began signing in from a particular page, in which case they are returned to it.
+- cites: src/back-end/lib/routers/auth.ts:169
+- cites: src/back-end/lib/routers/auth.ts:87
+- reconciliation: implemented-only
+- given: a returning person and a person signing in for the first time
+- when: each completes sign-in without having started from a particular page
+- then: the returning person lands on their dashboard and the new person lands on the profile-completion page
+- note: when sign-in was started from a page that requires signing in, that page is where both land instead.
+
+### R-4.23 · v2 · confirmed · accepted
+
+The profile-completion page is offered only to a vendor who has not yet agreed to the terms; a vendor who has agreed before and any signed-in person who is not a vendor are sent to their dashboard instead, and a visitor who is not signed in is sent to sign in.
+- cites: src/front-end/typescript/lib/pages/sign-up/step-two.tsx:61
+- cites: src/front-end/typescript/lib/pages/sign-up/step-two.tsx:65
+- reconciliation: implemented-only
+- given: a public sector employee signing in for the first time, and a vendor who has already agreed to the terms once
+- when: each is sent to the profile-completion page
+- then: both are moved straight on to their dashboard without being asked to confirm anything
+- note: every newly created account is sent to this page regardless of kind, so a public sector employee is never asked to confirm their details and never sees the notification choice offered there. Whether that is intended could not be settled from the source.
+- note: Should a public sector employee be asked to confirm their name, email address and job title, and be offered the new-opportunity notification choice, when their account is first created - or should they continue to be sent straight to the dashboard? The profile-completion page is where that notification choice is first offered and a public sector employee never sees it there, so answering this decides whether the page admits them or the choice moves elsewhere.
+
+### R-4.24 · v1 · confirmed · accepted
+
+While completing their profile a person may choose to be told about new opportunities, and the choice is saved with their account.
+- cites: src/front-end/typescript/lib/pages/sign-up/step-two.tsx:186
+- cites: src/front-end/typescript/lib/pages/sign-up/step-two.tsx:270
+- cites: src/back-end/lib/resources/user.ts:234
+- cites: src/shared/lib/resources/user.ts:183
+- reconciliation: implemented-only
+- given: a vendor completing their profile
+- when: they tick the box offering notice of new opportunities and complete the profile
+- then: their account records that notifications are on, with the moment the choice was made
+- note: turning notifications off does not record a date; the record simply becomes empty, so the service cannot say when somebody stopped wanting them.
+
+### R-4.25 · v1 · confirmed · accepted
+
+A person's account record may be read only by that person or by an administrator; anyone else is refused and, in the interface, is shown a missing-page instead of a refusal.
+- cites: src/back-end/lib/permissions.ts:159
+- cites: src/back-end/lib/resources/user.ts:67
+- cites: src/front-end/typescript/lib/pages/user/profile/index.tsx:133
+- cites: src/front-end/typescript/lib/pages/user/profile/index.tsx:149
+- cites: src/back-end/docs/user.yaml:14
+- reconciliation: implemented-only
+- given: two vendors and an administrator
+- when: one vendor opens the other vendor's profile, and separately an administrator opens it
+- then: the vendor is shown a missing page and the administrator sees the profile
+- note: the published interface description of this route mentions no restriction at all.
+
+### R-4.26 · v1 · confirmed · accepted
+
+A signed-in person can open their own profile through a fixed address that stands for whoever is signed in, without knowing their own account identifier.
+- cites: src/shared/lib/resources/user.ts:6
+- cites: src/front-end/typescript/lib/pages/user/profile/index.tsx:81
+- reconciliation: implemented-only
+- given: any signed-in person
+- when: they open the profile address that stands for the current person
+- then: their own profile is shown
+- note: a visitor who is not signed in is sent to sign in first and returned to the profile afterwards.
+
+### R-4.27 · v2 · confirmed · accepted
+
+A profile requires a name of between one and one hundred characters and an email address in a valid format, which is stored in lower case; the job title may be left blank and is limited to one hundred characters, and the profile picture is optional.
+- cites: src/shared/lib/validation/user.ts:22
+- cites: src/shared/lib/validation/user.ts:26
+- cites: src/shared/lib/validation/index.ts:218
+- cites: src/shared/lib/validation/index.ts:444
+- cites: src/front-end/typescript/lib/pages/user/lib/components/profile-form.tsx:77
+- cites: src/back-end/lib/resources/user.ts:157
+- cites: src/back-end/docs/user.yaml:93
+- reconciliation: implemented-only
+- given: a person editing their own profile
+- when: they clear the name, or enter an email address that is not in a valid format
+- then: the profile is not saved and the offending field is reported as invalid, while the same profile saves with the job title and picture left empty
+- note: the published interface description lists the same fields but says nothing about which are required or how long they may be, and it gives this operation a different request method than the service accepts, so it cannot be followed literally.
+- note: the sign-in username is shown on the profile as a permanently read-only field, so a person can see which identity their account belongs to but cannot change it.
+
+### R-4.28 · v1 · confirmed · accepted
+
+The job title is asked for and shown only on a public sector employee's profile; a vendor is never asked for one.
+- cites: src/front-end/typescript/lib/pages/user/lib/components/profile-form.tsx:283
+- cites: src/shared/lib/resources/user.ts:99
+- reconciliation: implemented-only
+- given: a vendor and a public sector employee each editing their own profile
+- when: each opens the profile form
+- then: the public sector employee is offered a job title field and the vendor is not
+- note: the service accepts a job title on any account, so a vendor's stored job title, if one ever existed, is carried through their profile edits unchanged and unseen.
+
+### D-users-29 · v1 · inferred · obsolete
+
+Outside production the service offers direct sign-in routes for fixed test accounts, which create a session without consulting the identity provider and without checking whether the account is active.
+- cites: src/back-end/lib/routers/auth.ts:194
+- cites: src/back-end/lib/routers/auth.ts:253
+- cites: src/back-end/lib/routers/auth.ts:313
+- cites: src/back-end/lib/routers/auth.ts:218
+- reconciliation: defect
+- given: a service not running in production and a fixed test account that an administrator has deactivated
+- when: someone opens the direct sign-in route for that account
+- then: a session is created and they are taken to the dashboard, without the identity provider being involved and without the deactivation being noticed
+- note: these routes exist only to let tests sign in, and they bypass the account-status rule in R-4.4. No corrected criterion has been written because how the new system lets tests establish an identity is a decision for its own environment arrangements rather than something to recover from here.
+- note: These routes are gated on NODE_ENV being exactly 'development' rather than on being outside production as the recovered statement has it, but either way they are test-only entrances of precisely the kind constitution article J3 forbids. The rebuilt system carries no route that establishes a session without the identity provider; tests sign in through the sandbox identity provider, which is also what makes R-4.4 testable at all, since the old routes bypass the account-status check.
+- note: These routes are gated on NODE_ENV being exactly 'development' rather than on being outside production as the recovered statement has it, but either way they are test-only entrances of precisely the kind constitution article J3 forbids. The rebuilt system carries no route that establishes a session without the identity provider; tests sign in through the sandbox identity provider, which is also what makes D-users-7 testable at all, since the old routes bypass the account-status check.
+
+### R-4.29 · v1 · confirmed · accepted
+
+A person may turn the notice of new opportunities on or off at any time from their profile, and following the unsubscribe link in such a message opens their profile and asks them to confirm before stopping.
+- cites: src/front-end/typescript/lib/pages/user/profile/tab/notifications.tsx:44
+- cites: src/front-end/typescript/lib/pages/user/profile/tab/notifications.tsx:101
+- cites: src/front-end/typescript/lib/pages/user/profile/tab/notifications.tsx:194
+- cites: src/back-end/lib/resources/user.ts:234
+- cites: src/front-end/typescript/lib/app/router.ts:546
+- cites: src/back-end/docs/user.yaml:113
+- reconciliation: implemented-only
+- given: a person who is being told about new opportunities
+- when: they follow the unsubscribe link from one of those messages
+- then: their notification settings open with a question asking whether they are sure, naming the email address that would stop receiving them, and the setting changes only once they confirm
+- note: the settings page states the address notifications are sent to and tells the person to correct their profile if it is wrong; there is no separate notification address.
+
+### R-4.30 · v1 · confirmed · accepted
+
+An administrator may deactivate another person's account, which records the date and who did it and tells that person by email that an administrator has removed their access.
+- cites: src/back-end/lib/resources/user.ts:368
+- cites: src/back-end/lib/resources/user.ts:393
+- cites: src/back-end/lib/mailer/notifications/user.tsx:96
+- cites: src/front-end/typescript/lib/pages/user/profile/tab/profile.tsx:593
+- reconciliation: implemented-only
+- given: an administrator viewing an active person's profile
+- when: they deactivate that account and confirm
+- then: the account is marked as deactivated by an administrator, carries the date and the identity of the administrator who did it, and the person receives a message saying their access has been removed and whom to contact with questions
+
+### R-4.31 · v2 · confirmed · accepted
+
+A request to deactivate an account that is already inactive is refused with a message saying the account is already inactive; an administrator viewing their own profile is offered no deactivation control, but that restriction rests on the interface alone, since the service accepts a deactivation request made against the requester's own account.
+- cites: src/back-end/lib/resources/user.ts:357
+- cites: src/front-end/typescript/lib/pages/user/profile/tab/profile.tsx:516
+- reconciliation: implemented-only
+- given: an already deactivated account, and an administrator viewing their own profile
+- when: a second deactivation is requested for the first, and the administrator looks for a deactivation control on their own profile
+- then: the second request is refused with a message saying the account is already inactive, and the administrator's own profile offers no such control
+- note: nothing prevents an administrator from deactivating the last remaining administrator account other than their own, so the service can be left with no usable administrator.
+
+### D-users-32 · v1 · open · obsolete
+
+The service offers no way to take over an account or a session by presenting a shared token, although its own documentation describes one.
+- cites: README.md:279
+- cites: src/back-end/config.ts:82
+- cites: src/back-end/index.ts:150
+- reconciliation: documented-only
+- given: a service configured with the shared token the documentation describes
+- when: someone tries to use it to override an account or a session
+- then: no route accepts it, because none is registered
+- note: the documentation describes "service API endpoints that are only enabled in development and test environments" which "can be used to override user accounts and sessions", and the setting it names is read into the configuration, but nothing else in the application refers to it and no such route is assembled. Either the feature was removed and the documentation was not, or it was documented ahead of being built; the source cannot say which.
+- note: The facility does not exist. SERVICE_TOKEN_HASH appears exactly twice in the whole of the old repository - its definition at src/back-end/config.ts:82 and its README row at README.md:279 - and no route, handler or middleware refers to it. The criterion records that the old repository's documentation is stale rather than a behaviour the rebuilt system must exhibit, and a shared token overriding user accounts and sessions would be a test-only entrance forbidden by J3 in any case, so it is carried forward in neither direction.
+
+### R-4.32 · v1 · confirmed · accepted
 
 An administrator may export a contact list of active accounts as a spreadsheet file, choosing whether to include public sector employees, vendors or both, and which of first name, last name, email address and organization name to include; at least one kind and one field must be chosen.
 - cites: src/back-end/lib/resources/contact-list.ts:34
@@ -418,7 +446,7 @@ An administrator may export a contact list of active accounts as a spreadsheet f
 - note: a person's name is split into a first name and a last name at the first space, so a single-word name yields an empty last name and a three-word name puts two words in the last-name column. The account-kind column appears only when both kinds were chosen. Administrators are exported whenever public sector employees are chosen. Only organizations that are still active and memberships that are still current are named, joined into one field.
 - note: the export is refused to anyone who is not an administrator, and the export control itself is unavailable until at least one kind and one field are ticked.
 
-### D-users-28 · v1 · inferred · proposed
+### R-4.33 · v1 · confirmed · accepted
 
 A vendor's profile carries a section setting out the privacy policy, the service's terms and conditions with the date and time they agreed to them, and the terms of each of the three programs; nobody but a vendor is shown it.
 - cites: src/front-end/typescript/lib/pages/user/profile/tab/legal.tsx:23
@@ -431,21 +459,7 @@ A vendor's profile carries a section setting out the privacy policy, the service
 - then: the vendor sees the legal section stating the date and time they agreed, and the public sector employee is not offered the section at all and is shown their profile instead if they ask for it
 - note: the privacy policy is shown as text on the page and states that agreement to it was given when the account was created, so it is never separately accepted.
 
-### D-users-29 · v1 · inferred · obsolete
-
-Outside production the service offers direct sign-in routes for fixed test accounts, which create a session without consulting the identity provider and without checking whether the account is active.
-- cites: src/back-end/lib/routers/auth.ts:194
-- cites: src/back-end/lib/routers/auth.ts:253
-- cites: src/back-end/lib/routers/auth.ts:313
-- cites: src/back-end/lib/routers/auth.ts:218
-- reconciliation: defect
-- given: a service not running in production and a fixed test account that an administrator has deactivated
-- when: someone opens the direct sign-in route for that account
-- then: a session is created and they are taken to the dashboard, without the identity provider being involved and without the deactivation being noticed
-- note: these routes exist only to let tests sign in, and they bypass the account-status rule in R-4.4. No corrected criterion has been written because how the new system lets tests establish an identity is a decision for its own environment arrangements rather than something to recover from here.
-- note: These routes are gated on NODE_ENV being exactly 'development' rather than on being outside production as the recovered statement has it, but either way they are test-only entrances of precisely the kind constitution article J3 forbids. The rebuilt system carries no route that establishes a session without the identity provider; tests sign in through the sandbox identity provider, which is also what makes R-4.4 testable at all, since the old routes bypass the account-status check.
-
-### D-users-30 · v1 · inferred · proposed
+### R-4.34 · v1 · confirmed · accepted
 
 A profile shows different sections depending on whose it is: a vendor's own profile offers profile, capabilities, organizations, notifications and legal sections, a public sector employee's offers profile and notifications, and an administrator looking at somebody else's account sees the profile section alone.
 - cites: src/front-end/typescript/lib/pages/user/profile/tab/index.ts:174
@@ -456,16 +470,3 @@ A profile shows different sections depending on whose it is: a vendor's own prof
 - when: each opens their own profile, and the administrator then opens the vendor's
 - then: each own profile shows the sections belonging to that kind of account, and the vendor's profile seen by the administrator shows only the profile section
 - note: asking for a section that does not belong to the profile being viewed silently shows the profile section instead of refusing. An account's status is shown only to an administrator; everyone else sees the account kind alone.
-
-### D-users-32 · v1 · open · obsolete
-
-The service offers no way to take over an account or a session by presenting a shared token, although its own documentation describes one.
-- cites: README.md:279
-- cites: src/back-end/config.ts:82
-- cites: src/back-end/index.ts:150
-- reconciliation: documented-only
-- given: a service configured with the shared token the documentation describes
-- when: someone tries to use it to override an account or a session
-- then: no route accepts it, because none is registered
-- note: the documentation describes "service API endpoints that are only enabled in development and test environments" which "can be used to override user accounts and sessions", and the setting it names is read into the configuration, but nothing else in the application refers to it and no such route is assembled. Either the feature was removed and the documentation was not, or it was documented ahead of being built; the source cannot say which.
-- note: The facility does not exist. SERVICE_TOKEN_HASH appears exactly twice in the whole of the old repository - its definition at src/back-end/config.ts:82 and its README row at README.md:279 - and no route, handler or middleware refers to it. The criterion records that the old repository's documentation is stale rather than a behaviour the rebuilt system must exhibit, and a shared token overriding user accounts and sessions would be a test-only entrance forbidden by J3 in any case, so it is carried forward in neither direction.
