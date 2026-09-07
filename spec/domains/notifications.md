@@ -155,18 +155,6 @@ The only notification a person can choose to stop is the announcement of newly p
 - note: the notification settings page offers exactly one choice and labels it "New opportunities", so the settings page itself is honest about its scope. The defect is that every message the service sends ends with an unsubscribe offer that leads to that one choice, so a person who unsubscribes from a message the choice does not govern will keep receiving messages of that kind with no indication why. No corrected criterion is offered, because whether the new service should let a person decline the other kinds of notice — and which of them may be declined at all, given that some carry decisions a person needs — is a ruling for a human.
 - note: superseded by R-6.16
 
-### D-notifications-11 · v1 · inferred · recovered
-A newly created account has new-opportunity notifications off until its holder asks for them.
-- cites: src/back-end/lib/routers/auth.ts:478
-- cites: src/shared/lib/resources/user.ts:56
-- cites: src/migrations/tasks/20191203143238_alter_columns.ts:14
-- reconciliation: implemented-only
-- given: a person signing in to the service for the first time
-- when: their account is created
-- then: it records no request for new-opportunity notices, and none is sent to them until they ask
-- state: proposed
-- note: the record holds the moment the request was made rather than a yes or no, so an account that has never asked and an account that has asked and then changed its mind are indistinguishable afterwards. Combined with the profile-completion page never being shown to a public sector employee, this means such a person is never offered the choice at the point where it is first offered and receives no new-opportunity notices unless they later find the setting themselves.
-
 ### R-6.11 · v1 · confirmed · recovered
 A deactivated account receives no announcement of newly published opportunities, but still receives every notice about an opportunity it was watching.
 - cites: src/back-end/lib/db/user.ts:164
@@ -182,20 +170,6 @@ A deactivated account receives no announcement of newly published opportunities,
 - note: the two recipient lists are built differently — the announcement list excludes deactivated accounts explicitly, the watcher list applies no such filter and no notification-preference filter either. A person who deactivated their own account therefore keeps receiving mail about opportunities they can no longer open. No corrected criterion is offered: whether deactivation should also end watching, or only suppress the messages, is a ruling for a human.
 - note: superseded by R-6.17
 
-### D-notifications-12 · v1 · inferred · recovered
-A signed-in person can turn new-opportunity notices on and off from the list of opportunities itself, without opening their settings.
-- cites: src/front-end/typescript/lib/pages/opportunity/list.tsx:503
-- cites: src/front-end/typescript/lib/pages/opportunity/list.tsx:886
-- cites: src/front-end/typescript/lib/pages/opportunity/list.tsx:894
-- cites: src/front-end/typescript/lib/pages/opportunity/list.tsx:997
-- reconciliation: implemented-only
-- given: a signed-in person browsing the list of opportunities with notices turned off
-- when: they choose to be notified about new opportunities
-- then: the control changes to offer the opposite choice, their account records the request, and the change takes effect for the next opportunity published
-- state: proposed
-- note: the control is offered without a confirmation in either direction here, whereas the same choice made from the notification settings asks the person to confirm before turning notices off.
-- note: it sits at the top of the first group of opportunities on the page, which is the unpublished group for a person who has unpublished opportunities and the open group for everybody else, so it appears exactly once wherever the reader is looking first.
-
 ### R-6.12 · v1 · confirmed · recovered
 The message announcing changed terms tells vendors the new terms must be accepted before submitting to two of the service's three programs, although all three require it.
 - cites: src/back-end/lib/mailer/notifications/terms-updated.tsx:40
@@ -210,16 +184,6 @@ The message announcing changed terms tells vendors the new terms must be accepte
 - superseded-by: R-6.18
 - note: the service refuses a submission to any of the three programs from a vendor who has not accepted the current terms; the message names only the two programs that existed when it was written. No corrected criterion is offered separately, because the fix is to name all three programs, or none of them, in that one sentence.
 - note: superseded by R-6.18
-
-### D-notifications-13 · v1 · inferred · recovered
-The notification control on the list of opportunities is not shown on a narrow screen.
-- cites: src/front-end/typescript/lib/pages/opportunity/list.tsx:877
-- reconciliation: defect
-- given: a signed-in person browsing the list of opportunities on a phone
-- when: they look for the control that turns new-opportunity notices on
-- then: no such control appears anywhere on the page, and the only route to the choice is the notification settings on their own profile
-- state: proposed
-- note: the control is hidden below the medium breakpoint and shown above it. The choice itself remains reachable from the notification settings, so nothing is unreachable, but the shortcut is silently absent rather than moved. No corrected criterion is offered; whether the new service shows this control at every width is a design decision rather than a recovered rule.
 
 ### R-6.13 · v1 · confirmed · recovered
 An administrator can open a single page showing a sample of each message the service sends, with its subject and, where one is written, a one-line summary of who receives it and why.
@@ -259,22 +223,6 @@ The reference page does not show every message the service can send: twelve of t
 - note: sixty-two distinct messages exist and fifty appear on the page. The twelve absent are the pair sent when a Code With Us opportunity is submitted for review, the notices sent when an evaluation panel is named or altered in either program, and the notices sent when either program's opportunity becomes ready for consensus, has a consensus submitted, or has one finalised. The pattern fits the page having been maintained alongside earlier work and not updated when the evaluation panel arrived, but the source cannot say whether the omissions are oversight or deliberate. Graded open because a human must rule on what the page is for before it can be said what "all of them" should mean: a complete catalogue that must be kept in step, or a sample that never claimed to be complete and whose documentation is simply overstated.
 - note: superseded by R-6.19
 
-### D-notifications-15 · v1 · inferred · recovered
-An administrator viewing the service's terms and conditions can announce that they have changed, which withdraws every vendor's standing acceptance and sends each active vendor a message asking them to read and accept the new terms.
-- cites: src/front-end/typescript/lib/pages/content/edit.tsx:114
-- cites: src/front-end/typescript/lib/pages/content/edit.tsx:555
-- cites: src/front-end/typescript/lib/pages/content/edit.tsx:619
-- cites: src/back-end/lib/resources/email-notifications.ts:52
-- cites: src/back-end/lib/resources/email-notifications.ts:76
-- cites: src/back-end/lib/mailer/notifications/terms-updated.tsx:11
-- cites: src/back-end/lib/permissions.ts:1646
-- reconciliation: implemented-only
-- given: an administrator on the page holding the service's terms and conditions, and a mix of active and deactivated vendors who had all accepted the previous terms
-- when: the administrator chooses to notify vendors and confirms
-- then: every vendor's acceptance is withdrawn and each active vendor receives a message naming the change and offering a link to read and accept the new terms
-- state: proposed
-- note: the announcement is offered only on the terms and conditions page and nowhere else, and only to an administrator; the same request made by anybody else, signed in or not, is refused. Acceptance is withdrawn for every vendor including deactivated ones, while only active vendors are told, so a vendor deactivated at the time of the change learns of it only on returning. This route appears in no published interface description.
-
 ### R-6.15 · v1 · confirmed · authored
 A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service's own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity's owner exactly as it does to every other multi-recipient notice.
 - state: accepted
@@ -284,18 +232,6 @@ A notice sent to more than one person must hide every recipient from the others,
 A message that the notification preference does not govern must not offer to unsubscribe; it links to the reader's notification settings without implying that any choice there will stop messages of that kind.
 - state: accepted
 - replaces: R-6.10
-
-### D-notifications-17 · v1 · inferred · recovered
-An announcement of changed terms is reported as successful as soon as the acceptances are withdrawn, before any message has been sent.
-- cites: src/back-end/lib/resources/email-notifications.ts:76
-- cites: src/back-end/lib/resources/email-notifications.ts:80
-- cites: src/back-end/lib/mailer/notifications/terms-updated.tsx:16
-- reconciliation: implemented-only
-- given: an administrator announcing changed terms to a large body of vendors
-- when: they confirm
-- then: they are told at once that vendors have been notified, while the messages are still being sent one at a time in the background, and nothing later tells them whether every message was sent
-- state: proposed
-- note: the withdrawal of acceptances is completed before the response, so the part of the action a vendor will notice on their next visit is reliable; only the messages are not. Delivery failures are invisible for the reason given in R-6.2, so a run that reaches nobody looks exactly like one that reaches everybody.
 
 ### R-6.17 · v1 · confirmed · authored
 A deactivated account receives no notification of any kind, including notices about opportunities it was watching, while the watch itself is retained so that reactivating the account restores it.
@@ -312,8 +248,74 @@ The administrator's notification reference page shows every message the service 
 - state: accepted
 - replaces: R-6.14
 
-### D-notifications-20 · v1 · inferred · recovered
-The message telling a vendor that an opportunity they proposed on has been awarded to somebody else names the organization that won it.
+### R-6.20 · v1 · confirmed · recovered
+A newly created account has new-opportunity notifications off until its holder asks for them.
+- cites: src/back-end/lib/routers/auth.ts:478
+- cites: src/shared/lib/resources/user.ts:56
+- cites: src/migrations/tasks/20191203143238_alter_columns.ts:14
+- reconciliation: implemented-only
+- given: a person signing in to the service for the first time
+- when: their account is created
+- then: it records no request for new-opportunity notices, and none is sent to them until they ask
+- state: accepted
+- note: the record holds the moment the request was made rather than a yes or no, so an account that has never asked and an account that has asked and then changed its mind are indistinguishable afterwards. Combined with the profile-completion page never being shown to a public sector employee, this means such a person is never offered the choice at the point where it is first offered and receives no new-opportunity notices unless they later find the setting themselves.
+
+### R-6.21 · v1 · confirmed · recovered
+A signed-in person can turn new-opportunity notices on and off from the list of opportunities itself, without opening their settings.
+- cites: src/front-end/typescript/lib/pages/opportunity/list.tsx:503
+- cites: src/front-end/typescript/lib/pages/opportunity/list.tsx:886
+- cites: src/front-end/typescript/lib/pages/opportunity/list.tsx:894
+- cites: src/front-end/typescript/lib/pages/opportunity/list.tsx:997
+- reconciliation: implemented-only
+- given: a signed-in person browsing the list of opportunities with notices turned off
+- when: they choose to be notified about new opportunities
+- then: the control changes to offer the opposite choice, their account records the request, and the change takes effect for the next opportunity published
+- state: accepted
+- note: the control is offered without a confirmation in either direction here, whereas the same choice made from the notification settings asks the person to confirm before turning notices off.
+- note: it sits at the top of the first group of opportunities on the page, which is the unpublished group for a person who has unpublished opportunities and the open group for everybody else, so it appears exactly once wherever the reader is looking first.
+
+### R-6.22 · v1 · confirmed · recovered
+The notification control on the list of opportunities is not shown on a narrow screen.
+- cites: src/front-end/typescript/lib/pages/opportunity/list.tsx:877
+- reconciliation: defect
+- given: a signed-in person browsing the list of opportunities on a phone
+- when: they look for the control that turns new-opportunity notices on
+- then: no such control appears anywhere on the page, and the only route to the choice is the notification settings on their own profile
+- state: accepted
+- superseded-by: R-6.27
+- note: the control is hidden below the medium breakpoint and shown above it. The choice itself remains reachable from the notification settings, so nothing is unreachable, but the shortcut is silently absent rather than moved. No corrected criterion is offered; whether the new service shows this control at every width is a design decision rather than a recovered rule.
+- note: superseded by R-6.27
+
+### R-6.23 · v1 · confirmed · recovered
+An administrator viewing the service's terms and conditions can announce that they have changed, which withdraws every vendor's standing acceptance and sends each active vendor a message asking them to read and accept the new terms.
+- cites: src/front-end/typescript/lib/pages/content/edit.tsx:114
+- cites: src/front-end/typescript/lib/pages/content/edit.tsx:555
+- cites: src/front-end/typescript/lib/pages/content/edit.tsx:619
+- cites: src/back-end/lib/resources/email-notifications.ts:52
+- cites: src/back-end/lib/resources/email-notifications.ts:76
+- cites: src/back-end/lib/mailer/notifications/terms-updated.tsx:11
+- cites: src/back-end/lib/permissions.ts:1646
+- reconciliation: implemented-only
+- given: an administrator on the page holding the service's terms and conditions, and a mix of active and deactivated vendors who had all accepted the previous terms
+- when: the administrator chooses to notify vendors and confirms
+- then: every vendor's acceptance is withdrawn and each active vendor receives a message naming the change and offering a link to read and accept the new terms
+- state: accepted
+- note: the announcement is offered only on the terms and conditions page and nowhere else, and only to an administrator; the same request made by anybody else, signed in or not, is refused. Acceptance is withdrawn for every vendor including deactivated ones, while only active vendors are told, so a vendor deactivated at the time of the change learns of it only on returning. This route appears in no published interface description.
+
+### R-6.24 · v1 · confirmed · recovered
+An announcement of changed terms is reported as successful as soon as the acceptances are withdrawn, before any message has been sent.
+- cites: src/back-end/lib/resources/email-notifications.ts:76
+- cites: src/back-end/lib/resources/email-notifications.ts:80
+- cites: src/back-end/lib/mailer/notifications/terms-updated.tsx:16
+- reconciliation: implemented-only
+- given: an administrator announcing changed terms to a large body of vendors
+- when: they confirm
+- then: they are told at once that vendors have been notified, while the messages are still being sent one at a time in the background, and nothing later tells them whether every message was sent
+- state: accepted
+- note: the withdrawal of acceptances is completed before the response, so the part of the action a vendor will notice on their next visit is reliable; only the messages are not. Delivery failures are invisible for the reason given in R-6.2, so a run that reaches nobody looks exactly like one that reaches everybody.
+
+### R-6.25 · v2 · confirmed · recovered
+The message telling a vendor that an opportunity they proposed on has been awarded to somebody else leads with the opportunity's title and the name of the winning proponent — the winning organization for Sprint With Us and Team With Us, and for Code With Us the legal name of the winning organization or individual, or an em dash where no successful proponent is recorded — and offers the reader a way to sign in and see their own score.
 - cites: src/back-end/lib/mailer/notifications/proposal/code-with-us.tsx:277
 - cites: src/back-end/lib/mailer/notifications/proposal/code-with-us.tsx:281
 - cites: src/back-end/lib/mailer/notifications/proposal/sprint-with-us.tsx:287
@@ -323,19 +325,31 @@ The message telling a vendor that an opportunity they proposed on has been award
 - given: three vendors who submitted proposals to one opportunity, one of which has just been awarded
 - when: the decision is sent to the two who were not chosen
 - then: each is told the opportunity was awarded, is shown the name of the organization it was awarded to, and is offered a way to sign in and see their own score
-- state: proposed
+- state: accepted
 - note: this message uses a layout of its own rather than the layout every other message uses, leading with the opportunity's title and the winner's name. Where no successful proponent is recorded the name is replaced by a dash rather than the sentence being omitted, so a reader can be shown "awarded to —".
 
-### D-notifications-21 · v1 · open · recovered
-What happens when the service tries to notify an account that has no email address cannot be determined from the code.
+### R-6.26 · v2 · confirmed · recovered
+When the service notifies an account that holds no email address it composes the message all the same and hands it over with an empty list of recipients; any resulting failure is written to the operational log only, nothing in the service records that the person was not reached, and a broadcast to many vendors always continues to the next recipient because no failure in composing or sending can interrupt it.
 - cites: src/back-end/lib/mailer/notifications/terms-updated.tsx:32
 - cites: src/back-end/lib/mailer/notifications/user.tsx:72
 - cites: src/shared/lib/resources/user.ts:53
 - cites: src/back-end/lib/mailer/transport.ts:26
-- reconciliation: implemented-only
+- reconciliation: defect
 - given: a vendor whose account holds no email address, because the identity provider supplied none
 - when: an administrator announces changed terms
 - then: the service composes a message for that account addressed to nobody and hands it on to be sent, and what follows depends on the sending machinery rather than on anything the service decides
-- state: proposed
+- state: accepted
+- superseded-by: R-6.28
 - note: accounts without an email address are allowed deliberately, and most messages guard against one only by substituting an empty list of recipients where the address would go — the message is still composed and still handed over to be sent. Whether that produces a rejected send, a silently discarded one, or an error that stops the rest of a broadcast is not decidable from the source, and because delivery failures are only logged, nothing inside the service would show which. The one place that does check is account creation, which skips the welcome message when there is no address. A human should rule on whether the new service must skip a recipient with no address everywhere, and on whether one such recipient may stop a broadcast to the rest.
 - note: Must the service skip a recipient that holds no email address rather than composing a message addressed to nobody, and must a broadcast to many vendors always continue past such a recipient rather than being able to stop the run on one?
+- note: superseded by R-6.28
+
+### R-6.27 · v1 · confirmed · authored
+The choice to be notified about newly published opportunities is offered on the list of opportunities itself at every screen width, so a person reading the list on a phone reaches it the same way as a person reading it on a desktop.
+- state: accepted
+- replaces: R-6.22
+
+### R-6.28 · v1 · confirmed · authored
+The service skips a recipient that holds no email address rather than composing a message addressed to nobody, and a broadcast to many people always continues past a recipient it cannot address or cannot reach.
+- state: accepted
+- replaces: R-6.26

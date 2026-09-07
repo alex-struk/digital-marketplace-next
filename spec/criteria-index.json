@@ -1,5 +1,5 @@
 {
-  "generated_from": "7214e11fe5805605dff5a5f5c20d4e2896f33753",
+  "generated_from": "24729facbeb8ac1654544e6685db4cd56c86ed9a",
   "criteria": [
     {
       "id": "R-5.1",
@@ -1572,39 +1572,6 @@
       "file": "spec/domains/notifications.md"
     },
     {
-      "id": "D-notifications-11",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "A newly created account has new-opportunity notifications off until its holder asks for them.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/routers/auth.ts",
-          "line": 478
-        },
-        {
-          "path": "src/shared/lib/resources/user.ts",
-          "line": 56
-        },
-        {
-          "path": "src/migrations/tasks/20191203143238_alter_columns.ts",
-          "line": 14
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "a person signing in to the service for the first time",
-      "when": "their account is created",
-      "then": "it records no request for new-opportunity notices, and none is sent to them until they ask",
-      "notes": [
-        "the record holds the moment the request was made rather than a yes or no, so an account that has never asked and an account that has asked and then changed its mind are indistinguishable afterwards. Combined with the profile-completion page never being shown to a public sector employee, this means such a person is never offered the choice at the point where it is first offered and receives no new-opportunity notices unless they later find the setting themselves."
-      ],
-      "state": "proposed",
-      "raw": "### D-notifications-11 · v1 · inferred · recovered",
-      "line": 158,
-      "domain": "notifications",
-      "file": "spec/domains/notifications.md"
-    },
-    {
       "id": "R-6.11",
       "version": 1,
       "confidence": "confirmed",
@@ -1639,45 +1606,7 @@
       "state": "accepted",
       "supersededBy": "R-6.17",
       "raw": "### R-6.11 · v1 · confirmed · recovered",
-      "line": 170,
-      "domain": "notifications",
-      "file": "spec/domains/notifications.md"
-    },
-    {
-      "id": "D-notifications-12",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "A signed-in person can turn new-opportunity notices on and off from the list of opportunities itself, without opening their settings.",
-      "cites": [
-        {
-          "path": "src/front-end/typescript/lib/pages/opportunity/list.tsx",
-          "line": 503
-        },
-        {
-          "path": "src/front-end/typescript/lib/pages/opportunity/list.tsx",
-          "line": 886
-        },
-        {
-          "path": "src/front-end/typescript/lib/pages/opportunity/list.tsx",
-          "line": 894
-        },
-        {
-          "path": "src/front-end/typescript/lib/pages/opportunity/list.tsx",
-          "line": 997
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "a signed-in person browsing the list of opportunities with notices turned off",
-      "when": "they choose to be notified about new opportunities",
-      "then": "the control changes to offer the opposite choice, their account records the request, and the change takes effect for the next opportunity published",
-      "notes": [
-        "the control is offered without a confirmation in either direction here, whereas the same choice made from the notification settings asks the person to confirm before turning notices off.",
-        "it sits at the top of the first group of opportunities on the page, which is the unpublished group for a person who has unpublished opportunities and the open group for everybody else, so it appears exactly once wherever the reader is looking first."
-      ],
-      "state": "proposed",
-      "raw": "### D-notifications-12 · v1 · inferred · recovered",
-      "line": 185,
+      "line": 158,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -1716,32 +1645,7 @@
       "state": "accepted",
       "supersededBy": "R-6.18",
       "raw": "### R-6.12 · v1 · confirmed · recovered",
-      "line": 199,
-      "domain": "notifications",
-      "file": "spec/domains/notifications.md"
-    },
-    {
-      "id": "D-notifications-13",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "The notification control on the list of opportunities is not shown on a narrow screen.",
-      "cites": [
-        {
-          "path": "src/front-end/typescript/lib/pages/opportunity/list.tsx",
-          "line": 877
-        }
-      ],
-      "reconciliation": "defect",
-      "given": "a signed-in person browsing the list of opportunities on a phone",
-      "when": "they look for the control that turns new-opportunity notices on",
-      "then": "no such control appears anywhere on the page, and the only route to the choice is the notification settings on their own profile",
-      "notes": [
-        "the control is hidden below the medium breakpoint and shown above it. The choice itself remains reachable from the notification settings, so nothing is unreachable, but the shortcut is silently absent rather than moved. No corrected criterion is offered; whether the new service shows this control at every width is a design decision rather than a recovered rule."
-      ],
-      "state": "proposed",
-      "raw": "### D-notifications-13 · v1 · inferred · recovered",
-      "line": 214,
+      "line": 173,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -1778,7 +1682,7 @@
       ],
       "state": "accepted",
       "raw": "### R-6.13 · v1 · confirmed · recovered",
-      "line": 224,
+      "line": 188,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -1857,14 +1761,187 @@
       "state": "accepted",
       "supersededBy": "R-6.19",
       "raw": "### R-6.14 · v1 · confirmed · recovered",
-      "line": 237,
+      "line": 201,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
     {
-      "id": "D-notifications-15",
+      "id": "R-6.15",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service's own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity's owner exactly as it does to every other multi-recipient notice.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-6.9",
+      "raw": "### R-6.15 · v1 · confirmed · authored",
+      "line": 226,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.16",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "A message that the notification preference does not govern must not offer to unsubscribe; it links to the reader's notification settings without implying that any choice there will stop messages of that kind.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-6.10",
+      "raw": "### R-6.16 · v1 · confirmed · authored",
+      "line": 231,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.17",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "A deactivated account receives no notification of any kind, including notices about opportunities it was watching, while the watch itself is retained so that reactivating the account restores it.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-6.11",
+      "raw": "### R-6.17 · v1 · confirmed · authored",
+      "line": 236,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.18",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "The message announcing changed terms names every program whose proposals require a current acceptance — Code With Us, Sprint With Us and Team With Us — or names none of them rather than a subset.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-6.12",
+      "raw": "### R-6.18 · v1 · confirmed · authored",
+      "line": 241,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.19",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "The administrator's notification reference page shows every message the service can send, so that no message exists which cannot be previewed there before the event that sends it.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-6.14",
+      "raw": "### R-6.19 · v1 · confirmed · authored",
+      "line": 246,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.20",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A newly created account has new-opportunity notifications off until its holder asks for them.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/routers/auth.ts",
+          "line": 478
+        },
+        {
+          "path": "src/shared/lib/resources/user.ts",
+          "line": 56
+        },
+        {
+          "path": "src/migrations/tasks/20191203143238_alter_columns.ts",
+          "line": 14
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a person signing in to the service for the first time",
+      "when": "their account is created",
+      "then": "it records no request for new-opportunity notices, and none is sent to them until they ask",
+      "notes": [
+        "the record holds the moment the request was made rather than a yes or no, so an account that has never asked and an account that has asked and then changed its mind are indistinguishable afterwards. Combined with the profile-completion page never being shown to a public sector employee, this means such a person is never offered the choice at the point where it is first offered and receives no new-opportunity notices unless they later find the setting themselves."
+      ],
+      "state": "accepted",
+      "raw": "### R-6.20 · v1 · confirmed · recovered",
+      "line": 251,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.21",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A signed-in person can turn new-opportunity notices on and off from the list of opportunities itself, without opening their settings.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/opportunity/list.tsx",
+          "line": 503
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/opportunity/list.tsx",
+          "line": 886
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/opportunity/list.tsx",
+          "line": 894
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/opportunity/list.tsx",
+          "line": 997
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a signed-in person browsing the list of opportunities with notices turned off",
+      "when": "they choose to be notified about new opportunities",
+      "then": "the control changes to offer the opposite choice, their account records the request, and the change takes effect for the next opportunity published",
+      "notes": [
+        "the control is offered without a confirmation in either direction here, whereas the same choice made from the notification settings asks the person to confirm before turning notices off.",
+        "it sits at the top of the first group of opportunities on the page, which is the unpublished group for a person who has unpublished opportunities and the open group for everybody else, so it appears exactly once wherever the reader is looking first."
+      ],
+      "state": "accepted",
+      "raw": "### R-6.21 · v1 · confirmed · recovered",
+      "line": 263,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.22",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "The notification control on the list of opportunities is not shown on a narrow screen.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/opportunity/list.tsx",
+          "line": 877
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "a signed-in person browsing the list of opportunities on a phone",
+      "when": "they look for the control that turns new-opportunity notices on",
+      "then": "no such control appears anywhere on the page, and the only route to the choice is the notification settings on their own profile",
+      "notes": [
+        "the control is hidden below the medium breakpoint and shown above it. The choice itself remains reachable from the notification settings, so nothing is unreachable, but the shortcut is silently absent rather than moved. No corrected criterion is offered; whether the new service shows this control at every width is a design decision rather than a recovered rule.",
+        "superseded by R-6.27"
+      ],
+      "state": "accepted",
+      "supersededBy": "R-6.27",
+      "raw": "### R-6.22 · v1 · confirmed · recovered",
+      "line": 277,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.23",
+      "version": 1,
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "An administrator viewing the service's terms and conditions can announce that they have changed, which withdraws every vendor's standing acceptance and sends each active vendor a message asking them to read and accept the new terms.",
       "cites": [
@@ -1904,46 +1981,16 @@
       "notes": [
         "the announcement is offered only on the terms and conditions page and nowhere else, and only to an administrator; the same request made by anybody else, signed in or not, is refused. Acceptance is withdrawn for every vendor including deactivated ones, while only active vendors are told, so a vendor deactivated at the time of the change learns of it only on returning. This route appears in no published interface description."
       ],
-      "state": "proposed",
-      "raw": "### D-notifications-15 · v1 · inferred · recovered",
-      "line": 262,
+      "state": "accepted",
+      "raw": "### R-6.23 · v1 · confirmed · recovered",
+      "line": 289,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
     {
-      "id": "R-6.15",
+      "id": "R-6.24",
       "version": 1,
       "confidence": "confirmed",
-      "origin": "authored",
-      "statement": "A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service's own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity's owner exactly as it does to every other multi-recipient notice.",
-      "cites": [],
-      "notes": [],
-      "state": "accepted",
-      "replaces": "R-6.9",
-      "raw": "### R-6.15 · v1 · confirmed · authored",
-      "line": 278,
-      "domain": "notifications",
-      "file": "spec/domains/notifications.md"
-    },
-    {
-      "id": "R-6.16",
-      "version": 1,
-      "confidence": "confirmed",
-      "origin": "authored",
-      "statement": "A message that the notification preference does not govern must not offer to unsubscribe; it links to the reader's notification settings without implying that any choice there will stop messages of that kind.",
-      "cites": [],
-      "notes": [],
-      "state": "accepted",
-      "replaces": "R-6.10",
-      "raw": "### R-6.16 · v1 · confirmed · authored",
-      "line": 283,
-      "domain": "notifications",
-      "file": "spec/domains/notifications.md"
-    },
-    {
-      "id": "D-notifications-17",
-      "version": 1,
-      "confidence": "inferred",
       "origin": "recovered",
       "statement": "An announcement of changed terms is reported as successful as soon as the acceptances are withdrawn, before any message has been sent.",
       "cites": [
@@ -1967,63 +2014,18 @@
       "notes": [
         "the withdrawal of acceptances is completed before the response, so the part of the action a vendor will notice on their next visit is reliable; only the messages are not. Delivery failures are invisible for the reason given in R-6.2, so a run that reaches nobody looks exactly like one that reaches everybody."
       ],
-      "state": "proposed",
-      "raw": "### D-notifications-17 · v1 · inferred · recovered",
-      "line": 288,
-      "domain": "notifications",
-      "file": "spec/domains/notifications.md"
-    },
-    {
-      "id": "R-6.17",
-      "version": 1,
-      "confidence": "confirmed",
-      "origin": "authored",
-      "statement": "A deactivated account receives no notification of any kind, including notices about opportunities it was watching, while the watch itself is retained so that reactivating the account restores it.",
-      "cites": [],
-      "notes": [],
       "state": "accepted",
-      "replaces": "R-6.11",
-      "raw": "### R-6.17 · v1 · confirmed · authored",
-      "line": 300,
-      "domain": "notifications",
-      "file": "spec/domains/notifications.md"
-    },
-    {
-      "id": "R-6.18",
-      "version": 1,
-      "confidence": "confirmed",
-      "origin": "authored",
-      "statement": "The message announcing changed terms names every program whose proposals require a current acceptance — Code With Us, Sprint With Us and Team With Us — or names none of them rather than a subset.",
-      "cites": [],
-      "notes": [],
-      "state": "accepted",
-      "replaces": "R-6.12",
-      "raw": "### R-6.18 · v1 · confirmed · authored",
+      "raw": "### R-6.24 · v1 · confirmed · recovered",
       "line": 305,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
     {
-      "id": "R-6.19",
-      "version": 1,
+      "id": "R-6.25",
+      "version": 2,
       "confidence": "confirmed",
-      "origin": "authored",
-      "statement": "The administrator's notification reference page shows every message the service can send, so that no message exists which cannot be previewed there before the event that sends it.",
-      "cites": [],
-      "notes": [],
-      "state": "accepted",
-      "replaces": "R-6.14",
-      "raw": "### R-6.19 · v1 · confirmed · authored",
-      "line": 310,
-      "domain": "notifications",
-      "file": "spec/domains/notifications.md"
-    },
-    {
-      "id": "D-notifications-20",
-      "version": 1,
-      "confidence": "inferred",
       "origin": "recovered",
-      "statement": "The message telling a vendor that an opportunity they proposed on has been awarded to somebody else names the organization that won it.",
+      "statement": "The message telling a vendor that an opportunity they proposed on has been awarded to somebody else leads with the opportunity's title and the name of the winning proponent — the winning organization for Sprint With Us and Team With Us, and for Code With Us the legal name of the winning organization or individual, or an em dash where no successful proponent is recorded — and offers the reader a way to sign in and see their own score.",
       "cites": [
         {
           "path": "src/back-end/lib/mailer/notifications/proposal/code-with-us.tsx",
@@ -2053,18 +2055,18 @@
       "notes": [
         "this message uses a layout of its own rather than the layout every other message uses, leading with the opportunity's title and the winner's name. Where no successful proponent is recorded the name is replaced by a dash rather than the sentence being omitted, so a reader can be shown \"awarded to —\"."
       ],
-      "state": "proposed",
-      "raw": "### D-notifications-20 · v1 · inferred · recovered",
-      "line": 315,
+      "state": "accepted",
+      "raw": "### R-6.25 · v2 · confirmed · recovered",
+      "line": 317,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
     {
-      "id": "D-notifications-21",
-      "version": 1,
-      "confidence": "open",
+      "id": "R-6.26",
+      "version": 2,
+      "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "What happens when the service tries to notify an account that has no email address cannot be determined from the code.",
+      "statement": "When the service notifies an account that holds no email address it composes the message all the same and hands it over with an empty list of recipients; any resulting failure is written to the operational log only, nothing in the service records that the person was not reached, and a broadcast to many vendors always continues to the next recipient because no failure in composing or sending can interrupt it.",
       "cites": [
         {
           "path": "src/back-end/lib/mailer/notifications/terms-updated.tsx",
@@ -2083,17 +2085,49 @@
           "line": 26
         }
       ],
-      "reconciliation": "implemented-only",
+      "reconciliation": "defect",
       "given": "a vendor whose account holds no email address, because the identity provider supplied none",
       "when": "an administrator announces changed terms",
       "then": "the service composes a message for that account addressed to nobody and hands it on to be sent, and what follows depends on the sending machinery rather than on anything the service decides",
       "notes": [
         "accounts without an email address are allowed deliberately, and most messages guard against one only by substituting an empty list of recipients where the address would go — the message is still composed and still handed over to be sent. Whether that produces a rejected send, a silently discarded one, or an error that stops the rest of a broadcast is not decidable from the source, and because delivery failures are only logged, nothing inside the service would show which. The one place that does check is account creation, which skips the welcome message when there is no address. A human should rule on whether the new service must skip a recipient with no address everywhere, and on whether one such recipient may stop a broadcast to the rest.",
-        "Must the service skip a recipient that holds no email address rather than composing a message addressed to nobody, and must a broadcast to many vendors always continue past such a recipient rather than being able to stop the run on one?"
+        "Must the service skip a recipient that holds no email address rather than composing a message addressed to nobody, and must a broadcast to many vendors always continue past such a recipient rather than being able to stop the run on one?",
+        "superseded by R-6.28"
       ],
-      "state": "proposed",
-      "raw": "### D-notifications-21 · v1 · open · recovered",
-      "line": 329,
+      "state": "accepted",
+      "supersededBy": "R-6.28",
+      "raw": "### R-6.26 · v2 · confirmed · recovered",
+      "line": 331,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.27",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "The choice to be notified about newly published opportunities is offered on the list of opportunities itself at every screen width, so a person reading the list on a phone reaches it the same way as a person reading it on a desktop.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-6.22",
+      "raw": "### R-6.27 · v1 · confirmed · authored",
+      "line": 347,
+      "domain": "notifications",
+      "file": "spec/domains/notifications.md"
+    },
+    {
+      "id": "R-6.28",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "The service skips a recipient that holds no email address rather than composing a message addressed to nobody, and a broadcast to many people always continues past a recipient it cannot address or cannot reach.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-6.26",
+      "raw": "### R-6.28 · v1 · confirmed · authored",
+      "line": 352,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },

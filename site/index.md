@@ -11,10 +11,10 @@ Profile: rebuild
 | organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 |
 | users | 0 | 34 | 0 | 0 | 0 | 2 | 1 | 36 |
 | evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 |
-| notifications | 7 | 19 | 0 | 0 | 0 | 0 | 1 | 26 |
+| notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 |
 | content | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
 | files | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| **Totals** | 7 | 219 | 0 | 0 | 0 | 5 | 4 | 231 |
+| **Totals** | 0 | 228 | 0 | 0 | 0 | 5 | 3 | 233 |
 
 ## Pages
 
