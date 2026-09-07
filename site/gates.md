@@ -8,6 +8,7 @@
 | 2026-09-07T15:57:25.227Z | derive-tests-opportunities | G3 | return | agent:reviewer | agent-held, unsampled | $2.4990725000000005 |  |
 | 2026-09-07T15:32:36.627Z | derive-tests-content-2 | G3 | return | agent:reviewer | agent-held, unsampled | $1.2788545000000002 |  |
 | 2026-09-07T15:20:04.898Z | derive-tests-evaluation-2 | G3 | return | agent:reviewer | agent-held, unsampled | $1.7549505 |  |
+| 2026-09-07T15:15:46.274Z | derive-tests-users-3 | G3 | return | agent:reviewer | agent-held, unsampled | $2.0168455 |  |
 | 2026-09-07T15:07:45.090Z | derive-tests-users-2 | G3 | return | agent:reviewer | agent-held, unsampled | $1.1403435 |  |
 | 2026-09-07T15:01:14.832Z | derive-tests-organizations-3 | G3 | return | agent:reviewer | agent-held, unsampled | $1.2934305000000001 |  |
 | 2026-09-07T14:53:42.779Z | derive-tests-organizations-2 | G3 | return | agent:reviewer | agent-held, unsampled | $1.406234 |  |
