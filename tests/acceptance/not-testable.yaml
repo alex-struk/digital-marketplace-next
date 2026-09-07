@@ -386,3 +386,63 @@ criteria:
       of an accept or a decline confirmation standing ready. Needs a mail
       observation of the message body or its links, and an observation of the
       prepared confirmation on organization-user-memberships.
+  - id: R-7.11
+    version: 1
+    reason: "The claim is about the shape of a refused answer — a permission refusal
+      reported as though the submission were faulty. Nothing returns that shape:
+      observables.yaml names a `refusal` status for files and for exports but
+      nothing for a page request, and the content surfaces offer only free-text
+      refused_for_non_administrator and field_error, which cannot be compared
+      for the shape of the answer that produced them."
+  - id: R-7.14
+    version: 1
+    reason: The criterion is a contrast between two renderings of one body, and the
+      second cannot be produced. The screens that embed a page's body — the
+      program qualification terms screens and the evaluation instructions screen
+      — embed pages the service creates for itself, which the seed does not name
+      and which no surface addresses by handle, so the body a test writes
+      through content-create or content-edit cannot be got into an embedded
+      rendering, and the bodies organization-swu-terms, organization-twu-terms
+      and the two evaluation-instructions surfaces do report are ones no test
+      can put raw markup into.
+  - id: R-7.15
+    version: 1
+    reason: The when is following the service level agreement link offered beside
+      the cost of a program. No surface exists for the learn-more index, and no
+      action on any surface follows a service level agreement link — the program
+      cards are reachable only as opportunity_program_select.program_card, an
+      observation with no link to follow — so the five places the criterion
+      names cannot be reached and the link cannot be followed to whatever
+      answers it.
+  - id: R-7.16
+    version: 1
+    reason: "Same missing observation as R-7.11, across a wider set of requests: the
+      criterion is about every page request answering a permission refusal in
+      one shape, and no observation returns the shape or status of a refused
+      page request. refused_for_non_administrator is free text on each surface,
+      so two refusals cannot be shown to be the same shape, only to have both
+      happened."
+  - id: R-7.23
+    version: 1
+    reason: "Asserting that nothing shows, compares or restores an earlier version
+      needs an observation naming what must be absent, and content-edit names
+      none: it has no observation of the wording it is showing, none of a
+      history, an earlier version or a comparison, and no restore action. A test
+      can neither find a route to a past version nor show that none exists."
+  - id: R-7.28
+    version: 2
+    reason: The given is two administrators who both opened the same page before
+      either saved. The target carries one administrator sign-in and no second
+      one, and the surface drives a single session, so two people cannot hold
+      the page open at once and no stale read-then-write window can be produced.
+      The collision half needs two publishes interleaving inside one such
+      window, and nothing in the surface reports a version-key collision or a
+      service error on the content-edit screen.
+  - id: R-7.29
+    version: 1
+    reason: "The given is a page whose body another screen embeds having been
+      removed. The embedded pages — an opportunity's scope page, a program's
+      evaluation instructions — are ones the service needs, which R-7.25 records
+      the service refuses to remove: content-edit withholds the removal and a
+      request made another way is refused, so there is no path through the
+      surface to the state the criterion starts from."
