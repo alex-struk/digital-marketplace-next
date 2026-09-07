@@ -60,6 +60,7 @@ The service administers British Columbia's Code With Us, Sprint With Us and Team
 ### J4 — Domain language
 | Term | Meaning |
 | --- | --- |
+| Digital Marketplace | The service that administers three procurement programs for the BC Public Service: Code With Us, Sprint With Us and Team With Us. |
 | opportunity | A procurement posting published by a public sector employee under one of the three programs. |
 | proposal | A vendor's submission responding to an opportunity. |
 | proponent | The individual or organisation submitting a proposal. |

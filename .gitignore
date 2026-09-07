@@ -3,3 +3,4 @@ node_modules/
 .sdlc/*.local.yaml
 .sdlc/*.local.txt
 .sdlc/run-state.json
+sources/

@@ -1,8 +1,11 @@
-# Journal
-
-## 002 · intent · 2026-09-07
-
-cost $0.6139335 · turns 8
+---
+stage: "intent"
+title: "intent"
+at: "2026-09-07T00:15:57.173Z"
+cost: 0.6139335
+turns: 8
+session: "d8df255f-0d1b-477e-b898-0cd0664fa960"
+---
 
 Two files touched, both inside my boundary: one new intent document and one row added to the constitution.
 
@@ -25,13 +28,3 @@ The second is the outcome. "Measurable parity" is the brief's own phrase, and it
 **Constitution.** One term of art the brief defines that the J4 table did not carry: *Digital Marketplace* itself, which the brief's first sentence defines. I added the row using the brief's own words. Every other term the brief uses — opportunity, proposal, organisation, affiliation, evaluation stage, award, the three programs — already has a row. I considered adding *parity*, and did not: the brief uses the word but never defines it, so any row would have been my definition rather than the author's. It is an open question instead.
 
 **What I could not do.** Nobody is available to answer the fifteen questions, so none of them are closed; the intent goes forward with its outcome not yet measurable, and a later stage or the brief's author will have to settle at least the parity measure before anything downstream can claim success against it. I did not look outside the brief — no reading of the existing application, no inference from similar procurement systems — so if the brief is itself wrong or incomplete about the service, that error is faithfully reproduced in the intent and the open questions are the only place it will surface.
-
-## 001 · probe · 2026-09-06
-
-cost $0.224672 · turns 2
-
-I wrote `app/PROBE.md` in the digital-marketplace-next repository. It holds two lines: today's date, 2026-09-06, and the sentence "the runner works" — nothing else, since the instruction asked for exactly that content and no more.
-
-The `app/` directory already existed, so the file simply landed alongside whatever else lives there; I did not inspect or touch any neighbouring files. Nothing was staged, committed, or pushed, and no gate was touched — the working tree now carries this new untracked file plus the pre-existing untracked `.sdlc/run-state.json` that was there when I started.
-
-One thing worth flagging for whoever picks this up: the date came from the session's stated current date rather than from a system clock reading, so if this probe is ever used to verify clock behaviour rather than just runner liveness, that distinction matters. There was nothing to verify beyond the write itself, and the instruction was to stop afterwards, so I did.
