@@ -1,0 +1,14 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The tests themselves are sound: I checked each of the 25 spec files against its own criterion and every assertion follows from what the criterion states, no implementation detail leaks in (no locators, test ids, routes or status codes anywhere in the diff), the R-5.14 status assertion that belonged to R-5.32 is gone, and the new R-5.9 not-testable reason names a real missing surface action rather than an inconvenience. What returns it is condition 1, still open: tests/acceptance/not-testable.yaml on this branch carries the ten R-5.* entries and none of the 33 R-6.*/R-8.* entries main holds for the notifications and files domains. The author's account of why they could not restore them is honest and their correction of the earlier 'untouched' receipt sentence is accepted, but an evaluation-domain proposal cannot land while it deletes two other domains' records — a calibrate run against this branch would report 33 criteria as missing tests that main correctly records as not testable. Restoring that file, by whoever holds the git history, is the only thing between this and approval; the derived tests need no further work.
+conditions:
+  - "Restore tests/acceptance/not-testable.yaml so it differs from main only by the addition of the ten R-5.* entries: take main's copy, insert the R-5.2/5.5/5.7/5.8/5.9/5.11/5.15/5.23/5.26/5.37 block ahead of the R-6 entries, and leave every R-6.* and R-8.* entry byte-for-byte as main has it. Confirm with a diff of the file against main that shows insertions only."
+  - "Run `npm run typecheck` from tests/ against the 25 files in tests/acceptance/evaluation/ and record the actual result in the receipt. The manual member cross-check is not a substitute and should not be reported as one; if the deriving workspace still cannot install dependencies, whoever can must run it before the next ruling."
+  - "Do not add spec files for R-5.4 and R-5.6. Both are superseded — by R-5.10 and R-5.12, which already have tests — so a test for either could only contradict its replacement, which is what the `tests` check warns about for the superseded R-6/R-8 criteria. If the domain accounting needs to explain the two, say so in the receipt."
+cost: 1.737879
+turns: 13
+session: "92043064-5c81-437f-99b9-424780d15b77"
+at: 2026-09-07T15:26:52.465Z
