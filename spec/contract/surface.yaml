@@ -1,7 +1,213 @@
 # Pages, and the actions and observations each offers. Test IDs are filled at the design gate.
-pages: []
-# - id: opportunity
-#   route: /opportunities/:id
-#   title: "Opportunity"
-#   actions: { publish: { test_id: null } }
-#   observations: { status: { test_id: null } }
+pages:
+  - id: opportunity-list
+    domain: opportunities
+    route: /opportunities
+    title: "Opportunities"
+    actions:
+      filter_by_program: { test_id: null }
+      filter_by_status: { test_id: null }
+      filter_remote_only: { test_id: null }
+      search: { test_id: null }
+      toggle_watch: { test_id: null }
+    observations:
+      unpublished_group: { test_id: null }
+      open_group: { test_id: null }
+      closed_group: { test_id: null }
+      opportunity_status: { test_id: null }
+      proposal_deadline: { test_id: null }
+
+  - id: opportunity-program-select
+    domain: opportunities
+    route: /opportunities/create
+    title: "Create an opportunity"
+    actions:
+      choose_code_with_us: { test_id: null }
+      choose_sprint_with_us: { test_id: null }
+      choose_team_with_us: { test_id: null }
+    observations:
+      program_card: { test_id: null }
+      max_budget: { test_id: null }
+
+  - id: opportunity-cwu-create
+    domain: opportunities
+    route: /opportunities/code-with-us/create
+    title: "Create a Code With Us opportunity"
+    actions:
+      save_draft: { test_id: null }
+      submit_for_review: { test_id: null }
+      publish: { test_id: null }
+      add_attachment: { test_id: null }
+    observations:
+      field_error: { test_id: null }
+
+  - id: opportunity-cwu-view
+    domain: opportunities
+    route: /opportunities/code-with-us/:opportunityId
+    title: "Code With Us opportunity"
+    actions:
+      toggle_watch: { test_id: null }
+      start_proposal: { test_id: null }
+    observations:
+      status: { test_id: null }
+      proposal_deadline: { test_id: null }
+      reward: { test_id: null }
+      addenda: { test_id: null }
+      successful_proponent: { test_id: null }
+
+  - id: opportunity-cwu-edit
+    domain: opportunities
+    route: /opportunities/code-with-us/:opportunityId/edit
+    title: "Manage a Code With Us opportunity"
+    actions:
+      edit_details: { test_id: null }
+      submit_for_review: { test_id: null }
+      publish: { test_id: null }
+      cancel_opportunity: { test_id: null }
+      delete_opportunity: { test_id: null }
+      add_addendum: { test_id: null }
+      add_note: { test_id: null }
+    observations:
+      summary_tab: { test_id: null }
+      opportunity_tab: { test_id: null }
+      addenda_tab: { test_id: null }
+      history_tab: { test_id: null }
+      proposals_tab: { test_id: null }
+      reporting_views: { test_id: null }
+      reporting_watchers: { test_id: null }
+      reporting_proposals: { test_id: null }
+
+  - id: opportunity-cwu-complete
+    domain: opportunities
+    route: /opportunities/code-with-us/:opportunityId/complete
+    title: "Code With Us opportunity report"
+    actions: {}
+    observations:
+      full_report: { test_id: null }
+
+  - id: opportunity-swu-create
+    domain: opportunities
+    route: /opportunities/sprint-with-us/create
+    title: "Create a Sprint With Us opportunity"
+    actions:
+      save_draft: { test_id: null }
+      submit_for_review: { test_id: null }
+      publish: { test_id: null }
+      add_phase: { test_id: null }
+      add_team_question: { test_id: null }
+      set_evaluation_panel: { test_id: null }
+    observations:
+      field_error: { test_id: null }
+      score_weight_error: { test_id: null }
+
+  - id: opportunity-swu-view
+    domain: opportunities
+    route: /opportunities/sprint-with-us/:opportunityId
+    title: "Sprint With Us opportunity"
+    actions:
+      toggle_watch: { test_id: null }
+      start_proposal: { test_id: null }
+    observations:
+      status: { test_id: null }
+      proposal_deadline: { test_id: null }
+      total_max_budget: { test_id: null }
+      phases: { test_id: null }
+      addenda: { test_id: null }
+      successful_proponent: { test_id: null }
+
+  - id: opportunity-swu-edit
+    domain: opportunities
+    route: /opportunities/sprint-with-us/:opportunityId/edit
+    title: "Manage a Sprint With Us opportunity"
+    actions:
+      edit_details: { test_id: null }
+      submit_for_review: { test_id: null }
+      publish: { test_id: null }
+      cancel_opportunity: { test_id: null }
+      delete_opportunity: { test_id: null }
+      add_addendum: { test_id: null }
+      add_note: { test_id: null }
+      edit_evaluation_panel: { test_id: null }
+      finalize_question_consensuses: { test_id: null }
+      start_team_scenario: { test_id: null }
+    observations:
+      summary_tab: { test_id: null }
+      opportunity_tab: { test_id: null }
+      addenda_tab: { test_id: null }
+      history_tab: { test_id: null }
+      proposals_tab: { test_id: null }
+      team_questions_tab: { test_id: null }
+      code_challenge_tab: { test_id: null }
+      team_scenario_tab: { test_id: null }
+      evaluation_panel_tab: { test_id: null }
+      consensus_tab: { test_id: null }
+
+  - id: opportunity-swu-complete
+    domain: opportunities
+    route: /opportunities/sprint-with-us/:opportunityId/complete
+    title: "Sprint With Us opportunity report"
+    actions: {}
+    observations:
+      full_report: { test_id: null }
+
+  - id: opportunity-twu-create
+    domain: opportunities
+    route: /opportunities/team-with-us/create
+    title: "Create a Team With Us opportunity"
+    actions:
+      save_draft: { test_id: null }
+      submit_for_review: { test_id: null }
+      publish: { test_id: null }
+      add_resource: { test_id: null }
+      add_resource_question: { test_id: null }
+      set_evaluation_panel: { test_id: null }
+    observations:
+      field_error: { test_id: null }
+      score_weight_error: { test_id: null }
+
+  - id: opportunity-twu-view
+    domain: opportunities
+    route: /opportunities/team-with-us/:opportunityId
+    title: "Team With Us opportunity"
+    actions:
+      toggle_watch: { test_id: null }
+      start_proposal: { test_id: null }
+    observations:
+      status: { test_id: null }
+      proposal_deadline: { test_id: null }
+      max_budget: { test_id: null }
+      resources: { test_id: null }
+      addenda: { test_id: null }
+      successful_proponent: { test_id: null }
+
+  - id: opportunity-twu-edit
+    domain: opportunities
+    route: /opportunities/team-with-us/:opportunityId/edit
+    title: "Manage a Team With Us opportunity"
+    actions:
+      edit_details: { test_id: null }
+      submit_for_review: { test_id: null }
+      publish: { test_id: null }
+      cancel_opportunity: { test_id: null }
+      delete_opportunity: { test_id: null }
+      add_addendum: { test_id: null }
+      edit_evaluation_panel: { test_id: null }
+      finalize_question_consensuses: { test_id: null }
+    observations:
+      summary_tab: { test_id: null }
+      opportunity_tab: { test_id: null }
+      addenda_tab: { test_id: null }
+      history_tab: { test_id: null }
+      proposals_tab: { test_id: null }
+      resource_questions_tab: { test_id: null }
+      challenge_tab: { test_id: null }
+      evaluation_panel_tab: { test_id: null }
+      consensus_tab: { test_id: null }
+
+  - id: opportunity-twu-complete
+    domain: opportunities
+    route: /opportunities/team-with-us/:opportunityId/complete
+    title: "Team With Us opportunity report"
+    actions: {}
+    observations:
+      full_report: { test_id: null }

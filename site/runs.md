@@ -24,6 +24,10 @@ Automatic merge failed; fix conflicts and then commit the result.
 - 17:53:43 run archaeology: post-checks failed
 - 17:55:42 propose spec-readme-v1 at G-POL
 - 17:56:00 rule spec-readme-v1 approve at G-POL by tech-lead (human)
+- 18:19:14 rule --pending archaeology-opportunities: failed — ruling agent turn failed: 
+- 18:08:02 run archaeology: ok, cost 11.958588999999995, turns 130
+- 18:08:02 propose archaeology-opportunities at G1
+- 18:21:29 rule archaeology-opportunities approve at G1 by agent:product-owner (agent)
 
 # Run record 2026-09-06
 
