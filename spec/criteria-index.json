@@ -1,5 +1,5 @@
 {
-  "generated_from": "ae7c1eb65ded9533f72327a11de748f673b1573e",
+  "generated_from": "d83c4da518ee072d6c6eeef7b7df2bcf9eaee99f",
   "criteria": [
     {
       "id": "R-7.1",
@@ -35,35 +35,6 @@
       "file": "spec/domains/content.md"
     },
     {
-      "id": "D-content-2",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "The service links its own footer to five of its pages, so every screen offers the about, disclaimer, privacy, accessibility and copyright pages to any visitor.",
-      "cites": [
-        {
-          "path": "src/front-end/typescript/lib/app/view/footer.tsx",
-          "line": 22
-        },
-        {
-          "path": "src/migrations/tasks/20201202094826_admin-content-stubs.ts",
-          "line": 8
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "any screen of the service, seen by a visitor who is not signed in",
-      "when": "the visitor reaches the bottom of it",
-      "then": "links labelled About, Disclaimer, Privacy, Accessibility and Copyright each open the corresponding page",
-      "notes": [
-        "these five are the service's whole standing offer of its own legal and informational prose; nothing outside the code describes them, and each is a page an administrator can re-word at any time."
-      ],
-      "state": "proposed",
-      "raw": "### D-content-2 · v1 · inferred · recovered",
-      "line": 42,
-      "domain": "content",
-      "file": "spec/domains/content.md"
-    },
-    {
       "id": "R-7.2",
       "version": 1,
       "confidence": "confirmed",
@@ -86,7 +57,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-7.2 · v1 · confirmed · recovered",
-      "line": 53,
+      "line": 42,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -119,7 +90,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.3 · v1 · confirmed · recovered",
-      "line": 63,
+      "line": 52,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -152,7 +123,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.4 · v1 · confirmed · recovered",
-      "line": 75,
+      "line": 64,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -193,7 +164,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.5 · v1 · confirmed · recovered",
-      "line": 87,
+      "line": 76,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -232,7 +203,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-7.6 · v1 · confirmed · recovered",
-      "line": 101,
+      "line": 90,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -267,7 +238,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-7.7 · v1 · confirmed · recovered",
-      "line": 114,
+      "line": 103,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -308,38 +279,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.8 · v1 · confirmed · recovered",
-      "line": 126,
-      "domain": "content",
-      "file": "spec/domains/content.md"
-    },
-    {
-      "id": "D-content-9",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named.",
-      "cites": [
-        {
-          "path": "src/shared/lib/validation/content.ts",
-          "line": 8
-        },
-        {
-          "path": "src/shared/lib/validation/content.ts",
-          "line": 12
-        },
-        {
-          "path": "src/back-end/lib/resources/content.ts",
-          "line": 141
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "an administrator creating or changing a page",
-      "when": "they submit it with an empty title, or with a body longer than fifty thousand characters",
-      "then": "nothing is saved and the failing field is marked with the reason",
-      "notes": [],
-      "state": "proposed",
-      "raw": "### D-content-9 · v1 · inferred · recovered",
-      "line": 140,
+      "line": 115,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -376,36 +316,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.9 · v1 · confirmed · recovered",
-      "line": 151,
-      "domain": "content",
-      "file": "spec/domains/content.md"
-    },
-    {
-      "id": "D-content-10",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "A page's address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused.",
-      "cites": [
-        {
-          "path": "src/shared/lib/validation/content.ts",
-          "line": 16
-        },
-        {
-          "path": "src/front-end/typescript/lib/pages/content/lib/components/form.tsx",
-          "line": 174
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "an administrator creating a page",
-      "when": "they give it an address containing a capital letter, a space, an underscore, or a leading or trailing hyphen",
-      "then": "the page is not created and the address is marked as invalid",
-      "notes": [
-        "the rule is stated to the administrator on the form as well as enforced on submission, and the form shows the full public address the page will have."
-      ],
-      "state": "proposed",
-      "raw": "### D-content-10 · v1 · inferred · recovered",
-      "line": 164,
+      "line": 129,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -444,34 +355,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-7.10 · v1 · confirmed · recovered",
-      "line": 175,
-      "domain": "content",
-      "file": "spec/domains/content.md"
-    },
-    {
-      "id": "D-content-11",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "No two pages may share an address, whether the clash arises on creating a page or on renaming one.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/resources/content.ts",
-          "line": 146
-        },
-        {
-          "path": "src/back-end/lib/resources/content.ts",
-          "line": 267
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "a page already published at the address \"about\"",
-      "when": "an administrator creates another page at that address, or renames a different page to it",
-      "then": "neither is accepted, the existing page is untouched, and the address is reported as already in use",
-      "notes": [],
-      "state": "proposed",
-      "raw": "### D-content-11 · v1 · inferred · recovered",
-      "line": 188,
+      "line": 142,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -510,7 +394,7 @@
       "state": "accepted",
       "supersededBy": "R-7.16",
       "raw": "### R-7.11 · v1 · confirmed · recovered",
-      "line": 198,
+      "line": 155,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -559,36 +443,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.12 · v1 · confirmed · recovered",
-      "line": 213,
-      "domain": "content",
-      "file": "spec/domains/content.md"
-    },
-    {
-      "id": "D-content-13",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "Nothing in the service shows, compares or restores an earlier version of a page.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/db/content.ts",
-          "line": 67
-        },
-        {
-          "path": "src/front-end/typescript/lib/pages/content/edit.tsx",
-          "line": 410
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "a page changed several times, so several earlier versions of it are kept",
-      "when": "an administrator opens its managing screen",
-      "then": "only the current title and body are shown, with no history, no earlier version and no way back to one",
-      "notes": [
-        "the versions accumulate with no route to them and no limit on their number. Recovering superseded wording is possible only from outside the service, which makes the retention useful for audit but not for undoing a mistaken edit."
-      ],
-      "state": "proposed",
-      "raw": "### D-content-13 · v1 · inferred · recovered",
-      "line": 229,
+      "line": 170,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -629,36 +484,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.13 · v1 · confirmed · recovered",
-      "line": 240,
-      "domain": "content",
-      "file": "spec/domains/content.md"
-    },
-    {
-      "id": "D-content-14",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "Renaming a page moves it to its new address at once and leaves nothing at the old one.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/db/content.ts",
-          "line": 189
-        },
-        {
-          "path": "src/front-end/typescript/lib/pages/content/edit.tsx",
-          "line": 287
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "a page published at the address \"about-us\" and links to it from elsewhere",
-      "when": "an administrator changes its address to \"about\"",
-      "then": "the page answers at \"about\", the old address is answered as not found, and no redirection is offered",
-      "notes": [
-        "nothing warns the administrator that a rename breaks existing links, and nothing in the service records the address a page used to have."
-      ],
-      "state": "proposed",
-      "raw": "### D-content-14 · v1 · inferred · recovered",
-      "line": 254,
+      "line": 186,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -693,44 +519,7 @@
       "state": "accepted",
       "supersededBy": "R-7.17",
       "raw": "### R-7.14 · v1 · confirmed · recovered",
-      "line": 265,
-      "domain": "content",
-      "file": "spec/domains/content.md"
-    },
-    {
-      "id": "D-content-15",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "A page the service itself depends on may have its title and body changed but may not be renamed or removed, and its managing screen says so.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/resources/content.ts",
-          "line": 258
-        },
-        {
-          "path": "src/back-end/lib/resources/content.ts",
-          "line": 360
-        },
-        {
-          "path": "src/front-end/typescript/lib/pages/content/edit.tsx",
-          "line": 507
-        },
-        {
-          "path": "src/front-end/typescript/lib/pages/content/lib/components/form.tsx",
-          "line": 183
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "an administrator on the managing screen of a page the service needs",
-      "when": "they look for the ways to change it",
-      "then": "a warning explains that the service needs this page at this address, the address cannot be typed over, no removal is offered, and a request to rename or remove it made another way is refused",
-      "notes": [
-        "whether a page is one the service needs is fixed when the page is created by migration and cannot be set or cleared through the service, so an administrator can neither promote an ordinary page to a needed one nor demote a needed one."
-      ],
-      "state": "proposed",
-      "raw": "### D-content-15 · v1 · inferred · recovered",
-      "line": 279,
+      "line": 200,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -773,7 +562,7 @@
       "state": "accepted",
       "supersededBy": "R-7.18",
       "raw": "### R-7.15 · v1 · confirmed · recovered",
-      "line": 292,
+      "line": 214,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -788,7 +577,7 @@
       "state": "accepted",
       "replaces": "R-7.11",
       "raw": "### R-7.16 · v1 · confirmed · authored",
-      "line": 308,
+      "line": 230,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -803,7 +592,7 @@
       "state": "accepted",
       "replaces": "R-7.14",
       "raw": "### R-7.17 · v1 · confirmed · authored",
-      "line": 313,
+      "line": 235,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -818,148 +607,218 @@
       "state": "accepted",
       "replaces": "R-7.15",
       "raw": "### R-7.18 · v1 · confirmed · authored",
-      "line": 318,
+      "line": 240,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
     {
-      "id": "D-content-21",
+      "id": "R-7.19",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "A page's body is written as marked-up text with an editor offering formatting shortcuts, a link to the guidance page, and image upload that places the uploaded image into the body.",
+      "statement": "The service links its own footer to five of its pages, so every screen offers the about, disclaimer, privacy, accessibility and copyright pages to any visitor.",
       "cites": [
         {
-          "path": "src/front-end/typescript/lib/pages/content/lib/components/form.tsx",
-          "line": 88
-        },
-        {
-          "path": "src/front-end/typescript/lib/components/form-field/rich-markdown-editor.tsx",
-          "line": 287
-        },
-        {
-          "path": "src/front-end/typescript/lib/components/form-field/rich-markdown-editor.tsx",
-          "line": 471
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "an administrator editing a page's body",
-      "when": "they use the image control to choose an image file",
-      "then": "the image is stored by the service and a reference to it is inserted into the body at the cursor, and the published page shows the image",
-      "notes": [
-        "the editor's guidance link points at the page held at the address \"markdown-guide\", so the help an author is offered is itself an editable page and reads \"Initial version\" until somebody writes it. What may be uploaded and who may then read it belongs to the files domain."
-      ],
-      "state": "proposed",
-      "raw": "### D-content-21 · v1 · inferred · recovered",
-      "line": 323,
-      "domain": "content",
-      "file": "spec/domains/content.md"
-    },
-    {
-      "id": "D-content-23",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "The managing screen of a page names who first published it and who last changed it, and names the service itself where no person is recorded.",
-      "cites": [
-        {
-          "path": "src/front-end/typescript/lib/pages/content/edit.tsx",
-          "line": 408
-        },
-        {
-          "path": "src/front-end/typescript/lib/pages/content/edit.tsx",
-          "line": 426
-        },
-        {
-          "path": "src/back-end/lib/db/content.ts",
-          "line": 93
+          "path": "src/front-end/typescript/lib/app/view/footer.tsx",
+          "line": 22
         },
         {
           "path": "src/migrations/tasks/20201202094826_admin-content-stubs.ts",
-          "line": 30
-        },
-        {
-          "path": "docs/database-schema.md",
-          "line": 83
+          "line": 8
         }
       ],
       "reconciliation": "implemented-only",
-      "given": "a page the service created for itself and has never been edited, and a page an administrator created and another administrator later changed",
-      "when": "an administrator opens each page's managing screen",
-      "then": "the first names \"System\" as both publisher and last editor, and the second names the two people, each linked to their profile",
+      "given": "any screen of the service, seen by a visitor who is not signed in",
+      "when": "the visitor reaches the bottom of it",
+      "then": "links labelled About, Disclaimer, Privacy, Accessibility and Copyright each open the corresponding page",
       "notes": [
-        "these names are disclosed only to an administrator; the same page read by anybody else carries no authorship at all. Authorship is recorded per version, so the last editor is the author of the current wording rather than of the page."
+        "these five are the service's whole standing offer of its own legal and informational prose; nothing outside the code describes them, and each is a page an administrator can re-word at any time."
       ],
-      "state": "proposed",
-      "raw": "### D-content-23 · v1 · inferred · recovered",
-      "line": 335,
+      "state": "accepted",
+      "raw": "### R-7.19 · v1 · confirmed · recovered",
+      "line": 245,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
     {
-      "id": "D-content-24",
+      "id": "R-7.20",
       "version": 1,
-      "confidence": "open",
+      "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "Two administrators editing the same page at once do not see each other's work, and the later of them to publish silently replaces the earlier's wording.",
+      "statement": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named.",
       "cites": [
         {
-          "path": "src/back-end/lib/resources/content.ts",
-          "line": 241
+          "path": "src/shared/lib/validation/content.ts",
+          "line": 8
+        },
+        {
+          "path": "src/shared/lib/validation/content.ts",
+          "line": 12
         },
         {
           "path": "src/back-end/lib/resources/content.ts",
-          "line": 293
+          "line": 141
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an administrator creating or changing a page",
+      "when": "they submit it with an empty title, or with a body longer than fifty thousand characters",
+      "then": "nothing is saved and the failing field is marked with the reason",
+      "notes": [],
+      "state": "accepted",
+      "raw": "### R-7.20 · v1 · confirmed · recovered",
+      "line": 256,
+      "domain": "content",
+      "file": "spec/domains/content.md"
+    },
+    {
+      "id": "R-7.21",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A page's address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused.",
+      "cites": [
+        {
+          "path": "src/shared/lib/validation/content.ts",
+          "line": 16
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/content/lib/components/form.tsx",
+          "line": 174
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an administrator creating a page",
+      "when": "they give it an address containing a capital letter, a space, an underscore, or a leading or trailing hyphen",
+      "then": "the page is not created and the address is marked as invalid",
+      "notes": [
+        "the rule is stated to the administrator on the form as well as enforced on submission, and the form shows the full public address the page will have."
+      ],
+      "state": "accepted",
+      "raw": "### R-7.21 · v1 · confirmed · recovered",
+      "line": 267,
+      "domain": "content",
+      "file": "spec/domains/content.md"
+    },
+    {
+      "id": "R-7.22",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "No two pages may share an address, whether the clash arises on creating a page or on renaming one.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/content.ts",
+          "line": 146
+        },
+        {
+          "path": "src/back-end/lib/resources/content.ts",
+          "line": 267
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a page already published at the address \"about\"",
+      "when": "an administrator creates another page at that address, or renames a different page to it",
+      "then": "neither is accepted, the existing page is untouched, and the address is reported as already in use",
+      "notes": [],
+      "state": "accepted",
+      "raw": "### R-7.22 · v1 · confirmed · recovered",
+      "line": 278,
+      "domain": "content",
+      "file": "spec/domains/content.md"
+    },
+    {
+      "id": "R-7.23",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Nothing in the service shows, compares or restores an earlier version of a page.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/db/content.ts",
+          "line": 67
         },
         {
           "path": "src/front-end/typescript/lib/pages/content/edit.tsx",
-          "line": 254
+          "line": 410
         }
       ],
       "reconciliation": "implemented-only",
-      "given": "two administrators who both opened the same page for editing before either saved",
-      "when": "the first publishes their change and then the second publishes theirs",
-      "then": "both are told their changes were published, the page shows only the second administrator's wording, and the first's survives only as an earlier version nothing in the service can show",
+      "given": "a page changed several times, so several earlier versions of it are kept",
+      "when": "an administrator opens its managing screen",
+      "then": "only the current title and body are shown, with no history, no earlier version and no way back to one",
       "notes": [
-        "the submission carries no record of which version it was based on, so the service cannot tell an overwrite from an ordinary change and no warning is possible. The consequence is not lost data — every version is kept — but silently reverted wording, and D-content-13 means the person whose text was replaced has no way to see that it happened.",
-        "Exercise two simultaneous edits of one page against the running old application: does the second publish succeed on stale state, is the first author's wording replaced with no warning to either administrator, and is the replaced version recoverable through anything the service offers?"
+        "the versions accumulate with no route to them and no limit on their number. Recovering superseded wording is possible only from outside the service, which makes the retention useful for audit but not for undoing a mistaken edit."
       ],
-      "state": "proposed",
-      "raw": "### D-content-24 · v1 · open · recovered",
-      "line": 349,
+      "state": "accepted",
+      "raw": "### R-7.23 · v1 · confirmed · recovered",
+      "line": 288,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
     {
-      "id": "D-content-25",
+      "id": "R-7.24",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "Where a screen embeds the body of a page beside its own material, a page that is missing or unreadable leaves that part of the screen empty and the screen otherwise works.",
+      "statement": "Renaming a page moves it to its new address at once and leaves nothing at the old one.",
       "cites": [
         {
-          "path": "src/front-end/typescript/lib/pages/opportunity/sprint-with-us/view.tsx",
-          "line": 144
+          "path": "src/back-end/lib/db/content.ts",
+          "line": 189
         },
         {
-          "path": "src/front-end/typescript/lib/pages/opportunity/sprint-with-us/view.tsx",
-          "line": 202
-        },
-        {
-          "path": "src/front-end/typescript/lib/pages/opportunity/sprint-with-us/edit/tab/instructions.tsx",
-          "line": 58
+          "path": "src/front-end/typescript/lib/pages/content/edit.tsx",
+          "line": 287
         }
       ],
       "reconciliation": "implemented-only",
-      "given": "an opportunity whose screen embeds the scope page's body, and that page having been removed",
-      "when": "a vendor opens the opportunity",
-      "then": "the opportunity is shown in full and the scope section is empty, with nothing said about why",
+      "given": "a page published at the address \"about-us\" and links to it from elsewhere",
+      "when": "an administrator changes its address to \"about\"",
+      "then": "the page answers at \"about\", the old address is answered as not found, and no redirection is offered",
       "notes": [
-        "the same silent-empty handling covers the evaluation instructions an evaluation panel reads, so a panel can be shown a blank instruction screen and told nothing."
+        "nothing warns the administrator that a rename breaks existing links, and nothing in the service records the address a page used to have."
       ],
-      "state": "proposed",
-      "raw": "### D-content-25 · v1 · inferred · recovered",
-      "line": 362,
+      "state": "accepted",
+      "raw": "### R-7.24 · v1 · confirmed · recovered",
+      "line": 299,
+      "domain": "content",
+      "file": "spec/domains/content.md"
+    },
+    {
+      "id": "R-7.25",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A page the service itself depends on may have its title and body changed but may not be renamed or removed, and its managing screen says so.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/content.ts",
+          "line": 258
+        },
+        {
+          "path": "src/back-end/lib/resources/content.ts",
+          "line": 360
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/content/edit.tsx",
+          "line": 507
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/content/lib/components/form.tsx",
+          "line": 183
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an administrator on the managing screen of a page the service needs",
+      "when": "they look for the ways to change it",
+      "then": "a warning explains that the service needs this page at this address, the address cannot be typed over, no removal is offered, and a request to rename or remove it made another way is refused",
+      "notes": [
+        "whether a page is one the service needs is fixed when the page is created by migration and cannot be set or cleared through the service, so an administrator can neither promote an ordinary page to a needed one nor demote a needed one."
+      ],
+      "state": "accepted",
+      "raw": "### R-7.25 · v1 · confirmed · recovered",
+      "line": 310,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -988,11 +847,45 @@
       "when": "they open the screen where the terms are accepted",
       "then": "they are shown the not-found screen, are told nothing about why, and cannot accept the terms",
       "notes": [
-        "this and D-content-25 are the two opposite handlings of the same failure, chosen screen by screen. Here the consequence reaches beyond wording: a missing or mis-addressed page blocks a business action, and the person blocked is given no reason and no route to one."
+        "this and R-7.29 are the two opposite handlings of the same failure, chosen screen by screen. Here the consequence reaches beyond wording: a missing or mis-addressed page blocks a business action, and the person blocked is given no reason and no route to one.",
+        "The screens this was recovered from do not behave this way - the !body guard at sprint-with-us-terms.tsx:136 and team-with-us-terms.tsx:135 is dead code, because cmd.ts:93-96 maps a 404 to an always-truthy invalid value, so a missing terms page falls through to the else branch, keeps the empty body it was initialised with, and renders the title, an empty block and a live Accept Terms and Conditions button; the only screen that genuinely becomes the not-found screen when its page cannot be read is pages/content/view.tsx:75-86, which carries no action to block. Nothing of this row is carried forward, and two criteria are owed in its place - the content view screen's not-found handling, and the defect that a program's qualification terms can be accepted with nothing shown in place of them."
       ],
-      "state": "proposed",
+      "state": "obsolete",
       "raw": "### D-content-26 · v1 · inferred · recovered",
-      "line": 374,
+      "line": 323,
+      "domain": "content",
+      "file": "spec/domains/content.md"
+    },
+    {
+      "id": "R-7.26",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A page's body is written as marked-up text with an editor offering formatting shortcuts, a link to the guidance page, and image upload that places the uploaded image into the body.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/content/lib/components/form.tsx",
+          "line": 88
+        },
+        {
+          "path": "src/front-end/typescript/lib/components/form-field/rich-markdown-editor.tsx",
+          "line": 287
+        },
+        {
+          "path": "src/front-end/typescript/lib/components/form-field/rich-markdown-editor.tsx",
+          "line": 471
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an administrator editing a page's body",
+      "when": "they use the image control to choose an image file",
+      "then": "the image is stored by the service and a reference to it is inserted into the body at the cursor, and the published page shows the image",
+      "notes": [
+        "the editor's guidance link points at the page held at the address \"markdown-guide\", so the help an author is offered is itself an editable page and reads \"Initial version\" until somebody writes it. What may be uploaded and who may then read it belongs to the files domain."
+      ],
+      "state": "accepted",
+      "raw": "### R-7.26 · v1 · confirmed · recovered",
+      "line": 336,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -1030,7 +923,115 @@
       ],
       "state": "obsolete",
       "raw": "### D-content-27 · v1 · inferred · recovered",
-      "line": 386,
+      "line": 348,
+      "domain": "content",
+      "file": "spec/domains/content.md"
+    },
+    {
+      "id": "R-7.27",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "The managing screen of a page names who first published it and who last changed it, and names the service itself where no person is recorded.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/content/edit.tsx",
+          "line": 408
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/content/edit.tsx",
+          "line": 426
+        },
+        {
+          "path": "src/back-end/lib/db/content.ts",
+          "line": 93
+        },
+        {
+          "path": "src/migrations/tasks/20201202094826_admin-content-stubs.ts",
+          "line": 30
+        },
+        {
+          "path": "docs/database-schema.md",
+          "line": 83
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a page the service created for itself and has never been edited, and a page an administrator created and another administrator later changed",
+      "when": "an administrator opens each page's managing screen",
+      "then": "the first names \"System\" as both publisher and last editor, and the second names the two people, each linked to their profile",
+      "notes": [
+        "these names are disclosed only to an administrator; the same page read by anybody else carries no authorship at all. Authorship is recorded per version, so the last editor is the author of the current wording rather than of the page."
+      ],
+      "state": "accepted",
+      "raw": "### R-7.27 · v1 · confirmed · recovered",
+      "line": 362,
+      "domain": "content",
+      "file": "spec/domains/content.md"
+    },
+    {
+      "id": "R-7.28",
+      "version": 2,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A change carries no record of the version it was based on, so an administrator who publishes over a page another has changed since it was opened silently replaces that wording and is told the change was published; only two publishes interleaving inside a single read-then-write window collide on the version key, and there the second is refused with a service error rather than silently winning.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/content.ts",
+          "line": 241
+        },
+        {
+          "path": "src/back-end/lib/resources/content.ts",
+          "line": 293
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/content/edit.tsx",
+          "line": 254
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "two administrators who both opened the same page for editing before either saved",
+      "when": "the first publishes their change and then the second publishes theirs",
+      "then": "both are told their changes were published, the page shows only the second administrator's wording, and the first's survives only as an earlier version nothing in the service can show",
+      "notes": [
+        "the submission carries no record of which version it was based on, so the service cannot tell an overwrite from an ordinary change and no warning is possible. The consequence is not lost data — every version is kept — but silently reverted wording, and R-7.23 means the person whose text was replaced has no way to see that it happened.",
+        "Exercise two simultaneous edits of one page against the running old application: does the second publish succeed on stale state, is the first author's wording replaced with no warning to either administrator, and is the replaced version recoverable through anything the service offers?"
+      ],
+      "state": "accepted",
+      "raw": "### R-7.28 · v2 · confirmed · recovered",
+      "line": 376,
+      "domain": "content",
+      "file": "spec/domains/content.md"
+    },
+    {
+      "id": "R-7.29",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Where a screen embeds the body of a page beside its own material, a page that is missing or unreadable leaves that part of the screen empty and the screen otherwise works.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/opportunity/sprint-with-us/view.tsx",
+          "line": 144
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/opportunity/sprint-with-us/view.tsx",
+          "line": 202
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/opportunity/sprint-with-us/edit/tab/instructions.tsx",
+          "line": 58
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an opportunity whose screen embeds the scope page's body, and that page having been removed",
+      "when": "a vendor opens the opportunity",
+      "then": "the opportunity is shown in full and the scope section is empty, with nothing said about why",
+      "notes": [
+        "the same silent-empty handling covers the evaluation instructions an evaluation panel reads, so a panel can be shown a blank instruction screen and told nothing."
+      ],
+      "state": "accepted",
+      "raw": "### R-7.29 · v1 · confirmed · recovered",
+      "line": 389,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
