@@ -41,6 +41,8 @@ Automatic merge failed; fix conflicts and then commit the result.
 - 20:22:16 propose archaeology-proposals at G1
 - 20:26:07 rule archaeology-proposals approve at G1 by agent:product-owner (agent)
 - 20:26:07 run ratify: ok, cost 0, turns 0
+- 20:26:07 propose ratify-proposals-1 at G1
+- 20:31:13 rule ratify-proposals-1 approve at G1 by agent:product-owner (agent)
 
 # Run record 2026-09-06
 
