@@ -1,5 +1,5 @@
 {
-  "generated_from": "b8d02d53af6c25c1fdbf38b421362c0b042633db",
+  "generated_from": "c569fa8609633d7dd7fee9d12db04fb496ef891a",
   "criteria": [
     {
       "id": "R-1.1",
@@ -1717,6 +1717,1133 @@
       "line": 626,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
+    },
+    {
+      "id": "R-3.1",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Anyone, signed in or not, can browse the list of registered organizations, which shows only organizations that have not been archived, ordered by legal name and split into pages.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/organization.ts",
+          "line": 78
+        },
+        {
+          "path": "src/back-end/lib/db/organization.ts",
+          "line": 232
+        },
+        {
+          "path": "src/back-end/lib/db/organization.ts",
+          "line": 457
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/list.tsx",
+          "line": 86
+        },
+        {
+          "path": "src/back-end/docs/organization.yaml",
+          "line": 9
+        },
+        {
+          "path": "CHANGELOG.md",
+          "line": 137
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "three registered organizations, one of which has been archived",
+      "when": "a visitor who is not signed in opens the organization list",
+      "then": "the two organizations that are not archived are listed in alphabetical order by legal name, and the archived one is absent",
+      "notes": [
+        "the page requests fifty organizations at a time; asking for a page beyond the last one returns the first page instead of an empty one."
+      ],
+      "state": "accepted",
+      "raw": "### R-3.1 · v1 · confirmed · recovered",
+      "line": 9,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "D-organizations-2",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "In the organization list, the owner's name and the organization's qualification status are shown only to an administrator and to the viewer's own organizations; every other viewer sees the organization's name alone.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/db/organization.ts",
+          "line": 502
+        },
+        {
+          "path": "src/back-end/lib/db/organization.ts",
+          "line": 251
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/list.tsx",
+          "line": 163
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/list.tsx",
+          "line": 204
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an organization owned by one vendor",
+      "when": "a different vendor, who is neither its owner nor one of its administrators, opens the organization list",
+      "then": "that organization's row shows its legal name only, with no owner, no team size and no qualification marks, while the same row shown to an administrator carries all of them",
+      "notes": [
+        "the owner and qualification columns are hidden entirely from a visitor who is not signed in and from public sector staff, so only vendors and administrators ever see them."
+      ],
+      "state": "proposed",
+      "raw": "### D-organizations-2 · v1 · inferred · recovered",
+      "line": 24,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.2",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Only a signed-in vendor who has already accepted the service's terms and conditions may register a new organization; a request from anyone else is refused.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 195
+        },
+        {
+          "path": "src/back-end/lib/resources/organization.ts",
+          "line": 236
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/create.tsx",
+          "line": 57
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a signed-in member of public sector staff and a signed-in vendor who has accepted the terms",
+      "when": "each tries to register an organization",
+      "then": "the vendor's organization is created and the public sector staff member's request is refused as not permitted",
+      "notes": [],
+      "state": "accepted",
+      "raw": "### R-3.2 · v1 · confirmed · recovered",
+      "line": 37,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.3",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "An organization's full record can be opened only by an administrator or by a member who owns or administers that organization; anyone else is refused.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 204
+        },
+        {
+          "path": "src/back-end/lib/resources/organization.ts",
+          "line": 127
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/edit/index.tsx",
+          "line": 66
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an organization with an owner, one administrator and one ordinary member",
+      "when": "the ordinary member, and separately a member of public sector staff, opens that organization's management page",
+      "then": "both are refused, while the owner, the organization's administrator and a service administrator each see the organization",
+      "notes": [
+        "the ordinary member is shown a \"not found\" page rather than a refusal, because the front end turns the refused read into a missing page."
+      ],
+      "state": "accepted",
+      "raw": "### R-3.3 · v1 · confirmed · recovered",
+      "line": 48,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "D-organizations-4",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "Registering an organization requires a legal name, street address, city, region, mail code, country, contact name and contact email, each no longer than one hundred characters, with the contact email in a valid email format; a website address, second address line, contact title and contact phone number may be left out but are rejected if given in an invalid format.",
+      "cites": [
+        {
+          "path": "src/shared/lib/validation/organization.ts",
+          "line": 10
+        },
+        {
+          "path": "src/shared/lib/validation/organization.ts",
+          "line": 56
+        },
+        {
+          "path": "src/shared/lib/validation/organization.ts",
+          "line": 60
+        },
+        {
+          "path": "src/shared/lib/validation/index.ts",
+          "line": 218
+        },
+        {
+          "path": "src/shared/lib/validation/index.ts",
+          "line": 423
+        },
+        {
+          "path": "src/shared/lib/validation/index.ts",
+          "line": 436
+        },
+        {
+          "path": "src/back-end/docs/organization.yaml",
+          "line": 102
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a signed-in vendor filling in the organization registration form",
+      "when": "they submit it with the legal name left blank, or with a contact email of \"not-an-email\"",
+      "then": "the organization is not created and the offending field is reported as invalid, while the same submission with the optional website, second address line, contact title and phone left empty succeeds",
+      "notes": [
+        "the published interface description lists the same set of fields but says nothing about which are required or how long they may be, so the required/optional split and the hundred-character limit rest on the code alone."
+      ],
+      "state": "proposed",
+      "raw": "### D-organizations-4 · v1 · inferred · recovered",
+      "line": 60,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.4",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "An organization's profile details may be changed only by an administrator or by the organization's owner; an organization administrator who is not the owner cannot save changes to them.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 218
+        },
+        {
+          "path": "src/back-end/lib/resources/organization.ts",
+          "line": 377
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/edit/tab/organization.tsx",
+          "line": 372
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "an organization whose owner has granted administrator rights to another member",
+      "when": "that organization administrator opens the organization's profile, edits the legal name and saves",
+      "then": "the change is refused and an error is shown",
+      "notes": [
+        "the management page offers the Edit and Archive controls to anyone who can open it, including an organization administrator, but the service only accepts profile changes and archiving from the owner or a service administrator, so the controls are visible to a person who cannot use them. No corrected criterion has been written because it is unclear whether the intent is to widen the permission or to hide the controls.",
+        "superseded by R-3.18"
+      ],
+      "state": "accepted",
+      "supersededBy": "R-3.18",
+      "raw": "### R-3.4 · v1 · confirmed · recovered",
+      "line": 76,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "D-organizations-5",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "The vendor who registers an organization becomes its owner immediately, and the organization is active from the moment it is registered.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/db/organization.ts",
+          "line": 595
+        },
+        {
+          "path": "src/back-end/lib/db/organization.ts",
+          "line": 618
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/create.tsx",
+          "line": 148
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a signed-in vendor with no organizations",
+      "when": "they register a new organization",
+      "then": "the organization appears under their owned organizations with them recorded as its owner and its team counted as one member, and they are taken to that organization's management page",
+      "notes": [],
+      "state": "proposed",
+      "raw": "### D-organizations-5 · v1 · inferred · recovered",
+      "line": 90,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.5",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A change to an organization's contact phone number made while editing its profile is not saved.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/organization.ts",
+          "line": 357
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/lib/components/form.tsx",
+          "line": 760
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "an organization whose owner is editing its profile",
+      "when": "they change the contact phone number and save",
+      "then": "every other edited field is saved but the contact phone number is not updated",
+      "notes": [
+        "the profile-update request is read field by field, and the contact phone is read from a differently named field than the one the form sends, so the submitted value never reaches the stored record. Whether the stored number is left as it was or cleared could not be settled from the source alone, because it depends on how the database layer treats a value it was not given.",
+        "superseded by R-3.19"
+      ],
+      "state": "accepted",
+      "supersededBy": "R-3.19",
+      "raw": "### R-3.5 · v1 · confirmed · recovered",
+      "line": 101,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.6",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "An administrator or an organization's owner may archive the organization, after which it no longer appears in the organization list, cannot be used on proposals, and disappears from its members' lists of organizations; the archiving is recorded with the date and the person who did it.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 232
+        },
+        {
+          "path": "src/back-end/lib/resources/organization.ts",
+          "line": 674
+        },
+        {
+          "path": "src/back-end/lib/db/affiliation.ts",
+          "line": 169
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/edit/tab/organization.tsx",
+          "line": 294
+        },
+        {
+          "path": "src/back-end/docs/organization.yaml",
+          "line": 88
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an active organization with an owner and one other active member",
+      "when": "the owner archives it",
+      "then": "it is gone from the public organization list, gone from the other member's affiliated organizations, and its record carries the date it was archived and the identity of the person who archived it",
+      "notes": [
+        "archiving does not delete the organization or its memberships; the record is retained and simply marked inactive."
+      ],
+      "state": "accepted",
+      "raw": "### R-3.6 · v1 · confirmed · recovered",
+      "line": 114,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.7",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "An organization's owner, its administrators and a service administrator may invite people to the team by email address, and each invitation is created as a pending membership.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 271
+        },
+        {
+          "path": "src/back-end/lib/resources/affiliation.ts",
+          "line": 233
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/edit/tab/team.tsx",
+          "line": 243
+        },
+        {
+          "path": "src/back-end/docs/affiliation.yaml",
+          "line": 25
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an organization with an owner and no other members",
+      "when": "the owner invites two email addresses at once from the team page",
+      "then": "both people appear on the team list marked as pending, and neither counts towards the organization's team size until they accept",
+      "notes": [
+        "an ordinary member of the organization is not permitted to invite anybody."
+      ],
+      "state": "accepted",
+      "raw": "### R-3.7 · v1 · confirmed · recovered",
+      "line": 128,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.8",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A person may only be invited to an organization if they hold an active vendor account, and cannot be invited twice to the same organization.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/affiliation.ts",
+          "line": 208
+        },
+        {
+          "path": "src/back-end/lib/resources/affiliation.ts",
+          "line": 214
+        },
+        {
+          "path": "src/back-end/lib/resources/affiliation.ts",
+          "line": 219
+        },
+        {
+          "path": "src/back-end/lib/db/affiliation.ts",
+          "line": 112
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an organization with one pending invitation outstanding for a given person",
+      "when": "the owner invites that same person again, and separately invites a member of public sector staff",
+      "then": "the repeat invitation is refused as the person already being a member of the organization, and the invitation to public sector staff is refused because only vendors may be invited",
+      "notes": [
+        "a person whose membership was previously ended can be invited again, because ended memberships are not counted when checking for an existing one; this was read from the shape of the duplicate check rather than observed."
+      ],
+      "state": "accepted",
+      "raw": "### R-3.8 · v1 · confirmed · recovered",
+      "line": 141,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.9",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A pending invitation becomes an active membership only when the invited person accepts it, or when an administrator accepts it on their behalf; nobody else can accept it and an invitation that is not pending cannot be accepted.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 284
+        },
+        {
+          "path": "src/back-end/lib/resources/affiliation.ts",
+          "line": 347
+        },
+        {
+          "path": "src/back-end/lib/db/affiliation.ts",
+          "line": 246
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/organizations.tsx",
+          "line": 216
+        },
+        {
+          "path": "src/back-end/docs/affiliation.yaml",
+          "line": 46
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a person with a pending invitation to an organization",
+      "when": "the organization's owner tries to accept it on their behalf, and then the invited person accepts it themselves",
+      "then": "the owner's attempt is refused, the invited person's acceptance makes the membership active, and a further attempt to accept the now-active membership is refused as not pending",
+      "notes": [
+        "the published interface description gives this operation a different request method than the service actually accepts, so the description cannot be followed literally."
+      ],
+      "state": "accepted",
+      "raw": "### R-3.9 · v1 · confirmed · recovered",
+      "line": 154,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "D-organizations-10",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "When an administrator archives an organization they do not own, its owner is told by email that the organization has been archived.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/organization.ts",
+          "line": 692
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/organization.tsx",
+          "line": 11
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/organization.tsx",
+          "line": 32
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an active organization owned by a vendor",
+      "when": "an administrator archives it",
+      "then": "the owner receives a message telling them their organization has been archived by an administrator and that they can no longer use it, and no such message is sent when the owner archives their own organization",
+      "notes": [],
+      "state": "proposed",
+      "raw": "### D-organizations-10 · v1 · inferred · recovered",
+      "line": 168,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.10",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A membership can be ended by the member themselves, by the organization's owner or administrators, or by a service administrator; the membership becomes inactive rather than being erased, and the person stops counting towards the organization's team.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 306
+        },
+        {
+          "path": "src/back-end/lib/db/affiliation.ts",
+          "line": 421
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/edit/tab/team.tsx",
+          "line": 372
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/organizations.tsx",
+          "line": 169
+        },
+        {
+          "path": "src/back-end/docs/affiliation.yaml",
+          "line": 63
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an organization with an owner and one further active member",
+      "when": "that member chooses to leave the organization",
+      "then": "they no longer appear on the organization's team list, the organization's team size falls to one, and the organization is no longer listed among their affiliated organizations",
+      "notes": [],
+      "state": "accepted",
+      "raw": "### R-3.10 · v1 · confirmed · recovered",
+      "line": 179,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "D-organizations-11",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "An organization is qualified for Sprint With Us once it has at least two active team members, those members between them hold every capability the service recognises, and its Sprint With Us terms have been accepted.",
+      "cites": [
+        {
+          "path": "src/shared/lib/resources/organization.ts",
+          "line": 125
+        },
+        {
+          "path": "src/shared/lib/resources/organization.ts",
+          "line": 131
+        },
+        {
+          "path": "src/back-end/lib/db/organization.ts",
+          "line": 199
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/edit/tab/swu-qualification.tsx",
+          "line": 74
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an organization with an owner and one further active member who between them hold every capability, and whose Sprint With Us terms have not yet been accepted",
+      "when": "the owner opens the organization's Sprint With Us qualification page",
+      "then": "the team-size and capability requirements are shown as met, the terms requirement as unmet, and the organization is marked as not qualified",
+      "notes": [
+        "only active members count towards the capability total; a member who has been invited but has not yet accepted is excluded."
+      ],
+      "state": "proposed",
+      "raw": "### D-organizations-11 · v1 · inferred · recovered",
+      "line": 192,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.11",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "An organization's last remaining owner cannot be removed from it.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/affiliation.ts",
+          "line": 518
+        },
+        {
+          "path": "src/back-end/lib/db/affiliation.ts",
+          "line": 492
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an organization with exactly one owner and two other active members",
+      "when": "an administrator tries to end the owner's membership",
+      "then": "the request is refused with a message saying this is the sole owner for the organization, and the membership remains",
+      "notes": [],
+      "state": "accepted",
+      "raw": "### R-3.11 · v1 · confirmed · recovered",
+      "line": 205,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "D-organizations-12",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "An organization is qualified for Team With Us once it has been approved for at least one service area and its Team With Us terms have been accepted.",
+      "cites": [
+        {
+          "path": "src/shared/lib/resources/organization.ts",
+          "line": 141
+        },
+        {
+          "path": "src/back-end/lib/db/organization.ts",
+          "line": 386
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/edit/tab/twu-qualification.tsx",
+          "line": 301
+        },
+        {
+          "path": "src/migrations/tasks/20230327102038_accept-twu-terms.ts"
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an organization approved for one service area whose Team With Us terms have not been accepted",
+      "when": "the owner opens the organization's Team With Us qualification page",
+      "then": "the service-area requirement is shown as met, the terms requirement as unmet, and the organization is marked as not qualified",
+      "notes": [
+        "the database description carried by the old application does not list the Team With Us terms field, the service-area approvals or the membership-rights history at all, so it is behind the schema the application actually uses."
+      ],
+      "state": "proposed",
+      "raw": "### D-organizations-12 · v1 · inferred · recovered",
+      "line": 215,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.12",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "An organization's owner, its administrators and a service administrator may grant or withdraw administrator rights over the organization to an active member, but nobody may change their own rights and the owner's own membership cannot be changed this way.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 294
+        },
+        {
+          "path": "src/back-end/lib/resources/affiliation.ts",
+          "line": 370
+        },
+        {
+          "path": "src/back-end/lib/db/affiliation.ts",
+          "line": 272
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/edit/tab/team.tsx",
+          "line": 630
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an organization with an owner and two other active members, one of whom already has administrator rights",
+      "when": "the owner grants administrator rights to the second member, that administrator tries to withdraw their own rights, and someone tries to change the owner's",
+      "then": "the second member gains administrator rights, and both the self-change and the change to the owner are refused",
+      "notes": [
+        "granting administrator rights requires the person granting them to confirm a statement about what those rights allow before the change is offered."
+      ],
+      "state": "accepted",
+      "raw": "### R-3.12 · v1 · confirmed · recovered",
+      "line": 228,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "D-organizations-13",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "Accepting an organization's Sprint With Us or Team With Us terms records the date of acceptance, and a second attempt to accept the same terms for the same organization is refused.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/organization.ts",
+          "line": 509
+        },
+        {
+          "path": "src/back-end/lib/resources/organization.ts",
+          "line": 524
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx",
+          "line": 155
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx",
+          "line": 224
+        },
+        {
+          "path": "src/back-end/docs/organization.yaml",
+          "line": 148
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an organization whose Sprint With Us terms have not been accepted",
+      "when": "its owner reads the terms and accepts them, and then tries to accept them again",
+      "then": "the first acceptance is recorded with its date and shown on the qualification page, and the second is refused with a message saying the terms have already been accepted",
+      "notes": [
+        "an administrator reading the terms page is not offered the accept control, so acceptance is in practice an act of the organization's own people."
+      ],
+      "state": "proposed",
+      "raw": "### D-organizations-13 · v1 · inferred · recovered",
+      "line": 241,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.13",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Only a service administrator may transfer ownership of an organization, and only to a member whose membership is already active; the previous owner becomes an ordinary member.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/affiliation.ts",
+          "line": 408
+        },
+        {
+          "path": "src/back-end/lib/db/affiliation.ts",
+          "line": 353
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/edit/tab/team.tsx",
+          "line": 1047
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an organization with an owner, one active member and one member whose invitation is still pending",
+      "when": "an administrator transfers ownership to the active member",
+      "then": "that member becomes the organization's owner, the previous owner becomes an ordinary member, and the pending member cannot be chosen as the new owner",
+      "notes": [
+        "the organization's own owner is not offered this action; it is offered only to a service administrator, and only when the organization has at least one member other than the owner."
+      ],
+      "state": "accepted",
+      "raw": "### R-3.13 · v1 · confirmed · recovered",
+      "line": 255,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "D-organizations-14",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "Only an administrator may set which service areas an organization is approved for, and saving a selection replaces the organization's previous approvals entirely.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/organization.ts",
+          "line": 545
+        },
+        {
+          "path": "src/back-end/lib/db/organization.ts",
+          "line": 691
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/edit/tab/twu-qualification.tsx",
+          "line": 400
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an organization approved for two service areas",
+      "when": "an administrator edits the service areas, leaves one of the two ticked, ticks a third, and saves",
+      "then": "the organization is approved for exactly the two areas that were ticked and no longer for the one that was cleared, and the same page offers no editing control to the organization's own owner",
+      "notes": [],
+      "state": "proposed",
+      "raw": "### D-organizations-14 · v1 · inferred · recovered",
+      "line": 267,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.14",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "The list of an organization's team members can be read only by a service administrator or by someone who owns or administers that organization.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 258
+        },
+        {
+          "path": "src/back-end/lib/resources/affiliation.ts",
+          "line": 98
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an organization with an owner and one ordinary member",
+      "when": "that ordinary member, and separately a vendor unconnected to the organization, asks for the organization's team list",
+      "then": "both are refused, while the owner and a service administrator receive the list",
+      "notes": [],
+      "state": "accepted",
+      "raw": "### R-3.14 · v1 · confirmed · recovered",
+      "line": 278,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.15",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "The organizations a vendor may act on behalf of are those they own and those they administer, excluding any that have been archived.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/db/organization.ts",
+          "line": 541
+        },
+        {
+          "path": "src/back-end/lib/resources/owned-organization.ts",
+          "line": 28
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a vendor who owns one organization, administers a second, is an ordinary member of a third, and owns a fourth that has been archived",
+      "when": "they ask for the organizations they can act for",
+      "then": "the first two are returned and the third and fourth are not",
+      "notes": [],
+      "state": "accepted",
+      "raw": "### R-3.15 · v1 · confirmed · recovered",
+      "line": 288,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "D-organizations-16",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "An invited person is told by email that the organization has asked them to join, and is offered a way to accept or decline from that message.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/affiliation.ts",
+          "line": 264
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/affiliation.tsx",
+          "line": 65
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/affiliation.tsx",
+          "line": 247
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/organizations.tsx",
+          "line": 122
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a registered vendor who is not a member of a given organization",
+      "when": "that organization invites them",
+      "then": "they receive a message naming the organization and offering an accept and a decline choice, and following either choice opens their own organizations page with that decision ready to confirm",
+      "notes": [],
+      "state": "proposed",
+      "raw": "### D-organizations-16 · v1 · inferred · recovered",
+      "line": 298,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.16",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "Asking for the organizations one may act on behalf of as anyone other than a vendor returns an empty list rather than being refused.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/owned-organization.ts",
+          "line": 25
+        },
+        {
+          "path": "src/back-end/lib/db/organization.ts",
+          "line": 542
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "a signed-in member of public sector staff, and a visitor who is not signed in",
+      "when": "each asks for the organizations they may act on behalf of",
+      "then": "each receives an empty list and neither is told they are not permitted",
+      "notes": [
+        "the permission rule for this request is written but never applied — the check tests that the rule exists rather than running it — so nothing is refused here. No harm follows, because the underlying lookup returns nothing for anyone who is not a vendor, but the outcome is an empty success where a refusal was intended. No corrected criterion has been written because it has not been decided whether the new system should refuse or should keep answering with an empty list.",
+        "superseded by R-3.20"
+      ],
+      "state": "accepted",
+      "supersededBy": "R-3.20",
+      "raw": "### R-3.16 · v1 · confirmed · recovered",
+      "line": 310,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "D-organizations-17",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "Inviting an email address that belongs to nobody registered with the service creates no membership; the address is instead sent an invitation to register, and the inviter is told the person was not registered but has been notified.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/affiliation.ts",
+          "line": 196
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/edit/tab/team.tsx",
+          "line": 270
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an organization whose owner is inviting team members",
+      "when": "they invite an email address that no registered account uses",
+      "then": "no pending membership appears on the team list, the address receives an invitation to register with the service, and the owner is shown a warning naming that address",
+      "notes": [],
+      "state": "proposed",
+      "raw": "### D-organizations-17 · v1 · inferred · recovered",
+      "line": 323,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.17",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "An invitation may name the invited person as an ordinary member or as an owner, and any other membership type is rejected.",
+      "cites": [
+        {
+          "path": "src/shared/lib/resources/affiliation.ts",
+          "line": 85
+        },
+        {
+          "path": "src/back-end/lib/resources/affiliation.ts",
+          "line": 186
+        },
+        {
+          "path": "src/back-end/docs/affiliation.yaml",
+          "line": 83
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an organization whose owner is inviting a team member",
+      "when": "the invitation names a membership type other than member or owner",
+      "then": "the invitation is refused as an invalid membership type",
+      "notes": [
+        "administrator rights are never granted by an invitation; they are granted afterwards to a member who has already joined, as in R-3.12. In practice the team page always sends \"member\"."
+      ],
+      "state": "accepted",
+      "raw": "### R-3.17 · v1 · confirmed · recovered",
+      "line": 333,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.18",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "The Edit and Archive controls on an organization's management page are offered only to a person permitted to use them — the organization's owner or a service administrator; an organization administrator who is not the owner sees the organization's profile as read-only, with no Edit and no Archive control, and the service continues to refuse a profile change or an archive request from anyone other than the owner or a service administrator.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-3.4",
+      "raw": "### R-3.18 · v1 · confirmed · authored",
+      "line": 345,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.19",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "A change to an organization's contact phone number made while editing its profile is saved along with every other profile field, and clearing the field removes the stored number.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-3.5",
+      "raw": "### R-3.19 · v1 · confirmed · authored",
+      "line": 350,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "D-organizations-20",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "When a person accepts an invitation, the organization's owner is told they have joined and the new member is told they may now be put forward on the organization's proposals.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/affiliation.ts",
+          "line": 450
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/affiliation.tsx",
+          "line": 18
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/affiliation.tsx",
+          "line": 106
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/affiliation.tsx",
+          "line": 168
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a person with a pending invitation to an organization",
+      "when": "they accept it",
+      "then": "the organization's owner receives a message saying the person approved the request, and the person receives a message saying they have joined the organization's team",
+      "notes": [],
+      "state": "proposed",
+      "raw": "### D-organizations-20 · v1 · inferred · recovered",
+      "line": 355,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "R-3.20",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "Asking for the organizations one may act on behalf of is refused as not permitted for anyone who is not a signed-in vendor, rather than answered with an empty list.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-3.16",
+      "raw": "### R-3.20 · v1 · confirmed · authored",
+      "line": 367,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "D-organizations-22",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "When an invited person declines an invitation rather than accepting it, the organization's owner is told the request was rejected.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/affiliation.ts",
+          "line": 562
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/affiliation.tsx",
+          "line": 35
+        },
+        {
+          "path": "src/back-end/lib/mailer/notifications/affiliation.tsx",
+          "line": 140
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/user/profile/tab/organizations.tsx",
+          "line": 270
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a person with a pending invitation to an organization",
+      "when": "they decline it",
+      "then": "the pending membership is gone from the organization's team list and the owner receives a message saying the person rejected the team request",
+      "notes": [
+        "no message is sent when the organization's own owner or administrator withdraws a pending invitation, nor when an established member leaves; the code that would tell the owner about a member leaving is present but nothing invokes it."
+      ],
+      "state": "proposed",
+      "raw": "### D-organizations-22 · v1 · inferred · recovered",
+      "line": 372,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "D-organizations-26",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "An organization keeps a changelog of every grant and withdrawal of administrator rights and every transfer of ownership, showing what happened, to whom, when and by whom, most recent first.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/db/organization.ts",
+          "line": 388
+        },
+        {
+          "path": "src/back-end/lib/db/affiliation.ts",
+          "line": 300
+        },
+        {
+          "path": "src/back-end/lib/db/affiliation.ts",
+          "line": 367
+        },
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/lib/index.tsx",
+          "line": 4
+        },
+        {
+          "path": "src/migrations/tasks/20231108161232_affiliation-events.ts",
+          "line": 13
+        },
+        {
+          "path": "src/migrations/tasks/20240410182955_update-affiliation-events.ts",
+          "line": 7
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an organization whose owner has granted administrator rights to a member and then withdrawn them",
+      "when": "the owner opens the organization's changelog",
+      "then": "two entries are shown, \"Admin Rights Removed\" above \"Admin Rights Given\", each naming the member it concerns, the time it happened and the person who made the change",
+      "notes": [],
+      "state": "proposed",
+      "raw": "### D-organizations-26 · v1 · inferred · recovered",
+      "line": 385,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
+    },
+    {
+      "id": "D-organizations-28",
+      "version": 1,
+      "confidence": "inferred",
+      "origin": "recovered",
+      "statement": "An organization's summary of team capabilities counts only members who have accepted their invitation.",
+      "cites": [
+        {
+          "path": "src/front-end/typescript/lib/pages/organization/edit/tab/team.tsx",
+          "line": 104
+        },
+        {
+          "path": "src/back-end/lib/db/organization.ts",
+          "line": 211
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an organization whose only member holding a given capability has been invited but has not yet accepted",
+      "when": "the owner opens the organization's team page",
+      "then": "that capability is shown as one the team does not have, and it becomes shown as held once the invitation is accepted",
+      "notes": [],
+      "state": "proposed",
+      "raw": "### D-organizations-28 · v1 · inferred · recovered",
+      "line": 399,
+      "domain": "organizations",
+      "file": "spec/domains/organizations.md"
     },
     {
       "id": "R-2.1",
