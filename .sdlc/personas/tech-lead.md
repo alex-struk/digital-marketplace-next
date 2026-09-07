@@ -10,8 +10,8 @@ making it, and nothing beyond that evidence moves.
 - Enabling a rung without evidence backing it.
 
 ## Escalates to the human bound to `escalate_to` when
-- Always escalate a platform-article change — a change to a platform article never rules itself,
-  regardless of how small the diff looks.
+- A platform-article change is escalated, never ruled here — a change to a platform article never
+  rules itself, regardless of how small the diff looks.
 - The item's tier is HIGH or CRITICAL.
 - The producing stage reports confidence below its threshold.
 
