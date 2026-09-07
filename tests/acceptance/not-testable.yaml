@@ -6,103 +6,329 @@
 criteria:
   - id: R-6.1
     version: 1
-    reason: "The given is an environment with notifications switched off, read once at start-up. No page, action or observation configures the running target's notification setting, and the fixtures set no environment beyond the target URL and the mail catcher, so the condition the criterion is about cannot be established."
+    reason: >-
+      The given is a service configured with notifications switched off, and no page in
+      the contract carries an action that switches them off — the setting is read once at
+      start-up and the surface offers no route to it. The "then" also asks that no message
+      reach anybody, while the Mail fixture searches by one recipient address at a time and
+      has no way to ask whether the catcher is empty. Needs a way to run against a target
+      with notifications disabled, and a mail observation of the catcher as a whole rather
+      than of one named recipient.
   - id: R-6.2
     version: 1
-    reason: "The given is a service whose mail server is unreachable. Nothing in the surface or the mail fixture can stop, break or intercept delivery — `mail` can only clear the catcher and search it — so a failed send cannot be produced, and the claim that nothing in the service records the failure has nothing to be asserted against."
+    reason: >-
+      The given is a service whose mail server is unreachable, which nothing in the
+      contract can bring about: no page, action or observation touches delivery, and the
+      mail catcher the email observable names is the very thing that would have to be
+      broken for the criterion to be reached. Needs a way to point a run at an unreachable
+      mail server, and an observation that the triggering action still reported success.
   - id: R-6.3
     version: 1
-    reason: "Neither half is observable. The test marker is never named — the contract says only that subjects may carry one — so no assertion can tell a marked subject from an unmarked one; and the test variant of the logo lives in the message body, which the mail fixture does not expose (observables.yaml names html_body, but Mail returns only Subject, Snippet, To and ID)."
+    reason: >-
+      Both halves of the "then" are out of reach. The test marker sits at the front of a
+      subject, which the mail catcher does expose, but nothing in the contract says whether
+      the target a run points at is marked as a test environment, so a test has no way to
+      know whether to expect the marker or its absence; and the test variant of the logo is
+      an image in the message body, which the Mail fixture does not reach. Needs an
+      observation of whether the target is a test environment, and a mail observation of
+      the message body.
   - id: R-6.4
     version: 2
-    reason: "The sender and the reply-to of a message are not reachable: observables.yaml names `sender: from`, but the mail fixture returns only Subject, Snippet, To and ID and offers no way to read one message's headers."
+    reason: >-
+      The claim is about who a message comes from and where a reply to it goes. The Mail
+      fixture exposes a message's subject, snippet, recipient and id and nothing else, so a
+      test cannot read the sender's display name, the sender's address, or the absence of a
+      reply-to address distinct from it. Needs mail observations of the sender and of the
+      reply-to address.
   - id: R-6.5
     version: 1
-    reason: "Comparing the plain-text form of a message with the formatted one needs both bodies. The mail fixture exposes neither html_body nor plain_text_body, only a snippet, which is a summary the catcher makes and not evidence that a plain-text part was sent at all."
+    reason: >-
+      The claim is that every message carries both a formatted and a plain-text form and
+      that the plain text carries the same words and links as the formatted version. The
+      mail catcher reaches a message's subject and a snippet of it, not its parts, so a test
+      can read neither form and cannot compare them. Needs mail observations of a message's
+      formatted and plain-text bodies.
   - id: R-6.8
     version: 1
-    reason: "Two things are missing. The batch's recipients are blind copies and the mail fixture has no accessor for them (observables.yaml names `copied_recipients: bcc`), so neither the batch size nor the hiding can be counted; and one hundred and twenty accounts that have asked for new-opportunity notices can be produced neither by the seed nor by any surface action, since accounts arrive only through sign-in as a seeded persona."
+    reason: >-
+      The claim is about batch size and about recipients hidden from one another. The Mail
+      fixture searches by recipient address and returns subject, snippet, recipient and id;
+      it cannot enumerate the messages one send produced, read a message's blind recipient
+      list, or read its visible one. The given also asks for one hundred and twenty people
+      who have requested new-opportunity notices, and the seed names no group of that size.
+      Needs a mail observation of a message's visible and hidden recipient lists, a way to
+      count the messages one action sent, and a seed group large enough to force batching.
   - id: R-6.9
     version: 1
-    reason: "The claim is about the visible address line of a panel notice listing all of its recipients. `mail.messagesTo` searches by one visible address and hands back `To` as an opaque value, so the addresses of the other recipients of the same message cannot be read."
+    reason: >-
+      The finding is that four evaluation notices put every recipient in the visible address
+      line instead of hiding them. The mail observable exposes a message's recipient field
+      but nothing that tells a visible recipient from a hidden one, and nothing in the
+      contract identifies which notice a message is, so a test cannot single out the four.
+      Needs a mail observation of the visible address line, and a way to tell one kind of
+      notice from another without guessing at its subject wording.
   - id: R-6.11
     version: 1
-    reason: "Both halves turn on the notice about a watched opportunity, which is sent as a batch of blind copies. The mail fixture searches by visible recipient only, so a message that did reach a deactivated watcher would not be found, and its absence from a search would be equally consistent with it having been sent."
+    reason: >-
+      The "then" turns on telling a watcher's notice apart from a new-opportunity
+      announcement for the same person, and nothing in the contract names message kinds —
+      the mail observable reaches subject, snippet and recipient, so the only way to
+      distinguish them is to guess at wording the contract does not carry. The given also
+      needs an account deactivated while a watch it holds survives, and no observation in
+      the contract reports a deactivated account's watches. Needs a mail observation naming
+      which notice a message is, and an observation of a watch held by a deactivated account.
   - id: R-6.12
     version: 1
-    reason: "The criterion is about the wording inside one message. The mail fixture exposes no message body, and the reference page's observations (message_subject, message_summary, message_body) name no way to select one message among the fifty on the page, so a containment assertion over the page as a whole would be satisfied by any message that happens to name a program."
+    reason: >-
+      The claim is about which programs one sentence inside the changed-terms message names.
+      That sentence lives in the message body, and the mail observable reaches only subject,
+      snippet and recipient; a snippet is the beginning of a message and nothing in the
+      contract says the sentence falls within it. Needs a mail observation of the message
+      body.
   - id: R-6.15
     version: 1
-    reason: "Requires reading, for one multi-recipient notice, both the visible recipient and the list of blind copies. The mail fixture offers neither: it searches by a single visible address and returns no blind-copy list, so hiding cannot be told from not sending."
+    reason: >-
+      The authored replacement for R-6.9 requires that every multi-recipient notice carry
+      its batch as blind copies with the service's own address as the visible recipient. The
+      mail observable exposes a message's recipient field without distinguishing a hidden
+      recipient from a visible one, so neither half of the requirement can be read. Needs a
+      mail observation of a message's hidden and visible recipient lists.
   - id: R-6.16
     version: 1
-    reason: "The claim is about what stands at the foot of a particular message — an unsubscribe offer, or a plain link to the notification settings. The mail fixture exposes no message body, and the reference page cannot be asked for one message's body, so the two endings cannot be told apart."
+    reason: >-
+      The claim is that a message the notification preference does not govern must not offer
+      to unsubscribe. The offer sits at the end of a message body, and the mail observable
+      reaches subject, snippet and recipient only, so a test cannot see whether the offer is
+      present or absent, nor what it links to. Needs a mail observation of the message body
+      or of its links.
   - id: R-6.18
     version: 1
-    reason: "Same missing observation as R-6.12: naming all three programs or none is a fact about the body of the changed-terms message, and no surface observation or mail accessor returns that one body."
+    reason: >-
+      The authored replacement for R-6.12 turns on which programs the changed-terms message
+      names, in a sentence inside the message body. The mail observable reaches subject,
+      snippet and recipient only, so the sentence cannot be read at all, let alone checked
+      for naming all three programs or none. Needs a mail observation of the message body.
   - id: R-6.20
     version: 1
-    reason: "The given is an account being created for the first time. Every persona signs in as an account the seed already holds, and no surface action creates one, so the sign-up completion page cannot be reached with a first-time identity and the state of a never-before-seen account cannot be read."
+    reason: >-
+      The given is a person signing in to the service for the first time and having an
+      account created for them. The contract's personas are accounts a run signs in as, and
+      no action in it creates one — user-sign-up-choose-account and user-sign-up-complete
+      offer to choose an account type and complete a profile, but a run reaches them already
+      provisioned, so a test cannot read the notification setting of an account nothing has
+      yet touched. Needs a way to bring a new account into being within a run.
   - id: R-6.24
     version: 1
-    reason: "What distinguishes this criterion from R-6.23 is ordering — success reported before any message has been sent. Nothing in the surface reports send progress, and nothing can hold delivery, so the only available check (that the catcher is empty at the moment success appears) is a race against the background sending rather than a test of it."
+    reason: >-
+      The claim is that the announcement is reported successful while the messages are still
+      being sent, and that nothing later says whether every one was sent.
+      notification-terms-broadcast observes notify_vendors_success, but nothing in the
+      contract observes work still outstanding behind it, so the ordering the criterion
+      rests on cannot be read; the second half is a negative over the whole service that no
+      observation covers. Needs an observation of the broadcast's outstanding work.
   - id: R-6.25
     version: 2
-    reason: "Every part of the claim — the opportunity's title and the winner's name leading the message, the em dash where no successful proponent is recorded, the offer to sign in and see one's own score — is content of the message body, which no mail accessor returns and which the reference page cannot be asked for one message at a time."
+    reason: >-
+      The claim is about the layout and the leading content of one message — the
+      opportunity's title, the winning proponent's name, an em dash where none is recorded,
+      and an offer to sign in and see one's own score. All of it lives in the message body,
+      which the mail observable does not reach; the snippet is the beginning of a message and
+      the contract does not say what falls within it. Needs a mail observation of the message
+      body.
   - id: R-6.27
     version: 1
-    reason: "The only width-aware observation is notification_control_hidden_on_narrow_screen, which is worded for the old service's behaviour. Asserting its negation is not reliable, since observations return free text with no stated yes/no vocabulary, and nothing names an observation reporting the control as offered at a narrow width or a way to ask a page to open at one."
+    reason: >-
+      The claim is that the new-opportunity control is offered on the list of opportunities
+      at every screen width. notification-optin-opportunity-list carries notification_control
+      and notification_control_hidden_on_narrow_screen, but no action or parameter in the
+      contract sets the width of the screen a run reads a page at, so a test cannot put
+      itself on a narrow screen to find the control there. Needs a way to set the viewport
+      width through the surface rather than around it.
   - id: R-8.3
     version: 1
-    reason: "Neither half of the given can be produced and the outcome cannot be read. No action declares, or withholds, the size of a submission — a file reaches the service only through add_attachment, choose_image or upload_body_image, each of which submits whatever it is handed — and no observation reports an upload refused for size: file_download names only contents, name, type, disposition and its two refusals, and the attachment control names only file_name_error. The outcome the criterion actually turns on, a fault of the service rather than a message about the file, has no observation reporting a fault of the service at all."
+    reason: >-
+      The claim is about an upload whose declared size is above ten megabytes and one that
+      declares no size at all. The three upload controls in the contract — add_attachment,
+      choose_image and upload_body_image — each take a file and settle its declared size
+      themselves, so a test cannot overstate, understate or omit it; and the observations on
+      those controls are file_name_error and rejected_image_error, neither of which is a
+      size refusal or the service fault the criterion records. Needs an upload action whose
+      declared size the test chooses, and an observation of the size refusal.
   - id: R-8.4
     version: 1
-    reason: "The given is a submission carrying no file part or read-access information that is not well-formed data. Every upload in the surface is made by a control that assembles the submission itself, so a malformed one cannot be sent; and the outcome — failing as an unexpected fault and being written to the service's error log — has no observation, since the surface names nothing that reports a fault of the service and observables.yaml exposes no log."
+    reason: >-
+      The given is a submission carrying no file part, or read-access information that is not
+      well-formed data. No control in the contract can produce either: add_attachment,
+      choose_image and upload_body_image all send a file, and each fixes the read-access
+      statement itself. The "then" also rests on what the service's error log records, which
+      no observation reaches. Needs a way to submit a malformed upload, and an observation of
+      the fault it produces.
   - id: R-8.5
     version: 1
-    reason: "Both halves need something the surface never returns. That identical content is stored once is visible only in the fingerprint the file record carries, and no observation returns a file record or a fingerprint; that the second uploader's read access does not reach the first record needs the first record to be addressed by identifier, and no observation returns a stored file's identifier, so a file can be reached only by following a download offered on a screen the requester can already open."
+    reason: >-
+      The claim is that two uploads of identical content share one stored copy while
+      remaining separate records with separate read access. Nothing in the contract observes
+      a file's record apart from its bytes — file-download reaches the contents, the name on
+      save and the content type of one file at a time, and reports no fingerprint — so a test
+      cannot tell one stored copy from two. Needs an observation of a file's record,
+      including the fingerprint by which identical uploads are recognised.
   - id: R-8.6
     version: 1
-    reason: "No observation returns who uploaded a file or when it was stored. file_download names contents, name on save, disposition, content type and refusals; the attachment control names rows and errors. With neither value readable, neither the recording of them nor their being unchangeable afterwards can be asserted."
+    reason: >-
+      The claim is that every stored file records who uploaded it and when, and that neither
+      can be changed afterwards. file-download observes contents, name on save, content type
+      and the several refusals, and no page in the contract shows a stored file's uploader or
+      the date it was stored. Needs an observation of a file's uploader and stored date.
   - id: R-8.7
     version: 1
-    reason: "The given/when/then needs a file that exists, that one person may read and another may not, addressed by both. No observation returns a stored file's identifier, and the only way the surface reaches a file is by following a download offered on a screen the requester can already open — which is by construction a file they may read. So refused_when_not_permitted cannot be reached for a file that exists, and the administrator's override cannot be told from the administrator simply being able to open the screen the download hangs on."
+    reason: >-
+      The claim is the five ways of being allowed to read a file. Reaching four of them needs
+      a file uploaded with a read-access statement of the test's choosing — readable by
+      anyone, by a named person, or by an account type — and no upload action in the contract
+      carries one; each control fixes read access itself. file-download does carry
+      refused_when_not_permitted, so the refusal would be readable, but the states that must
+      be arranged before it are not. Needs an upload action that carries a read-access
+      statement.
   - id: R-8.8
     version: 1
-    reason: "The when is a visitor who is not signed in asking for the attachment of a draft opportunity by its identifier. A visitor cannot open an unpublished opportunity, so there is no download to follow, and no observation returns the identifier of a file a test has uploaded, so it cannot be asked for directly. The criterion's own note says the identifier is published nowhere, which is exactly the reach the surface lacks."
+    reason: >-
+      The claim is that a Sprint With Us or Team With Us attachment is readable by a
+      signed-out visitor while its opportunity is still a draft. file-download carries
+      readable_when_signed_out_if_public, but reaching a particular file needs its
+      identifier, and nothing in the contract hands a test the identifier of an attachment it
+      has just added — file-attachment-control observes attachment rows and offers
+      download_attachment from a page only the draft's owner can open. Needs an observation of
+      an attachment's own identifier or address.
   - id: R-8.9
     version: 1
-    reason: "Nothing in the surface attaches a file to a Team With Us proposal and then offers it to the opportunity's owner. The attachment control is listed on the three opportunity forms and the Code With Us proposal form only, so it has no download to follow on a Team With Us proposal, and proposal-twu-view names no attachment action or observation. The criterion's outcome — the owner being refused — therefore has no request to make."
+    reason: >-
+      The claim is that a Team With Us proposal attachment is refused to the opportunity's
+      owner although they may read the proposal. proposal-twu-create does offer
+      add_attachment, so the given can be set up, but the "then" is a request for that
+      particular file made by another person, and no observation in the contract yields the
+      identifier of an attachment; download_attachment acts from the page rather than by
+      identifier, and it is on the page that the wrong person cannot get. Needs an observation
+      of an attachment's identifier.
   - id: R-8.11
     version: 1
-    reason: "The surface has one address for a stored file, file-download, and its route asks for the content. No page, action or observation makes the without-content request or returns what it answers with: nothing names a file's identifier, and nothing names the date it was stored, so the description the criterion says comes back cannot be read."
+    reason: >-
+      The claim is about asking for a file without requesting its content and receiving its
+      identifier, name and stored date instead. The contract's only address for a file is
+      file-download at "?type=blob", whose observations are all about the bytes; there is no
+      page, action or observation for a file's description on its own. Needs an observation of
+      a file's record without its content.
   - id: R-8.13
     version: 1
-    reason: "No observation reports the dimensions of a stored image. The image picker names current_image and chosen_image_preview, both free text, and no action states the size of the image it uploads, so neither the 2000-by-300 given nor the 500-pixel outcome can be established or read."
+    reason: >-
+      The claim is that a profile picture or logo above five hundred pixels is reduced to five
+      hundred keeping its proportions. file-image-picker observes current_image and
+      chosen_image_preview, neither of which reports a width or a height, and nothing else in
+      the contract measures a stored image. Needs an observation of a stored image's
+      dimensions.
   - id: R-8.15
     version: 1
-    reason: "The given is a file uploaded by one person and readable only by them, whose identifier a second person then names as an attachment. No observation returns a stored file's identifier, so the second person has nothing to name; and no action attaches a file by identifier rather than by choosing one from the machine the test runs on."
+    reason: >-
+      The claim is that attaching a file checks only that it exists, so one person can attach
+      another person's file and widen who may read it. Reaching it needs a test to name an
+      already-stored file's identifier while saving a proposal, and no action in the contract
+      takes a file identifier — add_attachment takes a file to upload. Needs an action that
+      attaches an already-stored file by its identifier.
   - id: R-8.16
     version: 1
-    reason: "The working directory is on the service's own machine. Nothing in the surface or in observables.yaml reads that machine's filesystem — the observables are email, file addresses, exports, a status trigger and counters — so neither the working copy being written nor its being removed afterwards can be seen."
+    reason: >-
+      The claim is about a working directory on the service's own machine and about a working
+      copy being removed once the upload has been answered. No page, action or observation in
+      the contract reaches the service's file system; the whole criterion is about a place the
+      surface does not describe. Needs an observation of the working directory's contents,
+      which is not something a surface can offer.
   - id: R-8.17
     version: 1
-    reason: "Two observations are missing. No observation reports an upload refused for size or the message such a refusal carries — file_name_error is about the name, and the file-download refusals are about reading rather than uploading — and no observation reports the size limit stated on the attachment control or the image picker before a file is chosen, which is the half of the criterion about what a person is told in advance."
+    reason: >-
+      The authored replacement for R-8.3 requires that a too-large upload be refused as the
+      requester's error with a message naming the limit, and that the limit be stated before a
+      person chooses a file. No upload action in the contract lets a test choose a declared
+      size, the observations on the upload controls are file_name_error and
+      rejected_image_error rather than a size refusal, and nothing in the contract observes a
+      stated limit anywhere in the interface. Needs an observation of the size refusal and an
+      observation of the limit as shown before a file is chosen.
   - id: R-8.18
     version: 1
-    reason: "Same reach as R-8.4: every upload in the surface is assembled by a control, so a submission with no file part or with malformed read-access information cannot be made. The refusal naming what was wrong, the absence of an entry in the service's error log, and the removal of the working copy are each unobservable as well — no observation names an upload refusal message, and neither the log nor the working directory is an observable."
+    reason: >-
+      The authored replacement for R-8.4 has the same unreachable given: no control in the
+      contract can send a submission with no file part or with read-access information that is
+      not well-formed. Its "then" adds that nothing is written to the service's error log and
+      that any working copy is removed either way, and neither the log nor the working
+      directory is anything the surface observes. Needs a way to submit a malformed upload, an
+      observation of the bad-request refusal, and an observation of the error log.
   - id: R-8.19
     version: 1
-    reason: "That no read access is recorded against the file itself is visible only as its consequence: somebody who may not read the opportunity being refused its attachment. That request cannot be made — a visitor cannot open an unpublished opportunity to follow a download, and no observation returns a file's identifier to ask for it directly — and the surface has no observation reporting what was recorded against a file."
+    reason: >-
+      The claim is about what read access is recorded against a file at the moment it is
+      uploaded, for all three programs alike. Nothing in the contract observes a file's
+      recorded read access — file-download reports only whether a given requester is refused,
+      and only for a file whose identifier the test holds, which no observation yields. Needs
+      an observation of a file's recorded read access, and of an attachment's identifier.
   - id: R-8.22
     version: 1
-    reason: "The criterion is about who may attach a file, which needs a file uploaded by somebody else to be named as an attachment. No observation returns a stored file's identifier, and no action attaches a file by identifier: add_attachment chooses a file to upload rather than naming one already stored, so the attempt the criterion refuses cannot be made."
+    reason: >-
+      The authored replacement for R-8.15 requires that a file be attachable only by someone
+      permitted to read it. Attempting the forbidden case needs a test to name an
+      already-stored file's identifier when attaching, and no action in the contract takes a
+      file identifier; nor is there an observation of the refusal such an attempt should meet.
+      Needs an action that attaches an already-stored file by its identifier, and an
+      observation of the refusal.
   - id: R-8.24
     version: 2
-    reason: "No action submits an upload without a read-access statement, or with one naming a kind of access the service does not recognise: the controls that upload settle that statement themselves and offer no way to set or omit it. Nor does any observation report an upload refused as carrying invalid information, so neither the given nor the outcome is reachable."
+    reason: >-
+      The claim is about an upload carrying no read-access statement, and one naming a kind of
+      access the service does not recognise. Every upload control in the contract fixes the
+      read-access statement itself, so a test can neither omit it nor name an unrecognised
+      kind, and no observation reports the invalid-read-access refusal. Needs an upload action
+      carrying a read-access statement of the test's choosing, and an observation of that
+      refusal.
   - id: R-8.26
     version: 1
-    reason: "The claim is about the file after the opportunity it was attached to is gone. Once the opportunity is deleted there is no screen carrying a download to follow, and no observation returns the file's identifier for it to be asked for directly, so whether it remains stored and readable cannot be read either way."
+    reason: >-
+      The claim is that deleting an opportunity removes only the attachment link, leaving the
+      file stored and still readable by whoever could read it. Asking for the file after the
+      deletion needs its identifier, which no observation in the contract yields —
+      file-attachment-control shows attachment rows and offers download_attachment from the
+      page, and that page is gone with the opportunity. Needs an observation of an
+      attachment's identifier or its own address.
   - id: R-8.31
     version: 1
-    reason: "Withdrawing the read paths a file held through an association can only be seen by asking for the file after the association is gone, which needs the file's identifier — no observation returns one. The second half, a file that no record refers to being identifiable as detached, names no surface at all: nothing in the pages, and nothing in observables.yaml, reports whether a stored file is still referred to."
+    reason: >-
+      The authored replacement for R-8.26 has two halves, neither reachable. Checking that a
+      removed attachment's read paths are withdrawn needs the file's identifier, which no
+      observation in the contract yields; and identifying a file no record refers to any longer
+      needs a report of detached files, which the contract has no page or observation for.
+      Needs an observation of an attachment's identifier and a report of files no record refers
+      to.
+  - id: R-3.17
+    version: 1
+    reason: >-
+      The only way the surface creates an invitation is organization-edit's
+      add_team_members, whose subject is email addresses; no page in the contract offers
+      a membership type on an invitation, so a test cannot send one other than the
+      "member" the team surface always sends, and therefore cannot reach the rejection of
+      any other type. Needs an add_team_members that carries a membership type, and an
+      observation of the invalid-membership-type refusal.
+  - id: R-3.20
+    version: 1
+    reason: >-
+      The criterion turns entirely on telling a refusal apart from an empty answer, and
+      no page in the organizations domain carries a refusal observation — organization-list
+      offers organization_name, owner_name, the two qualification marks and pagination,
+      none of which distinguishes "you are not permitted" from "you may act for nothing".
+      Needs an observation such as organization-list.refused_when_not_permitted, or a page
+      of its own for the organizations one may act on behalf of.
+  - id: R-3.35
+    version: 1
+    reason: >-
+      The claim is about where the accept and the decline choice inside an invitation
+      email lead. The email observable reaches a message's subject, snippet and recipient
+      through the mail catcher, and the Mail fixture exposes only those, so a test cannot
+      read the message body or follow either choice; organization-user-memberships also
+      carries no observation of an accept or a decline confirmation standing ready. Needs
+      a mail observation of the message body or its links, and an observation of the
+      prepared confirmation on organization-user-memberships.
