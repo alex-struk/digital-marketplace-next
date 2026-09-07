@@ -29,7 +29,7 @@ policy:
   default_tier: STANDARD
   rungs: {}
   triage: { direct_max_files: 3, direct_allowed_paths: [app/] }
-  budgets: { archaeology: 4000000, derive-tests: 2000000, build: 3000000, review: 1000000 }
+  budgets: { archaeology: 120, derive-tests: 2000000, build: 3000000, review: 1000000 }
 skills:
   packs:
     - { repo: mattpocock/skills, ref: 3cca18b368ae95cdbdebbff572ccafa662551015, skills: [grilling, domain-modeling, prototype, tdd, code-review] }
