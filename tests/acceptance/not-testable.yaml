@@ -1,150 +1,388 @@
-# Accepted criteria the acceptance suite cannot exercise through the surface, and why —
-# written by `derive-tests` when a criterion has no path through any page's actions and
-# observations, or added by hand when a person makes the same call. An entry here stands
-# in for a spec file: `sdlc run calibrate` reports it as a `not-testable` row rather than
-# a missing test.
 criteria:
   - id: R-1.1
     version: 2
-    reason: "The given is a published opportunity whose proposal deadline has passed, and no such opportunity can be had. The seed's only published opportunity has a deadline in 2030; an opportunity that is not a draft is refused a deadline earlier than today (R-1.14), and a draft left without one is given a deadline fourteen days out (R-1.9). The when is out of reach as well: observables.yaml names the status route as the request that runs the closing hook, but no page, action or observation in the surface makes that request."
+    reason: "The given is a published opportunity whose proposal deadline has
+      passed, and no such opportunity can be had. The seed's only published
+      opportunity has a deadline in 2030; an opportunity that is not a draft is
+      refused a deadline earlier than today (R-1.14), and a draft left without
+      one is given a deadline fourteen days out (R-1.9). The when is out of
+      reach as well: observables.yaml names the status route as the request that
+      runs the closing hook, but no page, action or observation in the surface
+      makes that request."
   - id: R-1.23
     version: 1
-    reason: "No observation returns an opportunity's published date. The three opportunity views name status, proposal deadline, reward or budget, addenda and successful proponent; published_date exists only on the content pages. Nor is there a when for the second half: no action republishes an opportunity that is already published, so 'even if it was later republished' cannot be set up."
+    reason: "No observation returns an opportunity's published date. The three
+      opportunity views name status, proposal deadline, reward or budget,
+      addenda and successful proponent; published_date exists only on the
+      content pages. Nor is there a when for the second half: no action
+      republishes an opportunity that is already published, so 'even if it was
+      later republished' cannot be set up."
   - id: R-1.24
     version: 1
-    reason: "The when is the opportunity closing at its proposal deadline, which cannot be brought about — see R-1.1 for the two things missing. Without the closure no submitted proposal is ever labelled, and the anonymous_proponent_name observations on the proposal surfaces have nothing to return."
+    reason: The when is the opportunity closing at its proposal deadline, which
+      cannot be brought about — see R-1.1 for the two things missing. Without
+      the closure no submitted proposal is ever labelled, and the
+      anonymous_proponent_name observations on the proposal surfaces have
+      nothing to return.
   - id: R-1.25
     version: 1
-    reason: "The given is an opportunity at its program's final evaluation stage. An opportunity reaches any evaluation stage only by closing at its proposal deadline, which cannot be brought about (see R-1.1), so neither the last proposal's scoring nor the move to processing can be reached."
+    reason: The given is an opportunity at its program's final evaluation stage. An
+      opportunity reaches any evaluation stage only by closing at its proposal
+      deadline, which cannot be brought about (see R-1.1), so neither the last
+      proposal's scoring nor the move to processing can be reached.
   - id: R-1.26
     version: 1
-    reason: "The given is an opportunity in processing. Processing lies beyond the evaluation stages, which are reached only by a closure the surface cannot bring about (see R-1.1), so award_proposal has no opportunity to act on and no proposal to mark not awarded."
+    reason: The given is an opportunity in processing. Processing lies beyond the
+      evaluation stages, which are reached only by a closure the surface cannot
+      bring about (see R-1.1), so award_proposal has no opportunity to act on
+      and no proposal to mark not awarded.
   - id: R-1.27
     version: 1
-    reason: "The given is an awarded opportunity. Awarding needs processing, processing needs the evaluation stages, and those need a closure the surface cannot bring about (see R-1.1). The successful_proponent observation therefore has nothing to return, and the proponent's contact details, which the criterion says are withheld, are named by no observation either."
+    reason: The given is an awarded opportunity. Awarding needs processing,
+      processing needs the evaluation stages, and those need a closure the
+      surface cannot bring about (see R-1.1). The successful_proponent
+      observation therefore has nothing to return, and the proponent's contact
+      details, which the criterion says are withheld, are named by no
+      observation either.
   - id: R-1.29
     version: 1
-    reason: "No observation returns the name of the person who created or last changed an opportunity. The opportunity views name status, dates, money, addenda and the successful proponent; the management surface names tabs and the three reporting counts. With the names unreadable, neither their presence for an administrator nor their absence for anybody else can be asserted."
+    reason: No observation returns the name of the person who created or last
+      changed an opportunity. The opportunity views name status, dates, money,
+      addenda and the successful proponent; the management surface names tabs
+      and the three reporting counts. With the names unreadable, neither their
+      presence for an administrator nor their absence for anybody else can be
+      asserted.
   - id: R-1.40
     version: 1
-    reason: "The given is an opportunity that has been evaluated, which cannot be reached: an opportunity leaves the published state only by closing at its proposal deadline (see R-1.1). The full_report observation would return nothing for an administrator as well as for a member of staff, so the contrast the criterion turns on cannot be told from the report simply not existing yet."
+    reason: "The given is an opportunity that has been evaluated, which cannot be
+      reached: an opportunity leaves the published state only by closing at its
+      proposal deadline (see R-1.1). The full_report observation would return
+      nothing for an administrator as well as for a member of staff, so the
+      contrast the criterion turns on cannot be told from the report simply not
+      existing yet."
   - id: R-1.41
     version: 1
-    reason: "The given is a Sprint With Us or Team With Us opportunity at the questions consensus stage, which is reached only after the opportunity closes at its proposal deadline (see R-1.1). The observations for both refusals exist — not_all_consensuses_submitted_error and no_screenable_proponent_error — but nothing in the surface can put an opportunity in front of them."
+    reason: The given is a Sprint With Us or Team With Us opportunity at the
+      questions consensus stage, which is reached only after the opportunity
+      closes at its proposal deadline (see R-1.1). The observations for both
+      refusals exist — not_all_consensuses_submitted_error and
+      no_screenable_proponent_error — but nothing in the surface can put an
+      opportunity in front of them.
   - id: R-1.42
     version: 1
-    reason: "The given is a Sprint With Us opportunity at the code challenge stage, which lies two stages beyond a closure the surface cannot bring about (see R-1.1). start_team_scenario therefore has no opportunity to be refused on, and the proponents whose scoring the refusal turns on cannot be created either."
+    reason: The given is a Sprint With Us opportunity at the code challenge stage,
+      which lies two stages beyond a closure the surface cannot bring about (see
+      R-1.1). start_team_scenario therefore has no opportunity to be refused on,
+      and the proponents whose scoring the refusal turns on cannot be created
+      either.
   - id: R-1.43
     version: 1
-    reason: "The given is an opportunity that has reached the consensus stage or beyond, which cannot be reached (see R-1.1). The panel_locked_after_consensus observation names exactly this outcome but no opportunity can be brought to the state in which it applies. The permitted half of the rule — changing the panel while the opportunity is a draft — is exercised by R-1.55."
+    reason: The given is an opportunity that has reached the consensus stage or
+      beyond, which cannot be reached (see R-1.1). The
+      panel_locked_after_consensus observation names exactly this outcome but no
+      opportunity can be brought to the state in which it applies. The permitted
+      half of the rule — changing the panel while the opportunity is a draft —
+      is exercised by R-1.55.
   - id: R-1.49
     version: 1
-    reason: "The claim is about which state changes are permitted out of processing for a Team With Us opportunity. Processing lies beyond the evaluation stages and cannot be reached (see R-1.1), and no observation returns the set of transitions an opportunity records, so neither the award nor the cancellation out of processing can be requested or read."
+    reason: The claim is about which state changes are permitted out of processing
+      for a Team With Us opportunity. Processing lies beyond the evaluation
+      stages and cannot be reached (see R-1.1), and no observation returns the
+      set of transitions an opportunity records, so neither the award nor the
+      cancellation out of processing can be requested or read.
   - id: R-1.50
     version: 1
-    reason: "Both halves are out of reach. The questions consensus stage cannot be reached (see R-1.1), so the refusal has no opportunity to act on; and the uniqueness claim is about there being no second way out, which the surface can only show by not naming one — the absence of an action is not an observation."
+    reason: Both halves are out of reach. The questions consensus stage cannot be
+      reached (see R-1.1), so the refusal has no opportunity to act on; and the
+      uniqueness claim is about there being no second way out, which the surface
+      can only show by not naming one — the absence of an action is not an
+      observation.
   - id: R-1.51
     version: 1
-    reason: "Nothing in the surface reaches a suspended state to show it is gone. No action requests a move to one, no observation returns the states an opportunity may hold or the states the list's state filter offers, and the seed holds no opportunity carrying the historical value, so the mapping of such a record to a defined state has nothing to be read on."
+    reason: Nothing in the surface reaches a suspended state to show it is gone. No
+      action requests a move to one, no observation returns the states an
+      opportunity may hold or the states the list's state filter offers, and the
+      seed holds no opportunity carrying the historical value, so the mapping of
+      such a record to a defined state has nothing to be read on.
   - id: R-6.1
     version: 1
-    reason: "The given is an environment with notifications switched off, read once at start-up. No page, action or observation configures the running target's notification setting, and the fixtures set no environment beyond the target URL and the mail catcher, so the condition the criterion is about cannot be established."
+    reason: The given is an environment with notifications switched off, read once
+      at start-up. No page, action or observation configures the running
+      target's notification setting, and the fixtures set no environment beyond
+      the target URL and the mail catcher, so the condition the criterion is
+      about cannot be established.
   - id: R-6.2
     version: 1
-    reason: "The given is a service whose mail server is unreachable. Nothing in the surface or the mail fixture can stop, break or intercept delivery — `mail` can only clear the catcher and search it — so a failed send cannot be produced, and the claim that nothing in the service records the failure has nothing to be asserted against."
+    reason: The given is a service whose mail server is unreachable. Nothing in the
+      surface or the mail fixture can stop, break or intercept delivery — `mail`
+      can only clear the catcher and search it — so a failed send cannot be
+      produced, and the claim that nothing in the service records the failure
+      has nothing to be asserted against.
   - id: R-6.3
     version: 1
-    reason: "Neither half is observable. The test marker is never named — the contract says only that subjects may carry one — so no assertion can tell a marked subject from an unmarked one; and the test variant of the logo lives in the message body, which the mail fixture does not expose (observables.yaml names html_body, but Mail returns only Subject, Snippet, To and ID)."
+    reason: Neither half is observable. The test marker is never named — the
+      contract says only that subjects may carry one — so no assertion can tell
+      a marked subject from an unmarked one; and the test variant of the logo
+      lives in the message body, which the mail fixture does not expose
+      (observables.yaml names html_body, but Mail returns only Subject, Snippet,
+      To and ID).
   - id: R-6.4
     version: 2
-    reason: "The sender and the reply-to of a message are not reachable: observables.yaml names `sender: from`, but the mail fixture returns only Subject, Snippet, To and ID and offers no way to read one message's headers."
+    reason: "The sender and the reply-to of a message are not reachable:
+      observables.yaml names `sender: from`, but the mail fixture returns only
+      Subject, Snippet, To and ID and offers no way to read one message's
+      headers."
   - id: R-6.5
     version: 1
-    reason: "Comparing the plain-text form of a message with the formatted one needs both bodies. The mail fixture exposes neither html_body nor plain_text_body, only a snippet, which is a summary the catcher makes and not evidence that a plain-text part was sent at all."
+    reason: Comparing the plain-text form of a message with the formatted one needs
+      both bodies. The mail fixture exposes neither html_body nor
+      plain_text_body, only a snippet, which is a summary the catcher makes and
+      not evidence that a plain-text part was sent at all.
   - id: R-6.8
     version: 1
-    reason: "Two things are missing. The batch's recipients are blind copies and the mail fixture has no accessor for them (observables.yaml names `copied_recipients: bcc`), so neither the batch size nor the hiding can be counted; and one hundred and twenty accounts that have asked for new-opportunity notices can be produced neither by the seed nor by any surface action, since accounts arrive only through sign-in as a seeded persona."
+    reason: "Two things are missing. The batch's recipients are blind copies and the
+      mail fixture has no accessor for them (observables.yaml names
+      `copied_recipients: bcc`), so neither the batch size nor the hiding can be
+      counted; and one hundred and twenty accounts that have asked for
+      new-opportunity notices can be produced neither by the seed nor by any
+      surface action, since accounts arrive only through sign-in as a seeded
+      persona."
   - id: R-6.9
     version: 1
-    reason: "The claim is about the visible address line of a panel notice listing all of its recipients. `mail.messagesTo` searches by one visible address and hands back `To` as an opaque value, so the addresses of the other recipients of the same message cannot be read."
+    reason: The claim is about the visible address line of a panel notice listing
+      all of its recipients. `mail.messagesTo` searches by one visible address
+      and hands back `To` as an opaque value, so the addresses of the other
+      recipients of the same message cannot be read.
   - id: R-6.11
     version: 1
-    reason: "Both halves turn on the notice about a watched opportunity, which is sent as a batch of blind copies. The mail fixture searches by visible recipient only, so a message that did reach a deactivated watcher would not be found, and its absence from a search would be equally consistent with it having been sent."
+    reason: Both halves turn on the notice about a watched opportunity, which is
+      sent as a batch of blind copies. The mail fixture searches by visible
+      recipient only, so a message that did reach a deactivated watcher would
+      not be found, and its absence from a search would be equally consistent
+      with it having been sent.
   - id: R-6.12
     version: 1
-    reason: "The criterion is about the wording inside one message. The mail fixture exposes no message body, and the reference page's observations (message_subject, message_summary, message_body) name no way to select one message among the fifty on the page, so a containment assertion over the page as a whole would be satisfied by any message that happens to name a program."
+    reason: The criterion is about the wording inside one message. The mail fixture
+      exposes no message body, and the reference page's observations
+      (message_subject, message_summary, message_body) name no way to select one
+      message among the fifty on the page, so a containment assertion over the
+      page as a whole would be satisfied by any message that happens to name a
+      program.
   - id: R-6.15
     version: 1
-    reason: "Requires reading, for one multi-recipient notice, both the visible recipient and the list of blind copies. The mail fixture offers neither: it searches by a single visible address and returns no blind-copy list, so hiding cannot be told from not sending."
+    reason: "Requires reading, for one multi-recipient notice, both the visible
+      recipient and the list of blind copies. The mail fixture offers neither:
+      it searches by a single visible address and returns no blind-copy list, so
+      hiding cannot be told from not sending."
   - id: R-6.16
     version: 1
-    reason: "The claim is about what stands at the foot of a particular message — an unsubscribe offer, or a plain link to the notification settings. The mail fixture exposes no message body, and the reference page cannot be asked for one message's body, so the two endings cannot be told apart."
+    reason: The claim is about what stands at the foot of a particular message — an
+      unsubscribe offer, or a plain link to the notification settings. The mail
+      fixture exposes no message body, and the reference page cannot be asked
+      for one message's body, so the two endings cannot be told apart.
   - id: R-6.18
     version: 1
-    reason: "Same missing observation as R-6.12: naming all three programs or none is a fact about the body of the changed-terms message, and no surface observation or mail accessor returns that one body."
+    reason: "Same missing observation as R-6.12: naming all three programs or none
+      is a fact about the body of the changed-terms message, and no surface
+      observation or mail accessor returns that one body."
   - id: R-6.20
     version: 1
-    reason: "The given is an account being created for the first time. Every persona signs in as an account the seed already holds, and no surface action creates one, so the sign-up completion page cannot be reached with a first-time identity and the state of a never-before-seen account cannot be read."
+    reason: The given is an account being created for the first time. Every persona
+      signs in as an account the seed already holds, and no surface action
+      creates one, so the sign-up completion page cannot be reached with a
+      first-time identity and the state of a never-before-seen account cannot be
+      read.
   - id: R-6.24
     version: 1
-    reason: "What distinguishes this criterion from R-6.23 is ordering — success reported before any message has been sent. Nothing in the surface reports send progress, and nothing can hold delivery, so the only available check (that the catcher is empty at the moment success appears) is a race against the background sending rather than a test of it."
+    reason: What distinguishes this criterion from R-6.23 is ordering — success
+      reported before any message has been sent. Nothing in the surface reports
+      send progress, and nothing can hold delivery, so the only available check
+      (that the catcher is empty at the moment success appears) is a race
+      against the background sending rather than a test of it.
   - id: R-6.25
     version: 2
-    reason: "Every part of the claim — the opportunity's title and the winner's name leading the message, the em dash where no successful proponent is recorded, the offer to sign in and see one's own score — is content of the message body, which no mail accessor returns and which the reference page cannot be asked for one message at a time."
+    reason: Every part of the claim — the opportunity's title and the winner's name
+      leading the message, the em dash where no successful proponent is
+      recorded, the offer to sign in and see one's own score — is content of the
+      message body, which no mail accessor returns and which the reference page
+      cannot be asked for one message at a time.
   - id: R-6.27
     version: 1
-    reason: "The only width-aware observation is notification_control_hidden_on_narrow_screen, which is worded for the old service's behaviour. Asserting its negation is not reliable, since observations return free text with no stated yes/no vocabulary, and nothing names an observation reporting the control as offered at a narrow width or a way to ask a page to open at one."
+    reason: The only width-aware observation is
+      notification_control_hidden_on_narrow_screen, which is worded for the old
+      service's behaviour. Asserting its negation is not reliable, since
+      observations return free text with no stated yes/no vocabulary, and
+      nothing names an observation reporting the control as offered at a narrow
+      width or a way to ask a page to open at one.
   - id: R-8.3
     version: 1
-    reason: "Neither half of the given can be produced and the outcome cannot be read. No action declares, or withholds, the size of a submission — a file reaches the service only through add_attachment, choose_image or upload_body_image, each of which submits whatever it is handed — and no observation reports an upload refused for size: file_download names only contents, name, type, disposition and its two refusals, and the attachment control names only file_name_error. The outcome the criterion actually turns on, a fault of the service rather than a message about the file, has no observation reporting a fault of the service at all."
+    reason: "Neither half of the given can be produced and the outcome cannot be
+      read. No action declares, or withholds, the size of a submission — a file
+      reaches the service only through add_attachment, choose_image or
+      upload_body_image, each of which submits whatever it is handed — and no
+      observation reports an upload refused for size: file_download names only
+      contents, name, type, disposition and its two refusals, and the attachment
+      control names only file_name_error. The outcome the criterion actually
+      turns on, a fault of the service rather than a message about the file, has
+      no observation reporting a fault of the service at all."
   - id: R-8.4
     version: 1
-    reason: "The given is a submission carrying no file part or read-access information that is not well-formed data. Every upload in the surface is made by a control that assembles the submission itself, so a malformed one cannot be sent; and the outcome — failing as an unexpected fault and being written to the service's error log — has no observation, since the surface names nothing that reports a fault of the service and observables.yaml exposes no log."
+    reason: The given is a submission carrying no file part or read-access
+      information that is not well-formed data. Every upload in the surface is
+      made by a control that assembles the submission itself, so a malformed one
+      cannot be sent; and the outcome — failing as an unexpected fault and being
+      written to the service's error log — has no observation, since the surface
+      names nothing that reports a fault of the service and observables.yaml
+      exposes no log.
   - id: R-8.5
     version: 1
-    reason: "Both halves need something the surface never returns. That identical content is stored once is visible only in the fingerprint the file record carries, and no observation returns a file record or a fingerprint; that the second uploader's read access does not reach the first record needs the first record to be addressed by identifier, and no observation returns a stored file's identifier, so a file can be reached only by following a download offered on a screen the requester can already open."
+    reason: Both halves need something the surface never returns. That identical
+      content is stored once is visible only in the fingerprint the file record
+      carries, and no observation returns a file record or a fingerprint; that
+      the second uploader's read access does not reach the first record needs
+      the first record to be addressed by identifier, and no observation returns
+      a stored file's identifier, so a file can be reached only by following a
+      download offered on a screen the requester can already open.
   - id: R-8.6
     version: 1
-    reason: "No observation returns who uploaded a file or when it was stored. file_download names contents, name on save, disposition, content type and refusals; the attachment control names rows and errors. With neither value readable, neither the recording of them nor their being unchangeable afterwards can be asserted."
+    reason: No observation returns who uploaded a file or when it was stored.
+      file_download names contents, name on save, disposition, content type and
+      refusals; the attachment control names rows and errors. With neither value
+      readable, neither the recording of them nor their being unchangeable
+      afterwards can be asserted.
   - id: R-8.7
     version: 1
-    reason: "The given/when/then needs a file that exists, that one person may read and another may not, addressed by both. No observation returns a stored file's identifier, and the only way the surface reaches a file is by following a download offered on a screen the requester can already open — which is by construction a file they may read. So refused_when_not_permitted cannot be reached for a file that exists, and the administrator's override cannot be told from the administrator simply being able to open the screen the download hangs on."
+    reason: The given/when/then needs a file that exists, that one person may read
+      and another may not, addressed by both. No observation returns a stored
+      file's identifier, and the only way the surface reaches a file is by
+      following a download offered on a screen the requester can already open —
+      which is by construction a file they may read. So
+      refused_when_not_permitted cannot be reached for a file that exists, and
+      the administrator's override cannot be told from the administrator simply
+      being able to open the screen the download hangs on.
   - id: R-8.8
     version: 1
-    reason: "The when is a visitor who is not signed in asking for the attachment of a draft opportunity by its identifier. A visitor cannot open an unpublished opportunity, so there is no download to follow, and no observation returns the identifier of a file a test has uploaded, so it cannot be asked for directly. The criterion's own note says the identifier is published nowhere, which is exactly the reach the surface lacks."
+    reason: The when is a visitor who is not signed in asking for the attachment of
+      a draft opportunity by its identifier. A visitor cannot open an
+      unpublished opportunity, so there is no download to follow, and no
+      observation returns the identifier of a file a test has uploaded, so it
+      cannot be asked for directly. The criterion's own note says the identifier
+      is published nowhere, which is exactly the reach the surface lacks.
   - id: R-8.9
     version: 1
-    reason: "Nothing in the surface attaches a file to a Team With Us proposal and then offers it to the opportunity's owner. The attachment control is listed on the three opportunity forms and the Code With Us proposal form only, so it has no download to follow on a Team With Us proposal, and proposal-twu-view names no attachment action or observation. The criterion's outcome — the owner being refused — therefore has no request to make."
+    reason: Nothing in the surface attaches a file to a Team With Us proposal and
+      then offers it to the opportunity's owner. The attachment control is
+      listed on the three opportunity forms and the Code With Us proposal form
+      only, so it has no download to follow on a Team With Us proposal, and
+      proposal-twu-view names no attachment action or observation. The
+      criterion's outcome — the owner being refused — therefore has no request
+      to make.
   - id: R-8.11
     version: 1
-    reason: "The surface has one address for a stored file, file-download, and its route asks for the content. No page, action or observation makes the without-content request or returns what it answers with: nothing names a file's identifier, and nothing names the date it was stored, so the description the criterion says comes back cannot be read."
+    reason: "The surface has one address for a stored file, file-download, and its
+      route asks for the content. No page, action or observation makes the
+      without-content request or returns what it answers with: nothing names a
+      file's identifier, and nothing names the date it was stored, so the
+      description the criterion says comes back cannot be read."
   - id: R-8.13
     version: 1
-    reason: "No observation reports the dimensions of a stored image. The image picker names current_image and chosen_image_preview, both free text, and no action states the size of the image it uploads, so neither the 2000-by-300 given nor the 500-pixel outcome can be established or read."
+    reason: No observation reports the dimensions of a stored image. The image
+      picker names current_image and chosen_image_preview, both free text, and
+      no action states the size of the image it uploads, so neither the
+      2000-by-300 given nor the 500-pixel outcome can be established or read.
   - id: R-8.15
     version: 1
-    reason: "The given is a file uploaded by one person and readable only by them, whose identifier a second person then names as an attachment. No observation returns a stored file's identifier, so the second person has nothing to name; and no action attaches a file by identifier rather than by choosing one from the machine the test runs on."
+    reason: The given is a file uploaded by one person and readable only by them,
+      whose identifier a second person then names as an attachment. No
+      observation returns a stored file's identifier, so the second person has
+      nothing to name; and no action attaches a file by identifier rather than
+      by choosing one from the machine the test runs on.
   - id: R-8.16
     version: 1
-    reason: "The working directory is on the service's own machine. Nothing in the surface or in observables.yaml reads that machine's filesystem — the observables are email, file addresses, exports, a status trigger and counters — so neither the working copy being written nor its being removed afterwards can be seen."
+    reason: The working directory is on the service's own machine. Nothing in the
+      surface or in observables.yaml reads that machine's filesystem — the
+      observables are email, file addresses, exports, a status trigger and
+      counters — so neither the working copy being written nor its being removed
+      afterwards can be seen.
   - id: R-8.17
     version: 1
-    reason: "Two observations are missing. No observation reports an upload refused for size or the message such a refusal carries — file_name_error is about the name, and the file-download refusals are about reading rather than uploading — and no observation reports the size limit stated on the attachment control or the image picker before a file is chosen, which is the half of the criterion about what a person is told in advance."
+    reason: Two observations are missing. No observation reports an upload refused
+      for size or the message such a refusal carries — file_name_error is about
+      the name, and the file-download refusals are about reading rather than
+      uploading — and no observation reports the size limit stated on the
+      attachment control or the image picker before a file is chosen, which is
+      the half of the criterion about what a person is told in advance.
   - id: R-8.18
     version: 1
-    reason: "Same reach as R-8.4: every upload in the surface is assembled by a control, so a submission with no file part or with malformed read-access information cannot be made. The refusal naming what was wrong, the absence of an entry in the service's error log, and the removal of the working copy are each unobservable as well — no observation names an upload refusal message, and neither the log nor the working directory is an observable."
+    reason: "Same reach as R-8.4: every upload in the surface is assembled by a
+      control, so a submission with no file part or with malformed read-access
+      information cannot be made. The refusal naming what was wrong, the absence
+      of an entry in the service's error log, and the removal of the working
+      copy are each unobservable as well — no observation names an upload
+      refusal message, and neither the log nor the working directory is an
+      observable."
   - id: R-8.19
     version: 1
-    reason: "That no read access is recorded against the file itself is visible only as its consequence: somebody who may not read the opportunity being refused its attachment. That request cannot be made — a visitor cannot open an unpublished opportunity to follow a download, and no observation returns a file's identifier to ask for it directly — and the surface has no observation reporting what was recorded against a file."
+    reason: "That no read access is recorded against the file itself is visible only
+      as its consequence: somebody who may not read the opportunity being
+      refused its attachment. That request cannot be made — a visitor cannot
+      open an unpublished opportunity to follow a download, and no observation
+      returns a file's identifier to ask for it directly — and the surface has
+      no observation reporting what was recorded against a file."
   - id: R-8.22
     version: 1
-    reason: "The criterion is about who may attach a file, which needs a file uploaded by somebody else to be named as an attachment. No observation returns a stored file's identifier, and no action attaches a file by identifier: add_attachment chooses a file to upload rather than naming one already stored, so the attempt the criterion refuses cannot be made."
+    reason: "The criterion is about who may attach a file, which needs a file
+      uploaded by somebody else to be named as an attachment. No observation
+      returns a stored file's identifier, and no action attaches a file by
+      identifier: add_attachment chooses a file to upload rather than naming one
+      already stored, so the attempt the criterion refuses cannot be made."
   - id: R-8.24
     version: 2
-    reason: "No action submits an upload without a read-access statement, or with one naming a kind of access the service does not recognise: the controls that upload settle that statement themselves and offer no way to set or omit it. Nor does any observation report an upload refused as carrying invalid information, so neither the given nor the outcome is reachable."
+    reason: "No action submits an upload without a read-access statement, or with
+      one naming a kind of access the service does not recognise: the controls
+      that upload settle that statement themselves and offer no way to set or
+      omit it. Nor does any observation report an upload refused as carrying
+      invalid information, so neither the given nor the outcome is reachable."
   - id: R-8.26
     version: 1
-    reason: "The claim is about the file after the opportunity it was attached to is gone. Once the opportunity is deleted there is no screen carrying a download to follow, and no observation returns the file's identifier for it to be asked for directly, so whether it remains stored and readable cannot be read either way."
+    reason: The claim is about the file after the opportunity it was attached to is
+      gone. Once the opportunity is deleted there is no screen carrying a
+      download to follow, and no observation returns the file's identifier for
+      it to be asked for directly, so whether it remains stored and readable
+      cannot be read either way.
   - id: R-8.31
     version: 1
-    reason: "Withdrawing the read paths a file held through an association can only be seen by asking for the file after the association is gone, which needs the file's identifier — no observation returns one. The second half, a file that no record refers to being identifiable as detached, names no surface at all: nothing in the pages, and nothing in observables.yaml, reports whether a stored file is still referred to."
+    reason: "Withdrawing the read paths a file held through an association can only
+      be seen by asking for the file after the association is gone, which needs
+      the file's identifier — no observation returns one. The second half, a
+      file that no record refers to being identifiable as detached, names no
+      surface at all: nothing in the pages, and nothing in observables.yaml,
+      reports whether a stored file is still referred to."
+  - id: R-3.17
+    version: 1
+    reason: The only way the surface creates an invitation is organization-edit's
+      add_team_members, whose subject is email addresses; no page in the
+      contract offers a membership type on an invitation, so a test cannot send
+      one other than the "member" the team surface always sends, and therefore
+      cannot reach the rejection of any other type. Needs an add_team_members
+      that carries a membership type, and an observation of the
+      invalid-membership-type refusal.
+  - id: R-3.20
+    version: 1
+    reason: The criterion turns entirely on telling a refusal apart from an empty
+      answer, and no page in the organizations domain carries a refusal
+      observation — organization-list offers organization_name, owner_name, the
+      two qualification marks and pagination, none of which distinguishes "you
+      are not permitted" from "you may act for nothing". Needs an observation
+      such as organization-list.refused_when_not_permitted, or a page of its own
+      for the organizations one may act on behalf of.
+  - id: R-3.35
+    version: 1
+    reason: The claim is about where the accept and the decline choice inside an
+      invitation email lead. The email observable reaches a message's subject,
+      snippet and recipient through the mail catcher, and the Mail fixture
+      exposes only those, so a test cannot read the message body or follow
+      either choice; organization-user-memberships also carries no observation
+      of an accept or a decline confirmation standing ready. Needs a mail
+      observation of the message body or its links, and an observation of the
+      prepared confirmation on organization-user-memberships.
