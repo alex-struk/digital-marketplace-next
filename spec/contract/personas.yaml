@@ -136,3 +136,41 @@ personas:
         sandbox-idp: { username: vendor-org-member-1 },
         session-route: { role: vendor }
       }
+
+  # The evaluation domain splits the panel in two. A member may be an evaluator, the
+  # chair, or both, and the two roles below are the extremes: an evaluator who is not
+  # the chair, and a chair who does not score. The existing evaluation-panel-member
+  # persona covers what any panel member may see of a proposal; these two cover what
+  # each may do to an evaluation.
+  - id: evaluation-panel-evaluator
+    domain: evaluation
+    can:
+      [
+        see an opportunity they sit on the panel for before it is public,
+        read the evaluation instructions for the program,
+        score every question of every proponent once the opportunity has closed,
+        change their own scores while they are still a draft,
+        submit all of their own evaluations for consensus in one action,
+        read every panel member's individual scores once consensus has begun
+      ]
+    sign_in:
+      {
+        sandbox-idp: { username: gov-panel-evaluator-1 },
+        session-route: { role: government }
+      }
+
+  - id: evaluation-panel-chair
+    domain: evaluation
+    can:
+      [
+        see an opportunity they sit on the panel for before it is public,
+        read every panel member's individual scores once consensus has begun,
+        record one agreed score per proponent during consensus,
+        change and resubmit an agreed score until it is finalised,
+        submit the agreed scores for the opportunity
+      ]
+    sign_in:
+      {
+        sandbox-idp: { username: gov-panel-chair-1 },
+        session-route: { role: government }
+      }
