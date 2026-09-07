@@ -13,7 +13,7 @@ Profile: rebuild
 | evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 |  |
 | notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 12/28 (n/t 16) |
 | content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 |  |
-| files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 |  |
+| files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 13/31 (n/t 18) |
 | **Totals** | 0 | 288 | 0 | 0 | 0 | 7 | 3 | 295 |  |
 
 ## Pages
@@ -34,6 +34,7 @@ Profile: rebuild
 - [budget-v1](proposals/budget-v1.md)
 - [constitution-v1](proposals/constitution-v1.md)
 - [contract-v1](proposals/contract-v1.md)
+- [derive-tests-files](proposals/derive-tests-files.md)
 - [derive-tests-notifications](proposals/derive-tests-notifications.md)
 - [gates-simulated-v1](proposals/gates-simulated-v1.md)
 - [intent-digital-marketplace-rebuild](proposals/intent-digital-marketplace-rebuild.md)
@@ -64,9 +65,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $105.413977
-- Rulings cost: $39.422829
-- Total cost: $144.836806
-- Agent-held rulings: 24
+- Journal cost: $109.83133
+- Rulings cost: $41.508225
+- Total cost: $151.339555
+- Agent-held rulings: 25
 - Open escalations: 0
 - Open proposals: 0

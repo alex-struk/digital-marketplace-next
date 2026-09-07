@@ -52,3 +52,57 @@ criteria:
   - id: R-6.27
     version: 1
     reason: "The only width-aware observation is notification_control_hidden_on_narrow_screen, which is worded for the old service's behaviour. Asserting its negation is not reliable, since observations return free text with no stated yes/no vocabulary, and nothing names an observation reporting the control as offered at a narrow width or a way to ask a page to open at one."
+  - id: R-8.3
+    version: 1
+    reason: "Neither half of the given can be produced and the outcome cannot be read. No action declares, or withholds, the size of a submission — a file reaches the service only through add_attachment, choose_image or upload_body_image, each of which submits whatever it is handed — and no observation reports an upload refused for size: file_download names only contents, name, type, disposition and its two refusals, and the attachment control names only file_name_error. The outcome the criterion actually turns on, a fault of the service rather than a message about the file, has no observation reporting a fault of the service at all."
+  - id: R-8.4
+    version: 1
+    reason: "The given is a submission carrying no file part or read-access information that is not well-formed data. Every upload in the surface is made by a control that assembles the submission itself, so a malformed one cannot be sent; and the outcome — failing as an unexpected fault and being written to the service's error log — has no observation, since the surface names nothing that reports a fault of the service and observables.yaml exposes no log."
+  - id: R-8.5
+    version: 1
+    reason: "Both halves need something the surface never returns. That identical content is stored once is visible only in the fingerprint the file record carries, and no observation returns a file record or a fingerprint; that the second uploader's read access does not reach the first record needs the first record to be addressed by identifier, and no observation returns a stored file's identifier, so a file can be reached only by following a download offered on a screen the requester can already open."
+  - id: R-8.6
+    version: 1
+    reason: "No observation returns who uploaded a file or when it was stored. file_download names contents, name on save, disposition, content type and refusals; the attachment control names rows and errors. With neither value readable, neither the recording of them nor their being unchangeable afterwards can be asserted."
+  - id: R-8.7
+    version: 1
+    reason: "The given/when/then needs a file that exists, that one person may read and another may not, addressed by both. No observation returns a stored file's identifier, and the only way the surface reaches a file is by following a download offered on a screen the requester can already open — which is by construction a file they may read. So refused_when_not_permitted cannot be reached for a file that exists, and the administrator's override cannot be told from the administrator simply being able to open the screen the download hangs on."
+  - id: R-8.8
+    version: 1
+    reason: "The when is a visitor who is not signed in asking for the attachment of a draft opportunity by its identifier. A visitor cannot open an unpublished opportunity, so there is no download to follow, and no observation returns the identifier of a file a test has uploaded, so it cannot be asked for directly. The criterion's own note says the identifier is published nowhere, which is exactly the reach the surface lacks."
+  - id: R-8.9
+    version: 1
+    reason: "Nothing in the surface attaches a file to a Team With Us proposal and then offers it to the opportunity's owner. The attachment control is listed on the three opportunity forms and the Code With Us proposal form only, so it has no download to follow on a Team With Us proposal, and proposal-twu-view names no attachment action or observation. The criterion's outcome — the owner being refused — therefore has no request to make."
+  - id: R-8.11
+    version: 1
+    reason: "The surface has one address for a stored file, file-download, and its route asks for the content. No page, action or observation makes the without-content request or returns what it answers with: nothing names a file's identifier, and nothing names the date it was stored, so the description the criterion says comes back cannot be read."
+  - id: R-8.13
+    version: 1
+    reason: "No observation reports the dimensions of a stored image. The image picker names current_image and chosen_image_preview, both free text, and no action states the size of the image it uploads, so neither the 2000-by-300 given nor the 500-pixel outcome can be established or read."
+  - id: R-8.15
+    version: 1
+    reason: "The given is a file uploaded by one person and readable only by them, whose identifier a second person then names as an attachment. No observation returns a stored file's identifier, so the second person has nothing to name; and no action attaches a file by identifier rather than by choosing one from the machine the test runs on."
+  - id: R-8.16
+    version: 1
+    reason: "The working directory is on the service's own machine. Nothing in the surface or in observables.yaml reads that machine's filesystem — the observables are email, file addresses, exports, a status trigger and counters — so neither the working copy being written nor its being removed afterwards can be seen."
+  - id: R-8.17
+    version: 1
+    reason: "Two observations are missing. No observation reports an upload refused for size or the message such a refusal carries — file_name_error is about the name, and the file-download refusals are about reading rather than uploading — and no observation reports the size limit stated on the attachment control or the image picker before a file is chosen, which is the half of the criterion about what a person is told in advance."
+  - id: R-8.18
+    version: 1
+    reason: "Same reach as R-8.4: every upload in the surface is assembled by a control, so a submission with no file part or with malformed read-access information cannot be made. The refusal naming what was wrong, the absence of an entry in the service's error log, and the removal of the working copy are each unobservable as well — no observation names an upload refusal message, and neither the log nor the working directory is an observable."
+  - id: R-8.19
+    version: 1
+    reason: "That no read access is recorded against the file itself is visible only as its consequence: somebody who may not read the opportunity being refused its attachment. That request cannot be made — a visitor cannot open an unpublished opportunity to follow a download, and no observation returns a file's identifier to ask for it directly — and the surface has no observation reporting what was recorded against a file."
+  - id: R-8.22
+    version: 1
+    reason: "The criterion is about who may attach a file, which needs a file uploaded by somebody else to be named as an attachment. No observation returns a stored file's identifier, and no action attaches a file by identifier: add_attachment chooses a file to upload rather than naming one already stored, so the attempt the criterion refuses cannot be made."
+  - id: R-8.24
+    version: 2
+    reason: "No action submits an upload without a read-access statement, or with one naming a kind of access the service does not recognise: the controls that upload settle that statement themselves and offer no way to set or omit it. Nor does any observation report an upload refused as carrying invalid information, so neither the given nor the outcome is reachable."
+  - id: R-8.26
+    version: 1
+    reason: "The claim is about the file after the opportunity it was attached to is gone. Once the opportunity is deleted there is no screen carrying a download to follow, and no observation returns the file's identifier for it to be asked for directly, so whether it remains stored and readable cannot be read either way."
+  - id: R-8.31
+    version: 1
+    reason: "Withdrawing the read paths a file held through an association can only be seen by asking for the file after the association is gone, which needs the file's identifier — no observation returns one. The second half, a file that no record refers to being identifiable as detached, names no surface at all: nothing in the pages, and nothing in observables.yaml, reports whether a stored file is still referred to."
