@@ -574,3 +574,156 @@ pages:
       swu_qualified_mark: { test_id: null }
       empty_owned_message: { test_id: null }
       empty_affiliated_message: { test_id: null }
+
+  - id: user-sign-in
+    domain: users
+    route: /sign-in
+    title: "Sign In"
+    actions:
+      sign_in_as_vendor: { test_id: null }
+      sign_in_as_public_sector_employee: { test_id: null }
+      go_to_sign_up: { test_id: null }
+    observations:
+      vendor_card: { test_id: null }
+      public_sector_card: { test_id: null }
+
+  - id: user-sign-up-choose-account
+    domain: users
+    route: /sign-up
+    title: "Choose Account Type"
+    actions:
+      sign_up_as_vendor: { test_id: null }
+      sign_up_as_public_sector_employee: { test_id: null }
+    observations:
+      vendor_card: { test_id: null }
+      public_sector_card: { test_id: null }
+
+  - id: user-sign-up-complete
+    domain: users
+    route: /sign-up/complete
+    title: "Complete Your Profile"
+    actions:
+      change_avatar: { test_id: null }
+      accept_app_terms: { test_id: null }
+      toggle_new_opportunity_notifications: { test_id: null }
+      complete_profile: { test_id: null }
+    observations:
+      idp_username_readonly: { test_id: null }
+      name_field: { test_id: null }
+      email_field: { test_id: null }
+      job_title_field: { test_id: null }
+      terms_checkbox: { test_id: null }
+      complete_disabled_until_terms_accepted: { test_id: null }
+      field_error: { test_id: null }
+
+  - id: user-sign-out
+    domain: users
+    route: /sign-out
+    title: "Signed Out"
+    actions: {}
+    observations:
+      signed_out_message: { test_id: null }
+      sign_out_failed_message: { test_id: null }
+
+  - id: user-notice
+    domain: users
+    route: /notice/:noticeId
+    title: "Notice"
+    actions:
+      back_to_home: { test_id: null }
+    observations:
+      deactivated_own_account_notice: { test_id: null }
+      sign_in_failed_notice: { test_id: null }
+
+  - id: user-list
+    domain: users
+    route: /users
+    title: "Digital Marketplace Users"
+    actions:
+      search_by_name: { test_id: null }
+      open_export_contact_list: { test_id: null }
+      toggle_export_user_type: { test_id: null }
+      toggle_export_field: { test_id: null }
+      export_contact_list: { test_id: null }
+      cancel_export: { test_id: null }
+      open_user_profile: { test_id: null }
+    observations:
+      user_row: { test_id: null }
+      status_badge: { test_id: null }
+      account_type: { test_id: null }
+      admin_check: { test_id: null }
+      export_modal: { test_id: null }
+      export_disabled_until_selection: { test_id: null }
+
+  - id: user-profile
+    domain: users
+    route: /users/:userId
+    title: "User Profile"
+    actions:
+      edit_profile: { test_id: null }
+      save_changes: { test_id: null }
+      cancel_editing: { test_id: null }
+      change_avatar: { test_id: null }
+      toggle_admin_permission: { test_id: null }
+      deactivate_account: { test_id: null }
+      reactivate_account: { test_id: null }
+      confirm_activation_change: { test_id: null }
+      cancel_activation_change: { test_id: null }
+    observations:
+      profile_tab: { test_id: null }
+      capabilities_tab: { test_id: null }
+      notifications_tab: { test_id: null }
+      legal_tab: { test_id: null }
+      organizations_tab: { test_id: null }
+      status_badge: { test_id: null }
+      account_type: { test_id: null }
+      permissions_label: { test_id: null }
+      admin_checkbox: { test_id: null }
+      idp_username_readonly: { test_id: null }
+      name_field: { test_id: null }
+      email_field: { test_id: null }
+      job_title_field: { test_id: null }
+      field_error: { test_id: null }
+      activation_modal: { test_id: null }
+      not_found_page: { test_id: null }
+
+  - id: user-profile-capabilities
+    domain: users
+    route: /users/:userId?tab=capabilities
+    title: "Capabilities"
+    actions:
+      toggle_capability: { test_id: null }
+      expand_capability_description: { test_id: null }
+    observations:
+      capability_row: { test_id: null }
+      capability_checked: { test_id: null }
+      capability_description: { test_id: null }
+
+  - id: user-profile-notifications
+    domain: users
+    route: /users/:userId?tab=notifications
+    title: "Notifications"
+    actions:
+      toggle_new_opportunity_notifications: { test_id: null }
+      confirm_unsubscribe: { test_id: null }
+      cancel_unsubscribe: { test_id: null }
+    observations:
+      new_opportunities_checkbox: { test_id: null }
+      notification_email_address: { test_id: null }
+      unsubscribe_modal: { test_id: null }
+
+  - id: user-profile-legal
+    domain: users
+    route: /users/:userId?tab=legal
+    title: "Policies, Terms & Agreements"
+    actions:
+      open_app_terms: { test_id: null }
+      accept_updated_terms: { test_id: null }
+      confirm_accept_updated_terms: { test_id: null }
+    observations:
+      privacy_policy: { test_id: null }
+      app_terms_link: { test_id: null }
+      accepted_on_notice: { test_id: null }
+      terms_updated_warning: { test_id: null }
+      program_terms_links: { test_id: null }
+      accept_updated_terms_modal: { test_id: null }

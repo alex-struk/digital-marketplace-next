@@ -108,6 +108,20 @@ personas:
         session-route: { role: vendor }
       }
 
+  # An account state rather than a new role, but the users domain's sign-in rules
+  # cannot be exercised without one: the account must already be deactivated by an
+  # administrator before the test signs in. Note that on the old application the
+  # session-route sign-in does not check account status, so this persona is only
+  # meaningful where sign-in goes through the identity provider.
+  - id: deactivated-vendor
+    domain: users
+    can: [attempt to sign in and be refused]
+    sign_in:
+      {
+        sandbox-idp: { username: vendor-deactivated-1 },
+        session-route: { role: vendor }
+      }
+
   - id: organization-member
     domain: organizations
     can:
