@@ -1,0 +1,26 @@
+---
+stage: "archaeology"
+title: "archaeology"
+at: "2026-09-07T01:08:02.842Z"
+cost: 11.958588999999995
+turns: 130
+session: "c17e84c3-697b-463e-8d13-49f999fae061"
+---
+
+I've finished. Files written: `spec/domains/opportunities.md` (51 criteria), plus appended entries to `spec/contract/surface.yaml` and `spec/contract/personas.yaml`.
+
+---
+
+## Journal
+
+The opportunities domain is where a procurement posting lives its whole life. A member of public sector staff drafts an opportunity under one of three programs — Code With Us, Sprint With Us, Team With Us — submits it for review, and an administrator publishes it; from that point vendors can see it and propose against it until its deadline passes, at which point the opportunity closes itself and moves into a program-specific chain of evaluation stages ending in an award or a cancellation. Around that spine sit the supporting behaviours: per-program content validation, a versioned edit history with immutable addenda, watchers who get notified when the posting changes, visibility rules that hide unpublished postings from everyone but their author and administrators, and view/watcher/proposal counts visible only to the author and administrators.
+
+I recovered 51 criteria, all `recovered` origin: 6 graded `confirmed`, 40 `inferred`, 5 `open`. By reconciliation class: 43 `implemented-only`, 4 `conflicting`, 3 `defect`, 1 `documented-only`. I read entry points, the shared status and validation modules, the database layer, the permission module, the migrations, the two OpenAPI files the application carries, its README, its generated schema document and its changelog. I did not open the test suite and did not go looking for it.
+
+**What conflicted.** The application's own documentation is materially behind its code, and this is the single biggest finding. The README describes two programs; the generated database-schema document contains no Team With Us tables at all; there is an OpenAPI file for Code With Us and one for Sprint With Us and none for Team With Us. The Code With Us interface description says an opportunity may be created only as a draft or published, omitting the under-review state that a later migration added; it omits the "submit for review" and "add note" actions entirely; and it says deletion is permitted only for a draft, where the code also lets an administrator delete an opportunity that is under review. Because of this I could only grade six criteria `confirmed` — for most behaviours the code is the only witness, so I graded them `inferred` rather than borrowing confidence from prose that has demonstrably drifted.
+
+There are also disagreements inside the code. The interface offers editing of a published opportunity only to administrators, while the service behind it accepts the same edit from the staff member who created it — the two can't both be the intent, and nothing says which. The evaluation-panel rule is documented in its own comment as "one and only one chair" but the code accepts a panel with no chair and rejects only a second one. Team With Us records that a processing opportunity may only be cancelled, never awarded, yet the award path does not consult that table and writes the award anyway.
+
+Three things I recorded as defects rather than intent. A member of public sector staff who is not an administrator can publish a Code With Us opportunity by *creating* it as published, sidestepping the administrator-only publication rule — the equivalent Sprint With Us and Team With Us creation checks close this explicitly, which is why it reads as an oversight. An older action for advancing out of the consensus stage still works alongside the newer one and skips the check that all consensus evaluations have been submitted; the Sprint With Us copy is marked deprecated in a comment but still accepted, and the Team With Us copy carries no such marking. And "suspended" remains a permitted stored state that nothing can reach, so historical records may hold a value the live system has no path to.
+
+**What I could not determine.** Why Team With Us has no upper budget limit when the other two programs are capped, why it alone has no "add note" action, and why its staff author may delete an under-review opportunity when the other two programs restrict them to drafts — these are real per-program divergences, but the application gives no reason for any of them, and each could as easily be an omission as a decision. I could not tell whether the stale README and schema document mean Team With Us was added without updating them, or whether some earlier decision scoped the service to two programs and the third was added later against that; both readings fit the evidence. I could not determine what the completion date on a Code With Us opportunity is used for downstream, since it is optional and nothing I read consumes it. And I could not establish the intended precision of automatic closure: closure is driven by ordinary web traffic rather than a clock, throttled to at most once a minute and additionally hung off the health-check route so it still fires on an idle site — so an opportunity closes at the first request after its deadline, not at the deadline. Whether that lag is acceptable behaviour or a workaround for the absence of a scheduler is a question the code cannot answer.

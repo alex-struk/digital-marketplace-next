@@ -1,6 +1,59 @@
 # Roles a test can act as, and how a test signs in as each on every target.
 # identity: sandbox-idp means a Keycloak (or OIDC mock) container seeded with these users.
-personas: []
-# - id: public-sector-admin
-#   can: [create opportunity, publish opportunity, score proposals]
-#   sign_in: { sandbox-idp: { username: admin-1 }, session-route: { role: admin } }
+personas:
+  - id: anonymous-visitor
+    domain: opportunities
+    can:
+      [
+        browse published opportunities,
+        view a published opportunity,
+        count as a view of an opportunity
+      ]
+    sign_in: null
+
+  - id: vendor
+    domain: opportunities
+    can:
+      [
+        browse published opportunities,
+        view a published opportunity,
+        watch an opportunity,
+        unwatch an opportunity
+      ]
+    sign_in: { sandbox-idp: { username: vendor-1 }, session-route: { role: vendor } }
+
+  - id: public-sector-staff
+    domain: opportunities
+    can:
+      [
+        create opportunity,
+        edit own opportunity,
+        submit own opportunity for review,
+        delete own draft opportunity,
+        add addendum to own opportunity,
+        add note to own opportunity,
+        view own unpublished opportunities,
+        view reporting for own opportunity,
+        advance own opportunity through evaluation stages,
+        watch an opportunity created by somebody else
+      ]
+    sign_in:
+      { sandbox-idp: { username: gov-1 }, session-route: { role: government } }
+
+  - id: administrator
+    domain: opportunities
+    can:
+      [
+        create opportunity,
+        edit any opportunity,
+        publish opportunity,
+        cancel opportunity,
+        delete any draft or under-review opportunity,
+        add addendum to any opportunity,
+        add note to any opportunity,
+        view all opportunities,
+        view reporting for any opportunity,
+        award an opportunity,
+        view the completed-opportunity report
+      ]
+    sign_in: { sandbox-idp: { username: admin-1 }, session-route: { role: admin } }
