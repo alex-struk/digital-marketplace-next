@@ -1,0 +1,11 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Verified against the repository, not the journal. Every assertion traces to its criterion's own text: "Initial version" is R-7.12's then clause, "System" is R-7.27's, the 50,001/101-character bounds are R-7.20's, and R-7.21's five malformed addresses are its given verbatim. No routes, selectors, test ids, status codes or column names appear in any of the twenty-two files; all surfaces, actions, observations and personas they name exist in spec/contract/, and all import only from ../../fixtures. The seven not-testable reasons each name a real hole confirmed against the contract: `refusal` is declared for files and exports only and never for a page request (R-7.11, R-7.16); content-edit declares no body, history, version or comparison observation and no restore action (R-7.23); personas.yaml carries a single administrator (R-7.28); opportunity-program-select exposes program_card with no action to follow and no learn-more surface exists (R-7.15). Condition 1 holds by count, not by claim: eighteen R-8 rows, seventeen at v1 with R-8.24 at v2 matching criteria-index.json, and 13 spec files + 18 rows = all 31 files criteria; R-7 closes the same way at 22 + 7 = 29. The 58-versus-41 discrepancy the proposal flagged is a merge and not damage — the surplus is fourteen R-1 and three R-3 rows from the still-open opportunities and organizations slices (36/56 and 28/35 covered), while content and files close exactly and 16+18+7 is the predicted 41. Checks are green; the five superseded-criterion warnings are all in files/ and notifications/, and this domain's three superseded criteria correctly carry rows and no tests. Two observations recorded without holding the gate: R-7.18's test asserts the fixed-page warning, locked address and withheld removal, which read as R-7.25's outcome but are the domain preamble's own definition of a page the service creates for itself; and R-7.1's not.toContain("**") rests on a claim about the seeded body that the seed manifest does not record, so it may pass vacuously though it cannot fail wrongly.
+conditions: []
+cost: 2.2845554999999997
+turns: 31
+session: "9ee5e0bd-c9fc-4b36-9724-8e2ce043b669"
+at: 2026-09-07T17:02:28.202Z
