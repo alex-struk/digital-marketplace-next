@@ -1,0 +1,13 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Conditions 1 and 2 are met and verified against the criteria: R-5.22's decimal test now asserts submitDisabledUntilComplete(), which is the criterion's own second clause and makes no claim about why the entry was refused, and R-5.19's second test now ends on not.toContain(TITLE), which is the whole of what that criterion says about the unrelated employee. Every observation used exists in spec/contract/surface.yaml and no implementation detail leaks into any of the 25 specs. Condition 4's sweep was done honestly and surfaced the remaining defect rather than hiding it: R-5.13's first test asserts notAllConsensusesSubmittedError(), but R-5.13 says only that finalising 'must be refused', and per R-5.4 that named refusal belongs to a different condition -- consensuses that exist but are drafts -- whereas R-5.13's scenario is a proponent with no consensus at all. R-5.13 is an authored criterion, so the test is not recording an observed behaviour but deciding which message a rule nobody has written yet will show. That is the same over-reach that was returned last round, and the fix belongs to the test author rather than to a note in this ruling. Condition 3's typecheck is correctly reported as unrun with no substitute offered; that is an environment gap for the pipeline owner, not a fault in this work, and it does not by itself block. The convention question about splitting a partially-reachable criterion into not-testable.yaml is settled in favour of the author's reading: R-5.22 is largely reachable and no id currently appears in both places, so no split.
+conditions:
+  - "In tests/acceptance/evaluation/R-5.13.spec.ts, replace the notAllConsensusesSubmittedError() assertion in the first test with a neutral observation of the refusal -- the finalise not taking effect, as the file's second test already observes -- or with an observation whose name restates R-5.13's own rule rather than R-5.4's. Nothing else in the slice needs to change."
+  - "Leave the typecheck condition open against the execution environment rather than against this slice: it needs a stage or machine with npm-registry access, or a workspace pre-seeded with tests/node_modules. Route it to whoever administers the pipeline; it has now been unmet for the same reason across two consecutive rounds and will not close from inside a spec-only workspace."
+cost: 1.4347524999999999
+turns: 13
+session: "53eaf3b4-188a-4d7b-828a-07a2d0ed8567"
+at: 2026-09-07T16:55:24.741Z
