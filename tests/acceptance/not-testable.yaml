@@ -3,5 +3,84 @@
 # observations, or added by hand when a person makes the same call. An entry here stands
 # in for a spec file: `sdlc run calibrate` reports it as a `not-testable` row rather than
 # a missing test.
-criteria: []
-# - { id: R-1.4, version: 1, reason: "..." }
+criteria:
+  - id: R-4.1
+    version: 1
+    reason: >-
+      Account creation cannot be reached. Every persona in spec/contract/personas.yaml
+      names an identity the seed has already registered, so no persona denotes a person
+      with no account, and neither surface.signIn nor user-sign-in's
+      sign_in_as_vendor / sign_in_as_public_sector_employee accepts an identity to sign in
+      with. Without a first-ever sign-in there is nothing to observe the account's
+      creation, or the kind it is given, against.
+  - id: R-4.2
+    version: 1
+    reason: >-
+      The welcome message is sent when an account is created, and account creation cannot
+      be reached through the surface for the reason given under R-4.1. A persona for a
+      person the service has not yet registered would make this testable, since the
+      message itself is observable through `mail`.
+  - id: R-4.7
+    version: 1
+    reason: >-
+      Neither half of the contradiction is reachable. user-profile carries no observation
+      for whether the profile editing control or the profile heading is offered — the
+      observations are the field values themselves, which read the same whether the form
+      is offered or suppressed — and there is no surface through which a profile change
+      can be submitted against another person's account outside the interface, which is
+      where the criterion says the service would accept it.
+  - id: R-4.13
+    version: 1
+    reason: >-
+      The criterion asserts the absence of any facility anywhere in the service for making
+      the first administrator. No page, action or observation can witness the absence of a
+      route across the whole service; only the presence of one could be shown. The
+      corroborating evidence the criterion rests on is the operating instructions, which
+      are not part of the running system a test drives.
+  - id: R-4.15
+    version: 1
+    reason: >-
+      user-list carries no observation for a refusal or a missing page shown to a
+      non-administrator — contrast content-list, which has refused_for_non_administrator —
+      so the interface half cannot be read. The service half (the same request answered in
+      full) is not reachable either, since no surface issues a request outside the
+      interface. Absent both, a test could only assert that a public sector employee sees
+      no rows, which holds equally under either reading and so settles nothing.
+  - id: R-4.18
+    version: 1
+    reason: >-
+      Same gap as R-4.7, which this criterion replaces. user-profile has no observation
+      for whether an editing control is offered on somebody else's profile, and no surface
+      submits a profile change against an account that is not the signed-in person's, so
+      neither the interface restriction nor the service's refusal can be witnessed. The
+      remaining clause — that an administrator's powers are limited to deactivating,
+      reactivating and granting or withdrawing rights — is covered where those powers are
+      exercised (R-4.30, R-4.10, R-4.12) and by the sections an administrator is shown
+      (R-4.34), but the criterion's own claim is not.
+  - id: R-4.19
+    version: 1
+    reason: >-
+      The criterion's distinctive claims are that no reactivation control is offered for a
+      self-deactivated account and that the profile states the person reactivates it by
+      signing in again. user-profile has no observation for whether the reactivation
+      control is offered, and none carrying that explanatory statement. The remaining
+      clause — that the service refuses such a request — is only reachable through the
+      control this criterion says should not exist, and is already derived under R-4.10.
+  - id: R-4.21
+    version: 1
+    reason: >-
+      Same gap as R-4.15, which this criterion replaces. user-list has no refusal
+      observation, and the surface offers no way to make the request other than through
+      the interface, so a test cannot tell a refused request from an answered one the
+      interface declines to render — which is the whole of what this criterion asserts
+      over the interface behaviour it shares with R-4.15.
+  - id: R-4.31
+    version: 2
+    reason: >-
+      No clause is reachable. A second deactivation cannot be requested through the
+      interface, because an inactive account is offered the reactivation control rather
+      than the deactivation one, so the "already inactive" refusal has no way in;
+      user-profile carries no observation for whether the deactivation control is offered,
+      so the administrator's own profile cannot be checked for its absence; and the
+      service accepting a deactivation aimed at the requester's own account is by the
+      criterion's own statement a thing the interface never does.
