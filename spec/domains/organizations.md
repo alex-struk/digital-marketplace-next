@@ -21,19 +21,6 @@ Anyone, signed in or not, can browse the list of registered organizations, which
 - state: accepted
 - note: the page requests fifty organizations at a time; asking for a page beyond the last one returns the first page instead of an empty one.
 
-### D-organizations-2 · v1 · inferred · recovered
-In the organization list, the owner's name and the organization's qualification status are shown only to an administrator and to the viewer's own organizations; every other viewer sees the organization's name alone.
-- cites: src/back-end/lib/db/organization.ts:502
-- cites: src/back-end/lib/db/organization.ts:251
-- cites: src/front-end/typescript/lib/pages/organization/list.tsx:163
-- cites: src/front-end/typescript/lib/pages/organization/list.tsx:204
-- reconciliation: implemented-only
-- given: an organization owned by one vendor
-- when: a different vendor, who is neither its owner nor one of its administrators, opens the organization list
-- then: that organization's row shows its legal name only, with no owner, no team size and no qualification marks, while the same row shown to an administrator carries all of them
-- state: proposed
-- note: the owner and qualification columns are hidden entirely from a visitor who is not signed in and from public sector staff, so only vendors and administrators ever see them.
-
 ### R-3.2 · v1 · confirmed · recovered
 Only a signed-in vendor who has already accepted the service's terms and conditions may register a new organization; a request from anyone else is refused.
 - cites: src/back-end/lib/permissions.ts:195
@@ -57,22 +44,6 @@ An organization's full record can be opened only by an administrator or by a mem
 - state: accepted
 - note: the ordinary member is shown a "not found" page rather than a refusal, because the front end turns the refused read into a missing page.
 
-### D-organizations-4 · v1 · inferred · recovered
-Registering an organization requires a legal name, street address, city, region, mail code, country, contact name and contact email, each no longer than one hundred characters, with the contact email in a valid email format; a website address, second address line, contact title and contact phone number may be left out but are rejected if given in an invalid format.
-- cites: src/shared/lib/validation/organization.ts:10
-- cites: src/shared/lib/validation/organization.ts:56
-- cites: src/shared/lib/validation/organization.ts:60
-- cites: src/shared/lib/validation/index.ts:218
-- cites: src/shared/lib/validation/index.ts:423
-- cites: src/shared/lib/validation/index.ts:436
-- cites: src/back-end/docs/organization.yaml:102
-- reconciliation: implemented-only
-- given: a signed-in vendor filling in the organization registration form
-- when: they submit it with the legal name left blank, or with a contact email of "not-an-email"
-- then: the organization is not created and the offending field is reported as invalid, while the same submission with the optional website, second address line, contact title and phone left empty succeeds
-- state: proposed
-- note: the published interface description lists the same set of fields but says nothing about which are required or how long they may be, so the required/optional split and the hundred-character limit rest on the code alone.
-
 ### R-3.4 · v1 · confirmed · recovered
 An organization's profile details may be changed only by an administrator or by the organization's owner; an organization administrator who is not the owner cannot save changes to them.
 - cites: src/back-end/lib/permissions.ts:218
@@ -86,17 +57,6 @@ An organization's profile details may be changed only by an administrator or by 
 - superseded-by: R-3.18
 - note: the management page offers the Edit and Archive controls to anyone who can open it, including an organization administrator, but the service only accepts profile changes and archiving from the owner or a service administrator, so the controls are visible to a person who cannot use them. No corrected criterion has been written because it is unclear whether the intent is to widen the permission or to hide the controls.
 - note: superseded by R-3.18
-
-### D-organizations-5 · v1 · inferred · recovered
-The vendor who registers an organization becomes its owner immediately, and the organization is active from the moment it is registered.
-- cites: src/back-end/lib/db/organization.ts:595
-- cites: src/back-end/lib/db/organization.ts:618
-- cites: src/front-end/typescript/lib/pages/organization/create.tsx:148
-- reconciliation: implemented-only
-- given: a signed-in vendor with no organizations
-- when: they register a new organization
-- then: the organization appears under their owned organizations with them recorded as its owner and its team counted as one member, and they are taken to that organization's management page
-- state: proposed
 
 ### R-3.5 · v1 · confirmed · recovered
 A change to an organization's contact phone number made while editing its profile is not saved.
@@ -165,17 +125,6 @@ A pending invitation becomes an active membership only when the invited person a
 - state: accepted
 - note: the published interface description gives this operation a different request method than the service actually accepts, so the description cannot be followed literally.
 
-### D-organizations-10 · v1 · inferred · recovered
-When an administrator archives an organization they do not own, its owner is told by email that the organization has been archived.
-- cites: src/back-end/lib/resources/organization.ts:692
-- cites: src/back-end/lib/mailer/notifications/organization.tsx:11
-- cites: src/back-end/lib/mailer/notifications/organization.tsx:32
-- reconciliation: implemented-only
-- given: an active organization owned by a vendor
-- when: an administrator archives it
-- then: the owner receives a message telling them their organization has been archived by an administrator and that they can no longer use it, and no such message is sent when the owner archives their own organization
-- state: proposed
-
 ### R-3.10 · v1 · confirmed · recovered
 A membership can be ended by the member themselves, by the organization's owner or administrators, or by a service administrator; the membership becomes inactive rather than being erased, and the person stops counting towards the organization's team.
 - cites: src/back-end/lib/permissions.ts:306
@@ -189,19 +138,6 @@ A membership can be ended by the member themselves, by the organization's owner 
 - then: they no longer appear on the organization's team list, the organization's team size falls to one, and the organization is no longer listed among their affiliated organizations
 - state: accepted
 
-### D-organizations-11 · v1 · inferred · recovered
-An organization is qualified for Sprint With Us once it has at least two active team members, those members between them hold every capability the service recognises, and its Sprint With Us terms have been accepted.
-- cites: src/shared/lib/resources/organization.ts:125
-- cites: src/shared/lib/resources/organization.ts:131
-- cites: src/back-end/lib/db/organization.ts:199
-- cites: src/front-end/typescript/lib/pages/organization/edit/tab/swu-qualification.tsx:74
-- reconciliation: implemented-only
-- given: an organization with an owner and one further active member who between them hold every capability, and whose Sprint With Us terms have not yet been accepted
-- when: the owner opens the organization's Sprint With Us qualification page
-- then: the team-size and capability requirements are shown as met, the terms requirement as unmet, and the organization is marked as not qualified
-- state: proposed
-- note: only active members count towards the capability total; a member who has been invited but has not yet accepted is excluded.
-
 ### R-3.11 · v1 · confirmed · recovered
 An organization's last remaining owner cannot be removed from it.
 - cites: src/back-end/lib/resources/affiliation.ts:518
@@ -211,19 +147,6 @@ An organization's last remaining owner cannot be removed from it.
 - when: an administrator tries to end the owner's membership
 - then: the request is refused with a message saying this is the sole owner for the organization, and the membership remains
 - state: accepted
-
-### D-organizations-12 · v1 · inferred · recovered
-An organization is qualified for Team With Us once it has been approved for at least one service area and its Team With Us terms have been accepted.
-- cites: src/shared/lib/resources/organization.ts:141
-- cites: src/back-end/lib/db/organization.ts:386
-- cites: src/front-end/typescript/lib/pages/organization/edit/tab/twu-qualification.tsx:301
-- cites: src/migrations/tasks/20230327102038_accept-twu-terms.ts
-- reconciliation: implemented-only
-- given: an organization approved for one service area whose Team With Us terms have not been accepted
-- when: the owner opens the organization's Team With Us qualification page
-- then: the service-area requirement is shown as met, the terms requirement as unmet, and the organization is marked as not qualified
-- state: proposed
-- note: the database description carried by the old application does not list the Team With Us terms field, the service-area approvals or the membership-rights history at all, so it is behind the schema the application actually uses.
 
 ### R-3.12 · v1 · confirmed · recovered
 An organization's owner, its administrators and a service administrator may grant or withdraw administrator rights over the organization to an active member, but nobody may change their own rights and the owner's own membership cannot be changed this way.
@@ -238,20 +161,6 @@ An organization's owner, its administrators and a service administrator may gran
 - state: accepted
 - note: granting administrator rights requires the person granting them to confirm a statement about what those rights allow before the change is offered.
 
-### D-organizations-13 · v1 · inferred · recovered
-Accepting an organization's Sprint With Us or Team With Us terms records the date of acceptance, and a second attempt to accept the same terms for the same organization is refused.
-- cites: src/back-end/lib/resources/organization.ts:509
-- cites: src/back-end/lib/resources/organization.ts:524
-- cites: src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:155
-- cites: src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:224
-- cites: src/back-end/docs/organization.yaml:148
-- reconciliation: implemented-only
-- given: an organization whose Sprint With Us terms have not been accepted
-- when: its owner reads the terms and accepts them, and then tries to accept them again
-- then: the first acceptance is recorded with its date and shown on the qualification page, and the second is refused with a message saying the terms have already been accepted
-- state: proposed
-- note: an administrator reading the terms page is not offered the accept control, so acceptance is in practice an act of the organization's own people.
-
 ### R-3.13 · v1 · confirmed · recovered
 Only a service administrator may transfer ownership of an organization, and only to a member whose membership is already active; the previous owner becomes an ordinary member.
 - cites: src/back-end/lib/resources/affiliation.ts:408
@@ -263,17 +172,6 @@ Only a service administrator may transfer ownership of an organization, and only
 - then: that member becomes the organization's owner, the previous owner becomes an ordinary member, and the pending member cannot be chosen as the new owner
 - state: accepted
 - note: the organization's own owner is not offered this action; it is offered only to a service administrator, and only when the organization has at least one member other than the owner.
-
-### D-organizations-14 · v1 · inferred · recovered
-Only an administrator may set which service areas an organization is approved for, and saving a selection replaces the organization's previous approvals entirely.
-- cites: src/back-end/lib/resources/organization.ts:545
-- cites: src/back-end/lib/db/organization.ts:691
-- cites: src/front-end/typescript/lib/pages/organization/edit/tab/twu-qualification.tsx:400
-- reconciliation: implemented-only
-- given: an organization approved for two service areas
-- when: an administrator edits the service areas, leaves one of the two ticked, ticks a third, and saves
-- then: the organization is approved for exactly the two areas that were ticked and no longer for the one that was cleared, and the same page offers no editing control to the organization's own owner
-- state: proposed
 
 ### R-3.14 · v1 · confirmed · recovered
 The list of an organization's team members can be read only by a service administrator or by someone who owns or administers that organization.
@@ -295,18 +193,6 @@ The organizations a vendor may act on behalf of are those they own and those the
 - then: the first two are returned and the third and fourth are not
 - state: accepted
 
-### D-organizations-16 · v1 · inferred · recovered
-An invited person is told by email that the organization has asked them to join, and is offered a way to accept or decline from that message.
-- cites: src/back-end/lib/resources/affiliation.ts:264
-- cites: src/back-end/lib/mailer/notifications/affiliation.tsx:65
-- cites: src/back-end/lib/mailer/notifications/affiliation.tsx:247
-- cites: src/front-end/typescript/lib/pages/user/profile/tab/organizations.tsx:122
-- reconciliation: implemented-only
-- given: a registered vendor who is not a member of a given organization
-- when: that organization invites them
-- then: they receive a message naming the organization and offering an accept and a decline choice, and following either choice opens their own organizations page with that decision ready to confirm
-- state: proposed
-
 ### R-3.16 · v1 · confirmed · recovered
 Asking for the organizations one may act on behalf of as anyone other than a vendor returns an empty list rather than being refused.
 - cites: src/back-end/lib/resources/owned-organization.ts:25
@@ -319,16 +205,6 @@ Asking for the organizations one may act on behalf of as anyone other than a ven
 - superseded-by: R-3.20
 - note: the permission rule for this request is written but never applied — the check tests that the rule exists rather than running it — so nothing is refused here. No harm follows, because the underlying lookup returns nothing for anyone who is not a vendor, but the outcome is an empty success where a refusal was intended. No corrected criterion has been written because it has not been decided whether the new system should refuse or should keep answering with an empty list.
 - note: superseded by R-3.20
-
-### D-organizations-17 · v1 · inferred · recovered
-Inviting an email address that belongs to nobody registered with the service creates no membership; the address is instead sent an invitation to register, and the inviter is told the person was not registered but has been notified.
-- cites: src/back-end/lib/resources/affiliation.ts:196
-- cites: src/front-end/typescript/lib/pages/organization/edit/tab/team.tsx:270
-- reconciliation: implemented-only
-- given: an organization whose owner is inviting team members
-- when: they invite an email address that no registered account uses
-- then: no pending membership appears on the team list, the address receives an invitation to register with the service, and the owner is shown a warning naming that address
-- state: proposed
 
 ### R-3.17 · v1 · confirmed · recovered
 An invitation may name the invited person as an ordinary member or as an owner, and any other membership type is rejected.
@@ -352,7 +228,138 @@ A change to an organization's contact phone number made while editing its profil
 - state: accepted
 - replaces: R-3.5
 
-### D-organizations-20 · v1 · inferred · recovered
+### R-3.20 · v1 · confirmed · authored
+Asking for the organizations one may act on behalf of is refused as not permitted for anyone who is not a signed-in vendor, rather than answered with an empty list.
+- state: accepted
+- replaces: R-3.16
+
+### R-3.21 · v2 · confirmed · recovered
+In the organization list, the owner's name, the team size and both qualification marks are shown only to a service administrator and, for a given organization, to the vendors who own or administer it; every other viewer sees that organization's legal name, logo, active state and service areas alone, and the owner and qualification columns are not offered at all to a visitor who is not signed in or to public sector staff.
+- cites: src/back-end/lib/db/organization.ts:502
+- cites: src/back-end/lib/db/organization.ts:251
+- cites: src/front-end/typescript/lib/pages/organization/list.tsx:163
+- cites: src/front-end/typescript/lib/pages/organization/list.tsx:204
+- reconciliation: implemented-only
+- given: an organization owned by one vendor
+- when: a different vendor, who is neither its owner nor one of its administrators, opens the organization list
+- then: that organization's row shows its legal name only, with no owner, no team size and no qualification marks, while the same row shown to an administrator carries all of them
+- state: accepted
+- note: the owner and qualification columns are hidden entirely from a visitor who is not signed in and from public sector staff, so only vendors and administrators ever see them.
+
+### R-3.22 · v2 · confirmed · recovered
+Registering an organization requires a legal name, street address, city, region, mail code, country and contact name, each between one and one hundred characters, together with a contact email in a valid email format and of any length; a website address, second address line, contact title and contact phone number may be left out, but each is rejected if given in an invalid format, with the second address line and contact title also limited to one hundred characters.
+- cites: src/shared/lib/validation/organization.ts:10
+- cites: src/shared/lib/validation/organization.ts:56
+- cites: src/shared/lib/validation/organization.ts:60
+- cites: src/shared/lib/validation/index.ts:218
+- cites: src/shared/lib/validation/index.ts:423
+- cites: src/shared/lib/validation/index.ts:436
+- cites: src/back-end/docs/organization.yaml:102
+- reconciliation: implemented-only
+- given: a signed-in vendor filling in the organization registration form
+- when: they submit it with the legal name left blank, or with a contact email of "not-an-email"
+- then: the organization is not created and the offending field is reported as invalid, while the same submission with the optional website, second address line, contact title and phone left empty succeeds
+- state: accepted
+- note: the published interface description lists the same set of fields but says nothing about which are required or how long they may be, so the required/optional split and the hundred-character limit rest on the code alone.
+
+### R-3.23 · v1 · confirmed · recovered
+The vendor who registers an organization becomes its owner immediately, and the organization is active from the moment it is registered.
+- cites: src/back-end/lib/db/organization.ts:595
+- cites: src/back-end/lib/db/organization.ts:618
+- cites: src/front-end/typescript/lib/pages/organization/create.tsx:148
+- reconciliation: implemented-only
+- given: a signed-in vendor with no organizations
+- when: they register a new organization
+- then: the organization appears under their owned organizations with them recorded as its owner and its team counted as one member, and they are taken to that organization's management page
+- state: accepted
+
+### R-3.24 · v1 · confirmed · recovered
+When an administrator archives an organization they do not own, its owner is told by email that the organization has been archived.
+- cites: src/back-end/lib/resources/organization.ts:692
+- cites: src/back-end/lib/mailer/notifications/organization.tsx:11
+- cites: src/back-end/lib/mailer/notifications/organization.tsx:32
+- reconciliation: implemented-only
+- given: an active organization owned by a vendor
+- when: an administrator archives it
+- then: the owner receives a message telling them their organization has been archived by an administrator and that they can no longer use it, and no such message is sent when the owner archives their own organization
+- state: accepted
+
+### R-3.25 · v1 · confirmed · recovered
+An organization is qualified for Sprint With Us once it has at least two active team members, those members between them hold every capability the service recognises, and its Sprint With Us terms have been accepted.
+- cites: src/shared/lib/resources/organization.ts:125
+- cites: src/shared/lib/resources/organization.ts:131
+- cites: src/back-end/lib/db/organization.ts:199
+- cites: src/front-end/typescript/lib/pages/organization/edit/tab/swu-qualification.tsx:74
+- reconciliation: implemented-only
+- given: an organization with an owner and one further active member who between them hold every capability, and whose Sprint With Us terms have not yet been accepted
+- when: the owner opens the organization's Sprint With Us qualification page
+- then: the team-size and capability requirements are shown as met, the terms requirement as unmet, and the organization is marked as not qualified
+- state: accepted
+- note: only active members count towards the capability total; a member who has been invited but has not yet accepted is excluded.
+
+### R-3.26 · v1 · confirmed · recovered
+An organization is qualified for Team With Us once it has been approved for at least one service area and its Team With Us terms have been accepted.
+- cites: src/shared/lib/resources/organization.ts:141
+- cites: src/back-end/lib/db/organization.ts:386
+- cites: src/front-end/typescript/lib/pages/organization/edit/tab/twu-qualification.tsx:301
+- cites: src/migrations/tasks/20230327102038_accept-twu-terms.ts
+- reconciliation: implemented-only
+- given: an organization approved for one service area whose Team With Us terms have not been accepted
+- when: the owner opens the organization's Team With Us qualification page
+- then: the service-area requirement is shown as met, the terms requirement as unmet, and the organization is marked as not qualified
+- state: accepted
+- note: the database description carried by the old application does not list the Team With Us terms field, the service-area approvals or the membership-rights history at all, so it is behind the schema the application actually uses.
+
+### R-3.27 · v1 · confirmed · recovered
+Accepting an organization's Sprint With Us or Team With Us terms records the date of acceptance, and a second attempt to accept the same terms for the same organization is refused.
+- cites: src/back-end/lib/resources/organization.ts:509
+- cites: src/back-end/lib/resources/organization.ts:524
+- cites: src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:155
+- cites: src/front-end/typescript/lib/pages/organization/sprint-with-us-terms.tsx:224
+- cites: src/back-end/docs/organization.yaml:148
+- reconciliation: implemented-only
+- given: an organization whose Sprint With Us terms have not been accepted
+- when: its owner reads the terms and accepts them, and then tries to accept them again
+- then: the first acceptance is recorded with its date and shown on the qualification page, and the second is refused with a message saying the terms have already been accepted
+- state: accepted
+- note: an administrator reading the terms page is not offered the accept control, so acceptance is in practice an act of the organization's own people.
+
+### R-3.28 · v1 · confirmed · recovered
+Only an administrator may set which service areas an organization is approved for, and saving a selection replaces the organization's previous approvals entirely.
+- cites: src/back-end/lib/resources/organization.ts:545
+- cites: src/back-end/lib/db/organization.ts:691
+- cites: src/front-end/typescript/lib/pages/organization/edit/tab/twu-qualification.tsx:400
+- reconciliation: implemented-only
+- given: an organization approved for two service areas
+- when: an administrator edits the service areas, leaves one of the two ticked, ticks a third, and saves
+- then: the organization is approved for exactly the two areas that were ticked and no longer for the one that was cleared, and the same page offers no editing control to the organization's own owner
+- state: accepted
+
+### R-3.29 · v1 · confirmed · recovered
+An invited person is told by email that the organization has asked them to join, and is offered a way to accept or decline from that message.
+- cites: src/back-end/lib/resources/affiliation.ts:264
+- cites: src/back-end/lib/mailer/notifications/affiliation.tsx:65
+- cites: src/back-end/lib/mailer/notifications/affiliation.tsx:247
+- cites: src/front-end/typescript/lib/pages/user/profile/tab/organizations.tsx:122
+- reconciliation: defect
+- given: a registered vendor who is not a member of a given organization
+- when: that organization invites them
+- then: they receive a message naming the organization and offering an accept and a decline choice, and following either choice opens their own organizations page with that decision ready to confirm
+- state: accepted
+- superseded-by: R-3.35
+- note: superseded by R-3.35
+
+### R-3.30 · v1 · confirmed · recovered
+Inviting an email address that belongs to nobody registered with the service creates no membership; the address is instead sent an invitation to register, and the inviter is told the person was not registered but has been notified.
+- cites: src/back-end/lib/resources/affiliation.ts:196
+- cites: src/front-end/typescript/lib/pages/organization/edit/tab/team.tsx:270
+- reconciliation: implemented-only
+- given: an organization whose owner is inviting team members
+- when: they invite an email address that no registered account uses
+- then: no pending membership appears on the team list, the address receives an invitation to register with the service, and the owner is shown a warning naming that address
+- state: accepted
+
+### R-3.31 · v1 · confirmed · recovered
 When a person accepts an invitation, the organization's owner is told they have joined and the new member is told they may now be put forward on the organization's proposals.
 - cites: src/back-end/lib/resources/affiliation.ts:450
 - cites: src/back-end/lib/mailer/notifications/affiliation.tsx:18
@@ -362,14 +369,9 @@ When a person accepts an invitation, the organization's owner is told they have 
 - given: a person with a pending invitation to an organization
 - when: they accept it
 - then: the organization's owner receives a message saying the person approved the request, and the person receives a message saying they have joined the organization's team
-- state: proposed
-
-### R-3.20 · v1 · confirmed · authored
-Asking for the organizations one may act on behalf of is refused as not permitted for anyone who is not a signed-in vendor, rather than answered with an empty list.
 - state: accepted
-- replaces: R-3.16
 
-### D-organizations-22 · v1 · inferred · recovered
+### R-3.32 · v1 · confirmed · recovered
 When an invited person declines an invitation rather than accepting it, the organization's owner is told the request was rejected.
 - cites: src/back-end/lib/resources/affiliation.ts:562
 - cites: src/back-end/lib/mailer/notifications/affiliation.tsx:35
@@ -379,10 +381,10 @@ When an invited person declines an invitation rather than accepting it, the orga
 - given: a person with a pending invitation to an organization
 - when: they decline it
 - then: the pending membership is gone from the organization's team list and the owner receives a message saying the person rejected the team request
-- state: proposed
+- state: accepted
 - note: no message is sent when the organization's own owner or administrator withdraws a pending invitation, nor when an established member leaves; the code that would tell the owner about a member leaving is present but nothing invokes it.
 
-### D-organizations-26 · v1 · inferred · recovered
+### R-3.33 · v1 · confirmed · recovered
 An organization keeps a changelog of every grant and withdrawal of administrator rights and every transfer of ownership, showing what happened, to whom, when and by whom, most recent first.
 - cites: src/back-end/lib/db/organization.ts:388
 - cites: src/back-end/lib/db/affiliation.ts:300
@@ -394,9 +396,9 @@ An organization keeps a changelog of every grant and withdrawal of administrator
 - given: an organization whose owner has granted administrator rights to a member and then withdrawn them
 - when: the owner opens the organization's changelog
 - then: two entries are shown, "Admin Rights Removed" above "Admin Rights Given", each naming the member it concerns, the time it happened and the person who made the change
-- state: proposed
+- state: accepted
 
-### D-organizations-28 · v1 · inferred · recovered
+### R-3.34 · v1 · confirmed · recovered
 An organization's summary of team capabilities counts only members who have accepted their invitation.
 - cites: src/front-end/typescript/lib/pages/organization/edit/tab/team.tsx:104
 - cites: src/back-end/lib/db/organization.ts:211
@@ -404,4 +406,9 @@ An organization's summary of team capabilities counts only members who have acce
 - given: an organization whose only member holding a given capability has been invited but has not yet accepted
 - when: the owner opens the organization's team page
 - then: that capability is shown as one the team does not have, and it becomes shown as held once the invitation is accepted
-- state: proposed
+- state: accepted
+
+### R-3.35 · v1 · confirmed · authored
+The accept and the decline choice offered in an invitation email both open the invited person's own organizations page with the matching confirmation ready, so a person can decline from the message as readily as they can accept.
+- state: accepted
+- replaces: R-3.29
