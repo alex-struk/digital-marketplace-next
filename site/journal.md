@@ -1,5 +1,17 @@
 # Journal
 
+## 021 · archaeology · 2026-09-07
+
+cost $0 · turns 0
+
+(resumed; agent output unavailable)
+
+## 020 · archaeology · 2026-09-07
+
+cost $15.593451500000004 · turns 121
+
+the agent turn reported failure with no output; the session hit the turn cap (error_max_turns)
+
 ## 019 · ratify · 2026-09-07
 
 cost $0 · turns 0

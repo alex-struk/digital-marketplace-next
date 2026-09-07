@@ -59,6 +59,10 @@ Automatic merge failed; fix conflicts and then commit the result.
 - 21:12:54 propose ratify-users-1 at G1
 - 21:16:50 rule ratify-users-1 approve at G1 by agent:product-owner (agent)
 - 21:16:50 run ratify: ok, cost 0, turns 0
+- 21:31:05 run archaeology: agent turn failed
+- 21:38:57 run archaeology: ok, cost 0, turns 0
+- 21:38:57 propose archaeology-evaluation at G1
+- 21:41:56 rule archaeology-evaluation approve at G1 by agent:product-owner (agent)
 
 # Run record 2026-09-06
 

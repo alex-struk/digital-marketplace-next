@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-07T04:41:56.303Z | archaeology-evaluation | G1 | approve | agent:product-owner | agent-held, unsampled | $1.0940745 |  |
 | 2026-09-07T04:16:50.081Z | ratify-users-1 | G1 | approve | agent:product-owner | agent-held, unsampled | $2.0127850000000005 |  |
 | 2026-09-07T04:12:53.844Z | archaeology-users | G1 | approve | agent:product-owner | agent-held, unsampled | $1.863165 |  |
 | 2026-09-07T03:46:46.694Z | ratify-organizations-1 | G1 | approve | agent:product-owner | agent-held, unsampled | $1.9592464999999997 |  |
