@@ -40,3 +40,17 @@ Observations return an opaque string, so presence is asserted as truthy, absence
 **Two places where the seed does not reach the criterion.** R-3.25's given asks for two active members who between them hold every capability; no two seeded vendors do (each holds three of nine), so the file tests the qualified case on the seeded organization and the wholly-unqualified case on a fresh one, and does not reach the "terms unmet, everything else met" case the criterion describes. And the seed records no display names for people, only emails — so R-3.33 can assert that "Admin Rights Removed" stands above "Admin Rights Given" but not that each entry names the member and the person who made the change, and R-3.10 cannot assert that a departed member's row is gone by name. A `name` on each seeded user would close both.
 
 **One assertion I am least sure of.** R-3.28 asserts on the service-area codes as the seed spells them (`FULL_STACK_DEVELOPER`, `AGILE_COACH`). If `service_area_checkbox` reports human-readable labels rather than those codes, that test will fail for a naming reason rather than a behavioural one; the seed is the only non-invented source for those values, so I used it.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+
+Most of the 32 files follow from their criteria and all three not-testable reasons are real, but five tests assert something other than what their criterion says or carry a check that cannot fail: swuRequirementTwoMembers is read as a varying value in R-3.7/R-3.10 and as bare presence in R-3.25, and both readings cannot hold; R-3.10 drops the team-list clause for a reason R-3.30 and R-3.32 disprove; R-3.25 and R-3.26 never reach the mixed met/unmet state their criteria describe and cannot distinguish met from unmet; R-3.22's not.toContain(streetAddress) against organizationName can never fail; and R-3.12 proves an admin-rights grant with R-3.3's record-access rule when changelogEntry observes it directly.
+
+**Conditions:**
+- Settle what swuRequirementTwoMembers yields and use it one way across R-3.7, R-3.10 and R-3.25 — as a presence string it makes R-3.10's not.toBe unpassable, as a team-size value it makes R-3.25's toBeTruthy vacuous.
+- R-3.10: assert the departed member is gone from teamMemberRow by email, as R-3.30 and R-3.32 already do, rather than resting the whole clause on a qualification-requirement observation.
+- R-3.25 and R-3.26: reach the criterion's mixed state (requirements met, terms unmet, organization marked not qualified) with an assertion that separates a requirement shown as met from one shown as unmet, or file the shortfall in not-testable.yaml naming the missing observation instead of recording the criterion as covered.
+- R-3.22 test 1: remove or replace the not.toContain(streetAddress) check against organizationName — it cannot fail, so the 'organization is not created' clause has no check behind it.
+- R-3.12 test 1: observe the grant of administrator rights through changelogEntry ('Admin Rights Given'), or record the missing admin-rights observation as a gap, rather than asserting R-3.3's record-access rule.
