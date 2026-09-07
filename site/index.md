@@ -11,9 +11,9 @@ Profile: rebuild
 | organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 |  |
 | users | 0 | 34 | 0 | 0 | 0 | 2 | 1 | 36 |  |
 | evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 |  |
-| notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 12/28 (n/t 16) |
+| notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 8/21 (n/t 13) |
 | content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 |  |
-| files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 13/31 (n/t 18) |
+| files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 12/24 (n/t 12) |
 | **Totals** | 0 | 288 | 0 | 0 | 0 | 7 | 3 | 295 |  |
 
 ## Pages
@@ -36,6 +36,7 @@ Profile: rebuild
 - [contract-v1](proposals/contract-v1.md)
 - [derive-tests-files](proposals/derive-tests-files.md)
 - [derive-tests-notifications](proposals/derive-tests-notifications.md)
+- [derive-tests-proposals](proposals/derive-tests-proposals.md)
 - [gates-simulated-v1](proposals/gates-simulated-v1.md)
 - [intent-digital-marketplace-rebuild](proposals/intent-digital-marketplace-rebuild.md)
 - [policy-v3](proposals/policy-v3.md)
@@ -66,8 +67,8 @@ Profile: rebuild
 ## Totals
 
 - Journal cost: $109.83133
-- Rulings cost: $41.508225
-- Total cost: $151.339555
-- Agent-held rulings: 25
+- Rulings cost: $44.908411
+- Total cost: $154.739741
+- Agent-held rulings: 26
 - Open escalations: 0
 - Open proposals: 0

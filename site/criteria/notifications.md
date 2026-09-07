@@ -12,12 +12,12 @@
 | R-6.6 | acceptance/notifications/R-6.6.spec.ts |
 | R-6.7 | acceptance/notifications/R-6.7.spec.ts |
 | R-6.8 | not testable: Two things are missing. The batch's recipients are blind copies and the mail fixture has no accessor for them (observables.yaml names `copied_recipients: bcc`), so neither the batch size nor the hiding can be counted; and one hundred and twenty accounts that have asked for new-opportunity notices can be produced neither by the seed nor by any surface action, since accounts arrive only through sign-in as a seeded persona. |
-| R-6.9 | not testable: The claim is about the visible address line of a panel notice listing all of its recipients. `mail.messagesTo` searches by one visible address and hands back `To` as an opaque value, so the addresses of the other recipients of the same message cannot be read. |
-| R-6.10 | acceptance/notifications/R-6.10.spec.ts |
-| R-6.11 | not testable: Both halves turn on the notice about a watched opportunity, which is sent as a batch of blind copies. The mail fixture searches by visible recipient only, so a message that did reach a deactivated watcher would not be found, and its absence from a search would be equally consistent with it having been sent. |
-| R-6.12 | not testable: The criterion is about the wording inside one message. The mail fixture exposes no message body, and the reference page's observations (message_subject, message_summary, message_body) name no way to select one message among the fifty on the page, so a containment assertion over the page as a whole would be satisfied by any message that happens to name a program. |
+| R-6.9 | — |
+| R-6.10 | — |
+| R-6.11 | — |
+| R-6.12 | — |
 | R-6.13 | acceptance/notifications/R-6.13.spec.ts |
-| R-6.14 | acceptance/notifications/R-6.14.spec.ts |
+| R-6.14 | — |
 | R-6.15 | not testable: Requires reading, for one multi-recipient notice, both the visible recipient and the list of blind copies. The mail fixture offers neither: it searches by a single visible address and returns no blind-copy list, so hiding cannot be told from not sending. |
 | R-6.16 | not testable: The claim is about what stands at the foot of a particular message — an unsubscribe offer, or a plain link to the notification settings. The mail fixture exposes no message body, and the reference page cannot be asked for one message's body, so the two endings cannot be told apart. |
 | R-6.17 | acceptance/notifications/R-6.17.spec.ts |
@@ -25,11 +25,11 @@
 | R-6.19 | acceptance/notifications/R-6.19.spec.ts |
 | R-6.20 | not testable: The given is an account being created for the first time. Every persona signs in as an account the seed already holds, and no surface action creates one, so the sign-up completion page cannot be reached with a first-time identity and the state of a never-before-seen account cannot be read. |
 | R-6.21 | acceptance/notifications/R-6.21.spec.ts |
-| R-6.22 | acceptance/notifications/R-6.22.spec.ts |
+| R-6.22 | — |
 | R-6.23 | acceptance/notifications/R-6.23.spec.ts |
 | R-6.24 | not testable: What distinguishes this criterion from R-6.23 is ordering — success reported before any message has been sent. Nothing in the surface reports send progress, and nothing can hold delivery, so the only available check (that the catcher is empty at the moment success appears) is a race against the background sending rather than a test of it. |
 | R-6.25 | not testable: Every part of the claim — the opportunity's title and the winner's name leading the message, the em dash where no successful proponent is recorded, the offer to sign in and see one's own score — is content of the message body, which no mail accessor returns and which the reference page cannot be asked for one message at a time. |
-| R-6.26 | acceptance/notifications/R-6.26.spec.ts |
+| R-6.26 | — |
 | R-6.27 | not testable: The only width-aware observation is notification_control_hidden_on_narrow_screen, which is worded for the old service's behaviour. Asserting its negation is not reliable, since observations return free text with no stated yes/no vocabulary, and nothing names an observation reporting the control as offered at a narrow width or a way to ask a page to open at one. |
 | R-6.28 | acceptance/notifications/R-6.28.spec.ts |
 

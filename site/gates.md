@@ -4,6 +4,7 @@
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2026-09-07T14:35:49.196Z | derive-tests-files | G3 | approve | agent:reviewer | agent-held, unsampled | $2.0853965000000003 | sample |
 | 2026-09-07T14:07:24.759Z | derive-tests-notifications | G3 | approve | agent:reviewer | agent-held, unsampled | $2.500539499999999 | sample |
+| 2026-09-07T12:50:27.625Z | derive-tests-proposals | G3 | return | agent:reviewer | agent-held, unsampled | $3.4001855 | sample |
 | 2026-09-07T11:52:04.374Z | contract-v1 | G1 | approve | agent:product-owner | agent-held, unsampled | $0.8271335 |  |
 | 2026-09-07T11:06:06.838Z | policy-v3 | G-POL | approve | agent:tech-lead | agent-held, unsampled | $0.722108 | sample |
 | 2026-09-07T08:48:15.694Z | ratify-files-1 | G1 | approve | agent:product-owner | agent-held, unsampled | $1.6447765 |  |
