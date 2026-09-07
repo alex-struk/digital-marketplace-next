@@ -1,5 +1,5 @@
 {
-  "generated_from": "9ca9a1575e989a40ad6ee55b247c0514bcc51769",
+  "generated_from": "40605384759bd10724c1411fdc448dfd99c70aee",
   "criteria": [
     {
       "id": "R-7.1",
@@ -2302,39 +2302,6 @@
       "file": "spec/domains/files.md"
     },
     {
-      "id": "D-files-3",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "An upload whose name is empty or longer than 255 characters is refused, and the person is told the name must be between 1 and 255 characters long.",
-      "cites": [
-        {
-          "path": "src/shared/lib/validation/file.ts",
-          "line": 25
-        },
-        {
-          "path": "src/shared/lib/validation/file.ts",
-          "line": 30
-        },
-        {
-          "path": "src/back-end/lib/resources/file.ts",
-          "line": 137
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "a signed-in person uploading a file",
-      "when": "they give it a name of 256 characters",
-      "then": "the upload is refused and the message names the permitted length",
-      "notes": [
-        "the limit is the length an ordinary file system will accept, not a rule of this service. Nothing else about the name is checked — no character restriction, no extension requirement, and no check that the name matches the content — except on the profile picture and logo route."
-      ],
-      "state": "proposed",
-      "raw": "### D-files-3 · v1 · inferred · recovered",
-      "line": 53,
-      "domain": "files",
-      "file": "spec/domains/files.md"
-    },
-    {
       "id": "R-8.3",
       "version": 1,
       "confidence": "confirmed",
@@ -2365,40 +2332,7 @@
       "state": "accepted",
       "supersededBy": "R-8.17",
       "raw": "### R-8.3 · v1 · confirmed · recovered",
-      "line": 65,
-      "domain": "files",
-      "file": "spec/domains/files.md"
-    },
-    {
-      "id": "D-files-4",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "An upload with no read-access statement, or with one that cannot be understood, is refused.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/resources/file.ts",
-          "line": 138
-        },
-        {
-          "path": "src/shared/lib/validation/file.ts",
-          "line": 64
-        },
-        {
-          "path": "src/back-end/index.ts",
-          "line": 301
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "a signed-in person uploading a file",
-      "when": "they omit the read-access statement, or give one naming a kind of access the service does not recognise",
-      "then": "the upload is refused as having invalid read-access information and no file is stored",
-      "notes": [
-        "the three kinds recognised are \"anyone\", \"this one named person\" and \"anyone of this account type\"; a statement naming a person must carry a well-formed identifier and one naming an account type must name a type the service knows. Repeated entries are reduced to one before they are recorded."
-      ],
-      "state": "proposed",
-      "raw": "### D-files-4 · v1 · inferred · recovered",
-      "line": 79,
+      "line": 53,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2427,13 +2361,13 @@
       "when": "the submission carries no file part, or read-access information that is not well-formed",
       "then": "the request fails as an unexpected fault of the service and is recorded in the service's error log as one",
       "notes": [
-        "no corrected criterion has been written because the two cases want different answers — a submission with no file is a bad request, whereas read-access information that is not well-formed is already reported properly when it is well-formed but wrong (see D-files-4). Both are indistinguishable to the caller from the service being broken, and both fill the error log with entries caused by callers rather than by the service. A file already written to temporary storage when one of these fails is not cleaned up, because the clean-up step is only reached on the success path.",
+        "no corrected criterion has been written because the two cases want different answers — a submission with no file is a bad request, whereas read-access information that is not well-formed is already reported properly when it is well-formed but wrong (see R-8.24). Both are indistinguishable to the caller from the service being broken, and both fill the error log with entries caused by callers rather than by the service. A file already written to temporary storage when one of these fails is not cleaned up, because the clean-up step is only reached on the success path.",
         "superseded by R-8.18"
       ],
       "state": "accepted",
       "supersededBy": "R-8.18",
       "raw": "### R-8.4 · v1 · confirmed · recovered",
-      "line": 91,
+      "line": 67,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2466,7 +2400,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.5 · v1 · confirmed · recovered",
-      "line": 105,
+      "line": 81,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2499,7 +2433,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.6 · v1 · confirmed · recovered",
-      "line": 117,
+      "line": 93,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2552,7 +2486,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.7 · v1 · confirmed · recovered",
-      "line": 129,
+      "line": 105,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2585,13 +2519,13 @@
       "when": "a visitor who is not signed in asks for that document by its identifier",
       "then": "the document is returned, even though the opportunity it belongs to is not visible to them",
       "notes": [
-        "no corrected criterion has been written because the correct behaviour is already described by D-files-10 — the association check would grant exactly the right access on its own, and the marking is what defeats it. The three programs disagree with each other: Code With Us attachments and Code With Us proposal attachments are uploaded with no read access recorded, and rely on the association check; Sprint With Us and Team With Us attachments are marked readable by anyone. The identifier of a draft opportunity's attachment is not published anywhere, so this is a matter of guessing or retaining an identifier rather than of browsing.",
+        "no corrected criterion has been written because the correct behaviour is already described by R-8.25 — the association check would grant exactly the right access on its own, and the marking is what defeats it. The three programs disagree with each other: Code With Us attachments and Code With Us proposal attachments are uploaded with no read access recorded, and rely on the association check; Sprint With Us and Team With Us attachments are marked readable by anyone. The identifier of a draft opportunity's attachment is not published anywhere, so this is a matter of guessing or retaining an identifier rather than of browsing.",
         "superseded by R-8.19"
       ],
       "state": "accepted",
       "supersededBy": "R-8.19",
       "raw": "### R-8.8 · v1 · confirmed · recovered",
-      "line": 146,
+      "line": 122,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2620,54 +2554,13 @@
       "when": "that staff member asks for the attachment",
       "then": "they are refused, although they may read the proposal it belongs to",
       "notes": [
-        "no corrected criterion has been written because the missing behaviour is D-files-10 extended to the third program, and whether the new system should carry three separate association rules or one is a design decision rather than a finding. Nothing in the interface offers a way to attach a file to a Team With Us proposal, so this is reachable only by a caller working against the service directly; the service accepts such attachments and stores them. The Team With Us opportunity case is masked rather than fixed by R-8.8, which marks those attachments readable by anyone.",
+        "no corrected criterion has been written because the missing behaviour is R-8.25 extended to the third program, and whether the new system should carry three separate association rules or one is a design decision rather than a finding. Nothing in the interface offers a way to attach a file to a Team With Us proposal, so this is reachable only by a caller working against the service directly; the service accepts such attachments and stores them. The Team With Us opportunity case is masked rather than fixed by R-8.8, which marks those attachments readable by anyone.",
         "superseded by R-8.20"
       ],
       "state": "accepted",
       "supersededBy": "R-8.20",
       "raw": "### R-8.9 · v1 · confirmed · recovered",
-      "line": 161,
-      "domain": "files",
-      "file": "spec/domains/files.md"
-    },
-    {
-      "id": "D-files-10",
-      "version": 1,
-      "confidence": "inferred",
-      "origin": "recovered",
-      "statement": "A file is also readable through what it is attached to: an attachment on a Code With Us or Sprint With Us opportunity is readable by anyone once that opportunity is publicly visible and by the opportunity's creator before then, and an attachment on a proposal is readable by whoever may read that proposal.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/permissions.ts",
-          "line": 338
-        },
-        {
-          "path": "src/back-end/lib/permissions.ts",
-          "line": 339
-        },
-        {
-          "path": "src/back-end/lib/db/proposal/code-with-us.ts",
-          "line": 282
-        },
-        {
-          "path": "src/back-end/lib/db/proposal/code-with-us.ts",
-          "line": 314
-        },
-        {
-          "path": "src/back-end/lib/db/proposal/sprint-with-us.ts",
-          "line": 2020
-        }
-      ],
-      "reconciliation": "implemented-only",
-      "given": "an attachment on a Code With Us opportunity that has not yet been published",
-      "when": "a vendor asks for it, and then the opportunity is published and the same vendor asks again",
-      "then": "the vendor is refused the first time and receives the file the second time",
-      "notes": [
-        "this is what makes a Code With Us attachment behave correctly without any read access recorded against the file itself — the attachment is checked against the state of the thing it hangs on, every time it is asked for, so the file becomes readable exactly when its opportunity does."
-      ],
-      "state": "proposed",
-      "raw": "### D-files-10 · v1 · inferred · recovered",
-      "line": 175,
+      "line": 137,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2712,7 +2605,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.10 · v1 · confirmed · recovered",
-      "line": 189,
+      "line": 151,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2749,7 +2642,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.11 · v1 · confirmed · recovered",
-      "line": 204,
+      "line": 166,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2794,7 +2687,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.12 · v1 · confirmed · recovered",
-      "line": 217,
+      "line": 179,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2839,7 +2732,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.13 · v1 · confirmed · recovered",
-      "line": 232,
+      "line": 194,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2870,7 +2763,7 @@
       "state": "accepted",
       "supersededBy": "R-8.21",
       "raw": "### R-8.14 · v1 · confirmed · recovered",
-      "line": 247,
+      "line": 209,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2901,41 +2794,7 @@
       "state": "accepted",
       "supersededBy": "R-8.22",
       "raw": "### R-8.15 · v1 · confirmed · recovered",
-      "line": 260,
-      "domain": "files",
-      "file": "spec/domains/files.md"
-    },
-    {
-      "id": "D-files-16",
-      "version": 1,
-      "confidence": "open",
-      "origin": "recovered",
-      "statement": "A file is never removed, and deleting the opportunity or proposal it was attached to removes only the attachment, leaving the file and its content stored and still readable by whoever could read them.",
-      "cites": [
-        {
-          "path": "src/back-end/lib/resources/file.ts",
-          "line": 201
-        },
-        {
-          "path": "src/migrations/tasks/20230116114550_twu_opportunities.ts",
-          "line": 102
-        },
-        {
-          "path": "src/migrations/tasks/20200201235459_cwu_cascades.ts",
-          "line": 35
-        }
-      ],
-      "reconciliation": "defect",
-      "given": "a draft opportunity with a document attached, marked readable by anyone",
-      "when": "the opportunity is deleted",
-      "then": "the attachment link is removed with it, and the document remains stored and remains readable by anyone who has its identifier",
-      "notes": [
-        "no corrected criterion has been written because there is no removal operation to correct — the service offers no way to delete a file at all, so what a rebuild should do about withdrawn attachments, about a person removing an attachment while editing, and about the storage that accumulates is an unanswered question rather than a broken rule. Removing an attachment in the interface only stops the record referring to it; the file itself is untouched. This bites hardest with R-8.8, where the file was marked readable by anyone and there is no longer an opportunity whose state could take that back.",
-        "When an attachment is removed from an opportunity or a proposal, or the opportunity or proposal it hangs on is deleted, is the file itself removed, and what removes stored content once no record refers to it? Answering this needs the records-retention rule that applies to procurement attachments, which is stated in neither the code nor the documentation."
-      ],
-      "state": "proposed",
-      "raw": "### D-files-16 · v1 · open · recovered",
-      "line": 273,
+      "line": 222,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2976,14 +2835,247 @@
       ],
       "state": "accepted",
       "raw": "### R-8.16 · v1 · confirmed · recovered",
-      "line": 286,
+      "line": 235,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
     {
-      "id": "D-files-17",
+      "id": "R-8.17",
       "version": 1,
-      "confidence": "inferred",
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "An upload larger than the service's size limit is refused as the requester's error, with a message naming the limit, and the limit is stated in the interface before a person chooses a file rather than only after they submit it.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-8.3",
+      "raw": "### R-8.17 · v1 · confirmed · authored",
+      "line": 249,
+      "domain": "files",
+      "file": "spec/domains/files.md"
+    },
+    {
+      "id": "R-8.18",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "A submission carrying no file part, or read-access information that is not well-formed, is refused as a bad request naming what was wrong with it, and is not recorded in the service's error log as a fault of the service; any working copy already written is removed whether the upload succeeds or fails.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-8.4",
+      "raw": "### R-8.18 · v1 · confirmed · authored",
+      "line": 254,
+      "domain": "files",
+      "file": "spec/domains/files.md"
+    },
+    {
+      "id": "R-8.19",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "An attachment on an opportunity is uploaded with no read access recorded against the file itself, for all three programs alike, so that what the opportunity is attached to decides who may read it.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-8.8",
+      "raw": "### R-8.19 · v1 · confirmed · authored",
+      "line": 259,
+      "domain": "files",
+      "file": "spec/domains/files.md"
+    },
+    {
+      "id": "R-8.20",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "A file attached to an opportunity or a proposal is readable by whoever may read the thing it is attached to, under one rule covering Code With Us, Sprint With Us and Team With Us alike rather than a separate rule per program.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-8.9",
+      "raw": "### R-8.20 · v1 · confirmed · authored",
+      "line": 264,
+      "domain": "files",
+      "file": "spec/domains/files.md"
+    },
+    {
+      "id": "R-8.21",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "A profile picture or organization logo is accepted only if its content can be read as a JPEG or a PNG, and a file whose content is neither is refused whatever its name says; an image that reads successfully but cannot be resized is stored at its original size rather than refused.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-8.14",
+      "raw": "### R-8.21 · v1 · confirmed · authored",
+      "line": 269,
+      "domain": "files",
+      "file": "spec/domains/files.md"
+    },
+    {
+      "id": "R-8.22",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "A file may be attached to an opportunity or a proposal only by someone who is permitted to read that file.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-8.15",
+      "raw": "### R-8.22 · v1 · confirmed · authored",
+      "line": 274,
+      "domain": "files",
+      "file": "spec/domains/files.md"
+    },
+    {
+      "id": "R-8.23",
+      "version": 2,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "An upload whose name is longer than 255 characters is refused as a bad request, and the person is told the file name must be between 1 and 255 characters long; an upload carrying no usable name at all never reaches this check and instead fails as the service fault described by R-8.4.",
+      "cites": [
+        {
+          "path": "src/shared/lib/validation/file.ts",
+          "line": 25
+        },
+        {
+          "path": "src/shared/lib/validation/file.ts",
+          "line": 30
+        },
+        {
+          "path": "src/back-end/lib/resources/file.ts",
+          "line": 137
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a signed-in person uploading a file",
+      "when": "they give it a name of 256 characters",
+      "then": "the upload is refused and the message names the permitted length",
+      "notes": [
+        "the limit is the length an ordinary file system will accept, not a rule of this service. Nothing else about the name is checked — no character restriction, no extension requirement, and no check that the name matches the content — except on the profile picture and logo route."
+      ],
+      "state": "accepted",
+      "raw": "### R-8.23 · v2 · confirmed · recovered",
+      "line": 279,
+      "domain": "files",
+      "file": "spec/domains/files.md"
+    },
+    {
+      "id": "R-8.24",
+      "version": 2,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "An upload that carries no read-access statement, or one that is well-formed data but names a kind of access the service does not recognise, is refused as a bad request reporting that the information provided was invalid, and no file is stored; read-access information that is not well-formed data at all fails instead as the service fault described by R-8.4.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/file.ts",
+          "line": 138
+        },
+        {
+          "path": "src/shared/lib/validation/file.ts",
+          "line": 64
+        },
+        {
+          "path": "src/back-end/index.ts",
+          "line": 301
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "a signed-in person uploading a file",
+      "when": "they omit the read-access statement, or give one naming a kind of access the service does not recognise",
+      "then": "the upload is refused as having invalid read-access information and no file is stored",
+      "notes": [
+        "the three kinds recognised are \"anyone\", \"this one named person\" and \"anyone of this account type\"; a statement naming a person must carry a well-formed identifier and one naming an account type must name a type the service knows. Repeated entries are reduced to one before they are recorded."
+      ],
+      "state": "accepted",
+      "raw": "### R-8.24 · v2 · confirmed · recovered",
+      "line": 291,
+      "domain": "files",
+      "file": "spec/domains/files.md"
+    },
+    {
+      "id": "R-8.25",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A file is also readable through what it is attached to: an attachment on a Code With Us or Sprint With Us opportunity is readable by anyone once that opportunity is publicly visible and by the opportunity's creator before then, and an attachment on a proposal is readable by whoever may read that proposal.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 338
+        },
+        {
+          "path": "src/back-end/lib/permissions.ts",
+          "line": 339
+        },
+        {
+          "path": "src/back-end/lib/db/proposal/code-with-us.ts",
+          "line": 282
+        },
+        {
+          "path": "src/back-end/lib/db/proposal/code-with-us.ts",
+          "line": 314
+        },
+        {
+          "path": "src/back-end/lib/db/proposal/sprint-with-us.ts",
+          "line": 2020
+        }
+      ],
+      "reconciliation": "implemented-only",
+      "given": "an attachment on a Code With Us opportunity that has not yet been published",
+      "when": "a vendor asks for it, and then the opportunity is published and the same vendor asks again",
+      "then": "the vendor is refused the first time and receives the file the second time",
+      "notes": [
+        "this is what makes a Code With Us attachment behave correctly without any read access recorded against the file itself — the attachment is checked against the state of the thing it hangs on, every time it is asked for, so the file becomes readable exactly when its opportunity does."
+      ],
+      "state": "accepted",
+      "raw": "### R-8.25 · v1 · confirmed · recovered",
+      "line": 303,
+      "domain": "files",
+      "file": "spec/domains/files.md"
+    },
+    {
+      "id": "R-8.26",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "recovered",
+      "statement": "A file is never removed, and deleting the opportunity or proposal it was attached to removes only the attachment, leaving the file and its content stored and still readable by whoever could read them.",
+      "cites": [
+        {
+          "path": "src/back-end/lib/resources/file.ts",
+          "line": 201
+        },
+        {
+          "path": "src/migrations/tasks/20230116114550_twu_opportunities.ts",
+          "line": 102
+        },
+        {
+          "path": "src/migrations/tasks/20200201235459_cwu_cascades.ts",
+          "line": 35
+        }
+      ],
+      "reconciliation": "defect",
+      "given": "a draft opportunity with a document attached, marked readable by anyone",
+      "when": "the opportunity is deleted",
+      "then": "the attachment link is removed with it, and the document remains stored and remains readable by anyone who has its identifier",
+      "notes": [
+        "no corrected criterion has been written because there is no removal operation to correct — the service offers no way to delete a file at all, so what a rebuild should do about withdrawn attachments, about a person removing an attachment while editing, and about the storage that accumulates is an unanswered question rather than a broken rule. Removing an attachment in the interface only stops the record referring to it; the file itself is untouched. This bites hardest with R-8.8, where the file was marked readable by anyone and there is no longer an opportunity whose state could take that back.",
+        "When an attachment is removed from an opportunity or a proposal, or the opportunity or proposal it hangs on is deleted, is the file itself removed, and what removes stored content once no record refers to it? Answering this needs the records-retention rule that applies to procurement attachments, which is stated in neither the code nor the documentation.",
+        "superseded by R-8.31"
+      ],
+      "state": "accepted",
+      "supersededBy": "R-8.31",
+      "raw": "### R-8.26 · v1 · confirmed · recovered",
+      "line": 317,
+      "domain": "files",
+      "file": "spec/domains/files.md"
+    },
+    {
+      "id": "R-8.27",
+      "version": 1,
+      "confidence": "confirmed",
       "origin": "recovered",
       "statement": "An attachment can be given a different display name before it is uploaded, and the ending of the original file is put back on if the person leaves it off.",
       "cites": [
@@ -3011,61 +3103,16 @@
       "notes": [
         "leaving the name box empty keeps the original name unchanged. The typed name is held to the same length rule as any other file name, and the error is shown against the attachment rather than against the form as a whole. Only attachments not yet uploaded can be renamed; an attachment already stored is shown read-only."
       ],
-      "state": "proposed",
-      "raw": "### D-files-17 · v1 · inferred · recovered",
-      "line": 300,
+      "state": "accepted",
+      "raw": "### R-8.27 · v1 · confirmed · recovered",
+      "line": 332,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
     {
-      "id": "R-8.17",
+      "id": "R-8.28",
       "version": 1,
       "confidence": "confirmed",
-      "origin": "authored",
-      "statement": "An upload larger than the service's size limit is refused as the requester's error, with a message naming the limit, and the limit is stated in the interface before a person chooses a file rather than only after they submit it.",
-      "cites": [],
-      "notes": [],
-      "state": "accepted",
-      "replaces": "R-8.3",
-      "raw": "### R-8.17 · v1 · confirmed · authored",
-      "line": 313,
-      "domain": "files",
-      "file": "spec/domains/files.md"
-    },
-    {
-      "id": "R-8.18",
-      "version": 1,
-      "confidence": "confirmed",
-      "origin": "authored",
-      "statement": "A submission carrying no file part, or read-access information that is not well-formed, is refused as a bad request naming what was wrong with it, and is not recorded in the service's error log as a fault of the service; any working copy already written is removed whether the upload succeeds or fails.",
-      "cites": [],
-      "notes": [],
-      "state": "accepted",
-      "replaces": "R-8.4",
-      "raw": "### R-8.18 · v1 · confirmed · authored",
-      "line": 318,
-      "domain": "files",
-      "file": "spec/domains/files.md"
-    },
-    {
-      "id": "R-8.19",
-      "version": 1,
-      "confidence": "confirmed",
-      "origin": "authored",
-      "statement": "An attachment on an opportunity is uploaded with no read access recorded against the file itself, for all three programs alike, so that what the opportunity is attached to decides who may read it.",
-      "cites": [],
-      "notes": [],
-      "state": "accepted",
-      "replaces": "R-8.8",
-      "raw": "### R-8.19 · v1 · confirmed · authored",
-      "line": 323,
-      "domain": "files",
-      "file": "spec/domains/files.md"
-    },
-    {
-      "id": "D-files-20",
-      "version": 1,
-      "confidence": "inferred",
       "origin": "recovered",
       "statement": "Profile pictures and organization logos are marked readable by anyone.",
       "cites": [
@@ -3085,31 +3132,16 @@
       "notes": [
         "this is what lets a logo appear on the public organization list and a profile picture appear beside a person's name to any viewer. It also means the image stays readable by anyone after the profile or organization it belonged to has changed picture, since nothing takes the marking back and nothing removes the file."
       ],
-      "state": "proposed",
-      "raw": "### D-files-20 · v1 · inferred · recovered",
-      "line": 328,
+      "state": "accepted",
+      "raw": "### R-8.28 · v1 · confirmed · recovered",
+      "line": 345,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
     {
-      "id": "R-8.20",
+      "id": "R-8.29",
       "version": 1,
       "confidence": "confirmed",
-      "origin": "authored",
-      "statement": "A file attached to an opportunity or a proposal is readable by whoever may read the thing it is attached to, under one rule covering Code With Us, Sprint With Us and Team With Us alike rather than a separate rule per program.",
-      "cites": [],
-      "notes": [],
-      "state": "accepted",
-      "replaces": "R-8.9",
-      "raw": "### R-8.20 · v1 · confirmed · authored",
-      "line": 339,
-      "domain": "files",
-      "file": "spec/domains/files.md"
-    },
-    {
-      "id": "D-files-21",
-      "version": 1,
-      "confidence": "inferred",
       "origin": "recovered",
       "statement": "An image placed into a piece of formatted text is stored as an ordinary file marked readable by anyone, and the text refers to it by an internal marker that is turned into a download address only when the text is displayed.",
       "cites": [
@@ -3141,46 +3173,16 @@
       "notes": [
         "the stored text never contains a web address, so the same text renders correctly wherever the service is running and whatever address it answers on. A marker that does not resolve to a known file identifier is left alone and treated as an ordinary address, so text written elsewhere still works. The content domain already expects image upload in the editor and defers what may be uploaded to here; this criterion is the other half of that."
       ],
-      "state": "proposed",
-      "raw": "### D-files-21 · v1 · inferred · recovered",
-      "line": 344,
+      "state": "accepted",
+      "raw": "### R-8.29 · v1 · confirmed · recovered",
+      "line": 356,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
     {
-      "id": "R-8.21",
+      "id": "R-8.30",
       "version": 1,
       "confidence": "confirmed",
-      "origin": "authored",
-      "statement": "A profile picture or organization logo is accepted only if its content can be read as a JPEG or a PNG, and a file whose content is neither is refused whatever its name says; an image that reads successfully but cannot be resized is stored at its original size rather than refused.",
-      "cites": [],
-      "notes": [],
-      "state": "accepted",
-      "replaces": "R-8.14",
-      "raw": "### R-8.21 · v1 · confirmed · authored",
-      "line": 358,
-      "domain": "files",
-      "file": "spec/domains/files.md"
-    },
-    {
-      "id": "R-8.22",
-      "version": 1,
-      "confidence": "confirmed",
-      "origin": "authored",
-      "statement": "A file may be attached to an opportunity or a proposal only by someone who is permitted to read that file.",
-      "cites": [],
-      "notes": [],
-      "state": "accepted",
-      "replaces": "R-8.15",
-      "raw": "### R-8.22 · v1 · confirmed · authored",
-      "line": 363,
-      "domain": "files",
-      "file": "spec/domains/files.md"
-    },
-    {
-      "id": "D-files-24",
-      "version": 1,
-      "confidence": "inferred",
       "origin": "recovered",
       "statement": "A profile picture or an organization logo whose name does not end in .jpg, .jpeg or .png is refused.",
       "cites": [
@@ -3216,9 +3218,24 @@
       "notes": [
         "the ending is compared without regard to capitalisation. The file choosers for a profile picture and for a logo both offer only these three endings, but the check on the service side is what actually enforces it. Nothing looks at the content, which is what makes R-8.14 possible."
       ],
-      "state": "proposed",
-      "raw": "### D-files-24 · v1 · inferred · recovered",
-      "line": 368,
+      "state": "accepted",
+      "raw": "### R-8.30 · v1 · confirmed · recovered",
+      "line": 370,
+      "domain": "files",
+      "file": "spec/domains/files.md"
+    },
+    {
+      "id": "R-8.31",
+      "version": 1,
+      "confidence": "confirmed",
+      "origin": "authored",
+      "statement": "Removing an attachment from an opportunity or a proposal, or deleting the opportunity or proposal it hangs on, withdraws every read path the file held through that association, and a file that no record refers to any longer is identifiable as detached so that stored content can be disposed of under the records-retention rule for procurement attachments, which is set outside this domain.",
+      "cites": [],
+      "notes": [],
+      "state": "accepted",
+      "replaces": "R-8.26",
+      "raw": "### R-8.31 · v1 · confirmed · authored",
+      "line": 385,
       "domain": "files",
       "file": "spec/domains/files.md"
     },

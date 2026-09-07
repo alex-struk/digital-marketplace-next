@@ -50,18 +50,6 @@ An upload carries the file itself, a name to store it under, and a statement of 
 - state: accepted
 - note: only the first file in a submission is taken; any further files and any fields other than the name and the read-access statement are discarded silently rather than refused.
 
-### D-files-3 · v1 · inferred · recovered
-An upload whose name is empty or longer than 255 characters is refused, and the person is told the name must be between 1 and 255 characters long.
-- cites: src/shared/lib/validation/file.ts:25
-- cites: src/shared/lib/validation/file.ts:30
-- cites: src/back-end/lib/resources/file.ts:137
-- reconciliation: implemented-only
-- given: a signed-in person uploading a file
-- when: they give it a name of 256 characters
-- then: the upload is refused and the message names the permitted length
-- state: proposed
-- note: the limit is the length an ordinary file system will accept, not a rule of this service. Nothing else about the name is checked — no character restriction, no extension requirement, and no check that the name matches the content — except on the profile picture and logo route.
-
 ### R-8.3 · v1 · confirmed · recovered
 An upload larger than 10 megabytes is refused, and so is one that does not declare its size in advance.
 - cites: src/shared/lib/resources/file.ts:7
@@ -76,18 +64,6 @@ An upload larger than 10 megabytes is refused, and so is one that does not decla
 - note: classed as a defect for the way the refusal is reported, not for the limit. The limit is applied to the declared size of the whole submission before any of it is read, so a submission that understates its size is not stopped by this check and nothing downstream applies a second one; a submission that declares no size at all is treated as too large. The 10 megabyte figure appears nowhere outside the code — not in the setup guide, not in the interface description, and nowhere in the interface a person sees before they choose a file.
 - note: superseded by R-8.17
 
-### D-files-4 · v1 · inferred · recovered
-An upload with no read-access statement, or with one that cannot be understood, is refused.
-- cites: src/back-end/lib/resources/file.ts:138
-- cites: src/shared/lib/validation/file.ts:64
-- cites: src/back-end/index.ts:301
-- reconciliation: implemented-only
-- given: a signed-in person uploading a file
-- when: they omit the read-access statement, or give one naming a kind of access the service does not recognise
-- then: the upload is refused as having invalid read-access information and no file is stored
-- state: proposed
-- note: the three kinds recognised are "anyone", "this one named person" and "anyone of this account type"; a statement naming a person must carry a well-formed identifier and one naming an account type must name a type the service knows. Repeated entries are reduced to one before they are recorded.
-
 ### R-8.4 · v1 · confirmed · recovered
 An upload that is malformed — no file part, or read-access information that is not well-formed data — fails as a fault of the service rather than as a rejected request.
 - cites: src/back-end/lib/server/adapters.ts:212
@@ -99,7 +75,7 @@ An upload that is malformed — no file part, or read-access information that is
 - then: the request fails as an unexpected fault of the service and is recorded in the service's error log as one
 - state: accepted
 - superseded-by: R-8.18
-- note: no corrected criterion has been written because the two cases want different answers — a submission with no file is a bad request, whereas read-access information that is not well-formed is already reported properly when it is well-formed but wrong (see D-files-4). Both are indistinguishable to the caller from the service being broken, and both fill the error log with entries caused by callers rather than by the service. A file already written to temporary storage when one of these fails is not cleaned up, because the clean-up step is only reached on the success path.
+- note: no corrected criterion has been written because the two cases want different answers — a submission with no file is a bad request, whereas read-access information that is not well-formed is already reported properly when it is well-formed but wrong (see R-8.24). Both are indistinguishable to the caller from the service being broken, and both fill the error log with entries caused by callers rather than by the service. A file already written to temporary storage when one of these fails is not cleaned up, because the clean-up step is only reached on the success path.
 - note: superseded by R-8.18
 
 ### R-8.5 · v1 · confirmed · recovered
@@ -155,7 +131,7 @@ An attachment added to a Sprint With Us or Team With Us opportunity is marked re
 - then: the document is returned, even though the opportunity it belongs to is not visible to them
 - state: accepted
 - superseded-by: R-8.19
-- note: no corrected criterion has been written because the correct behaviour is already described by D-files-10 — the association check would grant exactly the right access on its own, and the marking is what defeats it. The three programs disagree with each other: Code With Us attachments and Code With Us proposal attachments are uploaded with no read access recorded, and rely on the association check; Sprint With Us and Team With Us attachments are marked readable by anyone. The identifier of a draft opportunity's attachment is not published anywhere, so this is a matter of guessing or retaining an identifier rather than of browsing.
+- note: no corrected criterion has been written because the correct behaviour is already described by R-8.25 — the association check would grant exactly the right access on its own, and the marking is what defeats it. The three programs disagree with each other: Code With Us attachments and Code With Us proposal attachments are uploaded with no read access recorded, and rely on the association check; Sprint With Us and Team With Us attachments are marked readable by anyone. The identifier of a draft opportunity's attachment is not published anywhere, so this is a matter of guessing or retaining an identifier rather than of browsing.
 - note: superseded by R-8.19
 
 ### R-8.9 · v1 · confirmed · recovered
@@ -169,22 +145,8 @@ Nothing makes a Team With Us attachment readable by virtue of what it is attache
 - then: they are refused, although they may read the proposal it belongs to
 - state: accepted
 - superseded-by: R-8.20
-- note: no corrected criterion has been written because the missing behaviour is D-files-10 extended to the third program, and whether the new system should carry three separate association rules or one is a design decision rather than a finding. Nothing in the interface offers a way to attach a file to a Team With Us proposal, so this is reachable only by a caller working against the service directly; the service accepts such attachments and stores them. The Team With Us opportunity case is masked rather than fixed by R-8.8, which marks those attachments readable by anyone.
+- note: no corrected criterion has been written because the missing behaviour is R-8.25 extended to the third program, and whether the new system should carry three separate association rules or one is a design decision rather than a finding. Nothing in the interface offers a way to attach a file to a Team With Us proposal, so this is reachable only by a caller working against the service directly; the service accepts such attachments and stores them. The Team With Us opportunity case is masked rather than fixed by R-8.8, which marks those attachments readable by anyone.
 - note: superseded by R-8.20
-
-### D-files-10 · v1 · inferred · recovered
-A file is also readable through what it is attached to: an attachment on a Code With Us or Sprint With Us opportunity is readable by anyone once that opportunity is publicly visible and by the opportunity's creator before then, and an attachment on a proposal is readable by whoever may read that proposal.
-- cites: src/back-end/lib/permissions.ts:338
-- cites: src/back-end/lib/permissions.ts:339
-- cites: src/back-end/lib/db/proposal/code-with-us.ts:282
-- cites: src/back-end/lib/db/proposal/code-with-us.ts:314
-- cites: src/back-end/lib/db/proposal/sprint-with-us.ts:2020
-- reconciliation: implemented-only
-- given: an attachment on a Code With Us opportunity that has not yet been published
-- when: a vendor asks for it, and then the opportunity is published and the same vendor asks again
-- then: the vendor is refused the first time and receives the file the second time
-- state: proposed
-- note: this is what makes a Code With Us attachment behave correctly without any read access recorded against the file itself — the attachment is checked against the state of the thing it hangs on, every time it is asked for, so the file becomes readable exactly when its opportunity does.
 
 ### R-8.10 · v1 · confirmed · recovered
 Asking for a file with its content requested returns the bytes, described by a content type worked out from the file's name and offered to the browser as something to save rather than to display.
@@ -270,19 +232,6 @@ Attaching a file to an opportunity or a proposal checks only that the file exist
 - note: no corrected criterion has been written because the right rule is not obvious — requiring that the attacher be the uploader would be the narrow fix, but a file legitimately shared between two members of an organization would fail it. Reaching this needs the identifier of somebody else's file, which the service hands out only to people already allowed to read it, so the practical effect is that read access can be widened by someone who has it rather than gained by someone who has not.
 - note: superseded by R-8.22
 
-### D-files-16 · v1 · open · recovered
-A file is never removed, and deleting the opportunity or proposal it was attached to removes only the attachment, leaving the file and its content stored and still readable by whoever could read them.
-- cites: src/back-end/lib/resources/file.ts:201
-- cites: src/migrations/tasks/20230116114550_twu_opportunities.ts:102
-- cites: src/migrations/tasks/20200201235459_cwu_cascades.ts:35
-- reconciliation: defect
-- given: a draft opportunity with a document attached, marked readable by anyone
-- when: the opportunity is deleted
-- then: the attachment link is removed with it, and the document remains stored and remains readable by anyone who has its identifier
-- state: proposed
-- note: no corrected criterion has been written because there is no removal operation to correct — the service offers no way to delete a file at all, so what a rebuild should do about withdrawn attachments, about a person removing an attachment while editing, and about the storage that accumulates is an unanswered question rather than a broken rule. Removing an attachment in the interface only stops the record referring to it; the file itself is untouched. This bites hardest with R-8.8, where the file was marked readable by anyone and there is no longer an opportunity whose state could take that back.
-- note: When an attachment is removed from an opportunity or a proposal, or the opportunity or proposal it hangs on is deleted, is the file itself removed, and what removes stored content once no record refers to it? Answering this needs the records-retention rule that applies to procurement attachments, which is stated in neither the code nor the documentation.
-
 ### R-8.16 · v1 · confirmed · recovered
 An uploaded file is written to a working directory on the service's own machine before it is stored, and is removed from there once the upload has been answered.
 - cites: src/back-end/lib/server/adapters.ts:173
@@ -296,19 +245,6 @@ An uploaded file is written to a working directory on the service's own machine 
 - then: in both cases the working copy is removed once the answer has been sent
 - state: accepted
 - note: the working directory is a setting the setup guide records, and the service creates it at start-up and refuses to start if it cannot. The removal step is only reached when the request is answered normally, so the cases in R-8.4 — where the upload fails as a fault of the service — leave their working copy behind.
-
-### D-files-17 · v1 · inferred · recovered
-An attachment can be given a different display name before it is uploaded, and the ending of the original file is put back on if the person leaves it off.
-- cites: src/front-end/typescript/lib/components/attachments.tsx:91
-- cites: src/shared/lib/resources/file.ts:67
-- cites: src/shared/lib/resources/file.ts:72
-- cites: src/front-end/typescript/lib/components/attachments.tsx:35
-- reconciliation: implemented-only
-- given: a person attaching a file called "scan0001.pdf" to an opportunity
-- when: they type "Statement of work" as its name and save
-- then: the attachment is stored as "Statement of work.pdf"
-- state: proposed
-- note: leaving the name box empty keeps the original name unchanged. The typed name is held to the same length rule as any other file name, and the error is shown against the attachment rather than against the form as a whole. Only attachments not yet uploaded can be renamed; an attachment already stored is shown read-only.
 
 ### R-8.17 · v1 · confirmed · authored
 An upload larger than the service's size limit is refused as the requester's error, with a message naming the limit, and the limit is stated in the interface before a person chooses a file rather than only after they submit it.
@@ -325,35 +261,10 @@ An attachment on an opportunity is uploaded with no read access recorded against
 - state: accepted
 - replaces: R-8.8
 
-### D-files-20 · v1 · inferred · recovered
-Profile pictures and organization logos are marked readable by anyone.
-- cites: src/front-end/typescript/lib/pages/user/lib/components/profile-form.tsx:369
-- cites: src/front-end/typescript/lib/pages/organization/lib/components/form.tsx:719
-- reconciliation: implemented-only
-- given: an organization with a logo
-- when: a visitor who is not signed in opens the organization list
-- then: the logo is shown to them
-- state: proposed
-- note: this is what lets a logo appear on the public organization list and a profile picture appear beside a person's name to any viewer. It also means the image stays readable by anyone after the profile or organization it belonged to has changed picture, since nothing takes the marking back and nothing removes the file.
-
 ### R-8.20 · v1 · confirmed · authored
 A file attached to an opportunity or a proposal is readable by whoever may read the thing it is attached to, under one rule covering Code With Us, Sprint With Us and Team With Us alike rather than a separate rule per program.
 - state: accepted
 - replaces: R-8.9
-
-### D-files-21 · v1 · inferred · recovered
-An image placed into a piece of formatted text is stored as an ordinary file marked readable by anyone, and the text refers to it by an internal marker that is turned into a download address only when the text is displayed.
-- cites: src/front-end/typescript/lib/http/api/file/markdown-image.ts:7
-- cites: src/front-end/typescript/lib/http/api/file/markdown-image.ts:21
-- cites: src/shared/lib/resources/file.ts:85
-- cites: src/shared/lib/resources/file.ts:89
-- cites: src/front-end/typescript/lib/views/markdown.tsx:45
-- reconciliation: aligned
-- given: an administrator editing a page's body with the image control
-- when: they choose an image and it is accepted
-- then: the image is inserted into the text as a reference the service resolves for itself, and a reader of the finished page sees the image
-- state: proposed
-- note: the stored text never contains a web address, so the same text renders correctly wherever the service is running and whatever address it answers on. A marker that does not resolve to a known file identifier is left alone and treated as an ordinary address, so text written elsewhere still works. The content domain already expects image upload in the editor and defers what may be uploaded to here; this criterion is the other half of that.
 
 ### R-8.21 · v1 · confirmed · authored
 A profile picture or organization logo is accepted only if its content can be read as a JPEG or a PNG, and a file whose content is neither is refused whatever its name says; an image that reads successfully but cannot be resized is stored at its original size rather than refused.
@@ -365,7 +276,98 @@ A file may be attached to an opportunity or a proposal only by someone who is pe
 - state: accepted
 - replaces: R-8.15
 
-### D-files-24 · v1 · inferred · recovered
+### R-8.23 · v2 · confirmed · recovered
+An upload whose name is longer than 255 characters is refused as a bad request, and the person is told the file name must be between 1 and 255 characters long; an upload carrying no usable name at all never reaches this check and instead fails as the service fault described by R-8.4.
+- cites: src/shared/lib/validation/file.ts:25
+- cites: src/shared/lib/validation/file.ts:30
+- cites: src/back-end/lib/resources/file.ts:137
+- reconciliation: implemented-only
+- given: a signed-in person uploading a file
+- when: they give it a name of 256 characters
+- then: the upload is refused and the message names the permitted length
+- state: accepted
+- note: the limit is the length an ordinary file system will accept, not a rule of this service. Nothing else about the name is checked — no character restriction, no extension requirement, and no check that the name matches the content — except on the profile picture and logo route.
+
+### R-8.24 · v2 · confirmed · recovered
+An upload that carries no read-access statement, or one that is well-formed data but names a kind of access the service does not recognise, is refused as a bad request reporting that the information provided was invalid, and no file is stored; read-access information that is not well-formed data at all fails instead as the service fault described by R-8.4.
+- cites: src/back-end/lib/resources/file.ts:138
+- cites: src/shared/lib/validation/file.ts:64
+- cites: src/back-end/index.ts:301
+- reconciliation: implemented-only
+- given: a signed-in person uploading a file
+- when: they omit the read-access statement, or give one naming a kind of access the service does not recognise
+- then: the upload is refused as having invalid read-access information and no file is stored
+- state: accepted
+- note: the three kinds recognised are "anyone", "this one named person" and "anyone of this account type"; a statement naming a person must carry a well-formed identifier and one naming an account type must name a type the service knows. Repeated entries are reduced to one before they are recorded.
+
+### R-8.25 · v1 · confirmed · recovered
+A file is also readable through what it is attached to: an attachment on a Code With Us or Sprint With Us opportunity is readable by anyone once that opportunity is publicly visible and by the opportunity's creator before then, and an attachment on a proposal is readable by whoever may read that proposal.
+- cites: src/back-end/lib/permissions.ts:338
+- cites: src/back-end/lib/permissions.ts:339
+- cites: src/back-end/lib/db/proposal/code-with-us.ts:282
+- cites: src/back-end/lib/db/proposal/code-with-us.ts:314
+- cites: src/back-end/lib/db/proposal/sprint-with-us.ts:2020
+- reconciliation: implemented-only
+- given: an attachment on a Code With Us opportunity that has not yet been published
+- when: a vendor asks for it, and then the opportunity is published and the same vendor asks again
+- then: the vendor is refused the first time and receives the file the second time
+- state: accepted
+- note: this is what makes a Code With Us attachment behave correctly without any read access recorded against the file itself — the attachment is checked against the state of the thing it hangs on, every time it is asked for, so the file becomes readable exactly when its opportunity does.
+
+### R-8.26 · v1 · confirmed · recovered
+A file is never removed, and deleting the opportunity or proposal it was attached to removes only the attachment, leaving the file and its content stored and still readable by whoever could read them.
+- cites: src/back-end/lib/resources/file.ts:201
+- cites: src/migrations/tasks/20230116114550_twu_opportunities.ts:102
+- cites: src/migrations/tasks/20200201235459_cwu_cascades.ts:35
+- reconciliation: defect
+- given: a draft opportunity with a document attached, marked readable by anyone
+- when: the opportunity is deleted
+- then: the attachment link is removed with it, and the document remains stored and remains readable by anyone who has its identifier
+- state: accepted
+- superseded-by: R-8.31
+- note: no corrected criterion has been written because there is no removal operation to correct — the service offers no way to delete a file at all, so what a rebuild should do about withdrawn attachments, about a person removing an attachment while editing, and about the storage that accumulates is an unanswered question rather than a broken rule. Removing an attachment in the interface only stops the record referring to it; the file itself is untouched. This bites hardest with R-8.8, where the file was marked readable by anyone and there is no longer an opportunity whose state could take that back.
+- note: When an attachment is removed from an opportunity or a proposal, or the opportunity or proposal it hangs on is deleted, is the file itself removed, and what removes stored content once no record refers to it? Answering this needs the records-retention rule that applies to procurement attachments, which is stated in neither the code nor the documentation.
+- note: superseded by R-8.31
+
+### R-8.27 · v1 · confirmed · recovered
+An attachment can be given a different display name before it is uploaded, and the ending of the original file is put back on if the person leaves it off.
+- cites: src/front-end/typescript/lib/components/attachments.tsx:91
+- cites: src/shared/lib/resources/file.ts:67
+- cites: src/shared/lib/resources/file.ts:72
+- cites: src/front-end/typescript/lib/components/attachments.tsx:35
+- reconciliation: implemented-only
+- given: a person attaching a file called "scan0001.pdf" to an opportunity
+- when: they type "Statement of work" as its name and save
+- then: the attachment is stored as "Statement of work.pdf"
+- state: accepted
+- note: leaving the name box empty keeps the original name unchanged. The typed name is held to the same length rule as any other file name, and the error is shown against the attachment rather than against the form as a whole. Only attachments not yet uploaded can be renamed; an attachment already stored is shown read-only.
+
+### R-8.28 · v1 · confirmed · recovered
+Profile pictures and organization logos are marked readable by anyone.
+- cites: src/front-end/typescript/lib/pages/user/lib/components/profile-form.tsx:369
+- cites: src/front-end/typescript/lib/pages/organization/lib/components/form.tsx:719
+- reconciliation: implemented-only
+- given: an organization with a logo
+- when: a visitor who is not signed in opens the organization list
+- then: the logo is shown to them
+- state: accepted
+- note: this is what lets a logo appear on the public organization list and a profile picture appear beside a person's name to any viewer. It also means the image stays readable by anyone after the profile or organization it belonged to has changed picture, since nothing takes the marking back and nothing removes the file.
+
+### R-8.29 · v1 · confirmed · recovered
+An image placed into a piece of formatted text is stored as an ordinary file marked readable by anyone, and the text refers to it by an internal marker that is turned into a download address only when the text is displayed.
+- cites: src/front-end/typescript/lib/http/api/file/markdown-image.ts:7
+- cites: src/front-end/typescript/lib/http/api/file/markdown-image.ts:21
+- cites: src/shared/lib/resources/file.ts:85
+- cites: src/shared/lib/resources/file.ts:89
+- cites: src/front-end/typescript/lib/views/markdown.tsx:45
+- reconciliation: aligned
+- given: an administrator editing a page's body with the image control
+- when: they choose an image and it is accepted
+- then: the image is inserted into the text as a reference the service resolves for itself, and a reader of the finished page sees the image
+- state: accepted
+- note: the stored text never contains a web address, so the same text renders correctly wherever the service is running and whatever address it answers on. A marker that does not resolve to a known file identifier is left alone and treated as an ordinary address, so text written elsewhere still works. The content domain already expects image upload in the editor and defers what may be uploaded to here; this criterion is the other half of that.
+
+### R-8.30 · v1 · confirmed · recovered
 A profile picture or an organization logo whose name does not end in .jpg, .jpeg or .png is refused.
 - cites: src/back-end/lib/resources/avatar.ts:72
 - cites: src/shared/lib/validation/file.ts:21
@@ -377,5 +379,10 @@ A profile picture or an organization logo whose name does not end in .jpg, .jpeg
 - given: a signed-in person choosing a new profile picture
 - when: they upload a file named "portrait.gif"
 - then: the upload is refused for having an ending that is not allowed, and no file is stored
-- state: proposed
+- state: accepted
 - note: the ending is compared without regard to capitalisation. The file choosers for a profile picture and for a logo both offer only these three endings, but the check on the service side is what actually enforces it. Nothing looks at the content, which is what makes R-8.14 possible.
+
+### R-8.31 · v1 · confirmed · authored
+Removing an attachment from an opportunity or a proposal, or deleting the opportunity or proposal it hangs on, withdraws every read path the file held through that association, and a file that no record refers to any longer is identifiable as detached so that stored content can be disposed of under the records-retention rule for procurement attachments, which is set outside this domain.
+- state: accepted
+- replaces: R-8.26
