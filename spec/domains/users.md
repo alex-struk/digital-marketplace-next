@@ -150,7 +150,7 @@ Only an administrator may reactivate somebody else's account, and only an accoun
 - given: one account deactivated by an administrator and one the person deactivated themselves
 - when: an administrator uses the reactivate control on each
 - then: the first becomes active and the second is refused, with the interface showing only a general failure message
-- state: accepted
+- state: obsolete
 - superseded-by: R-4.19
 - note: the interface offers a "Reactivate Account" control for every inactive account, without distinguishing the two kinds of inactivity, so an administrator is invited to perform an action the service will always refuse. No corrected criterion has been written because it is undecided whether an administrator should be able to reactivate a self-deactivated account or the control should simply be hidden for one.
 - note: superseded by R-4.19
@@ -165,7 +165,7 @@ A person whose account an administrator reactivates is told that they themselves
 - given: an account an administrator deactivated
 - when: an administrator reactivates it
 - then: the person receives a message saying "You have successfully reactivated your Digital Marketplace account", which is not what happened
-- state: accepted
+- state: obsolete
 - superseded-by: R-4.20
 - note: a correctly worded message for administrator reactivation exists and appears in the service's internal preview of every notification, but nothing sends it. No corrected criterion has been written; the fix is to send the message that already exists.
 - note: superseded by R-4.20

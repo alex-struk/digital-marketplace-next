@@ -1,5 +1,5 @@
 {
-  "generated_from": "897abf82ff1b013b15ba65777ea1336a8f5e50f6",
+  "generated_from": "7a0d47692af14ab67cbbdeb0e701a6cf71199a60",
   "criteria": [
     {
       "id": "R-7.1",
@@ -8870,7 +8870,7 @@
         "the interface offers a \"Reactivate Account\" control for every inactive account, without distinguishing the two kinds of inactivity, so an administrator is invited to perform an action the service will always refuse. No corrected criterion has been written because it is undecided whether an administrator should be able to reactivate a self-deactivated account or the control should simply be hidden for one.",
         "superseded by R-4.19"
       ],
-      "state": "accepted",
+      "state": "obsolete",
       "supersededBy": "R-4.19",
       "raw": "### R-4.10 · v1 · confirmed · recovered",
       "line": 142,
@@ -8909,7 +8909,7 @@
         "a correctly worded message for administrator reactivation exists and appears in the service's internal preview of every notification, but nothing sends it. No corrected criterion has been written; the fix is to send the message that already exists.",
         "superseded by R-4.20"
       ],
-      "state": "accepted",
+      "state": "obsolete",
       "supersededBy": "R-4.20",
       "raw": "### R-4.11 · v1 · confirmed · recovered",
       "line": 158,

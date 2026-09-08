@@ -172,7 +172,7 @@ A person may deactivate their own account, which ends their session at once, rec
 - then: they are signed out, shown a page confirming the deactivation, sent a message telling them they can return by signing in again, and their account is kept with the date of deactivation and the fact that they did it themselves
 - note: the published description says the account simply becomes "Inactive"; the service actually distinguishes an account deactivated by its owner from one deactivated by an administrator, and only the second can be reactivated by an administrator.
 
-### R-4.10 · v1 · confirmed · accepted
+### R-4.10 · v1 · confirmed · obsolete
 
 Only an administrator may reactivate somebody else's account, and only an account that an administrator deactivated; a request to reactivate an account the person deactivated themselves is refused, although the interface offers the control.
 - cites: src/back-end/lib/permissions.ts:175
@@ -188,7 +188,7 @@ Only an administrator may reactivate somebody else's account, and only an accoun
 - note: the interface offers a "Reactivate Account" control for every inactive account, without distinguishing the two kinds of inactivity, so an administrator is invited to perform an action the service will always refuse. No corrected criterion has been written because it is undecided whether an administrator should be able to reactivate a self-deactivated account or the control should simply be hidden for one.
 - note: superseded by R-4.19
 
-### R-4.11 · v1 · confirmed · accepted
+### R-4.11 · v1 · confirmed · obsolete
 
 A person whose account an administrator reactivates is told that they themselves successfully reactivated it.
 - cites: src/back-end/lib/resources/user.ts:310
