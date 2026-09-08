@@ -1,8 +1,15 @@
 | Field | Value |
 | --- | --- |
-| gate | G3 |
-| opened | 2026-09-07T14:59:14.790Z |
-| holder | agent:reviewer |
+| gate |  |
+| opened |  |
+| holder |  |
+
+---
+gate: G3
+question: "Do the revised organizations tests now follow from their criteria and from nothing else?"
+recommendation: "All three conditions are acted on; one of them could only be satisfied in substance, not byte-for-byte, and that needs stating plainly."
+opened: 2026-09-07T14:59:14.790Z
+---
 
 # Do the revised organizations tests now follow from their criteria and from nothing else?
 

@@ -1,8 +1,15 @@
 | Field | Value |
 | --- | --- |
-| gate | G0 |
-| opened | 2026-09-07T00:15:57.203Z |
-| holder | agent:product-owner |
+| gate |  |
+| opened |  |
+| holder |  |
+
+---
+gate: G0
+question: "Is this the right problem and outcome?"
+recommendation: "Two files touched, both inside my boundary: one new intent document and one row added to the constitution."
+opened: 2026-09-07T00:15:57.203Z
+---
 
 # Is this the right problem and outcome?
 

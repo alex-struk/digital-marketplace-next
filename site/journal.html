@@ -15,16 +15,19 @@
   <span class="profile">rebuild profile</span>
 </div>
 <div class="shell">
-<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="index.html">Overview</a></li><li><a href="gates.html">Gate log <span class="count">50</span></a></li><li><a href="proposals.html">Proposals <span class="count">50</span></a></li><li><a href="results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="journal.html" aria-current="page">Journal <span class="count">52</span></a></li><li><a href="runs.html">Run log <span class="count">2</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="criteria/users.html">users <span class="count">36</span></a></li><li><a href="criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="criteria/content.html">content <span class="count">31</span></a></li><li><a href="criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="index.html">Overview</a></li><li><a href="gates.html">Gate log <span class="count">51</span></a></li><li><a href="proposals.html">Proposals <span class="count">51</span></a></li><li><a href="results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="journal.html" aria-current="page">Journal <span class="count">52</span></a></li><li><a href="runs.html">Run log <span class="count">3</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="criteria/users.html">users <span class="count">36</span></a></li><li><a href="criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="criteria/content.html">content <span class="count">31</span></a></li><li><a href="criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
 <main id="main">
 <div class="page-head"><h1>Journal</h1>
 <p class="lede">One entry per stage run, newest first, with what it cost and how many turns it took. Together they are the record of what the agents did and why.</p></div>
 <article class="entry">
       <header>
-        <h2>052 · derive-tests</h2>
-        <p class="meta">2026-09-07 · 19 turns · $0.99</p>
+        <h2>052 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>I made no edits this run. Here is why, and what I verified.</p>
+      <div class="body"><hr>
+<p>stage: &quot;derive-tests&quot; title: &quot;derive tests&quot; at: &quot;2026-09-07T16:57:46.741Z&quot; cost: 0.992475 turns: 19 session: &quot;b16e5040-3737-437e-b1dc-166b082bd0ed&quot;</p>
+<hr>
+<p>I made no edits this run. Here is why, and what I verified.</p>
 <h3>Journal</h3>
 <p><strong>Condition 1 — restore the eighteen R-8.* rows.</strong> Already satisfied in the tree I was handed. <code>tests/acceptance/not-testable.yaml</code> carries all eighteen ids the condition names — R-8.3, .4, .5, .6, .7, .8, .9, .11, .13, .15, .16, .17, .18, .19, .22, .24, .26, .31 — each with a substantive reason in the same register as the rest of the file (naming specific missing observations: no observation returning a stored file&#39;s identifier, no fault-of-the-service observation, no image-dimension observation, and so on). Their version fields check out against <code>spec/criteria-index.json</code>: seventeen at v1 and R-8.24 at v2, exactly as the index records. The arithmetic the condition asked for now holds — thirteen R-8 spec files plus eighteen R-8 rows account for all thirty-one files-domain criteria, with no id appearing in both places and none unaccounted for. This slice&#39;s seven R-7 rows (R-7.11, .14, .15, .16, .23, .28, .29) are intact, and the R-7.18 removal is preserved: R-7.18 has a spec file and no row. Content likewise closes: twenty-two R-7 spec files plus seven rows equal the twenty-nine R-7 criteria.</p>
 <p><strong>Condition 2 — supply the rows from outside this workspace.</strong> This was a directive to the pipeline rather than to me, and it was honoured. The workspace is still spec-only with no git history and no reachable copy of main, so I could not have recovered the rows from within it; they arrived in the tree instead. That is the mechanism the condition prescribed, and it worked.</p>
@@ -35,10 +38,13 @@
     </article>
 <article class="entry">
       <header>
-        <h2>051 · derive-tests</h2>
-        <p class="meta">2026-09-07 · 36 turns · $1.83</p>
+        <h2>051 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>All four conditions are addressed to the extent the workspace permits. Final accounting check passes: 35 accepted R-3 criteria = 28 spec files + 3 not-testable entries (R-3.17, R-3.20, R-3.35) + 4 superseded criteria deliberately left to their replacements.</p>
+      <div class="body"><hr>
+<p>stage: &quot;derive-tests&quot; title: &quot;derive tests&quot; at: &quot;2026-09-07T16:25:07.079Z&quot; cost: 1.8290375 turns: 36 session: &quot;08d56f39-8cee-42df-a0bd-8cc922d2cd98&quot;</p>
+<hr>
+<p>All four conditions are addressed to the extent the workspace permits. Final accounting check passes: 35 accepted R-3 criteria = 28 spec files + 3 not-testable entries (R-3.17, R-3.20, R-3.35) + 4 superseded criteria deliberately left to their replacements.</p>
 <hr>
 <h3>Journal</h3>
 <p><strong>Condition 1 — not done, and deliberately so.</strong> The condition instructs me to restore the thirty-four R-6.* and R-8.* reasons verbatim via <code>git show main:tests/acceptance/not-testable.yaml</code>. This workspace is not a git repository — there is no <code>.git</code> anywhere reachable, <code>git</code> itself is outside what I can run here, and a filesystem search turns up exactly one copy of <code>not-testable.yaml</code>, the working one. Main&#39;s text is not available to me in any form.</p>
@@ -53,10 +59,13 @@
     </article>
 <article class="entry">
       <header>
-        <h2>050 · derive-tests</h2>
-        <p class="meta">2026-09-07 · 18 turns · $0.71</p>
+        <h2>050 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>No dependencies are installed in this workspace (<code>tests/node_modules</code> is absent), so I could not run the typecheck or the separation check; both files use only the same imports and call shapes as the neighbouring specs that already pass.</p>
+      <div class="body"><hr>
+<p>stage: &quot;derive-tests&quot; title: &quot;derive tests&quot; at: &quot;2026-09-07T15:58:52.875Z&quot; cost: 0.7054995000000001 turns: 18 session: &quot;84f0e417-c490-49f1-8feb-cf74711da48a&quot;</p>
+<hr>
+<p>No dependencies are installed in this workspace (<code>tests/node_modules</code> is absent), so I could not run the typecheck or the separation check; both files use only the same imports and call shapes as the neighbouring specs that already pass.</p>
 <p><strong>Journal</strong></p>
 <p>I acted on two of the three conditions and left the third alone by doing nothing, which is what it asked for.</p>
 <p>For the first condition, I rewrote <code>tests/acceptance/opportunities/R-1.7.spec.ts</code> so that each of its two tests actually attempts the creation the criterion is about, instead of inspecting what the requester was offered. Both tests now open the Code With Us create page and call <code>saveDraft</code> with a title of their own — as a vendor in the first test, signed out entirely in the second — and then sign in as an administrator and assert that the title does not appear in <code>opportunityList.unpublishedGroup()</code>. That is the route the review named, and the same shape R-1.48&#39;s first test uses: an administrator is the one requester certain to see an opportunity whatever state it reached, and a draft that had been created would stand in the unpublished group. The <code>programCard()</code> and <code>myOpportunitiesTable()</code> assertions are gone, along with the reasoning comment that justified them; the replacement comment says why the reading is done by an administrator and notes that R-1.48 already establishes that a title-alone draft is accepted from a permitted requester, so nothing but the requester&#39;s standing is left to refuse it here. The vendor test signs out before the administrator reads back; the anonymous test has no session to drop. The header lines are untouched apart from being the same two lines they were.</p>
@@ -66,20 +75,26 @@
     </article>
 <article class="entry">
       <header>
-        <h2>049 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>049 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify opportunities: 56 accepted, 0 still open, 1 obsolete, 0 replacement(s) added. Conditions from: contract-v1. Obsolete:</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify opportunities&quot; at: &quot;2026-09-07T15:36:32.913Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify opportunities: 56 accepted, 0 still open, 1 obsolete, 0 replacement(s) added. Conditions from: contract-v1. Obsolete:</p>
 <ul><li>D-opportunities-51 — It records that the old application&#39;s own interface description is incomplete, which is a property of the recovered sources rather than a behaviour the rebuilt system must exhibit; the behaviours it points at are already carried by the criteria above, and the documentation&#39;s unreliability belongs in the archaeology journal.</li></ul>
 <p>Unknown conditions (reported, not applied):</p>
 <ul><li>Regrade D-opportunities-2 against constitution article J1, which already establishes that all three programs carry forward; the stale README and schema document are a documentation fact, not an open scope question.</li><li>Obtain human rulings on the four conflicting and three defect criteria before build, not during it: D-opportunities-49 (who may edit a published opportunity), -25 (who may delete and at what state), -47 (Team With Us award out of processing), -11 (whether an evaluation panel requires a chair), -46 (Code With Us create-as-published bypassing administrator-only publication), -48 (deprecated consensus-skipping path), -50 (unreachable &#39;suspended&#39; state).</li><li>Withdraw D-opportunities-51 as a criterion at ratify or move it to the journal: its outcome is a statement about the old application&#39;s documentation being unreliable, not a behaviour the rebuilt system must exhibit.</li><li>No inferred criterion may be upgraded to confirmed on the strength of the old application&#39;s README, generated schema document or OpenAPI files, which this recovery shows to be materially behind the code.</li><li>Record that the old test suite was not read because .sdlc/config.yaml excludes cypress/ and tests/; if a later stage wants criteria upgraded rather than ruled, lifting that exclusion is a policy change to propose, not an archaeology re-run.</li><li>Future archaeology proposals must carry an actual recommendation in front-matter; &#39;I&#39;ve finished.&#39; gives the gate holder nothing to rule on.</li><li>confirm D-opportunities-1</li><li>confirm D-opportunities-2</li><li>edit D-opportunities-3: An opportunity saved as a draft is accepted with incomplete content; when its proposal deadline, assignment date or start date is missing or invalid it is set to fourteen days from the day of saving, and its completion date is left empty.</li><li>confirm D-opportunities-4</li><li>confirm D-opportunities-5</li><li>confirm D-opportunities-6</li><li>confirm D-opportunities-7</li><li>confirm D-opportunities-8</li><li>confirm D-opportunities-9</li><li>confirm D-opportunities-10</li><li>spike D-opportunities-11: Must a Sprint With Us or Team With Us evaluation panel have exactly one chair, as the application&#39;s own comment states, or is a chair optional, as the code allows?</li><li>confirm D-opportunities-12</li><li>confirm D-opportunities-13</li><li>confirm D-opportunities-14</li><li>confirm D-opportunities-15</li><li>confirm D-opportunities-16</li><li>confirm D-opportunities-17</li><li>confirm D-opportunities-18</li><li>confirm D-opportunities-20</li><li>confirm D-opportunities-21</li><li>confirm D-opportunities-22</li><li>confirm D-opportunities-23</li><li>confirm D-opportunities-24</li><li>spike D-opportunities-25: Which single deletion rule carries forward across all three programs: may an administrator delete an opportunity that is under review as well as one in draft, and may the creating public sector employee delete one that is under review, or only a draft?</li><li>confirm D-opportunities-28</li><li>confirm D-opportunities-29</li><li>confirm D-opportunities-30</li><li>confirm D-opportunities-32</li><li>confirm D-opportunities-33</li><li>confirm D-opportunities-35</li><li>confirm D-opportunities-36</li><li>confirm D-opportunities-37</li><li>confirm D-opportunities-38</li><li>confirm D-opportunities-39</li><li>confirm D-opportunities-40</li><li>confirm D-opportunities-42</li><li>confirm D-opportunities-43</li><li>confirm D-opportunities-44</li><li>confirm D-opportunities-45</li><li>defect D-opportunities-46: Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs.</li><li>defect D-opportunities-47: The permitted state changes for a Team With Us opportunity in processing are awarded and cancelled, matching Code With Us and Sprint With Us, so the recorded transitions and the award path agree.</li><li>defect D-opportunities-48: There is exactly one path out of a questions consensus stage, and it refuses to advance unless every consensus evaluation has been submitted and at least one proponent has met the minimum score on every question that sets one.</li><li>spike D-opportunities-49: May the author of a published opportunity who is not an administrator change its details, as the service accepts, or is editing after publication administrator-only, as the interface enforces?</li><li>defect D-opportunities-50: The rebuilt system defines no suspended state for an opportunity: none can be created in it, moved to it or stored in it, and any historical record carrying it is mapped to a defined state before the rebuilt system reads it.</li><li>defect D-opportunities-11: A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named.</li><li>edit D-opportunities-25: An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains.</li><li>defect D-opportunities-49: Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike.</li></ul></div>
     </article>
 <article class="entry">
       <header>
-        <h2>048 · derive-tests</h2>
-        <p class="meta">2026-09-07 · 43 turns · $4.42</p>
+        <h2>048 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>I&#39;ve finished. Thirteen spec files and eighteen not-testable entries, covering all 31 criteria.</p>
+      <div class="body"><hr>
+<p>stage: &quot;derive-tests&quot; title: &quot;derive tests&quot; at: &quot;2026-09-07T14:32:15.688Z&quot; cost: 4.4173529999999985 turns: 43 session: &quot;deae8fe2-cea8-4512-b8ff-830b0a417b36&quot;</p>
+<hr>
+<p>I&#39;ve finished. Thirteen spec files and eighteen not-testable entries, covering all 31 criteria.</p>
 <h3>Journal</h3>
 <p>I derived acceptance tests for the 31 accepted criteria of the <strong>files</strong> domain from the contract alone — <code>tests/generated/surface.d.ts</code>, <code>personas.ts</code>, <code>seed.ts</code> and the seed manifest. Thirteen criteria got a spec file under <code>tests/acceptance/files/</code> (17 <code>test()</code> blocks in all); the remaining eighteen got entries in <code>tests/acceptance/not-testable.yaml</code>, appended after the notifications entries already there.</p>
 <p><strong>Tested:</strong> R-8.1, R-8.2, R-8.10, R-8.12 (two tests, vendor and administrator), R-8.14, R-8.20, R-8.21, R-8.23, R-8.25 (two tests), R-8.27, R-8.28 (two tests, picture and logo), R-8.29, R-8.30.</p>
@@ -93,10 +108,13 @@
     </article>
 <article class="entry">
       <header>
-        <h2>047 · derive-tests</h2>
-        <p class="meta">2026-09-07 · 39 turns · $3.38</p>
+        <h2>047 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>All twelve files are clean of implementation reaches, and <code>not-testable.yaml</code> carries the other sixteen. Dependencies aren&#39;t installed in this workspace (<code>tests/node_modules</code> is absent), so I could not run <code>npm run typecheck</code> or the suite itself; I hand-checked the types against the generated declarations instead.</p>
+      <div class="body"><hr>
+<p>stage: &quot;derive-tests&quot; title: &quot;derive tests&quot; at: &quot;2026-09-07T14:03:18.328Z&quot; cost: 3.3780640000000006 turns: 39 session: &quot;70093e4d-dea4-4a2d-a547-11d84e7069e9&quot;</p>
+<hr>
+<p>All twelve files are clean of implementation reaches, and <code>not-testable.yaml</code> carries the other sixteen. Dependencies aren&#39;t installed in this workspace (<code>tests/node_modules</code> is absent), so I could not run <code>npm run typecheck</code> or the suite itself; I hand-checked the types against the generated declarations instead.</p>
 <hr>
 <h3>Journal</h3>
 <p>I derived tests for the twenty-eight accepted criteria of the notifications domain from the contract alone — <code>spec/</code>, the generated <code>surface.d.ts</code>, <code>personas.ts</code>, <code>seed.ts</code>, and the <code>mail</code> fixture. Twelve criteria got a spec file (fourteen <code>test()</code> cases in all: R-6.7 and R-6.17 each state two outcomes and so got two); sixteen got an entry in <code>not-testable.yaml</code>.</p>
@@ -111,103 +129,145 @@
     </article>
 <article class="entry">
       <header>
-        <h2>046 · derive-tests</h2>
-        <p class="meta">2026-09-07 · 1 turns · $0.00</p>
+        <h2>046 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
+      <div class="body"><hr>
+<p>stage: &quot;derive-tests&quot; title: &quot;derive-tests: agent turn failed&quot; at: &quot;2026-09-07T12:27:38.816Z&quot; cost: 0 turns: 1 session: &quot;1c793022-3377-49d0-afd4-516c17500f26&quot;</p>
+<hr>
+<p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
     </article>
 <article class="entry">
       <header>
-        <h2>045 · derive-tests</h2>
-        <p class="meta">2026-09-07 · 1 turns · $0.00</p>
+        <h2>045 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
+      <div class="body"><hr>
+<p>stage: &quot;derive-tests&quot; title: &quot;derive-tests: agent turn failed&quot; at: &quot;2026-09-07T12:27:34.180Z&quot; cost: 0 turns: 1 session: &quot;2567e910-210a-4a42-bc8e-ff20f51b1db8&quot;</p>
+<hr>
+<p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
     </article>
 <article class="entry">
       <header>
-        <h2>044 · derive-tests</h2>
-        <p class="meta">2026-09-07 · 1 turns · $0.00</p>
+        <h2>044 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
+      <div class="body"><hr>
+<p>stage: &quot;derive-tests&quot; title: &quot;derive-tests: agent turn failed&quot; at: &quot;2026-09-07T12:27:27.584Z&quot; cost: 0 turns: 1 session: &quot;82465906-8f13-4192-ad4e-337c2b1ac403&quot;</p>
+<hr>
+<p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
     </article>
 <article class="entry">
       <header>
-        <h2>043 · derive-tests</h2>
-        <p class="meta">2026-09-07 · 1 turns · $0.00</p>
+        <h2>043 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
+      <div class="body"><hr>
+<p>stage: &quot;derive-tests&quot; title: &quot;derive-tests: agent turn failed&quot; at: &quot;2026-09-07T12:27:22.906Z&quot; cost: 0 turns: 1 session: &quot;bbb15810-8d09-431f-8655-59ff68135cc6&quot;</p>
+<hr>
+<p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
     </article>
 <article class="entry">
       <header>
-        <h2>042 · derive-tests</h2>
-        <p class="meta">2026-09-07 · 1 turns · $0.00</p>
+        <h2>042 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
+      <div class="body"><hr>
+<p>stage: &quot;derive-tests&quot; title: &quot;derive-tests: agent turn failed&quot; at: &quot;2026-09-07T12:27:15.962Z&quot; cost: 0 turns: 1 session: &quot;b5a54e55-6d02-42f0-ac78-4fc2eeb60200&quot;</p>
+<hr>
+<p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
     </article>
 <article class="entry">
       <header>
-        <h2>041 · derive-tests</h2>
-        <p class="meta">2026-09-07 · 1 turns · $0.00</p>
+        <h2>041 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
+      <div class="body"><hr>
+<p>stage: &quot;derive-tests&quot; title: &quot;derive-tests: agent turn failed&quot; at: &quot;2026-09-07T12:27:11.413Z&quot; cost: 0 turns: 1 session: &quot;591eadd0-2fec-4652-927c-18155725bffd&quot;</p>
+<hr>
+<p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
     </article>
 <article class="entry">
       <header>
-        <h2>040 · derive-tests</h2>
-        <p class="meta">2026-09-07 · 1 turns · $0.00</p>
+        <h2>040 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
+      <div class="body"><hr>
+<p>stage: &quot;derive-tests&quot; title: &quot;derive-tests: agent turn failed&quot; at: &quot;2026-09-07T12:27:05.192Z&quot; cost: 0 turns: 1 session: &quot;9d9da8f1-484a-4ff5-aac0-eb53a91f5e2a&quot;</p>
+<hr>
+<p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
     </article>
 <article class="entry">
       <header>
-        <h2>039 · derive-tests</h2>
-        <p class="meta">2026-09-07 · 1 turns · $0.00</p>
+        <h2>039 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
+      <div class="body"><hr>
+<p>stage: &quot;derive-tests&quot; title: &quot;derive-tests: agent turn failed&quot; at: &quot;2026-09-07T12:27:00.110Z&quot; cost: 0 turns: 1 session: &quot;e73acff1-fb30-4d79-a753-50721ad7922f&quot;</p>
+<hr>
+<p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
     </article>
 <article class="entry">
       <header>
-        <h2>038 · derive-tests</h2>
-        <p class="meta">2026-09-07 · 1 turns · $0.00</p>
+        <h2>038 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
+      <div class="body"><hr>
+<p>stage: &quot;derive-tests&quot; title: &quot;derive-tests: agent turn failed&quot; at: &quot;2026-09-07T12:26:54.047Z&quot; cost: 0 turns: 1 session: &quot;b2e65d37-b68d-4532-be53-b09e5653bb64&quot;</p>
+<hr>
+<p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
     </article>
 <article class="entry">
       <header>
-        <h2>037 · derive-tests</h2>
-        <p class="meta">2026-09-07 · 1 turns · $0.00</p>
+        <h2>037 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
+      <div class="body"><hr>
+<p>stage: &quot;derive-tests&quot; title: &quot;derive-tests: agent turn failed&quot; at: &quot;2026-09-07T12:26:49.372Z&quot; cost: 0 turns: 1 session: &quot;4a26888e-b72f-4122-a869-ed1fbf77730f&quot;</p>
+<hr>
+<p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
     </article>
 <article class="entry">
       <header>
-        <h2>036 · derive-tests</h2>
-        <p class="meta">2026-09-07 · 1 turns · $0.00</p>
+        <h2>036 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
+      <div class="body"><hr>
+<p>stage: &quot;derive-tests&quot; title: &quot;derive-tests: agent turn failed&quot; at: &quot;2026-09-07T12:26:42.493Z&quot; cost: 0 turns: 1 session: &quot;6570e456-d157-4743-bf70-4269edd980f7&quot;</p>
+<hr>
+<p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
     </article>
 <article class="entry">
       <header>
-        <h2>035 · derive-tests</h2>
-        <p class="meta">2026-09-07 · 45 turns · $3.48</p>
+        <h2>035 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
+      <div class="body"><hr>
+<p>stage: &quot;derive-tests&quot; title: &quot;derive-tests: agent turn failed&quot; at: &quot;2026-09-07T12:26:37.849Z&quot; cost: 3.4780284999999997 turns: 45 session: &quot;8e134b9e-3028-4723-ad69-0d4bcaae5f16&quot;</p>
+<hr>
+<p>You&#39;ve hit your session limit · resets 5:40am (America/Vancouver)</p></div>
     </article>
 <article class="entry">
       <header>
-        <h2>034 · contract</h2>
-        <p class="meta">2026-09-07 · 7 turns · $0.47</p>
+        <h2>034 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>(resumed; agent output unavailable)</p>
+      <div class="body"><hr>
+<p>stage: &quot;contract&quot; title: &quot;contract&quot; at: &quot;2026-09-07T11:47:33.463Z&quot; cost: 0.469701 turns: 7 session: &quot;&quot;</p>
+<hr>
+<p>(resumed; agent output unavailable)</p>
 <h3>Fix turn</h3>
 <p><strong>Journal addition.</strong> The persona <code>public-sector-staff-other</code> had <code>session-route: null</code> on its <code>sign_in</code> map, which the post-check read as a missing sign-in method for an identity the project configures. <code>null</code> on a whole <code>sign_in</code> is the deliberate &quot;there is nothing to sign in with&quot; marker for a role like the anonymous visitor; it is the wrong shape for a role the oracle genuinely cannot host a session for. That persona&#39;s entry now carries <code>session-route: { unavailable: … }</code>, with the reason stated in full: the old application exposes exactly three non-production sign-in routes, the two public-sector ones each mint a session for one fixed account, and neither takes a parameter that would reach a second non-administrator public-sector account — so the account can be seeded and observed on the oracle, but never acted as. <code>bind-adapter</code> will therefore throw from <code>signIn</code> for that identity and any criterion needing this persona reports as <code>unbound</code> on the oracle rather than as a failure. Its <code>sandbox-idp</code> entry (<code>username: gov-second</code>) is unchanged, so the persona still signs in normally on the rebuilt target. Nothing else in the contract was touched.</p></div>
     </article>
 <article class="entry">
       <header>
-        <h2>033 · contract</h2>
-        <p class="meta">2026-09-07 · 139 turns · $15.01</p>
+        <h2>033 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>All six deliverables are written. Here is my journal entry.</p>
+      <div class="body"><hr>
+<p>stage: &quot;contract&quot; title: &quot;contract: post-checks failed&quot; at: &quot;2026-09-07T11:26:02.584Z&quot; cost: 15.005878000000004 turns: 139 session: &quot;5d62f9c1-5025-408f-9719-580587818d79&quot;</p>
+<hr>
+<p>All six deliverables are written. Here is my journal entry.</p>
 <hr>
 <h3>Contract stage — digital-marketplace-next</h3>
 <p>I completed <code>spec/contract/</code> and <code>tests/seed/</code> from the old application at <code>sources/old</code> (commit <code>b0f0c99c</code>) and the ratified criteria in <code>spec/domains/</code>. I read code, migrations, the repository&#39;s own docs and its partial API description files; I did not open <code>sources/old/tests</code> or <code>sources/old/cypress</code>.</p>
@@ -227,26 +287,35 @@
     </article>
 <article class="entry">
       <header>
-        <h2>032 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>032 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify files: 31 accepted, 0 still open, 0 obsolete, 1 replacement(s) added. Unknown conditions (reported, not applied):</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify files&quot; at: &quot;2026-09-07T08:48:15.948Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify files: 31 accepted, 0 still open, 0 obsolete, 1 replacement(s) added. Unknown conditions (reported, not applied):</p>
 <ul><li>confirm D-files-1</li><li>confirm D-files-7</li><li>confirm D-files-15</li><li>confirm D-files-23</li><li>defect D-files-5: An upload larger than the service&#39;s size limit is refused as the requester&#39;s error, with a message naming the limit, and the limit is stated in the interface before a person chooses a file rather than only after they submit it.</li><li>defect D-files-6: A submission carrying no file part, or read-access information that is not well-formed, is refused as a bad request naming what was wrong with it, and is not recorded in the service&#39;s error log as a fault of the service; any working copy already written is removed whether the upload succeeds or fails.</li><li>defect D-files-11: An attachment on an opportunity is uploaded with no read access recorded against the file itself, for all three programs alike, so that what the opportunity is attached to decides who may read it.</li><li>defect D-files-12: A file attached to an opportunity or a proposal is readable by whoever may read the thing it is attached to, under one rule covering Code With Us, Sprint With Us and Team With Us alike rather than a separate rule per program.</li><li>defect D-files-19: A profile picture or organization logo is accepted only if its content can be read as a JPEG or a PNG, and a file whose content is neither is refused whatever its name says; an image that reads successfully but cannot be resized is stored at its original size rather than refused.</li><li>defect D-files-22: A file may be attached to an opportunity or a proposal only by someone who is permitted to read that file.</li></ul></div>
     </article>
 <article class="entry">
       <header>
-        <h2>031 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>031 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify files: 22 accepted, 8 still open, 0 obsolete, 6 replacement(s) added. Still open:</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify files&quot; at: &quot;2026-09-07T08:44:53.000Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify files: 22 accepted, 8 still open, 0 obsolete, 6 replacement(s) added. Still open:</p>
 <ul><li>D-files-3 (inferred) — the limit is the length an ordinary file system will accept, not a rule of this service. Nothing else about the name is checked — no character restriction, no extension requirement, and no check that the name matches the content — except on the profile picture and logo route.</li><li>D-files-4 (inferred) — the three kinds recognised are &quot;anyone&quot;, &quot;this one named person&quot; and &quot;anyone of this account type&quot;; a statement naming a person must carry a well-formed identifier and one naming an account type must name a type the service knows. Repeated entries are reduced to one before they are recorded.</li><li>D-files-10 (inferred) — this is what makes a Code With Us attachment behave correctly without any read access recorded against the file itself — the attachment is checked against the state of the thing it hangs on, every time it is asked for, so the file becomes readable exactly when its opportunity does.</li><li>D-files-16 (open) — no corrected criterion has been written because there is no removal operation to correct — the service offers no way to delete a file at all, so what a rebuild should do about withdrawn attachments, about a person removing an attachment while editing, and about the storage that accumulates is an unanswered question rather than a broken rule. Removing an attachment in the interface only stops the record referring to it; the file itself is untouched. This bites hardest with R-8.8, where the file was marked readable by anyone and there is no longer an opportunity whose state could take that back.</li><li>D-files-17 (inferred) — leaving the name box empty keeps the original name unchanged. The typed name is held to the same length rule as any other file name, and the error is shown against the attachment rather than against the form as a whole. Only attachments not yet uploaded can be renamed; an attachment already stored is shown read-only.</li><li>D-files-20 (inferred) — this is what lets a logo appear on the public organization list and a profile picture appear beside a person&#39;s name to any viewer. It also means the image stays readable by anyone after the profile or organization it belonged to has changed picture, since nothing takes the marking back and nothing removes the file.</li><li>D-files-21 (inferred) — the stored text never contains a web address, so the same text renders correctly wherever the service is running and whatever address it answers on. A marker that does not resolve to a known file identifier is left alone and treated as an ordinary address, so text written elsewhere still works. The content domain already expects image upload in the editor and defers what may be uploaded to here; this criterion is the other half of that.</li><li>D-files-24 (inferred) — the ending is compared without regard to capitalisation. The file choosers for a profile picture and for a logo both offer only these three endings, but the check on the service side is what actually enforces it. Nothing looks at the content, which is what makes R-8.14 possible.</li></ul></div>
     </article>
 <article class="entry">
       <header>
-        <h2>030 · archaeology</h2>
-        <p class="meta">2026-09-07 · 95 turns · $6.73</p>
+        <h2>030 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>All three deliverables are in place. Here is my journal entry.</p>
+      <div class="body"><hr>
+<p>stage: &quot;archaeology&quot; title: &quot;archaeology files&quot; at: &quot;2026-09-07T08:41:05.040Z&quot; cost: 6.7348845 turns: 95 session: &quot;9d80f1e9-3225-4579-a668-4bf14168b9d7&quot;</p>
+<hr>
+<p>All three deliverables are in place. Here is my journal entry.</p>
 <hr>
 <p>The files domain is the service&#39;s single store for everything a person uploads anywhere in it — attachments on opportunities and proposals, profile pictures, organization logos, and images dropped into formatted text are all one kind of record, differing only in which route they arrive through and who is recorded as allowed to read them. A file is written once and never altered or removed: its name, its content, its uploader and its date are fixed at upload, and read access is decided in the same moment and never revisited. Retrieval is a single request that returns either a short description of the file or its bytes, and the same permission test guards both.</p>
 <p>I recovered 24 criteria into <code>spec/domains/files.md</code> — six graded <code>confirmed</code> where the code and a second source agree, seventeen <code>inferred</code> where only the code shows it, and one <code>open</code>. Fifteen are <code>implemented-only</code>, one <code>aligned</code> (the embedded-image behaviour, which the content domain had already deferred to here), one <code>conflicting</code>, and seven <code>defect</code>. I also added four entries to the contract surface and one persona.</p>
@@ -256,30 +325,39 @@
     </article>
 <article class="entry">
       <header>
-        <h2>029 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>029 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify content: 29 accepted, 0 still open, 2 obsolete, 0 replacement(s) added. Obsolete:</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify content&quot; at: &quot;2026-09-07T08:31:47.863Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify content: 29 accepted, 0 still open, 2 obsolete, 0 replacement(s) added. Obsolete:</p>
 <ul><li>D-content-26 — The screens this was recovered from do not behave this way - the !body guard at sprint-with-us-terms.tsx:136 and team-with-us-terms.tsx:135 is dead code, because cmd.ts:93-96 maps a 404 to an always-truthy invalid value, so a missing terms page falls through to the else branch, keeps the empty body it was initialised with, and renders the title, an empty block and a live Accept Terms and Conditions button; the only screen that genuinely becomes the not-found screen when its page cannot be read is pages/content/view.tsx:75-86, which carries no action to block. Nothing of this row is carried forward, and two criteria are owed in its place - the content view screen&#39;s not-found handling, and the defect that a program&#39;s qualification terms can be accepted with nothing shown in place of them.</li><li>D-content-27 — The rebuild does not create pages for itself that nothing in it links to. The seven concerned — the opportunity and proposal guides of all three programs and the Team With Us opportunity scope page — were superseded by the built-in learn-more screens and survive only as unremovable rows an administrator cannot clean up. Rows already present in an existing installation are untouched, since the schema is kept.</li></ul>
 <p>Unknown conditions (reported, not applied):</p>
 <ul><li>confirm D-content-1</li><li>confirm D-content-3</li><li>confirm D-content-4</li><li>confirm D-content-5</li><li>defect D-content-18: A request refused for lack of permission is reported as a permission refusal, in the same shape for every page request, whether it reads the list, reads one page, or creates, changes or removes one.</li><li>defect D-content-22: A page&#39;s body is rendered as formatted text only; markup embedded in it is never executed, and the same body renders identically on the page&#39;s own address and wherever another screen embeds it.</li><li>defect D-content-28: The service level agreement page is one the service creates for itself, so every screen that links to it — the learn-more index, the program cards, and the Code With Us, Sprint With Us and Team With Us opportunity forms — resolves on a fresh installation.</li></ul></div>
     </article>
 <article class="entry">
       <header>
-        <h2>028 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>028 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify content: 18 accepted, 12 still open, 1 obsolete, 3 replacement(s) added. Still open:</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify&quot; at: &quot;2026-09-07T05:20:01.894Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify content: 18 accepted, 12 still open, 1 obsolete, 3 replacement(s) added. Still open:</p>
 <ul><li>D-content-2 (inferred) — these five are the service&#39;s whole standing offer of its own legal and informational prose; nothing outside the code describes them, and each is a page an administrator can re-word at any time.</li><li>D-content-9 (inferred)</li><li>D-content-10 (inferred) — the rule is stated to the administrator on the form as well as enforced on submission, and the form shows the full public address the page will have.</li><li>D-content-11 (inferred)</li><li>D-content-13 (inferred) — the versions accumulate with no route to them and no limit on their number. Recovering superseded wording is possible only from outside the service, which makes the retention useful for audit but not for undoing a mistaken edit.</li><li>D-content-14 (inferred) — nothing warns the administrator that a rename breaks existing links, and nothing in the service records the address a page used to have.</li><li>D-content-15 (inferred) — whether a page is one the service needs is fixed when the page is created by migration and cannot be set or cleared through the service, so an administrator can neither promote an ordinary page to a needed one nor demote a needed one.</li><li>D-content-21 (inferred) — the editor&#39;s guidance link points at the page held at the address &quot;markdown-guide&quot;, so the help an author is offered is itself an editable page and reads &quot;Initial version&quot; until somebody writes it. What may be uploaded and who may then read it belongs to the files domain.</li><li>D-content-23 (inferred) — these names are disclosed only to an administrator; the same page read by anybody else carries no authorship at all. Authorship is recorded per version, so the last editor is the author of the current wording rather than of the page.</li><li>D-content-24 (open) — the submission carries no record of which version it was based on, so the service cannot tell an overwrite from an ordinary change and no warning is possible. The consequence is not lost data — every version is kept — but silently reverted wording, and D-content-13 means the person whose text was replaced has no way to see that it happened.</li><li>D-content-25 (inferred) — the same silent-empty handling covers the evaluation instructions an evaluation panel reads, so a panel can be shown a blank instruction screen and told nothing.</li><li>D-content-26 (inferred) — this and D-content-25 are the two opposite handlings of the same failure, chosen screen by screen. Here the consequence reaches beyond wording: a missing or mis-addressed page blocks a business action, and the person blocked is given no reason and no route to one.</li></ul>
 <p>Obsolete:</p>
 <ul><li>D-content-27 — The rebuild does not create pages for itself that nothing in it links to. The seven concerned — the opportunity and proposal guides of all three programs and the Team With Us opportunity scope page — were superseded by the built-in learn-more screens and survive only as unremovable rows an administrator cannot clean up. Rows already present in an existing installation are untouched, since the schema is kept.</li></ul></div>
     </article>
 <article class="entry">
       <header>
-        <h2>027 · archaeology</h2>
-        <p class="meta">2026-09-07 · 106 turns · $6.57</p>
+        <h2>027 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p><strong>Journal — archaeology of the <code>content</code> domain</strong></p>
+      <div class="body"><hr>
+<p>stage: &quot;archaeology&quot; title: &quot;archaeology&quot; at: &quot;2026-09-07T05:16:36.748Z&quot; cost: 6.568516000000001 turns: 106 session: &quot;d28fc050-9a1c-44a7-8cc3-de81991dcaee&quot;</p>
+<hr>
+<p><strong>Journal — archaeology of the <code>content</code> domain</strong></p>
 <p>The content domain is how the old application keeps its own prose out of its own code. Every piece of standing text the service shows — its terms and conditions, its privacy, accessibility, copyright and disclaimer notices, the scope and evaluation notes embedded inside an opportunity, the instructions an evaluation panel reads, even the markdown help offered to authors — is a page with a title, a body of formatted text and a short address, readable by anyone at that address and editable only by an administrator through a management area reached from the navigation menu. Pages come in two kinds: ordinary ones an administrator creates and removes at will, and pages the service itself depends on, which are created by database migration, may be re-worded but never renamed or removed, and arrive on a fresh installation carrying placeholder text — twenty-two of them, each titled by its own address and all saying &quot;Initial version&quot; until somebody writes them.</p>
 <p>I recovered twenty-eight criteria into <code>spec/domains/content.md</code>: eight <code>confirmed</code> where the release notes, the schema description or the manual smoke-test script corroborate the code, nineteen <code>inferred</code> where only the code shows the behaviour, and one <code>open</code>. Four pages went into <code>spec/contract/surface.yaml</code> under <code>domain: content</code> — the list, the create form, the per-page management screen and the public page. I added nothing to <code>personas.yaml</code>: the only two roles this domain distinguishes are an administrator, who may do everything, and any visitor at all including one who is not signed in, who may read; both are already listed, and duplicating them under a second domain would have collided rather than added.</p>
 <p>What conflicted. The two mismatches worth a ruling are both inside the code rather than between code and prose. Seven pages the service creates for itself — the opportunity and proposal guides of all three programs and one opportunity scope page — are linked from nowhere in the application; the explanatory material they were meant to hold now lives in hard-coded &quot;learn more&quot; screens, but the pages remain, marked as needed by the service so an administrator cannot remove them, and the list of pages gives no hint they are unused. In the opposite direction, five places link to a &quot;service level agreement&quot; page that no migration ever creates. The published interface description is a third kind of disagreement: it documents a dozen other parts of the service and says nothing about pages at all, so everything below the screen level rests on the code alone. Two smaller inconsistencies are recorded as defects: a refusal to create or change a page for lack of permission comes back shaped like a complaint about the submission, while a refused request for the list of pages comes back as a permission refusal; and a page&#39;s body is rendered on its own address without filtering what its markup may contain, while the same body embedded in another screen is not — so an author previewing a page cannot tell which rendering another screen will use.</p>
@@ -287,26 +365,35 @@
     </article>
 <article class="entry">
       <header>
-        <h2>026 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>026 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify notifications: 28 accepted, 0 still open, 0 obsolete, 2 replacement(s) added. Unknown conditions (reported, not applied):</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify&quot; at: &quot;2026-09-07T05:06:31.342Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify notifications: 28 accepted, 0 still open, 0 obsolete, 2 replacement(s) added. Unknown conditions (reported, not applied):</p>
 <ul><li>confirm D-notifications-2</li><li>confirm D-notifications-5</li><li>confirm D-notifications-7</li><li>edit D-notifications-4: Every message the service sends comes from a single configured sender — a display name followed by one do-not-reply address, the same for every kind of message — and carries no reply-to address distinct from that sender.</li><li>edit D-notifications-6: Every message the service sends ends with an offer labelled Unsubscribe, which opens the reader&#39;s own notification settings with the unsubscribe confirmation already asked.</li><li>defect D-notifications-9: A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service&#39;s own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity&#39;s owner exactly as it does to every other multi-recipient notice.</li><li>defect D-notifications-10: A message that the notification preference does not govern must not offer to unsubscribe; it links to the reader&#39;s notification settings without implying that any choice there will stop messages of that kind.</li><li>defect D-notifications-14: A deactivated account receives no notification of any kind, including notices about opportunities it was watching, while the watch itself is retained so that reactivating the account restores it.</li><li>defect D-notifications-16: The message announcing changed terms names every program whose proposals require a current acceptance — Code With Us, Sprint With Us and Team With Us — or names none of them rather than a subset.</li><li>defect D-notifications-19: The administrator&#39;s notification reference page shows every message the service can send, so that no message exists which cannot be previewed there before the event that sends it.</li></ul></div>
     </article>
 <article class="entry">
       <header>
-        <h2>025 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>025 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify notifications: 19 accepted, 7 still open, 0 obsolete, 5 replacement(s) added. Still open:</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify&quot; at: &quot;2026-09-07T05:01:47.135Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify notifications: 19 accepted, 7 still open, 0 obsolete, 5 replacement(s) added. Still open:</p>
 <ul><li>D-notifications-11 (inferred) — the record holds the moment the request was made rather than a yes or no, so an account that has never asked and an account that has asked and then changed its mind are indistinguishable afterwards. Combined with the profile-completion page never being shown to a public sector employee, this means such a person is never offered the choice at the point where it is first offered and receives no new-opportunity notices unless they later find the setting themselves.</li><li>D-notifications-12 (inferred) — the control is offered without a confirmation in either direction here, whereas the same choice made from the notification settings asks the person to confirm before turning notices off.</li><li>D-notifications-13 (inferred) — the control is hidden below the medium breakpoint and shown above it. The choice itself remains reachable from the notification settings, so nothing is unreachable, but the shortcut is silently absent rather than moved. No corrected criterion is offered; whether the new service shows this control at every width is a design decision rather than a recovered rule.</li><li>D-notifications-15 (inferred) — the announcement is offered only on the terms and conditions page and nowhere else, and only to an administrator; the same request made by anybody else, signed in or not, is refused. Acceptance is withdrawn for every vendor including deactivated ones, while only active vendors are told, so a vendor deactivated at the time of the change learns of it only on returning. This route appears in no published interface description.</li><li>D-notifications-17 (inferred) — the withdrawal of acceptances is completed before the response, so the part of the action a vendor will notice on their next visit is reliable; only the messages are not. Delivery failures are invisible for the reason given in R-6.2, so a run that reaches nobody looks exactly like one that reaches everybody.</li><li>D-notifications-20 (inferred) — this message uses a layout of its own rather than the layout every other message uses, leading with the opportunity&#39;s title and the winner&#39;s name. Where no successful proponent is recorded the name is replaced by a dash rather than the sentence being omitted, so a reader can be shown &quot;awarded to —&quot;.</li><li>D-notifications-21 (open) — accounts without an email address are allowed deliberately, and most messages guard against one only by substituting an empty list of recipients where the address would go — the message is still composed and still handed over to be sent. Whether that produces a rejected send, a silently discarded one, or an error that stops the rest of a broadcast is not decidable from the source, and because delivery failures are only logged, nothing inside the service would show which. The one place that does check is account creation, which skips the welcome message when there is no address. A human should rule on whether the new service must skip a recipient with no address everywhere, and on whether one such recipient may stop a broadcast to the rest.</li></ul></div>
     </article>
 <article class="entry">
       <header>
-        <h2>024 · archaeology</h2>
-        <p class="meta">2026-09-07 · 112 turns · $8.69</p>
+        <h2>024 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>Done. <code>spec/domains/notifications.md</code> (21 criteria), plus four pages appended to <code>spec/contract/surface.yaml</code>. <code>personas.yaml</code> is unchanged — the domain introduced no role it does not already list.</p>
+      <div class="body"><hr>
+<p>stage: &quot;archaeology&quot; title: &quot;archaeology&quot; at: &quot;2026-09-07T04:57:45.177Z&quot; cost: 8.691965999999995 turns: 112 session: &quot;f56aa73a-a54a-413e-8113-9c482777fc1c&quot;</p>
+<hr>
+<p>Done. <code>spec/domains/notifications.md</code> (21 criteria), plus four pages appended to <code>spec/contract/surface.yaml</code>. <code>personas.yaml</code> is unchanged — the domain introduced no role it does not already list.</p>
 <hr>
 <h3>Journal</h3>
 <p>The notifications domain is the old application&#39;s only way of reaching a person who is not currently looking at it, and it has exactly one channel: an email message the service composes itself, in a house layout, and sends either to one person or as a broadcast to many. Every notice in the service — an opportunity published, a proposal awarded, a team request made, terms changed — passes through the same small piece of delivery machinery, which decides whether messages are sent at all, marks them when the environment is a test one, splits large audiences into batches, and swallows every failure. Over all of that a person has precisely one control: a single choice to be told about newly published opportunities, set at sign-up, changed either from their notification settings or from a shortcut on the opportunity list, and reachable from the unsubscribe offer at the foot of every message the service sends.</p>
@@ -316,60 +403,81 @@
     </article>
 <article class="entry">
       <header>
-        <h2>023 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>023 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify evaluation: 37 accepted, 0 still open, 0 obsolete, 1 replacement(s) added. Unknown conditions (reported, not applied):</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify&quot; at: &quot;2026-09-07T04:46:54.619Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify evaluation: 37 accepted, 0 still open, 0 obsolete, 1 replacement(s) added. Unknown conditions (reported, not applied):</p>
 <ul><li>confirm D-evaluation-1</li><li>confirm D-evaluation-10</li><li>defect D-evaluation-3: The service must reject an evaluation panel that names no chair, applying the same rule the browser form already applies, so that no opportunity can enter consensus with nobody able to record the agreed score.</li><li>defect D-evaluation-21: The refusal shown when no proponent clears every question&#39;s minimum score must name the stage that actually follows — the Code Challenge for Sprint With Us and the Challenge for Team With Us.</li><li>defect D-evaluation-26: An individual evaluation may be read only by an administrator, the opportunity&#39;s owner, and the members of that opportunity&#39;s evaluation panel, at every stage; passing the question stages does not open it to public sector employees with no connection to the opportunity.</li><li>defect D-evaluation-27: When the consensus list is withheld from the opportunity&#39;s owner because they are not on the evaluation panel, the page must say so rather than opening as an empty list with no explanation.</li><li>defect D-evaluation-28: Finalising the consensus scores must be refused unless every proponent still under review of the questions has a submitted consensus, so that no proponent is left neither screened in nor screened out.</li><li>defect D-evaluation-29: The action that finalises consensus scores must be offered to whoever the service accepts it from — the opportunity&#39;s owner as well as an administrator — so that the browser and the service agree on who may finalise.</li></ul></div>
     </article>
 <article class="entry">
       <header>
-        <h2>022 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>022 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify evaluation: 14 accepted, 22 still open, 0 obsolete, 6 replacement(s) added. Still open:</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify&quot; at: &quot;2026-09-07T04:41:56.497Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify evaluation: 14 accepted, 22 still open, 0 obsolete, 6 replacement(s) added. Still open:</p>
 <ul><li>D-evaluation-2 (open) — this rule is held only in the database, not in the code that validates a submitted panel, so the observable failure is a stored-data error rather than a field-level message. What a person actually sees when it happens could not be determined without running the old application.</li><li>D-evaluation-4 (inferred) — because the panel is recorded against a version of the opportunity and changing it writes a new version, a panel change also appears in the opportunity&#39;s history as an edit, and the count of evaluators the service waits for changes with it.</li><li>D-evaluation-5 (inferred) — the same change made while the opportunity is still a draft notifies nobody.</li><li>D-evaluation-6 (inferred)</li><li>D-evaluation-7 (inferred)</li><li>D-evaluation-8 (inferred) — this is the same closing event that moves the submitted proposals into review and gives each an anonymous proponent name; the evaluation domain inherits that from the proposals domain rather than restating it.</li><li>D-evaluation-9 (inferred) — an evaluator who tries the same thing once the opportunity has moved to consensus is refused as well.</li><li>D-evaluation-11 (inferred)</li><li>D-evaluation-12 (inferred) — the browser form checks each field as it is typed, so this is reachable through the service rather than through the form. Nothing in the code says whether unchecked drafts are intended; a human may want to rule on it.</li><li>D-evaluation-13 (inferred) — one evaluator cannot edit another&#39;s evaluation at any point, whatever its state.</li><li>D-evaluation-14 (inferred)</li><li>D-evaluation-15 (inferred) — the shared description of the evaluation interface declares a &quot;submit&quot; action on the single-evaluation route, but the service&#39;s own parser accepts only &quot;edit&quot; there and treats anything else as unreadable. The declared interface and the running service therefore disagree; the service is the stricter of the two.</li><li>D-evaluation-16 (inferred) — the count is taken against the panel and the questions of the opportunity&#39;s most recent version, so changing the panel during individual evaluation changes how many submissions are awaited.</li><li>D-evaluation-17 (inferred) — an administrator can read an individual evaluation at any stage.</li><li>D-evaluation-18 (inferred) — a consensus is scored against the same rules as an individual evaluation — one score and one comment per question, within the question&#39;s maximum.</li><li>D-evaluation-19 (inferred)</li><li>D-evaluation-20 (inferred)</li><li>D-evaluation-22 (inferred) — a proponent that is no longer under review of the questions — withdrawn or disqualified, say — is passed over even if their agreed scores would have placed them.</li><li>D-evaluation-23 (inferred)</li><li>D-evaluation-24 (inferred) — the evaluation instructions are a fixed piece of editable site content, one for each program, so what an evaluator is told can be changed without changing the service.</li><li>D-evaluation-25 (inferred) — the proponents are ordered by their anonymous names, so an evaluator never sees which organization they are scoring while the questions are being evaluated.</li><li>D-evaluation-30 (inferred) — Sprint With Us calls them team questions and carries four proponents forward; Team With Us calls them resource questions and carries three. Team With Us gained its panel about ten months after Sprint With Us did, and its tables were copied from the Sprint With Us ones.</li></ul></div>
     </article>
 <article class="entry">
       <header>
-        <h2>021 · archaeology</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>021 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>(resumed; agent output unavailable)</p></div>
+      <div class="body"><hr>
+<p>stage: &quot;archaeology&quot; title: &quot;archaeology&quot; at: &quot;2026-09-07T04:38:57.886Z&quot; cost: 0 turns: 0 session: &quot;&quot;</p>
+<hr>
+<p>(resumed; agent output unavailable)</p></div>
     </article>
 <article class="entry">
       <header>
-        <h2>020 · archaeology</h2>
-        <p class="meta">2026-09-07 · 121 turns · $15.59</p>
+        <h2>020 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>the agent turn reported failure with no output; the session hit the turn cap (error_max_turns)</p></div>
+      <div class="body"><hr>
+<p>stage: &quot;archaeology&quot; title: &quot;archaeology: agent turn failed&quot; at: &quot;2026-09-07T04:31:05.608Z&quot; cost: 15.593451500000004 turns: 121 session: &quot;fcbebecc-8723-4320-9287-18ab3079fc55&quot;</p>
+<hr>
+<p>the agent turn reported failure with no output; the session hit the turn cap (error_max_turns)</p></div>
     </article>
 <article class="entry">
       <header>
-        <h2>019 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>019 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify users: 34 accepted, 0 still open, 2 obsolete, 0 replacement(s) added. Obsolete:</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify&quot; at: &quot;2026-09-07T04:16:50.307Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify users: 34 accepted, 0 still open, 2 obsolete, 0 replacement(s) added. Obsolete:</p>
 <ul><li>D-users-29 — These routes are gated on NODE_ENV being exactly &#39;development&#39; rather than on being outside production as the recovered statement has it, but either way they are test-only entrances of precisely the kind constitution article J3 forbids. The rebuilt system carries no route that establishes a session without the identity provider; tests sign in through the sandbox identity provider, which is also what makes D-users-7 testable at all, since the old routes bypass the account-status check.</li><li>D-users-32 — The facility does not exist. SERVICE_TOKEN_HASH appears exactly twice in the whole of the old repository - its definition at src/back-end/config.ts:82 and its README row at README.md:279 - and no route, handler or middleware refers to it. The criterion records that the old repository&#39;s documentation is stale rather than a behaviour the rebuilt system must exhibit, and a shared token overriding user accounts and sessions would be a test-only entrance forbidden by J3 in any case, so it is carried forward in neither direction.</li></ul>
 <p>Unknown conditions (reported, not applied):</p>
 <ul><li>confirm D-users-2</li><li>confirm D-users-7</li><li>confirm D-users-8</li><li>defect D-users-14: A person&#39;s profile details - name, email address, job title and picture - may be changed only by that person. An administrator viewing somebody else&#39;s profile is offered no editing control, and the service refuses a profile change submitted against an account that is not the requester&#39;s own; an administrator&#39;s powers over another person&#39;s account are limited to deactivating it, reactivating it, and granting or withdrawing administrator rights.</li><li>defect D-users-20: The control to reactivate an account is offered only for an account that an administrator deactivated. An account its owner deactivated carries no reactivation control; the profile states instead that the person reactivates it themselves by signing in again, and the service continues to refuse a reactivation request made against such an account.</li><li>defect D-users-21: A person whose account an administrator reactivates is told that an administrator has reactivated their Digital Marketplace account and whom to contact with questions; the message telling a person they reactivated the account themselves is sent only when they did so by signing in again.</li><li>defect D-users-25: The list of everyone registered with the service may be read only by an administrator. The same request made by a public sector employee who is not an administrator, or by anyone else, is refused rather than answered, so the email address and account status of every registered person are never disclosed more widely than the interface offers them.</li></ul></div>
     </article>
 <article class="entry">
       <header>
-        <h2>018 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>018 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify users: 21 accepted, 13 still open, 2 obsolete, 4 replacement(s) added. Still open:</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify&quot; at: &quot;2026-09-07T04:12:54.156Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify users: 21 accepted, 13 still open, 2 obsolete, 4 replacement(s) added. Still open:</p>
 <ul><li>D-users-3 (inferred) — when sign-in was started from a page that requires signing in, that page is where both land instead.</li><li>D-users-4 (open) — every newly created account is sent to this page regardless of kind, so a public sector employee is never asked to confirm their details and never sees the notification choice offered there. Whether that is intended could not be settled from the source.</li><li>D-users-6 (inferred) — turning notifications off does not record a date; the record simply becomes empty, so the service cannot say when somebody stopped wanting them.</li><li>D-users-10 (inferred) — the published interface description of this route mentions no restriction at all.</li><li>D-users-11 (inferred) — a visitor who is not signed in is sent to sign in first and returned to the profile afterwards.</li><li>D-users-12 (inferred) — the published interface description lists the same fields but says nothing about which are required or how long they may be, and it gives this operation a different request method than the service accepts, so it cannot be followed literally.</li><li>D-users-13 (inferred) — the service accepts a job title on any account, so a vendor&#39;s stored job title, if one ever existed, is carried through their profile edits unchanged and unseen.</li><li>D-users-16 (inferred) — the settings page states the address notifications are sent to and tells the person to correct their profile if it is wrong; there is no separate notification address.</li><li>D-users-18 (inferred)</li><li>D-users-19 (inferred) — nothing prevents an administrator from deactivating the last remaining administrator account other than their own, so the service can be left with no usable administrator.</li><li>D-users-26 (inferred) — a person&#39;s name is split into a first name and a last name at the first space, so a single-word name yields an empty last name and a three-word name puts two words in the last-name column. The account-kind column appears only when both kinds were chosen. Administrators are exported whenever public sector employees are chosen. Only organizations that are still active and memberships that are still current are named, joined into one field.</li><li>D-users-28 (inferred) — the privacy policy is shown as text on the page and states that agreement to it was given when the account was created, so it is never separately accepted.</li><li>D-users-30 (inferred) — asking for a section that does not belong to the profile being viewed silently shows the profile section instead of refusing. An account&#39;s status is shown only to an administrator; everyone else sees the account kind alone.</li></ul>
 <p>Obsolete:</p>
 <ul><li>D-users-29 — These routes are gated on NODE_ENV being exactly &#39;development&#39; rather than on being outside production as the recovered statement has it, but either way they are test-only entrances of precisely the kind constitution article J3 forbids. The rebuilt system carries no route that establishes a session without the identity provider; tests sign in through the sandbox identity provider, which is also what makes R-4.4 testable at all, since the old routes bypass the account-status check.</li><li>D-users-32 — The facility does not exist. SERVICE_TOKEN_HASH appears exactly twice in the whole of the old repository - its definition at src/back-end/config.ts:82 and its README row at README.md:279 - and no route, handler or middleware refers to it. The criterion records that the old repository&#39;s documentation is stale rather than a behaviour the rebuilt system must exhibit, and a shared token overriding user accounts and sessions would be a test-only entrance forbidden by J3 in any case, so it is carried forward in neither direction.</li></ul></div>
     </article>
 <article class="entry">
       <header>
-        <h2>017 · archaeology</h2>
-        <p class="meta">2026-09-07 · 94 turns · $8.61</p>
+        <h2>017 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>Recovery of the <strong>users</strong> domain is complete: <code>spec/domains/users.md</code> (32 criteria, D-users-1 … D-users-32), plus twelve pages appended to <code>spec/contract/surface.yaml</code> and one persona to <code>spec/contract/personas.yaml</code>.</p>
+      <div class="body"><hr>
+<p>stage: &quot;archaeology&quot; title: &quot;archaeology&quot; at: &quot;2026-09-07T04:08:28.367Z&quot; cost: 8.6131965 turns: 94 session: &quot;f031c63e-3dee-4e5f-a9c6-26788f2cf62f&quot;</p>
+<hr>
+<p>Recovery of the <strong>users</strong> domain is complete: <code>spec/domains/users.md</code> (32 criteria, D-users-1 … D-users-32), plus twelve pages appended to <code>spec/contract/surface.yaml</code> and one persona to <code>spec/contract/personas.yaml</code>.</p>
 <hr>
 <p><strong>Journal</strong></p>
 <p>The users domain is the account layer under everything else the service does. Nobody registers an account by hand: the first time a person signs in through the identity provider an account is created for them, and the identity they used fixes what kind of account it is — a government identity makes a public sector employee, a code-hosting identity makes a vendor, and an administrator is only ever a public sector employee promoted by another administrator. From there the domain governs the profile a person keeps (name, email address, job title, picture, notification preference, and for vendors the capabilities they hold and their acceptance of the service&#39;s terms), who may read or change whose record, and the account&#39;s movement between active and two distinct inactive states — deactivated by its owner, which reverses itself on the next sign-in, and deactivated by an administrator, which locks the person out until an administrator reverses it.</p>
@@ -379,34 +487,46 @@
     </article>
 <article class="entry">
       <header>
-        <h2>016 · archaeology</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>016 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>(resumed; agent output unavailable)</p>
+      <div class="body"><hr>
+<p>stage: &quot;archaeology&quot; title: &quot;archaeology: post-checks failed&quot; at: &quot;2026-09-07T03:57:06.609Z&quot; cost: 0 turns: 0 session: &quot;&quot;</p>
+<hr>
+<p>(resumed; agent output unavailable)</p>
 <p>spec/domains/users.md is missing</p></div>
     </article>
 <article class="entry">
       <header>
-        <h2>015 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>015 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify organizations: 35 accepted, 0 still open, 0 obsolete, 1 replacement(s) added. Unknown conditions (reported, not applied):</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify&quot; at: &quot;2026-09-07T03:46:46.880Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify organizations: 35 accepted, 0 still open, 0 obsolete, 1 replacement(s) added. Unknown conditions (reported, not applied):</p>
 <ul><li>confirm D-organizations-3</li><li>confirm D-organizations-6</li><li>confirm D-organizations-15</li><li>confirm D-organizations-18</li><li>confirm D-organizations-23</li><li>confirm D-organizations-24</li><li>confirm D-organizations-25</li><li>confirm D-organizations-27</li><li>confirm D-organizations-29</li><li>defect D-organizations-7: The Edit and Archive controls on an organization&#39;s management page are offered only to a person permitted to use them — the organization&#39;s owner or a service administrator; an organization administrator who is not the owner sees the organization&#39;s profile as read-only, with no Edit and no Archive control, and the service continues to refuse a profile change or an archive request from anyone other than the owner or a service administrator.</li><li>defect D-organizations-8: A change to an organization&#39;s contact phone number made while editing its profile is saved along with every other profile field, and clearing the field removes the stored number.</li><li>defect D-organizations-30: Asking for the organizations one may act on behalf of is refused as not permitted for anyone who is not a signed-in vendor, rather than answered with an empty list.</li></ul></div>
     </article>
 <article class="entry">
       <header>
-        <h2>014 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>014 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify organizations: 20 accepted, 14 still open, 0 obsolete, 3 replacement(s) added. Still open:</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify&quot; at: &quot;2026-09-07T03:42:43.422Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify organizations: 20 accepted, 14 still open, 0 obsolete, 3 replacement(s) added. Still open:</p>
 <ul><li>D-organizations-2 (inferred) — the owner and qualification columns are hidden entirely from a visitor who is not signed in and from public sector staff, so only vendors and administrators ever see them.</li><li>D-organizations-4 (inferred) — the published interface description lists the same set of fields but says nothing about which are required or how long they may be, so the required/optional split and the hundred-character limit rest on the code alone.</li><li>D-organizations-5 (inferred)</li><li>D-organizations-10 (inferred)</li><li>D-organizations-11 (inferred) — only active members count towards the capability total; a member who has been invited but has not yet accepted is excluded.</li><li>D-organizations-12 (inferred) — the database description carried by the old application does not list the Team With Us terms field, the service-area approvals or the membership-rights history at all, so it is behind the schema the application actually uses.</li><li>D-organizations-13 (inferred) — an administrator reading the terms page is not offered the accept control, so acceptance is in practice an act of the organization&#39;s own people.</li><li>D-organizations-14 (inferred)</li><li>D-organizations-16 (inferred)</li><li>D-organizations-17 (inferred)</li><li>D-organizations-20 (inferred)</li><li>D-organizations-22 (inferred) — no message is sent when the organization&#39;s own owner or administrator withdraws a pending invitation, nor when an established member leaves; the code that would tell the owner about a member leaving is present but nothing invokes it.</li><li>D-organizations-26 (inferred)</li><li>D-organizations-28 (inferred)</li></ul></div>
     </article>
 <article class="entry">
       <header>
-        <h2>013 · archaeology</h2>
-        <p class="meta">2026-09-07 · 89 turns · $7.86</p>
+        <h2>013 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>Work is complete. Three files touched, all within <code>spec/</code>.</p>
+      <div class="body"><hr>
+<p>stage: &quot;archaeology&quot; title: &quot;archaeology&quot; at: &quot;2026-09-07T03:39:38.252Z&quot; cost: 7.864792999999998 turns: 89 session: &quot;03e15e6c-1f84-433f-b4cb-a4c0e541ad71&quot;</p>
+<hr>
+<p>Work is complete. Three files touched, all within <code>spec/</code>.</p>
 <hr>
 <h3>Journal</h3>
 <p>The organizations domain is how a vendor gets a company onto the Digital Marketplace and staffs it. A vendor who has accepted the service&#39;s terms registers an organization — legal name, address, contact details, optional logo — and becomes its owner on the spot; from there they invite other registered vendors by email address, each invitation sitting as a pending membership until the invited person accepts or declines it. The organization then earns the right to bid: it becomes Sprint With Us qualified once it has two active members who between them hold every capability the service recognises and has accepted the Sprint With Us terms, and Team With Us qualified once a service administrator has approved it for at least one service area and it has accepted the Team With Us terms. Everything else in the domain hangs off the affiliation record, which carries both a type (owner, administrator, member) and a status (pending, active, inactive), and which is never deleted — leaving, being removed, and declining an invitation all mark it inactive.</p>
@@ -417,30 +537,39 @@
     </article>
 <article class="entry">
       <header>
-        <h2>012 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>012 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify proposals: 38 accepted, 0 still open, 2 obsolete, 0 replacement(s) added. Obsolete:</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify&quot; at: &quot;2026-09-07T03:31:13.878Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify proposals: 38 accepted, 0 still open, 2 obsolete, 0 replacement(s) added. Obsolete:</p>
 <ul><li>D-proposals-35 — The stage between reviewing team questions and the code challenge is deprecated in the old system by its own migration, which comments &#39;Unused status; deprecate&#39;, rewrites every stored occurrence and narrows the permitted values so the old spelling can no longer be stored; only two migrations ever touch that constraint and neither restores it, and the live path moves proposals straight from question review to the code challenge. The new system carries no stage between them.</li><li>D-proposals-37 — An address that renders nothing but the words &#39;Proposal List&#39; is an unfinished stub rather than behaviour to carry forward. A vendor reaches their own and their organizations&#39; proposals from the dashboard, which R-2.24 already states; the proposal-list-stub entry in spec/contract/surface.yaml is removed with it.</li></ul>
 <p>Unknown conditions (reported, not applied):</p>
 <ul><li>defect D-proposals-31: A vendor may read the history of a proposal they authored, or of a proposal belonging to an organization they own or administer, in all three programs.</li><li>defect D-proposals-36: A Team With Us proposal is refused when the hourly rates it names, applied at each resource&#39;s target allocation across the opportunity&#39;s contract period, come to more than the opportunity&#39;s maximum budget; the check runs on both the create and the edit path, as the equivalent Sprint With Us check does.</li><li>edit D-proposals-34: A proposal may be created only as a draft or as a submission, in all three programs; any other state is refused.</li></ul></div>
     </article>
 <article class="entry">
       <header>
-        <h2>011 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>011 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify proposals: 10 accepted, 28 still open, 2 obsolete, 2 replacement(s) added. Still open:</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify&quot; at: &quot;2026-09-07T03:26:07.390Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify proposals: 10 accepted, 28 still open, 2 obsolete, 2 replacement(s) added. Still open:</p>
 <ul><li>D-proposals-3 (inferred)</li><li>D-proposals-4 (inferred)</li><li>D-proposals-5 (inferred)</li><li>D-proposals-6 (inferred)</li><li>D-proposals-8 (inferred)</li><li>D-proposals-9 (inferred)</li><li>D-proposals-10 (inferred)</li><li>D-proposals-11 (inferred) — a team member whose membership is still pending is shown as pending on the proposal rather than being hidden, so a vendor can see why the submission is blocked.</li><li>D-proposals-12 (inferred)</li><li>D-proposals-13 (inferred)</li><li>D-proposals-14 (inferred)</li><li>D-proposals-15 (inferred)</li><li>D-proposals-16 (inferred)</li><li>D-proposals-18 (inferred)</li><li>D-proposals-19 (inferred) — a withdrawn proposal is visible to administrators but hidden from the opportunity&#39;s own author.</li><li>D-proposals-21 (inferred)</li><li>D-proposals-22 (inferred)</li><li>D-proposals-23 (inferred)</li><li>D-proposals-24 (inferred)</li><li>D-proposals-25 (inferred) — a Team With Us bid is the sum of each named person&#39;s hourly rate weighted by the target allocation of the resource they are named against, rather than a stated total cost.</li><li>D-proposals-26 (inferred)</li><li>D-proposals-27 (inferred)</li><li>D-proposals-28 (inferred) — only a proposal that is fully evaluated, or one previously passed over, may be awarded.</li><li>D-proposals-29 (inferred)</li><li>D-proposals-30 (inferred)</li><li>D-proposals-32 (inferred)</li><li>D-proposals-33 (inferred)</li><li>D-proposals-38 (inferred)</li></ul>
 <p>Obsolete:</p>
 <ul><li>D-proposals-35 — The stage between reviewing team questions and the code challenge is deprecated in the old system by its own migration, which comments &#39;Unused status; deprecate&#39;, rewrites every stored occurrence and narrows the permitted values so the old spelling can no longer be stored; only two migrations ever touch that constraint and neither restores it, and the live path moves proposals straight from question review to the code challenge. The new system carries no stage between them.</li><li>D-proposals-37 — An address that renders nothing but the words &#39;Proposal List&#39; is an unfinished stub rather than behaviour to carry forward. A vendor reaches their own and their organizations&#39; proposals from the dashboard, which D-proposals-18 already states; the proposal-list-stub entry in spec/contract/surface.yaml is removed with it.</li></ul></div>
     </article>
 <article class="entry">
       <header>
-        <h2>010 · archaeology</h2>
-        <p class="meta">2026-09-07 · 101 turns · $11.76</p>
+        <h2>010 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>The proposals domain is recovered and written. Journal entry follows.</p>
+      <div class="body"><hr>
+<p>stage: &quot;archaeology&quot; title: &quot;archaeology&quot; at: &quot;2026-09-07T03:22:16.827Z&quot; cost: 11.763324 turns: 101 session: &quot;c3a18986-7545-4219-bac4-93f82f4ef4c8&quot;</p>
+<hr>
+<p>The proposals domain is recovered and written. Journal entry follows.</p>
 <hr>
 <p><strong>Journal — archaeology, proposals domain</strong></p>
 <p>A proposal is one vendor&#39;s bid against one procurement opportunity, and the old application treats it as a small object with a long life: a vendor drafts it privately, submits it before the opportunity&#39;s deadline, and from that moment it is out of their hands except that they may withdraw it. When the opportunity closes, every submitted proposal is stripped of its identity — renamed &quot;Proponent 1&quot;, &quot;Proponent 2&quot; and so on — and moves into that program&#39;s first review stage, where public sector staff score it through a fixed sequence of stages until one proposal is awarded and every other proposal still in contention is automatically marked not awarded. All three programs share that spine; what differs between them is what a proposal contains (free text and a named proponent for Code With Us, a phased team with proposed costs for Sprint With Us, named people at hourly rates against resources for Team With Us) and how many evaluation stages sit between closing and awarding.</p>
@@ -452,20 +581,26 @@
     </article>
 <article class="entry">
       <header>
-        <h2>009 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>009 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify opportunities: 56 accepted, 0 still open, 1 obsolete, 2 replacement(s) added. Obsolete:</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify&quot; at: &quot;2026-09-07T03:10:55.349Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify opportunities: 56 accepted, 0 still open, 1 obsolete, 2 replacement(s) added. Obsolete:</p>
 <ul><li>D-opportunities-51 — It records that the old application&#39;s own interface description is incomplete, which is a property of the recovered sources rather than a behaviour the rebuilt system must exhibit; the behaviours it points at are already carried by the criteria above, and the documentation&#39;s unreliability belongs in the archaeology journal.</li></ul>
 <p>Unknown conditions (reported, not applied):</p>
 <ul><li>Regrade D-opportunities-2 against constitution article J1, which already establishes that all three programs carry forward; the stale README and schema document are a documentation fact, not an open scope question.</li><li>Obtain human rulings on the four conflicting and three defect criteria before build, not during it: D-opportunities-49 (who may edit a published opportunity), -25 (who may delete and at what state), -47 (Team With Us award out of processing), -11 (whether an evaluation panel requires a chair), -46 (Code With Us create-as-published bypassing administrator-only publication), -48 (deprecated consensus-skipping path), -50 (unreachable &#39;suspended&#39; state).</li><li>Withdraw D-opportunities-51 as a criterion at ratify or move it to the journal: its outcome is a statement about the old application&#39;s documentation being unreliable, not a behaviour the rebuilt system must exhibit.</li><li>No inferred criterion may be upgraded to confirmed on the strength of the old application&#39;s README, generated schema document or OpenAPI files, which this recovery shows to be materially behind the code.</li><li>Record that the old test suite was not read because .sdlc/config.yaml excludes cypress/ and tests/; if a later stage wants criteria upgraded rather than ruled, lifting that exclusion is a policy change to propose, not an archaeology re-run.</li><li>Future archaeology proposals must carry an actual recommendation in front-matter; &#39;I&#39;ve finished.&#39; gives the gate holder nothing to rule on.</li><li>confirm D-opportunities-1</li><li>confirm D-opportunities-2</li><li>edit D-opportunities-3: An opportunity saved as a draft is accepted with incomplete content; when its proposal deadline, assignment date or start date is missing or invalid it is set to fourteen days from the day of saving, and its completion date is left empty.</li><li>confirm D-opportunities-4</li><li>confirm D-opportunities-5</li><li>confirm D-opportunities-6</li><li>confirm D-opportunities-7</li><li>confirm D-opportunities-8</li><li>confirm D-opportunities-9</li><li>confirm D-opportunities-10</li><li>confirm D-opportunities-12</li><li>confirm D-opportunities-13</li><li>confirm D-opportunities-14</li><li>confirm D-opportunities-15</li><li>confirm D-opportunities-16</li><li>confirm D-opportunities-17</li><li>confirm D-opportunities-18</li><li>confirm D-opportunities-20</li><li>confirm D-opportunities-21</li><li>confirm D-opportunities-22</li><li>confirm D-opportunities-23</li><li>confirm D-opportunities-24</li><li>confirm D-opportunities-28</li><li>confirm D-opportunities-29</li><li>confirm D-opportunities-30</li><li>confirm D-opportunities-32</li><li>confirm D-opportunities-33</li><li>confirm D-opportunities-35</li><li>confirm D-opportunities-36</li><li>confirm D-opportunities-37</li><li>confirm D-opportunities-38</li><li>confirm D-opportunities-39</li><li>confirm D-opportunities-40</li><li>confirm D-opportunities-42</li><li>confirm D-opportunities-43</li><li>confirm D-opportunities-44</li><li>confirm D-opportunities-45</li><li>defect D-opportunities-46: Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs.</li><li>defect D-opportunities-47: The permitted state changes for a Team With Us opportunity in processing are awarded and cancelled, matching Code With Us and Sprint With Us, so the recorded transitions and the award path agree.</li><li>defect D-opportunities-48: There is exactly one path out of a questions consensus stage, and it refuses to advance unless every consensus evaluation has been submitted and at least one proponent has met the minimum score on every question that sets one.</li><li>defect D-opportunities-50: The rebuilt system defines no suspended state for an opportunity: none can be created in it, moved to it or stored in it, and any historical record carrying it is mapped to a defined state before the rebuilt system reads it.</li></ul></div>
     </article>
 <article class="entry">
       <header>
-        <h2>008 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>008 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify opportunities: 51 accepted, 3 still open, 1 obsolete, 4 replacement(s) added. Still open:</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify&quot; at: &quot;2026-09-07T03:07:24.448Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify opportunities: 51 accepted, 3 still open, 1 obsolete, 4 replacement(s) added. Still open:</p>
 <ul><li>D-opportunities-11 (open) — the rule as written in the application&#39;s own comment says &quot;one and only one chair&quot;, but the code accepts a panel with no chair at all and rejects only a second chair. A human should rule on which was intended.</li><li>D-opportunities-25 (open) — the application&#39;s own interface documentation says deletion is permitted only for a draft, while the code also permits an administrator to delete an opportunity that is under review. The three programs also disagree with each other: for Code With Us and Sprint With Us the creating staff member may delete only a draft, but for Team With Us they may also delete one that is under review. A human should rule on the intended rule before it is carried forward.</li><li>D-opportunities-49 (open) — the interface offers the edit only to administrators once an opportunity is published, but the underlying service accepts it from the author too. The two disagree, and nothing in the application says which is intended.</li></ul>
 <p>Obsolete:</p>
 <ul><li>D-opportunities-51 — It records that the old application&#39;s own interface description is incomplete, which is a property of the recovered sources rather than a behaviour the rebuilt system must exhibit; the behaviours it points at are already carried by the criteria above, and the documentation&#39;s unreliability belongs in the archaeology journal.</li></ul>
@@ -474,20 +609,26 @@
     </article>
 <article class="entry">
       <header>
-        <h2>007 · ratify</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>007 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>ratify opportunities: 6 accepted, 45 still open, 0 obsolete, 0 replacement(s) added. Still open:</p>
+      <div class="body"><hr>
+<p>stage: &quot;ratify&quot; title: &quot;ratify&quot; at: &quot;2026-09-07T01:21:50.948Z&quot; cost: 0 turns: 0 session: &quot;deterministic&quot;</p>
+<hr>
+<p>ratify opportunities: 6 accepted, 45 still open, 0 obsolete, 0 replacement(s) added. Still open:</p>
 <ul><li>D-opportunities-1 (inferred)</li><li>D-opportunities-2 (open) — the running code implements three programs, but the application&#39;s own README describes only Code With Us and Sprint With Us, and its generated database-schema document lists no Team With Us tables at all. Both documents predate Team With Us; a human should confirm that all three programs carry forward rather than assuming the documents are merely stale.</li><li>D-opportunities-3 (inferred)</li><li>D-opportunities-4 (inferred)</li><li>D-opportunities-5 (inferred) — when remote work is not acceptable the remote-work description may be empty, and any value over 500 characters is rejected either way.</li><li>D-opportunities-6 (inferred) — duplicate skills are silently collapsed rather than rejected.</li><li>D-opportunities-7 (inferred) — the absence of an upper budget limit on Team With Us is a difference from the other two programs, not a stated policy; nothing in the application explains it, so a human should rule on whether it carries forward.</li><li>D-opportunities-8 (inferred) — when an already-published opportunity&#39;s deadline has passed, an edit is measured against that past deadline instead of today, so a closed opportunity can be edited without its dates being forced forward.</li><li>D-opportunities-9 (inferred) — Sprint With Us weights four stages (questions, code challenge, team scenario, price); Team With Us weights three (questions, challenge, price). Each individual weight is separately required to fall between 0 and 100.</li><li>D-opportunities-10 (inferred)</li><li>D-opportunities-11 (inferred) — the rule as written in the application&#39;s own comment says &quot;one and only one chair&quot;, but the code accepts a panel with no chair at all and rejects only a second chair. A human should rule on which was intended.</li><li>D-opportunities-12 (inferred) — the same limits apply to Sprint With Us &quot;team questions&quot; and Team With Us &quot;resource questions&quot;; the two differ only in name.</li><li>D-opportunities-13 (inferred)</li><li>D-opportunities-14 (inferred) — Code With Us has a single evaluation stage; Sprint With Us has four (team questions individual, team questions consensus, code challenge, team scenario); Team With Us has three (resource questions individual, resource questions consensus, challenge).</li><li>D-opportunities-15 (inferred) — a draft may go to under review or straight to published; under review may only go to published; published and every evaluation stage may go to the next stage or to cancelled; awarded and cancelled are final.</li><li>D-opportunities-16 (inferred) — Code With Us checks only title, teaser, remote-work fields, location and description at this point, while Sprint With Us additionally checks budget, skills, weights and every phase — so a Code With Us opportunity can reach &quot;under review&quot; with a missing reward or missing skills and be caught only at publication.</li><li>D-opportunities-17 (inferred)</li><li>D-opportunities-18 (inferred)</li><li>D-opportunities-20 (inferred) — Code With Us does not anonymise proponents.</li><li>D-opportunities-21 (inferred)</li><li>D-opportunities-22 (inferred)</li><li>D-opportunities-23 (inferred)</li><li>D-opportunities-24 (inferred) — a draft or under-review opportunity cannot be cancelled — it is deleted instead.</li><li>D-opportunities-25 (open) — the application&#39;s own interface documentation says deletion is permitted only for a draft, while the code also permits an administrator to delete an opportunity that is under review. The three programs also disagree with each other: for Code With Us and Sprint With Us the creating staff member may delete only a draft, but for Team With Us they may also delete one that is under review. A human should rule on the intended rule before it is carried forward.</li><li>D-opportunities-28 (inferred)</li><li>D-opportunities-29 (inferred) — the reporting counts are withheld while the opportunity is still a draft or under review, even from the author.</li><li>D-opportunities-30 (inferred)</li><li>D-opportunities-32 (inferred)</li><li>D-opportunities-33 (inferred) — Team With Us offers no such action at all. Nothing in the application explains the omission, so a human should decide whether it is a gap to close or a deliberate difference.</li><li>D-opportunities-35 (inferred)</li><li>D-opportunities-36 (inferred) — nobody is notified when the opportunity is a draft or has been cancelled.</li><li>D-opportunities-37 (inferred)</li><li>D-opportunities-38 (inferred)</li><li>D-opportunities-39 (inferred) — an opportunity counts as open only while it is published and its proposal deadline is still in the future; everything published and past its deadline, including cancelled and awarded opportunities, counts as closed.</li><li>D-opportunities-40 (inferred) — the state filter offers draft, under review, published, evaluation and awarded; there is no option for opportunities in processing or cancelled, so those can only be found by clearing the filter.</li><li>D-opportunities-42 (inferred)</li><li>D-opportunities-43 (inferred)</li><li>D-opportunities-44 (inferred)</li><li>D-opportunities-45 (inferred)</li><li>D-opportunities-46 (inferred) — this contradicts the administrator-only publication rule recovered as D-opportunities-17. The equivalent Sprint With Us and Team With Us creation checks refuse this case explicitly, so the Code With Us omission reads as an oversight rather than an intended difference. There is no replacement criterion because the corrected behaviour is already stated by D-opportunities-17; a human should rule on whether the rebuild simply closes the hole.</li><li>D-opportunities-47 (open) — the permitted-change table for Team With Us allows only cancellation out of processing, while the equivalent tables for the other two programs allow the award. Awarding does not consult that table, so the award succeeds anyway. Whether the table or the award path is wrong cannot be determined from the application; a human should rule.</li><li>D-opportunities-48 (inferred) — the application marks the Sprint With Us version of this action as deprecated in a comment but still accepts it; the Team With Us equivalent carries no such comment. There is no replacement criterion because the intended guard is already stated by D-opportunities-43; a human should rule on removing the older path.</li><li>D-opportunities-49 (open) — the interface offers the edit only to administrators once an opportunity is published, but the underlying service accepts it from the author too. The two disagree, and nothing in the application says which is intended.</li><li>D-opportunities-50 (inferred) — the state is named &quot;deprecated suspended&quot; in the application&#39;s own code but is still accepted by the store&#39;s constraint, so historical records may hold it. There is no replacement criterion: whether the rebuild must still display an opportunity left in this state from the old data is a question for a human, not something the application answers.</li><li>D-opportunities-51 (open) — recorded so that the gap is not mistaken for absent behaviour by a later reader. The behaviours themselves are stated in the criteria above; this criterion is about the documentation being an unreliable second source, which is why several criteria here are graded on code alone.</li></ul>
 <p>Unknown conditions (reported, not applied):</p>
 <ul><li>Regrade D-opportunities-2 against constitution article J1, which already establishes that all three programs carry forward; the stale README and schema document are a documentation fact, not an open scope question.</li><li>Obtain human rulings on the four conflicting and three defect criteria before build, not during it: D-opportunities-49 (who may edit a published opportunity), -25 (who may delete and at what state), -47 (Team With Us award out of processing), -11 (whether an evaluation panel requires a chair), -46 (Code With Us create-as-published bypassing administrator-only publication), -48 (deprecated consensus-skipping path), -50 (unreachable &#39;suspended&#39; state).</li><li>Withdraw D-opportunities-51 as a criterion at ratify or move it to the journal: its outcome is a statement about the old application&#39;s documentation being unreliable, not a behaviour the rebuilt system must exhibit.</li><li>No inferred criterion may be upgraded to confirmed on the strength of the old application&#39;s README, generated schema document or OpenAPI files, which this recovery shows to be materially behind the code.</li><li>Record that the old test suite was not read because .sdlc/config.yaml excludes cypress/ and tests/; if a later stage wants criteria upgraded rather than ruled, lifting that exclusion is a policy change to propose, not an archaeology re-run.</li><li>Future archaeology proposals must carry an actual recommendation in front-matter; &#39;I&#39;ve finished.&#39; gives the gate holder nothing to rule on.</li></ul></div>
     </article>
 <article class="entry">
       <header>
-        <h2>006 · archaeology</h2>
-        <p class="meta">2026-09-07 · 130 turns · $11.96</p>
+        <h2>006 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>I&#39;ve finished. Files written: <code>spec/domains/opportunities.md</code> (51 criteria), plus appended entries to <code>spec/contract/surface.yaml</code> and <code>spec/contract/personas.yaml</code>.</p>
+      <div class="body"><hr>
+<p>stage: &quot;archaeology&quot; title: &quot;archaeology&quot; at: &quot;2026-09-07T01:08:02.842Z&quot; cost: 11.958588999999995 turns: 130 session: &quot;c17e84c3-697b-463e-8d13-49f999fae061&quot;</p>
+<hr>
+<p>I&#39;ve finished. Files written: <code>spec/domains/opportunities.md</code> (51 criteria), plus appended entries to <code>spec/contract/surface.yaml</code> and <code>spec/contract/personas.yaml</code>.</p>
 <hr>
 <h3>Journal</h3>
 <p>The opportunities domain is where a procurement posting lives its whole life. A member of public sector staff drafts an opportunity under one of three programs — Code With Us, Sprint With Us, Team With Us — submits it for review, and an administrator publishes it; from that point vendors can see it and propose against it until its deadline passes, at which point the opportunity closes itself and moves into a program-specific chain of evaluation stages ending in an award or a cancellation. Around that spine sit the supporting behaviours: per-program content validation, a versioned edit history with immutable addenda, watchers who get notified when the posting changes, visibility rules that hide unpublished postings from everyone but their author and administrators, and view/watcher/proposal counts visible only to the author and administrators.</p>
@@ -499,10 +640,13 @@
     </article>
 <article class="entry">
       <header>
-        <h2>005 · archaeology</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>005 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>Work is complete. Here is the journal entry.</p>
+      <div class="body"><hr>
+<p>stage: &quot;archaeology&quot; title: &quot;archaeology: post-checks failed&quot; at: &quot;2026-09-07T00:53:43.512Z&quot; cost: 0 turns: 0 session: &quot;&quot;</p>
+<hr>
+<p>Work is complete. Here is the journal entry.</p>
 <hr>
 <p><strong>Opportunities domain — archaeology run</strong></p>
 <p>An opportunity is a procurement posting that a public sector employee writes, an administrator publishes, vendors respond to, and a panel or an administrator eventually awards or cancels. It exists in one of three programs — Code With Us, Sprint With Us, Team With Us — which share a common skeleton (draft → awaiting review → published → one or more evaluation states → processing → awarded, with cancellation available from publication onward) and differ in what they ask for: a single reward and criteria for the first, budgeted delivery phases and team questions for the second, named resources drawn from a fixed list of service areas and resource questions for the third. Around that spine sits everything that makes the posting usable: who can see it in which state, what makes it complete enough to publish, the addenda and private notes that accumulate on it, the watchers who get told when it changes, the view and proposal counts its author can see, and a nightly-in-effect sweep that closes it and moves its proposals into review the moment its deadline has passed.</p>
@@ -516,10 +660,13 @@
     </article>
 <article class="entry">
       <header>
-        <h2>004 · archaeology</h2>
-        <p class="meta">2026-09-07 · 0 turns · $0.00</p>
+        <h2>004 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>I&#39;ve finished. Here is my journal entry.</p>
+      <div class="body"><hr>
+<p>stage: &quot;archaeology&quot; title: &quot;archaeology: post-checks failed&quot; at: &quot;2026-09-07T00:43:21.428Z&quot; cost: 0 turns: 0 session: &quot;&quot;</p>
+<hr>
+<p>I&#39;ve finished. Here is my journal entry.</p>
 <hr>
 <h3>What the opportunities domain does</h3>
 <p>The opportunities domain is where a public sector employee writes up a piece of procurement work, gets it approved and published, and then walks it through evaluation to an award. It covers three programs — Code With Us (a fixed-price posting for a single deliverable, capped at $70,000), Sprint With Us (an agile team engagement in phases, capped at $5,000,000) and Team With Us (individual resources drawn from five named service areas, billed on time and materials) — which share one lifecycle skeleton but differ in their fields, their evaluation stages and their scoring rules. An opportunity is never overwritten: each edit writes a new version, and a parallel chain of status and event records is what the history page reads, so who changed what and when survives publication.</p>
@@ -538,17 +685,23 @@
     </article>
 <article class="entry">
       <header>
-        <h2>003 · archaeology</h2>
-        <p class="meta">2026-09-07 · 41 turns · $4.45</p>
+        <h2>003 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>the agent turn reported failure with no output</p></div>
+      <div class="body"><hr>
+<p>stage: &quot;archaeology&quot; title: &quot;archaeology: agent turn failed&quot; at: &quot;2026-09-07T00:32:52.615Z&quot; cost: 4.454979999999998 turns: 41 session: &quot;1555fdc3-4153-45f2-ad90-38ebfb71b080&quot;</p>
+<hr>
+<p>the agent turn reported failure with no output</p></div>
     </article>
 <article class="entry">
       <header>
-        <h2>002 · intent</h2>
-        <p class="meta">2026-09-07 · 8 turns · $0.61</p>
+        <h2>002 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>Two files touched, both inside my boundary: one new intent document and one row added to the constitution.</p>
+      <div class="body"><hr>
+<p>stage: &quot;intent&quot; title: &quot;intent&quot; at: &quot;2026-09-07T00:15:57.173Z&quot; cost: 0.6139335 turns: 8 session: &quot;d8df255f-0d1b-477e-b898-0cd0664fa960&quot;</p>
+<hr>
+<p>Two files touched, both inside my boundary: one new intent document and one row added to the constitution.</p>
 <hr>
 <p>I read <code>intent/brief.md</code> in full — it is six sentences of prose across three paragraphs — and then walked <code>intent/.template.md</code> section by section, asking of each what the brief actually says, and writing down only that.</p>
 <p><strong>What I produced.</strong> <code>intent/digital-marketplace-rebuild.md</code>, slugged from the brief&#39;s title &quot;Digital Marketplace rebuild&quot;. Every section is filled; no section kept its template guidance text, because the brief gave something for each one, though in two places what it gave was thinner than the section wants.</p>
@@ -562,10 +715,13 @@
     </article>
 <article class="entry">
       <header>
-        <h2>001 · probe</h2>
-        <p class="meta">2026-09-06 · 2 turns · $0.22</p>
+        <h2>001 · </h2>
+        <p class="meta"> · 0 turns · $0.00</p>
       </header>
-      <div class="body"><p>I wrote <code>app/PROBE.md</code> in the digital-marketplace-next repository. It holds two lines: today&#39;s date, 2026-09-06, and the sentence &quot;the runner works&quot; — nothing else, since the instruction asked for exactly that content and no more.</p>
+      <div class="body"><hr>
+<p>stage: &quot;probe&quot; title: &quot;probe&quot; at: &quot;2026-09-06T11:19:02.862Z&quot; cost: 0.224672 turns: 2 session: &quot;c74ea0cb-7f19-4519-a32b-33ea3cc63473&quot;</p>
+<hr>
+<p>I wrote <code>app/PROBE.md</code> in the digital-marketplace-next repository. It holds two lines: today&#39;s date, 2026-09-06, and the sentence &quot;the runner works&quot; — nothing else, since the instruction asked for exactly that content and no more.</p>
 <p>The <code>app/</code> directory already existed, so the file simply landed alongside whatever else lives there; I did not inspect or touch any neighbouring files. Nothing was staged, committed, or pushed, and no gate was touched — the working tree now carries this new untracked file plus the pre-existing untracked <code>.sdlc/run-state.json</code> that was there when I started.</p>
 <p>One thing worth flagging for whoever picks this up: the date came from the session&#39;s stated current date rather than from a system clock reading, so if this probe is ever used to verify clock behaviour rather than just runner liveness, that distinction matters. There was nothing to verify beyond the write itself, and the instruction was to stop afterwards, so I did.</p></div>
     </article>

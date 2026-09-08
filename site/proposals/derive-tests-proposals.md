@@ -1,8 +1,15 @@
 | Field | Value |
 | --- | --- |
-| gate | G3 |
-| opened | 2026-09-07T12:18:00.589Z |
-| holder | agent:reviewer |
+| gate |  |
+| opened |  |
+| holder |  |
+
+---
+gate: G3
+question: "Do these tests follow from the proposals criteria and from nothing else?"
+recommendation: "**What I did.** I derived acceptance tests for the 38 accepted criteria of the proposals domain, working only from `spec/`, `tests/seed/` and the generated contract (`tests/generated/surface.d.ts`, `p…"
+opened: 2026-09-07T12:18:00.589Z
+---
 
 # Do these tests follow from the proposals criteria and from nothing else?
 

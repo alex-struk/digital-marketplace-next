@@ -71,6 +71,7 @@ Profile: rebuild
 - [ratify-organizations-1](proposals/ratify-organizations-1.md)
 - [ratify-proposals-1](proposals/ratify-proposals-1.md)
 - [ratify-users-1](proposals/ratify-users-1.md)
+- [ratify-users-2](proposals/ratify-users-2.md)
 - [spec-readme-v1](proposals/spec-readme-v1.md)
 
 ## Criteria
@@ -86,9 +87,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $113.358342
-- Rulings cost: $81.2444
-- Total cost: $194.602742
-- Agent-held rulings: 45
+- Journal cost: $0
+- Rulings cost: $82.675982
+- Total cost: $82.675982
+- Agent-held rulings: 46
 - Open escalations: 0
 - Open proposals: 0

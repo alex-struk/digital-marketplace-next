@@ -1,8 +1,15 @@
 | Field | Value |
 | --- | --- |
-| gate | G3 |
-| opened | 2026-09-07T15:58:52.887Z |
-| holder | agent:reviewer |
+| gate |  |
+| opened |  |
+| holder |  |
+
+---
+gate: G3
+question: "Do the revised opportunities tests now follow from their criteria and from nothing else?"
+recommendation: "No dependencies are installed in this workspace (`tests/node_modules` is absent), so I could not run the typecheck or the separation check; both files use only the same imports and call shapes as the …"
+opened: 2026-09-07T15:58:52.887Z
+---
 
 # Do the revised opportunities tests now follow from their criteria and from nothing else?
 

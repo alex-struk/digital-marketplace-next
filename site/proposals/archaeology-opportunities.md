@@ -1,8 +1,15 @@
 | Field | Value |
 | --- | --- |
-| gate | G1 |
-| opened | 2026-09-07T01:08:02.876Z |
-| holder | agent:product-owner |
+| gate |  |
+| opened |  |
+| holder |  |
+
+---
+gate: G1
+question: "Is this what the opportunities domain does, and which of it is the contract?"
+recommendation: "I've finished."
+opened: 2026-09-07T01:08:02.876Z
+---
 
 # Is this what the opportunities domain does, and which of it is the contract?
 

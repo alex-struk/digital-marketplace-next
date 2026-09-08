@@ -1,8 +1,15 @@
 | Field | Value |
 | --- | --- |
-| gate | G3 |
-| opened | 2026-09-07T13:46:57.324Z |
-| holder | agent:reviewer |
+| gate |  |
+| opened |  |
+| holder |  |
+
+---
+gate: G3
+question: "Do these tests follow from the evaluation criteria and from nothing else?"
+recommendation: "All 37 criteria are accounted for: 28 spec files under `tests/acceptance/evaluation/` holding 63 tests, and 9 entries in `tests/acceptance/not-testable.yaml`."
+opened: 2026-09-07T13:46:57.324Z
+---
 
 # Do these tests follow from the evaluation criteria and from nothing else?
 

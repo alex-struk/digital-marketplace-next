@@ -1,8 +1,15 @@
 | Field | Value |
 | --- | --- |
-| gate | G1 |
-| opened | 2026-09-07T04:41:56.566Z |
-| holder | agent:product-owner |
+| gate |  |
+| opened |  |
+| holder |  |
+
+---
+gate: G1
+question: "Which of the evaluation criteria that are still inferred or open become the contract?"
+recommendation: "22 criterion(s) in evaluation are still short of the contract; rule on each with a ratification condition so the next ratify pass can mint them."
+opened: 2026-09-07T04:41:56.566Z
+---
 
 # Which of the evaluation criteria that are still inferred or open become the contract?
 

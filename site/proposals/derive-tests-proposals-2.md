@@ -1,8 +1,15 @@
 | Field | Value |
 | --- | --- |
-| gate | G3 |
-| opened | 2026-09-07T14:38:25.087Z |
-| holder | agent:reviewer |
+| gate |  |
+| opened |  |
+| holder |  |
+
+---
+gate: G3
+question: "Do the revised proposals tests now follow from their criteria and from nothing else?"
+recommendation: "All four actionable conditions are applied."
+opened: 2026-09-07T14:38:25.087Z
+---
 
 # Do the revised proposals tests now follow from their criteria and from nothing else?
 

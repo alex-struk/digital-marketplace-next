@@ -1,8 +1,15 @@
 | Field | Value |
 | --- | --- |
-| gate | G1 |
-| opened | 2026-09-07T04:38:57.899Z |
-| holder | agent:product-owner |
+| gate |  |
+| opened |  |
+| holder |  |
+
+---
+gate: G1
+question: "Is this what the evaluation domain does, and which of it is the contract?"
+recommendation: "(resumed; agent output unavailable)"
+opened: 2026-09-07T04:38:57.899Z
+---
 
 # Is this what the evaluation domain does, and which of it is the contract?
 

@@ -1,8 +1,15 @@
 | Field | Value |
 | --- | --- |
-| gate | G3 |
-| opened | 2026-09-07T15:11:42.013Z |
-| holder | agent:reviewer |
+| gate |  |
+| opened |  |
+| holder |  |
+
+---
+gate: G3
+question: "Do the revised users tests now follow from their criteria and from nothing else?"
+recommendation: "**Condition 1 — the one-shot terms-state dependency and the R-4.3 known-red.** The previous run's receipt was empty: `attestations.yaml` still reads `attestations: []`, and I left it that way, because…"
+opened: 2026-09-07T15:11:42.013Z
+---
 
 # Do the revised users tests now follow from their criteria and from nothing else?
 

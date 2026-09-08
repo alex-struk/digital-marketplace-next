@@ -1,8 +1,15 @@
 | Field | Value |
 | --- | --- |
-| gate | G3 |
-| opened | 2026-09-07T13:06:07.176Z |
-| holder | agent:reviewer |
+| gate |  |
+| opened |  |
+| holder |  |
+
+---
+gate: G3
+question: "Do these tests follow from the organizations criteria and from nothing else?"
+recommendation: "**What I did.** I derived Playwright acceptance tests for all 35 accepted criteria in the organizations domain, working only from `spec/domains/organizations.md`, `spec/contract/*` and the generated `…"
+opened: 2026-09-07T13:06:07.176Z
+---
 
 # Do these tests follow from the organizations criteria and from nothing else?
 

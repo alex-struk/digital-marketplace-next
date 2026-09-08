@@ -1,5 +1,10 @@
 # Run log
 
+# Run record 2026-09-08
+
+- 16:45:23 propose ratify-users-2 at G1
+- 16:47:07 rule ratify-users-2 approve at G1 by agent:product-owner (agent)
+
 # Run record 2026-09-07
 
 - 17:17:45 rule brief-v1 approve at G0 by agent:product-owner (agent)
