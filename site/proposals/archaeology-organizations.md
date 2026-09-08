@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G1
-question: "Is this what the organizations domain does, and which of it is the contract?"
-recommendation: "The organizations domain is how a vendor gets a company onto the Digital Marketplace and staffs it."
-opened: 2026-09-07T03:39:38.263Z
----
+| gate | G1 |
+| opened | 2026-09-07T03:39:38.263Z |
+| holder | agent:product-owner |
 
 # Is this what the organizations domain does, and which of it is the contract?
 

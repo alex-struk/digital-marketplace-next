@@ -19,11 +19,8 @@
 <main id="main">
 <div class="page-head"><h1>derive-tests-evaluation</h1>
 <p class="lede">G3 · <span class="chip return">return</span></p></div>
-<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td></td></tr><tr><th scope="row">opened</th><td></td></tr><tr><th scope="row">holder</th><td></td></tr></tbody></table></div>
-<div class="body"><hr>
-<p>gate: G3 question: &quot;Do these tests follow from the evaluation criteria and from nothing else?&quot; recommendation: &quot;All 37 criteria are accounted for: 28 spec files under <code>tests/acceptance/evaluation/</code> holding 63 tests, and 9 entries in <code>tests/acceptance/not-testable.yaml</code>.&quot; opened: 2026-09-07T13:46:57.324Z</p>
-<hr>
-<h2>Do these tests follow from the evaluation criteria and from nothing else?</h2>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-07 13:46</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the evaluation criteria and from nothing else?</h2>
 <p><strong>Recommendation.</strong> All 37 criteria are accounted for: 28 spec files under <code>tests/acceptance/evaluation/</code> holding 63 tests, and 9 entries in <code>tests/acceptance/not-testable.yaml</code>.</p>
 <p>All 37 criteria are accounted for: 28 spec files under <code>tests/acceptance/evaluation/</code> holding 63 tests, and 9 entries in <code>tests/acceptance/not-testable.yaml</code>.</p>
 <p><strong>What I did.</strong> I worked only from <code>spec/</code>, <code>tests/generated/*</code> and <code>tests/seed/</code>. Every test signs in through <code>persona.&lt;id&gt;</code>, acts and reads only through <code>surface.&lt;page&gt;.&lt;name&gt;()</code>, names seeded records through <code>seed.&lt;group&gt;.&lt;handle&gt;</code>, and observes notifications through <code>mail</code>. No routes, selectors or test ids appear anywhere; I grepped the finished directory for every token the separation check refuses and it is clean.</p>

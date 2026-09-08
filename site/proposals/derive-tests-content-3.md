@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G3
-question: "Do the revised content tests now follow from their criteria and from nothing else?"
-recommendation: "I made no edits this run."
-opened: 2026-09-07T15:35:11.877Z
----
+| gate | G3 |
+| opened | 2026-09-07T15:35:11.877Z |
+| holder | agent:reviewer |
 
 # Do the revised content tests now follow from their criteria and from nothing else?
 

@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G1
-question: "Which of the files criteria that are still inferred or open become the contract?"
-recommendation: "8 criterion(s) in files are still short of the contract; rule on each with a ratification condition so the next ratify pass can mint them."
-opened: 2026-09-07T08:44:53.069Z
----
+| gate | G1 |
+| opened | 2026-09-07T08:44:53.069Z |
+| holder | agent:product-owner |
 
 # Which of the files criteria that are still inferred or open become the contract?
 

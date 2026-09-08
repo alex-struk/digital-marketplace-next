@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G1
-question: "Is this what the users domain does, and which of it is the contract?"
-recommendation: "Recovery of the **users** domain is complete: `spec/domains/users.md` (32 criteria, D-users-1 … D-users-32), plus twelve pages appended to `spec/contract/surface.yaml` and one persona to `spec/contrac…"
-opened: 2026-09-07T04:08:28.379Z
----
+| gate | G1 |
+| opened | 2026-09-07T04:08:28.379Z |
+| holder | agent:product-owner |
 
 # Is this what the users domain does, and which of it is the contract?
 

@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G1
-question: "Is this what the content domain does, and which of it is the contract?"
-recommendation: "**Journal — archaeology of the `content` domain**\n\nThe content domain is how the old application keeps its own prose out of its own code."
-opened: 2026-09-07T05:16:36.761Z
----
+| gate | G1 |
+| opened | 2026-09-07T05:16:36.761Z |
+| holder | agent:product-owner |
 
 # Is this what the content domain does, and which of it is the contract?
 

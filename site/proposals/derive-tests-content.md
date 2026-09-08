@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G3
-question: "Do these tests follow from the content criteria and from nothing else?"
-recommendation: "I wrote 21 spec files and eight not-testable entries, covering all 29 criteria."
-opened: 2026-09-07T14:18:10.844Z
----
+| gate | G3 |
+| opened | 2026-09-07T14:18:10.844Z |
+| holder | agent:reviewer |
 
 # Do these tests follow from the content criteria and from nothing else?
 

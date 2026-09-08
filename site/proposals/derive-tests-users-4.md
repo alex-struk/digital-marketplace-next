@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G3
-question: "Do the revised users tests now follow from their criteria and from nothing else?"
-recommendation: "**Condition 1 — the 34 deleted ledger entries.** I found this one already satisfied in the workspace as it reached me, and so made no change for it."
-opened: 2026-09-07T16:32:33.968Z
----
+| gate | G3 |
+| opened | 2026-09-07T16:32:33.968Z |
+| holder | agent:reviewer |
 
 # Do the revised users tests now follow from their criteria and from nothing else?
 

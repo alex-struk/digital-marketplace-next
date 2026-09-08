@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G3
-question: "Do these tests follow from the files criteria and from nothing else?"
-recommendation: "I derived acceptance tests for the 31 accepted criteria of the **files** domain from the contract alone — `tests/generated/surface.d.ts`, `personas.ts`, `seed.ts` and the seed manifest."
-opened: 2026-09-07T14:32:15.700Z
----
+| gate | G3 |
+| opened | 2026-09-07T14:32:15.700Z |
+| holder | agent:reviewer |
 
 # Do these tests follow from the files criteria and from nothing else?
 

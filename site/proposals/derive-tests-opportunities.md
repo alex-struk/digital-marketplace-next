@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G3
-question: "Do these tests follow from the opportunities criteria and from nothing else?"
-recommendation: "82 tests across 36 files, plus 14 not-testable entries."
-opened: 2026-09-07T15:54:01.037Z
----
+| gate | G3 |
+| opened | 2026-09-07T15:54:01.037Z |
+| holder | agent:reviewer |
 
 # Do these tests follow from the opportunities criteria and from nothing else?
 

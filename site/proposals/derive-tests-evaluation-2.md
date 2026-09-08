@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G3
-question: "Do the revised evaluation tests now follow from their criteria and from nothing else?"
-recommendation: "I acted on the four conditions in order; here is what happened."
-opened: 2026-09-07T15:17:54.626Z
----
+| gate | G3 |
+| opened | 2026-09-07T15:17:54.626Z |
+| holder | agent:reviewer |
 
 # Do the revised evaluation tests now follow from their criteria and from nothing else?
 

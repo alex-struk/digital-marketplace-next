@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G3
-question: "Do these tests follow from the users criteria and from nothing else?"
-recommendation: "I wrote 25 spec files under `tests/acceptance/users/` and nine entries in `not-testable.yaml`."
-opened: 2026-09-07T13:23:04.697Z
----
+| gate | G3 |
+| opened | 2026-09-07T13:23:04.697Z |
+| holder | agent:reviewer |
 
 # Do these tests follow from the users criteria and from nothing else?
 

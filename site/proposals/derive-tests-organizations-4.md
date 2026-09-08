@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G3
-question: "Do the revised organizations tests now follow from their criteria and from nothing else?"
-recommendation: "**Condition 1 — not done, and deliberately so.** The condition instructs me to restore the thirty-four R-6.\\* and R-8.\\* reasons verbatim via `git show main:tests/acceptance/not-testable.yaml`."
-opened: 2026-09-07T16:25:07.090Z
----
+| gate | G3 |
+| opened | 2026-09-07T16:25:07.090Z |
+| holder | agent:reviewer |
 
 # Do the revised organizations tests now follow from their criteria and from nothing else?
 

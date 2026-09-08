@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G3
-question: "Do these tests follow from the notifications criteria and from nothing else?"
-recommendation: "I derived tests for the twenty-eight accepted criteria of the notifications domain from the contract alone — `spec/`, the generated `surface.d.ts`, `personas.ts`, `seed.ts`, and the `mail` fixture."
-opened: 2026-09-07T14:03:18.341Z
----
+| gate | G3 |
+| opened | 2026-09-07T14:03:18.341Z |
+| holder | agent:reviewer |
 
 # Do these tests follow from the notifications criteria and from nothing else?
 

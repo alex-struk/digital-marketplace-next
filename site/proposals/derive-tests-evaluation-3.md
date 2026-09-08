@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G3
-question: "Do the revised evaluation tests now follow from their criteria and from nothing else?"
-recommendation: "**Condition 1 — restoring the 33 R-6.\\*/R-8.\\* not-testable entries: not done, and I could not do it here.**\n\nMy workspace holds `spec/`, `tests/seed/`, `tests/generated/` and `tests/acceptance/` as t…"
-opened: 2026-09-07T15:24:56.980Z
----
+| gate | G3 |
+| opened | 2026-09-07T15:24:56.980Z |
+| holder | agent:reviewer |
 
 # Do the revised evaluation tests now follow from their criteria and from nothing else?
 

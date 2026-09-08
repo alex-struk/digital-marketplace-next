@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G3
-question: "Do the revised content tests now follow from their criteria and from nothing else?"
-recommendation: "**Condition 1 — restore the eighteen R-8.\\* rows.** Already satisfied in the tree I was handed."
-opened: 2026-09-07T16:57:46.757Z
----
+| gate | G3 |
+| opened | 2026-09-07T16:57:46.757Z |
+| holder | agent:reviewer |
 
 # Do the revised content tests now follow from their criteria and from nothing else?
 

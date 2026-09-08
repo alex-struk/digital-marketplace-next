@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G1
-question: "Is this what the files domain does, and which of it is the contract?"
-recommendation: "All three deliverables are in place."
-opened: 2026-09-07T08:41:05.051Z
----
+| gate | G1 |
+| opened | 2026-09-07T08:41:05.051Z |
+| holder | agent:product-owner |
 
 # Is this what the files domain does, and which of it is the contract?
 

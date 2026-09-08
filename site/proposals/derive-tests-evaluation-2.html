@@ -19,11 +19,8 @@
 <main id="main">
 <div class="page-head"><h1>derive-tests-evaluation-2</h1>
 <p class="lede">G3 · <span class="chip return">return</span></p></div>
-<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td></td></tr><tr><th scope="row">opened</th><td></td></tr><tr><th scope="row">holder</th><td></td></tr></tbody></table></div>
-<div class="body"><hr>
-<p>gate: G3 question: &quot;Do the revised evaluation tests now follow from their criteria and from nothing else?&quot; recommendation: &quot;I acted on the four conditions in order; here is what happened.&quot; opened: 2026-09-07T15:17:54.626Z</p>
-<hr>
-<h2>Do the revised evaluation tests now follow from their criteria and from nothing else?</h2>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-07 15:17</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised evaluation tests now follow from their criteria and from nothing else?</h2>
 <p><strong>Recommendation.</strong> I acted on the four conditions in order; here is what happened.</p>
 <p>I acted on the four conditions in order; here is what happened.</p>
 <p><strong>Condition 1 — deletions.</strong> I confirmed against <code>spec/domains/evaluation.md</code> that R-5.4 carries <code>superseded-by: R-5.10</code> and R-5.6 carries <code>superseded-by: R-5.12</code>, and that both replacements are live criteria with their own spec files already present. I deleted <code>tests/acceptance/evaluation/R-5.4.spec.ts</code> and <code>tests/acceptance/evaluation/R-5.6.spec.ts</code>. The domain now holds 26 spec files. Neither ID gained a <code>not-testable.yaml</code> entry: they are superseded criteria, not live criteria the surface cannot reach, so they belong in neither place. A grep across <code>tests/</code> confirms nothing else referenced either file. <code>not-testable.yaml</code> is untouched, and so is every other spec file — no header dates were rewritten anywhere, because no surviving file&#39;s content changed.</p>

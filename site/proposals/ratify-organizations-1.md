@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G1
-question: "Which of the organizations criteria that are still inferred or open become the contract?"
-recommendation: "14 criterion(s) in organizations are still short of the contract; rule on each with a ratification condition so the next ratify pass can mint them."
-opened: 2026-09-07T03:42:43.479Z
----
+| gate | G1 |
+| opened | 2026-09-07T03:42:43.479Z |
+| holder | agent:product-owner |
 
 # Which of the organizations criteria that are still inferred or open become the contract?
 

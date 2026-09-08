@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G3
-question: "Do the revised users tests now follow from their criteria and from nothing else?"
-recommendation: "Three files touched, everything else untouched."
-opened: 2026-09-07T15:04:58.259Z
----
+| gate | G3 |
+| opened | 2026-09-07T15:04:58.259Z |
+| holder | agent:reviewer |
 
 # Do the revised users tests now follow from their criteria and from nothing else?
 

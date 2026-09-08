@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G1
-question: "Which of the content criteria that are still inferred or open become the contract?"
-recommendation: "12 criterion(s) in content are still short of the contract; rule on each with a ratification condition so the next ratify pass can mint them."
-opened: 2026-09-07T08:27:06.779Z
----
+| gate | G1 |
+| opened | 2026-09-07T08:27:06.779Z |
+| holder | agent:product-owner |
 
 # Which of the content criteria that are still inferred or open become the contract?
 

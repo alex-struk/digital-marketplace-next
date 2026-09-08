@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G1
-question: "Should R-4.10 and R-4.11 become obsolete in favour of their already accepted replacements?"
-recommendation: "Route the spec-state conditions from the returned G3 review to G1; obsolete only R-4.10 and R-4.11, then let ratify regenerate the spec."
-opened: 2026-09-08T23:45:23.989Z
----
+| gate | G1 |
+| opened | 2026-09-08T23:45:23.989Z |
+| holder | agent:product-owner |
 
 # Should R-4.10 and R-4.11 become obsolete in favour of their already accepted replacements?
 

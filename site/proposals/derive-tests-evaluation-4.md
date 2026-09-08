@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G3
-question: "Do the revised evaluation tests now follow from their criteria and from nothing else?"
-recommendation: "Verification complete."
-opened: 2026-09-07T16:45:05.673Z
----
+| gate | G3 |
+| opened | 2026-09-07T16:45:05.673Z |
+| holder | agent:reviewer |
 
 # Do the revised evaluation tests now follow from their criteria and from nothing else?
 

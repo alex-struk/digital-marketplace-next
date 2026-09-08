@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G1
-question: "Is this what the notifications domain does, and which of it is the contract?"
-recommendation: "The notifications domain is the old application's only way of reaching a person who is not currently looking at it, and it has exactly one channel: an email message the service composes itself, in a h…"
-opened: 2026-09-07T04:57:45.190Z
----
+| gate | G1 |
+| opened | 2026-09-07T04:57:45.190Z |
+| holder | agent:product-owner |
 
 # Is this what the notifications domain does, and which of it is the contract?
 

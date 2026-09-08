@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G1
-question: "Is this the contract the tests will act through?"
-recommendation: "(resumed; agent output unavailable)\n\n## Fix turn\n\n**Journal addition.** The persona `public-sector-staff-other` had `session-route: null` on its `sign_in` map, which the post-check read as a missing s…"
-opened: 2026-09-07T11:47:33.476Z
----
+| gate | G1 |
+| opened | 2026-09-07T11:47:33.476Z |
+| holder | agent:product-owner |
 
 # Is this the contract the tests will act through?
 

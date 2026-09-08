@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G1
-question: "Which of the opportunities criteria that are still inferred or open become the contract?"
-recommendation: "3 criterion(s) in opportunities are still short of the contract; rule on each with a ratification condition so the next ratify pass can mint them."
-opened: 2026-09-07T03:07:24.499Z
----
+| gate | G1 |
+| opened | 2026-09-07T03:07:24.499Z |
+| holder | agent:product-owner |
 
 # Which of the opportunities criteria that are still inferred or open become the contract?
 

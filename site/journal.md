@@ -33,18 +33,9 @@ Unknown conditions (reported, not applied):
 - confirm D-users-28
 - confirm D-users-30
 
-## 052 ·  · 
+## 052 · derive-tests · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "derive-tests"
-title: "derive tests"
-at: "2026-09-07T16:57:46.741Z"
-cost: 0.992475
-turns: 19
-session: "b16e5040-3737-437e-b1dc-166b082bd0ed"
----
+cost $0.992475 · turns 19
 
 I made no edits this run. Here is why, and what I verified.
 
@@ -62,18 +53,9 @@ I made no edits this run. Here is why, and what I verified.
 
 **Surface gaps worth carrying into the next contract.** No new ones surfaced this run, since I derived nothing new. The gaps already recorded against the content domain stand and are the ones to extend toward: an observation of the *shape* or status of a refused page request rather than free-text `refused_for_non_administrator` (this alone blocks R-7.11 and R-7.16); a way to address a service-owned embedded page by handle, so a body written through `content-create` can be read back in an embedded rendering (R-7.14); an action that follows the service level agreement link beside a program's cost, which today exists only as the unfollowable `opportunity_program_select.program_card` observation (R-7.15); observations on `content-edit` for the wording it is showing, a version history, an earlier version or a comparison, plus a restore action (R-7.23); and a second administrator sign-in on the target together with an observation of a version-key collision, without which the concurrent-edit criterion has no way to open two sessions on one page (R-7.28).
 
-## 051 ·  · 
+## 051 · derive-tests · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "derive-tests"
-title: "derive tests"
-at: "2026-09-07T16:25:07.079Z"
-cost: 1.8290375
-turns: 36
-session: "08d56f39-8cee-42df-a0bd-8cc922d2cd98"
----
+cost $1.8290375 · turns 36
 
 All four conditions are addressed to the extent the workspace permits. Final accounting check passes: 35 accepted R-3 criteria = 28 spec files + 3 not-testable entries (R-3.17, R-3.20, R-3.35) + 4 superseded criteria deliberately left to their replacements.
 
@@ -100,18 +82,9 @@ I changed nothing else. No header `derived` date was rewritten anywhere — both
 - `organization-edit` has no observation of which controls a viewer is offered. The proposal pages have `available_actions`; the organization management page has nothing equivalent, so R-3.18's central claim can only be tested by reading control names out of `organization_tab`'s free text. An `available_actions`, or an explicit `edit_control_offered` / `archive_control_offered` pair, would let that test say what R-3.18 says instead of approximating it.
 - `organization-edit` has no observation of a member's administrator status. There is `owner_badge` and `pending_badge` but no admin equivalent, which is why R-3.12's grant has to be read as a difference in `team_member_row` rather than asserted directly. An `admin_badge` observation would fix that, and would also give R-3.12 a check that survives unrelated changes to the row's layout.
 
-## 050 ·  · 
+## 050 · derive-tests · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "derive-tests"
-title: "derive tests"
-at: "2026-09-07T15:58:52.875Z"
-cost: 0.7054995000000001
-turns: 18
-session: "84f0e417-c490-49f1-8feb-cf74711da48a"
----
+cost $0.7054995000000001 · turns 18
 
 No dependencies are installed in this workspace (`tests/node_modules` is absent), so I could not run the typecheck or the separation check; both files use only the same imports and call shapes as the neighbouring specs that already pass.
 
@@ -127,18 +100,9 @@ For the third condition I changed nothing: the other 35 spec files in the domain
 
 Nothing was missing from the contract for this work. The one gap worth carrying forward to whoever writes the contract next is the one R-1.55's comment now records: an evaluation panel error observation that names a second chair — something alongside `minimumMembersError`, `duplicateMemberError`, `missingChairError` and `nonPublicSectorMemberError` on both `EvaluationPanelSwuPage` and `EvaluationPanelTwuPage`. Without it, the fifth fault R-1.55 lists stays unassertable, since the criterion demands the reason be named and no observation can read that particular reason.
 
-## 049 ·  · 
+## 049 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify opportunities"
-at: "2026-09-07T15:36:32.913Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify opportunities: 56 accepted, 0 still open, 1 obsolete, 0 replacement(s) added.
 Conditions from: contract-v1.
@@ -199,18 +163,9 @@ Unknown conditions (reported, not applied):
 - edit D-opportunities-25: An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains.
 - defect D-opportunities-49: Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike.
 
-## 048 ·  · 
+## 048 · derive-tests · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "derive-tests"
-title: "derive tests"
-at: "2026-09-07T14:32:15.688Z"
-cost: 4.4173529999999985
-turns: 43
-session: "deae8fe2-cea8-4512-b8ff-830b0a417b36"
----
+cost $4.4173529999999985 · turns 43
 
 I've finished. Thirteen spec files and eighteen not-testable entries, covering all 31 criteria.
 
@@ -242,18 +197,9 @@ Two things worth flagging to whoever rules this proposal. R-8.14 and R-8.21 are 
 
 I could not typecheck or run anything: `tests/node_modules` is absent and installing dependencies is outside what this stage owns. I checked the files by hand against the separation rules in `tests/README.md` — no `page.`, no locator or test-id, no route-shaped or absolute-URL literal, imports only from `../../fixtures`.
 
-## 047 ·  · 
+## 047 · derive-tests · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "derive-tests"
-title: "derive tests"
-at: "2026-09-07T14:03:18.328Z"
-cost: 3.3780640000000006
-turns: 39
-session: "70093e4d-dea4-4a2d-a547-11d84e7069e9"
----
+cost $3.3780640000000006 · turns 39
 
 All twelve files are clean of implementation reaches, and `not-testable.yaml` carries the other sixteen. Dependencies aren't installed in this workspace (`tests/node_modules` is absent), so I could not run `npm run typecheck` or the suite itself; I hand-checked the types against the generated declarations instead.
 
@@ -283,198 +229,81 @@ The third is a set of specific, small additions I needed and did not find, named
 
 One last thing the next contract revision should settle: every observation is `Promise<string>` with no stated vocabulary for the many that read as yes/no predicates. I asserted them affirmatively (`toBeTruthy`) and avoided asserting their negation anywhere, because a wrong guess at "no" versus "false" versus rendered text would fail a correct implementation. That convention is why R-6.27 is an entry rather than a file.
 
-## 046 ·  · 
+## 046 · derive-tests · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "derive-tests"
-title: "derive-tests: agent turn failed"
-at: "2026-09-07T12:27:38.816Z"
-cost: 0
-turns: 1
-session: "1c793022-3377-49d0-afd4-516c17500f26"
----
+cost $0 · turns 1
 
 You've hit your session limit · resets 5:40am (America/Vancouver)
 
-## 045 ·  · 
+## 045 · derive-tests · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "derive-tests"
-title: "derive-tests: agent turn failed"
-at: "2026-09-07T12:27:34.180Z"
-cost: 0
-turns: 1
-session: "2567e910-210a-4a42-bc8e-ff20f51b1db8"
----
+cost $0 · turns 1
 
 You've hit your session limit · resets 5:40am (America/Vancouver)
 
-## 044 ·  · 
+## 044 · derive-tests · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "derive-tests"
-title: "derive-tests: agent turn failed"
-at: "2026-09-07T12:27:27.584Z"
-cost: 0
-turns: 1
-session: "82465906-8f13-4192-ad4e-337c2b1ac403"
----
+cost $0 · turns 1
 
 You've hit your session limit · resets 5:40am (America/Vancouver)
 
-## 043 ·  · 
+## 043 · derive-tests · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "derive-tests"
-title: "derive-tests: agent turn failed"
-at: "2026-09-07T12:27:22.906Z"
-cost: 0
-turns: 1
-session: "bbb15810-8d09-431f-8655-59ff68135cc6"
----
+cost $0 · turns 1
 
 You've hit your session limit · resets 5:40am (America/Vancouver)
 
-## 042 ·  · 
+## 042 · derive-tests · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "derive-tests"
-title: "derive-tests: agent turn failed"
-at: "2026-09-07T12:27:15.962Z"
-cost: 0
-turns: 1
-session: "b5a54e55-6d02-42f0-ac78-4fc2eeb60200"
----
+cost $0 · turns 1
 
 You've hit your session limit · resets 5:40am (America/Vancouver)
 
-## 041 ·  · 
+## 041 · derive-tests · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "derive-tests"
-title: "derive-tests: agent turn failed"
-at: "2026-09-07T12:27:11.413Z"
-cost: 0
-turns: 1
-session: "591eadd0-2fec-4652-927c-18155725bffd"
----
+cost $0 · turns 1
 
 You've hit your session limit · resets 5:40am (America/Vancouver)
 
-## 040 ·  · 
+## 040 · derive-tests · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "derive-tests"
-title: "derive-tests: agent turn failed"
-at: "2026-09-07T12:27:05.192Z"
-cost: 0
-turns: 1
-session: "9d9da8f1-484a-4ff5-aac0-eb53a91f5e2a"
----
+cost $0 · turns 1
 
 You've hit your session limit · resets 5:40am (America/Vancouver)
 
-## 039 ·  · 
+## 039 · derive-tests · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "derive-tests"
-title: "derive-tests: agent turn failed"
-at: "2026-09-07T12:27:00.110Z"
-cost: 0
-turns: 1
-session: "e73acff1-fb30-4d79-a753-50721ad7922f"
----
+cost $0 · turns 1
 
 You've hit your session limit · resets 5:40am (America/Vancouver)
 
-## 038 ·  · 
+## 038 · derive-tests · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "derive-tests"
-title: "derive-tests: agent turn failed"
-at: "2026-09-07T12:26:54.047Z"
-cost: 0
-turns: 1
-session: "b2e65d37-b68d-4532-be53-b09e5653bb64"
----
+cost $0 · turns 1
 
 You've hit your session limit · resets 5:40am (America/Vancouver)
 
-## 037 ·  · 
+## 037 · derive-tests · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "derive-tests"
-title: "derive-tests: agent turn failed"
-at: "2026-09-07T12:26:49.372Z"
-cost: 0
-turns: 1
-session: "4a26888e-b72f-4122-a869-ed1fbf77730f"
----
+cost $0 · turns 1
 
 You've hit your session limit · resets 5:40am (America/Vancouver)
 
-## 036 ·  · 
+## 036 · derive-tests · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "derive-tests"
-title: "derive-tests: agent turn failed"
-at: "2026-09-07T12:26:42.493Z"
-cost: 0
-turns: 1
-session: "6570e456-d157-4743-bf70-4269edd980f7"
----
+cost $0 · turns 1
 
 You've hit your session limit · resets 5:40am (America/Vancouver)
 
-## 035 ·  · 
+## 035 · derive-tests · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "derive-tests"
-title: "derive-tests: agent turn failed"
-at: "2026-09-07T12:26:37.849Z"
-cost: 3.4780284999999997
-turns: 45
-session: "8e134b9e-3028-4723-ad69-0d4bcaae5f16"
----
+cost $3.4780284999999997 · turns 45
 
 You've hit your session limit · resets 5:40am (America/Vancouver)
 
-## 034 ·  · 
+## 034 · contract · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "contract"
-title: "contract"
-at: "2026-09-07T11:47:33.463Z"
-cost: 0.469701
-turns: 7
-session: ""
----
+cost $0.469701 · turns 7
 
 (resumed; agent output unavailable)
 
@@ -482,18 +311,9 @@ session: ""
 
 **Journal addition.** The persona `public-sector-staff-other` had `session-route: null` on its `sign_in` map, which the post-check read as a missing sign-in method for an identity the project configures. `null` on a whole `sign_in` is the deliberate "there is nothing to sign in with" marker for a role like the anonymous visitor; it is the wrong shape for a role the oracle genuinely cannot host a session for. That persona's entry now carries `session-route: { unavailable: … }`, with the reason stated in full: the old application exposes exactly three non-production sign-in routes, the two public-sector ones each mint a session for one fixed account, and neither takes a parameter that would reach a second non-administrator public-sector account — so the account can be seeded and observed on the oracle, but never acted as. `bind-adapter` will therefore throw from `signIn` for that identity and any criterion needing this persona reports as `unbound` on the oracle rather than as a failure. Its `sandbox-idp` entry (`username: gov-second`) is unchanged, so the persona still signs in normally on the rebuilt target. Nothing else in the contract was touched.
 
-## 033 ·  · 
+## 033 · contract · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "contract"
-title: "contract: post-checks failed"
-at: "2026-09-07T11:26:02.584Z"
-cost: 15.005878000000004
-turns: 139
-session: "5d62f9c1-5025-408f-9719-580587818d79"
----
+cost $15.005878000000004 · turns 139
 
 All six deliverables are written. Here is my journal entry.
 
@@ -529,18 +349,9 @@ The second is verification. This session could not run a YAML parser or Docker, 
 
 persona "public-sector-staff-other" has no sign_in for identity "session-route"
 
-## 032 ·  · 
+## 032 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify files"
-at: "2026-09-07T08:48:15.948Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify files: 31 accepted, 0 still open, 0 obsolete, 1 replacement(s) added.
 Unknown conditions (reported, not applied):
@@ -555,18 +366,9 @@ Unknown conditions (reported, not applied):
 - defect D-files-19: A profile picture or organization logo is accepted only if its content can be read as a JPEG or a PNG, and a file whose content is neither is refused whatever its name says; an image that reads successfully but cannot be resized is stored at its original size rather than refused.
 - defect D-files-22: A file may be attached to an opportunity or a proposal only by someone who is permitted to read that file.
 
-## 031 ·  · 
+## 031 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify files"
-at: "2026-09-07T08:44:53.000Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify files: 22 accepted, 8 still open, 0 obsolete, 6 replacement(s) added.
 Still open:
@@ -579,18 +381,9 @@ Still open:
 - D-files-21 (inferred) — the stored text never contains a web address, so the same text renders correctly wherever the service is running and whatever address it answers on. A marker that does not resolve to a known file identifier is left alone and treated as an ordinary address, so text written elsewhere still works. The content domain already expects image upload in the editor and defers what may be uploaded to here; this criterion is the other half of that.
 - D-files-24 (inferred) — the ending is compared without regard to capitalisation. The file choosers for a profile picture and for a logo both offer only these three endings, but the check on the service side is what actually enforces it. Nothing looks at the content, which is what makes R-8.14 possible.
 
-## 030 ·  · 
+## 030 · archaeology · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "archaeology"
-title: "archaeology files"
-at: "2026-09-07T08:41:05.040Z"
-cost: 6.7348845
-turns: 95
-session: "9d80f1e9-3225-4579-a668-4bf14168b9d7"
----
+cost $6.7348845 · turns 95
 
 All three deliverables are in place. Here is my journal entry.
 
@@ -606,18 +399,9 @@ The three opportunity programs also disagree with each other, and this one is no
 
 **What I could not determine.** Whether an image that exceeds both the width and the height limit ends up within both: the two reductions are applied one after another to the same working image, and which of them survives depends on the image library's own semantics rather than on anything this service states. I narrowed that criterion to the single-dimension case, which is unambiguous, and recorded the gap rather than guessing. I could not settle what the correct rule should be for four of the seven defects — the size-limit refusal reported as a service fault, the missing removal path, the fact that attaching a file checks only that it exists and not who uploaded it, and the tolerated image-processing failure — so none of them carries a `replaces`; each has a note saying why the corrected criterion is a decision rather than a finding. I also found no statement anywhere outside the code of the 10-megabyte upload limit, and nothing in the interface tells a person about it before they choose a file, so I cannot say whether that figure is policy or an implementation choice that hardened into one.
 
-## 029 ·  · 
+## 029 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify content"
-at: "2026-09-07T08:31:47.863Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify content: 29 accepted, 0 still open, 2 obsolete, 0 replacement(s) added.
 Obsolete:
@@ -632,18 +416,9 @@ Unknown conditions (reported, not applied):
 - defect D-content-22: A page's body is rendered as formatted text only; markup embedded in it is never executed, and the same body renders identically on the page's own address and wherever another screen embeds it.
 - defect D-content-28: The service level agreement page is one the service creates for itself, so every screen that links to it — the learn-more index, the program cards, and the Code With Us, Sprint With Us and Team With Us opportunity forms — resolves on a fresh installation.
 
-## 028 ·  · 
+## 028 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify"
-at: "2026-09-07T05:20:01.894Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify content: 18 accepted, 12 still open, 1 obsolete, 3 replacement(s) added.
 Still open:
@@ -662,18 +437,9 @@ Still open:
 Obsolete:
 - D-content-27 — The rebuild does not create pages for itself that nothing in it links to. The seven concerned — the opportunity and proposal guides of all three programs and the Team With Us opportunity scope page — were superseded by the built-in learn-more screens and survive only as unremovable rows an administrator cannot clean up. Rows already present in an existing installation are untouched, since the schema is kept.
 
-## 027 ·  · 
+## 027 · archaeology · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "archaeology"
-title: "archaeology"
-at: "2026-09-07T05:16:36.748Z"
-cost: 6.568516000000001
-turns: 106
-session: "d28fc050-9a1c-44a7-8cc3-de81991dcaee"
----
+cost $6.568516000000001 · turns 106
 
 **Journal — archaeology of the `content` domain**
 
@@ -685,18 +451,9 @@ What conflicted. The two mismatches worth a ruling are both inside the code rath
 
 What I could not determine. Whether the service-level-agreement link is actually broken in a running installation is unresolvable from the source: an administrator can create an ordinary page at that address by hand, and a long-lived deployment may well have one. That is why I graded it `open` rather than asserting a break — but either way the page would be an ordinary one, removable and absent from a fresh installation, unlike every other page the service links to itself. I also could not consult the old application's commit history: the environment refused the read, so the questions history would have settled — when the guide pages fell out of use, whether the service-level-agreement page was ever seeded and then dropped — are unanswered rather than answered negatively. And two behaviours I recorded as `inferred` are reasoned from the code's structure rather than observed: that a rename leaves nothing at the old address, and that two administrators editing the same page at once produce a silent last-writer-wins overwrite, since the submission carries no record of which version it was based on. Both are worth exercising against the running old application before anyone treats them as settled.
 
-## 026 ·  · 
+## 026 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify"
-at: "2026-09-07T05:06:31.342Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify notifications: 28 accepted, 0 still open, 0 obsolete, 2 replacement(s) added.
 Unknown conditions (reported, not applied):
@@ -711,18 +468,9 @@ Unknown conditions (reported, not applied):
 - defect D-notifications-16: The message announcing changed terms names every program whose proposals require a current acceptance — Code With Us, Sprint With Us and Team With Us — or names none of them rather than a subset.
 - defect D-notifications-19: The administrator's notification reference page shows every message the service can send, so that no message exists which cannot be previewed there before the event that sends it.
 
-## 025 ·  · 
+## 025 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify"
-at: "2026-09-07T05:01:47.135Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify notifications: 19 accepted, 7 still open, 0 obsolete, 5 replacement(s) added.
 Still open:
@@ -734,18 +482,9 @@ Still open:
 - D-notifications-20 (inferred) — this message uses a layout of its own rather than the layout every other message uses, leading with the opportunity's title and the winner's name. Where no successful proponent is recorded the name is replaced by a dash rather than the sentence being omitted, so a reader can be shown "awarded to —".
 - D-notifications-21 (open) — accounts without an email address are allowed deliberately, and most messages guard against one only by substituting an empty list of recipients where the address would go — the message is still composed and still handed over to be sent. Whether that produces a rejected send, a silently discarded one, or an error that stops the rest of a broadcast is not decidable from the source, and because delivery failures are only logged, nothing inside the service would show which. The one place that does check is account creation, which skips the welcome message when there is no address. A human should rule on whether the new service must skip a recipient with no address everywhere, and on whether one such recipient may stop a broadcast to the rest.
 
-## 024 ·  · 
+## 024 · archaeology · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "archaeology"
-title: "archaeology"
-at: "2026-09-07T04:57:45.177Z"
-cost: 8.691965999999995
-turns: 112
-session: "f56aa73a-a54a-413e-8113-9c482777fc1c"
----
+cost $8.691965999999995 · turns 112
 
 Done. `spec/domains/notifications.md` (21 criteria), plus four pages appended to `spec/contract/surface.yaml`. `personas.yaml` is unchanged — the domain introduced no role it does not already list.
 
@@ -761,18 +500,9 @@ I deliberately did not re-record which event notifies whom — the opportunities
 
 **What I could not determine.** What happens when the service tries to notify an account that holds no email address. Accounts without one are allowed on purpose, and most messages guard against it only by substituting an empty recipient list — the message is still composed and still handed on to be sent, so the outcome is decided outside the application's own code, and because delivery failures are only written to an operational log and never surfaced, nothing inside the service would reveal which outcome occurred. It matters most for the terms broadcast, which walks every active vendor one at a time: whether one address-less vendor stops the run for everyone after them is exactly the question the source cannot answer. I recorded it as `open` with the question a human needs to rule on. Two further things I could describe but not settle: whether the four notices that disclose their recipients should be corrected (the rest of the code's own behaviour says yes, but nothing states it), and whether the single notification preference is meant to govern only new-opportunity announcements — the settings page is honest about its scope, but every other message still ends with an unsubscribe offer that leads to a choice which will not stop messages of that kind, and no source says whether the other kinds were ever intended to be declinable.
 
-## 023 ·  · 
+## 023 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify"
-at: "2026-09-07T04:46:54.619Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify evaluation: 37 accepted, 0 still open, 0 obsolete, 1 replacement(s) added.
 Unknown conditions (reported, not applied):
@@ -785,18 +515,9 @@ Unknown conditions (reported, not applied):
 - defect D-evaluation-28: Finalising the consensus scores must be refused unless every proponent still under review of the questions has a submitted consensus, so that no proponent is left neither screened in nor screened out.
 - defect D-evaluation-29: The action that finalises consensus scores must be offered to whoever the service accepts it from — the opportunity's owner as well as an administrator — so that the browser and the service agree on who may finalise.
 
-## 022 ·  · 
+## 022 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify"
-at: "2026-09-07T04:41:56.497Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify evaluation: 14 accepted, 22 still open, 0 obsolete, 6 replacement(s) added.
 Still open:
@@ -823,48 +544,21 @@ Still open:
 - D-evaluation-25 (inferred) — the proponents are ordered by their anonymous names, so an evaluator never sees which organization they are scoring while the questions are being evaluated.
 - D-evaluation-30 (inferred) — Sprint With Us calls them team questions and carries four proponents forward; Team With Us calls them resource questions and carries three. Team With Us gained its panel about ten months after Sprint With Us did, and its tables were copied from the Sprint With Us ones.
 
-## 021 ·  · 
+## 021 · archaeology · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "archaeology"
-title: "archaeology"
-at: "2026-09-07T04:38:57.886Z"
-cost: 0
-turns: 0
-session: ""
----
 
 (resumed; agent output unavailable)
 
-## 020 ·  · 
+## 020 · archaeology · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "archaeology"
-title: "archaeology: agent turn failed"
-at: "2026-09-07T04:31:05.608Z"
-cost: 15.593451500000004
-turns: 121
-session: "fcbebecc-8723-4320-9287-18ab3079fc55"
----
+cost $15.593451500000004 · turns 121
 
 the agent turn reported failure with no output; the session hit the turn cap (error_max_turns)
 
-## 019 ·  · 
+## 019 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify"
-at: "2026-09-07T04:16:50.307Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify users: 34 accepted, 0 still open, 2 obsolete, 0 replacement(s) added.
 Obsolete:
@@ -879,18 +573,9 @@ Unknown conditions (reported, not applied):
 - defect D-users-21: A person whose account an administrator reactivates is told that an administrator has reactivated their Digital Marketplace account and whom to contact with questions; the message telling a person they reactivated the account themselves is sent only when they did so by signing in again.
 - defect D-users-25: The list of everyone registered with the service may be read only by an administrator. The same request made by a public sector employee who is not an administrator, or by anyone else, is refused rather than answered, so the email address and account status of every registered person are never disclosed more widely than the interface offers them.
 
-## 018 ·  · 
+## 018 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify"
-at: "2026-09-07T04:12:54.156Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify users: 21 accepted, 13 still open, 2 obsolete, 4 replacement(s) added.
 Still open:
@@ -911,18 +596,9 @@ Obsolete:
 - D-users-29 — These routes are gated on NODE_ENV being exactly 'development' rather than on being outside production as the recovered statement has it, but either way they are test-only entrances of precisely the kind constitution article J3 forbids. The rebuilt system carries no route that establishes a session without the identity provider; tests sign in through the sandbox identity provider, which is also what makes R-4.4 testable at all, since the old routes bypass the account-status check.
 - D-users-32 — The facility does not exist. SERVICE_TOKEN_HASH appears exactly twice in the whole of the old repository - its definition at src/back-end/config.ts:82 and its README row at README.md:279 - and no route, handler or middleware refers to it. The criterion records that the old repository's documentation is stale rather than a behaviour the rebuilt system must exhibit, and a shared token overriding user accounts and sessions would be a test-only entrance forbidden by J3 in any case, so it is carried forward in neither direction.
 
-## 017 ·  · 
+## 017 · archaeology · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "archaeology"
-title: "archaeology"
-at: "2026-09-07T04:08:28.367Z"
-cost: 8.6131965
-turns: 94
-session: "f031c63e-3dee-4e5f-a9c6-26788f2cf62f"
----
+cost $8.6131965 · turns 94
 
 Recovery of the **users** domain is complete: `spec/domains/users.md` (32 criteria, D-users-1 … D-users-32), plus twelve pages appended to `spec/contract/surface.yaml` and one persona to `spec/contract/personas.yaml`.
 
@@ -938,35 +614,17 @@ Three defects are recorded that should not carry forward, none with a replacemen
 
 What I could not determine: whether a newly created public sector employee is *meant* to skip the profile-completion step. Every new account is redirected to that page, but the page admits vendors alone and sends everyone else straight to the dashboard, so a public sector employee is never asked to confirm their details and never sees the notification choice offered there — the code shows the outcome but not the intent, so it is noted rather than resolved. I also could not settle from the source what a person actually sees when a save fails because two accounts of the same kind would share an email address; the constraint is real and enforced in the stored data, but the failure surfaces as a generic sign-in or save failure indistinguishable from any other fault. Finally, the domain introduces no genuinely new role — vendor, public sector staff and administrator were all already listed — so the only persona I added is `deactivated-vendor`, which is an account state rather than a role, added because none of the existing personas can reach the sign-in rules this domain turns on. I left the sixteen existing persona entries untouched.
 
-## 016 ·  · 
+## 016 · archaeology · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "archaeology"
-title: "archaeology: post-checks failed"
-at: "2026-09-07T03:57:06.609Z"
-cost: 0
-turns: 0
-session: ""
----
 
 (resumed; agent output unavailable)
 
 spec/domains/users.md is missing
 
-## 015 ·  · 
+## 015 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify"
-at: "2026-09-07T03:46:46.880Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify organizations: 35 accepted, 0 still open, 0 obsolete, 1 replacement(s) added.
 Unknown conditions (reported, not applied):
@@ -983,18 +641,9 @@ Unknown conditions (reported, not applied):
 - defect D-organizations-8: A change to an organization's contact phone number made while editing its profile is saved along with every other profile field, and clearing the field removes the stored number.
 - defect D-organizations-30: Asking for the organizations one may act on behalf of is refused as not permitted for anyone who is not a signed-in vendor, rather than answered with an empty list.
 
-## 014 ·  · 
+## 014 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify"
-at: "2026-09-07T03:42:43.422Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify organizations: 20 accepted, 14 still open, 0 obsolete, 3 replacement(s) added.
 Still open:
@@ -1013,18 +662,9 @@ Still open:
 - D-organizations-26 (inferred)
 - D-organizations-28 (inferred)
 
-## 013 ·  · 
+## 013 · archaeology · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "archaeology"
-title: "archaeology"
-at: "2026-09-07T03:39:38.252Z"
-cost: 7.864792999999998
-turns: 89
-session: "03e15e6c-1f84-433f-b4cb-a4c0e541ad71"
----
+cost $7.864792999999998 · turns 89
 
 Work is complete. Three files touched, all within `spec/`.
 
@@ -1042,18 +682,9 @@ Three places where the code disagrees with itself rather than with a document. E
 
 **What I could not determine.** For the contact phone defect I could establish that the submitted value never reaches the stored record, but not whether the stored number is left as it was or cleared — that turns on how the database layer treats a field it was not handed, which the source does not settle. Whether a person whose membership was previously ended can be invited back is read off the shape of the duplicate check, not observed, and I have flagged it as such. I also could not tell whether the three defects are defects in anyone's eyes but mine: each carries a note saying no corrected criterion has been written, because deciding between widening a permission and hiding a control is a product judgement, not an archaeological one. Finally, one notification path — telling an owner that an established member has left — exists in the code but nothing calls it, so the owner is told when an invitation is declined and not when a member departs; I recorded the asymmetry rather than guessing which half was intended.
 
-## 012 ·  · 
+## 012 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify"
-at: "2026-09-07T03:31:13.878Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify proposals: 38 accepted, 0 still open, 2 obsolete, 0 replacement(s) added.
 Obsolete:
@@ -1064,18 +695,9 @@ Unknown conditions (reported, not applied):
 - defect D-proposals-36: A Team With Us proposal is refused when the hourly rates it names, applied at each resource's target allocation across the opportunity's contract period, come to more than the opportunity's maximum budget; the check runs on both the create and the edit path, as the equivalent Sprint With Us check does.
 - edit D-proposals-34: A proposal may be created only as a draft or as a submission, in all three programs; any other state is refused.
 
-## 011 ·  · 
+## 011 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify"
-at: "2026-09-07T03:26:07.390Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify proposals: 10 accepted, 28 still open, 2 obsolete, 2 replacement(s) added.
 Still open:
@@ -1111,18 +733,9 @@ Obsolete:
 - D-proposals-35 — The stage between reviewing team questions and the code challenge is deprecated in the old system by its own migration, which comments 'Unused status; deprecate', rewrites every stored occurrence and narrows the permitted values so the old spelling can no longer be stored; only two migrations ever touch that constraint and neither restores it, and the live path moves proposals straight from question review to the code challenge. The new system carries no stage between them.
 - D-proposals-37 — An address that renders nothing but the words 'Proposal List' is an unfinished stub rather than behaviour to carry forward. A vendor reaches their own and their organizations' proposals from the dashboard, which D-proposals-18 already states; the proposal-list-stub entry in spec/contract/surface.yaml is removed with it.
 
-## 010 ·  · 
+## 010 · archaeology · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "archaeology"
-title: "archaeology"
-at: "2026-09-07T03:22:16.827Z"
-cost: 11.763324
-turns: 101
-session: "c3a18986-7545-4219-bac4-93f82f4ef4c8"
----
+cost $11.763324 · turns 101
 
 The proposals domain is recovered and written. Journal entry follows.
 
@@ -1142,18 +755,9 @@ Two further things I found and marked as defects rather than behaviour to carry 
 
 One smaller gap worth flagging: the address that ought to list proposals renders the words "Proposal List" and nothing else. The working place for a vendor to see their bids is the dashboard, which separates their own proposals from their organizations'. Nothing should carry that address forward without a decision about what belongs on it.
 
-## 009 ·  · 
+## 009 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify"
-at: "2026-09-07T03:10:55.349Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify opportunities: 56 accepted, 0 still open, 1 obsolete, 2 replacement(s) added.
 Obsolete:
@@ -1207,18 +811,9 @@ Unknown conditions (reported, not applied):
 - defect D-opportunities-48: There is exactly one path out of a questions consensus stage, and it refuses to advance unless every consensus evaluation has been submitted and at least one proponent has met the minimum score on every question that sets one.
 - defect D-opportunities-50: The rebuilt system defines no suspended state for an opportunity: none can be created in it, moved to it or stored in it, and any historical record carrying it is mapped to a defined state before the rebuilt system reads it.
 
-## 008 ·  · 
+## 008 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify"
-at: "2026-09-07T03:07:24.448Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify opportunities: 51 accepted, 3 still open, 1 obsolete, 4 replacement(s) added.
 Still open:
@@ -1235,18 +830,9 @@ Unknown conditions (reported, not applied):
 - Record that the old test suite was not read because .sdlc/config.yaml excludes cypress/ and tests/; if a later stage wants criteria upgraded rather than ruled, lifting that exclusion is a policy change to propose, not an archaeology re-run.
 - Future archaeology proposals must carry an actual recommendation in front-matter; 'I've finished.' gives the gate holder nothing to rule on.
 
-## 007 ·  · 
+## 007 · ratify · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "ratify"
-title: "ratify"
-at: "2026-09-07T01:21:50.948Z"
-cost: 0
-turns: 0
-session: "deterministic"
----
 
 ratify opportunities: 6 accepted, 45 still open, 0 obsolete, 0 replacement(s) added.
 Still open:
@@ -1303,18 +889,9 @@ Unknown conditions (reported, not applied):
 - Record that the old test suite was not read because .sdlc/config.yaml excludes cypress/ and tests/; if a later stage wants criteria upgraded rather than ruled, lifting that exclusion is a policy change to propose, not an archaeology re-run.
 - Future archaeology proposals must carry an actual recommendation in front-matter; 'I've finished.' gives the gate holder nothing to rule on.
 
-## 006 ·  · 
+## 006 · archaeology · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "archaeology"
-title: "archaeology"
-at: "2026-09-07T01:08:02.842Z"
-cost: 11.958588999999995
-turns: 130
-session: "c17e84c3-697b-463e-8d13-49f999fae061"
----
+cost $11.958588999999995 · turns 130
 
 I've finished. Files written: `spec/domains/opportunities.md` (51 criteria), plus appended entries to `spec/contract/surface.yaml` and `spec/contract/personas.yaml`.
 
@@ -1334,18 +911,9 @@ Three things I recorded as defects rather than intent. A member of public sector
 
 **What I could not determine.** Why Team With Us has no upper budget limit when the other two programs are capped, why it alone has no "add note" action, and why its staff author may delete an under-review opportunity when the other two programs restrict them to drafts — these are real per-program divergences, but the application gives no reason for any of them, and each could as easily be an omission as a decision. I could not tell whether the stale README and schema document mean Team With Us was added without updating them, or whether some earlier decision scoped the service to two programs and the third was added later against that; both readings fit the evidence. I could not determine what the completion date on a Code With Us opportunity is used for downstream, since it is optional and nothing I read consumes it. And I could not establish the intended precision of automatic closure: closure is driven by ordinary web traffic rather than a clock, throttled to at most once a minute and additionally hung off the health-check route so it still fires on an idle site — so an opportunity closes at the first request after its deadline, not at the deadline. Whether that lag is acceptable behaviour or a workaround for the absence of a scheduler is a question the code cannot answer.
 
-## 005 ·  · 
+## 005 · archaeology · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "archaeology"
-title: "archaeology: post-checks failed"
-at: "2026-09-07T00:53:43.512Z"
-cost: 0
-turns: 0
-session: ""
----
 
 Work is complete. Here is the journal entry.
 
@@ -2335,18 +1903,9 @@ spec/domains/opportunities.md:596: expected a heading (### ID · vN · confidenc
 spec/domains/opportunities.md:597: expected a heading (### ID · vN · confidence · origin), got: then: the administrator sees the whole report on one page and the other person is refused access
 spec/domains/opportunities.md has no criteria
 
-## 004 ·  · 
+## 004 · archaeology · 2026-09-07
 
 cost $0 · turns 0
-
----
-stage: "archaeology"
-title: "archaeology: post-checks failed"
-at: "2026-09-07T00:43:21.428Z"
-cost: 0
-turns: 0
-session: ""
----
 
 I've finished. Here is my journal entry.
 
@@ -3794,33 +3353,15 @@ spec/domains/opportunities.md:803: expected a heading (### ID · vN · confidenc
 spec/domains/opportunities.md:804: expected a heading (### ID · vN · confidence · origin), got: - then: they receive one notification, not two
 spec/domains/opportunities.md has no criteria
 
-## 003 ·  · 
+## 003 · archaeology · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "archaeology"
-title: "archaeology: agent turn failed"
-at: "2026-09-07T00:32:52.615Z"
-cost: 4.454979999999998
-turns: 41
-session: "1555fdc3-4153-45f2-ad90-38ebfb71b080"
----
+cost $4.454979999999998 · turns 41
 
 the agent turn reported failure with no output
 
-## 002 ·  · 
+## 002 · intent · 2026-09-07
 
-cost $0 · turns 0
-
----
-stage: "intent"
-title: "intent"
-at: "2026-09-07T00:15:57.173Z"
-cost: 0.6139335
-turns: 8
-session: "d8df255f-0d1b-477e-b898-0cd0664fa960"
----
+cost $0.6139335 · turns 8
 
 Two files touched, both inside my boundary: one new intent document and one row added to the constitution.
 
@@ -3844,18 +3385,9 @@ The second is the outcome. "Measurable parity" is the brief's own phrase, and it
 
 **What I could not do.** Nobody is available to answer the fifteen questions, so none of them are closed; the intent goes forward with its outcome not yet measurable, and a later stage or the brief's author will have to settle at least the parity measure before anything downstream can claim success against it. I did not look outside the brief — no reading of the existing application, no inference from similar procurement systems — so if the brief is itself wrong or incomplete about the service, that error is faithfully reproduced in the intent and the open questions are the only place it will surface.
 
-## 001 ·  · 
+## 001 · probe · 2026-09-06
 
-cost $0 · turns 0
-
----
-stage: "probe"
-title: "probe"
-at: "2026-09-06T11:19:02.862Z"
-cost: 0.224672
-turns: 2
-session: "c74ea0cb-7f19-4519-a32b-33ea3cc63473"
----
+cost $0.224672 · turns 2
 
 I wrote `app/PROBE.md` in the digital-marketplace-next repository. It holds two lines: today's date, 2026-09-06, and the sentence "the runner works" — nothing else, since the instruction asked for exactly that content and no more.
 

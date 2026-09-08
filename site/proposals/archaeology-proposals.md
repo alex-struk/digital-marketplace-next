@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G1
-question: "Is this what the proposals domain does, and which of it is the contract?"
-recommendation: "The proposals domain is recovered and written."
-opened: 2026-09-07T03:22:16.838Z
----
+| gate | G1 |
+| opened | 2026-09-07T03:22:16.838Z |
+| holder | agent:product-owner |
 
 # Is this what the proposals domain does, and which of it is the contract?
 

@@ -19,11 +19,8 @@
 <main id="main">
 <div class="page-head"><h1>derive-tests-notifications</h1>
 <p class="lede">G3 · <span class="chip approve">approve</span></p></div>
-<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td></td></tr><tr><th scope="row">opened</th><td></td></tr><tr><th scope="row">holder</th><td></td></tr></tbody></table></div>
-<div class="body"><hr>
-<p>gate: G3 question: &quot;Do these tests follow from the notifications criteria and from nothing else?&quot; recommendation: &quot;I derived tests for the twenty-eight accepted criteria of the notifications domain from the contract alone — <code>spec/</code>, the generated <code>surface.d.ts</code>, <code>personas.ts</code>, <code>seed.ts</code>, and the <code>mail</code> fixture.&quot; opened: 2026-09-07T14:03:18.341Z</p>
-<hr>
-<h2>Do these tests follow from the notifications criteria and from nothing else?</h2>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-07 14:03</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the notifications criteria and from nothing else?</h2>
 <p><strong>Recommendation.</strong> I derived tests for the twenty-eight accepted criteria of the notifications domain from the contract alone — <code>spec/</code>, the generated <code>surface.d.ts</code>, <code>personas.ts</code>, <code>seed.ts</code>, and the <code>mail</code> fixture.</p>
 <p>All twelve files are clean of implementation reaches, and <code>not-testable.yaml</code> carries the other sixteen. Dependencies aren&#39;t installed in this workspace (<code>tests/node_modules</code> is absent), so I could not run <code>npm run typecheck</code> or the suite itself; I hand-checked the types against the generated declarations instead.</p>
 <hr>

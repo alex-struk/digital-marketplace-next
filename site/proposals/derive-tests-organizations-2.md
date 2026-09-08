@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G3
-question: "Do the revised organizations tests now follow from their criteria and from nothing else?"
-recommendation: "All five conditions are addressed."
-opened: 2026-09-07T14:51:20.566Z
----
+| gate | G3 |
+| opened | 2026-09-07T14:51:20.566Z |
+| holder | agent:reviewer |
 
 # Do the revised organizations tests now follow from their criteria and from nothing else?
 

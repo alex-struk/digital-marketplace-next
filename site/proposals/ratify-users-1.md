@@ -1,15 +1,8 @@
 | Field | Value |
 | --- | --- |
-| gate |  |
-| opened |  |
-| holder |  |
-
----
-gate: G1
-question: "Which of the users criteria that are still inferred or open become the contract?"
-recommendation: "13 criterion(s) in users are still short of the contract; rule on each with a ratification condition so the next ratify pass can mint them."
-opened: 2026-09-07T04:12:54.243Z
----
+| gate | G1 |
+| opened | 2026-09-07T04:12:54.243Z |
+| holder | agent:product-owner |
 
 # Which of the users criteria that are still inferred or open become the contract?
 
