@@ -32,3 +32,22 @@ What the contract would need to reach the rest:
 - Observations for the date and actor recorded on a deactivation, and for the two separate terms-acceptance dates the legal section collapses into one notice.
 
 Tests that leave an account changed put it back: self-deactivated accounts are signed back in, granted administrator rights are withdrawn, and the notification choice the seed defines is restored. I could not run the suite. No dependencies are installed in this workspace, so there is no type check or test run behind this report; correctness here rests on reading the generated surface, the seed and the existing tests in the other domains.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+The question is whether these tests follow from the users criteria and from nothing else. Approve. All thirty live criteria are accounted for, twenty-five with a spec file and five with a not-testable entry, and no test was written against a superseded or obsolete criterion; each not-testable reason names something the surface genuinely lacks, verified against spec/contract/surface.yaml, tests/generated/personas.ts and tests/fixtures/mail.ts rather than taken on trust, and the reactivation-message reason matches reasons already accepted at this gate for four notifications criteria; every assertion I traced follows from its criterion, with the gaps between criterion and surface recorded in comments rather than papered over with invented assertions, and no selector, route, status code, table or column name appears anywhere in the diff; the checks are green, the runner's typecheck passed on this revision, and nothing outside tests/acceptance and the record files was touched. What would change the ruling is a test asserting something its criterion does not say, a not-testable reason that names inconvenience rather than a missing page, action or observation, or a diff reaching a protected path.
+
+**Conditions:**
+- The terms-broadcast setup in R-4.3, R-4.16, R-4.23, R-4.24 and R-4.33 withdraws every vendor's standing acceptance and restores it only for the vendor under test; R-4.16 deliberately leaves persona.vendor withdrawn. The receipt enumerates three kinds of restoration and does not mention this one. Since the suite runs serially with one worker and file order is not fixed, a later file in another domain that assumes a vendor stands under the current terms may see a state the seed does not describe. Worth recording in the run notes.
+- The R-4.20 not-testable reason rests on the mail fixture returning Subject, Snippet, To and ID, but spec/contract/observables.yaml names html_body, plain_text_body and a read_one_message endpoint. The gap is in tests/fixtures/mail.ts, not in the contract. A body accessor would make R-4.20 testable and would also retire four notifications entries resting on the same limitation.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `89345d2aef247f27395aaa60daba4815b9a995eb`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+
+    No diagnostics.
