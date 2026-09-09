@@ -1,15 +1,13 @@
 gate: G3
-verdict: return
+verdict: approve
 by: agent:reviewer
 held_by: agent
 rationale: |2-
-  The not-testable reasons are all real and the suite is free of implementation leakage, but two tests assert what their criteria do not say and the receipt's restoration claim is untrue. R-4.27.spec.ts:50 reads job_title_field as a stored value (falsy after clearing) while R-4.28.spec.ts:9 reads the same observation as the field being offered (truthy) for the same account, and R-4.27 runs first and leaves that job title cleared — under either consistent meaning one of the two asserts something its criterion does not state, and R-4.28's presence reading is the one its criterion supports. Separately, the receipt states that every mutating test restores what it changed, while the proposal itself records that vendor-with-terms-reset is one-shot across R-4.3, R-4.23 and R-4.24; in alphabetical file order R-4.24 completes and accepts terms on that account before R-4.3 runs, so R-4.3's first two tests cannot pass. Coverage, the nine not-testable reasons and the separation of test from implementation would all have carried an approval on their own.
+  The question is whether these tests follow from the users criteria and from nothing else. Approve. All thirty live criteria are accounted for, twenty-five with a spec file and five with a not-testable entry, and no test was written against a superseded or obsolete criterion; each not-testable reason names something the surface genuinely lacks, verified against spec/contract/surface.yaml, tests/generated/personas.ts and tests/fixtures/mail.ts rather than taken on trust, and the reactivation-message reason matches reasons already accepted at this gate for four notifications criteria; every assertion I traced follows from its criterion, with the gaps between criterion and surface recorded in comments rather than papered over with invented assertions, and no selector, route, status code, table or column name appears anywhere in the diff; the checks are green, the runner's typecheck passed on this revision, and nothing outside tests/acceptance and the record files was touched. What would change the ruling is a test asserting something its criterion does not say, a not-testable reason that names inconvenience rather than a missing page, action or observation, or a diff reaching a protected path.
 conditions:
-  - "Settle what job_title_field observes — presence of the field or its value — and make R-4.27 and R-4.28 agree on it; R-4.27's blank-job-title case is already carried by the fieldError assertion, and R-4.28's criterion needs the presence reading."
-  - "Restore staffOne's job title in R-4.27 test 4, or stop asserting on job_title_field there, so R-4.28 does not inherit a cleared field."
-  - "Resolve the vendor-with-terms-reset one-shot across R-4.3, R-4.23 and R-4.24 — restore the state within each file, or record the ordering dependency as an attestation rather than a note in the proposal."
-  - "Replace emptyMyProposalsMessage() in R-4.23 with myProposalsTable(), so landing on the vendor dashboard is not proved by asserting the vendor has no proposals."
-cost: 1.7253394999999996
-turns: 9
-session: "8e5b9e0b-e5c2-46d8-8646-87b787502f27"
-at: 2026-09-07T13:26:33.373Z
+  - "The terms-broadcast setup in R-4.3, R-4.16, R-4.23, R-4.24 and R-4.33 withdraws every vendor's standing acceptance and restores it only for the vendor under test; R-4.16 deliberately leaves persona.vendor withdrawn. The receipt enumerates three kinds of restoration and does not mention this one. Since the suite runs serially with one worker and file order is not fixed, a later file in another domain that assumes a vendor stands under the current terms may see a state the seed does not describe. Worth recording in the run notes."
+  - "The R-4.20 not-testable reason rests on the mail fixture returning Subject, Snippet, To and ID, but spec/contract/observables.yaml names html_body, plain_text_body and a read_one_message endpoint. The gap is in tests/fixtures/mail.ts, not in the contract. A body accessor would make R-4.20 testable and would also retire four notifications entries resting on the same limitation."
+cost: 3.9504760000000005
+turns: 37
+session: "a30f73ca-6daa-4f71-8ba5-ee8189bd9df3"
+at: 2026-09-09T01:18:05.643Z

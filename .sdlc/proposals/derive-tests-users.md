@@ -1,49 +1,53 @@
 ---
 gate: G3
 question: "Do these tests follow from the users criteria and from nothing else?"
-recommendation: "I wrote 25 spec files under `tests/acceptance/users/` and nine entries in `not-testable.yaml`."
-opened: 2026-09-07T13:23:04.697Z
+recommendation: "Twenty-five of the thirty criteria for the users domain now have a Playwright file under `tests/acceptance/users/`, one per criterion, each importing only from the fixtures and reaching the system onl…"
+opened: 2026-09-09T01:10:16.594Z
 ---
 
 # Do these tests follow from the users criteria and from nothing else?
 
-**Recommendation.** I wrote 25 spec files under `tests/acceptance/users/` and nine entries in `not-testable.yaml`.
+**Recommendation.** Twenty-five of the thirty criteria for the users domain now have a Playwright file under `tests/acceptance/users/`, one per criterion, each importing only from the fixtures and reaching the system onl…
 
-I wrote 25 spec files under `tests/acceptance/users/` and nine entries in `not-testable.yaml`. Every surface call, persona and seed handle in them resolves against the generated contract, all headers match their filename and the spec's version numbers, and nothing in the directory trips the separation rules (no `page.`, locator, test id, `goto`, or route- or URL-shaped literal; every import is from `../../fixtures`).
+Twenty-five of the thirty criteria for the users domain now have a Playwright file under `tests/acceptance/users/`, one per criterion, each importing only from the fixtures and reaching the system only through `surface`, `persona`, `seed` and `mail`. Five criteria have entries in `tests/acceptance/not-testable.yaml` instead. I touched nothing else.
 
-## What got covered
+The five that got no file, and why:
 
-Twenty-five of the thirty-four criteria got a file, fifty-two tests in all — one per given/when/then, so criteria with several outcomes got several tests (R-4.23 and R-4.27 four each, R-4.3, R-4.9, R-4.12 and R-4.34 three each).
+- **R-4.1 and R-4.2** both start from an account being created. Every persona signs in as an account the seed already carries, and no action in the surface creates one, so a first sign-in cannot be made and the welcome message that follows it has nothing to follow.
+- **R-4.13** starts from a service with no administrator at all. The seed carries one, nothing removes an account, and the outcome is the absence of a way to make the first administrator, which is not something an observation returns.
+- **R-4.20** turns on which of two messages was sent. They differ only in wording, and the mail fixture returns subject, snippet, recipient and identifier but no body.
+- **R-4.21** turns on a request being refused rather than answered, and the user list carries no refusal observation. A test could only show that a non-administrator sees no rows, which was equally true of the superseded criterion where the service answered the request in full.
 
-Two decisions shaped nearly every file. First, observations return strings and the contract fixes no display wording, so rather than invent text like "Active" I asserted status by comparison: an account's badge is read against a seed account known to be in the state in question. The reactivation tests measure against `organizationOwner`'s badge, and R-4.30 measures a freshly administrator-deactivated account against `vendorDeactivated`, which the seed already puts in that state. R-4.9 uses the same trick in the negative — a self-deactivated account's badge must differ from an administrator-deactivated one, which is exactly the distinction the criterion says the service draws and the published description does not. Second, "sent to their dashboard" and "sent to sign in" have no observation of their own, so I expressed them by reading the destination's own observation from wherever the redirect left us — `emptyMyProposalsMessage` for a vendor, `myOpportunitiesTable` for public sector staff, `vendorCard` for the sign-in screen.
+Several files cover a criterion in part, and each says so in a comment at the top. The recurring reason is that the only request the surface can make is the control on the screen, so a rule that withholds the control also removes the way to test the service behind it. That blocks the profile change submitted against another person's account, the refused reactivation of a self-deactivated account, and the refused second deactivation of an account already inactive.
 
-Several tests mutate accounts. Each restores what it changed: capabilities are toggled back off, granted administrator rights are withdrawn, administrator-deactivated accounts are reactivated, and self-deactivated ones are restored by signing in again, which R-4.5 establishes as the only route back. The config runs one worker with no parallelism, so `mail.clear()` before a mail assertion is safe and I used it where a stale message could false-pass.
+What the contract would need to reach the rest:
 
-## What I could not do, and what would fix it
+- A persona with no seeded account, or a sign-in that carries a fresh identity, so an account can be watched coming into existence.
+- A name on each seeded user handle. The seed names no one, and only an account's owner may set a name, so the deactivated account can never be given one. I could assert the user list orders by name among two vendors I named through their own profiles, but not that active accounts precede inactive ones.
+- A mail accessor for the message body. Four criteria here assert only that a message arrived, because the wording is the claim.
+- `user-list.refused_for_non_administrator`, matching what the content surfaces already carry.
+- An observation returning the exported contact list itself. Nothing reads the document, so only the rule about choosing at least one kind and one field is covered.
+- Actions that send a profile change, a deactivation or a reactivation independently of the control being offered.
+- A starting point on `surface.signIn`, so that being returned to the screen sign-in began from can be set up.
+- Observations for the date and actor recorded on a deactivation, and for the two separate terms-acceptance dates the legal section collapses into one notice.
 
-**Nothing reaches an unregistered identity.** Every persona names an identity the seed has already registered, and neither `signIn` nor the sign-in screen's actions accept an identity to sign in *with*. Account creation is therefore unobservable, which sinks R-4.1 and R-4.2 outright and costs a clause each in R-4.6 (the duplicate-email-on-creation half) and R-4.22 (the newly-created person landing on profile completion). A persona denoting a person the service has not yet registered would recover all four; the welcome message itself is perfectly observable through `mail`.
-
-**No observation says whether a control is offered.** This is the single largest gap and it accounts for four of the nine not-testable entries. `user-profile` exposes field values, tabs and badges, but nothing that answers "is the editing control there", "is the reactivation control there", "is the deactivation control there". R-4.7 and R-4.18 turn entirely on the first, R-4.19 on the second, R-4.31 on the third. Observations named something like `edit_profile_control`, `reactivate_control` and `deactivate_control` — plus one carrying the profile's "you reactivate this by signing in again" statement that R-4.19 describes — would make all four testable at a stroke.
-
-**`user-list` is missing three observations its sibling pages have.** It has no refusal or missing-page observation, where `content-list` has `refused_for_non_administrator`; without it R-4.15 and R-4.21 cannot be read at all, since a test can only assert that a non-administrator sees no rows, which holds equally under both readings and so settles nothing. It has no ordering observation, where `content-list` has `ordered_by_title`, so R-4.14's "by status, then account kind, then name" is untested and only the columns and the name search are. And it has no observation of the exported document, where the proposal export screens have `exported_proposal`, so R-4.32 is reduced to the one clause about needing a kind and a field chosen — which accounts and which columns actually land in the file is unverifiable.
-
-**Smaller absences, each costing a clause.** There is no way to make signing out fail, so R-4.17's failure branch is untested. There is no observation for the second acceptance date that R-4.16 says survives a withdrawal, nor for the date and identity of the administrator who deactivated an account in R-4.30 — in both cases I tested the visible half and left the stored half alone. And R-4.24's "with the moment the choice was made" is likewise unobservable.
-
-**Two things I had to choose rather than read.** Action inputs are typed `unknown` throughout the contract, so any test supplying data invents a shape; I keyed mine to the matching observation names (`{ name }`, `{ email }`, `{ jobTitle }`, `{ capability }`, `{ query }`). And `open(params)` gave no guidance on its keys — the suite README's example uses `id` while the routes declare `:userId`, so I followed the routes and used `userId` consistently. Whoever writes the adapter should know both choices are mine, not the contract's. For the own-profile address in R-4.26 I passed the literal `"me"`, which is the contract's own notation in the unsubscribe-landing route; a named action would be cleaner.
-
-**Two ambiguities I resolved and one hazard I could not.** R-4.23 says the profile-completion screen is denied to "a vendor who has agreed before", and acceptance is recorded twice — the agreement that currently stands and the date terms were last accepted at all. I read "agreed" as the standing acceptance, which makes `vendor-with-terms-reset` the vendor the screen admits and every other vendor one it turns away; the opposite reading would flip R-4.23's first two tests. Separately, the seed names the service's capabilities only as capabilities particular people hold, so R-4.8 borrows two of `organizationOwner`'s to stand for "capabilities from the service's own list"; a list independent of any one person would be better. The hazard is that `vendor-with-terms-reset` is one-shot — R-4.3, R-4.23 and R-4.24 each complete that profile and consume the state — so those three files need the seed restored between them. There is likewise no persona or seed handle for an account its owner deactivated, only the administrator-deactivated one, which is why R-4.9 and R-4.10 have to arrange that state mid-test and put it back afterwards. A self-deactivated seed account and a second vendor whose terms are unaccepted would remove both frictions.
-
-One thing to expect from a run: R-4.11 and R-4.20 assert contradictory things about the same event, because R-4.20 is the corrected criterion and R-4.11 records the defect it replaces. Both are accepted, so both got tests; on the old system R-4.20 should fail and on the rebuilt one R-4.11 should. That is a signal, not a mistake.
+Tests that leave an account changed put it back: self-deactivated accounts are signed back in, granted administrator rights are withdrawn, and the notification choice the seed defines is restored. I could not run the suite. No dependencies are installed in this workspace, so there is no type check or test run behind this report; correctness here rests on reading the generated surface, the seed and the existing tests in the other domains.
 
 ## Ruling
 
-**Verdict:** return
+**Verdict:** approve
 **By:** agent:reviewer
 
-The not-testable reasons are all real and the suite is free of implementation leakage, but two tests assert what their criteria do not say and the receipt's restoration claim is untrue. R-4.27.spec.ts:50 reads job_title_field as a stored value (falsy after clearing) while R-4.28.spec.ts:9 reads the same observation as the field being offered (truthy) for the same account, and R-4.27 runs first and leaves that job title cleared — under either consistent meaning one of the two asserts something its criterion does not state, and R-4.28's presence reading is the one its criterion supports. Separately, the receipt states that every mutating test restores what it changed, while the proposal itself records that vendor-with-terms-reset is one-shot across R-4.3, R-4.23 and R-4.24; in alphabetical file order R-4.24 completes and accepts terms on that account before R-4.3 runs, so R-4.3's first two tests cannot pass. Coverage, the nine not-testable reasons and the separation of test from implementation would all have carried an approval on their own.
+The question is whether these tests follow from the users criteria and from nothing else. Approve. All thirty live criteria are accounted for, twenty-five with a spec file and five with a not-testable entry, and no test was written against a superseded or obsolete criterion; each not-testable reason names something the surface genuinely lacks, verified against spec/contract/surface.yaml, tests/generated/personas.ts and tests/fixtures/mail.ts rather than taken on trust, and the reactivation-message reason matches reasons already accepted at this gate for four notifications criteria; every assertion I traced follows from its criterion, with the gaps between criterion and surface recorded in comments rather than papered over with invented assertions, and no selector, route, status code, table or column name appears anywhere in the diff; the checks are green, the runner's typecheck passed on this revision, and nothing outside tests/acceptance and the record files was touched. What would change the ruling is a test asserting something its criterion does not say, a not-testable reason that names inconvenience rather than a missing page, action or observation, or a diff reaching a protected path.
 
 **Conditions:**
-- Settle what job_title_field observes — presence of the field or its value — and make R-4.27 and R-4.28 agree on it; R-4.27's blank-job-title case is already carried by the fieldError assertion, and R-4.28's criterion needs the presence reading.
-- Restore staffOne's job title in R-4.27 test 4, or stop asserting on job_title_field there, so R-4.28 does not inherit a cleared field.
-- Resolve the vendor-with-terms-reset one-shot across R-4.3, R-4.23 and R-4.24 — restore the state within each file, or record the ordering dependency as an attestation rather than a note in the proposal.
-- Replace emptyMyProposalsMessage() in R-4.23 with myProposalsTable(), so landing on the vendor dashboard is not proved by asserting the vendor has no proposals.
+- The terms-broadcast setup in R-4.3, R-4.16, R-4.23, R-4.24 and R-4.33 withdraws every vendor's standing acceptance and restores it only for the vendor under test; R-4.16 deliberately leaves persona.vendor withdrawn. The receipt enumerates three kinds of restoration and does not mention this one. Since the suite runs serially with one worker and file order is not fixed, a later file in another domain that assumes a vendor stands under the current terms may see a state the seed does not describe. Worth recording in the run notes.
+- The R-4.20 not-testable reason rests on the mail fixture returning Subject, Snippet, To and ID, but spec/contract/observables.yaml names html_body, plain_text_body and a read_one_message endpoint. The gap is in tests/fixtures/mail.ts, not in the contract. A body accessor would make R-4.20 testable and would also retire four notifications entries resting on the same limitation.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `89345d2aef247f27395aaa60daba4815b9a995eb`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+
+    No diagnostics.

@@ -9,7 +9,7 @@ Profile: rebuild
 | opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 36/50 (n/t 14) |
 | proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 | 25/36 (n/t 11) |
 | organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 | 28/31 (n/t 3) |
-| users | 0 | 32 | 0 | 0 | 0 | 4 | 1 | 36 |  |
+| users | 0 | 32 | 0 | 0 | 0 | 4 | 1 | 36 | 25/30 (n/t 5) |
 | evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 |  |
 | notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 8/21 (n/t 13) |
 | content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 | 22/26 (n/t 4) |
@@ -88,9 +88,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $116.343025
-- Rulings cost: $87.218081
-- Total cost: $203.561106
+- Journal cost: $125.398019
+- Rulings cost: $89.443217
+- Total cost: $214.841236
 - Agent-held rulings: 47
 - Open escalations: 0
 - Open proposals: 0
