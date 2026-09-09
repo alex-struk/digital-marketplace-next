@@ -1,0 +1,22 @@
+---
+gate: G3
+question: "Do the revised proposals tests now follow from their criteria and from nothing else?"
+recommendation: "Three of the four conditions are done."
+opened: 2026-09-09T00:45:51.121Z
+---
+
+# Do the revised proposals tests now follow from their criteria and from nothing else?
+
+**Recommendation.** Three of the four conditions are done.
+
+Three of the four conditions are done. The typecheck could not be run in this workspace, and I explain why below rather than repeat the earlier claim.
+
+**Condition one, completing the two proposals.** Both tests in the Sprint With Us qualification file now name a phase team member and a scrum master for the Implementation phase. Making the team valid forced a second change I want to flag. The proposals previously bid on behalf of the seeded organization that is qualified for neither program, and its only active member is a vendor who holds no capabilities at all, so adding that person as the team would have left the proposal failing the capability rule as well. I switched both tests to the seeded organization that carries an outstanding invitation. Its terms for the program were never accepted and it has a single active member, so it is unqualified twice over, and that member is the owner who holds the one capability the phase asks for. Each proposal is now complete in team, capability, cost, answers, references and terms, and the organization named is the only thing wrong with it.
+
+**Condition two, the re-check assertion.** I took the assertion branch rather than the not-testable branch. The proposal edit page carries no observation that names why a submission was refused, so there is nothing to read a reason from. What the surface does allow is a control in the same breath: the owner of the unqualified organization also owns the qualified one, so the test now builds two drafts that differ in nothing but the organization each names, saves both, and submits both. The unqualified draft stays a draft and the qualified one becomes submitted. A refusal that any other rule would also produce would refuse both, so the contrast is what pins the refusal to qualification at the moment of submission. I chose this over a not-testable entry because the suite's own README says an untestable criterion gets an entry instead of a file, and every existing entry is for a criterion with no file, so listing this one alongside its file would have broken that pattern.
+
+**Condition three, the over-assertions.** The organization notice assertion is gone from both the Sprint With Us and the Team With Us qualification files. Nothing else in the Team With Us file changed. The explanatory comment at the top of the Sprint With Us file no longer leans on that notice.
+
+**Condition four, the typecheck.** I could not run it, and the receipt should say so with these specifics rather than a bare claim of impossibility. The tests directory in this workspace contains only the four source directories and the four config files. There is no installed dependency tree, at the tests level or at the workspace root, so there is no TypeScript compiler to invoke. Separately, every npm invocation from this session was refused by the permission layer, including a bare version query, and reads outside the workspace are blocked, so a compiler installed elsewhere on the machine is out of reach too. I reviewed the types of both changed files by hand instead. The one new construct is a union type over the two seed organization records, used as the parameter of the shared proposal-filling helper, and both call sites pass a member of that union. Every other call goes through surface methods whose inputs are unknown and whose observations return strings, which the assertions treat as strings.
+
+**For whoever extends the contract.** The gap I hit is on the Sprint With Us proposal management page. It offers status, its tabs, total score and rank, and nothing that reports an error or a notice, so a submission refused from a saved draft is observable only as the status not changing. An observation naming the reason a submission was refused would let the re-check be asserted directly instead of by contrast. The unqualified organization notice on the two proposal creation pages remains in the contract and is now unused by these two files.
