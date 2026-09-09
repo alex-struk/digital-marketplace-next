@@ -1,13 +1,11 @@
 ---
-gate: G3
-question: "Do these tests follow from the evaluation criteria and from nothing else?"
-recommendation: "Six of the thirty criteria in the evaluation domain got tests."
-opened: 2026-09-09T01:29:56.695Z
+stage: "derive-tests"
+title: "derive tests"
+at: "2026-09-09T01:29:56.412Z"
+cost: 5.305803
+turns: 49
+session: "3d7d5b20-6753-4dc8-8cd4-2fc7d9a3bd57"
 ---
-
-# Do these tests follow from the evaluation criteria and from nothing else?
-
-**Recommendation.** Six of the thirty criteria in the evaluation domain got tests.
 
 Six of the thirty criteria in the evaluation domain got tests. The other twenty-four are recorded in `tests/acceptance/not-testable.yaml` with reasons.
 
