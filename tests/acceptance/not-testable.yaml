@@ -446,3 +446,86 @@ criteria:
       the service refuses to remove: content-edit withholds the removal and a
       request made another way is refused, so there is no path through the
       surface to the state the criterion starts from."
+  - id: R-2.5
+    version: 1
+    reason: The when is an opportunity's proposal deadline passing and the
+      opportunity closing. A published opportunity cannot be given a deadline in
+      the past — one that is not a draft is refused a deadline earlier than
+      today (R-1.14) — and no page, action or observation in the surface makes
+      the request that runs the closing hook (see R-1.1). Without the closure no
+      submitted proposal ever moves to review, and the anonymous_proponent_name
+      observations on the proposal surfaces have nothing to return.
+  - id: R-2.15
+    version: 2
+    reason: "The given is an opportunity whose proposal deadline has passed, which
+      cannot be produced: a published opportunity is refused a deadline earlier
+      than today, and nothing in the surface makes a deadline pass (see R-1.1).
+      Neither refusal the criterion names — a draft submitted after the deadline
+      and a Code With Us proposal created already marked as submitted after it —
+      has an opportunity to be made against, and the absence of the same guard
+      from the other two programs cannot be shown either."
+  - id: R-2.26
+    version: 1
+    reason: The given is a Code With Us proposal under review. A proposal reaches
+      review only when its opportunity closes at its proposal deadline, which
+      the surface cannot bring about (see R-1.1). enter_score on
+      proposal-cwu-view therefore has no proposal to act on, and the score, the
+      move to evaluated and the refusals of an out-of-range score have nothing
+      to be read on.
+  - id: R-2.27
+    version: 1
+    reason: The given is an opportunity in evaluation with proposals under review,
+      which lies beyond a closure the surface cannot bring about (see R-1.1). No
+      proposal can be scored, so the last one cannot be scored, and the move to
+      processing the criterion is about never has its trigger.
+  - id: R-2.28
+    version: 1
+    reason: The given is a Sprint With Us opportunity in its code challenge stage,
+      two stages past a closure the surface cannot bring about (see R-1.1). The
+      observation the refusal would be read from, wrong_stage_error, exists on
+      both the Sprint With Us and Team With Us proposal views, but nothing in
+      the surface can put an opportunity in front of it.
+  - id: R-2.29
+    version: 1
+    reason: The given is an opportunity whose questions have been scored and whose
+      panel is finalising its agreed scores. Question scoring happens after the
+      opportunity closes, and no page, action or observation closes one (see
+      R-1.1), so no proposal can be given a question score, none can fall below
+      a minimum, and finalize_question_consensuses has nothing to rank.
+  - id: R-2.30
+    version: 1
+    reason: The given is two proposals still in contention with a scenario score
+      being entered against one of them. Every score in the sequence comes after
+      the opportunity closes, which the surface cannot bring about (see R-1.1),
+      so the price_score observations on the two proposal views have nothing to
+      return and the lowest bid among proposals in contention is never worked
+      out.
+  - id: R-2.31
+    version: 1
+    reason: The given is a proposal carrying a score for every stage. No stage score
+      can be entered, because every one of them comes after a closure the
+      surface cannot bring about (see R-1.1), so total_score and rank have
+      nothing to return and no two proposals can be ranked against each other.
+  - id: R-2.32
+    version: 1
+    reason: "The given is a vendor's proposal that has been scored. Scoring needs
+      the opportunity to have closed, which the surface cannot bring about (see
+      R-1.1), so the withholding cannot be told from the score simply not
+      existing yet: score and rank read as empty on an unscored proposal for a
+      reason that has nothing to do with who is looking. The second half needs
+      the proposal to become awarded or not awarded, which needs an award."
+  - id: R-2.33
+    version: 1
+    reason: The given is an opportunity carrying an evaluated proposal. A proposal
+      becomes evaluated only after its opportunity closes and is scored, and the
+      surface closes no opportunity (see R-1.1), so award_proposal has nothing
+      to act on and no other proposal can be shown to have been marked not
+      awarded.
+  - id: R-2.34
+    version: 1
+    reason: The criterion's given is a proposal at a stage after the opportunity has
+      closed, and no page, action or observation closes an opportunity (see
+      R-1.1). disqualify_proposal is offered on all three proposal views, but
+      with no proposal past the published state there is nothing to disqualify,
+      and the written reason and its length bounds have nothing to be checked
+      against.

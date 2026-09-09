@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-proposals-4 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">52</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">52</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">54</span></a></li><li><a href="../runs.html">Run log <span class="count">4</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-proposals-4</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-09 00:45</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised proposals tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> Three of the four conditions are done.</p>
+<p>Three of the four conditions are done. The typecheck could not be run in this workspace, and I explain why below rather than repeat the earlier claim.</p>
+<p><strong>Condition one, completing the two proposals.</strong> Both tests in the Sprint With Us qualification file now name a phase team member and a scrum master for the Implementation phase. Making the team valid forced a second change I want to flag. The proposals previously bid on behalf of the seeded organization that is qualified for neither program, and its only active member is a vendor who holds no capabilities at all, so adding that person as the team would have left the proposal failing the capability rule as well. I switched both tests to the seeded organization that carries an outstanding invitation. Its terms for the program were never accepted and it has a single active member, so it is unqualified twice over, and that member is the owner who holds the one capability the phase asks for. Each proposal is now complete in team, capability, cost, answers, references and terms, and the organization named is the only thing wrong with it.</p>
+<p><strong>Condition two, the re-check assertion.</strong> I took the assertion branch rather than the not-testable branch. The proposal edit page carries no observation that names why a submission was refused, so there is nothing to read a reason from. What the surface does allow is a control in the same breath: the owner of the unqualified organization also owns the qualified one, so the test now builds two drafts that differ in nothing but the organization each names, saves both, and submits both. The unqualified draft stays a draft and the qualified one becomes submitted. A refusal that any other rule would also produce would refuse both, so the contrast is what pins the refusal to qualification at the moment of submission. I chose this over a not-testable entry because the suite&#39;s own README says an untestable criterion gets an entry instead of a file, and every existing entry is for a criterion with no file, so listing this one alongside its file would have broken that pattern.</p>
+<p><strong>Condition three, the over-assertions.</strong> The organization notice assertion is gone from both the Sprint With Us and the Team With Us qualification files. Nothing else in the Team With Us file changed. The explanatory comment at the top of the Sprint With Us file no longer leans on that notice.</p>
+<p><strong>Condition four, the typecheck.</strong> I could not run it, and the receipt should say so with these specifics rather than a bare claim of impossibility. The tests directory in this workspace contains only the four source directories and the four config files. There is no installed dependency tree, at the tests level or at the workspace root, so there is no TypeScript compiler to invoke. Separately, every npm invocation from this session was refused by the permission layer, including a bare version query, and reads outside the workspace are blocked, so a compiler installed elsewhere on the machine is out of reach too. I reviewed the types of both changed files by hand instead. The one new construct is a union type over the two seed organization records, used as the parameter of the shared proposal-filling helper, and both call sites pass a member of that union. Every other call goes through surface methods whose inputs are unknown and whose observations return strings, which the assertions treat as strings.</p>
+<p><strong>For whoever extends the contract.</strong> The gap I hit is on the Sprint With Us proposal management page. It offers status, its tabs, total score and rank, and nothing that reports an error or a notice, so a submission refused from a saved draft is observable only as the status not changing. An observation naming the reason a submission was refused would let the re-check be asserted directly instead of by contrast. The unqualified organization notice on the two proposal creation pages remains in the contract and is now unused by these two files.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-09 00:50.</p>
+<div class="body"><p>All four conditions from the prior return are discharged. The R-2.16 proposals are now complete in team, capability, cost, answers, references and terms, with the named organization the only defect, verified against tests/generated/seed.ts: organizations.withPendingInvitation has never accepted the Sprint With Us terms and has one active member, its owner, who holds the Backend Development capability the phase requires. The re-check half is asserted by a control pair of drafts differing only in the organization named, which distinguishes the qualification refusal from any other refusal without reading an error the proposal management screen cannot observe. No test anywhere in the suite still asserts unqualifiedOrganizationNotice(). The typecheck condition was addressed to a blind writer with no toolchain; the runner&#39;s typecheck on revision 554a2960 passed with no diagnostics. Quoted refusal strings are the criteria&#39;s own words, no implementation detail leaks into any test, and the not-testable reasons name real gaps in the surface.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

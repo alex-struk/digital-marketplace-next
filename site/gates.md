@@ -2,6 +2,8 @@
 
 | When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-09T00:50:03.165Z | derive-tests-proposals-4 | G3 | approve | agent:reviewer | agent-held, unsampled | $3.178329 |  |
+| 2026-09-09T00:21:36.072Z | derive-tests-proposals | G3 | return | agent:reviewer | agent-held, unsampled | $4.763955 |  |
 | 2026-09-08T23:47:07.017Z | ratify-users-2 | G1 | approve | agent:product-owner | agent-held, unsampled | $1.4315825 |  |
 | 2026-09-07T17:02:28.202Z | derive-tests-content-4 | G3 | approve | agent:reviewer | agent-held, unsampled | $2.2845554999999997 |  |
 | 2026-09-07T16:49:16.347Z | derive-tests-evaluation-4 | G3 | return | agent:reviewer | agent-held, unsampled | $3.2960729999999994 |  |
@@ -20,12 +22,11 @@
 | 2026-09-07T14:53:42.779Z | derive-tests-organizations-2 | G3 | return | agent:reviewer | agent-held, unsampled | $1.406234 |  |
 | 2026-09-07T14:40:12.082Z | derive-tests-proposals-2 | G3 | return | agent:reviewer | agent-held, unsampled | $1.611306 |  |
 | 2026-09-07T14:35:49.196Z | derive-tests-files | G3 | approve | agent:reviewer | agent-held, unsampled | $2.0853965000000003 |  |
-| 2026-09-07T14:21:45.559Z | derive-tests-content | G3 | return | agent:reviewer | agent-held, unsampled | $1.3792719999999998 |  |
+| 2026-09-07T14:21:45.559Z | derive-tests-content | G3 | return | agent:reviewer | agent-held, unsampled | $1.3792719999999998 | sample |
 | 2026-09-07T14:07:24.759Z | derive-tests-notifications | G3 | approve | agent:reviewer | agent-held, unsampled | $2.500539499999999 | sample |
 | 2026-09-07T13:52:57.457Z | derive-tests-evaluation | G3 | return | agent:reviewer | agent-held, unsampled | $4.5399905 | sample |
 | 2026-09-07T13:26:33.373Z | derive-tests-users | G3 | return | agent:reviewer | agent-held, unsampled | $1.7253394999999996 | sample |
 | 2026-09-07T13:10:27.199Z | derive-tests-organizations | G3 | return | agent:reviewer | agent-held, unsampled | $2.164838 | sample |
-| 2026-09-07T12:50:27.625Z | derive-tests-proposals | G3 | return | agent:reviewer | agent-held, unsampled | $3.4001855 | sample |
 | 2026-09-07T11:52:04.374Z | contract-v1 | G1 | approve | agent:product-owner | agent-held, unsampled | $0.8271335 |  |
 | 2026-09-07T11:06:06.838Z | policy-v3 | G-POL | approve | agent:tech-lead | agent-held, unsampled | $0.722108 | sample |
 | 2026-09-07T08:48:15.694Z | ratify-files-1 | G1 | approve | agent:product-owner | agent-held, unsampled | $1.6447765 |  |
