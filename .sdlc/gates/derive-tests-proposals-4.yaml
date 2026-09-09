@@ -1,0 +1,11 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  All four conditions from the prior return are discharged. The R-2.16 proposals are now complete in team, capability, cost, answers, references and terms, with the named organization the only defect, verified against tests/generated/seed.ts: organizations.withPendingInvitation has never accepted the Sprint With Us terms and has one active member, its owner, who holds the Backend Development capability the phase requires. The re-check half is asserted by a control pair of drafts differing only in the organization named, which distinguishes the qualification refusal from any other refusal without reading an error the proposal management screen cannot observe. No test anywhere in the suite still asserts unqualifiedOrganizationNotice(). The typecheck condition was addressed to a blind writer with no toolchain; the runner's typecheck on revision 554a2960 passed with no diagnostics. Quoted refusal strings are the criteria's own words, no implementation detail leaks into any test, and the not-testable reasons name real gaps in the surface.
+conditions: []
+cost: 3.178329
+turns: 29
+session: "df6cd390-fa7f-4613-a1cd-b6c9588c8f36"
+at: 2026-09-09T00:50:03.165Z
