@@ -25,3 +25,21 @@ Surface pieces I needed and did not find:
 - **An action adding a panel member with no role, plus an observation of the field-level message identifying that member.** Both are needed for R-5.37, and neither exists.
 - **An observation reporting whether the finalise action stands ready for the person looking.** R-5.14 is about who is offered the action, and offering is not currently readable.
 - **A second public sector sign-in that is not an administrator.** The persona for it is defined but its session route is marked unavailable. Its absence forced the arrangement of every test in R-5.18, cost R-5.19 its closing contrast, and is one of two reasons R-5.34 is not testable.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Each of the six spec files asserts only what its criterion states, using pages, actions and observations named in spec/contract/surface.yaml, with no route, selector, table, column or status code anywhere in the diff. The closure gap behind twenty-two of the twenty-four not-testable entries is verified against observables.yaml, the seed and the existing R-1.1 entry; the omissions documented inside R-5.1 correspond to observations that genuinely do not exist on the panel surfaces. The twenty-four refusals plus six tested criteria account for exactly the thirty live criteria in the domain at versions matching the spec. Runner-owned typecheck passed on this revision, and the diff stays inside tests/acceptance and the stage's own records. Noted without holding: the R-5.9 test can only show the browser form refuses a chairless panel, and R-5.17's absence assertions read visible recipients only, so a blind-copied notice would be missed; both belong to the contract owner, not the test writer.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `f7de3e3e26ec0f74d584edb4550f51873f1aee2c`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+
+    No diagnostics.
