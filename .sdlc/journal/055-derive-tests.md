@@ -1,13 +1,11 @@
 ---
-gate: G3
-question: "Do these tests follow from the users criteria and from nothing else?"
-recommendation: "Twenty-five of the thirty criteria for the users domain now have a Playwright file under `tests/acceptance/users/`, one per criterion, each importing only from the fixtures and reaching the system onl…"
-opened: 2026-09-09T01:10:16.594Z
+stage: "derive-tests"
+title: "derive tests"
+at: "2026-09-09T01:10:16.307Z"
+cost: 9.054994000000002
+turns: 82
+session: "7e893bfb-5e4e-4641-ad6a-d6db41c6aff7"
 ---
-
-# Do these tests follow from the users criteria and from nothing else?
-
-**Recommendation.** Twenty-five of the thirty criteria for the users domain now have a Playwright file under `tests/acceptance/users/`, one per criterion, each importing only from the fixtures and reaching the system onl…
 
 Twenty-five of the thirty criteria for the users domain now have a Playwright file under `tests/acceptance/users/`, one per criterion, each importing only from the fixtures and reaching the system only through `surface`, `persona`, `seed` and `mail`. Five criteria have entries in `tests/acceptance/not-testable.yaml` instead. I touched nothing else.
 
