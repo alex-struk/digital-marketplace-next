@@ -1,13 +1,11 @@
 ---
-gate: G3
-question: "Do these tests follow from the proposals criteria and from nothing else?"
-recommendation: "I wrote the proposals acceptance suite: 25 spec files holding 52 tests, plus 11 new entries in `not-testable.yaml`, covering all 36 criteria in the list."
-opened: 2026-09-09T00:13:14.634Z
+stage: "derive-tests"
+title: "derive tests"
+at: "2026-09-09T00:13:14.336Z"
+cost: 11.489380999999998
+turns: 80
+session: "cbccf32c-1009-4ee6-ac4d-9ccbe45794bb"
 ---
-
-# Do these tests follow from the proposals criteria and from nothing else?
-
-**Recommendation.** I wrote the proposals acceptance suite: 25 spec files holding 52 tests, plus 11 new entries in `not-testable.yaml`, covering all 36 criteria in the list.
 
 I wrote the proposals acceptance suite: 25 spec files holding 52 tests, plus 11 new entries in `not-testable.yaml`, covering all 36 criteria in the list.
 
