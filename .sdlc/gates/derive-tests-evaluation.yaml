@@ -1,15 +1,11 @@
 gate: G3
-verdict: return
+verdict: approve
 by: agent:reviewer
 held_by: agent
 rationale: |2-
-  Coverage, separation and surface fidelity are all sound: 26 spec files plus 4 not-testable entries account for every live evaluation criterion, no routes/selectors/status codes/table names appear anywhere, every page, action and observation resolves against tests/generated/surface.d.ts, every open() argument is a string, and each not-testable reason names a gap I confirmed is real. Returned because two spec files are written against superseded criteria — R-5.4.spec.ts (superseded by R-5.10) and R-5.6.spec.ts (superseded by R-5.12) — which sdlc's own coverage read excludes and the tests check warns can only contradict their replacements. R-5.6.spec.ts asserts the owner not on the panel sees no proponent rows and gains the list after the question stages; no live criterion says either, and an implementation that correctly satisfies R-5.12 could fail it. Both replacements are already tested, so the fix is deletion, not new work.
-conditions:
-  - "Delete tests/acceptance/evaluation/R-5.4.spec.ts and tests/acceptance/evaluation/R-5.6.spec.ts; R-5.10 and R-5.12, their live replacements, are already covered."
-  - "Run npm run typecheck against tests/acceptance/evaluation once tests/node_modules can be installed, and record the result in the receipt; no pipeline check compiles these files."
-  - "R-5.22's decimal-places test reads score_out_of_range_error for a violation that is not a range violation — keep it if that is the only observation the surface offers, but say so in the receipt rather than leaving it implied."
-  - "Carry into the adapter stage: on the oracle session-route binding, evaluationPanelEvaluator collapses onto publicSectorStaff (/auth/createsessiongov) and evaluationPanelChair onto administrator (/auth/createsessionadmin), so the role-separation branches in R-5.21, R-5.34 and R-5.12 need the sandbox-idp binding to distinguish their actors."
-cost: 4.5399905
-turns: 47
-session: "a5c6c6fb-8fb9-4a7c-8eaa-3caec27f2680"
-at: 2026-09-07T13:52:57.457Z
+  Each of the six spec files asserts only what its criterion states, using pages, actions and observations named in spec/contract/surface.yaml, with no route, selector, table, column or status code anywhere in the diff. The closure gap behind twenty-two of the twenty-four not-testable entries is verified against observables.yaml, the seed and the existing R-1.1 entry; the omissions documented inside R-5.1 correspond to observations that genuinely do not exist on the panel surfaces. The twenty-four refusals plus six tested criteria account for exactly the thirty live criteria in the domain at versions matching the spec. Runner-owned typecheck passed on this revision, and the diff stays inside tests/acceptance and the stage's own records. Noted without holding: the R-5.9 test can only show the browser form refuses a chairless panel, and R-5.17's absence assertions read visible recipients only, so a blind-copied notice would be missed; both belong to the contract owner, not the test writer.
+conditions: []
+cost: 3.3692595
+turns: 41
+session: "28a268f9-0af6-4eba-b5d7-03468d2c122c"
+at: 2026-09-09T01:37:03.859Z

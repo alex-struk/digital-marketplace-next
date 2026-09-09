@@ -15,12 +15,12 @@
   <span class="profile">rebuild profile</span>
 </div>
 <div class="shell">
-<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">52</span></a></li><li><a href="../proposals.html">Proposals <span class="count">52</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">55</span></a></li><li><a href="../runs.html">Run log <span class="count">4</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html" aria-current="page">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">52</span></a></li><li><a href="../proposals.html">Proposals <span class="count">52</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">56</span></a></li><li><a href="../runs.html">Run log <span class="count">4</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html" aria-current="page">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
 <main id="main">
 <div class="page-head"><h1>evaluation</h1>
-<p class="lede">37 criteria, 0 with a derived acceptance test, 0 recorded as not testable through the contract surface.</p></div>
-<div class="filters" hidden><button type="button" data-filter="all" aria-pressed="true">All (37)</button><button type="button" data-filter="tested" aria-pressed="false">Has a test (0)</button><button type="button" data-filter="not-testable" aria-pressed="false">Not testable (0)</button><button type="button" data-filter="untested" aria-pressed="false">No test yet (30)</button><button type="button" data-filter="obsolete" aria-pressed="false">Obsolete (0)</button></div>
-<article class="criterion" data-state="untested">
+<p class="lede">37 criteria, 6 with a derived acceptance test, 24 recorded as not testable through the contract surface.</p></div>
+<div class="filters" hidden><button type="button" data-filter="all" aria-pressed="true">All (37)</button><button type="button" data-filter="tested" aria-pressed="false">Has a test (6)</button><button type="button" data-filter="not-testable" aria-pressed="false">Not testable (24)</button><button type="button" data-filter="untested" aria-pressed="false">No test yet (0)</button><button type="button" data-filter="obsolete" aria-pressed="false">Obsolete (0)</button></div>
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-5.1</span>
     <span class="chip open">accepted</span>
@@ -28,7 +28,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">An opportunity that uses a panel must name at least two panel members, each a public sector employee, each named only once, and at most one of them marked as chair.</p>
-  <dl><dt>given</dt><dd>a public sector employee setting the evaluation panel of a Sprint With Us or Team With Us opportunity</dd><dt>when</dt><dd>they save a panel of one person, or a panel naming the same person twice, or a panel naming two chairs, or a panel naming a vendor</dd><dt>then</dt><dd>the panel is rejected with a message naming the rule that was broken, and the opportunity keeps the panel it had</dd><dt>cites</dt><dd><code>src/back-end/lib/validation.ts:914</code><br><code>src/back-end/lib/validation.ts:938</code><br><code>src/back-end/lib/validation.ts:949</code><br><code>src/back-end/lib/validation.ts:856</code><br><code>src/back-end/lib/validation.ts:487</code><br><code>src/shared/config.ts:32</code><br><code>src/shared/config.ts:34</code><br><code>src/migrations/tasks/20240527213854_add-evaluation-committee-panel-tables.ts:38</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the minimum of two members is the same for both programs.</dd></dl>
+  <dl><dt>given</dt><dd>a public sector employee setting the evaluation panel of a Sprint With Us or Team With Us opportunity</dd><dt>when</dt><dd>they save a panel of one person, or a panel naming the same person twice, or a panel naming two chairs, or a panel naming a vendor</dd><dt>then</dt><dd>the panel is rejected with a message naming the rule that was broken, and the opportunity keeps the panel it had</dd><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.1.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/validation.ts:914</code><br><code>src/back-end/lib/validation.ts:938</code><br><code>src/back-end/lib/validation.ts:949</code><br><code>src/back-end/lib/validation.ts:856</code><br><code>src/back-end/lib/validation.ts:487</code><br><code>src/shared/config.ts:32</code><br><code>src/shared/config.ts:34</code><br><code>src/migrations/tasks/20240527213854_add-evaluation-committee-panel-tables.ts:38</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the minimum of two members is the same for both programs.</dd></dl>
 </article>
 <article class="criterion" data-state="untested">
   <header>
@@ -40,7 +40,7 @@
   <p class="statement">A panel with no chair at all is accepted by the service, although the browser form refuses to submit one.</p>
   <dl><dt>given</dt><dd>an opportunity being given an evaluation panel</dd><dt>when</dt><dd>a panel of two evaluators with nobody marked as chair reaches the service without going through the browser form</dd><dt>then</dt><dd>the panel is accepted and stored, and the opportunity then has no one who can record a consensus</dd><dt>cites</dt><dd><code>src/back-end/lib/validation.ts:891</code><br><code>src/back-end/lib/validation.ts:938</code><br><code>src/front-end/typescript/lib/components/swu-evaluation-panel.tsx:83</code><br><code>src/front-end/typescript/lib/components/twu-evaluation-panel.tsx:71</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-5.9</dd><dt>note</dt><dd>the description written against the validation says it checks &quot;that there is one and only one chair&quot;, but the check only rejects more than one; zero passes. The browser form separately refuses to submit without a chair, so the two disagree. A human should rule on whether the service must require a chair; no replacement criterion is offered until then.</dd><dt>note</dt><dd>superseded by R-5.9</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.3</span>
     <span class="chip open">accepted</span>
@@ -48,7 +48,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">An evaluator holds at most one evaluation per proponent, and a second attempt is refused with a message saying they already have one.</p>
-  <dl><dt>given</dt><dd>an evaluator who has already started an evaluation of one proponent</dd><dt>when</dt><dd>they start a second evaluation of the same proponent</dd><dt>then</dt><dd>the request is refused with &quot;You already have a team question evaluation for this proposal.&quot; and no second evaluation is created</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/evaluations.ts:240</code><br><code>src/back-end/lib/resources/proposal/team-with-us/resource-questions/evaluations.ts:243</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the Team With Us wording is the same sentence with &quot;resource question&quot; in place of &quot;team question&quot;.</dd></dl>
+  <dl><dt>given</dt><dd>an evaluator who has already started an evaluation of one proponent</dd><dt>when</dt><dd>they start a second evaluation of the same proponent</dd><dt>then</dt><dd>the request is refused with &quot;You already have a team question evaluation for this proposal.&quot; and no second evaluation is created</dd><dt>not testable</dt><dd>The given is an evaluator who has already started an evaluation of one proponent. An evaluation can be started only while the opportunity is in individual question evaluation, which an opportunity reaches only by closing at its proposal deadline, and no page, action or observation brings that about (see R-1.1). The observation the refusal would be read from, duplicate_evaluation_error, is named on both individual-create surfaces, but nothing in the surface can put an evaluator in front of it.</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/evaluations.ts:240</code><br><code>src/back-end/lib/resources/proposal/team-with-us/resource-questions/evaluations.ts:243</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the Team With Us wording is the same sentence with &quot;resource question&quot; in place of &quot;team question&quot;.</dd></dl>
 </article>
 <article class="criterion" data-state="untested">
   <header>
@@ -100,7 +100,7 @@
   <p class="statement">Only an administrator is offered the action that finalises consensus scores, although the service also accepts it from the opportunity&#39;s owner.</p>
   <dl><dt>given</dt><dd>an opportunity in consensus, all its agreed scores submitted, whose owner is a public sector employee who is not an administrator</dd><dt>when</dt><dd>the owner opens the consensus list, and separately sends the request to finalise</dd><dt>then</dt><dd>no finalise action is offered to them, but the request they send is accepted and the scores are finalised</dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/opportunity/sprint-with-us/edit/tab/consensus.tsx:653</code><br><code>src/front-end/typescript/lib/pages/opportunity/team-with-us/edit/tab/consensus.tsx:654</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:868</code><br><code>src/back-end/lib/permissions.ts:614</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-5.14</dd><dt>note</dt><dd>the chair is offered nothing here either, even though the chair is the person who agreed the scores. A human should rule on whether finalising belongs to administrators alone or also to the opportunity&#39;s owner.</dd><dt>note</dt><dd>superseded by R-5.14</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-5.9</span>
     <span class="chip open">accepted</span>
@@ -108,9 +108,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The service must reject an evaluation panel that names no chair, applying the same rule the browser form already applies, so that no opportunity can enter consensus with nobody able to record the agreed score.</p>
-  <dl><dt>replaces</dt><dd>R-5.2</dd></dl>
+  <dl><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.9.spec.ts</code></dd><dt>replaces</dt><dd>R-5.2</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.10</span>
     <span class="chip open">accepted</span>
@@ -118,9 +118,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The refusal shown when no proponent clears every question&#39;s minimum score must name the stage that actually follows — the Code Challenge for Sprint With Us and the Challenge for Team With Us.</p>
-  <dl><dt>replaces</dt><dd>R-5.4</dd></dl>
+  <dl><dt>not testable</dt><dd>The refusal is shown when the consensus scores of an opportunity in consensus are finalised. The consensus stage lies two stages beyond a closure the surface cannot bring about (see R-1.1), so finalize_consensus_scores has no opportunity to act on and no_screenable_proponent_error, which both consensus lists name, has nothing to return. No proponent can be given a question score to fall short of a minimum with either, since scoring happens after the closure as well.</dd><dt>replaces</dt><dd>R-5.4</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.11</span>
     <span class="chip open">accepted</span>
@@ -128,9 +128,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">An individual evaluation may be read only by an administrator, the opportunity&#39;s owner, and the members of that opportunity&#39;s evaluation panel, at every stage; passing the question stages does not open it to public sector employees with no connection to the opportunity.</p>
-  <dl><dt>replaces</dt><dd>R-5.5</dd></dl>
+  <dl><dt>not testable</dt><dd>The subject is an individual evaluation, and none can exist. Recording one needs the opportunity to be in individual question evaluation, which is reached only by a closure the surface cannot bring about (see R-1.1), so there is nothing for an administrator, an owner, a panel member or an unconnected public sector employee to be granted or refused. The stage half of the claim is out of reach for the same reason: no opportunity can be got past the question stages.</dd><dt>replaces</dt><dd>R-5.5</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.12</span>
     <span class="chip open">accepted</span>
@@ -138,9 +138,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">When the consensus list is withheld from the opportunity&#39;s owner because they are not on the evaluation panel, the page must say so rather than opening as an empty list with no explanation.</p>
-  <dl><dt>replaces</dt><dd>R-5.6</dd></dl>
+  <dl><dt>not testable</dt><dd>The given is an opportunity in consensus whose owner is not on its panel, and the consensus stage cannot be reached (see R-1.1). The observation written for exactly this outcome, evaluation-consensus-list.empty_for_owner_not_on_panel, exists on both programs, but no opportunity can be brought to the state in which the page would have to explain itself.</dd><dt>replaces</dt><dd>R-5.6</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.13</span>
     <span class="chip open">accepted</span>
@@ -148,9 +148,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">Finalising the consensus scores must be refused unless every proponent still under review of the questions has a submitted consensus, so that no proponent is left neither screened in nor screened out.</p>
-  <dl><dt>replaces</dt><dd>R-5.7</dd></dl>
+  <dl><dt>not testable</dt><dd>Finalising happens only from the consensus stage, which lies beyond a closure the surface cannot bring about (see R-1.1). Neither half of the given can be built: no proponent can be left under review of the questions with no submitted consensus, because no consensus can be recorded at all, and not_all_consensuses_submitted_error has nothing to be read on.</dd><dt>replaces</dt><dd>R-5.7</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.14</span>
     <span class="chip open">accepted</span>
@@ -158,7 +158,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The action that finalises consensus scores must be offered to whoever the service accepts it from — the opportunity&#39;s owner as well as an administrator — so that the browser and the service agree on who may finalise.</p>
-  <dl><dt>replaces</dt><dd>R-5.8</dd></dl>
+  <dl><dt>not testable</dt><dd>The criterion is about who is offered the finalise action on an opportunity in consensus, and the consensus stage cannot be reached (see R-1.1). Nor would the offer itself be readable: the consensus lists name finalize_consensus_scores as an action and finalize_confirmation_modal as what follows it, and neither reports whether the action stands ready for the person looking, so an owner who was offered nothing could not be told from one whose request simply failed.</dd><dt>replaces</dt><dd>R-5.8</dd></dl>
 </article>
 <article class="criterion" data-state="untested">
   <header>
@@ -170,7 +170,7 @@
   <p class="statement">Every panel member must be an evaluator, a chair, or both; a member who is neither is rejected.</p>
   <dl><dt>given</dt><dd>an opportunity with an evaluation panel</dd><dt>when</dt><dd>a panel member is recorded who is neither an evaluator nor the chair</dd><dt>then</dt><dd>the panel is rejected</dd><dt>cites</dt><dd><code>src/migrations/tasks/20240527213854_add-evaluation-committee-panel-tables.ts:57</code><br><code>src/migrations/tasks/20240527213854_add-evaluation-committee-panel-tables.ts:149</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-5.37</dd><dt>note</dt><dd>this rule is held only in the database, not in the code that validates a submitted panel, so the observable failure is a stored-data error rather than a field-level message. What a person actually sees when it happens could not be determined without running the old application.</dd><dt>note</dt><dd>the chair is allowed not to be an evaluator. The browser form offers the chair as a separate choice from the list of evaluators and marks that person as chair-but-not-evaluator unless one of the evaluators has been ticked as chair, so a panel of two evaluators plus a separate chair holds three people.</dd><dt>note</dt><dd>superseded by R-5.37</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-5.16</span>
     <span class="chip open">accepted</span>
@@ -178,9 +178,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The evaluation panel may be set or changed while an opportunity is a draft, under review, published, or in individual question evaluation, and is fixed from the consensus stage onwards.</p>
-  <dl><dt>given</dt><dd>an opportunity whose questions are being evaluated individually</dd><dt>when</dt><dd>its owner changes the evaluation panel, and then tries again once the opportunity has moved to consensus</dd><dt>then</dt><dd>the first change is accepted and the second is refused</dd><dt>cites</dt><dd><code>src/shared/lib/resources/opportunity/sprint-with-us.ts:631</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1998</code><br><code>src/shared/lib/resources/opportunity/team-with-us.ts:585</code><br><code>src/back-end/lib/resources/opportunity/team-with-us/index.ts:1382</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>because the panel is recorded against a version of the opportunity and changing it writes a new version, a panel change also appears in the opportunity&#39;s history as an edit, and the count of evaluators the service waits for changes with it.</dd></dl>
+  <dl><dt>given</dt><dd>an opportunity whose questions are being evaluated individually</dd><dt>when</dt><dd>its owner changes the evaluation panel, and then tries again once the opportunity has moved to consensus</dd><dt>then</dt><dd>the first change is accepted and the second is refused</dd><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.16.spec.ts</code></dd><dt>cites</dt><dd><code>src/shared/lib/resources/opportunity/sprint-with-us.ts:631</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1998</code><br><code>src/shared/lib/resources/opportunity/team-with-us.ts:585</code><br><code>src/back-end/lib/resources/opportunity/team-with-us/index.ts:1382</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>because the panel is recorded against a version of the opportunity and changing it writes a new version, a panel change also appears in the opportunity&#39;s history as an edit, and the count of evaluators the service waits for changes with it.</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-5.17</span>
     <span class="chip open">accepted</span>
@@ -188,9 +188,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">When people are added to an evaluation panel, only the people newly added are notified, and only once the opportunity has left draft.</p>
-  <dl><dt>given</dt><dd>a published opportunity whose panel already names two people</dd><dt>when</dt><dd>a third person is added to the panel</dd><dt>then</dt><dd>only the third person is notified, and the two already on the panel are not</dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:147</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:2216</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the same change made while the opportunity is still a draft notifies nobody.</dd></dl>
+  <dl><dt>given</dt><dd>a published opportunity whose panel already names two people</dd><dt>when</dt><dd>a third person is added to the panel</dd><dt>then</dt><dd>only the third person is notified, and the two already on the panel are not</dd><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.17.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:147</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:2216</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the same change made while the opportunity is still a draft notifies nobody.</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-5.18</span>
     <span class="chip open">accepted</span>
@@ -198,9 +198,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The membership of an evaluation panel is shown only to an administrator, the opportunity&#39;s owner, and the people on the panel itself.</p>
-  <dl><dt>given</dt><dd>an opportunity with an evaluation panel</dd><dt>when</dt><dd>a vendor, or a public sector employee who is neither the owner nor on the panel, opens the opportunity</dd><dt>then</dt><dd>no panel membership is shown to them, while an administrator, the owner and each panel member all see it</dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:892</code><br><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:934</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>an opportunity with an evaluation panel</dd><dt>when</dt><dd>a vendor, or a public sector employee who is neither the owner nor on the panel, opens the opportunity</dd><dt>then</dt><dd>no panel membership is shown to them, while an administrator, the owner and each panel member all see it</dd><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.18.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:892</code><br><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:934</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-5.19</span>
     <span class="chip open">accepted</span>
@@ -208,9 +208,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">A panel member may open an opportunity they sit on the panel for even before it is public, and it is listed for them under a separate heading for work they are evaluating.</p>
-  <dl><dt>given</dt><dd>a draft opportunity whose panel names a public sector employee who did not create it</dd><dt>when</dt><dd>that person opens their dashboard and then the opportunity</dd><dt>then</dt><dd>the opportunity is listed under &quot;Evaluations&quot; and they can open it, whereas another public sector employee cannot see it at all</dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:793</code><br><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:640</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:172</code><br><code>src/front-end/typescript/lib/pages/dashboard.tsx:524</code><br><code>src/front-end/typescript/lib/pages/dashboard.tsx:789</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>a draft opportunity whose panel names a public sector employee who did not create it</dd><dt>when</dt><dd>that person opens their dashboard and then the opportunity</dd><dt>then</dt><dd>the opportunity is listed under &quot;Evaluations&quot; and they can open it, whereas another public sector employee cannot see it at all</dd><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.19.spec.ts</code></dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:793</code><br><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:640</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:172</code><br><code>src/front-end/typescript/lib/pages/dashboard.tsx:524</code><br><code>src/front-end/typescript/lib/pages/dashboard.tsx:789</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.20</span>
     <span class="chip open">accepted</span>
@@ -218,9 +218,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">When an opportunity closes it enters individual question evaluation, and every evaluator on its panel is told it is ready to evaluate.</p>
-  <dl><dt>given</dt><dd>a published opportunity with a panel of two evaluators and a separate chair, and submitted proposals against it</dd><dt>when</dt><dd>its proposal deadline passes</dd><dt>then</dt><dd>the opportunity moves to individual question evaluation and the two evaluators are notified, while the chair who is not an evaluator is not</dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:1455</code><br><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:1525</code><br><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:172</code><br><code>src/back-end/lib/db/opportunity/team-with-us.ts:1631</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>this is the same closing event that moves the submitted proposals into review and gives each an anonymous proponent name; the evaluation domain inherits that from the proposals domain rather than restating it.</dd></dl>
+  <dl><dt>given</dt><dd>a published opportunity with a panel of two evaluators and a separate chair, and submitted proposals against it</dd><dt>when</dt><dd>its proposal deadline passes</dd><dt>then</dt><dd>the opportunity moves to individual question evaluation and the two evaluators are notified, while the chair who is not an evaluator is not</dd><dt>not testable</dt><dd>The when is an opportunity closing at its proposal deadline. A published opportunity is refused a deadline earlier than today, and no page, action or observation makes the request that runs the closing hook (see R-1.1), so the move into individual question evaluation never happens and the notice to each evaluator on the panel is never sent. With no closure there is nothing to search the mail catcher for and nothing to read a status back from.</dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:1455</code><br><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:1525</code><br><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:172</code><br><code>src/back-end/lib/db/opportunity/team-with-us.ts:1631</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>this is the same closing event that moves the submitted proposals into review and gives each an anonymous proponent name; the evaluation domain inherits that from the proposals domain rather than restating it.</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.21</span>
     <span class="chip open">accepted</span>
@@ -228,9 +228,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">Only a person marked as an evaluator on the panel may record an individual evaluation, and only while the opportunity is in individual question evaluation.</p>
-  <dl><dt>given</dt><dd>an opportunity in individual question evaluation</dd><dt>when</dt><dd>the chair who is not an evaluator, or the opportunity&#39;s owner who is not on the panel, tries to score a proponent</dd><dt>then</dt><dd>the attempt is refused, whereas an evaluator on the panel may score</dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:1025</code><br><code>src/back-end/lib/permissions.ts:1542</code><br><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/evaluations.ts:203</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>an evaluator who tries the same thing once the opportunity has moved to consensus is refused as well.</dd></dl>
+  <dl><dt>given</dt><dd>an opportunity in individual question evaluation</dd><dt>when</dt><dd>the chair who is not an evaluator, or the opportunity&#39;s owner who is not on the panel, tries to score a proponent</dd><dt>then</dt><dd>the attempt is refused, whereas an evaluator on the panel may score</dd><dt>not testable</dt><dd>The given is an opportunity in individual question evaluation, which is reached only by a closure the surface cannot bring about (see R-1.1). The individual evaluation surfaces exist for all of the people the criterion contrasts, but none of them has an opportunity to act on, so neither the evaluator who may score nor the chair and the owner who may not can make the attempt.</dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:1025</code><br><code>src/back-end/lib/permissions.ts:1542</code><br><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/evaluations.ts:203</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>an evaluator who tries the same thing once the opportunity has moved to consensus is refused as well.</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.22</span>
     <span class="chip open">accepted</span>
@@ -238,9 +238,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">An evaluation carries one score and one comment per question, the score being between zero and that question&#39;s maximum with at most two decimal places, and the comment being at least one word.</p>
-  <dl><dt>given</dt><dd>an evaluator scoring a proponent against a question worth five points</dd><dt>when</dt><dd>they enter six, or a score with three decimal places, or leave the comment empty</dd><dt>then</dt><dd>the entry is rejected and the evaluation cannot be submitted until every question has a score in range and a comment</dd><dt>cites</dt><dd><code>src/shared/lib/validation/evaluations/sprint-with-us/team-questions.ts:58</code><br><code>src/shared/lib/validation/evaluations/sprint-with-us/team-questions.ts:65</code><br><code>src/shared/lib/validation/evaluations/sprint-with-us/team-questions.ts:136</code><br><code>src/shared/lib/validation/evaluations/team-with-us/resource-questions.ts:58</code><br><code>src/front-end/typescript/lib/pages/proposal/sprint-with-us/view/tab/team-questions.tsx:163</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>an evaluator scoring a proponent against a question worth five points</dd><dt>when</dt><dd>they enter six, or a score with three decimal places, or leave the comment empty</dd><dt>then</dt><dd>the entry is rejected and the evaluation cannot be submitted until every question has a score in range and a comment</dd><dt>not testable</dt><dd>The given is an evaluator scoring a proponent against a question, and no evaluation form can be opened: recording an evaluation needs the opportunity to be in individual question evaluation, reached only by a closure the surface cannot bring about (see R-1.1). score_out_of_range_error and empty_notes_error are named on all four individual evaluation surfaces, and nothing can put a score or a comment in front of either.</dd><dt>cites</dt><dd><code>src/shared/lib/validation/evaluations/sprint-with-us/team-questions.ts:58</code><br><code>src/shared/lib/validation/evaluations/sprint-with-us/team-questions.ts:65</code><br><code>src/shared/lib/validation/evaluations/sprint-with-us/team-questions.ts:136</code><br><code>src/shared/lib/validation/evaluations/team-with-us/resource-questions.ts:58</code><br><code>src/front-end/typescript/lib/pages/proposal/sprint-with-us/view/tab/team-questions.tsx:163</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.23</span>
     <span class="chip open">accepted</span>
@@ -248,9 +248,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">Scores and comments are checked when an evaluation is submitted, not when it is saved as a draft.</p>
-  <dl><dt>given</dt><dd>an evaluator part-way through scoring a proponent</dd><dt>when</dt><dd>they save a draft in which one score is above the question&#39;s maximum and one comment is empty</dd><dt>then</dt><dd>the draft is saved as entered, and the evaluation is refused only later, when they try to submit</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/evaluations.ts:248</code><br><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/evaluations.ts:379</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1808</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the browser form checks each field as it is typed, so this is reachable through the service rather than through the form. Nothing in the code says whether unchecked drafts are intended; a human may want to rule on it.</dd></dl>
+  <dl><dt>given</dt><dd>an evaluator part-way through scoring a proponent</dd><dt>when</dt><dd>they save a draft in which one score is above the question&#39;s maximum and one comment is empty</dd><dt>then</dt><dd>the draft is saved as entered, and the evaluation is refused only later, when they try to submit</dd><dt>not testable</dt><dd>The criterion turns on the difference between saving a draft evaluation and submitting one, and neither can be done. Both need an opportunity in individual question evaluation, which no page, action or observation reaches (see R-1.1). The criterion&#39;s own note says the case is reachable through the service rather than through the form, and the surface is the form.</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/evaluations.ts:248</code><br><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/evaluations.ts:379</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1808</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the browser form checks each field as it is typed, so this is reachable through the service rather than through the form. Nothing in the code says whether unchecked drafts are intended; a human may want to rule on it.</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.24</span>
     <span class="chip open">accepted</span>
@@ -258,9 +258,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">An evaluator may change their own evaluation only while it is still a draft and the opportunity is still in individual question evaluation; once submitted it cannot be changed at all.</p>
-  <dl><dt>given</dt><dd>an evaluator who has submitted their scores for a proponent</dd><dt>when</dt><dd>they try to change a score or a comment</dd><dt>then</dt><dd>the change is refused and the submitted scores stand</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/evaluations.ts:370</code><br><code>src/back-end/lib/permissions.ts:1056</code><br><code>src/shared/lib/resources/evaluations/sprint-with-us/team-questions.ts:94</code><br><code>src/back-end/lib/resources/proposal/team-with-us/resource-questions/evaluations.ts:370</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>one evaluator cannot edit another&#39;s evaluation at any point, whatever its state.</dd></dl>
+  <dl><dt>given</dt><dd>an evaluator who has submitted their scores for a proponent</dd><dt>when</dt><dd>they try to change a score or a comment</dd><dt>then</dt><dd>the change is refused and the submitted scores stand</dd><dt>not testable</dt><dd>The given is an evaluator who has submitted their scores for a proponent. Nothing in the surface reaches an individual evaluation at all, draft or submitted, because the stage it lives in needs a closure that cannot be brought about (see R-1.1). read_only_after_submitted is named on both individual-edit surfaces and has nothing to report.</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/evaluations.ts:370</code><br><code>src/back-end/lib/permissions.ts:1056</code><br><code>src/shared/lib/resources/evaluations/sprint-with-us/team-questions.ts:94</code><br><code>src/back-end/lib/resources/proposal/team-with-us/resource-questions/evaluations.ts:370</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>one evaluator cannot edit another&#39;s evaluation at any point, whatever its state.</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.25</span>
     <span class="chip open">accepted</span>
@@ -268,9 +268,9 @@
     <span class="chip muted">v2</span>
   </header>
   <p class="statement">An evaluator submits all of their existing draft evaluations for an opportunity in a single action, and the whole set is refused with &quot;This evaluation could not be submitted for review because it is incomplete. Please edit, complete and save the appropriate form before trying to submit it again.&quot; — none of it submitted — unless every evaluation in the set carries an in-range score and a comment for every question of the opportunity; the service does not check that the evaluator holds an evaluation for every proponent, so a proponent they never opened is simply absent from the set rather than blocking the submission.</p>
-  <dl><dt>given</dt><dd>an evaluator with three proponents to score and a complete draft for only two of them</dd><dt>when</dt><dd>they submit their scores for consensus</dd><dt>then</dt><dd>the submission is refused with &quot;This evaluation could not be submitted for review because it is incomplete. Please edit, complete and save the appropriate form before trying to submit it again.&quot; and none of the three is submitted</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1748</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1825</code><br><code>src/back-end/lib/resources/opportunity/team-with-us/index.ts:1205</code><br><code>src/front-end/typescript/lib/pages/opportunity/sprint-with-us/edit/tab/evaluation.tsx:139</code><br><code>src/front-end/typescript/lib/pages/opportunity/sprint-with-us/edit/tab/evaluation.tsx:505</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>an evaluator with three proponents to score and a complete draft for only two of them</dd><dt>when</dt><dd>they submit their scores for consensus</dd><dt>then</dt><dd>the submission is refused with &quot;This evaluation could not be submitted for review because it is incomplete. Please edit, complete and save the appropriate form before trying to submit it again.&quot; and none of the three is submitted</dd><dt>not testable</dt><dd>The given is an evaluator holding draft evaluations for some of an opportunity&#39;s proponents. Drafts cannot be made, because the individual question evaluation stage is reached only by a closure the surface cannot bring about (see R-1.1), so submit_scores_for_consensus has nothing to submit and incomplete_evaluation_error nothing to report. The second half — that a proponent the evaluator never opened does not block the submission — needs the same drafts and the same proponents.</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1748</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1825</code><br><code>src/back-end/lib/resources/opportunity/team-with-us/index.ts:1205</code><br><code>src/front-end/typescript/lib/pages/opportunity/sprint-with-us/edit/tab/evaluation.tsx:139</code><br><code>src/front-end/typescript/lib/pages/opportunity/sprint-with-us/edit/tab/evaluation.tsx:505</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.26</span>
     <span class="chip open">accepted</span>
@@ -278,9 +278,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">A request to submit one evaluation on its own is refused; submission is only accepted as the whole set for the opportunity.</p>
-  <dl><dt>given</dt><dd>an evaluator with one complete draft evaluation</dd><dt>when</dt><dd>a request is sent to submit that evaluation by itself</dd><dt>then</dt><dd>the request is rejected as unrecognised, and the evaluation stays a draft</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/evaluations.ts:306</code><br><code>src/shared/lib/resources/evaluations/sprint-with-us/team-questions.ts:72</code></dd><dt>reconciliation</dt><dd>conflicting</dd><dt>note</dt><dd>the shared description of the evaluation interface declares a &quot;submit&quot; action on the single-evaluation route, but the service&#39;s own parser accepts only &quot;edit&quot; there and treats anything else as unreadable. The declared interface and the running service therefore disagree; the service is the stricter of the two.</dd></dl>
+  <dl><dt>given</dt><dd>an evaluator with one complete draft evaluation</dd><dt>when</dt><dd>a request is sent to submit that evaluation by itself</dd><dt>then</dt><dd>the request is rejected as unrecognised, and the evaluation stays a draft</dd><dt>not testable</dt><dd>Two things are missing. The evaluation the request would name cannot exist, since individual evaluations need a stage reached only by a closure the surface cannot bring about (see R-1.1); and no action submits one evaluation on its own. The individual-edit surfaces offer save_changes and save_and_go_to_next_proponent only, and the sole submission in the contract is submit_scores_for_consensus on the individual list, which is the whole set. The request the criterion says is rejected therefore cannot be made.</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/evaluations.ts:306</code><br><code>src/shared/lib/resources/evaluations/sprint-with-us/team-questions.ts:72</code></dd><dt>reconciliation</dt><dd>conflicting</dd><dt>note</dt><dd>the shared description of the evaluation interface declares a &quot;submit&quot; action on the single-evaluation route, but the service&#39;s own parser accepts only &quot;edit&quot; there and treats anything else as unreadable. The declared interface and the running service therefore disagree; the service is the stricter of the two.</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.27</span>
     <span class="chip open">accepted</span>
@@ -288,9 +288,9 @@
     <span class="chip muted">v2</span>
   </header>
   <p class="statement">An opportunity moves from individual evaluation to consensus by itself once the submitted individual scores number one per question per proponent per evaluator, counted against the panel and the questions of the opportunity&#39;s most recent version but only over the proponents named in the submission that triggers the check, and the chair and the opportunity&#39;s owner are then told it is ready.</p>
-  <dl><dt>given</dt><dd>an opportunity in individual question evaluation with two evaluators, three proponents and four questions</dd><dt>when</dt><dd>the second evaluator submits the last of their scores, bringing the total to twenty-four submitted scores</dd><dt>then</dt><dd>the opportunity moves to consensus, and the chair and the opportunity&#39;s owner are notified</dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:1718</code><br><code>src/back-end/lib/db/evaluations/sprint-with-us/team-questions.ts:339</code><br><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:193</code><br><code>src/back-end/lib/db/opportunity/team-with-us.ts:1631</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the count is taken against the panel and the questions of the opportunity&#39;s most recent version, so changing the panel during individual evaluation changes how many submissions are awaited.</dd></dl>
+  <dl><dt>given</dt><dd>an opportunity in individual question evaluation with two evaluators, three proponents and four questions</dd><dt>when</dt><dd>the second evaluator submits the last of their scores, bringing the total to twenty-four submitted scores</dd><dt>then</dt><dd>the opportunity moves to consensus, and the chair and the opportunity&#39;s owner are notified</dd><dt>not testable</dt><dd>The when is the last of a set of individual scores being submitted, which needs an opportunity in individual question evaluation with proponents and submitted evaluations — none of which can be had, because the stage is reached only by a closure the surface cannot bring about (see R-1.1). The move to consensus and the notices to the chair and the owner both hang off that submission.</dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:1718</code><br><code>src/back-end/lib/db/evaluations/sprint-with-us/team-questions.ts:339</code><br><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:193</code><br><code>src/back-end/lib/db/opportunity/team-with-us.ts:1631</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the count is taken against the panel and the questions of the opportunity&#39;s most recent version, so changing the panel during individual evaluation changes how many submissions are awaited.</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.28</span>
     <span class="chip open">accepted</span>
@@ -298,9 +298,9 @@
     <span class="chip muted">v2</span>
   </header>
   <p class="statement">Once an opportunity reaches consensus, every member of its panel can read every evaluator&#39;s individual scores and comments for a proponent, and before then no one but the evaluator who wrote them can; an administrator who is not on the panel gains access to individual evaluations only after the question stages have passed, at code challenge, team scenario or awarded, whereas a consensus may be read by an administrator at any stage.</p>
-  <dl><dt>given</dt><dd>an opportunity in individual question evaluation with two evaluators who have both scored a proponent</dd><dt>when</dt><dd>the first evaluator asks to see the second&#39;s scores, and asks again after the opportunity has moved to consensus</dd><dt>then</dt><dd>the first request is refused and the second returns the second evaluator&#39;s scores and comments beside their name</dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:980</code><br><code>src/back-end/lib/permissions.ts:894</code><br><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/evaluations.ts:85</code><br><code>src/front-end/typescript/lib/pages/proposal/sprint-with-us/view/tab/team-questions.tsx:1246</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>an administrator can read an individual evaluation at any stage.</dd></dl>
+  <dl><dt>given</dt><dd>an opportunity in individual question evaluation with two evaluators who have both scored a proponent</dd><dt>when</dt><dd>the first evaluator asks to see the second&#39;s scores, and asks again after the opportunity has moved to consensus</dd><dt>then</dt><dd>the first request is refused and the second returns the second evaluator&#39;s scores and comments beside their name</dd><dt>not testable</dt><dd>Every reader in the criterion is asking for an individual evaluation or a consensus, and neither can exist: both live in stages reached only by a closure the surface cannot bring about (see R-1.1). panel_member_score and panel_member_notes are named on the consensus surfaces, and with no evaluation written and no stage to move between, the before-and-after contrast the criterion is built on has nothing to compare.</dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:980</code><br><code>src/back-end/lib/permissions.ts:894</code><br><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/evaluations.ts:85</code><br><code>src/front-end/typescript/lib/pages/proposal/sprint-with-us/view/tab/team-questions.tsx:1246</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>an administrator can read an individual evaluation at any stage.</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.29</span>
     <span class="chip open">accepted</span>
@@ -308,9 +308,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">Only the chair may record and change the consensus, one consensus per proponent, and only while the opportunity is in consensus.</p>
-  <dl><dt>given</dt><dd>an opportunity in consensus</dd><dt>when</dt><dd>an evaluator who is not the chair tries to record an agreed score for a proponent, and the chair records a second consensus for a proponent they have already agreed</dd><dt>then</dt><dd>the evaluator&#39;s attempt is refused, and the chair&#39;s second attempt is refused as a duplicate</dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:1007</code><br><code>src/back-end/lib/permissions.ts:1043</code><br><code>src/back-end/lib/permissions.ts:1524</code><br><code>src/back-end/lib/permissions.ts:1560</code><br><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/consensus.ts:155</code><br><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/consensus.ts:193</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>a consensus is scored against the same rules as an individual evaluation — one score and one comment per question, within the question&#39;s maximum.</dd></dl>
+  <dl><dt>given</dt><dd>an opportunity in consensus</dd><dt>when</dt><dd>an evaluator who is not the chair tries to record an agreed score for a proponent, and the chair records a second consensus for a proponent they have already agreed</dd><dt>then</dt><dd>the evaluator&#39;s attempt is refused, and the chair&#39;s second attempt is refused as a duplicate</dd><dt>not testable</dt><dd>The given is an opportunity in consensus, which cannot be reached (see R-1.1). Neither the chair recording an agreed score nor an evaluator being refused one can be attempted, and duplicate_consensus_error on both consensus-create surfaces has nothing to report.</dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:1007</code><br><code>src/back-end/lib/permissions.ts:1043</code><br><code>src/back-end/lib/permissions.ts:1524</code><br><code>src/back-end/lib/permissions.ts:1560</code><br><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/consensus.ts:155</code><br><code>src/back-end/lib/resources/proposal/sprint-with-us/team-questions/consensus.ts:193</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>a consensus is scored against the same rules as an individual evaluation — one score and one comment per question, within the question&#39;s maximum.</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.30</span>
     <span class="chip open">accepted</span>
@@ -318,9 +318,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The chair may reopen and resubmit a consensus as often as they like until it is finalised, unlike an individual evaluation, which is fixed once submitted.</p>
-  <dl><dt>given</dt><dd>a consensus the chair has already submitted, on an opportunity still in consensus</dd><dt>when</dt><dd>the chair changes an agreed score and submits again</dd><dt>then</dt><dd>the change is accepted and the consensus is recorded as submitted afresh</dd><dt>cites</dt><dd><code>src/shared/lib/resources/evaluations/sprint-with-us/team-questions.ts:106</code><br><code>src/shared/lib/resources/evaluations/team-with-us/resource-questions.ts:106</code><br><code>src/back-end/lib/permissions.ts:1043</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1922</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>a consensus the chair has already submitted, on an opportunity still in consensus</dd><dt>when</dt><dd>the chair changes an agreed score and submits again</dd><dt>then</dt><dd>the change is accepted and the consensus is recorded as submitted afresh</dd><dt>not testable</dt><dd>The given is a consensus the chair has already submitted, and no consensus can be recorded, because the consensus stage is reached only by a closure the surface cannot bring about (see R-1.1). editable_after_submitted is named on both consensus-edit surfaces and has nothing to be read on.</dd><dt>cites</dt><dd><code>src/shared/lib/resources/evaluations/sprint-with-us/team-questions.ts:106</code><br><code>src/shared/lib/resources/evaluations/team-with-us/resource-questions.ts:106</code><br><code>src/back-end/lib/permissions.ts:1043</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1922</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.31</span>
     <span class="chip open">accepted</span>
@@ -328,9 +328,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">When the chair submits the consensus, the opportunity&#39;s owner and every administrator are told.</p>
-  <dl><dt>given</dt><dd>an opportunity in consensus whose agreed scores are complete</dd><dt>when</dt><dd>the chair submits them</dd><dt>then</dt><dd>the opportunity&#39;s owner and all administrators are notified that the consensus has been submitted</dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:215</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:2202</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>an opportunity in consensus whose agreed scores are complete</dd><dt>when</dt><dd>the chair submits them</dd><dt>then</dt><dd>the opportunity&#39;s owner and all administrators are notified that the consensus has been submitted</dd><dt>not testable</dt><dd>The when is the chair submitting the agreed scores of an opportunity in consensus. The consensus stage cannot be reached (see R-1.1), so submit_final_consensus_scores has nothing to act on and no message to the owner or to the administrators is ever produced for the mail catcher to be searched for.</dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:215</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:2202</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.32</span>
     <span class="chip open">accepted</span>
@@ -338,9 +338,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">Finalising the consensus records the agreed scores against each proponent, screens in the highest-scoring proponents that met every minimum score — at most four for Sprint With Us and at most three for Team With Us — and moves the opportunity to its next stage.</p>
-  <dl><dt>given</dt><dd>a Sprint With Us opportunity in consensus with six proponents, five of whom met every minimum score</dd><dt>when</dt><dd>the consensus scores are finalised</dd><dt>then</dt><dd>every proponent&#39;s history records the agreed scores question by question, the four highest scoring of the five are moved into the code challenge, and the opportunity moves to the code challenge stage</dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:1820</code><br><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:1897</code><br><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:1923</code><br><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:1952</code><br><code>src/back-end/lib/db/opportunity/team-with-us.ts:1834</code><br><code>src/shared/config.ts:56</code><br><code>src/shared/config.ts:58</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>a proponent that is no longer under review of the questions — withdrawn or disqualified, say — is passed over even if their agreed scores would have placed them.</dd></dl>
+  <dl><dt>given</dt><dd>a Sprint With Us opportunity in consensus with six proponents, five of whom met every minimum score</dd><dt>when</dt><dd>the consensus scores are finalised</dd><dt>then</dt><dd>every proponent&#39;s history records the agreed scores question by question, the four highest scoring of the five are moved into the code challenge, and the opportunity moves to the code challenge stage</dd><dt>not testable</dt><dd>The given is a Sprint With Us opportunity in consensus with proponents carrying agreed scores. Consensus lies beyond a closure the surface cannot bring about (see R-1.1), so nothing can be finalised, no proponent can be screened in or passed over, and the next stage is never entered. The ceiling of four proponents for Sprint With Us and three for Team With Us has no set of proponents to be applied to.</dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:1820</code><br><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:1897</code><br><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:1923</code><br><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:1952</code><br><code>src/back-end/lib/db/opportunity/team-with-us.ts:1834</code><br><code>src/shared/config.ts:56</code><br><code>src/shared/config.ts:58</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>a proponent that is no longer under review of the questions — withdrawn or disqualified, say — is passed over even if their agreed scores would have placed them.</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.33</span>
     <span class="chip open">accepted</span>
@@ -348,9 +348,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">When the consensus scores are finalised, the chair and the opportunity&#39;s owner are told.</p>
-  <dl><dt>given</dt><dd>an opportunity whose consensus scores are complete and submitted</dd><dt>when</dt><dd>they are finalised</dd><dt>then</dt><dd>the chair and the opportunity&#39;s owner are notified that the consensus has been finalised</dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:240</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:2230</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>an opportunity whose consensus scores are complete and submitted</dd><dt>when</dt><dd>they are finalised</dd><dt>then</dt><dd>the chair and the opportunity&#39;s owner are notified that the consensus has been finalised</dd><dt>not testable</dt><dd>The when is the consensus scores being finalised, which needs the consensus stage and therefore a closure the surface cannot bring about (see R-1.1). With no finalising there is no notice to the chair or to the owner for the mail catcher to hold.</dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/opportunity/sprint-with-us.tsx:240</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:2230</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.34</span>
     <span class="chip open">accepted</span>
@@ -358,9 +358,9 @@
     <span class="chip muted">v2</span>
   </header>
   <p class="statement">The tools for evaluating an opportunity are split by role: only an evaluator sees the evaluation instructions and the individual evaluation list, only the chair or the opportunity&#39;s owner or an administrator sees the consensus list, and only the owner or an administrator sees the panel itself.</p>
-  <dl><dt>given</dt><dd>an opportunity being evaluated</dd><dt>when</dt><dd>an evaluator, the chair, the opportunity&#39;s owner and an unrelated public sector employee each open it</dd><dt>then</dt><dd>the evaluator is offered the instructions and the individual evaluations, the chair is offered the consensus, the owner is offered the consensus and the panel, and the unrelated employee is offered none of them</dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/opportunity/sprint-with-us/edit/tab/index.ts:169</code><br><code>src/front-end/typescript/lib/pages/opportunity/sprint-with-us/edit/index.tsx:205</code><br><code>src/migrations/tasks/20240607173220_admin-evaluation-content-stubs.ts:8</code><br><code>src/front-end/typescript/config.ts:54</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the evaluation instructions are a fixed piece of editable site content, one for each program, so what an evaluator is told can be changed without changing the service.</dd></dl>
+  <dl><dt>given</dt><dd>an opportunity being evaluated</dd><dt>when</dt><dd>an evaluator, the chair, the opportunity&#39;s owner and an unrelated public sector employee each open it</dd><dt>then</dt><dd>the evaluator is offered the instructions and the individual evaluations, the chair is offered the consensus, the owner is offered the consensus and the panel, and the unrelated employee is offered none of them</dd><dt>not testable</dt><dd>The given is an opportunity being evaluated. Every stage in which the instructions, the individual evaluation list and the consensus list belong to somebody is reached only by a closure the surface cannot bring about (see R-1.1), so three of the four tools cannot be looked for; and the contrast needs four different people looking at one opportunity, while the target mints a session for only one public sector employee besides the administrator. The fourth tool, the panel itself, is reachable and is exercised by R-5.18.</dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/opportunity/sprint-with-us/edit/tab/index.ts:169</code><br><code>src/front-end/typescript/lib/pages/opportunity/sprint-with-us/edit/index.tsx:205</code><br><code>src/migrations/tasks/20240607173220_admin-evaluation-content-stubs.ts:8</code><br><code>src/front-end/typescript/config.ts:54</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the evaluation instructions are a fixed piece of editable site content, one for each program, so what an evaluator is told can be changed without changing the service.</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.35</span>
     <span class="chip open">accepted</span>
@@ -368,9 +368,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">An evaluator works through the proponents one after another in anonymous-proponent order, saving as they move between them.</p>
-  <dl><dt>given</dt><dd>an evaluator scoring the second of three proponents</dd><dt>when</dt><dd>they move to the next proponent</dd><dt>then</dt><dd>their scores and comments for the second proponent are saved and the third proponent&#39;s questions are shown</dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/proposal/sprint-with-us/lib/components/team-questions-carousel.tsx:43</code><br><code>src/front-end/typescript/lib/pages/proposal/sprint-with-us/lib/components/team-questions-carousel.tsx:63</code><br><code>src/front-end/typescript/lib/pages/proposal/sprint-with-us/view/tab/team-questions.tsx:393</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the proponents are ordered by their anonymous names, so an evaluator never sees which organization they are scoring while the questions are being evaluated.</dd></dl>
+  <dl><dt>given</dt><dd>an evaluator scoring the second of three proponents</dd><dt>when</dt><dd>they move to the next proponent</dd><dt>then</dt><dd>their scores and comments for the second proponent are saved and the third proponent&#39;s questions are shown</dd><dt>not testable</dt><dd>The given is an evaluator part-way through the proponents of an opportunity in individual question evaluation, a stage reached only by a closure the surface cannot bring about (see R-1.1). save_and_go_to_next_proponent and save_and_go_to_previous_proponent are named on the individual-create surfaces, and anonymous_proponent_name would report the order, but there are no proponents to move between and no scores to be saved on the way.</dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/proposal/sprint-with-us/lib/components/team-questions-carousel.tsx:43</code><br><code>src/front-end/typescript/lib/pages/proposal/sprint-with-us/lib/components/team-questions-carousel.tsx:63</code><br><code>src/front-end/typescript/lib/pages/proposal/sprint-with-us/view/tab/team-questions.tsx:393</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the proponents are ordered by their anonymous names, so an evaluator never sees which organization they are scoring while the questions are being evaluated.</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.36</span>
     <span class="chip open">accepted</span>
@@ -378,9 +378,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The two programs run the same evaluation from end to end, differing only in what the questions are called, how many proponents are carried forward, and what the stage that follows is named.</p>
-  <dl><dt>given</dt><dd>one Sprint With Us and one Team With Us opportunity, each closing with proponents to evaluate</dd><dt>when</dt><dd>each is taken through individual evaluation, consensus and finalising</dd><dt>then</dt><dd>both follow published, individual question evaluation, consensus, and then their own next stage — the code challenge for Sprint With Us and the challenge for Team With Us — and neither can skip a stage or go back</dd><dt>cites</dt><dd><code>src/shared/lib/resources/opportunity/sprint-with-us.ts:487</code><br><code>src/shared/lib/resources/opportunity/team-with-us.ts:451</code><br><code>src/migrations/tasks/20240718222006_swu-evaluation-tables.ts:8</code><br><code>src/migrations/tasks/20250506164908_twu-evaluation-tables.ts:8</code><br><code>src/back-end/lib/db/evaluations/team-with-us/resource-questions.ts:53</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>Sprint With Us calls them team questions and carries four proponents forward; Team With Us calls them resource questions and carries three. Team With Us gained its panel about ten months after Sprint With Us did, and its tables were copied from the Sprint With Us ones.</dd></dl>
+  <dl><dt>given</dt><dd>one Sprint With Us and one Team With Us opportunity, each closing with proponents to evaluate</dd><dt>when</dt><dd>each is taken through individual evaluation, consensus and finalising</dd><dt>then</dt><dd>both follow published, individual question evaluation, consensus, and then their own next stage — the code challenge for Sprint With Us and the challenge for Team With Us — and neither can skip a stage or go back</dd><dt>not testable</dt><dd>The claim is that both programs run the whole evaluation, from published through individual question evaluation and consensus to their own next stage. Neither can leave published: an opportunity moves on only by closing at its proposal deadline, and no page, action or observation makes that happen (see R-1.1). Neither the sameness of the two runs nor the three differences the criterion allows can be observed on a walk that stops at the first stage.</dd><dt>cites</dt><dd><code>src/shared/lib/resources/opportunity/sprint-with-us.ts:487</code><br><code>src/shared/lib/resources/opportunity/team-with-us.ts:451</code><br><code>src/migrations/tasks/20240718222006_swu-evaluation-tables.ts:8</code><br><code>src/migrations/tasks/20250506164908_twu-evaluation-tables.ts:8</code><br><code>src/back-end/lib/db/evaluations/team-with-us/resource-questions.ts:53</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>Sprint With Us calls them team questions and carries four proponents forward; Team With Us calls them resource questions and carries three. Team With Us gained its panel about ten months after Sprint With Us did, and its tables were copied from the Sprint With Us ones.</dd></dl>
 </article>
-<article class="criterion" data-state="untested">
+<article class="criterion is-not-testable" data-state="not-testable">
   <header>
     <span class="id">R-5.37</span>
     <span class="chip open">accepted</span>
@@ -388,7 +388,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">A panel member who is neither an evaluator nor the chair must be refused by the service when the panel is submitted, with a field-level message identifying the offending member, rather than being allowed through to a database constraint violation.</p>
-  <dl><dt>replaces</dt><dd>R-5.15</dd></dl>
+  <dl><dt>not testable</dt><dd>The panel a test can submit never holds a member with no role. The three actions that put somebody on a panel — add_panel_member, choose_panel_chair and mark_member_as_chair — each give that member a role, and nothing adds one without, so the offending panel cannot be composed. The outcome is unreadable as well: the panel surfaces name minimum_members_error, duplicate_member_error, non_public_sector_member_error and missing_chair_error, and none of them is a field-level message identifying a member who is neither an evaluator nor the chair. Needs an add_panel_member that can withhold a role, and an observation of that refusal.</dd><dt>replaces</dt><dd>R-5.15</dd></dl>
 </article>
 <script>
 (function () {

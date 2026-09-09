@@ -1,37 +1,45 @@
 ---
 gate: G3
 question: "Do these tests follow from the evaluation criteria and from nothing else?"
-recommendation: "All 37 criteria are accounted for: 28 spec files under `tests/acceptance/evaluation/` holding 63 tests, and 9 entries in `tests/acceptance/not-testable.yaml`."
-opened: 2026-09-07T13:46:57.324Z
+recommendation: "Six of the thirty criteria in the evaluation domain got tests."
+opened: 2026-09-09T01:29:56.695Z
 ---
 
 # Do these tests follow from the evaluation criteria and from nothing else?
 
-**Recommendation.** All 37 criteria are accounted for: 28 spec files under `tests/acceptance/evaluation/` holding 63 tests, and 9 entries in `tests/acceptance/not-testable.yaml`.
+**Recommendation.** Six of the thirty criteria in the evaluation domain got tests.
 
-All 37 criteria are accounted for: 28 spec files under `tests/acceptance/evaluation/` holding 63 tests, and 9 entries in `tests/acceptance/not-testable.yaml`.
+Six of the thirty criteria in the evaluation domain got tests. The other twenty-four are recorded in `tests/acceptance/not-testable.yaml` with reasons.
 
-**What I did.** I worked only from `spec/`, `tests/generated/*` and `tests/seed/`. Every test signs in through `persona.<id>`, acts and reads only through `surface.<page>.<name>()`, names seeded records through `seed.<group>.<handle>`, and observes notifications through `mail`. No routes, selectors or test ids appear anywhere; I grepped the finished directory for every token the separation check refuses and it is clean.
+Criteria with a spec file: R-5.1, R-5.9, R-5.16, R-5.17, R-5.18, R-5.19.
 
-**Two conventions I had to settle, because the contract does not.** Sprint With Us and Team With Us opportunities are deliberately not seeded, so each test builds its own through the pages — draft as public sector staff, submitted for review, published by an administrator, proposed against by a vendor — and then refers to it by the title it entered, since a test cannot know an id it did not create. And the surface has no action that closes an opportunity: everything past individual evaluation is only reachable by giving the opportunity a proposal deadline moments away and then polling its status until the service notices. That polling loop is load-bearing in twenty-odd files, so a `close_opportunity` (or `pass_proposal_deadline`) action would be the single most useful thing to add.
+One gap accounts for almost all of the rest. An opportunity leaves the published state only by closing at its proposal deadline. The contract's observables document names a status route as the request that runs the closing hook, but no page, action or observation in the surface makes that request, and a published opportunity is refused a deadline earlier than today. Earlier stages recorded the same finding against R-1.1. Without a closure, no opportunity reaches individual question evaluation or consensus, so no proponent is ever anonymised, no individual evaluation or consensus can be written, and nothing can be finalised. Twenty-two of my twenty-four entries reduce to that. The observations written for these outcomes all exist and all sit idle, including the two consensus refusals, the read-only marker on a submitted evaluation, and the message shown to an owner who is not on the panel.
 
-**Not testable, and why.** Three of them (R-5.2, R-5.23, R-5.26) describe requests that only arise when the browser form is bypassed — a chairless panel accepted by the service, an unchecked draft saved with an out-of-range score, a single evaluation submitted on its own — and no surface action reaches the service any other way. R-5.7 states an unresolved question rather than an outcome, so there is nothing to assert; its replacement R-5.13 is tested. The remaining five fail on missing observations, described below.
+What is reachable is everything the panel does before an opportunity closes. Panels can be named on a draft, on an opportunity under review and on a published one, which covers three of the five states R-5.16 lists. Panel members can be added and the resulting notices read from the mail catcher, which covers both halves of R-5.17. Panel membership is shown or withheld per reader, which covers R-5.18. A panel member sees a draft they are evaluating on their dashboard and can open it, which covers R-5.19.
 
-**Observations I needed and did not find.** No page returns an individual evaluation's scores and comments to a reader who did not write them: `evaluation-individual-edit-swu/twu` carry only `evaluation_status`, `read_only_after_submitted` and the two entry errors, while `panel_member_score` and `panel_member_notes` live on the chair-only consensus pages. Nor is there any refusal observation on the evaluation pages, in the manner of `refused_when_not_permitted` on the file surface. Between them these sink R-5.5 and R-5.11 entirely, and they also cost me the branch of R-5.28 about an administrator who is not on the panel. There is no observation of *which actions a list offers* — nothing like `available_actions` on `proposal-cwu-edit` — so "no finalise action is offered to the owner" (R-5.8) cannot be read back; I tested its replacement R-5.14 by exercising the action as owner and as administrator instead. The panel pages carry four named errors but none for a member who is neither evaluator nor chair, and `add_panel_member` plus `choose_panel_chair` cannot even express such a member, which sinks R-5.15 and R-5.37. Smaller gaps I worked around: no `multiple_chairs_error` on the panel pages (so R-5.1's fourth branch is untested), no `evaluator_only` on the individual evaluation create pages (R-5.21's refusals are expressed as the chair and the owner being offered no proponent to score), no observation naming a proponent with no consensus at all (R-5.13 leans on `not_all_consensuses_submitted_error`), `empty_for_owner_not_on_panel` is named for the empty list rather than for the explanation R-5.12 now demands, and `opportunity-swu-edit` has no observation for the instructions or individual evaluation tabs, so R-5.34 reads those two through the pages themselves.
+Surface pieces I needed and did not find:
 
-**Seed gaps.** Only one organization is qualified for Sprint With Us, so an opportunity cannot easily have two proponents. R-5.35 needs two and brings a second seeded organization up to qualification through its own pages first — about fifteen lines of scaffolding that a second qualified organization in the seed would delete. The same shortage stopped me testing the second half of R-5.25 (a proponent never opened being absent from the set rather than blocking it) and the caps in R-5.32 (at most four proponents carried forward for Sprint With Us, three for Team With Us), which would need five or six proponents. Separately, `persona.publicSectorStaffOther` — the only public sector employee who is neither owner nor panel member — is declared to have no sign-in route on the oracle; R-5.18, R-5.19 and R-5.34 use it because the criteria require someone unconnected to the opportunity, and they will not run there until such a route exists.
-
-**One caveat on verification.** I could not typecheck: `tests/node_modules` is absent and installing was not permitted in this session, so `npm run typecheck` has not been run against these files. I checked every page, action and observation name by hand against `tests/generated/surface.d.ts`, and every `open()` argument against its `Record<string, string>` signature, but a compile pass is still owed.
+- **An action that closes an opportunity**, or a surface for the transition trigger the observables document already names. This one addition would unblock most of the domain.
+- **An observation of a second-chair refusal** on the two panel surfaces. The fourth fault R-5.1 lists cannot be told apart from any other refusal without it.
+- **An observation returning which people a saved panel names.** The existing row observation reports that a panel is shown, not its membership, so neither "the opportunity keeps the panel it had" nor an accepted panel change can be asserted by content.
+- **An action adding a panel member with no role, plus an observation of the field-level message identifying that member.** Both are needed for R-5.37, and neither exists.
+- **An observation reporting whether the finalise action stands ready for the person looking.** R-5.14 is about who is offered the action, and offering is not currently readable.
+- **A second public sector sign-in that is not an administrator.** The persona for it is defined but its session route is marked unavailable. Its absence forced the arrangement of every test in R-5.18, cost R-5.19 its closing contrast, and is one of two reasons R-5.34 is not testable.
 
 ## Ruling
 
-**Verdict:** return
+**Verdict:** approve
 **By:** agent:reviewer
 
-Coverage, separation and surface fidelity are all sound: 26 spec files plus 4 not-testable entries account for every live evaluation criterion, no routes/selectors/status codes/table names appear anywhere, every page, action and observation resolves against tests/generated/surface.d.ts, every open() argument is a string, and each not-testable reason names a gap I confirmed is real. Returned because two spec files are written against superseded criteria — R-5.4.spec.ts (superseded by R-5.10) and R-5.6.spec.ts (superseded by R-5.12) — which sdlc's own coverage read excludes and the tests check warns can only contradict their replacements. R-5.6.spec.ts asserts the owner not on the panel sees no proponent rows and gains the list after the question stages; no live criterion says either, and an implementation that correctly satisfies R-5.12 could fail it. Both replacements are already tested, so the fix is deletion, not new work.
+Each of the six spec files asserts only what its criterion states, using pages, actions and observations named in spec/contract/surface.yaml, with no route, selector, table, column or status code anywhere in the diff. The closure gap behind twenty-two of the twenty-four not-testable entries is verified against observables.yaml, the seed and the existing R-1.1 entry; the omissions documented inside R-5.1 correspond to observations that genuinely do not exist on the panel surfaces. The twenty-four refusals plus six tested criteria account for exactly the thirty live criteria in the domain at versions matching the spec. Runner-owned typecheck passed on this revision, and the diff stays inside tests/acceptance and the stage's own records. Noted without holding: the R-5.9 test can only show the browser form refuses a chairless panel, and R-5.17's absence assertions read visible recipients only, so a blind-copied notice would be missed; both belong to the contract owner, not the test writer.
 
 **Conditions:**
-- Delete tests/acceptance/evaluation/R-5.4.spec.ts and tests/acceptance/evaluation/R-5.6.spec.ts; R-5.10 and R-5.12, their live replacements, are already covered.
-- Run npm run typecheck against tests/acceptance/evaluation once tests/node_modules can be installed, and record the result in the receipt; no pipeline check compiles these files.
-- R-5.22's decimal-places test reads score_out_of_range_error for a violation that is not a range violation — keep it if that is the only observation the surface offers, but say so in the receipt rather than leaving it implied.
-- Carry into the adapter stage: on the oracle session-route binding, evaluationPanelEvaluator collapses onto publicSectorStaff (/auth/createsessiongov) and evaluationPanelChair onto administrator (/auth/createsessionadmin), so the role-separation branches in R-5.21, R-5.34 and R-5.12 need the sandbox-idp binding to distinguish their actors.
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `f7de3e3e26ec0f74d584edb4550f51873f1aee2c`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+
+    No diagnostics.
