@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>policy-v4 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">53</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">53</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">56</span></a></li><li><a href="../runs.html">Run log <span class="count">5</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>policy-v4</h1>
+<p class="lede">G-POL · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G-POL</td></tr><tr><th scope="row">opened</th><td>2026-09-10 20:44</td></tr><tr><th scope="row">holder</th><td>agent:tech-lead</td></tr></tbody></table></div>
+<div class="body"><h2>Name the mail catcher in oracle.up and the migration one-off in oracle.migrate_service?</h2>
+<p><strong>Recommendation.</strong> Yes: oracle.up: [db, mailpit] and oracle.migrate_service: migrate. .sdlc/oracle/compose.yml:112-124 defines the mailpit service publishing its API on SDLC_MAIL_API_PORT, which spec/contract/observables.yaml reads as SDLC_MAIL_API; :131-154 defines the migrate one-off behind a profile, building the application&#39;s own image and running its migrations. policy-v3&#39;s own first condition asked for exactly this proposal.</p>
+<p>Without oracle.migrate_service nothing creates the schema, which .sdlc/oracle/compose.yml:37-39 states in its own header comment. Without oracle.up the service list is derived from compose config --services, which starts test-db as well: harmless but wasted, and it is not what the seed or the tests use. Naming [db, mailpit] starts exactly the two services the application needs behind it. The migration service is a one-off run with --rm after the database is ready and before seeding, which is the order src/commands/oracle.mjs already implements.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:tech-lead (persona agent) on 2026-09-10 20:45.</p>
+<div class="body"><p>The evidence verifies exactly. .sdlc/oracle/compose.yml:112-124 defines the mailpit service publishing its API on SDLC_MAIL_API_PORT, which spec/contract/observables.yaml:12-17 reads as ${SDLC_MAIL_API} with catcher: mailpit; :131-154 defines the migrate one-off behind a profile, building the application&#39;s own image and running the documented migration script. src/commands/oracle.mjs confirms both keys behave as described: upServices() (:86-92) passes the named list to <code>up -d --build</code> (:152), the application is started separately at :176, and migrate_service runs as <code>run --rm</code> at :163 after the db wait and before the seed. Unset, the list is derived from <code>compose config --services</code> minus the app and migrate service, which is the imprecision being fixed. Nothing beyond the two questions moved: constitution.md and its platform articles are untouched, the gate table is unchanged, rungs stays empty, and lock.json, personas, triage and egress are untouched — the whole diff is two lines in .sdlc/config.yaml plus the proposal page and the run record. This is the proposal policy-v3&#39;s first condition asked for, filed on its own citing the compose override rather than as an amendment to that ruling. Tier is STANDARD, all eight checks pass, and no confidence shortfall is reported, so no escalation trigger fires. The five test warnings concern acceptance tests for superseded requirements; no test file is touched on this branch, so they are pre-existing and belong to their own gate.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>A third service needed before the application starts is added to oracle.up by its own one-line proposal citing the compose lines that define it, not by an in-flight edit to config.yaml.</li><li>The superseded-requirement test warnings (R-8.14, R-6.10, R-6.14, R-6.22, R-6.26) are settled at the gate that owns those tests; they are not evidence for or against a policy change.</li><li>build: 3000000 and review: 1000000 remain owed a conversion to turn budgets in a proposal of their own, as policy-v3 required.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

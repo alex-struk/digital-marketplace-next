@@ -1,5 +1,10 @@
 # Run log
 
+# Run record 2026-09-10
+
+- 13:44:11 propose policy-v4 at G-POL
+- 13:45:57 rule policy-v4 approve at G-POL by agent:tech-lead (agent)
+
 # Run record 2026-09-09
 
 - 17:45:50 run derive-tests: ok, cost 2.984683, turns 56
