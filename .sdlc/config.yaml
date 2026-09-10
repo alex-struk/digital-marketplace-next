@@ -17,6 +17,8 @@ oracle:
   base_url: http://localhost:3000
   identity: session-route
   service: app
+  up: [db, mailpit]
+  migrate_service: migrate
   db: { service: db, user: digmkt, database: digmkt }
 targets:
   new: { base_url: http://localhost:8080, identity: sandbox-idp }
