@@ -73,7 +73,14 @@ services:
 
       POSTGRES_URL: postgresql://digmkt:digmkt@db:5432/digmkt
       COOKIE_SECRET: oracle-cookie-secret-not-a-real-secret
-      FILE_STORAGE_DIR: ./tmp
+      # An absolute path under /tmp, not ./tmp. The image runs as uid 1000 and its
+      # working directory /usr/app is root-owned 0755, so the application cannot create
+      # ./tmp there. It fails that check inside getConfigErrors, whose own error path
+      # calls a logger that is still in its temporal dead zone at module scope, so the
+      # process dies with "Cannot access 'logger' before initialization" and never
+      # reports the permission error underneath. TMP_DIR is derived as
+      # FILE_STORAGE_DIR/__tmp, so this one value fixes both.
+      FILE_STORAGE_DIR: /tmp/dm-storage
 
       # Mail goes to the mailpit container below and nowhere else.
       MAILER_HOST: mailpit
@@ -145,7 +152,14 @@ services:
       ORIGIN: http://localhost:${SDLC_APP_PORT}
       POSTGRES_URL: postgresql://digmkt:digmkt@db:5432/digmkt
       COOKIE_SECRET: oracle-cookie-secret-not-a-real-secret
-      FILE_STORAGE_DIR: ./tmp
+      # An absolute path under /tmp, not ./tmp. The image runs as uid 1000 and its
+      # working directory /usr/app is root-owned 0755, so the application cannot create
+      # ./tmp there. It fails that check inside getConfigErrors, whose own error path
+      # calls a logger that is still in its temporal dead zone at module scope, so the
+      # process dies with "Cannot access 'logger' before initialization" and never
+      # reports the permission error underneath. TMP_DIR is derived as
+      # FILE_STORAGE_DIR/__tmp, so this one value fixes both.
+      FILE_STORAGE_DIR: /tmp/dm-storage
       MAILER_FROM: Digital Marketplace <donotreply@example.test>
     depends_on:
       - db
