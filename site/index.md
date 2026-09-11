@@ -37,6 +37,7 @@ Profile: rebuild
 - [constitution-v1](proposals/constitution-v1.md)
 - [contract-v1](proposals/contract-v1.md)
 - [contract-v2](proposals/contract-v2.md)
+- [contract-v3](proposals/contract-v3.md)
 - [derive-tests-content](proposals/derive-tests-content.md)
 - [derive-tests-content-2](proposals/derive-tests-content-2.md)
 - [derive-tests-content-3](proposals/derive-tests-content-3.md)
@@ -94,9 +95,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $245.785623
-- Rulings cost: $94.665293
-- Total cost: $340.450916
-- Agent-held rulings: 52
+- Journal cost: $262.744286
+- Rulings cost: $96.804872
+- Total cost: $359.549158
+- Agent-held rulings: 53
 - Open escalations: 0
 - Open proposals: 0

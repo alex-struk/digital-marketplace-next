@@ -18,6 +18,9 @@
 - 00:09:01 run contract: ok, cost 19.22653949999999, turns 188
 - 00:09:01 propose contract-v2 at G1
 - 00:12:16 rule contract-v2 approve at G1 by agent:product-owner (agent)
+- 00:57:44 run contract: ok after a fix turn, cost 16.958663499999993, turns 179
+- 00:57:44 propose contract-v3 at G1
+- 01:02:35 rule contract-v3 approve at G1 by agent:product-owner (agent)
 
 # Run record 2026-09-10
 

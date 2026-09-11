@@ -12,8 +12,13 @@
 # below has a named source and there are only four kinds:
 #
 #   From the seed. Every record tests/seed/manifest.yaml names carries its identifier
-#   there, so :userId, :orgId, the :slug of the one administrator-made page, and the
-#   :opportunityId of the two seeded Code With Us opportunities are all handles.
+#   there, so :userId, :orgId, the :slug of the one administrator-made page, the
+#   :opportunityId of the two seeded Code With Us opportunities and of the seeded Sprint
+#   With Us and Team With Us opportunities that have already closed, and the :proposalId
+#   of the six proposals against those two, are all handles. The closed pair is what the
+#   evaluation screens below are reached through: an opportunity closes only when its
+#   proposal deadline passes, and no form will accept a deadline that has already gone by,
+#   so the starting point for every criterion behind a closure is seeded rather than built.
 #
 #   From the page the record lands on. Creating a record sends the browser to that
 #   record's own screen, and every such screen carries an observation returning the
