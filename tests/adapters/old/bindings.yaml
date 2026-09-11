@@ -1,0 +1,929 @@
+# What the "old" adapter binds, and what it does not.
+#
+# Nothing is bound. Binding an action or an observation means opening its page on the
+# running target and finding the control by role, label, visible text or the address it
+# leads to; this run could not open the target at all, because the browser tooling in
+# this workspace has no usable Chromium and the session was refused any other way to
+# reach the application. Rather than leave guessed locators behind, every action and
+# observation is recorded unbound with that reason, and the adapter throws the matching
+# "unbound: <page>.<member>" error. Navigation and sign-in are written from the contract
+# and are not listed here.
+target: old
+pages:
+  home:
+    actions:
+      browse_opportunities: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      sign_in: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      sign_up: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      total_awarded_opportunity_count: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      total_awarded_opportunity_value: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      readable_when_signed_out: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  opportunity-dashboard:
+    actions:
+      create_opportunity: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      open_opportunity: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      my_opportunities_table: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      opportunity_status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      own_opportunities_only: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      all_opportunities_for_administrator: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      empty_my_opportunities_message: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  opportunity-list:
+    actions:
+      filter_by_program: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      filter_by_status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      filter_remote_only: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      search: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      toggle_watch: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      unpublished_group: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      open_group: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      closed_group: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      opportunity_status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      proposal_deadline: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  opportunity-program-select:
+    actions:
+      choose_code_with_us: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      choose_sprint_with_us: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      choose_team_with_us: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      program_card: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      max_budget: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  opportunity-cwu-create:
+    actions:
+      save_draft: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_for_review: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      publish: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_attachment: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      field_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  opportunity-cwu-view:
+    actions:
+      toggle_watch: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      start_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      proposal_deadline: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      reward: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      addenda: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      successful_proponent: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  opportunity-cwu-edit:
+    actions:
+      edit_details: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_for_review: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      publish: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel_opportunity: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      delete_opportunity: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_addendum: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_note: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      summary_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      opportunity_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      addenda_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      history_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      proposals_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      reporting_views: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      reporting_watchers: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      reporting_proposals: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  opportunity-cwu-complete:
+    actions: {}
+    observations:
+      full_report: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  opportunity-swu-create:
+    actions:
+      save_draft: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_for_review: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      publish: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_phase: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_team_question: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      set_evaluation_panel: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      field_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      score_weight_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  opportunity-swu-view:
+    actions:
+      toggle_watch: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      start_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      proposal_deadline: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      total_max_budget: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      phases: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      addenda: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      successful_proponent: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  opportunity-swu-edit:
+    actions:
+      edit_details: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_for_review: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      publish: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel_opportunity: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      delete_opportunity: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_addendum: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_note: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      edit_evaluation_panel: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      finalize_question_consensuses: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      start_team_scenario: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      summary_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      opportunity_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      addenda_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      history_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      proposals_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      team_questions_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      code_challenge_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      team_scenario_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      evaluation_panel_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      consensus_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  opportunity-swu-complete:
+    actions: {}
+    observations:
+      full_report: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  opportunity-twu-create:
+    actions:
+      save_draft: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_for_review: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      publish: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_resource: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_resource_question: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      set_evaluation_panel: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      field_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      score_weight_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  opportunity-twu-view:
+    actions:
+      toggle_watch: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      start_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      proposal_deadline: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      max_budget: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      resources: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      addenda: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      successful_proponent: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  opportunity-twu-edit:
+    actions:
+      edit_details: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_for_review: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      publish: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel_opportunity: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      delete_opportunity: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_addendum: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      edit_evaluation_panel: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      finalize_question_consensuses: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      summary_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      opportunity_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      addenda_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      history_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      proposals_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      resource_questions_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      challenge_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      evaluation_panel_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      consensus_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  opportunity-twu-complete:
+    actions: {}
+    observations:
+      full_report: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  proposal-cwu-create:
+    actions:
+      choose_proponent_individual: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      choose_proponent_organization: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_attachment: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_draft: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      accept_program_terms: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      accept_app_terms: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      field_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      opportunity_summary: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      terms_modal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_disabled_until_terms_accepted: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  proposal-cwu-edit:
+    actions:
+      start_editing: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_changes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_changes_and_submit: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      withdraw_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      delete_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_attachment: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      remove_attachment: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      proposal_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submitted_at: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      rank: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      available_actions: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  proposal-cwu-view:
+    actions:
+      enter_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      award_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      disqualify_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      proposal_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      history_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      proponent: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      rank: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      export_link: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  proposal-cwu-export-one:
+    actions: {}
+    observations:
+      exported_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  proposal-cwu-export-all:
+    actions: {}
+    observations:
+      exported_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  proposal-swu-create:
+    actions:
+      choose_organization: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_phase_team_member: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      set_scrum_master: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      set_phase_proposed_cost: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      answer_team_question: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_reference: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_attachment: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_draft: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      accept_program_terms: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      accept_app_terms: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      field_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      capability_gap_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      budget_exceeded_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      unqualified_organization_notice: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      pending_team_member: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  proposal-swu-edit:
+    actions:
+      start_editing: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_changes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_changes_and_submit: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      withdraw_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      delete_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      proposal_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      scoresheet_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      anonymous_proponent_name: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      total_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      rank: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  proposal-swu-view:
+    actions:
+      score_code_challenge: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      screen_in_to_team_scenario: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      screen_out_from_team_scenario: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      score_team_scenario: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      award_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      disqualify_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      proposal_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      team_questions_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      code_challenge_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      team_scenario_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      history_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      wrong_stage_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      questions_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      challenge_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      scenario_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      price_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      total_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  proposal-swu-export-one:
+    actions: {}
+    observations:
+      exported_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      anonymous_proponent_name: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  proposal-swu-export-all:
+    actions: {}
+    observations:
+      exported_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  proposal-twu-create:
+    actions:
+      choose_organization: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_team_member_for_resource: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      set_hourly_rate: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      answer_resource_question: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_attachment: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_draft: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      accept_program_terms: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      accept_app_terms: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      field_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      service_area_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      unqualified_organization_notice: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  proposal-twu-edit:
+    actions:
+      start_editing: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_changes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_changes_and_submit: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      withdraw_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      delete_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      proposal_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      scoresheet_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      anonymous_proponent_name: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      total_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      rank: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  proposal-twu-view:
+    actions:
+      score_resource_questions: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      screen_in_to_challenge: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      screen_out_from_challenge: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      score_challenge: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      award_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      disqualify_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      proposal_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      resource_questions_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      challenge_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      history_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      wrong_stage_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      questions_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      challenge_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      price_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      total_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  proposal-twu-export-one:
+    actions: {}
+    observations:
+      exported_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  proposal-twu-export-all:
+    actions: {}
+    observations:
+      exported_proposal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  proposal-vendor-dashboard:
+    actions:
+      show_my_proposals: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      show_org_proposals: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      my_proposals_table: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      org_proposals_table: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      proposal_status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      empty_my_proposals_message: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      empty_org_proposals_message: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  proposal-list-stub:
+    actions: {}
+    observations:
+      placeholder_text: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  organization-list:
+    actions:
+      change_page: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      open_organization: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      create_organization: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      my_organizations: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      organization_name: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      owner_name: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      swu_qualified_mark: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      twu_qualified_mark: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      pagination: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  organization-create:
+    actions:
+      create_organization: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      change_logo: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      field_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_disabled_until_valid: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  organization-edit:
+    actions:
+      edit_organization: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_changes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel_editing: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      archive_organization: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      add_team_members: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      approve_pending_member: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      remove_team_member: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      toggle_member_admin_status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      accept_org_admin_terms: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      change_owner: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      edit_service_areas: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_service_areas: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      view_swu_terms: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      view_twu_terms: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      organization_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      team_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      swu_qualification_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      twu_qualification_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      changelog_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      swu_qualified_badge: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      twu_qualified_badge: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      owner_badge: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      pending_badge: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      team_member_row: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      team_capabilities: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      swu_requirement_two_members: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      swu_requirement_all_capabilities: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      swu_requirement_terms_accepted: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      twu_requirement_service_area: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      twu_requirement_terms_accepted: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      service_area_checkbox: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      not_qualified_notice: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      changelog_entry: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      field_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  organization-swu-terms:
+    actions:
+      accept_terms: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      terms_body: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      accepted_on_notice: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  organization-twu-terms:
+    actions:
+      accept_terms: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      terms_body: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      accepted_on_notice: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  organization-user-memberships:
+    actions:
+      approve_invitation: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      reject_invitation: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      leave_organization: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      create_organization: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      open_organization: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      owned_organizations_table: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      affiliated_organizations_table: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      pending_badge: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      team_member_count: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      swu_qualified_mark: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      empty_owned_message: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      empty_affiliated_message: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  user-sign-in:
+    actions:
+      sign_in_as_vendor: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      sign_in_as_public_sector_employee: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      go_to_sign_up: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      vendor_card: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      public_sector_card: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  user-sign-up-choose-account:
+    actions:
+      sign_up_as_vendor: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      sign_up_as_public_sector_employee: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      vendor_card: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      public_sector_card: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  user-sign-up-complete:
+    actions:
+      change_avatar: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      accept_app_terms: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      toggle_new_opportunity_notifications: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      complete_profile: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      idp_username_readonly: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      name_field: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      email_field: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      job_title_field: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      terms_checkbox: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      complete_disabled_until_terms_accepted: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      field_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  user-sign-out:
+    actions: {}
+    observations:
+      signed_out_message: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      sign_out_failed_message: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  user-notice:
+    actions:
+      back_to_home: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      deactivated_own_account_notice: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      sign_in_failed_notice: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  user-list:
+    actions:
+      search_by_name: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      open_export_contact_list: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      toggle_export_user_type: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      toggle_export_field: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      export_contact_list: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel_export: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      open_user_profile: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      user_row: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      status_badge: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      account_type: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      admin_check: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      export_modal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      export_disabled_until_selection: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  user-profile:
+    actions:
+      edit_profile: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_changes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel_editing: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      change_avatar: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      toggle_admin_permission: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      deactivate_account: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      reactivate_account: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      confirm_activation_change: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel_activation_change: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      profile_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      capabilities_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      notifications_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      legal_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      organizations_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      status_badge: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      account_type: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      permissions_label: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      admin_checkbox: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      idp_username_readonly: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      name_field: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      email_field: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      job_title_field: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      field_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      activation_modal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      not_found_page: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  user-profile-capabilities:
+    actions:
+      toggle_capability: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      expand_capability_description: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      capability_row: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      capability_checked: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      capability_description: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  user-profile-notifications:
+    actions:
+      toggle_new_opportunity_notifications: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      confirm_unsubscribe: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel_unsubscribe: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      new_opportunities_checkbox: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      notification_email_address: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      unsubscribe_modal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  user-profile-legal:
+    actions:
+      open_app_terms: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      accept_updated_terms: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      confirm_accept_updated_terms: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      privacy_policy: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      app_terms_link: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      accepted_on_notice: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      terms_updated_warning: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      program_terms_links: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      accept_updated_terms_modal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  evaluation-panel-dashboard:
+    actions:
+      show_my_opportunities: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      show_panel_opportunities: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      open_opportunity: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      evaluations_tab: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      panel_opportunities_table: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      opportunity_status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      empty_panel_opportunities_message: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  evaluation-panel-swu:
+    actions:
+      add_panel_member: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      remove_panel_member: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      choose_panel_chair: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      mark_member_as_chair: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_evaluation_panel: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      panel_member_row: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      chair_field: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      minimum_members_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      duplicate_member_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      non_public_sector_member_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      missing_chair_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      panel_locked_after_consensus: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  evaluation-panel-twu:
+    actions:
+      add_panel_member: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      remove_panel_member: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      choose_panel_chair: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      mark_member_as_chair: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_evaluation_panel: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      panel_member_row: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      chair_field: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      minimum_members_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      duplicate_member_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      non_public_sector_member_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      missing_chair_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      panel_locked_after_consensus: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  evaluation-instructions-swu:
+    actions: {}
+    observations:
+      instructions_body: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      visible_to_evaluators_only: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  evaluation-instructions-twu:
+    actions: {}
+    observations:
+      instructions_body: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      visible_to_evaluators_only: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  evaluation-individual-list-swu:
+    actions:
+      open_proponent_evaluation: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_scores_for_consensus: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      proponent_row: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      anonymous_proponent_name: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      evaluation_status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_disabled_until_complete: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      incomplete_evaluation_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      own_evaluations_only: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  evaluation-individual-list-twu:
+    actions:
+      open_proponent_evaluation: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_scores_for_consensus: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      proponent_row: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      anonymous_proponent_name: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      evaluation_status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_disabled_until_complete: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      incomplete_evaluation_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      own_evaluations_only: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  evaluation-consensus-list-swu:
+    actions:
+      open_proponent_consensus: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_final_consensus_scores: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      confirm_submit_consensus: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      finalize_consensus_scores: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      confirm_finalize_consensus: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel_modal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      proponent_row: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      consensus_status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_confirmation_modal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      finalize_confirmation_modal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      not_all_consensuses_submitted_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      no_screenable_proponent_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      empty_for_owner_not_on_panel: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  evaluation-consensus-list-twu:
+    actions:
+      open_proponent_consensus: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_final_consensus_scores: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      confirm_submit_consensus: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      finalize_consensus_scores: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      confirm_finalize_consensus: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel_modal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      proponent_row: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      consensus_status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      submit_confirmation_modal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      finalize_confirmation_modal: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      not_all_consensuses_submitted_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      no_screenable_proponent_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      empty_for_owner_not_on_panel: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  evaluation-individual-create-swu:
+    actions:
+      enter_question_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      enter_question_notes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_draft: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_and_go_to_next_proponent: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_and_go_to_previous_proponent: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      anonymous_proponent_name: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      question_response: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      score_out_of_range_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      empty_notes_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      duplicate_evaluation_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  evaluation-individual-edit-swu:
+    actions:
+      enter_question_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      enter_question_notes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_changes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_and_go_to_next_proponent: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      evaluation_status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      read_only_after_submitted: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      score_out_of_range_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      empty_notes_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  evaluation-consensus-create-swu:
+    actions:
+      enter_question_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      enter_question_notes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_draft: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_and_go_to_next_proponent: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      anonymous_proponent_name: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      panel_member_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      panel_member_notes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      chair_only: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      duplicate_consensus_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  evaluation-consensus-edit-swu:
+    actions:
+      enter_question_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      enter_question_notes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_changes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_and_go_to_next_proponent: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      consensus_status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      editable_after_submitted: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      panel_member_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      panel_member_notes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  evaluation-individual-create-twu:
+    actions:
+      enter_question_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      enter_question_notes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_draft: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_and_go_to_next_proponent: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_and_go_to_previous_proponent: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      anonymous_proponent_name: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      question_response: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      score_out_of_range_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      empty_notes_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      duplicate_evaluation_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  evaluation-individual-edit-twu:
+    actions:
+      enter_question_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      enter_question_notes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_changes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_and_go_to_next_proponent: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      evaluation_status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      read_only_after_submitted: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      score_out_of_range_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      empty_notes_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  evaluation-consensus-create-twu:
+    actions:
+      enter_question_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      enter_question_notes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_draft: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_and_go_to_next_proponent: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      anonymous_proponent_name: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      panel_member_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      panel_member_notes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      chair_only: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      duplicate_consensus_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  evaluation-consensus-edit-twu:
+    actions:
+      enter_question_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      enter_question_notes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_changes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      save_and_go_to_next_proponent: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      consensus_status: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      editable_after_submitted: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      panel_member_score: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      panel_member_notes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  notification-unsubscribe-landing:
+    actions:
+      confirm_unsubscribe: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel_unsubscribe: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      unsubscribe_confirmation: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      confirmation_names_signed_in_address: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      resolves_to_signed_in_person: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      sign_in_required: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  notification-optin-opportunity-list:
+    actions:
+      toggle_new_opportunity_notifications: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      notification_control: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      notification_control_state: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      notification_control_hidden_on_narrow_screen: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  notification-terms-broadcast:
+    actions:
+      notify_vendors_of_updated_terms: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      confirm_notify_vendors: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel_notify_vendors: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      notify_vendors_control: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      notify_vendors_confirmation: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      notify_vendors_success: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      notify_vendors_failure: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  notification-email-reference:
+    actions:
+      open_reference: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      message_group_title: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      message_subject: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      message_summary: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      message_body: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      refused_for_non_administrator: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  content-footer:
+    actions:
+      open_about: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      open_disclaimer: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      open_privacy: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      open_accessibility: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      open_copyright: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      about_link: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      disclaimer_link: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      privacy_link: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      accessibility_link: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      copyright_link: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      present_when_signed_out: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  content-list:
+    actions:
+      open_page_for_editing: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      open_public_page: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      create_page: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      page_title: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      page_public_address: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      page_is_fixed: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      page_created_date: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      page_updated_date: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      ordered_by_title: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      refused_for_non_administrator: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  content-create:
+    actions:
+      enter_title: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      enter_slug: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      enter_body: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      upload_body_image: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      publish_page: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      confirm_publish: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      field_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      slug_rule_help: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      resulting_public_address: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      publish_disabled_until_valid: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      publish_confirmation: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      published_success: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      duplicate_slug_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      refused_for_non_administrator: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  content-edit:
+    actions:
+      start_editing: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      edit_title: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      edit_slug: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      edit_body: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      upload_body_image: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      publish_changes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      confirm_publish_changes: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      cancel_editing: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      delete_page: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      confirm_delete_page: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      published_date: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      updated_date: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      published_by: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      updated_by: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      fixed_page_warning: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      slug_locked_for_fixed_page: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      delete_withheld_for_fixed_page: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      field_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      duplicate_slug_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      changes_published_success: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      deleted_success: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      refused_for_non_administrator: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  content-view:
+    actions:
+      follow_body_link: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      page_title: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      page_body: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      published_date: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      updated_date: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      readable_when_signed_out: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      not_found_for_unknown_address: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  file-download:
+    actions:
+      download_file: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      file_contents: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      file_name_on_save: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      offered_as_download_not_displayed: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      content_type_from_name: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      readable_when_signed_out_if_public: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      refused_when_not_permitted: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      refused_for_unknown_file: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      not_found_for_administrator: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  file-attachment-control:
+    actions:
+      add_attachment: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      rename_new_attachment: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      remove_new_attachment: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      remove_existing_attachment: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      download_attachment: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      new_attachment_row: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      existing_attachment_row: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      existing_attachment_name_read_only: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      original_extension_restored: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      file_name_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      remove_control_hidden_when_not_removable: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      attachment_list_on_public_view: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  file-image-picker:
+    actions:
+      choose_image: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      current_image: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      chosen_image_preview: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      only_jpeg_and_png_offered: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      rejected_image_error: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      image_readable_when_signed_out: "unbound: the running target could not be opened from this workspace, so no control was observed"
+  file-embedded-image:
+    actions:
+      upload_body_image: "unbound: the running target could not be opened from this workspace, so no control was observed"
+    observations:
+      image_inserted_into_text: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      only_jpeg_and_png_offered: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      uploading_indicator: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      image_rendered_in_published_text: "unbound: the running target could not be opened from this workspace, so no control was observed"
+      upload_failure_leaves_text_unchanged: "unbound: the running target could not be opened from this workspace, so no control was observed"
