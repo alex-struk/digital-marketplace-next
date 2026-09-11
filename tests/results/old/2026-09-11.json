@@ -1,0 +1,3897 @@
+{
+  "target": "old",
+  "base_url": "http://localhost:3000",
+  "spec": "7a0d47692af14ab67cbbdeb0e701a6cf71199a60",
+  "at": "2026-09-11T04:52:21.727Z",
+  "rows": [
+    {
+      "id": "R-7.1",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.1.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "anyone, including a visitor who has not signed in, can read a page by its address and sees its title, its body as formatted text, and the dates it was first published and last updated",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"About us\"\u001b[39m\nReceived: \u001b[31m\"About us\u001b[7m — B.C. Digital Marketplace\u001b[27m\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-7.2",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.2.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a request for a page at an address that no page holds is answered as not found",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-7.3",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.3.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a visitor using the service sees the not-found screen either way, whether the address is malformed or merely one no page holds",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-7.4",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.4.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a page can also be read by its identifier",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"About us\"\u001b[39m\nReceived: \u001b[31m\"About us\u001b[7m — B.C. Digital Marketplace\u001b[27m\"\u001b[39m"
+        },
+        {
+          "title": "the service falls back to treating the same value as an address when no page carries that identifier",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"About us\"\u001b[39m\nReceived: \u001b[31m\"About us\u001b[7m — B.C. Digital Marketplace\u001b[27m\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-7.5",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.5.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the list of pages names every page with its title, its public address, whether the service needs it, and when it was created and last updated, ordered by title",
+          "status": "passed"
+        },
+        {
+          "title": "only an administrator can see the list of pages",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-7.6",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.6.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a signed-in vendor who reaches any of the managing screens directly is shown the not-found screen",
+          "status": "passed"
+        },
+        {
+          "title": "a signed-in public sector employee who reaches any of the managing screens directly is shown the not-found screen",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-7.7",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.7.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an administrator can create a page by giving it a title, an address and a body, and once published it is readable by anyone at that address",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"derived-created-mtwfhbcl\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-7.8",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.8.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "publishing a change to a page shows the new text to every reader from that moment, and the page's updated date becomes the moment of the change",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"Updated Jan 7, 2026 9:00 AM\u001b[39m\n\u001b[32mUpdated By\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-7.9",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.9.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "removing an ordinary page removes it, and its address stops answering",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-7.10",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.10.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a signed-in vendor asking the service to create, change or remove a page is refused, and nothing is created, changed or removed",
+          "status": "failed",
+          "error": "Error: unbound: content-create.enter_title — no field labelled \"Title\" on http://localhost:3000/content/create"
+        },
+        {
+          "title": "a signed-in public sector employee asking the service to create, change or remove a page is refused, and nothing is created, changed or removed",
+          "status": "failed",
+          "error": "Error: unbound: content-create.enter_title — no field labelled \"Title\" on http://localhost:3000/content/create"
+        },
+        {
+          "title": "a visitor who is not signed in asking the service to create, change or remove a page is refused, and nothing is created, changed or removed",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"About us\"\u001b[39m\nReceived: \u001b[31m\"About us\u001b[7m — B.C. Digital Marketplace\u001b[27m\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-7.11",
+      "version": 1,
+      "domain": "content",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-7.12",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.12.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a page the service needs exists and answers, its title is its own address, and its body holds placeholder text until somebody writes it",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"copyright\"\u001b[39m\nReceived: \u001b[31m\"copyright\u001b[7m — B.C. Digital Marketplace\u001b[27m\"\u001b[39m"
+        },
+        {
+          "title": "the pages the service needs are marked on the list as needed by the service",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-7.13",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.13.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the service's own terms and conditions page carries, for an administrator, the action that announces changed terms to vendors, and warns first that vendors will have to accept the new terms",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-7.14",
+      "version": 1,
+      "domain": "content",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-7.15",
+      "version": 1,
+      "domain": "content",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-7.16",
+      "version": 1,
+      "domain": "content",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-7.17",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.17.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a page's body is rendered as formatted text only",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-7.18",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.18.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the service level agreement page is one the service creates for itself",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-7.19",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.19.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the service links its own footer to five of its pages, so every screen offers the about, disclaimer, privacy, accessibility and copyright pages to any visitor",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-7.20",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.20.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a page whose title is empty is refused with the failing field named, and nothing is saved",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "a page whose body is longer than fifty thousand characters is refused with the failing field named, and nothing is saved",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "a page whose title is longer than a hundred characters is refused with the failing field named",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "a page whose body is empty is refused with the failing field named",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-7.21",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.21.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a page's address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "the rule for a page's address is stated on the form, alongside the full public address the page will have",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"derived-well-formed-mtwfd0ll\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-7.22",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.22.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a page cannot be created at an address another page already holds, and the existing page is untouched",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "a page cannot be renamed to an address another page already holds, and the existing page is untouched",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-7.23",
+      "version": 1,
+      "domain": "content",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-7.24",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.24.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "renaming a page moves it to its new address at once and leaves nothing at the old one",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-7.25",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.25.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the managing screen of a page the service depends on says the service needs it here: its address cannot be typed over and no removal is offered",
+          "status": "passed"
+        },
+        {
+          "title": "a page the service depends on may have its title and body changed",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7mD\u001b[27misclaimer\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7md\u001b[27misclaimer\u001b[7m — B.C. Digital Marketplace\u001b[27m\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-7.26",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.26.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the editor's image control stores the image, places a reference to it in the body, and the published page shows it",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-7.27",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.27.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the managing screen of a page the service created for itself and nobody has edited names the service itself as both publisher and last editor",
+          "status": "passed"
+        },
+        {
+          "title": "the managing screen of a page an administrator created and changed names who first published it and who last changed it",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-7.28",
+      "version": 2,
+      "domain": "content",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-7.29",
+      "version": 1,
+      "domain": "content",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.1",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.1.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an opportunity that uses a panel must name at least two panel members",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "each panel member must be named only once",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "each panel member must be a public sector employee",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel needs a value for \":opportunityId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-5.3",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.9",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.9.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the service must reject an evaluation panel that names no chair",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel needs a value for \":opportunityId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-5.10",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.11",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.12",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.13",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.14",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.16",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.16.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the evaluation panel may be set while an opportunity is a draft",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "the evaluation panel may be changed while an opportunity is under review",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        },
+        {
+          "title": "the evaluation panel may be changed while an opportunity is published",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-5.17",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.17.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "when people are added to an evaluation panel, only the people newly added are notified",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        },
+        {
+          "title": "people added to an evaluation panel are notified only once the opportunity has left draft",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel needs a value for \":opportunityId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-5.18",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.18.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the membership of an evaluation panel is shown to the opportunity's owner",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "the membership of an evaluation panel is shown to an administrator",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "the membership of an evaluation panel is shown to the people on the panel itself",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "no panel membership is shown to a public sector employee who is neither the owner nor on the panel",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        },
+        {
+          "title": "no panel membership is shown to a vendor",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-5.19",
+      "version": 1,
+      "domain": "evaluation",
+      "file": "tests/acceptance/evaluation/R-5.19.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a panel member may open an opportunity they sit on the panel for even before it is public",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "an opportunity is listed for its panel members under a separate heading for work they are evaluating",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel needs a value for \":opportunityId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-5.20",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.21",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.22",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.23",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.24",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.25",
+      "version": 2,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.26",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.27",
+      "version": 2,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.28",
+      "version": 2,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.29",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.30",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.31",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.32",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.33",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.34",
+      "version": 2,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.35",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.36",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-5.37",
+      "version": 1,
+      "domain": "evaluation",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.1",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.1.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "any person who is signed in may upload a file",
+          "status": "failed",
+          "error": "Error: ENOENT: no such file or directory, stat 'quote.pdf'"
+        }
+      ]
+    },
+    {
+      "id": "R-8.2",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.2.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an upload carries the file itself, a name to store it under, and a statement of who may read it, all in one submission",
+          "status": "failed",
+          "error": "Error: ENOENT: no such file or directory, stat 'terms-of-reference.pdf'"
+        }
+      ]
+    },
+    {
+      "id": "R-8.3",
+      "version": 1,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.4",
+      "version": 1,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.5",
+      "version": 1,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.6",
+      "version": 1,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.7",
+      "version": 1,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.8",
+      "version": 1,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.9",
+      "version": 1,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.10",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.10.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "asking for a file with its content requested returns the bytes, described by a content type worked out from the file's name and offered to the browser as something to save rather than to display",
+          "status": "failed",
+          "error": "Error: ENOENT: no such file or directory, stat 'terms.pdf'"
+        }
+      ]
+    },
+    {
+      "id": "R-8.11",
+      "version": 1,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.12",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.12.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a request for a file that does not exist is answered as not authorized",
+          "status": "passed"
+        },
+        {
+          "title": "a request for a file that does not exist is answered as not found when the requester is an administrator",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-8.13",
+      "version": 1,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.14",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.14.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a profile picture or logo that cannot be read as an image is stored as it was uploaded rather than refused",
+          "status": "failed",
+          "error": "Error: ENOENT: no such file or directory, stat 'portrait.png'"
+        }
+      ]
+    },
+    {
+      "id": "R-8.15",
+      "version": 1,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.16",
+      "version": 1,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.17",
+      "version": 1,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.18",
+      "version": 1,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.19",
+      "version": 1,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.20",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.20.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a file attached to an opportunity or a proposal is readable by whoever may read the thing it is attached to, under one rule covering Code With Us, Sprint With Us and Team With Us alike rather than a separate rule per program",
+          "status": "failed",
+          "error": "Error: unbound: file-attachment-control.open — the attachments step needs the opportunity it belongs to"
+        }
+      ]
+    },
+    {
+      "id": "R-8.21",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.21.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a profile picture or organization logo is accepted only if its content can be read as a JPEG or a PNG, and a file whose content is neither is refused whatever its name says",
+          "status": "failed",
+          "error": "Error: unbound: file-image-picker.choose_image — no \"Choose Image\" control on http://localhost:3000/users/00000000-0000-4000-8000-000000000206"
+        }
+      ]
+    },
+    {
+      "id": "R-8.22",
+      "version": 1,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.23",
+      "version": 2,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.23.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an upload whose name is longer than 255 characters is refused as a bad request, and the person is told the file name must be between 1 and 255 characters long",
+          "status": "failed",
+          "error": "Error: ENOENT: no such file or directory, stat 'scan0001.pdf'"
+        }
+      ]
+    },
+    {
+      "id": "R-8.24",
+      "version": 2,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.25",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.25.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an attachment on a Code With Us opportunity is readable by the opportunity's creator before it is publicly visible",
+          "status": "failed",
+          "error": "Error: ENOENT: no such file or directory, stat 'background.pdf'"
+        },
+        {
+          "title": "an attachment on a Code With Us opportunity is readable by anyone once that opportunity is publicly visible",
+          "status": "failed",
+          "error": "Error: unbound: file-attachment-control.open — the attachments step needs the opportunity it belongs to"
+        }
+      ]
+    },
+    {
+      "id": "R-8.26",
+      "version": 1,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-8.27",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.27.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an attachment can be given a different display name before it is uploaded, and the ending of the original file is put back on if the person leaves it off",
+          "status": "failed",
+          "error": "Error: ENOENT: no such file or directory, stat 'scan0001.pdf'"
+        }
+      ]
+    },
+    {
+      "id": "R-8.28",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.28.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "profile pictures are marked readable by anyone",
+          "status": "failed",
+          "error": "Error: unbound: file-image-picker.choose_image — no \"Choose Image\" control on http://localhost:3000/users/00000000-0000-4000-8000-000000000206"
+        },
+        {
+          "title": "organization logos are marked readable by anyone",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /organizations/:orgId/edit needs a value for \":orgId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-8.29",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.29.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an image placed into a piece of formatted text is stored as an ordinary file marked readable by anyone, and the text refers to it by an internal marker that is turned into a download address only when the text is displayed",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-8.30",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.30.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a profile picture or an organization logo whose name does not end in .jpg, .jpeg or .png is refused",
+          "status": "failed",
+          "error": "Error: unbound: file-image-picker.only_jpeg_and_png_offered — the picker says nothing on the page about which kinds of image it takes; the restriction lives only in the chooser the operating system opens"
+        }
+      ]
+    },
+    {
+      "id": "R-8.31",
+      "version": 1,
+      "domain": "files",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-6.1",
+      "version": 1,
+      "domain": "notifications",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-6.2",
+      "version": 1,
+      "domain": "notifications",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-6.3",
+      "version": 1,
+      "domain": "notifications",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-6.4",
+      "version": 2,
+      "domain": "notifications",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-6.5",
+      "version": 1,
+      "domain": "notifications",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-6.6",
+      "version": 2,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.6.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "every message the service sends ends with an offer labelled Unsubscribe, which opens the reader's own notification settings with the unsubscribe confirmation already asked",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-6.7",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.7.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the unsubscribe offer in a message is not tied to the person it was addressed to: it acts on whoever is signed in when it is opened",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId?tab=notifications needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "the unsubscribe offer cannot be used without signing in",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-6.8",
+      "version": 1,
+      "domain": "notifications",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-6.9",
+      "version": 1,
+      "domain": "notifications",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-6.10",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.10.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the only notification a person can choose to stop is the announcement of newly published opportunities; every other message is sent regardless of that choice",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /organizations/:orgId/edit needs a value for \":orgId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-6.11",
+      "version": 1,
+      "domain": "notifications",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-6.12",
+      "version": 1,
+      "domain": "notifications",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-6.13",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.13.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an administrator can open a single page showing a sample of each message the service sends, with its subject and, where one is written, a one-line summary of who receives it and why",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-6.14",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.14.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the reference page does not show every message the service can send: twelve of them appear nowhere on it",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-6.15",
+      "version": 1,
+      "domain": "notifications",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-6.16",
+      "version": 1,
+      "domain": "notifications",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-6.17",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.17.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a deactivated account receives no notification of any kind",
+          "status": "passed"
+        },
+        {
+          "title": "the watch itself is retained so that reactivating the account restores it",
+          "status": "failed",
+          "error": "Error: unbound: user-profile.reactivate_account — no control labelled \"Reactivate Account\" on http://localhost:3000/users/00000000-0000-4000-8000-000000000201"
+        }
+      ]
+    },
+    {
+      "id": "R-6.18",
+      "version": 1,
+      "domain": "notifications",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-6.19",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.19.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the administrator's notification reference page shows every message the service can send, so that no message exists which cannot be previewed there before the event that sends it",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-6.20",
+      "version": 1,
+      "domain": "notifications",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-6.21",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.21.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a signed-in person can turn new-opportunity notices on and off from the list of opportunities itself, without opening their settings",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId?tab=notifications needs a value for \":userId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-6.22",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.22.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the notification control on the list of opportunities is not shown on a narrow screen",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId?tab=notifications needs a value for \":userId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-6.23",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.23.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an administrator viewing the service's terms and conditions can announce that they have changed, which withdraws every vendor's standing acceptance and sends each active vendor a message asking them to read and accept the new terms",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-6.24",
+      "version": 1,
+      "domain": "notifications",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-6.25",
+      "version": 2,
+      "domain": "notifications",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-6.26",
+      "version": 2,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.26.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "when the service notifies an account that holds no email address, a broadcast to many vendors always continues to the next recipient because no failure in composing or sending can interrupt it",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-6.27",
+      "version": 1,
+      "domain": "notifications",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-6.28",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.28.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the service skips a recipient that holds no email address, and a broadcast to many people always continues past a recipient it cannot address or cannot reach",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate"
+        }
+      ]
+    },
+    {
+      "id": "R-1.1",
+      "version": 2,
+      "domain": "opportunities",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-1.2",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.2.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an anonymous visitor or a vendor is not listed drafts and opportunities under review",
+          "status": "passed"
+        },
+        {
+          "title": "an anonymous visitor or a vendor cannot open a draft or an opportunity under review",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-1.3",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.3.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a member of public sector staff sees every published opportunity plus their own drafts and opportunities under review",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"R-1.3 draft of the signed-in member of staff\"\u001b[39m\nReceived string:    \u001b[31m\"Dashboard\u001b[39m\n\u001b[31mMy Opportunities\u001b[39m\n\u001b[31mEvaluations\u001b[39m\n\u001b[31mMy Opportunities\u001b[39m\n\u001b[31mView all opportunities\u001b[39m\n\u001b[31mTITLE\tSTATUS\tCREATED·\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCODE WITH US··\u001b[39m\n\u001b[31mDraft··\u001b[39m\n\u001b[31mSep 10, 2026\u001b[39m\n\u001b[31mCASEY PLACEHOLDER··\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCODE WITH US··\u001b[39m\n\u001b[31mDraft··\u001b[39m\n\u001b[31mSep 10, 2026\u001b[39m\n\u001b[31mCASEY PLACEHOLDER··\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCODE WITH US··\u001b[39m\n\u001b[31mDraft··\u001b[39m\n\u001b[31mSep 10, 2026\u001b[39m\n\u001b[31mCASEY PLACEHOLDER··\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCODE WITH US··\u001b[39m\n\u001b[31mDraft··\u001b[39m\n\u001b[31mSep 10, 2026\u001b[39m\n\u001b[31mCASEY PLACEHOLDER··\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCODE WITH US··\u001b[39m\n\u001b[31mDraft··\u001b[39m\n\u001b[31mSep 10, 2026\u001b[39m\n\u001b[31mCASEY PLACEHOLDER··\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCODE WITH US··\u001b[39m\n\u001b[31mDraft··\u001b[39m\n\u001b[31mSep 10, 2026\u001b[39m\n\u001b[31mCASEY PLACEHOLDER··\u001b[39m\n\u001b[31mSeeded published Code With Us opportunity\u001b[39m\n\u001b[31mCODE WITH US··\u001b[39m\n\u001b[31mPublished··\u001b[39m\n\u001b[31mJan 5, 2026\u001b[39m\n\u001b[31mCASEY PLACEHOLDER\"\u001b[39m"
+        },
+        {
+          "title": "an administrator sees every opportunity",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Seeded draft Code With Us opportunity of another staff member\"\u001b[39m\nReceived string:    \u001b[31m\"Dashboard\u001b[39m\n\u001b[31mMy Opportunities\u001b[39m\n\u001b[31mEvaluations\u001b[39m\n\u001b[31mMy Opportunities\u001b[39m\n\u001b[31mView all opportunities\u001b[39m\n\u001b[31mTITLE\tSTATUS\tCREATED·\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCODE WITH US··\u001b[39m\n\u001b[31mDraft··\u001b[39m\n\u001b[31mSep 10, 2026\u001b[39m\n\u001b[31mROBIN PLACEHOLDER\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-1.4",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.4.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "every change to an opportunity's content creates a new version of it and records an edit in its history",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "the opportunity always shows its most recent version",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-1.5",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.5.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "any signed-in person may watch an opportunity they did not create",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m"
+        },
+        {
+          "title": "any signed-in person may stop watching an opportunity",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-1.6",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.6.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "opening an opportunity's public view counts as a view of that opportunity",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-1.7",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.7.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a vendor attempting to create an opportunity is refused and no opportunity is created",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.save_draft — no control labelled \"Save Draft\" on http://localhost:3000/opportunities/code-with-us/create"
+        },
+        {
+          "title": "an anonymous visitor attempting to create an opportunity is refused and no opportunity is created",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.save_draft — no control labelled \"Save Draft\" on http://localhost:3000/opportunities/code-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-1.8",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.8.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "every opportunity belongs to exactly one of three procurement programs, chosen when it is created",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.save_draft — no control labelled \"Save Draft\" on http://localhost:3000/opportunities/code-with-us/create"
+        },
+        {
+          "title": "an opportunity offers only its own program's fields, stages and actions",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.save_draft — no control labelled \"Save Draft\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-1.9",
+      "version": 2,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.9.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an opportunity saved as a draft is accepted with incomplete content",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"R-1.9 draft saved with fields still blank\"\u001b[39m\nReceived string:    \u001b[31m\"17\"\u001b[39m"
+        },
+        {
+          "title": "a proposal deadline that is missing is set to fourteen days from the day of saving",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/code-with-us/:opportunityId needs a value for \":opportunityId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-1.10",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.10.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an opportunity that is not a draft is rejected unless it carries a title",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "an opportunity that is not a draft is rejected unless its title is at most 200 characters",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "an opportunity that is not a draft is rejected unless its teaser is at most 500 characters",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "an opportunity that is not a draft is rejected unless it carries a location",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "an opportunity that is not a draft is rejected unless it carries a description of 1 to 10,000 characters",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-1.11",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.11.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an opportunity that is not a draft must state whether remote work is acceptable",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "an opportunity that is not a draft must carry a remote-work description whenever remote work is acceptable",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-1.12",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.12.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a Code With Us opportunity must offer a reward of at least $1",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "a Code With Us opportunity must offer a reward of at most $70,000",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "a Code With Us opportunity must name at least one skill",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-1.13",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.13.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a Sprint With Us opportunity must state a total maximum budget of at most $5,000,000",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        },
+        {
+          "title": "a Sprint With Us opportunity must state a total maximum budget of at least $1",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        },
+        {
+          "title": "a Team With Us opportunity must state a maximum budget of at least $1",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/team-with-us/create"
+        },
+        {
+          "title": "a Team With Us opportunity's maximum budget has no upper limit",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/team-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-1.14",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.14.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an opportunity's proposal deadline may be no earlier than today",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "an opportunity's key dates must run in order — the proposal deadline, then the assignment date, then the start date, then the completion date",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-1.15",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.15.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a Sprint With Us opportunity is rejected unless its evaluation weights total exactly one hundred per cent",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        },
+        {
+          "title": "a Team With Us opportunity is rejected unless its evaluation weights total exactly one hundred per cent",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/team-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-1.16",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.16.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a Sprint With Us opportunity must have an implementation phase",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        },
+        {
+          "title": "a Sprint With Us opportunity may only have an inception phase if it also has a prototype phase",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-1.17",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.17.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "each evaluation question carries a question, a guideline, a maximum score, a response word limit and a position",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        },
+        {
+          "title": "an evaluation question's optional minimum score must be lower than the question's maximum score",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/team-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-1.18",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.18.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "each resource on a Team With Us opportunity names a target allocation between 1 and 100 per cent of full time",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/team-with-us/create"
+        },
+        {
+          "title": "each resource on a Team With Us opportunity names one service area",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/team-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-1.19",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.19.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an opportunity moves through the states draft, under review and published",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/code-with-us/:opportunityId needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "an opportunity finally reaches cancelled",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-1.20",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.20.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a request to change an opportunity to a state that is not reachable from its own is refused and its state is unchanged",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-1.21",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.21.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "submitting a draft opportunity for review is refused unless the opportunity is complete",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/code-with-us/:opportunityId/edit needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "the person is told the opportunity is incomplete rather than which field is missing",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-1.22",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.22.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a member of public sector staff who is not an administrator asking to publish an opportunity is refused and the opportunity stays unpublished",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/code-with-us/:opportunityId/edit needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "only an administrator may publish an opportunity",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/code-with-us/:opportunityId/edit needs a value for \":opportunityId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-1.23",
+      "version": 1,
+      "domain": "opportunities",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-1.24",
+      "version": 1,
+      "domain": "opportunities",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-1.25",
+      "version": 1,
+      "domain": "opportunities",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-1.26",
+      "version": 1,
+      "domain": "opportunities",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-1.27",
+      "version": 1,
+      "domain": "opportunities",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-1.28",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.28.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an administrator may cancel a published opportunity",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "only an administrator may cancel an opportunity",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/code-with-us/:opportunityId/edit needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "an opportunity may be cancelled only once it has been published",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/code-with-us/:opportunityId/edit needs a value for \":opportunityId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-1.29",
+      "version": 1,
+      "domain": "opportunities",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-1.30",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.30.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an opportunity's administrator and its author can see its full change history and its counts of views, watchers and proposals",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-edit.reporting_views — no tab labelled \"Opportunity\" on http://localhost:3000/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/edit?tab=history"
+        },
+        {
+          "title": "nobody else can see an opportunity's change history or its counts of views, watchers and proposals",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-edit.reporting_views — no tab labelled \"Opportunity\" on http://localhost:3000/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/edit"
+        }
+      ]
+    },
+    {
+      "id": "R-1.31",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.31.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "public sector staff cannot see the proposals submitted against an opportunity until it has left the published state",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-1.32",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.32.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an addendum may be added to an opportunity that is no longer a draft by the staff member who created it, and is recorded in its history",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-edit.add_addendum — no tab labelled \"Addenda\" on http://localhost:3000/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/edit?tab=history"
+        },
+        {
+          "title": "an addendum may be added to an opportunity that is no longer a draft by an administrator",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-edit.add_addendum — no control labelled \"Add Addendum\" on http://localhost:3000/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/edit?tab=addenda"
+        },
+        {
+          "title": "an addendum may not be added to an opportunity that is still a draft, and may not be longer than 5,000 characters",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/code-with-us/:opportunityId/edit needs a value for \":opportunityId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-1.33",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.33.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an opportunity's author may attach a private note, with files, to a Code With Us opportunity's history",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/code-with-us/:opportunityId/edit needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "an administrator may attach a private note, with files, to a Sprint With Us opportunity's history",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/sprint-with-us/:opportunityId/edit needs a value for \":opportunityId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-1.34",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.34.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "publishing an opportunity confirms the publication to the opportunity's author",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/code-with-us/:opportunityId/edit needs a value for \":opportunityId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-1.35",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.35.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "changing an opportunity that is neither a draft nor cancelled notifies its author",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-edit.edit_details — no \"Actions\" menu on http://localhost:3000/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/edit"
+        },
+        {
+          "title": "adding an addendum to an opportunity that is neither a draft nor cancelled notifies its author",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-edit.add_addendum — no control labelled \"Add Addendum\" on http://localhost:3000/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/edit?tab=addenda"
+        }
+      ]
+    },
+    {
+      "id": "R-1.36",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.36.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "cancelling an opportunity separately notifies its author",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/code-with-us/:opportunityId/edit needs a value for \":opportunityId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-1.37",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.37.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "submitting an opportunity for review notifies every administrator",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/code-with-us/:opportunityId/edit needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "submitting an opportunity for review confirms the submission to its author",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/code-with-us/:opportunityId/edit needs a value for \":opportunityId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-1.38",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.38.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the opportunity list shows open opportunities with the nearest proposal deadline first",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "the opportunity list groups unpublished opportunities apart, most recently changed first",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"R-1.38 unpublished opportunity changed earlier\"\u001b[39m\nReceived string:    \u001b[31m\"13\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-1.39",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.39.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the opportunity list can be narrowed by program",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "the opportunity list can be narrowed by state",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "the opportunity list can be narrowed to remote-friendly opportunities only",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "the opportunity list can be narrowed by free text matched against title and location",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-1.40",
+      "version": 1,
+      "domain": "opportunities",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-1.41",
+      "version": 1,
+      "domain": "opportunities",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-1.42",
+      "version": 1,
+      "domain": "opportunities",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-1.43",
+      "version": 1,
+      "domain": "opportunities",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-1.48",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.48.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "creating an opportunity with its state set to published is refused unless the requester is an administrator",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.publish — no control labelled \"Publish\" on http://localhost:3000/opportunities/code-with-us/create"
+        },
+        {
+          "title": "a public sector employee who is not an administrator may create an opportunity as a draft or under review, in all three programs",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-1.49",
+      "version": 1,
+      "domain": "opportunities",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-1.50",
+      "version": 1,
+      "domain": "opportunities",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-1.51",
+      "version": 1,
+      "domain": "opportunities",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-1.53",
+      "version": 2,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.53.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an administrator may delete a draft, in Code With Us, Sprint With Us and Team With Us alike",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/code-with-us/:opportunityId/edit needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "an administrator may delete an opportunity that is under review",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "the public sector employee who created an opportunity may delete it while it is a draft",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/code-with-us/:opportunityId/edit needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "the public sector employee who created an opportunity may not delete it once it is under review",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "any other request to delete an opportunity is refused and the opportunity remains",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-1.55",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.55.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a Sprint With Us opportunity's evaluation panel is rejected with fewer than two members",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "a Sprint With Us opportunity's evaluation panel is rejected when it names the same person twice",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "a Sprint With Us opportunity's evaluation panel is rejected when no member is the chair",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "a Sprint With Us opportunity's evaluation panel is rejected when it names anyone who is not a public sector employee",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel needs a value for \":opportunityId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-1.56",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.56.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "once an opportunity is published, a request to change its details from the public sector employee who created it is refused",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/code-with-us/:opportunityId/edit needs a value for \":opportunityId\" and none was supplied"
+        },
+        {
+          "title": "once an opportunity is published, an administrator may change its details",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-3.1",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.1.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a visitor who is not signed in sees the two organizations that are not archived listed in alphabetical order by legal name, and the archived one is absent",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Northern Pines Digital Ltd.\"\u001b[39m\nReceived string:    \u001b[31m\"Cedar Hollow Systems Inc.\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-3.2",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.2.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the vendor's organization is created",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "the public sector staff member's request to register an organization is refused as not permitted",
+          "status": "failed",
+          "error": "Error: unbound: organization-create.create_organization — no control labelled \"Create Organization\" on http://localhost:3000/organizations/create"
+        }
+      ]
+    },
+    {
+      "id": "R-3.3",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.3.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the ordinary member is refused the organization's full record",
+          "status": "passed"
+        },
+        {
+          "title": "a member of public sector staff is refused the organization's full record",
+          "status": "passed"
+        },
+        {
+          "title": "the owner sees the organization",
+          "status": "passed"
+        },
+        {
+          "title": "the organization's administrator sees the organization",
+          "status": "passed"
+        },
+        {
+          "title": "a service administrator sees the organization",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-3.6",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.6.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "when the owner archives an active organization it is gone from the public organization list",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "when the owner archives an active organization it is gone from the other member's affiliated organizations",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-3.7",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.7.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "when the owner invites two email addresses at once both people appear on the team list marked as pending, and neither counts towards the organization's team size",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.add_team_members — no tab labelled \"Team\" on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000302/edit?tab=swuQualification"
+        }
+      ]
+    },
+    {
+      "id": "R-3.8",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.8.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the repeat invitation is refused as the person already being a member of the organization",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.add_team_members — no control labelled \"Add Team Member(s)\" on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000304/edit?tab=team"
+        },
+        {
+          "title": "the invitation to public sector staff is refused because only vendors may be invited",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.add_team_members — no control labelled \"Add Team Member(s)\" on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000304/edit?tab=team"
+        }
+      ]
+    },
+    {
+      "id": "R-3.9",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.9.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the organization owner's attempt to accept a pending invitation on the invited person's behalf is refused",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.approve_pending_member — no control labelled \"Approve\" on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000304/edit?tab=team"
+        },
+        {
+          "title": "the invited person's own acceptance makes the membership active",
+          "status": "failed",
+          "error": "Error: unbound: organization-user-memberships.approve_invitation — no control labelled \"Approve\" on http://localhost:3000/users/00000000-0000-4000-8000-000000000209?tab=organizations"
+        },
+        {
+          "title": "a further attempt to accept the now-active membership is refused as not pending",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.approve_pending_member — no control labelled \"Approve\" on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000304/edit?tab=team"
+        }
+      ]
+    },
+    {
+      "id": "R-3.10",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.10.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "when an active member chooses to leave, the membership becomes inactive and the person stops counting towards the organization's team",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-3.11",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.11.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "when an administrator tries to end the sole owner's membership the request is refused and the membership remains",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.remove_team_member — no control labelled \"Remove\" on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000301/edit?tab=team"
+        }
+      ]
+    },
+    {
+      "id": "R-3.12",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.12.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the owner grants administrator rights to the second member and that member gains them",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.accept_org_admin_terms — no dialog is open on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000301/edit"
+        },
+        {
+          "title": "an organization administrator trying to withdraw their own rights is refused",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.toggle_member_admin_status — no admin box on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000301/edit?tab=team"
+        },
+        {
+          "title": "a change to the owner's own membership is refused",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.toggle_member_admin_status — no admin box on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000301/edit?tab=team"
+        }
+      ]
+    },
+    {
+      "id": "R-3.13",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.13.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an administrator transfers ownership to the active member, who becomes the owner while the previous owner becomes an ordinary member",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "the pending member cannot be chosen as the new owner",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-3.14",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.14.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the ordinary member asking for the organization's team list is refused",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.team_member_row — no tab labelled \"Team\" on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000301/edit"
+        },
+        {
+          "title": "a vendor unconnected to the organization asking for its team list is refused",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.team_member_row — no tab labelled \"Team\" on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000301/edit"
+        },
+        {
+          "title": "the owner receives the organization's team list",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
+        },
+        {
+          "title": "a service administrator receives the organization's team list",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-3.15",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.15.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the organizations a vendor owns are returned, and an archived one they own is not",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Salt Marsh Labs Ltd.\"\u001b[39m\nReceived string:    \u001b[31m\"Northern Pines Digital Ltd.\"\u001b[39m"
+        },
+        {
+          "title": "an organization a vendor administers is returned",
+          "status": "passed"
+        },
+        {
+          "title": "an organization a vendor is only an ordinary member of is not returned",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"Northern Pines Digital Ltd.\"\u001b[39m\nReceived string:        \u001b[31m\"\u001b[7mNorthern Pines Digital Ltd.\u001b[27m\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-3.17",
+      "version": 1,
+      "domain": "organizations",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-3.18",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.18.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an organization administrator who is not the owner sees the profile read-only, with no Edit and no Archive control",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"Archive\"\u001b[39m\nReceived string:        \u001b[31m\"Organization\u001b[39m\n\u001b[31mTeam\u001b[39m\n\u001b[31mSWU Qualification\u001b[39m\n\u001b[31mTWU Qualification\u001b[39m\n\u001b[31mChangelog\u001b[39m\n\u001b[31mThe Digital Marketplace Terms & Conditions for E-Bidding have been updated. Please save what you are working on, review the latest version and agree to the updated terms.\u001b[39m\n\u001b[31mNorthern Pines Digital Ltd.\u001b[39m\n\u001b[31mSprint With Us Qualified\u001b[39m\n\u001b[31mTeam With Us Qualified\u001b[39m\n\u001b[31mProfile Picture (Optional)\u001b[39m\n\u001b[31mLegal Name\u001b[39m\n\u001b[31mWebsite Url (Optional)\u001b[39m\n\u001b[31mLegal Address\u001b[39m\n\u001b[31mStreet Address\u001b[39m\n\u001b[31mStreet Address\u001b[39m\n\u001b[31mCity\u001b[39m\n\u001b[31mProvince/State\u001b[39m\n\u001b[31mPostal / ZIP Code\u001b[39m\n\u001b[31mCountry\u001b[39m\n\u001b[31mContact Information\u001b[39m\n\u001b[31mContact Name\u001b[39m\n\u001b[31mJob Title (Optional)\u001b[39m\n\u001b[31mContact Email\u001b[39m\n\u001b[31mPhone Number (Optional)\u001b[39m\n\u001b[31m\u001b[7mArchive\u001b[27m Organization\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mArchiving this organization means that it will no longer be available for opportunity proposals.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mArchive Organization\"\u001b[39m"
+        },
+        {
+          "title": "the service refuses a profile change from an organization administrator who is not the owner",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.save_changes — no control labelled \"Save Changes\" on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000301/edit?tab=organization"
+        },
+        {
+          "title": "the service refuses an archive request from an organization administrator who is not the owner",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Northern Pines Digital Ltd.\"\u001b[39m\nReceived string:    \u001b[31m\"Cedar Hollow Systems Inc.\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-3.19",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.19.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a change to the contact phone number is saved along with every other profile field",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.save_changes — no control labelled \"Save Changes\" on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000301/edit?tab=organization"
+        },
+        {
+          "title": "clearing the contact phone number removes the stored number",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.save_changes — no control labelled \"Save Changes\" on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000301/edit?tab=organization"
+        }
+      ]
+    },
+    {
+      "id": "R-3.20",
+      "version": 1,
+      "domain": "organizations",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-3.21",
+      "version": 2,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.21.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a vendor who is neither owner nor administrator of an organization sees its legal name without the owner, the team size or the qualification marks",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Northern Pines Digital Ltd.\"\u001b[39m\nReceived string:    \u001b[31m\"Cedar Hollow Systems Inc.\"\u001b[39m"
+        },
+        {
+          "title": "the same row shown to a service administrator carries the owner's name and both qualification marks",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Northern Pines Digital Ltd.\"\u001b[39m\nReceived string:    \u001b[31m\"Cedar Hollow Systems Inc.\"\u001b[39m"
+        },
+        {
+          "title": "the owner and qualification columns are not offered at all to a visitor who is not signed in",
+          "status": "passed"
+        },
+        {
+          "title": "the owner and qualification columns are not offered at all to public sector staff",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-3.22",
+      "version": 2,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.22.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a submission with the legal name left blank does not create the organization and reports the field as invalid",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "a submission with a contact email of \"not-an-email\" does not create the organization and reports the field as invalid",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "the same submission with the optional website, second address line, contact title and phone left empty succeeds",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-3.23",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.23.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the organization appears under the registering vendor's owned organizations with them recorded as its owner, and it is active from the moment it is registered",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-3.24",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.24.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "when an administrator archives an organization they do not own, its owner receives a message telling them it has been archived",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "no such message is sent when the owner archives their own organization",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-3.25",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.25.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an organization with more than two active members holding every capability and accepted Sprint With Us terms is qualified",
+          "status": "passed"
+        },
+        {
+          "title": "with the team-size and capability requirements met and the terms requirement unmet, the organization is marked as not qualified",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-3.26",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.26.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an organization approved for service areas whose Team With Us terms have been accepted is qualified",
+          "status": "passed"
+        },
+        {
+          "title": "with the service-area requirement met and the terms requirement unmet, the organization is marked as not qualified",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-3.27",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.27.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the owner reading the Sprint With Us terms and accepting them has the acceptance recorded with its date",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
+        },
+        {
+          "title": "a second attempt to accept the same terms for the same organization is refused",
+          "status": "failed",
+          "error": "Error: unbound: organization-swu-terms.accept_terms — no control labelled \"Accept Terms & Conditions\" or \"Accept\" on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000302/sprint-with-us-terms-and-conditions"
+        }
+      ]
+    },
+    {
+      "id": "R-3.28",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.28.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "when an administrator saves a selection of service areas the organization is approved for exactly the areas that were ticked and no longer for the one that was cleared",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.edit_service_areas — no control labelled \"Edit\" on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000301/edit?tab=twuQualification"
+        }
+      ]
+    },
+    {
+      "id": "R-3.30",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.30.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "inviting an email address that no registered account uses creates no pending membership, sends that address an invitation to register, and warns the inviter",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.add_team_members — no control labelled \"Add Team Member(s)\" on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000304/edit?tab=team"
+        }
+      ]
+    },
+    {
+      "id": "R-3.31",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.31.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "when a person accepts an invitation the organization's owner is told they approved the request and the new member is told they have joined the team",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.add_team_members — no control labelled \"Add Team Member(s)\" on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000304/edit?tab=team"
+        }
+      ]
+    },
+    {
+      "id": "R-3.32",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.32.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "when an invited person declines the invitation the pending membership is gone from the team list and the owner is told the request was rejected",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.add_team_members — no control labelled \"Add Team Member(s)\" on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000301/edit?tab=team"
+        }
+      ]
+    },
+    {
+      "id": "R-3.33",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.33.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "after administrator rights are granted to a member and then withdrawn, the changelog shows \"Admin Rights Removed\" above \"Admin Rights Given\"",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.accept_org_admin_terms — no dialog is open on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000301/edit"
+        }
+      ]
+    },
+    {
+      "id": "R-3.34",
+      "version": 1,
+      "domain": "organizations",
+      "file": "tests/acceptance/organizations/R-3.34.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a capability held only by an invited person who has not yet accepted is shown as one the team does not have, and becomes shown as held once the invitation is accepted",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-3.35",
+      "version": 1,
+      "domain": "organizations",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-2.1",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.1.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a signed-in vendor who has accepted the service's terms may start a proposal",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "a request to start a proposal from public sector staff, an administrator or an anonymous visitor is refused",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-2.2",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.2.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a vendor may hold at most one proposal per opportunity, and a second attempt is refused with a message saying they already have one",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-2.3",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.3.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "submitting a proposal requires the vendor to accept both the program's terms and the service's current terms",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "the act of submitting a proposal records the vendor's acceptance of the terms",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-2.4",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.4.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a proposal that has been submitted cannot be deleted",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "only a draft proposal can be deleted, and deleting it removes it permanently",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-2.5",
+      "version": 1,
+      "domain": "proposals",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-2.7",
+      "version": 2,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.7.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a proposal may be created as a draft, in all three programs",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "a proposal may be created as a submission, in all three programs",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-2.9",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.9.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a vendor may read the history of a proposal they authored, in all three programs",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "a vendor may read the history of a proposal belonging to an organization they own or administer, in all three programs",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-2.10",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.10.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a Team With Us proposal whose hourly rates come to more than the opportunity's maximum budget is refused on the create path",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/team-with-us/create"
+        },
+        {
+          "title": "a Team With Us proposal whose hourly rates come to more than the opportunity's maximum budget is refused on the edit path",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/team-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-2.11",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.11.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an organization may appear on at most one proposal per opportunity, and a proposal naming an organization that already bid is refused",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-2.12",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.12.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a proposal saved as a draft is accepted however incomplete it is",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-2.13",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.13.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a Code With Us proposal that is not a draft is rejected when its proposal text is empty",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "a Code With Us proposal that is not a draft is rejected when its proposal text is longer than 10,000 characters",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "a Code With Us proposal that is not a draft is rejected when its additional comments are longer than 10,000 characters",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "a Code With Us proposal that is not a draft is rejected when it carries no complete proponent",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-2.14",
+      "version": 2,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.14.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a Code With Us proponent named as an individual carries a legal name, an email address and a full postal address, each field validated in turn",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "a Code With Us proponent named as an organization is checked only for existence and active status",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-2.15",
+      "version": 2,
+      "domain": "proposals",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-2.16",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.16.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a Sprint With Us proposal may only be submitted on behalf of an organization that is a qualified supplier for that program",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        },
+        {
+          "title": "the organization a Sprint With Us proposal names is re-checked at the moment of submission",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        },
+        {
+          "title": "a Sprint With Us proposal naming no organization at all is refused",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-2.17",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.17.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a Team With Us proposal may only be submitted on behalf of an organization that is a qualified supplier for that program",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/team-with-us/create"
+        },
+        {
+          "title": "a Team With Us proposal is refused when its organization does not provide every service area the opportunity's resources call for",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/team-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-2.18",
+      "version": 2,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.18.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "every person named on a proposal's team must be an active member of the organization the proposal is submitted for",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        },
+        {
+          "title": "a Team With Us proposal refuses the same person named twice",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/team-with-us/create"
+        },
+        {
+          "title": "a Sprint With Us phase applies no uniqueness check to the people named on it",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-2.19",
+      "version": 2,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.19.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a Sprint With Us proposal must offer a team for every phase the opportunity requires",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        },
+        {
+          "title": "a Sprint With Us proposal must offer no phase the opportunity does not require",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        },
+        {
+          "title": "a Sprint With Us proposal may name no more than one scrum master in each phase",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        },
+        {
+          "title": "a Sprint With Us proposal must cover every capability the opportunity requires across its phases",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        },
+        {
+          "title": "a Sprint With Us proposal must stay within each phase's budget",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-2.20",
+      "version": 2,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.20.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a Team With Us proposal must name at least one team member",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/team-with-us/create"
+        },
+        {
+          "title": "each team member on a Team With Us proposal carries an hourly rate of at least one dollar",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/team-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-2.21",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.21.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a response to an opportunity question is rejected if it is empty",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        },
+        {
+          "title": "a response to an opportunity question is rejected if it is longer than the word limit that question carries",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-2.22",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.22.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "once a proposal has been submitted, the organization it was submitted for cannot be changed",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/team-with-us/create"
+        },
+        {
+          "title": "the organization may be changed once the proposal has been withdrawn",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/team-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-2.23",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.23.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a vendor may withdraw a submitted proposal",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "a vendor may put a withdrawn proposal back in while the opportunity is still accepting proposals",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-2.24",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.24.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a vendor sees only the proposals they authored",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "a vendor additionally sees the proposals of organizations they own or administer, under a separate heading",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/team-with-us/create"
+        },
+        {
+          "title": "a vendor never sees another vendor's proposal",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-2.25",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.25.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "public sector staff and administrators cannot see any proposal against an opportunity until that opportunity has closed",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /opportunities/code-with-us/:opportunityId/edit needs a value for \":opportunityId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-2.26",
+      "version": 1,
+      "domain": "proposals",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-2.27",
+      "version": 1,
+      "domain": "proposals",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-2.28",
+      "version": 1,
+      "domain": "proposals",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-2.29",
+      "version": 1,
+      "domain": "proposals",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-2.30",
+      "version": 1,
+      "domain": "proposals",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-2.31",
+      "version": 1,
+      "domain": "proposals",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-2.32",
+      "version": 1,
+      "domain": "proposals",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-2.33",
+      "version": 1,
+      "domain": "proposals",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-2.34",
+      "version": 1,
+      "domain": "proposals",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-2.35",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.35.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "every change of state against a proposal is recorded in its history",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-2.36",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.36.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "submitting a proposal sends a confirmation to the submitting vendor",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "withdrawing a proposal sends a notice to the vendor and to every administrator",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-2.37",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.37.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "anyone entitled to read a proposal can take away a printable copy of it",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        },
+        {
+          "title": "the vendor's own copy of a Sprint With Us proposal names the organization",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/sprint-with-us/create"
+        }
+      ]
+    },
+    {
+      "id": "R-2.38",
+      "version": 1,
+      "domain": "proposals",
+      "file": "tests/acceptance/proposals/R-2.38.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a vendor may not take away every proposal of an opportunity in one document",
+          "status": "timedOut",
+          "error": "\u001b[31mTest timeout of 30000ms exceeded.\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-4.1",
+      "version": 1,
+      "domain": "users",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-4.2",
+      "version": 1,
+      "domain": "users",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-4.3",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.3.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a vendor cannot finish signing up until they confirm they have read and agree to the service's terms and conditions and its privacy policy",
+          "status": "failed",
+          "error": "Error: unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete never shows the profile form on this target; it redirects to /dashboard when signed in and to /sign-in when signed out, and no sign-in route mints an account with an unfinished profile"
+        },
+        {
+          "title": "the moment of acceptance is recorded on the vendor's account",
+          "status": "failed",
+          "error": "Error: unbound: user-sign-up-complete.accept_app_terms — /sign-up/complete never shows the profile form on this target; it redirects to /dashboard when signed in and to /sign-in when signed out, and no sign-in route mints an account with an unfinished profile"
+        },
+        {
+          "title": "a public sector employee is never asked to agree to the terms",
+          "status": "failed",
+          "error": "Error: unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete never shows the profile form on this target; it redirects to /dashboard when signed in and to /sign-in when signed out, and no sign-in route mints an account with an unfinished profile"
+        }
+      ]
+    },
+    {
+      "id": "R-4.4",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.4.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a person whose account an administrator deactivated cannot sign in; they are shown a sign-in failure notice instead of being let in",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-4.5",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.5.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a person who deactivated their own account is let back in the next time they sign in, and their account becomes active again",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "they are told by email that it has been reactivated",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-4.6",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.6.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "two accounts of the same kind may not share an email address, so a vendor's change to an address another vendor holds is not saved",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-4.8",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.8.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a vendor records which of the service's listed capabilities they hold by turning each on or off on their own profile",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId?tab=capabilities needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "only the vendor may change their capabilities, so an administrator viewing that vendor's profile is offered no working control",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId?tab=capabilities needs a value for \":userId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-4.9",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.9.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a person may deactivate their own account, which ends their session at once",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "the account is kept rather than erased, and is marked as deactivated by the person themselves",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "they are told by email",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-4.12",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.12.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a public sector employee becomes an administrator immediately when an administrator ticks the administrator box on their profile",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"Public Sector Employee\"\u001b[39m"
+        },
+        {
+          "title": "withdrawing the rights returns the person to an ordinary public sector employee account",
+          "status": "passed"
+        },
+        {
+          "title": "a vendor can never be granted administrator rights, and the request against a vendor's account is refused",
+          "status": "failed",
+          "error": "Error: unbound: user-profile.toggle_admin_permission — no box labelled \"Admin\" on http://localhost:3000/users/00000000-0000-4000-8000-000000000201"
+        },
+        {
+          "title": "an ordinary public sector employee viewing their own profile is shown their permissions as a read-only label rather than a control",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-4.13",
+      "version": 1,
+      "domain": "users",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-4.14",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.14.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an administrator can browse everyone registered with the service, showing each person's status, account kind, name and whether they are an administrator",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "everyone registered is listed by status, then account kind, then name",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "an administrator can narrow the list by typing part of a name",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-4.16",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.16.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "when an administrator announces that the terms have changed, every vendor's standing acceptance is withdrawn and each of them is asked to read and agree to the new terms before continuing",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId?tab=legal needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "agreeing to the new terms records a fresh acceptance",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId?tab=legal needs a value for \":userId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-4.17",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.17.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "signing out ends the person's session with the service, and the person is told they have been signed out",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-4.18",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.18.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a person's profile details may be changed only by that person, so an administrator viewing somebody else's profile is offered no editing control",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "an administrator's powers over another person's account are limited to deactivating it, reactivating it, and granting or withdrawing administrator rights",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Deactivate\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-4.19",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.19.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the control to reactivate an account is offered for an account that an administrator deactivated",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Reactivate\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m"
+        },
+        {
+          "title": "an account its owner deactivated carries no reactivation control; the profile states instead that the person reactivates it themselves by signing in again",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-4.20",
+      "version": 1,
+      "domain": "users",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-4.21",
+      "version": 1,
+      "domain": "users",
+      "file": null,
+      "result": "not-testable",
+      "tests": []
+    },
+    {
+      "id": "R-4.22",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.22.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "after signing in, a person who already had an account is taken to their dashboard",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-4.23",
+      "version": 2,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.23.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the profile-completion page is offered to a vendor who has not yet agreed to the terms",
+          "status": "failed",
+          "error": "Error: unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete never shows the profile form on this target; it redirects to /dashboard when signed in and to /sign-in when signed out, and no sign-in route mints an account with an unfinished profile"
+        },
+        {
+          "title": "a vendor who has agreed before is sent to their dashboard instead",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId?tab=legal needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "any signed-in person who is not a vendor is sent to their dashboard instead",
+          "status": "failed",
+          "error": "Error: unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete never shows the profile form on this target; it redirects to /dashboard when signed in and to /sign-in when signed out, and no sign-in route mints an account with an unfinished profile"
+        },
+        {
+          "title": "a visitor who is not signed in is sent to sign in",
+          "status": "failed",
+          "error": "Error: unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete never shows the profile form on this target; it redirects to /dashboard when signed in and to /sign-in when signed out, and no sign-in route mints an account with an unfinished profile"
+        }
+      ]
+    },
+    {
+      "id": "R-4.24",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.24.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "while completing their profile a person may choose to be told about new opportunities, and the choice is saved with their account",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId?tab=notifications needs a value for \":userId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-4.25",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.25.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a person's account record may not be read by anyone but that person or an administrator, and in the interface the other person is shown a missing-page instead of a refusal",
+          "status": "passed"
+        },
+        {
+          "title": "an administrator may read another person's account record",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeFalsy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"Blake Placeholder\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31mAccount Type\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31mProfile Picture (Optional)\u001b[39m\n\u001b[31mGitHub\u001b[39m\n\u001b[31mName\u001b[39m\n\u001b[31mEmail Address\u001b[39m\n\u001b[31mDeactivate Account·\u001b[39m\n\u001b[31mDeactivating their account means that they will no longer have access to the Digital Marketplace.·\u001b[39m\n\u001b[31mDeactivate Account\"\u001b[39m"
+        },
+        {
+          "title": "a person may read their own account record",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeFalsy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"Profile\u001b[39m\n\u001b[31mCapabilities\u001b[39m\n\u001b[31mOrganizations\u001b[39m\n\u001b[31mNotifications\u001b[39m\n\u001b[31mPolicies, Terms & Agreements\u001b[39m\n\u001b[31mThe Digital Marketplace Terms & Conditions for E-Bidding have been updated. Please save what you are working on, review the latest version and agree to the updated terms.\u001b[39m\n\u001b[31mBlake Placeholder\u001b[39m\n\u001b[31mAccount Type\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31mProfile Information\u001b[39m\n\u001b[31mProfile Picture (Optional)\u001b[39m\n\u001b[31mGitHub\u001b[39m\n\u001b[31mName\u001b[39m\n\u001b[31mEmail Address\u001b[39m\n\u001b[31mDeactivate Account·\u001b[39m\n\u001b[31mDeactivating your account means that you will no longer have access to the Digital Marketplace.·\u001b[39m\n\u001b[31mDeactivate Account\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-4.26",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.26.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a signed-in person can open their own profile through a fixed address that stands for whoever is signed in, without knowing their own account identifier",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-4.27",
+      "version": 2,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.27.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a profile requires a name, so clearing the name is refused and the profile is not saved",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "a profile requires a name of no more than one hundred characters",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "a profile requires an email address in a valid format",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "the email address is stored in lower case",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "the job title may be left blank, and the profile picture is optional",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "the job title is limited to one hundred characters",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-4.28",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.28.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the job title is asked for and shown on a public sector employee's profile",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "a vendor is never asked for a job title",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-4.29",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.29.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a person may turn the notice of new opportunities on or off at any time from their profile",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId?tab=notifications needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "following the unsubscribe link in such a message opens their profile and asks them to confirm before stopping",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId?tab=notifications needs a value for \":userId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-4.30",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.30.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an administrator may deactivate another person's account, and the account is marked as deactivated by an administrator",
+          "status": "failed",
+          "error": "Error: unbound: user-profile.deactivate_account — no control labelled \"Deactivate Account\" on http://localhost:3000/users/00000000-0000-4000-8000-000000000201"
+        },
+        {
+          "title": "the person is told by email",
+          "status": "failed",
+          "error": "Error: unbound: user-profile.deactivate_account — no control labelled \"Deactivate Account\" on http://localhost:3000/users/00000000-0000-4000-8000-000000000201"
+        }
+      ]
+    },
+    {
+      "id": "R-4.31",
+      "version": 2,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.31.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an administrator viewing their own profile is offered no deactivation control",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Deactivate\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-4.32",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.32.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "at least one kind and one field must be chosen before an administrator may export the contact list",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeFalsy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"enabled\"\u001b[39m"
+        }
+      ]
+    },
+    {
+      "id": "R-4.33",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.33.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a vendor's profile carries a section setting out the privacy policy, the service's terms and conditions with the date and time they agreed to them, and the terms of each of the three programs",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId?tab=legal needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "nobody but a vendor is shown the section",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        }
+      ]
+    },
+    {
+      "id": "R-4.34",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.34.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a vendor's own profile offers profile, capabilities, organizations, notifications and legal sections",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "a public sector employee's own profile offers profile and notifications",
+          "status": "failed",
+          "error": "Error: unbound: open — the route /users/:userId needs a value for \":userId\" and none was supplied"
+        },
+        {
+          "title": "an administrator looking at somebody else's account sees the profile section alone",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
+        }
+      ]
+    }
+  ]
+}
