@@ -1,0 +1,14 @@
+gate: G-POL
+verdict: approve
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  Every load-bearing claim verifies in this repo: journal 059 ends at 41 turns with error_max_turns, which is the 40-turn default and proves 1200 was discarded rather than honoured, while journal 058 ended at 201 against a 200 cap, showing sub-threshold budgets are applied as written; tests/generated/surface.d.ts declares 79 page interfaces and 761 method members, i.e. 680 actions and observations once the 79 open() navigators and two session members are excluded, matching the cited surface exactly, so at roughly 1.5 turns per member 999 is the expressible ceiling rather than padded headroom. The build and review conversions are the separate proposal policy-v3's third condition required and policy-v5 recorded as still unmet, and they tighten a dead unit into a fail-closed turn count rather than loosening anything. Scope matches the evidence: one config line plus the proposal page and run record, with gates, rungs, triage, egress and the skills lockfile untouched. constitution.md is not in the diff so no platform article changes and that escalation trigger does not fire; tier is STANDARD and no stage confidence below threshold is reported. The five check warnings are pre-existing superseded-requirement warnings on tests this diff does not touch. The pipeline-side claims about the 1000 threshold could not be checked here and the lockfile pins b7f642f rather than the cited 2d9585e, but the 41-turn run evidences the same behaviour from this project's side, so the gap does not touch the change.
+conditions:
+  - "policy-v5's first condition is still unmet and carries forward: the policy-v5 proposal page still reads 'as did the run before it' and has not been amended since its ruling. Journal 057 failed at one turn and zero cost on an expired OAuth session, an authentication failure and not a cap hit, and the page is corrected to say so before the next budget proposal is opened."
+  - "The next bind-adapter run under 999 reports how many of the 680 members it bound before it ended, whether or not it hits the cap, so the split-or-raise decision has measured data. If 999 is exhausted, the answer is the stage split this proposal commits to; a further raise argued from the same 1.5-turns-per-member estimate will be returned."
+  - "build 400 and review 200 are unmeasured placeholders and are acknowledged as such. Either is raised only by its own one-line proposal citing a real run's turn count, never folded into a bind-adapter budget change."
+cost: 1.0059275
+turns: 20
+session: "39822078-609c-40cb-8b7b-10d2c04d34ba"
+at: 2026-09-11T02:47:37.809Z
