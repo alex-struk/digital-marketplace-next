@@ -1,0 +1,14 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Adapter-only diff with nothing under tests/acceptance touched, no assertions or pass/fail logic in the bindings, all 680 contract names present once each, and 22 unbound entries whose reasons each name a concrete missing control or page and where it was checked. The nine separation-rule hits are verified false positives on regex .test() calls. The recommendation overstates its evidence: roughly 215 members on the SWU/TWU proposal pages, the evaluation sheets and the two non-CWU opportunity pages were bound from patterns rather than against the pages, which the journal discloses and the bindings file does not distinguish. Accepted because those bindings fail loudly with a named unbound error naming page, member and labels tried, making the first calibration run the real verification. Provenance rests on the journal alone, since the failed stage commit carries only the journal and these bytes first appear in the hand re-proposal.
+conditions:
+  - "Treat the first calibration run against target old as the verification of record for the ~215 members bound by pattern rather than against a page; report its failures as adapter defects, not test defects."
+  - "The two contract routes that do not resolve, /sign-up/complete and the attachments tab on the opportunity edit page, go back to the contract stage as defects rather than staying as adapter workarounds."
+  - "Record the hand re-proposal as a named exception to pipeline-only change, with the session id from the journal, so the provenance gap is visible to the next reviewer."
+cost: 1.8121815000000001
+turns: 19
+session: "2b2729a4-0b17-43e1-ab26-15d060b3af76"
+at: 2026-09-11T03:52:12.505Z

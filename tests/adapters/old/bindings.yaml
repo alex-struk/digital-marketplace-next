@@ -1,0 +1,997 @@
+target: old
+pages:
+  home:
+    actions:
+      browse_opportunities: bound
+      sign_in: bound
+      sign_up: bound
+    observations:
+      total_awarded_opportunity_count: bound
+      total_awarded_opportunity_value: bound
+      readable_when_signed_out: bound
+
+  opportunity-dashboard:
+    actions:
+      create_opportunity: bound
+      open_opportunity: bound
+    observations:
+      my_opportunities_table: bound
+      opportunity_status: bound
+      own_opportunities_only: bound
+      all_opportunities_for_administrator: bound
+      empty_my_opportunities_message: bound
+
+  opportunity-list:
+    actions:
+      filter_by_program: bound
+      filter_by_status: bound
+      filter_remote_only: bound
+      search: bound
+      toggle_watch: bound
+    observations:
+      unpublished_group: bound
+      open_group: bound
+      closed_group: bound
+      opportunity_status: bound
+      proposal_deadline: bound
+
+  opportunity-program-select:
+    actions:
+      choose_code_with_us: bound
+      choose_sprint_with_us: bound
+      choose_team_with_us: bound
+    observations:
+      program_card: bound
+      max_budget: bound
+
+  opportunity-cwu-create:
+    actions:
+      save_draft: bound
+      submit_for_review: bound
+      publish: bound
+      add_attachment: bound
+    observations:
+      field_error: bound
+
+  opportunity-cwu-view:
+    actions:
+      toggle_watch: bound
+      start_proposal: bound
+    observations:
+      status: bound
+      proposal_deadline: bound
+      reward: bound
+      addenda: bound
+      successful_proponent: bound
+
+  opportunity-cwu-edit:
+    actions:
+      edit_details: bound
+      submit_for_review: bound
+      publish: bound
+      cancel_opportunity: bound
+      delete_opportunity: bound
+      add_addendum: bound
+      add_note: "unbound: the History tab lists entries but offers no control for adding one; checked on a published opportunity as both its owner and an administrator, and on a draft, and no note control appears anywhere on the page"
+    observations:
+      summary_tab: bound
+      opportunity_tab: bound
+      addenda_tab: bound
+      history_tab: bound
+      proposals_tab: bound
+      reporting_views: bound
+      reporting_watchers: bound
+      reporting_proposals: bound
+
+  opportunity-cwu-complete:
+    actions: {}
+    observations:
+      full_report: bound
+
+  opportunity-swu-create:
+    actions:
+      save_draft: bound
+      submit_for_review: bound
+      publish: bound
+      add_phase: bound
+      add_team_question: bound
+      set_evaluation_panel: bound
+    observations:
+      field_error: bound
+      score_weight_error: bound
+
+  opportunity-swu-view:
+    actions:
+      toggle_watch: bound
+      start_proposal: bound
+    observations:
+      status: bound
+      proposal_deadline: bound
+      total_max_budget: bound
+      phases: bound
+      addenda: bound
+      successful_proponent: bound
+
+  opportunity-swu-edit:
+    actions:
+      edit_details: bound
+      submit_for_review: bound
+      publish: bound
+      cancel_opportunity: bound
+      delete_opportunity: bound
+      add_addendum: bound
+      add_note: "unbound: the History tab offers no control for adding a note; checked on a Sprint With Us opportunity built for the purpose, where the tab shows only the list of entries"
+      edit_evaluation_panel: bound
+      finalize_question_consensuses: bound
+      start_team_scenario: bound
+    observations:
+      summary_tab: bound
+      opportunity_tab: bound
+      addenda_tab: bound
+      history_tab: bound
+      proposals_tab: bound
+      team_questions_tab: bound
+      code_challenge_tab: bound
+      team_scenario_tab: bound
+      evaluation_panel_tab: bound
+      consensus_tab: bound
+
+  opportunity-swu-complete:
+    actions: {}
+    observations:
+      full_report: bound
+
+  opportunity-twu-create:
+    actions:
+      save_draft: bound
+      submit_for_review: bound
+      publish: bound
+      add_resource: bound
+      add_resource_question: bound
+      set_evaluation_panel: bound
+    observations:
+      field_error: bound
+      score_weight_error: bound
+
+  opportunity-twu-view:
+    actions:
+      toggle_watch: bound
+      start_proposal: bound
+    observations:
+      status: bound
+      proposal_deadline: bound
+      max_budget: bound
+      resources: bound
+      addenda: bound
+      successful_proponent: bound
+
+  opportunity-twu-edit:
+    actions:
+      edit_details: bound
+      submit_for_review: bound
+      publish: bound
+      cancel_opportunity: bound
+      delete_opportunity: bound
+      add_addendum: bound
+      edit_evaluation_panel: bound
+      finalize_question_consensuses: bound
+    observations:
+      summary_tab: bound
+      opportunity_tab: bound
+      addenda_tab: bound
+      history_tab: bound
+      proposals_tab: bound
+      resource_questions_tab: bound
+      challenge_tab: bound
+      evaluation_panel_tab: bound
+      consensus_tab: bound
+
+  opportunity-twu-complete:
+    actions: {}
+    observations:
+      full_report: bound
+
+  proposal-cwu-create:
+    actions:
+      choose_proponent_individual: bound
+      choose_proponent_organization: bound
+      add_attachment: bound
+      save_draft: bound
+      submit_proposal: bound
+      accept_program_terms: bound
+      accept_app_terms: bound
+      cancel: bound
+    observations:
+      field_error: bound
+      opportunity_summary: bound
+      terms_modal: bound
+      submit_disabled_until_terms_accepted: bound
+
+  proposal-cwu-edit:
+    actions:
+      start_editing: bound
+      save_changes: bound
+      save_changes_and_submit: bound
+      submit_proposal: bound
+      withdraw_proposal: bound
+      delete_proposal: bound
+      add_attachment: bound
+      remove_attachment: bound
+    observations:
+      proposal_tab: bound
+      status: bound
+      submitted_at: bound
+      score: bound
+      rank: bound
+      available_actions: bound
+
+  proposal-cwu-view:
+    actions:
+      enter_score: bound
+      award_proposal: bound
+      disqualify_proposal: bound
+    observations:
+      proposal_tab: bound
+      history_tab: bound
+      proponent: bound
+      score: bound
+      rank: bound
+      export_link: bound
+
+  proposal-cwu-export-one:
+    actions: {}
+    observations:
+      exported_proposal: bound
+
+  proposal-cwu-export-all:
+    actions: {}
+    observations:
+      exported_proposal: bound
+
+  proposal-swu-create:
+    actions:
+      choose_organization: bound
+      add_phase_team_member: bound
+      set_scrum_master: bound
+      set_phase_proposed_cost: bound
+      answer_team_question: bound
+      add_reference: bound
+      add_attachment: bound
+      save_draft: bound
+      submit_proposal: bound
+      accept_program_terms: bound
+      accept_app_terms: bound
+    observations:
+      field_error: bound
+      capability_gap_error: bound
+      budget_exceeded_error: bound
+      unqualified_organization_notice: bound
+      pending_team_member: bound
+
+  proposal-swu-edit:
+    actions:
+      start_editing: bound
+      save_changes: bound
+      save_changes_and_submit: bound
+      submit_proposal: bound
+      withdraw_proposal: bound
+      delete_proposal: bound
+    observations:
+      proposal_tab: bound
+      scoresheet_tab: bound
+      status: bound
+      anonymous_proponent_name: bound
+      total_score: bound
+      rank: bound
+
+  proposal-swu-view:
+    actions:
+      score_code_challenge: bound
+      screen_in_to_team_scenario: bound
+      screen_out_from_team_scenario: bound
+      score_team_scenario: bound
+      award_proposal: bound
+      disqualify_proposal: bound
+    observations:
+      proposal_tab: bound
+      team_questions_tab: bound
+      code_challenge_tab: bound
+      team_scenario_tab: bound
+      history_tab: bound
+      wrong_stage_error: bound
+      questions_score: bound
+      challenge_score: bound
+      scenario_score: bound
+      price_score: bound
+      total_score: bound
+
+  proposal-swu-export-one:
+    actions: {}
+    observations:
+      exported_proposal: bound
+      anonymous_proponent_name: bound
+
+  proposal-swu-export-all:
+    actions: {}
+    observations:
+      exported_proposal: bound
+
+  proposal-twu-create:
+    actions:
+      choose_organization: bound
+      add_team_member_for_resource: bound
+      set_hourly_rate: bound
+      answer_resource_question: bound
+      add_attachment: bound
+      save_draft: bound
+      submit_proposal: bound
+      accept_program_terms: bound
+      accept_app_terms: bound
+    observations:
+      field_error: bound
+      service_area_error: bound
+      unqualified_organization_notice: bound
+
+  proposal-twu-edit:
+    actions:
+      start_editing: bound
+      save_changes: bound
+      save_changes_and_submit: bound
+      submit_proposal: bound
+      withdraw_proposal: bound
+      delete_proposal: bound
+    observations:
+      proposal_tab: bound
+      scoresheet_tab: bound
+      status: bound
+      anonymous_proponent_name: bound
+      total_score: bound
+      rank: bound
+
+  proposal-twu-view:
+    actions:
+      score_resource_questions: bound
+      screen_in_to_challenge: bound
+      screen_out_from_challenge: bound
+      score_challenge: bound
+      award_proposal: bound
+      disqualify_proposal: bound
+    observations:
+      proposal_tab: bound
+      resource_questions_tab: bound
+      challenge_tab: bound
+      history_tab: bound
+      wrong_stage_error: bound
+      questions_score: bound
+      challenge_score: bound
+      price_score: bound
+      total_score: bound
+
+  proposal-twu-export-one:
+    actions: {}
+    observations:
+      exported_proposal: bound
+
+  proposal-twu-export-all:
+    actions: {}
+    observations:
+      exported_proposal: bound
+
+  proposal-vendor-dashboard:
+    actions:
+      show_my_proposals: bound
+      show_org_proposals: bound
+    observations:
+      my_proposals_table: bound
+      org_proposals_table: bound
+      proposal_status: bound
+      empty_my_proposals_message: bound
+      empty_org_proposals_message: bound
+
+  proposal-list-stub:
+    actions: {}
+    observations:
+      placeholder_text: bound
+
+  organization-list:
+    actions:
+      change_page: "unbound: the organizations list renders no pager — the whole list is shown on one page and no page control, next link or page number appears anywhere on it"
+      open_organization: bound
+      create_organization: bound
+      my_organizations: bound
+    observations:
+      organization_name: bound
+      owner_name: bound
+      swu_qualified_mark: bound
+      twu_qualified_mark: bound
+      pagination: "unbound: no pager is rendered on the organizations list, so there is nothing to read"
+
+  organization-create:
+    actions:
+      create_organization: bound
+      cancel: bound
+      change_logo: bound
+    observations:
+      field_error: bound
+      submit_disabled_until_valid: bound
+
+  organization-edit:
+    actions:
+      edit_organization: bound
+      save_changes: bound
+      cancel_editing: bound
+      archive_organization: bound
+      add_team_members: bound
+      approve_pending_member: bound
+      remove_team_member: bound
+      toggle_member_admin_status: bound
+      accept_org_admin_terms: bound
+      change_owner: bound
+      edit_service_areas: bound
+      save_service_areas: bound
+      view_swu_terms: bound
+      view_twu_terms: bound
+    observations:
+      organization_tab: bound
+      team_tab: bound
+      swu_qualification_tab: bound
+      twu_qualification_tab: bound
+      changelog_tab: bound
+      swu_qualified_badge: bound
+      twu_qualified_badge: bound
+      owner_badge: bound
+      pending_badge: bound
+      team_member_row: bound
+      team_capabilities: bound
+      swu_requirement_two_members: bound
+      swu_requirement_all_capabilities: bound
+      swu_requirement_terms_accepted: bound
+      twu_requirement_service_area: bound
+      twu_requirement_terms_accepted: bound
+      service_area_checkbox: bound
+      not_qualified_notice: bound
+      changelog_entry: bound
+      field_error: bound
+
+  organization-swu-terms:
+    actions:
+      accept_terms: bound
+      cancel: bound
+    observations:
+      terms_body: bound
+      accepted_on_notice: bound
+
+  organization-twu-terms:
+    actions:
+      accept_terms: bound
+      cancel: bound
+    observations:
+      terms_body: bound
+      accepted_on_notice: bound
+
+  organization-user-memberships:
+    actions:
+      approve_invitation: bound
+      reject_invitation: bound
+      leave_organization: bound
+      create_organization: bound
+      open_organization: bound
+    observations:
+      owned_organizations_table: bound
+      affiliated_organizations_table: bound
+      pending_badge: bound
+      team_member_count: bound
+      swu_qualified_mark: bound
+      empty_owned_message: bound
+      empty_affiliated_message: bound
+
+  user-sign-in:
+    actions:
+      sign_in_as_vendor: bound
+      sign_in_as_public_sector_employee: bound
+      go_to_sign_up: bound
+    observations:
+      vendor_card: bound
+      public_sector_card: bound
+
+  user-sign-up-choose-account:
+    actions:
+      sign_up_as_vendor: bound
+      sign_up_as_public_sector_employee: bound
+    observations:
+      vendor_card: bound
+      public_sector_card: bound
+
+  user-sign-up-complete:
+    actions:
+      change_avatar: "unbound: /sign-up/complete never shows the profile form on this target — it redirects to /dashboard when signed in and to /sign-in when signed out, and every account the target's sign-in routes mint already has a finished profile"
+      accept_app_terms: "unbound: /sign-up/complete redirects away instead of showing the profile form, so there is no terms box to tick"
+      toggle_new_opportunity_notifications: "unbound: /sign-up/complete redirects away instead of showing the profile form"
+      complete_profile: "unbound: /sign-up/complete redirects away instead of showing the profile form"
+    observations:
+      idp_username_readonly: "unbound: /sign-up/complete redirects away instead of showing the profile form"
+      name_field: "unbound: /sign-up/complete redirects away instead of showing the profile form"
+      email_field: "unbound: /sign-up/complete redirects away instead of showing the profile form"
+      job_title_field: "unbound: /sign-up/complete redirects away instead of showing the profile form"
+      terms_checkbox: "unbound: /sign-up/complete redirects away instead of showing the profile form"
+      complete_disabled_until_terms_accepted: "unbound: /sign-up/complete redirects away instead of showing the profile form"
+      field_error: "unbound: /sign-up/complete redirects away instead of showing the profile form"
+
+  user-sign-out:
+    actions: {}
+    observations:
+      signed_out_message: bound
+      sign_out_failed_message: bound
+
+  user-notice:
+    actions:
+      back_to_home: bound
+    observations:
+      deactivated_own_account_notice: bound
+      sign_in_failed_notice: bound
+
+  user-list:
+    actions:
+      search_by_name: bound
+      open_export_contact_list: bound
+      toggle_export_user_type: bound
+      toggle_export_field: bound
+      export_contact_list: bound
+      cancel_export: bound
+      open_user_profile: bound
+    observations:
+      user_row: bound
+      status_badge: bound
+      account_type: bound
+      admin_check: "unbound: the Admin? column marks an administrator with an unlabelled icon that carries no text and no accessible name, and the list's rows are drawn as one flattened block rather than real rows, so there is no way to read the mark for a named person"
+      export_modal: bound
+      export_disabled_until_selection: bound
+
+  user-profile:
+    actions:
+      edit_profile: bound
+      save_changes: bound
+      cancel_editing: bound
+      change_avatar: bound
+      toggle_admin_permission: bound
+      deactivate_account: bound
+      reactivate_account: bound
+      confirm_activation_change: bound
+      cancel_activation_change: bound
+    observations:
+      profile_tab: bound
+      capabilities_tab: bound
+      notifications_tab: bound
+      legal_tab: bound
+      organizations_tab: bound
+      status_badge: bound
+      account_type: bound
+      permissions_label: bound
+      admin_checkbox: bound
+      idp_username_readonly: bound
+      name_field: bound
+      email_field: bound
+      job_title_field: bound
+      field_error: bound
+      activation_modal: bound
+      not_found_page: bound
+
+  user-profile-capabilities:
+    actions:
+      toggle_capability: bound
+      expand_capability_description: bound
+    observations:
+      capability_row: bound
+      capability_checked: "unbound: whether a capability is held is shown only by the colour and shape of an unlabelled icon — the row has no checkbox, no text and no state in the accessibility tree, so there is nothing to read"
+      capability_description: bound
+
+  user-profile-notifications:
+    actions:
+      toggle_new_opportunity_notifications: bound
+      confirm_unsubscribe: "unbound: turning the notice off on this tab takes effect at once and raises no confirmation; the confirmation belongs to the unsubscribe landing page, where it is bound"
+      cancel_unsubscribe: "unbound: this tab raises no unsubscribe confirmation, so there is nothing to cancel"
+    observations:
+      new_opportunities_checkbox: bound
+      notification_email_address: bound
+      unsubscribe_modal: "unbound: no confirmation appears when the notice is turned off on this tab"
+
+  user-profile-legal:
+    actions:
+      open_app_terms: bound
+      accept_updated_terms: bound
+      confirm_accept_updated_terms: bound
+    observations:
+      privacy_policy: bound
+      app_terms_link: bound
+      accepted_on_notice: bound
+      terms_updated_warning: bound
+      program_terms_links: bound
+      accept_updated_terms_modal: bound
+
+  evaluation-panel-dashboard:
+    actions:
+      show_my_opportunities: bound
+      show_panel_opportunities: bound
+      open_opportunity: bound
+    observations:
+      evaluations_tab: bound
+      panel_opportunities_table: bound
+      opportunity_status: bound
+      empty_panel_opportunities_message: bound
+
+  evaluation-panel-swu:
+    actions:
+      add_panel_member: bound
+      remove_panel_member: bound
+      choose_panel_chair: bound
+      mark_member_as_chair: bound
+      save_evaluation_panel: bound
+    observations:
+      panel_member_row: bound
+      chair_field: bound
+      minimum_members_error: bound
+      duplicate_member_error: bound
+      non_public_sector_member_error: bound
+      missing_chair_error: bound
+      panel_locked_after_consensus: bound
+
+  evaluation-panel-twu:
+    actions:
+      add_panel_member: bound
+      remove_panel_member: bound
+      choose_panel_chair: bound
+      mark_member_as_chair: bound
+      save_evaluation_panel: bound
+    observations:
+      panel_member_row: bound
+      chair_field: bound
+      minimum_members_error: bound
+      duplicate_member_error: bound
+      non_public_sector_member_error: bound
+      missing_chair_error: bound
+      panel_locked_after_consensus: bound
+
+  evaluation-instructions-swu:
+    actions: {}
+    observations:
+      instructions_body: bound
+      visible_to_evaluators_only: bound
+
+  evaluation-instructions-twu:
+    actions: {}
+    observations:
+      instructions_body: bound
+      visible_to_evaluators_only: bound
+
+  evaluation-individual-list-swu:
+    actions:
+      open_proponent_evaluation: bound
+      submit_scores_for_consensus: bound
+    observations:
+      proponent_row: bound
+      anonymous_proponent_name: bound
+      evaluation_status: bound
+      submit_disabled_until_complete: bound
+      incomplete_evaluation_error: bound
+      own_evaluations_only: bound
+
+  evaluation-individual-list-twu:
+    actions:
+      open_proponent_evaluation: bound
+      submit_scores_for_consensus: bound
+    observations:
+      proponent_row: bound
+      anonymous_proponent_name: bound
+      evaluation_status: bound
+      submit_disabled_until_complete: bound
+      incomplete_evaluation_error: bound
+      own_evaluations_only: bound
+
+  evaluation-consensus-list-swu:
+    actions:
+      open_proponent_consensus: bound
+      submit_final_consensus_scores: bound
+      confirm_submit_consensus: bound
+      finalize_consensus_scores: bound
+      confirm_finalize_consensus: bound
+      cancel_modal: bound
+    observations:
+      proponent_row: bound
+      consensus_status: bound
+      submit_confirmation_modal: bound
+      finalize_confirmation_modal: bound
+      not_all_consensuses_submitted_error: bound
+      no_screenable_proponent_error: bound
+      empty_for_owner_not_on_panel: bound
+
+  evaluation-consensus-list-twu:
+    actions:
+      open_proponent_consensus: bound
+      submit_final_consensus_scores: bound
+      confirm_submit_consensus: bound
+      finalize_consensus_scores: bound
+      confirm_finalize_consensus: bound
+      cancel_modal: bound
+    observations:
+      proponent_row: bound
+      consensus_status: bound
+      submit_confirmation_modal: bound
+      finalize_confirmation_modal: bound
+      not_all_consensuses_submitted_error: bound
+      no_screenable_proponent_error: bound
+      empty_for_owner_not_on_panel: bound
+
+  evaluation-individual-create-swu:
+    actions:
+      enter_question_score: bound
+      enter_question_notes: bound
+      save_draft: bound
+      save_and_go_to_next_proponent: bound
+      save_and_go_to_previous_proponent: bound
+    observations:
+      anonymous_proponent_name: bound
+      question_response: bound
+      score_out_of_range_error: bound
+      empty_notes_error: bound
+      duplicate_evaluation_error: bound
+
+  evaluation-individual-edit-swu:
+    actions:
+      enter_question_score: bound
+      enter_question_notes: bound
+      save_changes: bound
+      save_and_go_to_next_proponent: bound
+    observations:
+      evaluation_status: bound
+      read_only_after_submitted: bound
+      score_out_of_range_error: bound
+      empty_notes_error: bound
+
+  evaluation-consensus-create-swu:
+    actions:
+      enter_question_score: bound
+      enter_question_notes: bound
+      save_draft: bound
+      save_and_go_to_next_proponent: bound
+    observations:
+      anonymous_proponent_name: bound
+      panel_member_score: bound
+      panel_member_notes: bound
+      chair_only: bound
+      duplicate_consensus_error: bound
+
+  evaluation-consensus-edit-swu:
+    actions:
+      enter_question_score: bound
+      enter_question_notes: bound
+      save_changes: bound
+      save_and_go_to_next_proponent: bound
+    observations:
+      consensus_status: bound
+      editable_after_submitted: bound
+      panel_member_score: bound
+      panel_member_notes: bound
+
+  evaluation-individual-create-twu:
+    actions:
+      enter_question_score: bound
+      enter_question_notes: bound
+      save_draft: bound
+      save_and_go_to_next_proponent: bound
+      save_and_go_to_previous_proponent: bound
+    observations:
+      anonymous_proponent_name: bound
+      question_response: bound
+      score_out_of_range_error: bound
+      empty_notes_error: bound
+      duplicate_evaluation_error: bound
+
+  evaluation-individual-edit-twu:
+    actions:
+      enter_question_score: bound
+      enter_question_notes: bound
+      save_changes: bound
+      save_and_go_to_next_proponent: bound
+    observations:
+      evaluation_status: bound
+      read_only_after_submitted: bound
+      score_out_of_range_error: bound
+      empty_notes_error: bound
+
+  evaluation-consensus-create-twu:
+    actions:
+      enter_question_score: bound
+      enter_question_notes: bound
+      save_draft: bound
+      save_and_go_to_next_proponent: bound
+    observations:
+      anonymous_proponent_name: bound
+      panel_member_score: bound
+      panel_member_notes: bound
+      chair_only: bound
+      duplicate_consensus_error: bound
+
+  evaluation-consensus-edit-twu:
+    actions:
+      enter_question_score: bound
+      enter_question_notes: bound
+      save_changes: bound
+      save_and_go_to_next_proponent: bound
+    observations:
+      consensus_status: bound
+      editable_after_submitted: bound
+      panel_member_score: bound
+      panel_member_notes: bound
+
+  notification-unsubscribe-landing:
+    actions:
+      confirm_unsubscribe: bound
+      cancel_unsubscribe: bound
+    observations:
+      unsubscribe_confirmation: bound
+      confirmation_names_signed_in_address: bound
+      resolves_to_signed_in_person: bound
+      sign_in_required: bound
+
+  notification-optin-opportunity-list:
+    actions:
+      toggle_new_opportunity_notifications: bound
+    observations:
+      notification_control: bound
+      notification_control_state: bound
+      notification_control_hidden_on_narrow_screen: bound
+
+  notification-terms-broadcast:
+    actions:
+      notify_vendors_of_updated_terms: bound
+      confirm_notify_vendors: bound
+      cancel_notify_vendors: bound
+    observations:
+      notify_vendors_control: bound
+      notify_vendors_confirmation: bound
+      notify_vendors_success: bound
+      notify_vendors_failure: bound
+
+  notification-email-reference:
+    actions:
+      open_reference: bound
+    observations:
+      message_group_title: bound
+      message_subject: bound
+      message_summary: bound
+      message_body: bound
+      refused_for_non_administrator: bound
+
+  content-footer:
+    actions:
+      open_about: bound
+      open_disclaimer: bound
+      open_privacy: bound
+      open_accessibility: bound
+      open_copyright: bound
+    observations:
+      about_link: bound
+      disclaimer_link: bound
+      privacy_link: bound
+      accessibility_link: bound
+      copyright_link: bound
+      present_when_signed_out: bound
+
+  content-list:
+    actions:
+      open_page_for_editing: bound
+      open_public_page: bound
+      create_page: bound
+    observations:
+      page_title: bound
+      page_public_address: bound
+      page_is_fixed: bound
+      page_created_date: bound
+      page_updated_date: bound
+      ordered_by_title: bound
+      refused_for_non_administrator: bound
+
+  content-create:
+    actions:
+      enter_title: bound
+      enter_slug: bound
+      enter_body: bound
+      upload_body_image: bound
+      publish_page: bound
+      confirm_publish: bound
+      cancel: bound
+    observations:
+      field_error: bound
+      slug_rule_help: bound
+      resulting_public_address: bound
+      publish_disabled_until_valid: bound
+      publish_confirmation: bound
+      published_success: bound
+      duplicate_slug_error: bound
+      refused_for_non_administrator: bound
+
+  content-edit:
+    actions:
+      start_editing: bound
+      edit_title: bound
+      edit_slug: bound
+      edit_body: bound
+      upload_body_image: bound
+      publish_changes: bound
+      confirm_publish_changes: bound
+      cancel_editing: bound
+      delete_page: bound
+      confirm_delete_page: bound
+    observations:
+      published_date: bound
+      updated_date: bound
+      published_by: bound
+      updated_by: bound
+      fixed_page_warning: bound
+      slug_locked_for_fixed_page: bound
+      delete_withheld_for_fixed_page: bound
+      field_error: bound
+      duplicate_slug_error: bound
+      changes_published_success: bound
+      deleted_success: bound
+      refused_for_non_administrator: bound
+
+  content-view:
+    actions:
+      follow_body_link: bound
+    observations:
+      page_title: bound
+      page_body: bound
+      published_date: bound
+      updated_date: bound
+      readable_when_signed_out: bound
+      not_found_for_unknown_address: bound
+
+  file-download:
+    actions:
+      download_file: bound
+    observations:
+      file_contents: bound
+      file_name_on_save: bound
+      offered_as_download_not_displayed: bound
+      content_type_from_name: bound
+      readable_when_signed_out_if_public: bound
+      refused_when_not_permitted: bound
+      refused_for_unknown_file: bound
+      not_found_for_administrator: bound
+
+  file-attachment-control:
+    actions:
+      add_attachment: bound
+      rename_new_attachment: bound
+      remove_new_attachment: bound
+      remove_existing_attachment: bound
+      download_attachment: bound
+    observations:
+      new_attachment_row: bound
+      existing_attachment_row: bound
+      existing_attachment_name_read_only: bound
+      original_extension_restored: bound
+      file_name_error: bound
+      remove_control_hidden_when_not_removable: bound
+      attachment_list_on_public_view: bound
+
+  file-image-picker:
+    actions:
+      choose_image: bound
+    observations:
+      current_image: bound
+      chosen_image_preview: bound
+      only_jpeg_and_png_offered: "unbound: nothing visible on the page says which kinds of image the picker takes — the restriction lives only in the chooser the operating system opens, which the page does not describe"
+      rejected_image_error: bound
+      image_readable_when_signed_out: bound
+
+  file-embedded-image:
+    actions:
+      upload_body_image: bound
+    observations:
+      image_inserted_into_text: bound
+      only_jpeg_and_png_offered: "unbound: the formatted-text editor states nothing on the page about the kinds of image it takes"
+      uploading_indicator: bound
+      image_rendered_in_published_text: bound
+      upload_failure_leaves_text_unchanged: bound

@@ -31,6 +31,7 @@ Profile: rebuild
 - [archaeology-proposals](proposals/archaeology-proposals.md)
 - [archaeology-users](proposals/archaeology-users.md)
 - [bind-adapter-old](proposals/bind-adapter-old.md)
+- [bind-adapter-old-2](proposals/bind-adapter-old-2.md)
 - [brief-v1](proposals/brief-v1.md)
 - [budget-v1](proposals/budget-v1.md)
 - [constitution-v1](proposals/constitution-v1.md)
@@ -92,9 +93,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $155.844351
-- Rulings cost: $91.196008
-- Total cost: $247.040359
-- Agent-held rulings: 50
+- Journal cost: $226.559083
+- Rulings cost: $93.008189
+- Total cost: $319.567272
+- Agent-held rulings: 51
 - Open escalations: 0
 - Open proposals: 0
