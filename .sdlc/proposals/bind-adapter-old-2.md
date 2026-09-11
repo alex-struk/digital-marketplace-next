@@ -1,0 +1,12 @@
+---
+gate: G3
+question: "Is this adapter a faithful binding of the contract surface to the old target?"
+recommendation: "Approve. 658 of the 680 actions and observations are bound against the running application; the 22 that are not each name what is missing and where it was checked. Two contract routes were found not to resolve as written and are reported rather than worked around."
+opened: 2026-09-11T03:49:05.581Z
+---
+
+# Is this adapter a faithful binding of the contract surface to the old target?
+
+**Recommendation.** Approve. 658 of the 680 actions and observations are bound against the running application; the 22 that are not each name what is missing and where it was checked. Two contract routes were found not to resolve as written and are reported rather than worked around.
+
+This proposal carries work the bind-adapter stage produced on 2026-09-11 over 501 turns. The stage failed its post-checks, but not on the adapter: the separation rule forbidding a test definition matched on a word boundary, so nine ordinary regular-expression calls of the form SOME_REGEX.test(line) read as test definitions. agentic-sdlc e964d38 fixes that rule and covers it with tests. All nine project checks pass with these files in place, unchanged. The files were re-proposed by hand rather than regenerated, because regenerating would discard 501 turns of verified browser work to reproduce it; that is a recorded exception to the rule that the project is only ever changed by the pipeline. Read the agent's own account in .sdlc/journal/060-bind-adapter.md: it explored the target signed out and as nine identities, and reports four habits of the application that shaped every binding, each verified against named cases. What to weigh. Whether the 22 unbound entries are genuinely absent from the application or merely not found; whether the two routes that do not resolve are contract defects to route back to the contract stage; and whether binding by exact visible text, which this target forces because its buttons are anchors carrying no role, is acceptable or too brittle.
