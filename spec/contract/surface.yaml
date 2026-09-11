@@ -5,6 +5,38 @@
 # separate address; the tab is part of how a test reaches the surface, not a selector.
 # Several routes appear twice under different ids where two domains own different parts
 # of the same screen; each such entry says so in a comment above it.
+#
+# Where a route parameter comes from
+# ----------------------------------
+# A test can only open a route whose parameters it can fill, so every parameter used
+# below has a named source and there are only four kinds:
+#
+#   From the seed. Every record tests/seed/manifest.yaml names carries its identifier
+#   there, so :userId, :orgId, the :slug of the one administrator-made page, and the
+#   :opportunityId of the two seeded Code With Us opportunities are all handles.
+#
+#   From the page the record lands on. Creating a record sends the browser to that
+#   record's own screen, and every such screen carries an observation returning the
+#   identifier its own address holds — opportunity_identifier, proposal_identifier,
+#   organization_identifier, user_identifier, page_address, attachment_address. A test
+#   that builds an opportunity, a proposal, an organization or an attachment reads the
+#   identifier off the screen it arrives on and passes it to any other route that needs
+#   it. Without these observations a record a test creates cannot be addressed again,
+#   which is why they are here rather than left to the design gate.
+#
+#   By following the service's own link. The evaluation and consensus screens for one
+#   proponent are reached by open_proponent_evaluation and open_proponent_consensus on
+#   the list that precedes them, which is also how a person reaches them. A test that
+#   follows the link needs no identifier at all.
+#
+#   From a fixed set the application itself defines. :program is one of code-with-us,
+#   sprint-with-us and team-with-us. :noticeId is one of deactivatedOwnAccount and
+#   authFailure, and any other value is answered as not found. :userId on an evaluation
+#   or consensus screen is the panel member's own account, which the seed names.
+#
+# A screen that is also reachable as the signed-in person's own carries a second entry
+# with no parameter in its route: the application resolves "me" in place of an account
+# identifier, and a test acting as itself has no identifier to pass.
 pages:
   - id: home
     domain: opportunities
@@ -85,7 +117,11 @@ pages:
       toggle_watch: { test_id: null }
       start_proposal: { test_id: null }
     observations:
+      opportunity_identifier: { test_id: null }
       status: { test_id: null }
+      published_date: { test_id: null }
+      created_by_name: { test_id: null }
+      last_changed_by_name: { test_id: null }
       proposal_deadline: { test_id: null }
       reward: { test_id: null }
       addenda: { test_id: null }
@@ -104,6 +140,9 @@ pages:
       add_addendum: { test_id: null }
       add_note: { test_id: null }
     observations:
+      opportunity_identifier: { test_id: null }
+      created_by_name: { test_id: null }
+      last_changed_by_name: { test_id: null }
       summary_tab: { test_id: null }
       opportunity_tab: { test_id: null }
       addenda_tab: { test_id: null }
@@ -144,7 +183,11 @@ pages:
       toggle_watch: { test_id: null }
       start_proposal: { test_id: null }
     observations:
+      opportunity_identifier: { test_id: null }
       status: { test_id: null }
+      published_date: { test_id: null }
+      created_by_name: { test_id: null }
+      last_changed_by_name: { test_id: null }
       proposal_deadline: { test_id: null }
       total_max_budget: { test_id: null }
       phases: { test_id: null }
@@ -167,6 +210,9 @@ pages:
       finalize_question_consensuses: { test_id: null }
       start_team_scenario: { test_id: null }
     observations:
+      opportunity_identifier: { test_id: null }
+      created_by_name: { test_id: null }
+      last_changed_by_name: { test_id: null }
       summary_tab: { test_id: null }
       opportunity_tab: { test_id: null }
       addenda_tab: { test_id: null }
@@ -209,7 +255,11 @@ pages:
       toggle_watch: { test_id: null }
       start_proposal: { test_id: null }
     observations:
+      opportunity_identifier: { test_id: null }
       status: { test_id: null }
+      published_date: { test_id: null }
+      created_by_name: { test_id: null }
+      last_changed_by_name: { test_id: null }
       proposal_deadline: { test_id: null }
       max_budget: { test_id: null }
       resources: { test_id: null }
@@ -230,6 +280,9 @@ pages:
       edit_evaluation_panel: { test_id: null }
       finalize_question_consensuses: { test_id: null }
     observations:
+      opportunity_identifier: { test_id: null }
+      created_by_name: { test_id: null }
+      last_changed_by_name: { test_id: null }
       summary_tab: { test_id: null }
       opportunity_tab: { test_id: null }
       addenda_tab: { test_id: null }
@@ -247,6 +300,22 @@ pages:
     actions: {}
     observations:
       full_report: { test_id: null }
+
+  # Not a screen, and here because a test can reach nothing else that does this. The
+  # application has no scheduler: a published opportunity whose proposal deadline has
+  # passed is moved on by a hook that runs in front of this address and in front of the
+  # resource routes under /api, and nowhere else. Requesting it is how a test brings a
+  # closure about deliberately instead of waiting for a clock, and the oracle sets the
+  # hook's throttle to zero so one request is enough. Without an entry here the criteria
+  # that begin "when the proposal deadline passes" have no "when" a test can perform.
+  - id: scheduled-transition-trigger
+    domain: opportunities
+    route: /status
+    title: "Service status"
+    actions:
+      run_pending_transitions: { test_id: null }
+    observations:
+      service_is_up: { test_id: null }
 
   - id: proposal-cwu-create
     domain: proposals
@@ -281,6 +350,8 @@ pages:
       add_attachment: { test_id: null }
       remove_attachment: { test_id: null }
     observations:
+      proposal_identifier: { test_id: null }
+      opportunity_identifier: { test_id: null }
       proposal_tab: { test_id: null }
       status: { test_id: null }
       submitted_at: { test_id: null }
@@ -297,6 +368,7 @@ pages:
       award_proposal: { test_id: null }
       disqualify_proposal: { test_id: null }
     observations:
+      proposal_identifier: { test_id: null }
       proposal_tab: { test_id: null }
       history_tab: { test_id: null }
       proponent: { test_id: null }
@@ -355,6 +427,8 @@ pages:
       withdraw_proposal: { test_id: null }
       delete_proposal: { test_id: null }
     observations:
+      proposal_identifier: { test_id: null }
+      opportunity_identifier: { test_id: null }
       proposal_tab: { test_id: null }
       scoresheet_tab: { test_id: null }
       status: { test_id: null }
@@ -374,6 +448,7 @@ pages:
       award_proposal: { test_id: null }
       disqualify_proposal: { test_id: null }
     observations:
+      proposal_identifier: { test_id: null }
       proposal_tab: { test_id: null }
       team_questions_tab: { test_id: null }
       code_challenge_tab: { test_id: null }
@@ -434,6 +509,8 @@ pages:
       withdraw_proposal: { test_id: null }
       delete_proposal: { test_id: null }
     observations:
+      proposal_identifier: { test_id: null }
+      opportunity_identifier: { test_id: null }
       proposal_tab: { test_id: null }
       scoresheet_tab: { test_id: null }
       status: { test_id: null }
@@ -453,6 +530,7 @@ pages:
       award_proposal: { test_id: null }
       disqualify_proposal: { test_id: null }
     observations:
+      proposal_identifier: { test_id: null }
       proposal_tab: { test_id: null }
       resource_questions_tab: { test_id: null }
       challenge_tab: { test_id: null }
@@ -516,6 +594,9 @@ pages:
       swu_qualified_mark: { test_id: null }
       twu_qualified_mark: { test_id: null }
       pagination: { test_id: null }
+      # Being refused the list and being shown an empty one are different answers, and a
+      # criterion turns on telling them apart.
+      refused_when_not_permitted: { test_id: null }
 
   - id: organization-create
     domain: organizations
@@ -549,6 +630,7 @@ pages:
       view_swu_terms: { test_id: null }
       view_twu_terms: { test_id: null }
     observations:
+      organization_identifier: { test_id: null }
       organization_tab: { test_id: null }
       team_tab: { test_id: null }
       swu_qualification_tab: { test_id: null }
@@ -569,6 +651,9 @@ pages:
       not_qualified_notice: { test_id: null }
       changelog_entry: { test_id: null }
       field_error: { test_id: null }
+      # add_team_members carries the kind of membership the invitation is for. The team
+      # surface offers only one, and a criterion turns on every other kind being refused.
+      invalid_membership_type_error: { test_id: null }
 
   - id: organization-swu-terms
     domain: organizations
@@ -610,6 +695,10 @@ pages:
       swu_qualified_mark: { test_id: null }
       empty_owned_message: { test_id: null }
       empty_affiliated_message: { test_id: null }
+      # An invitation arrives as a message offering to accept or to decline, and both
+      # choices land here with the answer already prepared and waiting to be confirmed.
+      accept_confirmation: { test_id: null }
+      decline_confirmation: { test_id: null }
 
   - id: user-sign-in
     domain: users
@@ -634,6 +723,11 @@ pages:
       vendor_card: { test_id: null }
       public_sector_card: { test_id: null }
 
+  # The profile a person finishes the first time they sign in. On the oracle every
+  # account a sign-in route mints already has a finished profile, so this screen sends
+  # the browser to the dashboard instead of showing the form and the criteria that turn
+  # on it cannot be reached there. It stays here because it is part of the service and
+  # the rebuilt target must offer it.
   - id: user-sign-up-complete
     domain: users
     route: /sign-up/complete
@@ -661,6 +755,10 @@ pages:
       signed_out_message: { test_id: null }
       sign_out_failed_message: { test_id: null }
 
+  # The notice screen holds a fixed pair of notices rather than a record: :noticeId is
+  # either "deactivatedOwnAccount" or "authFailure", and any other value is answered as
+  # not found. A test reaches the first by deactivating its own account and the second
+  # by a sign-in that fails; both can also be opened directly by name.
   - id: user-notice
     domain: users
     route: /notice/:noticeId
@@ -706,6 +804,7 @@ pages:
       confirm_activation_change: { test_id: null }
       cancel_activation_change: { test_id: null }
     observations:
+      user_identifier: { test_id: null }
       profile_tab: { test_id: null }
       capabilities_tab: { test_id: null }
       notifications_tab: { test_id: null }
@@ -763,6 +862,105 @@ pages:
       terms_updated_warning: { test_id: null }
       program_terms_links: { test_id: null }
       accept_updated_terms_modal: { test_id: null }
+
+  # The same five screens as the four entries above and organization-user-memberships,
+  # reached as the signed-in person's own rather than as a named account. The application
+  # reads "me" in place of an account identifier and resolves it to whoever is signed in,
+  # so a test acting as itself opens these and needs no identifier at all. They are
+  # separate entries because the criteria that turn on somebody reading or changing their
+  # own profile are not the criteria that turn on an administrator reading another's.
+  - id: user-profile-self
+    domain: users
+    route: /users/me
+    title: "User Profile"
+    actions:
+      edit_profile: { test_id: null }
+      save_changes: { test_id: null }
+      cancel_editing: { test_id: null }
+      change_avatar: { test_id: null }
+      deactivate_account: { test_id: null }
+      confirm_activation_change: { test_id: null }
+      cancel_activation_change: { test_id: null }
+    observations:
+      user_identifier: { test_id: null }
+      profile_tab: { test_id: null }
+      capabilities_tab: { test_id: null }
+      notifications_tab: { test_id: null }
+      legal_tab: { test_id: null }
+      organizations_tab: { test_id: null }
+      status_badge: { test_id: null }
+      account_type: { test_id: null }
+      idp_username_readonly: { test_id: null }
+      name_field: { test_id: null }
+      email_field: { test_id: null }
+      job_title_field: { test_id: null }
+      field_error: { test_id: null }
+      activation_modal: { test_id: null }
+      sign_in_required: { test_id: null }
+
+  - id: user-profile-self-capabilities
+    domain: users
+    route: /users/me?tab=capabilities
+    title: "Capabilities"
+    actions:
+      toggle_capability: { test_id: null }
+      expand_capability_description: { test_id: null }
+    observations:
+      capability_row: { test_id: null }
+      capability_checked: { test_id: null }
+      capability_description: { test_id: null }
+
+  - id: user-profile-self-notifications
+    domain: users
+    route: /users/me?tab=notifications
+    title: "Notifications"
+    actions:
+      toggle_new_opportunity_notifications: { test_id: null }
+      confirm_unsubscribe: { test_id: null }
+      cancel_unsubscribe: { test_id: null }
+    observations:
+      new_opportunities_checkbox: { test_id: null }
+      notification_email_address: { test_id: null }
+      unsubscribe_modal: { test_id: null }
+
+  - id: user-profile-self-legal
+    domain: users
+    route: /users/me?tab=legal
+    title: "Policies, Terms & Agreements"
+    actions:
+      open_app_terms: { test_id: null }
+      accept_updated_terms: { test_id: null }
+      confirm_accept_updated_terms: { test_id: null }
+    observations:
+      privacy_policy: { test_id: null }
+      app_terms_link: { test_id: null }
+      accepted_on_notice: { test_id: null }
+      terms_updated_warning: { test_id: null }
+      program_terms_links: { test_id: null }
+      accept_updated_terms_modal: { test_id: null }
+
+  - id: organization-user-memberships-self
+    domain: organizations
+    route: /users/me?tab=organizations
+    title: "My Organizations"
+    actions:
+      approve_invitation: { test_id: null }
+      reject_invitation: { test_id: null }
+      leave_organization: { test_id: null }
+      create_organization: { test_id: null }
+      open_organization: { test_id: null }
+    observations:
+      owned_organizations_table: { test_id: null }
+      affiliated_organizations_table: { test_id: null }
+      pending_badge: { test_id: null }
+      team_member_count: { test_id: null }
+      swu_qualified_mark: { test_id: null }
+      empty_owned_message: { test_id: null }
+      empty_affiliated_message: { test_id: null }
+      # An invitation arrives as a message offering to accept or to decline, and both
+      # choices land here with the answer already prepared and waiting to be confirmed.
+      accept_confirmation: { test_id: null }
+      decline_confirmation: { test_id: null }
 
   - id: evaluation-panel-dashboard
     domain: evaluation
@@ -1111,6 +1309,22 @@ pages:
       copyright_link: { test_id: null }
       present_when_signed_out: { test_id: null }
 
+  # The service offers a link to a service level agreement page from five places — the
+  # three program cards, the learn-more screen for each program, and the three
+  # opportunity forms — and creates no such page for itself. The route names the one a
+  # test can reach without signing in; link_target_address is where the link leads, and
+  # answer_at_link_target is what the service returns when it is followed.
+  - id: content-service-level-agreement-link
+    domain: content
+    route: /learn-more/code-with-us
+    title: "Service level agreement link"
+    actions:
+      follow_service_level_agreement_link: { test_id: null }
+    observations:
+      service_level_agreement_link: { test_id: null }
+      link_target_address: { test_id: null }
+      answer_at_link_target: { test_id: null }
+
   - id: content-list
     domain: content
     route: /content
@@ -1169,6 +1383,7 @@ pages:
       delete_page: { test_id: null }
       confirm_delete_page: { test_id: null }
     observations:
+      page_address: { test_id: null }
       published_date: { test_id: null }
       updated_date: { test_id: null }
       published_by: { test_id: null }
@@ -1181,6 +1396,11 @@ pages:
       changes_published_success: { test_id: null }
       deleted_success: { test_id: null }
       refused_for_non_administrator: { test_id: null }
+      # The body the screen is offering for editing, and whatever it offers of the page's
+      # past. A criterion turns on there being no past to offer, so it needs a name for
+      # the thing that must come back empty.
+      body_being_edited: { test_id: null }
+      version_history: { test_id: null }
 
   - id: content-view
     domain: content
@@ -1189,6 +1409,7 @@ pages:
     actions:
       follow_body_link: { test_id: null }
     observations:
+      page_address: { test_id: null }
       page_title: { test_id: null }
       page_body: { test_id: null }
       published_date: { test_id: null }
@@ -1196,11 +1417,56 @@ pages:
       readable_when_signed_out: { test_id: null }
       not_found_for_unknown_address: { test_id: null }
 
-  # Files. This domain has no page of its own — a stored file is reached by its own
+  # Files. This domain has no screen of its own — a stored file is reached by its own
   # address, and everything a person does to a file they do through a control that
-  # sits on a page another domain owns. The first entry below is that address; the
-  # three after it are the shared controls, listed once each rather than repeated on
-  # every host page, with the routes they appear on named in the entry.
+  # sits on a page another domain owns. The first three entries below are those
+  # addresses: storing a file, reading its bytes and reading its description. The three
+  # after them are the shared controls, listed once each rather than repeated on every
+  # host page, with the routes they appear on named in the entry.
+  #
+  # The addresses are here rather than left to the controls because a great many of this
+  # domain's criteria are about what the service does with a submission the controls
+  # never make — one that overstates or withholds its size, carries no file, or names a
+  # kind of read access the service does not know — and about what it stores, which is
+  # readable only as a description and never on a screen.
+  - id: file-upload
+    domain: files
+    route: /api/files
+    title: "Storing a file"
+    actions:
+      upload_file: { test_id: null }
+      upload_file_stating_its_read_access: { test_id: null }
+      upload_file_without_declaring_its_size: { test_id: null }
+      upload_file_with_no_file_part: { test_id: null }
+      upload_file_with_unrecognised_read_access: { test_id: null }
+      upload_file_with_malformed_read_access: { test_id: null }
+    observations:
+      stored_file_identifier: { test_id: null }
+      refused_for_size: { test_id: null }
+      size_limit_named_in_refusal: { test_id: null }
+      refused_for_file_name_length: { test_id: null }
+      refused_for_read_access: { test_id: null }
+      refused_when_signed_out: { test_id: null }
+      service_fault: { test_id: null }
+
+  # The same address as file-download without the request for its content. The service
+  # answers with a description of the stored file under the same permission rules as the
+  # bytes. stored_content_identifier is what two uploads of identical content share and
+  # what tells storing once from storing twice.
+  - id: file-description
+    domain: files
+    route: /api/files/:fileId
+    title: "A stored file's description"
+    actions: {}
+    observations:
+      file_identifier: { test_id: null }
+      file_name: { test_id: null }
+      stored_date: { test_id: null }
+      stored_content_identifier: { test_id: null }
+      refused_when_not_permitted: { test_id: null }
+      refused_for_unknown_file: { test_id: null }
+      not_found_for_administrator: { test_id: null }
+
   - id: file-download
     domain: files
     route: /api/files/:fileId?type=blob
@@ -1221,9 +1487,19 @@ pages:
   # Us proposal form. Appears at /opportunities/code-with-us/create and .../edit and
   # the Sprint With Us and Team With Us equivalents, and at
   # /opportunities/code-with-us/:opportunityId/proposals/create and .../edit.
+  #
+  # The route names the one place a test can always reach the control after the fact:
+  # attachments are a step inside the opportunity form rather than a tab of their own, so
+  # the address is the opportunity tab of an opportunity's management screen and the
+  # control is a step within it.
+  #
+  # :program names which of those forms the control sits on and is one of code-with-us,
+  # sprint-with-us and team-with-us. It is not an identifier and nothing needs to look
+  # it up. attachment_address returns the address the application stores an attachment
+  # at, which is how a test reaches file-download for a file it has just uploaded.
   - id: file-attachment-control
     domain: files
-    route: /opportunities/:program/:opportunityId/edit?tab=attachments
+    route: /opportunities/:program/:opportunityId/edit?tab=opportunity
     title: "Attachments"
     actions:
       add_attachment: { test_id: null }
@@ -1232,6 +1508,9 @@ pages:
       remove_existing_attachment: { test_id: null }
       download_attachment: { test_id: null }
     observations:
+      attachment_address: { test_id: null }
+      size_limit_stated_before_choosing: { test_id: null }
+      upload_refused_for_size: { test_id: null }
       new_attachment_row: { test_id: null }
       existing_attachment_row: { test_id: null }
       existing_attachment_name_read_only: { test_id: null }
@@ -1242,19 +1521,26 @@ pages:
 
   # The image picker for a profile picture and an organization logo. Appears at
   # /sign-up/complete, /users/:userId, /organizations/create and
-  # /organizations/:orgId/edit.
+  # /organizations/:orgId/edit. The route names the one of those a test can reach acting
+  # as itself, with no identifier to supply.
   - id: file-image-picker
     domain: files
-    route: /users/:userId
+    route: /users/me
     title: "Profile picture and organization logo"
     actions:
       choose_image: { test_id: null }
     observations:
+      image_address: { test_id: null }
       current_image: { test_id: null }
       chosen_image_preview: { test_id: null }
       only_jpeg_and_png_offered: { test_id: null }
       rejected_image_error: { test_id: null }
       image_readable_when_signed_out: { test_id: null }
+      # The size the image was stored at, read back from the stored image itself. Two
+      # criteria turn on a large picture being narrowed or shortened to 500 pixels while
+      # keeping its proportions, and on an unreadable one being kept at its own size.
+      stored_image_width: { test_id: null }
+      stored_image_height: { test_id: null }
 
   # The image control inside the formatted-text editor, shared by every page that
   # embeds one — /content/create, /content/:slug/edit, the three opportunity forms
@@ -1266,6 +1552,7 @@ pages:
     actions:
       upload_body_image: { test_id: null }
     observations:
+      image_address: { test_id: null }
       image_inserted_into_text: { test_id: null }
       only_jpeg_and_png_offered: { test_id: null }
       uploading_indicator: { test_id: null }

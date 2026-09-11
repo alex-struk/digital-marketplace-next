@@ -15,6 +15,9 @@
 - 20:52:12 rule bind-adapter-old-2 approve at G3 by agent:reviewer (agent)
 - 21:52:22 run calibrate: post-checks failed
 - 23:29:08 init: pipeline 9400fb6, packs 3, skills installed 0, skipped 0
+- 00:09:01 run contract: ok, cost 19.22653949999999, turns 188
+- 00:09:01 propose contract-v2 at G1
+- 00:12:16 rule contract-v2 approve at G1 by agent:product-owner (agent)
 
 # Run record 2026-09-10
 

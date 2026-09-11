@@ -27,8 +27,12 @@ info:
   version: "1.0"
   description: >-
     Server API for the Digital Marketplace, recovered as the contract the acceptance
-    suite and the oracle act through. Every route the application registers appears
-    here exactly once, with one operationId apiece.
+    suite and the oracle act through. It covers four families of route — the API
+    resources under /api, the authentication routes, the administrator routes under
+    /admin, and the status route — and each of those appears here exactly once, with one
+    operationId apiece. The front-end router's catch-all, which answers every remaining
+    address with the single-page application, is not among them: it serves screens
+    rather than an API, and spec/contract/surface.yaml is the account of those.
 servers:
   - url: "{base_url}"
     description: The application under test.
@@ -63,10 +67,12 @@ paths:
       tags: [Service status]
       summary: Reports that the service is up.
       description: >-
-        Answers "OK" and needs no session. Recovered from routes. The three
-        opportunity auto-update hooks run in front of this route as they do in front of
-        every route, so a request here is also what advances an opportunity whose
-        proposal deadline has passed.
+        Answers "OK" and needs no session. Recovered from routes. The three opportunity
+        auto-update hooks run in front of this route and in front of the resource routes
+        under /api, and nowhere else — not on the authentication routes, the
+        administrator routes or the screens. A request here is therefore what advances
+        an opportunity whose proposal deadline has passed, and is the trigger named for
+        that purpose because it needs no session and changes nothing else.
       responses:
         "200": { description: The service is up. }
 

@@ -282,6 +282,27 @@ personas:
       session-route: { route: /auth/createsessionadmin }
       sandbox-idp: { username: gov-panel-chair }
 
+  # A second administrator, needed wherever a criterion turns on one administrator's work
+  # meeting another's — two of them holding the same page open, one saving over the
+  # other. The oracle carries the account but has one administrator sign-in route and no
+  # parameter on it, so on the oracle this persona can be observed and not acted as. On
+  # the rebuilt target it signs in like any other.
+  - id: administrator-other
+    domain: content
+    can:
+      [
+        manage pages,
+        hold a page open while somebody else saves it
+      ]
+    sign_in:
+      session-route:
+        unavailable: >-
+          /auth/createsessionadmin mints a session for one fixed account, looked up by
+          the identity-provider id "test-admin", and takes no parameter. No route reaches
+          a second administrator, so this persona can be seeded and observed on the
+          oracle but never acted as.
+      sandbox-idp: { username: admin-second }
+
   # A second member of public sector staff, needed wherever a criterion turns on one
   # staff member not seeing another's work. The oracle carries the account — it owns a
   # seeded draft opportunity — but has no session route that reaches it, so on the

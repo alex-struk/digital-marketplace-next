@@ -104,7 +104,13 @@ users:
 
   # Present in the database but unreachable by any sign-in route on the oracle. A test
   # running against the oracle can see these people and what they own; it cannot act as
-  # them. On the rebuilt target the sandbox identity provider carries all three.
+  # them. On the rebuilt target the sandbox identity provider carries all four.
+  administratorTwo:
+    id: 00000000-0000-4000-8000-000000000106
+    persona: administrator-other
+    idp_id: admin-second
+    email: admin.two@example.test
+    account_type: ADMIN
   staffTwo:
     id: 00000000-0000-4000-8000-000000000103
     persona: public-sector-staff-other
@@ -243,12 +249,30 @@ opportunities:
 
 not_seeded:
   # Named so that a later stage does not go looking for these and conclude they were
-  # forgotten.
+  # forgotten. A test builds each of these through the pages, and addresses what it built
+  # by reading the identifier off the screen the application lands it on: creating an
+  # opportunity, a proposal or an organization ends on that record's own screen, and
+  # spec/contract/surface.yaml gives each of those screens an observation returning the
+  # identifier its address holds — opportunity_identifier, proposal_identifier,
+  # organization_identifier. A handle below is the identifier itself and is passed
+  # straight to a route; a record a test creates has no handle and must be read this way.
   - what: Sprint With Us and Team With Us opportunities
     why: >-
       Each spans versions, phases or resources, questions, an evaluation panel and a
       status history. A test builds one through the pages, which is also the only way to
       be sure the shape it builds is the shape the application makes.
+    limit: >-
+      This reaches every state up to and including a published opportunity, and no
+      further. An opportunity closes when its proposal deadline passes, and the form
+      refuses any deadline earlier than four in the afternoon on the day it is filled in,
+      so the only way a test acting through the pages reaches a closed opportunity is to
+      run after that hour on the same day — which is the clock deciding whether the suite
+      passes, not the application. Everything behind a closed opportunity is out of reach
+      the same way: individual scoring, consensus, screening and an award. The evaluation
+      criteria that begin "once the opportunity has closed" therefore have no
+      given-clause a test can arrange, and what would give them one is a seeded Sprint
+      With Us and Team With Us opportunity already past its deadline, with submitted
+      proposals and a panel against it.
   - what: proposals, in any program and any state
     why: >-
       A proposal's shape depends on the opportunity it answers, so seeding one means
