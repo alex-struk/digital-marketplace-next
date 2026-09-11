@@ -1,13 +1,11 @@
 ---
-gate: G3
-question: "Do these tests follow from the evaluation criteria and from nothing else?"
-recommendation: "I wrote the evaluation suite."
-opened: 2026-09-11T08:50:14.393Z
+stage: "derive-tests"
+title: "derive tests"
+at: "2026-09-11T08:50:14.345Z"
+cost: 11.6101075
+turns: 77
+session: "6f053357-1ea5-454d-aca3-6a2cab721fdf"
 ---
-
-# Do these tests follow from the evaluation criteria and from nothing else?
-
-**Recommendation.** I wrote the evaluation suite.
 
 I wrote the evaluation suite. Here is the journal entry.
 
