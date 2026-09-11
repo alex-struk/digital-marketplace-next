@@ -1,5 +1,5 @@
 // criterion: @R-1.39 v1
-// provenance: blind, spec@897abf82ff1b013b15ba65777ea1336a8f5e50f6, derived 2026-09-07
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona } from "../../fixtures";
 
 // Each test publishes what it needs to be narrowed down to, then asks for it under a

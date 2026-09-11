@@ -1,13 +1,14 @@
 // criterion: @R-1.38 v1
-// provenance: blind, spec@897abf82ff1b013b15ba65777ea1336a8f5e50f6, derived 2026-09-07
-import { test, expect, persona } from "../../fixtures";
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
+import { test, expect, persona, seed } from "../../fixtures";
 
 // Ordering is asserted by where two opportunities of the test's own fall relative to each
 // other in the group's text, which holds whatever else the list is showing at the time.
 //
-// The closed group is not asserted. An opportunity counts as closed once it is published
-// and past its proposal deadline, and nothing in the surface makes a deadline pass or
-// closes an opportunity by hand (see R-1.1), so no opportunity can be put in that group.
+// The closed group is taken from the two seeded opportunities the closing hook moves past
+// their deadline, since that is the only way an opportunity becomes closed. Their order
+// within the group is not asserted: both close in the same run of the hook, so which of
+// them closed most recently is not a thing the test arranged.
 
 function inDays(days: number): string {
   const date = new Date();
@@ -36,9 +37,17 @@ test("the opportunity list shows open opportunities with the nearest proposal de
 
   await surface.signIn(persona.administrator);
   await surface.opportunityCwuCreate.open();
-  await surface.opportunityCwuCreate.publish({ ...complete, title: later, proposalDeadline: inDays(120) });
+  await surface.opportunityCwuCreate.publish({
+    ...complete,
+    title: later,
+    proposalDeadline: inDays(120),
+  });
   await surface.opportunityCwuCreate.open();
-  await surface.opportunityCwuCreate.publish({ ...complete, title: sooner, proposalDeadline: inDays(60) });
+  await surface.opportunityCwuCreate.publish({
+    ...complete,
+    title: sooner,
+    proposalDeadline: inDays(60),
+  });
 
   await surface.opportunityList.open();
   const open = await surface.opportunityList.openGroup();
@@ -66,4 +75,23 @@ test("the opportunity list groups unpublished opportunities apart, most recently
   expect(unpublished).toContain(newer);
   expect(unpublished.indexOf(newer)).toBeLessThan(unpublished.indexOf(older));
   expect(await surface.opportunityList.openGroup()).not.toContain(newer);
+});
+
+test("the opportunity list groups closed opportunities apart from open and unpublished ones", async ({
+  surface,
+}) => {
+  await surface.scheduledTransitionTrigger.open();
+  await surface.scheduledTransitionTrigger.runPendingTransitions();
+
+  const sprint = seed.opportunities.closedSprintWithUs.title;
+  const team = seed.opportunities.closedTeamWithUs.title;
+
+  await surface.signIn(persona.administrator);
+  await surface.opportunityList.open();
+
+  const closed = await surface.opportunityList.closedGroup();
+  expect(closed).toContain(sprint);
+  expect(closed).toContain(team);
+  expect(await surface.opportunityList.openGroup()).not.toContain(sprint);
+  expect(await surface.opportunityList.unpublishedGroup()).not.toContain(sprint);
 });

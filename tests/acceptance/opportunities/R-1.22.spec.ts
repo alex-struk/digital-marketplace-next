@@ -1,11 +1,11 @@
 // criterion: @R-1.22 v1
-// provenance: blind, spec@897abf82ff1b013b15ba65777ea1336a8f5e50f6, derived 2026-09-07
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona } from "../../fixtures";
 
-// The draft is complete, so nothing but the requester's standing is left to refuse it.
-// The second test is the other side of the same rule: the same opportunity published by
-// an administrator, which is what makes the first test's refusal a rule about who is
-// asking rather than about the opportunity.
+// The opportunity is complete, so nothing but the requester's standing is left to refuse
+// the publication. It is asked for twice: once by the member of staff who created it, whose
+// request must leave it where it was, and once by an administrator, so that the refusal can
+// be told from an opportunity that simply cannot be published.
 
 function inDays(days: number): string {
   const date = new Date();
@@ -27,34 +27,25 @@ const complete = {
   completionDate: inDays(90),
 };
 
-test("a member of public sector staff who is not an administrator asking to publish an opportunity is refused and the opportunity stays unpublished", async ({
-  surface,
-}) => {
-  const title = "R-1.22 draft an ordinary member of staff asked to publish";
+test("only an administrator may publish an opportunity", async ({ surface }) => {
+  const title = "R-1.22 opportunity its author asked to publish";
 
   await surface.signIn(persona.publicSectorStaff);
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.saveDraft({ ...complete, title });
+  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
 
-  await surface.opportunityCwuEdit.open({ title });
+  await surface.opportunityCwuEdit.open({ opportunityId });
   await surface.opportunityCwuEdit.publish();
 
-  await surface.opportunityCwuView.open({ title });
+  await surface.opportunityCwuView.open({ opportunityId });
   expect((await surface.opportunityCwuView.status()).toLowerCase()).not.toContain("published");
-});
-
-test("only an administrator may publish an opportunity", async ({ surface }) => {
-  const title = "R-1.22 draft an administrator published";
-
-  await surface.signIn(persona.publicSectorStaff);
-  await surface.opportunityCwuCreate.open();
-  await surface.opportunityCwuCreate.saveDraft({ ...complete, title });
   await surface.signOut();
 
   await surface.signIn(persona.administrator);
-  await surface.opportunityCwuEdit.open({ title });
+  await surface.opportunityCwuEdit.open({ opportunityId });
   await surface.opportunityCwuEdit.publish();
 
-  await surface.opportunityCwuView.open({ title });
+  await surface.opportunityCwuView.open({ opportunityId });
   expect((await surface.opportunityCwuView.status()).toLowerCase()).toContain("published");
 });

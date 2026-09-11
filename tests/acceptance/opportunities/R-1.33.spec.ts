@@ -1,48 +1,47 @@
 // criterion: @R-1.33 v1
-// provenance: blind, spec@897abf82ff1b013b15ba65777ea1336a8f5e50f6, derived 2026-09-07
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona } from "../../fixtures";
 
-// The note is added to a draft, which is the earliest point in an opportunity's life, so
-// "at any point" is exercised at the end of it that is easiest to be sure of. That only
-// the author and administrators can see the history the note lands in is R-1.30's claim,
-// asserted there.
+// The note is read back off the opportunity's history, which is where the criterion says it
+// appears and which R-1.30 has already established only the author and an administrator can
+// see. "At any point in its life" is taken at the earliest point there is: each note below
+// is attached to a draft.
 //
-// Team With Us is not exercised: the surface offers add_note on the Code With Us and
-// Sprint With Us management surfaces only, which is the difference the criterion itself
-// draws.
+// The attachments the criterion mentions are not asserted. No observation names what a note
+// in the history carries, so a note with a file could not be told from a note without one.
 
-test("an opportunity's author may attach a private note, with files, to a Code With Us opportunity's history", async ({
+test("an opportunity's author may attach a private note to a Code With Us opportunity's history", async ({
   surface,
 }) => {
-  const title = "R-1.33 Code With Us draft given a private note";
-  const note = "R-1.33 a private note about the Code With Us opportunity.";
+  const title = "R-1.33 Code With Us draft its author attached a note to";
+  const note = "R-1.33 a private note the opportunity's own author wrote.";
 
   await surface.signIn(persona.publicSectorStaff);
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.saveDraft({ title });
+  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
 
-  await surface.opportunityCwuEdit.open({ title });
-  await surface.opportunityCwuEdit.addNote({ note, attachments: ["briefing.pdf"] });
+  await surface.opportunityCwuEdit.open({ opportunityId });
+  await surface.opportunityCwuEdit.addNote({ text: note });
 
-  const history = await surface.opportunityCwuEdit.historyTab();
-  expect(history).toContain(note);
-  expect(history).toContain("briefing.pdf");
+  await surface.opportunityCwuEdit.open({ opportunityId });
+  expect(await surface.opportunityCwuEdit.historyTab()).toContain(note);
 });
 
-test("an administrator may attach a private note, with files, to a Sprint With Us opportunity's history", async ({
+test("an administrator may attach a private note to a Sprint With Us opportunity's history", async ({
   surface,
 }) => {
-  const title = "R-1.33 Sprint With Us draft given a private note";
-  const note = "R-1.33 a private note about the Sprint With Us opportunity.";
+  const title = "R-1.33 Sprint With Us draft an administrator attached a note to";
+  const note = "R-1.33 a private note an administrator wrote.";
 
   await surface.signIn(persona.administrator);
   await surface.opportunitySwuCreate.open();
   await surface.opportunitySwuCreate.saveDraft({ title });
+  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
 
-  await surface.opportunitySwuEdit.open({ title });
-  await surface.opportunitySwuEdit.addNote({ note, attachments: ["briefing.pdf"] });
+  await surface.opportunitySwuEdit.open({ opportunityId });
+  await surface.opportunitySwuEdit.addNote({ text: note });
 
-  const history = await surface.opportunitySwuEdit.historyTab();
-  expect(history).toContain(note);
-  expect(history).toContain("briefing.pdf");
+  await surface.opportunitySwuEdit.open({ opportunityId });
+  expect(await surface.opportunitySwuEdit.historyTab()).toContain(note);
 });

@@ -1,13 +1,11 @@
 ---
-gate: G3
-question: "Do these tests follow from the opportunities criteria and from nothing else?"
-recommendation: "Forty of the fifty criteria now carry a test; ten are recorded as not testable."
-opened: 2026-09-11T10:09:41.197Z
+stage: "derive-tests"
+title: "derive tests"
+at: "2026-09-11T10:09:41.153Z"
+cost: 12.892765999999996
+turns: 88
+session: "af414cc1-e7f8-41e9-845a-5b029536897e"
 ---
-
-# Do these tests follow from the opportunities criteria and from nothing else?
-
-**Recommendation.** Forty of the fifty criteria now carry a test; ten are recorded as not testable.
 
 Forty of the fifty criteria now carry a test; ten are recorded as not testable. I rewrote the whole domain rather than adding to it, because the thirty-six files already present were derived against an earlier contract and call page `open` with an `id` or a `title`, which the current generated types reject.
 
