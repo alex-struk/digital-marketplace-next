@@ -8,10 +8,11 @@
 --   /auth/createsessionadmin      -> the ADMIN account whose idpId is 'test-admin'
 --   /auth/createsessiongov        -> the GOV account whose idpId is 'test-gov'
 --   /auth/createsessionvendor/:n  -> the VENDOR account whose idpId is 'test-vendor-<n>'
--- The three accounts named gov-second, gov-panel-evaluator and gov-panel-chair have no
--- route that reaches them. They exist because criteria need a second and third public
--- sector person to be present — owning an opportunity, sitting on a panel — and on the
--- oracle those people can be observed but not acted as.
+-- The four accounts named admin-second, gov-second, gov-panel-evaluator and
+-- gov-panel-chair have no route that reaches them. They exist because criteria need a
+-- second administrator and a second and third public sector person to be present —
+-- owning an opportunity, sitting on a panel, holding a screen open while somebody else
+-- saves — and on the oracle those people can be observed but not acted as.
 --
 -- (type, idpId), (type, idpUsername) and (type, email) are each unique, so every account
 -- of a given kind carries a distinct address; the account with no address at all is
@@ -26,6 +27,12 @@ VALUES
   ('00000000-0000-4000-8000-000000000101', TIMESTAMPTZ '2026-01-05 17:00:00+00', TIMESTAMPTZ '2026-01-05 17:00:00+00',
    'ADMIN', 'ACTIVE', 'Robin Placeholder', 'admin.one@example.test', 'Service Owner',
    'test-admin', 'test-admin', '{}', TIMESTAMPTZ '2026-01-05 17:00:00+00', NULL, NULL, NULL, NULL),
+
+  -- A second administrator, present so that criteria about one administrator's work
+  -- meeting another's have two people to be about. No sign-in route reaches it.
+  ('00000000-0000-4000-8000-000000000106', TIMESTAMPTZ '2026-01-05 17:00:00+00', TIMESTAMPTZ '2026-01-05 17:00:00+00',
+   'ADMIN', 'ACTIVE', 'Morgan Placeholder', 'admin.two@example.test', 'Service Owner',
+   'admin-second', 'admin-second', '{}', TIMESTAMPTZ '2026-01-05 17:00:00+00', NULL, NULL, NULL, NULL),
 
   ('00000000-0000-4000-8000-000000000102', TIMESTAMPTZ '2026-01-05 17:00:00+00', TIMESTAMPTZ '2026-01-05 17:00:00+00',
    'GOV', 'ACTIVE', 'Casey Placeholder', 'staff.one@example.test', 'Program Analyst',

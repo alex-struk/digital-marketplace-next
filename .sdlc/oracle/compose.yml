@@ -32,19 +32,17 @@
 #    start. It belongs to the old repository's own test tooling, is not the oracle's
 #    database, and would otherwise take a port for nothing.
 #
-# Two things this file does not settle, both recorded in the contract stage's journal:
-#
-#  - The application's image does not migrate on start-up, and .sdlc/config.yaml names no
-#    oracle.migrate_service, so nothing in the configured pipeline creates the schema.
-#    A one-off "migrate" service is defined below behind a profile, so that it changes
-#    nothing about an ordinary "up" and is there to be named once the configuration wants
-#    it. Run it before the seed:
+#  - Migration. The application's image does not create the schema on start-up, so the
+#    one-off "migrate" service below runs the repository's own migration script. It is
+#    what .sdlc/config.yaml names as oracle.migrate_service, and it is behind a profile so
+#    that it takes no part in an ordinary "up". Run it against an empty database, before
+#    the seed:
 #      docker compose -f sources/old/docker-compose.yml -f .sdlc/oracle/compose.yml \
 #        --profile migrate run --rm migrate
 #
-#  - The database keeps the base file's named volume, so it survives between runs. The
-#    seed is a plain set of inserts and is not idempotent: applying it twice fails on the
-#    primary keys. Remove the volume to start over.
+# One thing this file does not settle: the database keeps the base file's named volume, so
+# it survives between runs, and the seed is a plain set of inserts that is not idempotent —
+# applying it twice fails on the primary keys. Remove the volume to start over.
 
 services:
   app:
@@ -152,13 +150,8 @@ services:
       ORIGIN: http://localhost:${SDLC_APP_PORT}
       POSTGRES_URL: postgresql://digmkt:digmkt@db:5432/digmkt
       COOKIE_SECRET: oracle-cookie-secret-not-a-real-secret
-      # An absolute path under /tmp, not ./tmp. The image runs as uid 1000 and its
-      # working directory /usr/app is root-owned 0755, so the application cannot create
-      # ./tmp there. It fails that check inside getConfigErrors, whose own error path
-      # calls a logger that is still in its temporal dead zone at module scope, so the
-      # process dies with "Cannot access 'logger' before initialization" and never
-      # reports the permission error underneath. TMP_DIR is derived as
-      # FILE_STORAGE_DIR/__tmp, so this one value fixes both.
+      # The same writable storage directory the application itself needs: the migration
+      # script runs the same configuration check before it does anything.
       FILE_STORAGE_DIR: /tmp/dm-storage
       MAILER_FROM: Digital Marketplace <donotreply@example.test>
     depends_on:

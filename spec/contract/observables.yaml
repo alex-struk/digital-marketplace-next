@@ -38,6 +38,13 @@ email:
       rather than by what they equal.
     - Announcements to large groups are sent in batches, so several messages may carry
       the same subject and between them cover the whole group.
+    - Every field under "observable" above is one a test must be able to read, and the
+      list of messages does not carry all of them. The listing gives a subject, a
+      snippet, a visible recipient and an identifier; the sender, the blind-copy list,
+      the formatted body and the plain-text body come only from reading one message by
+      its identifier. A criterion about who else a batch reached, about what a message
+      says, or about which sender it came from is reachable only that way, so whatever
+      reads the catcher must offer both calls and not the listing alone.
 
 files:
   # A stored file is reached at its own address, whatever page put it there. The
@@ -52,10 +59,36 @@ files:
     content_type: the type the response declares, derived from the file's name
     disposition: whether the response offers the file as a download or displays it
     refusal: the status the application answers with when the requester may not read it
+    file_identifier: the identifier the stored file is held at, from the description form
+    stored_date: when the file was stored, from the description form
+    stored_content_identifier: >-
+      the identifier of the stored content, from the description form. Two uploads of
+      identical bytes share it while remaining two records, so it is what tells storing
+      once from storing twice.
   notes:
     - A file that no stored record carries and a file the requester may not read are
       answered differently, and which of the two a given requester sees is itself a
       thing the criteria turn on.
+    - The description form names no uploader. The application records who stored a file
+      and never returns it on this route, so who uploaded a file is not observable from
+      outside however the request is made.
+
+refusals:
+  # Some criteria are not about whether a request is refused but about the form the
+  # refusal takes: a refusal for lack of permission answered in the same form as one for
+  # a malformed submission, or every request for a page refusing in one form rather than
+  # in several. That is a property of the answer and of no screen, so it is read from the
+  # answer the application returns rather than from the prose a screen shows.
+  via: http
+  observable:
+    status: the status the application answers a refused request with
+    shape: >-
+      the form of the answered body — which fields it carries and how the reason is
+      named — so that two refusals can be compared and not merely both be seen to happen
+  notes:
+    - A screen reports a refusal as prose, which is evidence that one happened and not
+      evidence of what form the answer took. A criterion comparing two refusals must
+      read the answers themselves.
 
 exports:
   # Two surfaces hand a test a document rather than a screen. Both are reached as
@@ -74,16 +107,19 @@ exports:
 scheduled_transitions:
   # The application has no scheduler. The transitions that look time-driven — an
   # opportunity closing when its proposal deadline passes, and the equivalents for the
-  # other two programs — run as a hook in front of every request, throttled by a
-  # configured interval.
+  # other two programs — run as a hook in front of the resource routes under /api and in
+  # front of /status, throttled by a configured interval.
   via: http
   trigger: GET {base_url}/status
   observable:
     opportunity_status: read back from the opportunity's own page or list entry
   notes:
     - The oracle sets the throttle interval to zero, so one request to the trigger is
-      enough to run the transitions. Any request would do; the trigger above is named
-      because it needs no session and changes nothing else.
+      enough to run the transitions. A request to any route under /api would do as well,
+      since the hooks sit in front of those too; the trigger above is named because it
+      needs no session and changes nothing else. Opening a screen does not run them —
+      the authentication routes, the administrator routes and the screens carry no such
+      hook.
     - The transition happens inside the request that triggers it, so a test should
       trigger and then read, rather than reading and waiting.
 
