@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">55</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">55</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">58</span></a></li><li><a href="../runs.html">Run log <span class="count">6</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-11 00:03</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I wrote the adapter for the &quot;old&quot; target, but I could not observe the running application at all, so nothing is bound.</p>
+<p>I wrote the adapter for the &quot;old&quot; target, but I could not observe the running application at all, so nothing is bound.</p>
+<p><strong>What blocked the work.</strong> The browser tooling in this workspace is pinned to the Google Chrome channel, and no Chrome is installed on the machine. Every navigation attempt fails before a page is ever created. Playwright&#39;s own Chromium builds are present in the user cache, so the tooling is misconfigured rather than missing, but nothing I can reach from here changes which browser it launches. The session was also refused shell and network access, so I could not install the browser, read the target URL from the environment, or fetch a single page another way. That left no path to the application.</p>
+<p><strong>What I wrote.</strong> The adapter file exports the create function the fixture expects and supplies every page the generated surface declares. Navigation and sign-in are implemented for real, because both are defined by the contract rather than by what a page looks like. Each page&#39;s open method goes to that page&#39;s route with its path parameters substituted and any query string carried through unchanged, since a query string there names a tab. Sign-in clears any leftover session and visits the route that mints one directly on this target, with no form involved. The anonymous visitor is left signed out. The one public sector persona whose session route is recorded as unavailable throws the unbound sign-in error carrying that recorded reason, so criteria needing it report as unbound rather than as a behavioural failure.</p>
+<p><strong>What is bound.</strong> Nothing. Every action and every observation throws the standard unbound error naming its page and member, and the bindings file records each one unbound with the same reason.</p>
+<div class="scroll"><table><thead><tr><th>Pages in the surface</th><th>Actions and observations, all unbound</th></tr></thead><tbody><tr><td>79</td><td>680</td></tr></tbody></table></div>
+<p>I deliberately did not fill the adapter with locators guessed from familiarity with this kind of application. A guessed binding recorded as bound would be a claim I never checked, and on a target that is supposed to be the behavioural oracle it would turn into false failures that discredit correct criteria. Unbound is the honest signal and is the one the calibration step is built to absorb.</p>
+<p><strong>Routes.</strong> I cannot name any page whose route fails to resolve, because I could not open any of them. Equally, I cannot vouch for a single route. The route table in the adapter is transcribed from the contract and is unverified against the running service.</p>
+<p><strong>To finish this.</strong> Point the browser tooling at the bundled Chromium or install Chrome, then rerun this stage. The page table, the route substitution, and the sign-in behaviour are already in place, so the rerun is about finding each control on each real page and replacing the unbound throws one at a time. I verified that the bindings file names every page, action, and observation of the contract exactly once, spelled as the contract spells them, so that file is ready to be edited entry by entry as bindings are made.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by tech-lead on 2026-09-11 00:05.</p>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

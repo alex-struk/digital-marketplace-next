@@ -30,6 +30,7 @@ Profile: rebuild
 - [archaeology-organizations](proposals/archaeology-organizations.md)
 - [archaeology-proposals](proposals/archaeology-proposals.md)
 - [archaeology-users](proposals/archaeology-users.md)
+- [bind-adapter-old](proposals/bind-adapter-old.md)
 - [brief-v1](proposals/brief-v1.md)
 - [budget-v1](proposals/budget-v1.md)
 - [constitution-v1](proposals/constitution-v1.md)
@@ -62,6 +63,7 @@ Profile: rebuild
 - [intent-digital-marketplace-rebuild](proposals/intent-digital-marketplace-rebuild.md)
 - [policy-v3](proposals/policy-v3.md)
 - [policy-v4](proposals/policy-v4.md)
+- [policy-v5](proposals/policy-v5.md)
 - [probe-ruling](proposals/probe-ruling.md)
 - [ratify-content-1](proposals/ratify-content-1.md)
 - [ratify-content-3](proposals/ratify-content-3.md)
@@ -89,9 +91,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $130.703823
-- Rulings cost: $89.28185
-- Total cost: $219.985673
-- Agent-held rulings: 48
+- Journal cost: $152.515703
+- Rulings cost: $90.19008
+- Total cost: $242.705783
+- Agent-held rulings: 49
 - Open escalations: 0
 - Open proposals: 0

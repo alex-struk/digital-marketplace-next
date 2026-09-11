@@ -1,5 +1,13 @@
 # Run log
 
+# Run record 2026-09-11
+
+- 17:05:18 run bind-adapter: proposal bind-adapter-old still open
+- 17:06:24 run bind-adapter: agent turn failed
+- 19:29:33 run bind-adapter: agent turn failed
+- 19:31:01 propose policy-v5 at G-POL
+- 19:33:05 rule policy-v5 approve at G-POL by agent:tech-lead (agent)
+
 # Run record 2026-09-10
 
 - 13:44:11 propose policy-v4 at G-POL

@@ -1,5 +1,17 @@
 # Journal
 
+## 058 · bind-adapter · 2026-09-11
+
+cost $21.81188 · turns 201
+
+the agent turn reported failure with no output; the session hit the turn cap (error_max_turns)
+
+## 057 · bind-adapter · 2026-09-11
+
+cost $0 · turns 1
+
+Failed to authenticate: OAuth session expired and could not be refreshed
+
 ## 056 · derive-tests · 2026-09-09
 
 cost $5.305803 · turns 49
