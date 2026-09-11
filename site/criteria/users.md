@@ -2,44 +2,44 @@
 
 ## Tests
 
-| id | test |
-| --- | --- |
-| R-4.1 | not testable: The given is a person with no account on the service, which cannot be produced. Every persona signs in as an account the seed already carries, and no page, action or observation creates one, so no first sign-in can be made and no account can be watched coming into existence. Reading the kind of an account the seed already gave a kind would assert the seed rather than the service's decision, and the refusal of an identity of neither kind has no identity to be made with. |
-| R-4.2 | not testable: The when is an account being created, which no persona and no surface action brings about (see R-4.1), so the welcome message has nothing to follow. The withheld half fails twice over: seed.users.vendorWithoutEmail holds no address, and the mail fixture searches by a visible recipient address, so there is no search whose emptiness would show that no message was attempted for them. |
-| R-4.3 | acceptance/users/R-4.3.spec.ts |
-| R-4.4 | acceptance/users/R-4.4.spec.ts |
-| R-4.5 | acceptance/users/R-4.5.spec.ts |
-| R-4.6 | acceptance/users/R-4.6.spec.ts |
-| R-4.7 | — |
-| R-4.8 | acceptance/users/R-4.8.spec.ts |
-| R-4.9 | acceptance/users/R-4.9.spec.ts |
-| R-4.10 | — |
-| R-4.11 | — |
-| R-4.12 | acceptance/users/R-4.12.spec.ts |
-| R-4.13 | not testable: The given is a service with no administrator account at all. The seed carries seed.users.administratorOne, nothing in the surface removes an account, and the only demotion offered is one administrator withdrawing another's rights, so the state the criterion is about cannot be established. The outcome is an absence as well - that no way to make the first administrator exists - and the absence of an action is not an observation. |
-| R-4.14 | acceptance/users/R-4.14.spec.ts |
-| R-4.15 | — |
-| R-4.16 | acceptance/users/R-4.16.spec.ts |
-| R-4.17 | acceptance/users/R-4.17.spec.ts |
-| R-4.18 | acceptance/users/R-4.18.spec.ts |
-| R-4.19 | acceptance/users/R-4.19.spec.ts |
-| R-4.20 | not testable: Both halves turn on which message was sent, and the two messages differ only in their wording: one says an administrator reactivated the account and names whom to contact, the other says the person reactivated it themselves. The mail fixture returns Subject, Snippet, To and ID and no message body, and the email notification reference cannot be asked for one message's body either (see R-6.12), so the message that follows an administrator's reactivation cannot be told from the one that follows a person signing back in. |
-| R-4.21 | not testable: The claim is that the request is refused rather than answered, and user-list carries no refusal observation - it names user_row, status_badge, account_type, admin_check and the two export observations, none of which tells 'you are not permitted' from a screen with nothing on it. A test could only assert that a public sector employee who is not an administrator sees no rows, which is equally true of the superseded R-4.15 this criterion replaces, where the interface withheld the screen while the service answered the request in full. Needs an observation such as user-list.refused_for_non_administrator. |
-| R-4.22 | acceptance/users/R-4.22.spec.ts |
-| R-4.23 | acceptance/users/R-4.23.spec.ts |
-| R-4.24 | acceptance/users/R-4.24.spec.ts |
-| R-4.25 | acceptance/users/R-4.25.spec.ts |
-| R-4.26 | acceptance/users/R-4.26.spec.ts |
-| R-4.27 | acceptance/users/R-4.27.spec.ts |
-| R-4.28 | acceptance/users/R-4.28.spec.ts |
-| D-users-29 | — |
-| R-4.29 | acceptance/users/R-4.29.spec.ts |
-| R-4.30 | acceptance/users/R-4.30.spec.ts |
-| R-4.31 | acceptance/users/R-4.31.spec.ts |
-| D-users-32 | — |
-| R-4.32 | acceptance/users/R-4.32.spec.ts |
-| R-4.33 | acceptance/users/R-4.33.spec.ts |
-| R-4.34 | acceptance/users/R-4.34.spec.ts |
+| id | test | old |
+| --- | --- | --- |
+| R-4.1 | not testable: The given is a person with no account on the service, which cannot be produced. Every persona signs in as an account the seed already carries, and no page, action or observation creates one, so no first sign-in can be made and no account can be watched coming into existence. Reading the kind of an account the seed already gave a kind would assert the seed rather than the service's decision, and the refusal of an identity of neither kind has no identity to be made with. | not-testable |
+| R-4.2 | not testable: The when is an account being created, which no persona and no surface action brings about (see R-4.1), so the welcome message has nothing to follow. The withheld half fails twice over: seed.users.vendorWithoutEmail holds no address, and the mail fixture searches by a visible recipient address, so there is no search whose emptiness would show that no message was attempted for them. | not-testable |
+| R-4.3 | acceptance/users/R-4.3.spec.ts | fail |
+| R-4.4 | acceptance/users/R-4.4.spec.ts | fail |
+| R-4.5 | acceptance/users/R-4.5.spec.ts | fail |
+| R-4.6 | acceptance/users/R-4.6.spec.ts | fail |
+| R-4.7 | — |  |
+| R-4.8 | acceptance/users/R-4.8.spec.ts | fail |
+| R-4.9 | acceptance/users/R-4.9.spec.ts | fail |
+| R-4.10 | — |  |
+| R-4.11 | — |  |
+| R-4.12 | acceptance/users/R-4.12.spec.ts | fail |
+| R-4.13 | not testable: The given is a service with no administrator account at all. The seed carries seed.users.administratorOne, nothing in the surface removes an account, and the only demotion offered is one administrator withdrawing another's rights, so the state the criterion is about cannot be established. The outcome is an absence as well - that no way to make the first administrator exists - and the absence of an action is not an observation. | not-testable |
+| R-4.14 | acceptance/users/R-4.14.spec.ts | fail |
+| R-4.15 | — |  |
+| R-4.16 | acceptance/users/R-4.16.spec.ts | fail |
+| R-4.17 | acceptance/users/R-4.17.spec.ts | fail |
+| R-4.18 | acceptance/users/R-4.18.spec.ts | fail |
+| R-4.19 | acceptance/users/R-4.19.spec.ts | fail |
+| R-4.20 | not testable: Both halves turn on which message was sent, and the two messages differ only in their wording: one says an administrator reactivated the account and names whom to contact, the other says the person reactivated it themselves. The mail fixture returns Subject, Snippet, To and ID and no message body, and the email notification reference cannot be asked for one message's body either (see R-6.12), so the message that follows an administrator's reactivation cannot be told from the one that follows a person signing back in. | not-testable |
+| R-4.21 | not testable: The claim is that the request is refused rather than answered, and user-list carries no refusal observation - it names user_row, status_badge, account_type, admin_check and the two export observations, none of which tells 'you are not permitted' from a screen with nothing on it. A test could only assert that a public sector employee who is not an administrator sees no rows, which is equally true of the superseded R-4.15 this criterion replaces, where the interface withheld the screen while the service answered the request in full. Needs an observation such as user-list.refused_for_non_administrator. | not-testable |
+| R-4.22 | acceptance/users/R-4.22.spec.ts | pass |
+| R-4.23 | acceptance/users/R-4.23.spec.ts | fail |
+| R-4.24 | acceptance/users/R-4.24.spec.ts | fail |
+| R-4.25 | acceptance/users/R-4.25.spec.ts | fail |
+| R-4.26 | acceptance/users/R-4.26.spec.ts | fail |
+| R-4.27 | acceptance/users/R-4.27.spec.ts | fail |
+| R-4.28 | acceptance/users/R-4.28.spec.ts | fail |
+| D-users-29 | — |  |
+| R-4.29 | acceptance/users/R-4.29.spec.ts | fail |
+| R-4.30 | acceptance/users/R-4.30.spec.ts | fail |
+| R-4.31 | acceptance/users/R-4.31.spec.ts | fail |
+| D-users-32 | — |  |
+| R-4.32 | acceptance/users/R-4.32.spec.ts | fail |
+| R-4.33 | acceptance/users/R-4.33.spec.ts | fail |
+| R-4.34 | acceptance/users/R-4.34.spec.ts | fail |
 
 ### R-4.1 · v1 · confirmed · accepted
 

@@ -2,36 +2,36 @@
 
 ## Tests
 
-| id | test |
-| --- | --- |
-| R-6.1 | not testable: The given is an environment with notifications switched off, read once at start-up. No page, action or observation configures the running target's notification setting, and the fixtures set no environment beyond the target URL and the mail catcher, so the condition the criterion is about cannot be established. |
-| R-6.2 | not testable: The given is a service whose mail server is unreachable. Nothing in the surface or the mail fixture can stop, break or intercept delivery — `mail` can only clear the catcher and search it — so a failed send cannot be produced, and the claim that nothing in the service records the failure has nothing to be asserted against. |
-| R-6.3 | not testable: Neither half is observable. The test marker is never named — the contract says only that subjects may carry one — so no assertion can tell a marked subject from an unmarked one; and the test variant of the logo lives in the message body, which the mail fixture does not expose (observables.yaml names html_body, but Mail returns only Subject, Snippet, To and ID). |
-| R-6.4 | not testable: The sender and the reply-to of a message are not reachable: observables.yaml names `sender: from`, but the mail fixture returns only Subject, Snippet, To and ID and offers no way to read one message's headers. |
-| R-6.5 | not testable: Comparing the plain-text form of a message with the formatted one needs both bodies. The mail fixture exposes neither html_body nor plain_text_body, only a snippet, which is a summary the catcher makes and not evidence that a plain-text part was sent at all. |
-| R-6.6 | acceptance/notifications/R-6.6.spec.ts |
-| R-6.7 | acceptance/notifications/R-6.7.spec.ts |
-| R-6.8 | not testable: Two things are missing. The batch's recipients are blind copies and the mail fixture has no accessor for them (observables.yaml names `copied_recipients: bcc`), so neither the batch size nor the hiding can be counted; and one hundred and twenty accounts that have asked for new-opportunity notices can be produced neither by the seed nor by any surface action, since accounts arrive only through sign-in as a seeded persona. |
-| R-6.9 | — |
-| R-6.10 | — |
-| R-6.11 | — |
-| R-6.12 | — |
-| R-6.13 | acceptance/notifications/R-6.13.spec.ts |
-| R-6.14 | — |
-| R-6.15 | not testable: Requires reading, for one multi-recipient notice, both the visible recipient and the list of blind copies. The mail fixture offers neither: it searches by a single visible address and returns no blind-copy list, so hiding cannot be told from not sending. |
-| R-6.16 | not testable: The claim is about what stands at the foot of a particular message — an unsubscribe offer, or a plain link to the notification settings. The mail fixture exposes no message body, and the reference page cannot be asked for one message's body, so the two endings cannot be told apart. |
-| R-6.17 | acceptance/notifications/R-6.17.spec.ts |
-| R-6.18 | not testable: Same missing observation as R-6.12: naming all three programs or none is a fact about the body of the changed-terms message, and no surface observation or mail accessor returns that one body. |
-| R-6.19 | acceptance/notifications/R-6.19.spec.ts |
-| R-6.20 | not testable: The given is an account being created for the first time. Every persona signs in as an account the seed already holds, and no surface action creates one, so the sign-up completion page cannot be reached with a first-time identity and the state of a never-before-seen account cannot be read. |
-| R-6.21 | acceptance/notifications/R-6.21.spec.ts |
-| R-6.22 | — |
-| R-6.23 | acceptance/notifications/R-6.23.spec.ts |
-| R-6.24 | not testable: What distinguishes this criterion from R-6.23 is ordering — success reported before any message has been sent. Nothing in the surface reports send progress, and nothing can hold delivery, so the only available check (that the catcher is empty at the moment success appears) is a race against the background sending rather than a test of it. |
-| R-6.25 | not testable: Every part of the claim — the opportunity's title and the winner's name leading the message, the em dash where no successful proponent is recorded, the offer to sign in and see one's own score — is content of the message body, which no mail accessor returns and which the reference page cannot be asked for one message at a time. |
-| R-6.26 | — |
-| R-6.27 | not testable: The only width-aware observation is notification_control_hidden_on_narrow_screen, which is worded for the old service's behaviour. Asserting its negation is not reliable, since observations return free text with no stated yes/no vocabulary, and nothing names an observation reporting the control as offered at a narrow width or a way to ask a page to open at one. |
-| R-6.28 | acceptance/notifications/R-6.28.spec.ts |
+| id | test | old |
+| --- | --- | --- |
+| R-6.1 | not testable: The given is an environment with notifications switched off, read once at start-up. No page, action or observation configures the running target's notification setting, and the fixtures set no environment beyond the target URL and the mail catcher, so the condition the criterion is about cannot be established. | not-testable |
+| R-6.2 | not testable: The given is a service whose mail server is unreachable. Nothing in the surface or the mail fixture can stop, break or intercept delivery — `mail` can only clear the catcher and search it — so a failed send cannot be produced, and the claim that nothing in the service records the failure has nothing to be asserted against. | not-testable |
+| R-6.3 | not testable: Neither half is observable. The test marker is never named — the contract says only that subjects may carry one — so no assertion can tell a marked subject from an unmarked one; and the test variant of the logo lives in the message body, which the mail fixture does not expose (observables.yaml names html_body, but Mail returns only Subject, Snippet, To and ID). | not-testable |
+| R-6.4 | not testable: The sender and the reply-to of a message are not reachable: observables.yaml names `sender: from`, but the mail fixture returns only Subject, Snippet, To and ID and offers no way to read one message's headers. | not-testable |
+| R-6.5 | not testable: Comparing the plain-text form of a message with the formatted one needs both bodies. The mail fixture exposes neither html_body nor plain_text_body, only a snippet, which is a summary the catcher makes and not evidence that a plain-text part was sent at all. | not-testable |
+| R-6.6 | acceptance/notifications/R-6.6.spec.ts | pass |
+| R-6.7 | acceptance/notifications/R-6.7.spec.ts | fail |
+| R-6.8 | not testable: Two things are missing. The batch's recipients are blind copies and the mail fixture has no accessor for them (observables.yaml names `copied_recipients: bcc`), so neither the batch size nor the hiding can be counted; and one hundred and twenty accounts that have asked for new-opportunity notices can be produced neither by the seed nor by any surface action, since accounts arrive only through sign-in as a seeded persona. | not-testable |
+| R-6.9 | — | not-testable |
+| R-6.10 | — | fail |
+| R-6.11 | — | not-testable |
+| R-6.12 | — | not-testable |
+| R-6.13 | acceptance/notifications/R-6.13.spec.ts | pass |
+| R-6.14 | — | pass |
+| R-6.15 | not testable: Requires reading, for one multi-recipient notice, both the visible recipient and the list of blind copies. The mail fixture offers neither: it searches by a single visible address and returns no blind-copy list, so hiding cannot be told from not sending. | not-testable |
+| R-6.16 | not testable: The claim is about what stands at the foot of a particular message — an unsubscribe offer, or a plain link to the notification settings. The mail fixture exposes no message body, and the reference page cannot be asked for one message's body, so the two endings cannot be told apart. | not-testable |
+| R-6.17 | acceptance/notifications/R-6.17.spec.ts | fail |
+| R-6.18 | not testable: Same missing observation as R-6.12: naming all three programs or none is a fact about the body of the changed-terms message, and no surface observation or mail accessor returns that one body. | not-testable |
+| R-6.19 | acceptance/notifications/R-6.19.spec.ts | fail |
+| R-6.20 | not testable: The given is an account being created for the first time. Every persona signs in as an account the seed already holds, and no surface action creates one, so the sign-up completion page cannot be reached with a first-time identity and the state of a never-before-seen account cannot be read. | not-testable |
+| R-6.21 | acceptance/notifications/R-6.21.spec.ts | fail |
+| R-6.22 | — | fail |
+| R-6.23 | acceptance/notifications/R-6.23.spec.ts | fail |
+| R-6.24 | not testable: What distinguishes this criterion from R-6.23 is ordering — success reported before any message has been sent. Nothing in the surface reports send progress, and nothing can hold delivery, so the only available check (that the catcher is empty at the moment success appears) is a race against the background sending rather than a test of it. | not-testable |
+| R-6.25 | not testable: Every part of the claim — the opportunity's title and the winner's name leading the message, the em dash where no successful proponent is recorded, the offer to sign in and see one's own score — is content of the message body, which no mail accessor returns and which the reference page cannot be asked for one message at a time. | not-testable |
+| R-6.26 | — | fail |
+| R-6.27 | not testable: The only width-aware observation is notification_control_hidden_on_narrow_screen, which is worded for the old service's behaviour. Asserting its negation is not reliable, since observations return free text with no stated yes/no vocabulary, and nothing names an observation reporting the control as offered at a narrow width or a way to ask a page to open at one. | not-testable |
+| R-6.28 | acceptance/notifications/R-6.28.spec.ts | fail |
 
 ### R-6.1 · v1 · confirmed · accepted
 

@@ -13,7 +13,13 @@ export default defineConfig({
   fullyParallel: false,
   workers: 1,
   retries: 0,
-  timeout: 30000,
+  // A whole acceptance test, not a single wait. One criterion routinely means signing in,
+  // walking a multi-step form and reading the result back, against a target running in
+  // development mode. 30s was Playwright's default and was never sized for that: one
+  // calibration run lost 85 tests to it, concentrated in exactly the domains whose
+  // criteria involve creating something. Two minutes is a cap on a stuck test, not a
+  // budget a healthy one is expected to use.
+  timeout: 120000,
   reporter: [["json", { outputFile: "test-results/results.json" }], ["list"]],
   use: { baseURL: process.env.SDLC_TARGET_URL },
   projects: [{ name: target }],

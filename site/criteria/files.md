@@ -2,39 +2,39 @@
 
 ## Tests
 
-| id | test |
-| --- | --- |
-| R-8.1 | acceptance/files/R-8.1.spec.ts |
-| R-8.2 | acceptance/files/R-8.2.spec.ts |
-| R-8.3 | — |
-| R-8.4 | — |
-| R-8.5 | not testable: Both halves need something the surface never returns. That identical content is stored once is visible only in the fingerprint the file record carries, and no observation returns a file record or a fingerprint; that the second uploader's read access does not reach the first record needs the first record to be addressed by identifier, and no observation returns a stored file's identifier, so a file can be reached only by following a download offered on a screen the requester can already open. |
-| R-8.6 | not testable: No observation returns who uploaded a file or when it was stored. file_download names contents, name on save, disposition, content type and refusals; the attachment control names rows and errors. With neither value readable, neither the recording of them nor their being unchangeable afterwards can be asserted. |
-| R-8.7 | not testable: The given/when/then needs a file that exists, that one person may read and another may not, addressed by both. No observation returns a stored file's identifier, and the only way the surface reaches a file is by following a download offered on a screen the requester can already open — which is by construction a file they may read. So refused_when_not_permitted cannot be reached for a file that exists, and the administrator's override cannot be told from the administrator simply being able to open the screen the download hangs on. |
-| R-8.8 | — |
-| R-8.9 | — |
-| R-8.10 | acceptance/files/R-8.10.spec.ts |
-| R-8.11 | not testable: The surface has one address for a stored file, file-download, and its route asks for the content. No page, action or observation makes the without-content request or returns what it answers with: nothing names a file's identifier, and nothing names the date it was stored, so the description the criterion says comes back cannot be read. |
-| R-8.12 | acceptance/files/R-8.12.spec.ts |
-| R-8.13 | not testable: No observation reports the dimensions of a stored image. The image picker names current_image and chosen_image_preview, both free text, and no action states the size of the image it uploads, so neither the 2000-by-300 given nor the 500-pixel outcome can be established or read. |
-| R-8.14 | — |
-| R-8.15 | — |
-| R-8.16 | not testable: The working directory is on the service's own machine. Nothing in the surface or in observables.yaml reads that machine's filesystem — the observables are email, file addresses, exports, a status trigger and counters — so neither the working copy being written nor its being removed afterwards can be seen. |
-| R-8.17 | not testable: Two observations are missing. No observation reports an upload refused for size or the message such a refusal carries — file_name_error is about the name, and the file-download refusals are about reading rather than uploading — and no observation reports the size limit stated on the attachment control or the image picker before a file is chosen, which is the half of the criterion about what a person is told in advance. |
-| R-8.18 | not testable: Same reach as R-8.4: every upload in the surface is assembled by a control, so a submission with no file part or with malformed read-access information cannot be made. The refusal naming what was wrong, the absence of an entry in the service's error log, and the removal of the working copy are each unobservable as well — no observation names an upload refusal message, and neither the log nor the working directory is an observable. |
-| R-8.19 | not testable: That no read access is recorded against the file itself is visible only as its consequence: somebody who may not read the opportunity being refused its attachment. That request cannot be made — a visitor cannot open an unpublished opportunity to follow a download, and no observation returns a file's identifier to ask for it directly — and the surface has no observation reporting what was recorded against a file. |
-| R-8.20 | acceptance/files/R-8.20.spec.ts |
-| R-8.21 | acceptance/files/R-8.21.spec.ts |
-| R-8.22 | not testable: The criterion is about who may attach a file, which needs a file uploaded by somebody else to be named as an attachment. No observation returns a stored file's identifier, and no action attaches a file by identifier: add_attachment chooses a file to upload rather than naming one already stored, so the attempt the criterion refuses cannot be made. |
-| R-8.23 | acceptance/files/R-8.23.spec.ts |
-| R-8.24 | not testable: No action submits an upload without a read-access statement, or with one naming a kind of access the service does not recognise: the controls that upload settle that statement themselves and offer no way to set or omit it. Nor does any observation report an upload refused as carrying invalid information, so neither the given nor the outcome is reachable. |
-| R-8.25 | acceptance/files/R-8.25.spec.ts |
-| R-8.26 | — |
-| R-8.27 | acceptance/files/R-8.27.spec.ts |
-| R-8.28 | acceptance/files/R-8.28.spec.ts |
-| R-8.29 | acceptance/files/R-8.29.spec.ts |
-| R-8.30 | acceptance/files/R-8.30.spec.ts |
-| R-8.31 | not testable: Withdrawing the read paths a file held through an association can only be seen by asking for the file after the association is gone, which needs the file's identifier — no observation returns one. The second half, a file that no record refers to being identifiable as detached, names no surface at all: nothing in the pages, and nothing in observables.yaml, reports whether a stored file is still referred to. |
+| id | test | old |
+| --- | --- | --- |
+| R-8.1 | acceptance/files/R-8.1.spec.ts | fail |
+| R-8.2 | acceptance/files/R-8.2.spec.ts | fail |
+| R-8.3 | — | not-testable |
+| R-8.4 | — | not-testable |
+| R-8.5 | not testable: Both halves need something the surface never returns. That identical content is stored once is visible only in the fingerprint the file record carries, and no observation returns a file record or a fingerprint; that the second uploader's read access does not reach the first record needs the first record to be addressed by identifier, and no observation returns a stored file's identifier, so a file can be reached only by following a download offered on a screen the requester can already open. | not-testable |
+| R-8.6 | not testable: No observation returns who uploaded a file or when it was stored. file_download names contents, name on save, disposition, content type and refusals; the attachment control names rows and errors. With neither value readable, neither the recording of them nor their being unchangeable afterwards can be asserted. | not-testable |
+| R-8.7 | not testable: The given/when/then needs a file that exists, that one person may read and another may not, addressed by both. No observation returns a stored file's identifier, and the only way the surface reaches a file is by following a download offered on a screen the requester can already open — which is by construction a file they may read. So refused_when_not_permitted cannot be reached for a file that exists, and the administrator's override cannot be told from the administrator simply being able to open the screen the download hangs on. | not-testable |
+| R-8.8 | — | not-testable |
+| R-8.9 | — | not-testable |
+| R-8.10 | acceptance/files/R-8.10.spec.ts | fail |
+| R-8.11 | not testable: The surface has one address for a stored file, file-download, and its route asks for the content. No page, action or observation makes the without-content request or returns what it answers with: nothing names a file's identifier, and nothing names the date it was stored, so the description the criterion says comes back cannot be read. | not-testable |
+| R-8.12 | acceptance/files/R-8.12.spec.ts | pass |
+| R-8.13 | not testable: No observation reports the dimensions of a stored image. The image picker names current_image and chosen_image_preview, both free text, and no action states the size of the image it uploads, so neither the 2000-by-300 given nor the 500-pixel outcome can be established or read. | not-testable |
+| R-8.14 | — | fail |
+| R-8.15 | — | not-testable |
+| R-8.16 | not testable: The working directory is on the service's own machine. Nothing in the surface or in observables.yaml reads that machine's filesystem — the observables are email, file addresses, exports, a status trigger and counters — so neither the working copy being written nor its being removed afterwards can be seen. | not-testable |
+| R-8.17 | not testable: Two observations are missing. No observation reports an upload refused for size or the message such a refusal carries — file_name_error is about the name, and the file-download refusals are about reading rather than uploading — and no observation reports the size limit stated on the attachment control or the image picker before a file is chosen, which is the half of the criterion about what a person is told in advance. | not-testable |
+| R-8.18 | not testable: Same reach as R-8.4: every upload in the surface is assembled by a control, so a submission with no file part or with malformed read-access information cannot be made. The refusal naming what was wrong, the absence of an entry in the service's error log, and the removal of the working copy are each unobservable as well — no observation names an upload refusal message, and neither the log nor the working directory is an observable. | not-testable |
+| R-8.19 | not testable: That no read access is recorded against the file itself is visible only as its consequence: somebody who may not read the opportunity being refused its attachment. That request cannot be made — a visitor cannot open an unpublished opportunity to follow a download, and no observation returns a file's identifier to ask for it directly — and the surface has no observation reporting what was recorded against a file. | not-testable |
+| R-8.20 | acceptance/files/R-8.20.spec.ts | fail |
+| R-8.21 | acceptance/files/R-8.21.spec.ts | fail |
+| R-8.22 | not testable: The criterion is about who may attach a file, which needs a file uploaded by somebody else to be named as an attachment. No observation returns a stored file's identifier, and no action attaches a file by identifier: add_attachment chooses a file to upload rather than naming one already stored, so the attempt the criterion refuses cannot be made. | not-testable |
+| R-8.23 | acceptance/files/R-8.23.spec.ts | fail |
+| R-8.24 | not testable: No action submits an upload without a read-access statement, or with one naming a kind of access the service does not recognise: the controls that upload settle that statement themselves and offer no way to set or omit it. Nor does any observation report an upload refused as carrying invalid information, so neither the given nor the outcome is reachable. | not-testable |
+| R-8.25 | acceptance/files/R-8.25.spec.ts | fail |
+| R-8.26 | — | not-testable |
+| R-8.27 | acceptance/files/R-8.27.spec.ts | fail |
+| R-8.28 | acceptance/files/R-8.28.spec.ts | fail |
+| R-8.29 | acceptance/files/R-8.29.spec.ts | fail |
+| R-8.30 | acceptance/files/R-8.30.spec.ts | fail |
+| R-8.31 | not testable: Withdrawing the read paths a file held through an association can only be seen by asking for the file after the association is gone, which needs the file's identifier — no observation returns one. The second half, a file that no record refers to being identifiable as detached, names no surface at all: nothing in the pages, and nothing in observables.yaml, reports whether a stored file is still referred to. | not-testable |
 
 ### R-8.1 · v1 · confirmed · accepted
 

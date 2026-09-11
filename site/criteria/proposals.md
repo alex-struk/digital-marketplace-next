@@ -2,48 +2,48 @@
 
 ## Tests
 
-| id | test |
-| --- | --- |
-| R-2.1 | acceptance/proposals/R-2.1.spec.ts |
-| R-2.2 | acceptance/proposals/R-2.2.spec.ts |
-| R-2.3 | acceptance/proposals/R-2.3.spec.ts |
-| R-2.4 | acceptance/proposals/R-2.4.spec.ts |
-| R-2.5 | not testable: The when is an opportunity's proposal deadline passing and the opportunity closing. A published opportunity cannot be given a deadline in the past — one that is not a draft is refused a deadline earlier than today (R-1.14) — and no page, action or observation in the surface makes the request that runs the closing hook (see R-1.1). Without the closure no submitted proposal ever moves to review, and the anonymous_proponent_name observations on the proposal surfaces have nothing to return. |
-| R-2.6 | — |
-| R-2.7 | acceptance/proposals/R-2.7.spec.ts |
-| R-2.8 | — |
-| R-2.9 | acceptance/proposals/R-2.9.spec.ts |
-| R-2.10 | acceptance/proposals/R-2.10.spec.ts |
-| R-2.11 | acceptance/proposals/R-2.11.spec.ts |
-| R-2.12 | acceptance/proposals/R-2.12.spec.ts |
-| R-2.13 | acceptance/proposals/R-2.13.spec.ts |
-| R-2.14 | acceptance/proposals/R-2.14.spec.ts |
-| R-2.15 | not testable: The given is an opportunity whose proposal deadline has passed, which cannot be produced: a published opportunity is refused a deadline earlier than today, and nothing in the surface makes a deadline pass (see R-1.1). Neither refusal the criterion names — a draft submitted after the deadline and a Code With Us proposal created already marked as submitted after it — has an opportunity to be made against, and the absence of the same guard from the other two programs cannot be shown either. |
-| R-2.16 | acceptance/proposals/R-2.16.spec.ts |
-| R-2.17 | acceptance/proposals/R-2.17.spec.ts |
-| R-2.18 | acceptance/proposals/R-2.18.spec.ts |
-| R-2.19 | acceptance/proposals/R-2.19.spec.ts |
-| R-2.20 | acceptance/proposals/R-2.20.spec.ts |
-| R-2.21 | acceptance/proposals/R-2.21.spec.ts |
-| R-2.22 | acceptance/proposals/R-2.22.spec.ts |
-| R-2.23 | acceptance/proposals/R-2.23.spec.ts |
-| R-2.24 | acceptance/proposals/R-2.24.spec.ts |
-| R-2.25 | acceptance/proposals/R-2.25.spec.ts |
-| R-2.26 | not testable: The given is a Code With Us proposal under review. A proposal reaches review only when its opportunity closes at its proposal deadline, which the surface cannot bring about (see R-1.1). enter_score on proposal-cwu-view therefore has no proposal to act on, and the score, the move to evaluated and the refusals of an out-of-range score have nothing to be read on. |
-| R-2.27 | not testable: The given is an opportunity in evaluation with proposals under review, which lies beyond a closure the surface cannot bring about (see R-1.1). No proposal can be scored, so the last one cannot be scored, and the move to processing the criterion is about never has its trigger. |
-| R-2.28 | not testable: The given is a Sprint With Us opportunity in its code challenge stage, two stages past a closure the surface cannot bring about (see R-1.1). The observation the refusal would be read from, wrong_stage_error, exists on both the Sprint With Us and Team With Us proposal views, but nothing in the surface can put an opportunity in front of it. |
-| R-2.29 | not testable: The given is an opportunity whose questions have been scored and whose panel is finalising its agreed scores. Question scoring happens after the opportunity closes, and no page, action or observation closes one (see R-1.1), so no proposal can be given a question score, none can fall below a minimum, and finalize_question_consensuses has nothing to rank. |
-| R-2.30 | not testable: The given is two proposals still in contention with a scenario score being entered against one of them. Every score in the sequence comes after the opportunity closes, which the surface cannot bring about (see R-1.1), so the price_score observations on the two proposal views have nothing to return and the lowest bid among proposals in contention is never worked out. |
-| R-2.31 | not testable: The given is a proposal carrying a score for every stage. No stage score can be entered, because every one of them comes after a closure the surface cannot bring about (see R-1.1), so total_score and rank have nothing to return and no two proposals can be ranked against each other. |
-| R-2.32 | not testable: The given is a vendor's proposal that has been scored. Scoring needs the opportunity to have closed, which the surface cannot bring about (see R-1.1), so the withholding cannot be told from the score simply not existing yet: score and rank read as empty on an unscored proposal for a reason that has nothing to do with who is looking. The second half needs the proposal to become awarded or not awarded, which needs an award. |
-| R-2.33 | not testable: The given is an opportunity carrying an evaluated proposal. A proposal becomes evaluated only after its opportunity closes and is scored, and the surface closes no opportunity (see R-1.1), so award_proposal has nothing to act on and no other proposal can be shown to have been marked not awarded. |
-| R-2.34 | not testable: The criterion's given is a proposal at a stage after the opportunity has closed, and no page, action or observation closes an opportunity (see R-1.1). disqualify_proposal is offered on all three proposal views, but with no proposal past the published state there is nothing to disqualify, and the written reason and its length bounds have nothing to be checked against. |
-| D-proposals-35 | — |
-| R-2.35 | acceptance/proposals/R-2.35.spec.ts |
-| R-2.36 | acceptance/proposals/R-2.36.spec.ts |
-| D-proposals-37 | — |
-| R-2.37 | acceptance/proposals/R-2.37.spec.ts |
-| R-2.38 | acceptance/proposals/R-2.38.spec.ts |
+| id | test | old |
+| --- | --- | --- |
+| R-2.1 | acceptance/proposals/R-2.1.spec.ts | fail |
+| R-2.2 | acceptance/proposals/R-2.2.spec.ts | fail |
+| R-2.3 | acceptance/proposals/R-2.3.spec.ts | fail |
+| R-2.4 | acceptance/proposals/R-2.4.spec.ts | fail |
+| R-2.5 | not testable: The when is an opportunity's proposal deadline passing and the opportunity closing. A published opportunity cannot be given a deadline in the past — one that is not a draft is refused a deadline earlier than today (R-1.14) — and no page, action or observation in the surface makes the request that runs the closing hook (see R-1.1). Without the closure no submitted proposal ever moves to review, and the anonymous_proponent_name observations on the proposal surfaces have nothing to return. | not-testable |
+| R-2.6 | — |  |
+| R-2.7 | acceptance/proposals/R-2.7.spec.ts | fail |
+| R-2.8 | — |  |
+| R-2.9 | acceptance/proposals/R-2.9.spec.ts | fail |
+| R-2.10 | acceptance/proposals/R-2.10.spec.ts | fail |
+| R-2.11 | acceptance/proposals/R-2.11.spec.ts | fail |
+| R-2.12 | acceptance/proposals/R-2.12.spec.ts | fail |
+| R-2.13 | acceptance/proposals/R-2.13.spec.ts | fail |
+| R-2.14 | acceptance/proposals/R-2.14.spec.ts | fail |
+| R-2.15 | not testable: The given is an opportunity whose proposal deadline has passed, which cannot be produced: a published opportunity is refused a deadline earlier than today, and nothing in the surface makes a deadline pass (see R-1.1). Neither refusal the criterion names — a draft submitted after the deadline and a Code With Us proposal created already marked as submitted after it — has an opportunity to be made against, and the absence of the same guard from the other two programs cannot be shown either. | not-testable |
+| R-2.16 | acceptance/proposals/R-2.16.spec.ts | fail |
+| R-2.17 | acceptance/proposals/R-2.17.spec.ts | fail |
+| R-2.18 | acceptance/proposals/R-2.18.spec.ts | fail |
+| R-2.19 | acceptance/proposals/R-2.19.spec.ts | fail |
+| R-2.20 | acceptance/proposals/R-2.20.spec.ts | fail |
+| R-2.21 | acceptance/proposals/R-2.21.spec.ts | fail |
+| R-2.22 | acceptance/proposals/R-2.22.spec.ts | fail |
+| R-2.23 | acceptance/proposals/R-2.23.spec.ts | fail |
+| R-2.24 | acceptance/proposals/R-2.24.spec.ts | fail |
+| R-2.25 | acceptance/proposals/R-2.25.spec.ts | fail |
+| R-2.26 | not testable: The given is a Code With Us proposal under review. A proposal reaches review only when its opportunity closes at its proposal deadline, which the surface cannot bring about (see R-1.1). enter_score on proposal-cwu-view therefore has no proposal to act on, and the score, the move to evaluated and the refusals of an out-of-range score have nothing to be read on. | not-testable |
+| R-2.27 | not testable: The given is an opportunity in evaluation with proposals under review, which lies beyond a closure the surface cannot bring about (see R-1.1). No proposal can be scored, so the last one cannot be scored, and the move to processing the criterion is about never has its trigger. | not-testable |
+| R-2.28 | not testable: The given is a Sprint With Us opportunity in its code challenge stage, two stages past a closure the surface cannot bring about (see R-1.1). The observation the refusal would be read from, wrong_stage_error, exists on both the Sprint With Us and Team With Us proposal views, but nothing in the surface can put an opportunity in front of it. | not-testable |
+| R-2.29 | not testable: The given is an opportunity whose questions have been scored and whose panel is finalising its agreed scores. Question scoring happens after the opportunity closes, and no page, action or observation closes one (see R-1.1), so no proposal can be given a question score, none can fall below a minimum, and finalize_question_consensuses has nothing to rank. | not-testable |
+| R-2.30 | not testable: The given is two proposals still in contention with a scenario score being entered against one of them. Every score in the sequence comes after the opportunity closes, which the surface cannot bring about (see R-1.1), so the price_score observations on the two proposal views have nothing to return and the lowest bid among proposals in contention is never worked out. | not-testable |
+| R-2.31 | not testable: The given is a proposal carrying a score for every stage. No stage score can be entered, because every one of them comes after a closure the surface cannot bring about (see R-1.1), so total_score and rank have nothing to return and no two proposals can be ranked against each other. | not-testable |
+| R-2.32 | not testable: The given is a vendor's proposal that has been scored. Scoring needs the opportunity to have closed, which the surface cannot bring about (see R-1.1), so the withholding cannot be told from the score simply not existing yet: score and rank read as empty on an unscored proposal for a reason that has nothing to do with who is looking. The second half needs the proposal to become awarded or not awarded, which needs an award. | not-testable |
+| R-2.33 | not testable: The given is an opportunity carrying an evaluated proposal. A proposal becomes evaluated only after its opportunity closes and is scored, and the surface closes no opportunity (see R-1.1), so award_proposal has nothing to act on and no other proposal can be shown to have been marked not awarded. | not-testable |
+| R-2.34 | not testable: The criterion's given is a proposal at a stage after the opportunity has closed, and no page, action or observation closes an opportunity (see R-1.1). disqualify_proposal is offered on all three proposal views, but with no proposal past the published state there is nothing to disqualify, and the written reason and its length bounds have nothing to be checked against. | not-testable |
+| D-proposals-35 | — |  |
+| R-2.35 | acceptance/proposals/R-2.35.spec.ts | fail |
+| R-2.36 | acceptance/proposals/R-2.36.spec.ts | fail |
+| D-proposals-37 | — |  |
+| R-2.37 | acceptance/proposals/R-2.37.spec.ts | fail |
+| R-2.38 | acceptance/proposals/R-2.38.spec.ts | fail |
 
 ### R-2.1 · v1 · confirmed · accepted
 
