@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-11T02:47:37.809Z | policy-v6 | G-POL | approve | agent:tech-lead | agent-held, unsampled | $1.0059275 | sample |
 | 2026-09-11T02:33:05.782Z | policy-v5 | G-POL | approve | agent:tech-lead | agent-held, unsampled | $0.9082300000000001 | sample |
 | 2026-09-11T00:05:11.751Z | bind-adapter-old | G3 | return | tech-lead | human |  |  |
 | 2026-09-10T20:45:57.042Z | policy-v4 | G-POL | approve | agent:tech-lead | agent-held, unsampled | $1.0093640000000001 | sample |

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>policy-v6 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">56</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">56</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">59</span></a></li><li><a href="../runs.html">Run log <span class="count">6</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>policy-v6</h1>
+<p class="lede">G-POL · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G-POL</td></tr><tr><th scope="row">opened</th><td>2026-09-11 02:45</td></tr><tr><th scope="row">holder</th><td>agent:tech-lead</td></tr></tbody></table></div>
+<div class="body"><h2>Correct the three turn budgets the runner cannot honour?</h2>
+<p><strong>Recommendation.</strong> Yes: bind-adapter 999, build 400, review 200. policy-v5 set bind-adapter to 1200, which the runner reads as a token budget and ignores, so the stage ran with the 40-turn default and hit its cap; 999 is the largest value that is readable as a turn count. build 3000000 and review 1000000 are the pre-migration leftovers policy-v3&#39;s third condition said would be converted in a proposal of their own.</p>
+<p>Why this proposal exists. policy-v5 was approved on evidence that was correct about the problem and wrong about the remedy: the stage had genuinely exhausted its budget, but 1200 is not a number the runner can act on. agentic-sdlc 2d9585e makes that refusable rather than silent - checks now fails on any budget at or above 1000, and the runner honours an accepted budget as written rather than halving it at 400 as it used to. This project&#39;s checks fail on all three values today, which is the new check doing its job. Sizing. bind-adapter: the surface is 79 pages and 680 actions and observations; 999 turns is about 1.5 per member including navigation, and is the ceiling rather than an estimate, because no larger number is expressible. If 999 is not enough the answer is to split the stage, not to raise the cap again. build and review: neither stage is implemented yet, so these are placeholders chosen to be fail-closed rather than measured; both are raised by the same one-line route once a real run has a turn count to cite.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:tech-lead (persona agent) on 2026-09-11 02:47.</p>
+<div class="body"><p>Every load-bearing claim verifies in this repo: journal 059 ends at 41 turns with error_max_turns, which is the 40-turn default and proves 1200 was discarded rather than honoured, while journal 058 ended at 201 against a 200 cap, showing sub-threshold budgets are applied as written; tests/generated/surface.d.ts declares 79 page interfaces and 761 method members, i.e. 680 actions and observations once the 79 open() navigators and two session members are excluded, matching the cited surface exactly, so at roughly 1.5 turns per member 999 is the expressible ceiling rather than padded headroom. The build and review conversions are the separate proposal policy-v3&#39;s third condition required and policy-v5 recorded as still unmet, and they tighten a dead unit into a fail-closed turn count rather than loosening anything. Scope matches the evidence: one config line plus the proposal page and run record, with gates, rungs, triage, egress and the skills lockfile untouched. constitution.md is not in the diff so no platform article changes and that escalation trigger does not fire; tier is STANDARD and no stage confidence below threshold is reported. The five check warnings are pre-existing superseded-requirement warnings on tests this diff does not touch. The pipeline-side claims about the 1000 threshold could not be checked here and the lockfile pins b7f642f rather than the cited 2d9585e, but the 41-turn run evidences the same behaviour from this project&#39;s side, so the gap does not touch the change.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>policy-v5&#39;s first condition is still unmet and carries forward: the policy-v5 proposal page still reads &#39;as did the run before it&#39; and has not been amended since its ruling. Journal 057 failed at one turn and zero cost on an expired OAuth session, an authentication failure and not a cap hit, and the page is corrected to say so before the next budget proposal is opened.</li><li>The next bind-adapter run under 999 reports how many of the 680 members it bound before it ended, whether or not it hits the cap, so the split-or-raise decision has measured data. If 999 is exhausted, the answer is the stage split this proposal commits to; a further raise argued from the same 1.5-turns-per-member estimate will be returned.</li><li>build 400 and review 200 are unmeasured placeholders and are acknowledged as such. Either is raised only by its own one-line proposal citing a real run&#39;s turn count, never folded into a bind-adapter budget change.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

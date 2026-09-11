@@ -1,5 +1,11 @@
 # Journal
 
+## 059 · bind-adapter · 2026-09-11
+
+cost $3.3286480000000003 · turns 41
+
+the agent turn reported failure with no output; the session hit the turn cap (error_max_turns)
+
 ## 058 · bind-adapter · 2026-09-11
 
 cost $21.81188 · turns 201
