@@ -235,6 +235,24 @@ personas:
       session-route: { route: /auth/createsessionvendor/10 }
       sandbox-idp: { username: test-vendor-10 }
 
+  # A vendor who owns an organization of their own and has a submitted proposal against
+  # the same opportunity as somebody else. A relationship rather than a new kind of
+  # account, but the proposals domain's rules about one proponent not being shown
+  # another's work need two proponents a test can act as, and the criteria about ranking
+  # and about a second of three proponents need a third who is merely present.
+  - id: competing-vendor
+    domain: proposals
+    can:
+      [
+        submit a proposal against an opportunity somebody else has also answered,
+        view their own proposal,
+        be refused another proponent's proposal,
+        withdraw their own proposal
+      ]
+    sign_in:
+      session-route: { route: /auth/createsessionvendor/11 }
+      sandbox-idp: { username: test-vendor-11 }
+
   - id: evaluation-panel-member
     domain: proposals
     can:

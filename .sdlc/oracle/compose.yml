@@ -42,7 +42,9 @@
 #
 # One thing this file does not settle: the database keeps the base file's named volume, so
 # it survives between runs, and the seed is a plain set of inserts that is not idempotent —
-# applying it twice fails on the primary keys. Remove the volume to start over.
+# applying it twice fails on the primary keys. "sdlc oracle down" removes the volume along
+# with the containers, so an up-down-up cycle re-migrates and re-seeds a fresh database;
+# a compose run by hand has to remove the volume itself.
 
 services:
   app:

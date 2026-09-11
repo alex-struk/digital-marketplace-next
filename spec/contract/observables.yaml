@@ -33,6 +33,18 @@ email:
       Absence of a message is therefore evidence of what the application decided, not of
       whether the mail server was up, and a test asserting absence should first prove
       the catcher is reachable.
+    - >-
+      Some messages the code sets out to send do not arrive. The messages that follow an
+      ordinary request — an invitation to join an organization, for one — reach the
+      catcher within the same second. The messages the deadline hook sets out to send when
+      it closes an opportunity do not. Closing a Sprint With Us and a Team With Us
+      opportunity, each with an evaluation panel of two, left nothing in the catcher and
+      nothing in the application's log. The hook hands the notification off without
+      waiting for it and does so from inside the transaction that is closing the
+      opportunity, so whatever happens to it happens out of sight. A criterion about who
+      is told when an opportunity closes should therefore be measured against the target
+      rather than assumed, and a test that expects such a message and does not get one has
+      found something real.
     - Subjects carry a leading test marker when the application is configured to show
       one. The oracle turns that marker on, so assert on subjects by what they contain
       rather than by what they equal.
