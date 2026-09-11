@@ -4,6 +4,8 @@
 
 - 13:44:11 propose policy-v4 at G-POL
 - 13:45:57 rule policy-v4 approve at G-POL by agent:tech-lead (agent)
+- 16:49:31 oracle down old
+- 16:50:27 oracle up old: http://localhost:3000 (local port 3000)
 
 # Run record 2026-09-09
 
