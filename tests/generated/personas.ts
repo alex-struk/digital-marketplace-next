@@ -291,6 +291,21 @@ export const persona = {
       }
     }
   },
+  "administratorOther": {
+    "id": "administrator-other",
+    "can": [
+      "manage pages",
+      "hold a page open while somebody else saves it"
+    ],
+    "signIn": {
+      "session-route": {
+        "unavailable": "/auth/createsessionadmin mints a session for one fixed account, looked up by the identity-provider id \"test-admin\", and takes no parameter. No route reaches a second administrator, so this persona can be seeded and observed on the oracle but never acted as."
+      },
+      "sandbox-idp": {
+        "username": "admin-second"
+      }
+    }
+  },
   "publicSectorStaffOther": {
     "id": "public-sector-staff-other",
     "can": [

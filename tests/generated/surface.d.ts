@@ -20,6 +20,7 @@ export interface Surface {
   opportunityTwuView: OpportunityTwuViewPage;
   opportunityTwuEdit: OpportunityTwuEditPage;
   opportunityTwuComplete: OpportunityTwuCompletePage;
+  scheduledTransitionTrigger: ScheduledTransitionTriggerPage;
   proposalCwuCreate: ProposalCwuCreatePage;
   proposalCwuEdit: ProposalCwuEditPage;
   proposalCwuView: ProposalCwuViewPage;
@@ -53,6 +54,11 @@ export interface Surface {
   userProfileCapabilities: UserProfileCapabilitiesPage;
   userProfileNotifications: UserProfileNotificationsPage;
   userProfileLegal: UserProfileLegalPage;
+  userProfileSelf: UserProfileSelfPage;
+  userProfileSelfCapabilities: UserProfileSelfCapabilitiesPage;
+  userProfileSelfNotifications: UserProfileSelfNotificationsPage;
+  userProfileSelfLegal: UserProfileSelfLegalPage;
+  organizationUserMembershipsSelf: OrganizationUserMembershipsSelfPage;
   evaluationPanelDashboard: EvaluationPanelDashboardPage;
   evaluationPanelSwu: EvaluationPanelSwuPage;
   evaluationPanelTwu: EvaluationPanelTwuPage;
@@ -75,10 +81,13 @@ export interface Surface {
   notificationTermsBroadcast: NotificationTermsBroadcastPage;
   notificationEmailReference: NotificationEmailReferencePage;
   contentFooter: ContentFooterPage;
+  contentServiceLevelAgreementLink: ContentServiceLevelAgreementLinkPage;
   contentList: ContentListPage;
   contentCreate: ContentCreatePage;
   contentEdit: ContentEditPage;
   contentView: ContentViewPage;
+  fileUpload: FileUploadPage;
+  fileDescription: FileDescriptionPage;
   fileDownload: FileDownloadPage;
   fileAttachmentControl: FileAttachmentControlPage;
   fileImagePicker: FileImagePickerPage;
@@ -86,7 +95,7 @@ export interface Surface {
 }
 
 export interface HomePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   browseOpportunities(input?: unknown): Promise<void>;
   signIn(input?: unknown): Promise<void>;
   signUp(input?: unknown): Promise<void>;
@@ -96,7 +105,7 @@ export interface HomePage {
 }
 
 export interface OpportunityDashboardPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   createOpportunity(input?: unknown): Promise<void>;
   openOpportunity(input?: unknown): Promise<void>;
   myOpportunitiesTable(): Promise<string>;
@@ -107,7 +116,7 @@ export interface OpportunityDashboardPage {
 }
 
 export interface OpportunityListPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   filterByProgram(input?: unknown): Promise<void>;
   filterByStatus(input?: unknown): Promise<void>;
   filterRemoteOnly(input?: unknown): Promise<void>;
@@ -121,7 +130,7 @@ export interface OpportunityListPage {
 }
 
 export interface OpportunityProgramSelectPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   chooseCodeWithUs(input?: unknown): Promise<void>;
   chooseSprintWithUs(input?: unknown): Promise<void>;
   chooseTeamWithUs(input?: unknown): Promise<void>;
@@ -130,7 +139,7 @@ export interface OpportunityProgramSelectPage {
 }
 
 export interface OpportunityCwuCreatePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   saveDraft(input?: unknown): Promise<void>;
   submitForReview(input?: unknown): Promise<void>;
   publish(input?: unknown): Promise<void>;
@@ -139,10 +148,14 @@ export interface OpportunityCwuCreatePage {
 }
 
 export interface OpportunityCwuViewPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   toggleWatch(input?: unknown): Promise<void>;
   startProposal(input?: unknown): Promise<void>;
+  opportunityIdentifier(): Promise<string>;
   status(): Promise<string>;
+  publishedDate(): Promise<string>;
+  createdByName(): Promise<string>;
+  lastChangedByName(): Promise<string>;
   proposalDeadline(): Promise<string>;
   reward(): Promise<string>;
   addenda(): Promise<string>;
@@ -150,7 +163,7 @@ export interface OpportunityCwuViewPage {
 }
 
 export interface OpportunityCwuEditPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   editDetails(input?: unknown): Promise<void>;
   submitForReview(input?: unknown): Promise<void>;
   publish(input?: unknown): Promise<void>;
@@ -158,6 +171,9 @@ export interface OpportunityCwuEditPage {
   deleteOpportunity(input?: unknown): Promise<void>;
   addAddendum(input?: unknown): Promise<void>;
   addNote(input?: unknown): Promise<void>;
+  opportunityIdentifier(): Promise<string>;
+  createdByName(): Promise<string>;
+  lastChangedByName(): Promise<string>;
   summaryTab(): Promise<string>;
   opportunityTab(): Promise<string>;
   addendaTab(): Promise<string>;
@@ -169,12 +185,12 @@ export interface OpportunityCwuEditPage {
 }
 
 export interface OpportunityCwuCompletePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   fullReport(): Promise<string>;
 }
 
 export interface OpportunitySwuCreatePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   saveDraft(input?: unknown): Promise<void>;
   submitForReview(input?: unknown): Promise<void>;
   publish(input?: unknown): Promise<void>;
@@ -186,10 +202,14 @@ export interface OpportunitySwuCreatePage {
 }
 
 export interface OpportunitySwuViewPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   toggleWatch(input?: unknown): Promise<void>;
   startProposal(input?: unknown): Promise<void>;
+  opportunityIdentifier(): Promise<string>;
   status(): Promise<string>;
+  publishedDate(): Promise<string>;
+  createdByName(): Promise<string>;
+  lastChangedByName(): Promise<string>;
   proposalDeadline(): Promise<string>;
   totalMaxBudget(): Promise<string>;
   phases(): Promise<string>;
@@ -198,7 +218,7 @@ export interface OpportunitySwuViewPage {
 }
 
 export interface OpportunitySwuEditPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   editDetails(input?: unknown): Promise<void>;
   submitForReview(input?: unknown): Promise<void>;
   publish(input?: unknown): Promise<void>;
@@ -209,6 +229,9 @@ export interface OpportunitySwuEditPage {
   editEvaluationPanel(input?: unknown): Promise<void>;
   finalizeQuestionConsensuses(input?: unknown): Promise<void>;
   startTeamScenario(input?: unknown): Promise<void>;
+  opportunityIdentifier(): Promise<string>;
+  createdByName(): Promise<string>;
+  lastChangedByName(): Promise<string>;
   summaryTab(): Promise<string>;
   opportunityTab(): Promise<string>;
   addendaTab(): Promise<string>;
@@ -222,12 +245,12 @@ export interface OpportunitySwuEditPage {
 }
 
 export interface OpportunitySwuCompletePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   fullReport(): Promise<string>;
 }
 
 export interface OpportunityTwuCreatePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   saveDraft(input?: unknown): Promise<void>;
   submitForReview(input?: unknown): Promise<void>;
   publish(input?: unknown): Promise<void>;
@@ -239,10 +262,14 @@ export interface OpportunityTwuCreatePage {
 }
 
 export interface OpportunityTwuViewPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   toggleWatch(input?: unknown): Promise<void>;
   startProposal(input?: unknown): Promise<void>;
+  opportunityIdentifier(): Promise<string>;
   status(): Promise<string>;
+  publishedDate(): Promise<string>;
+  createdByName(): Promise<string>;
+  lastChangedByName(): Promise<string>;
   proposalDeadline(): Promise<string>;
   maxBudget(): Promise<string>;
   resources(): Promise<string>;
@@ -251,7 +278,7 @@ export interface OpportunityTwuViewPage {
 }
 
 export interface OpportunityTwuEditPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   editDetails(input?: unknown): Promise<void>;
   submitForReview(input?: unknown): Promise<void>;
   publish(input?: unknown): Promise<void>;
@@ -260,6 +287,9 @@ export interface OpportunityTwuEditPage {
   addAddendum(input?: unknown): Promise<void>;
   editEvaluationPanel(input?: unknown): Promise<void>;
   finalizeQuestionConsensuses(input?: unknown): Promise<void>;
+  opportunityIdentifier(): Promise<string>;
+  createdByName(): Promise<string>;
+  lastChangedByName(): Promise<string>;
   summaryTab(): Promise<string>;
   opportunityTab(): Promise<string>;
   addendaTab(): Promise<string>;
@@ -272,12 +302,18 @@ export interface OpportunityTwuEditPage {
 }
 
 export interface OpportunityTwuCompletePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   fullReport(): Promise<string>;
 }
 
+export interface ScheduledTransitionTriggerPage {
+  open(): Promise<void>;
+  runPendingTransitions(input?: unknown): Promise<void>;
+  serviceIsUp(): Promise<string>;
+}
+
 export interface ProposalCwuCreatePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   chooseProponentIndividual(input?: unknown): Promise<void>;
   chooseProponentOrganization(input?: unknown): Promise<void>;
   addAttachment(input?: unknown): Promise<void>;
@@ -293,7 +329,7 @@ export interface ProposalCwuCreatePage {
 }
 
 export interface ProposalCwuEditPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string; proposalId: string }): Promise<void>;
   startEditing(input?: unknown): Promise<void>;
   saveChanges(input?: unknown): Promise<void>;
   saveChangesAndSubmit(input?: unknown): Promise<void>;
@@ -302,6 +338,8 @@ export interface ProposalCwuEditPage {
   deleteProposal(input?: unknown): Promise<void>;
   addAttachment(input?: unknown): Promise<void>;
   removeAttachment(input?: unknown): Promise<void>;
+  proposalIdentifier(): Promise<string>;
+  opportunityIdentifier(): Promise<string>;
   proposalTab(): Promise<string>;
   status(): Promise<string>;
   submittedAt(): Promise<string>;
@@ -311,10 +349,11 @@ export interface ProposalCwuEditPage {
 }
 
 export interface ProposalCwuViewPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string; proposalId: string }): Promise<void>;
   enterScore(input?: unknown): Promise<void>;
   awardProposal(input?: unknown): Promise<void>;
   disqualifyProposal(input?: unknown): Promise<void>;
+  proposalIdentifier(): Promise<string>;
   proposalTab(): Promise<string>;
   historyTab(): Promise<string>;
   proponent(): Promise<string>;
@@ -324,17 +363,17 @@ export interface ProposalCwuViewPage {
 }
 
 export interface ProposalCwuExportOnePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string; proposalId: string }): Promise<void>;
   exportedProposal(): Promise<string>;
 }
 
 export interface ProposalCwuExportAllPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   exportedProposal(): Promise<string>;
 }
 
 export interface ProposalSwuCreatePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   chooseOrganization(input?: unknown): Promise<void>;
   addPhaseTeamMember(input?: unknown): Promise<void>;
   setScrumMaster(input?: unknown): Promise<void>;
@@ -354,13 +393,15 @@ export interface ProposalSwuCreatePage {
 }
 
 export interface ProposalSwuEditPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string; proposalId: string }): Promise<void>;
   startEditing(input?: unknown): Promise<void>;
   saveChanges(input?: unknown): Promise<void>;
   saveChangesAndSubmit(input?: unknown): Promise<void>;
   submitProposal(input?: unknown): Promise<void>;
   withdrawProposal(input?: unknown): Promise<void>;
   deleteProposal(input?: unknown): Promise<void>;
+  proposalIdentifier(): Promise<string>;
+  opportunityIdentifier(): Promise<string>;
   proposalTab(): Promise<string>;
   scoresheetTab(): Promise<string>;
   status(): Promise<string>;
@@ -370,13 +411,14 @@ export interface ProposalSwuEditPage {
 }
 
 export interface ProposalSwuViewPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string; proposalId: string }): Promise<void>;
   scoreCodeChallenge(input?: unknown): Promise<void>;
   screenInToTeamScenario(input?: unknown): Promise<void>;
   screenOutFromTeamScenario(input?: unknown): Promise<void>;
   scoreTeamScenario(input?: unknown): Promise<void>;
   awardProposal(input?: unknown): Promise<void>;
   disqualifyProposal(input?: unknown): Promise<void>;
+  proposalIdentifier(): Promise<string>;
   proposalTab(): Promise<string>;
   teamQuestionsTab(): Promise<string>;
   codeChallengeTab(): Promise<string>;
@@ -391,18 +433,18 @@ export interface ProposalSwuViewPage {
 }
 
 export interface ProposalSwuExportOnePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string; proposalId: string }): Promise<void>;
   exportedProposal(): Promise<string>;
   anonymousProponentName(): Promise<string>;
 }
 
 export interface ProposalSwuExportAllPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   exportedProposal(): Promise<string>;
 }
 
 export interface ProposalTwuCreatePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   chooseOrganization(input?: unknown): Promise<void>;
   addTeamMemberForResource(input?: unknown): Promise<void>;
   setHourlyRate(input?: unknown): Promise<void>;
@@ -418,13 +460,15 @@ export interface ProposalTwuCreatePage {
 }
 
 export interface ProposalTwuEditPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string; proposalId: string }): Promise<void>;
   startEditing(input?: unknown): Promise<void>;
   saveChanges(input?: unknown): Promise<void>;
   saveChangesAndSubmit(input?: unknown): Promise<void>;
   submitProposal(input?: unknown): Promise<void>;
   withdrawProposal(input?: unknown): Promise<void>;
   deleteProposal(input?: unknown): Promise<void>;
+  proposalIdentifier(): Promise<string>;
+  opportunityIdentifier(): Promise<string>;
   proposalTab(): Promise<string>;
   scoresheetTab(): Promise<string>;
   status(): Promise<string>;
@@ -434,13 +478,14 @@ export interface ProposalTwuEditPage {
 }
 
 export interface ProposalTwuViewPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string; proposalId: string }): Promise<void>;
   scoreResourceQuestions(input?: unknown): Promise<void>;
   screenInToChallenge(input?: unknown): Promise<void>;
   screenOutFromChallenge(input?: unknown): Promise<void>;
   scoreChallenge(input?: unknown): Promise<void>;
   awardProposal(input?: unknown): Promise<void>;
   disqualifyProposal(input?: unknown): Promise<void>;
+  proposalIdentifier(): Promise<string>;
   proposalTab(): Promise<string>;
   resourceQuestionsTab(): Promise<string>;
   challengeTab(): Promise<string>;
@@ -453,17 +498,17 @@ export interface ProposalTwuViewPage {
 }
 
 export interface ProposalTwuExportOnePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string; proposalId: string }): Promise<void>;
   exportedProposal(): Promise<string>;
 }
 
 export interface ProposalTwuExportAllPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   exportedProposal(): Promise<string>;
 }
 
 export interface ProposalVendorDashboardPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   showMyProposals(input?: unknown): Promise<void>;
   showOrgProposals(input?: unknown): Promise<void>;
   myProposalsTable(): Promise<string>;
@@ -474,12 +519,12 @@ export interface ProposalVendorDashboardPage {
 }
 
 export interface ProposalListStubPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   placeholderText(): Promise<string>;
 }
 
 export interface OrganizationListPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   changePage(input?: unknown): Promise<void>;
   openOrganization(input?: unknown): Promise<void>;
   createOrganization(input?: unknown): Promise<void>;
@@ -489,10 +534,11 @@ export interface OrganizationListPage {
   swuQualifiedMark(): Promise<string>;
   twuQualifiedMark(): Promise<string>;
   pagination(): Promise<string>;
+  refusedWhenNotPermitted(): Promise<string>;
 }
 
 export interface OrganizationCreatePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   createOrganization(input?: unknown): Promise<void>;
   cancel(input?: unknown): Promise<void>;
   changeLogo(input?: unknown): Promise<void>;
@@ -501,7 +547,7 @@ export interface OrganizationCreatePage {
 }
 
 export interface OrganizationEditPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { orgId: string }): Promise<void>;
   editOrganization(input?: unknown): Promise<void>;
   saveChanges(input?: unknown): Promise<void>;
   cancelEditing(input?: unknown): Promise<void>;
@@ -516,6 +562,7 @@ export interface OrganizationEditPage {
   saveServiceAreas(input?: unknown): Promise<void>;
   viewSwuTerms(input?: unknown): Promise<void>;
   viewTwuTerms(input?: unknown): Promise<void>;
+  organizationIdentifier(): Promise<string>;
   organizationTab(): Promise<string>;
   teamTab(): Promise<string>;
   swuQualificationTab(): Promise<string>;
@@ -536,10 +583,11 @@ export interface OrganizationEditPage {
   notQualifiedNotice(): Promise<string>;
   changelogEntry(): Promise<string>;
   fieldError(): Promise<string>;
+  invalidMembershipTypeError(): Promise<string>;
 }
 
 export interface OrganizationSwuTermsPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { orgId: string }): Promise<void>;
   acceptTerms(input?: unknown): Promise<void>;
   cancel(input?: unknown): Promise<void>;
   termsBody(): Promise<string>;
@@ -547,7 +595,7 @@ export interface OrganizationSwuTermsPage {
 }
 
 export interface OrganizationTwuTermsPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { orgId: string }): Promise<void>;
   acceptTerms(input?: unknown): Promise<void>;
   cancel(input?: unknown): Promise<void>;
   termsBody(): Promise<string>;
@@ -555,7 +603,7 @@ export interface OrganizationTwuTermsPage {
 }
 
 export interface OrganizationUserMembershipsPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { userId: string }): Promise<void>;
   approveInvitation(input?: unknown): Promise<void>;
   rejectInvitation(input?: unknown): Promise<void>;
   leaveOrganization(input?: unknown): Promise<void>;
@@ -568,10 +616,12 @@ export interface OrganizationUserMembershipsPage {
   swuQualifiedMark(): Promise<string>;
   emptyOwnedMessage(): Promise<string>;
   emptyAffiliatedMessage(): Promise<string>;
+  acceptConfirmation(): Promise<string>;
+  declineConfirmation(): Promise<string>;
 }
 
 export interface UserSignInPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   signInAsVendor(input?: unknown): Promise<void>;
   signInAsPublicSectorEmployee(input?: unknown): Promise<void>;
   goToSignUp(input?: unknown): Promise<void>;
@@ -580,7 +630,7 @@ export interface UserSignInPage {
 }
 
 export interface UserSignUpChooseAccountPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   signUpAsVendor(input?: unknown): Promise<void>;
   signUpAsPublicSectorEmployee(input?: unknown): Promise<void>;
   vendorCard(): Promise<string>;
@@ -588,7 +638,7 @@ export interface UserSignUpChooseAccountPage {
 }
 
 export interface UserSignUpCompletePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   changeAvatar(input?: unknown): Promise<void>;
   acceptAppTerms(input?: unknown): Promise<void>;
   toggleNewOpportunityNotifications(input?: unknown): Promise<void>;
@@ -603,20 +653,20 @@ export interface UserSignUpCompletePage {
 }
 
 export interface UserSignOutPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   signedOutMessage(): Promise<string>;
   signOutFailedMessage(): Promise<string>;
 }
 
 export interface UserNoticePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { noticeId: string }): Promise<void>;
   backToHome(input?: unknown): Promise<void>;
   deactivatedOwnAccountNotice(): Promise<string>;
   signInFailedNotice(): Promise<string>;
 }
 
 export interface UserListPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   searchByName(input?: unknown): Promise<void>;
   openExportContactList(input?: unknown): Promise<void>;
   toggleExportUserType(input?: unknown): Promise<void>;
@@ -633,7 +683,7 @@ export interface UserListPage {
 }
 
 export interface UserProfilePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { userId: string }): Promise<void>;
   editProfile(input?: unknown): Promise<void>;
   saveChanges(input?: unknown): Promise<void>;
   cancelEditing(input?: unknown): Promise<void>;
@@ -643,6 +693,7 @@ export interface UserProfilePage {
   reactivateAccount(input?: unknown): Promise<void>;
   confirmActivationChange(input?: unknown): Promise<void>;
   cancelActivationChange(input?: unknown): Promise<void>;
+  userIdentifier(): Promise<string>;
   profileTab(): Promise<string>;
   capabilitiesTab(): Promise<string>;
   notificationsTab(): Promise<string>;
@@ -662,7 +713,7 @@ export interface UserProfilePage {
 }
 
 export interface UserProfileCapabilitiesPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { userId: string }): Promise<void>;
   toggleCapability(input?: unknown): Promise<void>;
   expandCapabilityDescription(input?: unknown): Promise<void>;
   capabilityRow(): Promise<string>;
@@ -671,7 +722,7 @@ export interface UserProfileCapabilitiesPage {
 }
 
 export interface UserProfileNotificationsPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { userId: string }): Promise<void>;
   toggleNewOpportunityNotifications(input?: unknown): Promise<void>;
   confirmUnsubscribe(input?: unknown): Promise<void>;
   cancelUnsubscribe(input?: unknown): Promise<void>;
@@ -681,7 +732,7 @@ export interface UserProfileNotificationsPage {
 }
 
 export interface UserProfileLegalPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { userId: string }): Promise<void>;
   openAppTerms(input?: unknown): Promise<void>;
   acceptUpdatedTerms(input?: unknown): Promise<void>;
   confirmAcceptUpdatedTerms(input?: unknown): Promise<void>;
@@ -693,8 +744,84 @@ export interface UserProfileLegalPage {
   acceptUpdatedTermsModal(): Promise<string>;
 }
 
+export interface UserProfileSelfPage {
+  open(): Promise<void>;
+  editProfile(input?: unknown): Promise<void>;
+  saveChanges(input?: unknown): Promise<void>;
+  cancelEditing(input?: unknown): Promise<void>;
+  changeAvatar(input?: unknown): Promise<void>;
+  deactivateAccount(input?: unknown): Promise<void>;
+  confirmActivationChange(input?: unknown): Promise<void>;
+  cancelActivationChange(input?: unknown): Promise<void>;
+  userIdentifier(): Promise<string>;
+  profileTab(): Promise<string>;
+  capabilitiesTab(): Promise<string>;
+  notificationsTab(): Promise<string>;
+  legalTab(): Promise<string>;
+  organizationsTab(): Promise<string>;
+  statusBadge(): Promise<string>;
+  accountType(): Promise<string>;
+  idpUsernameReadonly(): Promise<string>;
+  nameField(): Promise<string>;
+  emailField(): Promise<string>;
+  jobTitleField(): Promise<string>;
+  fieldError(): Promise<string>;
+  activationModal(): Promise<string>;
+  signInRequired(): Promise<string>;
+}
+
+export interface UserProfileSelfCapabilitiesPage {
+  open(): Promise<void>;
+  toggleCapability(input?: unknown): Promise<void>;
+  expandCapabilityDescription(input?: unknown): Promise<void>;
+  capabilityRow(): Promise<string>;
+  capabilityChecked(): Promise<string>;
+  capabilityDescription(): Promise<string>;
+}
+
+export interface UserProfileSelfNotificationsPage {
+  open(): Promise<void>;
+  toggleNewOpportunityNotifications(input?: unknown): Promise<void>;
+  confirmUnsubscribe(input?: unknown): Promise<void>;
+  cancelUnsubscribe(input?: unknown): Promise<void>;
+  newOpportunitiesCheckbox(): Promise<string>;
+  notificationEmailAddress(): Promise<string>;
+  unsubscribeModal(): Promise<string>;
+}
+
+export interface UserProfileSelfLegalPage {
+  open(): Promise<void>;
+  openAppTerms(input?: unknown): Promise<void>;
+  acceptUpdatedTerms(input?: unknown): Promise<void>;
+  confirmAcceptUpdatedTerms(input?: unknown): Promise<void>;
+  privacyPolicy(): Promise<string>;
+  appTermsLink(): Promise<string>;
+  acceptedOnNotice(): Promise<string>;
+  termsUpdatedWarning(): Promise<string>;
+  programTermsLinks(): Promise<string>;
+  acceptUpdatedTermsModal(): Promise<string>;
+}
+
+export interface OrganizationUserMembershipsSelfPage {
+  open(): Promise<void>;
+  approveInvitation(input?: unknown): Promise<void>;
+  rejectInvitation(input?: unknown): Promise<void>;
+  leaveOrganization(input?: unknown): Promise<void>;
+  createOrganization(input?: unknown): Promise<void>;
+  openOrganization(input?: unknown): Promise<void>;
+  ownedOrganizationsTable(): Promise<string>;
+  affiliatedOrganizationsTable(): Promise<string>;
+  pendingBadge(): Promise<string>;
+  teamMemberCount(): Promise<string>;
+  swuQualifiedMark(): Promise<string>;
+  emptyOwnedMessage(): Promise<string>;
+  emptyAffiliatedMessage(): Promise<string>;
+  acceptConfirmation(): Promise<string>;
+  declineConfirmation(): Promise<string>;
+}
+
 export interface EvaluationPanelDashboardPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   showMyOpportunities(input?: unknown): Promise<void>;
   showPanelOpportunities(input?: unknown): Promise<void>;
   openOpportunity(input?: unknown): Promise<void>;
@@ -705,7 +832,7 @@ export interface EvaluationPanelDashboardPage {
 }
 
 export interface EvaluationPanelSwuPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   addPanelMember(input?: unknown): Promise<void>;
   removePanelMember(input?: unknown): Promise<void>;
   choosePanelChair(input?: unknown): Promise<void>;
@@ -721,7 +848,7 @@ export interface EvaluationPanelSwuPage {
 }
 
 export interface EvaluationPanelTwuPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   addPanelMember(input?: unknown): Promise<void>;
   removePanelMember(input?: unknown): Promise<void>;
   choosePanelChair(input?: unknown): Promise<void>;
@@ -737,19 +864,19 @@ export interface EvaluationPanelTwuPage {
 }
 
 export interface EvaluationInstructionsSwuPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   instructionsBody(): Promise<string>;
   visibleToEvaluatorsOnly(): Promise<string>;
 }
 
 export interface EvaluationInstructionsTwuPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   instructionsBody(): Promise<string>;
   visibleToEvaluatorsOnly(): Promise<string>;
 }
 
 export interface EvaluationIndividualListSwuPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   openProponentEvaluation(input?: unknown): Promise<void>;
   submitScoresForConsensus(input?: unknown): Promise<void>;
   proponentRow(): Promise<string>;
@@ -761,7 +888,7 @@ export interface EvaluationIndividualListSwuPage {
 }
 
 export interface EvaluationIndividualListTwuPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   openProponentEvaluation(input?: unknown): Promise<void>;
   submitScoresForConsensus(input?: unknown): Promise<void>;
   proponentRow(): Promise<string>;
@@ -773,7 +900,7 @@ export interface EvaluationIndividualListTwuPage {
 }
 
 export interface EvaluationConsensusListSwuPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   openProponentConsensus(input?: unknown): Promise<void>;
   submitFinalConsensusScores(input?: unknown): Promise<void>;
   confirmSubmitConsensus(input?: unknown): Promise<void>;
@@ -790,7 +917,7 @@ export interface EvaluationConsensusListSwuPage {
 }
 
 export interface EvaluationConsensusListTwuPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string }): Promise<void>;
   openProponentConsensus(input?: unknown): Promise<void>;
   submitFinalConsensusScores(input?: unknown): Promise<void>;
   confirmSubmitConsensus(input?: unknown): Promise<void>;
@@ -807,7 +934,7 @@ export interface EvaluationConsensusListTwuPage {
 }
 
 export interface EvaluationIndividualCreateSwuPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string; proposalId: string }): Promise<void>;
   enterQuestionScore(input?: unknown): Promise<void>;
   enterQuestionNotes(input?: unknown): Promise<void>;
   saveDraft(input?: unknown): Promise<void>;
@@ -821,7 +948,7 @@ export interface EvaluationIndividualCreateSwuPage {
 }
 
 export interface EvaluationIndividualEditSwuPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string; proposalId: string; userId: string }): Promise<void>;
   enterQuestionScore(input?: unknown): Promise<void>;
   enterQuestionNotes(input?: unknown): Promise<void>;
   saveChanges(input?: unknown): Promise<void>;
@@ -833,7 +960,7 @@ export interface EvaluationIndividualEditSwuPage {
 }
 
 export interface EvaluationConsensusCreateSwuPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string; proposalId: string }): Promise<void>;
   enterQuestionScore(input?: unknown): Promise<void>;
   enterQuestionNotes(input?: unknown): Promise<void>;
   saveDraft(input?: unknown): Promise<void>;
@@ -846,7 +973,7 @@ export interface EvaluationConsensusCreateSwuPage {
 }
 
 export interface EvaluationConsensusEditSwuPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string; proposalId: string; userId: string }): Promise<void>;
   enterQuestionScore(input?: unknown): Promise<void>;
   enterQuestionNotes(input?: unknown): Promise<void>;
   saveChanges(input?: unknown): Promise<void>;
@@ -858,7 +985,7 @@ export interface EvaluationConsensusEditSwuPage {
 }
 
 export interface EvaluationIndividualCreateTwuPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string; proposalId: string }): Promise<void>;
   enterQuestionScore(input?: unknown): Promise<void>;
   enterQuestionNotes(input?: unknown): Promise<void>;
   saveDraft(input?: unknown): Promise<void>;
@@ -872,7 +999,7 @@ export interface EvaluationIndividualCreateTwuPage {
 }
 
 export interface EvaluationIndividualEditTwuPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string; proposalId: string; userId: string }): Promise<void>;
   enterQuestionScore(input?: unknown): Promise<void>;
   enterQuestionNotes(input?: unknown): Promise<void>;
   saveChanges(input?: unknown): Promise<void>;
@@ -884,7 +1011,7 @@ export interface EvaluationIndividualEditTwuPage {
 }
 
 export interface EvaluationConsensusCreateTwuPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string; proposalId: string }): Promise<void>;
   enterQuestionScore(input?: unknown): Promise<void>;
   enterQuestionNotes(input?: unknown): Promise<void>;
   saveDraft(input?: unknown): Promise<void>;
@@ -897,7 +1024,7 @@ export interface EvaluationConsensusCreateTwuPage {
 }
 
 export interface EvaluationConsensusEditTwuPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { opportunityId: string; proposalId: string; userId: string }): Promise<void>;
   enterQuestionScore(input?: unknown): Promise<void>;
   enterQuestionNotes(input?: unknown): Promise<void>;
   saveChanges(input?: unknown): Promise<void>;
@@ -909,7 +1036,7 @@ export interface EvaluationConsensusEditTwuPage {
 }
 
 export interface NotificationUnsubscribeLandingPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   confirmUnsubscribe(input?: unknown): Promise<void>;
   cancelUnsubscribe(input?: unknown): Promise<void>;
   unsubscribeConfirmation(): Promise<string>;
@@ -919,7 +1046,7 @@ export interface NotificationUnsubscribeLandingPage {
 }
 
 export interface NotificationOptinOpportunityListPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   toggleNewOpportunityNotifications(input?: unknown): Promise<void>;
   notificationControl(): Promise<string>;
   notificationControlState(): Promise<string>;
@@ -927,7 +1054,7 @@ export interface NotificationOptinOpportunityListPage {
 }
 
 export interface NotificationTermsBroadcastPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   notifyVendorsOfUpdatedTerms(input?: unknown): Promise<void>;
   confirmNotifyVendors(input?: unknown): Promise<void>;
   cancelNotifyVendors(input?: unknown): Promise<void>;
@@ -938,7 +1065,7 @@ export interface NotificationTermsBroadcastPage {
 }
 
 export interface NotificationEmailReferencePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   openReference(input?: unknown): Promise<void>;
   messageGroupTitle(): Promise<string>;
   messageSubject(): Promise<string>;
@@ -948,7 +1075,7 @@ export interface NotificationEmailReferencePage {
 }
 
 export interface ContentFooterPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   openAbout(input?: unknown): Promise<void>;
   openDisclaimer(input?: unknown): Promise<void>;
   openPrivacy(input?: unknown): Promise<void>;
@@ -962,8 +1089,16 @@ export interface ContentFooterPage {
   presentWhenSignedOut(): Promise<string>;
 }
 
+export interface ContentServiceLevelAgreementLinkPage {
+  open(): Promise<void>;
+  followServiceLevelAgreementLink(input?: unknown): Promise<void>;
+  serviceLevelAgreementLink(): Promise<string>;
+  linkTargetAddress(): Promise<string>;
+  answerAtLinkTarget(): Promise<string>;
+}
+
 export interface ContentListPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   openPageForEditing(input?: unknown): Promise<void>;
   openPublicPage(input?: unknown): Promise<void>;
   createPage(input?: unknown): Promise<void>;
@@ -977,7 +1112,7 @@ export interface ContentListPage {
 }
 
 export interface ContentCreatePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   enterTitle(input?: unknown): Promise<void>;
   enterSlug(input?: unknown): Promise<void>;
   enterBody(input?: unknown): Promise<void>;
@@ -996,7 +1131,7 @@ export interface ContentCreatePage {
 }
 
 export interface ContentEditPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { slug: string }): Promise<void>;
   startEditing(input?: unknown): Promise<void>;
   editTitle(input?: unknown): Promise<void>;
   editSlug(input?: unknown): Promise<void>;
@@ -1007,6 +1142,7 @@ export interface ContentEditPage {
   cancelEditing(input?: unknown): Promise<void>;
   deletePage(input?: unknown): Promise<void>;
   confirmDeletePage(input?: unknown): Promise<void>;
+  pageAddress(): Promise<string>;
   publishedDate(): Promise<string>;
   updatedDate(): Promise<string>;
   publishedBy(): Promise<string>;
@@ -1019,11 +1155,14 @@ export interface ContentEditPage {
   changesPublishedSuccess(): Promise<string>;
   deletedSuccess(): Promise<string>;
   refusedForNonAdministrator(): Promise<string>;
+  bodyBeingEdited(): Promise<string>;
+  versionHistory(): Promise<string>;
 }
 
 export interface ContentViewPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { slug: string }): Promise<void>;
   followBodyLink(input?: unknown): Promise<void>;
+  pageAddress(): Promise<string>;
   pageTitle(): Promise<string>;
   pageBody(): Promise<string>;
   publishedDate(): Promise<string>;
@@ -1032,8 +1171,36 @@ export interface ContentViewPage {
   notFoundForUnknownAddress(): Promise<string>;
 }
 
+export interface FileUploadPage {
+  open(): Promise<void>;
+  uploadFile(input?: unknown): Promise<void>;
+  uploadFileStatingItsReadAccess(input?: unknown): Promise<void>;
+  uploadFileWithoutDeclaringItsSize(input?: unknown): Promise<void>;
+  uploadFileWithNoFilePart(input?: unknown): Promise<void>;
+  uploadFileWithUnrecognisedReadAccess(input?: unknown): Promise<void>;
+  uploadFileWithMalformedReadAccess(input?: unknown): Promise<void>;
+  storedFileIdentifier(): Promise<string>;
+  refusedForSize(): Promise<string>;
+  sizeLimitNamedInRefusal(): Promise<string>;
+  refusedForFileNameLength(): Promise<string>;
+  refusedForReadAccess(): Promise<string>;
+  refusedWhenSignedOut(): Promise<string>;
+  serviceFault(): Promise<string>;
+}
+
+export interface FileDescriptionPage {
+  open(params: { fileId: string }): Promise<void>;
+  fileIdentifier(): Promise<string>;
+  fileName(): Promise<string>;
+  storedDate(): Promise<string>;
+  storedContentIdentifier(): Promise<string>;
+  refusedWhenNotPermitted(): Promise<string>;
+  refusedForUnknownFile(): Promise<string>;
+  notFoundForAdministrator(): Promise<string>;
+}
+
 export interface FileDownloadPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { fileId: string }): Promise<void>;
   downloadFile(input?: unknown): Promise<void>;
   fileContents(): Promise<string>;
   fileNameOnSave(): Promise<string>;
@@ -1046,12 +1213,15 @@ export interface FileDownloadPage {
 }
 
 export interface FileAttachmentControlPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { program: string; opportunityId: string }): Promise<void>;
   addAttachment(input?: unknown): Promise<void>;
   renameNewAttachment(input?: unknown): Promise<void>;
   removeNewAttachment(input?: unknown): Promise<void>;
   removeExistingAttachment(input?: unknown): Promise<void>;
   downloadAttachment(input?: unknown): Promise<void>;
+  attachmentAddress(): Promise<string>;
+  sizeLimitStatedBeforeChoosing(): Promise<string>;
+  uploadRefusedForSize(): Promise<string>;
   newAttachmentRow(): Promise<string>;
   existingAttachmentRow(): Promise<string>;
   existingAttachmentNameReadOnly(): Promise<string>;
@@ -1062,18 +1232,22 @@ export interface FileAttachmentControlPage {
 }
 
 export interface FileImagePickerPage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(): Promise<void>;
   chooseImage(input?: unknown): Promise<void>;
+  imageAddress(): Promise<string>;
   currentImage(): Promise<string>;
   chosenImagePreview(): Promise<string>;
   onlyJpegAndPngOffered(): Promise<string>;
   rejectedImageError(): Promise<string>;
   imageReadableWhenSignedOut(): Promise<string>;
+  storedImageWidth(): Promise<string>;
+  storedImageHeight(): Promise<string>;
 }
 
 export interface FileEmbeddedImagePage {
-  open(params?: Record<string, string>): Promise<void>;
+  open(params: { slug: string }): Promise<void>;
   uploadBodyImage(input?: unknown): Promise<void>;
+  imageAddress(): Promise<string>;
   imageInsertedIntoText(): Promise<string>;
   onlyJpegAndPngOffered(): Promise<string>;
   uploadingIndicator(): Promise<string>;

@@ -112,6 +112,13 @@ export const seed = {
       "accepted_current_terms": false,
       "accepted_terms_previously": true
     },
+    "administratorTwo": {
+      "id": "00000000-0000-4000-8000-000000000106",
+      "persona": "administrator-other",
+      "idp_id": "admin-second",
+      "email": "admin.two@example.test",
+      "account_type": "ADMIN"
+    },
     "staffTwo": {
       "id": "00000000-0000-4000-8000-000000000103",
       "persona": "public-sector-staff-other",
@@ -267,7 +274,8 @@ export const seed = {
   "not_seeded": [
     {
       "what": "Sprint With Us and Team With Us opportunities",
-      "why": "Each spans versions, phases or resources, questions, an evaluation panel and a status history. A test builds one through the pages, which is also the only way to be sure the shape it builds is the shape the application makes."
+      "why": "Each spans versions, phases or resources, questions, an evaluation panel and a status history. A test builds one through the pages, which is also the only way to be sure the shape it builds is the shape the application makes.",
+      "limit": "This reaches every state up to and including a published opportunity, and no further. An opportunity closes when its proposal deadline passes, and the form refuses any deadline earlier than four in the afternoon on the day it is filled in, so the only way a test acting through the pages reaches a closed opportunity is to run after that hour on the same day — which is the clock deciding whether the suite passes, not the application. Everything behind a closed opportunity is out of reach the same way: individual scoring, consensus, screening and an award. The evaluation criteria that begin \"once the opportunity has closed\" therefore have no given-clause a test can arrange, and what would give them one is a seeded Sprint With Us and Team With Us opportunity already past its deadline, with submitted proposals and a panel against it."
     },
     {
       "what": "proposals, in any program and any state",
