@@ -4,7 +4,10 @@ export const seed = {
     "001-users.sql",
     "002-organizations.sql",
     "003-content.sql",
-    "004-opportunities.sql"
+    "004-opportunities.sql",
+    "005-evaluation-proponents.sql",
+    "006-swu-evaluation.sql",
+    "007-twu-evaluation.sql"
   ],
   "users": {
     "administratorOne": {
@@ -112,6 +115,34 @@ export const seed = {
       "accepted_current_terms": false,
       "accepted_terms_previously": true
     },
+    "proponentTwo": {
+      "id": "00000000-0000-4000-8000-000000000211",
+      "persona": "competing-vendor",
+      "idp_id": "test-vendor-11",
+      "email": "proponent.two@example.test",
+      "account_type": "VENDOR",
+      "capabilities": [
+        "Agile Coaching",
+        "Backend Development",
+        "Delivery Management",
+        "Frontend Development"
+      ],
+      "owns": "organizations.proponentTwo"
+    },
+    "proponentThree": {
+      "id": "00000000-0000-4000-8000-000000000212",
+      "idp_id": "test-vendor-12",
+      "email": "proponent.three@example.test",
+      "account_type": "VENDOR",
+      "capabilities": [
+        "Agile Coaching",
+        "Backend Development",
+        "Delivery Management",
+        "Technical Architecture"
+      ],
+      "owns": "organizations.proponentThree",
+      "note": "No persona of its own. It is the third proponent, which several evaluation criteria need in order to describe a second of three or a consensus recorded for two of three. It is reachable at /auth/createsessionvendor/12 if a test ever needs to act as it."
+    },
     "administratorTwo": {
       "id": "00000000-0000-4000-8000-000000000106",
       "persona": "administrator-other",
@@ -187,6 +218,30 @@ export const seed = {
       "pending_members": [
         "users.invitedVendor"
       ]
+    },
+    "proponentTwo": {
+      "id": "00000000-0000-4000-8000-000000000305",
+      "legal_name": "Silver Creek Software Ltd.",
+      "active": true,
+      "sprint_with_us_terms_accepted": true,
+      "team_with_us_terms_accepted": true,
+      "service_areas": [
+        "FULL_STACK_DEVELOPER"
+      ],
+      "owner": "users.proponentTwo",
+      "members": []
+    },
+    "proponentThree": {
+      "id": "00000000-0000-4000-8000-000000000306",
+      "legal_name": "Broken Compass Delivery Ltd.",
+      "active": true,
+      "sprint_with_us_terms_accepted": true,
+      "team_with_us_terms_accepted": true,
+      "service_areas": [
+        "FULL_STACK_DEVELOPER"
+      ],
+      "owner": "users.proponentThree",
+      "members": []
     }
   },
   "affiliations": {
@@ -238,6 +293,20 @@ export const seed = {
       "organization": "organizations.withPendingInvitation",
       "membership_type": "MEMBER",
       "membership_status": "PENDING"
+    },
+    "proponentTwoOwner": {
+      "id": "00000000-0000-4000-8000-000000000408",
+      "user": "users.proponentTwo",
+      "organization": "organizations.proponentTwo",
+      "membership_type": "OWNER",
+      "membership_status": "ACTIVE"
+    },
+    "proponentThreeOwner": {
+      "id": "00000000-0000-4000-8000-000000000409",
+      "user": "users.proponentThree",
+      "organization": "organizations.proponentThree",
+      "membership_type": "OWNER",
+      "membership_status": "ACTIVE"
     }
   },
   "content": {
@@ -269,16 +338,172 @@ export const seed = {
       "title": "Seeded draft Code With Us opportunity of another staff member",
       "created_by": "users.staffTwo",
       "note": "Exists so that a criterion about one staff member not seeing another's unpublished work has something to be about. No test can create it, because the oracle has no sign-in route that reaches its owner."
+    },
+    "closedSprintWithUs": {
+      "id": "00000000-0000-4000-8000-000000000701",
+      "program": "sprint-with-us",
+      "version_id": "00000000-0000-4000-8000-000000000711",
+      "seeded_status": "PUBLISHED",
+      "status_after_the_application_closes_it": "EVAL_QUESTIONS_INDIVIDUAL",
+      "title": "Seeded closed Sprint With Us opportunity",
+      "created_by": "users.staffOne",
+      "proposal_deadline": "thirty days before the seed is applied",
+      "total_max_budget": 500000,
+      "phases": [
+        "IMPLEMENTATION"
+      ],
+      "team_questions": 4,
+      "question_with_minimum_score": 4,
+      "weights": {
+        "questions": 25,
+        "code_challenge": 40,
+        "team_scenario": 15,
+        "price": 20
+      },
+      "panel": "evaluation_panels.sprintWithUs",
+      "proposals": [
+        "proposals.sprintWithUsOne",
+        "proposals.sprintWithUsTwo",
+        "proposals.sprintWithUsThree"
+      ]
+    },
+    "closedTeamWithUs": {
+      "id": "00000000-0000-4000-8000-000000000801",
+      "program": "team-with-us",
+      "version_id": "00000000-0000-4000-8000-000000000811",
+      "seeded_status": "PUBLISHED",
+      "status_after_the_application_closes_it": "EVAL_QUESTIONS_INDIVIDUAL",
+      "title": "Seeded closed Team With Us opportunity",
+      "created_by": "users.staffOne",
+      "proposal_deadline": "thirty days before the seed is applied",
+      "max_budget": 300000,
+      "resources": [
+        "resources.teamWithUsDeveloper"
+      ],
+      "resource_questions": 4,
+      "question_with_minimum_score": 4,
+      "weights": {
+        "questions": 30,
+        "challenge": 40,
+        "price": 30
+      },
+      "panel": "evaluation_panels.teamWithUs",
+      "proposals": [
+        "proposals.teamWithUsOne",
+        "proposals.teamWithUsTwo",
+        "proposals.teamWithUsThree"
+      ]
+    }
+  },
+  "resources": {
+    "teamWithUsDeveloper": {
+      "id": "00000000-0000-4000-8000-000000000821",
+      "opportunity": "opportunities.closedTeamWithUs",
+      "service_area": "FULL_STACK_DEVELOPER",
+      "target_allocation": 100
+    }
+  },
+  "evaluation_panels": {
+    "sprintWithUs": {
+      "id": "00000000-0000-4000-8000-000000000711",
+      "opportunity": "opportunities.closedSprintWithUs",
+      "members": [
+        {
+          "user": "users.staffOne",
+          "chair": false,
+          "evaluator": true,
+          "order": 0
+        },
+        {
+          "user": "users.administratorOne",
+          "chair": true,
+          "evaluator": true,
+          "order": 1
+        }
+      ]
+    },
+    "teamWithUs": {
+      "id": "00000000-0000-4000-8000-000000000811",
+      "opportunity": "opportunities.closedTeamWithUs",
+      "members": [
+        {
+          "user": "users.staffOne",
+          "chair": false,
+          "evaluator": true,
+          "order": 0
+        },
+        {
+          "user": "users.administratorOne",
+          "chair": true,
+          "evaluator": true,
+          "order": 1
+        }
+      ]
+    }
+  },
+  "proposals": {
+    "sprintWithUsOne": {
+      "id": "00000000-0000-4000-8000-000000000741",
+      "opportunity": "opportunities.closedSprintWithUs",
+      "organization": "organizations.qualified",
+      "created_by": "users.organizationOwner",
+      "seeded_status": "SUBMITTED",
+      "status_after_the_application_closes_it": "UNDER_REVIEW_QUESTIONS",
+      "proposed_cost": 420000
+    },
+    "sprintWithUsTwo": {
+      "id": "00000000-0000-4000-8000-000000000742",
+      "opportunity": "opportunities.closedSprintWithUs",
+      "organization": "organizations.proponentTwo",
+      "created_by": "users.proponentTwo",
+      "seeded_status": "SUBMITTED",
+      "status_after_the_application_closes_it": "UNDER_REVIEW_QUESTIONS",
+      "proposed_cost": 460000
+    },
+    "sprintWithUsThree": {
+      "id": "00000000-0000-4000-8000-000000000743",
+      "opportunity": "opportunities.closedSprintWithUs",
+      "organization": "organizations.proponentThree",
+      "created_by": "users.proponentThree",
+      "seeded_status": "SUBMITTED",
+      "status_after_the_application_closes_it": "UNDER_REVIEW_QUESTIONS",
+      "proposed_cost": 380000
+    },
+    "teamWithUsOne": {
+      "id": "00000000-0000-4000-8000-000000000841",
+      "opportunity": "opportunities.closedTeamWithUs",
+      "organization": "organizations.qualified",
+      "created_by": "users.organizationOwner",
+      "seeded_status": "SUBMITTED",
+      "status_after_the_application_closes_it": "UNDER_REVIEW_QUESTIONS",
+      "hourly_rate": 120
+    },
+    "teamWithUsTwo": {
+      "id": "00000000-0000-4000-8000-000000000842",
+      "opportunity": "opportunities.closedTeamWithUs",
+      "organization": "organizations.proponentTwo",
+      "created_by": "users.proponentTwo",
+      "seeded_status": "SUBMITTED",
+      "status_after_the_application_closes_it": "UNDER_REVIEW_QUESTIONS",
+      "hourly_rate": 135
+    },
+    "teamWithUsThree": {
+      "id": "00000000-0000-4000-8000-000000000843",
+      "opportunity": "opportunities.closedTeamWithUs",
+      "organization": "organizations.proponentThree",
+      "created_by": "users.proponentThree",
+      "seeded_status": "SUBMITTED",
+      "status_after_the_application_closes_it": "UNDER_REVIEW_QUESTIONS",
+      "hourly_rate": 110
     }
   },
   "not_seeded": [
     {
-      "what": "Sprint With Us and Team With Us opportunities",
-      "why": "Each spans versions, phases or resources, questions, an evaluation panel and a status history. A test builds one through the pages, which is also the only way to be sure the shape it builds is the shape the application makes.",
-      "limit": "This reaches every state up to and including a published opportunity, and no further. An opportunity closes when its proposal deadline passes, and the form refuses any deadline earlier than four in the afternoon on the day it is filled in, so the only way a test acting through the pages reaches a closed opportunity is to run after that hour on the same day — which is the clock deciding whether the suite passes, not the application. Everything behind a closed opportunity is out of reach the same way: individual scoring, consensus, screening and an award. The evaluation criteria that begin \"once the opportunity has closed\" therefore have no given-clause a test can arrange, and what would give them one is a seeded Sprint With Us and Team With Us opportunity already past its deadline, with submitted proposals and a panel against it."
+      "what": "Sprint With Us and Team With Us opportunities other than the two closed ones above",
+      "why": "A draft, an under-review or a still-open opportunity in either program is something a test can build through the pages, and building it is also the only way to be sure the shape it gets is the shape the application makes. Only the state the form refuses — a deadline already in the past — is written into the seed."
     },
     {
-      "what": "proposals, in any program and any state",
+      "what": "proposals against opportunities other than the two closed ones above",
       "why": "A proposal's shape depends on the opportunity it answers, so seeding one means seeding the opportunity's whole shape first. Tests build these through the pages."
     },
     {
@@ -287,7 +512,11 @@ export const seed = {
     },
     {
       "what": "evaluations, consensuses and scores",
-      "why": "They hang off proposals, and the criteria that concern them describe the act of recording a score rather than a score that was already there."
+      "why": "They hang off proposals, and the criteria that concern them describe the act of recording a score rather than a score that was already there. The two closed opportunities give those criteria somewhere to start; what happens next is the application's and belongs in the test."
+    },
+    {
+      "what": "an opportunity with six proponents",
+      "why": "One criterion describes six proponents, five of whom met every minimum score. The seeded opportunities carry three, which is what the rest of the evaluation criteria describe. Six would mean six qualified organizations and six vendor accounts seeded for the sake of a single criterion, and it would change what every list of organizations and of users contains. That criterion is expected to report unbound rather than to fail."
     }
   ]
 } as const;

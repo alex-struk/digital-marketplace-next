@@ -239,6 +239,23 @@ export const persona = {
       }
     }
   },
+  "competingVendor": {
+    "id": "competing-vendor",
+    "can": [
+      "submit a proposal against an opportunity somebody else has also answered",
+      "view their own proposal",
+      "be refused another proponent's proposal",
+      "withdraw their own proposal"
+    ],
+    "signIn": {
+      "session-route": {
+        "route": "/auth/createsessionvendor/11"
+      },
+      "sandbox-idp": {
+        "username": "test-vendor-11"
+      }
+    }
+  },
   "evaluationPanelMember": {
     "id": "evaluation-panel-member",
     "can": [
