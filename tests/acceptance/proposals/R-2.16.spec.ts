@@ -1,5 +1,5 @@
 // criterion: @R-2.16 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -35,7 +35,7 @@ const panel = {
   chair: seed.users.staffPanelEvaluator,
 };
 
-async function publishSprintOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishSprintOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunitySwuCreate.open();
   await surface.opportunitySwuCreate.addPhase({
@@ -71,7 +71,9 @@ async function publishSprintOpportunity(surface: Surface, title: string): Promis
     priceWeight: 25,
     title,
   });
+  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
 async function answerAndReference(surface: Surface): Promise<void> {
@@ -97,10 +99,10 @@ async function answerAndReference(surface: Surface): Promise<void> {
 // The only thing that varies between the proposals below is the organization named.
 async function fillProposal(
   surface: Surface,
-  opportunity: string,
+  opportunityId: string,
   organization: Organization,
 ): Promise<void> {
-  await surface.proposalSwuCreate.open({ opportunity });
+  await surface.proposalSwuCreate.open({ opportunityId });
   await surface.proposalSwuCreate.chooseOrganization({ organization });
   await surface.proposalSwuCreate.addPhaseTeamMember({
     phase: "Implementation",
@@ -118,10 +120,10 @@ test("a Sprint With Us proposal may only be submitted on behalf of an organizati
   surface,
 }) => {
   const title = "R-2.16 opportunity bid on by an unqualified organization";
-  await publishSprintOpportunity(surface, title);
+  const opportunityId = await publishSprintOpportunity(surface, title);
 
   await surface.signIn(persona.organizationOwner);
-  await fillProposal(surface, title, seed.organizations.withPendingInvitation);
+  await fillProposal(surface, opportunityId, seed.organizations.withPendingInvitation);
   await surface.proposalSwuCreate.submitProposal();
 
   await surface.proposalVendorDashboard.open();
@@ -132,36 +134,48 @@ test("a Sprint With Us proposal may only be submitted on behalf of an organizati
 test("the organization a Sprint With Us proposal names is re-checked at the moment of submission", async ({
   surface,
 }) => {
-  const refused = "R-2.16 opportunity whose unqualified draft is submitted later";
-  const accepted = "R-2.16 opportunity whose qualified draft is submitted later";
-  await publishSprintOpportunity(surface, refused);
-  await publishSprintOpportunity(surface, accepted);
+  const refused = await publishSprintOpportunity(
+    surface,
+    "R-2.16 opportunity whose unqualified draft is submitted later",
+  );
+  const accepted = await publishSprintOpportunity(
+    surface,
+    "R-2.16 opportunity whose qualified draft is submitted later",
+  );
 
   await surface.signIn(persona.organizationOwner);
 
   await fillProposal(surface, refused, seed.organizations.withPendingInvitation);
   await surface.proposalSwuCreate.saveDraft();
-  await surface.proposalSwuEdit.open({ opportunity: refused });
+  const refusedProposal = await surface.proposalSwuEdit.proposalIdentifier();
   expect((await surface.proposalSwuEdit.status()).toLowerCase()).toContain("draft");
   await surface.proposalSwuEdit.submitProposal();
-  await surface.proposalSwuEdit.open({ opportunity: refused });
+  await surface.proposalSwuEdit.open({
+    opportunityId: refused,
+    proposalId: refusedProposal,
+  });
   expect((await surface.proposalSwuEdit.status()).toLowerCase()).toContain("draft");
 
   await fillProposal(surface, accepted, seed.organizations.qualified);
   await surface.proposalSwuCreate.saveDraft();
-  await surface.proposalSwuEdit.open({ opportunity: accepted });
+  const acceptedProposal = await surface.proposalSwuEdit.proposalIdentifier();
   expect((await surface.proposalSwuEdit.status()).toLowerCase()).toContain("draft");
   await surface.proposalSwuEdit.submitProposal();
-  await surface.proposalSwuEdit.open({ opportunity: accepted });
+  await surface.proposalSwuEdit.open({
+    opportunityId: accepted,
+    proposalId: acceptedProposal,
+  });
   expect((await surface.proposalSwuEdit.status()).toLowerCase()).toContain("submitted");
 });
 
 test("a Sprint With Us proposal naming no organization at all is refused", async ({ surface }) => {
-  const title = "R-2.16 opportunity bid on with no organization named";
-  await publishSprintOpportunity(surface, title);
+  const opportunityId = await publishSprintOpportunity(
+    surface,
+    "R-2.16 opportunity bid on with no organization named",
+  );
 
   await surface.signIn(persona.vendor);
-  await surface.proposalSwuCreate.open({ opportunity: title });
+  await surface.proposalSwuCreate.open({ opportunityId });
   await surface.proposalSwuCreate.setPhaseProposedCost({ phase: "Implementation", cost: 400000 });
   await answerAndReference(surface);
   await surface.proposalSwuCreate.submitProposal();

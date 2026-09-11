@@ -1,5 +1,5 @@
 // criterion: @R-2.2 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -8,10 +8,9 @@ import type { Surface } from "../../fixtures";
 // those states — if even a draft blocks the second attempt, every other state does.
 //
 // The refusal is read from the create screen's field error, which is where a create the
-// service turns away reports itself. That no second proposal was made is read from the one
-// proposal the vendor holds against that opportunity still carrying the first proposal's
-// text: a vendor's proposal is addressed by the opportunity it answers, so a second one
-// would have left the surface with two records to choose between.
+// service turns away reports itself. That no second proposal was made is read from the
+// first proposal still carrying its own text, reached by the identifier the screen it was
+// created on gave back.
 
 function inDays(days: number): string {
   const date = new Date();
@@ -33,27 +32,31 @@ const details = {
   completionDate: inDays(35),
 };
 
-async function publishOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.publish({ ...details, title });
+  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
 test("a vendor may hold at most one proposal per opportunity, and a second attempt is refused with a message saying they already have one", async ({
   surface,
 }) => {
-  const title = "R-2.2 opportunity a vendor tries to bid on twice";
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(
+    surface,
+    "R-2.2 opportunity a vendor tries to bid on twice",
+  );
+  const firstText = "The first proposal this vendor offered against the opportunity.";
 
   await surface.signIn(persona.vendor);
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.chooseProponentIndividual();
-  await surface.proposalCwuCreate.saveDraft({
-    proposalText: "The first proposal this vendor offered against the opportunity.",
-  });
+  await surface.proposalCwuCreate.saveDraft({ proposalText: firstText });
+  const proposalId = await surface.proposalCwuEdit.proposalIdentifier();
 
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.chooseProponentIndividual();
   await surface.proposalCwuCreate.saveDraft({
     proposalText: "A second proposal against the same opportunity.",
@@ -63,8 +66,6 @@ test("a vendor may hold at most one proposal per opportunity, and a second attem
     "already have a proposal",
   );
 
-  await surface.proposalCwuEdit.open({ opportunity: title });
-  expect(await surface.proposalCwuEdit.proposalTab()).toContain(
-    "The first proposal this vendor offered against the opportunity.",
-  );
+  await surface.proposalCwuEdit.open({ opportunityId, proposalId });
+  expect(await surface.proposalCwuEdit.proposalTab()).toContain(firstText);
 });

@@ -1,13 +1,11 @@
 ---
-gate: G3
-question: "Do these tests follow from the proposals criteria and from nothing else?"
-recommendation: "Re-derived the whole proposals domain."
-opened: 2026-09-11T09:22:03.961Z
+stage: "derive-tests"
+title: "derive tests"
+at: "2026-09-11T09:22:03.933Z"
+cost: 13.796892999999999
+turns: 107
+session: "4df1cc47-0e09-4ff9-998e-b1c45c8b7a4a"
 ---
-
-# Do these tests follow from the proposals criteria and from nothing else?
-
-**Recommendation.** Re-derived the whole proposals domain.
 
 Re-derived the whole proposals domain. All checks for forbidden constructs pass; headers and versions match the criteria list.
 

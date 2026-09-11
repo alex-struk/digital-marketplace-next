@@ -1,5 +1,5 @@
 // criterion: @R-2.10 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -29,7 +29,7 @@ const panel = {
   chair: seed.users.staffPanelEvaluator,
 };
 
-async function publishTeamOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishTeamOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunityTwuCreate.open();
   await surface.opportunityTwuCreate.addResource({
@@ -61,15 +61,17 @@ async function publishTeamOpportunity(surface: Surface, title: string): Promise<
     priceWeight: 20,
     title,
   });
+  const opportunityId = await surface.opportunityTwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
 async function fillTeamProposal(
   surface: Surface,
-  opportunity: string,
+  opportunityId: string,
   hourlyRate: number,
 ): Promise<void> {
-  await surface.proposalTwuCreate.open({ opportunity });
+  await surface.proposalTwuCreate.open({ opportunityId });
   await surface.proposalTwuCreate.chooseOrganization({ organization: seed.organizations.qualified });
   await surface.proposalTwuCreate.addTeamMemberForResource({
     resource: "Full Stack Developer",
@@ -90,17 +92,20 @@ async function fillTeamProposal(
 test("a Team With Us proposal whose hourly rates come to more than the opportunity's maximum budget is refused on the create path", async ({
   surface,
 }) => {
-  const overBudget = "R-2.10 Team With Us opportunity bid over its maximum budget";
-  const withinBudget = "R-2.10 Team With Us opportunity bid within its maximum budget";
-  await publishTeamOpportunity(surface, overBudget);
-  await publishTeamOpportunity(surface, withinBudget);
+  const overBudget = await publishTeamOpportunity(
+    surface,
+    "R-2.10 Team With Us opportunity bid over its maximum budget",
+  );
+  const withinBudget = await publishTeamOpportunity(
+    surface,
+    "R-2.10 Team With Us opportunity bid within its maximum budget",
+  );
 
   await surface.signIn(persona.organizationAdmin);
 
   await fillTeamProposal(surface, withinBudget, 100);
   await surface.proposalTwuCreate.submitProposal();
   expect(await surface.proposalTwuCreate.fieldError()).toBeFalsy();
-  await surface.proposalTwuEdit.open({ opportunity: withinBudget });
   expect((await surface.proposalTwuEdit.status()).toLowerCase()).toContain("submitted");
 
   await fillTeamProposal(surface, overBudget, 5000);
@@ -111,17 +116,19 @@ test("a Team With Us proposal whose hourly rates come to more than the opportuni
 test("a Team With Us proposal whose hourly rates come to more than the opportunity's maximum budget is refused on the edit path", async ({
   surface,
 }) => {
-  const title = "R-2.10 Team With Us opportunity whose over-budget draft is submitted later";
-  await publishTeamOpportunity(surface, title);
+  const opportunityId = await publishTeamOpportunity(
+    surface,
+    "R-2.10 Team With Us opportunity whose over-budget draft is submitted later",
+  );
 
   await surface.signIn(persona.organizationAdmin);
-  await fillTeamProposal(surface, title, 5000);
+  await fillTeamProposal(surface, opportunityId, 5000);
   await surface.proposalTwuCreate.saveDraft();
+  const proposalId = await surface.proposalTwuEdit.proposalIdentifier();
 
-  await surface.proposalTwuEdit.open({ opportunity: title });
   expect((await surface.proposalTwuEdit.status()).toLowerCase()).toContain("draft");
   await surface.proposalTwuEdit.submitProposal();
 
-  await surface.proposalTwuEdit.open({ opportunity: title });
+  await surface.proposalTwuEdit.open({ opportunityId, proposalId });
   expect((await surface.proposalTwuEdit.status()).toLowerCase()).toContain("draft");
 });

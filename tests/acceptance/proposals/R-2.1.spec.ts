@@ -1,5 +1,5 @@
 // criterion: @R-2.1 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -37,21 +37,25 @@ const details = {
   completionDate: inDays(35),
 };
 
-async function publishOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.publish({ ...details, title });
+  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
 test("a signed-in vendor who has accepted the service's terms may start a proposal", async ({
   surface,
 }) => {
-  const title = "R-2.1 opportunity a vendor may start a proposal against";
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(
+    surface,
+    "R-2.1 opportunity a vendor may start a proposal against",
+  );
 
   await surface.signIn(persona.vendor);
-  await surface.opportunityCwuView.open({ title });
+  await surface.opportunityCwuView.open({ opportunityId });
   await surface.opportunityCwuView.startProposal();
 
   expect(await surface.proposalCwuCreate.opportunitySummary()).toBeTruthy();
@@ -60,19 +64,21 @@ test("a signed-in vendor who has accepted the service's terms may start a propos
 test("a request to start a proposal from public sector staff, an administrator or an anonymous visitor is refused", async ({
   surface,
 }) => {
-  const title = "R-2.1 opportunity nobody but a vendor may start a proposal against";
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(
+    surface,
+    "R-2.1 opportunity nobody but a vendor may start a proposal against",
+  );
 
   await surface.signIn(persona.publicSectorStaff);
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   expect(await surface.proposalCwuCreate.opportunitySummary()).toBeFalsy();
   await surface.signOut();
 
   await surface.signIn(persona.administrator);
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   expect(await surface.proposalCwuCreate.opportunitySummary()).toBeFalsy();
   await surface.signOut();
 
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   expect(await surface.proposalCwuCreate.opportunitySummary()).toBeFalsy();
 });

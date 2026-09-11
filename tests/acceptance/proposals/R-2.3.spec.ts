@@ -1,5 +1,5 @@
 // criterion: @R-2.3 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -34,21 +34,25 @@ const details = {
   completionDate: inDays(35),
 };
 
-async function publishOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.publish({ ...details, title });
+  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
 test("submitting a proposal requires the vendor to accept both the program's terms and the service's current terms", async ({
   surface,
 }) => {
-  const title = "R-2.3 opportunity bid on without agreeing to the terms";
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(
+    surface,
+    "R-2.3 opportunity bid on without agreeing to the terms",
+  );
 
   await surface.signIn(persona.vendorWithTermsReset);
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.chooseProponentIndividual();
 
   expect(await surface.proposalCwuCreate.submitDisabledUntilTermsAccepted()).toBeTruthy();
@@ -60,14 +64,17 @@ test("submitting a proposal requires the vendor to accept both the program's ter
 test("the act of submitting a proposal records the vendor's acceptance of the terms", async ({
   surface,
 }) => {
-  const title = "R-2.3 opportunity whose submission records an acceptance of the terms";
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(
+    surface,
+    "R-2.3 opportunity whose submission records an acceptance of the terms",
+  );
+  const userId = seed.users.vendorWithTermsReset.id;
 
   await surface.signIn(persona.vendorWithTermsReset);
-  await surface.userProfileLegal.open({ user: seed.users.vendorWithTermsReset.id });
+  await surface.userProfileLegal.open({ userId });
   expect(await surface.userProfileLegal.termsUpdatedWarning()).toBeTruthy();
 
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.chooseProponentIndividual();
   await surface.proposalCwuCreate.acceptProgramTerms();
   await surface.proposalCwuCreate.acceptAppTerms();
@@ -75,10 +82,9 @@ test("the act of submitting a proposal records the vendor's acceptance of the te
     proposalText: "A proposal submitted once both sets of terms had been agreed.",
   });
 
-  await surface.proposalCwuEdit.open({ opportunity: title });
   expect((await surface.proposalCwuEdit.status()).toLowerCase()).toContain("submitted");
 
-  await surface.userProfileLegal.open({ user: seed.users.vendorWithTermsReset.id });
+  await surface.userProfileLegal.open({ userId });
   expect(await surface.userProfileLegal.acceptedOnNotice()).toBeTruthy();
   expect(await surface.userProfileLegal.termsUpdatedWarning()).toBeFalsy();
 });

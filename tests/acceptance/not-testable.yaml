@@ -446,89 +446,96 @@ criteria:
       the service refuses to remove: content-edit withholds the removal and a
       request made another way is refused, so there is no path through the
       surface to the state the criterion starts from."
-  - id: R-2.5
-    version: 1
-    reason: The when is an opportunity's proposal deadline passing and the
-      opportunity closing. A published opportunity cannot be given a deadline in
-      the past — one that is not a draft is refused a deadline earlier than
-      today (R-1.14) — and no page, action or observation in the surface makes
-      the request that runs the closing hook (see R-1.1). Without the closure no
-      submitted proposal ever moves to review, and the anonymous_proponent_name
-      observations on the proposal surfaces have nothing to return.
   - id: R-2.15
     version: 2
-    reason: "The given is an opportunity whose proposal deadline has passed, which
-      cannot be produced: a published opportunity is refused a deadline earlier
-      than today, and nothing in the surface makes a deadline pass (see R-1.1).
-      Neither refusal the criterion names — a draft submitted after the deadline
-      and a Code With Us proposal created already marked as submitted after it —
-      has an opportunity to be made against, and the absence of the same guard
-      from the other two programs cannot be shown either."
+    reason: "blocked: the Code With Us half needs a published Code With Us
+      opportunity whose proposal deadline has passed, and there is none. The one
+      seeded Code With Us opportunity is open until 2030, and the create form
+      refuses a deadline earlier than the day it is filled in, so the refusal the
+      criterion quotes — \"This opportunity is no longer accepting proposals.\" —
+      has nothing to be raised against. The half that holds in all three programs
+      needs a draft proposal against an opportunity already past its deadline:
+      the two seeded closed opportunities are past theirs, but every vendor who
+      could bid on one has already bid and every qualified organization is
+      already named on a proposal of its own, so no draft can be added, and the
+      deadline hook sits in front of the service's own routes so the state before
+      the closure cannot be held still. Unblocked by seeding a Code With Us
+      opportunity past its proposal deadline, and a draft proposal against a
+      closed opportunity."
   - id: R-2.26
     version: 1
-    reason: The given is a Code With Us proposal under review. A proposal reaches
-      review only when its opportunity closes at its proposal deadline, which
-      the surface cannot bring about (see R-1.1). enter_score on
-      proposal-cwu-view therefore has no proposal to act on, and the score, the
-      move to evaluated and the refusals of an out-of-range score have nothing
-      to be read on.
+    reason: "blocked: the given is a Code With Us proposal under review, and a
+      proposal reaches review only when its opportunity closes. The closure
+      itself is now reachable — run_pending_transitions on
+      scheduled-transition-trigger runs the deadline hook — but only the Sprint
+      With Us and Team With Us opportunities are seeded past their deadlines. No
+      Code With Us opportunity can be given a deadline in the past, so
+      enter_score on proposal-cwu-view has no proposal to act on, and neither the
+      score, the move to evaluated nor the refusal of an out-of-range score has
+      anything to be read on. Unblocked by seeding a Code With Us opportunity
+      past its proposal deadline carrying a submitted proposal."
   - id: R-2.27
     version: 1
-    reason: The given is an opportunity in evaluation with proposals under review,
-      which lies beyond a closure the surface cannot bring about (see R-1.1). No
-      proposal can be scored, so the last one cannot be scored, and the move to
-      processing the criterion is about never has its trigger.
-  - id: R-2.28
-    version: 1
-    reason: The given is a Sprint With Us opportunity in its code challenge stage,
-      two stages past a closure the surface cannot bring about (see R-1.1). The
-      observation the refusal would be read from, wrong_stage_error, exists on
-      both the Sprint With Us and Team With Us proposal views, but nothing in
-      the surface can put an opportunity in front of it.
+    reason: "blocked: the when is the last proposal still in contention being
+      scored, which means carrying proposals all the way to evaluated. On the two
+      seeded closed opportunities that is a single path — score every proponent's
+      questions, agree those scores as a panel, finalise them, screen in, score
+      the challenge and then the scenario — and the seed carries one closed
+      opportunity per program. The first test to walk that path takes the
+      opportunity with it, so the criteria behind the closure cannot each have
+      one. Unblocked by seeding a closed opportunity for each criterion that has
+      to move one, or by seeding opportunities already standing at the later
+      evaluation stages."
   - id: R-2.29
     version: 1
-    reason: The given is an opportunity whose questions have been scored and whose
-      panel is finalising its agreed scores. Question scoring happens after the
-      opportunity closes, and no page, action or observation closes one (see
-      R-1.1), so no proposal can be given a question score, none can fall below
-      a minimum, and finalize_question_consensuses has nothing to rank.
+    reason: "blocked: two things are missing. The ranking and the cut need the
+      panel's agreed scores finalised, which consumes the one seeded closed
+      opportunity of that program (see R-2.27). And the criterion describes six
+      proponents of whom five clear every minimum and four go forward; the seed
+      carries three per opportunity and says so itself. The size of the cut
+      therefore cannot be shown even once, and the half that three proponents
+      could show — one below a question's minimum score being left behind — needs
+      the same finalisation. Unblocked by a closed opportunity of its own
+      carrying six proponents."
   - id: R-2.30
     version: 1
-    reason: The given is two proposals still in contention with a scenario score
-      being entered against one of them. Every score in the sequence comes after
-      the opportunity closes, which the surface cannot bring about (see R-1.1),
-      so the price_score observations on the two proposal views have nothing to
-      return and the lowest bid among proposals in contention is never worked
-      out.
+    reason: "blocked: the given is two proposals still in contention with a team
+      scenario score being entered against one of them, which is the last stage
+      of the evaluation. Reaching it means walking the whole chain on the one
+      seeded closed Sprint With Us opportunity and leaving nothing behind for the
+      other criteria (see R-2.27), so the price_score observations on the two
+      proposal views have nothing to return and the lowest bid among proposals in
+      contention is never worked out. Unblocked by a closed opportunity of its
+      own, or by one seeded at the code challenge stage with its question scores
+      already recorded."
   - id: R-2.31
     version: 1
-    reason: The given is a proposal carrying a score for every stage. No stage score
-      can be entered, because every one of them comes after a closure the
-      surface cannot bring about (see R-1.1), so total_score and rank have
-      nothing to return and no two proposals can be ranked against each other.
+    reason: "blocked: the given is a proposal carrying a score for every stage,
+      which is the end of the chain that consumes the one seeded closed
+      opportunity of its program (see R-2.27). Until then total_score and rank
+      have nothing to return and no two proposals can be ranked against each
+      other. Unblocked by a closed opportunity of its own, or by one seeded with
+      every stage scored but the last."
   - id: R-2.32
     version: 1
-    reason: "The given is a vendor's proposal that has been scored. Scoring needs
-      the opportunity to have closed, which the surface cannot bring about (see
-      R-1.1), so the withholding cannot be told from the score simply not
-      existing yet: score and rank read as empty on an unscored proposal for a
-      reason that has nothing to do with who is looking. The second half needs
-      the proposal to become awarded or not awarded, which needs an award."
+    reason: "blocked: the given is a vendor's proposal that has been scored, and
+      the then needs it to become awarded or passed over. Both lie at the end of
+      the evaluation chain, which consumes the one seeded closed opportunity of
+      its program (see R-2.27). Before any score exists the withholding cannot be
+      told from the score simply not being there: score and rank read as empty on
+      an unscored proposal for a reason that has nothing to do with who is
+      looking. Unblocked by a closed opportunity of its own carrying scored
+      proposals."
   - id: R-2.33
     version: 1
-    reason: The given is an opportunity carrying an evaluated proposal. A proposal
-      becomes evaluated only after its opportunity closes and is scored, and the
-      surface closes no opportunity (see R-1.1), so award_proposal has nothing
-      to act on and no other proposal can be shown to have been marked not
-      awarded.
-  - id: R-2.34
-    version: 1
-    reason: The criterion's given is a proposal at a stage after the opportunity has
-      closed, and no page, action or observation closes an opportunity (see
-      R-1.1). disqualify_proposal is offered on all three proposal views, but
-      with no proposal past the published state there is nothing to disqualify,
-      and the written reason and its length bounds have nothing to be checked
-      against.
+    reason: "blocked: only a fully evaluated proposal, or one previously passed
+      over, may be awarded, and reaching evaluated consumes the one seeded closed
+      opportunity of its program (see R-2.27). award_proposal is offered on all
+      three proposal views and has nothing it may act on, so neither the other
+      proposals being marked not awarded nor the opportunity becoming awarded can
+      be read. Unblocked by a closed opportunity of its own carrying one
+      evaluated proposal, one disqualified and one withdrawn, which is the given
+      the criterion states."
   - id: R-4.1
     version: 1
     reason: "The given is a person with no account on the service, which cannot be

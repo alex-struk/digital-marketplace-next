@@ -1,5 +1,5 @@
 // criterion: @R-2.24 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -38,28 +38,33 @@ const panel = {
   chair: seed.users.staffPanelEvaluator,
 };
 
-async function publishOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.publish({ ...details, title });
+  return surface.opportunityCwuEdit.opportunityIdentifier();
 }
 
-async function submitIndividualProposal(surface: Surface, opportunity: string): Promise<void> {
-  await surface.proposalCwuCreate.open({ opportunity });
+async function submitIndividualProposal(
+  surface: Surface,
+  opportunityId: string,
+): Promise<string> {
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.chooseProponentIndividual();
   await surface.proposalCwuCreate.acceptProgramTerms();
   await surface.proposalCwuCreate.acceptAppTerms();
   await surface.proposalCwuCreate.submitProposal({
     proposalText: "A proposal offered by one vendor on their own account.",
   });
+  return surface.proposalCwuEdit.proposalIdentifier();
 }
 
 test("a vendor sees only the proposals they authored", async ({ surface }) => {
-  const mine = "R-2.24 opportunity one vendor bids on";
-  const theirs = "R-2.24 opportunity another vendor bids on";
+  const mineTitle = "R-2.24 opportunity one vendor bids on";
+  const theirsTitle = "R-2.24 opportunity another vendor bids on";
 
   await surface.signIn(persona.administrator);
-  await publishOpportunity(surface, mine);
-  await publishOpportunity(surface, theirs);
+  const mine = await publishOpportunity(surface, mineTitle);
+  const theirs = await publishOpportunity(surface, theirsTitle);
   await surface.signOut();
 
   await surface.signIn(persona.vendor);
@@ -70,15 +75,15 @@ test("a vendor sees only the proposals they authored", async ({ surface }) => {
   await submitIndividualProposal(surface, theirs);
   await surface.proposalVendorDashboard.open();
   await surface.proposalVendorDashboard.showMyProposals();
-  expect(await surface.proposalVendorDashboard.myProposalsTable()).toContain(theirs);
-  expect(await surface.proposalVendorDashboard.myProposalsTable()).not.toContain(mine);
+  expect(await surface.proposalVendorDashboard.myProposalsTable()).toContain(theirsTitle);
+  expect(await surface.proposalVendorDashboard.myProposalsTable()).not.toContain(mineTitle);
   await surface.signOut();
 
   await surface.signIn(persona.vendor);
   await surface.proposalVendorDashboard.open();
   await surface.proposalVendorDashboard.showMyProposals();
-  expect(await surface.proposalVendorDashboard.myProposalsTable()).toContain(mine);
-  expect(await surface.proposalVendorDashboard.myProposalsTable()).not.toContain(theirs);
+  expect(await surface.proposalVendorDashboard.myProposalsTable()).toContain(mineTitle);
+  expect(await surface.proposalVendorDashboard.myProposalsTable()).not.toContain(theirsTitle);
 });
 
 test("a vendor additionally sees the proposals of organizations they own or administer, under a separate heading", async ({
@@ -117,10 +122,11 @@ test("a vendor additionally sees the proposals of organizations they own or admi
     priceWeight: 20,
     title,
   });
+  const opportunityId = await surface.opportunityTwuEdit.opportunityIdentifier();
   await surface.signOut();
 
   await surface.signIn(persona.organizationAdmin);
-  await surface.proposalTwuCreate.open({ opportunity: title });
+  await surface.proposalTwuCreate.open({ opportunityId });
   await surface.proposalTwuCreate.chooseOrganization({ organization: seed.organizations.qualified });
   await surface.proposalTwuCreate.addTeamMemberForResource({
     resource: "Full Stack Developer",
@@ -146,26 +152,21 @@ test("a vendor additionally sees the proposals of organizations they own or admi
 });
 
 test("a vendor never sees another vendor's proposal", async ({ surface }) => {
-  const title = "R-2.24 opportunity whose proposal another vendor tries to open";
-
   await surface.signIn(persona.administrator);
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(
+    surface,
+    "R-2.24 opportunity whose proposal another vendor tries to open",
+  );
   await surface.signOut();
 
   await surface.signIn(persona.organizationAdmin);
-  await submitIndividualProposal(surface, title);
+  const proposalId = await submitIndividualProposal(surface, opportunityId);
   await surface.signOut();
 
   await surface.signIn(persona.vendor);
-  await surface.proposalCwuEdit.open({
-    opportunity: title,
-    author: seed.users.organizationAdmin.id,
-  });
+  await surface.proposalCwuEdit.open({ opportunityId, proposalId });
   expect(await surface.proposalCwuEdit.proposalTab()).toBeFalsy();
 
-  await surface.proposalCwuView.open({
-    opportunity: title,
-    author: seed.users.organizationAdmin.id,
-  });
+  await surface.proposalCwuView.open({ opportunityId, proposalId });
   expect(await surface.proposalCwuView.proposalTab()).toBeFalsy();
 });

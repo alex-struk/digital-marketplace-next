@@ -1,18 +1,19 @@
 // criterion: @R-2.35 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// The proposal is walked through the three changes of state the surface can bring about —
-// saved as a draft, submitted, withdrawn — and the history is read after each one. Every
-// change both adds to the history and leaves the state it caused named there, which is what
-// "every change of state is recorded" means from outside.
+// The proposal is walked through the three changes of state the surface can bring about on
+// an opportunity a test can build — saved as a draft, submitted, withdrawn — and the history
+// is read after each one. Every change both adds to the history and leaves the state it
+// caused named there, which is what "every change of state is recorded" means from outside.
 //
 // Two parts of the criterion are left alone. The scores entered against a proposal are one:
-// scoring needs the opportunity to have closed, and no page, action or observation closes
-// one (see R-1.1). Who made each change is the other: the observation returns the history
-// as one piece of text, and no person the suite can sign in as carries a display name in
-// the seed for that text to be matched against.
+// a score is entered at an evaluation stage the surface cannot put an opportunity into (see
+// the entries for R-2.26 and R-2.29 through R-2.33 in not-testable.yaml). Who made each
+// change is the other: the observation returns the history as one piece of text, and no
+// person the suite can sign in as carries a display name in the seed for that text to be
+// matched against.
 
 function inDays(days: number): string {
   const date = new Date();
@@ -34,38 +35,43 @@ const details = {
   completionDate: inDays(35),
 };
 
-async function publishOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.publish({ ...details, title });
+  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
 test("every change of state against a proposal is recorded in its history", async ({ surface }) => {
-  const title = "R-2.35 opportunity whose proposal is walked through three states";
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(
+    surface,
+    "R-2.35 opportunity whose proposal is walked through three states",
+  );
 
   await surface.signIn(persona.vendor);
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.chooseProponentIndividual();
   await surface.proposalCwuCreate.saveDraft({
     proposalText: "A proposal whose history is read after every change of state.",
   });
+  const proposalId = await surface.proposalCwuEdit.proposalIdentifier();
 
-  await surface.proposalCwuView.open({ opportunity: title });
+  await surface.proposalCwuView.open({ opportunityId, proposalId });
   const afterDraft = await surface.proposalCwuView.historyTab();
   expect(afterDraft).toBeTruthy();
 
-  await surface.proposalCwuEdit.open({ opportunity: title });
+  await surface.proposalCwuEdit.open({ opportunityId, proposalId });
   await surface.proposalCwuEdit.submitProposal();
-  await surface.proposalCwuView.open({ opportunity: title });
+  await surface.proposalCwuView.open({ opportunityId, proposalId });
   const afterSubmission = await surface.proposalCwuView.historyTab();
   expect(afterSubmission).not.toBe(afterDraft);
   expect(afterSubmission.toLowerCase()).toContain("submitted");
 
-  await surface.proposalCwuEdit.open({ opportunity: title });
+  await surface.proposalCwuEdit.open({ opportunityId, proposalId });
   await surface.proposalCwuEdit.withdrawProposal();
-  await surface.proposalCwuView.open({ opportunity: title });
+  await surface.proposalCwuView.open({ opportunityId, proposalId });
   const afterWithdrawal = await surface.proposalCwuView.historyTab();
   expect(afterWithdrawal).not.toBe(afterSubmission);
   expect(afterWithdrawal.toLowerCase()).toContain("withdrawn");

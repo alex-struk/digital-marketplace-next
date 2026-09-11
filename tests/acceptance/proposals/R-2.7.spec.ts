@@ -1,5 +1,5 @@
 // criterion: @R-2.7 v2
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -40,7 +40,7 @@ const panel = {
   chair: seed.users.staffPanelEvaluator,
 };
 
-async function publishCodeWithUs(surface: Surface, title: string): Promise<void> {
+async function publishCodeWithUs(surface: Surface, title: string): Promise<string> {
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.publish({
     ...shared,
@@ -49,9 +49,10 @@ async function publishCodeWithUs(surface: Surface, title: string): Promise<void>
     skills: ["Backend Development"],
     title,
   });
+  return surface.opportunityCwuEdit.opportunityIdentifier();
 }
 
-async function publishSprintWithUs(surface: Surface, title: string): Promise<void> {
+async function publishSprintWithUs(surface: Surface, title: string): Promise<string> {
   await surface.opportunitySwuCreate.open();
   await surface.opportunitySwuCreate.addPhase({
     phase: "Implementation",
@@ -78,9 +79,10 @@ async function publishSprintWithUs(surface: Surface, title: string): Promise<voi
     priceWeight: 25,
     title,
   });
+  return surface.opportunitySwuEdit.opportunityIdentifier();
 }
 
-async function publishTeamWithUs(surface: Surface, title: string): Promise<void> {
+async function publishTeamWithUs(surface: Surface, title: string): Promise<string> {
   await surface.opportunityTwuCreate.open();
   await surface.opportunityTwuCreate.addResource({
     serviceArea: "Full Stack Developer",
@@ -103,10 +105,11 @@ async function publishTeamWithUs(surface: Surface, title: string): Promise<void>
     priceWeight: 20,
     title,
   });
+  return surface.opportunityTwuEdit.opportunityIdentifier();
 }
 
-async function fillSprintProposal(surface: Surface, opportunity: string): Promise<void> {
-  await surface.proposalSwuCreate.open({ opportunity });
+async function fillSprintProposal(surface: Surface, opportunityId: string): Promise<void> {
+  await surface.proposalSwuCreate.open({ opportunityId });
   await surface.proposalSwuCreate.chooseOrganization({ organization: seed.organizations.qualified });
   await surface.proposalSwuCreate.addPhaseTeamMember({
     phase: "Implementation",
@@ -132,8 +135,8 @@ async function fillSprintProposal(surface: Surface, opportunity: string): Promis
   }
 }
 
-async function fillTeamProposal(surface: Surface, opportunity: string): Promise<void> {
-  await surface.proposalTwuCreate.open({ opportunity });
+async function fillTeamProposal(surface: Surface, opportunityId: string): Promise<void> {
+  await surface.proposalTwuCreate.open({ opportunityId });
   await surface.proposalTwuCreate.chooseOrganization({ organization: seed.organizations.qualified });
   await surface.proposalTwuCreate.addTeamMemberForResource({
     resource: "Full Stack Developer",
@@ -147,56 +150,64 @@ async function fillTeamProposal(surface: Surface, opportunity: string): Promise<
 }
 
 test("a proposal may be created as a draft, in all three programs", async ({ surface }) => {
-  const code = "R-2.7 Code With Us opportunity carrying a draft proposal";
-  const sprint = "R-2.7 Sprint With Us opportunity carrying a draft proposal";
-  const team = "R-2.7 Team With Us opportunity carrying a draft proposal";
-
   await surface.signIn(persona.administrator);
-  await publishCodeWithUs(surface, code);
-  await publishSprintWithUs(surface, sprint);
-  await publishTeamWithUs(surface, team);
+  const code = await publishCodeWithUs(
+    surface,
+    "R-2.7 Code With Us opportunity carrying a draft proposal",
+  );
+  const sprint = await publishSprintWithUs(
+    surface,
+    "R-2.7 Sprint With Us opportunity carrying a draft proposal",
+  );
+  const team = await publishTeamWithUs(
+    surface,
+    "R-2.7 Team With Us opportunity carrying a draft proposal",
+  );
   await surface.signOut();
 
   await surface.signIn(persona.vendor);
-  await surface.proposalCwuCreate.open({ opportunity: code });
+  await surface.proposalCwuCreate.open({ opportunityId: code });
   await surface.proposalCwuCreate.chooseProponentIndividual();
-  await surface.proposalCwuCreate.saveDraft({ proposalText: "A Code With Us proposal kept as a draft." });
-  await surface.proposalCwuEdit.open({ opportunity: code });
+  await surface.proposalCwuCreate.saveDraft({
+    proposalText: "A Code With Us proposal kept as a draft.",
+  });
   expect((await surface.proposalCwuEdit.status()).toLowerCase()).toContain("draft");
   await surface.signOut();
 
   await surface.signIn(persona.organizationAdmin);
   await fillSprintProposal(surface, sprint);
   await surface.proposalSwuCreate.saveDraft();
-  await surface.proposalSwuEdit.open({ opportunity: sprint });
   expect((await surface.proposalSwuEdit.status()).toLowerCase()).toContain("draft");
 
   await fillTeamProposal(surface, team);
   await surface.proposalTwuCreate.saveDraft();
-  await surface.proposalTwuEdit.open({ opportunity: team });
   expect((await surface.proposalTwuEdit.status()).toLowerCase()).toContain("draft");
 });
 
 test("a proposal may be created as a submission, in all three programs", async ({ surface }) => {
-  const code = "R-2.7 Code With Us opportunity carrying a submitted proposal";
-  const sprint = "R-2.7 Sprint With Us opportunity carrying a submitted proposal";
-  const team = "R-2.7 Team With Us opportunity carrying a submitted proposal";
-
   await surface.signIn(persona.administrator);
-  await publishCodeWithUs(surface, code);
-  await publishSprintWithUs(surface, sprint);
-  await publishTeamWithUs(surface, team);
+  const code = await publishCodeWithUs(
+    surface,
+    "R-2.7 Code With Us opportunity carrying a submitted proposal",
+  );
+  const sprint = await publishSprintWithUs(
+    surface,
+    "R-2.7 Sprint With Us opportunity carrying a submitted proposal",
+  );
+  const team = await publishTeamWithUs(
+    surface,
+    "R-2.7 Team With Us opportunity carrying a submitted proposal",
+  );
   await surface.signOut();
 
   await surface.signIn(persona.vendor);
-  await surface.proposalCwuCreate.open({ opportunity: code });
+  await surface.proposalCwuCreate.open({ opportunityId: code });
   await surface.proposalCwuCreate.chooseProponentIndividual();
   await surface.proposalCwuCreate.acceptProgramTerms();
   await surface.proposalCwuCreate.acceptAppTerms();
   await surface.proposalCwuCreate.submitProposal({
     proposalText: "A Code With Us proposal offered as a submission from the start.",
   });
-  await surface.proposalCwuEdit.open({ opportunity: code });
   expect((await surface.proposalCwuEdit.status()).toLowerCase()).toContain("submitted");
   await surface.signOut();
 
@@ -205,13 +216,11 @@ test("a proposal may be created as a submission, in all three programs", async (
   await surface.proposalSwuCreate.acceptProgramTerms();
   await surface.proposalSwuCreate.acceptAppTerms();
   await surface.proposalSwuCreate.submitProposal();
-  await surface.proposalSwuEdit.open({ opportunity: sprint });
   expect((await surface.proposalSwuEdit.status()).toLowerCase()).toContain("submitted");
 
   await fillTeamProposal(surface, team);
   await surface.proposalTwuCreate.acceptProgramTerms();
   await surface.proposalTwuCreate.acceptAppTerms();
   await surface.proposalTwuCreate.submitProposal();
-  await surface.proposalTwuEdit.open({ opportunity: team });
   expect((await surface.proposalTwuEdit.status()).toLowerCase()).toContain("submitted");
 });
