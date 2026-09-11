@@ -1,0 +1,6 @@
+gate: G3
+verdict: return
+by: tech-lead
+held_by: human
+note: "Returned on the stage's own report, not on a reading of the adapter. The session could not open a single page: the browser server was pinned to the Google Chrome channel and no Chrome is installed, so every navigation failed before a page existed. The agent was right to record all 79 pages and 680 members unbound rather than guess locators from familiarity, and said so plainly. Cause is environmental and now fixed in the pipeline (agentic-sdlc 9192e56 asks the server for bundled Chromium). Re-run the stage against the running oracle."
+at: 2026-09-11T00:05:11.751Z
