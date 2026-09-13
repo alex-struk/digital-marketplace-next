@@ -1,0 +1,15 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Do these tests follow from the opportunities criteria and from nothing else? Returned. The not-testable reasons are real and name what is missing, no implementation details leak into the tests, and the typecheck failures are all in other domains, but three tests assert something their criterion does not support. (1) R-1.1's notification test counts the author's mail before calling the closure trigger and expects it to grow. The criterion and the seed manifest both say closure runs in front of any /api or /status request, and the suite runs serially (workers: 1) with content/, evaluation/, files/ and notifications/ ahead of opportunities/. The one-time notice has therefore already been sent before the count is taken, so the test fails against a conforming system, as its own comment concedes. (2) R-1.18 reads a field error straight after adding a resource to an unsaved form. The criterion's given and when are the submission of a Team With Us opportunity that is not a draft, so the test asserts rejection at add time, which the criterion never states. (3) R-1.37 asserts that a visibly addressed notice reaches the administrator and concedes in its comment that a blind-copied notice would fail it. Addressing is not in the criterion, and R-1.34 to R-1.36 decline the same assertion for the same fixture limitation. The ruling changes to approve once those three are corrected.
+conditions:
+  - "R-1.1: remove the before/after mail-count test; state in the file comment that the author notification is not asserted because closure is one-shot and triggered by any /api or /status request, so the moment of notification cannot be isolated. Keep the status and proposal-review tests."
+  - "R-1.18: have each case submit an otherwise complete Team With Us opportunity that is not a draft (as R-1.13 and R-1.16 do) and read the rejection after that submission, not after addResource alone."
+  - "R-1.37: drop the every-administrator mail assertion or mark it unassertable on the same blind-copy grounds used in R-1.34 to R-1.36; keep the author-confirmation test."
+  - "Non-blocking: R-1.1, R-1.19 and R-1.24 read the seeded closed opportunities at their first evaluation stage; this holds only while no earlier-running domain advances those records, which should be rechecked when the evaluation domain is re-derived against the same seeds."
+cost: 2.229104
+turns: 20
+session: "3de87e38-2875-43da-8435-b18b2324376e"
+at: 2026-09-13T23:35:47.283Z
