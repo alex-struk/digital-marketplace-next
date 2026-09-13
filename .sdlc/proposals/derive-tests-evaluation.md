@@ -1,35 +1,45 @@
 ---
 gate: G3
 question: "Do these tests follow from the evaluation criteria and from nothing else?"
-recommendation: "I wrote the evaluation suite."
-opened: 2026-09-11T08:50:14.393Z
+recommendation: "Six of the thirty criteria in the evaluation domain got tests."
+opened: 2026-09-09T01:29:56.695Z
 ---
 
 # Do these tests follow from the evaluation criteria and from nothing else?
 
-**Recommendation.** I wrote the evaluation suite.
+**Recommendation.** Six of the thirty criteria in the evaluation domain got tests.
 
-I wrote the evaluation suite. Here is the journal entry.
+Six of the thirty criteria in the evaluation domain got tests. The other twenty-four are recorded in `tests/acceptance/not-testable.yaml` with reasons.
 
-**What I did.** This run is the first to see a contract that can reach a closed opportunity. The surface now carries a service status page whose action runs the pending transitions, and the seed carries one Sprint With Us and one Team With Us opportunity whose deadlines lapsed thirty days before the seed is applied, each with an evaluation panel, four questions worth five points apiece, and three submitted proposals. That unlocks the whole walk: close, every evaluator scores every proponent and submits, the chair agrees a score per proponent, the scores are finalised. Eighteen criteria that a previous pass had recorded as unreachable now have real tests behind them.
+Criteria with a spec file: R-5.1, R-5.9, R-5.16, R-5.17, R-5.18, R-5.19.
 
-Counts for this domain:
+One gap accounts for almost all of the rest. An opportunity leaves the published state only by closing at its proposal deadline. The contract's observables document names a status route as the request that runs the closing hook, but no page, action or observation in the surface makes that request, and a published opportunity is refused a deadline earlier than today. Earlier stages recorded the same finding against R-1.1. Without a closure, no opportunity reaches individual question evaluation or consensus, so no proponent is ever anonymised, no individual evaluation or consensus can be written, and nothing can be finalised. Twenty-two of my twenty-four entries reduce to that. The observations written for these outcomes all exist and all sit idle, including the two consensus refusals, the read-only marker on a submitted evaluation, and the message shown to an owner who is not on the panel.
 
-| | |
-|---|---|
-| criteria in scope | 30 |
-| criteria with a test file | 24 |
-| criteria recorded as not testable | 6 |
+What is reachable is everything the panel does before an opportunity closes. Panels can be named on a draft, on an opportunity under review and on a published one, which covers three of the five states R-5.16 lists. Panel members can be added and the resulting notices read from the mail catcher, which covers both halves of R-5.17. Panel membership is shown or withheld per reader, which covers R-5.18. A panel member sees a draft they are evaluating on their dashboard and can open it, which covers R-5.19.
 
-**What I rewrote.** Six evaluation files already existed from an earlier contract. They addressed pages by opportunity title, while the contract's page opener takes an identifier, so each now reads the identifier off the screen the application lands on after a save. The panel criterion about changing a panel mid evaluation also gained the two stages that were previously out of reach.
+Surface pieces I needed and did not find:
 
-**Not testable, all of them blocked rather than permanent.** Each needs something the contract could add. Named so the next contract pass can act on them:
+- **An action that closes an opportunity**, or a surface for the transition trigger the observables document already names. This one addition would unblock most of the domain.
+- **An observation of a second-chair refusal** on the two panel surfaces. The fourth fault R-5.1 lists cannot be told apart from any other refusal without it.
+- **An observation returning which people a saved panel names.** The existing row observation reports that a panel is shown, not its membership, so neither "the opportunity keeps the panel it had" nor an accepted panel change can be asserted by content.
+- **An action adding a panel member with no role, plus an observation of the field-level message identifying that member.** Both are needed for R-5.37, and neither exists.
+- **An observation reporting whether the finalise action stands ready for the person looking.** R-5.14 is about who is offered the action, and offering is not currently readable.
+- **A second public sector sign-in that is not an administrator.** The persona for it is defined but its session route is marked unavailable. Its absence forced the arrangement of every test in R-5.18, cost R-5.19 its closing contrast, and is one of two reasons R-5.34 is not testable.
 
-- A refusal observation on the individual evaluation create and edit surfaces. Without it, an attempt made by the wrong person or at the wrong stage cannot be told from one that simply recorded nothing. This blocks the criteria on who may read an evaluation and on who may record one.
-- A sign-in for the second public sector employee, which the persona file itself records as unavailable, and an administrator who is not on the panel. Both roles are required by the criteria on reader permission and on the split of evaluation tools by role.
-- A seeded panel whose chair is not an evaluator. Today both panel members evaluate, so no test can show a chair being refused a score, nor a chair being left out of the closing notice.
-- An action that saves a draft evaluation the browser form would refuse, in the shape the file upload page already uses for malformed requests. Without it the criterion about drafts going unchecked has no given.
-- An action that submits one evaluation on its own, plus an observation of its rejection.
-- An action that adds a panel member with no role, plus a field level refusal naming that member.
+## Ruling
 
-**Three things worth a decision.** First, each seeded closed opportunity can be walked to consensus exactly once, and thirteen of my tests need one in its starting state, so a full suite run will have them contending. The seed needs one closed opportunity per walking criterion, or a reset between files. Second, no observation returns a stage as an identity, so several tests read the stage from the status text by the words the criteria themselves use. Third, the criterion about the closing notice asserts messages the contract already warns do not arrive on the current target, which the contract says should be measured rather than assumed.
+**Verdict:** approve
+**By:** agent:reviewer
+
+Each of the six spec files asserts only what its criterion states, using pages, actions and observations named in spec/contract/surface.yaml, with no route, selector, table, column or status code anywhere in the diff. The closure gap behind twenty-two of the twenty-four not-testable entries is verified against observables.yaml, the seed and the existing R-1.1 entry; the omissions documented inside R-5.1 correspond to observations that genuinely do not exist on the panel surfaces. The twenty-four refusals plus six tested criteria account for exactly the thirty live criteria in the domain at versions matching the spec. Runner-owned typecheck passed on this revision, and the diff stays inside tests/acceptance and the stage's own records. Noted without holding: the R-5.9 test can only show the browser form refuses a chairless panel, and R-5.17's absence assertions read visible recipients only, so a blind-copied notice would be missed; both belong to the contract owner, not the test writer.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `f7de3e3e26ec0f74d584edb4550f51873f1aee2c`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+
+    No diagnostics.
