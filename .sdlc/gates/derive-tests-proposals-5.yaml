@@ -1,0 +1,13 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Do these tests follow from the proposals criteria and from nothing else? Approve. Checked against spec/domains/proposals.md: R-2.5 asserts the move to review and the three anonymous names as a set, which fits the criterion's note that the numbering order carries no meaning; R-2.28 asserts only the wrong-stage refusal; R-2.34 asserts the 1 to 5,000 character reason bounds and the reason kept in history; R-2.25, R-2.37 and R-2.38 add only the after-closure half each criterion states. No route, selector, table or status code appears, and records are reached through seed handles and the identifiers the pages return. The seed manifest confirms staffOne (publicSectorStaff) authored both closed opportunities and that organizationOwner and proponentTwo (competingVendor) created the proposals the tests sign in to read. Every not-testable reason names a real gap: the seed has no closed Code With Us opportunity; it has one closed opportunity per program and the suite runs with workers: 1 and no reset between tests, so walking the evaluation chain uses the fixture up for every later test; and the seed states it declines six proponents. The runner typecheck failed, but every error listed is in the evaluation, files, notifications and opportunities domains, whose files this diff does not touch and which still pass title, id or user to open. The list is truncated before proposals, so the proposals files were checked by hand: no old-style open parameters remain, and every page member, seed handle and persona the new tests use exists in tests/generated with a matching signature. The ruling would change if a full typecheck showed errors under acceptance/proposals, or if the test runner turned out to reset the seed between tests, which would make the six fixture-consumption reasons false.
+conditions:
+  - "The runner's full, untruncated typecheck output shows zero errors under tests/acceptance/proposals before merge; errors in other domains belong to those domains' own re-derivations."
+  - "R-2.34 permanently disqualifies seed.proposals.teamWithUsThree on the closed Team With Us opportunity; the evaluation domain's next derivation must treat that opportunity as carrying two proposals still in contention, or the seed must add a closed opportunity of its own for R-2.34."
+cost: 1.906938
+turns: 21
+session: "83f074d2-682b-44c2-b86e-e3e60354a9de"
+at: 2026-09-13T23:38:31.021Z

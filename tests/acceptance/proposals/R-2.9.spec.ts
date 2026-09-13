@@ -1,5 +1,5 @@
 // criterion: @R-2.9 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -16,6 +16,17 @@ function inDays(days: number): string {
   const date = new Date();
   date.setDate(date.getDate() + days);
   return date.toISOString().slice(0, 10);
+}
+
+interface Bid {
+  opportunityId: string;
+  proposalId: string;
+}
+
+interface Bids {
+  code: Bid;
+  sprint: Bid;
+  team: Bid;
 }
 
 const shared = {
@@ -35,12 +46,7 @@ const panel = {
   chair: seed.users.staffPanelEvaluator,
 };
 
-async function publishAllThree(
-  surface: Surface,
-  code: string,
-  sprint: string,
-  team: string,
-): Promise<void> {
+async function publishAllThree(surface: Surface, label: string): Promise<Bids> {
   await surface.signIn(persona.administrator);
 
   await surface.opportunityCwuCreate.open();
@@ -49,8 +55,9 @@ async function publishAllThree(
     completionDate: inDays(35),
     reward: 5000,
     skills: ["Backend Development"],
-    title: code,
+    title: `R-2.9 Code With Us opportunity ${label}`,
   });
+  const code = await surface.opportunityCwuEdit.opportunityIdentifier();
 
   await surface.opportunitySwuCreate.open();
   await surface.opportunitySwuCreate.addPhase({
@@ -76,8 +83,9 @@ async function publishAllThree(
     codeChallengeWeight: 25,
     teamScenarioWeight: 25,
     priceWeight: 25,
-    title: sprint,
+    title: `R-2.9 Sprint With Us opportunity ${label}`,
   });
+  const sprint = await surface.opportunitySwuEdit.opportunityIdentifier();
 
   await surface.opportunityTwuCreate.open();
   await surface.opportunityTwuCreate.addResource({
@@ -99,21 +107,23 @@ async function publishAllThree(
     questionsWeight: 40,
     challengeWeight: 40,
     priceWeight: 20,
-    title: team,
+    title: `R-2.9 Team With Us opportunity ${label}`,
   });
+  const team = await surface.opportunityTwuEdit.opportunityIdentifier();
 
   await surface.signOut();
+
+  return {
+    code: { opportunityId: code, proposalId: "" },
+    sprint: { opportunityId: sprint, proposalId: "" },
+    team: { opportunityId: team, proposalId: "" },
+  };
 }
 
-async function submitAllThree(
-  surface: Surface,
-  code: string,
-  sprint: string,
-  team: string,
-): Promise<void> {
+async function submitAllThree(surface: Surface, bids: Bids): Promise<Bids> {
   await surface.signIn(persona.organizationAdmin);
 
-  await surface.proposalCwuCreate.open({ opportunity: code });
+  await surface.proposalCwuCreate.open({ opportunityId: bids.code.opportunityId });
   await surface.proposalCwuCreate.chooseProponentOrganization({
     organization: seed.organizations.qualified,
   });
@@ -122,8 +132,9 @@ async function submitAllThree(
   await surface.proposalCwuCreate.submitProposal({
     proposalText: "A Code With Us proposal offered for the organization.",
   });
+  const code = await surface.proposalCwuEdit.proposalIdentifier();
 
-  await surface.proposalSwuCreate.open({ opportunity: sprint });
+  await surface.proposalSwuCreate.open({ opportunityId: bids.sprint.opportunityId });
   await surface.proposalSwuCreate.chooseOrganization({ organization: seed.organizations.qualified });
   await surface.proposalSwuCreate.addPhaseTeamMember({
     phase: "Implementation",
@@ -150,8 +161,9 @@ async function submitAllThree(
   await surface.proposalSwuCreate.acceptProgramTerms();
   await surface.proposalSwuCreate.acceptAppTerms();
   await surface.proposalSwuCreate.submitProposal();
+  const sprint = await surface.proposalSwuEdit.proposalIdentifier();
 
-  await surface.proposalTwuCreate.open({ opportunity: team });
+  await surface.proposalTwuCreate.open({ opportunityId: bids.team.opportunityId });
   await surface.proposalTwuCreate.chooseOrganization({ organization: seed.organizations.qualified });
   await surface.proposalTwuCreate.addTeamMemberForResource({
     resource: "Full Stack Developer",
@@ -165,48 +177,42 @@ async function submitAllThree(
   await surface.proposalTwuCreate.acceptProgramTerms();
   await surface.proposalTwuCreate.acceptAppTerms();
   await surface.proposalTwuCreate.submitProposal();
+  const team = await surface.proposalTwuEdit.proposalIdentifier();
+
+  return {
+    code: { ...bids.code, proposalId: code },
+    sprint: { ...bids.sprint, proposalId: sprint },
+    team: { ...bids.team, proposalId: team },
+  };
+}
+
+async function expectEveryHistoryReadable(surface: Surface, bids: Bids): Promise<void> {
+  await surface.proposalCwuView.open(bids.code);
+  expect(await surface.proposalCwuView.historyTab()).toBeTruthy();
+
+  await surface.proposalSwuView.open(bids.sprint);
+  expect(await surface.proposalSwuView.historyTab()).toBeTruthy();
+
+  await surface.proposalTwuView.open(bids.team);
+  expect(await surface.proposalTwuView.historyTab()).toBeTruthy();
 }
 
 test("a vendor may read the history of a proposal they authored, in all three programs", async ({
   surface,
 }) => {
-  const code = "R-2.9 Code With Us opportunity whose author reads the history";
-  const sprint = "R-2.9 Sprint With Us opportunity whose author reads the history";
-  const team = "R-2.9 Team With Us opportunity whose author reads the history";
+  const published = await publishAllThree(surface, "whose author reads the history");
+  const bids = await submitAllThree(surface, published);
 
-  await publishAllThree(surface, code, sprint, team);
-  await submitAllThree(surface, code, sprint, team);
-
-  await surface.proposalCwuView.open({ opportunity: code });
-  expect(await surface.proposalCwuView.historyTab()).toBeTruthy();
-
-  await surface.proposalSwuView.open({ opportunity: sprint });
-  expect(await surface.proposalSwuView.historyTab()).toBeTruthy();
-
-  await surface.proposalTwuView.open({ opportunity: team });
-  expect(await surface.proposalTwuView.historyTab()).toBeTruthy();
+  await expectEveryHistoryReadable(surface, bids);
 });
 
 test("a vendor may read the history of a proposal belonging to an organization they own or administer, in all three programs", async ({
   surface,
 }) => {
-  const code = "R-2.9 Code With Us opportunity whose organization owner reads the history";
-  const sprint = "R-2.9 Sprint With Us opportunity whose organization owner reads the history";
-  const team = "R-2.9 Team With Us opportunity whose organization owner reads the history";
-
-  await publishAllThree(surface, code, sprint, team);
-  await submitAllThree(surface, code, sprint, team);
+  const published = await publishAllThree(surface, "whose organization owner reads the history");
+  const bids = await submitAllThree(surface, published);
   await surface.signOut();
 
   await surface.signIn(persona.organizationOwner);
-  const organization = seed.organizations.qualified.id;
-
-  await surface.proposalCwuView.open({ opportunity: code, organization });
-  expect(await surface.proposalCwuView.historyTab()).toBeTruthy();
-
-  await surface.proposalSwuView.open({ opportunity: sprint, organization });
-  expect(await surface.proposalSwuView.historyTab()).toBeTruthy();
-
-  await surface.proposalTwuView.open({ opportunity: team, organization });
-  expect(await surface.proposalTwuView.historyTab()).toBeTruthy();
+  await expectEveryHistoryReadable(surface, bids);
 });

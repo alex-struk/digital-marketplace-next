@@ -1,5 +1,5 @@
 // criterion: @R-2.20 v2
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -21,7 +21,7 @@ const panel = {
   chair: seed.users.staffPanelEvaluator,
 };
 
-async function publishTeamOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishTeamOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunityTwuCreate.open();
   await surface.opportunityTwuCreate.addResource({
@@ -53,11 +53,13 @@ async function publishTeamOpportunity(surface: Surface, title: string): Promise<
     priceWeight: 20,
     title,
   });
+  const opportunityId = await surface.opportunityTwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
-async function openProposalForm(surface: Surface, opportunity: string): Promise<void> {
-  await surface.proposalTwuCreate.open({ opportunity });
+async function openProposalForm(surface: Surface, opportunityId: string): Promise<void> {
+  await surface.proposalTwuCreate.open({ opportunityId });
   await surface.proposalTwuCreate.chooseOrganization({ organization: seed.organizations.qualified });
   await surface.proposalTwuCreate.answerResourceQuestion({
     order: 0,
@@ -68,11 +70,13 @@ async function openProposalForm(surface: Surface, opportunity: string): Promise<
 }
 
 test("a Team With Us proposal must name at least one team member", async ({ surface }) => {
-  const title = "R-2.20 opportunity bid on with nobody on the team";
-  await publishTeamOpportunity(surface, title);
+  const opportunityId = await publishTeamOpportunity(
+    surface,
+    "R-2.20 opportunity bid on with nobody on the team",
+  );
 
   await surface.signIn(persona.organizationAdmin);
-  await openProposalForm(surface, title);
+  await openProposalForm(surface, opportunityId);
   await surface.proposalTwuCreate.submitProposal();
 
   expect(await surface.proposalTwuCreate.fieldError()).toBeTruthy();
@@ -81,11 +85,13 @@ test("a Team With Us proposal must name at least one team member", async ({ surf
 test("each team member on a Team With Us proposal carries an hourly rate of at least one dollar", async ({
   surface,
 }) => {
-  const title = "R-2.20 opportunity bid on with an hourly rate below a dollar";
-  await publishTeamOpportunity(surface, title);
+  const opportunityId = await publishTeamOpportunity(
+    surface,
+    "R-2.20 opportunity bid on with an hourly rate below a dollar",
+  );
 
   await surface.signIn(persona.organizationAdmin);
-  await openProposalForm(surface, title);
+  await openProposalForm(surface, opportunityId);
   await surface.proposalTwuCreate.addTeamMemberForResource({
     resource: "Full Stack Developer",
     member: seed.users.organizationAdmin,

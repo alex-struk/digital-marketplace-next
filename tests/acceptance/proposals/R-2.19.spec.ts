@@ -1,5 +1,5 @@
 // criterion: @R-2.19 v2
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -25,7 +25,7 @@ const panel = {
   chair: seed.users.staffPanelEvaluator,
 };
 
-async function publishSprintOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishSprintOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunitySwuCreate.open();
   await surface.opportunitySwuCreate.addPhase({
@@ -68,7 +68,9 @@ async function publishSprintOpportunity(surface: Surface, title: string): Promis
     priceWeight: 25,
     title,
   });
+  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
 async function answerAndReference(surface: Surface): Promise<void> {
@@ -89,19 +91,21 @@ async function answerAndReference(surface: Surface): Promise<void> {
   await surface.proposalSwuCreate.acceptAppTerms();
 }
 
-async function openProposalForm(surface: Surface, opportunity: string): Promise<void> {
-  await surface.proposalSwuCreate.open({ opportunity });
+async function openProposalForm(surface: Surface, opportunityId: string): Promise<void> {
+  await surface.proposalSwuCreate.open({ opportunityId });
   await surface.proposalSwuCreate.chooseOrganization({ organization: seed.organizations.qualified });
 }
 
 test("a Sprint With Us proposal must offer a team for every phase the opportunity requires", async ({
   surface,
 }) => {
-  const title = "R-2.19 opportunity bid on with a phase left without a team";
-  await publishSprintOpportunity(surface, title);
+  const opportunityId = await publishSprintOpportunity(
+    surface,
+    "R-2.19 opportunity bid on with a phase left without a team",
+  );
 
   await surface.signIn(persona.organizationAdmin);
-  await openProposalForm(surface, title);
+  await openProposalForm(surface, opportunityId);
   await surface.proposalSwuCreate.addPhaseTeamMember({
     phase: "Implementation",
     member: seed.users.organizationOwner,
@@ -121,11 +125,13 @@ test("a Sprint With Us proposal must offer a team for every phase the opportunit
 test("a Sprint With Us proposal must offer no phase the opportunity does not require", async ({
   surface,
 }) => {
-  const title = "R-2.19 opportunity bid on with a phase it never asked for";
-  await publishSprintOpportunity(surface, title);
+  const opportunityId = await publishSprintOpportunity(
+    surface,
+    "R-2.19 opportunity bid on with a phase it never asked for",
+  );
 
   await surface.signIn(persona.organizationAdmin);
-  await openProposalForm(surface, title);
+  await openProposalForm(surface, opportunityId);
   await surface.proposalSwuCreate.addPhaseTeamMember({
     phase: "Inception",
     member: seed.users.organizationMember,
@@ -157,11 +163,13 @@ test("a Sprint With Us proposal must offer no phase the opportunity does not req
 test("a Sprint With Us proposal may name no more than one scrum master in each phase", async ({
   surface,
 }) => {
-  const title = "R-2.19 opportunity bid on with two scrum masters in one phase";
-  await publishSprintOpportunity(surface, title);
+  const opportunityId = await publishSprintOpportunity(
+    surface,
+    "R-2.19 opportunity bid on with two scrum masters in one phase",
+  );
 
   await surface.signIn(persona.organizationAdmin);
-  await openProposalForm(surface, title);
+  await openProposalForm(surface, opportunityId);
   await surface.proposalSwuCreate.addPhaseTeamMember({
     phase: "Prototype",
     member: seed.users.organizationAdmin,
@@ -197,11 +205,13 @@ test("a Sprint With Us proposal may name no more than one scrum master in each p
 test("a Sprint With Us proposal must cover every capability the opportunity requires across its phases", async ({
   surface,
 }) => {
-  const title = "R-2.19 opportunity bid on with a required capability uncovered";
-  await publishSprintOpportunity(surface, title);
+  const opportunityId = await publishSprintOpportunity(
+    surface,
+    "R-2.19 opportunity bid on with a required capability uncovered",
+  );
 
   await surface.signIn(persona.organizationAdmin);
-  await openProposalForm(surface, title);
+  await openProposalForm(surface, opportunityId);
   await surface.proposalSwuCreate.addPhaseTeamMember({
     phase: "Prototype",
     member: seed.users.organizationMember,
@@ -227,11 +237,13 @@ test("a Sprint With Us proposal must cover every capability the opportunity requ
 });
 
 test("a Sprint With Us proposal must stay within each phase's budget", async ({ surface }) => {
-  const title = "R-2.19 opportunity bid on above one phase's budget";
-  await publishSprintOpportunity(surface, title);
+  const opportunityId = await publishSprintOpportunity(
+    surface,
+    "R-2.19 opportunity bid on above one phase's budget",
+  );
 
   await surface.signIn(persona.organizationAdmin);
-  await openProposalForm(surface, title);
+  await openProposalForm(surface, opportunityId);
   await surface.proposalSwuCreate.addPhaseTeamMember({
     phase: "Prototype",
     member: seed.users.organizationAdmin,

@@ -1,5 +1,5 @@
 // criterion: @R-2.4 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -8,7 +8,8 @@ import type { Surface } from "../../fixtures";
 // observation, and a deletion that did not happen is exactly a proposal that survives.
 //
 // "Permanently" is read the only way a person could read it — the proposal can no longer
-// be opened, and no longer appears among the vendor's own proposals on their dashboard.
+// be opened at the address it was held at, and no longer appears among the vendor's own
+// proposals on their dashboard.
 
 function inDays(days: number): string {
   const date = new Date();
@@ -30,30 +31,34 @@ const details = {
   completionDate: inDays(35),
 };
 
-async function publishOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.publish({ ...details, title });
+  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
 test("a proposal that has been submitted cannot be deleted", async ({ surface }) => {
-  const title = "R-2.4 opportunity carrying a submitted proposal";
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(
+    surface,
+    "R-2.4 opportunity carrying a submitted proposal",
+  );
 
   await surface.signIn(persona.vendor);
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.chooseProponentIndividual();
   await surface.proposalCwuCreate.acceptProgramTerms();
   await surface.proposalCwuCreate.acceptAppTerms();
   await surface.proposalCwuCreate.submitProposal({
     proposalText: "A submitted proposal its author then asks to have deleted.",
   });
+  const proposalId = await surface.proposalCwuEdit.proposalIdentifier();
 
-  await surface.proposalCwuEdit.open({ opportunity: title });
   await surface.proposalCwuEdit.deleteProposal();
 
-  await surface.proposalCwuEdit.open({ opportunity: title });
+  await surface.proposalCwuEdit.open({ opportunityId, proposalId });
   expect((await surface.proposalCwuEdit.status()).toLowerCase()).toContain("submitted");
 });
 
@@ -61,20 +66,20 @@ test("only a draft proposal can be deleted, and deleting it removes it permanent
   surface,
 }) => {
   const title = "R-2.4 opportunity carrying a draft proposal that is deleted";
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(surface, title);
 
   await surface.signIn(persona.vendor);
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.chooseProponentIndividual();
   await surface.proposalCwuCreate.saveDraft({
     proposalText: "A draft proposal its author then deletes.",
   });
+  const proposalId = await surface.proposalCwuEdit.proposalIdentifier();
 
-  await surface.proposalCwuEdit.open({ opportunity: title });
   expect((await surface.proposalCwuEdit.status()).toLowerCase()).toContain("draft");
   await surface.proposalCwuEdit.deleteProposal();
 
-  await surface.proposalCwuEdit.open({ opportunity: title });
+  await surface.proposalCwuEdit.open({ opportunityId, proposalId });
   expect(await surface.proposalCwuEdit.proposalTab()).toBeFalsy();
 
   await surface.proposalVendorDashboard.open();

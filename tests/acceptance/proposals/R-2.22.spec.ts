@@ -1,18 +1,18 @@
 // criterion: @R-2.22 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
 // The criterion needs two organizations the same vendor may bid with, and the seed carries
-// only one qualified supplier. A second one is built here: Team With Us qualification is an
-// approved service area and the program's terms accepted, both of which the surface
-// reaches, whereas Sprint With Us qualification also wants a team covering nine
+// only one qualified supplier that vendor owns. A second one is built here: Team With Us
+// qualification is an approved service area and the program's terms accepted, both of which
+// the surface reaches, whereas Sprint With Us qualification also wants a team covering nine
 // capabilities. So the proposal is a Team With Us one and the organization it is moved to
 // provides the service area the opportunity calls for.
 //
 // The proposal management screens carry no action that names an organization, so the change
-// is asked for through save_changes, which is the action that submits the edited proposal.
-// A choose_organization action on proposal-twu-edit and proposal-swu-edit would say this
+// is asked for through save_changes, which is the action that saves the edited proposal. A
+// choose_organization action on proposal-twu-edit and proposal-swu-edit would say this
 // outright; without one, the edit form is reached only through what save_changes carries.
 //
 // The refusal is read from the proposal still naming the organization it was submitted for,
@@ -30,7 +30,6 @@ const panel = {
 };
 
 const secondSupplier = {
-  legalName: "R-2.22 Second Supplier Ltd.",
   streetAddress: "60 Marine Way",
   addressLineTwo: "",
   city: "Victoria",
@@ -44,7 +43,7 @@ const secondSupplier = {
   website: "",
 };
 
-async function publishTeamOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishTeamOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunityTwuCreate.open();
   await surface.opportunityTwuCreate.addResource({
@@ -76,18 +75,20 @@ async function publishTeamOpportunity(surface: Surface, title: string): Promise<
     priceWeight: 20,
     title,
   });
+  const opportunityId = await surface.opportunityTwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
 async function qualifySecondSupplier(surface: Surface, legalName: string): Promise<void> {
   await surface.signIn(persona.organizationOwner);
   await surface.organizationCreate.open();
   await surface.organizationCreate.createOrganization({ ...secondSupplier, legalName });
+  const orgId = await surface.organizationEdit.organizationIdentifier();
   await surface.signOut();
 
   await surface.signIn(persona.administrator);
-  await surface.organizationList.open();
-  await surface.organizationList.openOrganization({ legalName });
+  await surface.organizationEdit.open({ orgId });
   await surface.organizationEdit.editServiceAreas();
   await surface.organizationEdit.saveServiceAreas({
     serviceAreas: [seed.organizations.qualified.service_areas[0]],
@@ -95,17 +96,15 @@ async function qualifySecondSupplier(surface: Surface, legalName: string): Promi
   await surface.signOut();
 
   await surface.signIn(persona.organizationOwner);
-  await surface.organizationList.open();
-  await surface.organizationList.openOrganization({ legalName });
-  await surface.organizationEdit.viewTwuTerms();
+  await surface.organizationTwuTerms.open({ orgId });
   await surface.organizationTwuTerms.acceptTerms();
 }
 
 async function submitProposalForQualifiedOrganization(
   surface: Surface,
-  opportunity: string,
-): Promise<void> {
-  await surface.proposalTwuCreate.open({ opportunity });
+  opportunityId: string,
+): Promise<string> {
+  await surface.proposalTwuCreate.open({ opportunityId });
   await surface.proposalTwuCreate.chooseOrganization({ organization: seed.organizations.qualified });
   await surface.proposalTwuCreate.addTeamMemberForResource({
     resource: "Full Stack Developer",
@@ -119,24 +118,26 @@ async function submitProposalForQualifiedOrganization(
   await surface.proposalTwuCreate.acceptProgramTerms();
   await surface.proposalTwuCreate.acceptAppTerms();
   await surface.proposalTwuCreate.submitProposal();
+  return surface.proposalTwuEdit.proposalIdentifier();
 }
 
 test("once a proposal has been submitted, the organization it was submitted for cannot be changed", async ({
   surface,
 }) => {
-  const title = "R-2.22 opportunity whose submitted proposal tries to change organization";
   const legalName = "R-2.22 Second Supplier For A Submitted Proposal Ltd.";
-  await publishTeamOpportunity(surface, title);
+  const opportunityId = await publishTeamOpportunity(
+    surface,
+    "R-2.22 opportunity whose submitted proposal tries to change organization",
+  );
   await qualifySecondSupplier(surface, legalName);
 
-  await submitProposalForQualifiedOrganization(surface, title);
-  await surface.proposalTwuEdit.open({ opportunity: title });
+  const proposalId = await submitProposalForQualifiedOrganization(surface, opportunityId);
   expect((await surface.proposalTwuEdit.status()).toLowerCase()).toContain("submitted");
 
   await surface.proposalTwuEdit.startEditing();
   await surface.proposalTwuEdit.saveChanges({ organization: { legalName } });
 
-  await surface.proposalTwuEdit.open({ opportunity: title });
+  await surface.proposalTwuEdit.open({ opportunityId, proposalId });
   const shown = await surface.proposalTwuEdit.proposalTab();
   expect(shown).toContain(seed.organizations.qualified.legal_name);
   expect(shown).not.toContain(legalName);
@@ -145,18 +146,19 @@ test("once a proposal has been submitted, the organization it was submitted for 
 test("the organization may be changed once the proposal has been withdrawn", async ({
   surface,
 }) => {
-  const title = "R-2.22 opportunity whose withdrawn proposal changes organization";
   const legalName = "R-2.22 Second Supplier For A Withdrawn Proposal Ltd.";
-  await publishTeamOpportunity(surface, title);
+  const opportunityId = await publishTeamOpportunity(
+    surface,
+    "R-2.22 opportunity whose withdrawn proposal changes organization",
+  );
   await qualifySecondSupplier(surface, legalName);
 
-  await submitProposalForQualifiedOrganization(surface, title);
-  await surface.proposalTwuEdit.open({ opportunity: title });
+  const proposalId = await submitProposalForQualifiedOrganization(surface, opportunityId);
   await surface.proposalTwuEdit.withdrawProposal();
 
   await surface.proposalTwuEdit.startEditing();
   await surface.proposalTwuEdit.saveChanges({ organization: { legalName } });
 
-  await surface.proposalTwuEdit.open({ opportunity: title });
+  await surface.proposalTwuEdit.open({ opportunityId, proposalId });
   expect(await surface.proposalTwuEdit.proposalTab()).toContain(legalName);
 });

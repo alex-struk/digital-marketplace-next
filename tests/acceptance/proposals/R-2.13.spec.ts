@@ -1,5 +1,5 @@
 // criterion: @R-2.13 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -34,15 +34,17 @@ const details = {
 
 const tooLong = "word ".repeat(2001).slice(0, 10001);
 
-async function publishOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.publish({ ...details, title });
+  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
-async function openProposalForm(surface: Surface, opportunity: string): Promise<void> {
-  await surface.proposalCwuCreate.open({ opportunity });
+async function openProposalForm(surface: Surface, opportunityId: string): Promise<void> {
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.chooseProponentIndividual();
   await surface.proposalCwuCreate.acceptProgramTerms();
   await surface.proposalCwuCreate.acceptAppTerms();
@@ -51,11 +53,13 @@ async function openProposalForm(surface: Surface, opportunity: string): Promise<
 test("a Code With Us proposal that is not a draft is rejected when its proposal text is empty", async ({
   surface,
 }) => {
-  const title = "R-2.13 opportunity bid on with no proposal text";
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(
+    surface,
+    "R-2.13 opportunity bid on with no proposal text",
+  );
 
   await surface.signIn(persona.vendor);
-  await openProposalForm(surface, title);
+  await openProposalForm(surface, opportunityId);
   await surface.proposalCwuCreate.submitProposal({ proposalText: "" });
 
   expect(await surface.proposalCwuCreate.fieldError()).toBeTruthy();
@@ -64,11 +68,13 @@ test("a Code With Us proposal that is not a draft is rejected when its proposal 
 test("a Code With Us proposal that is not a draft is rejected when its proposal text is longer than 10,000 characters", async ({
   surface,
 }) => {
-  const title = "R-2.13 opportunity bid on with overlong proposal text";
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(
+    surface,
+    "R-2.13 opportunity bid on with overlong proposal text",
+  );
 
   await surface.signIn(persona.vendor);
-  await openProposalForm(surface, title);
+  await openProposalForm(surface, opportunityId);
   await surface.proposalCwuCreate.submitProposal({ proposalText: tooLong });
 
   expect(await surface.proposalCwuCreate.fieldError()).toBeTruthy();
@@ -77,11 +83,13 @@ test("a Code With Us proposal that is not a draft is rejected when its proposal 
 test("a Code With Us proposal that is not a draft is rejected when its additional comments are longer than 10,000 characters", async ({
   surface,
 }) => {
-  const title = "R-2.13 opportunity bid on with overlong additional comments";
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(
+    surface,
+    "R-2.13 opportunity bid on with overlong additional comments",
+  );
 
   await surface.signIn(persona.vendor);
-  await openProposalForm(surface, title);
+  await openProposalForm(surface, opportunityId);
   await surface.proposalCwuCreate.submitProposal({
     proposalText: "A proposal whose text is the right length and whose comments are not.",
     additionalComments: tooLong,
@@ -93,11 +101,13 @@ test("a Code With Us proposal that is not a draft is rejected when its additiona
 test("a Code With Us proposal that is not a draft is rejected when it carries no complete proponent", async ({
   surface,
 }) => {
-  const title = "R-2.13 opportunity bid on with no proponent";
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(
+    surface,
+    "R-2.13 opportunity bid on with no proponent",
+  );
 
   await surface.signIn(persona.vendor);
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.acceptProgramTerms();
   await surface.proposalCwuCreate.acceptAppTerms();
   await surface.proposalCwuCreate.submitProposal({

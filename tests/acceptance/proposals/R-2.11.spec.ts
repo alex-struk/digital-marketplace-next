@@ -1,5 +1,5 @@
 // criterion: @R-2.11 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -8,8 +8,11 @@ import type { Surface } from "../../fixtures";
 // organization" is exactly the second of those two acting after the first.
 //
 // The identifier of the existing proposal, which the criterion says comes back alongside
-// the refusal, is not asserted: no observation on any proposal surface returns a
-// proposal's identifier, so there is nothing to read it from.
+// the refusal, is not asserted. The proposal screens do return a proposal's identifier
+// now, but the thing to compare it against is a field of the answer the service gave the
+// refused request, and the create screen reports a refusal as one piece of prose.
+// observables.yaml says as much: the shape of a refusal is read from the answer and not
+// from the screen, and the surface offers no way to read that answer.
 //
 // The other route the criterion names — an existing proposal edited to name an
 // organization that already bid — is not exercised here. The proposal management screens
@@ -26,7 +29,7 @@ const panel = {
   chair: seed.users.staffPanelEvaluator,
 };
 
-async function publishSprintOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishSprintOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunitySwuCreate.open();
   await surface.opportunitySwuCreate.addPhase({
@@ -62,11 +65,13 @@ async function publishSprintOpportunity(surface: Surface, title: string): Promis
     priceWeight: 25,
     title,
   });
+  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
-async function fillSprintProposal(surface: Surface, opportunity: string): Promise<void> {
-  await surface.proposalSwuCreate.open({ opportunity });
+async function fillSprintProposal(surface: Surface, opportunityId: string): Promise<void> {
+  await surface.proposalSwuCreate.open({ opportunityId });
   await surface.proposalSwuCreate.chooseOrganization({ organization: seed.organizations.qualified });
   await surface.proposalSwuCreate.addPhaseTeamMember({
     phase: "Implementation",
@@ -97,18 +102,19 @@ async function fillSprintProposal(surface: Surface, opportunity: string): Promis
 test("an organization may appear on at most one proposal per opportunity, and a proposal naming an organization that already bid is refused", async ({
   surface,
 }) => {
-  const title = "R-2.11 opportunity one organization is named on twice";
-  await publishSprintOpportunity(surface, title);
+  const opportunityId = await publishSprintOpportunity(
+    surface,
+    "R-2.11 opportunity one organization is named on twice",
+  );
 
   await surface.signIn(persona.organizationAdmin);
-  await fillSprintProposal(surface, title);
+  await fillSprintProposal(surface, opportunityId);
   await surface.proposalSwuCreate.submitProposal();
-  await surface.proposalSwuEdit.open({ opportunity: title });
   expect((await surface.proposalSwuEdit.status()).toLowerCase()).toContain("submitted");
   await surface.signOut();
 
   await surface.signIn(persona.organizationOwner);
-  await fillSprintProposal(surface, title);
+  await fillSprintProposal(surface, opportunityId);
   await surface.proposalSwuCreate.submitProposal();
 
   expect((await surface.proposalSwuCreate.fieldError()).toLowerCase()).toContain(

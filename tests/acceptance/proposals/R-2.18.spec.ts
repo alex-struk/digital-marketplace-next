@@ -1,5 +1,5 @@
 // criterion: @R-2.18 v2
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -29,7 +29,7 @@ const panel = {
   chair: seed.users.staffPanelEvaluator,
 };
 
-async function publishSprintOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishSprintOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunitySwuCreate.open();
   await surface.opportunitySwuCreate.addPhase({
@@ -65,13 +65,15 @@ async function publishSprintOpportunity(surface: Surface, title: string): Promis
     priceWeight: 25,
     title,
   });
+  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
 async function publishTeamOpportunityWithTwoResources(
   surface: Surface,
   title: string,
-): Promise<void> {
+): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunityTwuCreate.open();
   await surface.opportunityTwuCreate.addResource({
@@ -108,7 +110,9 @@ async function publishTeamOpportunityWithTwoResources(
     priceWeight: 20,
     title,
   });
+  const opportunityId = await surface.opportunityTwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
 async function answerAndReference(surface: Surface): Promise<void> {
@@ -132,11 +136,13 @@ async function answerAndReference(surface: Surface): Promise<void> {
 test("every person named on a proposal's team must be an active member of the organization the proposal is submitted for", async ({
   surface,
 }) => {
-  const title = "R-2.18 opportunity bid on with an outsider on the team";
-  await publishSprintOpportunity(surface, title);
+  const opportunityId = await publishSprintOpportunity(
+    surface,
+    "R-2.18 opportunity bid on with an outsider on the team",
+  );
 
   await surface.signIn(persona.organizationAdmin);
-  await surface.proposalSwuCreate.open({ opportunity: title });
+  await surface.proposalSwuCreate.open({ opportunityId });
   await surface.proposalSwuCreate.chooseOrganization({ organization: seed.organizations.qualified });
   await surface.proposalSwuCreate.addPhaseTeamMember({
     phase: "Implementation",
@@ -160,11 +166,13 @@ test("every person named on a proposal's team must be an active member of the or
 });
 
 test("a Team With Us proposal refuses the same person named twice", async ({ surface }) => {
-  const title = "R-2.18 opportunity bid on with one person named against two resources";
-  await publishTeamOpportunityWithTwoResources(surface, title);
+  const opportunityId = await publishTeamOpportunityWithTwoResources(
+    surface,
+    "R-2.18 opportunity bid on with one person named against two resources",
+  );
 
   await surface.signIn(persona.organizationAdmin);
-  await surface.proposalTwuCreate.open({ opportunity: title });
+  await surface.proposalTwuCreate.open({ opportunityId });
   await surface.proposalTwuCreate.chooseOrganization({ organization: seed.organizations.qualified });
   await surface.proposalTwuCreate.addTeamMemberForResource({
     resource: "Full Stack Developer",
@@ -192,11 +200,13 @@ test("a Team With Us proposal refuses the same person named twice", async ({ sur
 test("a Sprint With Us phase applies no uniqueness check to the people named on it", async ({
   surface,
 }) => {
-  const title = "R-2.18 opportunity bid on with one person named twice in a phase";
-  await publishSprintOpportunity(surface, title);
+  const opportunityId = await publishSprintOpportunity(
+    surface,
+    "R-2.18 opportunity bid on with one person named twice in a phase",
+  );
 
   await surface.signIn(persona.organizationAdmin);
-  await surface.proposalSwuCreate.open({ opportunity: title });
+  await surface.proposalSwuCreate.open({ opportunityId });
   await surface.proposalSwuCreate.chooseOrganization({ organization: seed.organizations.qualified });
   await surface.proposalSwuCreate.addPhaseTeamMember({
     phase: "Implementation",
@@ -215,6 +225,5 @@ test("a Sprint With Us phase applies no uniqueness check to the people named on 
   await surface.proposalSwuCreate.submitProposal();
 
   expect(await surface.proposalSwuCreate.fieldError()).toBeFalsy();
-  await surface.proposalSwuEdit.open({ opportunity: title });
   expect((await surface.proposalSwuEdit.status()).toLowerCase()).toContain("submitted");
 });

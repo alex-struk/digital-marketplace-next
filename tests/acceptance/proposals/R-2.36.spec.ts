@@ -1,5 +1,5 @@
 // criterion: @R-2.36 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -8,9 +8,9 @@ import type { Surface } from "../../fixtures";
 // would otherwise still be holding the submission's own confirmation.
 //
 // The middle of the criterion — an award notice to the winner and a decision notice to
-// everyone else — is not asserted. Awarding needs an opportunity that has closed and been
-// evaluated, and no page, action or observation closes an opportunity (see R-1.1), so there
-// is no award for either notice to follow.
+// everyone else — is not asserted. Only a fully evaluated proposal may be awarded, and the
+// surface cannot carry one that far: see the entries for R-2.33 and R-2.30 in
+// not-testable.yaml.
 
 function inDays(days: number): string {
   const date = new Date();
@@ -32,22 +32,26 @@ const details = {
   completionDate: inDays(35),
 };
 
-async function publishOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.publish({ ...details, title });
+  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
 test("submitting a proposal sends a confirmation to the submitting vendor", async ({
   surface,
   mail,
 }) => {
-  const title = "R-2.36 opportunity whose submission is confirmed by email";
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(
+    surface,
+    "R-2.36 opportunity whose submission is confirmed by email",
+  );
 
   await surface.signIn(persona.vendor);
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.chooseProponentIndividual();
   await surface.proposalCwuCreate.acceptProgramTerms();
   await surface.proposalCwuCreate.acceptAppTerms();
@@ -66,11 +70,13 @@ test("withdrawing a proposal sends a notice to the vendor and to every administr
   surface,
   mail,
 }) => {
-  const title = "R-2.36 opportunity whose withdrawal is written about";
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(
+    surface,
+    "R-2.36 opportunity whose withdrawal is written about",
+  );
 
   await surface.signIn(persona.vendor);
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.chooseProponentIndividual();
   await surface.proposalCwuCreate.acceptProgramTerms();
   await surface.proposalCwuCreate.acceptAppTerms();
@@ -78,7 +84,6 @@ test("withdrawing a proposal sends a notice to the vendor and to every administr
     proposalText: "A proposal the vendor later takes back.",
   });
 
-  await surface.proposalCwuEdit.open({ opportunity: title });
   await mail.clear();
   await surface.proposalCwuEdit.withdrawProposal();
 

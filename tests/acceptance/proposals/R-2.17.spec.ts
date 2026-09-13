@@ -1,5 +1,5 @@
 // criterion: @R-2.17 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -10,7 +10,8 @@ import type { Surface } from "../../fixtures";
 // for the other, which is the criterion's given with nothing else varying.
 //
 // Only an administrator may approve an organization for a service area, so the two halves
-// of qualifying that organization are done by two different people.
+// of qualifying that organization are done by two different people. The organization is
+// reached afterwards by the identifier its own screen gave back when it was registered.
 
 function inDays(days: number): string {
   const date = new Date();
@@ -40,7 +41,7 @@ const panel = {
   chair: seed.users.staffPanelEvaluator,
 };
 
-async function publishTeamOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishTeamOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunityTwuCreate.open();
   await surface.opportunityTwuCreate.addResource({
@@ -72,17 +73,19 @@ async function publishTeamOpportunity(surface: Surface, title: string): Promise<
     priceWeight: 20,
     title,
   });
+  const opportunityId = await surface.opportunityTwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
 test("a Team With Us proposal may only be submitted on behalf of an organization that is a qualified supplier for that program", async ({
   surface,
 }) => {
   const title = "R-2.17 opportunity bid on by an unqualified organization";
-  await publishTeamOpportunity(surface, title);
+  const opportunityId = await publishTeamOpportunity(surface, title);
 
   await surface.signIn(persona.vendor);
-  await surface.proposalTwuCreate.open({ opportunity: title });
+  await surface.proposalTwuCreate.open({ opportunityId });
   await surface.proposalTwuCreate.chooseOrganization({
     organization: seed.organizations.unqualified,
   });
@@ -107,31 +110,30 @@ test("a Team With Us proposal may only be submitted on behalf of an organization
 test("a Team With Us proposal is refused when its organization does not provide every service area the opportunity's resources call for", async ({
   surface,
 }) => {
-  const title = "R-2.17 opportunity calling for a service area the organization lacks";
-  await publishTeamOpportunity(surface, title);
+  const opportunityId = await publishTeamOpportunity(
+    surface,
+    "R-2.17 opportunity calling for a service area the organization lacks",
+  );
 
   await surface.signIn(persona.organizationOwner);
   await surface.organizationCreate.open();
   await surface.organizationCreate.createOrganization(agileCoachOnly);
+  const orgId = await surface.organizationEdit.organizationIdentifier();
   await surface.signOut();
 
   await surface.signIn(persona.administrator);
-  await surface.organizationList.open();
-  await surface.organizationList.openOrganization({ legalName: agileCoachOnly.legalName });
+  await surface.organizationEdit.open({ orgId });
   await surface.organizationEdit.editServiceAreas();
   await surface.organizationEdit.saveServiceAreas({ serviceAreas: [providedServiceArea] });
   await surface.signOut();
 
   await surface.signIn(persona.organizationOwner);
-  await surface.organizationList.open();
-  await surface.organizationList.openOrganization({ legalName: agileCoachOnly.legalName });
-  await surface.organizationEdit.viewTwuTerms();
+  await surface.organizationTwuTerms.open({ orgId });
   await surface.organizationTwuTerms.acceptTerms();
-  await surface.organizationList.open();
-  await surface.organizationList.openOrganization({ legalName: agileCoachOnly.legalName });
+  await surface.organizationEdit.open({ orgId });
   expect(await surface.organizationEdit.twuQualifiedBadge()).toBeTruthy();
 
-  await surface.proposalTwuCreate.open({ opportunity: title });
+  await surface.proposalTwuCreate.open({ opportunityId });
   await surface.proposalTwuCreate.chooseOrganization({
     organization: { legalName: agileCoachOnly.legalName },
   });

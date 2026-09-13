@@ -1,5 +1,5 @@
 // criterion: @R-2.12 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -33,23 +33,25 @@ const details = {
   completionDate: inDays(35),
 };
 
-async function publishOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.publish({ ...details, title });
+  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
 test("a proposal saved as a draft is accepted however incomplete it is", async ({ surface }) => {
-  const title = "R-2.12 opportunity carrying an empty draft proposal";
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(
+    surface,
+    "R-2.12 opportunity carrying an empty draft proposal",
+  );
 
   await surface.signIn(persona.vendor);
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.saveDraft();
 
   expect(await surface.proposalCwuCreate.fieldError()).toBeFalsy();
-
-  await surface.proposalCwuEdit.open({ opportunity: title });
   expect((await surface.proposalCwuEdit.status()).toLowerCase()).toContain("draft");
 });

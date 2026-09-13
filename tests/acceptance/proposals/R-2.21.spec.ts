@@ -1,5 +1,5 @@
 // criterion: @R-2.21 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -24,7 +24,7 @@ const panel = {
 
 const overTheLimit = "delivery ".repeat(60).trim();
 
-async function publishSprintOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishSprintOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunitySwuCreate.open();
   await surface.opportunitySwuCreate.addPhase({
@@ -60,11 +60,16 @@ async function publishSprintOpportunity(surface: Surface, title: string): Promis
     priceWeight: 25,
     title,
   });
+  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
-async function fillProposalExceptTheAnswer(surface: Surface, opportunity: string): Promise<void> {
-  await surface.proposalSwuCreate.open({ opportunity });
+async function fillProposalExceptTheAnswer(
+  surface: Surface,
+  opportunityId: string,
+): Promise<void> {
+  await surface.proposalSwuCreate.open({ opportunityId });
   await surface.proposalSwuCreate.chooseOrganization({ organization: seed.organizations.qualified });
   await surface.proposalSwuCreate.addPhaseTeamMember({
     phase: "Implementation",
@@ -89,11 +94,13 @@ async function fillProposalExceptTheAnswer(surface: Surface, opportunity: string
 }
 
 test("a response to an opportunity question is rejected if it is empty", async ({ surface }) => {
-  const title = "R-2.21 opportunity whose question is answered with nothing";
-  await publishSprintOpportunity(surface, title);
+  const opportunityId = await publishSprintOpportunity(
+    surface,
+    "R-2.21 opportunity whose question is answered with nothing",
+  );
 
   await surface.signIn(persona.organizationAdmin);
-  await fillProposalExceptTheAnswer(surface, title);
+  await fillProposalExceptTheAnswer(surface, opportunityId);
   await surface.proposalSwuCreate.answerTeamQuestion({ order: 0, response: "" });
   await surface.proposalSwuCreate.submitProposal();
 
@@ -103,11 +110,13 @@ test("a response to an opportunity question is rejected if it is empty", async (
 test("a response to an opportunity question is rejected if it is longer than the word limit that question carries", async ({
   surface,
 }) => {
-  const title = "R-2.21 opportunity whose question is answered past its word limit";
-  await publishSprintOpportunity(surface, title);
+  const opportunityId = await publishSprintOpportunity(
+    surface,
+    "R-2.21 opportunity whose question is answered past its word limit",
+  );
 
   await surface.signIn(persona.organizationAdmin);
-  await fillProposalExceptTheAnswer(surface, title);
+  await fillProposalExceptTheAnswer(surface, opportunityId);
   await surface.proposalSwuCreate.answerTeamQuestion({ order: 0, response: overTheLimit });
   await surface.proposalSwuCreate.submitProposal();
 

@@ -1,5 +1,5 @@
 // criterion: @R-2.14 v2
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -48,18 +48,22 @@ const completeIndividual = {
   country: "Canada",
 };
 
-async function publishOpportunity(surface: Surface, title: string): Promise<void> {
+async function publishOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.publish({ ...details, title });
+  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
 test("a Code With Us proponent named as an individual carries a legal name, an email address and a full postal address, each field validated in turn", async ({
   surface,
 }) => {
-  const title = "R-2.14 opportunity bid on by an incomplete individual";
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(
+    surface,
+    "R-2.14 opportunity bid on by an incomplete individual",
+  );
 
   await surface.signIn(persona.vendor);
 
@@ -74,7 +78,7 @@ test("a Code With Us proponent named as an individual carries a legal name, an e
   ] as const;
 
   for (const field of required) {
-    await surface.proposalCwuCreate.open({ opportunity: title });
+    await surface.proposalCwuCreate.open({ opportunityId });
     await surface.proposalCwuCreate.chooseProponentIndividual({
       ...completeIndividual,
       [field]: "",
@@ -87,7 +91,7 @@ test("a Code With Us proponent named as an individual carries a legal name, an e
     expect(await surface.proposalCwuCreate.fieldError()).toBeTruthy();
   }
 
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.chooseProponentIndividual({
     ...completeIndividual,
     email: "not-an-email-address",
@@ -99,7 +103,7 @@ test("a Code With Us proponent named as an individual carries a legal name, an e
   });
   expect(await surface.proposalCwuCreate.fieldError()).toBeTruthy();
 
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.chooseProponentIndividual({
     ...completeIndividual,
     phone: "not a phone number",
@@ -115,12 +119,14 @@ test("a Code With Us proponent named as an individual carries a legal name, an e
 test("a Code With Us proponent named as an organization is checked only for existence and active status", async ({
   surface,
 }) => {
-  const title = "R-2.14 opportunity bid on by an organization the vendor does not belong to";
-  await publishOpportunity(surface, title);
+  const opportunityId = await publishOpportunity(
+    surface,
+    "R-2.14 opportunity bid on by an organization the vendor does not belong to",
+  );
 
   await surface.signIn(persona.vendor);
 
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.chooseProponentOrganization({
     organization: seed.organizations.archived,
   });
@@ -131,7 +137,7 @@ test("a Code With Us proponent named as an organization is checked only for exis
   });
   expect(await surface.proposalCwuCreate.fieldError()).toBeTruthy();
 
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.chooseProponentOrganization({
     organization: seed.organizations.qualified,
   });
@@ -141,7 +147,5 @@ test("a Code With Us proponent named as an organization is checked only for exis
     proposalText: "A proposal offered for an active organization the vendor is not a member of.",
   });
   expect(await surface.proposalCwuCreate.fieldError()).toBeFalsy();
-
-  await surface.proposalCwuEdit.open({ opportunity: title });
   expect((await surface.proposalCwuEdit.status()).toLowerCase()).toContain("submitted");
 });

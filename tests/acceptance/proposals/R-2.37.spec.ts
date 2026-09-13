@@ -1,17 +1,21 @@
 // criterion: @R-2.37 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-08
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// The reader here is the vendor who wrote the proposal, who is entitled to read it while
-// the opportunity is still open. The criterion's other reader is the opportunity's author,
-// and staff may see no proposal until the opportunity has closed (R-2.25), which no page,
-// action or observation brings about (see R-1.1). So the staff copy, and with it the
-// anonymous proponent name it shows until the challenge stage, are not asserted.
+// The first two tests read a copy as the vendor who wrote the proposal, who is entitled to
+// it while the opportunity is still open, and whose copy names the organization outright.
 //
-// What the vendor's own copy shows is asserted instead, which is the half of the contrast
-// the surface reaches: the organization named outright, and no anonymous proponent name in
-// its place.
+// The third is the contrast the criterion draws, and it needs an opportunity that has
+// closed, because staff may see no proposal until then (R-2.25). That is the seeded Sprint
+// With Us opportunity, closed by the service's own deadline hook through
+// run_pending_transitions, and read without changing anything.
+//
+// The last clause — that once the proposal reaches the code challenge the staff copy names
+// the organization too — is not asserted. Reaching the challenge stage means scoring every
+// proponent's questions and finalising the panel's agreed scores, and the seed carries one
+// closed Sprint With Us opportunity: a test that walked it that far would take it away from
+// every other criterion behind the closure. See R-2.29 in not-testable.yaml.
 
 function inDays(days: number): string {
   const date = new Date();
@@ -36,7 +40,12 @@ const panel = {
   chair: seed.users.staffPanelEvaluator,
 };
 
-async function publishSprintOpportunity(surface: Surface, title: string): Promise<void> {
+async function closeOverdueOpportunities(surface: Surface): Promise<void> {
+  await surface.scheduledTransitionTrigger.open();
+  await surface.scheduledTransitionTrigger.runPendingTransitions();
+}
+
+async function publishSprintOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunitySwuCreate.open();
   await surface.opportunitySwuCreate.addPhase({
@@ -64,12 +73,14 @@ async function publishSprintOpportunity(surface: Surface, title: string): Promis
     priceWeight: 25,
     title,
   });
+  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
   await surface.signOut();
+  return opportunityId;
 }
 
-async function submitSprintProposal(surface: Surface, opportunity: string): Promise<void> {
+async function submitSprintProposal(surface: Surface, opportunityId: string): Promise<string> {
   await surface.signIn(persona.organizationAdmin);
-  await surface.proposalSwuCreate.open({ opportunity });
+  await surface.proposalSwuCreate.open({ opportunityId });
   await surface.proposalSwuCreate.chooseOrganization({ organization: seed.organizations.qualified });
   await surface.proposalSwuCreate.addPhaseTeamMember({
     phase: "Implementation",
@@ -96,12 +107,13 @@ async function submitSprintProposal(surface: Surface, opportunity: string): Prom
   await surface.proposalSwuCreate.acceptProgramTerms();
   await surface.proposalSwuCreate.acceptAppTerms();
   await surface.proposalSwuCreate.submitProposal();
+  return surface.proposalSwuEdit.proposalIdentifier();
 }
 
 test("anyone entitled to read a proposal can take away a printable copy of it", async ({
   surface,
 }) => {
-  const title = "R-2.37 opportunity whose proposal is taken away as a printable copy";
+  const proposalText = "A proposal its author takes away as a printable copy.";
 
   await surface.signIn(persona.administrator);
   await surface.opportunityCwuCreate.open();
@@ -110,35 +122,52 @@ test("anyone entitled to read a proposal can take away a printable copy of it", 
     completionDate: inDays(35),
     reward: 5000,
     skills: ["Backend Development"],
-    title,
+    title: "R-2.37 opportunity whose proposal is taken away as a printable copy",
   });
+  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
   await surface.signOut();
 
   await surface.signIn(persona.vendor);
-  await surface.proposalCwuCreate.open({ opportunity: title });
+  await surface.proposalCwuCreate.open({ opportunityId });
   await surface.proposalCwuCreate.chooseProponentIndividual();
   await surface.proposalCwuCreate.acceptProgramTerms();
   await surface.proposalCwuCreate.acceptAppTerms();
-  await surface.proposalCwuCreate.submitProposal({
-    proposalText: "A proposal its author takes away as a printable copy.",
-  });
+  await surface.proposalCwuCreate.submitProposal({ proposalText });
+  const proposalId = await surface.proposalCwuEdit.proposalIdentifier();
 
-  await surface.proposalCwuExportOne.open({ opportunity: title });
-  expect(await surface.proposalCwuExportOne.exportedProposal()).toContain(
-    "A proposal its author takes away as a printable copy.",
-  );
+  await surface.proposalCwuExportOne.open({ opportunityId, proposalId });
+  expect(await surface.proposalCwuExportOne.exportedProposal()).toContain(proposalText);
 });
 
 test("the vendor's own copy of a Sprint With Us proposal names the organization", async ({
   surface,
 }) => {
-  const title = "R-2.37 Sprint With Us opportunity whose vendor reads their own copy";
-  await publishSprintOpportunity(surface, title);
-  await submitSprintProposal(surface, title);
+  const opportunityId = await publishSprintOpportunity(
+    surface,
+    "R-2.37 Sprint With Us opportunity whose vendor reads their own copy",
+  );
+  const proposalId = await submitSprintProposal(surface, opportunityId);
 
-  await surface.proposalSwuExportOne.open({ opportunity: title });
+  await surface.proposalSwuExportOne.open({ opportunityId, proposalId });
   expect(await surface.proposalSwuExportOne.exportedProposal()).toContain(
     seed.organizations.qualified.legal_name,
   );
   expect(await surface.proposalSwuExportOne.anonymousProponentName()).toBeFalsy();
+});
+
+test("staff reading a Sprint With Us copy see the anonymous proponent name before the challenge stage", async ({
+  surface,
+}) => {
+  await closeOverdueOpportunities(surface);
+
+  await surface.signIn(persona.publicSectorStaff);
+  await surface.proposalSwuExportOne.open({
+    opportunityId: seed.opportunities.closedSprintWithUs.id,
+    proposalId: seed.proposals.sprintWithUsOne.id,
+  });
+
+  expect(await surface.proposalSwuExportOne.anonymousProponentName()).toContain("Proponent");
+  expect(await surface.proposalSwuExportOne.exportedProposal()).not.toContain(
+    seed.organizations.qualified.legal_name,
+  );
 });
