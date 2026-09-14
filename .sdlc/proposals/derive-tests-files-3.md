@@ -1,11 +1,13 @@
 ---
-stage: "derive-tests"
-title: "derive tests"
-at: "2026-09-14T02:32:49.987Z"
-cost: 0.7142660000000001
-turns: 16
-session: "6b3e9aa3-8af4-4035-a734-1ce9c993f020"
+gate: G3
+question: "Do the revised files tests now follow from their criteria and from nothing else?"
+recommendation: "I changed two files in `tests/acceptance/files/`, one per condition that asked for a change."
+opened: 2026-09-14T02:32:50.003Z
 ---
+
+# Do the revised files tests now follow from their criteria and from nothing else?
+
+**Recommendation.** I changed two files in `tests/acceptance/files/`, one per condition that asked for a change.
 
 I changed two files in `tests/acceptance/files/`, one per condition that asked for a change. I could not run the typechecker because the command needed approval I didn't have, so neither change has been compiled. I checked both by hand against `tests/generated/surface.d.ts` and `tests/tsconfig.json` (ES2022, strict), and both should compile. The `derived` dates on these two files are still 2026-09-14, which is later than today, and this return gave me no new header lines. Nothing else in `tests/acceptance/files/` or `tests/acceptance/not-testable.yaml` was touched.
 
