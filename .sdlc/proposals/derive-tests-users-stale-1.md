@@ -35,3 +35,25 @@ That lets the ordering test check all three levels, where the old one only check
 - A way to request deactivation of an account that is already inactive, or of one's own account as an administrator, without using the profile control. Plus an observation on the user profile of the "already inactive" refusal.
 
 A smaller point for the contract: the list's status, account kind and administrator observations can only be checked as non-empty, because the contract doesn't say what they read for a given person. This was judged from the method names only, since `surface.yaml` has no descriptions for these observations.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+
+The question is whether the rewritten tests for R-4.14, R-4.31 and R-4.32 follow from their criteria and from nothing else. R-4.14 does. Its status, account-kind and name-order checks and its narrowing check all come from the criterion, and it now makes the accounts active and waits for the list to update, which answers its redo note. R-4.31 does too. It makes the comparison vendor active before looking for the Deactivate control, and both of its not-testable reasons are real: the user-profile contract has no observation of an already-inactive refusal, and the withheld control is the only way to request self-deactivation. R-4.32 does not. calibrate-old-4 ruled test-wrong because the test assumed nothing is chosen when the export choices open, and the new test's first assertion is still that export is unavailable as the dialog opens. The four-reading reasoning is logically sound, but it only confirms that assumption when it already holds and does not put the dialog into that state. If the dialog opens with anything ticked, the test fails at the same point as before, so the redo reason is not addressed, and removing R-4.32 from redo.yaml and applied.yaml is not backed by a check. The ruling becomes approve once R-4.32 puts the dialog into a known empty state before its checks, or records that clause as not-testable, naming the missing observation of which choices are ticked.
+
+**Conditions:**
+- R-4.32: do not assert that export is unavailable as the dialog opens. First put the dialog into a known state where no kind and no field is ticked. Availability alone is enough to find it: export is available only when at least one kind and one field are ticked, so the toggle combination that leaves export unavailable whatever is toggled on the other axis is the empty one. Then check kind only (unavailable), field only (unavailable), and one of each (available). If that cannot be done, record the rule's check in not-testable.yaml, naming the missing user-list observation of which kinds and fields are ticked, and do not assert the opening state.
+- R-4.32: keep its redo.yaml and applied.yaml entries until the rewrite above is done. The R-4.14 and R-4.31 removals may stand, since their redo reasons are met.
+- R-4.14 and R-4.31 need no change.
+- Carried forward to the adapter owner, not the test writer: R-4.14 now signs in the deactivated-vendor persona after reactivating the account, and bind-adapter-old-10 noted that signIn sends that persona down the path expecting a refused sign-in, chosen by matching the persona's description text. Make sure an active account signs in normally, or R-4.14's setup will fail for a reason that is not the product's.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `77fa4292afa8d618ba8a08917a35e45833b39d70`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/users/`, which this proposal answers for.
+
+    No diagnostics.
