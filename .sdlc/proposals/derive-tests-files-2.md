@@ -1,11 +1,13 @@
 ---
-stage: "derive-tests"
-title: "derive tests"
-at: "2026-09-14T02:25:51.845Z"
-cost: 5.174244
-turns: 71
-session: "2692deb1-215d-455f-8aad-920cf684d08b"
+gate: G3
+question: "Do these tests follow from the files criteria and from nothing else?"
+recommendation: "I rewrote the files domain against the current contract."
+opened: 2026-09-14T02:25:51.861Z
 ---
+
+# Do these tests follow from the files criteria and from nothing else?
+
+**Recommendation.** I rewrote the files domain against the current contract.
 
 I rewrote the files domain against the current contract. All 24 criteria in the brief are accounted for: 22 have a test file and 2 have a `not-testable.yaml` entry, with none in both places. I couldn't run anything. The typecheck and a check of the PNG builder both needed approval I didn't have, so the tests are unrun and untypechecked.
 

@@ -15,7 +15,7 @@ test("a profile picture or logo that cannot be read as an image is stored as it 
 }) => {
   await surface.signIn(persona.fileUploader);
 
-  await surface.userProfile.open({ user: seed.users.fileUploader.id });
+  await surface.userProfile.open({ userId: seed.users.fileUploader.id });
   const before = await surface.fileImagePicker.currentImage();
 
   await surface.userProfile.editProfile();

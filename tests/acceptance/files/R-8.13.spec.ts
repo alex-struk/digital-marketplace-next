@@ -1,11 +1,12 @@
-// criterion: @R-8.28 v1
+// criterion: @R-8.13 v1
 // provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-14
 import { test, expect, persona, seed } from "../../fixtures";
 
-// Being marked readable by anyone is read as its consequence: somebody with no session at all
-// asks for the stored image by the address the picker reports and receives it. The criterion's
-// own example ends at the logo being shown on the public organization list; that list names no
-// observation of a logo, so the image is asked for directly rather than seen there.
+// The criterion's own example, 2000 pixels wide by 300 tall, and its mirror, 300 by 2000.
+// Each exceeds only one limit, which is the case the criterion calls unambiguous; the case of
+// an image over both limits is left alone, as the criterion's note leaves it open. The image
+// is built here so that the dimensions uploaded are stated by the test itself, and the stored
+// size is read back from the stored image.
 
 // A greyscale PNG of the given size, uncompressed inside a valid zlib stream.
 function png(width: number, height: number): Buffer {
@@ -59,43 +60,45 @@ function png(width: number, height: number): Buffer {
   ]);
 }
 
-function fileIdIn(address: string): string {
-  return address.split("?")[0].split(/\//).filter(Boolean).pop() ?? "";
+async function pixels(value: Promise<string>): Promise<number> {
+  return Number.parseInt(await value, 10);
 }
 
-test("profile pictures are marked readable by anyone", async ({ surface }) => {
+test("a profile picture wider than 500 pixels is narrowed to 500 pixels before it is stored, keeping its proportions", async ({
+  surface,
+}) => {
   await surface.signIn(persona.fileUploader);
   await surface.userProfileSelf.open();
   await surface.userProfileSelf.editProfile();
-  await surface.fileImagePicker.chooseImage({ file: "R-8.28 portrait.png", content: png(48, 48) });
+  await surface.fileImagePicker.chooseImage({ file: "R-8.13 wide.png", content: png(2000, 300) });
   await surface.userProfileSelf.saveChanges();
 
-  const fileId = fileIdIn(await surface.fileImagePicker.imageAddress());
-  expect(fileId).toBeTruthy();
-  await surface.signOut();
-
-  await surface.fileDownload.open({ fileId });
-  await surface.fileDownload.downloadFile();
-  expect(await surface.fileDownload.readableWhenSignedOutIfPublic()).toBeTruthy();
-  expect(await surface.fileDownload.fileContents()).toBeTruthy();
+  expect(await pixels(surface.fileImagePicker.storedImageWidth())).toBe(500);
+  expect(await pixels(surface.fileImagePicker.storedImageHeight())).toBe(75);
 });
 
-test("organization logos are marked readable by anyone", async ({ surface }) => {
+test("a profile picture taller than 500 pixels is shortened to 500 pixels before it is stored, keeping its proportions", async ({
+  surface,
+}) => {
+  await surface.signIn(persona.fileUploader);
+  await surface.userProfileSelf.open();
+  await surface.userProfileSelf.editProfile();
+  await surface.fileImagePicker.chooseImage({ file: "R-8.13 tall.png", content: png(300, 2000) });
+  await surface.userProfileSelf.saveChanges();
+
+  expect(await pixels(surface.fileImagePicker.storedImageWidth())).toBe(75);
+  expect(await pixels(surface.fileImagePicker.storedImageHeight())).toBe(500);
+});
+
+test("an organization logo wider than 500 pixels is narrowed to 500 pixels before it is stored, keeping its proportions", async ({
+  surface,
+}) => {
   await surface.signIn(persona.organizationOwner);
   await surface.organizationEdit.open({ orgId: seed.organizations.qualified.id });
   await surface.organizationEdit.editOrganization();
-  await surface.fileImagePicker.chooseImage({ file: "R-8.28 logo.png", content: png(64, 32) });
+  await surface.fileImagePicker.chooseImage({ file: "R-8.13 wide logo.png", content: png(2000, 300) });
   await surface.organizationEdit.saveChanges();
 
-  const fileId = fileIdIn(await surface.fileImagePicker.imageAddress());
-  expect(fileId).toBeTruthy();
-  await surface.signOut();
-
-  await surface.organizationList.open();
-  expect(await surface.organizationList.organizationName()).toContain(seed.organizations.qualified.legal_name);
-
-  await surface.fileDownload.open({ fileId });
-  await surface.fileDownload.downloadFile();
-  expect(await surface.fileDownload.readableWhenSignedOutIfPublic()).toBeTruthy();
-  expect(await surface.fileDownload.fileContents()).toBeTruthy();
+  expect(await pixels(surface.fileImagePicker.storedImageWidth())).toBe(500);
+  expect(await pixels(surface.fileImagePicker.storedImageHeight())).toBe(75);
 });
