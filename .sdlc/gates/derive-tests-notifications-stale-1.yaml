@@ -1,0 +1,16 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question was whether the R-6.23 and R-6.28 tests follow from their criteria and from nothing else, and whether they answer the redo conditions set at calibrate-old-3. Ruling: return. First, both tests assert notifyVendorsSuccess is truthy, but neither criterion mentions a success message. R-6.23's then is withdrawn acceptance plus a message to each active vendor, R-6.28 concerns recipients only, and when success is reported is R-6.24's subject. That is an assertion nobody asked for. Second, the redo conditions are not met even though redo.yaml was emptied. R-6.28 decides which vendors are active from the seed's shape (no `status` key), which is exactly the assumption the condition refused. It puts vendorOne, the account the R-4.19 test leaves self-deactivated, first again, and the sequential expect.poll loop still stops at the first vendor not reached instead of reporting every one. R-6.23's pre-step signs vendorOne in and clears the terms warning, which does not establish the account is active, because calibrate-old-3 recorded that the suite's sign-in does not reactivate a self-deactivated account. Third, R-6.23 never establishes the deactivated vendor's starting acceptance, so the warning read afterwards cannot be attributed to this announcement: an earlier broadcast in the same run produces the same reading. All names the tests use come from the contract, the typecheck passed, and R-6.28's two unasserted parts name real gaps (no view of recipient-less messages, no way to make one delivery fail). Tier is STANDARD with no unaccepted residual risk, so no escalation. What would change the ruling: the success assertions removed, every polled vendor shown active through the surface at the moment of broadcast, R-6.28 collecting and reporting every unreached vendor before failing, and R-6.23 either establishing the deactivated vendor's prior acceptance or dropping that assertion and saying why in the file comment.
+conditions:
+  - "R-6.23 and R-6.28: remove `expect(notifyVendorsSuccess()).toBeTruthy()`; neither criterion states a success message (that is R-6.24's subject)"
+  - "R-6.23: establish through the surface that each vendor expected to receive a message is active when the announcement is made (for example, an administrator reading each vendor's profile); signing in and clearing the terms warning does not show this, and vendorOne is left self-deactivated by the R-4.19 test"
+  - "R-6.28: do not decide who is active from the seed's field layout (absence of `status`); establish through the surface that every vendor polled is active at the moment of the broadcast, and keep vendorWithoutEmail among the recipients"
+  - "R-6.28: gather which addressable active vendors received no message across all of them and fail once with the full list, rather than stopping at the first expect.poll timeout"
+  - "R-6.23: either establish that the deactivated vendor had accepted the terms in force before the announcement, or stop asserting the withdrawal for that vendor and state in the file comment what is missing from the surface to establish it"
+cost: 0.8744565
+turns: 19
+session: "5202926a-d802-40b2-aa61-20901b78363e"
+at: 2026-09-14T20:27:40.633Z
