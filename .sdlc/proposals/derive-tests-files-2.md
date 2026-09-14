@@ -45,3 +45,29 @@ I fixed the one compile error the check reported. The file `tests/acceptance/fil
 Something the next stage should know: the file is from an earlier derivation. Its header still says `spec@4060538…, derived 2026-09-07`, and R-8.14 is not on this run's list of criteria. The test says in its own comment that R-8.21 replaces it, and the two tests contradict each other. The check asked for only this compile error to be fixed, so I didn't delete the file or change its header. Whether it stays in the suite still needs a decision.
 
 **Journal addition:** Following the check, I fixed the one compile error it reported. In `tests/acceptance/files/R-8.14.spec.ts`, the call `surface.userProfile.open()` passed `{ user: ... }`, while the generated contract gives that page's `open()` the parameter `{ userId: string }`. I renamed the property to `userId` and still pass the seeded user's id. Nothing else in the file or the rest of the suite changed. I couldn't rerun the type checker because command execution wasn't permitted, so the fix is unverified beyond matching it to the generated type. The file itself is left over from an earlier derivation: its header points to an older spec commit, and R-8.14 wasn't among this run's criteria. Its own comment says R-8.21 supersedes it, and the two tests contradict each other. The check named only the compile error, so I didn't remove the file, but whoever reviews this proposal should decide whether it belongs in the suite.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+
+Question: do the rewritten files-domain tests follow from their criteria and from nothing else? Ruling: return. Coverage is complete (24 criteria: 22 tests, 2 not-testable, none in both). The runner's typecheck shows no diagnostics under acceptance/files; its failure is confined to acceptance/notifications, which this proposal does not answer for. No implementation leaks: the read-access tags any/user/userType come from the contract's FileUpload schema (openapi.yaml:1370). Taking the identifier from the last path segment follows the contract's own address form (/api/files/{fileId}) and surface.yaml:1503, which names attachment_address as how a test reaches file-download. Read paths are proven by readers only the association explains. Both not-testable reasons are real: R-8.16's working directory is on the host, and surface.yaml has no action that attaches an already-stored file for R-8.22. Keeping R-8.14's superseded test was already ratified at this gate. The return is narrow. In R-8.21, the test 'a profile picture whose content can be read as a PNG is accepted' also asserts the image is stored at exactly 40x30 pixels. R-8.21 says only that such an image is accepted, and R-8.13 says only that images over 500 pixels are reduced. No criterion says a small image keeps its dimensions, so a rebuild that normalises avatars to a fixed size would satisfy every criterion and fail this test. Per the reviewer brief, that is fixed by the test writer, not waved through. What would change the ruling: drop the storedImageWidth/storedImageHeight assertions from that test, or replace them with a check that the image was set (for example, currentImage changed after saving).
+
+**Conditions:**
+- R-8.21: remove the exact 40x30 stored-dimension assertions from 'a profile picture whose content can be read as a PNG is accepted'. Assert acceptance only (no rejectedImageError, and the picture set after saving).
+- R-8.17: the refusal is required to contain the same digit string as the limit stated before choosing a file. The criterion asks only that each names the limit, and '10 MB' vs '10485760 bytes' both do. Loosen the refusal assertion so it does not depend on both messages using the same units. Blind-writer fix, same pass.
+- Carry forward from the prior ruling, not a blocker here: R-8.14 (superseded by R-8.21) still has a spec file that contradicts R-8.21's test. A spec-process ruling on whether superseded defect criteria keep their tests is still owed before the suite is used as a pass/fail gate.
+- Carry forward, not a blocker here: R-8.23 and R-8.24 each end with a clause pointing at R-8.4's service fault, which contradicts R-8.18 (bad request). The two accepted criteria disagree on malformed read access and need a ruling from whoever owns the criteria.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `62b689a846b93479a9dae0c1150a727517b31855`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/files/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    acceptance/notifications/: 13 diagnostics

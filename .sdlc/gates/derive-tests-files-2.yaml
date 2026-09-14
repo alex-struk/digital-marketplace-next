@@ -1,0 +1,15 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the rewritten files-domain tests follow from their criteria and from nothing else? Ruling: return. Coverage is complete (24 criteria: 22 tests, 2 not-testable, none in both). The runner's typecheck shows no diagnostics under acceptance/files; its failure is confined to acceptance/notifications, which this proposal does not answer for. No implementation leaks: the read-access tags any/user/userType come from the contract's FileUpload schema (openapi.yaml:1370). Taking the identifier from the last path segment follows the contract's own address form (/api/files/{fileId}) and surface.yaml:1503, which names attachment_address as how a test reaches file-download. Read paths are proven by readers only the association explains. Both not-testable reasons are real: R-8.16's working directory is on the host, and surface.yaml has no action that attaches an already-stored file for R-8.22. Keeping R-8.14's superseded test was already ratified at this gate. The return is narrow. In R-8.21, the test 'a profile picture whose content can be read as a PNG is accepted' also asserts the image is stored at exactly 40x30 pixels. R-8.21 says only that such an image is accepted, and R-8.13 says only that images over 500 pixels are reduced. No criterion says a small image keeps its dimensions, so a rebuild that normalises avatars to a fixed size would satisfy every criterion and fail this test. Per the reviewer brief, that is fixed by the test writer, not waved through. What would change the ruling: drop the storedImageWidth/storedImageHeight assertions from that test, or replace them with a check that the image was set (for example, currentImage changed after saving).
+conditions:
+  - "R-8.21: remove the exact 40x30 stored-dimension assertions from 'a profile picture whose content can be read as a PNG is accepted'. Assert acceptance only (no rejectedImageError, and the picture set after saving)."
+  - "R-8.17: the refusal is required to contain the same digit string as the limit stated before choosing a file. The criterion asks only that each names the limit, and '10 MB' vs '10485760 bytes' both do. Loosen the refusal assertion so it does not depend on both messages using the same units. Blind-writer fix, same pass."
+  - "Carry forward from the prior ruling, not a blocker here: R-8.14 (superseded by R-8.21) still has a spec file that contradicts R-8.21's test. A spec-process ruling on whether superseded defect criteria keep their tests is still owed before the suite is used as a pass/fail gate."
+  - "Carry forward, not a blocker here: R-8.23 and R-8.24 each end with a clause pointing at R-8.4's service fault, which contradicts R-8.18 (bad request). The two accepted criteria disagree on malformed read access and need a ruling from whoever owns the criteria."
+cost: 1.8050614999999999
+turns: 20
+session: "e7cd480e-0911-48ba-842c-4ba7fd48499b"
+at: 2026-09-14T02:29:12.853Z
