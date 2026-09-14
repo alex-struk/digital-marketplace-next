@@ -58,3 +58,24 @@ This was behind about thirty of the findings. The Code With Us form's '3. Detail
 - **Not binding faults:** the reviewer called four failures sound page behaviour: the second test of R-2.34, the edit test of R-1.35, the first test of R-6.17 and the public sector staff test of R-3.21. They are untouched.
 - **`bindings.yaml`:** every member these findings touch was already bound, and no page's route failed to resolve.
 - **Target state:** my probes left nothing behind. Every dialog was cancelled, the one Admin box I ticked was put back, and the title-only draft was refused, so no record was created.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+The question is whether this adapter binds every surface action and observation on old, and nothing else. Approve. The diff changes only tests/adapters/old/index.ts and the proposal's own .sdlc records. Nothing under tests/acceptance differs from main, and the runner's typecheck passed with no errors under adapters/old. Every change answers an adapter-wrong condition from calibrate-triage-old-4 or old-5. Those are: filling required fields the input never names ('Acceptance Criteria*', 'Evaluation Criteria*', the individual proponent's details); confirming 'Save Changes?', 'Are you sure?' and 'Publish Addendum?'; ending quietly when an Actions-menu entry, the Addenda tab, the dialog's Disqualify or a profile's Save Changes is missing or disabled; choosing Edit before attaching a file; making Save Draft fail loudly when it never reaches the record; mapping the phase and resource keys and 'order'; reading the alert's list items in fieldError; reading the '—' owner placeholder as empty; and waiting for the Admin tick to save. The four failures left untouched are the ones those triages called page behaviour, not binding faults. The adapter still decides nothing about whether a test passes. Each quiet return ends an action and leaves the verdict to an observation the test reads: fieldError must be non-empty in R-3.12, R-4.12 and R-1.16, and the status must be unchanged in R-1.28, so a return that never reached the page cannot make those pass. The auto-fill has two guards that keep it from deciding a refusal. First, a field whose label the test named is never touched, because labels are compared with punctuation and case stripped. Second, hidden fields are skipped. So the four weights in R-1.15 and the phase fields in R-1.16 stay exactly as the tests set them, and the phases nobody opened stay blank. The one API read, memberName's GET /api/affiliations on the target, only turns a user id into the name the Team row shows. The receipt says plainly that nothing was executed. It asserts no test outcome, and the next calibration run is the check on it. Tier is STANDARD and no residual risk is marked unaccepted, so there is nothing to escalate. The ruling would change to return if a revision touched tests/acceptance, or if the auto-fill started writing into a field the test named, including through a null value, which entriesOf drops and so never records as named. It would also change if a quiet return were reachable on a path where the test's following observation reads empty by default.
+
+**Conditions:**
+- Note, not blocking: addPhase's PHASES list has 'Proof of Concept' but no 'Prototype', while R-1.16's first test calls addPhase({ phase: 'Prototype' }). That test will stop with 'unbound: no phase named "Prototype"'. If calibration reports it, map 'Prototype' to 'Proof of Concept' in phaseNamed.
+- Note, not blocking: namedLabels is keyed by label, not by slot. Naming 'Question' or 'Service Area' for one slot stops the auto-fill for the same label in every other slot. That errs toward a blank field and a refusal rather than a false pass. If a positive test with two resources or questions fails on a disabled Publish, key the set by label and slot.
+- Note, not blocking: the adapter now depends on two assumptions that were checked by hand against the running target but not executed as tests. First, a blank chooser is detected by its placeholder in aria-describedby. Second, a field's accessible name is parsed from the start of its ariaSnapshot line. If the next calibration shows required fields still blank on a form, check these two first.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `04cbe411d524ec86a5f52874d0b443cf21a2f50d`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    No diagnostics.
