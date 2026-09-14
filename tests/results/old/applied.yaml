@@ -170,10 +170,6 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-4
     adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
-  - id: R-4.14
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-4
   - id: R-3.15
     version: 1
     verb: product-question
@@ -289,10 +285,6 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-5
     adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
-  - id: R-4.31
-    version: 2
-    verb: product-question
-    gate: calibrate-triage-old-5
   - id: R-8.31
     version: 1
     verb: adapter-wrong
@@ -304,10 +296,6 @@ rulings:
     gate: calibrate-triage-old-5
     adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
   - id: R-3.32
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-5
-  - id: R-4.32
     version: 1
     verb: product-question
     gate: calibrate-triage-old-5
@@ -418,18 +406,6 @@ rulings:
     verb: test-wrong
     gate: calibrate-old-4
   - id: R-3.32
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-4
-  - id: R-4.14
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-4
-  - id: R-4.31
-    version: 2
-    verb: test-wrong
-    gate: calibrate-old-4
-  - id: R-4.32
     version: 1
     verb: test-wrong
     gate: calibrate-old-4

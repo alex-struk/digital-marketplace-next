@@ -74,24 +74,3 @@ redo:
       which the criterion never says the list shows; identify them on the team
       list without assuming it shows email addresses, both before and after they
       decline
-  - id: R-4.14
-    version: 1
-    why: the test assumes both accounts it names are active without establishing it,
-      and another test in the suite leaves one of them deactivated, which
-      correctly places it after every active account in the order the criterion
-      describes; it also reads the narrowed list without allowing the list time
-      to narrow after the name is typed; establish both accounts as active
-      before comparing their order, and let the list settle before reading it
-  - id: R-4.31
-    version: 2
-    why: the test uses another person's profile as proof that the screen offers a
-      deactivation control, without establishing that person's account is
-      active, and another test in the suite leaves it deactivated, so the
-      control it expects there is legitimately absent; establish an active
-      account for the comparison before looking for the control
-  - id: R-4.32
-    version: 1
-    why: the test assumes nothing is chosen when the export choices open, which the
-      criterion never says; establish that no kind and no field are chosen
-      before checking that export is unavailable, then check it becomes
-      available only once at least one kind and one field are chosen
