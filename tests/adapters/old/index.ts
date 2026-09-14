@@ -67,9 +67,28 @@ export default function create(
     return baseURL + filled;
   }
 
+  // A save or a screen still fetching says "Loading..." where its control or its content
+  // will be; nothing read or pressed before that goes away is what the page will show.
   async function settle(): Promise<void> {
     await page.waitForLoadState("domcontentloaded").catch(() => undefined);
     await page.waitForLoadState("networkidle", { timeout: 10000 }).catch(() => undefined);
+    await seen(page.getByText("Loading...", { exact: true }))
+      .first()
+      .waitFor({ state: "hidden", timeout: 30000 })
+      .catch(() => undefined);
+  }
+
+  // A screen has rendered once its heading is up and nothing on it is still loading.
+  async function ready(): Promise<void> {
+    await settle();
+    await seen(page.getByRole("heading"))
+      .first()
+      .waitFor({ state: "visible", timeout: 10000 })
+      .catch(() => undefined);
+  }
+
+  async function notFoundShown(): Promise<boolean> {
+    return (await seen(page.getByRole("heading", { name: "Not Found", exact: true })).count()) > 0;
   }
 
   async function go(route: string, params?: Record<string, string>): Promise<void> {
@@ -270,10 +289,32 @@ export default function create(
     return null;
   }
 
+  // A control taken out of use is the page saying it is not ready — usually a required
+  // field left empty. The anchors this application uses as buttons show it by leaving the
+  // tab order with no address to go to; a real link that skips the tab order still leads
+  // somewhere and is not disabled.
+  async function isDisabled(control: Locator): Promise<boolean> {
+    if (await control.isDisabled().catch(() => false)) return true;
+    const ariaDisabled = await control.getAttribute("aria-disabled").catch(() => null);
+    const tabIndex = await control.getAttribute("tabindex").catch(() => null);
+    const href = await control.getAttribute("href").catch(() => null);
+    return ariaDisabled === "true" || (tabIndex === "-1" && href === null);
+  }
+
+  // A disabled control is reported at once, with what the page is showing beside it,
+  // rather than clicked until the test runs out of time.
   async function press(where: string, names: string[], scope: Scope = page): Promise<void> {
     for (const name of names) {
       const control = await findControl(scope, name);
       if (control) {
+        if (await isDisabled(control)) {
+          const shown = await messages().catch(() => "");
+          throw new Error(
+            `${where} — "${name}" is disabled on ${page.url()}; ${
+              shown ? `the page shows: ${shown.replace(/\n/g, " | ")}` : "the page shows no message"
+            }`,
+          );
+        }
         await control.click();
         await settle();
         return;
@@ -290,18 +331,8 @@ export default function create(
 
   async function controlState(names: string[], scope: Scope = page): Promise<string> {
     for (const name of names) {
-      const button = seen(scope.getByRole("button", { name, exact: true }));
-      if (await button.count()) return (await button.first().isEnabled()) ? "enabled" : "disabled";
-      const link = seen(scope.getByRole("link", { name, exact: true }));
-      if (await link.count()) return "enabled";
-      const words = seen(scope.getByText(name, { exact: true }));
-      const count = await words.count();
-      if (count > 0) {
-        const control = words.nth(count - 1);
-        const ariaDisabled = await control.getAttribute("aria-disabled");
-        const tabIndex = await control.getAttribute("tabindex");
-        return ariaDisabled === "true" || tabIndex === "-1" ? "disabled" : "enabled";
-      }
+      const control = await findControl(scope, name);
+      if (control) return (await isDisabled(control)) ? "disabled" : "enabled";
     }
     return "absent";
   }
@@ -329,7 +360,10 @@ export default function create(
   async function openActionsMenu(where: string): Promise<Locator> {
     const alreadyOpen = seen(navBar().getByRole("menu"));
     if (await alreadyOpen.count()) return alreadyOpen.first();
-    const toggle = await findControl(navBar(), "Actions");
+    await ready();
+    let toggle = await findControl(navBar(), "Actions");
+    // The menu belongs to the record's own tab; the summary a record opens on has none.
+    if (!toggle && (await enterTab(["Opportunity"]))) toggle = await findControl(navBar(), "Actions");
     if (!toggle) {
       throw new Error(`unbound: ${where} — no "Actions" menu on ${page.url()}`);
     }
@@ -356,44 +390,362 @@ export default function create(
     return (await opened.count()) ? (await opened.first().innerText()).trim() : "";
   }
 
+  // A screen's own tabs lead back to the same address with "?tab=" on it. The site-wide
+  // links along the top are never tabs, even where one shares a tab's name
+  // ("Organizations" on a profile), so a word the top bar also carries is not taken.
+  async function findTab(label: string): Promise<Locator | null> {
+    const links = seen(page.getByRole("link", { name: label, exact: true }));
+    const count = await links.count();
+    for (let i = 0; i < count; i++) {
+      const href = (await links.nth(i).getAttribute("href")) ?? "";
+      if (href.includes("tab=")) return links.nth(i);
+    }
+    if (await seen(navBar().getByText(label, { exact: true })).count()) return null;
+    const control = await findControl(page, label);
+    if (!control) return null;
+    const href = await control.getAttribute("href");
+    return href === null || href.includes("tab=") ? control : null;
+  }
+
   async function openTab(where: string, labels: string[]): Promise<void> {
-    for (const label of labels) {
-      const control = await findControl(page, label);
-      if (control) {
-        await control.click();
-        await settle();
-        return;
-      }
+    if (!(await enterTab(labels))) {
+      throw new Error(`unbound: ${where} — no tab labelled ${quoted(labels)} on ${page.url()}`);
     }
-    throw new Error(`unbound: ${where} — no tab labelled ${quoted(labels)} on ${page.url()}`);
   }
 
-  // A tab's content, or nothing at all when this reader is not offered the tab — which
-  // is how a test sees a tab being withheld.
+  // Whether this reader is offered the tab at all, opening it when so.
+  async function enterTab(labels: string[]): Promise<boolean> {
+    await ready();
+    for (const label of labels) {
+      const tab = await findTab(label);
+      if (tab) {
+        await tab.click();
+        await ready();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // A withheld tab is how a test sees something being kept from somebody, so a reader of
+  // one reads as nothing rather than failing.
+  async function inTab(labels: string[], read: () => Promise<string>): Promise<string> {
+    return (await enterTab(labels)) ? read() : "";
+  }
+
   async function tabContent(labels: string[]): Promise<string> {
-    for (const label of labels) {
-      const control = await findControl(page, label);
-      if (control) {
-        await control.click();
-        await settle();
-        return contentText();
-      }
-    }
-    return "";
+    return inTab(labels, contentText);
   }
 
-  // The long forms are wizards that show one numbered step at a time.
+  // The whole screen with only the standing footer taken off, the top bar's controls kept.
+  async function screenText(): Promise<string> {
+    const whole = await wholeText();
+    const footer = whole.lastIndexOf("\nHome|");
+    return (footer > 0 ? whole.slice(0, footer) : whole).trim();
+  }
+
+  // The long forms are wizards showing one numbered step at a time. The current step's
+  // name opens a menu listing every step, so any step can be reached directly, wherever
+  // an earlier action left the form.
+  const STEP = /^\d+\.\s+\S/;
+
+  async function currentStep(): Promise<Locator | null> {
+    const shown = seen(page.getByText(STEP));
+    return (await shown.count()) ? shown.first() : null;
+  }
+
+  async function chooseStep(pattern: RegExp): Promise<boolean> {
+    const current = await currentStep();
+    if (!current) return false;
+    if (matches(pattern, (await current.innerText()).trim())) return true;
+    await current.click();
+    const choice = seen(page.getByText(pattern));
+    const count = await choice.count();
+    if (!count) {
+      await page.keyboard.press("Escape").catch(() => undefined);
+      return false;
+    }
+    await choice.nth(count - 1).click();
+    await settle();
+    return true;
+  }
+
+  async function goToStep(name: string): Promise<boolean> {
+    await settle();
+    return chooseStep(new RegExp(`^\\d+\\.\\s+${escapeRegExp(name)}$`, "i"));
+  }
+
   async function advanceTo(where: string, marker: string, limit = 12): Promise<void> {
+    await settle();
+    if (await seen(page.getByText(marker, { exact: false })).count()) return;
+    await chooseStep(/^1\.\s+\S/);
     for (let step = 0; step <= limit; step++) {
       if (await seen(page.getByText(marker, { exact: false })).count()) return;
       const next = await findControl(page, "Next");
-      if (!next) break;
+      if (!next || (await isDisabled(next))) break;
       await next.click();
       await settle();
     }
     throw new Error(
       `unbound: ${where} — could not reach a step showing "${marker}" on ${page.url()}`,
     );
+  }
+
+  // ---------------------------------------------------------------- filling forms from input
+
+  const escapeRegExp = (words: string): string => words.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  // A field's label as the form shows it, its required mark and "(Optional)" aside.
+  function labelled(label: string): RegExp {
+    return new RegExp(`^\\s*${escapeRegExp(label)}\\s*\\*?\\s*(\\(optional\\))?\\s*$`, "i");
+  }
+
+  const squash = (words: string): string => words.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+  // What a test calls a value, mapped to the label the form puts on its field. A key not
+  // listed is looked for under its own words, so "costRecovery" finds "Cost Recovery" and
+  // "legalName" finds "Legal Name". "#2" picks the second field carrying the same label.
+  const FIELD_LABELS: Record<string, string[]> = {
+    remoteok: ["Remote OK?"],
+    remote: ["Remote OK?"],
+    remotedesc: ["Remote Description"],
+    reward: ["Fixed-Price Award"],
+    skills: ["Required Skills", "Mandatory Skills"],
+    description: ["Description", "Description and Contract Details"],
+    deadline: ["Proposal Deadline"],
+    assignmentdate: ["Assignment Date", "Contract Award Date"],
+    awarddate: ["Contract Award Date", "Assignment Date"],
+    startdate: ["Proposed Start Date", "Contract Start Date"],
+    completiondate: ["Completion Date", "Contract Completion Date"],
+    submissioninfo: ["Project Submission Info"],
+    totalmaxbudget: ["Total Maximum Budget"],
+    maxbudget: ["Maximum Budget", "Total Maximum Budget"],
+    budget: ["Maximum Budget", "Total Maximum Budget"],
+    minteammembers: ["Recommended Minimum Team Members"],
+    minteamsize: ["Recommended Minimum Team Members"],
+    proposaltext: ["Proposal"],
+    comments: ["Additional Comments"],
+    website: ["Website Url"],
+    street: ["Street Address"],
+    address: ["Street Address"],
+    streetaddress1: ["Street Address"],
+    addressline1: ["Street Address"],
+    streetaddress2: ["Street Address#2"],
+    addressline2: ["Street Address#2"],
+    region: ["Province/State", "Province / State"],
+    province: ["Province/State", "Province / State"],
+    state: ["Province/State", "Province / State"],
+    provincestate: ["Province/State", "Province / State"],
+    mailcode: ["Postal / ZIP Code"],
+    postalcode: ["Postal / ZIP Code"],
+    postal: ["Postal / ZIP Code"],
+    zip: ["Postal / ZIP Code"],
+    zipcode: ["Postal / ZIP Code"],
+    contacttitle: ["Job Title"],
+    contactphone: ["Phone Number"],
+    phone: ["Phone Number"],
+    email: ["Email Address", "Contact Email"],
+    name: ["Name", "Legal Name"],
+    questiontext: ["Question"],
+    guideline: ["Response Guidelines"],
+    guidelines: ["Response Guidelines"],
+    wordlimit: ["Response Word Limit"],
+    maxscore: ["Score"],
+    minscore: ["Minimum Score"],
+    allocation: ["Resource Target Allocation"],
+    targetallocation: ["Resource Target Allocation"],
+    disqualificationreason: ["Reason"],
+  };
+
+  function labelsFor(key: string): string[] {
+    const own = key.replace(/([a-z0-9])([A-Z])/g, "$1 $2").replace(/[_-]+/g, " ").trim();
+    return [...(FIELD_LABELS[squash(key)] ?? []), own];
+  }
+
+  type Entry = { key: string; value: unknown };
+
+  // The values a test handed an action, one per field; a group of values given under one
+  // name ({ address: { city, country } }) is entered field by field.
+  function entriesOf(input: unknown, skip: string[] = []): Entry[] {
+    if (!input || typeof input !== "object" || Array.isArray(input) || input instanceof Date) return [];
+    const skipped = skip.map(squash);
+    const found: Entry[] = [];
+    for (const [key, value] of Object.entries(input as Record<string, unknown>)) {
+      if (value === undefined || value === null || skipped.includes(squash(key))) continue;
+      if (typeof value === "object" && !Array.isArray(value) && !(value instanceof Date)) {
+        found.push(...entriesOf(value, skip));
+      } else {
+        found.push({ key, value });
+      }
+    }
+    return found;
+  }
+
+  const isYesNo = (value: unknown): boolean =>
+    typeof value === "boolean" || (typeof value === "string" && /^(yes|no|true|false)$/i.test(value));
+  const saysYes = (value: unknown): boolean =>
+    value === true || (typeof value === "string" && /^(yes|true|on|checked)$/i.test(value));
+
+  async function pickOption(where: string, box: Locator, item: string): Promise<void> {
+    await box.click();
+    await box.fill(item).catch(() => page.keyboard.type(item));
+    const exact = seen(page.getByRole("option", { name: item, exact: true }));
+    const loose = seen(page.getByRole("option", { name: item, exact: false }));
+    await loose.first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    const option = (await exact.count()) ? exact.first() : (await loose.count()) ? loose.first() : null;
+    if (!option) {
+      await page.keyboard.press("Escape").catch(() => undefined);
+      throw new Error(`unbound: ${where} — the chooser offers no option matching "${item}" on ${page.url()}`);
+    }
+    await option.click();
+  }
+
+  async function enterValue(where: string, entry: Entry, role: string, box: Locator): Promise<void> {
+    if (role === "checkbox") {
+      if ((await box.isChecked()) !== saysYes(entry.value)) await box.click();
+      return;
+    }
+    if (role === "combobox") {
+      const items = (Array.isArray(entry.value) ? entry.value : [entry.value]).map(asText).filter(Boolean);
+      for (const item of items) await pickOption(where, box, item);
+      return;
+    }
+    let text = asText(entry.value);
+    if ((await box.getAttribute("type")) === "date") {
+      const day = /^\d{4}-\d{2}-\d{2}/.exec(text);
+      if (day) text = day[0];
+    }
+    if (await box.isDisabled()) {
+      throw new Error(`${where} — the field for "${entry.key}" is disabled on ${page.url()}`);
+    }
+    await box.fill(text);
+    await box.blur().catch(() => undefined);
+  }
+
+  async function setField(where: string, entry: Entry, scope: Scope, last: boolean): Promise<boolean> {
+    for (const wanted of labelsFor(entry.key)) {
+      const [label, position] = wanted.split("#");
+      const name = labelled(label);
+      for (const role of ["textbox", "spinbutton", "combobox", "checkbox"] as const) {
+        const boxes = seen(scope.getByRole(role, { name }));
+        const count = await boxes.count();
+        if (!count) continue;
+        const at = position ? Number(position) - 1 : last ? count - 1 : 0;
+        if (at >= count) continue;
+        await enterValue(where, entry, role, boxes.nth(at));
+        return true;
+      }
+      // A yes-or-no question is a pair of radios under a plain label.
+      if (isYesNo(entry.value) && (await seen(scope.getByText(name)).count())) {
+        const radio = seen(
+          scope.getByRole("radio", { name: saysYes(entry.value) ? "Yes" : "No", exact: true }),
+        );
+        if (await radio.count()) {
+          await radio.first().check();
+          return true;
+        }
+      }
+    }
+    // A choice of kind ("Individual" or "Organization") is one radio per option.
+    if (/type|kind|proponent/i.test(entry.key) && !isYesNo(entry.value)) {
+      const radio = seen(scope.getByRole("radio", { name: asText(entry.value), exact: false }));
+      if (asText(entry.value) && (await radio.count())) {
+        await radio.first().check();
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // Enters every value the test gave before anything is pressed. On a wizard it walks the
+  // steps from the first, entering each value where its field appears; a value that no
+  // step has a field for is named, since dropping it would test a different form.
+  async function fillForm(
+    where: string,
+    input: unknown,
+    options: { scope?: Scope; last?: boolean; skip?: string[] } = {},
+  ): Promise<void> {
+    const pending = entriesOf(input, options.skip ?? []);
+    if (!pending.length) return;
+    // Answers to yes-or-no questions go first: they reveal the fields that follow them.
+    pending.sort((a, b) => Number(isYesNo(b.value)) - Number(isYesNo(a.value)));
+    const scope = options.scope ?? page;
+    const wizard = options.scope === undefined && (await currentStep()) !== null;
+    if (wizard) await chooseStep(/^1\.\s+\S/);
+    for (let step = 0; step < 16 && pending.length; step++) {
+      let progress = true;
+      while (progress && pending.length) {
+        progress = false;
+        for (let i = 0; i < pending.length; i++) {
+          if (await setField(where, pending[i], scope, options.last ?? false)) {
+            pending.splice(i, 1);
+            i--;
+            progress = true;
+          }
+        }
+      }
+      if (!wizard || !pending.length) break;
+      const next = await findControl(page, "Next");
+      if (!next || (await isDisabled(next))) break;
+      await next.click();
+      await settle();
+    }
+    await settle();
+    if (pending.length) {
+      throw new Error(
+        `unbound: ${where} — no field on ${page.url()} takes ${pending.map((entry) => `"${entry.key}"`).join(", ")}`,
+      );
+    }
+  }
+
+  async function chooseRadio(where: string, name: string): Promise<void> {
+    const radio = seen(page.getByRole("radio", { name, exact: true }));
+    if (!(await radio.count())) {
+      throw new Error(`unbound: ${where} — no "${name}" option on ${page.url()}`);
+    }
+    await radio.first().check();
+    await settle();
+  }
+
+  // A box that must end up ticked, whatever it was before.
+  async function ensureTicked(where: string, labels: string[], scope: Scope): Promise<void> {
+    for (const label of labels) {
+      const box = seen(scope.getByRole("checkbox", { name: label, exact: false }));
+      if (await box.count()) {
+        if (!(await box.first().isChecked())) await box.first().click();
+        await settle();
+        return;
+      }
+    }
+    throw new Error(`unbound: ${where} — no box labelled ${quoted(labels)} on ${page.url()}`);
+  }
+
+  // An edit ends when its save control leaves the top bar.
+  async function saved(names: string[]): Promise<void> {
+    for (const name of names) {
+      await seen(navBar().getByText(name, { exact: true }))
+        .first()
+        .waitFor({ state: "hidden", timeout: 30000 })
+        .catch(() => undefined);
+    }
+    await ready();
+  }
+
+  // A record's own address, once an action that creates it has landed there.
+  function recordAddress(prefix: string): RegExp {
+    return new RegExp(`^${prefix}/${UUID}`);
+  }
+
+  async function landOn(pattern: RegExp): Promise<void> {
+    await page.waitForURL((url) => pattern.test(url.pathname), { timeout: 20000 }).catch(() => undefined);
+    await ready();
+  }
+
+  const ATTACHMENT_KEYS = ["files", "attachments", "attachment", "file"];
+
+  function hasFiles(input: unknown): boolean {
+    if (!input || typeof input !== "object" || Array.isArray(input)) return false;
+    return ATTACHMENT_KEYS.some((key) => (input as Record<string, unknown>)[key] !== undefined);
   }
 
   async function fill(where: string, labels: string[], value: string): Promise<void> {
@@ -534,13 +886,21 @@ export default function create(
     if (input === undefined || input === null) return "";
     if (typeof input === "string") return input;
     if (typeof input === "number" || typeof input === "boolean") return String(input);
+    if (input instanceof Date) return input.toISOString();
     if (Array.isArray(input)) return input.map(asText).filter(Boolean).join(", ");
     const record = input as Record<string, unknown>;
-    for (const key of ["value", "name", "text", "title", "label", "answer", "score", "id"]) {
+    for (const key of [
+      "value", "name", "text", "title", "label", "answer", "score", "id",
+      "slug", "body", "reason", "email", "content", "query", "search",
+    ]) {
       const found = record[key];
       if (typeof found === "string" || typeof found === "number") return String(found);
     }
-    return "";
+    // Anything else carrying exactly one value means that value.
+    const values = Object.values(record).filter(
+      (value) => typeof value === "string" || typeof value === "number",
+    );
+    return values.length === 1 ? String(values[0]) : "";
   }
 
   function asList(input: unknown): string[] {
@@ -601,7 +961,9 @@ export default function create(
     if (!files.length) {
       throw new Error(`unbound: ${where} — no file was named to attach`);
     }
-    await advanceTo(where, "Add Attachment");
+    if (!(await goToStep("Attachments")) || !(await findControl(page, "Add Attachment"))) {
+      await advanceTo(where, "Add Attachment");
+    }
     const control = await findControl(page, "Add Attachment");
     if (!control) {
       throw new Error(`unbound: ${where} — no "Add Attachment" control on ${page.url()}`);
@@ -801,14 +1163,20 @@ export default function create(
 
   // ---------------------------------------------------------------- sign in and out
 
-  type SessionRoute = { route?: string; unavailable?: string };
+  type SignInEntry = { route?: string; username?: string; unavailable?: string };
 
   async function signIn(who: Persona): Promise<void> {
-    const table = who.signIn as unknown as null | Record<string, SessionRoute>;
+    const table = who.signIn as unknown as null | Record<string, SignInEntry>;
     if (!table) {
       // The anonymous visitor has no account; being signed out is the whole state.
       await page.goto(baseURL + "/sign-out", { waitUntil: "domcontentloaded" });
       await settle();
+      return;
+    }
+    // The session route mints a session for any account, a deactivated one included, so a
+    // sign-in that exists to be refused has to go through the identity provider instead.
+    if ((who.can as readonly string[]).some((can) => /sign in and be refused/i.test(can))) {
+      await signInThroughIdentityProvider(who, table["sandbox-idp"], table["session-route"]?.route ?? "");
       return;
     }
     const entry = table["session-route"];
@@ -818,6 +1186,37 @@ export default function create(
       );
     }
     await page.goto(baseURL + entry.route, { waitUntil: "domcontentloaded" });
+    await settle();
+  }
+
+  async function signInThroughIdentityProvider(
+    who: Persona,
+    entry: SignInEntry | undefined,
+    sessionRoute: string,
+  ): Promise<void> {
+    const where = `signIn.${who.id}`;
+    if (!entry || entry.unavailable !== undefined || !entry.username) {
+      throw new Error(`unbound: ${where} — ${entry?.unavailable ?? "this persona has no identity provider account"}`);
+    }
+    const password = process.env.SDLC_SANDBOX_PASSWORD;
+    if (!password) {
+      throw new Error(`unbound: ${where} — SDLC_SANDBOX_PASSWORD is not set, so there is no password to sign in with`);
+    }
+    await go("/sign-in");
+    await press(where, [/vendor/i.test(sessionRoute) ? "Sign In Using GitHub" : "Sign In Using IDIR"]);
+    const home = new URL(baseURL).origin;
+    const reached = new URL(page.url());
+    // The service answered by itself, without sending the browser anywhere.
+    if (reached.origin === home) return;
+    if (/(^|\.)github\.com$/i.test(reached.hostname)) {
+      throw new Error(
+        `unbound: ${where} — on this target "Sign In Using GitHub" goes to github.com itself, not to a sandbox identity provider, and the sandbox account "${entry.username}" is not an account there; the session route that does reach this persona mints a session even for a deactivated account, so the refusal cannot be exercised`,
+      );
+    }
+    await page.getByLabel(/username/i).first().fill(entry.username);
+    await page.getByLabel(/password/i).first().fill(password);
+    await press(where, ["Sign In", "Sign in", "Log In", "Log in", "Continue"]);
+    await page.waitForURL((url) => url.origin === home, { timeout: 30000 }).catch(() => undefined);
     await settle();
   }
 
@@ -853,14 +1252,58 @@ export default function create(
     async ownOpportunitiesOnly() {
       return tabContent(["My Opportunities"]);
     },
+    // The dashboard's own table holds only the administrator's opportunities; its "View
+    // all opportunities" leads to the full list, read with every group opened.
     async allOpportunitiesForAdministrator() {
-      return tabContent(["My Opportunities"]);
+      await ready();
+      const all = await findControl(page, "View all opportunities");
+      if (!all) return "";
+      await all.click();
+      await ready();
+      const groups: string[] = [];
+      for (const name of OPPORTUNITY_GROUPS) groups.push(await opportunityGroup(name));
+      return groups.filter(Boolean).join("\n");
     },
     async emptyMyOpportunitiesMessage() {
       const body = await tabContent(["My Opportunities"]);
       return (await tableText()) ? "" : body;
     },
   };
+
+  // The list groups opportunities under headers carrying their count. A group may be shown
+  // folded, with only the header; it is opened by its header before its rows are read.
+  const OPPORTUNITY_GROUPS = ["Unpublished Opportunities", "Open Opportunities", "Closed Opportunities"];
+
+  async function opportunityGroup(name: string): Promise<string> {
+    const isHeader = (line: string, group: string): boolean =>
+      line === group || line.startsWith(`${group} `);
+    const rows = async (): Promise<string[] | null> => {
+      const lines = await textLines();
+      const start = lines.findIndex((line) => isHeader(line, name));
+      if (start < 0) return null;
+      const body: string[] = [];
+      for (let i = start + 1; i < lines.length; i++) {
+        if (OPPORTUNITY_GROUPS.some((group) => isHeader(lines[i], group))) break;
+        body.push(lines[i]);
+      }
+      if (body.length && matches(/^\d+$/, body[0])) body.shift();
+      return body;
+    };
+    await ready();
+    let body = await rows();
+    // This reader is shown no such group at all.
+    if (body === null) return "";
+    if (!body.length) {
+      const header = seen(page.getByText(new RegExp(`^${escapeRegExp(name)}`)));
+      const count = await header.count();
+      if (count) {
+        await header.nth(count - 1).click();
+        await settle();
+        body = (await rows()) ?? [];
+      }
+    }
+    return body.join("\n");
+  }
 
   const opportunityList: S.OpportunityListPage = {
     ...at("/opportunities"),
@@ -877,10 +1320,9 @@ export default function create(
       fill("opportunity-list.search", ["Search by Title or Location"], asText(input)),
     toggleWatch: () =>
       press("opportunity-list.toggle_watch", ["Watch", "Watching", "Unwatch"]),
-    unpublishedGroup: () =>
-      sectionFrom(["Unpublished Opportunities"], ["Open Opportunities", "Closed Opportunities"]),
-    openGroup: () => sectionFrom(["Open Opportunities"], ["Closed Opportunities"]),
-    closedGroup: () => sectionFrom(["Closed Opportunities"]),
+    unpublishedGroup: () => opportunityGroup("Unpublished Opportunities"),
+    openGroup: () => opportunityGroup("Open Opportunities"),
+    closedGroup: () => opportunityGroup("Closed Opportunities"),
     async opportunityStatus() {
       const lines = await textLines();
       const start = lines.findIndex((line) => matches(/Opportunities$/, line));
@@ -914,24 +1356,52 @@ export default function create(
   };
 
   // The three creation forms share a shape: a wizard, with the saving controls in the
-  // top navigation.
+  // top navigation. Each action enters every value it was given before pressing anything.
   function opportunityCreate(where: string, route: string) {
+    async function enter(member: string, input: unknown): Promise<void> {
+      await ready();
+      await fillForm(`${where}.${member}`, input, { skip: ATTACHMENT_KEYS });
+      if (hasFiles(input)) await addAttachment(`${where}.${member}`, input);
+    }
+    // A control this person is not offered at all is the refusal the test goes on to
+    // read, so its absence ends the action quietly. A control offered but disabled is
+    // reported by press() instead.
+    const offered = async (name: string): Promise<boolean> =>
+      (await findControl(navBar(), name)) !== null;
+    const record = () => recordAddress("/opportunities/[a-z-]+");
     return {
       ...at(route),
-      saveDraft: () => press(`${where}.save_draft`, ["Save Draft"], navBar()),
-      submitForReview: async () => {
+      saveDraft: async (input?: unknown) => {
+        await enter("save_draft", input);
+        await press(`${where}.save_draft`, ["Save Draft"], navBar());
+        await landOn(record());
+      },
+      submitForReview: async (input?: unknown) => {
+        await enter("submit_for_review", input);
+        if (!(await offered("Submit for Review"))) return;
         await press(`${where}.submit_for_review`, ["Submit for Review"], navBar());
         await confirmIfAsked(`${where}.submit_for_review`, [
           "Submit for Review",
           "Submit Opportunity",
         ]);
+        await landOn(record());
       },
-      publish: async () => {
+      publish: async (input?: unknown) => {
+        await enter("publish", input);
+        if (!(await offered("Publish"))) return;
         await press(`${where}.publish`, ["Publish"], navBar());
         await confirmIfAsked(`${where}.publish`, ["Publish Opportunity", "Publish"]);
+        await landOn(record());
       },
       fieldError: () => messages(),
     };
+  }
+
+  // A question is added at the end of its step, and its fields are the last ones there.
+  async function addQuestion(where: string, step: string, input: unknown): Promise<void> {
+    if (!(await goToStep(step))) await advanceTo(where, "Add Question");
+    await press(where, ["Add Question"]);
+    await fillForm(where, input, { scope: page, last: true });
   }
 
   const opportunityCwuCreate: S.OpportunityCwuCreatePage = {
@@ -942,17 +1412,18 @@ export default function create(
   const opportunitySwuCreate: S.OpportunitySwuCreatePage = {
     ...opportunityCreate("opportunity-swu-create", "/opportunities/sprint-with-us/create"),
     addPhase: async (input) => {
-      await advanceTo("opportunity-swu-create.add_phase", "Which phase do you want to start with?");
+      const where = "opportunity-swu-create.add_phase";
+      if (!(await goToStep("Phases"))) await advanceTo(where, "Which phase do you want to start with?");
+      const phaseKeys = ["phase", "startingPhase", "name"];
       await choose(
-        "opportunity-swu-create.add_phase",
+        where,
         ["Which phase do you want to start with?", "Select Phase"],
-        asText(input),
+        field(input, ...phaseKeys) || asText(input),
       );
+      await fillForm(where, input, { scope: page, skip: phaseKeys });
     },
-    addTeamQuestion: async () => {
-      await advanceTo("opportunity-swu-create.add_team_question", "Add Question");
-      await press("opportunity-swu-create.add_team_question", ["Add Question"]);
-    },
+    addTeamQuestion: (input) =>
+      addQuestion("opportunity-swu-create.add_team_question", "Team Questions", input),
     setEvaluationPanel: (input) =>
       setEvaluationPanel("opportunity-swu-create.set_evaluation_panel", input),
     scoreWeightError: () => messages(/100%|weight/i),
@@ -960,25 +1431,32 @@ export default function create(
 
   const opportunityTwuCreate: S.OpportunityTwuCreatePage = {
     ...opportunityCreate("opportunity-twu-create", "/opportunities/team-with-us/create"),
-    addResource: async () => {
-      await advanceTo("opportunity-twu-create.add_resource", "Add a Resource");
-      await press("opportunity-twu-create.add_resource", ["Add a Resource"]);
+    addResource: async (input) => {
+      const where = "opportunity-twu-create.add_resource";
+      if (!(await goToStep("Resource Details"))) await advanceTo(where, "Add a Resource");
+      await press(where, ["Add a Resource"]);
+      await fillForm(where, input, { scope: page, last: true });
     },
-    addResourceQuestion: async () => {
-      await advanceTo("opportunity-twu-create.add_resource_question", "Add Question");
-      await press("opportunity-twu-create.add_resource_question", ["Add Question"]);
-    },
+    addResourceQuestion: (input) =>
+      addQuestion("opportunity-twu-create.add_resource_question", "Resource Questions", input),
     setEvaluationPanel: (input) =>
       setEvaluationPanel("opportunity-twu-create.set_evaluation_panel", input),
     scoreWeightError: () => messages(/100%|weight/i),
   };
 
   // The panel is a list of evaluator slots plus a chair. More slots are added one at a
-  // time, and each slot picks a public sector person by name.
+  // time, and each slot picks a public sector person by name. On the creation forms the
+  // panel is its own step, reached directly wherever the form was left.
   async function setEvaluationPanel(where: string, input: unknown): Promise<void> {
-    const members = asList(field(input, "members", "evaluators") || input);
+    const record =
+      input && typeof input === "object" && !Array.isArray(input)
+        ? (input as Record<string, unknown>)
+        : {};
+    const members = asList(
+      record.members ?? record.evaluators ?? (typeof input === "string" || Array.isArray(input) ? input : undefined),
+    );
     const chair = field(input, "chair");
-    await advanceTo(where, "Panel Member");
+    if (!(await goToStep("Evaluation Panel"))) await advanceTo(where, "Panel Member");
     for (let i = 0; i < members.length; i++) {
       const slots = seen(page.getByRole("combobox", { name: "Panel Member", exact: false }));
       while ((await slots.count()) <= i) {
@@ -1082,7 +1560,19 @@ export default function create(
   function opportunityEdit(where: string, route: string) {
     return {
       ...at(route),
-      editDetails: () => fromActions(`${where}.edit_details`, ["Edit"]),
+      // Editing reopens the creation wizard in place; what the test gave is entered and
+      // saved with the control the top bar offers for this opportunity's state.
+      editDetails: async (input?: unknown) => {
+        await fromActions(`${where}.edit_details`, ["Edit"]);
+        await settle();
+        if (!entriesOf(input, ATTACHMENT_KEYS).length && !hasFiles(input)) return;
+        await fillForm(`${where}.edit_details`, input, { skip: ATTACHMENT_KEYS });
+        if (hasFiles(input)) await addAttachment(`${where}.edit_details`, input);
+        const saves = ["Publish Changes", "Save Changes", "Submit Changes for Review", "Save Draft"];
+        await press(`${where}.edit_details`, saves, navBar());
+        await confirmIfAsked(`${where}.edit_details`, saves);
+        await saved(saves);
+      },
       submitForReview: async () => {
         await fromActions(`${where}.submit_for_review`, ["Submit for Review"]);
         await confirmIfAsked(`${where}.submit_for_review`, [
@@ -1131,19 +1621,26 @@ export default function create(
   const opportunityCwuEdit: S.OpportunityCwuEditPage = {
     ...opportunityEdit("opportunity-cwu-edit", "/opportunities/code-with-us/:opportunityId/edit"),
     addNote: noteIsNotOffered("opportunity-cwu-edit"),
-    async reportingViews() {
-      await openTab("opportunity-cwu-edit.reporting_views", ["Opportunity"]);
-      return statFor(["Total Views", "Views"]);
-    },
-    async reportingWatchers() {
-      await openTab("opportunity-cwu-edit.reporting_watchers", ["Opportunity"]);
-      return statFor(["Watching", "Watchers"]);
-    },
-    async reportingProposals() {
-      await openTab("opportunity-cwu-edit.reporting_proposals", ["Opportunity"]);
-      return statFor(["Proposals"]);
-    },
+    reportingViews: () => reportFigure(["Total Views", "Views"]),
+    reportingWatchers: () => reportFigure(["Watching", "Watchers"]),
+    reportingProposals: () => reportFigure(["Proposals"]),
   };
+
+  // Each reporting figure sits in a card of its own, the number beside the words naming
+  // it. A reader not offered the Opportunity tab is shown no figures at all.
+  async function reportFigure(labels: string[]): Promise<string> {
+    if (!(await enterTab(["Opportunity"]))) return "";
+    for (const label of labels) {
+      const card = seen(
+        page.getByText(new RegExp(`^\\s*\\$?\\d[\\d,.]*\\s*${escapeRegExp(label)}\\s*$`)),
+      );
+      const count = await card.count();
+      if (!count) continue;
+      const figure = /\$?\d[\d,.]*/.exec(await card.nth(count - 1).innerText());
+      if (figure) return figure[0];
+    }
+    return statFor(labels);
+  }
 
   const opportunitySwuEdit: S.OpportunitySwuEditPage = {
     ...opportunityEdit("opportunity-swu-edit", "/opportunities/sprint-with-us/:opportunityId/edit"),
@@ -1242,34 +1739,55 @@ export default function create(
   // ================================================================ proposals
 
   // Submitting raises a terms dialog that must be agreed to before it will go through.
+  // The top bar's "Submit" stays disabled until the proposal is complete; press() reports
+  // that at once rather than waiting on it.
   async function openTermsDialog(where: string): Promise<void> {
     if (await dialog().count()) return;
     await press(where, ["Submit", "Submit Proposal"], navBar());
+    await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
     if (!(await dialog().count())) {
       throw new Error(`unbound: ${where} — submitting raised no terms dialog on ${page.url()}`);
     }
   }
 
   function proposalCreate(where: string, route: string, programme: string) {
+    // The form sits behind the terms dialog once that is open, so values still to be
+    // entered close it first; the submit that follows opens it again.
+    async function enter(member: string, input: unknown): Promise<void> {
+      if (!entriesOf(input, ATTACHMENT_KEYS).length && !hasFiles(input)) return;
+      if (await dialog().count()) await inDialog(`${where}.${member}`, ["Cancel"]);
+      await ready();
+      await fillForm(`${where}.${member}`, input, { skip: ATTACHMENT_KEYS });
+      if (hasFiles(input)) await addAttachment(`${where}.${member}`, input);
+    }
+    const record = () => recordAddress("/opportunities/[a-z-]+/[^/]+/proposals");
     return {
       ...at(route),
       addAttachment: (input: unknown) => addAttachment(`${where}.add_attachment`, input),
-      saveDraft: () => press(`${where}.save_draft`, ["Save Draft"], navBar()),
-      submitProposal: async () => {
+      saveDraft: async (input?: unknown) => {
+        await enter("save_draft", input);
+        await press(`${where}.save_draft`, ["Save Draft"], navBar());
+        await landOn(record());
+      },
+      submitProposal: async (input?: unknown) => {
+        await enter("submit_proposal", input);
         await openTermsDialog(`${where}.submit_proposal`);
         await inDialog(`${where}.submit_proposal`, ["Submit Proposal", "Submit"]);
+        await landOn(record());
       },
-      acceptProgramTerms: async () => {
+      acceptProgramTerms: async (input?: unknown) => {
+        await enter("accept_program_terms", input);
         await openTermsDialog(`${where}.accept_program_terms`);
-        await tick(
+        await ensureTicked(
           `${where}.accept_program_terms`,
           [`agree to the ${programme} Terms & Conditions`],
           dialog().first(),
         );
       },
-      acceptAppTerms: async () => {
+      acceptAppTerms: async (input?: unknown) => {
+        await enter("accept_app_terms", input);
         await openTermsDialog(`${where}.accept_app_terms`);
-        await tick(
+        await ensureTicked(
           `${where}.accept_app_terms`,
           ["Digital Marketplace Terms & Conditions for E-Bidding"],
           dialog().first(),
@@ -1279,16 +1797,42 @@ export default function create(
     };
   }
 
+  // Disqualifying asks for the reason in a dialog whose confirmation stays disabled until
+  // one is typed.
+  async function disqualify(where: string, input: unknown): Promise<void> {
+    await ready();
+    await press(where, ["Disqualify", "Disqualify Proposal"]);
+    await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    if (!(await dialog().count())) return;
+    const reason = field(input, "reason", "disqualificationReason", "text") || asText(input);
+    const box = seen(dialog().first().getByRole("textbox", { name: labelled("Reason") }));
+    if (reason && (await box.count())) await box.first().fill(reason);
+    await press(where, ["Disqualify", "Disqualify Proposal"], dialog().first());
+  }
+
   const proposalCwuCreate: S.ProposalCwuCreatePage = {
     ...proposalCreate(
       "proposal-cwu-create",
       "/opportunities/code-with-us/:opportunityId/proposals/create",
       "Code With Us",
     ),
-    chooseProponentIndividual: () =>
-      tick("proposal-cwu-create.choose_proponent_individual", ["Individual"]),
-    chooseProponentOrganization: () =>
-      tick("proposal-cwu-create.choose_proponent_organization", ["Organization"]),
+    // Choosing to answer as an individual opens the individual's own details on the same
+    // step, and those are entered from the input.
+    chooseProponentIndividual: async (input) => {
+      const where = "proposal-cwu-create.choose_proponent_individual";
+      await ready();
+      await goToStep("Proponent");
+      await chooseRadio(where, "Individual");
+      await fillForm(where, input, { scope: page });
+    },
+    chooseProponentOrganization: async (input) => {
+      const where = "proposal-cwu-create.choose_proponent_organization";
+      await ready();
+      await goToStep("Proponent");
+      await chooseRadio(where, "Organization");
+      const name = field(input, "organization", "organizationName", "legalName", "name") || asText(input);
+      if (name) await choose(where, ["Organization"], name);
+    },
     cancel: () => press("proposal-cwu-create.cancel", ["Cancel"], navBar()),
     opportunitySummary: () => headerText(),
     async termsModal() {
@@ -1465,13 +2009,7 @@ export default function create(
       await press("proposal-cwu-view.award_proposal", ["Award", "Award Proposal"]);
       await confirmIfAsked("proposal-cwu-view.award_proposal", ["Award Proposal", "Award"]);
     },
-    disqualifyProposal: async () => {
-      await press("proposal-cwu-view.disqualify_proposal", ["Disqualify", "Disqualify Proposal"]);
-      await confirmIfAsked("proposal-cwu-view.disqualify_proposal", [
-        "Disqualify Proposal",
-        "Disqualify",
-      ]);
-    },
+    disqualifyProposal: (input) => disqualify("proposal-cwu-view.disqualify_proposal", input),
     proposalTab: () => tabContent(["Proposal Details", "Proposal"]),
     historyTab: () => tabContent(["Proposal History", "History"]),
     proponent: () => valueAfter(["Proponent"]),
@@ -1511,13 +2049,7 @@ export default function create(
       await press("proposal-swu-view.award_proposal", ["Award", "Award Proposal"]);
       await confirmIfAsked("proposal-swu-view.award_proposal", ["Award Proposal", "Award"]);
     },
-    disqualifyProposal: async () => {
-      await press("proposal-swu-view.disqualify_proposal", ["Disqualify", "Disqualify Proposal"]);
-      await confirmIfAsked("proposal-swu-view.disqualify_proposal", [
-        "Disqualify Proposal",
-        "Disqualify",
-      ]);
-    },
+    disqualifyProposal: (input) => disqualify("proposal-swu-view.disqualify_proposal", input),
     proposalTab: () => tabContent(["Proposal Details", "Proposal"]),
     teamQuestionsTab: () => tabContent(["Team Questions", "Team Questions (Eval)"]),
     codeChallengeTab: () => tabContent(["Code Challenge"]),
@@ -1565,13 +2097,7 @@ export default function create(
       await press("proposal-twu-view.award_proposal", ["Award", "Award Proposal"]);
       await confirmIfAsked("proposal-twu-view.award_proposal", ["Award Proposal", "Award"]);
     },
-    disqualifyProposal: async () => {
-      await press("proposal-twu-view.disqualify_proposal", ["Disqualify", "Disqualify Proposal"]);
-      await confirmIfAsked("proposal-twu-view.disqualify_proposal", [
-        "Disqualify Proposal",
-        "Disqualify",
-      ]);
-    },
+    disqualifyProposal: (input) => disqualify("proposal-twu-view.disqualify_proposal", input),
     proposalTab: () => tabContent(["Proposal Details", "Proposal"]),
     resourceQuestionsTab: () => tabContent(["Resource Questions", "Resource Questions (Eval)"]),
     challengeTab: () => tabContent(["Interview/Challenge", "Challenge"]),
@@ -1583,30 +2109,36 @@ export default function create(
     totalScore: () => statFor(["Total Score"]),
   };
 
+  // A withheld export answers with the "Not Found" screen, which is no exported document.
+  async function exported(): Promise<string> {
+    await ready();
+    return (await notFoundShown()) ? "" : contentText();
+  }
+
   const proposalCwuExportOne: S.ProposalCwuExportOnePage = {
     ...at("/opportunities/code-with-us/:opportunityId/proposals/:proposalId/export"),
-    exportedProposal: () => contentText(),
+    exportedProposal: exported,
   };
   const proposalCwuExportAll: S.ProposalCwuExportAllPage = {
     ...at("/opportunities/code-with-us/:opportunityId/proposals/export"),
-    exportedProposal: () => contentText(),
+    exportedProposal: exported,
   };
   const proposalSwuExportOne: S.ProposalSwuExportOnePage = {
     ...at("/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export"),
-    exportedProposal: () => contentText(),
+    exportedProposal: exported,
     anonymousProponentName: () => anonymousProponent(),
   };
   const proposalSwuExportAll: S.ProposalSwuExportAllPage = {
     ...at("/opportunities/sprint-with-us/:opportunityId/proposals/export"),
-    exportedProposal: () => contentText(),
+    exportedProposal: exported,
   };
   const proposalTwuExportOne: S.ProposalTwuExportOnePage = {
     ...at("/opportunities/team-with-us/:opportunityId/proposals/:proposalId/export"),
-    exportedProposal: () => contentText(),
+    exportedProposal: exported,
   };
   const proposalTwuExportAll: S.ProposalTwuExportAllPage = {
     ...at("/opportunities/team-with-us/:opportunityId/proposals/export"),
-    exportedProposal: () => contentText(),
+    exportedProposal: exported,
   };
 
   const proposalVendorDashboard: S.ProposalVendorDashboardPage = {
@@ -1650,7 +2182,9 @@ export default function create(
       press("organization-list.create_organization", ["Create Organization"], navBar()),
     myOrganizations: () =>
       press("organization-list.my_organizations", ["My Organizations"], navBar()),
-    organizationName: () => textUnder("", "Organization Name"),
+    // The public list heads the column "Organization Name"; a profile's Organizations tab,
+    // where "My Organizations" leads, heads it "Legal Name".
+    organizationName: () => columnValues(["Organization Name", "Legal Name"]),
     ownerName: () => textUnder("", "Owner"),
     swuQualifiedMark: () => markUnder("", "SWU Qualified?"),
     twuQualifiedMark: () => markUnder("", "TWU Qualified?"),
@@ -1667,10 +2201,52 @@ export default function create(
     },
   };
 
+  // Every value in a column, in the order the page lists them, across every table
+  // carrying that column.
+  async function columnValues(headers: string[]): Promise<string> {
+    await ready();
+    const wanted = headers.map((title) => title.trim().toLowerCase());
+    const values: string[] = [];
+    const tables = seen(page.getByRole("table"));
+    const tableCount = await tables.count();
+    for (let t = 0; t < tableCount; t++) {
+      const table = tables.nth(t);
+      const titles = (await table.getByRole("columnheader").allInnerTexts()).map((title) =>
+        title.trim().toLowerCase(),
+      );
+      const column = titles.findIndex((title) => wanted.includes(title));
+      if (column < 0) continue;
+      const rows = table.getByRole("row");
+      const rowCount = await rows.count();
+      for (let r = 0; r < rowCount; r++) {
+        const cells = rows.nth(r).getByRole("cell");
+        if (column < (await cells.count())) values.push((await cells.nth(column).innerText()).trim());
+      }
+    }
+    return values.filter(Boolean).join("\n");
+  }
+
+  // A picture handed to a form action alongside its other values.
+  const LOGO_KEYS = ["logo", "image", "avatar", "picture"];
+  const pictureOf = (input: unknown): unknown =>
+    input && typeof input === "object" && !Array.isArray(input)
+      ? LOGO_KEYS.map((key) => (input as Record<string, unknown>)[key]).find((value) => value !== undefined)
+      : undefined;
+
   const organizationCreate: S.OrganizationCreatePage = {
     ...at("/organizations/create"),
-    createOrganization: () =>
-      press("organization-create.create_organization", ["Create Organization"], navBar()),
+    createOrganization: async (input) => {
+      const where = "organization-create.create_organization";
+      await ready();
+      // Public sector staff and administrators are shown "Not Found" here, with no form and
+      // no control: that refusal is what the test reads next, so nothing is attempted.
+      if ((await notFoundShown()) || !(await findControl(navBar(), "Create Organization"))) return;
+      await fillForm(where, input, { skip: LOGO_KEYS });
+      const picture = pictureOf(input);
+      if (picture !== undefined) await chooseImage(where, picture);
+      await press(where, ["Create Organization"], navBar());
+      await landOn(recordAddress("/organizations"));
+    },
     cancel: () => press("organization-create.cancel", ["Cancel"], navBar()),
     changeLogo: (input) => chooseImage("organization-create.change_logo", input),
     fieldError: () => messages(),
@@ -1680,6 +2256,7 @@ export default function create(
   async function chooseImage(where: string, input: unknown): Promise<void> {
     const files = filePaths(input);
     if (!files.length) throw new Error(`unbound: ${where} — no image file was named`);
+    await ready();
     const control = await findControl(page, "Choose Image");
     if (!control) {
       throw new Error(`unbound: ${where} — no "Choose Image" control on ${page.url()}`);
@@ -1687,16 +2264,35 @@ export default function create(
     const chooser = page.waitForEvent("filechooser");
     await control.click();
     await (await chooser).setFiles(files);
+    // The chooser has taken the file once its preview stands in for the picture. A file
+    // the form refuses shows no preview, and that is left for the test to read.
+    for (let wait = 0; wait < 20; wait++) {
+      if ((await pictures()).some((source) => /^(blob|data):/.test(source))) break;
+      await page.waitForTimeout(250);
+    }
     await settle();
   }
 
   const organizationEdit: S.OrganizationEditPage = {
     ...at("/organizations/:orgId/edit"),
-    editOrganization: async () => {
-      await openTab("organization-edit.edit_organization", ["Organization"]);
-      await press("organization-edit.edit_organization", ["Edit Organization"], navBar());
+    editOrganization: async (input) => {
+      const where = "organization-edit.edit_organization";
+      await ready();
+      if (!(await findControl(navBar(), "Edit Organization"))) await enterTab(["Organization"]);
+      await press(where, ["Edit Organization"], navBar());
+      await fillForm(where, input, { skip: LOGO_KEYS });
+      const picture = pictureOf(input);
+      if (picture !== undefined) await chooseImage(where, picture);
     },
-    saveChanges: () => press("organization-edit.save_changes", ["Save Changes"], navBar()),
+    saveChanges: async (input) => {
+      const where = "organization-edit.save_changes";
+      await settle();
+      await fillForm(where, input, { skip: LOGO_KEYS });
+      const picture = pictureOf(input);
+      if (picture !== undefined) await chooseImage(where, picture);
+      await press(where, ["Save Changes"], navBar());
+      await saved(["Save Changes"]);
+    },
     cancelEditing: () => press("organization-edit.cancel_editing", ["Cancel"], navBar()),
     archiveOrganization: async () => {
       await press("organization-edit.archive_organization", ["Archive Organization"]);
@@ -1807,51 +2403,30 @@ export default function create(
     changelogTab: () => tabContent(["Changelog"]),
     swuQualifiedBadge: () => linesMatching(/^Sprint With Us Qualified$/),
     twuQualifiedBadge: () => linesMatching(/^Team With Us Qualified$/),
-    async ownerBadge() {
-      await openTab("organization-edit.owner_badge", ["Team"]);
-      return linesMatching(/\bOwner\b/);
-    },
-    async pendingBadge() {
-      await openTab("organization-edit.pending_badge", ["Team"]);
-      return linesMatching(/\bPending\b/);
-    },
-    async teamMemberRow() {
-      await openTab("organization-edit.team_member_row", ["Team"]);
-      return tableText();
-    },
-    async teamCapabilities() {
-      await openTab("organization-edit.team_capabilities", ["Team"]);
-      return sectionFrom(["Team Capabilities"]);
-    },
-    async swuRequirementTwoMembers() {
-      await openTab("organization-edit.swu_requirement_two_members", ["SWU Qualification"]);
-      return linesMatching(/two team members/i);
-    },
-    async swuRequirementAllCapabilities() {
-      await openTab("organization-edit.swu_requirement_all_capabilities", ["SWU Qualification"]);
-      return linesMatching(/all capabilities/i);
-    },
-    async swuRequirementTermsAccepted() {
-      await openTab("organization-edit.swu_requirement_terms_accepted", ["SWU Qualification"]);
-      return linesMatching(/agreed to the sprint with us|agreed to sprint with us/i);
-    },
-    async twuRequirementServiceArea() {
-      await openTab("organization-edit.twu_requirement_service_area", ["TWU Qualification"]);
-      return linesMatching(/service area/i);
-    },
-    async twuRequirementTermsAccepted() {
-      await openTab("organization-edit.twu_requirement_terms_accepted", ["TWU Qualification"]);
-      return linesMatching(/agreed to the team with us|agreed to team with us/i);
-    },
-    async serviceAreaCheckbox() {
-      await openTab("organization-edit.service_area_checkbox", ["TWU Qualification"]);
-      return sectionFrom(["Service Areas"], ["Terms & Conditions"]);
-    },
+    // Each of these sits on a tab an ordinary member or an outsider is not offered; for
+    // them the tab's absence is the answer, and it reads as nothing.
+    ownerBadge: () => inTab(["Team"], () => linesMatching(/\bOwner\b/)),
+    pendingBadge: () => inTab(["Team"], () => linesMatching(/\bPending\b/)),
+    teamMemberRow: () => inTab(["Team"], tableText),
+    teamCapabilities: () => inTab(["Team"], () => sectionFrom(["Team Capabilities"])),
+    swuRequirementTwoMembers: () =>
+      inTab(["SWU Qualification"], () => linesMatching(/two team members/i)),
+    swuRequirementAllCapabilities: () =>
+      inTab(["SWU Qualification"], () => linesMatching(/all capabilities/i)),
+    swuRequirementTermsAccepted: () =>
+      inTab(["SWU Qualification"], () =>
+        linesMatching(/agreed to the sprint with us|agreed to sprint with us/i),
+      ),
+    twuRequirementServiceArea: () =>
+      inTab(["TWU Qualification"], () => linesMatching(/service area/i)),
+    twuRequirementTermsAccepted: () =>
+      inTab(["TWU Qualification"], () =>
+        linesMatching(/agreed to the team with us|agreed to team with us/i),
+      ),
+    serviceAreaCheckbox: () =>
+      inTab(["TWU Qualification"], () => sectionFrom(["Service Areas"], ["Terms & Conditions"])),
     notQualifiedNotice: () => linesMatching(/not qualified/i),
-    async changelogEntry() {
-      await openTab("organization-edit.changelog_entry", ["Changelog"]);
-      return tableText();
-    },
+    changelogEntry: () => inTab(["Changelog"], tableText),
     fieldError: () => messages(),
     organizationIdentifier: async () => organizationId(),
     // The latest refusal, whole, when the invitation was refused; otherwise whatever
@@ -2058,15 +2633,44 @@ export default function create(
       );
     },
     exportModal: () => dialogText(),
-    exportDisabledUntilSelection: () => controlState(["Export"], dialog().first()),
+    // Something to read only while Export cannot be pressed; once it can, nothing.
+    exportDisabledUntilSelection: async () => {
+      if (!(await dialog().count())) {
+        nothing(`user-list.export_disabled_until_selection — the export dialog is not open on ${page.url()}`);
+      }
+      const control = await findControl(dialog().first(), "Export");
+      return control && (await isDisabled(control)) ? "disabled" : "";
+    },
   };
 
   // The profile screen, reached under a person's identifier or as the signed-in "me".
   function profile(where: string, route: string) {
     return {
       ...at(route),
-      editProfile: () => press(`${where}.edit_profile`, ["Edit Profile"], navBar()),
-      saveChanges: () => press(`${where}.save_changes`, ["Save Changes"], navBar()),
+      editProfile: async () => {
+        await ready();
+        await press(`${where}.edit_profile`, ["Edit Profile"], navBar());
+      },
+      // What the test gave is typed into the profile before saving, putting the profile
+      // into editing first when it is not already.
+      saveChanges: async (input?: unknown) => {
+        await ready();
+        const picture = pictureOf(input);
+        if (entriesOf(input, LOGO_KEYS).length || picture !== undefined) {
+          const name = seen(page.getByRole("textbox", { name: labelled("Name") }));
+          if (!(await name.count()) || (await name.first().isDisabled())) {
+            const edit = await findControl(navBar(), "Edit Profile");
+            if (edit) {
+              await edit.click();
+              await settle();
+            }
+          }
+          await fillForm(`${where}.save_changes`, input, { skip: LOGO_KEYS });
+          if (picture !== undefined) await chooseImage(`${where}.save_changes`, picture);
+        }
+        await press(`${where}.save_changes`, ["Save Changes"], navBar());
+        await saved(["Save Changes"]);
+      },
       cancelEditing: () => press(`${where}.cancel_editing`, ["Cancel"], navBar()),
       changeAvatar: (input?: unknown) => chooseImage(`${where}.change_avatar`, input),
       deactivateAccount: () => press(`${where}.deactivate_account`, ["Deactivate Account"]),
@@ -2077,7 +2681,14 @@ export default function create(
         ]),
       cancelActivationChange: () => inDialog(`${where}.cancel_activation_change`, ["Cancel"]),
       userIdentifier: () => userId(),
-      profileTab: () => tabContent(["Profile"]),
+      // An administrator looking at somebody else's account is shown the profile with no
+      // tab strip at all; that screen, with its top-bar controls, is the profile tab.
+      profileTab: async () => {
+        await ready();
+        if (await notFoundShown()) return "";
+        await enterTab(["Profile"]);
+        return screenText();
+      },
       capabilitiesTab: () => tabContent(["Capabilities"]),
       notificationsTab: () => tabContent(["Notifications"]),
       legalTab: () => tabContent(["Policies, Terms & Agreements"]),
@@ -2099,7 +2710,11 @@ export default function create(
     reactivateAccount: () => press("user-profile.reactivate_account", ["Reactivate Account"]),
     permissionsLabel: () => valueAfter(["Permission(s)", "Permissions"]),
     adminCheckbox: () => tickState(["Admin"]),
-    notFoundPage: () => contentText(),
+    // Only the "Not Found" screen reads as anything; a profile shown reads as nothing.
+    notFoundPage: async () => {
+      await ready();
+      return (await notFoundShown()) ? contentText() : "";
+    },
   };
 
   const userProfileSelf: S.UserProfileSelfPage = {
@@ -2668,8 +3283,8 @@ export default function create(
       inDialog("notification-terms-broadcast.cancel_notify_vendors", ["Cancel"]),
     notifyVendorsControl: () => controlState(["Notify Vendors"], navBar()),
     notifyVendorsConfirmation: () => dialogText(),
-    notifyVendorsSuccess: () => linesMatching(/notified|success/i),
-    notifyVendorsFailure: () => messages(/unable|failed/i),
+    notifyVendorsSuccess: () => alertLines(/notified/i),
+    notifyVendorsFailure: () => alertLines(/unable|failed/i),
   };
 
   const notificationEmailReference: S.NotificationEmailReferencePage = {
@@ -2793,9 +3408,12 @@ export default function create(
 
   const contentCreate: S.ContentCreatePage = {
     ...at("/content/create"),
-    enterTitle: (input) => fill("content-create.enter_title", ["Title"], asText(input)),
-    enterSlug: (input) => fill("content-create.enter_slug", ["Slug"], asText(input)),
-    enterBody: (input) => fill("content-create.enter_body", ["Body"], asText(input)),
+    enterTitle: (input) =>
+      fill("content-create.enter_title", ["Title"], field(input, "title") || asText(input)),
+    enterSlug: (input) =>
+      fill("content-create.enter_slug", ["Slug"], field(input, "slug") || asText(input)),
+    enterBody: (input) =>
+      fill("content-create.enter_body", ["Body"], field(input, "body", "content") || asText(input)),
     uploadBodyImage: (input) => uploadBodyImage("content-create.upload_body_image", input),
     publishPage: () => press("content-create.publish_page", ["Publish"], navBar()),
     confirmPublish: () => inDialog("content-create.confirm_publish", ["Publish", "Yes"]),
@@ -2838,9 +3456,12 @@ export default function create(
   const contentEdit: S.ContentEditPage = {
     ...at("/content/:slug/edit"),
     startEditing: () => press("content-edit.start_editing", ["Edit"], navBar()),
-    editTitle: (input) => fill("content-edit.edit_title", ["Title"], asText(input)),
-    editSlug: (input) => fill("content-edit.edit_slug", ["Slug"], asText(input)),
-    editBody: (input) => fill("content-edit.edit_body", ["Body"], asText(input)),
+    editTitle: (input) =>
+      fill("content-edit.edit_title", ["Title"], field(input, "title") || asText(input)),
+    editSlug: (input) =>
+      fill("content-edit.edit_slug", ["Slug"], field(input, "slug") || asText(input)),
+    editBody: (input) =>
+      fill("content-edit.edit_body", ["Body"], field(input, "body", "content") || asText(input)),
     uploadBodyImage: (input) => uploadBodyImage("content-edit.upload_body_image", input),
     publishChanges: () => press("content-edit.publish_changes", ["Publish Changes"], navBar()),
     confirmPublishChanges: () =>
@@ -2850,7 +3471,8 @@ export default function create(
     confirmDeletePage: () =>
       inDialog("content-edit.confirm_delete_page", ["Delete Page", "Delete", "Yes"]),
     publishedDate: () => linesMatching(/^Published /),
-    updatedDate: () => linesMatching(/^Updated /),
+    // "Updated By" is the label of the person, not the date.
+    updatedDate: () => linesMatching(/^Updated (?!By\b)/),
     publishedBy: () => valueAfter(["Published By"]),
     updatedBy: () => valueAfter(["Updated By"]),
     fixedPageWarning: () => linesMatching(/"fixed" page|fixed. page/i),
@@ -2875,7 +3497,12 @@ export default function create(
   const contentView: S.ContentViewPage = {
     ...at("/content/:slug"),
     followBodyLink: (input) => openNamed("content-view.follow_body_link", input),
-    pageTitle: () => page.title(),
+    // The page's own heading, not the browser tab's title.
+    pageTitle: async () => {
+      await ready();
+      const heading = seen(page.getByRole("heading", { level: 1 }));
+      return (await heading.count()) ? (await heading.first().innerText()).trim() : "";
+    },
     pageBody: () => contentText(),
     publishedDate: () => linesMatching(/^Published /),
     updatedDate: () => linesMatching(/^Updated /),
@@ -3024,14 +3651,14 @@ export default function create(
     };
   }
 
-  // An upload that says nothing about who may read it sends an empty list, which this
-  // target accepts; leaving the field out altogether is refused as invalid.
+  // The uploads that are about something other than read access state an empty list,
+  // which this target accepts, so whatever they are refused for is what they are named for.
   const NO_STATED_ACCESS = "[]";
 
   const fileUpload: S.FileUploadPage = {
     ...at("/api/files"),
-    uploadFile: (input) =>
-      upload("file-upload.upload_file", uploadForm(input, readAccess(input) ?? NO_STATED_ACCESS)),
+    // An upload that states no read access sends no statement of it at all.
+    uploadFile: (input) => upload("file-upload.upload_file", uploadForm(input, readAccess(input))),
     uploadFileStatingItsReadAccess: async (input) => {
       const stated = readAccess(input);
       if (stated === undefined) {
@@ -3099,16 +3726,21 @@ export default function create(
     notFoundForAdministrator: async () => refusal((status) => status === 404),
   };
 
+  // Downloading takes the file that was opened, unless the action names another.
+  let openedFileId = "";
+
   const fileDownload: S.FileDownloadPage = {
     open: async (params) => {
+      openedFileId = params?.fileId ?? "";
       await ask("file-download.open", address("/api/files/:fileId?type=blob", params));
     },
     downloadFile: async (input) => {
+      const fileId =
+        field(input, "fileId", "id") || (typeof input === "string" ? input : "") || openedFileId;
+      if (!fileId) nothing("file-download.download_file — no file has been opened to download");
       await ask(
         "file-download.download_file",
-        address("/api/files/:fileId?type=blob", {
-          fileId: field(input, "fileId", "id") || asText(input),
-        }),
+        address("/api/files/:fileId?type=blob", { fileId }),
       );
     },
     fileContents: async () => {
@@ -3155,9 +3787,9 @@ export default function create(
         );
       }
       await go(`/opportunities/${programme}/${opportunityId}/edit?tab=opportunity`);
-      // The step is headed "Attachments" and states its size limit whether or not the
+      // The step is headed "N. Attachments" and states its size limit whether or not the
       // form is being edited; "Add Attachment" appears only once editing has begun.
-      await advanceTo("file-attachment-control.open", "Attachments");
+      await attachmentsStep();
     },
     // A stored attachment is offered as a link to the address the file is kept at.
     async attachmentAddress() {
@@ -3170,7 +3802,11 @@ export default function create(
       }
       return found.join("\n");
     },
-    sizeLimitStatedBeforeChoosing: () => linesMatching(/smaller than|\b\d+\s?MB\b/i),
+    // Whichever form is open, the limit is stated on its Attachments step.
+    sizeLimitStatedBeforeChoosing: async () => {
+      await attachmentsStep();
+      return linesMatching(/smaller than|\b\d+\s?MB\b/i);
+    },
     // The upload is made through the page's own file chooser, so its refusal is whatever
     // message the step shows afterwards, whole.
     uploadRefusedForSize: () => messages(),
@@ -3206,7 +3842,26 @@ export default function create(
       }
       return names.join("\n");
     },
-    existingAttachmentRow: () => sectionFrom(["Attachments"]),
+    // The names listed on the Attachments step, between its note and its step controls.
+    async existingAttachmentRow() {
+      await attachmentsStep();
+      const lines = await textLines();
+      const start = lines.findIndex((line) => matches(/^\d+\.\s+Attachments$/i, line));
+      if (start < 0) return sectionFrom(["Attachments"]);
+      const names: string[] = [];
+      for (let i = start + 1; i < lines.length; i++) {
+        if (matches(/^(Previous|Next|Add Attachment)$/, lines[i])) break;
+        if (matches(/smaller than|supporting material/i, lines[i])) continue;
+        names.push(lines[i]);
+      }
+      const boxes = attachmentNameBoxes();
+      const count = await boxes.count();
+      for (let i = 0; i < count; i++) {
+        const typed = await boxes.nth(i).inputValue();
+        names.push(typed || ((await boxes.nth(i).getAttribute("placeholder")) ?? ""));
+      }
+      return names.filter(Boolean).join("\n");
+    },
     // An attachment already saved is shown as plain words; a newly added one is shown in
     // a box that can still be typed into.
     existingAttachmentNameReadOnly: async () =>
@@ -3224,17 +3879,52 @@ export default function create(
     attachmentListOnPublicView: () => tabContent(["Attachments"]),
   };
 
-  // A stored picture is shown from the service's own address; the placeholder shown when
-  // there is none comes from the site's static images and is not a stored image.
-  async function storedImageAddress(): Promise<string> {
+  // An opportunity or proposal form's Attachments step, reached from its own tab when the
+  // record's screen opened on another.
+  async function attachmentsStep(): Promise<void> {
+    await ready();
+    if (!(await currentStep())) await enterTab(["Opportunity", "Proposal Details"]);
+    await goToStep("Attachments");
+  }
+
+  // An outcome announced as an alert drawn after the page's footer, once the confirmation
+  // that led to it has closed.
+  async function alertLines(pattern: RegExp): Promise<string> {
+    await dialog().first().waitFor({ state: "hidden", timeout: 10000 }).catch(() => undefined);
+    await seen(page.getByText(pattern)).first().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+    const prose = await proseLines();
+    const whole = await page.evaluate(() => document.body.innerText);
+    return whole
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line && !prose.has(line) && matches(pattern, line))
+      .join("\n");
+  }
+
+  // The pictures a screen shows as its own, below the top bar: the site logo and the
+  // signed-in person's small avatar up there are never the picture being asked about.
+  async function pictures(): Promise<string[]> {
+    const bar = await navBar().boundingBox().catch(() => null);
+    const below = bar ? bar.y + bar.height : 0;
     const images = seen(page.getByRole("img"));
     const count = await images.count();
+    const sources: string[] = [];
     for (let i = 0; i < count; i++) {
       const source = await images.nth(i).getAttribute("src");
-      if (source && source.includes("/api/")) return source;
+      if (!source) continue;
+      const box = await images.nth(i).boundingBox();
+      if (box && box.y + box.height <= below) continue;
+      sources.push(source);
     }
+    return sources;
+  }
+
+  // A stored picture is shown from the service's file address; the placeholder shown when
+  // there is none comes from the site's static images and is not a stored image.
+  async function storedImageAddress(): Promise<string> {
+    await ready();
     // Only the placeholder, or no picture at all: nothing is stored to point at.
-    return "";
+    return (await pictures()).find((source) => source.includes("/api/files/")) ?? "";
   }
 
   // The size the image was stored at, read by loading the stored image itself. With no
@@ -3267,23 +3957,11 @@ export default function create(
       return size ? String(size.height) : "";
     },
     currentImage: async () => {
-      const images = seen(page.getByRole("img"));
-      const count = await images.count();
-      for (let i = 0; i < count; i++) {
-        const source = await images.nth(i).getAttribute("src");
-        if (source) return source;
-      }
-      return "";
+      await ready();
+      return (await pictures())[0] ?? "";
     },
-    chosenImagePreview: async () => {
-      const images = seen(page.getByRole("img"));
-      const count = await images.count();
-      for (let i = 0; i < count; i++) {
-        const source = await images.nth(i).getAttribute("src");
-        if (source && (source.startsWith("blob:") || source.startsWith("data:"))) return source;
-      }
-      return "";
-    },
+    chosenImagePreview: async () =>
+      (await pictures()).find((source) => /^(blob|data):/.test(source)) ?? "",
     onlyJpegAndPngOffered: async () => {
       throw new Error(
         "unbound: file-image-picker.only_jpeg_and_png_offered — the picker says nothing on the page about which kinds of image it takes; the restriction lives only in the chooser the operating system opens",

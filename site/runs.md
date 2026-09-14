@@ -88,6 +88,9 @@
 - 12:42:15 rule calibrate-old-3 approve at G1 by agent:product-owner (agent)
 - 12:42:16 run calibrate: ok, cost 0, turns 0
 - 12:44:43 init: pipeline e133b6b, packs 3, skills installed 0, skipped 0
+- 13:18:29 run bind-adapter: ok, cost 9.298642, turns 84
+- 13:18:29 propose bind-adapter-old-10 at G3
+- 13:19:53 rule bind-adapter-old-10 approve at G3 by agent:reviewer (agent)
 
 # Run record 2026-09-13
 
