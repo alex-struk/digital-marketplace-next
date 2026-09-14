@@ -9,7 +9,7 @@
 | R-4.3 | acceptance/users/R-4.3.spec.ts | fail |
 | R-4.4 | acceptance/users/R-4.4.spec.ts | fail |
 | R-4.5 | acceptance/users/R-4.5.spec.ts | fail |
-| R-4.6 | acceptance/users/R-4.6.spec.ts | fail |
+| R-4.6 | acceptance/users/R-4.6.spec.ts | pass |
 | R-4.7 | — |  |
 | R-4.8 | acceptance/users/R-4.8.spec.ts | fail |
 | R-4.9 | acceptance/users/R-4.9.spec.ts | fail |
@@ -19,8 +19,8 @@
 | R-4.13 | not testable: unobservable: the outcome is that the service offers no way to create an administrator where none exists, and that only a change to the stored data outside the service can. That is the absence of an action anywhere in the service, and no observation reports an absence of that kind — a test could only show that the particular controls it knows of do not do it, never that no other route exists. The given could be seeded (a seed with no administrator account), but that would not help: the claim a test would then have to settle is still the non-existence of a route, and the documented manual route lies outside the service by definition. This is a property to be accepted by a reader of the rebuilt system's routes, not settled by a test. | not-testable |
 | R-4.14 | acceptance/users/R-4.14.spec.ts | fail |
 | R-4.15 | — |  |
-| R-4.16 | acceptance/users/R-4.16.spec.ts | fail |
-| R-4.17 | acceptance/users/R-4.17.spec.ts | fail |
+| R-4.16 | acceptance/users/R-4.16.spec.ts | pass |
+| R-4.17 | acceptance/users/R-4.17.spec.ts | pass |
 | R-4.18 | acceptance/users/R-4.18.spec.ts | fail |
 | R-4.19 | acceptance/users/R-4.19.spec.ts | fail |
 | R-4.20 | not testable: blocked: both halves turn on which message was sent, and the two messages differ only in their wording — one says an administrator reactivated the account and names whom to contact, the other says the person reactivated it themselves. The mail fixture returns Subject, Snippet, To and ID from the search listing and offers no way to read one message; the Snippet was considered and rejected, because it is a leading excerpt the catcher cuts at a length of its own choosing, so a phrase missing from it proves nothing. The email notification reference describes messages rather than the one that was sent (see R-6.12). Unblocked by a mail accessor over observables.yaml's read_one_message returning the message's plain_text_body (Text) or html_body (HTML); both halves are then reachable, since an administrator's reactivation of seed.users.vendorDeactivated and a self-deactivated vendor signing in again can each be produced. | not-testable |
@@ -29,16 +29,16 @@
 | R-4.23 | acceptance/users/R-4.23.spec.ts | fail |
 | R-4.24 | acceptance/users/R-4.24.spec.ts | fail |
 | R-4.25 | acceptance/users/R-4.25.spec.ts | fail |
-| R-4.26 | acceptance/users/R-4.26.spec.ts | fail |
+| R-4.26 | acceptance/users/R-4.26.spec.ts | pass |
 | R-4.27 | acceptance/users/R-4.27.spec.ts | fail |
 | R-4.28 | acceptance/users/R-4.28.spec.ts | fail |
 | D-users-29 | — |  |
-| R-4.29 | acceptance/users/R-4.29.spec.ts | fail |
+| R-4.29 | acceptance/users/R-4.29.spec.ts | pass |
 | R-4.30 | acceptance/users/R-4.30.spec.ts | fail |
 | R-4.31 | acceptance/users/R-4.31.spec.ts | fail |
 | D-users-32 | — |  |
 | R-4.32 | acceptance/users/R-4.32.spec.ts | fail |
-| R-4.33 | acceptance/users/R-4.33.spec.ts | fail |
+| R-4.33 | acceptance/users/R-4.33.spec.ts | pass |
 | R-4.34 | acceptance/users/R-4.34.spec.ts | fail |
 
 ### R-4.1 · v1 · confirmed · accepted

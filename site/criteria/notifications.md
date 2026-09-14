@@ -10,7 +10,7 @@
 | R-6.4 | not testable: blocked: sender and reply-to are headers of one message, and the mail fixture returns only Subject, Snippet, To and ID. Needs a `mail` accessor for one message's From and Reply-To (observables.yaml names `sender: from` and read_one_message), and the configured sender named in the contract so that 'the same for every kind of message' can be compared against it. | not-testable |
 | R-6.5 | not testable: blocked: comparing the plain-text form with the formatted one needs both bodies of one message. The mail fixture exposes neither; its snippet is a summary the catcher makes, not evidence that a plain-text part was sent. Needs a `mail` accessor returning one message's HTML and Text (observables.yaml names html_body and plain_text_body). | not-testable |
 | R-6.6 | acceptance/notifications/R-6.6.spec.ts | pass |
-| R-6.7 | acceptance/notifications/R-6.7.spec.ts | fail |
+| R-6.7 | acceptance/notifications/R-6.7.spec.ts | pass |
 | R-6.8 | not testable: blocked: two things are missing. The batch's recipients are blind copies and the mail fixture has no accessor for them, so neither batch size nor hiding can be counted — needs a `mail` accessor for one message's To and Bcc (observables.yaml names copied_recipients). And more than fifty accounts that have asked for new-opportunity notices exist neither in the seed nor through any surface action; the seed could create them, or the contract could name a smaller configured batch size on the oracle. | not-testable |
 | R-6.9 | — | not-testable |
 | R-6.10 | — | fail |
@@ -25,12 +25,12 @@
 | R-6.19 | acceptance/notifications/R-6.19.spec.ts | fail |
 | R-6.20 | not testable: blocked: the given is an account being created for the first time. Every persona signs in as an account the seed already holds, and no surface action creates one. Needs a persona whose sign-in reaches an identity the seed does not hold (a fresh sandbox identity), after which userSignUpComplete and userProfileSelfNotifications.newOpportunitiesCheckbox already read the result. | not-testable |
 | R-6.21 | acceptance/notifications/R-6.21.spec.ts | fail |
-| R-6.22 | — | fail |
+| R-6.22 | — | pass |
 | R-6.23 | acceptance/notifications/R-6.23.spec.ts | fail |
 | R-6.24 | not testable: blocked: what this adds to R-6.23 is ordering — success reported before any message is sent. Nothing reports send progress and nothing can hold delivery, so checking the catcher at the moment success appears is a race against the background sending, not a test of it. Needs a way to hold or slow the mail catcher's acceptance of messages, so that notifyVendorsSuccess can be read while no message has yet arrived. | not-testable |
 | R-6.25 | not testable: blocked: every part of the claim — title and winner leading the message, the em dash where no successful proponent is recorded, the offer to sign in and see one's own score — is body content, which no `mail` accessor returns. Needs a `mail` accessor for one message's body, and a starting state from which an award can be made with three proponents: the only seeded Code With Us opportunity has no proposals and a deadline years away, and the two closed opportunities need their whole evaluation run first. The seed could hold a closed Code With Us opportunity with three submitted proposals. | not-testable |
 | R-6.26 | — | fail |
-| R-6.27 | acceptance/notifications/R-6.27.spec.ts | not-testable |
+| R-6.27 | acceptance/notifications/R-6.27.spec.ts | fail |
 | R-6.28 | acceptance/notifications/R-6.28.spec.ts | fail |
 
 ### R-6.1 · v1 · confirmed · accepted
