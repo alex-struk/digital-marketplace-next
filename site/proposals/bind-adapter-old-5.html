@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-5 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">63</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">63</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">65</span></a></li><li><a href="../runs.html">Run log <span class="count">8</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-5</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-14 00:16</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I made the one required fix and both optional ones, but I could not run the typecheck, so nothing I changed has been compiled.</p>
+<p>I made the one required fix and both optional ones, but I could not run the typecheck, so nothing I changed has been compiled.</p>
+<p><strong>The required fix.</strong> In <code>tests/adapters/old/index.ts</code>, <code>fileAttachmentControl.open</code> now reads only <code>params.program</code> and <code>params.opportunityId</code>, the two fields the generated <code>FileAttachmentControlPage.open</code> declares. I removed the <code>params.programme</code> and <code>params.id</code> fallbacks that caused the two errors at lines 2933–2934. It still defaults the program to <code>code-with-us</code> when none is given. It still throws <code>unbound: file-attachment-control.open</code> when no opportunity id is given. Nothing else about how the page opens changed.</p>
+<p><strong>First optional change.</strong> <code>fileAttachmentControl.uploadRefusedForSize</code> no longer keeps only messages that match a size pattern; it returns every message the step shows. I didn&#39;t copy the form the other refusal readers use, which reads the status of the adapter&#39;s last direct request. The attachment control uploads through the page&#39;s own file chooser, so no request answer comes back to read. The step&#39;s own messages are the only honest source, read the same way <code>fieldError</code> reads them.</p>
+<p><strong>Second optional change.</strong> <code>bindings.yaml</code> now has a comment on <code>organization-edit.add_team_members</code>. It says ordinary members are invited through the Team tab&#39;s &quot;Add Team Member(s)&quot; dialog, and any other membership type is posted directly to <code>/api/affiliations</code> because that screen cannot send one. The entry stays <code>bound</code>, and no name was added, removed or renamed.</p>
+<p>Everything else from the previous binding is untouched. Nothing was rebound, no page was walked again, and no route was re-checked. No page&#39;s route was found missing this time, because none was visited. The adapter still asserts nothing, defines no test, and holds no password or other value read from the environment.</p>
+<p><strong>What I could not do.</strong> The workspace has no installed packages, and installing the runner&#39;s pinned TypeScript and Playwright versions into the scratchpad needed an approval this session couldn&#39;t get. The only TypeScript installs on the machine are inside other project folders, one of which may hold the target&#39;s source, so I didn&#39;t use them. Instead I did a narrower check by hand. After the fix, the adapter reads a field off <code>params</code> in exactly two places, <code>params?.program</code> and <code>params?.opportunityId</code>, and both are declared in the generated signature. That rules out the two errors the ruling cited, but it is not the runner&#39;s typecheck.</p>
+<p>Approval still depends on a runner typecheck under <code>adapters/old/</code> with no errors, which has yet to happen. The earlier point also still stands: the chunked upload from the previous revision has never been sent against the target.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-14 00:17.</p>
+<div class="body"><p>Does this adapter bind every surface action and observation on old, and nothing else? Approved. The previous ruling (bind-adapter-old-4) returned it for a single reason: two TypeScript errors in fileAttachmentControl.open, which read params.programme and params.id when the generated type declares only program and opportunityId. The runner&#39;s typecheck at 313c40c lists no errors under adapters/old/. The non-zero exit comes entirely from errors in tests/acceptance/, which this proposal does not own and did not touch. The source no longer reads either undeclared field. Because the adapter satisfies every generated page type with no errors, it declares every action and observation the surface names. Nothing under tests/acceptance or tests/generated changed. The adapter contains no assertion, no expect call and no read from the environment. Both optional fixes are in: uploadRefusedForSize now returns the step&#39;s messages unfiltered, and bindings.yaml records that non-member invitations are posted to /api/affiliations. The upload that sends no Content-Length has never been sent against the target, but a failure there throws an unbound error instead of producing a result, so it cannot fake a pass. The tier is STANDARD and no risk is marked unaccepted, so nothing needs escalating. The ruling would change if a later runner typecheck reports errors under adapters/old/, if a binding is found asserting an outcome rather than locating one, or if the first run shows the no-size-header upload never reaches the target while its binding stays marked bound.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>The first run against the target should show whether file-upload.upload_file_without_declaring_its_size actually reaches the target. If it cannot, mark that binding unbound with the real reason instead of leaving it bound.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

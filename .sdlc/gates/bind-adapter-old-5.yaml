@@ -1,0 +1,12 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Does this adapter bind every surface action and observation on old, and nothing else? Approved. The previous ruling (bind-adapter-old-4) returned it for a single reason: two TypeScript errors in fileAttachmentControl.open, which read params.programme and params.id when the generated type declares only program and opportunityId. The runner's typecheck at 313c40c lists no errors under adapters/old/. The non-zero exit comes entirely from errors in tests/acceptance/, which this proposal does not own and did not touch. The source no longer reads either undeclared field. Because the adapter satisfies every generated page type with no errors, it declares every action and observation the surface names. Nothing under tests/acceptance or tests/generated changed. The adapter contains no assertion, no expect call and no read from the environment. Both optional fixes are in: uploadRefusedForSize now returns the step's messages unfiltered, and bindings.yaml records that non-member invitations are posted to /api/affiliations. The upload that sends no Content-Length has never been sent against the target, but a failure there throws an unbound error instead of producing a result, so it cannot fake a pass. The tier is STANDARD and no risk is marked unaccepted, so nothing needs escalating. The ruling would change if a later runner typecheck reports errors under adapters/old/, if a binding is found asserting an outcome rather than locating one, or if the first run shows the no-size-header upload never reaches the target while its binding stays marked bound.
+conditions:
+  - "The first run against the target should show whether file-upload.upload_file_without_declaring_its_size actually reaches the target. If it cannot, mark that binding unbound with the real reason instead of leaving it bound."
+cost: 0.7340654999999998
+turns: 6
+session: "6f3e0559-7097-4a86-ae0b-3c0b73684b09"
+at: 2026-09-14T00:17:36.822Z

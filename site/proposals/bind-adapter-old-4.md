@@ -22,4 +22,32 @@ The typecheck errors the ruling saw are in `tests/acceptance`: parameter names a
 
 Everything else is as accepted in the last round. All pages' routes still resolve on the target, and I didn't open any page again this time.
 
-_Open, waiting for agent:reviewer_
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+
+Does this adapter bind every surface action and observation on old, and nothing else? Returned. The runner's typecheck at 9985d92 fails in the adapter itself: in fileAttachmentControl.open, tests/adapters/old/index.ts lines 2933-2934 read params.programme and params.id, which the generated type { program, opportunityId } does not have (TS2551, TS2339). I checked the source at that revision and the errors are real. These belong to the adapter, not to the test writer. Combined with the author's statement that the new chunked upload was never sent against the target, none of the three fixes has any evidence behind it, and the only check that ran failed. The rest holds up: nothing under tests/acceptance changed, the four file-upload refusal readers named in the prior ruling and invalidMembershipTypeError now return the latest refusal unfiltered, the node:http import is not prohibited by the separation rules, and the adapter asserts nothing and defines no test. Approval needs a runner typecheck with no diagnostics under adapters/old/.
+
+**Conditions:**
+- In fileAttachmentControl.open, read only the typed parameters params.program and params.opportunityId, removing the params.programme and params.id fallbacks, so the runner's typecheck reports zero diagnostics under adapters/old/.
+- Optional: stop fileAttachmentControl.uploadRefusedForSize from keeping only messages that match a size pattern, as the other refusal readers now do.
+- Optional: record in bindings.yaml that organization-edit.add_team_members sends non-member invitations directly to /api/affiliations because the team screen cannot send them.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `9985d92af0c4f664f111db2b4ceca474689c40ef`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    adapters/old/index.ts(2933,52): error TS2551: Property 'programme' does not exist on type '{ program: string; opportunityId: string; }'. Did you mean 'program'?
+    adapters/old/index.ts(2934,62): error TS2339: Property 'id' does not exist on type '{ program: string; opportunityId: string; }'.
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    acceptance/users/: 89 diagnostics
+    acceptance/opportunities/: 73 diagnostics
+    acceptance/evaluation/: 19 diagnostics
+    acceptance/files/: 13 diagnostics
+    acceptance/notifications/: 13 diagnostics
