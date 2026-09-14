@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-triage-old-3 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">83</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">83</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">72</span></a></li><li><a href="../runs.html">Run log <span class="count">8</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-triage-old-3</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-14 19:24</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>24 criterion(s) fail against old: which of them did this project&#39;s own adapter cause?</h2>
+<p><strong>Recommendation.</strong> Sort R-1.28, R-4.28, R-6.28, R-8.28, R-8.29, R-1.30, R-1.31, R-4.31, R-8.31, R-1.32, R-4.32, R-2.34, R-3.34, R-4.34, R-2.35, R-2.36, R-1.37, R-2.37, R-1.38, R-2.38, R-1.39, R-1.48, R-1.53, R-1.56 with a triage condition each, so the adapter&#39;s failures are fixed there and only product questions reach the product owner.</p>
+<p>24 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:3000,">http://localhost:3000,</a> and nobody has sorted them yet. Before any reaches the product owner, say which of them this project&#39;s own adapter caused. The adapter is under <code>tests/adapters/old/</code>; read each failure against it and against the test.</p>
+<h4>R-1.28 · v1</h4>
+<p>Only an administrator may cancel an opportunity, and only once it has been published.</p>
+<ul><li>given: an opportunity that is published or at any evaluation stage or in processing</li><li>when: an administrator cancels it, giving an optional note of up to 1,000 characters</li><li>then: the opportunity moves to cancelled and stops accepting proposals</li><li>test: tests/acceptance/opportunities/R-1.28.spec.ts</li></ul>
+<p><strong>an administrator may cancel a published opportunity</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>a member of public sector staff who is not an administrator may not cancel an opportunity</strong> — failed</p>
+<pre><code>Error: unbound: no opportunity identifier in the address http://localhost:3000/opportunities/code-with-us/create</code></pre>
+<p><strong>an opportunity may only be cancelled once it has been published</strong> — failed</p>
+<pre><code>Error: unbound: no opportunity identifier in the address http://localhost:3000/opportunities/code-with-us/create</code></pre>
+<h4>R-4.28 · v1</h4>
+<p>The job title is asked for and shown only on a public sector employee&#39;s profile; a vendor is never asked for one.</p>
+<ul><li>given: a vendor and a public sector employee each editing their own profile</li><li>when: each opens the profile form</li><li>then: the public sector employee is offered a job title field and the vendor is not</li><li>test: tests/acceptance/users/R-4.28.spec.ts</li></ul>
+<p><strong>the job title is asked for and shown on a public sector employee&#39;s profile</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;Procurement Lead&quot;[39m
+Received string:    [31m&quot;Program Analyst&quot;[39m</code></pre>
+<h4>R-6.28 · v1</h4>
+<p>The service skips a recipient that holds no email address rather than composing a message addressed to nobody, and a broadcast to many people always continues past a recipient it cannot address or cannot reach.</p>
+<ul><li>test: tests/acceptance/notifications/R-6.28.spec.ts</li></ul>
+<p><strong>the service skips a recipient that holds no email address rather than composing a message addressed to nobody, and a broadcast to many people always continues past a recipient it cannot address or cannot reach</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+Expected: &gt; [32m0[39m
+Received:   [31m0[39m
+
+Call Log:
+- Timeout 10000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-8.28 · v1</h4>
+<p>Profile pictures and organization logos are marked readable by anyone.</p>
+<ul><li>given: an organization with a logo</li><li>when: a visitor who is not signed in opens the organization list</li><li>then: the logo is shown to them</li><li>test: tests/acceptance/files/R-8.28.spec.ts</li></ul>
+<p><strong>profile pictures are marked readable by anyone</strong> — failed</p>
+<pre><code>Error: open() of /api/files/:fileId?type=blob was called without a value for &quot;:fileId&quot; (given: {&quot;fileId&quot;:&quot;&quot;})</code></pre>
+<p><strong>organization logos are marked readable by anyone</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-8.29 · v1</h4>
+<p>An image placed into a piece of formatted text is stored as an ordinary file marked readable by anyone, and the text refers to it by an internal marker that is turned into a download address only when the text is displayed.</p>
+<ul><li>given: an administrator editing a page&#39;s body with the image control</li><li>when: they choose an image and it is accepted</li><li>then: the image is inserted into the text as a reference the service resolves for itself, and a reader of the finished page sees the image</li><li>test: tests/acceptance/files/R-8.29.spec.ts</li></ul>
+<p><strong>an image placed into a piece of formatted text is stored as an ordinary file marked readable by anyone, and the text refers to it by an internal marker that is turned into a download address only when the text is displayed</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-1.30 · v1</h4>
+<p>An opportunity&#39;s administrator and its author can see its full change history, how many times it has been viewed, how many people are watching it and how many proposals have been submitted; nobody else can.</p>
+<ul><li>given: a published opportunity that has been viewed, watched and proposed against</li><li>when: its author or an administrator opens it</li><li>then: they see its history of state changes and events and its counts of views, watchers and submitted proposals</li><li>test: tests/acceptance/opportunities/R-1.30.spec.ts</li></ul>
+<p><strong>an opportunity&#39;s administrator and its author can see its full change history and its counts of views, watchers and proposals</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>nobody else can see an opportunity&#39;s change history or its counts of views, watchers and proposals</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-cwu-edit.reporting_views — no tab labelled &quot;Opportunity&quot; on http://localhost:3000/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/edit</code></pre>
+<h4>R-1.31 · v1</h4>
+<p>Public sector staff cannot see the proposals submitted against an opportunity until it has left the published state.</p>
+<ul><li>given: a published opportunity that has received proposals</li><li>when: its author or an administrator asks to see the proposals</li><li>then: the request is refused until the opportunity has closed and moved to an evaluation stage</li><li>test: tests/acceptance/opportunities/R-1.31.spec.ts</li></ul>
+<p><strong>public sector staff cannot see the proposals submitted against an opportunity while it is published</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-4.31 · v2</h4>
+<p>A request to deactivate an account that is already inactive is refused with a message saying the account is already inactive; an administrator viewing their own profile is offered no deactivation control, but that restriction rests on the interface alone, since the service accepts a deactivation request made against the requester&#39;s own account.</p>
+<ul><li>given: an already deactivated account, and an administrator viewing their own profile</li><li>when: a second deactivation is requested for the first, and the administrator looks for a deactivation control on their own profile</li><li>then: the second request is refused with a message saying the account is already inactive, and the administrator&#39;s own profile offers no such control</li><li>test: tests/acceptance/users/R-4.31.spec.ts</li></ul>
+<p><strong>an administrator viewing their own profile is offered no deactivation control</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;Deactivate&quot;[39m
+Received string:    [31m&quot;&quot;[39m</code></pre>
+<h4>R-8.31 · v1</h4>
+<p>Removing an attachment from an opportunity or a proposal, or deleting the opportunity or proposal it hangs on, withdraws every read path the file held through that association, and a file that no record refers to any longer is identifiable as detached so that stored content can be disposed of under the records-retention rule for procurement attachments, which is set outside this domain.</p>
+<ul><li>test: tests/acceptance/files/R-8.31.spec.ts</li></ul>
+<p><strong>removing an attachment from an opportunity withdraws the read path the file held through that opportunity</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>deleting the opportunity an attachment hangs on withdraws the read path the file held through that opportunity</strong> — failed</p>
+<pre><code>Error: unbound: no opportunity identifier in the address http://localhost:3000/opportunities/code-with-us/create</code></pre>
+<p><strong>removing an attachment from a proposal withdraws the read path the file held through that proposal</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-1.32 · v1</h4>
+<p>An addendum of 1 to 5,000 characters may be added to any opportunity that is no longer a draft, by an administrator or by the staff member who created it, and cannot be removed afterwards.</p>
+<ul><li>given: a published opportunity</li><li>when: its author adds an addendum</li><li>then: the addendum is appended to the opportunity with its author and date, an entry is added to the opportunity&#39;s history, and there is no action that removes it</li><li>test: tests/acceptance/opportunities/R-1.32.spec.ts</li></ul>
+<p><strong>an addendum may be added to an opportunity that is no longer a draft by the staff member who created it</strong> — failed</p>
+<pre><code>Error: unbound: no opportunity identifier in the address http://localhost:3000/opportunities/code-with-us/create</code></pre>
+<p><strong>an addendum may be added to an opportunity that is no longer a draft by an administrator</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>an addendum cannot be added to an opportunity that is still a draft</strong> — failed</p>
+<pre><code>Error: unbound: no opportunity identifier in the address http://localhost:3000/opportunities/code-with-us/create</code></pre>
+<p><strong>an addendum of more than five thousand characters is refused</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-4.32 · v1</h4>
+<p>An administrator may export a contact list of active accounts as a spreadsheet file, choosing whether to include public sector employees, vendors or both, and which of first name, last name, email address and organization name to include; at least one kind and one field must be chosen.</p>
+<ul><li>given: one active vendor belonging to an active organization, one deactivated vendor and one administrator</li><li>when: an administrator exports the contact list with both kinds and all four fields chosen</li><li>then: the file contains the active vendor and the administrator but not the deactivated vendor, the administrator is labelled as such, and the vendor&#39;s row carries their organization&#39;s legal name</li><li>test: tests/acceptance/users/R-4.32.spec.ts</li></ul>
+<p><strong>at least one kind and one field must be chosen before an administrator may export the contact list</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeFalsy[2m()[22m
+
+Received: [31m&quot;enabled&quot;[39m</code></pre>
+<h4>R-2.34 · v1</h4>
+<p>A proposal may be disqualified at any stage of evaluation, and doing so requires a written reason of 1 to 5,000 characters.</p>
+<ul><li>given: a proposal at any stage after the opportunity has closed</li><li>when: an administrator disqualifies it without giving a reason</li><li>then: the request is refused, and with a reason given the proposal becomes disqualified, the reason is kept in its history, and the opportunity is re-checked for whether every remaining proposal is now evaluated</li><li>test: tests/acceptance/proposals/R-2.34.spec.ts</li></ul>
+<p><strong>disqualifying a proposal requires a written reason of 1 to 5,000 characters</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>a proposal may be disqualified at any stage of evaluation, and the reason is kept in its history</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-3.34 · v1</h4>
+<p>An organization&#39;s summary of team capabilities counts only members who have accepted their invitation.</p>
+<ul><li>given: an organization whose only member holding a given capability has been invited but has not yet accepted</li><li>when: the owner opens the organization&#39;s team page</li><li>then: that capability is shown as one the team does not have, and it becomes shown as held once the invitation is accepted</li><li>test: tests/acceptance/organizations/R-3.34.spec.ts</li></ul>
+<p><strong>a capability held only by an invited person who has not yet accepted is shown as one the team does not have, and becomes shown as held once the invitation is accepted</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-4.34 · v1</h4>
+<p>A profile shows different sections depending on whose it is: a vendor&#39;s own profile offers profile, capabilities, organizations, notifications and legal sections, a public sector employee&#39;s offers profile and notifications, and an administrator looking at somebody else&#39;s account sees the profile section alone.</p>
+<ul><li>given: a vendor, a public sector employee and an administrator</li><li>when: each opens their own profile, and the administrator then opens the vendor&#39;s</li><li>then: each own profile shows the sections belonging to that kind of account, and the vendor&#39;s profile seen by the administrator shows only the profile section</li><li>test: tests/acceptance/users/R-4.34.spec.ts</li></ul>
+<p><strong>a vendor&#39;s own profile offers profile, capabilities, organizations, notifications and legal sections</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>a public sector employee&#39;s own profile offers profile and notifications</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeFalsy[2m()[22m
+
+Received: [31m&quot;Profile[39m
+[31mNotifications[39m
+[31mNotifications·[39m
+[31mEmail notifications will be sent to staff.one@example.test for the options selected below. If this email address is incorrect please update your profile.·[39m
+[31mNotify me about...[39m
+[31mNew opportunities.&quot;[39m</code></pre>
+<p><strong>an administrator looking at somebody else&#39;s account sees the profile section alone</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-2.35 · v1</h4>
+<p>Every change of state and every score entered against a proposal is recorded in its history with who did it, when, and any note given.</p>
+<ul><li>given: a proposal that has been submitted, reviewed and scored</li><li>when: someone entitled to see its history opens it</li><li>then: the history lists each state change and each score entry, newest first, each with its author, its time and its note</li><li>test: tests/acceptance/proposals/R-2.35.spec.ts</li></ul>
+<p><strong>every change of state against a proposal is recorded in its history</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-2.36 · v1</h4>
+<p>Submitting a proposal, awarding one and withdrawing one each send notifications: a confirmation to the submitting vendor, an award notice to the winner and a decision notice to everyone else, and a withdrawal notice to the vendor and to every administrator.</p>
+<ul><li>given: an opportunity with three submitted proposals</li><li>when: one of them is awarded</li><li>then: its vendor receives an award notice and the other two vendors each receive a decision notice, and a later withdrawal sends a notice to the withdrawing vendor and to every administrator</li><li>test: tests/acceptance/proposals/R-2.36.spec.ts</li></ul>
+<p><strong>submitting a proposal sends a confirmation to the submitting vendor</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>withdrawing a proposal sends a notice to the vendor and to every administrator</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-1.37 · v1</h4>
+<p>Submitting an opportunity for review notifies every administrator, and confirms the submission to its author.</p>
+<ul><li>given: a complete draft opportunity</li><li>when: its author submits it for review</li><li>then: every administrator is notified that an opportunity awaits review, and the author receives a confirmation</li><li>test: tests/acceptance/opportunities/R-1.37.spec.ts</li></ul>
+<p><strong>submitting an opportunity for review confirms the submission to its author</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-2.37 · v1</h4>
+<p>Anyone entitled to read a proposal can take away a printable copy of it, and staff reading a Sprint With Us or Team With Us copy see the anonymous proponent name until the proposal reaches the challenge stage.</p>
+<ul><li>given: a Sprint With Us proposal under review on its team questions</li><li>when: the opportunity&#39;s author opens its printable copy, and then the vendor who wrote it opens the same copy</li><li>then: the staff copy names the proponent only as &quot;Proponent 1&quot; while the vendor&#39;s own copy names the organization, and once the proposal reaches the code challenge the staff copy names the organization too</li><li>test: tests/acceptance/proposals/R-2.37.spec.ts</li></ul>
+<p><strong>anyone entitled to read a proposal can take away a printable copy of it</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>the vendor&#39;s own copy of a Sprint With Us proposal names the organization</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing &quot;Panel Member&quot; on http://localhost:3000/opportunities/sprint-with-us/create</code></pre>
+<h4>R-1.38 · v1</h4>
+<p>The opportunity list groups opportunities into unpublished, open and closed, showing open opportunities with the nearest proposal deadline first, closed ones most recently closed first, and unpublished ones most recently changed first.</p>
+<ul><li>given: a set of opportunities in a mix of states</li><li>when: someone opens the opportunity list</li><li>then: each opportunity appears in exactly one of the three groups, ordered as described</li><li>test: tests/acceptance/opportunities/R-1.38.spec.ts</li></ul>
+<p><strong>the opportunity list shows open opportunities with the nearest proposal deadline first</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>the opportunity list groups unpublished opportunities apart, most recently changed first</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;R-1.38 unpublished opportunity changed earlier&quot;[39m
+Received string:    [31m&quot;58&quot;[39m</code></pre>
+<p><strong>the opportunity list groups closed opportunities apart from open and unpublished ones</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;Seeded closed Sprint With Us opportunity&quot;[39m
+Received string:    [31m&quot;&quot;[39m</code></pre>
+<h4>R-2.38 · v1</h4>
+<p>Only public sector staff and administrators may take away every proposal of an opportunity in one document, and they choose whether that document names the proponents.</p>
+<ul><li>given: a closed opportunity carrying several submitted proposals</li><li>when: a vendor opens the address that exports all of them, and then the opportunity&#39;s author opens it</li><li>then: the vendor is refused, the author receives every proposal they are entitled to see in one document, and the author can ask for the same document with the proponents named anonymously</li><li>test: tests/acceptance/proposals/R-2.38.spec.ts</li></ul>
+<p><strong>a vendor may not take away every proposal of an opportunity in one document</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>public sector staff and administrators may take away every proposal of a closed opportunity in one document</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeFalsy[2m()[22m
+
+Received: [31m&quot;The Digital Marketplace Terms &amp; Conditions for E-Bidding have been updated. Please save what you are working on, review the latest version and agree to the updated terms.[39m
+[31mNot Found·[39m
+[31mThe page you are looking for doesn&#39;t exist.·[39m
+[31mGo Home&quot;[39m</code></pre>
+<h4>R-1.39 · v1</h4>
+<p>The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location.</p>
+<ul><li>given: a list of opportunities across all three programs</li><li>when: someone selects a program, selects a state, ticks remote-only, or types words into the search box</li><li>then: only opportunities matching every chosen condition remain visible</li><li>test: tests/acceptance/opportunities/R-1.39.spec.ts</li></ul>
+<p><strong>the opportunity list can be narrowed by program</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>the opportunity list can be narrowed by state</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>the opportunity list can be narrowed to remote-friendly opportunities only</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>the opportunity list can be narrowed by free text matched against title and location</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-1.48 · v1</h4>
+<p>Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs.</p>
+<ul><li>test: tests/acceptance/opportunities/R-1.48.spec.ts</li></ul>
+<p><strong>creating an opportunity with its state set to published is refused unless the requester is an administrator</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-cwu-create.publish — no control labelled &quot;Publish&quot; on http://localhost:3000/opportunities/code-with-us/create</code></pre>
+<p><strong>a public sector employee who is not an administrator may create an opportunity as a draft, in all three programs</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;R-1.48 Code With Us draft created by an ordinary member of staff&quot;[39m
+Received string:    [31m&quot;59&quot;[39m</code></pre>
+<p><strong>a public sector employee who is not an administrator may create an opportunity under review</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-1.53 · v2</h4>
+<p>An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains.</p>
+<ul><li>given: an opportunity that has been published at any point</li><li>when: anyone asks to delete it</li><li>then: the request is refused and the opportunity remains</li><li>test: tests/acceptance/opportunities/R-1.53.spec.ts</li></ul>
+<p><strong>an administrator may delete a draft, in Code With Us, Sprint With Us and Team With Us alike</strong> — failed</p>
+<pre><code>Error: unbound: no opportunity identifier in the address http://localhost:3000/opportunities/code-with-us/create</code></pre>
+<p><strong>an administrator may delete an opportunity that is under review</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>the public sector employee who created an opportunity may delete it while it is a draft</strong> — failed</p>
+<pre><code>Error: unbound: no opportunity identifier in the address http://localhost:3000/opportunities/code-with-us/create</code></pre>
+<p><strong>the public sector employee who created an opportunity may not delete it once it is under review</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>any other request to delete an opportunity is refused and the opportunity remains</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-1.56 · v1</h4>
+<p>Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike.</p>
+<ul><li>test: tests/acceptance/opportunities/R-1.56.spec.ts</li></ul>
+<p><strong>once an opportunity is published, an administrator may change its details</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>once an opportunity is published, a request to change its details from the public sector employee who created it is refused</strong> — failed</p>
+<pre><code>Error: unbound: no opportunity identifier in the address http://localhost:3000/opportunities/code-with-us/create</code></pre>
+<p><strong>the same rule governs a published Sprint With Us opportunity</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-swu-create.set_evaluation_panel — could not reach a step showing &quot;Panel Member&quot; on http://localhost:3000/opportunities/sprint-with-us/create</code></pre>
+<p><strong>the same rule governs a published Team With Us opportunity</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing &quot;Panel Member&quot; on http://localhost:3000/opportunities/team-with-us/create</code></pre>
+<h3>Triage conditions</h3>
+<p>One condition per line, one for every failing criterion the page lists, in exactly one of these forms:</p>
+<ul><li><code>adapter-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion and the test are both fine, and this target&#39;s adapter is what failed: it read the wrong thing off the page, reported a control missing that the page does render, or answered empty where it never reached the page. <code>&lt;why&gt;</code> names what the adapter did wrong, specifically enough for the next binding run to fix it. The criterion is not touched.</li><li><code>product-question &lt;ID&gt;</code> — nothing in the evidence points at the adapter. The failure goes to the product owner, who decides whether the application, the criterion or the test is wrong. No text after the ID.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. A condition may not span more than one line. When the evidence is genuinely unclear, it is a <code>product-question</code>: a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the adapter comes back from the next binding run unchanged and costs a run to find out.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-14 19:28.</p>
+<div class="body"><p>The question was which of the 24 criteria failing against the old target were caused by this project&#39;s own adapter. Ruling: approve, with one triage line per criterion: 23 adapter-wrong and 1 product-question. The adapter is unchanged since bind-adapter-old-9, and the saved snapshots and click logs show the defects named in calibrate-triage-old-1 and -2 again. opportunityCwuCreate.publish/saveDraft/submitForReview, organizationCreate.createOrganization, the profile&#39;s saveChanges and the proposal forms drop their input, and press() then clicks a disabled anchor (tabindex=-1) until the 120 s timeout. asText() never reads slug or body. opportunityIdentifier() is read while the address is still /create. setEvaluationPanel only walks forward. fileDownload.downloadFile() ignores the file that open() was given. profileTab() returns &#39;&#39; on an administrator&#39;s view of another person&#39;s profile. This page also shows new binding faults. tabContent() matches a label anywhere on the page, so organizationsTab clicked the top-navigation &#39;Organizations&#39; link and left the profile (R-4.34). exportedProposal returns a Not Found screen as text (R-2.38). controlState returns &#39;enabled&#39;, a truthy string, for export_disabled_until_selection (R-4.32). The opportunity-list group readers read a collapsed group as its count, &#39;58&#39; (R-1.38). reportingViews returned &#39;&#39; on a tab showing &#39;22&#39; over &#39;Total Views&#39;, and throws unbound when the tab is withheld (R-1.30). disqualifyProposal never types the reason into the open &#39;Disqualification Reason&#39; dialog (R-2.34). R-6.28 goes to the product owner: the adapter sent and confirmed the broadcast, the &#39;Vendors Notified&#39; alert rendered, and no mail reached any addressable vendor, which is the same evidence that sent R-6.23 there. Residual uncertainty: R-1.38&#39;s closed-group snapshot shows the heading with no count, so the group could be collapsed or empty, and R-8.28&#39;s logo half stayed in edit mode with no image shown after save. Both carry a clear adapter fault in another test of the same criterion. What would change this ruling: a fresh run, with these adapter defects fixed, that still fails a criterion at the same assertion. That criterion becomes a product question on the next page.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>adapter-wrong R-1.28: opportunityCwuCreate.publish(input) never fills the form from its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the 120 s timeout. opportunityCwuCreate.saveDraft(input) also drops its input, and opportunityCwuEdit.opportunityIdentifier() is read while the address is still /opportunities/code-with-us/create. Fill the form from the input, wait for the save to land on the record&#39;s own address, and have press() fail at once on a disabled control.</li><li>adapter-wrong R-4.28: the profile&#39;s saveChanges(input) ignores its input and only presses &#39;Save Changes&#39;, so the job title under test is never typed and the field still reads &#39;Program Analyst&#39;. Fill the name, email and job title fields from the input before saving.</li><li>product-question R-6.28</li><li>adapter-wrong R-8.28: fileDownload.downloadFile() ignores the fileId passed to fileDownload.open() and rebuilds the address with an empty id, throwing &#39;called without a value for :fileId&#39; after the profile picture was stored. It must reuse the file opened. In the logo test, after organizationEdit.editOrganization, chooseImage and organizationEdit.saveChanges, the form is still in edit mode with no chosen image shown, and imageAddress() reads &#39;&#39;. Confirm that the chooser took the file and that the save completed before reading the stored address.</li><li>adapter-wrong R-8.29: contentCreate.enterSlug({slug}) and enterBody({body}) send an empty string because asText() never reads the slug or body keys, so Publish stays disabled and press() clicks the disabled Publish anchor (tabindex=-1) until the 120 s timeout.</li><li>adapter-wrong R-1.30: opportunityCwuEdit.reportingViews() returned &#39;&#39; for the opportunity&#39;s author, although the Opportunity tab it opened shows &#39;22&#39; over &#39;Total Views&#39;, &#39;0&#39; over &#39;Watching&#39; and &#39;0&#39; over &#39;Proposals&#39;. statFor() does not find a figure rendered this way; read the figure from the box its label sits in. For the vendor, reportingViews/Watchers/Proposals call openTab, which throws unbound when the &#39;Opportunity&#39; tab is withheld; read &#39;&#39; as tabContent does.</li><li>adapter-wrong R-1.31: proposalCwuCreate.acceptProgramTerms opens the terms dialog through the top-bar &#39;Submit&#39; anchor, which is disabled (tabindex=-1) while the proposal form is unfilled, and press() clicks it until the 120 s timeout. submitProposal(input) also drops proposalText. Fill the proposal from its input, and have press() fail at once on a disabled control.</li><li>adapter-wrong R-4.31: userProfile.profileTab() goes through tabContent([&#39;Profile&#39;]), which returns &#39;&#39; on an administrator&#39;s view of vendor.one&#39;s profile, a screen with no tab strip that renders &#39;Deactivate Account&#39;. Read the profile screen itself when no Profile tab is offered.</li><li>adapter-wrong R-8.31: opportunityCwuCreate.publish(input) never fills the form from its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the timeout. opportunityCwuCreate.saveDraft(input) drops its input, and opportunityCwuEdit.opportunityIdentifier() is read while the address is still /opportunities/code-with-us/create.</li><li>adapter-wrong R-1.32: opportunityCwuCreate.saveDraft(input) drops its input, and opportunityCwuEdit.opportunityIdentifier() is read while the address is still /opportunities/code-with-us/create. opportunityCwuCreate.publish(input) never fills the form from its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the 120 s timeout.</li><li>adapter-wrong R-4.32: userList.exportDisabledUntilSelection() returns controlState(), whose &#39;enabled&#39; and &#39;disabled&#39; are both non-empty. After a kind and a field were ticked, it answered &#39;enabled&#39; for a control that is not disabled, which reads as disabled. Return a value only while the Export control is disabled, and &#39;&#39; once it is enabled.</li><li>adapter-wrong R-2.34: proposalTwuView.disqualifyProposal(input) ignores the reason. The &#39;Disqualification Reason&#39; dialog opens, but nothing is typed into it, and press() clicks the dialog&#39;s disabled &#39;Disqualify&#39; anchor (tabindex=-1) until the 120 s timeout. Type the reason from the input into the dialog before confirming, and fail at once on a disabled control.</li><li>adapter-wrong R-3.34: organizationCreate.createOrganization(input) never fills Legal Name, the address fields or the contact fields from its input, then clicks the disabled &#39;Create Organization&#39; anchor (tabindex=-1) until the 120 s timeout.</li><li>adapter-wrong R-4.34: tabContent() looks for its label anywhere on the page, so userProfileSelf.organizationsTab() clicked the top-navigation &#39;Organizations&#39; link and left the profile for /organizations. For the vendor, notificationsTab() then found nothing and read &#39;&#39;. For the public sector employee, organizationsTab() returned the notifications text it read while navigating away. Look for tabs only in the profile&#39;s own tab list. userProfile.profileTab() also returns &#39;&#39; on an administrator&#39;s view of another person&#39;s profile, which has no tab strip.</li><li>adapter-wrong R-2.35: publishOpportunity&#39;s opportunityCwuCreate.publish(input) never fills the form from its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the 120 s timeout. proposalCwuCreate.saveDraft(input) also drops proposalText.</li><li>adapter-wrong R-2.36: publishOpportunity&#39;s opportunityCwuCreate.publish(input) never fills the form from its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the 120 s timeout. proposalCwuCreate.submitProposal(input) also drops proposalText.</li><li>adapter-wrong R-1.37: opportunityCwuCreate.submitForReview(input) never fills the form from its input, and press() clicks the disabled &#39;Submit for Review&#39; anchor (tabindex=-1) until the 120 s timeout.</li><li>adapter-wrong R-2.37: opportunityCwuCreate.publish(input) never fills the form from its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the timeout. For Sprint With Us, setEvaluationPanel&#39;s advanceTo() only presses Next forward from the step it was left on, and never reaches a step showing &#39;Panel Member&#39;. addTeamQuestion(input) also ignores its input.</li><li>adapter-wrong R-1.38: opportunityCwuCreate.publish(input) drops its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the timeout. saveDraft(input) drops the title. opportunityList.unpublishedGroup() and closedGroup() read a group while it is collapsed, so the unpublished group read only its count, &#39;58&#39;, and the closed group read &#39;&#39;. The snapshot shows &#39;Unpublished Opportunities 70&#39; with no rows listed. Expand each group before reading its opportunities.</li><li>adapter-wrong R-2.38: publishOpportunity&#39;s opportunityCwuCreate.publish(input) never fills the form from its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the timeout. proposalSwuExportAll.exportedProposal() returns contentText() whole, so the organization owner&#39;s &#39;Not Found&#39; screen, with its terms-updated banner, reads as an exported document. Return &#39;&#39; when the Not Found screen is shown.</li><li>adapter-wrong R-1.39: in all four tests, opportunityCwuCreate.publish(input) never fills the form from its input (title, location, remoteOk and the rest), and press() clicks the disabled Publish anchor (tabindex=-1) until the 120 s timeout.</li><li>adapter-wrong R-1.48: opportunityCwuCreate.publish throws unbound when the create page offers a public sector employee no &#39;Publish&#39; control, instead of letting the refusal be observed. saveDraft(input) drops the title, and opportunityList.unpublishedGroup() reads the collapsed group as its count, &#39;59&#39;. submitForReview(input) drops its input, and press() clicks the disabled &#39;Submit for Review&#39; anchor (tabindex=-1) until the timeout.</li><li>adapter-wrong R-1.53: opportunityCwuCreate.saveDraft(input) drops its input, and opportunityCwuEdit.opportunityIdentifier() is read while the address is still /opportunities/code-with-us/create. submitForReview(input) and publish(input) never fill the form, and press() clicks the disabled anchor (tabindex=-1) until the timeout. allOpportunitiesForAdministrator reads only the &#39;My Opportunities&#39; tab.</li><li>adapter-wrong R-1.56: opportunityCwuCreate.publish(input) never fills the form from its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the timeout. saveDraft(input) drops its input, and opportunityIdentifier() is read while the address is still /opportunities/code-with-us/create. For Sprint With Us and Team With Us, setEvaluationPanel&#39;s advanceTo() only presses Next forward and never reaches a step showing &#39;Panel Member&#39;. addTeamQuestion and addResourceQuestion ignore their input.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
