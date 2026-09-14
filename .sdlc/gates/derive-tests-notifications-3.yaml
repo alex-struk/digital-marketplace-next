@@ -1,0 +1,14 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the revised notifications tests follow from their criteria and from nothing else? Ruling: return. Both blocking conditions from the previous ruling are met. R-6.28 no longer asserts notifyVendorsSuccess(). R-6.6 drops the vendorOne address check and asserts unsubscribeConfirmation() is present and resolvesToSignedInPerson(), which is what 'the reader's own notification settings' states. Both recommendations were taken: R-6.19 searches for the spec's phrase 'evaluation panel', and R-6.7 uses confirmationNamesSignedInAddress(), matching its then-clause 'the confirmation naming their own address'. Between the notifications-2 proposal commit (efd468b) and this one, only R-6.6, R-6.7, R-6.19 and R-6.28 changed in the notifications slice. The R-6 not-testable entries were relocated in the file, not added or removed. The runner typecheck reports no diagnostics under acceptance/notifications/; its 13 diagnostics are in acceptance/files/, outside this proposal. Tier is STANDARD, no protected path is touched and no residual risk is marked unaccepted, so nothing requires escalation. One test still asserts what its criterion does not say, and the brief requires a return for that. R-6.23 keeps expect(notifyVendorsSuccess()).toBeTruthy(). R-6.23's then-clause is that every vendor's acceptance is withdrawn and each active vendor receives a message. It says nothing about the administrator being told the broadcast succeeded. Success reporting is R-6.24's claim, and R-6.24 is recorded as not testable. This is the same defect returned in R-6.28 last round, and the previous ruling passed R-6.23 in error. What would change the ruling: remove that single assertion from R-6.23. Its notifyVendorsConfirmation() check can stay, since the criterion's when-clause has the administrator confirm.
+conditions:
+  - "R-6.23: remove `expect(await surface.notificationTermsBroadcast.notifyVendorsSuccess()).toBeTruthy()`; the criterion states that acceptance is withdrawn and active vendors are messaged, not that the administrator is told it succeeded (that is R-6.24's claim)."
+  - "For the suite owner, outside this slice, carried forward: R-6.10, R-6.14, R-6.22 and R-6.26 test superseded criteria, and R-6.14 asserts the opposite of R-6.19 so the two cannot pass together; decide whether they stay as oracle-only tests or are removed."
+  - "For the spec owner, carried forward: R-6.6 v2 (Unsubscribe on every message) conflicts with R-6.16 (messages the preference does not govern must not offer Unsubscribe); one of them needs a new version."
+cost: 1.1371640000000003
+turns: 14
+session: "1e4d5576-dec9-4562-a4bc-966e80c814aa"
+at: 2026-09-14T02:10:23.968Z
