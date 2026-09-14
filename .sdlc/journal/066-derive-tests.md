@@ -1,10 +1,10 @@
 ---
 stage: "derive-tests"
 title: "derive-tests: agent turn failed"
-at: "2026-09-14T00:57:05.757Z"
+at: "2026-09-14T00:57:08.195Z"
 cost: 0
 turns: 1
-session: "562d4252-3843-43c1-89ae-e4b410f6d7d2"
+session: "a2116925-68cd-4c72-9b26-2d32e9ac66d2"
 ---
 
 Failed to authenticate: OAuth session expired and could not be refreshed
