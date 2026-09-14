@@ -1,0 +1,17 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do these tests follow from the notifications criteria and from nothing else? Ruling: return. Most of the slice holds. The runner's typecheck reports no diagnostics under acceptance/notifications/, so the fix turn worked. R-6.7, R-6.13, R-6.21, R-6.23 and R-6.27 assert only what their criteria state. R-6.17's second test now establishes that the watch registered before using the count as a baseline. Every not-testable reason names a real missing accessor, target variant or seed state. Two tests assert what their criteria do not say, and the brief requires a return for that. (1) R-6.28 adds `expect(notifyVendorsSuccess()).toBeTruthy()`. R-6.28 says only that a recipient with no address is skipped and that a broadcast continues past recipients it cannot address or reach. It says nothing about reporting success, and the contract also defines notify_vendors_failure. A service that continues correctly and then reports partial delivery would fail this test for a reason outside the criterion. (2) R-6.6 asserts `unsubscribeConfirmation()` contains vendorOne's email address. R-6.6 v2 says the offer opens the reader's own settings with the confirmation already asked; naming the address is R-6.7's then-clause, not R-6.6's. The contract already provides resolves_to_signed_in_person, which matches 'own' directly. What would change the ruling: drop the success assertion from R-6.28, and replace the address assertion in R-6.6 with resolvesToSignedInPerson() (or remove it).
+conditions:
+  - "R-6.28: remove the notifyVendorsSuccess() assertion; the criterion does not state that the administrator is told the broadcast succeeded."
+  - "R-6.6: replace `unsubscribeConfirmation()).toContain(seed.users.vendorOne.email)` with an assertion on resolvesToSignedInPerson(), which is what 'the reader's own notification settings' states; keep the confirmation-present check."
+  - "Recommended, not blocking: R-6.19 searches for the guessed word 'panel'; either tie it to wording the spec uses ('evaluation panel', as R-6.15 does) or state the guess as a narrowing in the file header."
+  - "Recommended, not blocking: R-6.7 should use the contract's confirmationNamesSignedInAddress() rather than a substring match on the free-text unsubscribeConfirmation(), which assumes that observation's content."
+  - "For the suite owner, outside this slice: R-6.10, R-6.14, R-6.22 and R-6.26 test superseded criteria (checks warn on all four), and R-6.14 and R-6.22 assert the opposite of R-6.19 and R-6.27. Decide whether they stay as oracle-only tests or are removed."
+  - "For the spec owner: R-6.6 v2 (Unsubscribe on every message, note still pointing at superseded R-6.10) conflicts with R-6.16 (messages the preference does not govern must not offer Unsubscribe). One of them needs a new version."
+cost: 1.2337595
+turns: 10
+session: "ad7de545-2a97-44e3-84e6-d6c74a82054d"
+at: 2026-09-14T01:43:25.120Z

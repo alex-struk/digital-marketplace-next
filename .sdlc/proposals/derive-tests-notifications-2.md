@@ -58,3 +58,32 @@ I fixed all three compile errors, but I couldn't confirm it: the type-check comm
 R-6.10 and R-6.22 aren't in this run's list of criteria. They came over from the last approved version, and their headers still carry the older spec commit (`40605384…`). You asked me to fix only what the errors named, so I left their headers and whether they should exist alone. Whoever reviews this should decide what to do with them.
 
 **Journal addition:** I fixed the three compile errors the suite reported and changed nothing else. R-6.10 passed its organization to the edit page under the wrong key, so I renamed it to `orgId`. R-6.13 used a type-guard that the seed's exact literal types don't allow, so I switched to a `flatMap` that drops missing emails and keeps the test's meaning. R-6.22 opened the profile notifications page with no user, so it now passes the seed id of the account `persona.vendor` signs in as. I couldn't run the type-check, so the compile check still has to confirm the fixes. R-6.10 and R-6.22 are carried over from the last approved version, still name the older spec commit, and aren't among this run's criteria; I didn't touch those questions and they need a decision.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+
+Question: do these tests follow from the notifications criteria and from nothing else? Ruling: return. Most of the slice holds. The runner's typecheck reports no diagnostics under acceptance/notifications/, so the fix turn worked. R-6.7, R-6.13, R-6.21, R-6.23 and R-6.27 assert only what their criteria state. R-6.17's second test now establishes that the watch registered before using the count as a baseline. Every not-testable reason names a real missing accessor, target variant or seed state. Two tests assert what their criteria do not say, and the brief requires a return for that. (1) R-6.28 adds `expect(notifyVendorsSuccess()).toBeTruthy()`. R-6.28 says only that a recipient with no address is skipped and that a broadcast continues past recipients it cannot address or reach. It says nothing about reporting success, and the contract also defines notify_vendors_failure. A service that continues correctly and then reports partial delivery would fail this test for a reason outside the criterion. (2) R-6.6 asserts `unsubscribeConfirmation()` contains vendorOne's email address. R-6.6 v2 says the offer opens the reader's own settings with the confirmation already asked; naming the address is R-6.7's then-clause, not R-6.6's. The contract already provides resolves_to_signed_in_person, which matches 'own' directly. What would change the ruling: drop the success assertion from R-6.28, and replace the address assertion in R-6.6 with resolvesToSignedInPerson() (or remove it).
+
+**Conditions:**
+- R-6.28: remove the notifyVendorsSuccess() assertion; the criterion does not state that the administrator is told the broadcast succeeded.
+- R-6.6: replace `unsubscribeConfirmation()).toContain(seed.users.vendorOne.email)` with an assertion on resolvesToSignedInPerson(), which is what 'the reader's own notification settings' states; keep the confirmation-present check.
+- Recommended, not blocking: R-6.19 searches for the guessed word 'panel'; either tie it to wording the spec uses ('evaluation panel', as R-6.15 does) or state the guess as a narrowing in the file header.
+- Recommended, not blocking: R-6.7 should use the contract's confirmationNamesSignedInAddress() rather than a substring match on the free-text unsubscribeConfirmation(), which assumes that observation's content.
+- For the suite owner, outside this slice: R-6.10, R-6.14, R-6.22 and R-6.26 test superseded criteria (checks warn on all four), and R-6.14 and R-6.22 assert the opposite of R-6.19 and R-6.27. Decide whether they stay as oracle-only tests or are removed.
+- For the spec owner: R-6.6 v2 (Unsubscribe on every message, note still pointing at superseded R-6.10) conflicts with R-6.16 (messages the preference does not govern must not offer Unsubscribe). One of them needs a new version.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `efd468b036126da6cd50541038da85b35d173d12`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/notifications/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    acceptance/users/: 89 diagnostics
+    acceptance/files/: 13 diagnostics
