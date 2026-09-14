@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | R-1.1 | acceptance/opportunities/R-1.1.spec.ts | pass |
 | R-1.2 | acceptance/opportunities/R-1.2.spec.ts | pass |
-| R-1.3 | acceptance/opportunities/R-1.3.spec.ts | fail |
+| R-1.3 | acceptance/opportunities/R-1.3.spec.ts | fail (ruled: test-wrong) |
 | R-1.4 | acceptance/opportunities/R-1.4.spec.ts | fail (ruled: adapter-wrong) |
 | R-1.5 | acceptance/opportunities/R-1.5.spec.ts | pass |
 | R-1.6 | acceptance/opportunities/R-1.6.spec.ts | pass |
@@ -24,7 +24,7 @@
 | R-1.18 | acceptance/opportunities/R-1.18.spec.ts | unbound |
 | R-1.19 | acceptance/opportunities/R-1.19.spec.ts | fail (ruled: adapter-wrong) |
 | R-1.20 | acceptance/opportunities/R-1.20.spec.ts | fail (ruled: adapter-wrong) |
-| R-1.21 | acceptance/opportunities/R-1.21.spec.ts | fail |
+| R-1.21 | acceptance/opportunities/R-1.21.spec.ts | fail (ruled: test-wrong) |
 | R-1.22 | acceptance/opportunities/R-1.22.spec.ts | fail (ruled: adapter-wrong) |
 | R-1.23 | acceptance/opportunities/R-1.23.spec.ts | fail (ruled: adapter-wrong) |
 | R-1.24 | acceptance/opportunities/R-1.24.spec.ts | pass |

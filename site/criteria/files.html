@@ -15,7 +15,7 @@
   <span class="profile">rebuild profile</span>
 </div>
 <div class="shell">
-<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">91</span></a></li><li><a href="../proposals.html">Proposals <span class="count">91</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">80</span></a></li><li><a href="../runs.html">Run log <span class="count">8</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html" aria-current="page">files <span class="count">31</span></a></li></ul></nav>
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">91</span></a></li><li><a href="../proposals.html">Proposals <span class="count">91</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">81</span></a></li><li><a href="../runs.html">Run log <span class="count">8</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html" aria-current="page">files <span class="count">31</span></a></li></ul></nav>
 <main id="main">
 <div class="page-head"><h1>files</h1>
 <p class="lede">31 criteria, 22 with a derived acceptance test, 2 recorded as not testable through the contract surface.</p></div>
@@ -188,7 +188,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">An upload larger than the service&#39;s size limit is refused as the requester&#39;s error, with a message naming the limit, and the limit is stated in the interface before a person chooses a file rather than only after they submit it.</p>
-  <dl><dt>test</dt><dd><code>tests/acceptance/files/R-8.17.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>replaces</dt><dd>R-8.3</dd></dl>
+  <dl><dt>test</dt><dd><code>tests/acceptance/files/R-8.17.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled defect-in-old</dd><dt>replaces</dt><dd>R-8.3</dd><dt>note</dt><dd>calibrate 2026-09-14: the old target fails this; kept, the rebuild must pass it</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -228,7 +228,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">A profile picture or organization logo is accepted only if its content can be read as a JPEG or a PNG, and a file whose content is neither is refused whatever its name says; an image that reads successfully but cannot be resized is stored at its original size rather than refused.</p>
-  <dl><dt>test</dt><dd><code>tests/acceptance/files/R-8.21.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>replaces</dt><dd>R-8.14</dd></dl>
+  <dl><dt>test</dt><dd><code>tests/acceptance/files/R-8.21.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled defect-in-old</dd><dt>replaces</dt><dd>R-8.14</dd><dt>note</dt><dd>calibrate 2026-09-14: the old target fails this; kept, the rebuild must pass it</dd></dl>
 </article>
 <article class="criterion is-not-testable" data-state="not-testable">
   <header>

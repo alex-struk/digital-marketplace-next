@@ -6,19 +6,19 @@
 | --- | --- | --- |
 | R-3.1 | acceptance/organizations/R-3.1.spec.ts | pass |
 | R-3.2 | acceptance/organizations/R-3.2.spec.ts | unbound |
-| R-3.3 | acceptance/organizations/R-3.3.spec.ts | fail |
+| R-3.3 | acceptance/organizations/R-3.3.spec.ts | fail (ruled: test-wrong) |
 | R-3.4 | — |  |
 | R-3.5 | — |  |
 | R-3.6 | acceptance/organizations/R-3.6.spec.ts | unbound |
-| R-3.7 | acceptance/organizations/R-3.7.spec.ts | fail |
-| R-3.8 | acceptance/organizations/R-3.8.spec.ts | fail |
+| R-3.7 | acceptance/organizations/R-3.7.spec.ts | fail (ruled: test-wrong) |
+| R-3.8 | acceptance/organizations/R-3.8.spec.ts | fail (ruled: test-wrong) |
 | R-3.9 | acceptance/organizations/R-3.9.spec.ts | unbound |
 | R-3.10 | acceptance/organizations/R-3.10.spec.ts | unbound |
 | R-3.11 | acceptance/organizations/R-3.11.spec.ts | unbound |
 | R-3.12 | acceptance/organizations/R-3.12.spec.ts | fail (ruled: adapter-wrong) |
 | R-3.13 | acceptance/organizations/R-3.13.spec.ts | unbound |
 | R-3.14 | acceptance/organizations/R-3.14.spec.ts | pass |
-| R-3.15 | acceptance/organizations/R-3.15.spec.ts | fail |
+| R-3.15 | acceptance/organizations/R-3.15.spec.ts | fail (ruled: test-wrong) |
 | R-3.16 | — |  |
 | R-3.17 | not testable: The only way the surface creates an invitation is organization-edit's add_team_members, whose subject is email addresses; no page in the contract offers a membership type on an invitation, so a test cannot send one other than the "member" the team surface always sends, and therefore cannot reach the rejection of any other type. Needs an add_team_members that carries a membership type, and an observation of the invalid-membership-type refusal. | not-testable |
 | R-3.18 | acceptance/organizations/R-3.18.spec.ts | fail (ruled: adapter-wrong) |
@@ -35,7 +35,7 @@
 | R-3.29 | — |  |
 | R-3.30 | acceptance/organizations/R-3.30.spec.ts | fail (ruled: adapter-wrong) |
 | R-3.31 | acceptance/organizations/R-3.31.spec.ts | unbound |
-| R-3.32 | acceptance/organizations/R-3.32.spec.ts | fail |
+| R-3.32 | acceptance/organizations/R-3.32.spec.ts | fail (ruled: test-wrong) |
 | R-3.33 | acceptance/organizations/R-3.33.spec.ts | unbound |
 | R-3.34 | acceptance/organizations/R-3.34.spec.ts | unbound |
 | R-3.35 | not testable: The claim is about where the accept and the decline choice inside an invitation email lead. The email observable reaches a message's subject, snippet and recipient through the mail catcher, and the Mail fixture exposes only those, so a test cannot read the message body or follow either choice; organization-user-memberships also carries no observation of an accept or a decline confirmation standing ready. Needs a mail observation of the message body or its links, and an observation of the prepared confirmation on organization-user-memberships. | not-testable |

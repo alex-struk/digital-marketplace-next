@@ -23,8 +23,8 @@
 | R-7.17 | acceptance/content/R-7.17.spec.ts | unbound |
 | R-7.18 | acceptance/content/R-7.18.spec.ts | fail (ruled: defect-in-old) |
 | R-7.19 | acceptance/content/R-7.19.spec.ts | pass |
-| R-7.20 | acceptance/content/R-7.20.spec.ts | fail |
-| R-7.21 | acceptance/content/R-7.21.spec.ts | fail |
+| R-7.20 | acceptance/content/R-7.20.spec.ts | fail (ruled: test-wrong) |
+| R-7.21 | acceptance/content/R-7.21.spec.ts | fail (ruled: test-wrong) |
 | R-7.22 | acceptance/content/R-7.22.spec.ts | fail (ruled: adapter-wrong) |
 | R-7.23 | not testable: Asserting that nothing shows, compares or restores an earlier version needs an observation naming what must be absent, and content-edit names none: it has no observation of the wording it is showing, none of a history, an earlier version or a comparison, and no restore action. A test can neither find a route to a past version nor show that none exists. | not-testable |
 | R-7.24 | acceptance/content/R-7.24.spec.ts | unbound |

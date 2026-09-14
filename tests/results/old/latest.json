@@ -1,8 +1,8 @@
 {
   "target": "old",
   "base_url": "http://localhost:3000",
-  "spec": "d4b7ad71f09fd800088a439d26222d352e4e30dc",
-  "at": "2026-09-14T21:20:19.851Z",
+  "spec": "1c3743e9fb53c29de89a28045222abab29c5e27e",
+  "at": "2026-09-14T21:27:36.953Z",
   "rows": [
     {
       "id": "R-7.1",
@@ -289,7 +289,7 @@
           "error": "Error: content-create.publish_page — \"Publish\" is disabled on http://localhost:3000/content/create; the page shows no message"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-7.21",
@@ -308,7 +308,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-7.22",
@@ -1128,7 +1128,7 @@
           "error": "Error: \"\" names the stated limit\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "defect-in-old"
     },
     {
       "id": "R-8.18",
@@ -1226,7 +1226,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "defect-in-old"
     },
     {
       "id": "R-8.22",
@@ -1669,7 +1669,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-6.27",
@@ -1752,7 +1752,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.4",
@@ -2185,7 +2185,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"complete\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.22",
@@ -2749,7 +2749,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-3.6",
@@ -2783,7 +2783,7 @@
           "error": "Error: organization-edit.add_team_members — \"Add Team Member(s)\" is disabled on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000302/edit?tab=team; the page shows no message"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-3.8",
@@ -2803,7 +2803,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-3.9",
@@ -2947,7 +2947,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"Northern Pines Digital Ltd.\"\u001b[39m\nReceived string:        \u001b[31m\"\u001b[7mNorthern Pines Digital Ltd.\u001b[27m\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-3.17",
@@ -3205,7 +3205,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"vendor.invited@example.test\"\u001b[39m\nReceived string:    \u001b[31m\"TEAM MEMBER\tCAPABILITIES\tADMIN··\u001b[39m\n\u001b[31mBlake Placeholder\u001b[39m\n\u001b[31mOwner··\u001b[39m\n\u001b[31m3·····\u001b[39m\n\u001b[31mCharlie Placeholder··\u001b[39m\n\u001b[31m3·····\u001b[39m\n\u001b[31mDana Placeholder··\u001b[39m\n\u001b[31m3·····\u001b[39m\n\u001b[31mIndigo Placeholder\u001b[39m\n\u001b[31mPending··\u001b[39m\n\u001b[31m0\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-3.33",
@@ -4064,7 +4064,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"Zinnia Quillfeather\"\u001b[39m\nReceived string:        \u001b[31m\"STATUS\tACCOUNT TYPE\tNAME\tADMIN?\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mPublic Sector Employee\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mPublic Sector Employee\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mDevon Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mPublic Sector Employee\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mEmerson Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mPublic Sector Employee\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mEmery Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mPublic Sector Employee\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mMIGRATION_USER\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mPublic Sector Employee\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mMorgan Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mPublic Sector Employee\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mRobin Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mBlake Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mCharlie Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mDana Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mGray Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mHarper Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mIndigo Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mKai Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mLarkin Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[7mZinnia Quillfeather\u001b[27m\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mInactive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mAldous Quillfeather\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mInactive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mEllis Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mInactive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mJules Placeholder\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-4.16",
@@ -4341,7 +4341,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Deactivate\"\u001b[39m\nReceived string:    \u001b[31m\"Digital Marketplace\u001b[39m\n\u001b[31madmin.one@example.test\u001b[39m\n\u001b[31mDashboard\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mOpportunities\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mOrganizations\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mUsers\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mContent\u001b[39m\n\u001b[31mAldous Quillfeather\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mInactive\u001b[39m\n\u001b[31mAccount Type\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31mProfile Picture (Optional)\u001b[39m\n\u001b[31mGitHub\u001b[39m\n\u001b[31mName\u001b[39m\n\u001b[31mEmail Address\u001b[39m\n\u001b[31mReactivate Account·\u001b[39m\n\u001b[31mReactivate this user's account to enable their access to the Digital Marketplace.·\u001b[39m\n\u001b[31mReactivate Account\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-4.32",
@@ -4356,7 +4356,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-4.33",

@@ -17,7 +17,7 @@
 | R-4.11 | — |  |
 | R-4.12 | acceptance/users/R-4.12.spec.ts | fail (ruled: adapter-wrong) |
 | R-4.13 | not testable: unobservable: the outcome is that the service offers no way to create an administrator where none exists, and that only a change to the stored data outside the service can. That is the absence of an action anywhere in the service, and no observation reports an absence of that kind — a test could only show that the particular controls it knows of do not do it, never that no other route exists. The given could be seeded (a seed with no administrator account), but that would not help: the claim a test would then have to settle is still the non-existence of a route, and the documented manual route lies outside the service by definition. This is a property to be accepted by a reader of the rebuilt system's routes, not settled by a test. | not-testable |
-| R-4.14 | acceptance/users/R-4.14.spec.ts | fail |
+| R-4.14 | acceptance/users/R-4.14.spec.ts | fail (ruled: test-wrong) |
 | R-4.15 | — |  |
 | R-4.16 | acceptance/users/R-4.16.spec.ts | pass |
 | R-4.17 | acceptance/users/R-4.17.spec.ts | pass |
@@ -35,9 +35,9 @@
 | D-users-29 | — |  |
 | R-4.29 | acceptance/users/R-4.29.spec.ts | pass |
 | R-4.30 | acceptance/users/R-4.30.spec.ts | unbound |
-| R-4.31 | acceptance/users/R-4.31.spec.ts | fail |
+| R-4.31 | acceptance/users/R-4.31.spec.ts | fail (ruled: test-wrong) |
 | D-users-32 | — |  |
-| R-4.32 | acceptance/users/R-4.32.spec.ts | fail |
+| R-4.32 | acceptance/users/R-4.32.spec.ts | fail (ruled: test-wrong) |
 | R-4.33 | acceptance/users/R-4.33.spec.ts | pass |
 | R-4.34 | acceptance/users/R-4.34.spec.ts | pass |
 
