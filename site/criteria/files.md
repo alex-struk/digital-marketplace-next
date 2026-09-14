@@ -21,7 +21,7 @@
 | R-8.15 | — | not-testable |
 | R-8.16 | not testable: unobservable: the claim is about a working directory on the service's own machine — a copy written there before the file is stored and removed once the upload is answered. Nothing the service answers ever mentions that directory: an upload's answer carries the stored record, and a stored file's description and bytes carry nothing about where the upload waited. Whether a working copy was written, and whether it is gone, can only be seen by reading that machine's filesystem, which is the implementation rather than anything the service shows, so no page, action or observation added to the contract would reach it without exposing the host's disk. | not-testable |
 | R-8.17 | acceptance/files/R-8.17.spec.ts | fail (ruled: adapter-wrong) |
-| R-8.18 | acceptance/files/R-8.18.spec.ts | fail |
+| R-8.18 | acceptance/files/R-8.18.spec.ts | fail (ruled: defect-in-old) |
 | R-8.19 | acceptance/files/R-8.19.spec.ts | unbound |
 | R-8.20 | acceptance/files/R-8.20.spec.ts | fail (ruled: adapter-wrong) |
 | R-8.21 | acceptance/files/R-8.21.spec.ts | fail (ruled: adapter-wrong) |
@@ -265,6 +265,7 @@ An upload larger than the service's size limit is refused as the requester's err
 
 A submission carrying no file part, or read-access information that is not well-formed, is refused as a bad request naming what was wrong with it, and is not recorded in the service's error log as a fault of the service; any working copy already written is removed whether the upload succeeds or fails.
 - replaces: R-8.4
+- note: calibrate 2026-09-14: the old target fails this; kept, the rebuild must pass it
 
 ### R-8.19 · v1 · confirmed · accepted
 

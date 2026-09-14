@@ -1,8 +1,8 @@
 {
   "target": "old",
   "base_url": "http://localhost:3000",
-  "spec": "7a0d47692af14ab67cbbdeb0e701a6cf71199a60",
-  "at": "2026-09-14T19:28:21.234Z",
+  "spec": "d4b7ad71f09fd800088a439d26222d352e4e30dc",
+  "at": "2026-09-14T19:34:54.439Z",
   "rows": [
     {
       "id": "R-7.1",
@@ -261,7 +261,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "defect-in-old"
     },
     {
       "id": "R-7.19",
@@ -678,7 +678,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate"
         }
       ],
-      "triage": "product-question"
+      "ruled": "defect-in-old"
     },
     {
       "id": "R-5.21",
@@ -1189,7 +1189,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeFalsy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"500 Invalid `metadata` field.\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "defect-in-old"
     },
     {
       "id": "R-8.19",
@@ -1636,7 +1636,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"evaluation panel\"\u001b[39m\nReceived string:    \u001b[31m\"account registered\u001b[39m\n\u001b[31mterms & conditions updated\u001b[39m\n\u001b[31muser invited to join team\u001b[39m\n\u001b[31man organization invites someone who has not registered\u001b[39m\n\u001b[31muser account deactivated\u001b[39m\n\u001b[31muser account reactivated\u001b[39m\n\u001b[31muser approved request to join organization\u001b[39m\n\u001b[31muser rejected request to join organization\u001b[39m\n\u001b[31muser leaves an organization\u001b[39m\n\u001b[31mcwu opportunity published\u001b[39m\n\u001b[31mcwu opportunity updated\u001b[39m\n\u001b[31mcwu opportunity cancelled\u001b[39m\n\u001b[31mcwu opportunity ready for evaluation\u001b[39m\n\u001b[31mcwu proposal submitted\u001b[39m\n\u001b[31mcwu proposal awarded\u001b[39m\n\u001b[31mcwu proposal withdrawn\u001b[39m\n\u001b[31mswu opportunity published\u001b[39m\n\u001b[31mswu opportunity updated\u001b[39m\n\u001b[31mswu opportunity submitted for review\u001b[39m\n\u001b[31mswu opportunity cancelled\u001b[39m\n\u001b[31mswu opportunity proposal deadline passed\u001b[39m\n\u001b[31mswu proposal submitted\u001b[39m\n\u001b[31mswu proposal awarded\u001b[39m\n\u001b[31mswu proposal withdrawn\u001b[39m\n\u001b[31mtwu opportunity submitted for review\u001b[39m\n\u001b[31mtwu opportunity published\u001b[39m\n\u001b[31mtwu opportunity updated\u001b[39m\n\u001b[31mtwu opportunity cancelled\u001b[39m\n\u001b[31mtwu opportunity proposal deadline passed\u001b[39m\n\u001b[31mtwu proposal submitted\u001b[39m\n\u001b[31mtwu proposal awarded\u001b[39m\n\u001b[31mtwu proposal withdrawn\u001b[39m\n\u001b[31morganization archived\u001b[39m\n\u001b[31msubject: welcome to the digital marketplace\u001b[39m\n\u001b[31msubject: our terms and conditions have been updated\u001b[39m\n\u001b[31msubject: organization has sent you a team request\u001b[39m\n\u001b[31msubject: organization has sent you a team request\u001b[39m\n\u001b[31msubject: your account has been deactivated\u001b[39m\n\u001b[31msubject: your account has been deactivated\u001b[39m\n\u001b[31msubject: your account has been reactivated\u001b[39m\n\u001b[31msubject: your account has been reactivated\u001b[39m\n\u001b[31msubject: vendor user has approved your team request\u001b[39m\n\u001b[31msubject: you have joined organization's team\u001b[39m\n\u001b[31msubject: vendor user has rejected your team request\u001b[39m\n\u001b[31msubject: vendor user has left organization's team\u001b[39m\n\u001b[31msubject: a new code with us opportunity has been posted\u001b[39m\n\u001b[31msubject: your code with us opportunity has been posted\u001b[39m\n\u001b[31msubject: a code with us opportunity has been updated\u001b[39m\n\u001b[31msubject: a code with us opportunity has been cancelled\u001b[39m\n\u001b[31msubject: a code with us opportunity has been cancelled\u001b[39m\n\u001b[31msubject: your code with us opportunity is ready to be evaluated\u001b[39m\n\u001b[31msubject: your code with us opportunity proposal has been submitted\u001b[39m\n\u001b[31msubject: you have been awarded a code with us opportunity\u001b[39m\n\u001b[31msubject: a code with us opportunity: award decision made\u001b[39m\n\u001b[31msubject: your proposal has been withdrawn\u001b[39m\n\u001b[31msubject: a proposal has been withdrawn\u001b[39m\n\u001b[31msubject: a new sprint with us opportunity has been posted\u001b[39m\n\u001b[31msubject: your sprint with us opportunity has been posted\u001b[39m\n\u001b[31msubject: a sprint with us opportunity has been updated\u001b[39m\n\u001b[31msubject: a sprint with us opportunity has been submitted for review\u001b[39m\n\u001b[31msubject: your sprint with us opportunity has been submitted for review\u001b[39m\n\u001b[31msubject: a sprint with us opportunity has been cancelled\u001b[39m\n\u001b[31msubject: a sprint with us opportunity has been cancelled\u001b[39m\n\u001b[31msubject: a sprint with us opportunity is ready to be evaluated\u001b[39m\n\u001b[31msubject: your sprint with us opportunity proposal has been submitted\u001b[39m\n\u001b[31msubject: you have been awarded a sprint with us opportunity\u001b[39m\n\u001b[31msubject: a sprint with us opportunity: award decision made\u001b[39m\n\u001b[31msubject: your proposal has been withdrawn\u001b[39m\n\u001b[31msubject: a proposal has been withdrawn\u001b[39m\n\u001b[31msubject: a team with us opportunity has been submitted for review\u001b[39m\n\u001b[31msubject: your team with us opportunity has been submitted for review\u001b[39m\n\u001b[31msubject: a new team with us opportunity has been posted\u001b[39m\n\u001b[31msubject: your team with us opportunity has been posted\u001b[39m\n\u001b[31msubject: a team with us opportunity has been updated\u001b[39m\n\u001b[31msubject: a team with us opportunity has been cancelled\u001b[39m\n\u001b[31msubject: a team with us opportunity has been cancelled\u001b[39m\n\u001b[31msubject: your team with us opportunity is ready to be evaluated\u001b[39m\n\u001b[31msubject: your team with us opportunity proposal has been submitted\u001b[39m\n\u001b[31msubject: you have been awarded a team with us opportunity\u001b[39m\n\u001b[31msubject: a team with us opportunity: award decision made\u001b[39m\n\u001b[31msubject: your proposal has been withdrawn\u001b[39m\n\u001b[31msubject: a proposal has been withdrawn\u001b[39m\n\u001b[31msubject: your organization has been archived\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "defect-in-old"
     },
     {
       "id": "R-6.20",
@@ -1731,7 +1731,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "defect-in-old"
     },
     {
       "id": "R-6.28",

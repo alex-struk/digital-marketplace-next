@@ -23,7 +23,7 @@
 | R-5.17 | acceptance/evaluation/R-5.17.spec.ts | unbound |
 | R-5.18 | acceptance/evaluation/R-5.18.spec.ts | unbound |
 | R-5.19 | acceptance/evaluation/R-5.19.spec.ts | unbound |
-| R-5.20 | acceptance/evaluation/R-5.20.spec.ts | fail |
+| R-5.20 | acceptance/evaluation/R-5.20.spec.ts | fail (ruled: defect-in-old) |
 | R-5.21 | not testable: blocked: the two people the criterion has refused cannot be reached, and the refusal cannot be read. The seeded panel's chair is also an evaluator and the opportunity's owner is also on the panel, because the target has two public sector sign-ins and consensus waits for every evaluator, so neither a chair who does not evaluate nor an owner off the panel can attempt to score. The individual create and edit surfaces carry no refusal observation — the proposal views have wrong_stage_error and the evaluation surfaces have nothing like it — so an attempt made at the wrong stage or by the wrong person could not be told from one that simply recorded nothing. Needs a panel whose chair is not an evaluator and a refusal observation on evaluation-individual-create. | not-testable |
 | R-5.22 | acceptance/evaluation/R-5.22.spec.ts | pass |
 | R-5.23 | not testable: blocked: the given is a draft evaluation holding a score above the question's maximum and an empty comment, and the surface cannot produce one. The browser form checks each field as it is typed, which is the criterion's own note, so a draft saved through save_draft is a draft that passed those checks. The file upload page shows the shape that would reach it — upload_file_stating_its_read_access and its malformed variants are actions written for requests no form would send — so this needs an action on evaluation-individual-create that saves a draft the form would refuse, and an observation that the draft was stored as entered. | not-testable |
@@ -263,6 +263,7 @@ When an opportunity closes it enters individual question evaluation, and every e
 - when: its proposal deadline passes
 - then: the opportunity moves to individual question evaluation and the two evaluators are notified, while the chair who is not an evaluator is not
 - note: this is the same closing event that moves the submitted proposals into review and gives each an anonymous proponent name; the evaluation domain inherits that from the proposals domain rather than restating it.
+- note: calibrate 2026-09-14: the old target fails this; kept, the rebuild must pass it
 
 ### R-5.21 · v1 · confirmed · accepted
 

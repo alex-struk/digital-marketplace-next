@@ -21,7 +21,7 @@
 | R-7.15 | — | not-testable |
 | R-7.16 | not testable: Same missing observation as R-7.11, across a wider set of requests: the criterion is about every page request answering a permission refusal in one shape, and no observation returns the shape or status of a refused page request. refused_for_non_administrator is free text on each surface, so two refusals cannot be shown to be the same shape, only to have both happened. | not-testable |
 | R-7.17 | acceptance/content/R-7.17.spec.ts | fail (ruled: adapter-wrong) |
-| R-7.18 | acceptance/content/R-7.18.spec.ts | fail |
+| R-7.18 | acceptance/content/R-7.18.spec.ts | fail (ruled: defect-in-old) |
 | R-7.19 | acceptance/content/R-7.19.spec.ts | pass |
 | R-7.20 | acceptance/content/R-7.20.spec.ts | fail (ruled: adapter-wrong) |
 | R-7.21 | acceptance/content/R-7.21.spec.ts | fail (ruled: adapter-wrong) |
@@ -250,6 +250,7 @@ A page's body is rendered as formatted text only; markup embedded in it is never
 
 The service level agreement page is one the service creates for itself, so every screen that links to it — the learn-more index, the program cards, and the Code With Us, Sprint With Us and Team With Us opportunity forms — resolves on a fresh installation.
 - replaces: R-7.15
+- note: calibrate 2026-09-14: the old target fails this; kept, the rebuild must pass it
 
 ### R-7.19 · v1 · confirmed · accepted
 

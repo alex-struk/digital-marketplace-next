@@ -22,7 +22,7 @@
 | R-6.16 | not testable: blocked: the claim is about what stands at the foot of particular messages — an unsubscribe offer, or a plain link to the settings. The mail fixture exposes no body, and the reference page returns its bodies as one reading with no way to select a single message. Needs a `mail` accessor for one message's body (or a per-message body observation on notification-email-reference), and the contract naming which messages the notification preference governs. | not-testable |
 | R-6.17 | acceptance/notifications/R-6.17.spec.ts | fail (ruled: adapter-wrong) |
 | R-6.18 | not testable: blocked: naming all three programs or none is a fact about the body of the changed-terms message. The broadcast is reachable (notificationTermsBroadcast), but no `mail` accessor returns a body and the reference page cannot be asked for that one message's body. Needs a `mail` accessor for one message's Text or HTML body. | not-testable |
-| R-6.19 | acceptance/notifications/R-6.19.spec.ts | fail |
+| R-6.19 | acceptance/notifications/R-6.19.spec.ts | fail (ruled: defect-in-old) |
 | R-6.20 | not testable: blocked: the given is an account being created for the first time. Every persona signs in as an account the seed already holds, and no surface action creates one. Needs a persona whose sign-in reaches an identity the seed does not hold (a fresh sandbox identity), after which userSignUpComplete and userProfileSelfNotifications.newOpportunitiesCheckbox already read the result. | not-testable |
 | R-6.21 | acceptance/notifications/R-6.21.spec.ts | pass |
 | R-6.22 | — | pass |
@@ -30,7 +30,7 @@
 | R-6.24 | not testable: blocked: what this adds to R-6.23 is ordering — success reported before any message is sent. Nothing reports send progress and nothing can hold delivery, so checking the catcher at the moment success appears is a race against the background sending, not a test of it. Needs a way to hold or slow the mail catcher's acceptance of messages, so that notifyVendorsSuccess can be read while no message has yet arrived. | not-testable |
 | R-6.25 | not testable: blocked: every part of the claim — title and winner leading the message, the em dash where no successful proponent is recorded, the offer to sign in and see one's own score — is body content, which no `mail` accessor returns. Needs a `mail` accessor for one message's body, and a starting state from which an award can be made with three proponents: the only seeded Code With Us opportunity has no proposals and a deadline years away, and the two closed opportunities need their whole evaluation run first. The seed could hold a closed Code With Us opportunity with three submitted proposals. | not-testable |
 | R-6.26 | — | fail (ruled: adapter-wrong) |
-| R-6.27 | acceptance/notifications/R-6.27.spec.ts | fail |
+| R-6.27 | acceptance/notifications/R-6.27.spec.ts | fail (ruled: defect-in-old) |
 | R-6.28 | acceptance/notifications/R-6.28.spec.ts | fail |
 
 ### R-6.1 · v1 · confirmed · accepted
@@ -258,6 +258,7 @@ The message announcing changed terms names every program whose proposals require
 
 The administrator's notification reference page shows every message the service can send, so that no message exists which cannot be previewed there before the event that sends it.
 - replaces: R-6.14
+- note: calibrate 2026-09-14: the old target fails this; kept, the rebuild must pass it
 
 ### R-6.20 · v1 · confirmed · accepted
 
@@ -359,6 +360,7 @@ When the service notifies an account that holds no email address it composes the
 
 The choice to be notified about newly published opportunities is offered on the list of opportunities itself at every screen width, so a person reading the list on a phone reaches it the same way as a person reading it on a desktop.
 - replaces: R-6.22
+- note: calibrate 2026-09-14: the old target fails this; kept, the rebuild must pass it
 
 ### R-6.28 · v1 · confirmed · accepted
 
