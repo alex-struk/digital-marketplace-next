@@ -221,3 +221,224 @@ rebind:
       organizationName() reads only one cell under 'Organization Name'. It
       returned a single name on the public list and '' on this tab, where the
       snapshot lists 'Northern Pines Digital Ltd.'.
+  - id: R-1.17
+    target: old
+    why: opportunitySwuCreate.addTeamQuestion(input) and
+      opportunityTwuCreate.addResourceQuestion(input) ignore their input. They
+      walk to the questions step and press 'Add Question' but never type the
+      question, guideline, word limit, score or minimum score (the snapshot
+      shows 'Question*' empty and 'Score*' still at the default 5), so the
+      invalid value under test is never entered and fieldError() has nothing to
+      report. Fill the added question's fields from the input.
+  - id: R-6.17
+    target: old
+    why: "in 'the watch itself is retained', opportunityCwuCreate.publish(input)
+      never fills the form from its input (Title blank), and press() clicks the
+      disabled Publish anchor (tabindex=-1) until the 120 s timeout. Fill the
+      form from the input, and have press() fail at once on a disabled control.
+      The first test's missing 'Deactivate Account' is not a binding fault: that
+      account already shows Status Inactive with only 'Reactivate Account'."
+  - id: R-7.17
+    target: old
+    why: contentCreate.enterSlug and enterBody send an empty string because asText()
+      never reads the slug or body keys (the snapshot shows Title filled but
+      Slug* and Body* blank), so Publish stays disabled and press() clicks the
+      disabled Publish anchor (tabindex=-1) until the timeout.
+  - id: R-8.17
+    target: old
+    why: fileAttachmentControl.sizeLimitStatedBeforeChoosing() reads whichever step
+      the create form is on (the snapshot shows '1. Overview') instead of
+      walking to the Attachments step, where the form states 'Attachments must
+      be smaller than 10MB.'. All three tests take the limit from this reader
+      and got ''.
+  - id: R-3.18
+    target: old
+    why: organizationEdit.editOrganization pressed 'Edit Organization' while the
+      page still showed 'Loading...' (the same organization admin's
+      organizationTab reading in the first test contains 'Edit Organization'),
+      and organizationList.organizationName() still returns only the first body
+      row's cell ('Broken Compass Delivery Ltd.') instead of every name in the
+      column. Wait for the page to render before pressing, and return all names
+      in page order.
+  - id: R-4.18
+    target: old
+    why: userProfile.profileTab() goes through tabContent(['Profile']). That returns
+      '' on an administrator's view of another person's profile, which has no
+      tab strip but does render 'Deactivate Account' and the Admin checkbox. For
+      the owner it read while the page showed 'Loading...', and contentText()
+      strips the top bar where 'Edit Profile' sits. Read the profile screen
+      itself when there is no tab, include its top-bar controls, and wait for it
+      to load.
+  - id: R-1.19
+    target: old
+    why: opportunityCwuCreate.saveDraft(input) never fills the form from its input
+      (Title blank), and opportunityCwuEdit.opportunityIdentifier() is read
+      while Save Draft still shows 'Loading...' and the address is still
+      /opportunities/code-with-us/create. opportunityCwuCreate.publish(input)
+      likewise drops its input, and press() clicks the disabled Publish anchor
+      (tabindex=-1) until the timeout.
+  - id: R-4.19
+    target: old
+    why: "userProfile.profileTab() returns '' on an administrator's view of another
+      person's profile because that screen has no 'Profile' tab, yet the
+      snapshot shows the 'Reactivate Account' section rendered for the account
+      an administrator deactivated. Read the profile screen itself when no tab
+      is offered. The second test's missing 'Deactivate Account' is not a
+      binding fault: vendor.one's own profile already shows only 'Reactivate
+      Account'."
+  - id: R-1.20
+    target: old
+    why: in both tests opportunityCwuCreate.publish(input) never fills the form from
+      its input (title, teaser, location, reward, skills, dates), and press()
+      clicks the disabled Publish anchor (tabindex=-1) until the 120 s timeout.
+  - id: R-7.20
+    target: old
+    why: contentCreate.enterSlug and enterBody send '' because asText() never reads
+      the slug or body keys, so every submission lacks a slug and body, Publish
+      stays disabled, and press() clicks the disabled Publish anchor
+      (tabindex=-1) until the timeout instead of letting the refusal be read.
+  - id: R-8.20
+    target: old
+    why: the Code With Us and proposal tests time out because
+      opportunityCwuCreate.publish(input) drops its input and press() clicks the
+      disabled Publish anchor (tabindex=-1). The Sprint With Us and Team With Us
+      tests fail in setEvaluationPanel, whose advanceTo() only presses Next from
+      wherever the previous action left the wizard; it reached the last step,
+      '8. Attachments', without finding 'Panel Member', and never goes back or
+      opens the panel step directly.
+  - id: R-1.21
+    target: old
+    why: opportunityCwuCreate.saveDraft(input) and submitForReview(input) never fill
+      the form from their input. opportunityCwuEdit.opportunityIdentifier() is
+      read while the address is still /opportunities/code-with-us/create, and
+      press() clicks the disabled 'Submit for Review' anchor (tabindex=-1) until
+      the timeout.
+  - id: R-3.21
+    target: old
+    why: organizationList.organizationName() uses textUnder('', 'Organization
+      Name'), which returns only the first body row's cell ('Broken Compass
+      Delivery Ltd.'). It must return every name in that column, in page order.
+  - id: R-7.21
+    target: old
+    why: contentCreate.enterSlug and enterBody send '' because asText() never reads
+      the slug or body keys. Publish therefore stays disabled and press() clicks
+      the disabled anchor (tabindex=-1) until the timeout, and
+      resultingPublicAddress() finds no 'will be available at' line because no
+      slug was ever typed.
+  - id: R-8.21
+    target: old
+    why: organizationEdit.editOrganization pressed 'Edit Organization' while the
+      page still showed 'Loading...', and fileImagePicker.currentImage() returns
+      the first img on the page, the site header logo '/images/logo.svg', rather
+      than the profile picture.
+  - id: R-3.22
+    target: old
+    why: organizationCreate.createOrganization(input) never fills Legal Name, the
+      address fields or the contact fields from its input, then clicks the
+      disabled 'Create Organization' anchor (tabindex=-1) until the 120 s
+      timeout.
+  - id: R-7.22
+    target: old
+    why: contentCreate.enterSlug/enterBody and contentEdit.editSlug send '' because
+      asText() never reads the slug or body keys, so Publish stays disabled and
+      press() clicks the disabled Publish anchor (tabindex=-1) until the
+      timeout.
+  - id: R-1.23
+    target: old
+    why: opportunityCwuCreate.publish(input) never fills the form from its input,
+      and press() clicks the disabled Publish anchor (tabindex=-1) until the 120
+      s timeout.
+  - id: R-2.23
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) never fills the
+      form from its input, and press() clicks the disabled Publish anchor
+      (tabindex=-1) until the timeout.
+  - id: R-3.23
+    target: old
+    why: organizationCreate.createOrganization(input) never fills the form from its
+      input, then clicks the disabled 'Create Organization' anchor (tabindex=-1)
+      until the 120 s timeout.
+  - id: R-2.24
+    target: old
+    why: opportunityCwuCreate.publish(input) drops its input and press() clicks the
+      disabled Publish anchor (tabindex=-1) until the timeout. For Team With Us,
+      setEvaluationPanel's advanceTo() only presses Next forward from the step
+      it was left on and never reaches a step showing 'Panel Member'.
+  - id: R-3.24
+    target: old
+    why: organizationCreate.createOrganization(input) never fills the form from its
+      input, then clicks the disabled 'Create Organization' anchor (tabindex=-1)
+      until the 120 s timeout.
+  - id: R-7.24
+    target: old
+    why: contentCreate.enterSlug/enterBody and contentEdit.editSlug send '' because
+      asText() never reads the slug or body keys, so Publish stays disabled and
+      press() clicks the disabled Publish anchor (tabindex=-1) until the
+      timeout.
+  - id: R-8.24
+    target: old
+    why: fileUpload.uploadFile fills in metadata '[]' (NO_STATED_ACCESS) when the
+      input states no read access, so the upload carried a read-access statement
+      that the target accepts, and refusedForReadAccess() had no refusal to
+      read. For this action, send no metadata field at all.
+  - id: R-3.25
+    target: old
+    why: organizationCreate.createOrganization(input) never fills the form from its
+      input, then clicks the disabled 'Create Organization' anchor (tabindex=-1)
+      until the 120 s timeout.
+  - id: R-4.25
+    target: old
+    why: userProfile.notFoundPage() returns contentText(), the whole rendered
+      profile, so a profile the administrator or its owner may read is reported
+      as a not-found page. It must return something only when the 'Not Found'
+      screen is shown.
+  - id: R-7.25
+    target: old
+    why: contentView.pageTitle() returns page.title(), the browser tab title
+      ('disclaimer — B.C. Digital Marketplace'). It must read the page's own
+      heading text.
+  - id: R-8.25
+    target: old
+    why: opportunityCwuCreate.saveDraft(input) drops its input and
+      opportunityCwuEdit.opportunityIdentifier() is read while the address is
+      still /opportunities/code-with-us/create. Sprint With Us
+      setEvaluationPanel only walks forward and never reaches 'Panel Member',
+      and opportunityCwuCreate.publish(input) drops its input and press() clicks
+      the disabled Publish anchor (tabindex=-1) until the timeout.
+  - id: R-3.26
+    target: old
+    why: organizationCreate.createOrganization(input) never fills the form from its
+      input, then clicks the disabled 'Create Organization' anchor (tabindex=-1)
+      until the 120 s timeout.
+  - id: R-6.26
+    target: old
+    why: notificationTermsBroadcast.notifyVendorsSuccess() runs linesMatching over
+      contentText(), which cuts off everything after the footer. That is where
+      the 'Vendors Notified' alert renders (R-6.23's snapshot shows it there).
+      It also read while the confirmation dialog was still closing. Read the
+      alert wherever it renders, and wait for it to appear.
+  - id: R-7.26
+    target: old
+    why: contentCreate.enterSlug and enterBody send '' because asText() never reads
+      the slug or body keys, so Publish stays disabled and press() clicks the
+      disabled Publish anchor (tabindex=-1) until the timeout.
+  - id: R-4.27
+    target: old
+    why: the profile's saveChanges(input) ignores its input and only presses 'Save
+      Changes', so the name, email and job title under test are never typed (the
+      job title stays 'Program Analyst'). Fill the fields from the input before
+      saving.
+  - id: R-7.27
+    target: old
+    why: contentCreate.enterSlug/enterBody and contentEdit.editBody send '' because
+      asText() never reads the slug or body keys, so Publish stays disabled and
+      press() clicks the disabled Publish anchor (tabindex=-1) until the
+      timeout.
+  - id: R-8.27
+    target: old
+    why: fileAttachmentControl.existingAttachmentRow() was read while Save Draft
+      still showed 'Loading...' on /opportunities/code-with-us/create. It uses
+      sectionFrom(['Attachments']), which looks for a line reading exactly
+      'Attachments', but the step is headed '4. Attachments'.
+      opportunityCwuCreate.saveDraft(input) also drops the title. Wait for the
+      save to finish, and read the attachment names from the Attachments step.
