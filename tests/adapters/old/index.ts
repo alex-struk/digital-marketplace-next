@@ -104,13 +104,19 @@ export default function create(
       .filter((line) => line.length > 0);
   }
 
+  // Whether a pattern finds anything in a piece of text.
+  function matches(pattern: RegExp, text: string): boolean {
+    pattern.lastIndex = 0;
+    return pattern.exec(text) !== null;
+  }
+
   const LOOKS_LIKE_A_VALUE = /^(—|-|\$?\d[\d,.]*%?)$/;
 
   // A figure shown above its label, the way the reporting and summary panels read.
   async function statFor(labels: string[]): Promise<string> {
     const lines = await textLines();
     for (let i = 1; i < lines.length; i++) {
-      if (labels.includes(lines[i]) && LOOKS_LIKE_A_VALUE.test(lines[i - 1])) return lines[i - 1];
+      if (labels.includes(lines[i]) && matches(LOOKS_LIKE_A_VALUE, lines[i - 1])) return lines[i - 1];
     }
     return valueBefore(labels);
   }
@@ -147,14 +153,14 @@ export default function create(
   }
 
   async function linesMatching(pattern: RegExp): Promise<string> {
-    return (await textLines()).filter((line) => pattern.test(line)).join("\n");
+    return (await textLines()).filter((line) => matches(pattern, line)).join("\n");
   }
 
   // Everything above the numbered step list: the header a form carries about the thing
   // it belongs to.
   async function headerText(): Promise<string> {
     const lines = await textLines();
-    const step = lines.findIndex((line) => /^\d+\.\s/.test(line));
+    const step = lines.findIndex((line) => matches(/^\d+\.\s/, line));
     return (step > 0 ? lines.slice(0, step) : lines).join("\n");
   }
 
@@ -174,8 +180,8 @@ export default function create(
   // out. Narrow it further with a pattern when the contract names a particular one.
   async function messages(pattern?: RegExp): Promise<string> {
     const prose = await proseLines();
-    const found = (await textLines()).filter((line) => !prose.has(line) && MESSAGE.test(line));
-    const picked = pattern ? found.filter((line) => pattern.test(line)) : found;
+    const found = (await textLines()).filter((line) => !prose.has(line) && matches(MESSAGE, line));
+    const picked = pattern ? found.filter((line) => matches(pattern, line)) : found;
     return picked.join("\n");
   }
 
@@ -704,7 +710,7 @@ export default function create(
   // answer was one; a request that went through reads as nothing.
   function refusal(isRefusal: (status: number) => boolean, about?: RegExp): string {
     if (!lastAnswer || !isRefusal(lastAnswer.status)) return "";
-    if (about && !about.test(lastAnswer.body)) return "";
+    if (about && !matches(about, lastAnswer.body)) return "";
     return `${lastAnswer.status} ${lastAnswer.body}`;
   }
 
@@ -792,7 +798,7 @@ export default function create(
     closedGroup: () => sectionFrom(["Closed Opportunities"]),
     async opportunityStatus() {
       const lines = await textLines();
-      const start = lines.findIndex((line) => /Opportunities$/.test(line));
+      const start = lines.findIndex((line) => matches(/Opportunities$/, line));
       return start < 0 ? "" : lines.slice(start).join("\n");
     },
     proposalDeadline: () => linesMatching(/^Close[sd]\b/),
@@ -1302,7 +1308,7 @@ export default function create(
       },
       proposalIdentifier: async () => proposalId(),
       opportunityIdentifier: async () => opportunityId(),
-      proposalTab: () => tabContent(["Proposal"]),
+      proposalTab: () => tabContent(["Proposal Details", "Proposal"]),
       status: () => valueAfter(["Proposal Status", "Status"]),
     };
   }
@@ -1368,8 +1374,8 @@ export default function create(
         "Disqualify",
       ]);
     },
-    proposalTab: () => tabContent(["Proposal"]),
-    historyTab: () => tabContent(["History"]),
+    proposalTab: () => tabContent(["Proposal Details", "Proposal"]),
+    historyTab: () => tabContent(["Proposal History", "History"]),
     proponent: () => valueAfter(["Proponent"]),
     score: () => valueAfter(["Score", "Total Score"]),
     rank: () => valueAfter(["Rank"]),
@@ -1414,11 +1420,11 @@ export default function create(
         "Disqualify",
       ]);
     },
-    proposalTab: () => tabContent(["Proposal"]),
-    teamQuestionsTab: () => tabContent(["Team Questions"]),
+    proposalTab: () => tabContent(["Proposal Details", "Proposal"]),
+    teamQuestionsTab: () => tabContent(["Team Questions", "Team Questions (Eval)"]),
     codeChallengeTab: () => tabContent(["Code Challenge"]),
     teamScenarioTab: () => tabContent(["Team Scenario"]),
-    historyTab: () => tabContent(["History"]),
+    historyTab: () => tabContent(["Proposal History", "History"]),
     wrongStageError: () => messages(/stage|not yet|cannot/i),
     questionsScore: () => statFor(["Team Questions", "Questions Score"]),
     challengeScore: () => statFor(["Code Challenge", "Challenge Score"]),
@@ -1468,10 +1474,10 @@ export default function create(
         "Disqualify",
       ]);
     },
-    proposalTab: () => tabContent(["Proposal"]),
-    resourceQuestionsTab: () => tabContent(["Resource Questions"]),
-    challengeTab: () => tabContent(["Challenge", "Interview/Challenge"]),
-    historyTab: () => tabContent(["History"]),
+    proposalTab: () => tabContent(["Proposal Details", "Proposal"]),
+    resourceQuestionsTab: () => tabContent(["Resource Questions", "Resource Questions (Eval)"]),
+    challengeTab: () => tabContent(["Interview/Challenge", "Challenge"]),
+    historyTab: () => tabContent(["Proposal History", "History"]),
     wrongStageError: () => messages(/stage|not yet|cannot/i),
     questionsScore: () => statFor(["Resource Questions", "Questions Score"]),
     challengeScore: () => statFor(["Interview/Challenge", "Challenge", "Challenge Score"]),
@@ -1853,11 +1859,11 @@ export default function create(
       swuQualifiedMark: () => markUnder("", "SWU Qualified?"),
       async emptyOwnedMessage() {
         const owned = await sectionFrom(["Owned Organizations"], ["Affiliated Organizations"]);
-        return /^you do not own/i.test(owned) ? owned : "";
+        return matches(/^you do not own/i, owned) ? owned : "";
       },
       async emptyAffiliatedMessage() {
         const affiliated = await sectionFrom(["Affiliated Organizations"]);
-        return /^you are not affiliated/i.test(affiliated) ? affiliated : "";
+        return matches(/^you are not affiliated/i, affiliated) ? affiliated : "";
       },
       async acceptConfirmation() {
         const shown = confirmation("approve");
@@ -2207,6 +2213,7 @@ export default function create(
         openNamed(`${where}.open_proponent_evaluation`, input),
       submitScoresForConsensus: async () => {
         await press(`${where}.submit_scores_for_consensus`, [
+          "Submit Scores for Consensus",
           "Submit for Consensus",
           "Submit Scores",
           "Submit",
@@ -2220,7 +2227,7 @@ export default function create(
       anonymousProponentName: () => anonymousProponent(),
       evaluationStatus: () => tableText(),
       submitDisabledUntilComplete: () =>
-        controlState(["Submit for Consensus", "Submit Scores", "Submit"]),
+        controlState(["Submit Scores for Consensus", "Submit for Consensus", "Submit Scores"]),
       incompleteEvaluationError: () => messages(/complete|incomplete/i),
       ownEvaluationsOnly: () => tableText(),
     };
@@ -2284,13 +2291,36 @@ export default function create(
     "/opportunities/team-with-us/:opportunityId/edit?tab=consensus",
   );
 
+  // The score sheet shows its form only when the address names the questions tab
+  // ("?tab=teamQuestions" or "?tab=resourceQuestions"); without it the route renders the
+  // proposal's details instead. Each question carries an "Evaluator Notes" box and a
+  // "Score" field, in question order, so a question is picked by its position.
   function scoreSheet(where: string, route: string) {
+    const tab = route.includes("/team-questions/") ? "teamQuestions" : "resourceQuestions";
+    async function enter(member: string, labels: string[], input: unknown): Promise<void> {
+      const value = field(input, "score", "notes", "value") || asText(input);
+      const which = indexOf(input) || Math.max(0, Number.parseInt(field(input, "question"), 10) - 1 || 0);
+      for (const label of labels) {
+        for (const role of ["spinbutton", "textbox"] as const) {
+          const boxes = seen(page.getByRole(role, { name: label, exact: false }));
+          const count = await boxes.count();
+          if (!count) continue;
+          const box = boxes.nth(Math.min(which, count - 1));
+          await box.fill(value);
+          await box.blur().catch(() => undefined);
+          await settle();
+          return;
+        }
+      }
+      throw new Error(
+        `unbound: ${where}.${member} — no field labelled ${quoted(labels)} on ${page.url()}`,
+      );
+    }
     return {
-      ...at(route),
-      enterQuestionScore: (input: unknown) =>
-        fill(`${where}.enter_question_score`, ["Score"], asText(input)),
+      open: (params?: Record<string, string>) => go(`${route}?tab=${tab}`, params),
+      enterQuestionScore: (input: unknown) => enter("enter_question_score", ["Score"], input),
       enterQuestionNotes: (input: unknown) =>
-        fill(`${where}.enter_question_notes`, ["Notes", "Comments"], asText(input)),
+        enter("enter_question_notes", ["Evaluator Notes", "Notes"], input),
       saveAndGoToNextProponent: () =>
         press(`${where}.save_and_go_to_next_proponent`, [
           "Save & Go to Next Proponent",
@@ -2529,7 +2559,7 @@ export default function create(
   }
 
   async function visit(href: string): Promise<void> {
-    if (/^https?:\/\//.test(href)) {
+    if (matches(/^https?:\/\//, href)) {
       await page.goto(href, { waitUntil: "domcontentloaded" });
       await settle();
       return;
@@ -2803,7 +2833,7 @@ export default function create(
     const stated = record.readAccess ?? record.read_access ?? record.metadata ?? record.access;
     if (stated === undefined || stated === null) return undefined;
     if (typeof stated === "string") {
-      return /^[A-Za-z]+$/.test(stated) ? JSON.stringify([{ tag: stated }]) : stated;
+      return matches(/^[A-Za-z]+$/, stated) ? JSON.stringify([{ tag: stated }]) : stated;
     }
     return JSON.stringify(Array.isArray(stated) ? stated : [stated]);
   }
@@ -2917,7 +2947,7 @@ export default function create(
       return match ? decodeURIComponent(match[1]) : "";
     },
     offeredAsDownloadNotDisplayed: async () =>
-      /attachment/i.test(header("content-disposition")) ? "attachment" : "",
+      matches(/attachment/i, header("content-disposition")) ? "attachment" : "",
     contentTypeFromName: async () => header("content-type"),
     readableWhenSignedOutIfPublic: async () =>
       lastAnswer && lastAnswer.status === 200 ? lastAnswer.body : "",
