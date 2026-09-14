@@ -1,0 +1,223 @@
+rebind:
+  - id: R-2.1
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) never fills the
+      form from its input (title, teaser, location, description, remoteOk,
+      reward, skills, dates), and press() clicks the Publish anchor while it is
+      disabled (tabindex=-1, class disabled), retrying until the 120 s timeout.
+      Fill the fields from the input, and have press() fail at once on a
+      disabled control instead of clicking it.
+  - id: R-3.1
+    target: old
+    why: organizationList.organizationName() uses textUnder('', 'Organization
+      Name'), which returns only the first body row's cell ('Broken Compass
+      Delivery Ltd.'). It must return every name in that column, in page order.
+  - id: R-7.1
+    target: old
+    why: contentView.pageTitle() returns page.title(), the browser tab title ('About
+      us — B.C. Digital Marketplace'). It must read the page's own heading text.
+  - id: R-2.2
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) never fills the
+      form from its input, and press() clicks the disabled Publish anchor
+      (tabindex=-1) until the test times out. proposalCwuCreate.saveDraft(input)
+      likewise drops proposalText.
+  - id: R-3.2
+    target: old
+    why: organizationCreate.createOrganization(input) never fills Legal Name,
+      address and contact fields from its input, then clicks the disabled
+      'Create Organization' anchor (tabindex=-1) until the 120 s timeout. For
+      public sector staff it throws unbound when the create page is withheld,
+      instead of letting the refusal be observed.
+  - id: R-1.3
+    target: old
+    why: opportunityCwuCreate.saveDraft(input) drops the title, so drafts are saved
+      as 'Untitled' (the dashboard shows rows of Untitled drafts).
+      allOpportunitiesForAdministrator reads only the administrator's own 'My
+      Opportunities' tab rather than a list of every opportunity.
+  - id: R-2.3
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) never fills the
+      form from its input, and press() clicks the disabled Publish anchor
+      (tabindex=-1) until the test times out.
+  - id: R-3.3
+    target: old
+    why: organizationEdit.organizationTab() reads the page before it has rendered.
+      For the service administrator the snapshot shows heading 'Northern Pines
+      Digital Ltd.', but the reader returned only the footer; for the owner and
+      the organization admin it read while the page showed 'Loading...'. Wait
+      for the tab's content to appear before reading it.
+  - id: R-1.4
+    target: old
+    why: opportunityCwuCreate.publish(input) never fills the form from its input,
+      and press() clicks the disabled Publish anchor (tabindex=-1) until the
+      test times out. opportunityCwuEdit.editDetails(input) also ignores the
+      description it is given.
+  - id: R-2.4
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) never fills the
+      form from its input, and press() clicks the disabled Publish anchor
+      (tabindex=-1) until the test times out.
+      proposalCwuCreate.saveDraft/submitProposal also drop proposalText.
+  - id: R-4.4
+    target: old
+    why: signIn() always uses the persona's session-route
+      (/auth/createsessionvendor/5), which minted a session for the deactivated
+      account and landed on the Dashboard. It bypassed the identity provider the
+      criterion names. For a sign-in that is meant to be refused, use the
+      persona's sandbox-idp entry.
+  - id: R-7.4
+    target: old
+    why: contentView.pageTitle() returns page.title(), the browser tab title ('About
+      us — B.C. Digital Marketplace'). It must read the page's own heading text.
+  - id: R-3.6
+    target: old
+    why: organizationCreate.createOrganization(input) never fills the form from its
+      input, then clicks the disabled 'Create Organization' anchor (tabindex=-1)
+      until the 120 s timeout.
+  - id: R-2.7
+    target: old
+    why: publishCodeWithUs's opportunityCwuCreate.publish(input) never fills the
+      form from its input, and press() clicks the disabled Publish anchor
+      (tabindex=-1) until the test times out. The Sprint With Us and Team With
+      Us create publish and the proposal saveDraft/submitProposal share the same
+      dropped input.
+  - id: R-7.7
+    target: old
+    why: contentCreate.enterSlug and enterBody send an empty string because asText()
+      only reads the value/name/text/title/label/answer/score/id keys and never
+      slug or body. The snapshot shows Slug and Body blank, so
+      resultingPublicAddress() finds nothing.
+  - id: R-8.7
+    target: old
+    why: fileDownload.downloadFile() ignores the fileId passed to
+      fileDownload.open() and rebuilds the address from its own missing input,
+      throwing 'called without a value for :fileId'. It must reuse the file
+      opened.
+  - id: R-7.8
+    target: old
+    why: contentEdit.editBody sends an empty string because asText() never reads the
+      body key. The page then shows 'Body must be between 1 and 50000 characters
+      long.' and nothing publishes. contentEdit.updatedDate() also matches the
+      'Updated By' label along with the date.
+  - id: R-1.9
+    target: old
+    why: opportunityCwuCreate.saveDraft(input) drops the title, so the draft is
+      saved as 'Untitled'. opportunityCwuEdit.opportunityIdentifier() is read
+      while Save Draft still shows 'Loading...' and the address is still
+      /opportunities/code-with-us/create. Wait for the save to finish.
+  - id: R-2.9
+    target: old
+    why: publishAllThree's opportunityCwuCreate.publish(input) never fills the form
+      from its input, and press() clicks the disabled Publish anchor
+      (tabindex=-1) until the test times out.
+  - id: R-7.9
+    target: old
+    why: contentCreate.enterSlug and enterBody send an empty string (asText() never
+      reads slug or body), so Publish stays disabled, and press() clicks the
+      disabled Publish anchor (tabindex=-1) until the 120 s timeout.
+  - id: R-1.10
+    target: old
+    why: opportunityCwuCreate.publish(input) never fills the form from its input, so
+      the one invalid field under test is never entered, and press() clicks the
+      disabled Publish anchor (tabindex=-1) until the test times out.
+  - id: R-3.10
+    target: old
+    why: organizationCreate.createOrganization(input) never fills the form from its
+      input, then clicks the disabled 'Create Organization' anchor (tabindex=-1)
+      until the 120 s timeout.
+  - id: R-7.10
+    target: old
+    why: contentView.pageTitle() returns page.title(), the browser tab title ('About
+      us — B.C. Digital Marketplace'), not the page's own heading.
+  - id: R-8.10
+    target: old
+    why: fileDownload.downloadFile() ignores the fileId passed to
+      fileDownload.open() and throws 'called without a value for :fileId'. It
+      must reuse the file opened.
+  - id: R-1.11
+    target: old
+    why: opportunityCwuCreate.publish(input) never fills the form from its input
+      (remoteOk, remoteDescription and the rest), and press() clicks the
+      disabled Publish anchor (tabindex=-1) until the test times out.
+  - id: R-8.11
+    target: old
+    why: fileDownload.downloadFile() ignores the fileId passed to
+      fileDownload.open() and throws 'called without a value for :fileId' after
+      the upload and description checks succeeded. It must reuse the file
+      opened.
+  - id: R-1.12
+    target: old
+    why: opportunityCwuCreate.publish(input) never fills the form from its input
+      (reward, skills and the rest), and press() clicks the disabled Publish
+      anchor (tabindex=-1) until the test times out.
+  - id: R-2.12
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) never fills the
+      form from its input, and press() clicks the disabled Publish anchor
+      (tabindex=-1) until the test times out.
+  - id: R-4.12
+    target: old
+    why: userProfile.notFoundPage() returns the whole page text, so any rendered
+      profile reads as a not-found page. It must return something only when the
+      Not Found screen is shown.
+  - id: R-7.12
+    target: old
+    why: contentView.pageTitle() returns page.title(), the browser tab title
+      ('copyright — B.C. Digital Marketplace'). It must read the page's own
+      heading text.
+  - id: R-8.12
+    target: old
+    why: fileDownload.downloadFile() ignores the fileId passed to
+      fileDownload.open() and throws 'called without a value for :fileId', even
+      when open() was given the seeded identifier. It must reuse the file
+      opened.
+  - id: R-2.13
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) never fills the
+      form from its input, and press() clicks the disabled Publish anchor
+      (tabindex=-1) until the test times out. proposalCwuCreate.submitProposal
+      also drops proposalText and additionalComments.
+  - id: R-3.13
+    target: old
+    why: organizationCreate.createOrganization(input) never fills the form from its
+      input, then clicks the disabled 'Create Organization' anchor (tabindex=-1)
+      until the 120 s timeout.
+  - id: R-8.13
+    target: old
+    why: storedImageWidth/Height are read while Save Changes still shows
+      'Loading...', and only an img whose src contains /api/ is looked for, so
+      no stored picture is found. organizationEdit.editOrganization presses
+      'Edit Organization' while the organization page still shows 'Loading...',
+      though R-3.3's administrator snapshot shows that control in the nav bar.
+  - id: R-1.14
+    target: old
+    why: opportunityCwuCreate.publish(input) never fills the form from its input
+      (the four dates and the rest), and press() clicks the disabled Publish
+      anchor (tabindex=-1) until the test times out.
+  - id: R-2.14
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) never fills the
+      form from its input, and press() clicks the disabled Publish anchor
+      (tabindex=-1) until the test times out.
+      proposalCwuCreate.chooseProponentIndividual(input) also ignores the
+      individual's details.
+  - id: R-3.14
+    target: old
+    why: organizationEdit.teamMemberRow() calls openTab, which throws unbound when
+      the Team tab is withheld from the ordinary member and the unconnected
+      vendor. It should read '' as tabContent does. For the owner and the
+      administrator it reads the table before the page has loaded (snapshot
+      shows 'Loading...').
+  - id: R-8.14
+    target: old
+    why: fileImagePicker.currentImage() returns the first img on the page, the site
+      header logo '/images/logo.svg', rather than the profile picture, and reads
+      it while Save Changes still shows 'Loading...'.
+  - id: R-3.15
+    target: old
+    why: after myOrganizations the page is the profile Organizations tab, whose
+      Owned and Affiliated tables are headed 'Legal Name', but
+      organizationName() reads only one cell under 'Organization Name'. It
+      returned a single name on the public list and '' on this tab, where the
+      snapshot lists 'Northern Pines Digital Ltd.'.
