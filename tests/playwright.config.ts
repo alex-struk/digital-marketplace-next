@@ -21,6 +21,16 @@ export default defineConfig({
   // budget a healthy one is expected to use.
   timeout: 120000,
   reporter: [["json", { outputFile: "test-results/results.json" }], ["list"]],
-  use: { baseURL: process.env.SDLC_TARGET_URL },
+  use: {
+    baseURL: process.env.SDLC_TARGET_URL,
+    // One click, one fill, one navigation — each bounded on its own, well inside the test's
+    // two minutes. Without this a single action waits on the test's whole budget: a control
+    // that never becomes clickable, because a field before it was left empty, held one test
+    // for two minutes and did so in more than half the failures of one calibration, which is
+    // most of why a full run took hours. A stuck action now fails in seconds and names what it
+    // was waiting on.
+    actionTimeout: 15000,
+    navigationTimeout: 30000,
+  },
   projects: [{ name: target }],
 });
