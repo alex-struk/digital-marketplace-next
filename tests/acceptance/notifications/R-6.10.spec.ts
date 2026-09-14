@@ -16,7 +16,7 @@ test("the only notification a person can choose to stop is the announcement of n
   await mail.clear();
 
   await surface.signIn(persona.organizationOwner);
-  await surface.organizationEdit.open({ organization: seed.organizations.qualified.id });
+  await surface.organizationEdit.open({ orgId: seed.organizations.qualified.id });
   await surface.organizationEdit.addTeamMembers({ user: seed.users.vendorWithNoticesOff });
 
   await expect

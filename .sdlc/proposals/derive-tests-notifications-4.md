@@ -1,11 +1,13 @@
 ---
-stage: "derive-tests"
-title: "derive tests"
-at: "2026-09-14T02:29:44.727Z"
-cost: 0.25702849999999994
-turns: 5
-session: "74fe2693-7374-4134-91bf-7bb4cd79b135"
+gate: G3
+question: "Do the revised notifications tests now follow from their criteria and from nothing else?"
+recommendation: "I removed the one assertion the reviewer named."
+opened: 2026-09-14T02:29:44.739Z
 ---
+
+# Do the revised notifications tests now follow from their criteria and from nothing else?
+
+**Recommendation.** I removed the one assertion the reviewer named.
 
 I removed the one assertion the reviewer named. Nothing else in the notifications slice or in `tests/acceptance/not-testable.yaml` was touched.
 
