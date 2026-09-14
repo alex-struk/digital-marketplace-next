@@ -76,3 +76,23 @@ I revised `tests/adapters/old/index.ts` against every calibration finding, worki
 ## Side effects on the target
 
 While looking, I saved a profile picture on the file-uploader account (vendor 6). I opened and then cancelled edit and disqualify dialogs without saving anything.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+The question is whether the revised tests/adapters/old/index.ts binds every surface action and observation on old and nothing else. Ruling: approve. The adapter still only moves around pages and finds things on them. The diff adds no assertion, and nothing in it decides whether a test passes. Readers that now return '' do so for a withheld tab, the Not Found screen, or Export once it is enabled, and these match what the tests expect: R-4.32 wants truthy before the selection and falsy after, and R-4.12, R-4.25 and R-4.9 read notFoundPage the same way. Each defect named in calibrate-triage-old-3 has a matching change. Forms are now filled from their input before anything is pressed, and press() reports a disabled control at once instead of clicking it until the 120 s timeout. Saves wait for the record's own address before its identifier is read. The evaluation panel is reached through the step menu. Folded opportunity groups are opened before they are read. Reporting figures are read from their cards. Disqualify types its reason into the dialog. asText reads slug and body. downloadFile reuses the file id passed to open(). profileTab reads the whole screen where there is no tab strip. Tabs are taken only from a screen's own ?tab= links, never from the top bar. Nothing under tests/acceptance changed, and config.yaml defines no protected paths. The authoring agent could not run the typecheck, but the runner ran it on revision 0eddc29 and it passed with no diagnostics under adapters/old/. The single new unbound, signIn.deactivated-vendor, has a real reason. On this target 'Sign In Using GitHub' goes to github.com itself, not to a sandbox identity provider, and the session route that reaches the account ignores deactivation, so the refusal R-4.4 needs cannot be observed. The adapter also stops before typing the sandbox password anywhere. Tier is STANDARD and the receipt marks no risk as unaccepted, so this does not escalate. What would change the ruling: a calibration run showing that a binding hides a failure. That would be a quiet return, or a '' reader, that makes a criterion pass while the page does not do what the criterion says. It would also change if the fill helpers turn out to report a missing field as unbound when the field is on the page.
+
+**Conditions:**
+- Re-run calibrate against old before this adapter is relied on. The new form filler and step navigation were checked by eye and by browser locator probes, not by running the suite. Any criterion that still fails at the same assertion goes to the product owner as a product-question.
+- Change signIn so it chooses the identity-provider path from the persona's id or its sandbox-idp entry, not by matching 'sign in and be refused' in the persona's can text. Today, if that wording changes, the deactivated vendor silently goes back through the session route, which cannot show the refusal.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `0eddc291a564513cf7c172232435cd67ae6a2e93`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    No diagnostics.
