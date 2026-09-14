@@ -1,38 +1,39 @@
 // criterion: @R-3.3 v1
-// provenance: blind, spec@40605384759bd10724c1411fdc448dfd99c70aee, derived 2026-09-07
+// provenance: blind, spec@1c3743e9fb53c29de89a28045222abab29c5e27e, derived 2026-09-14
 import { test, expect, persona, seed } from "../../fixtures";
 
-test("the ordinary member is refused the organization's full record", async ({ surface }) => {
+// The seeded qualified organization is the criterion's given: an owner, one organization
+// administrator and one ordinary member.
+const organization = seed.organizations.qualified;
+
+// organization-edit carries no refusal or not-found observation of its own, so being
+// refused is read as the organization's record not being shown. The second test in this
+// file shows the same observation does carry the record for somebody who may see it, so an
+// absence here is the refusal and not an observation that returns nothing for anyone.
+test("the ordinary member, and separately a member of public sector staff, opening the organization's management page are both refused", async ({
+  surface,
+}) => {
   await surface.signIn(persona.organizationMember);
-  await surface.organizationEdit.open({ orgId: seed.organizations.qualified.id });
+  await surface.organizationEdit.open({ orgId: organization.id });
+  expect(await surface.organizationEdit.organizationTab()).not.toContain(organization.legal_name);
 
-  expect(await surface.organizationEdit.organizationTab()).not.toContain(seed.organizations.qualified.legal_name);
-});
-
-test("a member of public sector staff is refused the organization's full record", async ({ surface }) => {
   await surface.signIn(persona.publicSectorStaff);
-  await surface.organizationEdit.open({ orgId: seed.organizations.qualified.id });
-
-  expect(await surface.organizationEdit.organizationTab()).not.toContain(seed.organizations.qualified.legal_name);
+  await surface.organizationEdit.open({ orgId: organization.id });
+  expect(await surface.organizationEdit.organizationTab()).not.toContain(organization.legal_name);
 });
 
-test("the owner sees the organization", async ({ surface }) => {
+test("the owner, the organization's administrator and a service administrator each see the organization", async ({
+  surface,
+}) => {
   await surface.signIn(persona.organizationOwner);
-  await surface.organizationEdit.open({ orgId: seed.organizations.qualified.id });
+  await surface.organizationEdit.open({ orgId: organization.id });
+  expect(await surface.organizationEdit.organizationTab()).toContain(organization.legal_name);
 
-  expect(await surface.organizationEdit.organizationTab()).toContain(seed.organizations.qualified.legal_name);
-});
-
-test("the organization's administrator sees the organization", async ({ surface }) => {
   await surface.signIn(persona.organizationAdmin);
-  await surface.organizationEdit.open({ orgId: seed.organizations.qualified.id });
+  await surface.organizationEdit.open({ orgId: organization.id });
+  expect(await surface.organizationEdit.organizationTab()).toContain(organization.legal_name);
 
-  expect(await surface.organizationEdit.organizationTab()).toContain(seed.organizations.qualified.legal_name);
-});
-
-test("a service administrator sees the organization", async ({ surface }) => {
   await surface.signIn(persona.administrator);
-  await surface.organizationEdit.open({ orgId: seed.organizations.qualified.id });
-
-  expect(await surface.organizationEdit.organizationTab()).toContain(seed.organizations.qualified.legal_name);
+  await surface.organizationEdit.open({ orgId: organization.id });
+  expect(await surface.organizationEdit.organizationTab()).toContain(organization.legal_name);
 });

@@ -1,28 +1,37 @@
 // criterion: @R-3.32 v1
-// provenance: blind, spec@40605384759bd10724c1411fdc448dfd99c70aee, derived 2026-09-07
+// provenance: blind, spec@1c3743e9fb53c29de89a28045222abab29c5e27e, derived 2026-09-14
 import { test, expect, persona, seed } from "../../fixtures";
 
-test("when an invited person declines the invitation the pending membership is gone from the team list and the owner is told the request was rejected", async ({
+// The seeded pending invitation is the criterion's given: the invited vendor has been
+// invited to this organization and has not answered.
+const organization = seed.organizations.withPendingInvitation;
+const invited = seed.users.invitedVendor;
+const owner = seed.users.organizationOwner;
+
+test("when a person with a pending invitation declines it, the pending membership is gone from the organization's team list and the owner receives a message saying the person rejected the team request", async ({
   surface,
   mail,
 }) => {
   await surface.signIn(persona.organizationOwner);
-  await surface.organizationEdit.open({ orgId: seed.organizations.qualified.id });
-  await surface.organizationEdit.addTeamMembers({ emails: [seed.users.invitedVendor.email] });
-  expect(await surface.organizationEdit.teamMemberRow()).toContain(seed.users.invitedVendor.email);
+  await surface.organizationEdit.open({ orgId: organization.id });
+  expect(await surface.organizationEdit.teamMemberRow()).toContain(invited.email);
 
+  // Cleared once the given is confirmed, so what arrives is the consequence of the decline.
   await mail.clear();
 
   await surface.signIn(persona.invitedVendor);
-  await surface.organizationUserMemberships.open({ userId: seed.users.invitedVendor.id });
-  await surface.organizationUserMemberships.rejectInvitation({
-    organization: seed.organizations.qualified.legal_name,
-  });
+  await surface.organizationUserMembershipsSelf.open();
+  await surface.organizationUserMembershipsSelf.rejectInvitation({ organization: organization.legal_name });
 
-  const toOwner = await mail.messagesTo(seed.users.organizationOwner.email);
-  expect(toOwner.length).toBeGreaterThan(0);
+  await expect
+    .poll(
+      async () =>
+        (await mail.messagesTo(owner.email)).map((message) => `${message.Subject} ${message.Snippet}`).join(" "),
+      { timeout: 10000 },
+    )
+    .toMatch(/reject/i);
 
   await surface.signIn(persona.organizationOwner);
-  await surface.organizationEdit.open({ orgId: seed.organizations.qualified.id });
-  expect(await surface.organizationEdit.teamMemberRow()).not.toContain(seed.users.invitedVendor.email);
+  await surface.organizationEdit.open({ orgId: organization.id });
+  expect(await surface.organizationEdit.teamMemberRow()).not.toContain(invited.email);
 });
