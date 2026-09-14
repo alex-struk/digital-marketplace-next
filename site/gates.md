@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-14T21:15:48.283Z | calibrate-triage-old-4 | G3 | approve | agent:reviewer | agent-held, unsampled | $4.5032365 |  |
 | 2026-09-14T20:27:40.633Z | derive-tests-notifications-stale-1 | G3 | return | agent:reviewer | agent-held, unsampled | $0.8744565 |  |
 | 2026-09-14T20:22:36.086Z | derive-tests-files-stale-1 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.4922625 |  |
 | 2026-09-14T20:19:53.915Z | bind-adapter-old-10 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.8793859999999999 |  |
