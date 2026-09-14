@@ -1,11 +1,13 @@
 ---
-stage: "derive-tests"
-title: "derive tests"
-at: "2026-09-14T02:08:15.825Z"
-cost: 0.660851
-turns: 15
-session: "d854d230-8ba5-40cf-8340-f59339c55776"
+gate: G3
+question: "Do the revised notifications tests now follow from their criteria and from nothing else?"
+recommendation: "I changed four test files in the notifications slice, one for each condition that belongs to this slice."
+opened: 2026-09-14T02:08:15.838Z
 ---
+
+# Do the revised notifications tests now follow from their criteria and from nothing else?
+
+**Recommendation.** I changed four test files in the notifications slice, one for each condition that belongs to this slice.
 
 I changed four test files in the notifications slice, one for each condition that belongs to this slice. Everything else is exactly as I found it: the other nine files under `tests/acceptance/notifications/`, `tests/acceptance/not-testable.yaml` and every spec file. No criterion moved between having a test and having a not-testable entry.
 
