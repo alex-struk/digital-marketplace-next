@@ -1,0 +1,12 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether this adapter binds every surface action and observation on old, and nothing else. Approve. The last ruling (bind-adapter-old-8) returned the binding over two readers and said reverting them would make it approve. Diffing returned/bind-adapter-old-8 against f693686 shows exactly those two changes and nothing else. fileDownload.readableWhenSignedOutIfPublic now returns the body only on a 200 and an empty string otherwise, so a signed-out refusal no longer passes the toBeTruthy() checks in R-8.7, R-8.28 and R-8.29. scheduledTransitionTrigger.serviceIsUp returns the trimmed body only when the /status request answers 200, and an empty string otherwise. The only other change is the comment above the first reader, which now describes what it does. The third condition also holds: the absence fixes, the programme-badge Value readers, row links, the Panel Chair checkbox, pressing Edit before editing, uploadFile and the label corrections are byte-identical to old-8. Both readers now only locate and hand over what the target returned, so neither one decides a test. Nothing under tests/acceptance, tests/generated or tests/fixtures differs from main. The runner's typecheck passed on f693686 with no diagnostics under adapters/old. The earlier branch of serviceIsUp, which reads visible text when the browser is already on /status, is already on main, was not in the returned conditions, and reads the page rather than judging it, so it does not block. Tier is STANDARD and no residual risk is marked unaccepted, so there is nothing to escalate. The ruling would change to return if a later revision touched tests/acceptance, or made either reader return non-empty text for a non-200 answer again.
+conditions:
+  - "Note for a future revision, not required for this approval: serviceIsUp's early branch returns document.body.innerText when the browser is already on /status, without seeing a status code. If a test ever reaches that reader after navigating to /status, an error page would read as truthy. Route that branch through the same 200-only request."
+cost: 0.550903
+turns: 7
+session: "926e11bd-23ad-45eb-900f-b84d9c59beb8"
+at: 2026-09-14T14:47:58.202Z

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-9 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">80</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">80</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">69</span></a></li><li><a href="../runs.html">Run log <span class="count">8</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-9</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-14 14:47</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I changed the two readers the last ruling returned this binding for, and nothing else.</p>
+<p>I changed the two readers the last ruling returned this binding for, and nothing else. I couldn&#39;t run a typecheck because this workspace has no TypeScript compiler or tsconfig. Both edits swap one string expression for another, so the return types haven&#39;t changed, but the runner&#39;s typecheck is still the real check.</p>
+<p>The first change is to <code>fileDownload.readableWhenSignedOutIfPublic</code> in <code>tests/adapters/old/index.ts</code>. It now returns the downloaded body only when the latest answer was a 200, and an empty string otherwise. In the previous revision a refusal came back as &quot;status plus body&quot;, which is never empty. So a signed-out refusal passed the <code>toBeTruthy()</code> checks in R-8.7, R-8.28 and R-8.29 that are meant to show the file was readable. With empty on refusal, those assertions depend on what the target returns, not on the adapter. I also rewrote the comment above that reader, which still described the old behaviour.</p>
+<p>The second change is to <code>scheduledTransitionTrigger.serviceIsUp</code>. When it has to request the status address, it now returns the trimmed body only on a 200 and an empty string otherwise, instead of the status and body.</p>
+<p>One thing a reviewer may want to look at: <code>serviceIsUp</code> has an earlier branch that I left alone because the conditions don&#39;t mention it. If the browser is already on <code>/status</code>, it returns the page&#39;s visible text without making a request, so it never sees a status code. If that page ever loaded with an error, its text would still read as truthy. The condition covered the requested path, and that is the path I fixed.</p>
+<p>I didn&#39;t touch anything else. The fixes that return empty on loaded but empty pages, the Value readers that check the programme badge, the row links, the Panel Chair checkbox, pressing Edit before editing, <code>uploadFile</code> and the label corrections all stay as they were. I didn&#39;t change <code>bindings.yaml</code> either, because both members were already &quot;bound&quot; and still are. I didn&#39;t reopen the running target, since neither fix needed a new look at a page. This revision finds no new unbound members and no route that fails to resolve.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-14 14:47.</p>
+<div class="body"><p>The question is whether this adapter binds every surface action and observation on old, and nothing else. Approve. The last ruling (bind-adapter-old-8) returned the binding over two readers and said reverting them would make it approve. Diffing returned/bind-adapter-old-8 against f693686 shows exactly those two changes and nothing else. fileDownload.readableWhenSignedOutIfPublic now returns the body only on a 200 and an empty string otherwise, so a signed-out refusal no longer passes the toBeTruthy() checks in R-8.7, R-8.28 and R-8.29. scheduledTransitionTrigger.serviceIsUp returns the trimmed body only when the /status request answers 200, and an empty string otherwise. The only other change is the comment above the first reader, which now describes what it does. The third condition also holds: the absence fixes, the programme-badge Value readers, row links, the Panel Chair checkbox, pressing Edit before editing, uploadFile and the label corrections are byte-identical to old-8. Both readers now only locate and hand over what the target returned, so neither one decides a test. Nothing under tests/acceptance, tests/generated or tests/fixtures differs from main. The runner&#39;s typecheck passed on f693686 with no diagnostics under adapters/old. The earlier branch of serviceIsUp, which reads visible text when the browser is already on /status, is already on main, was not in the returned conditions, and reads the page rather than judging it, so it does not block. Tier is STANDARD and no residual risk is marked unaccepted, so there is nothing to escalate. The ruling would change to return if a later revision touched tests/acceptance, or made either reader return non-empty text for a non-200 answer again.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>Note for a future revision, not required for this approval: serviceIsUp&#39;s early branch returns document.body.innerText when the browser is already on /status, without seeing a status code. If a test ever reaches that reader after navigating to /status, an error page would read as truthy. Route that branch through the same 200-only request.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

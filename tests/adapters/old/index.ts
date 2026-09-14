@@ -25,8 +25,19 @@ import { request as httpsRequest } from "node:https";
 import type { Locator, Page } from "@playwright/test";
 import type { Persona, persona as PersonaTable } from "../../generated/personas";
 import type * as S from "../../generated/surface";
+import { uploadFile } from "../../fixtures/upload";
 
 type Scope = Page | Locator;
+
+// Two ways an observation can come up with nothing, and they are not the same answer.
+// When the page loaded and simply shows nothing there — a label this programme's page does
+// not carry, a panel with no evaluators, a refused upload that stored no file — the reader
+// returns "" and the test decides what that emptiness means. Only when the place itself
+// could not be reached (no record's screen to take an identifier from, no request made)
+// does it throw this.
+function nothing(reason: string): never {
+  throw new Error(`unbound: ${reason}`);
+}
 
 export default function create(
   page: Page,
@@ -46,8 +57,9 @@ export default function create(
         supplied.id ??
         supplied.slug;
       if (value === undefined || value === "") {
+        // Not unbound: the page exists, the caller did not say which record to open.
         throw new Error(
-          `unbound: open — the route ${route} needs a value for ":${name}" and none was supplied`,
+          `open() of ${route} was called without a value for ":${name}" (given: ${JSON.stringify(params ?? {})})`,
         );
       }
       return String(value);
@@ -121,17 +133,27 @@ export default function create(
     return valueBefore(labels);
   }
 
-  async function valueBefore(labels: string[]): Promise<string> {
+  async function findBefore(labels: string[]): Promise<string | null> {
     const lines = await textLines();
     for (let i = 1; i < lines.length; i++) if (labels.includes(lines[i])) return lines[i - 1];
-    return "";
+    return null;
+  }
+
+  // A label the loaded page does not carry reads as nothing: another programme's page, or
+  // a record this reader is not shown, has no such value to give.
+  async function valueBefore(labels: string[]): Promise<string> {
+    return (await findBefore(labels)) ?? "";
   }
 
   // A value shown under its label, the way the definition panels read.
-  async function valueAfter(labels: string[]): Promise<string> {
+  async function findAfter(labels: string[]): Promise<string | null> {
     const lines = await textLines();
     for (let i = 0; i < lines.length - 1; i++) if (labels.includes(lines[i])) return lines[i + 1];
-    return "";
+    return null;
+  }
+
+  async function valueAfter(labels: string[]): Promise<string> {
+    return (await findAfter(labels)) ?? "";
   }
 
   async function sectionFrom(labels: string[], until: string[] = []): Promise<string> {
@@ -218,6 +240,13 @@ export default function create(
 
   // Several columns say yes with an unlabelled tick. Report the mark's presence, or the
   // cell's own words when it has any.
+  // A column or row the loaded list does not show reads as nothing.
+  async function textUnder(rowName: string, header: string): Promise<string> {
+    const cell = await cellUnder(rowName, header);
+    if (!cell) return "";
+    return (await cell.innerText()).trim();
+  }
+
   async function markUnder(rowName: string, header: string): Promise<string> {
     const cell = await cellUnder(rowName, header);
     if (!cell) return "";
@@ -466,6 +495,22 @@ export default function create(
     throw new Error(`unbound: ${where} — nothing to open on ${page.url()}`);
   }
 
+  // The evaluation and consensus lists name each proponent in a plain cell and put the way
+  // in ("Edit", "View", "Start") as a link at the end of the same row.
+  async function openRow(where: string, input: unknown): Promise<void> {
+    const name = asText(input);
+    const bodyRows = seen(page.getByRole("row")).filter({ has: page.getByRole("cell") });
+    const rows = name ? bodyRows.filter({ hasText: name }) : bodyRows;
+    if (!(await rows.count())) {
+      nothing(`${where} — no proponent row${name ? ` for "${name}"` : ""} on ${page.url()}`);
+    }
+    const link = seen(rows.first().getByRole("link"));
+    const count = await link.count();
+    if (!count) nothing(`${where} — the row${name ? ` for "${name}"` : ""} offers no link on ${page.url()}`);
+    await link.nth(count - 1).click();
+    await settle();
+  }
+
   // Some controls are told apart only by where they lead.
   async function followTo(where: string, name: string, route: string): Promise<void> {
     const links = seen(page.getByRole("link", { name, exact: true }));
@@ -516,10 +561,31 @@ export default function create(
     return "";
   }
 
+  // A test names a file the way a person would ({ file: "scan0001.pdf", content?, bytes? }),
+  // never by where it lives. The harness makes a real file under that name for the chooser.
   function filePaths(input: unknown): string[] {
-    const named = field(input, "path", "file", "files", "attachment");
-    if (named) return named.split(", ").filter(Boolean);
-    return asList(input);
+    const one = (item: unknown): string | null => {
+      if (typeof item === "string") return item ? uploadFile({ name: item }) : null;
+      if (!item || typeof item !== "object") return null;
+      const record = item as Record<string, unknown>;
+      const name = ["file", "name", "fileName", "file_name", "attachment", "image"]
+        .map((key) => record[key])
+        .find((value): value is string => typeof value === "string" && value.length > 0);
+      if (!name) return null;
+      const content = record.content ?? record.contents;
+      const bytes = record.bytes ?? record.size ?? record.sizeBytes;
+      return uploadFile({
+        name,
+        content: typeof content === "string" || content instanceof Uint8Array ? content : undefined,
+        bytes: typeof bytes === "number" ? bytes : undefined,
+      });
+    };
+    const listed =
+      input && typeof input === "object" && !Array.isArray(input)
+        ? (input as Record<string, unknown>).files
+        : undefined;
+    const items = Array.isArray(listed) ? listed : Array.isArray(input) ? input : [input];
+    return items.map(one).filter((path): path is string => path !== null);
   }
 
   function indexOf(input: unknown): number {
@@ -625,20 +691,22 @@ export default function create(
   // A record's own screen carries its identifier in the address it lands on.
   const UUID = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
 
-  function fromAddress(pattern: string): string {
+  function fromAddress(pattern: string, what = "identifier"): string {
     const match = new RegExp(pattern).exec(new URL(page.url()).pathname);
-    return match ? match[1] : "";
+    return match ? match[1] : nothing(`no ${what} in the address ${page.url()}`);
   }
 
-  const opportunityId = (): string => fromAddress(`^/opportunities/[a-z-]+/(${UUID})`);
-  const proposalId = (): string => fromAddress(`/proposals/(${UUID})`);
-  const organizationId = (): string => fromAddress(`^/organizations/(${UUID})`);
+  const opportunityId = (): string =>
+    fromAddress(`^/opportunities/[a-z-]+/(${UUID})`, "opportunity identifier");
+  const proposalId = (): string => fromAddress(`/proposals/(${UUID})`, "proposal identifier");
+  const organizationId = (): string =>
+    fromAddress(`^/organizations/(${UUID})`, "organization identifier");
 
   // "/users/me" keeps "me" in its address, so the tabs beside the profile are read
   // instead: each one leads to the same person under their own identifier.
   async function userId(): Promise<string> {
-    const shown = fromAddress(`^/users/(${UUID})`);
-    if (shown) return shown;
+    const shown = new RegExp(`^/users/(${UUID})`).exec(new URL(page.url()).pathname);
+    if (shown) return shown[1];
     const links = seen(page.getByRole("link"));
     const count = await links.count();
     for (let i = 0; i < count; i++) {
@@ -646,7 +714,7 @@ export default function create(
       const match = new RegExp(`^/users/(${UUID})\\?tab=`).exec(href);
       if (match) return match[1];
     }
-    return "";
+    return nothing(`no user identifier in the address or the profile tabs on ${page.url()}`);
   }
 
   // The History tab lists its entries newest first, each signed by the person who made
@@ -670,6 +738,7 @@ export default function create(
       const at = own.toLowerCase().lastIndexOf(shown.toLowerCase());
       return at >= 0 ? own.slice(at, at + shown.length) : shown;
     }
+    // The tab opened and lists nobody.
     return "";
   }
 
@@ -708,10 +777,26 @@ export default function create(
 
   // A refusal reads as its status and the body it came with, and only when the latest
   // answer was one; a request that went through reads as nothing.
+  // An answer must exist before it can be read; with no request made there is nothing.
+  function answer(what: string): Answer {
+    return lastAnswer ?? nothing(`${what} — no request has been made on this surface yet`);
+  }
+
+  // The body of a successful answer, field by field; a refusal carries no such field and
+  // reads as nothing.
+  function answeredField(what: string, key: string): string {
+    const got = answer(what);
+    if (got.status !== 200) return "";
+    const value = answered()[key];
+    if (value === undefined || value === null) return "";
+    return String(value);
+  }
+
   function refusal(isRefusal: (status: number) => boolean, about?: RegExp): string {
-    if (!lastAnswer || !isRefusal(lastAnswer.status)) return "";
-    if (about && !matches(about, lastAnswer.body)) return "";
-    return `${lastAnswer.status} ${lastAnswer.body}`;
+    const got = answer("refusal");
+    if (!isRefusal(got.status)) return "";
+    if (about && !matches(about, got.body)) return "";
+    return `${got.status} ${got.body}`;
   }
 
   // ---------------------------------------------------------------- sign in and out
@@ -915,7 +1000,7 @@ export default function create(
       await option.first().click();
       await settle();
     }
-    if (chair) await choose(where, ["Chair"], chair);
+    if (chair) await makeChair(where, chair);
   }
 
   // The three public opportunity pages share their shape; only the money and the middle
@@ -942,13 +1027,23 @@ export default function create(
       },
       // The badge sits directly under the programme's name in the page header.
       status: () => valueAfter([programme]),
-      proposalDeadline: () => valueBefore(["Proposal Deadline", "Proposals Deadline"]),
+      // Team With Us calls its deadline the "Closing Date".
+      proposalDeadline: () =>
+        valueBefore(["Proposal Deadline", "Proposals Deadline", "Closing Date"]),
       addenda: () => tabContent(["Addenda"]),
       successfulProponent: async () => {
-        const named = await valueAfter(["Successful Proponent", "Awarded To"]);
+        const named = await findAfter(["Successful Proponent", "Awarded To"]);
         return named || linesMatching(/successful proponent/i);
       },
     };
+  }
+
+  // All three programmes label their money "Value", so a programme's figure is read only
+  // from a page whose badge names that programme. Another programme's page, or the
+  // "Not Found" screen a withheld record shows, has no such figure and reads as nothing.
+  async function programmeValue(programme: string, labels: string[]): Promise<string> {
+    if (!(await textLines()).includes(programme)) return "";
+    return valueBefore(labels);
   }
 
   const opportunityCwuView: S.OpportunityCwuViewPage = {
@@ -957,7 +1052,7 @@ export default function create(
       "/opportunities/code-with-us/:opportunityId",
       "Code With Us",
     ),
-    reward: () => valueBefore(["Value", "Fixed-Price Award", "Reward"]),
+    reward: () => programmeValue("Code With Us", ["Value", "Fixed-Price Award", "Reward"]),
   };
 
   const opportunitySwuView: S.OpportunitySwuViewPage = {
@@ -966,8 +1061,9 @@ export default function create(
       "/opportunities/sprint-with-us/:opportunityId",
       "Sprint With Us",
     ),
-    totalMaxBudget: () => valueBefore(["Total Maximum Budget", "Maximum Budget", "Value"]),
-    phases: () => sectionFrom(["Phases", "Phase Information"], ["Addenda", "Attachments"]),
+    totalMaxBudget: () =>
+      programmeValue("Sprint With Us", ["Total Maximum Budget", "Maximum Budget", "Value"]),
+    phases: () => sectionFrom(["Phases of Work", "Phases"], ["Addenda", "Attachments"]),
   };
 
   const opportunityTwuView: S.OpportunityTwuViewPage = {
@@ -976,8 +1072,10 @@ export default function create(
       "/opportunities/team-with-us/:opportunityId",
       "Team With Us",
     ),
-    maxBudget: () => valueBefore(["Maximum Budget", "Value"]),
-    resources: () => sectionFrom(["Resources", "Resource Details"], ["Addenda", "Attachments"]),
+    maxBudget: () =>
+      programmeValue("Team With Us", ["Maximum Contract Value", "Maximum Budget", "Value"]),
+    // The resources sought are listed under "Service Areas" with their allocation.
+    resources: () => sectionFrom(["Service Areas"], ["Required Skills", "Addenda"]),
   };
 
   // The management pages share a sidebar of tabs and an Actions menu.
@@ -1136,8 +1234,8 @@ export default function create(
       if (new URL(page.url()).pathname === "/status") {
         return (await page.evaluate(() => document.body.innerText)).trim();
       }
-      const answer = await ask("scheduled-transition-trigger.service_is_up", baseURL + "/status");
-      return answer.status === 200 ? answer.body.trim() : "";
+      const got = await ask("scheduled-transition-trigger.service_is_up", baseURL + "/status");
+      return got.status === 200 ? got.body.trim() : "";
     },
   };
 
@@ -1321,7 +1419,7 @@ export default function create(
     addAttachment: (input) => addAttachment("proposal-cwu-edit.add_attachment", input),
     removeAttachment: (input) => removeAttachment("proposal-cwu-edit.remove_attachment", input),
     submittedAt: async () => {
-      const shown = await valueAfter(["Submitted On", "Submitted At", "Submitted"]);
+      const shown = await findAfter(["Submitted On", "Submitted At", "Submitted"]);
       return shown || linesMatching(/submitted/i);
     },
     score: () => valueAfter(["Score", "Total Score"]),
@@ -1552,14 +1650,8 @@ export default function create(
       press("organization-list.create_organization", ["Create Organization"], navBar()),
     myOrganizations: () =>
       press("organization-list.my_organizations", ["My Organizations"], navBar()),
-    organizationName: async () => {
-      const cell = await cellUnder("", "Organization Name");
-      return cell ? (await cell.innerText()).trim() : "";
-    },
-    ownerName: async () => {
-      const cell = await cellUnder("", "Owner");
-      return cell ? (await cell.innerText()).trim() : "";
-    },
+    organizationName: () => textUnder("", "Organization Name"),
+    ownerName: () => textUnder("", "Owner"),
     swuQualifiedMark: () => markUnder("", "SWU Qualified?"),
     twuQualifiedMark: () => markUnder("", "TWU Qualified?"),
     pagination: async () => {
@@ -1619,11 +1711,6 @@ export default function create(
       const kind = field(input, "membershipType", "membership_type", "kind");
       if (kind && kind.toUpperCase() !== "MEMBER") {
         const organization = organizationId();
-        if (!organization) {
-          throw new Error(
-            `unbound: organization-edit.add_team_members — no organization in the address ${page.url()} to invite to`,
-          );
-        }
         const invited = asList(field(input, "emails", "email", "userEmail"));
         for (const userEmail of invited.length ? invited : [""]) {
           await ask("organization-edit.add_team_members", baseURL + "/api/affiliations", {
@@ -1770,7 +1857,8 @@ export default function create(
     // The latest refusal, whole, when the invitation was refused; otherwise whatever
     // messages the screen is showing.
     async invalidMembershipTypeError() {
-      return refusal((status) => status >= 400) || messages();
+      // An invitation made through the Team dialog sends no request of ours to read.
+      return (lastAnswer ? refusal((status) => status >= 400) : "") || messages();
     },
   };
 
@@ -1852,10 +1940,7 @@ export default function create(
         sectionFrom(["Owned Organizations"], ["Affiliated Organizations"]),
       affiliatedOrganizationsTable: () => sectionFrom(["Affiliated Organizations"]),
       pendingBadge: () => linesMatching(/\bPending\b/),
-      teamMemberCount: async () => {
-        const cell = await cellUnder("", "Team Members");
-        return cell ? (await cell.innerText()).trim() : "";
-      },
+      teamMemberCount: () => textUnder("", "Team Members"),
       swuQualifiedMark: () => markUnder("", "SWU Qualified?"),
       async emptyOwnedMessage() {
         const owned = await sectionFrom(["Owned Organizations"], ["Affiliated Organizations"]);
@@ -2031,6 +2116,7 @@ export default function create(
       const box = seen(page.getByRole("textbox", { name: label, exact: false }));
       if (await box.count()) return (await box.first().inputValue()).trim();
     }
+    // Read-only, the profile shows the value as plain words under its label.
     return valueAfter(labels);
   }
 
@@ -2161,19 +2247,84 @@ export default function create(
     },
   };
 
+  // The panel tab shows each evaluator as "Evaluator N", a "Panel Member*" chooser showing
+  // who is picked, and a "Panel Chair" box. It is read-only until "Edit" in the top bar is
+  // pressed, which is what an owner or administrator does before changing it.
+  async function editingPanel(where: string): Promise<void> {
+    if (await seen(page.getByRole("combobox", { name: "Panel Member", exact: false })).count()) return;
+    const edit = await findControl(navBar(), "Edit");
+    if (!edit) nothing(`${where} — the evaluation panel is not editable and offers no "Edit" on ${page.url()}`);
+    await edit.click();
+    await settle();
+  }
+
+  // The evaluators in order, each with who is picked and whether they chair. A page that
+  // shows no evaluators — as it does to a vendor or to staff with no part in the
+  // opportunity — gives an empty list, and the readers built on it read as nothing.
+  async function panelMembers(): Promise<{ name: string; chair: boolean }[]> {
+    const lines = await textLines();
+    const names: string[] = [];
+    for (let i = 0; i < lines.length - 1; i++) {
+      if (matches(/^Panel Member\*?$/, lines[i])) names.push(lines[i + 1]);
+    }
+    const boxes = seen(page.getByRole("checkbox", { name: "Panel Chair", exact: true }));
+    const count = await boxes.count();
+    const members: { name: string; chair: boolean }[] = [];
+    for (let i = 0; i < Math.max(names.length, count); i++) {
+      members.push({
+        name: names[i] ?? "",
+        chair: i < count ? await boxes.nth(i).isChecked() : false,
+      });
+    }
+    return members;
+  }
+
+  async function chairBox(where: string, input: unknown): Promise<Locator> {
+    const boxes = seen(page.getByRole("checkbox", { name: "Panel Chair", exact: true }));
+    const count = await boxes.count();
+    if (!count) nothing(`${where} — no "Panel Chair" box on ${page.url()}`);
+    const name = field(input, "member", "user", "name", "email") || (typeof input === "string" ? input : "");
+    if (name) {
+      const members = await panelMembers();
+      const at = members.findIndex((member) => member.name.toLowerCase().includes(name.toLowerCase()));
+      if (at < 0 || at >= count) nothing(`${where} — no evaluator matching "${name}" on ${page.url()}`);
+      return boxes.nth(at);
+    }
+    return boxes.nth(Math.min(indexOf(input), count - 1));
+  }
+
+  async function makeChair(where: string, input: unknown): Promise<void> {
+    await editingPanel(where);
+    const box = await chairBox(where, input);
+    if (!(await box.isChecked())) await box.click();
+    await settle();
+  }
+
   function evaluationPanel(where: string, route: string) {
     return {
       ...at(route),
-      addPanelMember: (input: unknown) => setEvaluationPanel(`${where}.add_panel_member`, input),
-      removePanelMember: () =>
-        press(`${where}.remove_panel_member`, ["Remove this evaluator", "Remove"]),
-      choosePanelChair: (input: unknown) =>
-        choose(`${where}.choose_panel_chair`, ["Chair"], asText(input)),
-      markMemberAsChair: () => tick(`${where}.mark_member_as_chair`, ["Panel Chair"]),
+      addPanelMember: async (input: unknown) => {
+        await editingPanel(`${where}.add_panel_member`);
+        await setEvaluationPanel(`${where}.add_panel_member`, input);
+      },
+      removePanelMember: async () => {
+        await editingPanel(`${where}.remove_panel_member`);
+        await press(`${where}.remove_panel_member`, ["Remove this evaluator", "Remove"]);
+      },
+      choosePanelChair: (input: unknown) => makeChair(`${where}.choose_panel_chair`, input),
+      markMemberAsChair: (input: unknown) => makeChair(`${where}.mark_member_as_chair`, input),
       saveEvaluationPanel: () =>
         press(`${where}.save_evaluation_panel`, ["Save Changes", "Save"], navBar()),
-      panelMemberRow: () => sectionFrom(["Evaluation Panel"], ["Panel Chair"]),
-      chairField: () => valueAfter(["Chair", "Chair*"]),
+      panelMemberRow: async () =>
+        (await panelMembers())
+          .map((member) => `${member.name}${member.chair ? " (Panel Chair)" : ""}`)
+          .join("\n"),
+      // Who chairs, by the name the chooser shows; nobody ticked reads as nobody.
+      chairField: async () =>
+        (await panelMembers())
+          .filter((member) => member.chair)
+          .map((member) => member.name)
+          .join("\n"),
       minimumMembersError: () => messages(/two|minimum|at least/i),
       duplicateMemberError: () => messages(/duplicate|already/i),
       nonPublicSectorMemberError: () => messages(/public sector|identifier/i),
@@ -2210,7 +2361,7 @@ export default function create(
     return {
       ...at(route),
       openProponentEvaluation: (input: unknown) =>
-        openNamed(`${where}.open_proponent_evaluation`, input),
+        openRow(`${where}.open_proponent_evaluation`, input),
       submitScoresForConsensus: async () => {
         await press(`${where}.submit_scores_for_consensus`, [
           "Submit Scores for Consensus",
@@ -2248,7 +2399,7 @@ export default function create(
     return {
       ...at(route),
       openProponentConsensus: (input: unknown) =>
-        openNamed(`${where}.open_proponent_consensus`, input),
+        openRow(`${where}.open_proponent_consensus`, input),
       submitFinalConsensusScores: () =>
         press(`${where}.submit_final_consensus_scores`, [
           "Submit Consensus Scores",
@@ -2297,20 +2448,39 @@ export default function create(
   // "Score" field, in question order, so a question is picked by its position.
   function scoreSheet(where: string, route: string) {
     const tab = route.includes("/team-questions/") ? "teamQuestions" : "resourceQuestions";
+    // A saved sheet shows its boxes disabled until "Edit" in the top bar is pressed. The
+    // consensus sheet leaves its boxes unlabelled: one number box and one text box per
+    // question, under "Consensus Score", so there they are taken by kind and position.
     async function enter(member: string, labels: string[], input: unknown): Promise<void> {
-      const value = field(input, "score", "notes", "value") || asText(input);
+      const kind = labels.includes("Score") ? "spinbutton" : "textbox";
+      const value =
+        field(input, kind === "spinbutton" ? "score" : "notes", "value") || asText(input);
       const which = indexOf(input) || Math.max(0, Number.parseInt(field(input, "question"), 10) - 1 || 0);
+      let boxes: Locator | null = null;
       for (const label of labels) {
-        for (const role of ["spinbutton", "textbox"] as const) {
-          const boxes = seen(page.getByRole(role, { name: label, exact: false }));
-          const count = await boxes.count();
-          if (!count) continue;
-          const box = boxes.nth(Math.min(which, count - 1));
-          await box.fill(value);
-          await box.blur().catch(() => undefined);
-          await settle();
-          return;
+        const named = seen(page.getByRole(kind, { name: label, exact: false }));
+        if (await named.count()) {
+          boxes = named;
+          break;
         }
+      }
+      if (!boxes && (await seen(page.getByText("Consensus Score", { exact: true })).count())) {
+        boxes = seen(page.getByRole("main").getByRole(kind));
+      }
+      const count = boxes ? await boxes.count() : 0;
+      if (boxes && count) {
+        const box = boxes.nth(Math.min(which, count - 1));
+        if (await box.isDisabled()) {
+          const edit = await findControl(navBar(), "Edit");
+          if (edit) {
+            await edit.click();
+            await settle();
+          }
+        }
+        await box.fill(value);
+        await box.blur().catch(() => undefined);
+        await settle();
+        return;
       }
       throw new Error(
         `unbound: ${where}.${member} — no field labelled ${quoted(labels)} on ${page.url()}`,
@@ -2582,7 +2752,7 @@ export default function create(
     serviceLevelAgreementLink: async () =>
       (await slaLink().count()) ? (await slaLink().first().innerText()).trim() : "",
     linkTargetAddress: async () =>
-      (await slaLink().count()) ? ((await slaLink().first().getAttribute("href")) ?? "") : "",
+      ((await slaLink().count()) ? await slaLink().first().getAttribute("href") : null) ?? "",
     async answerAtLinkTarget() {
       if (await slaLink().count()) {
         const href = await slaLink().first().getAttribute("href");
@@ -2615,14 +2785,8 @@ export default function create(
     pageTitle: () => tableText(),
     pagePublicAddress: () => linesMatching(/^\/CONTENT\//i),
     pageIsFixed: () => markUnder("", "Fixed?"),
-    pageCreatedDate: async () => {
-      const cell = await cellUnder("", "Created");
-      return cell ? (await cell.innerText()).trim() : "";
-    },
-    pageUpdatedDate: async () => {
-      const cell = await cellUnder("", "Updated");
-      return cell ? (await cell.innerText()).trim() : "";
-    },
+    pageCreatedDate: () => textUnder("", "Created"),
+    pageUpdatedDate: () => textUnder("", "Updated"),
     orderedByTitle: () => tableText(),
     refusedForNonAdministrator: () => contentText(),
   };
@@ -2897,8 +3061,14 @@ export default function create(
         "file-upload.upload_file_with_malformed_read_access",
         uploadForm(input, readAccess(input) ?? "{not a read access"),
       ),
-    storedFileIdentifier: async () =>
-      lastAnswer && lastAnswer.status < 300 ? String(answered().id ?? "") : "",
+    // A refused upload stored nothing, so it has no identifier to give: that reads as "".
+    // Only reading before any upload was sent at all is unreachable.
+    storedFileIdentifier: async () => {
+      const got = answer("file-upload.stored_file_identifier");
+      if (got.status >= 300) return "";
+      const id = answered().id;
+      return id ? String(id) : "";
+    },
     // The refusal readers hand over the latest refusal whole — its status and its body —
     // and leave it to the test to decide what that refusal says.
     refusedForSize: async () => refusal((status) => status >= 400),
@@ -2907,9 +3077,10 @@ export default function create(
     refusedForReadAccess: async () => refusal((status) => status >= 400),
     refusedWhenSignedOut: async () => refusal((status) => status === 401),
     serviceFault: async () => {
-      if (!lastAnswer || lastAnswer.status < 500) return "";
+      const got = answer("file-upload.service_fault");
+      if (got.status < 500) return "";
       const message = answered().message;
-      return `${lastAnswer.status} ${typeof message === "string" ? message : lastAnswer.body}`;
+      return `${got.status} ${typeof message === "string" ? message : got.body}`;
     },
   };
 
@@ -2917,12 +3088,12 @@ export default function create(
     open: async (params) => {
       await ask("file-description.open", address("/api/files/:fileId", params));
     },
-    fileIdentifier: async () => (lastAnswer?.status === 200 ? String(answered().id ?? "") : ""),
-    fileName: async () => (lastAnswer?.status === 200 ? String(answered().name ?? "") : ""),
-    storedDate: async () => (lastAnswer?.status === 200 ? String(answered().createdAt ?? "") : ""),
+    fileIdentifier: async () => answeredField("file-description.file_identifier", "id"),
+    fileName: async () => answeredField("file-description.file_name", "name"),
+    storedDate: async () => answeredField("file-description.stored_date", "createdAt"),
     // The description names the stored content by the digest it is kept under.
     storedContentIdentifier: async () =>
-      lastAnswer?.status === 200 ? String(answered().fileBlob ?? "") : "",
+      answeredField("file-description.stored_content_identifier", "fileBlob"),
     refusedWhenNotPermitted: async () => refusal((status) => status === 401 || status === 403),
     refusedForUnknownFile: async () => refusal((status) => status === 404),
     notFoundForAdministrator: async () => refusal((status) => status === 404),
@@ -2940,17 +3111,33 @@ export default function create(
         }),
       );
     },
-    fileContents: async () => (lastAnswer && lastAnswer.status < 300 ? lastAnswer.body : ""),
-    // The name the file is kept under travels in the disposition the answer carries.
+    fileContents: async () => {
+      // A refused download hands over no contents.
+      const got = answer("file-download.file_contents");
+      return got.status < 300 ? got.body : "";
+    },
+    // The name the file is kept under travels in the disposition the answer carries; an
+    // answer that names no file reads as nothing.
     fileNameOnSave: async () => {
+      answer("file-download.file_name_on_save");
       const match = /filename\*?=(?:UTF-8'')?"?([^";]+)"?/i.exec(header("content-disposition"));
       return match ? decodeURIComponent(match[1]) : "";
     },
-    offeredAsDownloadNotDisplayed: async () =>
-      matches(/attachment/i, header("content-disposition")) ? "attachment" : "",
-    contentTypeFromName: async () => header("content-type"),
-    readableWhenSignedOutIfPublic: async () =>
-      lastAnswer && lastAnswer.status === 200 ? lastAnswer.body : "",
+    // "attachment" or "inline" as the answer states it; a stated nothing reads as nothing.
+    offeredAsDownloadNotDisplayed: async () => {
+      answer("file-download.offered_as_download_not_displayed");
+      const disposition = header("content-disposition");
+      return /^\s*(attachment|inline)/i.exec(disposition)?.[1].toLowerCase() ?? "";
+    },
+    contentTypeFromName: async () => {
+      answer("file-download.content_type_from_name");
+      return header("content-type");
+    },
+    // The body only when the file was actually read; a refusal reads as nothing.
+    readableWhenSignedOutIfPublic: async () => {
+      const got = answer("file-download.readable_when_signed_out_if_public");
+      return got.status === 200 ? got.body : "";
+    },
     refusedWhenNotPermitted: async () => refusal((status) => status === 401 || status === 403),
     refusedForUnknownFile: async () => refusal((status) => status === 404),
     notFoundForAdministrator: async () => refusal((status) => status === 404),
@@ -3046,10 +3233,12 @@ export default function create(
       const source = await images.nth(i).getAttribute("src");
       if (source && source.includes("/api/")) return source;
     }
+    // Only the placeholder, or no picture at all: nothing is stored to point at.
     return "";
   }
 
-  // The size the image was stored at, read by loading the stored image itself.
+  // The size the image was stored at, read by loading the stored image itself. With no
+  // stored image, or one the service will not hand back, there is no size to read.
   async function storedImageSize(): Promise<{ width: number; height: number } | null> {
     const source = await storedImageAddress();
     if (!source) return null;
@@ -3108,9 +3297,12 @@ export default function create(
         const source = await images.nth(i).getAttribute("src");
         if (source && source.includes("/api/files/")) {
           const response = await page.request.get(source).catch(() => null);
-          return response ? String(response.status()) : "";
+          return response
+            ? String(response.status())
+            : nothing(`file-image-picker.image_readable_when_signed_out — ${source} could not be requested`);
         }
       }
+      // No stored picture on the loaded page: nothing to be readable.
       return "";
     },
   };
