@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-triage-old-5 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">90</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">90</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">79</span></a></li><li><a href="../runs.html">Run log <span class="count">8</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-triage-old-5</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-14 21:15</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>28 criterion(s) fail against old: which of them did this project&#39;s own adapter cause?</h2>
+<p><strong>Recommendation.</strong> Sort R-2.24, R-8.25, R-6.26, R-4.27, R-1.28, R-3.28, R-8.28, R-3.30, R-1.31, R-4.31, R-8.31, R-1.32, R-3.32, R-4.32, R-1.34, R-2.34, R-1.35, R-2.35, R-1.36, R-2.36, R-1.37, R-2.37, R-1.38, R-2.38, R-1.39, R-1.48, R-1.53, R-1.56 with a triage condition each, so the adapter&#39;s failures are fixed there and only product questions reach the product owner.</p>
+<p>28 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:3000,">http://localhost:3000,</a> and nobody has sorted them yet. Before any reaches the product owner, say which of them this project&#39;s own adapter caused. The adapter is under <code>tests/adapters/old/</code>; read each failure against it and against the test.</p>
+<h4>R-2.24 · v1</h4>
+<p>A vendor sees only the proposals they authored, plus the proposals of organizations they own or administer, and never another vendor&#39;s proposal.</p>
+<ul><li>given: two vendors who each hold a proposal against the same opportunity</li><li>when: each lists their proposals and each opens the other&#39;s proposal directly</li><li>then: each list shows only that vendor&#39;s own proposal, an organization owner additionally sees their organization&#39;s proposals under a separate heading, and opening the other vendor&#39;s proposal is refused</li><li>test: tests/acceptance/proposals/R-2.24.spec.ts</li></ul>
+<p><strong>a vendor sees only the proposals they authored</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<p><strong>a vendor additionally sees the proposals of organizations they own or administer, under a separate heading</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-twu-create.add_resource — no field on http://localhost:3000/opportunities/team-with-us/create takes &quot;order&quot;</code></pre>
+<p><strong>a vendor never sees another vendor&#39;s proposal</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<h4>R-8.25 · v1</h4>
+<p>A file is also readable through what it is attached to: an attachment on a Code With Us or Sprint With Us opportunity is readable by anyone once that opportunity is publicly visible and by the opportunity&#39;s creator before then, and an attachment on a proposal is readable by whoever may read that proposal.</p>
+<ul><li>given: an attachment on a Code With Us opportunity that has not yet been published</li><li>when: a vendor asks for it, and then the opportunity is published and the same vendor asks again</li><li>then: the vendor is refused the first time and receives the file the second time</li><li>test: tests/acceptance/files/R-8.25.spec.ts</li></ul>
+<p><strong>an attachment on a Code With Us opportunity is refused to a vendor before the opportunity is publicly visible, and readable by them once it is</strong> — failed</p>
+<pre><code>Error: unbound: file-attachment-control.add_attachment — could not reach a step showing &quot;Add Attachment&quot; on http://localhost:3000/opportunities/code-with-us/3ccb82f6-91e2-4d09-95cb-a417f21bb0b2/edit?tab=opportunity</code></pre>
+<p><strong>an attachment on a Sprint With Us opportunity is refused to a vendor before the opportunity is publicly visible, and readable by them once it is</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-swu-create.add_phase — no field on http://localhost:3000/opportunities/sprint-with-us/create takes &quot;startDate&quot;, &quot;completionDate&quot;, &quot;maxBudget&quot;, &quot;capabilities&quot;</code></pre>
+<p><strong>an attachment on an opportunity that is not yet publicly visible is readable by the opportunity&#39;s creator</strong> — failed</p>
+<pre><code>Error: unbound: file-attachment-control.add_attachment — could not reach a step showing &quot;Add Attachment&quot; on http://localhost:3000/opportunities/code-with-us/30c3533d-5672-4d68-aecf-7d5570a2e254/edit?tab=opportunity</code></pre>
+<p><strong>an attachment on a proposal is readable by whoever may read that proposal</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<h4>R-6.26 · v2</h4>
+<p>When the service notifies an account that holds no email address it composes the message all the same and hands it over with an empty list of recipients; any resulting failure is written to the operational log only, nothing in the service records that the person was not reached, and a broadcast to many vendors always continues to the next recipient because no failure in composing or sending can interrupt it.</p>
+<ul><li>given: a vendor whose account holds no email address, because the identity provider supplied none</li><li>when: an administrator announces changed terms</li><li>then: the service composes a message for that account addressed to nobody and hands it on to be sent, and what follows depends on the sending machinery rather than on anything the service decides</li><li>test: tests/acceptance/notifications/R-6.26.spec.ts</li></ul>
+<p><strong>when the service notifies an account that holds no email address, a broadcast to many vendors always continues to the next recipient because no failure in composing or sending can interrupt it</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+Expected: &gt; [32m0[39m
+Received:   [31m0[39m
+
+Call Log:
+- Timeout 10000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-4.27 · v2</h4>
+<p>A profile requires a name of between one and one hundred characters and an email address in a valid format, which is stored in lower case; the job title may be left blank and is limited to one hundred characters, and the profile picture is optional.</p>
+<ul><li>given: a person editing their own profile</li><li>when: they clear the name, or enter an email address that is not in a valid format</li><li>then: the profile is not saved and the offending field is reported as invalid, while the same profile saves with the job title and picture left empty</li><li>test: tests/acceptance/users/R-4.27.spec.ts</li></ul>
+<p><strong>a profile requires a name, so clearing the name is refused and the profile is not saved</strong> — failed</p>
+<pre><code>Error: user-profile-self.save_changes — &quot;Save Changes&quot; is disabled on http://localhost:3000/users/me; the page shows no message</code></pre>
+<p><strong>a profile requires a name of no more than one hundred characters</strong> — failed</p>
+<pre><code>Error: user-profile-self.save_changes — &quot;Save Changes&quot; is disabled on http://localhost:3000/users/me; the page shows no message</code></pre>
+<p><strong>a profile requires an email address in a valid format</strong> — failed</p>
+<pre><code>Error: user-profile-self.save_changes — &quot;Save Changes&quot; is disabled on http://localhost:3000/users/me; the page shows no message</code></pre>
+<p><strong>the job title is limited to one hundred characters</strong> — failed</p>
+<pre><code>Error: user-profile-self.save_changes — &quot;Save Changes&quot; is disabled on http://localhost:3000/users/me; the page shows no message</code></pre>
+<h4>R-1.28 · v1</h4>
+<p>Only an administrator may cancel an opportunity, and only once it has been published.</p>
+<ul><li>given: an opportunity that is published or at any evaluation stage or in processing</li><li>when: an administrator cancels it, giving an optional note of up to 1,000 characters</li><li>then: the opportunity moves to cancelled and stops accepting proposals</li><li>test: tests/acceptance/opportunities/R-1.28.spec.ts</li></ul>
+<p><strong>an administrator may cancel a published opportunity</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<p><strong>a member of public sector staff who is not an administrator may not cancel an opportunity</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-edit.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/694d6182-0705-4bf5-94ec-820ca57e8180/edit?tab=opportunity; the page shows no message</code></pre>
+<p><strong>an opportunity may only be cancelled once it has been published</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-cwu-edit.cancel_opportunity — no control labelled &quot;Cancel&quot; on http://localhost:3000/opportunities/code-with-us/d9cc1a74-c953-46dc-a8c9-bcf2cddb3123/edit?tab=opportunity</code></pre>
+<h4>R-3.28 · v1</h4>
+<p>Only an administrator may set which service areas an organization is approved for, and saving a selection replaces the organization&#39;s previous approvals entirely.</p>
+<ul><li>given: an organization approved for two service areas</li><li>when: an administrator edits the service areas, leaves one of the two ticked, ticks a third, and saves</li><li>then: the organization is approved for exactly the two areas that were ticked and no longer for the one that was cleared, and the same page offers no editing control to the organization&#39;s own owner</li><li>test: tests/acceptance/organizations/R-3.28.spec.ts</li></ul>
+<p><strong>when an administrator saves a selection of service areas the organization is approved for exactly the areas that were ticked and no longer for the one that was cleared</strong> — failed</p>
+<pre><code>TimeoutError: locator.click: Timeout 15000ms exceeded.
+Call log:
+[2m  - waiting for getByRole(&#39;link&#39;, { name: &#39;TWU Qualification&#39;, exact: true }).visible().first()[22m
+[2m    - locator resolved to &lt;a tabindex=&quot;0&quot; href=&quot;/organizations/00000000-0000-4000-8000-000000000301/edit?tab=twuQualification&quot; class=&quot;a d-inline-flex align-items-center flex-nowrap mb-3 text-start text-wrap text-c-sidebar-menu-link-active-fg position-relative btn btn-md btn-c-sidebar-menu-link-active-bg&quot;&gt;…&lt;/a&gt;[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - &lt;div role=&quot;dialog&quot; tabindex=&quot;-1&quot; aria-modal=&quot;true&quot; class=&quot;modal fade&quot;&gt;…&lt;/div&gt; from &lt;div tabindex=&quot;-1&quot;&gt;…&lt;/div&gt; subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - &lt;div role=&quot;dialog&quot; tabindex=&quot;-1&quot; aria-modal=&quot;true&quot; class=&quot;modal fade&quot;&gt;…&lt;/div&gt; from &lt;div tabindex=&quot;-1&quot;&gt;…&lt;/div&gt; subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m    29 × waiting for element to be visible, enabled and stable[22m
+… 7 more line(s)</code></pre>
+<h4>R-8.28 · v1</h4>
+<p>Profile pictures and organization logos are marked readable by anyone.</p>
+<ul><li>given: an organization with a logo</li><li>when: a visitor who is not signed in opens the organization list</li><li>then: the logo is shown to them</li><li>test: tests/acceptance/files/R-8.28.spec.ts</li></ul>
+<p><strong>organization logos are marked readable by anyone</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-3.30 · v1</h4>
+<p>Inviting an email address that belongs to nobody registered with the service creates no membership; the address is instead sent an invitation to register, and the inviter is told the person was not registered but has been notified.</p>
+<ul><li>given: an organization whose owner is inviting team members</li><li>when: they invite an email address that no registered account uses</li><li>then: no pending membership appears on the team list, the address receives an invitation to register with the service, and the owner is shown a warning naming that address</li><li>test: tests/acceptance/organizations/R-3.30.spec.ts</li></ul>
+<p><strong>inviting an email address that no registered account uses creates no pending membership, sends that address an invitation to register, and warns the inviter</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;nobody.registered.here@example.test&quot;[39m
+Received string:    [31m&quot;&quot;[39m</code></pre>
+<h4>R-1.31 · v1</h4>
+<p>Public sector staff cannot see the proposals submitted against an opportunity until it has left the published state.</p>
+<ul><li>given: a published opportunity that has received proposals</li><li>when: its author or an administrator asks to see the proposals</li><li>then: the request is refused until the opportunity has closed and moved to an evaluation stage</li><li>test: tests/acceptance/opportunities/R-1.31.spec.ts</li></ul>
+<p><strong>public sector staff cannot see the proposals submitted against an opportunity while it is published</strong> — failed</p>
+<pre><code>Error: proposal-cwu-create.accept_program_terms — &quot;Submit&quot; is disabled on http://localhost:3000/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/proposals/create; the page shows no message</code></pre>
+<h4>R-4.31 · v2</h4>
+<p>A request to deactivate an account that is already inactive is refused with a message saying the account is already inactive; an administrator viewing their own profile is offered no deactivation control, but that restriction rests on the interface alone, since the service accepts a deactivation request made against the requester&#39;s own account.</p>
+<ul><li>given: an already deactivated account, and an administrator viewing their own profile</li><li>when: a second deactivation is requested for the first, and the administrator looks for a deactivation control on their own profile</li><li>then: the second request is refused with a message saying the account is already inactive, and the administrator&#39;s own profile offers no such control</li><li>test: tests/acceptance/users/R-4.31.spec.ts</li></ul>
+<p><strong>an administrator viewing their own profile is offered no deactivation control</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;Deactivate&quot;[39m
+Received string:    [31m&quot;Digital Marketplace[39m
+[31madmin.one@example.test[39m
+[31mDashboard[39m
+[31m|[39m
+[31mOpportunities[39m
+[31m|[39m
+[31mOrganizations[39m
+[31m|[39m
+[31mUsers[39m
+[31m|[39m
+[31mContent[39m
+[31mAldous Quillfeather[39m
+[31mStatus[39m
+[31mInactive[39m
+[31mAccount Type[39m
+[31mVendor[39m
+[31mProfile Picture (Optional)[39m
+… 6 more line(s)</code></pre>
+<h4>R-8.31 · v1</h4>
+<p>Removing an attachment from an opportunity or a proposal, or deleting the opportunity or proposal it hangs on, withdraws every read path the file held through that association, and a file that no record refers to any longer is identifiable as detached so that stored content can be disposed of under the records-retention rule for procurement attachments, which is set outside this domain.</p>
+<ul><li>test: tests/acceptance/files/R-8.31.spec.ts</li></ul>
+<p><strong>removing an attachment from an opportunity withdraws the read path the file held through that opportunity</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<p><strong>deleting the opportunity an attachment hangs on withdraws the read path the file held through that opportunity</strong> — failed</p>
+<pre><code>Error: unbound: file-attachment-control.add_attachment — could not reach a step showing &quot;Add Attachment&quot; on http://localhost:3000/opportunities/code-with-us/1f12924b-7c49-4ce3-bf4f-5460f7f7d3b9/edit?tab=opportunity</code></pre>
+<p><strong>removing an attachment from a proposal withdraws the read path the file held through that proposal</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<h4>R-1.32 · v1</h4>
+<p>An addendum of 1 to 5,000 characters may be added to any opportunity that is no longer a draft, by an administrator or by the staff member who created it, and cannot be removed afterwards.</p>
+<ul><li>given: a published opportunity</li><li>when: its author adds an addendum</li><li>then: the addendum is appended to the opportunity with its author and date, an entry is added to the opportunity&#39;s history, and there is no action that removes it</li><li>test: tests/acceptance/opportunities/R-1.32.spec.ts</li></ul>
+<p><strong>an addendum may be added to an opportunity that is no longer a draft by the staff member who created it</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-edit.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/d9770c69-06a9-49c9-b041-18ccd4b41d53/edit?tab=opportunity; the page shows no message</code></pre>
+<p><strong>an addendum may be added to an opportunity that is no longer a draft by an administrator</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<p><strong>an addendum cannot be added to an opportunity that is still a draft</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-cwu-edit.add_addendum — no tab labelled &quot;Addenda&quot; on http://localhost:3000/opportunities/code-with-us/6b153f12-dae1-45ee-bc71-e1feb076fbf1/edit</code></pre>
+<p><strong>an addendum of more than five thousand characters is refused</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<h4>R-3.32 · v1</h4>
+<p>When an invited person declines an invitation rather than accepting it, the organization&#39;s owner is told the request was rejected.</p>
+<ul><li>given: a person with a pending invitation to an organization</li><li>when: they decline it</li><li>then: the pending membership is gone from the organization&#39;s team list and the owner receives a message saying the person rejected the team request</li><li>test: tests/acceptance/organizations/R-3.32.spec.ts</li></ul>
+<p><strong>when an invited person declines the invitation the pending membership is gone from the team list and the owner is told the request was rejected</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;vendor.invited@example.test&quot;[39m
+Received string:    [31m&quot;TEAM MEMBER	CAPABILITIES	ADMIN··[39m
+[31mBlake Placeholder[39m
+[31mOwner··[39m
+[31m3·····[39m
+[31mCharlie Placeholder··[39m
+[31m3·····[39m
+[31mDana Placeholder··[39m
+[31m3·····[39m
+[31mIndigo Placeholder[39m
+[31mPending··[39m
+[31m0&quot;[39m</code></pre>
+<h4>R-4.32 · v1</h4>
+<p>An administrator may export a contact list of active accounts as a spreadsheet file, choosing whether to include public sector employees, vendors or both, and which of first name, last name, email address and organization name to include; at least one kind and one field must be chosen.</p>
+<ul><li>given: one active vendor belonging to an active organization, one deactivated vendor and one administrator</li><li>when: an administrator exports the contact list with both kinds and all four fields chosen</li><li>then: the file contains the active vendor and the administrator but not the deactivated vendor, the administrator is labelled as such, and the vendor&#39;s row carries their organization&#39;s legal name</li><li>test: tests/acceptance/users/R-4.32.spec.ts</li></ul>
+<p><strong>at least one kind and one field must be chosen before an administrator may export the contact list</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-1.34 · v1</h4>
+<p>Publishing an opportunity notifies everyone who has asked for new-opportunity notifications, and separately confirms the publication to the opportunity&#39;s author.</p>
+<ul><li>given: an opportunity ready to be published and people who have turned notifications on</li><li>when: an administrator publishes it</li><li>then: each of those people receives a notice that a new opportunity has been posted, and the opportunity&#39;s author receives a confirmation</li><li>test: tests/acceptance/opportunities/R-1.34.spec.ts</li></ul>
+<p><strong>publishing an opportunity confirms the publication to the opportunity&#39;s author</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-edit.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/f5d77489-57ef-4dc1-8ebc-fe5a412e5afe/edit?tab=opportunity; the page shows no message</code></pre>
+<h4>R-2.34 · v1</h4>
+<p>A proposal may be disqualified at any stage of evaluation, and doing so requires a written reason of 1 to 5,000 characters.</p>
+<ul><li>given: a proposal at any stage after the opportunity has closed</li><li>when: an administrator disqualifies it without giving a reason</li><li>then: the request is refused, and with a reason given the proposal becomes disqualified, the reason is kept in its history, and the opportunity is re-checked for whether every remaining proposal is now evaluated</li><li>test: tests/acceptance/proposals/R-2.34.spec.ts</li></ul>
+<p><strong>disqualifying a proposal requires a written reason of 1 to 5,000 characters</strong> — failed</p>
+<pre><code>Error: proposal-twu-view.disqualify_proposal — &quot;Disqualify&quot; is disabled on http://localhost:3000/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/proposals/00000000-0000-4000-8000-000000000843; the page shows no message</code></pre>
+<p><strong>a proposal may be disqualified at any stage of evaluation, and the reason is kept in its history</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;disqualif&quot;[39m
+Received string:    [31m&quot;back to opportunity[39m
+[31mvendor proposal[39m
+[31mproposal details[39m
+[31mvendor evaluation[39m
+[31mresource questions[39m
+[31minterview/challenge[39m
+[31mmanagement[39m
+[31mproposal history[39m
+[31mteam with us: vendor proposal[39m
+[31mstatus[39m
+[31mnon-compliant[39m
+[31mproponent[39m
+[31mproponent 3[39m
+[31mthis proposal&#39;s history will be available once the opportunity reaches the challenge.&quot;[39m</code></pre>
+<h4>R-1.35 · v1</h4>
+<p>Changing or adding an addendum to an opportunity that is neither a draft nor cancelled notifies everyone watching it, everyone who has submitted a proposal to it, and its author.</p>
+<ul><li>given: a published opportunity with watchers and submitted proposals</li><li>when: an administrator edits it or adds an addendum</li><li>then: its watchers, its proponents and its author are each notified once</li><li>test: tests/acceptance/opportunities/R-1.35.spec.ts</li></ul>
+<p><strong>changing an opportunity that is neither a draft nor cancelled notifies its author</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+Expected: &gt; [32m0[39m
+Received:   [31m0[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>adding an addendum to an opportunity that is neither a draft nor cancelled notifies its author</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+Expected: &gt; [32m0[39m
+Received:   [31m0[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-2.35 · v1</h4>
+<p>Every change of state and every score entered against a proposal is recorded in its history with who did it, when, and any note given.</p>
+<ul><li>given: a proposal that has been submitted, reviewed and scored</li><li>when: someone entitled to see its history opens it</li><li>then: the history lists each state change and each score entry, newest first, each with its author, its time and its note</li><li>test: tests/acceptance/proposals/R-2.35.spec.ts</li></ul>
+<p><strong>every change of state against a proposal is recorded in its history</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<h4>R-1.36 · v1</h4>
+<p>Cancelling an opportunity notifies everyone watching it and everyone who has submitted a proposal to it, and separately notifies its author.</p>
+<ul><li>given: a published opportunity with watchers and submitted proposals</li><li>when: an administrator cancels it</li><li>then: its watchers and proponents are told it has been cancelled, and its author is told separately that the cancellation was actioned</li><li>test: tests/acceptance/opportunities/R-1.36.spec.ts</li></ul>
+<p><strong>cancelling an opportunity notifies its author</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-edit.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/d7caab1a-f1b6-42c4-84d7-de4ebdc9e6d4/edit?tab=opportunity; the page shows no message</code></pre>
+<h4>R-2.36 · v1</h4>
+<p>Submitting a proposal, awarding one and withdrawing one each send notifications: a confirmation to the submitting vendor, an award notice to the winner and a decision notice to everyone else, and a withdrawal notice to the vendor and to every administrator.</p>
+<ul><li>given: an opportunity with three submitted proposals</li><li>when: one of them is awarded</li><li>then: its vendor receives an award notice and the other two vendors each receive a decision notice, and a later withdrawal sends a notice to the withdrawing vendor and to every administrator</li><li>test: tests/acceptance/proposals/R-2.36.spec.ts</li></ul>
+<p><strong>submitting a proposal sends a confirmation to the submitting vendor</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<p><strong>withdrawing a proposal sends a notice to the vendor and to every administrator</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<h4>R-1.37 · v1</h4>
+<p>Submitting an opportunity for review notifies every administrator, and confirms the submission to its author.</p>
+<ul><li>given: a complete draft opportunity</li><li>when: its author submits it for review</li><li>then: every administrator is notified that an opportunity awaits review, and the author receives a confirmation</li><li>test: tests/acceptance/opportunities/R-1.37.spec.ts</li></ul>
+<p><strong>submitting an opportunity for review confirms the submission to its author</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+Expected: &gt; [32m0[39m
+Received:   [31m0[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-2.37 · v1</h4>
+<p>Anyone entitled to read a proposal can take away a printable copy of it, and staff reading a Sprint With Us or Team With Us copy see the anonymous proponent name until the proposal reaches the challenge stage.</p>
+<ul><li>given: a Sprint With Us proposal under review on its team questions</li><li>when: the opportunity&#39;s author opens its printable copy, and then the vendor who wrote it opens the same copy</li><li>then: the staff copy names the proponent only as &quot;Proponent 1&quot; while the vendor&#39;s own copy names the organization, and once the proposal reaches the code challenge the staff copy names the organization too</li><li>test: tests/acceptance/proposals/R-2.37.spec.ts</li></ul>
+<p><strong>anyone entitled to read a proposal can take away a printable copy of it</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<p><strong>the vendor&#39;s own copy of a Sprint With Us proposal names the organization</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-swu-create.add_phase — no field on http://localhost:3000/opportunities/sprint-with-us/create takes &quot;startDate&quot;, &quot;completionDate&quot;, &quot;maxBudget&quot;, &quot;capabilities&quot;</code></pre>
+<h4>R-1.38 · v1</h4>
+<p>The opportunity list groups opportunities into unpublished, open and closed, showing open opportunities with the nearest proposal deadline first, closed ones most recently closed first, and unpublished ones most recently changed first.</p>
+<ul><li>given: a set of opportunities in a mix of states</li><li>when: someone opens the opportunity list</li><li>then: each opportunity appears in exactly one of the three groups, ordered as described</li><li>test: tests/acceptance/opportunities/R-1.38.spec.ts</li></ul>
+<p><strong>the opportunity list shows open opportunities with the nearest proposal deadline first</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<h4>R-2.38 · v1</h4>
+<p>Only public sector staff and administrators may take away every proposal of an opportunity in one document, and they choose whether that document names the proponents.</p>
+<ul><li>given: a closed opportunity carrying several submitted proposals</li><li>when: a vendor opens the address that exports all of them, and then the opportunity&#39;s author opens it</li><li>then: the vendor is refused, the author receives every proposal they are entitled to see in one document, and the author can ask for the same document with the proponents named anonymously</li><li>test: tests/acceptance/proposals/R-2.38.spec.ts</li></ul>
+<p><strong>a vendor may not take away every proposal of an opportunity in one document</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<h4>R-1.39 · v1</h4>
+<p>The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location.</p>
+<ul><li>given: a list of opportunities across all three programs</li><li>when: someone selects a program, selects a state, ticks remote-only, or types words into the search box</li><li>then: only opportunities matching every chosen condition remain visible</li><li>test: tests/acceptance/opportunities/R-1.39.spec.ts</li></ul>
+<p><strong>the opportunity list can be narrowed by program</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<p><strong>the opportunity list can be narrowed by state</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<p><strong>the opportunity list can be narrowed to remote-friendly opportunities only</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<p><strong>the opportunity list can be narrowed by free text matched against title and location</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<h4>R-1.48 · v1</h4>
+<p>Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs.</p>
+<ul><li>test: tests/acceptance/opportunities/R-1.48.spec.ts</li></ul>
+<p><strong>creating an opportunity with its state set to published is refused unless the requester is an administrator</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<p><strong>a public sector employee who is not an administrator may create an opportunity as a draft, in all three programs</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;R-1.48 Sprint With Us draft created by an ordinary member of staff&quot;[39m
+Received string:    [31m&quot;R-1.48 Code With Us draft created by an ordinary member of staff[39m
+[31mCode With Us[39m
+[31mDraft[39m
+[31mClosed Sep 28, 2026 at 1:49 PM PDT[39m
+[31m$0[39m
+[31mVictoria[39m
+[31mRemote OK[39m
+[31mR-1.38 unpublished opportunity changed later[39m
+[31mCode With Us[39m
+[31mDraft[39m
+[31mClosed Sep 28, 2026 at 1:48 PM PDT[39m
+[31m$0[39m
+[31mVictoria[39m
+[31mRemote OK[39m
+[31mR-1.38 unpublished opportunity changed earlier[39m
+[31mCode With Us[39m
+[31mDraft[39m
+… 695 more line(s)</code></pre>
+<p><strong>a public sector employee who is not an administrator may create an opportunity under review</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;R-1.48 Code With Us opportunity created under review&quot;[39m
+Received string:    [31m&quot;R-1.48 Code With Us draft created by an ordinary member of staff[39m
+[31mCode With Us[39m
+[31mDraft[39m
+[31mClosed Sep 28, 2026 at 1:49 PM PDT[39m
+[31m$0[39m
+[31mVictoria[39m
+[31mRemote OK[39m
+[31mR-1.38 unpublished opportunity changed later[39m
+[31mCode With Us[39m
+[31mDraft[39m
+[31mClosed Sep 28, 2026 at 1:48 PM PDT[39m
+[31m$0[39m
+[31mVictoria[39m
+[31mRemote OK[39m
+[31mR-1.38 unpublished opportunity changed earlier[39m
+[31mCode With Us[39m
+[31mDraft[39m
+… 695 more line(s)</code></pre>
+<h4>R-1.53 · v2</h4>
+<p>An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains.</p>
+<ul><li>given: an opportunity that has been published at any point</li><li>when: anyone asks to delete it</li><li>then: the request is refused and the opportunity remains</li><li>test: tests/acceptance/opportunities/R-1.53.spec.ts</li></ul>
+<p><strong>an administrator may delete a draft, in Code With Us, Sprint With Us and Team With Us alike</strong> — failed</p>
+<pre><code>Error: unbound: no opportunity identifier in the address http://localhost:3000/opportunities/sprint-with-us/create</code></pre>
+<p><strong>an administrator may delete an opportunity that is under review</strong> — failed</p>
+<pre><code>Error: unbound: no opportunity identifier in the address http://localhost:3000/opportunities/code-with-us/create</code></pre>
+<p><strong>the public sector employee who created an opportunity may not delete it once it is under review</strong> — failed</p>
+<pre><code>Error: unbound: no opportunity identifier in the address http://localhost:3000/opportunities/code-with-us/create</code></pre>
+<p><strong>any other request to delete an opportunity is refused and the opportunity remains</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<h4>R-1.56 · v1</h4>
+<p>Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike.</p>
+<ul><li>test: tests/acceptance/opportunities/R-1.56.spec.ts</li></ul>
+<p><strong>once an opportunity is published, an administrator may change its details</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message</code></pre>
+<p><strong>once an opportunity is published, a request to change its details from the public sector employee who created it is refused</strong> — failed</p>
+<pre><code>Error: opportunity-cwu-edit.publish — &quot;Publish&quot; is disabled on http://localhost:3000/opportunities/code-with-us/602a192f-bf42-478c-aebc-5b77a74767c9/edit?tab=opportunity; the page shows no message</code></pre>
+<p><strong>the same rule governs a published Sprint With Us opportunity</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-swu-create.add_phase — no field on http://localhost:3000/opportunities/sprint-with-us/create takes &quot;startDate&quot;, &quot;completionDate&quot;, &quot;maxBudget&quot;</code></pre>
+<p><strong>the same rule governs a published Team With Us opportunity</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-twu-create.add_resource_question — no field on http://localhost:3000/opportunities/team-with-us/create takes &quot;order&quot;</code></pre>
+<h3>Triage conditions</h3>
+<p>One condition per line, one for every failing criterion the page lists, in exactly one of these forms:</p>
+<ul><li><code>adapter-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion and the test are both fine, and this target&#39;s adapter is what failed: it read the wrong thing off the page, reported a control missing that the page does render, or answered empty where it never reached the page. <code>&lt;why&gt;</code> names what the adapter did wrong, specifically enough for the next binding run to fix it. The criterion is not touched.</li><li><code>product-question &lt;ID&gt;</code> — nothing in the evidence points at the adapter. The failure goes to the product owner, who decides whether the application, the criterion or the test is wrong. No text after the ID.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. A condition may not span more than one line. When the evidence is genuinely unclear, it is a <code>product-question</code>: a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the adapter comes back from the next binding run unchanged and costs a run to find out.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-14 21:20.</p>
+<div class="body"><p>The question was which of the 28 criteria failing against the old target were caused by this project&#39;s own adapter. Ruling: approve, with one triage line per criterion: 24 adapter-wrong and 4 product-question. The adapter and the tests are unchanged since the run calibrate-triage-old-4 ruled on (git diff 4c2f3bf..HEAD over tests/adapters/old and tests/acceptance is empty), so the faults named there come back. The largest is on the Code With Us create form: its &#39;3. Details&#39; step also requires &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39;, which the test input never carries. The adapter leaves both blank, so Publish and Submit for Review stay disabled and 17 criteria stop before reaching what they test. The saved snapshots also show new binding faults. saveServiceAreas and organizationEdit.saveChanges never confirm the &#39;Are you sure?&#39; and &#39;Save Changes?&#39; dialogs (R-3.28, R-8.28). addAddendum never confirms &#39;Publish Addendum?&#39; (R-1.35). A disabled &#39;Save Changes&#39; or &#39;Disqualify&#39;, or a missing &#39;Cancel&#39; action or &#39;Addenda&#39; tab, is the refusal the test asks about, but the adapter throws instead of returning (R-4.27, R-2.34, R-1.28, R-1.32). fieldError() drops the list item naming the unregistered address in the &#39;Unable to Add Unregistered Team Members&#39; alert (R-3.30). The attachment control never selects &#39;Edit&#39; on a draft whose page says to (R-8.25, R-8.31). A Sprint With Us &#39;Save Draft&#39; stays on /create while landOn hides its timeout (R-1.48, R-1.53). The proposal terms are opened through a top-bar Submit disabled by blank proponent fields (R-1.31). Four go to the product owner because the adapter did what the test asked. R-4.31: vendor.one&#39;s profile genuinely shows Status Inactive with only &#39;Reactivate Account&#39;. R-6.26: the &#39;Vendors Notified&#39; alert rendered and no mail reached vendor.one, an inactive account. R-3.32: the invitation succeeded and the Team table lists members by name (&#39;Indigo Placeholder Pending&#39;), never by email. R-4.32: the export dialog opens with every box already ticked and Export an enabled link. Caveats for the product owner: in R-1.35 the edit showed &#39;Opportunity Changes Published&#39; and the author (staff.one, Casey Placeholder) received no mail. In R-2.34 the page shows the proposal as Non-compliant with its history withheld until the Challenge. Seed accounts left altered by earlier runs (vendor.one inactive, staff.one showing admin-only links) may skew those results. What would change this ruling: a fresh run, with these adapter defects fixed, that still fails a criterion at the same assertion. That criterion would come back as a product question.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>adapter-wrong R-2.24: opportunityCwuCreate.publish(input) leaves the required &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39; on &#39;3. Details&#39; blank because the input never names them, so Publish stays disabled and press() throws before any proposal exists; opportunityTwuCreate.addResource also has no mapping for &#39;order&#39;. Fill required fields the input does not name before pressing Publish, and map &#39;order&#39; on the resource step.</li><li>adapter-wrong R-8.25: fileAttachmentControl.addAttachment opens the draft&#39;s edit page (tab=opportunity), which is read-only and shows &#39;This opportunity is a draft. Please select &quot;Edit&quot; from the Actions dropdown&#39;; the adapter walks to &#39;4. Attachments&#39; without choosing Edit, so &#39;Add Attachment&#39; never appears. Choose &#39;Edit&#39; from the Actions menu before looking for &#39;Add Attachment&#39;. opportunitySwuCreate.addPhase also leaves &#39;startDate&#39;, &#39;completionDate&#39;, &#39;maxBudget&#39; and &#39;capabilities&#39; unmapped, and opportunityCwuCreate.publish leaves &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39; blank so Publish stays disabled.</li><li>product-question R-6.26</li><li>adapter-wrong R-4.27: after the name is cleared, or given a name or job title over one hundred characters, the profile&#39;s &#39;Save Changes&#39; is disabled and that is the refusal the test goes on to read; userProfileSelf.saveChanges press() throws on the disabled control instead. When &#39;Save Changes&#39; is disabled after the input is entered, return without saving so fieldError() and the reopened fields can be read.</li><li>adapter-wrong R-1.28: opportunityCwuCreate.publish and saveDraft leave the required &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39; blank, so the create page&#39;s Publish and the draft&#39;s Actions-menu Publish are disabled and press() throws. For the draft, opportunityCwuEdit.cancelOpportunity throws unbound when the Actions menu offers no &#39;Cancel&#39;, although that absence is the refusal the test reads; return quietly when the action is not offered. Fill required fields the input does not name before publishing.</li><li>adapter-wrong R-3.28: organizationEdit.saveServiceAreas presses the top-bar &#39;Save Changes&#39; but never confirms the &#39;Are you sure?&#39; dialog it raises (&#39;Please confirm your changes to the Service Area list&#39;), so the dialog stays open and intercepts the click on the &#39;TWU Qualification&#39; tab for 15 s. saveServiceAreas also ignores its serviceAreas input and never ticks or clears boxes. Set the boxes from the input, confirm the dialog with its &#39;Save Changes&#39;, and wait for it to close.</li><li>adapter-wrong R-8.28: in the logo test organizationEdit.saveChanges() presses &#39;Save Changes&#39; but never confirms the &#39;Save Changes?&#39; dialog, which is still open in the snapshot with the form in edit mode, so imageAddress() reads &#39;&#39;. Confirm the dialog and wait for the save to finish before reading the stored image address.</li><li>adapter-wrong R-3.30: organizationEdit.fieldError() returns &#39;&#39; while the page shows the alert &#39;Unable to Add Unregistered Team Members&#39; with nobody.registered.here@example.test as a list item under it; messages() discards list items as prose and its pattern does not match an address. Read the text of a visible alert, list items included, as the warning.</li><li>adapter-wrong R-1.31: proposalCwuCreate.chooseProponentIndividual() leaves the required &#39;Legal Name*&#39;, &#39;Email Address*&#39;, &#39;Street Address*&#39;, &#39;City*&#39;, &#39;Province / State*&#39;, &#39;Postal / ZIP Code*&#39; and &#39;Country*&#39; blank because the input names none of them, and acceptProgramTerms then opens the terms through the top-bar &#39;Submit&#39;, which is disabled, so press() throws before any proposal is submitted. Fill required proponent fields the input does not name, and reach the terms without a disabled control.</li><li>product-question R-4.31</li><li>adapter-wrong R-8.31: opportunityCwuCreate.publish(input) leaves the required &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39; blank, so Publish stays disabled and press() throws; for the draft, fileAttachmentControl.addAttachment never chooses &#39;Edit&#39; from the Actions menu on the read-only draft page, so &#39;Add Attachment&#39; is never reached. Fill required fields the input does not name, and enter editing before attaching.</li><li>adapter-wrong R-1.32: opportunityCwuCreate.publish and saveDraft leave the required &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39; blank, so the create page&#39;s Publish and the draft&#39;s Actions-menu Publish are disabled and press() throws. For the draft, opportunityCwuEdit.addAddendum throws unbound when no &#39;Addenda&#39; tab is offered, although that absence is the refusal the test reads; return quietly. addAddendum also never confirms the &#39;Publish Addendum?&#39; dialog (seen open in R-1.35).</li><li>product-question R-3.32</li><li>product-question R-4.32</li><li>adapter-wrong R-1.34: opportunityCwuCreate.saveDraft(input) leaves the required &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39; blank because the input never names them, so the draft is incomplete and opportunityCwuEdit.publish finds the Actions-menu Publish disabled and throws. Fill required fields the input does not name before saving the draft.</li><li>adapter-wrong R-2.34: in the first test the &#39;Disqualification Reason&#39; dialog is open with Reason empty and its &#39;Disqualify&#39; disabled, which is the refusal the test reads; disqualify() press() throws instead. When the dialog&#39;s &#39;Disqualify&#39; is still disabled after the reason is entered, cancel the dialog and return. The second test&#39;s failure is not a binding fault: the page shows the proposal as Non-compliant and says its history will be available once the opportunity reaches the Challenge.</li><li>adapter-wrong R-1.35: in the addendum test opportunityCwuEdit.addAddendum types the text and presses &#39;Publish Addendum&#39;, but never confirms the &#39;Publish Addendum?&#39; dialog it raises, which is still open in the snapshot, so no addendum is published and no notice is sent. Confirm the dialog and wait for it to close. The edit test is not a binding fault: &#39;Opportunity Changes Published&#39; rendered and the author received no mail.</li><li>adapter-wrong R-2.35: publishOpportunity&#39;s opportunityCwuCreate.publish(input) leaves the required &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39; on &#39;3. Details&#39; blank because the input never names them, so Publish stays disabled and press() throws before any proposal exists. Fill required fields the input does not name before pressing Publish.</li><li>adapter-wrong R-1.36: opportunityCwuCreate.saveDraft(input) leaves the required &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39; blank, so the draft is incomplete and opportunityCwuEdit.publish finds the Actions-menu Publish disabled and throws before anything can be cancelled. Fill required fields the input does not name before saving the draft.</li><li>adapter-wrong R-2.36: in both tests opportunityCwuCreate.publish(input) leaves the required &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39; blank, so Publish stays disabled and press() throws before any proposal is submitted or withdrawn. Fill required fields the input does not name before pressing Publish.</li><li>adapter-wrong R-1.37: opportunityCwuCreate.submitForReview(input) leaves the required &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39; on &#39;3. Details&#39; blank because the input never names them; the snapshot shows the top bar with &#39;Publish&#39; disabled and no &#39;Submit for Review&#39;, so offered() returns quietly and nothing is submitted. Fill required fields the input does not name before looking for &#39;Submit for Review&#39;.</li><li>adapter-wrong R-2.37: opportunityCwuCreate.publish(input) leaves the required &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39; blank, so Publish stays disabled and press() throws; opportunitySwuCreate.addPhase leaves &#39;startDate&#39;, &#39;completionDate&#39;, &#39;maxBudget&#39; and &#39;capabilities&#39; unmapped to the phase step&#39;s fields. Fill required fields the input does not name, and map those phase keys.</li><li>adapter-wrong R-1.38: opportunityCwuCreate.publish(input) leaves the required &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39; blank, so Publish stays disabled and press() throws before any open opportunity exists to order. Fill required fields the input does not name before pressing Publish.</li><li>adapter-wrong R-2.38: publishOpportunity&#39;s opportunityCwuCreate.publish(input) leaves the required &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39; blank, so Publish stays disabled and press() throws before any proposal exists to export. Fill required fields the input does not name before pressing Publish.</li><li>adapter-wrong R-1.39: in all four tests opportunityCwuCreate.publish(input) leaves the required &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39; blank, so Publish stays disabled and press() throws before the list can be filtered. Fill required fields the input does not name before pressing Publish.</li><li>adapter-wrong R-1.48: opportunityCwuCreate.publish and submitForReview leave the required &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39; blank, so Publish throws disabled and submitForReview returns without submitting because no &#39;Submit for Review&#39; is shown. opportunitySwuCreate.saveDraft({title}) clicks &#39;Save Draft&#39;, but the page stays on /opportunities/sprint-with-us/create, and landOn swallows its 20 s timeout, so no Sprint With Us draft exists to list. Fill required fields the input does not name, and when Save Draft does not reach the record&#39;s address, report the page&#39;s state instead of returning.</li><li>adapter-wrong R-1.53: opportunitySwuCreate.saveDraft({title}) clicks &#39;Save Draft&#39;, but the snapshot is still on /opportunities/sprint-with-us/create with the title entered, and landOn swallows its timeout, so opportunitySwuEdit.opportunityIdentifier() throws. opportunityCwuCreate.submitForReview and publish leave the required &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39; blank, so nothing is submitted, the address stays /create, and Publish throws disabled. Fill required fields the input does not name, and fail at the save when the record&#39;s address is never reached.</li><li>adapter-wrong R-1.56: opportunityCwuCreate.publish and saveDraft leave the required &#39;Acceptance Criteria*&#39; and &#39;Evaluation Criteria*&#39; blank, so the create page&#39;s Publish and the draft&#39;s Actions-menu Publish are disabled and press() throws. opportunitySwuCreate.addPhase leaves &#39;startDate&#39;, &#39;completionDate&#39; and &#39;maxBudget&#39; unmapped, and opportunityTwuCreate.addResourceQuestion has no mapping for &#39;order&#39;. Fill required fields the input does not name, and map those keys on the phase and resource question steps.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
