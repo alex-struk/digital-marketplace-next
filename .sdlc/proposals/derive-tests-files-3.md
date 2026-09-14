@@ -20,3 +20,23 @@ I changed two files in `tests/acceptance/files/`, one per condition that asked f
 4. **R-8.23 and R-8.24 contradict R-8.18: not acted on.** R-8.23 and R-8.24 end by pointing at R-8.4's "service fault" outcome, while R-8.18 says a bad request. That clash is in the criteria themselves, so no change to a test can settle it. Whoever owns the criteria still needs to rule on it, and both test files are unchanged.
 
 No new not-testable entries were needed. Coverage is still 22 tests and 2 not-testable entries out of 24 criteria. I didn't need any surface action or observation that the contract lacks.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: do the revised files tests now follow from their criteria and from nothing else? Ruling: approve. The previous ruling returned on two narrow points, and git diff 62b689a..eb3477f limited to tests/acceptance/files shows changes to exactly those two files and nothing else. In R-8.21, 'a profile picture whose content can be read as a PNG is accepted' no longer checks the stored width and height. It now checks no rejectedImageError, a non-empty currentImage after saving, and that it differs from the image before editing. That follows from the criterion's 'is accepted' and matches the form the previous ruling named. In R-8.17, both refusal checks convert every size the message names to bytes, reading kilo/mega/giga as both 1000 and 1024 and a bare number as bytes, and accept a match within 0.5% of the stated limit. That is what 'a message naming the limit' asks for, whatever units the message uses. A refusal naming no size or a different size still fails, and the oversized upload (5% plus 1 KiB over the limit) is too far off to match by accident. No selectors, routes, tables or status codes were added. Moved-line diffing shows the files not-testable entries were reordered and re-wrapped with the same wording, so the R-8.16 and R-8.22 reasons already accepted still stand. Coverage is unchanged at 24 criteria: 22 tests and 2 not-testable. The runner's own typecheck on this revision passed with no diagnostics under acceptance/files. Tier is STANDARD and no residual risk is marked unaccepted, so nothing here needs escalating. What would change the ruling: any files test gaining an assertion its criterion does not state, or a later typecheck failing under acceptance/files.
+
+**Conditions:**
+- Carry forward, not a blocker here: R-8.14 is superseded by R-8.21 but still has a spec file that contradicts R-8.21's test (the checks report this as a warning). Whoever runs the spec process still needs to rule on whether tests for superseded defect criteria are kept, before the suite is used as a pass/fail gate.
+- Carry forward, not a blocker here: R-8.23 and R-8.24 each end with a clause pointing at R-8.4's service fault, which contradicts R-8.18 (refused as a bad request). Whoever owns the criteria needs to rule on this conflict; the two test files correctly leave that clause unasserted.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `eb3477f6c173a965ea4ac18d3bd18bea777fe077`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/files/`, which this proposal answers for.
+
+    No diagnostics.
