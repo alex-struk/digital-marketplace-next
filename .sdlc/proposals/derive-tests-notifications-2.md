@@ -1,11 +1,13 @@
 ---
-stage: "derive-tests"
-title: "derive tests"
-at: "2026-09-14T01:41:27.151Z"
-cost: 3.9704905
-turns: 71
-session: "6c4e0c66-4151-422b-93ff-94bba9ccb01d"
+gate: G3
+question: "Do these tests follow from the notifications criteria and from nothing else?"
+recommendation: "Of the 21 notification criteria, 9 now have a test file and 12 have a `not-testable.yaml` entry."
+opened: 2026-09-14T01:41:27.166Z
 ---
+
+# Do these tests follow from the notifications criteria and from nothing else?
+
+**Recommendation.** Of the 21 notification criteria, 9 now have a test file and 12 have a `not-testable.yaml` entry.
 
 Of the 21 notification criteria, 9 now have a test file and 12 have a `not-testable.yaml` entry. I checked that none has both. I haven't run or typechecked anything: the workspace has no installed packages, and running a compiler would have needed approval. So "these compile" and "these pass" are both unconfirmed.
 
