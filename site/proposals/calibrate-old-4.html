@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-old-4 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">91</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">91</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">80</span></a></li><li><a href="../runs.html">Run log <span class="count">8</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-old-4</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-09-14 21:20</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr></tbody></table></div>
+<div class="body"><h2>15 criterion(s) fail against old: which of them is the application&#39;s fault, which the spec&#39;s, and which the test&#39;s?</h2>
+<p><strong>Recommendation.</strong> Rule on R-1.3, R-3.3, R-3.7, R-3.8, R-4.14, R-3.15, R-8.17, R-7.20, R-1.21, R-7.21, R-8.21, R-6.26, R-4.31, R-3.32, R-4.32 with a calibration condition, so the next calibrate run can apply it.</p>
+<p>15 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:3000,">http://localhost:3000,</a> with no ruling yet. The tests are blind: they were written from the criteria alone, by an agent that never saw the application. So a failure means one of exactly three things, and only you can say which: the application is wrong, the criterion is wrong, or the test is wrong.</p>
+<p>Rule on each one below. Until every failure carries a ruling, this question is asked again on every calibration run.</p>
+<h4>R-1.3 · v1</h4>
+<p>A member of public sector staff sees every published opportunity plus their own drafts and opportunities under review, and an administrator sees every opportunity.</p>
+<ul><li>given: two members of public sector staff, each with an unpublished opportunity of their own</li><li>when: each lists opportunities</li><li>then: each sees their own unpublished opportunity and not the other&#39;s, while an administrator listing opportunities sees both</li><li>test: tests/acceptance/opportunities/R-1.3.spec.ts</li></ul>
+<p><strong>a member of public sector staff sees every published opportunity plus their own drafts, and not another staff member&#39;s</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: not [32m&quot;Seeded draft Code With Us opportunity of another staff member&quot;[39m
+Received string:        [31m&quot;R-1.3 draft belonging to the member of staff who is signed in[39m
+[31mCode With Us[39m
+[31mDraft[39m
+[31mClosed Sep 28, 2026 at 1:45 PM PDT[39m
+[31m$0[39m
+[31mVictoria[39m
+[31mRemote OK[39m
+[31mR-1.28 draft an administrator asked to cancel[39m
+[31mCode With Us[39m
+[31mDraft[39m
+[31mClosed Sep 27, 2026 at 4:00 PM PDT[39m
+[31mA short summary of the work to be done.[39m
+[31m$5,000[39m
+[31mVictoria[39m
+[31mRemote OK[39m
+[31mWatch[39m
+[31mR-1.28 published opportunity its author asked to cancel[39m
+… 627 more line(s)</code></pre>
+<h4>R-3.3 · v1</h4>
+<p>An organization&#39;s full record can be opened only by an administrator or by a member who owns or administers that organization; anyone else is refused.</p>
+<ul><li>given: an organization with an owner, one administrator and one ordinary member</li><li>when: the ordinary member, and separately a member of public sector staff, opens that organization&#39;s management page</li><li>then: both are refused, while the owner, the organization&#39;s administrator and a service administrator each see the organization</li><li>test: tests/acceptance/organizations/R-3.3.spec.ts</li></ul>
+<p><strong>a member of public sector staff is refused the organization&#39;s full record</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: not [32m&quot;Northern Pines Digital Ltd.&quot;[39m
+Received string:        [31m&quot;Organization[39m
+[31mTeam[39m
+[31mSWU Qualification[39m
+[31mTWU Qualification[39m
+[31mChangelog[39m
+[31m[7mNorthern Pines Digital Ltd.[27m[39m
+[31mSprint With Us Qualified[39m
+[31mTeam With Us Qualified[39m
+[31mProfile Picture (Optional)[39m
+[31mLegal Name[39m
+[31mWebsite Url (Optional)[39m
+[31mLegal Address[39m
+[31mStreet Address[39m
+[31mStreet Address[39m
+[31mCity[39m
+[31mProvince/State[39m
+[31mPostal / ZIP Code[39m
+… 11 more line(s)</code></pre>
+<h4>R-3.7 · v1</h4>
+<p>An organization&#39;s owner, its administrators and a service administrator may invite people to the team by email address, and each invitation is created as a pending membership.</p>
+<ul><li>given: an organization with an owner and no other members</li><li>when: the owner invites two email addresses at once from the team page</li><li>then: both people appear on the team list marked as pending, and neither counts towards the organization&#39;s team size until they accept</li><li>test: tests/acceptance/organizations/R-3.7.spec.ts</li></ul>
+<p><strong>when the owner invites two email addresses at once both people appear on the team list marked as pending, and neither counts towards the organization&#39;s team size</strong> — failed</p>
+<pre><code>Error: organization-edit.add_team_members — &quot;Add Team Member(s)&quot; is disabled on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000302/edit?tab=team; the page shows no message</code></pre>
+<h4>R-3.8 · v1</h4>
+<p>A person may only be invited to an organization if they hold an active vendor account, and cannot be invited twice to the same organization.</p>
+<ul><li>given: an organization with one pending invitation outstanding for a given person</li><li>when: the owner invites that same person again, and separately invites a member of public sector staff</li><li>then: the repeat invitation is refused as the person already being a member of the organization, and the invitation to public sector staff is refused because only vendors may be invited</li><li>test: tests/acceptance/organizations/R-3.8.spec.ts</li></ul>
+<p><strong>the repeat invitation is refused as the person already being a member of the organization</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>the invitation to public sector staff is refused because only vendors may be invited</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-4.14 · v1</h4>
+<p>An administrator can browse everyone registered with the service, listed by status, then account kind, then name, showing each person&#39;s status, account kind, name and whether they are an administrator, and can narrow the list by typing part of a name.</p>
+<ul><li>given: an active vendor, a deactivated vendor and a public sector employee registered with the service</li><li>when: an administrator opens the list of users and then types part of one person&#39;s name</li><li>then: all three are listed with the active accounts before the inactive ones, and the list narrows to the people whose names match what was typed</li><li>test: tests/acceptance/users/R-4.14.spec.ts</li></ul>
+<p><strong>an administrator can browse everyone registered with the service, showing each person&#39;s status, account kind, name and whether they are an administrator</strong> — failed</p>
+<pre><code>Error: unbound: user-list.admin_check — the Admin? column shows an unlabelled tick with no accessible name or text, and the list&#39;s rows are drawn as one flattened block, so there is nothing on the page to read the mark from</code></pre>
+<p><strong>everyone registered is listed by status, then account kind, then name</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeLessThan[2m([22m[32mexpected[39m[2m)[22m
+
+Expected: &lt; [32m763[39m
+Received:   [31m807[39m</code></pre>
+<p><strong>an administrator can narrow the list by typing part of a name</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: not [32m&quot;Zinnia Quillfeather&quot;[39m
+Received string:        [31m&quot;STATUS	ACCOUNT TYPE	NAME	ADMIN?[39m
+[31mActive[39m
+[31m	[39m
+[31mPublic Sector Employee[39m
+[31m	[39m
+[31mCasey Placeholder[39m
+[31m	[39m
+[31m[39m
+[31m[39m
+[31mActive[39m
+[31m	[39m
+[31mPublic Sector Employee[39m
+[31m	[39m
+[31mDevon Placeholder[39m
+[31m	[39m
+[31m[39m
+[31m[39m
+… 133 more line(s)</code></pre>
+<h4>R-3.15 · v1</h4>
+<p>The organizations a vendor may act on behalf of are those they own and those they administer, excluding any that have been archived.</p>
+<ul><li>given: a vendor who owns one organization, administers a second, is an ordinary member of a third, and owns a fourth that has been archived</li><li>when: they ask for the organizations they can act for</li><li>then: the first two are returned and the third and fourth are not</li><li>test: tests/acceptance/organizations/R-3.15.spec.ts</li></ul>
+<p><strong>an organization a vendor is only an ordinary member of is not returned</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: not [32m&quot;Northern Pines Digital Ltd.&quot;[39m
+Received string:        [31m&quot;[7mNorthern Pines Digital Ltd.[27m&quot;[39m</code></pre>
+<h4>R-8.17 · v1</h4>
+<p>An upload larger than the service&#39;s size limit is refused as the requester&#39;s error, with a message naming the limit, and the limit is stated in the interface before a person chooses a file rather than only after they submit it.</p>
+<ul><li>test: tests/acceptance/files/R-8.17.spec.ts</li></ul>
+<p><strong>an upload larger than the service&#39;s size limit is refused as the requester&#39;s error, with a message naming the limit</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an attachment larger than the service&#39;s size limit is refused in the interface with a message naming the limit</strong> — failed</p>
+<pre><code>Error: &quot;&quot; names the stated limit
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32mtrue[39m
+Received: [31mfalse[39m</code></pre>
+<h4>R-7.20 · v1</h4>
+<p>A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named.</p>
+<ul><li>given: an administrator creating or changing a page</li><li>when: they submit it with an empty title, or with a body longer than fifty thousand characters</li><li>then: nothing is saved and the failing field is marked with the reason</li><li>test: tests/acceptance/content/R-7.20.spec.ts</li></ul>
+<p><strong>a page whose title is empty is refused with the failing field named, and nothing is saved</strong> — failed</p>
+<pre><code>Error: content-create.publish_page — &quot;Publish&quot; is disabled on http://localhost:3000/content/create; the page shows no message</code></pre>
+<p><strong>a page whose body is longer than fifty thousand characters is refused with the failing field named, and nothing is saved</strong> — failed</p>
+<pre><code>Error: content-create.publish_page — &quot;Publish&quot; is disabled on http://localhost:3000/content/create; the page shows no message</code></pre>
+<p><strong>a page whose title is longer than a hundred characters is refused with the failing field named</strong> — failed</p>
+<pre><code>Error: content-create.publish_page — &quot;Publish&quot; is disabled on http://localhost:3000/content/create; the page shows no message</code></pre>
+<p><strong>a page whose body is empty is refused with the failing field named</strong> — failed</p>
+<pre><code>Error: content-create.publish_page — &quot;Publish&quot; is disabled on http://localhost:3000/content/create; the page shows no message</code></pre>
+<h4>R-1.21 · v1</h4>
+<p>Submitting a draft opportunity for review is refused unless the opportunity is complete, and the person is told the opportunity is incomplete rather than which field is missing.</p>
+<ul><li>given: a draft opportunity with a field still blank</li><li>when: its author submits it for review</li><li>then: the request is refused with a message saying the opportunity is incomplete and asking the author to complete and save the form</li><li>test: tests/acceptance/opportunities/R-1.21.spec.ts</li></ul>
+<p><strong>submitting a draft opportunity for review is refused unless the opportunity is complete</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-cwu-edit.submit_for_review — no control labelled &quot;Submit for Review&quot; on http://localhost:3000/opportunities/code-with-us/d926188b-1892-496e-8b6f-efc47361fb9c/edit?tab=opportunity</code></pre>
+<p><strong>the person is told the opportunity is incomplete rather than which field is missing</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;complete&quot;[39m
+Received string:    [31m&quot;&quot;[39m</code></pre>
+<h4>R-7.21 · v1</h4>
+<p>A page&#39;s address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused.</p>
+<ul><li>given: an administrator creating a page</li><li>when: they give it an address containing a capital letter, a space, an underscore, or a leading or trailing hyphen</li><li>then: the page is not created and the address is marked as invalid</li><li>test: tests/acceptance/content/R-7.21.spec.ts</li></ul>
+<p><strong>a page&#39;s address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused</strong> — failed</p>
+<pre><code>Error: content-create.publish_page — &quot;Publish&quot; is disabled on http://localhost:3000/content/create; the page shows no message</code></pre>
+<h4>R-8.21 · v1</h4>
+<p>A profile picture or organization logo is accepted only if its content can be read as a JPEG or a PNG, and a file whose content is neither is refused whatever its name says; an image that reads successfully but cannot be resized is stored at its original size rather than refused.</p>
+<ul><li>test: tests/acceptance/files/R-8.21.spec.ts</li></ul>
+<p><strong>a profile picture whose content is neither a JPEG nor a PNG is refused whatever its name says</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an organization logo whose content is neither a JPEG nor a PNG is refused whatever its name says</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-6.26 · v2</h4>
+<p>When the service notifies an account that holds no email address it composes the message all the same and hands it over with an empty list of recipients; any resulting failure is written to the operational log only, nothing in the service records that the person was not reached, and a broadcast to many vendors always continues to the next recipient because no failure in composing or sending can interrupt it.</p>
+<ul><li>given: a vendor whose account holds no email address, because the identity provider supplied none</li><li>when: an administrator announces changed terms</li><li>then: the service composes a message for that account addressed to nobody and hands it on to be sent, and what follows depends on the sending machinery rather than on anything the service decides</li><li>test: tests/acceptance/notifications/R-6.26.spec.ts</li></ul>
+<p><strong>when the service notifies an account that holds no email address, a broadcast to many vendors always continues to the next recipient because no failure in composing or sending can interrupt it</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+Expected: &gt; [32m0[39m
+Received:   [31m0[39m
+
+Call Log:
+- Timeout 10000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-4.31 · v2</h4>
+<p>A request to deactivate an account that is already inactive is refused with a message saying the account is already inactive; an administrator viewing their own profile is offered no deactivation control, but that restriction rests on the interface alone, since the service accepts a deactivation request made against the requester&#39;s own account.</p>
+<ul><li>given: an already deactivated account, and an administrator viewing their own profile</li><li>when: a second deactivation is requested for the first, and the administrator looks for a deactivation control on their own profile</li><li>then: the second request is refused with a message saying the account is already inactive, and the administrator&#39;s own profile offers no such control</li><li>test: tests/acceptance/users/R-4.31.spec.ts</li></ul>
+<p><strong>an administrator viewing their own profile is offered no deactivation control</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;Deactivate&quot;[39m
+Received string:    [31m&quot;Digital Marketplace[39m
+[31madmin.one@example.test[39m
+[31mDashboard[39m
+[31m|[39m
+[31mOpportunities[39m
+[31m|[39m
+[31mOrganizations[39m
+[31m|[39m
+[31mUsers[39m
+[31m|[39m
+[31mContent[39m
+[31mAldous Quillfeather[39m
+[31mStatus[39m
+[31mInactive[39m
+[31mAccount Type[39m
+[31mVendor[39m
+[31mProfile Picture (Optional)[39m
+… 6 more line(s)</code></pre>
+<h4>R-3.32 · v1</h4>
+<p>When an invited person declines an invitation rather than accepting it, the organization&#39;s owner is told the request was rejected.</p>
+<ul><li>given: a person with a pending invitation to an organization</li><li>when: they decline it</li><li>then: the pending membership is gone from the organization&#39;s team list and the owner receives a message saying the person rejected the team request</li><li>test: tests/acceptance/organizations/R-3.32.spec.ts</li></ul>
+<p><strong>when an invited person declines the invitation the pending membership is gone from the team list and the owner is told the request was rejected</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;vendor.invited@example.test&quot;[39m
+Received string:    [31m&quot;TEAM MEMBER	CAPABILITIES	ADMIN··[39m
+[31mBlake Placeholder[39m
+[31mOwner··[39m
+[31m3·····[39m
+[31mCharlie Placeholder··[39m
+[31m3·····[39m
+[31mDana Placeholder··[39m
+[31m3·····[39m
+[31mIndigo Placeholder[39m
+[31mPending··[39m
+[31m0&quot;[39m</code></pre>
+<h4>R-4.32 · v1</h4>
+<p>An administrator may export a contact list of active accounts as a spreadsheet file, choosing whether to include public sector employees, vendors or both, and which of first name, last name, email address and organization name to include; at least one kind and one field must be chosen.</p>
+<ul><li>given: one active vendor belonging to an active organization, one deactivated vendor and one administrator</li><li>when: an administrator exports the contact list with both kinds and all four fields chosen</li><li>then: the file contains the active vendor and the administrator but not the deactivated vendor, the administrator is labelled as such, and the vendor&#39;s row carries their organization&#39;s legal name</li><li>test: tests/acceptance/users/R-4.32.spec.ts</li></ul>
+<p><strong>at least one kind and one field must be chosen before an administrator may export the contact list</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h3>Calibration conditions</h3>
+<p>One condition per line, and exactly one of these forms:</p>
+<ul><li><code>defect-in-old &lt;ID&gt;</code> — the old application really does fail this and the criterion is right anyway. The test stands as written and the rebuild has to pass it; the criterion keeps a note saying so. No text after the ID.</li><li><code>spec-wrong &lt;ID&gt;: &lt;corrected statement&gt;</code> — the criterion misdescribes what the old application does. The statement is replaced and its version bumped, which marks the test stale so <code>derive-tests --stale</code> writes it again from the corrected criterion.</li><li><code>test-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion is right and the test is not. The id goes to <code>tests/acceptance/redo.yaml</code> for <code>derive-tests</code> to redo, still blind, and <code>&lt;why&gt;</code> records what the test got wrong without describing how the application is built.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. <code>defect-in-old</code> takes no text; the other two require a colon and text on the same line. A condition may not span more than one line.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent) on 2026-09-14 21:27.</p>
+<div class="body"><p>The question was which of fifteen criteria failing against the old application are the application&#39;s fault, the spec&#39;s, or the test&#39;s. Ruling: approve, with defect-in-old on two and test-wrong on thirteen; none misdescribes the old application. R-8.17 and R-8.21 are authored replacements for recovered criteria that already recorded the old behaviour as a defect: R-8.3 found the old service answers an oversized upload as its own fault rather than telling the person the file is too large, and R-8.14 found a file that is not an image is stored as uploaded. The tests bear both out: the stated-limit test and the real-PNG test pass, while the oversized upload and the non-image file get no refusal. Seven failures come from seed accounts other tests leave altered: R-4.19 leaves vendor.one deactivated, and R-4.12 toggles administrator rights on staff.one during the same run. The old code gives staff only their own unpublished opportunities (db/opportunity/code-with-us.ts:612) and refuses staff an organization&#39;s record (permissions.ts:204), so staff seeing another staff member&#39;s draft (R-1.3) and the full organization record (R-3.3) show an account that was an administrator at the time; the received draft list also holds administrators&#39; drafts. Administrators are offered Publish rather than Submit for Review (create.tsx:350), which fits R-1.21. The user list sorts Active before Inactive (user/list.tsx:274), so the deactivated vendor correctly sorted last (R-4.14). A deactivated profile offers only Reactivate Account (profile.tsx:523), so the missing Deactivate control is correct (R-4.31). The broadcast skips inactive vendors (R-6.26, as ruled for R-6.28 in calibrate-old-3). The owner in R-3.7 is that same deactivated vendor. Four tests read the wrong observation. The team list shows people by name, not email (R-3.7, R-3.32; triage saw &#39;Indigo Placeholder Pending&#39;). A refused invitation is reported as an &#39;Unable to Add Team Members&#39; alert, not as an error on a form field, although the service does refuse both cases with the reasons the criterion names (resources/affiliation.ts:214-231, and db/affiliation.ts:112 counts pending memberships) (R-3.8). The vendor&#39;s own organizations page also lists organizations they merely belong to, while the organizations they can act for are only those they own or administer (db/organization.ts:541) (R-3.15). R-4.32&#39;s export dialog opens with every box ticked (user/list.tsx:144-193), and Export is disabled only when no kind or no field is chosen (user/list.tsx:634); the test assumed nothing starts chosen. R-7.20 and R-7.21: the old page form validates title, address and body with the shared rules and shows the reason under the field (content form.tsx:70-90, form-field index.tsx:316), keeping Publish disabled until every field is valid (content/create.tsx:224). The tests demand a submission before reading the refusal, the same pattern calibrate-triage-old-5 ruled a harness fault for R-4.27. Caveats: shared seed accounts that tests alter without restoring are the largest single cause on this page, and the suite&#39;s owner should isolate them or reseed between tests. On the old list of users the Admin? column is an unlabelled tick nothing can read, and the rebuild should label it. Whether tests for superseded criteria such as R-6.26 stay in the suite is still an open spec-process question. What would change this ruling: a rewritten test run on a freshly seeded target that still fails at the same point would make that criterion defect-in-old. For R-7.20 in particular, a field left empty that is never marked with a reason even after waiting would do so. For R-8.17 or R-8.21, evidence that the old target does refuse with the limit named, or refuses a non-image file, would withdraw those rulings.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>test-wrong R-1.3: the test signs in as the member of public sector staff without establishing that the account holds no administrator rights at that moment, and another test in the suite grants that account administrator rights during the same run; the criterion is about staff who are not administrators, so establish that before listing opportunities</li><li>test-wrong R-3.3: the refusal of the member of public sector staff is read without establishing that the account holds no administrator rights at that moment, and another test in the suite grants that account administrator rights during the same run; establish that the staff member is not an administrator before opening the organization</li><li>test-wrong R-3.7: the test signs in as the organization&#39;s owner without establishing that the owner&#39;s account is active, and another test in the suite leaves that account deactivated; it also looks for the invitees&#39; email addresses on the team list, which the criterion never says the list shows; establish an active owner, and identify the invitees on the team list without assuming it shows email addresses</li><li>test-wrong R-3.8: the test reads the refusal as an error on a form field, which the criterion never says it is; the criterion says the invitation itself is refused, so read the refusal of the invitation, and when checking that nobody was added do not assume the team list shows email addresses</li><li>test-wrong R-4.14: the test assumes both accounts it names are active without establishing it, and another test in the suite leaves one of them deactivated, which correctly places it after every active account in the order the criterion describes; it also reads the narrowed list without allowing the list time to narrow after the name is typed; establish both accounts as active before comparing their order, and let the list settle before reading it</li><li>test-wrong R-3.15: the test reads every organization on the vendor&#39;s own page of organizations, which also lists organizations they merely belong to, rather than only the organizations the criterion describes as those they may act on behalf of; read only the organizations the vendor is offered as ones they can act for</li><li>defect-in-old R-8.17</li><li>test-wrong R-7.20: the test requires the page to be submitted before it reads the refusal, and treats a page that cannot be submitted as a failure, but the criterion is met by any refusal that saves nothing and marks the failing field with its reason, whether it comes before or after an attempt to submit; read the failing field&#39;s mark, allowing time for it to appear, and that nothing was saved, without requiring the submission itself to go through</li><li>test-wrong R-1.21: the second half reads the refusal from an opportunity that was never saved as a draft, which the criterion does not describe, and both halves sign in as public sector staff without establishing that the account holds no administrator rights, which another test in the suite grants during the same run; submit a saved draft as a staff member who is not an administrator, treat a draft that cannot be submitted and keeps its status as refused, and read what that person is told</li><li>test-wrong R-7.21: the test requires the page to be submitted before it reads the refusal, and treats a page that cannot be submitted as a failure, but the criterion is met by any refusal that creates no page and marks the address as invalid, whether it comes before or after an attempt to submit; read the address field&#39;s mark, allowing time for it to appear, and that no page was created, without requiring the submission itself to go through</li><li>defect-in-old R-8.21</li><li>test-wrong R-6.26: the test polls vendors it assumes are active without establishing it, the first being an account the suite leaves deactivated, so one timeout ends the check before any other vendor is looked at; establish that every vendor polled is active at the moment of the broadcast, keep the vendor holding no email address among the recipients, and report every addressable vendor not reached rather than stopping at the first</li><li>test-wrong R-4.31: the test uses another person&#39;s profile as proof that the screen offers a deactivation control, without establishing that person&#39;s account is active, and another test in the suite leaves it deactivated, so the control it expects there is legitimately absent; establish an active account for the comparison before looking for the control</li><li>test-wrong R-3.32: the test identifies the invited person on the team list by email address, which the criterion never says the list shows; identify them on the team list without assuming it shows email addresses, both before and after they decline</li><li>test-wrong R-4.32: the test assumes nothing is chosen when the export choices open, which the criterion never says; establish that no kind and no field are chosen before checking that export is unavailable, then check it becomes available only once at least one kind and one field are chosen</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

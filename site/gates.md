@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-14T21:27:36.405Z | calibrate-old-4 | G1 | approve | agent:product-owner | agent-held, unsampled | $2.980218 | sample |
 | 2026-09-14T21:20:19.245Z | calibrate-triage-old-5 | G3 | approve | agent:reviewer | agent-held, unsampled | $3.026904 |  |
 | 2026-09-14T21:15:48.283Z | calibrate-triage-old-4 | G3 | approve | agent:reviewer | agent-held, unsampled | $4.5032365 |  |
 | 2026-09-14T20:27:40.633Z | derive-tests-notifications-stale-1 | G3 | return | agent:reviewer | agent-held, unsampled | $0.8744565 |  |
