@@ -52,3 +52,30 @@ The contract should be extended in three places:
 All five failed checks are fixed: no evaluation criterion appears in both `tests/acceptance/not-testable.yaml` and a spec file any more.
 
 Journal addition: The five failures came from one mistake in my last pass. I had kept R-5.20, R-5.22, R-5.27, R-5.31 and R-5.33 as spec files and also given each a not-testable entry for the half the test could not reach. The format doesn't allow a criterion to be both, so I deleted those five entries and left every other entry untouched. The evaluation domain now has six not-testable entries (R-5.11, R-5.21, R-5.23, R-5.26, R-5.34, R-5.37), and none of them has a spec file. That matches the reviewer's count of 24 test files and 6 records. Each of the five spec files had a comment saying its missing half "is recorded in not-testable.yaml", which was no longer true. In each file I changed only that sentence so it names the missing piece directly. For R-5.20, R-5.27, R-5.31 and R-5.33 that is a `mail` call over `read_one_message` that returns a message's blind-copy list. For R-5.22 it is a decimal-places observation on the individual create pages, such as `score_too_many_decimal_places_error`. No test body or header changed. Two things the check does not catch still stand. First, the contract stage needs a new home for these missing pieces: they are now written only in spec-file comments, not in the not-testable list. Second, none of this touches the reviewer's six conditions, which remain as they were after my previous pass.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+
+Question: do the revised evaluation tests now follow from their criteria and from nothing else? Ruling: return, on one assertion. The writer met every condition that was theirs from derive-tests-evaluation-6. In R-5.22 the decimal-places test is gone and the missing observation is named in the file's comment. R-5.25 no longer checks for a disabled control. R-5.20, R-5.27, R-5.31 and R-5.33 now share one premise taken from spec/contract/observables.yaml: a message has one visible recipient and blind copies for the rest, and the mail fixture offers only a search by visible recipient. R-5.28 now reads as a panel member who is not an administrator and requires the other evaluator's comment. R-5.16's fifth test now has the owner try the change. The runner's typecheck lists no errors under acceptance/evaluation/. The 24 test files and 6 not-testable entries cover the domain, and no criterion appears as both. The remaining defect is the same kind the last ruling returned in R-5.25. R-5.22's second test ends by checking that the submit control on the individual evaluation list is disabled. R-5.22's criterion says only that the evaluation cannot be submitted until complete; it says nothing about a disabled control. The check also contradicts R-5.25, where a submit on the same list is clicked for an incomplete set and must return the refusal sentence, so the control has to be enabled. And the test never saves the empty-comment draft (the R-5.23 entry says the form refuses to), so the list it reads does not hold the evaluation the criterion is about. Non-blocking notes: the four mail tests pass on any message to any named address, and the owner, who is one of those addresses, may get other mail from the same event, so they discriminate weakly. Filtering by subject would assert wording no criterion gives, so this is a limit of the mail contract. R-5.12 changes the seeded panel and never restores it, which adds to the seed contention in condition 5. The ruling changes to approve when R-5.22's second test stops relying on the disabled-control check.
+
+**Conditions:**
+- R-5.22: remove the submitDisabledUntilComplete assertion from the second test. Either stop after emptyNotesError and say in the comment that the submission half cannot be shown without saving a draft the form refuses (which R-5.23 records as missing), or show the refusal the way R-5.25 does: save an incomplete draft, submit, and read incompleteEvaluationError. Do not assert a disabled control.
+- Carried forward, not the writer's: the seed or harness owner should give each walking test its own closed opportunity, or reset between files, so that tests like R-5.12 and R-5.16 stop changing the shared seeded panel under the others.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `8b8f4ada1afcd31e9edb6db382d0146ac4221f96`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    acceptance/users/: 89 diagnostics
+    acceptance/opportunities/: 73 diagnostics
+    acceptance/files/: 13 diagnostics
+    acceptance/notifications/: 13 diagnostics
