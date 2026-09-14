@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-triage-old-1 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">81</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">81</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">70</span></a></li><li><a href="../runs.html">Run log <span class="count">8</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-triage-old-1</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-14 19:08</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>104 criterion(s) fail against old: which of them did this project&#39;s own adapter cause?</h2>
+<p><strong>Recommendation.</strong> Sort R-2.1, R-3.1, R-7.1, R-8.1, R-2.2, R-3.2, R-1.3, R-2.3, R-3.3, R-1.4, R-2.4, R-4.4, R-7.4, R-3.6, R-2.7, R-7.7, R-8.7, R-7.8, R-1.9, R-2.9, R-7.9, R-1.10, R-3.10, R-7.10, R-8.10, R-1.11, R-8.11, R-1.12, R-2.12, R-4.12, R-7.12, R-8.12, R-2.13, R-3.13, R-8.13, R-1.14, R-2.14, R-3.14, R-8.14, R-3.15 with a triage condition each, so the adapter&#39;s failures are fixed there and only product questions reach the product owner.</p>
+<p>104 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:3000,">http://localhost:3000,</a> and nobody has sorted them yet. Before any reaches the product owner, say which of them this project&#39;s own adapter caused. The adapter is under <code>tests/adapters/old/</code>; read each failure against it and against the test.</p>
+<p>The 40 below are the ones to sort now; the remaining 64 come back on the next run.</p>
+<h4>R-2.1 · v1</h4>
+<p>Only a signed-in vendor who has accepted the service&#39;s terms at some point may start a proposal; a request from public sector staff, an administrator or an anonymous visitor is refused.</p>
+<ul><li>given: a visitor who is not signed in, or is signed in as public sector staff or as an administrator</li><li>when: they attempt to start a proposal against a published opportunity</li><li>then: the request is refused and no proposal is created</li><li>test: tests/acceptance/proposals/R-2.1.spec.ts</li></ul>
+<p><strong>a signed-in vendor who has accepted the service&#39;s terms may start a proposal</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>a request to start a proposal from public sector staff, an administrator or an anonymous visitor is refused</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-3.1 · v1</h4>
+<p>Anyone, signed in or not, can browse the list of registered organizations, which shows only organizations that have not been archived, ordered by legal name and split into pages.</p>
+<ul><li>given: three registered organizations, one of which has been archived</li><li>when: a visitor who is not signed in opens the organization list</li><li>then: the two organizations that are not archived are listed in alphabetical order by legal name, and the archived one is absent</li><li>test: tests/acceptance/organizations/R-3.1.spec.ts</li></ul>
+<p><strong>a visitor who is not signed in sees the two organizations that are not archived listed in alphabetical order by legal name, and the archived one is absent</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;Cedar Hollow Systems Inc.&quot;[39m
+Received string:    [31m&quot;Broken Compass Delivery Ltd.&quot;[39m</code></pre>
+<h4>R-7.1 · v1</h4>
+<p>Anyone, including a visitor who has not signed in, can read a page by its address and sees its title, its body as formatted text, and the dates it was first published and last updated.</p>
+<ul><li>given: a page that exists at the address &quot;privacy&quot;</li><li>when: a visitor who is not signed in opens that address</li><li>then: the page&#39;s title, its body as formatted text, and its published and updated dates are shown</li><li>test: tests/acceptance/content/R-7.1.spec.ts</li></ul>
+<p><strong>anyone, including a visitor who has not signed in, can read a page by its address and sees its title, its body as formatted text, and the dates it was first published and last updated</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m&quot;About us&quot;[39m
+Received: [31m&quot;About us[7m — B.C. Digital Marketplace[27m&quot;[39m</code></pre>
+<h4>R-8.1 · v1</h4>
+<p>Any person who is signed in may upload a file, and a visitor who is not signed in cannot.</p>
+<ul><li>given: a visitor who is not signed in</li><li>when: they submit a file for upload</li><li>then: the upload is refused as not permitted and no file is stored</li><li>test: tests/acceptance/files/R-8.1.spec.ts</li></ul>
+<p><strong>any person who is signed in may upload a file</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-2.2 · v1</h4>
+<p>A vendor may hold at most one proposal per opportunity, and a second attempt is refused with a message saying they already have one.</p>
+<ul><li>given: a vendor who already has a proposal, in any state, against a published opportunity</li><li>when: they start a second proposal against the same opportunity</li><li>then: the request is refused with &quot;You already have a proposal for this opportunity.&quot; and no second proposal is created</li><li>test: tests/acceptance/proposals/R-2.2.spec.ts</li></ul>
+<p><strong>a vendor may hold at most one proposal per opportunity, and a second attempt is refused with a message saying they already have one</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-3.2 · v1</h4>
+<p>Only a signed-in vendor who has already accepted the service&#39;s terms and conditions may register a new organization; a request from anyone else is refused.</p>
+<ul><li>given: a signed-in member of public sector staff and a signed-in vendor who has accepted the terms</li><li>when: each tries to register an organization</li><li>then: the vendor&#39;s organization is created and the public sector staff member&#39;s request is refused as not permitted</li><li>test: tests/acceptance/organizations/R-3.2.spec.ts</li></ul>
+<p><strong>the vendor&#39;s organization is created</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>the public sector staff member&#39;s request to register an organization is refused as not permitted</strong> — failed</p>
+<pre><code>Error: unbound: organization-create.create_organization — no control labelled &quot;Create Organization&quot; on http://localhost:3000/organizations/create</code></pre>
+<h4>R-1.3 · v1</h4>
+<p>A member of public sector staff sees every published opportunity plus their own drafts and opportunities under review, and an administrator sees every opportunity.</p>
+<ul><li>given: two members of public sector staff, each with an unpublished opportunity of their own</li><li>when: each lists opportunities</li><li>then: each sees their own unpublished opportunity and not the other&#39;s, while an administrator listing opportunities sees both</li><li>test: tests/acceptance/opportunities/R-1.3.spec.ts</li></ul>
+<p><strong>a member of public sector staff sees every published opportunity plus their own drafts, and not another staff member&#39;s</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;R-1.3 draft belonging to the member of staff who is signed in&quot;[39m
+Received string:    [31m&quot;51&quot;[39m</code></pre>
+<p><strong>an administrator sees every opportunity</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;R-1.3 draft an administrator must also be able to see&quot;[39m
+Received string:    [31m&quot;Dashboard[39m
+[31mMy Opportunities[39m
+[31mEvaluations[39m
+[31mMy Opportunities[39m
+[31mView all opportunities[39m
+[31mTITLE	STATUS	CREATED·[39m
+[31mUntitled[39m
+[31mCODE WITH US··[39m
+[31mDraft··[39m
+[31mSep 14, 2026[39m
+[31mROBIN PLACEHOLDER··[39m
+[31mUntitled[39m
+[31mCODE WITH US··[39m
+[31mDraft··[39m
+[31mSep 14, 2026[39m
+[31mROBIN PLACEHOLDER··[39m
+[31mUntitled[39m
+… 39 more line(s)</code></pre>
+<h4>R-2.3 · v1</h4>
+<p>Submitting a proposal requires the vendor to accept both the program&#39;s terms and the service&#39;s current terms, and the act of submitting records that acceptance.</p>
+<ul><li>given: a vendor with a complete proposal whose acceptance of the current terms has been reset</li><li>when: they submit the proposal without ticking both the program terms and the service terms</li><li>then: the submit action is unavailable, and a submission that reaches the service anyway is refused</li><li>test: tests/acceptance/proposals/R-2.3.spec.ts</li></ul>
+<p><strong>submitting a proposal requires the vendor to accept both the program&#39;s terms and the service&#39;s current terms</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>the act of submitting a proposal records the vendor&#39;s acceptance of the terms</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-3.3 · v1</h4>
+<p>An organization&#39;s full record can be opened only by an administrator or by a member who owns or administers that organization; anyone else is refused.</p>
+<ul><li>given: an organization with an owner, one administrator and one ordinary member</li><li>when: the ordinary member, and separately a member of public sector staff, opens that organization&#39;s management page</li><li>then: both are refused, while the owner, the organization&#39;s administrator and a service administrator each see the organization</li><li>test: tests/acceptance/organizations/R-3.3.spec.ts</li></ul>
+<p><strong>the owner sees the organization</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;Northern Pines Digital Ltd.&quot;[39m
+Received string:    [31m&quot;The Digital Marketplace Terms &amp; Conditions for E-Bidding have been updated. Please save what you are working on, review the latest version and agree to the updated terms.&quot;[39m</code></pre>
+<p><strong>the organization&#39;s administrator sees the organization</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;Northern Pines Digital Ltd.&quot;[39m
+Received string:    [31m&quot;The Digital Marketplace Terms &amp; Conditions for E-Bidding have been updated. Please save what you are working on, review the latest version and agree to the updated terms.&quot;[39m</code></pre>
+<p><strong>a service administrator sees the organization</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;Northern Pines Digital Ltd.&quot;[39m
+Received string:    [31m&quot;Home|[39m
+[31mAbout|[39m
+[31mDisclaimer|[39m
+[31mPrivacy|[39m
+[31mAccessibility|[39m
+[31mCopyright|[39m
+[31mContact Us|[39m
+[31mSource Code[39m
+[31mOwned and operated by the B.C. Government.&quot;[39m</code></pre>
+<h4>R-1.4 · v1</h4>
+<p>Every change to an opportunity&#39;s content creates a new version of it and records an edit in its history; the opportunity always shows its most recent version.</p>
+<ul><li>given: a published opportunity</li><li>when: an administrator changes its description and saves</li><li>then: the opportunity shows the new description, its history gains an entry recording that it was edited, by whom and when, and the previous content is retained</li><li>test: tests/acceptance/opportunities/R-1.4.spec.ts</li></ul>
+<p><strong>every change to an opportunity&#39;s content creates a new version of it and the opportunity always shows its most recent version</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>every change to an opportunity&#39;s content records an edit in its history</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-2.4 · v1</h4>
+<p>Only a draft proposal can be deleted, and deleting it removes it permanently.</p>
+<ul><li>given: a proposal that has been submitted</li><li>when: its author asks for it to be deleted</li><li>then: the request is refused, whereas deleting a draft succeeds and the proposal can no longer be opened</li><li>test: tests/acceptance/proposals/R-2.4.spec.ts</li></ul>
+<p><strong>a proposal that has been submitted cannot be deleted</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>only a draft proposal can be deleted, and deleting it removes it permanently</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-4.4 · v1</h4>
+<p>A person whose account an administrator deactivated cannot sign in; they are shown a sign-in failure notice instead of being let in.</p>
+<ul><li>given: an account an administrator has deactivated</li><li>when: that person signs in through the identity provider</li><li>then: no session is created and they are shown a page saying sign-in failed and inviting them to try again</li><li>test: tests/acceptance/users/R-4.4.spec.ts</li></ul>
+<p><strong>a person whose account an administrator deactivated cannot sign in; they are shown a sign-in failure notice instead of being let in</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-7.4 · v1</h4>
+<p>A page can also be read by its identifier, and the service falls back to treating the same value as an address when no page carries that identifier.</p>
+<ul><li>given: a page whose identifier is known</li><li>when: that identifier is used in place of the page&#39;s address</li><li>then: the same page is returned</li><li>test: tests/acceptance/content/R-7.4.spec.ts</li></ul>
+<p><strong>a page can also be read by its identifier</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m&quot;About us&quot;[39m
+Received: [31m&quot;About us[7m — B.C. Digital Marketplace[27m&quot;[39m</code></pre>
+<p><strong>the service falls back to treating the same value as an address when no page carries that identifier</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m&quot;About us&quot;[39m
+Received: [31m&quot;About us[7m — B.C. Digital Marketplace[27m&quot;[39m</code></pre>
+<h4>R-3.6 · v1</h4>
+<p>An administrator or an organization&#39;s owner may archive the organization, after which it no longer appears in the organization list, cannot be used on proposals, and disappears from its members&#39; lists of organizations; the archiving is recorded with the date and the person who did it.</p>
+<ul><li>given: an active organization with an owner and one other active member</li><li>when: the owner archives it</li><li>then: it is gone from the public organization list, gone from the other member&#39;s affiliated organizations, and its record carries the date it was archived and the identity of the person who archived it</li><li>test: tests/acceptance/organizations/R-3.6.spec.ts</li></ul>
+<p><strong>when the owner archives an active organization it is gone from the public organization list</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>when the owner archives an active organization it is gone from the other member&#39;s affiliated organizations</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-2.7 · v2</h4>
+<p>A proposal may be created only as a draft or as a submission, in all three programs; any other state is refused.</p>
+<ul><li>given: the published description of the proposal interface</li><li>when: it is compared with what the service accepts</li><li>then: three disagreements appear, and in each the running service is the stricter of the two</li><li>test: tests/acceptance/proposals/R-2.7.spec.ts</li></ul>
+<p><strong>a proposal may be created as a draft, in all three programs</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>a proposal may be created as a submission, in all three programs</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-7.7 · v1</h4>
+<p>An administrator can create a page by giving it a title, an address and a body, and once published it is readable by anyone at that address.</p>
+<ul><li>given: an administrator in the content area</li><li>when: they create a page, fill in its title, address and body, and confirm publishing it</li><li>then: the page exists, they are taken to its managing screen, and any visitor opening its address sees it</li><li>test: tests/acceptance/content/R-7.7.spec.ts</li></ul>
+<p><strong>an administrator can create a page by giving it a title, an address and a body, and once published it is readable by anyone at that address</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;derived-created-mu1em1pc&quot;[39m
+Received string:    [31m&quot;&quot;[39m</code></pre>
+<h4>R-8.7 · v1</h4>
+<p>A file is readable by anyone if it was marked readable by anyone, by a person it names, by anyone holding an account type it names, by whoever uploaded it, and by any administrator.</p>
+<ul><li>given: a file uploaded by one vendor and marked readable by no one else</li><li>when: a second vendor asks for it, and then an administrator asks for it</li><li>then: the second vendor is refused and the administrator receives it</li><li>test: tests/acceptance/files/R-8.7.spec.ts</li></ul>
+<p><strong>a file marked readable by no one else is readable by whoever uploaded it and by any administrator, and refused to another vendor</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>a file is readable by anyone if it was marked readable by anyone</strong> — failed</p>
+<pre><code>Error: open() of /api/files/:fileId?type=blob was called without a value for &quot;:fileId&quot; (given: {&quot;fileId&quot;:&quot;&quot;})</code></pre>
+<p><strong>a file is readable by a person it names</strong> — failed</p>
+<pre><code>Error: open() of /api/files/:fileId?type=blob was called without a value for &quot;:fileId&quot; (given: {&quot;fileId&quot;:&quot;&quot;})</code></pre>
+<p><strong>a file is readable by anyone holding an account type it names</strong> — failed</p>
+<pre><code>Error: open() of /api/files/:fileId?type=blob was called without a value for &quot;:fileId&quot; (given: {&quot;fileId&quot;:&quot;&quot;})</code></pre>
+<h4>R-7.8 · v1</h4>
+<p>Publishing a change to a page keeps the text it replaces as an earlier version of that page and shows the new text to every reader from that moment.</p>
+<ul><li>given: a published page an administrator has changed the body of</li><li>when: they confirm publishing the change</li><li>then: readers of the page&#39;s address see the new body, the page&#39;s updated date becomes the moment of the change, and the replaced title and body are kept as an earlier version</li><li>test: tests/acceptance/content/R-7.8.spec.ts</li></ul>
+<p><strong>publishing a change to a page shows the new text to every reader from that moment, and the page&#39;s updated date becomes the moment of the change</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: not [32m&quot;Updated Jan 7, 2026 9:00 AM[39m
+[32mUpdated By&quot;[39m</code></pre>
+<h4>R-1.9 · v2</h4>
+<p>An opportunity saved as a draft is accepted with incomplete content; when its proposal deadline, assignment date or start date is missing or invalid it is set to fourteen days from the day of saving, and its completion date is left empty.</p>
+<ul><li>given: a member of public sector staff filling in a new opportunity</li><li>when: they save it as a draft with fields still blank</li><li>then: the draft is stored, no content validation error is raised, and absent dates are set to fourteen days from the day of saving</li><li>test: tests/acceptance/opportunities/R-1.9.spec.ts</li></ul>
+<p><strong>an opportunity saved as a draft is accepted with incomplete content</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;R-1.9 draft saved with nothing but a title&quot;[39m
+Received string:    [31m&quot;Dashboard[39m
+[31mMy Opportunities[39m
+[31mEvaluations[39m
+[31mMy Opportunities[39m
+[31mView all opportunities[39m
+[31mTITLE	STATUS	CREATED·[39m
+[31mUntitled[39m
+[31mCODE WITH US··[39m
+[31mDraft··[39m
+[31mSep 14, 2026[39m
+[31mCASEY PLACEHOLDER··[39m
+[31mUntitled[39m
+[31mCODE WITH US··[39m
+[31mDraft··[39m
+[31mSep 14, 2026[39m
+[31mCASEY PLACEHOLDER··[39m
+[31mUntitled[39m
+… 314 more line(s)</code></pre>
+<p><strong>a draft whose proposal deadline is missing is given one fourteen days from the day of saving</strong> — failed</p>
+<pre><code>Error: unbound: no opportunity identifier in the address http://localhost:3000/opportunities/code-with-us/create</code></pre>
+<h4>R-2.9 · v1</h4>
+<p>A vendor may read the history of a proposal they authored, or of a proposal belonging to an organization they own or administer, in all three programs.</p>
+<ul><li>test: tests/acceptance/proposals/R-2.9.spec.ts</li></ul>
+<p><strong>a vendor may read the history of a proposal they authored, in all three programs</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>a vendor may read the history of a proposal belonging to an organization they own or administer, in all three programs</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-7.9 · v1</h4>
+<p>Removing an ordinary page removes it and every version of it permanently, and its address stops answering.</p>
+<ul><li>given: an ordinary page with several versions behind it</li><li>when: an administrator confirms removing it</li><li>then: they are returned to the list of pages, told it was removed, its address is answered as not found, and no version of its text survives anywhere in the service</li><li>test: tests/acceptance/content/R-7.9.spec.ts</li></ul>
+<p><strong>removing an ordinary page removes it, and its address stops answering</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-1.10 · v1</h4>
+<p>An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters.</p>
+<ul><li>given: a member of public sector staff creating or editing an opportunity that is not a draft</li><li>when: they submit it with a missing title, a title over 200 characters, a teaser over 500 characters, a missing location, or a description that is missing or over 10,000 characters</li><li>then: the submission is rejected and the offending field is named in the response</li><li>test: tests/acceptance/opportunities/R-1.10.spec.ts</li></ul>
+<p><strong>an opportunity that is not a draft is rejected when its title is missing</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>an opportunity that is not a draft is rejected when its title is over 200 characters</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>an opportunity that is not a draft is rejected when its teaser is over 500 characters</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>an opportunity that is not a draft is rejected when its location is missing</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>an opportunity that is not a draft is rejected when its description is missing</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>an opportunity that is not a draft is rejected when its description is over 10,000 characters</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-3.10 · v1</h4>
+<p>A membership can be ended by the member themselves, by the organization&#39;s owner or administrators, or by a service administrator; the membership becomes inactive rather than being erased, and the person stops counting towards the organization&#39;s team.</p>
+<ul><li>given: an organization with an owner and one further active member</li><li>when: that member chooses to leave the organization</li><li>then: they no longer appear on the organization&#39;s team list, the organization&#39;s team size falls to one, and the organization is no longer listed among their affiliated organizations</li><li>test: tests/acceptance/organizations/R-3.10.spec.ts</li></ul>
+<p><strong>when an active member chooses to leave, the membership becomes inactive and the person stops counting towards the organization&#39;s team</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-7.10 · v1</h4>
+<p>Only an administrator may create, change or remove a page; the same request from anybody else, signed in or not, changes nothing.</p>
+<ul><li>given: a signed-in vendor, a signed-in public sector employee, and a visitor who is not signed in</li><li>when: each of them asks the service to create, change or remove a page</li><li>then: each request is refused and no page is created, changed or removed</li><li>test: tests/acceptance/content/R-7.10.spec.ts</li></ul>
+<p><strong>a signed-in vendor asking the service to create, change or remove a page is refused, and nothing is created, changed or removed</strong> — failed</p>
+<pre><code>Error: unbound: content-create.enter_title — no field labelled &quot;Title&quot; on http://localhost:3000/content/create</code></pre>
+<p><strong>a signed-in public sector employee asking the service to create, change or remove a page is refused, and nothing is created, changed or removed</strong> — failed</p>
+<pre><code>Error: unbound: content-create.enter_title — no field labelled &quot;Title&quot; on http://localhost:3000/content/create</code></pre>
+<p><strong>a visitor who is not signed in asking the service to create, change or remove a page is refused, and nothing is created, changed or removed</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m&quot;About us&quot;[39m
+Received: [31m&quot;About us[7m — B.C. Digital Marketplace[27m&quot;[39m</code></pre>
+<h4>R-8.10 · v1</h4>
+<p>Asking for a file with its content requested returns the bytes, described by a content type worked out from the file&#39;s name and offered to the browser as something to save rather than to display.</p>
+<ul><li>given: a stored file named &quot;terms.pdf&quot; that the requester may read</li><li>when: they ask for it with its content requested</li><li>then: the bytes are returned, described as a PDF, and named &quot;terms.pdf&quot; for saving</li><li>test: tests/acceptance/files/R-8.10.spec.ts</li></ul>
+<p><strong>asking for a file with its content requested returns the bytes, described by a content type worked out from the file&#39;s name and offered to the browser as something to save rather than to display</strong> — failed</p>
+<pre><code>Error: open() of /api/files/:fileId?type=blob was called without a value for &quot;:fileId&quot; (given: {&quot;fileId&quot;:&quot;&quot;})</code></pre>
+<h4>R-1.11 · v1</h4>
+<p>An opportunity that is not a draft must state whether remote work is acceptable, and must carry a remote-work description of up to 500 characters whenever remote work is acceptable.</p>
+<ul><li>given: a member of public sector staff creating or editing an opportunity that is not a draft</li><li>when: they mark it as accepting remote work but leave the remote-work description empty</li><li>then: the submission is rejected</li><li>test: tests/acceptance/opportunities/R-1.11.spec.ts</li></ul>
+<p><strong>an opportunity that is not a draft must state whether remote work is acceptable</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>an opportunity that accepts remote work must carry a remote-work description</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>a remote-work description of more than 500 characters is rejected</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-8.11 · v1</h4>
+<p>Asking for a file without requesting its content returns a description of it — its identifier, its name and the date it was stored — under the same permission rules as the content itself.</p>
+<ul><li>given: a stored file the requester may read</li><li>when: they ask for it without requesting its content</li><li>then: its identifier, name and stored date are returned, and its content is not</li><li>test: tests/acceptance/files/R-8.11.spec.ts</li></ul>
+<p><strong>a description of a file is given under the same permission rules as the content itself</strong> — failed</p>
+<pre><code>Error: open() of /api/files/:fileId?type=blob was called without a value for &quot;:fileId&quot; (given: {&quot;fileId&quot;:&quot;&quot;})</code></pre>
+<h4>R-1.12 · v1</h4>
+<p>A Code With Us opportunity must offer a reward of at least $1 and at most $70,000, and must name at least one skill.</p>
+<ul><li>given: a member of public sector staff creating or editing a Code With Us opportunity that is not a draft</li><li>when: they submit a reward outside $1 to $70,000, or submit no skills</li><li>then: the submission is rejected</li><li>test: tests/acceptance/opportunities/R-1.12.spec.ts</li></ul>
+<p><strong>a Code With Us opportunity offering a reward below one dollar is rejected</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>a Code With Us opportunity offering a reward above seventy thousand dollars is rejected</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>a Code With Us opportunity naming no skill is rejected</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-2.12 · v1</h4>
+<p>A proposal saved as a draft is accepted however incomplete it is, but its attachments are checked even in draft.</p>
+<ul><li>given: a vendor filling in a new proposal with most fields still blank</li><li>when: they save it as a draft, attaching a file that does not exist</li><li>then: no content validation error is raised for the blank fields, and the save is refused only because of the attachment</li><li>test: tests/acceptance/proposals/R-2.12.spec.ts</li></ul>
+<p><strong>a proposal saved as a draft is accepted however incomplete it is</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-4.12 · v1</h4>
+<p>Only an administrator may grant or withdraw administrator rights, only over a public sector employee&#39;s account, and a vendor can never be granted them; withdrawing the rights returns the person to an ordinary public sector employee account.</p>
+<ul><li>given: an administrator, a public sector employee and a vendor</li><li>when: the administrator opens each of the other two profiles and ticks the administrator box</li><li>then: the public sector employee becomes an administrator immediately, and the request against the vendor is refused with a message saying vendors cannot be granted administrator permissions</li><li>test: tests/acceptance/users/R-4.12.spec.ts</li></ul>
+<p><strong>a public sector employee becomes an administrator immediately when an administrator grants them administrator rights</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: not [32m&quot;Public Sector Employee&quot;[39m</code></pre>
+<p><strong>a vendor can never be granted administrator rights, and the request against a vendor&#39;s account is refused</strong> — failed</p>
+<pre><code>Error: unbound: user-profile.toggle_admin_permission — no box labelled &quot;Admin&quot; on http://localhost:3000/users/00000000-0000-4000-8000-000000000201</code></pre>
+<p><strong>an ordinary public sector employee is offered no control to grant administrator rights, only a statement of their permissions</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeFalsy[2m()[22m
+
+Received: [31m&quot;Profile[39m
+[31mNotifications[39m
+[31mCasey Placeholder[39m
+[31mStatus[39m
+[31mActive[39m
+[31mAccount Type[39m
+[31mPublic Sector Employee[39m
+[31mPermission(s)[39m
+[31mAdmin[39m
+[31mProfile Information[39m
+[31mProfile Picture (Optional)[39m
+[31mIDIR[39m
+[31mName[39m
+[31mJob Title[39m
+[31mEmail Address&quot;[39m</code></pre>
+<h4>R-7.12 · v1</h4>
+<p>A fresh installation carries a full set of the pages the service needs, each holding placeholder text and titled by its own address until somebody writes it.</p>
+<ul><li>given: a newly prepared installation of the service that nobody has edited and an administrator looking at the list of pages on that installation</li><li>when: a visitor opens any of the pages the service needs, such as its terms and conditions and they read it</li><li>then: the page exists and answers, its title is its own address, and its body reads &quot;Initial version&quot; and twenty-two pages are listed, all marked as needed by the service</li><li>test: tests/acceptance/content/R-7.12.spec.ts</li></ul>
+<p><strong>a page the service needs exists and answers, its title is its own address, and its body holds placeholder text until somebody writes it</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m&quot;copyright&quot;[39m
+Received: [31m&quot;copyright[7m — B.C. Digital Marketplace[27m&quot;[39m</code></pre>
+<h4>R-8.12 · v1</h4>
+<p>A request for a file the requester may not read is answered as not authorized, and so is a request for a file that does not exist — unless the requester is an administrator, who is told it was not found.</p>
+<ul><li>given: an identifier that no stored file carries</li><li>when: a vendor asks for it, and then an administrator asks for it</li><li>then: the vendor is told they are not authorized and the administrator is told it was not found</li><li>test: tests/acceptance/files/R-8.12.spec.ts</li></ul>
+<p><strong>a request for a file the requester may not read is answered as not authorized</strong> — failed</p>
+<pre><code>Error: open() of /api/files/:fileId?type=blob was called without a value for &quot;:fileId&quot; (given: {&quot;fileId&quot;:&quot;&quot;})</code></pre>
+<p><strong>a request for a file that does not exist is answered as not authorized</strong> — failed</p>
+<pre><code>Error: open() of /api/files/:fileId?type=blob was called without a value for &quot;:fileId&quot; (given: {&quot;fileId&quot;:&quot;&quot;})</code></pre>
+<p><strong>a request for a file that does not exist is answered as not found when the requester is an administrator</strong> — failed</p>
+<pre><code>Error: open() of /api/files/:fileId?type=blob was called without a value for &quot;:fileId&quot; (given: {&quot;fileId&quot;:&quot;&quot;})</code></pre>
+<h4>R-2.13 · v1</h4>
+<p>A Code With Us proposal that is not a draft is rejected unless it carries proposal text of 1 to 10,000 characters, additional comments of at most 10,000 characters, and a complete proponent.</p>
+<ul><li>given: a vendor submitting a Code With Us proposal</li><li>when: the proposal text is empty or longer than 10,000 characters, or the additional comments are longer than 10,000 characters</li><li>then: the submission is rejected and the offending field is named in the response</li><li>test: tests/acceptance/proposals/R-2.13.spec.ts</li></ul>
+<p><strong>a Code With Us proposal that is not a draft is rejected when its proposal text is empty</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>a Code With Us proposal that is not a draft is rejected when its proposal text is longer than 10,000 characters</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>a Code With Us proposal that is not a draft is rejected when its additional comments are longer than 10,000 characters</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>a Code With Us proposal that is not a draft is rejected when it carries no complete proponent</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-3.13 · v1</h4>
+<p>Only a service administrator may transfer ownership of an organization, and only to a member whose membership is already active; the previous owner becomes an ordinary member.</p>
+<ul><li>given: an organization with an owner, one active member and one member whose invitation is still pending</li><li>when: an administrator transfers ownership to the active member</li><li>then: that member becomes the organization&#39;s owner, the previous owner becomes an ordinary member, and the pending member cannot be chosen as the new owner</li><li>test: tests/acceptance/organizations/R-3.13.spec.ts</li></ul>
+<p><strong>an administrator transfers ownership to the active member, who becomes the owner while the previous owner becomes an ordinary member</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>the pending member cannot be chosen as the new owner</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-8.13 · v1</h4>
+<p>A profile picture or an organization logo wider than 500 pixels is narrowed to 500 pixels before it is stored, and one taller than 500 pixels is shortened to 500 pixels, in both cases keeping its proportions.</p>
+<ul><li>given: a signed-in person choosing a new profile picture</li><li>when: they upload an image 2000 pixels wide and 300 pixels tall</li><li>then: it is stored 500 pixels wide, still in its original proportions</li><li>test: tests/acceptance/files/R-8.13.spec.ts</li></ul>
+<p><strong>a profile picture wider than 500 pixels is narrowed to 500 pixels before it is stored, keeping its proportions</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m500[39m
+Received: [31mNaN[39m</code></pre>
+<p><strong>a profile picture taller than 500 pixels is shortened to 500 pixels before it is stored, keeping its proportions</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m75[39m
+Received: [31mNaN[39m</code></pre>
+<p><strong>an organization logo wider than 500 pixels is narrowed to 500 pixels before it is stored, keeping its proportions</strong> — failed</p>
+<pre><code>Error: unbound: organization-edit.edit_organization — no control labelled &quot;Edit Organization&quot; on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000301/edit?tab=organization</code></pre>
+<h4>R-1.14 · v1</h4>
+<p>An opportunity&#39;s key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen.</p>
+<ul><li>given: a member of public sector staff creating or editing an opportunity that is not a draft</li><li>when: they submit a proposal deadline in the past, or any later date that falls before the date preceding it</li><li>then: the submission is rejected</li><li>test: tests/acceptance/opportunities/R-1.14.spec.ts</li></ul>
+<p><strong>an opportunity that is not a draft is rejected when its proposal deadline is earlier than today</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>an opportunity that is not a draft is rejected when its assignment date falls before its proposal deadline</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>an opportunity that is not a draft is rejected when its start date falls before its assignment date</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>an opportunity that is not a draft is rejected when its completion date falls before its start date</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>each of an opportunity&#39;s key dates is recorded as four o&#39;clock in the afternoon on the day chosen</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-2.14 · v2</h4>
+<p>A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name.</p>
+<ul><li>given: a vendor submitting a Code With Us proposal as an individual</li><li>when: the legal name, email address, street address, city, province, postal code or country is missing, or the email address or phone number is malformed</li><li>then: the submission is rejected and each offending field is named in the response</li><li>test: tests/acceptance/proposals/R-2.14.spec.ts</li></ul>
+<p><strong>a Code With Us proponent named as an individual carries a legal name, an email address and a full postal address, each field validated in turn</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>a Code With Us proponent named as an organization is checked only for existence and active status</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-3.14 · v1</h4>
+<p>The list of an organization&#39;s team members can be read only by a service administrator or by someone who owns or administers that organization.</p>
+<ul><li>given: an organization with an owner and one ordinary member</li><li>when: that ordinary member, and separately a vendor unconnected to the organization, asks for the organization&#39;s team list</li><li>then: both are refused, while the owner and a service administrator receive the list</li><li>test: tests/acceptance/organizations/R-3.14.spec.ts</li></ul>
+<p><strong>the ordinary member asking for the organization&#39;s team list is refused</strong> — failed</p>
+<pre><code>Error: unbound: organization-edit.team_member_row — no tab labelled &quot;Team&quot; on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000301/edit</code></pre>
+<p><strong>a vendor unconnected to the organization asking for its team list is refused</strong> — failed</p>
+<pre><code>Error: unbound: organization-edit.team_member_row — no tab labelled &quot;Team&quot; on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000301/edit</code></pre>
+<p><strong>the owner receives the organization&#39;s team list</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>a service administrator receives the organization&#39;s team list</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-8.14 · v1</h4>
+<p>A profile picture or logo that cannot be read as an image is stored as it was uploaded rather than refused.</p>
+<ul><li>given: a signed-in person with a file that is not an image but is named &quot;portrait.png&quot;</li><li>when: they upload it as their profile picture</li><li>then: the resizing step fails quietly, the file is stored unchanged, and it is set as their profile picture</li><li>test: tests/acceptance/files/R-8.14.spec.ts</li></ul>
+<p><strong>a profile picture or logo that cannot be read as an image is stored as it was uploaded rather than refused</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: not [32m&quot;/images/logo.svg&quot;[39m</code></pre>
+<h4>R-3.15 · v1</h4>
+<p>The organizations a vendor may act on behalf of are those they own and those they administer, excluding any that have been archived.</p>
+<ul><li>given: a vendor who owns one organization, administers a second, is an ordinary member of a third, and owns a fourth that has been archived</li><li>when: they ask for the organizations they can act for</li><li>then: the first two are returned and the third and fourth are not</li><li>test: tests/acceptance/organizations/R-3.15.spec.ts</li></ul>
+<p><strong>the organizations a vendor owns are returned, and an archived one they own is not</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;Salt Marsh Labs Ltd.&quot;[39m
+Received string:    [31m&quot;Northern Pines Digital Ltd.&quot;[39m</code></pre>
+<p><strong>an organization a vendor administers is returned</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;Northern Pines Digital Ltd.&quot;[39m
+Received string:    [31m&quot;&quot;[39m</code></pre>
+<h3>Triage conditions</h3>
+<p>One condition per line, one for every failing criterion the page lists, in exactly one of these forms:</p>
+<ul><li><code>adapter-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion and the test are both fine, and this target&#39;s adapter is what failed: it read the wrong thing off the page, reported a control missing that the page does render, or answered empty where it never reached the page. <code>&lt;why&gt;</code> names what the adapter did wrong, specifically enough for the next binding run to fix it. The criterion is not touched.</li><li><code>product-question &lt;ID&gt;</code> — nothing in the evidence points at the adapter. The failure goes to the product owner, who decides whether the application, the criterion or the test is wrong. No text after the ID.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. A condition may not span more than one line. When the evidence is genuinely unclear, it is a <code>product-question</code>: a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the adapter comes back from the next binding run unchanged and costs a run to find out.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-14 19:18.</p>
+<div class="body"><p>The question was which of the 40 failing criteria on this page this project&#39;s own old-target adapter caused. Ruling: approve, with one triage line per criterion (39 adapter-wrong, 1 product-question). The reason is in the saved page snapshots and call logs under tests/test-results. Every timed-out test stalled clicking a disabled anchor (tabindex=-1). It was disabled because opportunityCwuCreate.publish, saveDraft and organizationCreate.createOrganization drop their input and the form was never filled, and press() does not refuse a disabled control. The content tests typed an empty slug and body because asText() never reads the slug or body keys. contentView.pageTitle returns the browser tab title. fileDownload.downloadFile() discards the id given to open(), even after uploads that succeeded. Several readers read the wrong region or read before the page finished loading. R-8.1 goes to the product owner because nothing points at the adapter: the page shows it failing, but the run&#39;s own results file records both of its tests as passing, and uploads through the same code passed in R-8.2, R-8.5 and R-8.6. What would change this ruling: a fresh run with these adapter defects fixed that still fails a criterion at the same assertion. That criterion would then be a product question, and it would come back on the next page.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>adapter-wrong R-2.1: publishOpportunity&#39;s opportunityCwuCreate.publish(input) never fills the form from its input (title, teaser, location, description, remoteOk, reward, skills, dates), and press() clicks the Publish anchor while it is disabled (tabindex=-1, class disabled), retrying until the 120 s timeout. Fill the fields from the input, and have press() fail at once on a disabled control instead of clicking it.</li><li>adapter-wrong R-3.1: organizationList.organizationName() uses textUnder(&#39;&#39;, &#39;Organization Name&#39;), which returns only the first body row&#39;s cell (&#39;Broken Compass Delivery Ltd.&#39;). It must return every name in that column, in page order.</li><li>adapter-wrong R-7.1: contentView.pageTitle() returns page.title(), the browser tab title (&#39;About us — B.C. Digital Marketplace&#39;). It must read the page&#39;s own heading text.</li><li>product-question R-8.1</li><li>adapter-wrong R-2.2: publishOpportunity&#39;s opportunityCwuCreate.publish(input) never fills the form from its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the test times out. proposalCwuCreate.saveDraft(input) likewise drops proposalText.</li><li>adapter-wrong R-3.2: organizationCreate.createOrganization(input) never fills Legal Name, address and contact fields from its input, then clicks the disabled &#39;Create Organization&#39; anchor (tabindex=-1) until the 120 s timeout. For public sector staff it throws unbound when the create page is withheld, instead of letting the refusal be observed.</li><li>adapter-wrong R-1.3: opportunityCwuCreate.saveDraft(input) drops the title, so drafts are saved as &#39;Untitled&#39; (the dashboard shows rows of Untitled drafts). allOpportunitiesForAdministrator reads only the administrator&#39;s own &#39;My Opportunities&#39; tab rather than a list of every opportunity.</li><li>adapter-wrong R-2.3: publishOpportunity&#39;s opportunityCwuCreate.publish(input) never fills the form from its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the test times out.</li><li>adapter-wrong R-3.3: organizationEdit.organizationTab() reads the page before it has rendered. For the service administrator the snapshot shows heading &#39;Northern Pines Digital Ltd.&#39;, but the reader returned only the footer; for the owner and the organization admin it read while the page showed &#39;Loading...&#39;. Wait for the tab&#39;s content to appear before reading it.</li><li>adapter-wrong R-1.4: opportunityCwuCreate.publish(input) never fills the form from its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the test times out. opportunityCwuEdit.editDetails(input) also ignores the description it is given.</li><li>adapter-wrong R-2.4: publishOpportunity&#39;s opportunityCwuCreate.publish(input) never fills the form from its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the test times out. proposalCwuCreate.saveDraft/submitProposal also drop proposalText.</li><li>adapter-wrong R-4.4: signIn() always uses the persona&#39;s session-route (/auth/createsessionvendor/5), which minted a session for the deactivated account and landed on the Dashboard. It bypassed the identity provider the criterion names. For a sign-in that is meant to be refused, use the persona&#39;s sandbox-idp entry.</li><li>adapter-wrong R-7.4: contentView.pageTitle() returns page.title(), the browser tab title (&#39;About us — B.C. Digital Marketplace&#39;). It must read the page&#39;s own heading text.</li><li>adapter-wrong R-3.6: organizationCreate.createOrganization(input) never fills the form from its input, then clicks the disabled &#39;Create Organization&#39; anchor (tabindex=-1) until the 120 s timeout.</li><li>adapter-wrong R-2.7: publishCodeWithUs&#39;s opportunityCwuCreate.publish(input) never fills the form from its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the test times out. The Sprint With Us and Team With Us create publish and the proposal saveDraft/submitProposal share the same dropped input.</li><li>adapter-wrong R-7.7: contentCreate.enterSlug and enterBody send an empty string because asText() only reads the value/name/text/title/label/answer/score/id keys and never slug or body. The snapshot shows Slug and Body blank, so resultingPublicAddress() finds nothing.</li><li>adapter-wrong R-8.7: fileDownload.downloadFile() ignores the fileId passed to fileDownload.open() and rebuilds the address from its own missing input, throwing &#39;called without a value for :fileId&#39;. It must reuse the file opened.</li><li>adapter-wrong R-7.8: contentEdit.editBody sends an empty string because asText() never reads the body key. The page then shows &#39;Body must be between 1 and 50000 characters long.&#39; and nothing publishes. contentEdit.updatedDate() also matches the &#39;Updated By&#39; label along with the date.</li><li>adapter-wrong R-1.9: opportunityCwuCreate.saveDraft(input) drops the title, so the draft is saved as &#39;Untitled&#39;. opportunityCwuEdit.opportunityIdentifier() is read while Save Draft still shows &#39;Loading...&#39; and the address is still /opportunities/code-with-us/create. Wait for the save to finish.</li><li>adapter-wrong R-2.9: publishAllThree&#39;s opportunityCwuCreate.publish(input) never fills the form from its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the test times out.</li><li>adapter-wrong R-7.9: contentCreate.enterSlug and enterBody send an empty string (asText() never reads slug or body), so Publish stays disabled, and press() clicks the disabled Publish anchor (tabindex=-1) until the 120 s timeout.</li><li>adapter-wrong R-1.10: opportunityCwuCreate.publish(input) never fills the form from its input, so the one invalid field under test is never entered, and press() clicks the disabled Publish anchor (tabindex=-1) until the test times out.</li><li>adapter-wrong R-3.10: organizationCreate.createOrganization(input) never fills the form from its input, then clicks the disabled &#39;Create Organization&#39; anchor (tabindex=-1) until the 120 s timeout.</li><li>adapter-wrong R-7.10: contentView.pageTitle() returns page.title(), the browser tab title (&#39;About us — B.C. Digital Marketplace&#39;), not the page&#39;s own heading.</li><li>adapter-wrong R-8.10: fileDownload.downloadFile() ignores the fileId passed to fileDownload.open() and throws &#39;called without a value for :fileId&#39;. It must reuse the file opened.</li><li>adapter-wrong R-1.11: opportunityCwuCreate.publish(input) never fills the form from its input (remoteOk, remoteDescription and the rest), and press() clicks the disabled Publish anchor (tabindex=-1) until the test times out.</li><li>adapter-wrong R-8.11: fileDownload.downloadFile() ignores the fileId passed to fileDownload.open() and throws &#39;called without a value for :fileId&#39; after the upload and description checks succeeded. It must reuse the file opened.</li><li>adapter-wrong R-1.12: opportunityCwuCreate.publish(input) never fills the form from its input (reward, skills and the rest), and press() clicks the disabled Publish anchor (tabindex=-1) until the test times out.</li><li>adapter-wrong R-2.12: publishOpportunity&#39;s opportunityCwuCreate.publish(input) never fills the form from its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the test times out.</li><li>adapter-wrong R-4.12: userProfile.notFoundPage() returns the whole page text, so any rendered profile reads as a not-found page. It must return something only when the Not Found screen is shown.</li><li>adapter-wrong R-7.12: contentView.pageTitle() returns page.title(), the browser tab title (&#39;copyright — B.C. Digital Marketplace&#39;). It must read the page&#39;s own heading text.</li><li>adapter-wrong R-8.12: fileDownload.downloadFile() ignores the fileId passed to fileDownload.open() and throws &#39;called without a value for :fileId&#39;, even when open() was given the seeded identifier. It must reuse the file opened.</li><li>adapter-wrong R-2.13: publishOpportunity&#39;s opportunityCwuCreate.publish(input) never fills the form from its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the test times out. proposalCwuCreate.submitProposal also drops proposalText and additionalComments.</li><li>adapter-wrong R-3.13: organizationCreate.createOrganization(input) never fills the form from its input, then clicks the disabled &#39;Create Organization&#39; anchor (tabindex=-1) until the 120 s timeout.</li><li>adapter-wrong R-8.13: storedImageWidth/Height are read while Save Changes still shows &#39;Loading...&#39;, and only an img whose src contains /api/ is looked for, so no stored picture is found. organizationEdit.editOrganization presses &#39;Edit Organization&#39; while the organization page still shows &#39;Loading...&#39;, though R-3.3&#39;s administrator snapshot shows that control in the nav bar.</li><li>adapter-wrong R-1.14: opportunityCwuCreate.publish(input) never fills the form from its input (the four dates and the rest), and press() clicks the disabled Publish anchor (tabindex=-1) until the test times out.</li><li>adapter-wrong R-2.14: publishOpportunity&#39;s opportunityCwuCreate.publish(input) never fills the form from its input, and press() clicks the disabled Publish anchor (tabindex=-1) until the test times out. proposalCwuCreate.chooseProponentIndividual(input) also ignores the individual&#39;s details.</li><li>adapter-wrong R-3.14: organizationEdit.teamMemberRow() calls openTab, which throws unbound when the Team tab is withheld from the ordinary member and the unconnected vendor. It should read &#39;&#39; as tabContent does. For the owner and the administrator it reads the table before the page has loaded (snapshot shows &#39;Loading...&#39;).</li><li>adapter-wrong R-8.14: fileImagePicker.currentImage() returns the first img on the page, the site header logo &#39;/images/logo.svg&#39;, rather than the profile picture, and reads it while Save Changes still shows &#39;Loading...&#39;.</li><li>adapter-wrong R-3.15: after myOrganizations the page is the profile Organizations tab, whose Owned and Affiliated tables are headed &#39;Legal Name&#39;, but organizationName() reads only one cell under &#39;Organization Name&#39;. It returned a single name on the public list and &#39;&#39; on this tab, where the snapshot lists &#39;Northern Pines Digital Ltd.&#39;.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
