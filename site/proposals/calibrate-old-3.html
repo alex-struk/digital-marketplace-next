@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-old-3 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">85</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">85</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">74</span></a></li><li><a href="../runs.html">Run log <span class="count">8</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-old-3</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-09-14 19:34</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr></tbody></table></div>
+<div class="body"><h2>3 criterion(s) fail against old: which of them is the application&#39;s fault, which the spec&#39;s, and which the test&#39;s?</h2>
+<p><strong>Recommendation.</strong> Rule on R-8.1, R-6.23, R-6.28 with a calibration condition, so the next calibrate run can apply it.</p>
+<p>3 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:3000,">http://localhost:3000,</a> with no ruling yet. The tests are blind: they were written from the criteria alone, by an agent that never saw the application. So a failure means one of exactly three things, and only you can say which: the application is wrong, the criterion is wrong, or the test is wrong.</p>
+<p>Rule on each one below. Until every failure carries a ruling, this question is asked again on every calibration run.</p>
+<h4>R-8.1 · v1</h4>
+<p>Any person who is signed in may upload a file, and a visitor who is not signed in cannot.</p>
+<ul><li>given: a visitor who is not signed in</li><li>when: they submit a file for upload</li><li>then: the upload is refused as not permitted and no file is stored</li><li>test: tests/acceptance/files/R-8.1.spec.ts</li></ul>
+<p><strong>any person who is signed in may upload a file</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-6.23 · v1</h4>
+<p>An administrator viewing the service&#39;s terms and conditions can announce that they have changed, which withdraws every vendor&#39;s standing acceptance and sends each active vendor a message asking them to read and accept the new terms.</p>
+<ul><li>given: an administrator on the page holding the service&#39;s terms and conditions, and a mix of active and deactivated vendors who had all accepted the previous terms</li><li>when: the administrator chooses to notify vendors and confirms</li><li>then: every vendor&#39;s acceptance is withdrawn and each active vendor receives a message naming the change and offering a link to read and accept the new terms</li><li>test: tests/acceptance/notifications/R-6.23.spec.ts</li></ul>
+<p><strong>an administrator viewing the service&#39;s terms and conditions can announce that they have changed, which withdraws every vendor&#39;s standing acceptance and sends each active vendor a message asking them to read and accept the new terms</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+Expected: &gt; [32m0[39m
+Received:   [31m0[39m
+
+Call Log:
+- Timeout 10000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-6.28 · v1</h4>
+<p>The service skips a recipient that holds no email address rather than composing a message addressed to nobody, and a broadcast to many people always continues past a recipient it cannot address or cannot reach.</p>
+<ul><li>test: tests/acceptance/notifications/R-6.28.spec.ts</li></ul>
+<p><strong>the service skips a recipient that holds no email address rather than composing a message addressed to nobody, and a broadcast to many people always continues past a recipient it cannot address or cannot reach</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+Expected: &gt; [32m0[39m
+Received:   [31m0[39m
+
+Call Log:
+- Timeout 10000ms exceeded while waiting on the predicate</code></pre>
+<h3>Calibration conditions</h3>
+<p>One condition per line, and exactly one of these forms:</p>
+<ul><li><code>defect-in-old &lt;ID&gt;</code> — the old application really does fail this and the criterion is right anyway. The test stands as written and the rebuild has to pass it; the criterion keeps a note saying so. No text after the ID.</li><li><code>spec-wrong &lt;ID&gt;: &lt;corrected statement&gt;</code> — the criterion misdescribes what the old application does. The statement is replaced and its version bumped, which marks the test stale so <code>derive-tests --stale</code> writes it again from the corrected criterion.</li><li><code>test-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion is right and the test is not. The id goes to <code>tests/acceptance/redo.yaml</code> for <code>derive-tests</code> to redo, still blind, and <code>&lt;why&gt;</code> records what the test got wrong without describing how the application is built.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. <code>defect-in-old</code> takes no text; the other two require a colon and text on the same line. A condition may not span more than one line.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent) on 2026-09-14 19:42.</p>
+<div class="body"><p>The question was whether the three criteria still failing against the old application, R-8.1, R-6.23 and R-6.28, fail because of the application, the spec or the test. Ruling: approve, with test-wrong on all three, because in each case the evidence shows the old application doing what the criterion says and the test assuming something the criterion never states. R-6.23 and R-6.28 both poll vendor.one first and both failed after about 11 s, which is a single 10 s poll timing out on that first vendor. The R-4.19 test signs in as vendor.one and deactivates the account. It relies on signing in again to restore it, which the suite&#39;s test sign-in does not do, and calibrate-triage-old-2 recorded vendor.one&#39;s profile as already offering only reactivation. Both criteria promise a message only to active vendors, so a deactivated vendor receiving nothing meets them. The same snapshots show the Vendors Notified confirmation, and the old code sends one message per active vendor and never lets a failed send interrupt the loop (email-notifications.ts:76, terms-updated.tsx:11, transport.ts:24-68). For R-8.1, the old code grants upload on being signed in alone (permissions.ts:326, file.ts:131). The read-access statement the test sends passes the service&#39;s own validation, and the uploader&#39;s seeded account exists with that identifier. The same persona uploading through the same path passes R-8.2, whose read-access statement is the plainest one, and calibrate-triage-old-1 recorded this signed-in test passing in an earlier run. Nothing points at the product, and the test makes success depend on a read-access detail R-8.1 never mentions. Caveats about the evidence: no test that waits for mail has yet passed against the old target, so delivery to the catcher is still unproven, and a direct query of the catcher and the database was not run. The old application also composes a message with no recipient for a vendor who holds no email address, which R-6.28 forbids, but the current test does not observe that and it is not what failed. Separately, the test suite&#39;s owner should note that the R-4.19 test leaves vendor.one deactivated on the old target. What would change this ruling: a rewritten R-6.23 or R-6.28 test that establishes its vendors are active and still finds no message reaching them would make that criterion defect-in-old. A rewritten R-8.1 test with the plainest read access that is still refused while signed in would do the same for R-8.1.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>test-wrong R-8.1: the signed-in half makes a successful upload depend on a read-access statement naming one particular account, which R-8.1 never mentions; state read access in the plainest form the spec offers, so that being signed in is the only thing that differs between the two halves</li><li>test-wrong R-6.23: the test expects a message for vendors it assumes are active without establishing that they are active when the announcement is made, and the first one it polls is an account another test in the suite leaves deactivated; the criterion promises a message only to active vendors, so establish the active and deactivated vendors the given names before announcing and check each group against what the criterion says it should receive</li><li>test-wrong R-6.28: the test polls vendors it assumes are active without establishing it, the first being an account the suite leaves deactivated, so one timeout ends the check before any other vendor is looked at; establish that every vendor polled is active at the moment of the broadcast, keep the vendor holding no email address among the recipients, and report every addressable vendor not reached rather than stopping at the first</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
