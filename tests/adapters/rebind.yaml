@@ -220,3 +220,198 @@ rebind:
       blank (not in the contract's input), so Publish stays disabled and press()
       throws before any proposal is withdrawn. Fill required fields the input
       does not name before pressing Publish.
+  - id: R-2.24
+    target: old
+    why: opportunityCwuCreate.publish(input) leaves the required 'Acceptance
+      Criteria*' and 'Evaluation Criteria*' on '3. Details' blank because the
+      input never names them, so Publish stays disabled and press() throws
+      before any proposal exists; opportunityTwuCreate.addResource also has no
+      mapping for 'order'. Fill required fields the input does not name before
+      pressing Publish, and map 'order' on the resource step.
+  - id: R-8.25
+    target: old
+    why: fileAttachmentControl.addAttachment opens the draft's edit page
+      (tab=opportunity), which is read-only and shows 'This opportunity is a
+      draft. Please select "Edit" from the Actions dropdown'; the adapter walks
+      to '4. Attachments' without choosing Edit, so 'Add Attachment' never
+      appears. Choose 'Edit' from the Actions menu before looking for 'Add
+      Attachment'. opportunitySwuCreate.addPhase also leaves 'startDate',
+      'completionDate', 'maxBudget' and 'capabilities' unmapped, and
+      opportunityCwuCreate.publish leaves 'Acceptance Criteria*' and 'Evaluation
+      Criteria*' blank so Publish stays disabled.
+  - id: R-4.27
+    target: old
+    why: after the name is cleared, or given a name or job title over one hundred
+      characters, the profile's 'Save Changes' is disabled and that is the
+      refusal the test goes on to read; userProfileSelf.saveChanges press()
+      throws on the disabled control instead. When 'Save Changes' is disabled
+      after the input is entered, return without saving so fieldError() and the
+      reopened fields can be read.
+  - id: R-1.28
+    target: old
+    why: opportunityCwuCreate.publish and saveDraft leave the required 'Acceptance
+      Criteria*' and 'Evaluation Criteria*' blank, so the create page's Publish
+      and the draft's Actions-menu Publish are disabled and press() throws. For
+      the draft, opportunityCwuEdit.cancelOpportunity throws unbound when the
+      Actions menu offers no 'Cancel', although that absence is the refusal the
+      test reads; return quietly when the action is not offered. Fill required
+      fields the input does not name before publishing.
+  - id: R-3.28
+    target: old
+    why: organizationEdit.saveServiceAreas presses the top-bar 'Save Changes' but
+      never confirms the 'Are you sure?' dialog it raises ('Please confirm your
+      changes to the Service Area list'), so the dialog stays open and
+      intercepts the click on the 'TWU Qualification' tab for 15 s.
+      saveServiceAreas also ignores its serviceAreas input and never ticks or
+      clears boxes. Set the boxes from the input, confirm the dialog with its
+      'Save Changes', and wait for it to close.
+  - id: R-8.28
+    target: old
+    why: in the logo test organizationEdit.saveChanges() presses 'Save Changes' but
+      never confirms the 'Save Changes?' dialog, which is still open in the
+      snapshot with the form in edit mode, so imageAddress() reads ''. Confirm
+      the dialog and wait for the save to finish before reading the stored image
+      address.
+  - id: R-3.30
+    target: old
+    why: organizationEdit.fieldError() returns '' while the page shows the alert
+      'Unable to Add Unregistered Team Members' with
+      nobody.registered.here@example.test as a list item under it; messages()
+      discards list items as prose and its pattern does not match an address.
+      Read the text of a visible alert, list items included, as the warning.
+  - id: R-1.31
+    target: old
+    why: proposalCwuCreate.chooseProponentIndividual() leaves the required 'Legal
+      Name*', 'Email Address*', 'Street Address*', 'City*', 'Province / State*',
+      'Postal / ZIP Code*' and 'Country*' blank because the input names none of
+      them, and acceptProgramTerms then opens the terms through the top-bar
+      'Submit', which is disabled, so press() throws before any proposal is
+      submitted. Fill required proponent fields the input does not name, and
+      reach the terms without a disabled control.
+  - id: R-8.31
+    target: old
+    why: opportunityCwuCreate.publish(input) leaves the required 'Acceptance
+      Criteria*' and 'Evaluation Criteria*' blank, so Publish stays disabled and
+      press() throws; for the draft, fileAttachmentControl.addAttachment never
+      chooses 'Edit' from the Actions menu on the read-only draft page, so 'Add
+      Attachment' is never reached. Fill required fields the input does not
+      name, and enter editing before attaching.
+  - id: R-1.32
+    target: old
+    why: opportunityCwuCreate.publish and saveDraft leave the required 'Acceptance
+      Criteria*' and 'Evaluation Criteria*' blank, so the create page's Publish
+      and the draft's Actions-menu Publish are disabled and press() throws. For
+      the draft, opportunityCwuEdit.addAddendum throws unbound when no 'Addenda'
+      tab is offered, although that absence is the refusal the test reads;
+      return quietly. addAddendum also never confirms the 'Publish Addendum?'
+      dialog (seen open in R-1.35).
+  - id: R-1.34
+    target: old
+    why: opportunityCwuCreate.saveDraft(input) leaves the required 'Acceptance
+      Criteria*' and 'Evaluation Criteria*' blank because the input never names
+      them, so the draft is incomplete and opportunityCwuEdit.publish finds the
+      Actions-menu Publish disabled and throws. Fill required fields the input
+      does not name before saving the draft.
+  - id: R-2.34
+    target: old
+    why: "in the first test the 'Disqualification Reason' dialog is open with Reason
+      empty and its 'Disqualify' disabled, which is the refusal the test reads;
+      disqualify() press() throws instead. When the dialog's 'Disqualify' is
+      still disabled after the reason is entered, cancel the dialog and return.
+      The second test's failure is not a binding fault: the page shows the
+      proposal as Non-compliant and says its history will be available once the
+      opportunity reaches the Challenge."
+  - id: R-1.35
+    target: old
+    why: "in the addendum test opportunityCwuEdit.addAddendum types the text and
+      presses 'Publish Addendum', but never confirms the 'Publish Addendum?'
+      dialog it raises, which is still open in the snapshot, so no addendum is
+      published and no notice is sent. Confirm the dialog and wait for it to
+      close. The edit test is not a binding fault: 'Opportunity Changes
+      Published' rendered and the author received no mail."
+  - id: R-2.35
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) leaves the
+      required 'Acceptance Criteria*' and 'Evaluation Criteria*' on '3. Details'
+      blank because the input never names them, so Publish stays disabled and
+      press() throws before any proposal exists. Fill required fields the input
+      does not name before pressing Publish.
+  - id: R-1.36
+    target: old
+    why: opportunityCwuCreate.saveDraft(input) leaves the required 'Acceptance
+      Criteria*' and 'Evaluation Criteria*' blank, so the draft is incomplete
+      and opportunityCwuEdit.publish finds the Actions-menu Publish disabled and
+      throws before anything can be cancelled. Fill required fields the input
+      does not name before saving the draft.
+  - id: R-2.36
+    target: old
+    why: in both tests opportunityCwuCreate.publish(input) leaves the required
+      'Acceptance Criteria*' and 'Evaluation Criteria*' blank, so Publish stays
+      disabled and press() throws before any proposal is submitted or withdrawn.
+      Fill required fields the input does not name before pressing Publish.
+  - id: R-1.37
+    target: old
+    why: opportunityCwuCreate.submitForReview(input) leaves the required 'Acceptance
+      Criteria*' and 'Evaluation Criteria*' on '3. Details' blank because the
+      input never names them; the snapshot shows the top bar with 'Publish'
+      disabled and no 'Submit for Review', so offered() returns quietly and
+      nothing is submitted. Fill required fields the input does not name before
+      looking for 'Submit for Review'.
+  - id: R-2.37
+    target: old
+    why: opportunityCwuCreate.publish(input) leaves the required 'Acceptance
+      Criteria*' and 'Evaluation Criteria*' blank, so Publish stays disabled and
+      press() throws; opportunitySwuCreate.addPhase leaves 'startDate',
+      'completionDate', 'maxBudget' and 'capabilities' unmapped to the phase
+      step's fields. Fill required fields the input does not name, and map those
+      phase keys.
+  - id: R-1.38
+    target: old
+    why: opportunityCwuCreate.publish(input) leaves the required 'Acceptance
+      Criteria*' and 'Evaluation Criteria*' blank, so Publish stays disabled and
+      press() throws before any open opportunity exists to order. Fill required
+      fields the input does not name before pressing Publish.
+  - id: R-2.38
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) leaves the
+      required 'Acceptance Criteria*' and 'Evaluation Criteria*' blank, so
+      Publish stays disabled and press() throws before any proposal exists to
+      export. Fill required fields the input does not name before pressing
+      Publish.
+  - id: R-1.39
+    target: old
+    why: in all four tests opportunityCwuCreate.publish(input) leaves the required
+      'Acceptance Criteria*' and 'Evaluation Criteria*' blank, so Publish stays
+      disabled and press() throws before the list can be filtered. Fill required
+      fields the input does not name before pressing Publish.
+  - id: R-1.48
+    target: old
+    why: opportunityCwuCreate.publish and submitForReview leave the required
+      'Acceptance Criteria*' and 'Evaluation Criteria*' blank, so Publish throws
+      disabled and submitForReview returns without submitting because no 'Submit
+      for Review' is shown. opportunitySwuCreate.saveDraft({title}) clicks 'Save
+      Draft', but the page stays on /opportunities/sprint-with-us/create, and
+      landOn swallows its 20 s timeout, so no Sprint With Us draft exists to
+      list. Fill required fields the input does not name, and when Save Draft
+      does not reach the record's address, report the page's state instead of
+      returning.
+  - id: R-1.53
+    target: old
+    why: opportunitySwuCreate.saveDraft({title}) clicks 'Save Draft', but the
+      snapshot is still on /opportunities/sprint-with-us/create with the title
+      entered, and landOn swallows its timeout, so
+      opportunitySwuEdit.opportunityIdentifier() throws.
+      opportunityCwuCreate.submitForReview and publish leave the required
+      'Acceptance Criteria*' and 'Evaluation Criteria*' blank, so nothing is
+      submitted, the address stays /create, and Publish throws disabled. Fill
+      required fields the input does not name, and fail at the save when the
+      record's address is never reached.
+  - id: R-1.56
+    target: old
+    why: opportunityCwuCreate.publish and saveDraft leave the required 'Acceptance
+      Criteria*' and 'Evaluation Criteria*' blank, so the create page's Publish
+      and the draft's Actions-menu Publish are disabled and press() throws.
+      opportunitySwuCreate.addPhase leaves 'startDate', 'completionDate' and
+      'maxBudget' unmapped, and opportunityTwuCreate.addResourceQuestion has no
+      mapping for 'order'. Fill required fields the input does not name, and map
+      those keys on the phase and resource question steps.

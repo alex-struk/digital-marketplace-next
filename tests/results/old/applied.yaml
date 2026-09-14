@@ -5,6 +5,7 @@ applied:
   - calibrate-old-2
   - calibrate-old-3
   - calibrate-triage-old-4
+  - calibrate-triage-old-5
 rulings:
   - id: R-7.18
     version: 1
@@ -250,4 +251,140 @@ rulings:
     version: 1
     verb: adapter-wrong
     gate: calibrate-triage-old-4
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-2.24
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-8.25
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-6.26
+    version: 2
+    verb: product-question
+    gate: calibrate-triage-old-5
+  - id: R-4.27
+    version: 2
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-1.28
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-3.28
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-8.28
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-3.30
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-1.31
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-4.31
+    version: 2
+    verb: product-question
+    gate: calibrate-triage-old-5
+  - id: R-8.31
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-1.32
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-3.32
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-5
+  - id: R-4.32
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-5
+  - id: R-1.34
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-2.34
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-1.35
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-2.35
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-1.36
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-2.36
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-1.37
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-2.37
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-1.38
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-2.38
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-1.39
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-1.48
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-1.53
+    version: 2
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
+    adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
+  - id: R-1.56
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-5
     adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
