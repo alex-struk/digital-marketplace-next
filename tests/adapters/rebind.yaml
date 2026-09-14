@@ -442,3 +442,173 @@ rebind:
       'Attachments', but the step is headed '4. Attachments'.
       opportunityCwuCreate.saveDraft(input) also drops the title. Wait for the
       save to finish, and read the attachment names from the Attachments step.
+  - id: R-1.28
+    target: old
+    why: opportunityCwuCreate.publish(input) never fills the form from its input,
+      and press() clicks the disabled Publish anchor (tabindex=-1) until the 120
+      s timeout. opportunityCwuCreate.saveDraft(input) also drops its input, and
+      opportunityCwuEdit.opportunityIdentifier() is read while the address is
+      still /opportunities/code-with-us/create. Fill the form from the input,
+      wait for the save to land on the record's own address, and have press()
+      fail at once on a disabled control.
+  - id: R-4.28
+    target: old
+    why: the profile's saveChanges(input) ignores its input and only presses 'Save
+      Changes', so the job title under test is never typed and the field still
+      reads 'Program Analyst'. Fill the name, email and job title fields from
+      the input before saving.
+  - id: R-8.28
+    target: old
+    why: fileDownload.downloadFile() ignores the fileId passed to
+      fileDownload.open() and rebuilds the address with an empty id, throwing
+      'called without a value for :fileId' after the profile picture was stored.
+      It must reuse the file opened. In the logo test, after
+      organizationEdit.editOrganization, chooseImage and
+      organizationEdit.saveChanges, the form is still in edit mode with no
+      chosen image shown, and imageAddress() reads ''. Confirm that the chooser
+      took the file and that the save completed before reading the stored
+      address.
+  - id: R-8.29
+    target: old
+    why: contentCreate.enterSlug({slug}) and enterBody({body}) send an empty string
+      because asText() never reads the slug or body keys, so Publish stays
+      disabled and press() clicks the disabled Publish anchor (tabindex=-1)
+      until the 120 s timeout.
+  - id: R-1.30
+    target: old
+    why: opportunityCwuEdit.reportingViews() returned '' for the opportunity's
+      author, although the Opportunity tab it opened shows '22' over 'Total
+      Views', '0' over 'Watching' and '0' over 'Proposals'. statFor() does not
+      find a figure rendered this way; read the figure from the box its label
+      sits in. For the vendor, reportingViews/Watchers/Proposals call openTab,
+      which throws unbound when the 'Opportunity' tab is withheld; read '' as
+      tabContent does.
+  - id: R-1.31
+    target: old
+    why: proposalCwuCreate.acceptProgramTerms opens the terms dialog through the
+      top-bar 'Submit' anchor, which is disabled (tabindex=-1) while the
+      proposal form is unfilled, and press() clicks it until the 120 s timeout.
+      submitProposal(input) also drops proposalText. Fill the proposal from its
+      input, and have press() fail at once on a disabled control.
+  - id: R-4.31
+    target: old
+    why: userProfile.profileTab() goes through tabContent(['Profile']), which
+      returns '' on an administrator's view of vendor.one's profile, a screen
+      with no tab strip that renders 'Deactivate Account'. Read the profile
+      screen itself when no Profile tab is offered.
+  - id: R-8.31
+    target: old
+    why: opportunityCwuCreate.publish(input) never fills the form from its input,
+      and press() clicks the disabled Publish anchor (tabindex=-1) until the
+      timeout. opportunityCwuCreate.saveDraft(input) drops its input, and
+      opportunityCwuEdit.opportunityIdentifier() is read while the address is
+      still /opportunities/code-with-us/create.
+  - id: R-1.32
+    target: old
+    why: opportunityCwuCreate.saveDraft(input) drops its input, and
+      opportunityCwuEdit.opportunityIdentifier() is read while the address is
+      still /opportunities/code-with-us/create.
+      opportunityCwuCreate.publish(input) never fills the form from its input,
+      and press() clicks the disabled Publish anchor (tabindex=-1) until the 120
+      s timeout.
+  - id: R-4.32
+    target: old
+    why: userList.exportDisabledUntilSelection() returns controlState(), whose
+      'enabled' and 'disabled' are both non-empty. After a kind and a field were
+      ticked, it answered 'enabled' for a control that is not disabled, which
+      reads as disabled. Return a value only while the Export control is
+      disabled, and '' once it is enabled.
+  - id: R-2.34
+    target: old
+    why: proposalTwuView.disqualifyProposal(input) ignores the reason. The
+      'Disqualification Reason' dialog opens, but nothing is typed into it, and
+      press() clicks the dialog's disabled 'Disqualify' anchor (tabindex=-1)
+      until the 120 s timeout. Type the reason from the input into the dialog
+      before confirming, and fail at once on a disabled control.
+  - id: R-3.34
+    target: old
+    why: organizationCreate.createOrganization(input) never fills Legal Name, the
+      address fields or the contact fields from its input, then clicks the
+      disabled 'Create Organization' anchor (tabindex=-1) until the 120 s
+      timeout.
+  - id: R-4.34
+    target: old
+    why: tabContent() looks for its label anywhere on the page, so
+      userProfileSelf.organizationsTab() clicked the top-navigation
+      'Organizations' link and left the profile for /organizations. For the
+      vendor, notificationsTab() then found nothing and read ''. For the public
+      sector employee, organizationsTab() returned the notifications text it
+      read while navigating away. Look for tabs only in the profile's own tab
+      list. userProfile.profileTab() also returns '' on an administrator's view
+      of another person's profile, which has no tab strip.
+  - id: R-2.35
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) never fills the
+      form from its input, and press() clicks the disabled Publish anchor
+      (tabindex=-1) until the 120 s timeout. proposalCwuCreate.saveDraft(input)
+      also drops proposalText.
+  - id: R-2.36
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) never fills the
+      form from its input, and press() clicks the disabled Publish anchor
+      (tabindex=-1) until the 120 s timeout.
+      proposalCwuCreate.submitProposal(input) also drops proposalText.
+  - id: R-1.37
+    target: old
+    why: opportunityCwuCreate.submitForReview(input) never fills the form from its
+      input, and press() clicks the disabled 'Submit for Review' anchor
+      (tabindex=-1) until the 120 s timeout.
+  - id: R-2.37
+    target: old
+    why: opportunityCwuCreate.publish(input) never fills the form from its input,
+      and press() clicks the disabled Publish anchor (tabindex=-1) until the
+      timeout. For Sprint With Us, setEvaluationPanel's advanceTo() only presses
+      Next forward from the step it was left on, and never reaches a step
+      showing 'Panel Member'. addTeamQuestion(input) also ignores its input.
+  - id: R-1.38
+    target: old
+    why: opportunityCwuCreate.publish(input) drops its input, and press() clicks the
+      disabled Publish anchor (tabindex=-1) until the timeout. saveDraft(input)
+      drops the title. opportunityList.unpublishedGroup() and closedGroup() read
+      a group while it is collapsed, so the unpublished group read only its
+      count, '58', and the closed group read ''. The snapshot shows 'Unpublished
+      Opportunities 70' with no rows listed. Expand each group before reading
+      its opportunities.
+  - id: R-2.38
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) never fills the
+      form from its input, and press() clicks the disabled Publish anchor
+      (tabindex=-1) until the timeout. proposalSwuExportAll.exportedProposal()
+      returns contentText() whole, so the organization owner's 'Not Found'
+      screen, with its terms-updated banner, reads as an exported document.
+      Return '' when the Not Found screen is shown.
+  - id: R-1.39
+    target: old
+    why: in all four tests, opportunityCwuCreate.publish(input) never fills the form
+      from its input (title, location, remoteOk and the rest), and press()
+      clicks the disabled Publish anchor (tabindex=-1) until the 120 s timeout.
+  - id: R-1.48
+    target: old
+    why: opportunityCwuCreate.publish throws unbound when the create page offers a
+      public sector employee no 'Publish' control, instead of letting the
+      refusal be observed. saveDraft(input) drops the title, and
+      opportunityList.unpublishedGroup() reads the collapsed group as its count,
+      '59'. submitForReview(input) drops its input, and press() clicks the
+      disabled 'Submit for Review' anchor (tabindex=-1) until the timeout.
+  - id: R-1.53
+    target: old
+    why: opportunityCwuCreate.saveDraft(input) drops its input, and
+      opportunityCwuEdit.opportunityIdentifier() is read while the address is
+      still /opportunities/code-with-us/create. submitForReview(input) and
+      publish(input) never fill the form, and press() clicks the disabled anchor
+      (tabindex=-1) until the timeout. allOpportunitiesForAdministrator reads
+      only the 'My Opportunities' tab.
+  - id: R-1.56
+    target: old
+    why: opportunityCwuCreate.publish(input) never fills the form from its input,
+      and press() clicks the disabled Publish anchor (tabindex=-1) until the
+      timeout. saveDraft(input) drops its input, and opportunityIdentifier() is
+      read while the address is still /opportunities/code-with-us/create. For
+      Sprint With Us and Team With Us, setEvaluationPanel's advanceTo() only
+      presses Next forward and never reaches a step showing 'Panel Member'.
+      addTeamQuestion and addResourceQuestion ignore their input.
