@@ -1,0 +1,14 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The adapter leaves tests/acceptance alone, drops the XPath position lookups, and most unbound reasons name something really missing from the screens. It fails the adapter standard in two ways. (1) file-upload.upload_file_without_declaring_its_size is marked unbound, but the reason is not real: spec/contract/surface.yaml defines the upload address precisely for submissions the controls never make, including one that withholds its size, so 'no screen does it' was expected. What's left is a tooling limit, since Node's http module in the test process can send a chunked body with no Content-Length. (2) Several observations filter the reply through a regex and so decide the outcome themselves. sizeLimitNamedInRefusal returns empty on the target's real reply 'Content-Length is too large.', which settles the criterion before the test sees it. refusedForSize, refusedForReadAccess (needs 'metadata'), refusedForFileNameLength (needs '"name":') and organization-edit.invalidMembershipTypeError do the same. The runner typecheck failed. Every error it shows is in tests/acceptance (wrong open() parameter names and argument counts against the generated types), which belongs to the test writer, not this adapter. The log was truncated, so it is not confirmed that the adapter compiles.
+conditions:
+  - "Bind file-upload.upload_file_without_declaring_its_size (e.g. a chunked request with no Content-Length from the test process), or replace the reason with one naming something actually missing from the service rather than a client-tooling limit"
+  - "Make refusedForSize, sizeLimitNamedInRefusal, refusedForReadAccess, refusedForFileNameLength and invalidMembershipTypeError return the latest refusal's status and body whenever one exists, with no filter on its content, so the test decides what the refusal says"
+  - "Runner re-runs the typecheck and reports no diagnostics under tests/adapters/old; the acceptance-test parameter errors (title/id/user/organization vs opportunityId/userId/orgId, open() arity) go to the test writer separately and do not block this adapter"
+cost: 0.9867469999999999
+turns: 10
+session: "3bd4f278-ed96-4c83-9a6b-301a0585c18c"
+at: 2026-09-14T00:02:11.596Z
