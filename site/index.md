@@ -6,14 +6,14 @@ Profile: rebuild
 
 | Domain | proposed | accepted | implemented | verified | monitored | obsolete | open questions | total | tests | old |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 40/50 (n/t 10) | 5 pass · 22 fail · 13 unbound · 0 stale |
+| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 40/50 (n/t 10) | 7 pass · 23 fail · 10 unbound · 0 stale |
 | proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 | 28/36 (n/t 8) | 1 pass · 16 fail · 11 unbound · 0 stale |
-| organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 | 28/31 (n/t 3) | 0 pass · 16 fail · 12 unbound · 0 stale |
-| users | 0 | 32 | 0 | 0 | 0 | 4 | 1 | 36 | 25/30 (n/t 5) | 7 pass · 10 fail · 8 unbound · 0 stale |
+| organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 | 28/31 (n/t 3) | 2 pass · 11 fail · 15 unbound · 0 stale |
+| users | 0 | 32 | 0 | 0 | 0 | 4 | 1 | 36 | 25/30 (n/t 5) | 11 pass · 5 fail · 9 unbound · 0 stale |
 | evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 | 24/30 (n/t 6) | 1 pass · 1 fail · 22 unbound · 0 stale |
-| notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 9/21 (n/t 12) | 6 pass · 6 fail · 1 unbound · 0 stale |
-| content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 | 22/26 (n/t 4) | 6 pass · 16 fail · 0 unbound · 0 stale |
-| files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 22/24 (n/t 2) | 4 pass · 17 fail · 2 unbound · 0 stale |
+| notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 9/21 (n/t 12) | 6 pass · 7 fail · 0 unbound · 0 stale |
+| content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 | 22/26 (n/t 4) | 11 pass · 4 fail · 7 unbound · 0 stale |
+| files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 22/24 (n/t 2) | 12 pass · 8 fail · 3 unbound · 0 stale |
 | **Totals** | 0 | 286 | 0 | 0 | 0 | 9 | 3 | 295 |  |  |
 
 ## Pages
@@ -71,6 +71,7 @@ Profile: rebuild
 - [derive-tests-notifications-2](proposals/derive-tests-notifications-2.md)
 - [derive-tests-notifications-3](proposals/derive-tests-notifications-3.md)
 - [derive-tests-notifications-4](proposals/derive-tests-notifications-4.md)
+- [derive-tests-notifications-stale-1](proposals/derive-tests-notifications-stale-1.md)
 - [derive-tests-opportunities](proposals/derive-tests-opportunities.md)
 - [derive-tests-opportunities-2](proposals/derive-tests-opportunities-2.md)
 - [derive-tests-opportunities-3](proposals/derive-tests-opportunities-3.md)
@@ -124,8 +125,8 @@ Profile: rebuild
 ## Totals
 
 - Journal cost: $278.566843
-- Rulings cost: $143.318119
-- Total cost: $421.884962
-- Agent-held rulings: 81
+- Rulings cost: $144.192575
+- Total cost: $422.759418
+- Agent-held rulings: 82
 - Open escalations: 0
 - Open proposals: 0

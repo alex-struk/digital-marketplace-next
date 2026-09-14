@@ -6,43 +6,43 @@
 | --- | --- | --- |
 | R-1.1 | acceptance/opportunities/R-1.1.spec.ts | pass |
 | R-1.2 | acceptance/opportunities/R-1.2.spec.ts | pass |
-| R-1.3 | acceptance/opportunities/R-1.3.spec.ts | fail (ruled: adapter-wrong) |
-| R-1.4 | acceptance/opportunities/R-1.4.spec.ts | fail (ruled: adapter-wrong) |
+| R-1.3 | acceptance/opportunities/R-1.3.spec.ts | fail |
+| R-1.4 | acceptance/opportunities/R-1.4.spec.ts | fail |
 | R-1.5 | acceptance/opportunities/R-1.5.spec.ts | pass |
 | R-1.6 | acceptance/opportunities/R-1.6.spec.ts | pass |
 | R-1.7 | acceptance/opportunities/R-1.7.spec.ts | unbound |
 | R-1.8 | acceptance/opportunities/R-1.8.spec.ts | unbound |
-| R-1.9 | acceptance/opportunities/R-1.9.spec.ts | fail (ruled: adapter-wrong) |
-| R-1.10 | acceptance/opportunities/R-1.10.spec.ts | fail (ruled: adapter-wrong) |
-| R-1.11 | acceptance/opportunities/R-1.11.spec.ts | fail (ruled: adapter-wrong) |
-| R-1.12 | acceptance/opportunities/R-1.12.spec.ts | fail (ruled: adapter-wrong) |
+| R-1.9 | acceptance/opportunities/R-1.9.spec.ts | pass |
+| R-1.10 | acceptance/opportunities/R-1.10.spec.ts | fail |
+| R-1.11 | acceptance/opportunities/R-1.11.spec.ts | fail |
+| R-1.12 | acceptance/opportunities/R-1.12.spec.ts | fail |
 | R-1.13 | acceptance/opportunities/R-1.13.spec.ts | unbound |
-| R-1.14 | acceptance/opportunities/R-1.14.spec.ts | fail (ruled: adapter-wrong) |
+| R-1.14 | acceptance/opportunities/R-1.14.spec.ts | fail |
 | R-1.15 | acceptance/opportunities/R-1.15.spec.ts | unbound |
 | R-1.16 | acceptance/opportunities/R-1.16.spec.ts | unbound |
-| R-1.17 | acceptance/opportunities/R-1.17.spec.ts | fail (ruled: adapter-wrong) |
+| R-1.17 | acceptance/opportunities/R-1.17.spec.ts | unbound |
 | R-1.18 | acceptance/opportunities/R-1.18.spec.ts | unbound |
-| R-1.19 | acceptance/opportunities/R-1.19.spec.ts | fail (ruled: adapter-wrong) |
-| R-1.20 | acceptance/opportunities/R-1.20.spec.ts | fail (ruled: adapter-wrong) |
-| R-1.21 | acceptance/opportunities/R-1.21.spec.ts | fail (ruled: adapter-wrong) |
-| R-1.22 | acceptance/opportunities/R-1.22.spec.ts | unbound |
-| R-1.23 | acceptance/opportunities/R-1.23.spec.ts | fail (ruled: adapter-wrong) |
+| R-1.19 | acceptance/opportunities/R-1.19.spec.ts | fail |
+| R-1.20 | acceptance/opportunities/R-1.20.spec.ts | fail |
+| R-1.21 | acceptance/opportunities/R-1.21.spec.ts | fail |
+| R-1.22 | acceptance/opportunities/R-1.22.spec.ts | fail |
+| R-1.23 | acceptance/opportunities/R-1.23.spec.ts | fail |
 | R-1.24 | acceptance/opportunities/R-1.24.spec.ts | pass |
 | R-1.25 | not testable: blocked: the given is an opportunity at its program's final evaluation stage, and the seed carries none. Each program has exactly one closable opportunity, seeded at the first evaluation stage, and reaching the last one means walking that single record through consensus and every stage after it — which no second test could then repeat, because the seed is applied once and nothing resets it. Unblocked by seeding an opportunity already at each program's final evaluation stage, with its proposals scored up to that point. | not-testable |
 | R-1.26 | not testable: blocked: the given is an opportunity in processing, which the seed does not carry and which lies past the whole of evaluation on the one closable opportunity of each program. award_proposal is offered on all three proposal views and has nothing to act on. Unblocked by seeding an opportunity in processing, in each program, with more than one proposal still in contention so that the others can be seen to be marked not awarded. | not-testable |
 | R-1.27 | not testable: blocked: the given is an awarded opportunity, which needs processing, which needs the whole of evaluation on the one closable opportunity of each program. successful_proponent is named on all three opportunity views and has nothing to return. The withheld half needs an observation as well: no observation names the successful proponent's contact details, so their being withheld from a reader who may not see the score cannot be told from their not being shown to anybody. Unblocked by seeding an awarded opportunity and by an observation of the successful proponent's contact details. | not-testable |
-| R-1.28 | acceptance/opportunities/R-1.28.spec.ts | fail (ruled: adapter-wrong) |
+| R-1.28 | acceptance/opportunities/R-1.28.spec.ts | fail |
 | R-1.29 | acceptance/opportunities/R-1.29.spec.ts | unbound |
-| R-1.30 | acceptance/opportunities/R-1.30.spec.ts | fail (ruled: adapter-wrong) |
-| R-1.31 | acceptance/opportunities/R-1.31.spec.ts | fail (ruled: adapter-wrong) |
-| R-1.32 | acceptance/opportunities/R-1.32.spec.ts | fail (ruled: adapter-wrong) |
+| R-1.30 | acceptance/opportunities/R-1.30.spec.ts | pass |
+| R-1.31 | acceptance/opportunities/R-1.31.spec.ts | fail |
+| R-1.32 | acceptance/opportunities/R-1.32.spec.ts | fail |
 | R-1.33 | acceptance/opportunities/R-1.33.spec.ts | unbound |
-| R-1.34 | acceptance/opportunities/R-1.34.spec.ts | unbound |
-| R-1.35 | acceptance/opportunities/R-1.35.spec.ts | unbound |
-| R-1.36 | acceptance/opportunities/R-1.36.spec.ts | unbound |
-| R-1.37 | acceptance/opportunities/R-1.37.spec.ts | fail (ruled: adapter-wrong) |
-| R-1.38 | acceptance/opportunities/R-1.38.spec.ts | fail (ruled: adapter-wrong) |
-| R-1.39 | acceptance/opportunities/R-1.39.spec.ts | fail (ruled: adapter-wrong) |
+| R-1.34 | acceptance/opportunities/R-1.34.spec.ts | fail |
+| R-1.35 | acceptance/opportunities/R-1.35.spec.ts | fail |
+| R-1.36 | acceptance/opportunities/R-1.36.spec.ts | fail |
+| R-1.37 | acceptance/opportunities/R-1.37.spec.ts | fail |
+| R-1.38 | acceptance/opportunities/R-1.38.spec.ts | fail |
+| R-1.39 | acceptance/opportunities/R-1.39.spec.ts | fail |
 | R-1.40 | not testable: blocked: the given is an opportunity that has been evaluated. The seed carries none past the first evaluation stage, so full_report would return nothing for an administrator as well as for a member of staff and the contrast the criterion turns on could not be told from the report simply not existing yet. Unblocked by seeding a completed opportunity — awarded, with its addenda, its history and its proposals behind it — in at least one program. | not-testable |
 | R-1.41 | not testable: blocked: the given is a Sprint With Us or Team With Us opportunity at the questions consensus stage. The seed stops one stage earlier, and reaching consensus means every evaluator submitting an individual evaluation for every proponent of the one closable opportunity of that program — after which no other criterion could use the same record. Both refusal observations exist, not_all_consensuses_submitted_error and no_screenable_proponent_error, and neither has an opportunity to be read on. Unblocked by seeding an opportunity at the questions consensus stage in each program, one with a consensus still unsubmitted and one where no proponent has cleared every minimum score. | not-testable |
 | R-1.42 | not testable: blocked: the given is a Sprint With Us opportunity at the code challenge stage, two stages past where the seed leaves the one closable Sprint With Us opportunity. start_team_scenario has nothing to be refused on and the part-scored proponents the refusal turns on cannot be arranged. Unblocked by seeding a Sprint With Us opportunity at the code challenge stage with one proponent scored and another neither scored nor disqualified. | not-testable |
@@ -51,16 +51,16 @@
 | R-1.45 | — |  |
 | R-1.46 | — |  |
 | R-1.47 | — |  |
-| R-1.48 | acceptance/opportunities/R-1.48.spec.ts | fail (ruled: adapter-wrong) |
+| R-1.48 | acceptance/opportunities/R-1.48.spec.ts | fail |
 | R-1.49 | not testable: blocked: the claim is about which state changes are permitted out of processing for a Team With Us opportunity, and the seed carries no Team With Us opportunity in processing. The award half could be read from the opportunity's own state once it were reachable; the recorded-transitions half needs an observation as well, since nothing returns the set of changes an opportunity's program permits. Unblocked by seeding a Team With Us opportunity in processing, and by an observation of the state changes permitted from an opportunity's current state. | not-testable |
 | R-1.50 | not testable: blocked: the refusal half needs an opportunity at the questions consensus stage, which the seed does not carry — see R-1.41 for why the one closable opportunity of each program cannot supply it. The uniqueness half is unobservable whatever the seed holds: 'exactly one path out' is a claim about no second action existing, and the absence of an action is not something an observation reports. Unblocked for its refusal half by the same seeding R-1.41 names; its uniqueness half is for a reader of the rebuilt system's own actions rather than for a test. | not-testable |
 | D-opportunities-51 | — |  |
 | R-1.51 | not testable: unobservable: nothing the service does could show that a state it does not define is gone. No action requests a move to a suspended state, no observation returns the states an opportunity may hold or the states the list's state filter offers, and the mapping of a historical record onto a defined state happens before the rebuilt system reads it, which is a property of the migration rather than of anything the running service answers with. No addition to the surface would help; this is a claim a human accepts about the rebuild rather than one a test can settle. | not-testable |
 | R-1.52 | — |  |
-| R-1.53 | acceptance/opportunities/R-1.53.spec.ts | fail (ruled: adapter-wrong) |
+| R-1.53 | acceptance/opportunities/R-1.53.spec.ts | fail |
 | R-1.54 | — |  |
 | R-1.55 | acceptance/opportunities/R-1.55.spec.ts | unbound |
-| R-1.56 | acceptance/opportunities/R-1.56.spec.ts | fail (ruled: adapter-wrong) |
+| R-1.56 | acceptance/opportunities/R-1.56.spec.ts | fail |
 
 ### R-1.1 · v2 · confirmed · accepted
 
