@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-14T14:35:45.743Z | bind-adapter-old-7 | G3 | return | agent:reviewer | agent-held, unsampled | $1.2487715000000001 |  |
 | 2026-09-14T06:30:58.296Z | bind-adapter-old-6 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.39978299999999994 |  |
 | 2026-09-14T02:33:58.853Z | derive-tests-files-3 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.215816 |  |
 | 2026-09-14T02:30:53.495Z | derive-tests-notifications-4 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.808122 |  |
