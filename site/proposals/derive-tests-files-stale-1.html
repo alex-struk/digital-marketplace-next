@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-files-stale-1 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">87</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">87</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">77</span></a></li><li><a href="../runs.html">Run log <span class="count">8</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-files-stale-1</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-14 20:21</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the files criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the test for the one criterion in this run, R-8.1 (v1), so it is now <code>tests/acceptance/files/R-8.1.spec.ts</code>.</p>
+<p>I rewrote the test for the one criterion in this run, R-8.1 (v1), so it is now <code>tests/acceptance/files/R-8.1.spec.ts</code>. No criterion was found untestable, and I added nothing to <code>not-testable.yaml</code>. The file was written but not run or type-checked; this workspace has no app to run it against.</p>
+<p><strong>Why it was rewritten.</strong> A test for this criterion already existed from the last approved derivation, and <code>tests/acceptance/redo.yaml</code> sent it back. Its signed-in half only succeeded if the upload&#39;s read-access statement named one particular account, and the criterion says nothing about that.</p>
+<p><strong>What changed.</strong> The upload now states read access as &quot;readable by anyone&quot; (<code>{ tag: &quot;any&quot; }</code>). That is the plainest form the spec offers, and the sibling tests for R-8.2 and R-8.23 already use it.</p>
+<ul><li>I kept a read-access statement rather than using the plain <code>uploadFile</code> action. Under R-8.24, leaving the statement out is its own refusal, which would blur what R-8.1 is testing.</li><li>Both tests now send the same submission. The only difference between them is whether anyone is signed in.</li><li>The signed-in actor is still <code>persona.fileUploader</code>. It&#39;s a vendor with no role, no organization membership and no administrator rights, so a successful upload depends only on being signed in.</li><li>I removed the unused <code>seed</code> import and updated the header to the new spec commit (d4b7ad71).</li></ul>
+<p><strong>What the tests check.</strong> The criterion has two outcomes, so there are two tests, each titled with the criterion&#39;s own wording:</p>
+<ul><li><strong>Signed in:</strong> a signed-in person uploads through <code>surface.fileUpload.uploadFileStatingItsReadAccess</code>. The test expects no signed-out refusal (<code>refusedWhenSignedOut</code>) and a stored file identifier (<code>storedFileIdentifier</code>).</li><li><strong>Not signed in:</strong> a visitor sends the same submission. The test expects the signed-out refusal and no stored file identifier, which covers the spec&#39;s &quot;no file is stored.&quot;</li></ul>
+<p><strong>Gaps in the contract.</strong> Nothing was missing: the <code>file-upload</code> page has every action and observation this criterion needs. Two things are worth knowing:</p>
+<ul><li><strong>What &quot;no file is stored&quot; rests on.</strong> The test can only show that no identifier came back. The surface has no way to confirm afterwards that nothing was saved, such as a list of stored files or a count of them. If that stronger check matters, the contract would need such an observation.</li><li><strong>How the adapter reads read access.</strong> The surface types every action&#39;s input as <code>unknown</code>. So what <code>readAccess: [{ tag: &quot;any&quot; }]</code> means depends on the adapter accepting the same shape the other files tests use.</li></ul></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-14 20:22.</p>
+<div class="body"><p>Question: do the R-8.1 tests follow from the criterion (&#39;Any person who is signed in may upload a file, and a visitor who is not signed in cannot&#39;; then: refused as not permitted and no file is stored) and from nothing else? Ruling: approve. The signed-in test expects no signed-out refusal and a stored file identifier, which is what &#39;may upload&#39; means. The visitor test sends the same submission and expects the refusal and no identifier, which is the criterion&#39;s stated outcome. The redo reason is fixed: read access is now stated as readable by anyone ({tag:&#39;any&#39;}), matching R-8.7&#39;s wording and the approved R-8.2 and R-8.23 tests, so success no longer depends on naming a particular account. A statement is still sent because omitting it is a separate refusal under R-8.24. Every call is a surface action or observation on FileUploadPage; no selector, route, table or status code appears. The runner typecheck passed with no diagnostics under acceptance/files, and the tests-check warnings concern other, superseded criteria. Removing R-8.1 from redo.yaml and its stale calibration rulings from applied.yaml is consistent with the rewrite and touches no protected path. The tier is STANDARD with no unaccepted residual risk, so no escalation. &#39;No file is stored&#39; can only be shown as the absence of an identifier, because the page offers no list or count of stored files; that is a contract gap, not a test fault. The ruling would change if the adapter does not accept the {tag:&#39;any&#39;} read-access shape, or if calibration shows the signed-in upload depends on anything besides being signed in.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

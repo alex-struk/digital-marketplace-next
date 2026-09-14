@@ -20,10 +20,6 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-1
     adapter: e43ec733ff3c437c1899ffd6a49a00c020c616d8
-  - id: R-8.1
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-1
   - id: R-2.2
     version: 1
     verb: adapter-wrong
@@ -537,10 +533,6 @@ rulings:
     version: 1
     verb: defect-in-old
     gate: calibrate-old-2
-  - id: R-8.1
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-3
   - id: R-6.23
     version: 1
     verb: test-wrong

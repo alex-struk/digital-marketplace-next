@@ -1,16 +1,19 @@
 // criterion: @R-8.1 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-14
-import { test, expect, persona, seed } from "../../fixtures";
+// provenance: blind, spec@d4b7ad71f09fd800088a439d26222d352e4e30dc, derived 2026-09-14
+import { test, expect, persona } from "../../fixtures";
 
 // Both halves send the same submission to the address that stores a file, so the only thing
-// that differs between them is whether anybody is signed in. persona.fileUploader is a vendor
-// holding no role, no organization membership and no administrator right, so an upload that
-// succeeds for them turned on nothing but being signed in.
+// that differs between them is whether anybody is signed in. The read-access statement is the
+// plainest one the spec offers — readable by anyone — so it names no account and gives no
+// account a reason to be let in. A statement is still sent because leaving it out is its own
+// refusal (R-8.24), which would muddy what this criterion is about. persona.fileUploader is a
+// vendor holding no role, no organization membership and no administrator right, so an upload
+// that succeeds for them turned on nothing but being signed in.
 function submission() {
   return {
     name: "R-8.1 upload.pdf",
     content: `R-8.1 upload ${Date.now()}`,
-    readAccess: [{ tag: "user", value: seed.users.fileUploader.id }],
+    readAccess: [{ tag: "any" }],
   };
 }
 

@@ -66,6 +66,7 @@ Profile: rebuild
 - [derive-tests-files](proposals/derive-tests-files.md)
 - [derive-tests-files-2](proposals/derive-tests-files-2.md)
 - [derive-tests-files-3](proposals/derive-tests-files-3.md)
+- [derive-tests-files-stale-1](proposals/derive-tests-files-stale-1.md)
 - [derive-tests-notifications](proposals/derive-tests-notifications.md)
 - [derive-tests-notifications-2](proposals/derive-tests-notifications-2.md)
 - [derive-tests-notifications-3](proposals/derive-tests-notifications-3.md)
@@ -122,9 +123,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $277.85957
-- Rulings cost: $142.825856
-- Total cost: $420.685426
-- Agent-held rulings: 80
+- Journal cost: $278.566843
+- Rulings cost: $143.318119
+- Total cost: $421.884962
+- Agent-held rulings: 81
 - Open escalations: 0
 - Open proposals: 0
