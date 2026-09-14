@@ -1,5 +1,5 @@
 // criterion: @R-5.18 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-09
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -47,18 +47,20 @@ const panelOfStrangers = {
   chair: seed.users.staffPanelChair,
 };
 
-async function draftWithPanel(surface: Surface, title: string): Promise<void> {
+async function draftWithPanel(surface: Surface, title: string): Promise<string> {
   await surface.opportunitySwuCreate.open();
   await surface.opportunitySwuCreate.saveDraft({ title });
-  await surface.evaluationPanelSwu.open({ title });
+  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
+  await surface.evaluationPanelSwu.open({ opportunityId });
   for (const member of panelOfStrangers.members) {
     await surface.evaluationPanelSwu.addPanelMember({ member });
   }
   await surface.evaluationPanelSwu.markMemberAsChair({ member: panelOfStrangers.chair });
   await surface.evaluationPanelSwu.saveEvaluationPanel();
+  return opportunityId;
 }
 
-async function publishedWithPanel(surface: Surface, title: string): Promise<void> {
+async function publishedWithPanel(surface: Surface, title: string): Promise<string> {
   await surface.opportunitySwuCreate.open();
   await surface.opportunitySwuCreate.addPhase({
     phase: "Implementation",
@@ -76,41 +78,45 @@ async function publishedWithPanel(surface: Surface, title: string): Promise<void
   });
   await surface.opportunitySwuCreate.setEvaluationPanel(panelOfStrangers);
   await surface.opportunitySwuCreate.publish({ ...details, title });
+  return await surface.opportunitySwuEdit.opportunityIdentifier();
 }
 
 test("the membership of an evaluation panel is shown to the opportunity's owner", async ({
   surface,
 }) => {
-  const title = "R-5.18 opportunity whose owner reads its panel";
-
   await surface.signIn(persona.publicSectorStaff);
-  await draftWithPanel(surface, title);
+  const opportunityId = await draftWithPanel(
+    surface,
+    "R-5.18 opportunity whose owner reads its panel",
+  );
 
-  await surface.evaluationPanelSwu.open({ title });
+  await surface.evaluationPanelSwu.open({ opportunityId });
   expect(await surface.evaluationPanelSwu.panelMemberRow()).toBeTruthy();
 });
 
 test("the membership of an evaluation panel is shown to an administrator", async ({ surface }) => {
-  const title = "R-5.18 opportunity whose panel an administrator reads";
-
   await surface.signIn(persona.publicSectorStaff);
-  await draftWithPanel(surface, title);
+  const opportunityId = await draftWithPanel(
+    surface,
+    "R-5.18 opportunity whose panel an administrator reads",
+  );
   await surface.signOut();
 
   await surface.signIn(persona.administrator);
-  await surface.evaluationPanelSwu.open({ title });
+  await surface.evaluationPanelSwu.open({ opportunityId });
   expect(await surface.evaluationPanelSwu.panelMemberRow()).toBeTruthy();
 });
 
 test("the membership of an evaluation panel is shown to the people on the panel itself", async ({
   surface,
 }) => {
-  const title = "R-5.18 opportunity whose panel one of its own members reads";
-
   await surface.signIn(persona.administrator);
   await surface.opportunitySwuCreate.open();
-  await surface.opportunitySwuCreate.saveDraft({ title });
-  await surface.evaluationPanelSwu.open({ title });
+  await surface.opportunitySwuCreate.saveDraft({
+    title: "R-5.18 opportunity whose panel one of its own members reads",
+  });
+  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
+  await surface.evaluationPanelSwu.open({ opportunityId });
   await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffOne });
   await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffPanelEvaluator });
   await surface.evaluationPanelSwu.markMemberAsChair({ member: seed.users.staffPanelEvaluator });
@@ -118,32 +124,34 @@ test("the membership of an evaluation panel is shown to the people on the panel 
   await surface.signOut();
 
   await surface.signIn(persona.evaluationPanelEvaluator);
-  await surface.evaluationPanelSwu.open({ title });
+  await surface.evaluationPanelSwu.open({ opportunityId });
   expect(await surface.evaluationPanelSwu.panelMemberRow()).toBeTruthy();
 });
 
 test("no panel membership is shown to a public sector employee who is neither the owner nor on the panel", async ({
   surface,
 }) => {
-  const title = "R-5.18 opportunity an unrelated public sector employee asked for the panel of";
-
   await surface.signIn(persona.administrator);
-  await publishedWithPanel(surface, title);
+  const opportunityId = await publishedWithPanel(
+    surface,
+    "R-5.18 opportunity an unrelated public sector employee asked for the panel of",
+  );
   await surface.signOut();
 
   await surface.signIn(persona.publicSectorStaff);
-  await surface.evaluationPanelSwu.open({ title });
+  await surface.evaluationPanelSwu.open({ opportunityId });
   expect(await surface.evaluationPanelSwu.panelMemberRow()).toBeFalsy();
 });
 
 test("no panel membership is shown to a vendor", async ({ surface }) => {
-  const title = "R-5.18 opportunity a vendor asked for the panel of";
-
   await surface.signIn(persona.administrator);
-  await publishedWithPanel(surface, title);
+  const opportunityId = await publishedWithPanel(
+    surface,
+    "R-5.18 opportunity a vendor asked for the panel of",
+  );
   await surface.signOut();
 
   await surface.signIn(persona.vendor);
-  await surface.evaluationPanelSwu.open({ title });
+  await surface.evaluationPanelSwu.open({ opportunityId });
   expect(await surface.evaluationPanelSwu.panelMemberRow()).toBeFalsy();
 });
