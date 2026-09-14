@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",
+    "@types/node": "24.13.4",
     "typescript": "5.9.3",
     "yaml": "2.9.0"
   }
