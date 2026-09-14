@@ -19,6 +19,9 @@
 // An action or observation the running pages do not offer throws
 // "unbound: <page>.<member> — <reason>" instead of pretending to work.
 
+import { request as httpRequest } from "node:http";
+import type { IncomingMessage, RequestOptions } from "node:http";
+import { request as httpsRequest } from "node:https";
 import type { Locator, Page } from "@playwright/test";
 import type { Persona, persona as PersonaTable } from "../../generated/personas";
 import type * as S from "../../generated/surface";
@@ -558,21 +561,151 @@ export default function create(
     await settle();
   }
 
-  // The control offered right beside an attachment's name takes it off the list.
+  // Each attachment is a box holding its name, an unlabelled remove mark drawn just to
+  // the right of that box, and an unnamed link to its file. The link is known by where it
+  // leads; the mark carries nothing to read, so it is known by where it is drawn.
+  async function markBeside(box: Locator): Promise<Locator | null> {
+    const edge = await box.boundingBox();
+    if (!edge) return null;
+    const marks = seen(page.getByRole("img"));
+    const count = await marks.count();
+    let best: Locator | null = null;
+    let nearest = Number.POSITIVE_INFINITY;
+    for (let i = 0; i < count; i++) {
+      const mark = await marks.nth(i).boundingBox();
+      if (!mark) continue;
+      const middle = mark.y + mark.height / 2;
+      if (middle < edge.y || middle > edge.y + edge.height) continue;
+      const gap = mark.x - (edge.x + edge.width);
+      if (gap < -1 || gap >= nearest) continue;
+      nearest = gap;
+      best = marks.nth(i);
+    }
+    return best;
+  }
+
+  async function attachmentLink(which: number): Promise<Locator | null> {
+    const links = seen(page.getByRole("link"));
+    const count = await links.count();
+    let passed = 0;
+    for (let i = 0; i < count; i++) {
+      const href = (await links.nth(i).getAttribute("href")) ?? "";
+      if (!href.startsWith("blob:") && !href.includes("/api/files/")) continue;
+      if (passed === which) return links.nth(i);
+      passed++;
+    }
+    return null;
+  }
+
+  // The mark drawn right beside an attachment's name takes it off the list.
   async function removeAttachment(where: string, input: unknown): Promise<void> {
     await advanceTo(where, "Add Attachment");
     const boxes = attachmentNameBoxes();
     const count = await boxes.count();
     if (count) {
       const which = Math.min(indexOf(input), count - 1);
-      const beside = boxes.nth(which).locator("xpath=following-sibling::*[1]");
-      if (await beside.count()) {
-        await beside.first().click();
+      const beside = await markBeside(boxes.nth(which));
+      if (beside) {
+        await beside.click();
         await settle();
         return;
       }
     }
     await press(where, ["Remove", "Remove Attachment"]);
+  }
+
+  // ---------------------------------------------------------------- identifiers
+
+  // A record's own screen carries its identifier in the address it lands on.
+  const UUID = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}";
+
+  function fromAddress(pattern: string): string {
+    const match = new RegExp(pattern).exec(new URL(page.url()).pathname);
+    return match ? match[1] : "";
+  }
+
+  const opportunityId = (): string => fromAddress(`^/opportunities/[a-z-]+/(${UUID})`);
+  const proposalId = (): string => fromAddress(`/proposals/(${UUID})`);
+  const organizationId = (): string => fromAddress(`^/organizations/(${UUID})`);
+
+  // "/users/me" keeps "me" in its address, so the tabs beside the profile are read
+  // instead: each one leads to the same person under their own identifier.
+  async function userId(): Promise<string> {
+    const shown = fromAddress(`^/users/(${UUID})`);
+    if (shown) return shown;
+    const links = seen(page.getByRole("link"));
+    const count = await links.count();
+    for (let i = 0; i < count; i++) {
+      const href = (await links.nth(i).getAttribute("href")) ?? "";
+      const match = new RegExp(`^/users/(${UUID})\\?tab=`).exec(href);
+      if (match) return match[1];
+    }
+    return "";
+  }
+
+  // The History tab lists its entries newest first, each signed by the person who made
+  // it. The name is drawn in capitals, so its own spelling is taken from the text itself.
+  async function latestHistoryAuthor(where: string): Promise<string> {
+    await openTab(where, ["History"]);
+    const rows = seen(page.getByRole("row"));
+    const count = await rows.count();
+    for (let i = 0; i < count; i++) {
+      const cells = rows.nth(i).getByRole("cell");
+      const cellCount = await cells.count();
+      if (!cellCount) continue;
+      const signed = cells.nth(cellCount - 1);
+      const lines = (await signed.innerText())
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean);
+      const shown = lines[lines.length - 1] ?? "";
+      if (!shown) return "";
+      const own = (await signed.textContent()) ?? "";
+      const at = own.toLowerCase().lastIndexOf(shown.toLowerCase());
+      return at >= 0 ? own.slice(at, at + shown.length) : shown;
+    }
+    return "";
+  }
+
+  // ---------------------------------------------------------------- answers from addresses
+
+  // A few surfaces are addresses that answer with a document rather than screens. They
+  // are asked from the browser's own session, so the answer is the one the signed-in
+  // person would get, and the latest answer is what the observations on them read.
+  type Answer = { status: number; headers: Record<string, string>; body: string };
+  let lastAnswer: Answer | null = null;
+
+  async function ask(where: string, target: string, data?: unknown): Promise<Answer> {
+    const sent = data === undefined ? page.request.get(target) : page.request.post(target, { data });
+    const response = await sent.catch((error: unknown) => {
+      throw new Error(`unbound: ${where} — ${target} could not be reached (${String(error)})`);
+    });
+    const answer: Answer = {
+      status: response.status(),
+      headers: response.headers(),
+      body: await response.text().catch(() => ""),
+    };
+    lastAnswer = answer;
+    return answer;
+  }
+
+  function answered(): Record<string, unknown> {
+    try {
+      const parsed: unknown = JSON.parse(lastAnswer?.body ?? "");
+      return parsed && typeof parsed === "object" ? (parsed as Record<string, unknown>) : {};
+    } catch {
+      return {};
+    }
+  }
+
+  const header = (name: string): string => lastAnswer?.headers[name] ?? "";
+
+  // A refusal reads as its status and the body it came with, and only when the latest
+  // answer was one; a request that went through reads as nothing.
+  function refusal(isRefusal: (status: number) => boolean, about?: RegExp): string {
+    if (!lastAnswer || !isRefusal(lastAnswer.status)) return "";
+    if (about && !about.test(lastAnswer.body)) return "";
+    return `${lastAnswer.status} ${lastAnswer.body}`;
   }
 
   // ---------------------------------------------------------------- sign in and out
@@ -786,6 +919,21 @@ export default function create(
       ...at(route),
       toggleWatch: () => press(`${where}.toggle_watch`, ["Watch", "Watching", "Unwatch"]),
       startProposal: () => press(`${where}.start_proposal`, ["Start Proposal"], navBar()),
+      opportunityIdentifier: async () => opportunityId(),
+      // The header reads "Published <date>" above the title, beside "Updated <date>".
+      publishedDate: () => linesMatching(/^Published\s/),
+      // The public page names nobody: its header carries only the published and updated
+      // dates. Who made and last changed an opportunity is shown on its management page.
+      createdByName: async (): Promise<string> => {
+        throw new Error(
+          `unbound: ${where}.created_by_name — the public opportunity page names no creator; its header shows only the published and updated dates, and the creator's name appears only on the management page`,
+        );
+      },
+      lastChangedByName: async (): Promise<string> => {
+        throw new Error(
+          `unbound: ${where}.last_changed_by_name — the public opportunity page names nobody who changed it; only the updated date is shown`,
+        );
+      },
       // The badge sits directly under the programme's name in the page header.
       status: () => valueAfter([programme]),
       proposalDeadline: () => valueBefore(["Proposal Deadline", "Proposals Deadline"]),
@@ -859,6 +1007,9 @@ export default function create(
           await press(`${where}.add_addendum`, ["Publish Addendum", "Publish", "Save"], navBar());
         }
       },
+      opportunityIdentifier: async () => opportunityId(),
+      createdByName: () => valueAfter(["Created By"]),
+      lastChangedByName: () => latestHistoryAuthor(`${where}.last_changed_by_name`),
       summaryTab: () => tabContent(["Summary"]),
       opportunityTab: () => tabContent(["Opportunity"]),
       addendaTab: () => tabContent(["Addenda"]),
@@ -966,6 +1117,22 @@ export default function create(
   const opportunityTwuComplete: S.OpportunityTwuCompletePage = {
     ...at("/opportunities/team-with-us/:opportunityId/complete"),
     fullReport: () => contentText(),
+  };
+
+  // Not a screen. The service moves time-driven transitions on in front of this address,
+  // so asking for it is the whole of the action; it answers "OK" when it is up.
+  const scheduledTransitionTrigger: S.ScheduledTransitionTriggerPage = {
+    ...at("/status"),
+    runPendingTransitions: async () => {
+      await ask("scheduled-transition-trigger.run_pending_transitions", baseURL + "/status");
+    },
+    async serviceIsUp() {
+      if (new URL(page.url()).pathname === "/status") {
+        return (await page.evaluate(() => document.body.innerText)).trim();
+      }
+      const answer = await ask("scheduled-transition-trigger.service_is_up", baseURL + "/status");
+      return answer.status === 200 ? answer.body.trim() : "";
+    },
   };
 
   // ================================================================ proposals
@@ -1133,6 +1300,8 @@ export default function create(
         await fromActions(`${where}.delete_proposal`, ["Delete"]);
         await confirmIfAsked(`${where}.delete_proposal`, ["Delete Proposal", "Delete"]);
       },
+      proposalIdentifier: async () => proposalId(),
+      opportunityIdentifier: async () => opportunityId(),
       proposalTab: () => tabContent(["Proposal"]),
       status: () => valueAfter(["Proposal Status", "Status"]),
     };
@@ -1185,6 +1354,7 @@ export default function create(
 
   const proposalCwuView: S.ProposalCwuViewPage = {
     ...at("/opportunities/code-with-us/:opportunityId/proposals/:proposalId"),
+    proposalIdentifier: async () => proposalId(),
     enterScore: (input) =>
       fill("proposal-cwu-view.enter_score", ["Score"], asText(input)),
     awardProposal: async () => {
@@ -1208,6 +1378,7 @@ export default function create(
 
   const proposalSwuView: S.ProposalSwuViewPage = {
     ...at("/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId"),
+    proposalIdentifier: async () => proposalId(),
     scoreCodeChallenge: async (input) => {
       await openTab("proposal-swu-view.score_code_challenge", ["Code Challenge"]);
       await fill("proposal-swu-view.score_code_challenge", ["Score"], asText(input));
@@ -1258,6 +1429,7 @@ export default function create(
 
   const proposalTwuView: S.ProposalTwuViewPage = {
     ...at("/opportunities/team-with-us/:opportunityId/proposals/:proposalId"),
+    proposalIdentifier: async () => proposalId(),
     scoreResourceQuestions: async (input) => {
       await openTab("proposal-twu-view.score_resource_questions", ["Resource Questions"]);
       await fill("proposal-twu-view.score_resource_questions", ["Score"], asText(input));
@@ -1389,6 +1561,12 @@ export default function create(
         "unbound: organization-list.pagination — the organizations list renders no pager to read",
       );
     },
+    // A refused visitor is sent to sign in or shown a permission message; a visitor who
+    // may see the list, even an empty one, reads as nothing here.
+    async refusedWhenNotPermitted() {
+      if (new URL(page.url()).pathname.startsWith("/sign-in")) return page.url();
+      return messages(/permission|not authori[sz]ed|sign in/i);
+    },
   };
 
   const organizationCreate: S.OrganizationCreatePage = {
@@ -1430,6 +1608,26 @@ export default function create(
       ]);
     },
     addTeamMembers: async (input) => {
+      // The team screen invites ordinary members only. Any other kind of membership can
+      // be asked for only at the address that screen itself sends its invitations to.
+      const kind = field(input, "membershipType", "membership_type", "kind");
+      if (kind && kind.toUpperCase() !== "MEMBER") {
+        const organization = organizationId();
+        if (!organization) {
+          throw new Error(
+            `unbound: organization-edit.add_team_members — no organization in the address ${page.url()} to invite to`,
+          );
+        }
+        const invited = asList(field(input, "emails", "email", "userEmail"));
+        for (const userEmail of invited.length ? invited : [""]) {
+          await ask("organization-edit.add_team_members", baseURL + "/api/affiliations", {
+            userEmail,
+            organization,
+            membershipType: kind,
+          });
+        }
+        return;
+      }
       await openTab("organization-edit.add_team_members", ["Team"]);
       await press("organization-edit.add_team_members", ["Add Team Member(s)"], navBar());
       const addresses = asList(field(input, "emails", "email") || input);
@@ -1562,6 +1760,12 @@ export default function create(
       return tableText();
     },
     fieldError: () => messages(),
+    organizationIdentifier: async () => organizationId(),
+    // The latest refusal, whole, when the invitation was refused; otherwise whatever
+    // messages the screen is showing.
+    async invalidMembershipTypeError() {
+      return refusal((status) => status >= 400) || messages();
+    },
   };
 
   function organizationTerms(where: string, route: string) {
@@ -1586,57 +1790,92 @@ export default function create(
     "/organizations/:orgId/team-with-us-terms-and-conditions",
   );
 
-  const organizationUserMemberships: S.OrganizationUserMembershipsPage = {
-    ...at("/users/:userId?tab=organizations"),
-    approveInvitation: async (input) => {
-      const name = asText(input);
-      const scope = name
-        ? seen(page.getByRole("row").filter({ hasText: name })).first()
-        : page;
-      await press("organization-user-memberships.approve_invitation", ["Approve"], scope);
-      await confirmIfAsked("organization-user-memberships.approve_invitation", ["Approve"]);
-    },
-    rejectInvitation: async (input) => {
-      const name = asText(input);
-      const scope = name
-        ? seen(page.getByRole("row").filter({ hasText: name })).first()
-        : page;
-      await press("organization-user-memberships.reject_invitation", ["Reject"], scope);
-      await confirmIfAsked("organization-user-memberships.reject_invitation", ["Reject"]);
-    },
-    leaveOrganization: async (input) => {
-      const name = asText(input);
-      const scope = name
-        ? seen(page.getByRole("row").filter({ hasText: name })).first()
-        : page;
-      await press("organization-user-memberships.leave_organization", ["Leave"], scope);
-      await confirmIfAsked("organization-user-memberships.leave_organization", [
-        "Leave Organization",
-        "Leave",
-      ]);
-    },
-    createOrganization: () =>
-      press("organization-user-memberships.create_organization", ["Create Organization"], navBar()),
-    openOrganization: (input) =>
-      openNamed("organization-user-memberships.open_organization", input),
-    ownedOrganizationsTable: () =>
-      sectionFrom(["Owned Organizations"], ["Affiliated Organizations"]),
-    affiliatedOrganizationsTable: () => sectionFrom(["Affiliated Organizations"]),
-    pendingBadge: () => linesMatching(/\bPending\b/),
-    teamMemberCount: async () => {
-      const cell = await cellUnder("", "Team Members");
-      return cell ? (await cell.innerText()).trim() : "";
-    },
-    swuQualifiedMark: () => markUnder("", "SWU Qualified?"),
-    async emptyOwnedMessage() {
-      const owned = await sectionFrom(["Owned Organizations"], ["Affiliated Organizations"]);
-      return /^you do not own/i.test(owned) ? owned : "";
-    },
-    async emptyAffiliatedMessage() {
-      const affiliated = await sectionFrom(["Affiliated Organizations"]);
-      return /^you are not affiliated/i.test(affiliated) ? affiliated : "";
-    },
-  };
+  // The organizations tab lists a pending invitation with nothing beside it to answer it
+  // with. An invitation is answered from the message that carries it: its Approve and
+  // Reject buttons lead to this tab with the invitation and the answer in the address,
+  // and the tab opens a confirmation ("Approve Request?" / "Reject Request?") waiting.
+  function organizationMemberships(where: string, route: string) {
+    const confirmation = (answer: "approve" | "reject") =>
+      seen(
+        page
+          .getByRole("dialog")
+          .filter({ hasText: answer === "approve" ? "Approve Request?" : "Reject Request?" }),
+      );
+
+    const answerInvitation =
+      (member: string, answer: "approve" | "reject") =>
+      async (input?: unknown): Promise<void> => {
+        if (!(await confirmation(answer).count())) {
+          const affiliation =
+            field(input, "invitationAffiliationId", "affiliationId", "affiliation", "id") ||
+            (typeof input === "string" ? input : "");
+          if (!affiliation) {
+            throw new Error(
+              `unbound: ${where}.${member} — the organizations tab offers no ${answer} control beside a pending invitation; it is answered only through the invitation message's link, which needs the invitation's affiliation identifier, and none was supplied`,
+            );
+          }
+          await go(
+            `/users/me?tab=organizations&invitationAffiliationId=${encodeURIComponent(affiliation)}&invitationResponse=${answer}`,
+          );
+        }
+        if (!(await confirmation(answer).count())) {
+          throw new Error(
+            `unbound: ${where}.${member} — no ${answer} confirmation opened on ${page.url()}`,
+          );
+        }
+        await press(
+          `${where}.${member}`,
+          [answer === "approve" ? "Approve Request" : "Reject Request"],
+          confirmation(answer).first(),
+        );
+      };
+
+    return {
+      ...at(route),
+      approveInvitation: answerInvitation("approve_invitation", "approve"),
+      rejectInvitation: answerInvitation("reject_invitation", "reject"),
+      leaveOrganization: async (): Promise<void> => {
+        throw new Error(
+          `unbound: ${where}.leave_organization — an affiliated organization's row carries only its name; the column beside it is empty and no leave control appears anywhere on the tab`,
+        );
+      },
+      createOrganization: () =>
+        press(`${where}.create_organization`, ["Create Organization"], navBar()),
+      openOrganization: (input?: unknown) => openNamed(`${where}.open_organization`, input),
+      ownedOrganizationsTable: () =>
+        sectionFrom(["Owned Organizations"], ["Affiliated Organizations"]),
+      affiliatedOrganizationsTable: () => sectionFrom(["Affiliated Organizations"]),
+      pendingBadge: () => linesMatching(/\bPending\b/),
+      teamMemberCount: async () => {
+        const cell = await cellUnder("", "Team Members");
+        return cell ? (await cell.innerText()).trim() : "";
+      },
+      swuQualifiedMark: () => markUnder("", "SWU Qualified?"),
+      async emptyOwnedMessage() {
+        const owned = await sectionFrom(["Owned Organizations"], ["Affiliated Organizations"]);
+        return /^you do not own/i.test(owned) ? owned : "";
+      },
+      async emptyAffiliatedMessage() {
+        const affiliated = await sectionFrom(["Affiliated Organizations"]);
+        return /^you are not affiliated/i.test(affiliated) ? affiliated : "";
+      },
+      async acceptConfirmation() {
+        const shown = confirmation("approve");
+        return (await shown.count()) ? (await shown.first().innerText()).trim() : "";
+      },
+      async declineConfirmation() {
+        const shown = confirmation("reject");
+        return (await shown.count()) ? (await shown.first().innerText()).trim() : "";
+      },
+    };
+  }
+
+  const organizationUserMemberships: S.OrganizationUserMembershipsPage = organizationMemberships(
+    "organization-user-memberships",
+    "/users/:userId?tab=organizations",
+  );
+  const organizationUserMembershipsSelf: S.OrganizationUserMembershipsSelfPage =
+    organizationMemberships("organization-user-memberships-self", "/users/me?tab=organizations");
 
   // ================================================================ users
 
@@ -1731,39 +1970,54 @@ export default function create(
     exportDisabledUntilSelection: () => controlState(["Export"], dialog().first()),
   };
 
+  // The profile screen, reached under a person's identifier or as the signed-in "me".
+  function profile(where: string, route: string) {
+    return {
+      ...at(route),
+      editProfile: () => press(`${where}.edit_profile`, ["Edit Profile"], navBar()),
+      saveChanges: () => press(`${where}.save_changes`, ["Save Changes"], navBar()),
+      cancelEditing: () => press(`${where}.cancel_editing`, ["Cancel"], navBar()),
+      changeAvatar: (input?: unknown) => chooseImage(`${where}.change_avatar`, input),
+      deactivateAccount: () => press(`${where}.deactivate_account`, ["Deactivate Account"]),
+      confirmActivationChange: () =>
+        inDialog(`${where}.confirm_activation_change`, [
+          "Deactivate Account",
+          "Reactivate Account",
+        ]),
+      cancelActivationChange: () => inDialog(`${where}.cancel_activation_change`, ["Cancel"]),
+      userIdentifier: () => userId(),
+      profileTab: () => tabContent(["Profile"]),
+      capabilitiesTab: () => tabContent(["Capabilities"]),
+      notificationsTab: () => tabContent(["Notifications"]),
+      legalTab: () => tabContent(["Policies, Terms & Agreements"]),
+      organizationsTab: () => tabContent(["Organizations"]),
+      statusBadge: () => valueAfter(["Status"]),
+      accountType: () => valueAfter(["Account Type"]),
+      idpUsernameReadonly: () => fieldValue(["IDIR", "GitHub"]),
+      nameField: () => fieldValue(["Name"]),
+      emailField: () => fieldValue(["Email Address"]),
+      jobTitleField: () => fieldValue(["Job Title"]),
+      fieldError: () => messages(),
+      activationModal: () => dialogText(),
+    };
+  }
+
   const userProfile: S.UserProfilePage = {
-    ...at("/users/:userId"),
-    editProfile: () => press("user-profile.edit_profile", ["Edit Profile"], navBar()),
-    saveChanges: () => press("user-profile.save_changes", ["Save Changes"], navBar()),
-    cancelEditing: () => press("user-profile.cancel_editing", ["Cancel"], navBar()),
-    changeAvatar: (input) => chooseImage("user-profile.change_avatar", input),
+    ...profile("user-profile", "/users/:userId"),
     toggleAdminPermission: () => tick("user-profile.toggle_admin_permission", ["Admin"]),
-    deactivateAccount: () =>
-      press("user-profile.deactivate_account", ["Deactivate Account"]),
-    reactivateAccount: () =>
-      press("user-profile.reactivate_account", ["Reactivate Account"]),
-    confirmActivationChange: () =>
-      inDialog("user-profile.confirm_activation_change", [
-        "Deactivate Account",
-        "Reactivate Account",
-      ]),
-    cancelActivationChange: () => inDialog("user-profile.cancel_activation_change", ["Cancel"]),
-    profileTab: () => tabContent(["Profile"]),
-    capabilitiesTab: () => tabContent(["Capabilities"]),
-    notificationsTab: () => tabContent(["Notifications"]),
-    legalTab: () => tabContent(["Policies, Terms & Agreements"]),
-    organizationsTab: () => tabContent(["Organizations"]),
-    statusBadge: () => valueAfter(["Status"]),
-    accountType: () => valueAfter(["Account Type"]),
+    reactivateAccount: () => press("user-profile.reactivate_account", ["Reactivate Account"]),
     permissionsLabel: () => valueAfter(["Permission(s)", "Permissions"]),
     adminCheckbox: () => tickState(["Admin"]),
-    idpUsernameReadonly: () => fieldValue(["IDIR", "GitHub"]),
-    nameField: () => fieldValue(["Name"]),
-    emailField: () => fieldValue(["Email Address"]),
-    jobTitleField: () => fieldValue(["Job Title"]),
-    fieldError: () => messages(),
-    activationModal: () => dialogText(),
     notFoundPage: () => contentText(),
+  };
+
+  const userProfileSelf: S.UserProfileSelfPage = {
+    ...profile("user-profile-self", "/users/me"),
+    // Signed out, "/users/me" sends the browser to the sign-in page, carrying the way back.
+    async signInRequired() {
+      if (!new URL(page.url()).pathname.startsWith("/sign-in")) return "";
+      return (await linesMatching(/sign in/i)) || page.url();
+    },
   };
 
   async function fieldValue(labels: string[]): Promise<string> {
@@ -1774,93 +2028,111 @@ export default function create(
     return valueAfter(labels);
   }
 
-  const userProfileCapabilities: S.UserProfileCapabilitiesPage = {
-    ...at("/users/:userId?tab=capabilities"),
-    toggleCapability: (input) =>
-      press("user-profile-capabilities.toggle_capability", [asText(input)]),
-    expandCapabilityDescription: async (input) => {
-      const name = asText(input);
-      if (!name) {
+  function profileCapabilities(where: string, route: string) {
+    return {
+      ...at(route),
+      toggleCapability: (input?: unknown) => press(`${where}.toggle_capability`, [asText(input)]),
+      expandCapabilityDescription: async (input?: unknown) => {
+        const name = asText(input);
+        if (!name) {
+          throw new Error(`unbound: ${where}.expand_capability_description — no capability was named`);
+        }
+        const row = seen(page.getByText(name, { exact: true })).first();
+        if (!(await row.count())) {
+          throw new Error(
+            `unbound: ${where}.expand_capability_description — no capability named "${name}" on ${page.url()}`,
+          );
+        }
+        const marks = row.getByRole("img");
+        const count = await marks.count();
+        if (!count) {
+          throw new Error(
+            `unbound: ${where}.expand_capability_description — "${name}" offers no control to open its description`,
+          );
+        }
+        await marks.nth(count - 1).click();
+        await settle();
+      },
+      capabilityRow: () => sectionFrom(["Capabilities"]),
+      capabilityChecked: async (): Promise<string> => {
         throw new Error(
-          "unbound: user-profile-capabilities.expand_capability_description — no capability was named",
+          `unbound: ${where}.capability_checked — whether a capability is held is shown only by the colour and shape of an unlabelled icon; the row carries no text, no checkbox and no state in the accessibility tree`,
         );
-      }
-      const row = seen(page.getByText(name, { exact: true })).first();
-      if (!(await row.count())) {
-        throw new Error(
-          `unbound: user-profile-capabilities.expand_capability_description — no capability named "${name}" on ${page.url()}`,
-        );
-      }
-      const marks = row.getByRole("img");
-      const count = await marks.count();
-      if (!count) {
-        throw new Error(
-          `unbound: user-profile-capabilities.expand_capability_description — "${name}" offers no control to open its description`,
-        );
-      }
-      await marks.nth(count - 1).click();
-      await settle();
-    },
-    capabilityRow: () => sectionFrom(["Capabilities"]),
-    capabilityChecked: async () => {
-      throw new Error(
-        "unbound: user-profile-capabilities.capability_checked — whether a capability is held is shown only by the colour and shape of an unlabelled icon; the row carries no text, no checkbox and no state in the accessibility tree",
-      );
-    },
-    async capabilityDescription() {
-      return sectionFrom(["Capabilities"]);
-    },
-  };
+      },
+      capabilityDescription: () => sectionFrom(["Capabilities"]),
+    };
+  }
 
-  const userProfileNotifications: S.UserProfileNotificationsPage = {
-    ...at("/users/:userId?tab=notifications"),
-    toggleNewOpportunityNotifications: () =>
-      tick("user-profile-notifications.toggle_new_opportunity_notifications", [
-        "New opportunities",
-      ]),
-    confirmUnsubscribe: async () => {
-      throw new Error(
-        "unbound: user-profile-notifications.confirm_unsubscribe — turning the notice off on this tab takes effect at once and raises no confirmation; the confirmation belongs to the unsubscribe landing page",
-      );
-    },
-    cancelUnsubscribe: async () => {
-      throw new Error(
-        "unbound: user-profile-notifications.cancel_unsubscribe — this tab raises no unsubscribe confirmation to cancel",
-      );
-    },
-    newOpportunitiesCheckbox: () => tickState(["New opportunities"]),
-    notificationEmailAddress: () => linesMatching(/@/),
-    unsubscribeModal: async () => {
-      throw new Error(
-        "unbound: user-profile-notifications.unsubscribe_modal — no confirmation appears on this tab",
-      );
-    },
-  };
+  const userProfileCapabilities: S.UserProfileCapabilitiesPage = profileCapabilities(
+    "user-profile-capabilities",
+    "/users/:userId?tab=capabilities",
+  );
+  const userProfileSelfCapabilities: S.UserProfileSelfCapabilitiesPage = profileCapabilities(
+    "user-profile-self-capabilities",
+    "/users/me?tab=capabilities",
+  );
 
-  const userProfileLegal: S.UserProfileLegalPage = {
-    ...at("/users/:userId?tab=legal"),
-    openAppTerms: () =>
-      press("user-profile-legal.open_app_terms", [
-        "Digital Marketplace Terms & Conditions for E-Bidding",
-      ]),
-    acceptUpdatedTerms: () =>
-      press("user-profile-legal.accept_updated_terms", ["agree to the updated terms"]),
-    confirmAcceptUpdatedTerms: async () => {
-      const box = seen(dialog().getByRole("checkbox"));
-      if (await box.count()) await box.first().click();
-      await inDialog("user-profile-legal.confirm_accept_updated_terms", [
-        "Agree & Continue",
-        "Agree",
-      ]);
-    },
-    privacyPolicy: () => sectionFrom(["Privacy Policy"], ["Terms & Conditions"]),
-    appTermsLink: () =>
-      linesMatching(/^Digital Marketplace Terms & Conditions for E-Bidding$/),
-    acceptedOnNotice: () => linesMatching(/you agreed to/i),
-    termsUpdatedWarning: () => linesMatching(/have been updated/i),
-    programTermsLinks: () => linesMatching(/(Code|Sprint|Team) With Us Terms & Conditions/),
-    acceptUpdatedTermsModal: () => dialogText(),
-  };
+  function profileNotifications(where: string, route: string) {
+    return {
+      ...at(route),
+      toggleNewOpportunityNotifications: () =>
+        tick(`${where}.toggle_new_opportunity_notifications`, ["New opportunities"]),
+      confirmUnsubscribe: async (): Promise<void> => {
+        throw new Error(
+          `unbound: ${where}.confirm_unsubscribe — turning the notice off on this tab takes effect at once and raises no confirmation; the confirmation belongs to the unsubscribe landing page`,
+        );
+      },
+      cancelUnsubscribe: async (): Promise<void> => {
+        throw new Error(
+          `unbound: ${where}.cancel_unsubscribe — this tab raises no unsubscribe confirmation to cancel`,
+        );
+      },
+      newOpportunitiesCheckbox: () => tickState(["New opportunities"]),
+      notificationEmailAddress: () => linesMatching(/@/),
+      unsubscribeModal: async (): Promise<string> => {
+        throw new Error(`unbound: ${where}.unsubscribe_modal — no confirmation appears on this tab`);
+      },
+    };
+  }
+
+  const userProfileNotifications: S.UserProfileNotificationsPage = profileNotifications(
+    "user-profile-notifications",
+    "/users/:userId?tab=notifications",
+  );
+  const userProfileSelfNotifications: S.UserProfileSelfNotificationsPage = profileNotifications(
+    "user-profile-self-notifications",
+    "/users/me?tab=notifications",
+  );
+
+  function profileLegal(where: string, route: string) {
+    return {
+      ...at(route),
+      openAppTerms: () =>
+        press(`${where}.open_app_terms`, ["Digital Marketplace Terms & Conditions for E-Bidding"]),
+      acceptUpdatedTerms: () =>
+        press(`${where}.accept_updated_terms`, ["agree to the updated terms"]),
+      confirmAcceptUpdatedTerms: async () => {
+        const box = seen(dialog().getByRole("checkbox"));
+        if (await box.count()) await box.first().click();
+        await inDialog(`${where}.confirm_accept_updated_terms`, ["Agree & Continue", "Agree"]);
+      },
+      privacyPolicy: () => sectionFrom(["Privacy Policy"], ["Terms & Conditions"]),
+      appTermsLink: () => linesMatching(/^Digital Marketplace Terms & Conditions for E-Bidding$/),
+      acceptedOnNotice: () => linesMatching(/you agreed to/i),
+      termsUpdatedWarning: () => linesMatching(/have been updated/i),
+      programTermsLinks: () => linesMatching(/(Code|Sprint|Team) With Us Terms & Conditions/),
+      acceptUpdatedTermsModal: () => dialogText(),
+    };
+  }
+
+  const userProfileLegal: S.UserProfileLegalPage = profileLegal(
+    "user-profile-legal",
+    "/users/:userId?tab=legal",
+  );
+  const userProfileSelfLegal: S.UserProfileSelfLegalPage = profileLegal(
+    "user-profile-self-legal",
+    "/users/me?tab=legal",
+  );
 
   // ================================================================ evaluation
 
@@ -2249,6 +2521,47 @@ export default function create(
     return start > 0 ? whole.slice(start).trim() : "";
   }
 
+  // The program pages offer "See Service Level Agreement ..." as an ordinary link. The
+  // service creates no page at the address it leads to, and answers there with its own
+  // "Not Found" screen.
+  function slaLink(): Locator {
+    return seen(page.getByRole("link", { name: /service level agreement/i }));
+  }
+
+  async function visit(href: string): Promise<void> {
+    if (/^https?:\/\//.test(href)) {
+      await page.goto(href, { waitUntil: "domcontentloaded" });
+      await settle();
+      return;
+    }
+    await go(href.startsWith("/") ? href : `/${href}`);
+  }
+
+  const contentServiceLevelAgreementLink: S.ContentServiceLevelAgreementLinkPage = {
+    ...at("/learn-more/code-with-us"),
+    followServiceLevelAgreementLink: async () => {
+      const href = (await slaLink().count()) ? await slaLink().first().getAttribute("href") : null;
+      if (!href) {
+        throw new Error(
+          `unbound: content-service-level-agreement-link.follow_service_level_agreement_link — no service level agreement link on ${page.url()}`,
+        );
+      }
+      // The link may open a window of its own, so follow where it leads.
+      await visit(href);
+    },
+    serviceLevelAgreementLink: async () =>
+      (await slaLink().count()) ? (await slaLink().first().innerText()).trim() : "",
+    linkTargetAddress: async () =>
+      (await slaLink().count()) ? ((await slaLink().first().getAttribute("href")) ?? "") : "",
+    async answerAtLinkTarget() {
+      if (await slaLink().count()) {
+        const href = await slaLink().first().getAttribute("href");
+        if (href) await visit(href);
+      }
+      return contentText();
+    },
+  };
+
   const contentList: S.ContentListPage = {
     ...at("/content"),
     openPageForEditing: (input) => openNamed("content-list.open_page_for_editing", input),
@@ -2354,6 +2667,15 @@ export default function create(
     changesPublishedSuccess: () => linesMatching(/published/i),
     deletedSuccess: () => linesMatching(/deleted/i),
     refusedForNonAdministrator: () => contentText(),
+    // The form states "This page is available at /content/<slug>." under the slug.
+    async pageAddress() {
+      const stated = /(\/content\/[A-Za-z0-9_-]+)/.exec(await linesMatching(/is available at/i));
+      return stated ? stated[1] : fromAddress("^(/content/[^/]+)/edit");
+    },
+    bodyBeingEdited: () => fieldValue(["Body"]),
+    // Nothing on this screen offers a page's earlier versions, so this reads empty here.
+    versionHistory: () =>
+      sectionFrom(["History", "Version History", "Versions", "Previous Versions"]),
   };
 
   const contentView: S.ContentViewPage = {
@@ -2365,76 +2687,276 @@ export default function create(
     updatedDate: () => linesMatching(/^Updated /),
     readableWhenSignedOut: () => contentText(),
     notFoundForUnknownAddress: () => contentText(),
+    pageAddress: async () => new URL(page.url()).pathname,
   };
 
   // ================================================================ files
 
-  // A stored file is not a screen: it is an address that answers with the bytes and the
-  // headers that say how to keep them. The request is made in the browser's own session
-  // so that what it is allowed to see is what the signed-in person is allowed to see.
-  let lastFile: {
-    status: number;
-    headers: Record<string, string>;
-    body: string;
-  } | null = null;
+  // A stored file is not a screen: it is an address that answers with the bytes, or with
+  // a description of them, and with the headers that say how to keep them. Every request
+  // is made in the browser's own session, so what it may see is what the signed-in person
+  // may see. On this target an unknown file answers 404 and a signed-out upload 401.
 
-  async function fetchFile(where: string, params?: Record<string, string>): Promise<void> {
-    const target = address("/api/files/:fileId?type=blob", params);
-    const response = await page.request.get(target).catch((error: unknown) => {
-      throw new Error(`unbound: ${where} — ${target} could not be reached (${String(error)})`);
+  type Upload = {
+    name: string;
+    metadata?: string;
+    file?: { fileName: string; mimeType: string; contents: string };
+  };
+
+  // Uploads are sent from inside the page, the way the attachment control sends them, so
+  // the session travels with them and nothing outside the browser is needed.
+  async function upload(where: string, form: Upload): Promise<void> {
+    if (!page.url().startsWith(baseURL)) await go("/api/files");
+    lastAnswer = await page
+      .evaluate(async (sent) => {
+        const body = new FormData();
+        body.append("name", sent.name);
+        if (sent.metadata !== undefined) body.append("metadata", sent.metadata);
+        if (sent.file) {
+          body.append(
+            "file",
+            new Blob([sent.file.contents], { type: sent.file.mimeType }),
+            sent.file.fileName,
+          );
+        }
+        const response = await fetch("/api/files", { method: "POST", body });
+        const headers: Record<string, string> = {};
+        response.headers.forEach((value, key) => {
+          headers[key] = value;
+        });
+        return { status: response.status, headers, body: await response.text() };
+      }, form)
+      .catch((error: unknown) => {
+        throw new Error(`unbound: ${where} — the upload could not be sent (${String(error)})`);
+      });
+  }
+
+  // Neither the browser nor Playwright's request client will send a body without stating
+  // its length, so this one submission leaves from the test process itself: the same
+  // multipart form, carrying the browser's session cookies, written in chunks with no
+  // Content-Length header at all.
+  async function uploadWithoutLength(where: string, form: Upload): Promise<void> {
+    const target = new URL(baseURL + "/api/files");
+    const cookie = (await page.context().cookies(target.origin))
+      .map((c) => `${c.name}=${c.value}`)
+      .join("; ");
+    const boundary = `----withoutLength${Date.now().toString(16)}`;
+    const part = (disposition: string, value: string, type?: string): string =>
+      `--${boundary}\r\nContent-Disposition: form-data; ${disposition}\r\n` +
+      (type ? `Content-Type: ${type}\r\n` : "") +
+      `\r\n${value}\r\n`;
+    const pieces = [part(`name="name"`, form.name)];
+    if (form.metadata !== undefined) pieces.push(part(`name="metadata"`, form.metadata));
+    if (form.file) {
+      pieces.push(
+        part(
+          `name="file"; filename="${form.file.fileName.replace(/"/g, "%22")}"`,
+          form.file.contents,
+          form.file.mimeType,
+        ),
+      );
+    }
+    pieces.push(`--${boundary}--\r\n`);
+    const options: RequestOptions = {
+      method: "POST",
+      headers: {
+        "content-type": `multipart/form-data; boundary=${boundary}`,
+        "transfer-encoding": "chunked",
+        ...(cookie ? { cookie } : {}),
+      },
+    };
+    lastAnswer = await new Promise<Answer>((resolve, reject) => {
+      const onResponse = (response: IncomingMessage): void => {
+        const chunks: Buffer[] = [];
+        response.on("data", (chunk: Buffer) => chunks.push(chunk));
+        response.on("error", reject);
+        response.on("end", () => {
+          const headers: Record<string, string> = {};
+          for (const [key, value] of Object.entries(response.headers)) {
+            if (value !== undefined) headers[key] = Array.isArray(value) ? value.join(", ") : value;
+          }
+          resolve({
+            status: response.statusCode ?? 0,
+            headers,
+            body: Buffer.concat(chunks).toString("utf8"),
+          });
+        });
+      };
+      const request =
+        target.protocol === "https:"
+          ? httpsRequest(target, options, onResponse)
+          : httpRequest(target, options, onResponse);
+      request.on("error", reject);
+      for (const piece of pieces) request.write(piece);
+      request.end();
+    }).catch((error: unknown) => {
+      throw new Error(`unbound: ${where} — the upload could not be sent (${String(error)})`);
     });
-    lastFile = {
-      status: response.status(),
-      headers: response.headers(),
-      body: await response.text().catch(() => ""),
+  }
+
+  // Who may read a stored file travels as a list of { tag, value } entries, with tag one
+  // of any, user or userType. A bare word is taken as a tag; anything already written out
+  // is sent exactly as given, malformed or not.
+  function readAccess(input: unknown): string | undefined {
+    if (!input || typeof input !== "object" || Array.isArray(input)) return undefined;
+    const record = input as Record<string, unknown>;
+    const stated = record.readAccess ?? record.read_access ?? record.metadata ?? record.access;
+    if (stated === undefined || stated === null) return undefined;
+    if (typeof stated === "string") {
+      return /^[A-Za-z]+$/.test(stated) ? JSON.stringify([{ tag: stated }]) : stated;
+    }
+    return JSON.stringify(Array.isArray(stated) ? stated : [stated]);
+  }
+
+  function uploadForm(input: unknown, metadata: string | undefined, withFile = true): Upload {
+    const name =
+      field(input, "name", "fileName", "file_name") ||
+      (typeof input === "string" ? input : "") ||
+      "upload.txt";
+    const size = Number.parseInt(field(input, "size", "sizeBytes", "size_bytes", "bytes"), 10);
+    const contents = Number.isFinite(size)
+      ? "A".repeat(size)
+      : field(input, "contents", "content", "body", "text");
+    return {
+      name,
+      metadata,
+      file: withFile
+        ? {
+            fileName: field(input, "fileName", "file_name") || name,
+            mimeType: field(input, "mimeType", "contentType", "content_type") || "text/plain",
+            contents,
+          }
+        : undefined,
     };
   }
 
-  function fileHeader(name: string): string {
-    return lastFile?.headers[name] ?? "";
-  }
+  // An upload that says nothing about who may read it sends an empty list, which this
+  // target accepts; leaving the field out altogether is refused as invalid.
+  const NO_STATED_ACCESS = "[]";
+
+  const fileUpload: S.FileUploadPage = {
+    ...at("/api/files"),
+    uploadFile: (input) =>
+      upload("file-upload.upload_file", uploadForm(input, readAccess(input) ?? NO_STATED_ACCESS)),
+    uploadFileStatingItsReadAccess: async (input) => {
+      const stated = readAccess(input);
+      if (stated === undefined) {
+        throw new Error(
+          "unbound: file-upload.upload_file_stating_its_read_access — no read access was supplied to state",
+        );
+      }
+      await upload("file-upload.upload_file_stating_its_read_access", uploadForm(input, stated));
+    },
+    uploadFileWithoutDeclaringItsSize: (input) =>
+      uploadWithoutLength(
+        "file-upload.upload_file_without_declaring_its_size",
+        uploadForm(input, readAccess(input) ?? NO_STATED_ACCESS),
+      ),
+    uploadFileWithNoFilePart: (input) =>
+      upload(
+        "file-upload.upload_file_with_no_file_part",
+        uploadForm(input, readAccess(input) ?? NO_STATED_ACCESS, false),
+      ),
+    uploadFileWithUnrecognisedReadAccess: (input) =>
+      upload(
+        "file-upload.upload_file_with_unrecognised_read_access",
+        uploadForm(input, readAccess(input) ?? JSON.stringify([{ tag: "nobodyInParticular" }])),
+      ),
+    uploadFileWithMalformedReadAccess: (input) =>
+      upload(
+        "file-upload.upload_file_with_malformed_read_access",
+        uploadForm(input, readAccess(input) ?? "{not a read access"),
+      ),
+    storedFileIdentifier: async () =>
+      lastAnswer && lastAnswer.status < 300 ? String(answered().id ?? "") : "",
+    // The refusal readers hand over the latest refusal whole — its status and its body —
+    // and leave it to the test to decide what that refusal says.
+    refusedForSize: async () => refusal((status) => status >= 400),
+    sizeLimitNamedInRefusal: async () => refusal((status) => status >= 400),
+    refusedForFileNameLength: async () => refusal((status) => status >= 400),
+    refusedForReadAccess: async () => refusal((status) => status >= 400),
+    refusedWhenSignedOut: async () => refusal((status) => status === 401),
+    serviceFault: async () => {
+      if (!lastAnswer || lastAnswer.status < 500) return "";
+      const message = answered().message;
+      return `${lastAnswer.status} ${typeof message === "string" ? message : lastAnswer.body}`;
+    },
+  };
+
+  const fileDescription: S.FileDescriptionPage = {
+    open: async (params) => {
+      await ask("file-description.open", address("/api/files/:fileId", params));
+    },
+    fileIdentifier: async () => (lastAnswer?.status === 200 ? String(answered().id ?? "") : ""),
+    fileName: async () => (lastAnswer?.status === 200 ? String(answered().name ?? "") : ""),
+    storedDate: async () => (lastAnswer?.status === 200 ? String(answered().createdAt ?? "") : ""),
+    // The description names the stored content by the digest it is kept under.
+    storedContentIdentifier: async () =>
+      lastAnswer?.status === 200 ? String(answered().fileBlob ?? "") : "",
+    refusedWhenNotPermitted: async () => refusal((status) => status === 401 || status === 403),
+    refusedForUnknownFile: async () => refusal((status) => status === 404),
+    notFoundForAdministrator: async () => refusal((status) => status === 404),
+  };
 
   const fileDownload: S.FileDownloadPage = {
-    open: (params) => fetchFile("file-download.open", params),
-    downloadFile: (input) =>
-      fetchFile("file-download.download_file", {
-        fileId: field(input, "fileId", "id") || asText(input),
-      }),
-    fileContents: async () => lastFile?.body ?? "",
+    open: async (params) => {
+      await ask("file-download.open", address("/api/files/:fileId?type=blob", params));
+    },
+    downloadFile: async (input) => {
+      await ask(
+        "file-download.download_file",
+        address("/api/files/:fileId?type=blob", {
+          fileId: field(input, "fileId", "id") || asText(input),
+        }),
+      );
+    },
+    fileContents: async () => (lastAnswer && lastAnswer.status < 300 ? lastAnswer.body : ""),
     // The name the file is kept under travels in the disposition the answer carries.
     fileNameOnSave: async () => {
-      const match = /filename\*?=(?:UTF-8'')?"?([^";]+)"?/i.exec(
-        fileHeader("content-disposition"),
-      );
+      const match = /filename\*?=(?:UTF-8'')?"?([^";]+)"?/i.exec(header("content-disposition"));
       return match ? decodeURIComponent(match[1]) : "";
     },
     offeredAsDownloadNotDisplayed: async () =>
-      /attachment/i.test(fileHeader("content-disposition")) ? "attachment" : "",
-    contentTypeFromName: async () => fileHeader("content-type"),
+      /attachment/i.test(header("content-disposition")) ? "attachment" : "",
+    contentTypeFromName: async () => header("content-type"),
     readableWhenSignedOutIfPublic: async () =>
-      lastFile && lastFile.status === 200 ? lastFile.body : "",
-    refusedWhenNotPermitted: async () =>
-      lastFile && lastFile.status >= 400 ? `${lastFile.status} ${lastFile.body}` : "",
-    refusedForUnknownFile: async () =>
-      lastFile && lastFile.status >= 400 ? `${lastFile.status} ${lastFile.body}` : "",
-    notFoundForAdministrator: async () =>
-      lastFile && lastFile.status >= 400 ? `${lastFile.status} ${lastFile.body}` : "",
+      lastAnswer && lastAnswer.status === 200 ? lastAnswer.body : "",
+    refusedWhenNotPermitted: async () => refusal((status) => status === 401 || status === 403),
+    refusedForUnknownFile: async () => refusal((status) => status === 404),
+    notFoundForAdministrator: async () => refusal((status) => status === 404),
   };
 
   // The attachment control is a step of the opportunity and proposal forms rather than
   // a tab of its own; opening it means opening the form and walking to that step.
   const fileAttachmentControl: S.FileAttachmentControlPage = {
     async open(params) {
-      const programme = params?.program ?? params?.programme ?? "code-with-us";
-      const opportunityId = params?.opportunityId ?? params?.id;
+      const programme = params?.program || "code-with-us";
+      const opportunityId = params?.opportunityId;
       if (!opportunityId) {
         throw new Error(
           "unbound: file-attachment-control.open — the attachments step needs the opportunity it belongs to",
         );
       }
       await go(`/opportunities/${programme}/${opportunityId}/edit?tab=opportunity`);
-      await advanceTo("file-attachment-control.open", "Add Attachment");
+      // The step is headed "Attachments" and states its size limit whether or not the
+      // form is being edited; "Add Attachment" appears only once editing has begun.
+      await advanceTo("file-attachment-control.open", "Attachments");
     },
+    // A stored attachment is offered as a link to the address the file is kept at.
+    async attachmentAddress() {
+      const links = seen(page.getByRole("link"));
+      const count = await links.count();
+      const found: string[] = [];
+      for (let i = 0; i < count; i++) {
+        const href = await links.nth(i).getAttribute("href");
+        if (href && href.includes("/api/files/")) found.push(href);
+      }
+      return found.join("\n");
+    },
+    sizeLimitStatedBeforeChoosing: () => linesMatching(/smaller than|\b\d+\s?MB\b/i),
+    // The upload is made through the page's own file chooser, so its refusal is whatever
+    // message the step shows afterwards, whole.
+    uploadRefusedForSize: () => messages(),
     addAttachment: (input) => addAttachment("file-attachment-control.add_attachment", input),
     renameNewAttachment: (input) =>
       renameAttachment("file-attachment-control.rename_new_attachment", input),
@@ -2447,9 +2969,9 @@ export default function create(
       const count = await boxes.count();
       if (count) {
         const which = Math.min(indexOf(input), count - 1);
-        const link = boxes.nth(which).locator("xpath=following-sibling::a[1]");
-        if (await link.count()) {
-          await link.first().click();
+        const link = await attachmentLink(which);
+        if (link) {
+          await link.click();
           await settle();
           return;
         }
@@ -2485,9 +3007,46 @@ export default function create(
     attachmentListOnPublicView: () => tabContent(["Attachments"]),
   };
 
+  // A stored picture is shown from the service's own address; the placeholder shown when
+  // there is none comes from the site's static images and is not a stored image.
+  async function storedImageAddress(): Promise<string> {
+    const images = seen(page.getByRole("img"));
+    const count = await images.count();
+    for (let i = 0; i < count; i++) {
+      const source = await images.nth(i).getAttribute("src");
+      if (source && source.includes("/api/")) return source;
+    }
+    return "";
+  }
+
+  // The size the image was stored at, read by loading the stored image itself.
+  async function storedImageSize(): Promise<{ width: number; height: number } | null> {
+    const source = await storedImageAddress();
+    if (!source) return null;
+    return page.evaluate(
+      (src) =>
+        new Promise<{ width: number; height: number } | null>((resolve) => {
+          const image = new Image();
+          image.onload = () => resolve({ width: image.naturalWidth, height: image.naturalHeight });
+          image.onerror = () => resolve(null);
+          image.src = src;
+        }),
+      source,
+    );
+  }
+
   const fileImagePicker: S.FileImagePickerPage = {
-    ...at("/users/:userId"),
+    ...at("/users/me"),
     chooseImage: (input) => chooseImage("file-image-picker.choose_image", input),
+    imageAddress: () => storedImageAddress(),
+    storedImageWidth: async () => {
+      const size = await storedImageSize();
+      return size ? String(size.width) : "";
+    },
+    storedImageHeight: async () => {
+      const size = await storedImageSize();
+      return size ? String(size.height) : "";
+    },
     currentImage: async () => {
       const images = seen(page.getByRole("img"));
       const count = await images.count();
@@ -2529,6 +3088,11 @@ export default function create(
   const fileEmbeddedImage: S.FileEmbeddedImagePage = {
     ...at("/content/:slug/edit"),
     uploadBodyImage: (input) => uploadBodyImage("file-embedded-image.upload_body_image", input),
+    // An uploaded image goes into the text as a reference to the address it is kept at.
+    async imageAddress() {
+      const inText = /\/api\/files\/[^\s)"'\]]+/.exec(await fieldValue(["Body"]));
+      return inText ? inText[0] : storedImageAddress();
+    },
     imageInsertedIntoText: () => fieldValue(["Body"]),
     onlyJpegAndPngOffered: async () => {
       throw new Error(
@@ -2568,6 +3132,7 @@ export default function create(
     opportunityTwuView,
     opportunityTwuEdit,
     opportunityTwuComplete,
+    scheduledTransitionTrigger,
     proposalCwuCreate,
     proposalCwuEdit,
     proposalCwuView,
@@ -2601,6 +3166,11 @@ export default function create(
     userProfileCapabilities,
     userProfileNotifications,
     userProfileLegal,
+    userProfileSelf,
+    userProfileSelfCapabilities,
+    userProfileSelfNotifications,
+    userProfileSelfLegal,
+    organizationUserMembershipsSelf,
     evaluationPanelDashboard,
     evaluationPanelSwu,
     evaluationPanelTwu,
@@ -2623,10 +3193,13 @@ export default function create(
     notificationTermsBroadcast,
     notificationEmailReference,
     contentFooter,
+    contentServiceLevelAgreementLink,
     contentList,
     contentCreate,
     contentEdit,
     contentView,
+    fileUpload,
+    fileDescription,
     fileDownload,
     fileAttachmentControl,
     fileImagePicker,

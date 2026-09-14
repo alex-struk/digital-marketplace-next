@@ -58,7 +58,11 @@ pages:
       toggle_watch: bound
       start_proposal: bound
     observations:
+      opportunity_identifier: bound
       status: bound
+      published_date: bound
+      created_by_name: "unbound: the public opportunity page names no creator; its header shows only the published and updated dates, and the creator's name appears only on the management page"
+      last_changed_by_name: "unbound: the public opportunity page names nobody who changed it; only the updated date is shown"
       proposal_deadline: bound
       reward: bound
       addenda: bound
@@ -74,6 +78,9 @@ pages:
       add_addendum: bound
       add_note: "unbound: the History tab lists entries but offers no control for adding one; checked on a published opportunity as both its owner and an administrator, and on a draft, and no note control appears anywhere on the page"
     observations:
+      opportunity_identifier: bound
+      created_by_name: bound
+      last_changed_by_name: bound
       summary_tab: bound
       opportunity_tab: bound
       addenda_tab: bound
@@ -105,7 +112,11 @@ pages:
       toggle_watch: bound
       start_proposal: bound
     observations:
+      opportunity_identifier: bound
       status: bound
+      published_date: bound
+      created_by_name: "unbound: the public opportunity page names no creator; its header shows only the published and updated dates, and the creator's name appears only on the management page"
+      last_changed_by_name: "unbound: the public opportunity page names nobody who changed it; only the updated date is shown"
       proposal_deadline: bound
       total_max_budget: bound
       phases: bound
@@ -125,6 +136,9 @@ pages:
       finalize_question_consensuses: bound
       start_team_scenario: bound
     observations:
+      opportunity_identifier: bound
+      created_by_name: bound
+      last_changed_by_name: bound
       summary_tab: bound
       opportunity_tab: bound
       addenda_tab: bound
@@ -158,7 +172,11 @@ pages:
       toggle_watch: bound
       start_proposal: bound
     observations:
+      opportunity_identifier: bound
       status: bound
+      published_date: bound
+      created_by_name: "unbound: the public opportunity page names no creator; its header shows only the published and updated dates, and the creator's name appears only on the management page"
+      last_changed_by_name: "unbound: the public opportunity page names nobody who changed it; only the updated date is shown"
       proposal_deadline: bound
       max_budget: bound
       resources: bound
@@ -176,6 +194,9 @@ pages:
       edit_evaluation_panel: bound
       finalize_question_consensuses: bound
     observations:
+      opportunity_identifier: bound
+      created_by_name: bound
+      last_changed_by_name: bound
       summary_tab: bound
       opportunity_tab: bound
       addenda_tab: bound
@@ -190,6 +211,12 @@ pages:
     actions: {}
     observations:
       full_report: bound
+
+  scheduled-transition-trigger:
+    actions:
+      run_pending_transitions: bound
+    observations:
+      service_is_up: bound
 
   proposal-cwu-create:
     actions:
@@ -218,6 +245,8 @@ pages:
       add_attachment: bound
       remove_attachment: bound
     observations:
+      proposal_identifier: bound
+      opportunity_identifier: bound
       proposal_tab: bound
       status: bound
       submitted_at: bound
@@ -231,6 +260,7 @@ pages:
       award_proposal: bound
       disqualify_proposal: bound
     observations:
+      proposal_identifier: bound
       proposal_tab: bound
       history_tab: bound
       proponent: bound
@@ -277,6 +307,8 @@ pages:
       withdraw_proposal: bound
       delete_proposal: bound
     observations:
+      proposal_identifier: bound
+      opportunity_identifier: bound
       proposal_tab: bound
       scoresheet_tab: bound
       status: bound
@@ -293,6 +325,7 @@ pages:
       award_proposal: bound
       disqualify_proposal: bound
     observations:
+      proposal_identifier: bound
       proposal_tab: bound
       team_questions_tab: bound
       code_challenge_tab: bound
@@ -341,6 +374,8 @@ pages:
       withdraw_proposal: bound
       delete_proposal: bound
     observations:
+      proposal_identifier: bound
+      opportunity_identifier: bound
       proposal_tab: bound
       scoresheet_tab: bound
       status: bound
@@ -357,6 +392,7 @@ pages:
       award_proposal: bound
       disqualify_proposal: bound
     observations:
+      proposal_identifier: bound
       proposal_tab: bound
       resource_questions_tab: bound
       challenge_tab: bound
@@ -405,6 +441,7 @@ pages:
       swu_qualified_mark: bound
       twu_qualified_mark: bound
       pagination: "unbound: no pager is rendered on the organizations list, so there is nothing to read"
+      refused_when_not_permitted: bound
 
   organization-create:
     actions:
@@ -421,6 +458,9 @@ pages:
       save_changes: bound
       cancel_editing: bound
       archive_organization: bound
+      # Ordinary members are invited through the Team tab's "Add Team Member(s)" dialog.
+      # That screen cannot send any other membership type, so a non-member invitation is
+      # sent directly to /api/affiliations, the same address the screen posts to.
       add_team_members: bound
       approve_pending_member: bound
       remove_team_member: bound
@@ -432,6 +472,7 @@ pages:
       view_swu_terms: bound
       view_twu_terms: bound
     observations:
+      organization_identifier: bound
       organization_tab: bound
       team_tab: bound
       swu_qualification_tab: bound
@@ -452,6 +493,7 @@ pages:
       not_qualified_notice: bound
       changelog_entry: bound
       field_error: bound
+      invalid_membership_type_error: bound
 
   organization-swu-terms:
     actions:
@@ -473,7 +515,7 @@ pages:
     actions:
       approve_invitation: bound
       reject_invitation: bound
-      leave_organization: bound
+      leave_organization: "unbound: an affiliated organization's row carries only its name; the column beside it is empty in the accessibility tree and no leave control appears anywhere on the tab"
       create_organization: bound
       open_organization: bound
     observations:
@@ -484,6 +526,8 @@ pages:
       swu_qualified_mark: bound
       empty_owned_message: bound
       empty_affiliated_message: bound
+      accept_confirmation: bound
+      decline_confirmation: bound
 
   user-sign-in:
     actions:
@@ -559,6 +603,7 @@ pages:
       confirm_activation_change: bound
       cancel_activation_change: bound
     observations:
+      user_identifier: bound
       profile_tab: bound
       capabilities_tab: bound
       notifications_tab: bound
@@ -607,6 +652,82 @@ pages:
       terms_updated_warning: bound
       program_terms_links: bound
       accept_updated_terms_modal: bound
+
+  user-profile-self:
+    actions:
+      edit_profile: bound
+      save_changes: bound
+      cancel_editing: bound
+      change_avatar: bound
+      deactivate_account: bound
+      confirm_activation_change: bound
+      cancel_activation_change: bound
+    observations:
+      user_identifier: bound
+      profile_tab: bound
+      capabilities_tab: bound
+      notifications_tab: bound
+      legal_tab: bound
+      organizations_tab: bound
+      status_badge: bound
+      account_type: bound
+      idp_username_readonly: bound
+      name_field: bound
+      email_field: bound
+      job_title_field: bound
+      field_error: bound
+      activation_modal: bound
+      sign_in_required: bound
+
+  user-profile-self-capabilities:
+    actions:
+      toggle_capability: bound
+      expand_capability_description: bound
+    observations:
+      capability_row: bound
+      capability_checked: "unbound: whether a capability is held is shown only by the colour and shape of an unlabelled icon — the row has no checkbox, no text and no state in the accessibility tree, so there is nothing to read"
+      capability_description: bound
+
+  user-profile-self-notifications:
+    actions:
+      toggle_new_opportunity_notifications: bound
+      confirm_unsubscribe: "unbound: /users/me?tab=notifications without the unsubscribe flag is the same settings tab, where turning the notice off takes effect at once and raises no confirmation"
+      cancel_unsubscribe: "unbound: this tab raises no unsubscribe confirmation, so there is nothing to cancel"
+    observations:
+      new_opportunities_checkbox: bound
+      notification_email_address: bound
+      unsubscribe_modal: "unbound: no confirmation appears when the notice is turned off on this tab"
+
+  user-profile-self-legal:
+    actions:
+      open_app_terms: bound
+      accept_updated_terms: bound
+      confirm_accept_updated_terms: bound
+    observations:
+      privacy_policy: bound
+      app_terms_link: bound
+      accepted_on_notice: bound
+      terms_updated_warning: bound
+      program_terms_links: bound
+      accept_updated_terms_modal: bound
+
+  organization-user-memberships-self:
+    actions:
+      approve_invitation: bound
+      reject_invitation: bound
+      leave_organization: "unbound: an affiliated organization's row carries only its name; the column beside it is empty in the accessibility tree and no leave control appears anywhere on the tab"
+      create_organization: bound
+      open_organization: bound
+    observations:
+      owned_organizations_table: bound
+      affiliated_organizations_table: bound
+      pending_badge: bound
+      team_member_count: bound
+      swu_qualified_mark: bound
+      empty_owned_message: bound
+      empty_affiliated_message: bound
+      accept_confirmation: bound
+      decline_confirmation: bound
 
   evaluation-panel-dashboard:
     actions:
@@ -877,6 +998,14 @@ pages:
       copyright_link: bound
       present_when_signed_out: bound
 
+  content-service-level-agreement-link:
+    actions:
+      follow_service_level_agreement_link: bound
+    observations:
+      service_level_agreement_link: bound
+      link_target_address: bound
+      answer_at_link_target: bound
+
   content-list:
     actions:
       open_page_for_editing: bound
@@ -923,6 +1052,7 @@ pages:
       delete_page: bound
       confirm_delete_page: bound
     observations:
+      page_address: bound
       published_date: bound
       updated_date: bound
       published_by: bound
@@ -935,17 +1065,48 @@ pages:
       changes_published_success: bound
       deleted_success: bound
       refused_for_non_administrator: bound
+      body_being_edited: bound
+      version_history: bound
 
   content-view:
     actions:
       follow_body_link: bound
     observations:
+      page_address: bound
       page_title: bound
       page_body: bound
       published_date: bound
       updated_date: bound
       readable_when_signed_out: bound
       not_found_for_unknown_address: bound
+
+  file-upload:
+    actions:
+      upload_file: bound
+      upload_file_stating_its_read_access: bound
+      upload_file_without_declaring_its_size: bound
+      upload_file_with_no_file_part: bound
+      upload_file_with_unrecognised_read_access: bound
+      upload_file_with_malformed_read_access: bound
+    observations:
+      stored_file_identifier: bound
+      refused_for_size: bound
+      size_limit_named_in_refusal: bound
+      refused_for_file_name_length: bound
+      refused_for_read_access: bound
+      refused_when_signed_out: bound
+      service_fault: bound
+
+  file-description:
+    actions: {}
+    observations:
+      file_identifier: bound
+      file_name: bound
+      stored_date: bound
+      stored_content_identifier: bound
+      refused_when_not_permitted: bound
+      refused_for_unknown_file: bound
+      not_found_for_administrator: bound
 
   file-download:
     actions:
@@ -968,6 +1129,9 @@ pages:
       remove_existing_attachment: bound
       download_attachment: bound
     observations:
+      attachment_address: bound
+      size_limit_stated_before_choosing: bound
+      upload_refused_for_size: bound
       new_attachment_row: bound
       existing_attachment_row: bound
       existing_attachment_name_read_only: bound
@@ -980,16 +1144,20 @@ pages:
     actions:
       choose_image: bound
     observations:
+      image_address: bound
       current_image: bound
       chosen_image_preview: bound
       only_jpeg_and_png_offered: "unbound: nothing visible on the page says which kinds of image the picker takes — the restriction lives only in the chooser the operating system opens, which the page does not describe"
       rejected_image_error: bound
       image_readable_when_signed_out: bound
+      stored_image_width: bound
+      stored_image_height: bound
 
   file-embedded-image:
     actions:
       upload_body_image: bound
     observations:
+      image_address: bound
       image_inserted_into_text: bound
       only_jpeg_and_png_offered: "unbound: the formatted-text editor states nothing on the page about the kinds of image it takes"
       uploading_indicator: bound
