@@ -1,11 +1,13 @@
 ---
-stage: "derive-tests"
-title: "derive tests"
-at: "2026-09-14T02:05:13.883Z"
-cost: 3.7923484999999997
-turns: 57
-session: "74d04b9b-ca17-426e-bfbf-2603114ac1fb"
+gate: G3
+question: "Do these tests follow from the users criteria and from nothing else?"
+recommendation: "Of the 30 users criteria, 25 now have a test file and 5 are recorded in `tests/acceptance/not-testable.yaml` (4 blocked, 1 unobservable)."
+opened: 2026-09-14T02:05:13.899Z
 ---
+
+# Do these tests follow from the users criteria and from nothing else?
+
+**Recommendation.** Of the 30 users criteria, 25 now have a test file and 5 are recorded in `tests/acceptance/not-testable.yaml` (4 blocked, 1 unobservable).
 
 Of the 30 users criteria, 25 now have a test file and 5 are recorded in `tests/acceptance/not-testable.yaml` (4 blocked, 1 unobservable). Nothing has been run or type-checked: there is no TypeScript compiler in the workspace, and running the YAML parser needed approval I didn't have. I checked instead that no user test contains a pattern the separation check refuses, re-read the YAML by eye, and confirmed no criterion has both a test file and an entry.
 
