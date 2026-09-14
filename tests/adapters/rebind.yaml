@@ -1,1 +1,222 @@
-rebind: []
+rebind:
+  - id: R-2.1
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) fills every field
+      the test gives, but the old form's '3. Details' step also requires
+      'Acceptance Criteria*' and 'Evaluation Criteria*', which the contract's
+      input never carries; the snapshot shows both blank, so Publish stays
+      disabled and press() throws before the proposal is reached. Enter valid
+      values into required fields the input does not name before pressing
+      Publish.
+  - id: R-2.2
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) leaves the
+      required 'Acceptance Criteria*' and 'Evaluation Criteria*' fields on '3.
+      Details' blank because the contract's input never names them, so Publish
+      stays disabled and press() throws before the second proposal is attempted.
+      Fill required fields the input does not name before pressing Publish.
+  - id: R-2.3
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) leaves the
+      required 'Acceptance Criteria*' and 'Evaluation Criteria*' on '3. Details'
+      blank (the contract's input never names them), so Publish stays disabled
+      and press() throws before any proposal is submitted. Fill required fields
+      the input does not name before pressing Publish.
+  - id: R-1.4
+    target: old
+    why: opportunityCwuCreate.publish(input) leaves the required 'Acceptance
+      Criteria*' and 'Evaluation Criteria*' on '3. Details' blank because the
+      contract's input never names them, so Publish stays disabled and press()
+      throws before any edit is made. Fill required fields the input does not
+      name before pressing Publish.
+  - id: R-2.4
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) leaves the
+      required 'Acceptance Criteria*' and 'Evaluation Criteria*' on '3. Details'
+      blank (not in the contract's input), so Publish stays disabled and press()
+      throws before any proposal exists to delete. Fill required fields the
+      input does not name before pressing Publish.
+  - id: R-2.7
+    target: old
+    why: opportunityCwuCreate.publish(input) leaves the required 'Acceptance
+      Criteria*' and 'Evaluation Criteria*' on '3. Details' blank because the
+      contract's input never names them, so Publish stays disabled and press()
+      throws before any proposal is created. Fill required fields the input does
+      not name before pressing Publish.
+  - id: R-2.9
+    target: old
+    why: opportunityCwuCreate.publish(input) leaves the required 'Acceptance
+      Criteria*' and 'Evaluation Criteria*' on '3. Details' blank because the
+      contract's input never names them, so Publish stays disabled and press()
+      throws before any proposal history exists. Fill required fields the input
+      does not name before pressing Publish.
+  - id: R-1.10
+    target: old
+    why: in all six tests opportunityCwuCreate.publish(input) leaves the required
+      'Acceptance Criteria*' and 'Evaluation Criteria*' on '3. Details' blank
+      (the contract's input never names them), so Publish is disabled whatever
+      the field under test holds, and press() throws instead of letting
+      fieldError() be read. Fill required fields the input does not name, and
+      when Publish is still disabled after that, return so the test can read the
+      refusal.
+  - id: R-6.10
+    target: old
+    why: organizationEdit.addTeamMembers({user}) reads only top-level 'emails' or
+      'email' keys, so the address nested under 'user' is dropped, nothing is
+      typed into 'Email Addresses', the dialog is never confirmed and no
+      invitation is sent. Read the email from a nested user record.
+  - id: R-1.11
+    target: old
+    why: in all three tests opportunityCwuCreate.publish(input) leaves the required
+      'Acceptance Criteria*' and 'Evaluation Criteria*' on '3. Details' blank,
+      so Publish is disabled regardless of the remote-work fields under test,
+      and press() throws instead of letting fieldError() be read. Fill required
+      fields the input does not name, and return on a still-disabled Publish so
+      the refusal can be read.
+  - id: R-1.12
+    target: old
+    why: in all three tests opportunityCwuCreate.publish(input) leaves the required
+      'Acceptance Criteria*' and 'Evaluation Criteria*' on '3. Details' blank,
+      so Publish is disabled regardless of the reward or skills under test, and
+      press() throws instead of letting fieldError() be read. Fill required
+      fields the input does not name, and return on a still-disabled Publish so
+      the refusal can be read.
+  - id: R-2.12
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) leaves the
+      required 'Acceptance Criteria*' and 'Evaluation Criteria*' on '3. Details'
+      blank (not in the contract's input), so Publish stays disabled and press()
+      throws before the draft proposal is saved. Fill required fields the input
+      does not name before pressing Publish.
+  - id: R-3.12
+    target: old
+    why: acceptOrgAdminTerms() throws 'no dialog is open' because the test calls it
+      before anything has raised the terms dialog; open it from the member's
+      Admin box, or return when none is open. toggleMemberAdminStatus({member})
+      gets '' from asText for the nested seed user, so it falls back to the
+      first checkbox on the Team tab, the owner's checked and disabled box, and
+      clicks it until the 15 s timeout. Find the row by the member's name, and
+      treat a disabled box as the refusal rather than clicking it.
+  - id: R-4.12
+    target: old
+    why: userProfile.toggleAdminPermission() throws unbound when a vendor's profile
+      offers no Admin box (vendor.one's page shows Status, Account Type and no
+      Permission(s)), although that absence is the refusal the test goes on to
+      read; return quietly as opportunityCreate does for a withheld control. In
+      the first test, after the tick and a reopen, the Admin box reads
+      unchecked; confirm that the click was saved (wait for any confirmation or
+      save) before the page is reopened.
+  - id: R-2.13
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) leaves the
+      required 'Acceptance Criteria*' and 'Evaluation Criteria*' on '3. Details'
+      blank (not in the contract's input), so Publish stays disabled and press()
+      throws before any proposal is submitted. Fill required fields the input
+      does not name before pressing Publish.
+  - id: R-8.13
+    target: old
+    why: after editOrganization and chooseImage, organizationEdit.saveChanges()
+      presses 'Save Changes' but never confirms the 'Save Changes?' dialog it
+      raises (seen open in R-3.19), so the snapshot is still in edit mode with
+      no stored logo and storedImageWidth() reads nothing (NaN). Confirm the
+      dialog and wait for the save before reading the stored image.
+  - id: R-1.14
+    target: old
+    why: in all five tests opportunityCwuCreate.publish(input) leaves the required
+      'Acceptance Criteria*' and 'Evaluation Criteria*' on '3. Details' blank,
+      so Publish is disabled regardless of the dates under test, and press()
+      throws instead of letting fieldError() or the stored dates be read. Fill
+      required fields the input does not name, and return on a still-disabled
+      Publish so the refusal can be read.
+  - id: R-2.14
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) leaves the
+      required 'Acceptance Criteria*' and 'Evaluation Criteria*' on '3. Details'
+      blank (not in the contract's input), so Publish stays disabled and press()
+      throws before any proponent is chosen. Fill required fields the input does
+      not name before pressing Publish.
+  - id: R-6.17
+    target: old
+    why: "in 'the watch itself is retained', opportunityCwuCreate.publish(input)
+      leaves the required 'Acceptance Criteria*' and 'Evaluation Criteria*' on
+      '3. Details' blank, so Publish stays disabled and press() throws. Fill
+      required fields the input does not name before pressing Publish. The first
+      test's missing 'Deactivate Account' is not a binding fault: that account
+      (vendor.terms.reset) already shows Status Inactive with only 'Reactivate
+      Account'."
+  - id: R-3.18
+    target: old
+    why: organizationEdit.organizationTab() returns tabContent(['Organization']),
+      which drops the top bar, so for the owner the reading lacks the 'Edit
+      Organization' control the snapshot shows there and 'Edit' is not found.
+      Include the screen's top-bar controls in this reading, as profileTab now
+      does.
+  - id: R-1.19
+    target: old
+    why: opportunityCwuCreate.saveDraft and publish(input) leave the required
+      'Acceptance Criteria*' and 'Evaluation Criteria*' on '3. Details' blank
+      because the contract's input never names them. The draft is therefore
+      incomplete, its Actions menu offers Publish disabled and no 'Submit for
+      Review', and the create page's Publish throws disabled. Fill required
+      fields the input does not name before saving or publishing.
+  - id: R-3.19
+    target: old
+    why: organizationEdit.saveChanges(input) fills the phone number and presses
+      'Save Changes', but never confirms the 'Save Changes?' dialog that opens;
+      the dialog is still open in the snapshot and intercepts the next click on
+      the Organization tab for 15 s. Confirm the dialog with its 'Save Changes'
+      control and wait for the save to finish.
+  - id: R-1.20
+    target: old
+    why: in both tests opportunityCwuCreate.publish(input) leaves the required
+      'Acceptance Criteria*' and 'Evaluation Criteria*' on '3. Details' blank
+      (not in the contract's input), so Publish stays disabled and press()
+      throws before any state change is requested. Fill required fields the
+      input does not name before pressing Publish.
+  - id: R-8.20
+    target: old
+    why: the Code With Us and proposal tests fail because
+      opportunityCwuCreate.publish(input) leaves the required 'Acceptance
+      Criteria*' and 'Evaluation Criteria*' blank, so Publish stays disabled.
+      opportunitySwuCreate.addPhase maps none of 'startDate', 'completionDate',
+      'maxBudget' or 'capabilities' to the phase step's fields, and
+      opportunityTwuCreate.addResource has no mapping for 'order'; map those
+      keys to the phase and resource fields on those steps.
+  - id: R-3.21
+    target: old
+    why: "for the vendor who neither owns nor administers it,
+      organizationList.ownerName() returns '—', the placeholder the Owner cell
+      shows when the owner is withheld; read that placeholder as ''. The public
+      sector staff test is not a binding fault: that list shows owner names such
+      as 'Larkin Placeholder' in links."
+  - id: R-1.22
+    target: old
+    why: opportunityCwuCreate.saveDraft(input) leaves the required 'Acceptance
+      Criteria*' and 'Evaluation Criteria*' blank, so the draft is incomplete
+      and its Actions menu shows Publish disabled for that reason.
+      opportunityCwuEdit.publish() then throws on the disabled entry instead of
+      letting the unchanged status be read. Fill required fields the input does
+      not name, and treat a disabled Publish entry as the refusal and return.
+  - id: R-7.22
+    target: old
+    why: in both tests contentCreate.publishPage() clicked the enabled top-bar
+      Publish, but no confirmation dialog appeared and the page stayed on
+      /content/create with every field filled, even for the unique slug
+      'derived-rename-clash-…'. confirmPublish therefore finds no dialog, and
+      duplicateSlugError() reads before anything was submitted. Make sure the
+      click reaches the Publish anchor itself, and wait for the confirmation
+      dialog before returning.
+  - id: R-1.23
+    target: old
+    why: opportunityCwuCreate.publish(input) leaves the required 'Acceptance
+      Criteria*' and 'Evaluation Criteria*' on '3. Details' blank because the
+      contract's input never names them, so Publish stays disabled and press()
+      throws before anything is published. Fill required fields the input does
+      not name before pressing Publish.
+  - id: R-2.23
+    target: old
+    why: publishOpportunity's opportunityCwuCreate.publish(input) leaves the
+      required 'Acceptance Criteria*' and 'Evaluation Criteria*' on '3. Details'
+      blank (not in the contract's input), so Publish stays disabled and press()
+      throws before any proposal is withdrawn. Fill required fields the input
+      does not name before pressing Publish.
