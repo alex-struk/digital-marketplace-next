@@ -36,3 +36,28 @@ Nothing else changed. The first test (a score of 6 rejected through `scoreOutOfR
 - An action on `evaluation-individual-create` that saves a draft the browser form would refuse, plus an observation that it was stored as entered. That would unblock R-5.23 and the submission half of R-5.22.
 
 The domain still has 24 test files and 6 not-testable entries, the same count the ruling reviewed.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: do the revised evaluation tests now follow from their criteria and from nothing else? Ruling: approve. The one condition from derive-tests-evaluation-7 that belonged to the writer is met. R-5.22's second test no longer checks that the submit control is disabled or opens the individual evaluation list. It enters a score of 4 with an empty comment and stops at emptyNotesError, which follows from the criterion's statement that an empty comment is rejected. It is titled 'an empty comment is rejected', so it claims nothing more. The file comment names what the two untested parts need from the contract: a decimal-places observation on the individual create surfaces for the too-precise score, and an action that saves a draft the form would refuse for the 'cannot be submitted until complete' half, which the R-5.23 not-testable entry already records. A search of the R-5.22 file on this branch finds neither submitDisabledUntilComplete nor incompleteEvaluationError. The evaluation domain still has 24 test files and 6 not-testable entries, and the branch changes nothing under app/, tests/seed/, tests/fixtures/ or spec/, so no protected path is touched. The runner's typecheck failed for the whole suite but reports no diagnostics under acceptance/evaluation/; the failures are in users, files and notifications, which this proposal does not answer for. The tier is STANDARD and no residual risk is marked unaccepted, so none of the escalation triggers apply. The ruling would change to return if the runner reported a type error under acceptance/evaluation/, or if any test were found to assert something its criterion does not state.
+
+**Conditions:**
+- Carried forward, not the writer's: the seed or harness owner should give each test that walks the evaluation stages its own closed opportunity, or reset state between files, so that R-5.12 and R-5.16 stop leaving the shared seeded panel changed for the tests that run after them.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `7349393052140be2d9cf53f93445942957c11265`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    acceptance/users/: 89 diagnostics
+    acceptance/files/: 13 diagnostics
+    acceptance/notifications/: 13 diagnostics
