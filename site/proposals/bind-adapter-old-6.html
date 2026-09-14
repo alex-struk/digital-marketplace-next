@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-6 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">77</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">77</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">67</span></a></li><li><a href="../runs.html">Run log <span class="count">8</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-6</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-14 06:28</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> The workspace already held an adapter at <code>tests/adapters/old/index.ts</code> and a <code>bindings.yaml</code> covering every page in the contract.</p>
+<h3>Journal: &quot;old&quot; target adapter</h3>
+<p>The workspace already held an adapter at <code>tests/adapters/old/index.ts</code> and a <code>bindings.yaml</code> covering every page in the contract. I didn&#39;t start over. I checked the riskiest parts against the running application at <code>http://localhost:3000</code> and fixed what was wrong. I couldn&#39;t read <code>SDLC_TARGET_URL</code> directly because it needed approval, so I used the README&#39;s default address. It served the Digital Marketplace, and the seeded records were there.</p>
+<p><strong>Verification status.</strong> The adapter has not been typechecked or run. There is no <code>node_modules</code> in the workspace, and checking for a compiler needed approval that wasn&#39;t given. A later stage should run <code>npm run typecheck</code> before anything else.</p>
+<p><strong>Pages I opened.</strong> I signed in as the administrator through <code>/auth/createsessionadmin</code>, who chairs both seeded panels, and used the seeded identifiers to open:</p>
+<ul><li>the management tabs of the closed Sprint With Us and Team With Us opportunities (evaluation panel, instructions, evaluation, consensus, proposals);</li><li>the seeded proposals, including their proposal-details, questions, challenge and history tabs;</li><li>the scoring forms for one proponent in each programme;</li><li>the History tab of the published Code With Us opportunity;</li><li>the organizations list and the users list.</li></ul>
+<p>Every route I tried resolved.</p>
+<p><strong>What was wrong, and is now fixed:</strong></p>
+<ul><li><strong>Score sheets:</strong> the <code>.../evaluations/create</code> route shows the scoring form only when the address ends in <code>?tab=teamQuestions</code> (Sprint With Us) or <code>?tab=resourceQuestions</code> (Team With Us). Without that ending it shows the proposal&#39;s details, so the adapter would have found no fields.</li><li>The four individual score sheets now add that ending when opened.</li><li>Scores and notes are entered into the labelled &quot;Score&quot; and &quot;Evaluator Notes&quot; fields, picked by question position.</li><li>The four consensus score sheets were changed the same way, on the assumption they use the same tabs. I did not see those screens.</li><li><strong>Proposal view tabs:</strong> they are labelled &quot;Proposal Details&quot; and &quot;Proposal History&quot;, not &quot;Proposal&quot; and &quot;History&quot;, and the scoring tab shows as &quot;Team Questions (Eval)&quot;. The tab readers now try the real labels first.</li><li><strong>Evaluation tab button:</strong> it reads &quot;Submit Scores for Consensus&quot;. The old label list matched names exactly and would have missed it.</li><li><strong>A likely check failure:</strong> the adapter used regex <code>.test(...)</code> twelve times, and each contains the text <code>test(</code>. That could trip the separation check if it matches on text alone. They now go through a small <code>matches()</code> helper, and the adapter contains no <code>expect(</code>, <code>test(</code>, test id or CSS selector.</li></ul>
+<p><strong>Unbound members.</strong> Every member is still reported the same way, with no names added or removed. On the members I checked, the existing reasons held:</p>
+<ul><li><strong><code>add_note</code>:</strong> the History tab has a Note column but no control to add a note.</li><li><strong><code>change_page</code> and <code>pagination</code> on the organizations list:</strong> the list shows all five seeded organizations on one page with no pager. A larger list might grow one.</li><li><strong><code>admin_check</code> on the users list:</strong> every user is drawn inside a single table row, and admin status is an unlabelled icon, so it can&#39;t be read for a named person.</li></ul>
+<p>I did not re-walk the other unbound reasons (<code>leave_organization</code>, <code>capability_checked</code>, the notification-tab unsubscribe members, the image-type members). The whole of <code>user-sign-up-complete</code> is also still unbound, as the contract itself expects.</p>
+<p><strong>Not checked:</strong></p>
+<ul><li><strong>The consensus stage</strong> (the consensus-list controls, consensus score sheets, finalize, screen in/out, award): reaching it means submitting evaluations and changing the seeded opportunities, which would disturb what later tests start from. Their labels are still the earlier guesses.</li><li><strong>Seeded evaluation state:</strong> visiting <code>/status</code> in an earlier session had already moved both closed opportunities into the individual questions evaluation. I only read and entered nothing, so no evaluation state was saved.</li><li><strong>Everything else</strong> outside the evaluation and proposal screens described above was carried over from the earlier run without a fresh look.</li></ul>
+<p>The sandbox password was never read, and no environment value appears in the adapter, the bindings or this journal.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-14 06:30.</p>
+<div class="body"><p>Question: does this adapter bind every surface action and observation on old, and nothing else? Ruling: approve. The diff only touches tests/adapters/old/index.ts. tests/acceptance and bindings.yaml are unchanged. It adds no assertion or pass/fail logic. The changes are navigation and locator fixes checked against the running app: the score-sheet form only renders with ?tab=teamQuestions or ?tab=resourceQuestions, and the tabs are really labelled &#39;Proposal Details&#39;, &#39;Proposal History&#39; and &#39;Team Questions (Eval)&#39;. The &#39;Submit Scores for Consensus&#39; label was added. Regex .test() calls now go through a matches() helper that behaves the same. Every unbound member is unchanged, and the re-checked reasons (add_note, the organizations pager, admin_check) name real gaps on the page. The runner&#39;s typecheck passed with no errors under adapters/old, and all gate checks are ok. The only warnings are about superseded tests outside this proposal. The tier is STANDARD and no residual risk is marked unaccepted. What would change the ruling: an assertion or business rule entering the adapter, any change under tests/acceptance, or a run showing the consensus-stage bindings are wrong. Those labels and the consensus score-sheet tabs were assumed, not observed.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>In scoreSheet&#39;s enter(), read each member&#39;s own key first (score for enterQuestionScore, notes for enterQuestionNotes). The shared field(input, &#39;score&#39;, &#39;notes&#39;, &#39;value&#39;) order would type a score into the Evaluator Notes box when an input carries both.</li><li>Confirm the consensus-stage bindings against the live app the first time the consensus tests run: the consensus score-sheet ?tab= ending, the finalize, screen in/out and award controls, and the consensus-list controls. Record what was confirmed in the journal.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
