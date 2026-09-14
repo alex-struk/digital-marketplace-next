@@ -13,7 +13,7 @@ Profile: rebuild
 | evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 | 24/30 (n/t 6) | 0 pass · 6 fail · 0 unbound · 0 stale |
 | notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 9/21 (n/t 12) | 3 pass · 9 fail · 0 unbound · 0 stale |
 | content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 | 22/26 (n/t 4) | 6 pass · 16 fail · 0 unbound · 0 stale |
-| files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 12/24 (n/t 12) | 1 pass · 12 fail · 0 unbound · 0 stale |
+| files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 22/24 (n/t 2) | 1 pass · 12 fail · 0 unbound · 0 stale |
 | **Totals** | 0 | 286 | 0 | 0 | 0 | 9 | 3 | 295 |  |  |
 
 ## Pages
@@ -54,6 +54,8 @@ Profile: rebuild
 - [derive-tests-evaluation-7](proposals/derive-tests-evaluation-7.md)
 - [derive-tests-evaluation-8](proposals/derive-tests-evaluation-8.md)
 - [derive-tests-files](proposals/derive-tests-files.md)
+- [derive-tests-files-2](proposals/derive-tests-files-2.md)
+- [derive-tests-files-3](proposals/derive-tests-files-3.md)
 - [derive-tests-notifications](proposals/derive-tests-notifications.md)
 - [derive-tests-notifications-2](proposals/derive-tests-notifications-2.md)
 - [derive-tests-notifications-3](proposals/derive-tests-notifications-3.md)
@@ -110,9 +112,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $263.731561
-- Rulings cost: $115.713609
-- Total cost: $379.44517
-- Agent-held rulings: 68
+- Journal cost: $264.188799
+- Rulings cost: $118.734486
+- Total cost: $382.923285
+- Agent-held rulings: 70
 - Open escalations: 0
 - Open proposals: 0

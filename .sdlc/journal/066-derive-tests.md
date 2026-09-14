@@ -1,27 +1,20 @@
 ---
 stage: "derive-tests"
 title: "derive tests"
-at: "2026-09-14T02:29:44.727Z"
-cost: 0.25702849999999994
-turns: 5
-session: "74fe2693-7374-4134-91bf-7bb4cd79b135"
+at: "2026-09-14T02:32:49.987Z"
+cost: 0.7142660000000001
+turns: 16
+session: "6b3e9aa3-8af4-4035-a734-1ce9c993f020"
 ---
 
-I removed the one assertion the reviewer named. Nothing else in the notifications slice or in `tests/acceptance/not-testable.yaml` was touched.
+I changed two files in `tests/acceptance/files/`, one per condition that asked for a change. I could not run the typechecker because the command needed approval I didn't have, so neither change has been compiled. I checked both by hand against `tests/generated/surface.d.ts` and `tests/tsconfig.json` (ES2022, strict), and both should compile. The `derived` dates on these two files are still 2026-09-14, which is later than today, and this return gave me no new header lines. Nothing else in `tests/acceptance/files/` or `tests/acceptance/not-testable.yaml` was touched.
 
-**Condition 1 (R-6.23).** I deleted the line `expect(await surface.notificationTermsBroadcast.notifyVendorsSuccess()).toBeTruthy();` from `tests/acceptance/notifications/R-6.23.spec.ts`. The reviewer was right: the criterion says every vendor's acceptance is withdrawn and each active vendor gets a message. Telling the administrator it worked is R-6.24's claim, and R-6.24 is recorded as not testable.
+1. **R-8.21: done.** In the test "a profile picture whose content can be read as a PNG is accepted", I removed the checks that the stored image is exactly 40×30. The test now reads `fileImagePicker.currentImage()` on the person's own profile before editing and again after saving. It checks three things: no `rejectedImageError`, a non-empty current image after saving, and that it differs from the one before. That is the acceptance-only form the reviewer asked for. I also rewrote the file's top comment, which had claimed the image "is seen to be stored at its own size". The small PNG builder and the two refusal tests are unchanged.
 
-The rest of the test is unchanged:
-- **Kept checks:** the control is present, and the confirmation step appears (the criterion has the administrator confirm).
-- **Mail check:** new messages still reach both seeded vendors.
-- **Vendor check:** each vendor's own legal settings still show the terms-updated warning.
+2. **R-8.17: done.** Both refusal checks used to require the same digits as the limit shown before choosing a file. Now each size in the refusal is converted to bytes: kilo, mega and giga units are read both as powers of 1000 and of 1024, and a bare number counts as bytes. The check passes if any of those is within 0.5% of the stated limit converted the same way. So "10 MB" and "10485760 bytes" both count as naming a 10 MB limit, but a refusal that names no size, or a different one, still fails. The same check covers the upload refusal (`fileUpload.sizeLimitNamedInRefusal`) and the attachment refusal in the form (`fileAttachmentControl.uploadRefusedForSize`). How big the oversized upload is, and every other assertion, stays as it was.
 
-I left the header alone, including its derived date (2026-09-14, the day after today's date). Nothing was re-derived, and the file still claims the same criterion version and spec commit.
+3. **R-8.14 kept alongside R-8.21: not acted on.** This was carried forward as a question for the spec process, not a job for me. Removing `R-8.14.spec.ts` would decide that question here, so I left it exactly as I found it. That ruling is still needed before the suite is used as a pass/fail gate.
 
-After the edit I searched the slice for `notifyVendorsSuccess`. One use is left, in R-6.26. I did not touch it: R-6.26 is one of the tests condition 2 flags for testing a superseded criterion, and that call belongs to the suite owner, not to this change. If R-6.26 stays as an oracle-only test, whoever decides should know it still checks the success message.
+4. **R-8.23 and R-8.24 contradict R-8.18: not acted on.** R-8.23 and R-8.24 end by pointing at R-8.4's "service fault" outcome, while R-8.18 says a bad request. That clash is in the criteria themselves, so no change to a test can settle it. Whoever owns the criteria still needs to rule on it, and both test files are unchanged.
 
-**Condition 2 (R-6.10, R-6.14, R-6.22, R-6.26 test superseded criteria; R-6.14 and R-6.19 contradict each other).** No action. This is for the suite owner and outside this slice; each file stays byte-for-byte as I found it. R-6.14 and R-6.19 still cannot both pass, and that stands until the suite owner keeps or removes those tests.
-
-**Condition 3 (R-6.6 v2 conflicts with R-6.16 over whether Unsubscribe appears on every message).** No action. It needs a new version of one criterion from the spec owner, and this stage can't edit spec files. The R-6.6 test still follows its v2 wording as approved last round.
-
-No criterion changed status, so `not-testable.yaml` is unchanged. This round needed no surface actions or observations that the contract doesn't already provide. I did not re-run the typecheck. Removing one line that awaits a call and asserts on it should add no errors, but that is not confirmed.
+No new not-testable entries were needed. Coverage is still 22 tests and 2 not-testable entries out of 24 criteria. I didn't need any surface action or observation that the contract lacks.
