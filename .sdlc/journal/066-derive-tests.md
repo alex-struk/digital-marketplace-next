@@ -1,95 +1,57 @@
 ---
 stage: "derive-tests"
 title: "derive-tests: post-checks failed"
-at: "2026-09-14T01:31:24.037Z"
-cost: 4.882538499999999
-turns: 81
-session: "d12e7c2e-f906-40b7-842b-fc540edcabe1"
+at: "2026-09-14T01:58:01.829Z"
+cost: 5.4775290000000005
+turns: 82
+session: "309d21b3-2915-4212-aa50-b94b6fec9588"
 ---
 
-Of the 30 users criteria, 20 now have a test file under `tests/acceptance/users/` and 10 have an entry in `tests/acceptance/not-testable.yaml`. No criterion has both. I haven't run or typechecked the suite: `tests/node_modules` isn't installed and running scripts needed approval. I checked by hand that every call matches `tests/generated/surface.d.ts`, and a search found none of the patterns the separation check refuses.
+Of the 24 files criteria, 22 now have a test file and 2 have an entry in `tests/acceptance/not-testable.yaml`. No criterion has both. I could not run the suite or its typecheck, because every shell command needed approval that never came. Each file does start with the two required header lines, and a search found nothing the separation check refuses: no selectors, routes, `page` object or imports from outside `fixtures` and `generated`.
 
-**Starting state.** The users folder already held 25 spec files from an earlier pass. They were written against an older contract: they called `userProfile.open()` with no argument or with `{ user }`, where it now requires `{ userId }`, and they predated the `userProfileSelf*` pages. I rewrote all of them. Where a person acts on their own record, the tests now use the self pages. `userProfile.open({ userId })` is used only where an administrator looks at somebody else, or a person looks at an account by its ID.
+**What changed since the last derivation.** The earlier files tests were written against an older contract. That contract returned no file identifiers and had no upload or description page, so a file could only be reached through a download link on a screen the reader could already open. The current contract adds:
+- an upload page;
+- a file description page;
+- identifiers for attachments and images;
+- the width and height an image was stored at.
 
-**Seed finding.** Every seeded vendor has a last-accepted-terms date, including `vendor-with-terms-reset`. Under R-4.23 v2 the profile-completion page is offered only to a vendor who has never agreed, so no account a test can sign in as ever reaches it. The earlier pass had tested R-4.3 and R-4.24 by announcing new terms and then using that vendor. That contradicts R-4.23 v2, so I removed those two files, along with R-4.18, R-4.19 and R-4.31.
+Most earlier refusals and entries were really that one missing piece, so I rewrote the whole domain against the new contract. R-8.5, 8.6, 8.7, 8.11, 8.13, 8.17, 8.18, 8.19, 8.24 and 8.31 moved from `not-testable.yaml` to test files. The older tests also opened pages with parameter names the contract no longer uses, so they were rewritten too.
 
-**Tested:** R-4.4, 4.5, 4.6, 4.8, 4.9, 4.12, 4.14, 4.16, 4.17, 4.22, 4.23, 4.25, 4.26, 4.27, 4.28, 4.29, 4.30, 4.32, 4.33, 4.34.
-
-Several of these cover only the part of the criterion the surface can reach. The file comments name what is left out:
-- **Never observable here:** recorded dates, who deactivated an account, and any email wording (R-4.5, 4.9, 4.30). The email tests only check that a message arrived.
-- **No first-time sign-in:** the new-account half of R-4.6 and R-4.22.
-- **No starting page for sign-in:** being returned to the page sign-in began from (R-4.22), because `signIn` takes only a persona.
-- **R-4.17:** whether the identity provider's session also ended, and what a failed sign-out shows.
-- **R-4.32:** what the exported file contains.
-- **R-4.23:** the never-agreed vendor being offered the page.
-
-I avoided guessing at on-screen words. Where the surface has no vocabulary, a value is compared with itself before and after a change (status badge, account kind, notification checkbox). "Deactivated by an administrator" versus "by the owner" is read from what happens next: a sign-in is refused (R-4.4) or let back in (R-4.5). Names for R-4.14 are read off each profile, since the seed doesn't expose them.
-
-Every test that changes shared seeded accounts puts them back, except one side effect I couldn't avoid. Announcing changed terms (R-4.16, R-4.33) withdraws every vendor's standing acceptance. These tests re-accept only for the vendors they use, and other domains' tests announce too.
+**Also removed.** R-8.14's test was left over from the previous run. It asserted the behaviour R-8.21 replaces, and a superseded criterion should have no test, so I deleted it. The six entries for superseded criteria in `not-testable.yaml` (R-8.3, 8.4, 8.8, 8.9, 8.15, 8.26) contradict nothing, so I left them.
 
 **Not testable:**
-- **R-4.1, blocked:** there is no persona whose sign-in identity has no seeded account. It needs one with a government identity, one with a code-hosting identity, and one of neither kind.
-- **R-4.2, blocked:** it needs the same first-time personas, plus a `mail` method that lists every message so an empty catcher can be shown.
-- **R-4.3 and R-4.24, blocked:** they need a vendor persona that has never accepted any terms. Completing the page uses up that account.
-- **R-4.13, unobservable:** "the service has no way to create the first administrator" is a claim that something doesn't exist, which no observation can prove.
-- **R-4.18, blocked:** it needs `user-profile` observations `edit_control_offered` and `account_controls_offered`. It also needs an action that submits a profile change against a named account, with a `refused_when_not_own` observation.
-- **R-4.19, blocked:** it needs `user-profile.reactivation_control_offered` and `reactivates_by_signing_in_notice`. It also needs an action that requests reactivation of a named account, with a refusal observation.
-- **R-4.20, blocked:** it needs a `mail` method that reads one message's body by its ID. `observables.yaml` already names that body, but the fixture doesn't expose it.
-- **R-4.21, blocked:** it needs `user-list.refused_for_non_administrator`.
-- **R-4.31, blocked:** it needs these additions:
-  - a `deactivation_control_offered` observation
-  - an action that requests deactivation of a named account without going through the screen control
-  - an `already_inactive_error` observation
-  - a second administrator persona with a working sign-in
+- **R-8.16, unobservable.** The claim is about a working directory on the service's own machine, and no response ever shows its contents. No contract addition could reach it.
+- **R-8.22, blocked.** A test can now get the identifier of someone else's file, but no action attaches a file that is already stored. Every attachment action uploads a new file, which the uploader can always read. It needs an action that saves an opportunity or proposal naming a stored file, plus an observation that the attachment was refused.
 
-**Missing from the contract, by kind:**
-- **First-time identities:** no persona signs in without an existing account, and no seeded vendor has never agreed to terms.
-- **Whether a control is offered:** the edit, reactivate and deactivate controls on the profile pages exist only as actions. Nothing reports whether they are there.
-- **Direct requests with refusals:** there are no actions that act on a named account without its screen control, and none of those refusals can be read.
-- **Two `mail` methods:** read one message's body by its ID, and list every message.
-- **One list refusal:** `user-list.refused_for_non_administrator`.
+**Choices the next stage should check:**
+- **Read-access statements.** They follow the upload schema in the interface description: "any", a named user, or an account type. An empty list means nobody else may read the file. The named user and account type come from the seed.
+- **"Address" observations.** I treated `attachmentAddress()` and `imageAddress()` as returning a file identifier, as the surface's own header describes them. If they return a full address, most tests break at the same point.
+- **Upload with no statement.** For R-8.24 I took plain `uploadFile()` to be the upload that carries no read-access statement. It is the only one of the six upload actions that neither states access nor names a broken form of it. Every upload meant to succeed uses the variant that states access explicitly, so nothing else depends on that reading.
+- **Oversized upload.** R-8.17 names no figure, so the test describes the file as `exceedsSizeLimit: true` rather than assuming 10 megabytes.
+- **Proposal read paths.** For R-8.20, R-8.25 and R-8.31, each test publishes its own Code With Us opportunity. The organization owner submits a proposal for the qualified organization. That organization's administrator reads the attachment and a competing vendor is refused it.
+
+**A conflict in the spec.** R-8.23 v2 and R-8.24 v2 each end with a clause saying a malformed upload "fails as the service fault described by R-8.4". R-8.4 is superseded by R-8.18, which says the same upload is refused as a bad request and is not a service fault. I tested R-8.18 as written and left those two clauses out, with a comment in each file, because a test for them could only contradict R-8.18. The contract stage should correct the wording.
+
+**Parts left unasserted inside tests, and what would reach them:**
+- **R-8.18:** no observation says what was wrong with an upload that has no file part; `upload_refused_for_missing_file` on `file-upload` would cover it. The error log and working copy can't be seen at all.
+- **R-8.31:** no observation says whether a stored file is still attached to anything; `detached` on `file-description` would cover it. The opportunity half also can't be separated from the uploader's own access, because only the creator attaches files to a draft.
+- **R-8.20:** Sprint With Us and Team With Us proposals are not covered. Neither program's proposal pages have an attachment action, and the attachment control is not listed on those forms.
+- **R-8.21:** nothing produces an image that reads correctly but can't be resized.
+- **R-8.25:** the creator's access before publication can't be told apart from their access as uploader.
+- **R-8.6:** who uploaded a file is only visible through the uploader's own access, since the description never names the uploader.
+- **R-8.11:** nothing can show the description leaving out the file's content.
 
 ## Fix turn
 
-I made no edits this pass. I also couldn't confirm that the suite compiles: running the TypeScript compiler needed an approval this session didn't have.
+I checked the one compile error the check reported, and I didn't need to change any file.
 
-The failures named five criteria: R-4.3, R-4.18, R-4.19, R-4.24 and R-4.31. Each had both a spec file and a `not-testable.yaml` entry, and those spec files didn't compile. When I looked, none of the five files was in `tests/acceptance/users/`, and nothing matching them was anywhere else in the workspace. Their yaml entries were still there. So the last pass had already settled all five as not testable and removed the tests; the failures were reported against the earlier state, when both still existed. That means no criterion has both a test and an entry now, and the files carrying the compile errors are gone.
+The error points at `acceptance/files/R-8.14.spec.ts` line 18, which passes `{ user: … }` to a page whose `open()` only accepts `{ userId: string }`. That file isn't in the workspace. I searched all of `tests/acceptance/files/` and ran a glob over the whole workspace and found no `R-8.14` file. None of the files in this domain pass `user:` to an `open()` call: they use `fileId`, `orgId`, `opportunityId` and `proposalId`, or take no argument. That's correct for this criterion, because R-8.14 was replaced by R-8.21, so it was never on this run's list and should have no test. There's also no `not-testable.yaml` entry for it. The only files-domain entries there are R-8.16 and R-8.22, which matches the other 22 criteria each having a test file. The error came from a file that no longer exists, and the files domain has nothing left to fix. I left everything else alone as instructed.
 
-I kept the yaml entries rather than restoring and fixing the tests, because rereading the user-profile pages in the surface backs up their reasons. `user-profile` and `user-profile-self` name `editProfile`, `deactivateAccount` and `reactivateAccount` only as actions. Nothing reports whether one of those controls is offered, which is exactly what R-4.18, R-4.19 and R-4.31 turn on. Nothing reports a refusal of a request aimed at another person's account, or of deactivating an account that's already inactive. And no action sends such a request other than through the control the interface holds back. R-4.3 and R-4.24 depend on `user-sign-up-complete`, which no seeded vendor can reach.
+One thing for whoever rules on this or maintains the contract: the same mistake appears outside this domain. Several tests in `users/` pass `{ user: seed.users.<handle>.id }` to `surface.userProfile.open()`, `userProfileLegal.open()` and `userProfileCapabilities.open()`: R-4.3, R-4.5, R-4.8, R-4.9, R-4.12, R-4.18, R-4.19, R-4.25, R-4.30, R-4.31 and R-4.34. `notifications/R-6.17` does the same. All of these should be `{ userId: … }`. `notifications/R-6.10` also passes `{ user: … }` to `organizationEdit.addTeamMembers()`, which I didn't check against the contract. Those files belong to other stages, so I didn't touch them. They'll probably fail the compile check once their own domains are run.
 
-In place of the compiler, I searched the twenty remaining spec files for the two mistakes it had reported: a user-profile `open` called with no argument, or with a `user` key instead of the `userId` the contract takes. There were no matches. That is weaker evidence than a clean compile, so the next stage should run the compiler before relying on the suite.
+**Journal addition:** The compile check blamed `acceptance/files/R-8.14.spec.ts` for passing `user` where `open()` expects `userId`, but no such file exists in the workspace, so there was nothing to fix. R-8.14 was replaced by R-8.21 and correctly has no test and no `not-testable.yaml` entry. No file in the files domain uses the wrong key, so I changed nothing. The same `user`/`userId` mistake is still in a dozen tests under `users/` and `notifications/`, which this stage doesn't own. Whichever stage writes those domains needs to fix them.
 
-tests/acceptance/not-testable.yaml: R-4.3 also has a test
-tests/acceptance/not-testable.yaml: R-4.18 also has a test
-tests/acceptance/not-testable.yaml: R-4.19 also has a test
-tests/acceptance/not-testable.yaml: R-4.24 also has a test
-tests/acceptance/not-testable.yaml: R-4.31 also has a test
-the acceptance suite does not compile; every diagnostic below is in acceptance/users/, which this run wrote:
-acceptance/users/R-4.18.spec.ts(19,29): error TS2554: Expected 1 arguments, but got 0.
-acceptance/users/R-4.18.spec.ts(23,36): error TS2353: Object literal may only specify known properties, and 'user' does not exist in type '{ userId: string; }'.
-acceptance/users/R-4.18.spec.ts(31,36): error TS2353: Object literal may only specify known properties, and 'user' does not exist in type '{ userId: string; }'.
-acceptance/users/R-4.19.spec.ts(17,36): error TS2353: Object literal may only specify known properties, and 'user' does not exist in type '{ userId: string; }'.
-acceptance/users/R-4.19.spec.ts(26,29): error TS2554: Expected 1 arguments, but got 0.
-acceptance/users/R-4.19.spec.ts(31,36): error TS2353: Object literal may only specify known properties, and 'user' does not exist in type '{ userId: string; }'.
-acceptance/users/R-4.24.spec.ts(21,42): error TS2554: Expected 1 arguments, but got 0.
-acceptance/users/R-4.24.spec.ts(29,42): error TS2554: Expected 1 arguments, but got 0.
-acceptance/users/R-4.3.spec.ts(45,41): error TS2353: Object literal may only specify known properties, and 'user' does not exist in type '{ userId: string; }'.
-acceptance/users/R-4.31.spec.ts(17,36): error TS2353: Object literal may only specify known properties, and 'user' does not exist in type '{ userId: string; }'.
-acceptance/users/R-4.31.spec.ts(20,29): error TS2554: Expected 1 arguments, but got 0.
-tests/acceptance/not-testable.yaml: R-4.3 also has a test
-tests/acceptance/not-testable.yaml: R-4.18 also has a test
-tests/acceptance/not-testable.yaml: R-4.19 also has a test
-tests/acceptance/not-testable.yaml: R-4.24 also has a test
-tests/acceptance/not-testable.yaml: R-4.31 also has a test
-the acceptance suite does not compile; every diagnostic below is in acceptance/users/, which this run wrote:
-acceptance/users/R-4.18.spec.ts(19,29): error TS2554: Expected 1 arguments, but got 0.
-acceptance/users/R-4.18.spec.ts(23,36): error TS2353: Object literal may only specify known properties, and 'user' does not exist in type '{ userId: string; }'.
-acceptance/users/R-4.18.spec.ts(31,36): error TS2353: Object literal may only specify known properties, and 'user' does not exist in type '{ userId: string; }'.
-acceptance/users/R-4.19.spec.ts(17,36): error TS2353: Object literal may only specify known properties, and 'user' does not exist in type '{ userId: string; }'.
-acceptance/users/R-4.19.spec.ts(26,29): error TS2554: Expected 1 arguments, but got 0.
-acceptance/users/R-4.19.spec.ts(31,36): error TS2353: Object literal may only specify known properties, and 'user' does not exist in type '{ userId: string; }'.
-acceptance/users/R-4.24.spec.ts(21,42): error TS2554: Expected 1 arguments, but got 0.
-acceptance/users/R-4.24.spec.ts(29,42): error TS2554: Expected 1 arguments, but got 0.
-acceptance/users/R-4.3.spec.ts(45,41): error TS2353: Object literal may only specify known properties, and 'user' does not exist in type '{ userId: string; }'.
-acceptance/users/R-4.31.spec.ts(17,36): error TS2353: Object literal may only specify known properties, and 'user' does not exist in type '{ userId: string; }'.
-acceptance/users/R-4.31.spec.ts(20,29): error TS2554: Expected 1 arguments, but got 0.
+the acceptance suite does not compile; every diagnostic below is in acceptance/files/, which this run wrote:
+acceptance/files/R-8.14.spec.ts(18,36): error TS2353: Object literal may only specify known properties, and 'user' does not exist in type '{ userId: string; }'.
+the acceptance suite does not compile; every diagnostic below is in acceptance/files/, which this run wrote:
+acceptance/files/R-8.14.spec.ts(18,36): error TS2353: Object literal may only specify known properties, and 'user' does not exist in type '{ userId: string; }'.
