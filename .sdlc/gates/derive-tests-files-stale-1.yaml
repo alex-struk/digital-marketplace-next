@@ -1,0 +1,11 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the R-8.1 tests follow from the criterion ('Any person who is signed in may upload a file, and a visitor who is not signed in cannot'; then: refused as not permitted and no file is stored) and from nothing else? Ruling: approve. The signed-in test expects no signed-out refusal and a stored file identifier, which is what 'may upload' means. The visitor test sends the same submission and expects the refusal and no identifier, which is the criterion's stated outcome. The redo reason is fixed: read access is now stated as readable by anyone ({tag:'any'}), matching R-8.7's wording and the approved R-8.2 and R-8.23 tests, so success no longer depends on naming a particular account. A statement is still sent because omitting it is a separate refusal under R-8.24. Every call is a surface action or observation on FileUploadPage; no selector, route, table or status code appears. The runner typecheck passed with no diagnostics under acceptance/files, and the tests-check warnings concern other, superseded criteria. Removing R-8.1 from redo.yaml and its stale calibration rulings from applied.yaml is consistent with the rewrite and touches no protected path. The tier is STANDARD with no unaccepted residual risk, so no escalation. 'No file is stored' can only be shown as the absence of an identifier, because the page offers no list or count of stored files; that is a contract gap, not a test fault. The ruling would change if the adapter does not accept the {tag:'any'} read-access shape, or if calibration shows the signed-in upload depends on anything besides being signed in.
+conditions: []
+cost: 0.4922625
+turns: 9
+session: "533f2adb-0b9f-432f-91cd-cee2cef8bd8b"
+at: 2026-09-14T20:22:36.086Z

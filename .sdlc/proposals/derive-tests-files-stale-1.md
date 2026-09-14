@@ -26,3 +26,22 @@ I rewrote the test for the one criterion in this run, R-8.1 (v1), so it is now `
 **Gaps in the contract.** Nothing was missing: the `file-upload` page has every action and observation this criterion needs. Two things are worth knowing:
 - **What "no file is stored" rests on.** The test can only show that no identifier came back. The surface has no way to confirm afterwards that nothing was saved, such as a list of stored files or a count of them. If that stronger check matters, the contract would need such an observation.
 - **How the adapter reads read access.** The surface types every action's input as `unknown`. So what `readAccess: [{ tag: "any" }]` means depends on the adapter accepting the same shape the other files tests use.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: do the R-8.1 tests follow from the criterion ('Any person who is signed in may upload a file, and a visitor who is not signed in cannot'; then: refused as not permitted and no file is stored) and from nothing else? Ruling: approve. The signed-in test expects no signed-out refusal and a stored file identifier, which is what 'may upload' means. The visitor test sends the same submission and expects the refusal and no identifier, which is the criterion's stated outcome. The redo reason is fixed: read access is now stated as readable by anyone ({tag:'any'}), matching R-8.7's wording and the approved R-8.2 and R-8.23 tests, so success no longer depends on naming a particular account. A statement is still sent because omitting it is a separate refusal under R-8.24. Every call is a surface action or observation on FileUploadPage; no selector, route, table or status code appears. The runner typecheck passed with no diagnostics under acceptance/files, and the tests-check warnings concern other, superseded criteria. Removing R-8.1 from redo.yaml and its stale calibration rulings from applied.yaml is consistent with the rewrite and touches no protected path. The tier is STANDARD with no unaccepted residual risk, so no escalation. 'No file is stored' can only be shown as the absence of an identifier, because the page offers no list or count of stored files; that is a contract gap, not a test fault. The ruling would change if the adapter does not accept the {tag:'any'} read-access shape, or if calibration shows the signed-in upload depends on anything besides being signed in.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `564e8d932cd81dec9b44aa1d23f4e6f1290c6e3e`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/files/`, which this proposal answers for.
+
+    No diagnostics.
