@@ -2,7 +2,7 @@
   "target": "old",
   "base_url": "http://localhost:3000",
   "spec": "d4b7ad71f09fd800088a439d26222d352e4e30dc",
-  "at": "2026-09-14T21:15:48.860Z",
+  "at": "2026-09-14T21:20:19.851Z",
   "rows": [
     {
       "id": "R-7.1",
@@ -1293,7 +1293,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-8.26",
@@ -1332,7 +1333,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-8.29",
@@ -1384,7 +1386,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-6.1",
@@ -1665,7 +1668,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-6.27",
@@ -2276,7 +2280,8 @@
           "status": "failed",
           "error": "Error: unbound: opportunity-cwu-edit.cancel_opportunity — no control labelled \"Cancel\" on http://localhost:3000/opportunities/code-with-us/d9cc1a74-c953-46dc-a8c9-bcf2cddb3123/edit?tab=opportunity"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.29",
@@ -2335,7 +2340,8 @@
           "title": "public sector staff can see the proposals once the opportunity has left the published state",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.32",
@@ -2364,7 +2370,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.33",
@@ -2397,7 +2404,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-edit.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/f5d77489-57ef-4dc1-8ebc-fe5a412e5afe/edit?tab=opportunity; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.35",
@@ -2416,7 +2424,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.36",
@@ -2430,7 +2439,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-edit.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/d7caab1a-f1b6-42c4-84d7-de4ebdc9e6d4/edit?tab=opportunity; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.37",
@@ -2444,7 +2454,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.38",
@@ -2466,7 +2477,8 @@
           "title": "the opportunity list groups closed opportunities apart from open and unpublished ones",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.39",
@@ -2495,7 +2507,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.40",
@@ -2551,7 +2564,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"R-1.48 Code With Us opportunity created under review\"\u001b[39m\nReceived string:    \u001b[31m\"R-1.48 Code With Us draft created by an ordinary member of staff\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:49 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-1.38 unpublished opportunity changed later\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:48 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-1.38 unpublished opportunity changed earlier\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:48 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-1.36 opportunity whose author is told it was cancelled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 4:00 PM PDT\u001b[39m\n\u001b[31mA short summary of the work to be done.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-1.34 opportunity whose author is told it was published\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 4:00 PM PDT\u001b[39m\n\u001b[31mA short summary of the work to be done.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-1.33 Code With Us draft its author attached a note to\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:46 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-1.32 draft an administrator tried to add an addendum to\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 4:00 PM PDT\u001b[39m\n\u001b[31mA short summary of the work to be done.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\u001b[39m\n\u001b[31mR-1.32 published opportunity its author added an addendum to\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 4:00 PM PDT\u001b[39m\n\u001b[31mA short summary of the work to be done.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-1.3 draft an administrator must also be able to see\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:45 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-1.3 draft belonging to the member of staff who is signed in\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:45 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-1.28 draft an administrator asked to cancel\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 4:00 PM PDT\u001b[39m\n\u001b[31mA short summary of the work to be done.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\u001b[39m\n\u001b[31mR-1.28 published opportunity its author asked to cancel\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 4:00 PM PDT\u001b[39m\n\u001b[31mA short summary of the work to be done.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-1.22 opportunity its author asked to publish\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 4:00 PM PDT\u001b[39m\n\u001b[31mA short summary of the work to be done.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-1.21 incomplete draft submitted for review\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 4:00 PM PDT\u001b[39m\n\u001b[31mA short summary of the work to be done.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-1.19 opportunity walked from draft to published\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 4:00 PM PDT\u001b[39m\n\u001b[31mA short summary of the work to be done.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-8.31 draft deleted with its attachment\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:39 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-8.27 draft with a renamed attachment\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:38 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-8.25 draft another person attaches to\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:38 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-8.25 Code With Us draft published later\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 4:00 PM PDT\u001b[39m\n\u001b[31mA short summary of the work to be done.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\u001b[39m\n\u001b[31mR-8.19 Code With Us draft with an attachment\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:37 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-8.17 draft offered an oversized attachment\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:37 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 11:33 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 10:26 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 10:26 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 10:25 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 10:19 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 10:17 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 10:14 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 10:01 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 10:01 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 9:57 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 9:57 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 9:56 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 9:54 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 9:52 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 9:50 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 9:50 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 9:50 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 9:50 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 9:45 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 9:43 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 9:36 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 8:52 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 8:48 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 8:46 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 8:46 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 8:41 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 3:22 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 2:17 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 2:17 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 2:17 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 2:12 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 2:12 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 2:12 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:57 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:57 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:55 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:55 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:55 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:53 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:51 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:49 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:48 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:48 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:48 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:44 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:44 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 1:38 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 12:55 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 12:49 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 12:48 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 28, 2026 at 12:44 AM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 10:44 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:40 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:40 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:40 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:33 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:31 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:29 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:17 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:17 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:13 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:13 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:12 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:10 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:08 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:06 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:06 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:06 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:06 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:02 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 9:00 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 8:54 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 8:13 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 8:06 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 8:06 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\u001b[39m\n\u001b[31mUntitled\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Sep 27, 2026 at 8:02 PM PDT\u001b[39m\n\u001b[31m$0\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mSeeded draft Code With Us opportunity of another staff member\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mClosed Aug 1, 2030 at 4:59 PM PDT\u001b[39m\n\u001b[31mA draft belonging to a second member of public sector staff.\u001b[39m\n\u001b[31m$12,000\u001b[39m\n\u001b[31mKamloops\u001b[39m\n\u001b[31mWatch\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.49",
@@ -2608,7 +2622,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.55",
@@ -2671,7 +2686,8 @@
           "status": "failed",
           "error": "Error: unbound: opportunity-twu-create.add_resource_question — no field on http://localhost:3000/opportunities/team-with-us/create takes \"order\""
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.1",
@@ -3144,7 +3160,8 @@
           "status": "failed",
           "error": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'TWU Qualification', exact: true }).visible().first()\u001b[22m\n\u001b[2m    - locator resolved to <a tabindex=\"0\" href=\"/organizations/00000000-0000-4000-8000-000000000301/edit?tab=twuQualification\" class=\"a d-inline-flex align-items-center flex-nowrap mb-3 text-start text-wrap text-c-sidebar-menu-link-active-fg position-relative btn btn-md btn-c-sidebar-menu-link-active-bg\">…</a>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div role=\"dialog\" tabindex=\"-1\" aria-modal=\"true\" class=\"modal fade\">…</div> from <div tabindex=\"-1\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div role=\"dialog\" tabindex=\"-1\" aria-modal=\"true\" class=\"modal fade\">…</div> from <div tabindex=\"-1\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    29 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div role=\"dialog\" tabindex=\"-1\" aria-modal=\"true\" class=\"modal fade show\">…</div> from <div tabindex=\"-1\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.30",
@@ -3158,7 +3175,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"nobody.registered.here@example.test\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.31",
@@ -3186,7 +3204,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"vendor.invited@example.test\"\u001b[39m\nReceived string:    \u001b[31m\"TEAM MEMBER\tCAPABILITIES\tADMIN··\u001b[39m\n\u001b[31mBlake Placeholder\u001b[39m\n\u001b[31mOwner··\u001b[39m\n\u001b[31m3·····\u001b[39m\n\u001b[31mCharlie Placeholder··\u001b[39m\n\u001b[31m3·····\u001b[39m\n\u001b[31mDana Placeholder··\u001b[39m\n\u001b[31m3·····\u001b[39m\n\u001b[31mIndigo Placeholder\u001b[39m\n\u001b[31mPending··\u001b[39m\n\u001b[31m0\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-3.33",
@@ -3662,7 +3681,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.25",
@@ -3774,7 +3794,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"disqualif\"\u001b[39m\nReceived string:    \u001b[31m\"back to opportunity\u001b[39m\n\u001b[31mvendor proposal\u001b[39m\n\u001b[31mproposal details\u001b[39m\n\u001b[31mvendor evaluation\u001b[39m\n\u001b[31mresource questions\u001b[39m\n\u001b[31minterview/challenge\u001b[39m\n\u001b[31mmanagement\u001b[39m\n\u001b[31mproposal history\u001b[39m\n\u001b[31mteam with us: vendor proposal\u001b[39m\n\u001b[31mstatus\u001b[39m\n\u001b[31mnon-compliant\u001b[39m\n\u001b[31mproponent\u001b[39m\n\u001b[31mproponent 3\u001b[39m\n\u001b[31mthis proposal's history will be available once the opportunity reaches the challenge.\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.35",
@@ -3788,7 +3809,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.36",
@@ -3807,7 +3829,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.37",
@@ -3830,7 +3853,8 @@
           "title": "staff reading a Sprint With Us copy see the anonymous proponent name before the challenge stage",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.38",
@@ -3848,7 +3872,8 @@
           "title": "public sector staff and administrators may take away every proposal of a closed opportunity in one document",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-4.1",
@@ -4247,7 +4272,8 @@
           "status": "failed",
           "error": "Error: user-profile-self.save_changes — \"Save Changes\" is disabled on http://localhost:3000/users/me; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-4.28",
@@ -4314,7 +4340,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Deactivate\"\u001b[39m\nReceived string:    \u001b[31m\"Digital Marketplace\u001b[39m\n\u001b[31madmin.one@example.test\u001b[39m\n\u001b[31mDashboard\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mOpportunities\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mOrganizations\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mUsers\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mContent\u001b[39m\n\u001b[31mAldous Quillfeather\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mInactive\u001b[39m\n\u001b[31mAccount Type\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31mProfile Picture (Optional)\u001b[39m\n\u001b[31mGitHub\u001b[39m\n\u001b[31mName\u001b[39m\n\u001b[31mEmail Address\u001b[39m\n\u001b[31mReactivate Account·\u001b[39m\n\u001b[31mReactivate this user's account to enable their access to the Digital Marketplace.·\u001b[39m\n\u001b[31mReactivate Account\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-4.32",
@@ -4328,7 +4355,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-4.33",

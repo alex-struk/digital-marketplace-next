@@ -30,7 +30,7 @@
 | R-4.24 | acceptance/users/R-4.24.spec.ts | unbound |
 | R-4.25 | acceptance/users/R-4.25.spec.ts | pass |
 | R-4.26 | acceptance/users/R-4.26.spec.ts | pass |
-| R-4.27 | acceptance/users/R-4.27.spec.ts | fail |
+| R-4.27 | acceptance/users/R-4.27.spec.ts | fail (ruled: adapter-wrong) |
 | R-4.28 | acceptance/users/R-4.28.spec.ts | pass |
 | D-users-29 | — |  |
 | R-4.29 | acceptance/users/R-4.29.spec.ts | pass |

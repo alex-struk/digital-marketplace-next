@@ -31,9 +31,9 @@
 | R-3.25 | acceptance/organizations/R-3.25.spec.ts | unbound |
 | R-3.26 | acceptance/organizations/R-3.26.spec.ts | unbound |
 | R-3.27 | acceptance/organizations/R-3.27.spec.ts | unbound |
-| R-3.28 | acceptance/organizations/R-3.28.spec.ts | fail |
+| R-3.28 | acceptance/organizations/R-3.28.spec.ts | fail (ruled: adapter-wrong) |
 | R-3.29 | — |  |
-| R-3.30 | acceptance/organizations/R-3.30.spec.ts | fail |
+| R-3.30 | acceptance/organizations/R-3.30.spec.ts | fail (ruled: adapter-wrong) |
 | R-3.31 | acceptance/organizations/R-3.31.spec.ts | unbound |
 | R-3.32 | acceptance/organizations/R-3.32.spec.ts | fail |
 | R-3.33 | acceptance/organizations/R-3.33.spec.ts | unbound |

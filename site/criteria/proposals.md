@@ -27,7 +27,7 @@
 | R-2.21 | acceptance/proposals/R-2.21.spec.ts | unbound |
 | R-2.22 | acceptance/proposals/R-2.22.spec.ts | unbound |
 | R-2.23 | acceptance/proposals/R-2.23.spec.ts | fail (ruled: adapter-wrong) |
-| R-2.24 | acceptance/proposals/R-2.24.spec.ts | fail |
+| R-2.24 | acceptance/proposals/R-2.24.spec.ts | fail (ruled: adapter-wrong) |
 | R-2.25 | acceptance/proposals/R-2.25.spec.ts | unbound |
 | R-2.26 | not testable: blocked: the given is a Code With Us proposal under review, and a proposal reaches review only when its opportunity closes. The closure itself is now reachable — run_pending_transitions on scheduled-transition-trigger runs the deadline hook — but only the Sprint With Us and Team With Us opportunities are seeded past their deadlines. No Code With Us opportunity can be given a deadline in the past, so enter_score on proposal-cwu-view has no proposal to act on, and neither the score, the move to evaluated nor the refusal of an out-of-range score has anything to be read on. Unblocked by seeding a Code With Us opportunity past its proposal deadline carrying a submitted proposal. | not-testable |
 | R-2.27 | not testable: blocked: the when is the last proposal still in contention being scored, which means carrying proposals all the way to evaluated. On the two seeded closed opportunities that is a single path — score every proponent's questions, agree those scores as a panel, finalise them, screen in, score the challenge and then the scenario — and the seed carries one closed opportunity per program. The first test to walk that path takes the opportunity with it, so the criteria behind the closure cannot each have one. Unblocked by seeding a closed opportunity for each criterion that has to move one, or by seeding opportunities already standing at the later evaluation stages. | not-testable |
@@ -37,13 +37,13 @@
 | R-2.31 | not testable: blocked: the given is a proposal carrying a score for every stage, which is the end of the chain that consumes the one seeded closed opportunity of its program (see R-2.27). Until then total_score and rank have nothing to return and no two proposals can be ranked against each other. Unblocked by a closed opportunity of its own, or by one seeded with every stage scored but the last. | not-testable |
 | R-2.32 | not testable: blocked: the given is a vendor's proposal that has been scored, and the then needs it to become awarded or passed over. Both lie at the end of the evaluation chain, which consumes the one seeded closed opportunity of its program (see R-2.27). Before any score exists the withholding cannot be told from the score simply not being there: score and rank read as empty on an unscored proposal for a reason that has nothing to do with who is looking. Unblocked by a closed opportunity of its own carrying scored proposals. | not-testable |
 | R-2.33 | not testable: blocked: only a fully evaluated proposal, or one previously passed over, may be awarded, and reaching evaluated consumes the one seeded closed opportunity of its program (see R-2.27). award_proposal is offered on all three proposal views and has nothing it may act on, so neither the other proposals being marked not awarded nor the opportunity becoming awarded can be read. Unblocked by a closed opportunity of its own carrying one evaluated proposal, one disqualified and one withdrawn, which is the given the criterion states. | not-testable |
-| R-2.34 | acceptance/proposals/R-2.34.spec.ts | fail |
+| R-2.34 | acceptance/proposals/R-2.34.spec.ts | fail (ruled: adapter-wrong) |
 | D-proposals-35 | — |  |
-| R-2.35 | acceptance/proposals/R-2.35.spec.ts | fail |
-| R-2.36 | acceptance/proposals/R-2.36.spec.ts | fail |
+| R-2.35 | acceptance/proposals/R-2.35.spec.ts | fail (ruled: adapter-wrong) |
+| R-2.36 | acceptance/proposals/R-2.36.spec.ts | fail (ruled: adapter-wrong) |
 | D-proposals-37 | — |  |
-| R-2.37 | acceptance/proposals/R-2.37.spec.ts | fail |
-| R-2.38 | acceptance/proposals/R-2.38.spec.ts | fail |
+| R-2.37 | acceptance/proposals/R-2.37.spec.ts | fail (ruled: adapter-wrong) |
+| R-2.38 | acceptance/proposals/R-2.38.spec.ts | fail (ruled: adapter-wrong) |
 
 ### R-2.1 · v1 · confirmed · accepted
 
