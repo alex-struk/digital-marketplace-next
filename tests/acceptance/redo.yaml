@@ -16,22 +16,6 @@ redo:
       vendor polled is active at the moment of the broadcast, keep the vendor
       holding no email address among the recipients, and report every
       addressable vendor not reached rather than stopping at the first
-  - id: R-7.20
-    version: 1
-    why: the test requires the page to be submitted before it reads the refusal, and
-      treats a page that cannot be submitted as a failure, but the criterion is
-      met by any refusal that saves nothing and marks the failing field with its
-      reason, whether it comes before or after an attempt to submit; read the
-      failing field's mark, allowing time for it to appear, and that nothing was
-      saved, without requiring the submission itself to go through
-  - id: R-7.21
-    version: 1
-    why: the test requires the page to be submitted before it reads the refusal, and
-      treats a page that cannot be submitted as a failure, but the criterion is
-      met by any refusal that creates no page and marks the address as invalid,
-      whether it comes before or after an attempt to submit; read the address
-      field's mark, allowing time for it to appear, and that no page was
-      created, without requiring the submission itself to go through
   - id: R-6.26
     version: 2
     why: the test polls vendors it assumes are active without establishing it, the

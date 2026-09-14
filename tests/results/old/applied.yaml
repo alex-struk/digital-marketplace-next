@@ -207,10 +207,6 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-4
     adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
-  - id: R-7.20
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-4
   - id: R-8.20
     version: 1
     verb: adapter-wrong
@@ -225,10 +221,6 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-4
     adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
-  - id: R-7.21
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-4
   - id: R-8.21
     version: 1
     verb: product-question
@@ -389,14 +381,6 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-5
     adapter: 13d4012d5ece531d4e12354b2325872786a49ca2
-  - id: R-7.20
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-4
-  - id: R-7.21
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-4
   - id: R-8.17
     version: 1
     verb: defect-in-old
