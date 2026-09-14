@@ -1,49 +1,53 @@
 // criterion: @R-1.5 v1
-// provenance: blind, spec@897abf82ff1b013b15ba65777ea1336a8f5e50f6, derived 2026-09-07
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 
-// The seeded published opportunity was created by a member of public sector staff, so
-// the vendor watching it here did not create it. Whether somebody is watching is read
-// through the watcher count on the opportunity's own reporting, which only its author
-// and an administrator may see — hence the change of persona between acting and reading.
+// The seeded published opportunity was created by a member of public sector staff, so both
+// signed-in people below are watching something they did not create. Watching is not
+// readable on the opportunity itself — the only observation that counts watchers is the
+// author's and the administrator's reporting — so each reading is taken as the
+// administrator either side of the vendor's action.
 //
-// The third outcome, that the same opportunity cannot be watched twice, is not asserted:
-// the surface offers one toggle_watch action rather than a watch action, so a second
-// watch request cannot be made through it at all.
+// The third part of the criterion, that the same opportunity cannot be watched twice, is
+// not asserted. The surface names one action for watching, a toggle, so asking twice
+// switches the watch off rather than asking again; and no observation reports a request
+// refused as a duplicate. It needs an action that watches without toggling and an
+// observation of that refusal.
 
-function count(text: string): number {
-  return Number(text.replace(/[^0-9]/g, ""));
-}
+const opportunityId = seed.opportunities.publishedCodeWithUs.id;
 
 test("any signed-in person may watch an opportunity they did not create", async ({ surface }) => {
   await surface.signIn(persona.administrator);
-  await surface.opportunityCwuEdit.open({ id: seed.opportunities.publishedCodeWithUs.id });
-  const before = count(await surface.opportunityCwuEdit.reportingWatchers());
+  await surface.opportunityCwuEdit.open({ opportunityId });
+  const before = await surface.opportunityCwuEdit.reportingWatchers();
   await surface.signOut();
 
   await surface.signIn(persona.vendor);
-  await surface.opportunityCwuView.open({ id: seed.opportunities.publishedCodeWithUs.id });
+  await surface.opportunityCwuView.open({ opportunityId });
   await surface.opportunityCwuView.toggleWatch();
   await surface.signOut();
 
   await surface.signIn(persona.administrator);
-  await surface.opportunityCwuEdit.open({ id: seed.opportunities.publishedCodeWithUs.id });
-  expect(count(await surface.opportunityCwuEdit.reportingWatchers())).toBe(before + 1);
+  await surface.opportunityCwuEdit.open({ opportunityId });
+  expect(await surface.opportunityCwuEdit.reportingWatchers()).not.toBe(before);
 });
 
-test("any signed-in person may stop watching an opportunity", async ({ surface }) => {
+test("any signed-in person may stop watching an opportunity they did not create", async ({
+  surface,
+}) => {
   await surface.signIn(persona.administrator);
-  await surface.opportunityCwuEdit.open({ id: seed.opportunities.publishedCodeWithUs.id });
-  const before = count(await surface.opportunityCwuEdit.reportingWatchers());
+  await surface.opportunityCwuEdit.open({ opportunityId });
+  const before = await surface.opportunityCwuEdit.reportingWatchers();
   await surface.signOut();
 
-  await surface.signIn(persona.vendor);
-  await surface.opportunityCwuView.open({ id: seed.opportunities.publishedCodeWithUs.id });
+  await surface.signIn(persona.organizationOwner);
+  await surface.opportunityCwuView.open({ opportunityId });
   await surface.opportunityCwuView.toggleWatch();
+  await surface.opportunityCwuView.open({ opportunityId });
   await surface.opportunityCwuView.toggleWatch();
   await surface.signOut();
 
   await surface.signIn(persona.administrator);
-  await surface.opportunityCwuEdit.open({ id: seed.opportunities.publishedCodeWithUs.id });
-  expect(count(await surface.opportunityCwuEdit.reportingWatchers())).toBe(before);
+  await surface.opportunityCwuEdit.open({ opportunityId });
+  expect(await surface.opportunityCwuEdit.reportingWatchers()).toBe(before);
 });

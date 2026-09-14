@@ -1,11 +1,10 @@
 // criterion: @R-1.53 v2
-// provenance: blind, spec@897abf82ff1b013b15ba65777ea1336a8f5e50f6, derived 2026-09-07
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona } from "../../fixtures";
 
-// A deletion is read as the opportunity no longer being listed to the person who is
-// certain to see it otherwise — its author on the dashboard, or an administrator, who
-// sees every opportunity there is. A refusal is read the same way round: it is still
-// there afterwards.
+// A deletion is read as the opportunity no longer being listed to the person who is certain
+// to see it otherwise — its author on the dashboard, or an administrator, who sees every
+// opportunity there is. A refusal is read the same way round: it is still there afterwards.
 
 function inDays(days: number): string {
   const date = new Date();
@@ -38,17 +37,20 @@ test("an administrator may delete a draft, in Code With Us, Sprint With Us and T
 
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.saveDraft({ title: codeWithUs });
-  await surface.opportunityCwuEdit.open({ title: codeWithUs });
+  const codeWithUsId = await surface.opportunityCwuEdit.opportunityIdentifier();
+  await surface.opportunityCwuEdit.open({ opportunityId: codeWithUsId });
   await surface.opportunityCwuEdit.deleteOpportunity();
 
   await surface.opportunitySwuCreate.open();
   await surface.opportunitySwuCreate.saveDraft({ title: sprintWithUs });
-  await surface.opportunitySwuEdit.open({ title: sprintWithUs });
+  const sprintWithUsId = await surface.opportunitySwuEdit.opportunityIdentifier();
+  await surface.opportunitySwuEdit.open({ opportunityId: sprintWithUsId });
   await surface.opportunitySwuEdit.deleteOpportunity();
 
   await surface.opportunityTwuCreate.open();
   await surface.opportunityTwuCreate.saveDraft({ title: teamWithUs });
-  await surface.opportunityTwuEdit.open({ title: teamWithUs });
+  const teamWithUsId = await surface.opportunityTwuEdit.opportunityIdentifier();
+  await surface.opportunityTwuEdit.open({ opportunityId: teamWithUsId });
   await surface.opportunityTwuEdit.deleteOpportunity();
 
   await surface.opportunityDashboard.open();
@@ -64,10 +66,11 @@ test("an administrator may delete an opportunity that is under review", async ({
   await surface.signIn(persona.publicSectorStaff);
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.submitForReview({ ...complete, title });
+  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
   await surface.signOut();
 
   await surface.signIn(persona.administrator);
-  await surface.opportunityCwuEdit.open({ title });
+  await surface.opportunityCwuEdit.open({ opportunityId });
   await surface.opportunityCwuEdit.deleteOpportunity();
 
   await surface.opportunityDashboard.open();
@@ -82,7 +85,9 @@ test("the public sector employee who created an opportunity may delete it while 
   await surface.signIn(persona.publicSectorStaff);
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.saveDraft({ title });
-  await surface.opportunityCwuEdit.open({ title });
+  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
+
+  await surface.opportunityCwuEdit.open({ opportunityId });
   await surface.opportunityCwuEdit.deleteOpportunity();
 
   await surface.opportunityDashboard.open();
@@ -97,7 +102,9 @@ test("the public sector employee who created an opportunity may not delete it on
   await surface.signIn(persona.publicSectorStaff);
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.submitForReview({ ...complete, title });
-  await surface.opportunityCwuEdit.open({ title });
+  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
+
+  await surface.opportunityCwuEdit.open({ opportunityId });
   await surface.opportunityCwuEdit.deleteOpportunity();
 
   await surface.opportunityDashboard.open();
@@ -112,8 +119,9 @@ test("any other request to delete an opportunity is refused and the opportunity 
   await surface.signIn(persona.administrator);
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.publish({ ...complete, title });
+  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
 
-  await surface.opportunityCwuEdit.open({ title });
+  await surface.opportunityCwuEdit.open({ opportunityId });
   await surface.opportunityCwuEdit.deleteOpportunity();
 
   await surface.opportunityList.open();

@@ -1,13 +1,13 @@
 // criterion: @R-1.13 v1
-// provenance: blind, spec@897abf82ff1b013b15ba65777ea1336a8f5e50f6, derived 2026-09-07
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// Each test builds an opportunity that is complete in every other respect — a phase and
-// a question, an evaluation panel, weights that total a hundred — and varies only the
-// budget, so a refusal can only be the budget's doing. The last test is the positive
-// half of the criterion: a Team With Us budget well above the Sprint With Us ceiling is
-// accepted, which is what "no upper limit" means from outside.
+// Each opportunity below is complete in every other respect — a phase or a resource, a
+// question, a panel and weights totalling one hundred — so the only thing left to refuse a
+// submission is the budget. The last test is the one the criterion turns on: the same
+// figure that a Sprint With Us opportunity is refused for is accepted on a Team With Us
+// one, which is what "no upper limit" means when nothing reports a limit directly.
 
 function inDays(days: number): string {
   const date = new Date();
@@ -28,8 +28,8 @@ const shared = {
 };
 
 const panel = {
-  members: [seed.users.staffOne, seed.users.staffPanelEvaluator],
-  chair: seed.users.staffPanelEvaluator,
+  members: [seed.users.staffOne, seed.users.administratorOne],
+  chair: seed.users.administratorOne,
 };
 
 async function prepareSprintWithUs(surface: Surface): Promise<void> {
@@ -66,69 +66,74 @@ async function prepareTeamWithUs(surface: Surface): Promise<void> {
   await surface.opportunityTwuCreate.setEvaluationPanel(panel);
 }
 
-const sprintDetails = {
-  ...shared,
-  mandatorySkills: ["Backend Development"],
+const sprintWeights = {
   questionsWeight: 25,
-  codeChallengeWeight: 25,
-  teamScenarioWeight: 25,
-  priceWeight: 25,
-};
-
-const teamDetails = {
-  ...shared,
-  questionsWeight: 40,
-  challengeWeight: 40,
+  codeChallengeWeight: 40,
+  teamScenarioWeight: 15,
   priceWeight: 20,
 };
 
-test("a Sprint With Us opportunity must state a total maximum budget of at most $5,000,000", async ({
+const teamWeights = { questionsWeight: 30, challengeWeight: 40, priceWeight: 30 };
+
+test("a Sprint With Us opportunity stating a total maximum budget above five million dollars is rejected", async ({
   surface,
 }) => {
   await surface.signIn(persona.administrator);
   await prepareSprintWithUs(surface);
   await surface.opportunitySwuCreate.publish({
-    ...sprintDetails,
-    title: "R-1.13 Sprint With Us opportunity over the budget ceiling",
+    ...shared,
+    ...sprintWeights,
+    title: "R-1.13 Sprint With Us opportunity budgeted above the ceiling",
+    mandatorySkills: ["Backend Development"],
     totalMaxBudget: 5000001,
   });
-
   expect(await surface.opportunitySwuCreate.fieldError()).toBeTruthy();
 });
 
-test("a Sprint With Us opportunity must state a total maximum budget of at least $1", async ({
+test("a Sprint With Us opportunity stating a total maximum budget below one dollar is rejected", async ({
   surface,
 }) => {
   await surface.signIn(persona.administrator);
   await prepareSprintWithUs(surface);
   await surface.opportunitySwuCreate.publish({
-    ...sprintDetails,
-    title: "R-1.13 Sprint With Us opportunity with no budget",
+    ...shared,
+    ...sprintWeights,
+    title: "R-1.13 Sprint With Us opportunity budgeted at nothing",
+    mandatorySkills: ["Backend Development"],
     totalMaxBudget: 0,
   });
-
   expect(await surface.opportunitySwuCreate.fieldError()).toBeTruthy();
 });
 
-test("a Team With Us opportunity must state a maximum budget of at least $1", async ({ surface }) => {
+test("a Team With Us opportunity stating a maximum budget below one dollar is rejected", async ({
+  surface,
+}) => {
   await surface.signIn(persona.administrator);
   await prepareTeamWithUs(surface);
   await surface.opportunityTwuCreate.publish({
-    ...teamDetails,
-    title: "R-1.13 Team With Us opportunity with no budget",
+    ...shared,
+    ...teamWeights,
+    title: "R-1.13 Team With Us opportunity budgeted at nothing",
     maxBudget: 0,
   });
-
   expect(await surface.opportunityTwuCreate.fieldError()).toBeTruthy();
 });
 
-test("a Team With Us opportunity's maximum budget has no upper limit", async ({ surface }) => {
-  const title = "R-1.13 Team With Us opportunity above the Sprint With Us ceiling";
+test("a Team With Us opportunity may state a maximum budget with no upper limit", async ({
+  surface,
+}) => {
+  const title = "R-1.13 Team With Us opportunity budgeted above the Sprint With Us ceiling";
+
   await surface.signIn(persona.administrator);
   await prepareTeamWithUs(surface);
-  await surface.opportunityTwuCreate.publish({ ...teamDetails, title, maxBudget: 9000000 });
+  await surface.opportunityTwuCreate.publish({
+    ...shared,
+    ...teamWeights,
+    title,
+    maxBudget: 5000001,
+  });
 
   expect(await surface.opportunityTwuCreate.fieldError()).toBeFalsy();
-  await surface.opportunityTwuView.open({ title });
-  expect((await surface.opportunityTwuView.status()).toLowerCase()).toContain("published");
+  await surface.opportunityList.open();
+  expect(await surface.opportunityList.openGroup()).toContain(title);
 });

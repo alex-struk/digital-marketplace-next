@@ -6,7 +6,7 @@ Profile: rebuild
 
 | Domain | proposed | accepted | implemented | verified | monitored | obsolete | open questions | total | tests | old |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 36/50 (n/t 14) | 1 pass · 35 fail · 0 unbound · 0 stale |
+| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 40/50 (n/t 10) | 1 pass · 35 fail · 0 unbound · 0 stale |
 | proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 | 28/36 (n/t 8) | 0 pass · 25 fail · 0 unbound · 0 stale |
 | organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 | 28/31 (n/t 3) | 1 pass · 27 fail · 0 unbound · 0 stale |
 | users | 0 | 32 | 0 | 0 | 0 | 4 | 1 | 36 | 25/30 (n/t 5) | 1 pass · 24 fail · 0 unbound · 0 stale |
@@ -49,10 +49,13 @@ Profile: rebuild
 - [derive-tests-evaluation-2](proposals/derive-tests-evaluation-2.md)
 - [derive-tests-evaluation-3](proposals/derive-tests-evaluation-3.md)
 - [derive-tests-evaluation-4](proposals/derive-tests-evaluation-4.md)
+- [derive-tests-evaluation-6](proposals/derive-tests-evaluation-6.md)
 - [derive-tests-files](proposals/derive-tests-files.md)
 - [derive-tests-notifications](proposals/derive-tests-notifications.md)
 - [derive-tests-opportunities](proposals/derive-tests-opportunities.md)
 - [derive-tests-opportunities-2](proposals/derive-tests-opportunities-2.md)
+- [derive-tests-opportunities-3](proposals/derive-tests-opportunities-3.md)
+- [derive-tests-opportunities-4](proposals/derive-tests-opportunities-4.md)
 - [derive-tests-organizations](proposals/derive-tests-organizations.md)
 - [derive-tests-organizations-2](proposals/derive-tests-organizations-2.md)
 - [derive-tests-organizations-3](proposals/derive-tests-organizations-3.md)
@@ -99,9 +102,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $277.271426
-- Rulings cost: $101.005092
-- Total cost: $378.276518
-- Agent-held rulings: 57
+- Journal cost: $264.359159
+- Rulings cost: $106.922107
+- Total cost: $371.281266
+- Agent-held rulings: 60
 - Open escalations: 0
 - Open proposals: 0

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-4 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">66</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">66</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">65</span></a></li><li><a href="../runs.html">Run log <span class="count">8</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-4</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-14 00:29</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised opportunities tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the three opportunities tests the reviewer returned.</p>
+<p>I rewrote the three opportunities tests the reviewer returned. I changed nothing else: every other file in <code>tests/acceptance/opportunities/</code> is untouched, and so is <code>tests/acceptance/not-testable.yaml</code>. The three changed files keep their criterion versions and the spec sha, which <code>spec/criteria-index.json</code> confirms is still <code>7a0d4769…</code>. Their &quot;derived&quot; date is now 2026-09-13. I could not typecheck the changes: running <code>tsc</code> on the test project needed approval that wasn&#39;t given, so the next stage should run it.</p>
+<p><strong>Condition 1, R-1.1.</strong> I removed the test that counted the author&#39;s mail before and after the closure trigger. The file comment now says the author notification is not asserted, and why: closure happens only once, and any request under /api or /status can set it off, not just the trigger the test calls. So there&#39;s no way to pin down when the notice goes out, and comparing counts before and after would fail a system that works correctly. The status test and the proposal-review test are unchanged.</p>
+<p><strong>Condition 2, R-1.18.</strong> None of the three cases reads a field error right after adding a resource any more. Each one now does the following, as R-1.13 and R-1.16 do:</p>
+<ul><li>signs in as the administrator and adds the one faulty resource: allocation 0, allocation 101, or an unrecognised service area;</li><li>completes the rest of a Team With Us opportunity: a resource question, an evaluation panel from the seeded users, a budget, weights totalling one hundred, and dates;</li><li>submits it with <code>publish</code>, so it is not a draft, and only then expects <code>fieldError()</code> to report the rejection.</li></ul>
+<p><strong>Condition 3, R-1.37.</strong> I removed the test asserting that the administrator gets a notice. The comment now says that notice isn&#39;t asserted: the criterion doesn&#39;t say how it&#39;s addressed, and the mail fixture only searches visible recipients, so a blind-copied notice wouldn&#39;t be found. It points to R-1.34 to R-1.36, which skip their group notices for the same reason. The author-confirmation test is unchanged. The file still has a test, so R-1.37 gets no not-testable entry.</p>
+<p><strong>Condition 4 (non-blocking).</strong> I didn&#39;t act on this one; it asked for a later recheck, not a change here. R-1.1, R-1.19 and R-1.24 still expect the seeded closed opportunities to be at their first evaluation stage. That holds only while no domain that runs earlier moves those records on, so it should be checked again when the evaluation domain is re-derived against the same seeds.</p>
+<p>Nothing I needed was missing from the surface. The one gap these fixes exposed is in the mail fixture: it can&#39;t find blind-copied messages. That now affects R-1.34 to R-1.37. If the contract gave <code>mail</code> a way to search every recipient, including blind copies, all four group-notice claims could be asserted.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-14 00:30.</p>
+<div class="body"><p>Do the revised opportunities tests now follow from their criteria and from nothing else? Approved. Against the returned revision, only R-1.1, R-1.18 and R-1.37 changed under tests/acceptance/opportunities/, and the R-1 not-testable entries are unchanged (one entry is only re-wrapped). All three conditions are met. R-1.1 no longer counts the author&#39;s mail before and after closure, and its comment gives the real reason the notice can&#39;t be asserted: closure happens once and any /api or /status request can trigger it. The status and proposal-review tests remain. R-1.18 now builds a complete Team With Us opportunity that is not a draft (question, panel, budget, weights totalling one hundred, dates), publishes it with the one faulty resource, and reads fieldError() only after that submission, which matches the criterion&#39;s given and when. R-1.37 drops the administrator-notice assertion for the same blind-copy limitation of the mail fixture used in R-1.34 to R-1.36, and keeps the author confirmation, which the criterion states. The runner&#39;s typecheck reports no diagnostics under acceptance/opportunities/. The failures elsewhere belong to other domains. Tier is STANDARD and no residual risk is marked unaccepted, so there are no grounds to escalate. The ruling would change if the opportunities tests gained a typecheck diagnostic, or if the seeded closed opportunities were found to be past their first evaluation stage when this domain runs.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>Non-blocking, carried forward: R-1.1, R-1.19 and R-1.24 expect the seeded closed Sprint With Us and Team With Us opportunities to be at their first evaluation stage. Recheck this when the evaluation domain is re-derived against the same seeds, because a domain that runs earlier could move those records on.</li><li>Non-blocking: R-1.34 to R-1.37 leave their group notices unasserted because the mail fixture searches visible recipients only. If the contract gains a way to search every recipient, including blind copies, these notices should be re-derived.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

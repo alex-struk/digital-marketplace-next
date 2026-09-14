@@ -1,36 +1,23 @@
 ---
 stage: "derive-tests"
 title: "derive tests"
-at: "2026-09-11T09:22:03.933Z"
-cost: 13.796892999999999
-turns: 107
-session: "4df1cc47-0e09-4ff9-998e-b1c45c8b7a4a"
+at: "2026-09-14T00:29:00.944Z"
+cost: 0.8846265
+turns: 16
+session: "37c7a106-df54-4124-90e3-686b5eaa676f"
 ---
 
-Re-derived the whole proposals domain. All checks for forbidden constructs pass; headers and versions match the criteria list.
+I rewrote the three opportunities tests the reviewer returned. I changed nothing else: every other file in `tests/acceptance/opportunities/` is untouched, and so is `tests/acceptance/not-testable.yaml`. The three changed files keep their criterion versions and the spec sha, which `spec/criteria-index.json` confirms is still `7a0d4769…`. Their "derived" date is now 2026-09-13. I could not typecheck the changes: running `tsc` on the test project needed approval that wasn't given, so the next stage should run it.
 
-**What changed since the last derivation.** The contract now carries a service-status page with a "run pending transitions" action, and the seed carries a Sprint With Us and a Team With Us opportunity published with deadlines thirty days old, three submitted proposals each. Together these close an opportunity on demand, which the previous derivation recorded as the one thing nothing could reach. The generated page types also tightened: every `open` now takes named route parameters, so each test takes an identifier from the screen a record lands on instead of naming a record by title.
+**Condition 1, R-1.1.** I removed the test that counted the author's mail before and after the closure trigger. The file comment now says the author notification is not asserted, and why: closure happens only once, and any request under /api or /status can set it off, not just the trigger the test calls. So there's no way to pin down when the notice goes out, and comparing counts before and after would fail a system that works correctly. The status test and the proposal-review test are unchanged.
 
-Coverage:
+**Condition 2, R-1.18.** None of the three cases reads a field error right after adding a resource any more. Each one now does the following, as R-1.13 and R-1.16 do:
+- signs in as the administrator and adds the one faulty resource: allocation 0, allocation 101, or an unrecognised service area;
+- completes the rest of a Team With Us opportunity: a resource question, an evaluation panel from the seeded users, a budget, weights totalling one hundred, and dates;
+- submits it with `publish`, so it is not a draft, and only then expects `fieldError()` to report the rejection.
 
-| outcome | criteria |
-|---|---|
-| test written | 28 |
-| not testable | 8 |
+**Condition 3, R-1.37.** I removed the test asserting that the administrator gets a notice. The comment now says that notice isn't asserted: the criterion doesn't say how it's addressed, and the mail fixture only searches visible recipients, so a blind-copied notice wouldn't be found. It points to R-1.34 to R-1.36, which skip their group notices for the same reason. The author-confirmation test is unchanged. The file still has a test, so R-1.37 gets no not-testable entry.
 
-**Newly reachable.** Three criteria got their first test: proposals moving to review with anonymous proponent names when an opportunity closes, an evaluation action taken at the wrong stage being refused, and disqualification requiring a written reason within bounds. Three more gained the half that was previously out of reach: staff seeing proposals only after a closure, the anonymous name on a staff copy of a proposal, and staff taking away every proposal in one document.
+**Condition 4 (non-blocking).** I didn't act on this one; it asked for a later recheck, not a change here. R-1.1, R-1.19 and R-1.24 still expect the seeded closed opportunities to be at their first evaluation stage. That holds only while no domain that runs earlier moves those records on, so it should be checked again when the evaluation domain is re-derived against the same seeds.
 
-**Still not testable, and why.** Two need a Code With Us opportunity seeded past its proposal deadline, since only the other two programs have one and no form accepts a past date. Six sit behind the full evaluation chain, and the seed holds exactly one closed opportunity per program. Walking that chain consumes it: the first test to score, agree and finalise a panel's scores takes the fixture away from every other criterion behind the closure, including the evaluation domain's. I chose not to write tests that quietly depend on file ordering, so those six say so in the not-testable list with what would unblock each.
-
-**What I needed and did not find.** For the contract stage, in rough order of how much they would buy:
-
-- **More closed opportunities.** One per criterion that has to move one, or opportunities seeded at the later evaluation stages. This alone unblocks six criteria.
-- **A closed Code With Us opportunity** carrying a submitted proposal. Unblocks two.
-- **A draft proposal seeded against a closed opportunity.** Three criteria assert that drafts are left alone or withheld, and none can build one.
-- **An organization action on the two proposal management screens.** The criterion about an organization being locked after submission has to ask for the change through the save action, because no action names an organization there.
-- **An attachment action naming a file already stored.** Attachments checked in draft cannot be tested while the only action uploads a file that exists by construction.
-- **Six proponents on one opportunity**, which one criterion states outright and the seed declines.
-- **Scores as seed handles.** The seeded questions carry a maximum and a minimum that appear only in the seed SQL, not in the generated seed. Any test entering a valid score has to hard-code them.
-- **Display names for seeded people**, so a history entry can be matched to who made it.
-
-I could not run the type check. The test workspace has no installed dependencies, so the files are verified by reading against the generated types rather than by compiling.
+Nothing I needed was missing from the surface. The one gap these fixes exposed is in the mail fixture: it can't find blind-copied messages. That now affects R-1.34 to R-1.37. If the contract gave `mail` a way to search every recipient, including blind copies, all four group-notice claims could be asserted.

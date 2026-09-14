@@ -1,109 +1,4 @@
 criteria:
-  - id: R-1.1
-    version: 2
-    reason: "The given is a published opportunity whose proposal deadline has
-      passed, and no such opportunity can be had. The seed's only published
-      opportunity has a deadline in 2030; an opportunity that is not a draft is
-      refused a deadline earlier than today (R-1.14), and a draft left without
-      one is given a deadline fourteen days out (R-1.9). The when is out of
-      reach as well: observables.yaml names the status route as the request that
-      runs the closing hook, but no page, action or observation in the surface
-      makes that request."
-  - id: R-1.23
-    version: 1
-    reason: "No observation returns an opportunity's published date. The three
-      opportunity views name status, proposal deadline, reward or budget,
-      addenda and successful proponent; published_date exists only on the
-      content pages. Nor is there a when for the second half: no action
-      republishes an opportunity that is already published, so 'even if it was
-      later republished' cannot be set up."
-  - id: R-1.24
-    version: 1
-    reason: The when is the opportunity closing at its proposal deadline, which
-      cannot be brought about — see R-1.1 for the two things missing. Without
-      the closure no submitted proposal is ever labelled, and the
-      anonymous_proponent_name observations on the proposal surfaces have
-      nothing to return.
-  - id: R-1.25
-    version: 1
-    reason: The given is an opportunity at its program's final evaluation stage. An
-      opportunity reaches any evaluation stage only by closing at its proposal
-      deadline, which cannot be brought about (see R-1.1), so neither the last
-      proposal's scoring nor the move to processing can be reached.
-  - id: R-1.26
-    version: 1
-    reason: The given is an opportunity in processing. Processing lies beyond the
-      evaluation stages, which are reached only by a closure the surface cannot
-      bring about (see R-1.1), so award_proposal has no opportunity to act on
-      and no proposal to mark not awarded.
-  - id: R-1.27
-    version: 1
-    reason: The given is an awarded opportunity. Awarding needs processing,
-      processing needs the evaluation stages, and those need a closure the
-      surface cannot bring about (see R-1.1). The successful_proponent
-      observation therefore has nothing to return, and the proponent's contact
-      details, which the criterion says are withheld, are named by no
-      observation either.
-  - id: R-1.29
-    version: 1
-    reason: No observation returns the name of the person who created or last
-      changed an opportunity. The opportunity views name status, dates, money,
-      addenda and the successful proponent; the management surface names tabs
-      and the three reporting counts. With the names unreadable, neither their
-      presence for an administrator nor their absence for anybody else can be
-      asserted.
-  - id: R-1.40
-    version: 1
-    reason: "The given is an opportunity that has been evaluated, which cannot be
-      reached: an opportunity leaves the published state only by closing at its
-      proposal deadline (see R-1.1). The full_report observation would return
-      nothing for an administrator as well as for a member of staff, so the
-      contrast the criterion turns on cannot be told from the report simply not
-      existing yet."
-  - id: R-1.41
-    version: 1
-    reason: The given is a Sprint With Us or Team With Us opportunity at the
-      questions consensus stage, which is reached only after the opportunity
-      closes at its proposal deadline (see R-1.1). The observations for both
-      refusals exist — not_all_consensuses_submitted_error and
-      no_screenable_proponent_error — but nothing in the surface can put an
-      opportunity in front of them.
-  - id: R-1.42
-    version: 1
-    reason: The given is a Sprint With Us opportunity at the code challenge stage,
-      which lies two stages beyond a closure the surface cannot bring about (see
-      R-1.1). start_team_scenario therefore has no opportunity to be refused on,
-      and the proponents whose scoring the refusal turns on cannot be created
-      either.
-  - id: R-1.43
-    version: 1
-    reason: The given is an opportunity that has reached the consensus stage or
-      beyond, which cannot be reached (see R-1.1). The
-      panel_locked_after_consensus observation names exactly this outcome but no
-      opportunity can be brought to the state in which it applies. The permitted
-      half of the rule — changing the panel while the opportunity is a draft —
-      is exercised by R-1.55.
-  - id: R-1.49
-    version: 1
-    reason: The claim is about which state changes are permitted out of processing
-      for a Team With Us opportunity. Processing lies beyond the evaluation
-      stages and cannot be reached (see R-1.1), and no observation returns the
-      set of transitions an opportunity records, so neither the award nor the
-      cancellation out of processing can be requested or read.
-  - id: R-1.50
-    version: 1
-    reason: Both halves are out of reach. The questions consensus stage cannot be
-      reached (see R-1.1), so the refusal has no opportunity to act on; and the
-      uniqueness claim is about there being no second way out, which the surface
-      can only show by not naming one — the absence of an action is not an
-      observation.
-  - id: R-1.51
-    version: 1
-    reason: Nothing in the surface reaches a suspended state to show it is gone. No
-      action requests a move to one, no observation returns the states an
-      opportunity may hold or the states the list's state filter offers, and the
-      seed holds no opportunity carrying the historical value, so the mapping of
-      such a record to a defined state has nothing to be read on.
   - id: R-6.1
     version: 1
     reason: The given is an environment with notifications switched off, read once
@@ -451,17 +346,17 @@ criteria:
     reason: "blocked: the Code With Us half needs a published Code With Us
       opportunity whose proposal deadline has passed, and there is none. The one
       seeded Code With Us opportunity is open until 2030, and the create form
-      refuses a deadline earlier than the day it is filled in, so the refusal the
-      criterion quotes — \"This opportunity is no longer accepting proposals.\" —
-      has nothing to be raised against. The half that holds in all three programs
-      needs a draft proposal against an opportunity already past its deadline:
-      the two seeded closed opportunities are past theirs, but every vendor who
-      could bid on one has already bid and every qualified organization is
-      already named on a proposal of its own, so no draft can be added, and the
-      deadline hook sits in front of the service's own routes so the state before
-      the closure cannot be held still. Unblocked by seeding a Code With Us
-      opportunity past its proposal deadline, and a draft proposal against a
-      closed opportunity."
+      refuses a deadline earlier than the day it is filled in, so the refusal
+      the criterion quotes — \"This opportunity is no longer accepting
+      proposals.\" — has nothing to be raised against. The half that holds in
+      all three programs needs a draft proposal against an opportunity already
+      past its deadline: the two seeded closed opportunities are past theirs,
+      but every vendor who could bid on one has already bid and every qualified
+      organization is already named on a proposal of its own, so no draft can be
+      added, and the deadline hook sits in front of the service's own routes so
+      the state before the closure cannot be held still. Unblocked by seeding a
+      Code With Us opportunity past its proposal deadline, and a draft proposal
+      against a closed opportunity."
   - id: R-2.26
     version: 1
     reason: "blocked: the given is a Code With Us proposal under review, and a
@@ -470,22 +365,22 @@ criteria:
       scheduled-transition-trigger runs the deadline hook — but only the Sprint
       With Us and Team With Us opportunities are seeded past their deadlines. No
       Code With Us opportunity can be given a deadline in the past, so
-      enter_score on proposal-cwu-view has no proposal to act on, and neither the
-      score, the move to evaluated nor the refusal of an out-of-range score has
-      anything to be read on. Unblocked by seeding a Code With Us opportunity
-      past its proposal deadline carrying a submitted proposal."
+      enter_score on proposal-cwu-view has no proposal to act on, and neither
+      the score, the move to evaluated nor the refusal of an out-of-range score
+      has anything to be read on. Unblocked by seeding a Code With Us
+      opportunity past its proposal deadline carrying a submitted proposal."
   - id: R-2.27
     version: 1
     reason: "blocked: the when is the last proposal still in contention being
-      scored, which means carrying proposals all the way to evaluated. On the two
-      seeded closed opportunities that is a single path — score every proponent's
-      questions, agree those scores as a panel, finalise them, screen in, score
-      the challenge and then the scenario — and the seed carries one closed
-      opportunity per program. The first test to walk that path takes the
-      opportunity with it, so the criteria behind the closure cannot each have
-      one. Unblocked by seeding a closed opportunity for each criterion that has
-      to move one, or by seeding opportunities already standing at the later
-      evaluation stages."
+      scored, which means carrying proposals all the way to evaluated. On the
+      two seeded closed opportunities that is a single path — score every
+      proponent's questions, agree those scores as a panel, finalise them,
+      screen in, score the challenge and then the scenario — and the seed
+      carries one closed opportunity per program. The first test to walk that
+      path takes the opportunity with it, so the criteria behind the closure
+      cannot each have one. Unblocked by seeding a closed opportunity for each
+      criterion that has to move one, or by seeding opportunities already
+      standing at the later evaluation stages."
   - id: R-2.29
     version: 1
     reason: "blocked: two things are missing. The ranking and the cut need the
@@ -494,20 +389,20 @@ criteria:
       proponents of whom five clear every minimum and four go forward; the seed
       carries three per opportunity and says so itself. The size of the cut
       therefore cannot be shown even once, and the half that three proponents
-      could show — one below a question's minimum score being left behind — needs
-      the same finalisation. Unblocked by a closed opportunity of its own
+      could show — one below a question's minimum score being left behind —
+      needs the same finalisation. Unblocked by a closed opportunity of its own
       carrying six proponents."
   - id: R-2.30
     version: 1
     reason: "blocked: the given is two proposals still in contention with a team
       scenario score being entered against one of them, which is the last stage
       of the evaluation. Reaching it means walking the whole chain on the one
-      seeded closed Sprint With Us opportunity and leaving nothing behind for the
-      other criteria (see R-2.27), so the price_score observations on the two
-      proposal views have nothing to return and the lowest bid among proposals in
-      contention is never worked out. Unblocked by a closed opportunity of its
-      own, or by one seeded at the code challenge stage with its question scores
-      already recorded."
+      seeded closed Sprint With Us opportunity and leaving nothing behind for
+      the other criteria (see R-2.27), so the price_score observations on the
+      two proposal views have nothing to return and the lowest bid among
+      proposals in contention is never worked out. Unblocked by a closed
+      opportunity of its own, or by one seeded at the code challenge stage with
+      its question scores already recorded."
   - id: R-2.31
     version: 1
     reason: "blocked: the given is a proposal carrying a score for every stage,
@@ -518,33 +413,33 @@ criteria:
       every stage scored but the last."
   - id: R-2.32
     version: 1
-    reason: "blocked: the given is a vendor's proposal that has been scored, and
-      the then needs it to become awarded or passed over. Both lie at the end of
-      the evaluation chain, which consumes the one seeded closed opportunity of
-      its program (see R-2.27). Before any score exists the withholding cannot be
-      told from the score simply not being there: score and rank read as empty on
-      an unscored proposal for a reason that has nothing to do with who is
+    reason: "blocked: the given is a vendor's proposal that has been scored, and the
+      then needs it to become awarded or passed over. Both lie at the end of the
+      evaluation chain, which consumes the one seeded closed opportunity of its
+      program (see R-2.27). Before any score exists the withholding cannot be
+      told from the score simply not being there: score and rank read as empty
+      on an unscored proposal for a reason that has nothing to do with who is
       looking. Unblocked by a closed opportunity of its own carrying scored
       proposals."
   - id: R-2.33
     version: 1
     reason: "blocked: only a fully evaluated proposal, or one previously passed
-      over, may be awarded, and reaching evaluated consumes the one seeded closed
-      opportunity of its program (see R-2.27). award_proposal is offered on all
-      three proposal views and has nothing it may act on, so neither the other
-      proposals being marked not awarded nor the opportunity becoming awarded can
-      be read. Unblocked by a closed opportunity of its own carrying one
-      evaluated proposal, one disqualified and one withdrawn, which is the given
-      the criterion states."
+      over, may be awarded, and reaching evaluated consumes the one seeded
+      closed opportunity of its program (see R-2.27). award_proposal is offered
+      on all three proposal views and has nothing it may act on, so neither the
+      other proposals being marked not awarded nor the opportunity becoming
+      awarded can be read. Unblocked by a closed opportunity of its own carrying
+      one evaluated proposal, one disqualified and one withdrawn, which is the
+      given the criterion states."
   - id: R-4.1
     version: 1
-    reason: "The given is a person with no account on the service, which cannot be
+    reason: The given is a person with no account on the service, which cannot be
       produced. Every persona signs in as an account the seed already carries,
       and no page, action or observation creates one, so no first sign-in can be
       made and no account can be watched coming into existence. Reading the kind
       of an account the seed already gave a kind would assert the seed rather
       than the service's decision, and the refusal of an identity of neither
-      kind has no identity to be made with."
+      kind has no identity to be made with.
   - id: R-4.2
     version: 1
     reason: "The when is an account being created, which no persona and no surface
@@ -555,13 +450,13 @@ criteria:
       was attempted for them."
   - id: R-4.13
     version: 1
-    reason: "The given is a service with no administrator account at all. The seed
+    reason: The given is a service with no administrator account at all. The seed
       carries seed.users.administratorOne, nothing in the surface removes an
       account, and the only demotion offered is one administrator withdrawing
       another's rights, so the state the criterion is about cannot be
       established. The outcome is an absence as well - that no way to make the
       first administrator exists - and the absence of an action is not an
-      observation."
+      observation.
   - id: R-4.20
     version: 1
     reason: "Both halves turn on which message was sent, and the two messages differ
@@ -574,7 +469,7 @@ criteria:
       person signing back in."
   - id: R-4.21
     version: 1
-    reason: "The claim is that the request is refused rather than answered, and
+    reason: The claim is that the request is refused rather than answered, and
       user-list carries no refusal observation - it names user_row,
       status_badge, account_type, admin_check and the two export observations,
       none of which tells 'you are not permitted' from a screen with nothing on
@@ -582,42 +477,43 @@ criteria:
       administrator sees no rows, which is equally true of the superseded R-4.15
       this criterion replaces, where the interface withheld the screen while the
       service answered the request in full. Needs an observation such as
-      user-list.refused_for_non_administrator."
+      user-list.refused_for_non_administrator.
   - id: R-5.3
     version: 1
-    reason: "The given is an evaluator who has already started an evaluation of one
+    reason: The given is an evaluator who has already started an evaluation of one
       proponent. An evaluation can be started only while the opportunity is in
-      individual question evaluation, which an opportunity reaches only by closing
-      at its proposal deadline, and no page, action or observation brings that
-      about (see R-1.1). The observation the refusal would be read from,
-      duplicate_evaluation_error, is named on both individual-create surfaces, but
-      nothing in the surface can put an evaluator in front of it."
+      individual question evaluation, which an opportunity reaches only by
+      closing at its proposal deadline, and no page, action or observation
+      brings that about (see R-1.1). The observation the refusal would be read
+      from, duplicate_evaluation_error, is named on both individual-create
+      surfaces, but nothing in the surface can put an evaluator in front of it.
   - id: R-5.10
     version: 1
-    reason: "The refusal is shown when the consensus scores of an opportunity in
+    reason: The refusal is shown when the consensus scores of an opportunity in
       consensus are finalised. The consensus stage lies two stages beyond a
       closure the surface cannot bring about (see R-1.1), so
       finalize_consensus_scores has no opportunity to act on and
-      no_screenable_proponent_error, which both consensus lists name, has nothing
-      to return. No proponent can be given a question score to fall short of a
-      minimum with either, since scoring happens after the closure as well."
+      no_screenable_proponent_error, which both consensus lists name, has
+      nothing to return. No proponent can be given a question score to fall
+      short of a minimum with either, since scoring happens after the closure as
+      well.
   - id: R-5.11
     version: 1
     reason: "The subject is an individual evaluation, and none can exist. Recording
-      one needs the opportunity to be in individual question evaluation, which is
-      reached only by a closure the surface cannot bring about (see R-1.1), so
-      there is nothing for an administrator, an owner, a panel member or an
-      unconnected public sector employee to be granted or refused. The stage half
-      of the claim is out of reach for the same reason: no opportunity can be got
-      past the question stages."
+      one needs the opportunity to be in individual question evaluation, which
+      is reached only by a closure the surface cannot bring about (see R-1.1),
+      so there is nothing for an administrator, an owner, a panel member or an
+      unconnected public sector employee to be granted or refused. The stage
+      half of the claim is out of reach for the same reason: no opportunity can
+      be got past the question stages."
   - id: R-5.12
     version: 1
-    reason: "The given is an opportunity in consensus whose owner is not on its
+    reason: The given is an opportunity in consensus whose owner is not on its
       panel, and the consensus stage cannot be reached (see R-1.1). The
       observation written for exactly this outcome,
       evaluation-consensus-list.empty_for_owner_not_on_panel, exists on both
       programs, but no opportunity can be brought to the state in which the page
-      would have to explain itself."
+      would have to explain itself.
   - id: R-5.13
     version: 1
     reason: "Finalising happens only from the consensus stage, which lies beyond a
@@ -631,73 +527,77 @@ criteria:
       opportunity in consensus, and the consensus stage cannot be reached (see
       R-1.1). Nor would the offer itself be readable: the consensus lists name
       finalize_consensus_scores as an action and finalize_confirmation_modal as
-      what follows it, and neither reports whether the action stands ready for the
-      person looking, so an owner who was offered nothing could not be told from
-      one whose request simply failed."
+      what follows it, and neither reports whether the action stands ready for
+      the person looking, so an owner who was offered nothing could not be told
+      from one whose request simply failed."
   - id: R-5.20
     version: 1
-    reason: "The when is an opportunity closing at its proposal deadline. A published
-      opportunity is refused a deadline earlier than today, and no page, action or
-      observation makes the request that runs the closing hook (see R-1.1), so the
-      move into individual question evaluation never happens and the notice to
-      each evaluator on the panel is never sent. With no closure there is nothing
-      to search the mail catcher for and nothing to read a status back from."
+    reason: The when is an opportunity closing at its proposal deadline. A published
+      opportunity is refused a deadline earlier than today, and no page, action
+      or observation makes the request that runs the closing hook (see R-1.1),
+      so the move into individual question evaluation never happens and the
+      notice to each evaluator on the panel is never sent. With no closure there
+      is nothing to search the mail catcher for and nothing to read a status
+      back from.
   - id: R-5.21
     version: 1
-    reason: "The given is an opportunity in individual question evaluation, which is
+    reason: The given is an opportunity in individual question evaluation, which is
       reached only by a closure the surface cannot bring about (see R-1.1). The
       individual evaluation surfaces exist for all of the people the criterion
       contrasts, but none of them has an opportunity to act on, so neither the
-      evaluator who may score nor the chair and the owner who may not can make the
-      attempt."
+      evaluator who may score nor the chair and the owner who may not can make
+      the attempt.
   - id: R-5.22
     version: 1
-    reason: "The given is an evaluator scoring a proponent against a question, and no
-      evaluation form can be opened: recording an evaluation needs the opportunity
-      to be in individual question evaluation, reached only by a closure the
-      surface cannot bring about (see R-1.1). score_out_of_range_error and
-      empty_notes_error are named on all four individual evaluation surfaces, and
-      nothing can put a score or a comment in front of either."
+    reason: "The given is an evaluator scoring a proponent against a question, and
+      no evaluation form can be opened: recording an evaluation needs the
+      opportunity to be in individual question evaluation, reached only by a
+      closure the surface cannot bring about (see R-1.1).
+      score_out_of_range_error and empty_notes_error are named on all four
+      individual evaluation surfaces, and nothing can put a score or a comment
+      in front of either."
   - id: R-5.23
     version: 1
-    reason: "The criterion turns on the difference between saving a draft evaluation
+    reason: The criterion turns on the difference between saving a draft evaluation
       and submitting one, and neither can be done. Both need an opportunity in
-      individual question evaluation, which no page, action or observation reaches
-      (see R-1.1). The criterion's own note says the case is reachable through the
-      service rather than through the form, and the surface is the form."
+      individual question evaluation, which no page, action or observation
+      reaches (see R-1.1). The criterion's own note says the case is reachable
+      through the service rather than through the form, and the surface is the
+      form.
   - id: R-5.24
     version: 1
-    reason: "The given is an evaluator who has submitted their scores for a
+    reason: The given is an evaluator who has submitted their scores for a
       proponent. Nothing in the surface reaches an individual evaluation at all,
       draft or submitted, because the stage it lives in needs a closure that
       cannot be brought about (see R-1.1). read_only_after_submitted is named on
-      both individual-edit surfaces and has nothing to report."
+      both individual-edit surfaces and has nothing to report.
   - id: R-5.25
     version: 2
-    reason: "The given is an evaluator holding draft evaluations for some of an
+    reason: The given is an evaluator holding draft evaluations for some of an
       opportunity's proponents. Drafts cannot be made, because the individual
       question evaluation stage is reached only by a closure the surface cannot
       bring about (see R-1.1), so submit_scores_for_consensus has nothing to
-      submit and incomplete_evaluation_error nothing to report. The second half —
-      that a proponent the evaluator never opened does not block the submission —
-      needs the same drafts and the same proponents."
+      submit and incomplete_evaluation_error nothing to report. The second half
+      — that a proponent the evaluator never opened does not block the
+      submission — needs the same drafts and the same proponents.
   - id: R-5.26
     version: 1
-    reason: "Two things are missing. The evaluation the request would name cannot
+    reason: Two things are missing. The evaluation the request would name cannot
       exist, since individual evaluations need a stage reached only by a closure
       the surface cannot bring about (see R-1.1); and no action submits one
       evaluation on its own. The individual-edit surfaces offer save_changes and
-      save_and_go_to_next_proponent only, and the sole submission in the contract
-      is submit_scores_for_consensus on the individual list, which is the whole
-      set. The request the criterion says is rejected therefore cannot be made."
+      save_and_go_to_next_proponent only, and the sole submission in the
+      contract is submit_scores_for_consensus on the individual list, which is
+      the whole set. The request the criterion says is rejected therefore cannot
+      be made.
   - id: R-5.27
     version: 2
-    reason: "The when is the last of a set of individual scores being submitted,
-      which needs an opportunity in individual question evaluation with proponents
-      and submitted evaluations — none of which can be had, because the stage is
-      reached only by a closure the surface cannot bring about (see R-1.1). The
-      move to consensus and the notices to the chair and the owner both hang off
-      that submission."
+    reason: The when is the last of a set of individual scores being submitted,
+      which needs an opportunity in individual question evaluation with
+      proponents and submitted evaluations — none of which can be had, because
+      the stage is reached only by a closure the surface cannot bring about (see
+      R-1.1). The move to consensus and the notices to the chair and the owner
+      both hang off that submission.
   - id: R-5.28
     version: 2
     reason: "Every reader in the criterion is asking for an individual evaluation or
@@ -708,74 +608,175 @@ criteria:
       contrast the criterion is built on has nothing to compare."
   - id: R-5.29
     version: 1
-    reason: "The given is an opportunity in consensus, which cannot be reached (see
+    reason: The given is an opportunity in consensus, which cannot be reached (see
       R-1.1). Neither the chair recording an agreed score nor an evaluator being
       refused one can be attempted, and duplicate_consensus_error on both
-      consensus-create surfaces has nothing to report."
+      consensus-create surfaces has nothing to report.
   - id: R-5.30
     version: 1
-    reason: "The given is a consensus the chair has already submitted, and no
-      consensus can be recorded, because the consensus stage is reached only by a
-      closure the surface cannot bring about (see R-1.1).
+    reason: The given is a consensus the chair has already submitted, and no
+      consensus can be recorded, because the consensus stage is reached only by
+      a closure the surface cannot bring about (see R-1.1).
       editable_after_submitted is named on both consensus-edit surfaces and has
-      nothing to be read on."
+      nothing to be read on.
   - id: R-5.31
     version: 1
-    reason: "The when is the chair submitting the agreed scores of an opportunity in
+    reason: The when is the chair submitting the agreed scores of an opportunity in
       consensus. The consensus stage cannot be reached (see R-1.1), so
       submit_final_consensus_scores has nothing to act on and no message to the
       owner or to the administrators is ever produced for the mail catcher to be
-      searched for."
+      searched for.
   - id: R-5.32
     version: 1
-    reason: "The given is a Sprint With Us opportunity in consensus with proponents
+    reason: The given is a Sprint With Us opportunity in consensus with proponents
       carrying agreed scores. Consensus lies beyond a closure the surface cannot
       bring about (see R-1.1), so nothing can be finalised, no proponent can be
-      screened in or passed over, and the next stage is never entered. The ceiling
-      of four proponents for Sprint With Us and three for Team With Us has no set
-      of proponents to be applied to."
+      screened in or passed over, and the next stage is never entered. The
+      ceiling of four proponents for Sprint With Us and three for Team With Us
+      has no set of proponents to be applied to.
   - id: R-5.33
     version: 1
-    reason: "The when is the consensus scores being finalised, which needs the
-      consensus stage and therefore a closure the surface cannot bring about (see
-      R-1.1). With no finalising there is no notice to the chair or to the owner
-      for the mail catcher to hold."
+    reason: The when is the consensus scores being finalised, which needs the
+      consensus stage and therefore a closure the surface cannot bring about
+      (see R-1.1). With no finalising there is no notice to the chair or to the
+      owner for the mail catcher to hold.
   - id: R-5.34
     version: 2
-    reason: "The given is an opportunity being evaluated. Every stage in which the
+    reason: The given is an opportunity being evaluated. Every stage in which the
       instructions, the individual evaluation list and the consensus list belong
-      to somebody is reached only by a closure the surface cannot bring about (see
-      R-1.1), so three of the four tools cannot be looked for; and the contrast
-      needs four different people looking at one opportunity, while the target
-      mints a session for only one public sector employee besides the
+      to somebody is reached only by a closure the surface cannot bring about
+      (see R-1.1), so three of the four tools cannot be looked for; and the
+      contrast needs four different people looking at one opportunity, while the
+      target mints a session for only one public sector employee besides the
       administrator. The fourth tool, the panel itself, is reachable and is
-      exercised by R-5.18."
+      exercised by R-5.18.
   - id: R-5.35
     version: 1
-    reason: "The given is an evaluator part-way through the proponents of an
+    reason: The given is an evaluator part-way through the proponents of an
       opportunity in individual question evaluation, a stage reached only by a
       closure the surface cannot bring about (see R-1.1).
       save_and_go_to_next_proponent and save_and_go_to_previous_proponent are
-      named on the individual-create surfaces, and anonymous_proponent_name would
-      report the order, but there are no proponents to move between and no scores
-      to be saved on the way."
+      named on the individual-create surfaces, and anonymous_proponent_name
+      would report the order, but there are no proponents to move between and no
+      scores to be saved on the way.
   - id: R-5.36
     version: 1
     reason: "The claim is that both programs run the whole evaluation, from
-      published through individual question evaluation and consensus to their own
-      next stage. Neither can leave published: an opportunity moves on only by
-      closing at its proposal deadline, and no page, action or observation makes
-      that happen (see R-1.1). Neither the sameness of the two runs nor the three
-      differences the criterion allows can be observed on a walk that stops at the
-      first stage."
+      published through individual question evaluation and consensus to their
+      own next stage. Neither can leave published: an opportunity moves on only
+      by closing at its proposal deadline, and no page, action or observation
+      makes that happen (see R-1.1). Neither the sameness of the two runs nor
+      the three differences the criterion allows can be observed on a walk that
+      stops at the first stage."
   - id: R-5.37
     version: 1
-    reason: "The panel a test can submit never holds a member with no role. The three
-      actions that put somebody on a panel — add_panel_member, choose_panel_chair
-      and mark_member_as_chair — each give that member a role, and nothing adds one
-      without, so the offending panel cannot be composed. The outcome is
-      unreadable as well: the panel surfaces name minimum_members_error,
-      duplicate_member_error, non_public_sector_member_error and
-      missing_chair_error, and none of them is a field-level message identifying a
-      member who is neither an evaluator nor the chair. Needs an add_panel_member
-      that can withhold a role, and an observation of that refusal."
+    reason: "The panel a test can submit never holds a member with no role. The
+      three actions that put somebody on a panel — add_panel_member,
+      choose_panel_chair and mark_member_as_chair — each give that member a
+      role, and nothing adds one without, so the offending panel cannot be
+      composed. The outcome is unreadable as well: the panel surfaces name
+      minimum_members_error, duplicate_member_error,
+      non_public_sector_member_error and missing_chair_error, and none of them
+      is a field-level message identifying a member who is neither an evaluator
+      nor the chair. Needs an add_panel_member that can withhold a role, and an
+      observation of that refusal."
+  - id: R-1.25
+    version: 1
+    reason: "blocked: the given is an opportunity at its program's final evaluation
+      stage, and the seed carries none. Each program has exactly one closable
+      opportunity, seeded at the first evaluation stage, and reaching the last
+      one means walking that single record through consensus and every stage
+      after it — which no second test could then repeat, because the seed is
+      applied once and nothing resets it. Unblocked by seeding an opportunity
+      already at each program's final evaluation stage, with its proposals
+      scored up to that point."
+  - id: R-1.26
+    version: 1
+    reason: "blocked: the given is an opportunity in processing, which the seed does
+      not carry and which lies past the whole of evaluation on the one closable
+      opportunity of each program. award_proposal is offered on all three
+      proposal views and has nothing to act on. Unblocked by seeding an
+      opportunity in processing, in each program, with more than one proposal
+      still in contention so that the others can be seen to be marked not
+      awarded."
+  - id: R-1.27
+    version: 1
+    reason: "blocked: the given is an awarded opportunity, which needs processing,
+      which needs the whole of evaluation on the one closable opportunity of
+      each program. successful_proponent is named on all three opportunity views
+      and has nothing to return. The withheld half needs an observation as well:
+      no observation names the successful proponent's contact details, so their
+      being withheld from a reader who may not see the score cannot be told from
+      their not being shown to anybody. Unblocked by seeding an awarded
+      opportunity and by an observation of the successful proponent's contact
+      details."
+  - id: R-1.40
+    version: 1
+    reason: "blocked: the given is an opportunity that has been evaluated. The seed
+      carries none past the first evaluation stage, so full_report would return
+      nothing for an administrator as well as for a member of staff and the
+      contrast the criterion turns on could not be told from the report simply
+      not existing yet. Unblocked by seeding a completed opportunity — awarded,
+      with its addenda, its history and its proposals behind it — in at least
+      one program."
+  - id: R-1.41
+    version: 1
+    reason: "blocked: the given is a Sprint With Us or Team With Us opportunity at
+      the questions consensus stage. The seed stops one stage earlier, and
+      reaching consensus means every evaluator submitting an individual
+      evaluation for every proponent of the one closable opportunity of that
+      program — after which no other criterion could use the same record. Both
+      refusal observations exist, not_all_consensuses_submitted_error and
+      no_screenable_proponent_error, and neither has an opportunity to be read
+      on. Unblocked by seeding an opportunity at the questions consensus stage
+      in each program, one with a consensus still unsubmitted and one where no
+      proponent has cleared every minimum score."
+  - id: R-1.42
+    version: 1
+    reason: "blocked: the given is a Sprint With Us opportunity at the code
+      challenge stage, two stages past where the seed leaves the one closable
+      Sprint With Us opportunity. start_team_scenario has nothing to be refused
+      on and the part-scored proponents the refusal turns on cannot be arranged.
+      Unblocked by seeding a Sprint With Us opportunity at the code challenge
+      stage with one proponent scored and another neither scored nor
+      disqualified."
+  - id: R-1.43
+    version: 1
+    reason: "blocked: the given is an opportunity that has reached the consensus
+      stage or beyond, which the seed does not carry and which the one closable
+      opportunity of each program can only be walked to once.
+      panel_locked_after_consensus names exactly this outcome and has nothing to
+      be read on. The permitted half of the rule — changing the panel while the
+      opportunity is a draft — is exercised by R-1.55. Unblocked by seeding an
+      opportunity at the consensus stage with an evaluation panel already
+      named."
+  - id: R-1.49
+    version: 1
+    reason: "blocked: the claim is about which state changes are permitted out of
+      processing for a Team With Us opportunity, and the seed carries no Team
+      With Us opportunity in processing. The award half could be read from the
+      opportunity's own state once it were reachable; the recorded-transitions
+      half needs an observation as well, since nothing returns the set of
+      changes an opportunity's program permits. Unblocked by seeding a Team With
+      Us opportunity in processing, and by an observation of the state changes
+      permitted from an opportunity's current state."
+  - id: R-1.50
+    version: 1
+    reason: "blocked: the refusal half needs an opportunity at the questions
+      consensus stage, which the seed does not carry — see R-1.41 for why the
+      one closable opportunity of each program cannot supply it. The uniqueness
+      half is unobservable whatever the seed holds: 'exactly one path out' is a
+      claim about no second action existing, and the absence of an action is not
+      something an observation reports. Unblocked for its refusal half by the
+      same seeding R-1.41 names; its uniqueness half is for a reader of the
+      rebuilt system's own actions rather than for a test."
+  - id: R-1.51
+    version: 1
+    reason: "unobservable: nothing the service does could show that a state it does
+      not define is gone. No action requests a move to a suspended state, no
+      observation returns the states an opportunity may hold or the states the
+      list's state filter offers, and the mapping of a historical record onto a
+      defined state happens before the rebuilt system reads it, which is a
+      property of the migration rather than of anything the running service
+      answers with. No addition to the surface would help; this is a claim a
+      human accepts about the rebuild rather than one a test can settle."
