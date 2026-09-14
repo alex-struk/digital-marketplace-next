@@ -10,14 +10,14 @@
 | R-8.4 | — | not-testable |
 | R-8.5 | acceptance/files/R-8.5.spec.ts | pass |
 | R-8.6 | acceptance/files/R-8.6.spec.ts | pass |
-| R-8.7 | acceptance/files/R-8.7.spec.ts | fail |
+| R-8.7 | acceptance/files/R-8.7.spec.ts | fail (ruled: adapter-wrong) |
 | R-8.8 | — | not-testable |
 | R-8.9 | — | not-testable |
-| R-8.10 | acceptance/files/R-8.10.spec.ts | fail |
-| R-8.11 | acceptance/files/R-8.11.spec.ts | fail |
-| R-8.12 | acceptance/files/R-8.12.spec.ts | fail |
-| R-8.13 | acceptance/files/R-8.13.spec.ts | fail |
-| R-8.14 | — | fail |
+| R-8.10 | acceptance/files/R-8.10.spec.ts | fail (ruled: adapter-wrong) |
+| R-8.11 | acceptance/files/R-8.11.spec.ts | fail (ruled: adapter-wrong) |
+| R-8.12 | acceptance/files/R-8.12.spec.ts | fail (ruled: adapter-wrong) |
+| R-8.13 | acceptance/files/R-8.13.spec.ts | fail (ruled: adapter-wrong) |
+| R-8.14 | — | fail (ruled: adapter-wrong) |
 | R-8.15 | — | not-testable |
 | R-8.16 | not testable: unobservable: the claim is about a working directory on the service's own machine — a copy written there before the file is stored and removed once the upload is answered. Nothing the service answers ever mentions that directory: an upload's answer carries the stored record, and a stored file's description and bytes carry nothing about where the upload waited. Whether a working copy was written, and whether it is gone, can only be seen by reading that machine's filesystem, which is the implementation rather than anything the service shows, so no page, action or observation added to the contract would reach it without exposing the host's disk. | not-testable |
 | R-8.17 | acceptance/files/R-8.17.spec.ts | fail |

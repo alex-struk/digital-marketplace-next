@@ -4,21 +4,21 @@
 
 | id | test | old |
 | --- | --- | --- |
-| R-3.1 | acceptance/organizations/R-3.1.spec.ts | fail |
-| R-3.2 | acceptance/organizations/R-3.2.spec.ts | fail |
-| R-3.3 | acceptance/organizations/R-3.3.spec.ts | fail |
+| R-3.1 | acceptance/organizations/R-3.1.spec.ts | fail (ruled: adapter-wrong) |
+| R-3.2 | acceptance/organizations/R-3.2.spec.ts | fail (ruled: adapter-wrong) |
+| R-3.3 | acceptance/organizations/R-3.3.spec.ts | fail (ruled: adapter-wrong) |
 | R-3.4 | — |  |
 | R-3.5 | — |  |
-| R-3.6 | acceptance/organizations/R-3.6.spec.ts | fail |
+| R-3.6 | acceptance/organizations/R-3.6.spec.ts | fail (ruled: adapter-wrong) |
 | R-3.7 | acceptance/organizations/R-3.7.spec.ts | unbound |
 | R-3.8 | acceptance/organizations/R-3.8.spec.ts | unbound |
 | R-3.9 | acceptance/organizations/R-3.9.spec.ts | unbound |
-| R-3.10 | acceptance/organizations/R-3.10.spec.ts | fail |
+| R-3.10 | acceptance/organizations/R-3.10.spec.ts | fail (ruled: adapter-wrong) |
 | R-3.11 | acceptance/organizations/R-3.11.spec.ts | unbound |
 | R-3.12 | acceptance/organizations/R-3.12.spec.ts | unbound |
-| R-3.13 | acceptance/organizations/R-3.13.spec.ts | fail |
-| R-3.14 | acceptance/organizations/R-3.14.spec.ts | fail |
-| R-3.15 | acceptance/organizations/R-3.15.spec.ts | fail |
+| R-3.13 | acceptance/organizations/R-3.13.spec.ts | fail (ruled: adapter-wrong) |
+| R-3.14 | acceptance/organizations/R-3.14.spec.ts | fail (ruled: adapter-wrong) |
+| R-3.15 | acceptance/organizations/R-3.15.spec.ts | fail (ruled: adapter-wrong) |
 | R-3.16 | — |  |
 | R-3.17 | not testable: The only way the surface creates an invitation is organization-edit's add_team_members, whose subject is email addresses; no page in the contract offers a membership type on an invitation, so a test cannot send one other than the "member" the team surface always sends, and therefore cannot reach the rejection of any other type. Needs an add_team_members that carries a membership type, and an observation of the invalid-membership-type refusal. | not-testable |
 | R-3.18 | acceptance/organizations/R-3.18.spec.ts | fail |

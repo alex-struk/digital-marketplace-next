@@ -1,5 +1,14 @@
 # Journal
 
+## 071 · calibrate · 2026-09-14
+
+cost $0 · turns 0
+
+calibrate old: 265 row(s) — 104 fail, 62 not-testable, 30 pass, 69 unbound.
+Failing with no ruling: R-8.1, R-1.17, R-6.17, R-7.17, R-8.17, R-3.18, R-4.18, R-7.18, R-8.18, R-1.19, R-4.19, R-6.19, R-1.20, R-5.20, R-7.20, R-8.20, R-1.21, R-3.21, R-7.21, R-8.21, R-3.22, R-7.22, R-1.23, R-2.23, R-3.23, R-6.23, R-2.24, R-3.24, R-7.24, R-8.24, R-3.25, R-4.25, R-7.25, R-8.25, R-3.26, R-6.26, R-7.26, R-4.27, R-6.27, R-7.27, R-8.27, R-1.28, R-4.28, R-6.28, R-8.28, R-8.29, R-1.30, R-1.31, R-4.31, R-8.31, R-1.32, R-4.32, R-2.34, R-3.34, R-4.34, R-2.35, R-2.36, R-1.37, R-2.37, R-1.38, R-2.38, R-1.39, R-1.48, R-1.53, R-1.56
+Ruled: R-7.1 adapter-wrong, R-7.4 adapter-wrong, R-7.7 adapter-wrong, R-7.8 adapter-wrong, R-7.9 adapter-wrong, R-7.10 adapter-wrong, R-7.12 adapter-wrong, R-8.7 adapter-wrong, R-8.10 adapter-wrong, R-8.11 adapter-wrong, R-8.12 adapter-wrong, R-8.13 adapter-wrong, R-8.14 adapter-wrong, R-1.3 adapter-wrong, R-1.4 adapter-wrong, R-1.9 adapter-wrong, R-1.10 adapter-wrong, R-1.11 adapter-wrong, R-1.12 adapter-wrong, R-1.14 adapter-wrong, R-3.1 adapter-wrong, R-3.2 adapter-wrong, R-3.3 adapter-wrong, R-3.6 adapter-wrong, R-3.10 adapter-wrong, R-3.13 adapter-wrong, R-3.14 adapter-wrong, R-3.15 adapter-wrong, R-2.1 adapter-wrong, R-2.2 adapter-wrong, R-2.3 adapter-wrong, R-2.4 adapter-wrong, R-2.7 adapter-wrong, R-2.9 adapter-wrong, R-2.12 adapter-wrong, R-2.13 adapter-wrong, R-2.14 adapter-wrong, R-4.4 adapter-wrong, R-4.12 adapter-wrong
+Sorted 40 failure(s) from calibrate-triage-old-1: R-2.1 adapter-wrong, R-3.1 adapter-wrong, R-7.1 adapter-wrong, R-8.1 product-question, R-2.2 adapter-wrong, R-3.2 adapter-wrong, R-1.3 adapter-wrong, R-2.3 adapter-wrong, R-3.3 adapter-wrong, R-1.4 adapter-wrong, R-2.4 adapter-wrong, R-4.4 adapter-wrong, R-7.4 adapter-wrong, R-3.6 adapter-wrong, R-2.7 adapter-wrong, R-7.7 adapter-wrong, R-8.7 adapter-wrong, R-7.8 adapter-wrong, R-1.9 adapter-wrong, R-2.9 adapter-wrong, R-7.9 adapter-wrong, R-1.10 adapter-wrong, R-3.10 adapter-wrong, R-7.10 adapter-wrong, R-8.10 adapter-wrong, R-1.11 adapter-wrong, R-8.11 adapter-wrong, R-1.12 adapter-wrong, R-2.12 adapter-wrong, R-4.12 adapter-wrong, R-7.12 adapter-wrong, R-8.12 adapter-wrong, R-2.13 adapter-wrong, R-3.13 adapter-wrong, R-8.13 adapter-wrong, R-1.14 adapter-wrong, R-2.14 adapter-wrong, R-3.14 adapter-wrong, R-8.14 adapter-wrong, R-3.15 adapter-wrong
+
 ## 070 · calibrate · 2026-09-14
 
 cost $0 · turns 0
