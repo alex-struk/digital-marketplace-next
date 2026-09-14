@@ -24,6 +24,7 @@
 | 2026-09-09T00:21:36.072Z | derive-tests-proposals | G3 | return | agent:reviewer | agent-held, unsampled | $4.763955 |  |
 | 2026-09-08T23:47:07.017Z | ratify-users-2 | G1 | approve | agent:product-owner | agent-held, unsampled | $1.4315825 |  |
 | 2026-09-07T17:02:28.202Z | derive-tests-content-4 | G3 | approve | agent:reviewer | agent-held, unsampled | $2.2845554999999997 |  |
+| 2026-09-07T16:55:24.741Z | derive-tests-evaluation-5 | G3 | return | agent:reviewer | agent-held, unsampled | $1.4347524999999999 |  |
 | 2026-09-07T16:49:16.347Z | derive-tests-evaluation-4 | G3 | return | agent:reviewer | agent-held, unsampled | $3.2960729999999994 |  |
 | 2026-09-07T16:39:02.945Z | derive-tests-users-5 | G3 | return | agent:reviewer | agent-held, unsampled | $0.8361945 |  |
 | 2026-09-07T16:34:54.476Z | derive-tests-users-4 | G3 | return | agent:reviewer | agent-held, unsampled | $1.4303275000000002 |  |

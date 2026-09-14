@@ -16,6 +16,38 @@
 - 17:40:31 run derive-tests: ok, cost 0.441468, turns 12
 - 17:40:31 propose derive-tests-evaluation-8 at G3
 - 17:41:09 rule derive-tests-evaluation-8 approve at G3 by agent:reviewer (agent)
+- 17:41:11 run derive-tests: pre-checks failed
+- 17:57:03 run derive-tests: post-checks failed
+- 17:57:04 run derive-tests: pre-checks failed
+- 17:57:05 run derive-tests: agent turn failed
+- 17:57:06 run derive-tests: pre-checks failed
+- 17:57:08 run derive-tests: agent turn failed
+- 17:57:09 run derive-tests: pre-checks failed
+- 17:57:10 run derive-tests: agent turn failed
+- 17:57:12 run derive-tests: agent turn failed
+- 17:57:14 run derive-tests: pre-checks failed
+- 17:57:15 run derive-tests: agent turn failed
+- 17:57:16 run derive-tests: pre-checks failed
+- 17:57:17 run derive-tests: agent turn failed
+- 17:57:19 run derive-tests: pre-checks failed
+- 17:57:20 run derive-tests: agent turn failed
+- 17:57:21 run derive-tests: pre-checks failed
+- 17:57:22 run derive-tests: agent turn failed
+- 17:57:23 run derive-tests: pre-checks failed
+- 17:57:25 run derive-tests: agent turn failed
+- 17:57:26 run derive-tests: pre-checks failed
+- 17:57:27 run derive-tests: agent turn failed
+- 17:57:28 run derive-tests: pre-checks failed
+- 17:57:30 run derive-tests: agent turn failed
+- 17:57:31 run derive-tests: pre-checks failed
+- 17:57:32 run derive-tests: agent turn failed
+- 17:57:33 run derive-tests: pre-checks failed
+- 17:57:35 run derive-tests: agent turn failed
+- 17:58:20 run derive-tests: agent turn failed
+- 18:04:57 run derive-tests: pre-checks failed
+- 18:20:41 run derive-tests: pre-checks failed
+- 18:31:24 run derive-tests: post-checks failed
+- 18:31:26 run derive-tests: pre-checks failed
 
 # Run record 2026-09-13
 
