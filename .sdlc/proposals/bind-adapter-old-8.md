@@ -37,3 +37,24 @@ I fixed how the adapter for "old" handles pages that correctly show nothing. The
 - **R-8.1 (line 32), R-8.17 (line 66), R-8.18 (lines 27, 43), R-8.23 (line 28) and R-8.24 (lines 23, 38), stored file identifier after a refused upload:** I didn't send uploads to the target for this. It follows from the code: any answer of 300 or above now returns empty instead of throwing.
 
 No page route from `surface.yaml` failed to resolve in this revision. The routes that showed "Not Found" did so because that persona or programme isn't shown the record.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+
+The question is whether this adapter binds every surface action and observation on old, and nothing else. The absence fix the last ruling asked for is done and correct. storedFileIdentifier, panelMemberRow, chairField, valueBefore and valueAfter now return empty on a loaded page that shows nothing or after a refused upload. Every toBeFalsy use of the request-backed readers (R-8.1, R-8.7, R-8.11, R-8.12, R-8.17, R-8.18, R-8.20, R-8.23, R-8.24, R-8.25, R-8.31) follows a request, so answer() never throws there. The programme-badge check on the Value readers is locating, not logic. Nothing under tests/acceptance changed, and the runner's typecheck passed on 453b52c. But this revision also changed fileDownload.readableWhenSignedOutIfPublic, unasked, so a refused download returns `${status} ${body}` instead of empty. R-8.7:62, R-8.28:79,99 and R-8.29:106 assert only toBeTruthy() on that reader, so a signed-out refusal now satisfies the check meant to show the file was readable. The adapter decides that assertion, and only the following fileContents check still catches it. serviceIsUp got the same change: a non-200 status check now returns truthy text. Revert those two readers and the ruling becomes approve.
+
+**Conditions:**
+- fileDownload.readableWhenSignedOutIfPublic returns the body only when the latest answer is 200, and empty otherwise. A refusal must not read as readable.
+- scheduledTransitionTrigger.serviceIsUp returns empty when the status request does not answer 200, not the status and body.
+- Everything else in bind-adapter-old-8 stays as it is: the absence fixes, the programme-badge Value readers, row links, the Panel Chair checkbox, pressing Edit before editing, uploadFile and the label corrections.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `453b52cb9f34400b8f130ddb26566779e4db1e89`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    No diagnostics.
