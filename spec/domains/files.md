@@ -255,6 +255,7 @@ An upload larger than the service's size limit is refused as the requester's err
 A submission carrying no file part, or read-access information that is not well-formed, is refused as a bad request naming what was wrong with it, and is not recorded in the service's error log as a fault of the service; any working copy already written is removed whether the upload succeeds or fails.
 - state: accepted
 - replaces: R-8.4
+- note: calibrate 2026-09-14: the old target fails this; kept, the rebuild must pass it
 
 ### R-8.19 · v1 · confirmed · authored
 An attachment on an opportunity is uploaded with no read access recorded against the file itself, for all three programs alike, so that what the opportunity is attached to decides who may read it.

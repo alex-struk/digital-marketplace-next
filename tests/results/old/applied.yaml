@@ -2,6 +2,7 @@ applied:
   - calibrate-triage-old-1
   - calibrate-triage-old-2
   - calibrate-triage-old-3
+  - calibrate-old-2
 rulings:
   - id: R-2.1
     version: 1
@@ -515,3 +516,23 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-3
     adapter: e43ec733ff3c437c1899ffd6a49a00c020c616d8
+  - id: R-7.18
+    version: 1
+    verb: defect-in-old
+    gate: calibrate-old-2
+  - id: R-5.20
+    version: 1
+    verb: defect-in-old
+    gate: calibrate-old-2
+  - id: R-8.18
+    version: 1
+    verb: defect-in-old
+    gate: calibrate-old-2
+  - id: R-6.19
+    version: 1
+    verb: defect-in-old
+    gate: calibrate-old-2
+  - id: R-6.27
+    version: 1
+    verb: defect-in-old
+    gate: calibrate-old-2

@@ -241,6 +241,7 @@ A page's body is rendered as formatted text only; markup embedded in it is never
 The service level agreement page is one the service creates for itself, so every screen that links to it — the learn-more index, the program cards, and the Code With Us, Sprint With Us and Team With Us opportunity forms — resolves on a fresh installation.
 - state: accepted
 - replaces: R-7.15
+- note: calibrate 2026-09-14: the old target fails this; kept, the rebuild must pass it
 
 ### R-7.19 · v1 · confirmed · recovered
 The service links its own footer to five of its pages, so every screen offers the about, disclaimer, privacy, accessibility and copyright pages to any visitor.

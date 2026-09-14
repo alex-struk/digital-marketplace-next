@@ -247,6 +247,7 @@ The message announcing changed terms names every program whose proposals require
 The administrator's notification reference page shows every message the service can send, so that no message exists which cannot be previewed there before the event that sends it.
 - state: accepted
 - replaces: R-6.14
+- note: calibrate 2026-09-14: the old target fails this; kept, the rebuild must pass it
 
 ### R-6.20 · v1 · confirmed · recovered
 A newly created account has new-opportunity notifications off until its holder asks for them.
@@ -348,6 +349,7 @@ When the service notifies an account that holds no email address it composes the
 The choice to be notified about newly published opportunities is offered on the list of opportunities itself at every screen width, so a person reading the list on a phone reaches it the same way as a person reading it on a desktop.
 - state: accepted
 - replaces: R-6.22
+- note: calibrate 2026-09-14: the old target fails this; kept, the rebuild must pass it
 
 ### R-6.28 · v1 · confirmed · authored
 The service skips a recipient that holds no email address rather than composing a message addressed to nobody, and a broadcast to many people always continues past a recipient it cannot address or cannot reach.

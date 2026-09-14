@@ -235,6 +235,7 @@ When an opportunity closes it enters individual question evaluation, and every e
 - then: the opportunity moves to individual question evaluation and the two evaluators are notified, while the chair who is not an evaluator is not
 - state: accepted
 - note: this is the same closing event that moves the submitted proposals into review and gives each an anonymous proponent name; the evaluation domain inherits that from the proposals domain rather than restating it.
+- note: calibrate 2026-09-14: the old target fails this; kept, the rebuild must pass it
 
 ### R-5.21 · v1 · confirmed · recovered
 Only a person marked as an evaluator on the panel may record an individual evaluation, and only while the opportunity is in individual question evaluation.
