@@ -32,6 +32,8 @@ export const test = base.extend<{ surface: Surface; mail: Mail }>({
 });
 
 export { expect, persona, seed };
+export { uploadFile } from "./upload";
+export type { UploadRequest } from "./upload";
 export type { Persona } from "../generated/personas";
 export type { Seed } from "../generated/seed";
 export type { Surface } from "../generated/surface";
