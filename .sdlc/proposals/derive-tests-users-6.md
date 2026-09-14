@@ -44,3 +44,28 @@ Of the 30 users criteria, 25 now have a test file and 5 are recorded in `tests/a
 6. Observations of the profile's edit, deactivate and reactivate controls, to replace the word checks.
 7. An action that requests deactivation or reactivation, or submits a profile change, other than through the control on screen.
 8. A way to begin sign-in from a given page.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: do the 25 users test files and 5 not-testable entries follow from the users criteria and nothing else? Approve. Each assertion added in this pass was read against spec/domains/users.md and follows from its criterion. R-4.29 checks resolvesToSignedInPerson and confirmationNamesSignedInAddress, matching 'their notification settings open ... naming the email address that would stop receiving them'. R-4.17, R-4.4 and R-4.9 use signInRequired, matching 'pages that require signing in send them back to sign in'. R-4.12's employee test comes from its note about a read-only permissions label. R-4.28's check that no job title field is shown before editing matches 'never asked for one'. The rest is setup (reopening a page before reading it, checking a row is present before comparing order). Every new observation name exists in spec/contract/surface.yaml and tests/generated/surface.d.ts, and no route, selector, table or status code appears in any test. The runner's typecheck on revision a69429e reports no diagnostics under acceptance/users/; its failures are in files and notifications, which this proposal does not answer for. The diff touches only tests/acceptance and .sdlc, so no protected path. The receipt says honestly that the author could neither run nor type-check anything. The five not-testable reasons name real gaps (a first-time persona, a mail accessor for one message's body, user-list.refused_for_non_administrator), and R-4.13 is correctly classed unobservable because it claims a route does not exist anywhere. The ruling would change to return if the runner's typecheck showed diagnostics under acceptance/users/, or if a word check such as profileTab containing 'Edit' or 'Deactivate' were found to test wording the criterion does not describe rather than the control it names.
+
+**Conditions:**
+- Carry the proposal's eight missing-contract items to the next contract author. The most useful is observations of the profile's edit, deactivate and reactivate controls, which would replace the fragile word checks in R-4.18, R-4.19, R-4.30, R-4.31 and R-4.9.
+- The first-time identity personas and a single-message mail accessor (read_one_message) would unblock R-4.1, R-4.2 and R-4.20, and the email-wording halves of R-4.5, R-4.9 and R-4.30. Re-derive those criteria when the contract gains them.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `a69429e6735bcb9042351029ccb7efe793507d5f`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/users/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    acceptance/files/: 13 diagnostics
+    acceptance/notifications/: 13 diagnostics
