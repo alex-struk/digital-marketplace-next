@@ -1,0 +1,16 @@
+gate: G1
+verdict: approve
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  The question was which of eight criteria that fail against the old application are the application's fault, the spec's, or the test's. Ruling: approve, with defect-in-old on five and no ruling on three whose failures come from the test harness rather than the product. R-8.18, R-7.18, R-6.19 and R-6.27 are authored replacements for recovered criteria that already recorded the old behaviour as a defect (R-8.4, R-7.15, R-6.14, R-6.22), and the old code bears each one out. The upload parser rejects a missing file part or malformed read access with a generic error, so the service answers 500 ('500 No file uploaded'). No setup script creates the service-level-agreement page that five screens link to, and the address answers Not Found. The reference page's list of titles and subjects has no evaluation-panel or consensus notice. The opportunity-list notify control renders only at medium width and up, so the 390 px list has none. R-5.20 is a defect in the old application found by reading its code, not a mail-delivery artefact. When opportunities close, the step that emails evaluators is handed an opportunity built by a converter that never loads the evaluation panel, so it finds no evaluators and sends nothing. The status half of the test passed, so the close itself ran. R-8.1 is not ruled. The old service refuses a signed-out upload with a 400 carrying the permissions error and stores nothing, which is what the criterion says. The harness's refused-when-signed-out reader counts only a 401, and the contract names no status code, so this is a harness binding fault that none of the three verbs describes; test-wrong would regenerate the same test. R-6.23 and R-6.28 are not ruled. The old code sends one message per active vendor, addressed to that vendor, and a failed send never interrupts the loop. But no test that expects mail to arrive has yet run against the old target (every one is unbound), so nothing shows mail reaches the catcher at all. Both tests also poll vendor.one first, and calibrate-triage-old-2 found that account already deactivated by earlier runs, so the poll fails before any other vendor is checked. The old application composes a message with no recipients for a vendor with no email, which R-6.28 forbids, but its test does not assert that and it is not what failed. What would change this ruling: for R-8.1, a harness reader that counts a permissions refusal whatever its status code, still failing; for R-6.23 and R-6.28, a run on a freshly seeded target where at least one mail-arrival test passes against old and these still receive nothing, which would make them defect-in-old; for R-5.20, evidence that a closing opportunity's evaluators are in fact emailed on a clean target.
+conditions:
+  - "defect-in-old R-8.18"
+  - "defect-in-old R-7.18"
+  - "defect-in-old R-6.19"
+  - "defect-in-old R-6.27"
+  - "defect-in-old R-5.20"
+cost: 2.7109894999999997
+turns: 67
+session: "95185bc6-721f-4d55-a730-3baa18c884e5"
+at: 2026-09-14T19:34:53.954Z
