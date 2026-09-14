@@ -1,5 +1,5 @@
 {
-  "generated_from": "d4b7ad71f09fd800088a439d26222d352e4e30dc",
+  "generated_from": "1c3743e9fb53c29de89a28045222abab29c5e27e",
   "criteria": [
     {
       "id": "R-7.1",
@@ -2849,7 +2849,9 @@
       "origin": "authored",
       "statement": "An upload larger than the service's size limit is refused as the requester's error, with a message naming the limit, and the limit is stated in the interface before a person chooses a file rather than only after they submit it.",
       "cites": [],
-      "notes": [],
+      "notes": [
+        "calibrate 2026-09-14: the old target fails this; kept, the rebuild must pass it"
+      ],
       "state": "accepted",
       "replaces": "R-8.3",
       "raw": "### R-8.17 · v1 · confirmed · authored",
@@ -2870,7 +2872,7 @@
       "state": "accepted",
       "replaces": "R-8.4",
       "raw": "### R-8.18 · v1 · confirmed · authored",
-      "line": 254,
+      "line": 255,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2885,7 +2887,7 @@
       "state": "accepted",
       "replaces": "R-8.8",
       "raw": "### R-8.19 · v1 · confirmed · authored",
-      "line": 260,
+      "line": 261,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2900,7 +2902,7 @@
       "state": "accepted",
       "replaces": "R-8.9",
       "raw": "### R-8.20 · v1 · confirmed · authored",
-      "line": 265,
+      "line": 266,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2911,11 +2913,13 @@
       "origin": "authored",
       "statement": "A profile picture or organization logo is accepted only if its content can be read as a JPEG or a PNG, and a file whose content is neither is refused whatever its name says; an image that reads successfully but cannot be resized is stored at its original size rather than refused.",
       "cites": [],
-      "notes": [],
+      "notes": [
+        "calibrate 2026-09-14: the old target fails this; kept, the rebuild must pass it"
+      ],
       "state": "accepted",
       "replaces": "R-8.14",
       "raw": "### R-8.21 · v1 · confirmed · authored",
-      "line": 270,
+      "line": 271,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2930,7 +2934,7 @@
       "state": "accepted",
       "replaces": "R-8.15",
       "raw": "### R-8.22 · v1 · confirmed · authored",
-      "line": 275,
+      "line": 277,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2963,7 +2967,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.23 · v2 · confirmed · recovered",
-      "line": 280,
+      "line": 282,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2996,7 +3000,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.24 · v2 · confirmed · recovered",
-      "line": 292,
+      "line": 294,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3037,7 +3041,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.25 · v1 · confirmed · recovered",
-      "line": 304,
+      "line": 306,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3073,7 +3077,7 @@
       "state": "accepted",
       "supersededBy": "R-8.31",
       "raw": "### R-8.26 · v1 · confirmed · recovered",
-      "line": 318,
+      "line": 320,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3110,7 +3114,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.27 · v1 · confirmed · recovered",
-      "line": 333,
+      "line": 335,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3139,7 +3143,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.28 · v1 · confirmed · recovered",
-      "line": 346,
+      "line": 348,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3180,7 +3184,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.29 · v1 · confirmed · recovered",
-      "line": 357,
+      "line": 359,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3225,7 +3229,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.30 · v1 · confirmed · recovered",
-      "line": 371,
+      "line": 373,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3240,7 +3244,7 @@
       "state": "accepted",
       "replaces": "R-8.26",
       "raw": "### R-8.31 · v1 · confirmed · authored",
-      "line": 386,
+      "line": 388,
       "domain": "files",
       "file": "spec/domains/files.md"
     },

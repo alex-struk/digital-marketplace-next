@@ -250,6 +250,7 @@ An uploaded file is written to a working directory on the service's own machine 
 An upload larger than the service's size limit is refused as the requester's error, with a message naming the limit, and the limit is stated in the interface before a person chooses a file rather than only after they submit it.
 - state: accepted
 - replaces: R-8.3
+- note: calibrate 2026-09-14: the old target fails this; kept, the rebuild must pass it
 
 ### R-8.18 · v1 · confirmed · authored
 A submission carrying no file part, or read-access information that is not well-formed, is refused as a bad request naming what was wrong with it, and is not recorded in the service's error log as a fault of the service; any working copy already written is removed whether the upload succeeds or fails.
@@ -271,6 +272,7 @@ A file attached to an opportunity or a proposal is readable by whoever may read 
 A profile picture or organization logo is accepted only if its content can be read as a JPEG or a PNG, and a file whose content is neither is refused whatever its name says; an image that reads successfully but cannot be resized is stored at its original size rather than refused.
 - state: accepted
 - replaces: R-8.14
+- note: calibrate 2026-09-14: the old target fails this; kept, the rebuild must pass it
 
 ### R-8.22 · v1 · confirmed · authored
 A file may be attached to an opportunity or a proposal only by someone who is permitted to read that file.
