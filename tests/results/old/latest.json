@@ -2,7 +2,7 @@
   "target": "old",
   "base_url": "http://localhost:3000",
   "spec": "d4b7ad71f09fd800088a439d26222d352e4e30dc",
-  "at": "2026-09-14T19:34:54.439Z",
+  "at": "2026-09-14T19:42:15.784Z",
   "rows": [
     {
       "id": "R-7.1",
@@ -928,7 +928,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-8.2",
@@ -1685,7 +1685,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-6.24",
@@ -1746,7 +1746,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.1",

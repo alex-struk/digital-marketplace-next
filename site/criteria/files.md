@@ -4,7 +4,7 @@
 
 | id | test | old |
 | --- | --- | --- |
-| R-8.1 | acceptance/files/R-8.1.spec.ts | fail |
+| R-8.1 | acceptance/files/R-8.1.spec.ts | fail (ruled: test-wrong) |
 | R-8.2 | acceptance/files/R-8.2.spec.ts | pass |
 | R-8.3 | — | not-testable |
 | R-8.4 | — | not-testable |
