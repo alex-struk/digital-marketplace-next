@@ -26,8 +26,8 @@
 | R-2.20 | acceptance/proposals/R-2.20.spec.ts | unbound |
 | R-2.21 | acceptance/proposals/R-2.21.spec.ts | unbound |
 | R-2.22 | acceptance/proposals/R-2.22.spec.ts | unbound |
-| R-2.23 | acceptance/proposals/R-2.23.spec.ts | fail |
-| R-2.24 | acceptance/proposals/R-2.24.spec.ts | fail |
+| R-2.23 | acceptance/proposals/R-2.23.spec.ts | fail (ruled: adapter-wrong) |
+| R-2.24 | acceptance/proposals/R-2.24.spec.ts | fail (ruled: adapter-wrong) |
 | R-2.25 | acceptance/proposals/R-2.25.spec.ts | unbound |
 | R-2.26 | not testable: blocked: the given is a Code With Us proposal under review, and a proposal reaches review only when its opportunity closes. The closure itself is now reachable — run_pending_transitions on scheduled-transition-trigger runs the deadline hook — but only the Sprint With Us and Team With Us opportunities are seeded past their deadlines. No Code With Us opportunity can be given a deadline in the past, so enter_score on proposal-cwu-view has no proposal to act on, and neither the score, the move to evaluated nor the refusal of an out-of-range score has anything to be read on. Unblocked by seeding a Code With Us opportunity past its proposal deadline carrying a submitted proposal. | not-testable |
 | R-2.27 | not testable: blocked: the when is the last proposal still in contention being scored, which means carrying proposals all the way to evaluated. On the two seeded closed opportunities that is a single path — score every proponent's questions, agree those scores as a panel, finalise them, screen in, score the challenge and then the scenario — and the seed carries one closed opportunity per program. The first test to walk that path takes the opportunity with it, so the criteria behind the closure cannot each have one. Unblocked by seeding a closed opportunity for each criterion that has to move one, or by seeding opportunities already standing at the later evaluation stages. | not-testable |

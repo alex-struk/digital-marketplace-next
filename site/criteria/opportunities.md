@@ -20,13 +20,13 @@
 | R-1.14 | acceptance/opportunities/R-1.14.spec.ts | fail (ruled: adapter-wrong) |
 | R-1.15 | acceptance/opportunities/R-1.15.spec.ts | unbound |
 | R-1.16 | acceptance/opportunities/R-1.16.spec.ts | unbound |
-| R-1.17 | acceptance/opportunities/R-1.17.spec.ts | fail |
+| R-1.17 | acceptance/opportunities/R-1.17.spec.ts | fail (ruled: adapter-wrong) |
 | R-1.18 | acceptance/opportunities/R-1.18.spec.ts | unbound |
-| R-1.19 | acceptance/opportunities/R-1.19.spec.ts | fail |
-| R-1.20 | acceptance/opportunities/R-1.20.spec.ts | fail |
-| R-1.21 | acceptance/opportunities/R-1.21.spec.ts | fail |
+| R-1.19 | acceptance/opportunities/R-1.19.spec.ts | fail (ruled: adapter-wrong) |
+| R-1.20 | acceptance/opportunities/R-1.20.spec.ts | fail (ruled: adapter-wrong) |
+| R-1.21 | acceptance/opportunities/R-1.21.spec.ts | fail (ruled: adapter-wrong) |
 | R-1.22 | acceptance/opportunities/R-1.22.spec.ts | unbound |
-| R-1.23 | acceptance/opportunities/R-1.23.spec.ts | fail |
+| R-1.23 | acceptance/opportunities/R-1.23.spec.ts | fail (ruled: adapter-wrong) |
 | R-1.24 | acceptance/opportunities/R-1.24.spec.ts | pass |
 | R-1.25 | not testable: blocked: the given is an opportunity at its program's final evaluation stage, and the seed carries none. Each program has exactly one closable opportunity, seeded at the first evaluation stage, and reaching the last one means walking that single record through consensus and every stage after it — which no second test could then repeat, because the seed is applied once and nothing resets it. Unblocked by seeding an opportunity already at each program's final evaluation stage, with its proposals scored up to that point. | not-testable |
 | R-1.26 | not testable: blocked: the given is an opportunity in processing, which the seed does not carry and which lies past the whole of evaluation on the one closable opportunity of each program. award_proposal is offered on all three proposal views and has nothing to act on. Unblocked by seeding an opportunity in processing, in each program, with more than one proposal still in contention so that the others can be seen to be marked not awarded. | not-testable |
