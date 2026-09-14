@@ -1,5 +1,5 @@
 // criterion: @R-5.17 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-09
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -11,6 +11,9 @@ import type { Surface } from "../../fixtures";
 //
 // Emptying the catcher is itself a request to it, so a test that goes on to assert an
 // absence has already shown the catcher was reachable, as observables.yaml asks.
+//
+// Each test builds its own opportunity rather than touching a seeded one, so that the panel
+// it changes has a known membership and nothing else is notified alongside it.
 
 function inDays(days: number): string {
   const date = new Date();
@@ -64,15 +67,17 @@ test("when people are added to an evaluation panel, only the people newly added 
   surface,
   mail,
 }) => {
-  const title = "R-5.17 published opportunity whose panel gained a third person";
-
   await surface.signIn(persona.administrator);
   await prepareSprintWithUs(surface);
-  await surface.opportunitySwuCreate.publish({ ...details, title });
+  await surface.opportunitySwuCreate.publish({
+    ...details,
+    title: "R-5.17 published opportunity whose panel gained a third person",
+  });
+  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
 
   await mail.clear();
 
-  await surface.evaluationPanelSwu.open({ title });
+  await surface.evaluationPanelSwu.open({ opportunityId });
   await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffTwo });
   await surface.evaluationPanelSwu.saveEvaluationPanel();
 
@@ -88,15 +93,14 @@ test("people added to an evaluation panel are notified only once the opportunity
   surface,
   mail,
 }) => {
-  const title = "R-5.17 draft opportunity given a panel";
-
   await surface.signIn(persona.publicSectorStaff);
   await surface.opportunitySwuCreate.open();
-  await surface.opportunitySwuCreate.saveDraft({ title });
+  await surface.opportunitySwuCreate.saveDraft({ title: "R-5.17 draft opportunity given a panel" });
+  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
 
   await mail.clear();
 
-  await surface.evaluationPanelSwu.open({ title });
+  await surface.evaluationPanelSwu.open({ opportunityId });
   await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffPanelEvaluator });
   await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffTwo });
   await surface.evaluationPanelSwu.markMemberAsChair({ member: seed.users.staffPanelEvaluator });

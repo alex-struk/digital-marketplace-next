@@ -1,15 +1,18 @@
 // criterion: @R-5.16 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-09
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-13
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// Three of the five states the criterion names are reachable: a draft, an opportunity under
-// review, and a published one. The other two are not. An opportunity reaches individual
-// question evaluation, and then consensus, only by closing at its proposal deadline, and no
-// page, action or observation makes that happen (see R-1.1), so neither the last permitted
-// state nor the state the panel is fixed from can be established. The observation written
-// for the refusal, panel_locked_after_consensus, is read here as the negative it should be
-// in each of the three states that can be reached.
+// Five states, five tests. The first three are opportunities the test builds and leaves in
+// draft, under review and published; the last two are the seeded Sprint With Us
+// opportunity, which is in individual question evaluation as soon as its lapsed deadline is
+// noticed, and in consensus once both of its evaluators have submitted their scores.
+//
+// The fourth test puts its change back. Adding a person to the seeded panel adds an
+// evaluator the target cannot sign in as, and consensus waits for every evaluator, so a
+// panel left changed would put the consensus stage out of reach for the fifth test and for
+// every other criterion that walks that far. The change is made, read as accepted, and then
+// undone.
 //
 // A panel that was accepted is read as the save going through — the lock is not reported
 // and the panel surface shows members afterwards — rather than as the membership itself,
@@ -45,6 +48,14 @@ const panel = {
   chair: seed.users.staffPanelEvaluator,
 };
 
+const seeded = seed.opportunities.closedSprintWithUs.id;
+const seededProposals = [
+  seed.proposals.sprintWithUsOne.id,
+  seed.proposals.sprintWithUsTwo.id,
+  seed.proposals.sprintWithUsThree.id,
+];
+const questions = [0, 1, 2, 3];
+
 async function prepareSprintWithUs(surface: Surface): Promise<void> {
   await surface.opportunitySwuCreate.open();
   await surface.opportunitySwuCreate.addPhase({
@@ -64,14 +75,29 @@ async function prepareSprintWithUs(surface: Surface): Promise<void> {
   await surface.opportunitySwuCreate.setEvaluationPanel(panel);
 }
 
-test("the evaluation panel may be set while an opportunity is a draft", async ({ surface }) => {
-  const title = "R-5.16 draft opportunity given a panel";
+async function scoreEveryProponent(surface: Surface): Promise<void> {
+  for (const proposalId of seededProposals) {
+    await surface.evaluationIndividualCreateSwu.open({ opportunityId: seeded, proposalId });
+    for (const order of questions) {
+      await surface.evaluationIndividualCreateSwu.enterQuestionScore({ order, score: 5 });
+      await surface.evaluationIndividualCreateSwu.enterQuestionNotes({
+        order,
+        notes: "A complete reading of this answer.",
+      });
+    }
+    await surface.evaluationIndividualCreateSwu.saveDraft();
+  }
+  await surface.evaluationIndividualListSwu.open({ opportunityId: seeded });
+  await surface.evaluationIndividualListSwu.submitScoresForConsensus();
+}
 
+test("the evaluation panel may be set while an opportunity is a draft", async ({ surface }) => {
   await surface.signIn(persona.publicSectorStaff);
   await surface.opportunitySwuCreate.open();
-  await surface.opportunitySwuCreate.saveDraft({ title });
+  await surface.opportunitySwuCreate.saveDraft({ title: "R-5.16 draft opportunity given a panel" });
+  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
 
-  await surface.evaluationPanelSwu.open({ title });
+  await surface.evaluationPanelSwu.open({ opportunityId });
   await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffPanelEvaluator });
   await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffTwo });
   await surface.evaluationPanelSwu.markMemberAsChair({ member: seed.users.staffPanelEvaluator });
@@ -79,44 +105,88 @@ test("the evaluation panel may be set while an opportunity is a draft", async ({
 
   expect(await surface.evaluationPanelSwu.panelLockedAfterConsensus()).toBeFalsy();
 
-  await surface.evaluationPanelSwu.open({ title });
+  await surface.evaluationPanelSwu.open({ opportunityId });
   expect(await surface.evaluationPanelSwu.panelMemberRow()).toBeTruthy();
 });
 
 test("the evaluation panel may be changed while an opportunity is under review", async ({
   surface,
 }) => {
-  const title = "R-5.16 opportunity under review whose panel changed";
-
   await surface.signIn(persona.publicSectorStaff);
   await prepareSprintWithUs(surface);
-  await surface.opportunitySwuCreate.submitForReview({ ...details, title });
+  await surface.opportunitySwuCreate.submitForReview({
+    ...details,
+    title: "R-5.16 opportunity under review whose panel changed",
+  });
+  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
 
-  await surface.evaluationPanelSwu.open({ title });
+  await surface.evaluationPanelSwu.open({ opportunityId });
   await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffTwo });
   await surface.evaluationPanelSwu.saveEvaluationPanel();
 
   expect(await surface.evaluationPanelSwu.panelLockedAfterConsensus()).toBeFalsy();
 
-  await surface.evaluationPanelSwu.open({ title });
+  await surface.evaluationPanelSwu.open({ opportunityId });
   expect(await surface.evaluationPanelSwu.panelMemberRow()).toBeTruthy();
 });
 
 test("the evaluation panel may be changed while an opportunity is published", async ({
   surface,
 }) => {
-  const title = "R-5.16 published opportunity whose panel changed";
-
   await surface.signIn(persona.administrator);
   await prepareSprintWithUs(surface);
-  await surface.opportunitySwuCreate.publish({ ...details, title });
+  await surface.opportunitySwuCreate.publish({
+    ...details,
+    title: "R-5.16 published opportunity whose panel changed",
+  });
+  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
 
-  await surface.evaluationPanelSwu.open({ title });
+  await surface.evaluationPanelSwu.open({ opportunityId });
   await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffTwo });
   await surface.evaluationPanelSwu.saveEvaluationPanel();
 
   expect(await surface.evaluationPanelSwu.panelLockedAfterConsensus()).toBeFalsy();
 
-  await surface.evaluationPanelSwu.open({ title });
+  await surface.evaluationPanelSwu.open({ opportunityId });
   expect(await surface.evaluationPanelSwu.panelMemberRow()).toBeTruthy();
+});
+
+test("the evaluation panel may be changed while an opportunity is in individual question evaluation", async ({
+  surface,
+}) => {
+  await surface.scheduledTransitionTrigger.open();
+  await surface.scheduledTransitionTrigger.runPendingTransitions();
+
+  await surface.signIn(persona.publicSectorStaff);
+  await surface.evaluationPanelSwu.open({ opportunityId: seeded });
+  await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffTwo });
+  await surface.evaluationPanelSwu.saveEvaluationPanel();
+
+  expect(await surface.evaluationPanelSwu.panelLockedAfterConsensus()).toBeFalsy();
+
+  await surface.evaluationPanelSwu.open({ opportunityId: seeded });
+  expect(await surface.evaluationPanelSwu.panelMemberRow()).toBeTruthy();
+
+  await surface.evaluationPanelSwu.removePanelMember({ member: seed.users.staffTwo });
+  await surface.evaluationPanelSwu.saveEvaluationPanel();
+});
+
+test("the evaluation panel is fixed from the consensus stage onwards", async ({ surface }) => {
+  await surface.scheduledTransitionTrigger.open();
+  await surface.scheduledTransitionTrigger.runPendingTransitions();
+
+  await surface.signIn(persona.publicSectorStaff);
+  await scoreEveryProponent(surface);
+  await surface.signOut();
+
+  await surface.signIn(persona.administrator);
+  await scoreEveryProponent(surface);
+  await surface.signOut();
+
+  await surface.signIn(persona.publicSectorStaff);
+  await surface.evaluationPanelSwu.open({ opportunityId: seeded });
+  await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffTwo });
+  await surface.evaluationPanelSwu.saveEvaluationPanel();
+
+  expect(await surface.evaluationPanelSwu.panelLockedAfterConsensus()).toBeTruthy();
 });

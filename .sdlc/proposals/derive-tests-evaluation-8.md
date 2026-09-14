@@ -1,11 +1,13 @@
 ---
-stage: "derive-tests"
-title: "derive tests"
-at: "2026-09-14T00:40:31.902Z"
-cost: 0.441468
-turns: 12
-session: "495e69ae-431b-4f58-b8e5-2f1f3d25e5c5"
+gate: G3
+question: "Do the revised evaluation tests now follow from their criteria and from nothing else?"
+recommendation: "I couldn't run the typecheck here because the command needed an approval I don't have, so I'm handing it to the runner's typecheck."
+opened: 2026-09-14T00:40:31.916Z
 ---
+
+# Do the revised evaluation tests now follow from their criteria and from nothing else?
+
+**Recommendation.** I couldn't run the typecheck here because the command needed an approval I don't have, so I'm handing it to the runner's typecheck.
 
 I've made the R-5.22 fix. I couldn't run the typecheck here because the command needed an approval I don't have, so I'm handing it to the runner's typecheck. Here is the journal entry.
 

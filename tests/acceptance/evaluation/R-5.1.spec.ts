@@ -1,5 +1,5 @@
 // criterion: @R-5.1 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-09
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -19,10 +19,12 @@ import type { Surface } from "../../fixtures";
 // the same seven observations, and the criterion's own note says the minimum of two members
 // is the same in both programs.
 
-async function draftWithPanelForm(surface: Surface, title: string): Promise<void> {
+async function draftWithPanelForm(surface: Surface, title: string): Promise<string> {
   await surface.opportunitySwuCreate.open();
   await surface.opportunitySwuCreate.saveDraft({ title });
-  await surface.evaluationPanelSwu.open({ title });
+  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
+  await surface.evaluationPanelSwu.open({ opportunityId });
+  return opportunityId;
 }
 
 test("an opportunity that uses a panel must name at least two panel members", async ({
