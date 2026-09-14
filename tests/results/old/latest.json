@@ -2,7 +2,7 @@
   "target": "old",
   "base_url": "http://localhost:3000",
   "spec": "d4b7ad71f09fd800088a439d26222d352e4e30dc",
-  "at": "2026-09-14T21:07:25.668Z",
+  "at": "2026-09-14T21:15:48.860Z",
   "rows": [
     {
       "id": "R-7.1",
@@ -288,7 +288,8 @@
           "status": "failed",
           "error": "Error: content-create.publish_page — \"Publish\" is disabled on http://localhost:3000/content/create; the page shows no message"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-7.21",
@@ -306,7 +307,8 @@
           "title": "the rule for a page's address is stated on the form, alongside the full public address the page will have",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-7.22",
@@ -325,7 +327,8 @@
           "status": "failed",
           "error": "Error: unbound: content-create.confirm_publish — no control labelled \"Publish\" or \"Yes\" on http://localhost:3000/content/create"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-7.23",
@@ -1071,7 +1074,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m500\u001b[39m\nReceived: \u001b[31mNaN\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-8.14",
@@ -1123,7 +1127,8 @@
           "status": "failed",
           "error": "Error: \"\" names the stated limit\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-8.18",
@@ -1196,7 +1201,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-8.21",
@@ -1219,7 +1225,8 @@
           "title": "a profile picture whose content can be read as a PNG is accepted",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-8.22",
@@ -1477,7 +1484,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-6.11",
@@ -1554,7 +1562,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-6.18",
@@ -1738,7 +1747,8 @@
           "title": "an administrator sees every opportunity",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.4",
@@ -1757,7 +1767,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.5",
@@ -1885,7 +1896,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.11",
@@ -1909,7 +1921,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.12",
@@ -1933,7 +1946,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.13",
@@ -1996,7 +2010,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.15",
@@ -2125,7 +2140,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.20",
@@ -2144,7 +2160,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.21",
@@ -2163,7 +2180,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"complete\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.22",
@@ -2177,7 +2195,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-edit.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/330dcb03-d905-4ab9-8328-11c5c11fe08c/edit?tab=opportunity; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.23",
@@ -2191,7 +2210,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.24",
@@ -2712,7 +2732,8 @@
           "title": "a service administrator sees the organization",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-3.6",
@@ -2745,7 +2766,8 @@
           "status": "failed",
           "error": "Error: organization-edit.add_team_members — \"Add Team Member(s)\" is disabled on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000302/edit?tab=team; the page shows no message"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-3.8",
@@ -2764,7 +2786,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-3.9",
@@ -2840,7 +2863,8 @@
           "status": "failed",
           "error": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('checkbox').visible().first()\u001b[22m\n\u001b[2m    - locator resolved to <input checked disabled type=\"checkbox\" class=\"form-check-input\" id=\"affiliations-admin-checkbox-0\"/>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not enabled\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    29 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not enabled\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.13",
@@ -2906,7 +2930,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"Northern Pines Digital Ltd.\"\u001b[39m\nReceived string:        \u001b[31m\"\u001b[7mNorthern Pines Digital Ltd.\u001b[27m\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-3.17",
@@ -2936,7 +2961,8 @@
           "title": "the service refuses an archive request from an organization administrator who is not the owner",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.19",
@@ -2955,7 +2981,8 @@
           "status": "failed",
           "error": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('link', { name: 'Organization', exact: true }).visible().first()\u001b[22m\n\u001b[2m    - locator resolved to <a tabindex=\"0\" href=\"/organizations/00000000-0000-4000-8000-000000000301/edit?tab=organization\" class=\"a d-inline-flex align-items-center flex-nowrap mb-3 text-start text-wrap text-c-sidebar-menu-link-active-fg position-relative btn btn-md btn-c-sidebar-menu-link-active-bg\">…</a>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div role=\"dialog\" tabindex=\"-1\" aria-modal=\"true\" class=\"modal fade show\">…</div> from <div tabindex=\"-1\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div role=\"dialog\" tabindex=\"-1\" aria-modal=\"true\" class=\"modal fade show\">…</div> from <div tabindex=\"-1\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    29 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div role=\"dialog\" tabindex=\"-1\" aria-modal=\"true\" class=\"modal fade show\">…</div> from <div tabindex=\"-1\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.20",
@@ -2990,7 +3017,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeFalsy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"Larkin Placeholder\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.22",
@@ -3213,7 +3241,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.2",
@@ -3227,7 +3256,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.3",
@@ -3246,7 +3276,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.4",
@@ -3265,7 +3296,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.5",
@@ -3301,7 +3333,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.9",
@@ -3320,7 +3353,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.10",
@@ -3367,7 +3401,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.13",
@@ -3396,7 +3431,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.14",
@@ -3415,7 +3451,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.15",
@@ -3600,7 +3637,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-create.publish — \"Publish\" is disabled on http://localhost:3000/opportunities/code-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.24",
@@ -3967,7 +4005,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-4.13",
@@ -3999,7 +4038,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"Zinnia Quillfeather\"\u001b[39m\nReceived string:        \u001b[31m\"STATUS\tACCOUNT TYPE\tNAME\tADMIN?\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mPublic Sector Employee\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mPublic Sector Employee\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mDevon Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mPublic Sector Employee\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mEmerson Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mPublic Sector Employee\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mEmery Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mPublic Sector Employee\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mMIGRATION_USER\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mPublic Sector Employee\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mMorgan Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mPublic Sector Employee\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mRobin Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mBlake Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mCharlie Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mDana Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mGray Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mHarper Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mIndigo Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mKai Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mLarkin Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mActive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[7mZinnia Quillfeather\u001b[27m\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mInactive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mAldous Quillfeather\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mInactive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mEllis Placeholder\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mInactive\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mJules Placeholder\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-4.16",
