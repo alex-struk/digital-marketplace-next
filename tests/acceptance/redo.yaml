@@ -1,10 +1,4 @@
 redo:
-  - id: R-8.1
-    version: 1
-    why: the signed-in half makes a successful upload depend on a read-access
-      statement naming one particular account, which R-8.1 never mentions; state
-      read access in the plainest form the spec offers, so that being signed in
-      is the only thing that differs between the two halves
   - id: R-6.23
     version: 1
     why: the test expects a message for vendors it assumes are active without
