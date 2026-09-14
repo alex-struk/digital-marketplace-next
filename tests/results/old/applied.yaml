@@ -3,6 +3,7 @@ applied:
   - calibrate-triage-old-2
   - calibrate-triage-old-3
   - calibrate-old-2
+  - calibrate-old-3
 rulings:
   - id: R-2.1
     version: 1
@@ -536,3 +537,15 @@ rulings:
     version: 1
     verb: defect-in-old
     gate: calibrate-old-2
+  - id: R-8.1
+    version: 1
+    verb: test-wrong
+    gate: calibrate-old-3
+  - id: R-6.23
+    version: 1
+    verb: test-wrong
+    gate: calibrate-old-3
+  - id: R-6.28
+    version: 1
+    verb: test-wrong
+    gate: calibrate-old-3
