@@ -37,13 +37,13 @@
 | R-2.31 | not testable: blocked: the given is a proposal carrying a score for every stage, which is the end of the chain that consumes the one seeded closed opportunity of its program (see R-2.27). Until then total_score and rank have nothing to return and no two proposals can be ranked against each other. Unblocked by a closed opportunity of its own, or by one seeded with every stage scored but the last. | not-testable |
 | R-2.32 | not testable: blocked: the given is a vendor's proposal that has been scored, and the then needs it to become awarded or passed over. Both lie at the end of the evaluation chain, which consumes the one seeded closed opportunity of its program (see R-2.27). Before any score exists the withholding cannot be told from the score simply not being there: score and rank read as empty on an unscored proposal for a reason that has nothing to do with who is looking. Unblocked by a closed opportunity of its own carrying scored proposals. | not-testable |
 | R-2.33 | not testable: blocked: only a fully evaluated proposal, or one previously passed over, may be awarded, and reaching evaluated consumes the one seeded closed opportunity of its program (see R-2.27). award_proposal is offered on all three proposal views and has nothing it may act on, so neither the other proposals being marked not awarded nor the opportunity becoming awarded can be read. Unblocked by a closed opportunity of its own carrying one evaluated proposal, one disqualified and one withdrawn, which is the given the criterion states. | not-testable |
-| R-2.34 | acceptance/proposals/R-2.34.spec.ts | fail |
+| R-2.34 | acceptance/proposals/R-2.34.spec.ts | fail (ruled: adapter-wrong) |
 | D-proposals-35 | — |  |
-| R-2.35 | acceptance/proposals/R-2.35.spec.ts | fail |
-| R-2.36 | acceptance/proposals/R-2.36.spec.ts | fail |
+| R-2.35 | acceptance/proposals/R-2.35.spec.ts | fail (ruled: adapter-wrong) |
+| R-2.36 | acceptance/proposals/R-2.36.spec.ts | fail (ruled: adapter-wrong) |
 | D-proposals-37 | — |  |
-| R-2.37 | acceptance/proposals/R-2.37.spec.ts | fail |
-| R-2.38 | acceptance/proposals/R-2.38.spec.ts | fail |
+| R-2.37 | acceptance/proposals/R-2.37.spec.ts | fail (ruled: adapter-wrong) |
+| R-2.38 | acceptance/proposals/R-2.38.spec.ts | fail (ruled: adapter-wrong) |
 
 ### R-2.1 · v1 · confirmed · accepted
 

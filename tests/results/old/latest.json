@@ -2,7 +2,7 @@
   "target": "old",
   "base_url": "http://localhost:3000",
   "spec": "7a0d47692af14ab67cbbdeb0e701a6cf71199a60",
-  "at": "2026-09-14T19:24:18.600Z",
+  "at": "2026-09-14T19:28:21.234Z",
   "rows": [
     {
       "id": "R-7.1",
@@ -1380,7 +1380,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-8.29",
@@ -1394,7 +1395,8 @@
           "status": "timedOut",
           "error": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-8.30",
@@ -1432,7 +1434,8 @@
           "status": "timedOut",
           "error": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-6.1",
@@ -1742,7 +1745,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.1",
@@ -2328,7 +2332,8 @@
           "status": "failed",
           "error": "Error: unbound: no opportunity identifier in the address http://localhost:3000/opportunities/code-with-us/create"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.29",
@@ -2371,7 +2376,8 @@
           "status": "failed",
           "error": "Error: unbound: opportunity-cwu-edit.reporting_views — no tab labelled \"Opportunity\" on http://localhost:3000/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/edit"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.31",
@@ -2389,7 +2395,8 @@
           "title": "public sector staff can see the proposals once the opportunity has left the published state",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.32",
@@ -2418,7 +2425,8 @@
           "status": "timedOut",
           "error": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.33",
@@ -2498,7 +2506,8 @@
           "status": "timedOut",
           "error": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.38",
@@ -2522,7 +2531,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Seeded closed Sprint With Us opportunity\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.39",
@@ -2551,7 +2561,8 @@
           "status": "timedOut",
           "error": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.40",
@@ -2607,7 +2618,8 @@
           "status": "timedOut",
           "error": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.49",
@@ -2665,7 +2677,8 @@
           "status": "timedOut",
           "error": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.55",
@@ -2728,7 +2741,8 @@
           "status": "failed",
           "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — could not reach a step showing \"Panel Member\" on http://localhost:3000/opportunities/team-with-us/create"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.1",
@@ -3289,7 +3303,8 @@
           "status": "timedOut",
           "error": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.35",
@@ -3850,7 +3865,8 @@
           "status": "timedOut",
           "error": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.35",
@@ -3864,7 +3880,8 @@
           "status": "timedOut",
           "error": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.36",
@@ -3883,7 +3900,8 @@
           "status": "timedOut",
           "error": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.37",
@@ -3906,7 +3924,8 @@
           "title": "staff reading a Sprint With Us copy see the anonymous proponent name before the challenge stage",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.38",
@@ -3925,7 +3944,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeFalsy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"The Digital Marketplace Terms & Conditions for E-Bidding have been updated. Please save what you are working on, review the latest version and agree to the updated terms.\u001b[39m\n\u001b[31mNot Found·\u001b[39m\n\u001b[31mThe page you are looking for doesn't exist.·\u001b[39m\n\u001b[31mGo Home\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-4.1",
@@ -4352,7 +4372,8 @@
           "title": "a vendor is never asked for a job title",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-4.29",
@@ -4402,7 +4423,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Deactivate\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-4.32",
@@ -4416,7 +4438,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeFalsy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"enabled\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-4.33",
@@ -4457,7 +4480,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     }
   ]
 }

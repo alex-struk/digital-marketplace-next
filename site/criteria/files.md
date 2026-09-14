@@ -31,10 +31,10 @@
 | R-8.25 | acceptance/files/R-8.25.spec.ts | fail (ruled: adapter-wrong) |
 | R-8.26 | — | not-testable |
 | R-8.27 | acceptance/files/R-8.27.spec.ts | fail (ruled: adapter-wrong) |
-| R-8.28 | acceptance/files/R-8.28.spec.ts | fail |
-| R-8.29 | acceptance/files/R-8.29.spec.ts | fail |
+| R-8.28 | acceptance/files/R-8.28.spec.ts | fail (ruled: adapter-wrong) |
+| R-8.29 | acceptance/files/R-8.29.spec.ts | fail (ruled: adapter-wrong) |
 | R-8.30 | acceptance/files/R-8.30.spec.ts | unbound |
-| R-8.31 | acceptance/files/R-8.31.spec.ts | fail |
+| R-8.31 | acceptance/files/R-8.31.spec.ts | fail (ruled: adapter-wrong) |
 
 ### R-8.1 · v1 · confirmed · accepted
 

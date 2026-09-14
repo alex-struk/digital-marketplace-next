@@ -31,15 +31,15 @@
 | R-4.25 | acceptance/users/R-4.25.spec.ts | fail (ruled: adapter-wrong) |
 | R-4.26 | acceptance/users/R-4.26.spec.ts | pass |
 | R-4.27 | acceptance/users/R-4.27.spec.ts | fail (ruled: adapter-wrong) |
-| R-4.28 | acceptance/users/R-4.28.spec.ts | fail |
+| R-4.28 | acceptance/users/R-4.28.spec.ts | fail (ruled: adapter-wrong) |
 | D-users-29 | — |  |
 | R-4.29 | acceptance/users/R-4.29.spec.ts | pass |
 | R-4.30 | acceptance/users/R-4.30.spec.ts | unbound |
-| R-4.31 | acceptance/users/R-4.31.spec.ts | fail |
+| R-4.31 | acceptance/users/R-4.31.spec.ts | fail (ruled: adapter-wrong) |
 | D-users-32 | — |  |
-| R-4.32 | acceptance/users/R-4.32.spec.ts | fail |
+| R-4.32 | acceptance/users/R-4.32.spec.ts | fail (ruled: adapter-wrong) |
 | R-4.33 | acceptance/users/R-4.33.spec.ts | pass |
-| R-4.34 | acceptance/users/R-4.34.spec.ts | fail |
+| R-4.34 | acceptance/users/R-4.34.spec.ts | fail (ruled: adapter-wrong) |
 
 ### R-4.1 · v1 · confirmed · accepted
 

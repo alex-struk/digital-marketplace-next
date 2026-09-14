@@ -37,7 +37,7 @@
 | R-3.31 | acceptance/organizations/R-3.31.spec.ts | unbound |
 | R-3.32 | acceptance/organizations/R-3.32.spec.ts | unbound |
 | R-3.33 | acceptance/organizations/R-3.33.spec.ts | unbound |
-| R-3.34 | acceptance/organizations/R-3.34.spec.ts | fail |
+| R-3.34 | acceptance/organizations/R-3.34.spec.ts | fail (ruled: adapter-wrong) |
 | R-3.35 | not testable: The claim is about where the accept and the decline choice inside an invitation email lead. The email observable reaches a message's subject, snippet and recipient through the mail catcher, and the Mail fixture exposes only those, so a test cannot read the message body or follow either choice; organization-user-memberships also carries no observation of an accept or a decline confirmation standing ready. Needs a mail observation of the message body or its links, and an observation of the prepared confirmation on organization-user-memberships. | not-testable |
 
 ### R-3.1 · v1 · confirmed · accepted
