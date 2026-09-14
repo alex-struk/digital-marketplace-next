@@ -11,4 +11,4 @@ jobs:
         with: { node-version: "24" }
       # Pinned by `sdlc init` to the commit recorded in .sdlc/lock.json.
       # Configured ref: main
-      - run: npx --yes github:alex-struk/agentic-sdlc#a963bea52cf8df5e9ac9851c4f4b7c4dddb8b314 checks --json
+      - run: npx --yes github:alex-struk/agentic-sdlc#6cbccd19719235d67ea1520746daea47c7a32d68 checks --json

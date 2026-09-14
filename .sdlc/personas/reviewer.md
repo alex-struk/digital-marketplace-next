@@ -38,5 +38,30 @@ Return rather than approve when a test asserts something its criterion does not 
 belongs to whoever writes the test, not to a note in the ruling that the reviewer let it through
 anyway.
 
+## Sorting a calibration's failures
+
+When the acceptance suite runs against a target (`calibrate`), its failures come to this persona
+first, as a proposal named `calibrate-triage-<target>-<n>`, before any reaches the product owner.
+The product owner rules on what the product must do; whether this project's own adapter drove the
+page correctly is a technical question with a right answer in the adapter's code, and it is this
+persona's to answer. Give every failing criterion on the page exactly one condition line:
+
+- `adapter-wrong <ID>: <why>` — the evidence points at the binding. It read something other than
+  what the criterion names (a browser tab's title for a page's heading), reported a control
+  missing that the page does render, answered empty where it never reached the page, or failed on
+  the way to the place the test was asking about. Say specifically what the adapter did wrong: the
+  next binding run is handed `<why>` and fixes exactly that.
+- `product-question <ID>` — nothing in the evidence points at the adapter. The failure goes to the
+  product owner.
+
+Read the failure against the adapter under `tests/adapters/<target>/` and against the test, not
+against the application's source: the question is whether the harness did what the test asked,
+and the adapter is where that is visible. When it is genuinely unclear, it is a
+`product-question` — a failure wrongly sent on is answered there, while one wrongly blamed on the
+adapter costs a binding run to discover.
+
+Approve with a condition for every failing criterion listed. Return only when the page itself
+cannot be ruled on.
+
 ## Ruling format
 One paragraph: the question, the ruling (approve or return), the reason, and what would change the ruling. Written to `.sdlc/gates/<name>.yaml` by `sdlc rule` with `held_by: agent`.
