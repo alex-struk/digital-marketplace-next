@@ -1,11 +1,13 @@
 ---
-stage: "derive-tests"
-title: "derive tests"
-at: "2026-09-14T00:29:00.944Z"
-cost: 0.8846265
-turns: 16
-session: "37c7a106-df54-4124-90e3-686b5eaa676f"
+gate: G3
+question: "Do the revised opportunities tests now follow from their criteria and from nothing else?"
+recommendation: "I rewrote the three opportunities tests the reviewer returned."
+opened: 2026-09-14T00:29:00.958Z
 ---
+
+# Do the revised opportunities tests now follow from their criteria and from nothing else?
+
+**Recommendation.** I rewrote the three opportunities tests the reviewer returned.
 
 I rewrote the three opportunities tests the reviewer returned. I changed nothing else: every other file in `tests/acceptance/opportunities/` is untouched, and so is `tests/acceptance/not-testable.yaml`. The three changed files keep their criterion versions and the spec sha, which `spec/criteria-index.json` confirms is still `7a0d4769…`. Their "derived" date is now 2026-09-13. I could not typecheck the changes: running `tsc` on the test project needed approval that wasn't given, so the next stage should run it.
 

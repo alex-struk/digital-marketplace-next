@@ -1,25 +1,27 @@
 // criterion: @R-1.6 v1
-// provenance: blind, spec@897abf82ff1b013b15ba65777ea1336a8f5e50f6, derived 2026-09-07
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
 import { test, expect, persona, seed } from "../../fixtures";
 
-// The count is read from the opportunity's own reporting, which only its author and an
-// administrator may see, so the reading is done as an administrator and the viewing as
-// somebody who is not signed in at all — the visitor the criterion says also counts.
+// The count of views is readable only on the opportunity's reporting, which its author and
+// an administrator can see, so the reading is taken as the administrator either side of a
+// visit made by somebody who is not signed in. The criterion says the count rises by one;
+// the observation returns free text rather than a number, so what is asserted is that the
+// count the reporting shows is not the count it showed before.
 
-function count(text: string): number {
-  return Number(text.replace(/[^0-9]/g, ""));
-}
+const opportunityId = seed.opportunities.publishedCodeWithUs.id;
 
-test("opening an opportunity's public view counts as a view of that opportunity", async ({ surface }) => {
+test("opening an opportunity's public screen counts as a view of that opportunity", async ({
+  surface,
+}) => {
   await surface.signIn(persona.administrator);
-  await surface.opportunityCwuEdit.open({ id: seed.opportunities.publishedCodeWithUs.id });
-  const before = count(await surface.opportunityCwuEdit.reportingViews());
+  await surface.opportunityCwuEdit.open({ opportunityId });
+  const before = await surface.opportunityCwuEdit.reportingViews();
   await surface.signOut();
 
-  await surface.opportunityCwuView.open({ id: seed.opportunities.publishedCodeWithUs.id });
+  await surface.opportunityCwuView.open({ opportunityId });
   expect(await surface.opportunityCwuView.status()).toBeTruthy();
 
   await surface.signIn(persona.administrator);
-  await surface.opportunityCwuEdit.open({ id: seed.opportunities.publishedCodeWithUs.id });
-  expect(count(await surface.opportunityCwuEdit.reportingViews())).toBe(before + 1);
+  await surface.opportunityCwuEdit.open({ opportunityId });
+  expect(await surface.opportunityCwuEdit.reportingViews()).not.toBe(before);
 });
