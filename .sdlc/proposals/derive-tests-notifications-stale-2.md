@@ -32,3 +32,26 @@ Both files already existed from an earlier derivation against an older spec sha,
 - **A `mail` accessor that reads one message's body.** The contract's mail notes say this is needed, and it would let R-6.23 check the request to read and accept the new terms.
 - **A seeded recipient the catcher refuses.**
 - **An observation for a message the service skipped or failed to deliver.** Nothing on `notificationTermsBroadcast` shows one; `notifyVendorsFailure` covers the announcement as a whole, not a single recipient.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+
+The question is whether the R-6.23 and R-6.28 tests check what their criteria say and nothing more, and whether this rewrite meets the conditions derive-tests-notifications-stale-1 returned. Ruling: return. First, both tests now assert notifyVendorsSuccess() is truthy. The earlier ruling told the writer to remove that check, and this diff adds it to both files. Neither criterion mentions a success message; that is R-6.24's subject ('reported as successful as soon as the acceptances are withdrawn'). Second, both tests still take their list of active vendors from the seed, with vendorOne first. vendorOne is the account the R-4.19 test deactivates itself, and the contract can show an account's status (userProfile.statusBadge()), so being active can and should be established through the surface. Third, R-6.28 still checks vendors one at a time with expect.poll, so the first timeout ends the test before any other vendor is looked at. Its criterion is about continuing past a failure. Fourth, R-6.23 reads the deactivated vendor's terms warning without first reading that vendor's prior acceptance (userProfileLegal.acceptedOnNotice() is available), so an earlier announcement in the same run would give the same reading. Fifth, the diff deletes the R-6.23 and R-6.28 entries from redo.yaml and results/old/applied.yaml although their reasons are not met. What is sound: every name used exists in the contract and the runner's type check passed; checking that the subject or snippet names the terms follows from 'a message naming the change'; and R-6.28's two unchecked parts are left out for real reasons (a message with no recipient never reaches the catcher, and nothing in the seed or surface can make one delivery fail). Tier is STANDARD with no unaccepted residual risk, so no escalation. What would change the ruling: the five conditions below met, with the redo entries removed only once they are.
+
+**Conditions:**
+- R-6.23 and R-6.28: remove expect(notifyVendorsSuccess()).toBeTruthy(); neither criterion mentions a success message, which is R-6.24's subject
+- R-6.23 and R-6.28: before announcing, establish through the surface (for example, an administrator reading userProfile.statusBadge() for each vendor) that every vendor the test expects a message for is active, and only expect messages for those; do not take it from the seed list, because vendorOne is deactivated by the R-4.19 test
+- R-6.28: check every addressable active vendor, collect the ones who received no message, and fail once with the full list instead of stopping at the first expect.poll timeout; keep vendorWithoutEmail among the recipients
+- R-6.23: read the deactivated vendor's prior acceptance through userProfileLegal before announcing, so the warning read afterwards can be attributed to this announcement; otherwise drop that check and say in the file comment what the surface is missing
+- Keep the R-6.23 and R-6.28 entries in tests/acceptance/redo.yaml and tests/results/old/applied.yaml until the tests actually meet their redo reasons
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `8884ae0bce71ed04628688b06d29118749834048`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/notifications/`, which this proposal answers for.
+
+    No diagnostics.
