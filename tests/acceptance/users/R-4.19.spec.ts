@@ -1,12 +1,11 @@
 // criterion: @R-4.19 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-09
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-14
 import { test, expect, persona, seed } from "../../fixtures";
 
-// The last clause — that the service continues to refuse a reactivation request made
-// against an account its owner deactivated — is not asserted. The only reactivation request
-// the surface makes is the control, and the claim being tested is that the control is not
-// offered for such an account, so there is nothing left to press and no other way to send
-// the request.
+// The last clause — that the service continues to refuse a reactivation request made against
+// an account its owner deactivated — is not asserted. The only reactivation request the
+// surface makes is the control, the claim being tested is that the control is not offered
+// for such an account, and nothing else in the surface sends the request.
 //
 // seed.users.vendorDeactivated is the account an administrator deactivated, so the first
 // test reads it without changing anything.
@@ -14,7 +13,7 @@ test("the control to reactivate an account is offered for an account that an adm
   surface,
 }) => {
   await surface.signIn(persona.administrator);
-  await surface.userProfile.open({ user: seed.users.vendorDeactivated.id });
+  await surface.userProfile.open({ userId: seed.users.vendorDeactivated.id });
 
   expect(await surface.userProfile.profileTab()).toContain("Reactivate");
 });
@@ -23,12 +22,12 @@ test("an account its owner deactivated carries no reactivation control; the prof
   surface,
 }) => {
   await surface.signIn(persona.vendor);
-  await surface.userProfile.open();
-  await surface.userProfile.deactivateAccount();
-  await surface.userProfile.confirmActivationChange();
+  await surface.userProfileSelf.open();
+  await surface.userProfileSelf.deactivateAccount();
+  await surface.userProfileSelf.confirmActivationChange();
 
   await surface.signIn(persona.administrator);
-  await surface.userProfile.open({ user: seed.users.vendorOne.id });
+  await surface.userProfile.open({ userId: seed.users.vendorOne.id });
 
   const asAdministrator = await surface.userProfile.profileTab();
   expect(asAdministrator).not.toContain("Reactivate");

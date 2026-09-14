@@ -1,5 +1,5 @@
 // criterion: @R-4.33 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-09
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-14
 import { test, expect, persona } from "../../fixtures";
 
 // The vendor is given an acceptance to read back rather than assumed to hold one: the terms
@@ -15,26 +15,26 @@ test("a vendor's profile carries a section setting out the privacy policy, the s
   await surface.signOut();
 
   await surface.signIn(persona.vendor);
-  await surface.userProfileLegal.open();
-  await surface.userProfileLegal.acceptUpdatedTerms();
-  await surface.userProfileLegal.confirmAcceptUpdatedTerms();
+  await surface.userProfileSelfLegal.open();
+  await surface.userProfileSelfLegal.acceptUpdatedTerms();
+  await surface.userProfileSelfLegal.confirmAcceptUpdatedTerms();
 
-  await surface.userProfileLegal.open();
-  expect(await surface.userProfileLegal.privacyPolicy()).toBeTruthy();
-  expect(await surface.userProfileLegal.appTermsLink()).toBeTruthy();
-  expect(await surface.userProfileLegal.acceptedOnNotice()).toBeTruthy();
-  expect(await surface.userProfileLegal.programTermsLinks()).toBeTruthy();
+  await surface.userProfileSelfLegal.open();
+  expect(await surface.userProfileSelfLegal.privacyPolicy()).toBeTruthy();
+  expect(await surface.userProfileSelfLegal.appTermsLink()).toBeTruthy();
+  expect(await surface.userProfileSelfLegal.acceptedOnNotice()).toBeTruthy();
+  expect(await surface.userProfileSelfLegal.programTermsLinks()).toBeTruthy();
 });
 
 test("nobody but a vendor is shown the section", async ({ surface }) => {
   await surface.signIn(persona.publicSectorStaff);
-  await surface.userProfile.open();
-  expect(await surface.userProfile.legalTab()).toBeFalsy();
+  await surface.userProfileSelf.open();
+  expect(await surface.userProfileSelf.legalTab()).toBeFalsy();
 
-  await surface.userProfileLegal.open();
-  expect(await surface.userProfileLegal.privacyPolicy()).toBeFalsy();
-  expect(await surface.userProfileLegal.acceptedOnNotice()).toBeFalsy();
+  await surface.userProfileSelfLegal.open();
+  expect(await surface.userProfileSelfLegal.privacyPolicy()).toBeFalsy();
+  expect(await surface.userProfileSelfLegal.acceptedOnNotice()).toBeFalsy();
 
   // Asking for a section that does not belong to the profile shows the profile instead.
-  expect(await surface.userProfile.nameField()).toBeTruthy();
+  expect(await surface.userProfileSelf.nameField()).toBeTruthy();
 });

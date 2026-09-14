@@ -1,5 +1,5 @@
 // criterion: @R-4.16 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-09
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-14
 import { test, expect, persona } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -22,35 +22,36 @@ test("when an administrator announces that the terms have changed, every vendor'
   await announceChangedTerms(surface);
 
   await surface.signIn(persona.vendorWithTermsReset);
-  await surface.userProfileLegal.open();
-  await surface.userProfileLegal.acceptUpdatedTerms();
-  await surface.userProfileLegal.confirmAcceptUpdatedTerms();
-  expect(await surface.userProfileLegal.termsUpdatedWarning()).toBeFalsy();
+  await surface.userProfileSelfLegal.open();
+  await surface.userProfileSelfLegal.acceptUpdatedTerms();
+  await surface.userProfileSelfLegal.confirmAcceptUpdatedTerms();
+  await surface.userProfileSelfLegal.open();
+  expect(await surface.userProfileSelfLegal.termsUpdatedWarning()).toBeFalsy();
 
   await announceChangedTerms(surface);
 
   await surface.signIn(persona.vendorWithTermsReset);
-  await surface.userProfileLegal.open();
-  expect(await surface.userProfileLegal.termsUpdatedWarning()).toBeTruthy();
+  await surface.userProfileSelfLegal.open();
+  expect(await surface.userProfileSelfLegal.termsUpdatedWarning()).toBeTruthy();
 
-  await surface.userProfileLegal.acceptUpdatedTerms();
-  expect(await surface.userProfileLegal.acceptUpdatedTermsModal()).toBeTruthy();
+  await surface.userProfileSelfLegal.acceptUpdatedTerms();
+  expect(await surface.userProfileSelfLegal.acceptUpdatedTermsModal()).toBeTruthy();
 
-  // Every vendor, not only the one that was watched through the announcement.
+  // Every vendor, not only the one watched through the announcement.
   await surface.signIn(persona.vendor);
-  await surface.userProfileLegal.open();
-  expect(await surface.userProfileLegal.termsUpdatedWarning()).toBeTruthy();
+  await surface.userProfileSelfLegal.open();
+  expect(await surface.userProfileSelfLegal.termsUpdatedWarning()).toBeTruthy();
 });
 
 test("agreeing to the new terms records a fresh acceptance", async ({ surface }) => {
   await announceChangedTerms(surface);
 
   await surface.signIn(persona.vendorWithTermsReset);
-  await surface.userProfileLegal.open();
-  await surface.userProfileLegal.acceptUpdatedTerms();
-  await surface.userProfileLegal.confirmAcceptUpdatedTerms();
+  await surface.userProfileSelfLegal.open();
+  await surface.userProfileSelfLegal.acceptUpdatedTerms();
+  await surface.userProfileSelfLegal.confirmAcceptUpdatedTerms();
 
-  await surface.userProfileLegal.open();
-  expect(await surface.userProfileLegal.acceptedOnNotice()).toBeTruthy();
-  expect(await surface.userProfileLegal.termsUpdatedWarning()).toBeFalsy();
+  await surface.userProfileSelfLegal.open();
+  expect(await surface.userProfileSelfLegal.acceptedOnNotice()).toBeTruthy();
+  expect(await surface.userProfileSelfLegal.termsUpdatedWarning()).toBeFalsy();
 });

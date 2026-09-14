@@ -1,15 +1,16 @@
 // criterion: @R-4.32 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-09
+// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-14
 import { test, expect, persona } from "../../fixtures";
 
 // What the exported spreadsheet holds — the active accounts, the administrator's label, the
-// organization's legal name, the deactivated account's absence — is not asserted, because
-// no observation returns the document the export hands back. user-list names the modal, the
-// two kinds of tick and the unavailable control, and nothing else, so the clause a test can
-// settle is the one about what must be chosen before the export can be asked for.
+// organization's legal name, the deactivated account's absence — is not asserted, because no
+// observation returns the document the export hands back. observables.yaml names the
+// contact-list export and its document contents, but user-list offers only the modal, the
+// two kinds of tick and the unavailable control, so the clause a test can settle is what must
+// be chosen before the export can be asked for.
 //
-// The modal is read as it opens, before anything is ticked, which is what makes the first
-// reading below the state the criterion describes.
+// The modal is read as it opens, before anything is ticked, which is the state the criterion
+// describes.
 test("at least one kind and one field must be chosen before an administrator may export the contact list", async ({
   surface,
 }) => {
