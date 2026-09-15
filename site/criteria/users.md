@@ -8,21 +8,21 @@
 | R-4.2 | not testable: blocked: the when is an account being created, which no persona brings about (see R-4.1), so the welcome message has nothing to follow. The withheld half needs two further things: a first-time persona whose identity supplies no email address (seed.users.vendorWithoutEmail already has an account), and a mail accessor that lists every message in the catcher — observables.yaml names read_messages, but the mail fixture only searches by one visible recipient, and a person with no address has no address to search by, so an empty search cannot show that nothing was attempted. Unblocked by the first-time personas R-4.1 needs, one of them without an email address, and a mail.all() (or equivalent) over read_messages. | not-testable |
 | R-4.3 | acceptance/users/R-4.3.spec.ts | unbound |
 | R-4.4 | acceptance/users/R-4.4.spec.ts | unbound |
-| R-4.5 | acceptance/users/R-4.5.spec.ts | fail |
+| R-4.5 | acceptance/users/R-4.5.spec.ts | fail (ruled: test-wrong) |
 | R-4.6 | acceptance/users/R-4.6.spec.ts | pass |
 | R-4.7 | — |  |
 | R-4.8 | acceptance/users/R-4.8.spec.ts | unbound |
-| R-4.9 | acceptance/users/R-4.9.spec.ts | fail |
+| R-4.9 | acceptance/users/R-4.9.spec.ts | fail (ruled: test-wrong) |
 | R-4.10 | — |  |
 | R-4.11 | — |  |
-| R-4.12 | acceptance/users/R-4.12.spec.ts | fail |
+| R-4.12 | acceptance/users/R-4.12.spec.ts | fail (ruled: test-wrong) |
 | R-4.13 | not testable: unobservable: the outcome is that the service offers no way to create an administrator where none exists, and that only a change to the stored data outside the service can. That is the absence of an action anywhere in the service, and no observation reports an absence of that kind — a test could only show that the particular controls it knows of do not do it, never that no other route exists. The given could be seeded (a seed with no administrator account), but that would not help: the claim a test would then have to settle is still the non-existence of a route, and the documented manual route lies outside the service by definition. This is a property to be accepted by a reader of the rebuilt system's routes, not settled by a test. | not-testable |
 | R-4.14 | acceptance/users/R-4.14.spec.ts | unbound (ruled: test-wrong) |
 | R-4.15 | — |  |
 | R-4.16 | acceptance/users/R-4.16.spec.ts | unbound |
 | R-4.17 | acceptance/users/R-4.17.spec.ts | pass |
 | R-4.18 | acceptance/users/R-4.18.spec.ts | pass |
-| R-4.19 | acceptance/users/R-4.19.spec.ts | fail |
+| R-4.19 | acceptance/users/R-4.19.spec.ts | fail (ruled: defect-in-old) |
 | R-4.20 | not testable: blocked: both halves turn on which message was sent, and the two messages differ only in their wording — one says an administrator reactivated the account and names whom to contact, the other says the person reactivated it themselves. The mail fixture returns Subject, Snippet, To and ID from the search listing and offers no way to read one message; the Snippet was considered and rejected, because it is a leading excerpt the catcher cuts at a length of its own choosing, so a phrase missing from it proves nothing. The email notification reference describes messages rather than the one that was sent (see R-6.12). Unblocked by a mail accessor over observables.yaml's read_one_message returning the message's plain_text_body (Text) or html_body (HTML); both halves are then reachable, since an administrator's reactivation of seed.users.vendorDeactivated and a self-deactivated vendor signing in again can each be produced. | not-testable |
 | R-4.21 | not testable: blocked: the claim is that the request is refused rather than answered, and user-list carries no refusal observation — it names user_row, status_badge, account_type, admin_check and the two export observations, none of which tells 'you are not permitted' from a screen with nothing on it. A test could only assert that a public sector employee who is not an administrator sees no rows, which was equally true of the superseded R-4.15, where the interface withheld the screen while the service answered the request in full. The disclosure the criterion guards against is a property of the service's answer, which observables.yaml's refusals section reads for files and exports but not for the list of users. Unblocked by user-list.refused_for_non_administrator (reported to a signed-in public sector employee and to a visitor who is not signed in alike), or by a refusals entry naming the user-list request's status. | not-testable |
 | R-4.22 | acceptance/users/R-4.22.spec.ts | pass |
@@ -30,7 +30,7 @@
 | R-4.24 | acceptance/users/R-4.24.spec.ts | unbound |
 | R-4.25 | acceptance/users/R-4.25.spec.ts | pass |
 | R-4.26 | acceptance/users/R-4.26.spec.ts | pass |
-| R-4.27 | acceptance/users/R-4.27.spec.ts | fail |
+| R-4.27 | acceptance/users/R-4.27.spec.ts | fail (ruled: test-wrong) |
 | R-4.28 | acceptance/users/R-4.28.spec.ts | pass |
 | D-users-29 | — |  |
 | R-4.29 | acceptance/users/R-4.29.spec.ts | pass |
@@ -302,6 +302,7 @@ A person's profile details - name, email address, job title and picture - may be
 
 The control to reactivate an account is offered only for an account that an administrator deactivated. An account its owner deactivated carries no reactivation control; the profile states instead that the person reactivates it themselves by signing in again, and the service continues to refuse a reactivation request made against such an account.
 - replaces: R-4.10
+- note: calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it
 
 ### R-4.20 · v1 · confirmed · accepted
 

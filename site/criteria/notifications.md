@@ -20,7 +20,7 @@
 | R-6.14 | — | pass |
 | R-6.15 | not testable: blocked: requires reading, for one multi-recipient notice, both its visible recipient and its list of blind copies; the mail fixture searches by one visible address and returns neither, so hiding cannot be told from not sending. The notices themselves are reachable (evaluationPanelSwu, opportunitySwuEdit.editEvaluationPanel, opportunityCwuEdit.addAddendum). Needs a `mail` accessor for one message's To and Bcc, and the service's own address named in the contract. | not-testable |
 | R-6.16 | not testable: blocked: the claim is about what stands at the foot of particular messages — an unsubscribe offer, or a plain link to the settings. The mail fixture exposes no body, and the reference page returns its bodies as one reading with no way to select a single message. Needs a `mail` accessor for one message's body (or a per-message body observation on notification-email-reference), and the contract naming which messages the notification preference governs. | not-testable |
-| R-6.17 | acceptance/notifications/R-6.17.spec.ts | fail |
+| R-6.17 | acceptance/notifications/R-6.17.spec.ts | fail (ruled: defect-in-old) |
 | R-6.18 | not testable: blocked: naming all three programs or none is a fact about the body of the changed-terms message. The broadcast is reachable (notificationTermsBroadcast), but no `mail` accessor returns a body and the reference page cannot be asked for that one message's body. Needs a `mail` accessor for one message's Text or HTML body. | not-testable |
 | R-6.19 | acceptance/notifications/R-6.19.spec.ts | fail (ruled: defect-in-old) |
 | R-6.20 | not testable: blocked: the given is an account being created for the first time. Every persona signs in as an account the seed already holds, and no surface action creates one. Needs a persona whose sign-in reaches an identity the seed does not hold (a fresh sandbox identity), after which userSignUpComplete and userProfileSelfNotifications.newOpportunitiesCheckbox already read the result. | not-testable |
@@ -248,6 +248,7 @@ A message that the notification preference does not govern must not offer to uns
 
 A deactivated account receives no notification of any kind, including notices about opportunities it was watching, while the watch itself is retained so that reactivating the account restores it.
 - replaces: R-6.11
+- note: calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it
 
 ### R-6.18 · v1 · confirmed · accepted
 

@@ -1,8 +1,8 @@
 {
   "target": "old",
   "base_url": "http://localhost:3000",
-  "spec": "1c3743e9fb53c29de89a28045222abab29c5e27e",
-  "at": "2026-09-15T01:24:14.535Z",
+  "spec": "08d8aac0ee7ec7fcee1a309ef183dcb17e38221b",
+  "at": "2026-09-15T01:33:51.008Z",
   "rows": [
     {
       "id": "R-7.1",
@@ -133,7 +133,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-7.10",
@@ -183,7 +183,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-7.13",
@@ -303,7 +303,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "defect-in-old"
     },
     {
       "id": "R-7.21",
@@ -356,7 +356,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-7.23",
@@ -397,7 +397,7 @@
           "error": "Error: unbound: content-edit.start_editing — no control labelled \"Edit\" on http://localhost:3000/content/disclaimer/edit"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-7.26",
@@ -430,7 +430,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-7.28",
@@ -720,7 +720,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-5.23",
@@ -1605,7 +1605,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "defect-in-old"
     },
     {
       "id": "R-6.18",
@@ -1758,7 +1758,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"review\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.2",
@@ -1884,7 +1884,7 @@
           "error": "Error: opportunity-twu-create.save_draft — the save never reached the record's address; still on http://localhost:3000/opportunities/team-with-us/create; the page shows no message"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.9",
@@ -2262,7 +2262,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Proponent 1\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.25",
@@ -2448,7 +2448,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m8\u001b[39m\nReceived:   \u001b[31m8\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.36",
@@ -2636,7 +2636,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.55",
@@ -2989,7 +2989,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "defect-in-old"
     },
     {
       "id": "R-3.19",
@@ -3157,7 +3157,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\"\u001b[39m\nReceived: \u001b[31m\"Cedar Hollow Systems Inc. agreed to the Sprint With Us Terms & Conditions on Sep 14, 2026 at 5:46 PM.\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-3.28",
@@ -3283,7 +3283,7 @@
           "error": "Error: proposal-cwu-create.save_draft — the field for \"proposalText\" is disabled on http://localhost:3000/opportunities/code-with-us/fa2ccaf6-9e94-44ca-82c5-9eb486acf86a/proposals/775d1458-b90d-4d8c-a946-54a744be7b96/edit"
         }
       ],
-      "triage": "product-question"
+      "ruled": "spec-wrong"
     },
     {
       "id": "R-2.3",
@@ -3811,7 +3811,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-2.36",
@@ -3948,7 +3948,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-4.6",
@@ -4003,7 +4003,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-4.12",
@@ -4032,7 +4032,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-4.13",
@@ -4132,7 +4132,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"Reactivate\"\u001b[39m\nReceived string:        \u001b[31m\"Digital Marketplace\u001b[39m\n\u001b[31madmin.one@example.test\u001b[39m\n\u001b[31mDashboard\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mOpportunities\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mOrganizations\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mUsers\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mContent\u001b[39m\n\u001b[31mAlex Placeholder\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mInactive\u001b[39m\n\u001b[31mAccount Type\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31mProfile Picture (Optional)\u001b[39m\n\u001b[31mGitHub\u001b[39m\n\u001b[31mName\u001b[39m\n\u001b[31mEmail Address\u001b[39m\n\u001b[31m\u001b[7mReactivate\u001b[27m Account\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mReactivate this user's account to enable their access to the Digital Marketplace.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mReactivate Account\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "defect-in-old"
     },
     {
       "id": "R-4.20",
@@ -4276,7 +4276,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-4.28",

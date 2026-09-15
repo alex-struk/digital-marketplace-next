@@ -5,7 +5,7 @@
 | id | test | old |
 | --- | --- | --- |
 | R-2.1 | acceptance/proposals/R-2.1.spec.ts | fail (ruled: adapter-wrong) |
-| R-2.2 | acceptance/proposals/R-2.2.spec.ts | fail |
+| R-2.2 | acceptance/proposals/R-2.2.spec.ts | fail (ruled: spec-wrong) |
 | R-2.3 | acceptance/proposals/R-2.3.spec.ts | fail (ruled: adapter-wrong) |
 | R-2.4 | acceptance/proposals/R-2.4.spec.ts | fail (ruled: adapter-wrong) |
 | R-2.5 | acceptance/proposals/R-2.5.spec.ts | pass |
@@ -39,7 +39,7 @@
 | R-2.33 | not testable: blocked: only a fully evaluated proposal, or one previously passed over, may be awarded, and reaching evaluated consumes the one seeded closed opportunity of its program (see R-2.27). award_proposal is offered on all three proposal views and has nothing it may act on, so neither the other proposals being marked not awarded nor the opportunity becoming awarded can be read. Unblocked by a closed opportunity of its own carrying one evaluated proposal, one disqualified and one withdrawn, which is the given the criterion states. | not-testable |
 | R-2.34 | acceptance/proposals/R-2.34.spec.ts | unbound |
 | D-proposals-35 | — |  |
-| R-2.35 | acceptance/proposals/R-2.35.spec.ts | fail |
+| R-2.35 | acceptance/proposals/R-2.35.spec.ts | fail (ruled: test-wrong) |
 | R-2.36 | acceptance/proposals/R-2.36.spec.ts | fail (ruled: adapter-wrong) |
 | D-proposals-37 | — |  |
 | R-2.37 | acceptance/proposals/R-2.37.spec.ts | fail (ruled: adapter-wrong) |
@@ -59,9 +59,9 @@ Only a signed-in vendor who has accepted the service's terms at some point may s
 - then: the request is refused and no proposal is created
 - note: a vendor who has never accepted the terms is refused as well, so accepting the terms is a precondition of bidding at all, not only of submitting.
 
-### R-2.2 · v1 · confirmed · accepted
+### R-2.2 · v2 · confirmed · accepted
 
-A vendor may hold at most one proposal per opportunity, and a second attempt is refused with a message saying they already have one.
+A vendor may hold at most one proposal per opportunity: a vendor who starts a second proposal against an opportunity they already have a proposal for is taken to the proposal they already hold instead of a new one, a request to create a second one is refused with a message saying they already have one, and no second proposal is created.
 - cites: src/back-end/lib/resources/proposal/code-with-us.ts:355
 - cites: src/back-end/lib/resources/proposal/sprint-with-us/index.ts:322
 - cites: src/migrations/tasks/20200210233100_unique_proposal_constraint.ts:9

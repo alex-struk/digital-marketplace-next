@@ -21,7 +21,7 @@
 | R-3.15 | acceptance/organizations/R-3.15.spec.ts | fail (ruled: test-wrong) |
 | R-3.16 | — |  |
 | R-3.17 | not testable: The only way the surface creates an invitation is organization-edit's add_team_members, whose subject is email addresses; no page in the contract offers a membership type on an invitation, so a test cannot send one other than the "member" the team surface always sends, and therefore cannot reach the rejection of any other type. Needs an add_team_members that carries a membership type, and an observation of the invalid-membership-type refusal. | not-testable |
-| R-3.18 | acceptance/organizations/R-3.18.spec.ts | fail |
+| R-3.18 | acceptance/organizations/R-3.18.spec.ts | fail (ruled: defect-in-old) |
 | R-3.19 | acceptance/organizations/R-3.19.spec.ts | fail (ruled: adapter-wrong) |
 | R-3.20 | not testable: The criterion turns entirely on telling a refusal apart from an empty answer, and no page in the organizations domain carries a refusal observation — organization-list offers organization_name, owner_name, the two qualification marks and pagination, none of which distinguishes "you are not permitted" from "you may act for nothing". Needs an observation such as organization-list.refused_when_not_permitted, or a page of its own for the organizations one may act on behalf of. | not-testable |
 | R-3.21 | acceptance/organizations/R-3.21.spec.ts | fail (ruled: adapter-wrong) |
@@ -30,7 +30,7 @@
 | R-3.24 | acceptance/organizations/R-3.24.spec.ts | unbound |
 | R-3.25 | acceptance/organizations/R-3.25.spec.ts | unbound |
 | R-3.26 | acceptance/organizations/R-3.26.spec.ts | fail (ruled: adapter-wrong) |
-| R-3.27 | acceptance/organizations/R-3.27.spec.ts | fail |
+| R-3.27 | acceptance/organizations/R-3.27.spec.ts | fail (ruled: test-wrong) |
 | R-3.28 | acceptance/organizations/R-3.28.spec.ts | fail (ruled: adapter-wrong) |
 | R-3.29 | — |  |
 | R-3.30 | acceptance/organizations/R-3.30.spec.ts | pass |
@@ -256,6 +256,7 @@ An invitation may name the invited person as an ordinary member or as an owner, 
 
 The Edit and Archive controls on an organization's management page are offered only to a person permitted to use them — the organization's owner or a service administrator; an organization administrator who is not the owner sees the organization's profile as read-only, with no Edit and no Archive control, and the service continues to refuse a profile change or an archive request from anyone other than the owner or a service administrator.
 - replaces: R-3.4
+- note: calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it
 
 ### R-3.19 · v1 · confirmed · accepted
 
