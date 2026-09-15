@@ -36,3 +36,23 @@ On Sprint With Us, the dates exist only on a phase. A top-level `startDate` or `
 - **Adding:** "Add Attachment" was never missing. It is a link taken out of the tab order, which the adapter's disabled check treats as disabled. The real control is the "Choose File" input underneath it. `addAttachment` now goes to the Attachments step through the step menu, falling back to Previous/Next, and hands the file to "Choose File" directly. It falls back to "Add Attachment" only if that isn't disabled. On the published Code With Us proposal, a file given to "Choose File" appeared in the attachment list.
 
 **Embedded image (R-8.29).** When the Body refers to the upload as `FILE_ID:<id>`, `imageAddress` now returns `/api/files/<id>`. I did not open a published page with an embedded image, so I haven't confirmed this matches the address the page itself renders. The contract's download route adds `?type=blob` to the same address.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: does this adapter bind every surface action and observation on old, and nothing else? Ruling: approve. The diff touches only tests/adapters/old/index.ts, with nothing under tests/acceptance, and the runner's typecheck passed with no diagnostics under adapters/old. Every change is navigation or reading. Invitations enter one address per box. Weights map to the Scoring step's fields. Top-level Sprint With Us dates go onto the starting phase. Attachments use the Choose File input and whichever save control is enabled. Organization, fields-named and terms-accepted state now resets on page open or sign-in, and go() is not called between accepting terms and submitting in any flow read. The reshaped observations are faithful readings, checked against their tests. proposalsTab returns empty only when the page shows the withheld notice and no table, which is what R-2.25 and R-1.31 observe. The Met/Not met prefix reads the mark's colour, and R-3.26 only asserts that the reading changes after a service area is approved. Colour-filtered capabilities match what R-3.34 reads with toContain. An archived organization missing from the chooser is left unchosen, so the refusal R-2.14 reads is the application's. No binding asserts or decides a pass. Tier is STANDARD and no residual risk is marked unaccepted. The ruling would change to return if a calibration showed any of these readers reporting a state the page does not show, or if the image address built from FILE_ID differs from the address the page renders.
+
+**Conditions:**
+- R-8.29: imageAddress builds /api/files/<id> from the FILE_ID marker ahead of the rendered picture's address (storedImageAddress). The later fileDescription and fileDownload checks verify the id, but the next binding run should confirm it once on a published page and read the rendered address first when one exists.
+- R-3.26 and R-3.34: the service-area requirement and team-capabilities readers compare computed colours, which gives a wrong answer without any error if the styling changes. Any calibration failure on these criteria should be triaged against these readers before it goes to the product owner.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `6c37d635528b379c2b62f72b8b74f22290180a1c`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    No diagnostics.
