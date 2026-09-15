@@ -1,0 +1,14 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the rewritten content tests (R-7.9, R-7.12, R-7.22, R-7.25, R-7.27) follow from their criteria and from nothing else? Ruling: approve. Each assertion traces to its criterion's then-clause. R-7.9's identifier probe uses the spec's own statement that a page can be read by its identifier (content.md:75), and its version-history reading uses the content-edit version_history observation the contract added for exactly that absence, so neither leaks implementation. R-7.12 names only the seven addresses the criterion's note gives, and the not-asserted parts (the count of twenty-two in R-7.12, 'a request made another way' in R-7.25, profile links in R-7.27) are disclosed with real surface gaps. R-7.22 uses the seeded address, which is legitimate for a general rule. R-7.27's second administrator is the seeded administratorTwo per the manifest. No steps name selectors, routes or tables; the runner typecheck passed with no diagnostics; the redo.yaml and applied.yaml pruning matches the pipeline's pattern on earlier stale-test proposals. Tier is STANDARD with no unaccepted residual risk, so no escalation. Would change to return if the identifier or history readings proved to come from the application's source rather than the spec, or if calibration showed R-7.9 failing on its setup step of reusing the removed address, which the criterion does not promise.
+conditions:
+  - "R-7.9: the step publishing a new page at the removed page's address is setup, not a claim of the criterion; if calibration fails there, triage it as test-wrong rather than a product question"
+  - "R-7.12: the needed-page count (22 in the criterion vs 19 in the seed manifest, and D-content-27 / R-7.18 changes) needs a product-owner ruling before any test asserts the count"
+  - "R-7.27: the second test runs only on the rebuild until the seed adds a page whose current version was written by administratorTwo"
+cost: 0.8582239999999999
+turns: 14
+session: "0ef7aaa5-d21a-47dd-90f8-ea7bdb910e6d"
+at: 2026-09-15T05:16:27.600Z

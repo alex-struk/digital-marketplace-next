@@ -43,3 +43,24 @@ Risks for whoever runs or rules on this:
 - **Second administrator on the old app.** The `administrator-other` persona has no sign-in route on the old application, so R-7.27's second test can only run on the rebuild. A seeded page whose current version was written by `administratorTwo` would let it run on the old application too.
 - **Pages missing on the target.** An earlier run's notes (in `redo.yaml`) say the target held none of the pages the service needs. If that is still true, the R-7.12, R-7.25 and R-7.27 tests will stop at their opening check that the page exists, not at the claim being tested.
 - **The spec disagrees with itself.** R-7.12 counts twenty-two needed pages and the seed notes say nineteen. D-content-27, a spec entry marked obsolete, says the rebuild stops creating seven of them. R-7.18 adds a service level agreement page. The seven addresses I test are in every version of that list, but the count needs a ruling before anyone checks it.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: do the rewritten content tests (R-7.9, R-7.12, R-7.22, R-7.25, R-7.27) follow from their criteria and from nothing else? Ruling: approve. Each assertion traces to its criterion's then-clause. R-7.9's identifier probe uses the spec's own statement that a page can be read by its identifier (content.md:75), and its version-history reading uses the content-edit version_history observation the contract added for exactly that absence, so neither leaks implementation. R-7.12 names only the seven addresses the criterion's note gives, and the not-asserted parts (the count of twenty-two in R-7.12, 'a request made another way' in R-7.25, profile links in R-7.27) are disclosed with real surface gaps. R-7.22 uses the seeded address, which is legitimate for a general rule. R-7.27's second administrator is the seeded administratorTwo per the manifest. No steps name selectors, routes or tables; the runner typecheck passed with no diagnostics; the redo.yaml and applied.yaml pruning matches the pipeline's pattern on earlier stale-test proposals. Tier is STANDARD with no unaccepted residual risk, so no escalation. Would change to return if the identifier or history readings proved to come from the application's source rather than the spec, or if calibration showed R-7.9 failing on its setup step of reusing the removed address, which the criterion does not promise.
+
+**Conditions:**
+- R-7.9: the step publishing a new page at the removed page's address is setup, not a claim of the criterion; if calibration fails there, triage it as test-wrong rather than a product question
+- R-7.12: the needed-page count (22 in the criterion vs 19 in the seed manifest, and D-content-27 / R-7.18 changes) needs a product-owner ruling before any test asserts the count
+- R-7.27: the second test runs only on the rebuild until the seed adds a page whose current version was written by administratorTwo
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `9f95882b9611fcf4b374c455a4072c00909b1087`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/content/`, which this proposal answers for.
+
+    No diagnostics.
