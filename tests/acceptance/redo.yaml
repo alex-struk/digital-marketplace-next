@@ -7,22 +7,6 @@ redo:
       vendor polled is active at the moment of the broadcast, keep the vendor
       holding no email address among the recipients, and report every
       addressable vendor not reached rather than stopping at the first
-  - id: R-1.3
-    version: 1
-    why: the test signs in as the member of public sector staff without establishing
-      that the account holds no administrator rights at that moment, and another
-      test in the suite grants that account administrator rights during the same
-      run; the criterion is about staff who are not administrators, so establish
-      that before listing opportunities
-  - id: R-1.21
-    version: 1
-    why: the second half reads the refusal from an opportunity that was never saved
-      as a draft, which the criterion does not describe, and both halves sign in
-      as public sector staff without establishing that the account holds no
-      administrator rights, which another test in the suite grants during the
-      same run; submit a saved draft as a staff member who is not an
-      administrator, treat a draft that cannot be submitted and keeps its status
-      as refused, and read what that person is told
   - id: R-3.3
     version: 1
     why: the refusal of the member of public sector staff is read without
@@ -113,38 +97,6 @@ redo:
       entering nothing into a comment that was already empty, so nothing about
       the comment changed; allow time for the mark, and enter a comment before
       clearing it
-  - id: R-1.1
-    version: 2
-    why: the test reads the opportunity and its proposals immediately after the
-      request that sets closure off, without allowing the closure to complete;
-      allow time for each opportunity and its submitted proposals to reach their
-      new state, reading each as a person entitled to see it, before concluding
-  - id: R-1.24
-    version: 1
-    why: the test reads the proponent names immediately after the request that sets
-      closure off, without allowing the closure to complete; allow time for the
-      opportunity to reach evaluation before reading the names
-  - id: R-1.8
-    version: 1
-    why: the test assumes a Team With Us opportunity can be saved as a draft holding
-      only a title and a budget, which R-1.8 never says, and the refusal it met
-      concerned the draft's content, not its program; save a draft the service
-      accepts before reading which program it is filed under
-  - id: R-1.53
-    version: 2
-    why: the test assumes a Team With Us opportunity can be saved as a draft holding
-      only a title, which the criterion never says, so setup failed before any
-      deletion was asked for; save a draft the service accepts before deleting
-      it
-  - id: R-1.35
-    version: 1
-    why: the test expects the author's notice to arrive addressed to the author by
-      name, but the criterion names the author with the watchers and proponents
-      as those told and never says the author is addressed individually, so the
-      author's notice is as unobservable to the mail fixture as the watchers'
-      notices the test already leaves unasserted; observe the author's notice in
-      a way that does not depend on visible addressing, or record it as not
-      observable
   - id: R-3.27
     version: 1
     why: the second attempt relies on another test having accepted the terms first,
