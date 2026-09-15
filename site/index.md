@@ -122,6 +122,7 @@ Profile: rebuild
 - [policy-v4](proposals/policy-v4.md)
 - [policy-v5](proposals/policy-v5.md)
 - [policy-v6](proposals/policy-v6.md)
+- [policy-v8](proposals/policy-v8.md)
 - [probe-ruling](proposals/probe-ruling.md)
 - [ratify-content-1](proposals/ratify-content-1.md)
 - [ratify-content-3](proposals/ratify-content-3.md)
@@ -150,8 +151,8 @@ Profile: rebuild
 ## Totals
 
 - Journal cost: $313.746739
-- Rulings cost: $217.586206
-- Total cost: $531.332945
-- Agent-held rulings: 107
+- Rulings cost: $218.316913
+- Total cost: $532.063652
+- Agent-held rulings: 108
 - Open escalations: 0
 - Open proposals: 0
