@@ -33,13 +33,6 @@ redo:
       service areas before editing, and it does not tick a third area as the
       given describes; establish the two starting approvals, clear one and tick
       a third, then read the approvals once the save has completed
-  - id: R-2.13
-    version: 1
-    why: for a proposal with no complete proponent the criterion promises only a
-      refusal, never a reason shown against a choice the person never made;
-      treat a submission that stays unavailable as the refusal and check that no
-      proposal was submitted, expecting the offending field to be named only in
-      the text and comments cases, after allowing time for it
   - id: R-4.5
     version: 1
     why: the return the criterion describes is an ordinary sign-in, and the only

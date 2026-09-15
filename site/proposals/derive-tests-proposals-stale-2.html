@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-proposals-stale-2 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">122</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">122</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">109</span></a></li><li><a href="../runs.html">Run log <span class="count">9</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-proposals-stale-2</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-15 05:54</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the proposals criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the one criterion in this batch, R-2.13 v1, and it has a test file.</p>
+<p>I rewrote the one criterion in this batch, R-2.13 v1, and it has a test file. Nothing was sent to <code>not-testable.yaml</code>, and R-2.13 had no entry there already. I couldn&#39;t type-check the file: there is no <code>node_modules</code> in the workspace, so neither <code>tsc</code> nor Playwright has run on it.</p>
+<p>The workspace already had an approved R-2.13 test, and a redo note came with it. The note said the no-proponent case should not expect a reason shown against a choice the person never made. It said to treat a submission that can&#39;t be made as the refusal, and to check that nothing was submitted. It also said to expect the field to be named only in the text and comments cases, with time allowed for the error to appear. The rewrite does all of that.</p>
+<p>The file has four tests, one for each case the criterion&#39;s &quot;when&quot; lists: empty proposal text, proposal text over 10,000 characters, additional comments over 10,000 characters, and no proponent. Each test title is the criterion&#39;s own statement with the case in brackets. In each test an administrator publishes a new Code With Us opportunity, because the only seeded open one is shared with other tests. Then the vendor persona fills in the proposal form with everything correct except the one thing under test.</p>
+<ul><li><strong>Text and comments cases:</strong> the test waits for <code>proposalCwuCreate.fieldError()</code> to show something (<code>expect.poll</code>), which covers the time the note asked for. It then checks that the opportunity&#39;s title is not in <code>proposalVendorDashboard.myProposalsTable()</code>.</li><li><strong>No-proponent case:</strong> the test asserts no error message. It tries <code>submitProposal</code>, and if the screen won&#39;t carry that out, the test counts that as the refusal rather than a failure. The only check is that no proposal shows up in the vendor&#39;s own list.</li></ul>
+<p>I also made one fix the note didn&#39;t ask for. The old test called <code>chooseProponentIndividual()</code> with no details, so the &quot;valid&quot; proponent in the text and comments cases may not actually have been complete. That would have let a refusal come from the proponent rather than the field under test. The rewrite now passes a full individual (legal name, email, phone and full postal address), with the same field names R-2.14 uses.</p>
+<p>Two parts of the criterion can&#39;t be fully checked with the current contract, and I left them out rather than guess:</p>
+<ul><li><strong>Which field the error names:</strong> the criterion says the response names the offending field. <code>proposalCwuCreate.fieldError()</code> returns all the screen&#39;s errors as one string, so the tests only check that an error appears. A per-field observation on the create page, such as a proposal-text error and an additional-comments error, would let the test confirm the right field is named.</li><li><strong>Whether submitting was possible:</strong> no observation says whether submitting is currently allowed. The only one is <code>submitDisabledUntilTermsAccepted</code>, and it is tied to the terms. An observation like &quot;submit unavailable until a proponent is chosen&quot; would let the no-proponent test state the refusal directly instead of tolerating an action that fails.</li></ul>
+<p>The criterion also sets a lower bound (1 to 10,000 characters) that implies text at exactly 10,000 characters is accepted. Its given/when/then only describes refusals, so I didn&#39;t test the boundary being accepted.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-15 05:55.</p>
+<div class="body"><p>Question: do the rewritten R-2.13 tests follow from the criterion and nothing else? Ruling: approve. The four tests cover the criterion&#39;s statement: empty and over-long proposal text and over-long additional comments come from its given/when/then, and the no-proponent case comes from the statement&#39;s &#39;a complete proponent&#39;. Every assertion follows from the criterion: the proposal must not appear in the vendor&#39;s own list (the rejection), and in the three field cases an error must appear (a weaker, openly disclosed reading of &#39;the offending field is named&#39;, limited by fieldError() returning all the screen&#39;s errors as one string). Nothing about how the system is built leaks in; the tests use only the published surface contract, and the complete-individual field names match R-2.14&#39;s. The rewrite does what the redo note asked: no error message is expected in the no-proponent case, a submission the screen will not allow counts as the refusal, and the field cases poll for the error. The runner&#39;s typecheck passed with no diagnostics, the checks are green (the warnings concern superseded tests in other areas), no protected path is touched, the tier is STANDARD and no residual risk is unaccepted. Accepted weakness: in the no-proponent test, .catch(() =&gt; undefined) swallows any failure of submitProposal, not only an unavailable submit, so that test could pass without testing anything if the action broke for an unrelated reason; the redo note directed this and the contract has no observation of whether submitting is possible. What would change the ruling: the contract gaining a per-field error observation or a &#39;submit unavailable&#39; observation on the create page, after which the test should be re-derived to state which field is named and the refusal directly.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
