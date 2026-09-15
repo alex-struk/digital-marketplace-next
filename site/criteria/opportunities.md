@@ -4,30 +4,30 @@
 
 | id | test | old |
 | --- | --- | --- |
-| R-1.1 | acceptance/opportunities/R-1.1.spec.ts | fail |
+| R-1.1 | acceptance/opportunities/R-1.1.spec.ts | fail (ruled: spec-wrong) |
 | R-1.2 | acceptance/opportunities/R-1.2.spec.ts | pass |
-| R-1.3 | acceptance/opportunities/R-1.3.spec.ts | fail |
+| R-1.3 | acceptance/opportunities/R-1.3.spec.ts | fail (ruled: test-wrong) |
 | R-1.4 | acceptance/opportunities/R-1.4.spec.ts | pass |
 | R-1.5 | acceptance/opportunities/R-1.5.spec.ts | pass |
 | R-1.6 | acceptance/opportunities/R-1.6.spec.ts | pass |
 | R-1.7 | acceptance/opportunities/R-1.7.spec.ts | unbound |
 | R-1.8 | acceptance/opportunities/R-1.8.spec.ts | unbound |
 | R-1.9 | acceptance/opportunities/R-1.9.spec.ts | pass |
-| R-1.10 | acceptance/opportunities/R-1.10.spec.ts | fail |
-| R-1.11 | acceptance/opportunities/R-1.11.spec.ts | fail |
-| R-1.12 | acceptance/opportunities/R-1.12.spec.ts | fail |
+| R-1.10 | acceptance/opportunities/R-1.10.spec.ts | fail (ruled: test-wrong) |
+| R-1.11 | acceptance/opportunities/R-1.11.spec.ts | fail (ruled: test-wrong) |
+| R-1.12 | acceptance/opportunities/R-1.12.spec.ts | fail (ruled: test-wrong) |
 | R-1.13 | acceptance/opportunities/R-1.13.spec.ts | unbound |
-| R-1.14 | acceptance/opportunities/R-1.14.spec.ts | fail |
+| R-1.14 | acceptance/opportunities/R-1.14.spec.ts | fail (ruled: test-wrong) |
 | R-1.15 | acceptance/opportunities/R-1.15.spec.ts | unbound |
 | R-1.16 | acceptance/opportunities/R-1.16.spec.ts | unbound |
-| R-1.17 | acceptance/opportunities/R-1.17.spec.ts | fail |
+| R-1.17 | acceptance/opportunities/R-1.17.spec.ts | fail (ruled: spec-wrong) |
 | R-1.18 | acceptance/opportunities/R-1.18.spec.ts | unbound |
 | R-1.19 | acceptance/opportunities/R-1.19.spec.ts | pass |
 | R-1.20 | acceptance/opportunities/R-1.20.spec.ts | pass |
-| R-1.21 | acceptance/opportunities/R-1.21.spec.ts | fail |
+| R-1.21 | acceptance/opportunities/R-1.21.spec.ts | fail (ruled: test-wrong) |
 | R-1.22 | acceptance/opportunities/R-1.22.spec.ts | pass |
 | R-1.23 | acceptance/opportunities/R-1.23.spec.ts | pass |
-| R-1.24 | acceptance/opportunities/R-1.24.spec.ts | fail |
+| R-1.24 | acceptance/opportunities/R-1.24.spec.ts | fail (ruled: test-wrong) |
 | R-1.25 | not testable: blocked: the given is an opportunity at its program's final evaluation stage, and the seed carries none. Each program has exactly one closable opportunity, seeded at the first evaluation stage, and reaching the last one means walking that single record through consensus and every stage after it — which no second test could then repeat, because the seed is applied once and nothing resets it. Unblocked by seeding an opportunity already at each program's final evaluation stage, with its proposals scored up to that point. | not-testable |
 | R-1.26 | not testable: blocked: the given is an opportunity in processing, which the seed does not carry and which lies past the whole of evaluation on the one closable opportunity of each program. award_proposal is offered on all three proposal views and has nothing to act on. Unblocked by seeding an opportunity in processing, in each program, with more than one proposal still in contention so that the others can be seen to be marked not awarded. | not-testable |
 | R-1.27 | not testable: blocked: the given is an awarded opportunity, which needs processing, which needs the whole of evaluation on the one closable opportunity of each program. successful_proponent is named on all three opportunity views and has nothing to return. The withheld half needs an observation as well: no observation names the successful proponent's contact details, so their being withheld from a reader who may not see the score cannot be told from their not being shown to anybody. Unblocked by seeding an awarded opportunity and by an observation of the successful proponent's contact details. | not-testable |
@@ -42,7 +42,7 @@
 | R-1.36 | acceptance/opportunities/R-1.36.spec.ts | pass |
 | R-1.37 | acceptance/opportunities/R-1.37.spec.ts | pass |
 | R-1.38 | acceptance/opportunities/R-1.38.spec.ts | pass |
-| R-1.39 | acceptance/opportunities/R-1.39.spec.ts | fail |
+| R-1.39 | acceptance/opportunities/R-1.39.spec.ts | fail (ruled: test-wrong) |
 | R-1.40 | not testable: blocked: the given is an opportunity that has been evaluated. The seed carries none past the first evaluation stage, so full_report would return nothing for an administrator as well as for a member of staff and the contrast the criterion turns on could not be told from the report simply not existing yet. Unblocked by seeding a completed opportunity — awarded, with its addenda, its history and its proposals behind it — in at least one program. | not-testable |
 | R-1.41 | not testable: blocked: the given is a Sprint With Us or Team With Us opportunity at the questions consensus stage. The seed stops one stage earlier, and reaching consensus means every evaluator submitting an individual evaluation for every proponent of the one closable opportunity of that program — after which no other criterion could use the same record. Both refusal observations exist, not_all_consensuses_submitted_error and no_screenable_proponent_error, and neither has an opportunity to be read on. Unblocked by seeding an opportunity at the questions consensus stage in each program, one with a consensus still unsubmitted and one where no proponent has cleared every minimum score. | not-testable |
 | R-1.42 | not testable: blocked: the given is a Sprint With Us opportunity at the code challenge stage, two stages past where the seed leaves the one closable Sprint With Us opportunity. start_team_scenario has nothing to be refused on and the part-scored proponents the refusal turns on cannot be arranged. Unblocked by seeding a Sprint With Us opportunity at the code challenge stage with one proponent scored and another neither scored nor disqualified. | not-testable |
@@ -59,12 +59,12 @@
 | R-1.52 | — |  |
 | R-1.53 | acceptance/opportunities/R-1.53.spec.ts | fail (ruled: adapter-wrong) |
 | R-1.54 | — |  |
-| R-1.55 | acceptance/opportunities/R-1.55.spec.ts | fail |
+| R-1.55 | acceptance/opportunities/R-1.55.spec.ts | fail (ruled: test-wrong) |
 | R-1.56 | acceptance/opportunities/R-1.56.spec.ts | unbound |
 
-### R-1.1 · v2 · confirmed · accepted
+### R-1.1 · v3 · confirmed · accepted
 
-A published opportunity whose proposal deadline has passed closes on its own at the next request the service handles under /api or /status: it moves to the first evaluation stage of its program, every proposal submitted against it moves to review, and its author is notified that it is ready for evaluation.
+A published opportunity whose proposal deadline has passed closes on its own at the next request the service handles under /api or /status: it moves to the first evaluation stage of its program, every proposal submitted against it moves to review, and it is announced as ready for evaluation, to its author for a Code With Us opportunity and to the evaluators on its evaluation panel for a Sprint With Us or Team With Us opportunity.
 - cites: src/back-end/lib/db/opportunity/code-with-us.ts:898
 - cites: src/back-end/lib/db/opportunity/sprint-with-us.ts:1442
 - cites: src/back-end/lib/db/opportunity/team-with-us.ts:1433
@@ -251,9 +251,9 @@ A Sprint With Us opportunity must have an implementation phase, and may only hav
 - when: they include an inception phase but no prototype phase
 - then: the submission is rejected with a message saying a prototype phase must follow an inception phase
 
-### R-1.17 · v1 · confirmed · accepted
+### R-1.17 · v2 · confirmed · accepted
 
-Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question, a guideline, a maximum score, a response word limit and a position, and an optional minimum score that must be lower than the question's maximum score.
+Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position is set by its place in the opportunity's list of questions, which holds at most 100, and is never entered by the person; a question outside these limits is refused.
 - cites: src/shared/lib/validation/opportunity/sprint-with-us.ts:371
 - cites: src/shared/lib/validation/opportunity/team-with-us.ts:111
 - cites: src/shared/lib/resources/opportunity/sprint-with-us.ts:16

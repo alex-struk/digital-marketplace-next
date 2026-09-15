@@ -16,7 +16,7 @@
 | R-2.10 | acceptance/proposals/R-2.10.spec.ts | unbound |
 | R-2.11 | acceptance/proposals/R-2.11.spec.ts | unbound |
 | R-2.12 | acceptance/proposals/R-2.12.spec.ts | pass |
-| R-2.13 | acceptance/proposals/R-2.13.spec.ts | fail |
+| R-2.13 | acceptance/proposals/R-2.13.spec.ts | fail (ruled: test-wrong) |
 | R-2.14 | acceptance/proposals/R-2.14.spec.ts | fail (ruled: adapter-wrong) |
 | R-2.15 | not testable: blocked: the Code With Us half needs a published Code With Us opportunity whose proposal deadline has passed, and there is none. The one seeded Code With Us opportunity is open until 2030, and the create form refuses a deadline earlier than the day it is filled in, so the refusal the criterion quotes — "This opportunity is no longer accepting proposals." — has nothing to be raised against. The half that holds in all three programs needs a draft proposal against an opportunity already past its deadline: the two seeded closed opportunities are past theirs, but every vendor who could bid on one has already bid and every qualified organization is already named on a proposal of its own, so no draft can be added, and the deadline hook sits in front of the service's own routes so the state before the closure cannot be held still. Unblocked by seeding a Code With Us opportunity past its proposal deadline, and a draft proposal against a closed opportunity. | not-testable |
 | R-2.16 | acceptance/proposals/R-2.16.spec.ts | unbound |

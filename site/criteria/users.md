@@ -8,7 +8,7 @@
 | R-4.2 | not testable: blocked: the when is an account being created, which no persona brings about (see R-4.1), so the welcome message has nothing to follow. The withheld half needs two further things: a first-time persona whose identity supplies no email address (seed.users.vendorWithoutEmail already has an account), and a mail accessor that lists every message in the catcher — observables.yaml names read_messages, but the mail fixture only searches by one visible recipient, and a person with no address has no address to search by, so an empty search cannot show that nothing was attempted. Unblocked by the first-time personas R-4.1 needs, one of them without an email address, and a mail.all() (or equivalent) over read_messages. | not-testable |
 | R-4.3 | acceptance/users/R-4.3.spec.ts | unbound |
 | R-4.4 | acceptance/users/R-4.4.spec.ts | unbound |
-| R-4.5 | acceptance/users/R-4.5.spec.ts | fail |
+| R-4.5 | acceptance/users/R-4.5.spec.ts | fail (ruled: test-wrong) |
 | R-4.6 | acceptance/users/R-4.6.spec.ts | pass |
 | R-4.7 | — |  |
 | R-4.8 | acceptance/users/R-4.8.spec.ts | unbound |

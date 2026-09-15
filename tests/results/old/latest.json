@@ -1,8 +1,8 @@
 {
   "target": "old",
   "base_url": "http://localhost:3000",
-  "spec": "08d8aac0ee7ec7fcee1a309ef183dcb17e38221b",
-  "at": "2026-09-15T04:30:42.743Z",
+  "spec": "2d9a83e439479b419845aa46aa7d9d819b38de24",
+  "at": "2026-09-15T04:42:24.656Z",
   "rows": [
     {
       "id": "R-7.1",
@@ -467,7 +467,7 @@
           "error": "Error: evaluation-panel-swu.save_evaluation_panel — \"Save Changes\" is disabled on http://localhost:3000/opportunities/sprint-with-us/592d5cb1-733f-407b-9b53-c8a02dd46a35/edit?tab=evaluationPanel; the page shows no message"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-5.3",
@@ -496,7 +496,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-5.10",
@@ -667,7 +667,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-5.20",
@@ -745,7 +745,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-5.25",
@@ -765,7 +765,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "spec-wrong"
     },
     {
       "id": "R-5.26",
@@ -1205,7 +1205,7 @@
           "error": "Error: opportunity-twu-create.save_draft — the save never reached the record's address; still on http://localhost:3000/opportunities/team-with-us/create; the page shows no message"
         }
       ],
-      "triage": "product-question"
+      "ruled": "defect-in-old"
     },
     {
       "id": "R-8.20",
@@ -1664,7 +1664,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-6.24",
@@ -1749,7 +1749,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 30000ms exceeded while waiting on the predicate"
         }
       ],
-      "triage": "product-question"
+      "ruled": "spec-wrong"
     },
     {
       "id": "R-1.2",
@@ -1786,7 +1786,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.4",
@@ -1929,7 +1929,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.11",
@@ -1952,7 +1952,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.12",
@@ -1975,7 +1975,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.13",
@@ -2036,7 +2036,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.15",
@@ -2114,7 +2114,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "spec-wrong"
     },
     {
       "id": "R-1.18",
@@ -2191,7 +2191,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.22",
@@ -2236,7 +2236,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/evaluat|question/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 30000ms exceeded while waiting on the predicate"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.25",
@@ -2483,7 +2483,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"R-1.39 published opportunity in another town\"\u001b[39m\nReceived string:        \u001b[31m\"R-1.39 published opportunity about kittiwakes\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mPublished\u001b[39m\n\u001b[31mCloses Oct 29, 2026 at 4:00 PM PDT\u001b[39m\n\u001b[31mA short summary of the work to be done.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31m\u001b[7mR-1.39 published opportunity in another town\u001b[27m\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mPublished\u001b[39m\n\u001b[31mCloses Oct 29, 2026 at 4:00 PM PDT\u001b[39m\n\u001b[31mA short summary of the work to be done.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mKamloops\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mSeeded published Code With Us opportunity\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mPublished\u001b[39m\n\u001b[31mCloses Jun 1, 2030 at 4:59 PM PDT\u001b[39m\n\u001b[31mA published opportunity that exists before any test runs.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.40",
@@ -2633,7 +2633,7 @@
           "error": "Error: opportunity-twu-create.save_draft — the save never reached the record's address; still on http://localhost:3000/opportunities/team-with-us/create; the page shows no message"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.56",
@@ -2709,7 +2709,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-3.6",
@@ -2835,7 +2835,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-3.13",
@@ -2855,7 +2855,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-3.14",
@@ -2938,7 +2938,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "defect-in-old"
     },
     {
       "id": "R-3.20",
@@ -2995,7 +2995,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "defect-in-old"
     },
     {
       "id": "R-3.23",
@@ -3096,7 +3096,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"FULL_STACK_DEVELOPER\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-3.30",
@@ -3368,7 +3368,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-2.14",
@@ -3860,7 +3860,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-4.6",

@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | R-3.1 | acceptance/organizations/R-3.1.spec.ts | pass |
 | R-3.2 | acceptance/organizations/R-3.2.spec.ts | pass |
-| R-3.3 | acceptance/organizations/R-3.3.spec.ts | fail |
+| R-3.3 | acceptance/organizations/R-3.3.spec.ts | fail (ruled: test-wrong) |
 | R-3.4 | — |  |
 | R-3.5 | — |  |
 | R-3.6 | acceptance/organizations/R-3.6.spec.ts | unbound |
@@ -15,23 +15,23 @@
 | R-3.9 | acceptance/organizations/R-3.9.spec.ts | unbound |
 | R-3.10 | acceptance/organizations/R-3.10.spec.ts | unbound |
 | R-3.11 | acceptance/organizations/R-3.11.spec.ts | unbound |
-| R-3.12 | acceptance/organizations/R-3.12.spec.ts | fail |
-| R-3.13 | acceptance/organizations/R-3.13.spec.ts | fail |
+| R-3.12 | acceptance/organizations/R-3.12.spec.ts | fail (ruled: test-wrong) |
+| R-3.13 | acceptance/organizations/R-3.13.spec.ts | fail (ruled: test-wrong) |
 | R-3.14 | acceptance/organizations/R-3.14.spec.ts | pass |
 | R-3.15 | not testable: blocked: the outcome is which organizations a vendor is offered as ones they may act on behalf of, and nothing in the surface reads that set. The only place it is offered is the organization picker on proposal-swu-create and proposal-twu-create, where choose_organization is an action with no observation of the organizations it offers or of a choice it refuses. organization-list.my_organizations and the owned and affiliated tables on organization-user-memberships(-self) read the organizations a vendor belongs to, which include those where they are only an ordinary member, and the affiliated table does not tell an administered organization from a member one, so none of them separates the four organizations the given describes. The given itself can be built through the surface (add_team_members, approve_invitation, toggle_member_admin_status, archive_organization). Unblocked by an observation of the organizations offered for a vendor to act on behalf of, such as proposal-swu-create.organization_choices and its Team With Us sibling, or an organization-list observation that reads only those organizations. | not-testable |
 | R-3.16 | — |  |
 | R-3.17 | not testable: The only way the surface creates an invitation is organization-edit's add_team_members, whose subject is email addresses; no page in the contract offers a membership type on an invitation, so a test cannot send one other than the "member" the team surface always sends, and therefore cannot reach the rejection of any other type. Needs an add_team_members that carries a membership type, and an observation of the invalid-membership-type refusal. | not-testable |
 | R-3.18 | acceptance/organizations/R-3.18.spec.ts | fail (ruled: defect-in-old) |
-| R-3.19 | acceptance/organizations/R-3.19.spec.ts | fail |
+| R-3.19 | acceptance/organizations/R-3.19.spec.ts | fail (ruled: defect-in-old) |
 | R-3.20 | not testable: The criterion turns entirely on telling a refusal apart from an empty answer, and no page in the organizations domain carries a refusal observation — organization-list offers organization_name, owner_name, the two qualification marks and pagination, none of which distinguishes "you are not permitted" from "you may act for nothing". Needs an observation such as organization-list.refused_when_not_permitted, or a page of its own for the organizations one may act on behalf of. | not-testable |
 | R-3.21 | acceptance/organizations/R-3.21.spec.ts | pass |
-| R-3.22 | acceptance/organizations/R-3.22.spec.ts | fail |
+| R-3.22 | acceptance/organizations/R-3.22.spec.ts | fail (ruled: defect-in-old) |
 | R-3.23 | acceptance/organizations/R-3.23.spec.ts | pass |
 | R-3.24 | acceptance/organizations/R-3.24.spec.ts | pass |
 | R-3.25 | acceptance/organizations/R-3.25.spec.ts | fail (ruled: adapter-wrong) |
 | R-3.26 | acceptance/organizations/R-3.26.spec.ts | fail (ruled: adapter-wrong) |
 | R-3.27 | acceptance/organizations/R-3.27.spec.ts | pass |
-| R-3.28 | acceptance/organizations/R-3.28.spec.ts | fail |
+| R-3.28 | acceptance/organizations/R-3.28.spec.ts | fail (ruled: test-wrong) |
 | R-3.29 | — |  |
 | R-3.30 | acceptance/organizations/R-3.30.spec.ts | pass |
 | R-3.31 | acceptance/organizations/R-3.31.spec.ts | unbound |
@@ -262,6 +262,7 @@ The Edit and Archive controls on an organization's management page are offered o
 
 A change to an organization's contact phone number made while editing its profile is saved along with every other profile field, and clearing the field removes the stored number.
 - replaces: R-3.5
+- note: calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it
 
 ### R-3.20 · v1 · confirmed · accepted
 
@@ -296,6 +297,7 @@ Registering an organization requires a legal name, street address, city, region,
 - when: they submit it with the legal name left blank, or with a contact email of "not-an-email"
 - then: the organization is not created and the offending field is reported as invalid, while the same submission with the optional website, second address line, contact title and phone left empty succeeds
 - note: the published interface description lists the same set of fields but says nothing about which are required or how long they may be, so the required/optional split and the hundred-character limit rest on the code alone.
+- note: calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it
 
 ### R-3.23 · v1 · confirmed · accepted
 
