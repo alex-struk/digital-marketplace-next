@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-evaluation-9 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">106</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">106</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">94</span></a></li><li><a href="../runs.html">Run log <span class="count">9</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-evaluation-9</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-15 02:10</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised evaluation tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I fixed the R-5.22 test in <code>tests/acceptance/evaluation/R-5.22.spec.ts</code> for all three conditions.</p>
+<p>I fixed the R-5.22 test in <code>tests/acceptance/evaluation/R-5.22.spec.ts</code> for all three conditions. Nothing else in the workspace changed. I couldn&#39;t run a typecheck: the workspace has a <code>tests/tsconfig.json</code> but no TypeScript compiler or <code>node_modules</code>. The file only uses types the returned version already passed with, but the runner&#39;s typecheck still needs to confirm it.</p>
+<p><strong>Condition 1: wait for each rejection.</strong> All four tests now retry the error read until it shows up or a 15-second wait runs out. They use <code>expect.poll</code>, as <code>tests/acceptance/content/R-7.20.spec.ts</code> does. The wait time is one shared constant, <code>settle</code>. Afterwards, no immediate <code>expect(await …)</code> read was left in the file. The things the tests check are unchanged: <code>scoreOutOfRangeError()</code> for a score of six and <code>emptyNotesError()</code> for an empty comment, on both the Sprint With Us and Team With Us individual create pages.</p>
+<p><strong>Condition 2: fill the comment, then clear it.</strong> In both empty-comment tests the comment for question 0 is first set to &quot;A full answer to the first question.&quot; and then set to &quot;&quot;, so it really changes to empty before the error is read. The score of four is still entered first, so the comment is the only thing wrong. I added a short note to the file&#39;s opening comment explaining why each read waits and why the comment is filled before it is cleared.</p>
+<p><strong>Condition 3: keep the R-5.22 entry in <code>tests/acceptance/redo.yaml</code>.</strong> The entry is still there, because the workspace started from the last approved version, not the returned proposal. I left the file untouched.</p>
+<p>Everything else stays as it was:</p>
+<ul><li><strong>Header:</strong> I left both header lines as they were, including the &quot;derived 2026-09-15&quot; date. This is a repair to what was written against that spec version, not a new derivation, and I wasn&#39;t given a new header.</li><li><strong>Other files:</strong> no other file under <code>tests/acceptance/evaluation/</code> changed. R-5.22 has no entry in <code>tests/acceptance/not-testable.yaml</code>, and that file is unchanged.</li></ul>
+<p>The two parts of the criterion that still aren&#39;t tested are the same, and the file&#39;s comments still explain them:</p>
+<ul><li><strong>Too many decimal places:</strong> no observation on either individual create page reports a score with too many decimal places. Something like <code>scoreTooManyDecimalPlacesError</code> would reach it.</li><li><strong>Submitting an incomplete evaluation:</strong> no action saves a draft the form refuses, which is the same gap recorded for R-5.23.</li></ul></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-15 02:12.</p>
+<div class="body"><p>Question: do the revised R-5.22 tests follow from their criterion and from nothing else, and do they meet the three conditions from derive-tests-evaluation-stale-1? Ruling: approve. Against the returned version (075c1f7), the only changes to tests/acceptance/evaluation/R-5.22.spec.ts are the requested fixes. First, all four tests now read the rejection with expect.poll and a shared 15-second timeout instead of one immediate read. Second, both empty-comment tests enter &#39;A full answer to the first question.&#39; before setting the comment to &#39;&#39;, so the comment really changes to empty, and the score of 4 still makes the comment the only thing wrong. The assertions are unchanged and follow from the criterion&#39;s example: scoreOutOfRangeError after six on a five-point question, and emptyNotesError after an empty comment, on both the Sprint With Us and Team With Us individual create pages. Nothing about how the app is built leaks in. The two untested parts still name real gaps: no observation reports a score with too many decimal places, and no action saves a draft the form refuses, the same gap recorded for R-5.23. Third, the branch leaves tests/acceptance/redo.yaml alone and the R-5.22 entry is still there, so the calibration can confirm the redo&#39;s reason is met. The runner&#39;s typecheck passed with no diagnostics under acceptance/evaluation/. One inaccuracy: the writer says tests/acceptance/not-testable.yaml is unchanged, but the proposal commit rewrote it. Sorting both versions gives identical lines: the R-5.11, R-5.21, R-5.23, R-5.26, R-5.34 and R-5.37 entries moved to the end of the file with no text changed, so it changes nothing and is not a reason to return. No protected path is touched, the tier is STANDARD and no residual risk is marked unaccepted, so nothing escalates. What would change the ruling: finding that not-testable.yaml changed more than its order, or a test asserting something the criterion does not state.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>Not the writer&#39;s: the not-testable.yaml change in this commit only reorders entries (the six evaluation entries moved to the end, no text changed). Whoever owns the proposal tooling should find out why the file was rewritten when the writer reports leaving it alone, so later diffs don&#39;t carry reorders that change nothing.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
