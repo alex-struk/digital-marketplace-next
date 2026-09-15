@@ -15,16 +15,16 @@
 | R-3.9 | acceptance/organizations/R-3.9.spec.ts | unbound |
 | R-3.10 | acceptance/organizations/R-3.10.spec.ts | unbound |
 | R-3.11 | acceptance/organizations/R-3.11.spec.ts | unbound |
-| R-3.12 | acceptance/organizations/R-3.12.spec.ts | fail |
+| R-3.12 | acceptance/organizations/R-3.12.spec.ts | fail (ruled: adapter-wrong) |
 | R-3.13 | acceptance/organizations/R-3.13.spec.ts | unbound |
 | R-3.14 | acceptance/organizations/R-3.14.spec.ts | pass |
 | R-3.15 | acceptance/organizations/R-3.15.spec.ts | fail (ruled: test-wrong) |
 | R-3.16 | — |  |
 | R-3.17 | not testable: The only way the surface creates an invitation is organization-edit's add_team_members, whose subject is email addresses; no page in the contract offers a membership type on an invitation, so a test cannot send one other than the "member" the team surface always sends, and therefore cannot reach the rejection of any other type. Needs an add_team_members that carries a membership type, and an observation of the invalid-membership-type refusal. | not-testable |
 | R-3.18 | acceptance/organizations/R-3.18.spec.ts | fail |
-| R-3.19 | acceptance/organizations/R-3.19.spec.ts | fail |
+| R-3.19 | acceptance/organizations/R-3.19.spec.ts | fail (ruled: adapter-wrong) |
 | R-3.20 | not testable: The criterion turns entirely on telling a refusal apart from an empty answer, and no page in the organizations domain carries a refusal observation — organization-list offers organization_name, owner_name, the two qualification marks and pagination, none of which distinguishes "you are not permitted" from "you may act for nothing". Needs an observation such as organization-list.refused_when_not_permitted, or a page of its own for the organizations one may act on behalf of. | not-testable |
-| R-3.21 | acceptance/organizations/R-3.21.spec.ts | fail |
+| R-3.21 | acceptance/organizations/R-3.21.spec.ts | fail (ruled: adapter-wrong) |
 | R-3.22 | acceptance/organizations/R-3.22.spec.ts | unbound |
 | R-3.23 | acceptance/organizations/R-3.23.spec.ts | unbound |
 | R-3.24 | acceptance/organizations/R-3.24.spec.ts | unbound |

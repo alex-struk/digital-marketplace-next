@@ -15,7 +15,7 @@
   <span class="profile">rebuild profile</span>
 </div>
 <div class="shell">
-<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">99</span></a></li><li><a href="../proposals.html">Proposals <span class="count">99</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">88</span></a></li><li><a href="../runs.html">Run log <span class="count">9</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html" aria-current="page">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">99</span></a></li><li><a href="../proposals.html">Proposals <span class="count">99</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">89</span></a></li><li><a href="../runs.html">Run log <span class="count">9</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html" aria-current="page">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
 <main id="main">
 <div class="page-head"><h1>evaluation</h1>
 <p class="lede">37 criteria, 24 with a derived acceptance test, 6 recorded as not testable through the contract surface.</p></div>
@@ -28,7 +28,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">An opportunity that uses a panel must name at least two panel members, each a public sector employee, each named only once, and at most one of them marked as chair.</p>
-  <dl><dt>given</dt><dd>a public sector employee setting the evaluation panel of a Sprint With Us or Team With Us opportunity</dd><dt>when</dt><dd>they save a panel of one person, or a panel naming the same person twice, or a panel naming two chairs, or a panel naming a vendor</dd><dt>then</dt><dd>the panel is rejected with a message naming the rule that was broken, and the opportunity keeps the panel it had</dd><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.1.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>cites</dt><dd><code>src/back-end/lib/validation.ts:914</code><br><code>src/back-end/lib/validation.ts:938</code><br><code>src/back-end/lib/validation.ts:949</code><br><code>src/back-end/lib/validation.ts:856</code><br><code>src/back-end/lib/validation.ts:487</code><br><code>src/shared/config.ts:32</code><br><code>src/shared/config.ts:34</code><br><code>src/migrations/tasks/20240527213854_add-evaluation-committee-panel-tables.ts:38</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the minimum of two members is the same for both programs.</dd></dl>
+  <dl><dt>given</dt><dd>a public sector employee setting the evaluation panel of a Sprint With Us or Team With Us opportunity</dd><dt>when</dt><dd>they save a panel of one person, or a panel naming the same person twice, or a panel naming two chairs, or a panel naming a vendor</dd><dt>then</dt><dd>the panel is rejected with a message naming the rule that was broken, and the opportunity keeps the panel it had</dd><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.1.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled adapter-wrong</dd><dt>cites</dt><dd><code>src/back-end/lib/validation.ts:914</code><br><code>src/back-end/lib/validation.ts:938</code><br><code>src/back-end/lib/validation.ts:949</code><br><code>src/back-end/lib/validation.ts:856</code><br><code>src/back-end/lib/validation.ts:487</code><br><code>src/shared/config.ts:32</code><br><code>src/shared/config.ts:34</code><br><code>src/migrations/tasks/20240527213854_add-evaluation-committee-panel-tables.ts:38</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the minimum of two members is the same for both programs.</dd></dl>
 </article>
 <article class="criterion" data-state="untested">
   <header>
@@ -108,7 +108,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The service must reject an evaluation panel that names no chair, applying the same rule the browser form already applies, so that no opportunity can enter consensus with nobody able to record the agreed score.</p>
-  <dl><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.9.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>replaces</dt><dd>R-5.2</dd></dl>
+  <dl><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.9.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled adapter-wrong</dd><dt>replaces</dt><dd>R-5.2</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -118,7 +118,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The refusal shown when no proponent clears every question&#39;s minimum score must name the stage that actually follows — the Code Challenge for Sprint With Us and the Challenge for Team With Us.</p>
-  <dl><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.10.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>replaces</dt><dd>R-5.4</dd></dl>
+  <dl><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.10.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled adapter-wrong</dd><dt>replaces</dt><dd>R-5.4</dd></dl>
 </article>
 <article class="criterion is-not-testable" data-state="not-testable">
   <header>
@@ -148,7 +148,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">Finalising the consensus scores must be refused unless every proponent still under review of the questions has a submitted consensus, so that no proponent is left neither screened in nor screened out.</p>
-  <dl><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.13.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>replaces</dt><dd>R-5.7</dd></dl>
+  <dl><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.13.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled adapter-wrong</dd><dt>replaces</dt><dd>R-5.7</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -158,7 +158,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The action that finalises consensus scores must be offered to whoever the service accepts it from — the opportunity&#39;s owner as well as an administrator — so that the browser and the service agree on who may finalise.</p>
-  <dl><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.14.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>replaces</dt><dd>R-5.8</dd></dl>
+  <dl><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.14.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled adapter-wrong</dd><dt>replaces</dt><dd>R-5.8</dd></dl>
 </article>
 <article class="criterion" data-state="untested">
   <header>
@@ -178,7 +178,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The evaluation panel may be set or changed while an opportunity is a draft, under review, published, or in individual question evaluation, and is fixed from the consensus stage onwards.</p>
-  <dl><dt>given</dt><dd>an opportunity whose questions are being evaluated individually</dd><dt>when</dt><dd>its owner changes the evaluation panel, and then tries again once the opportunity has moved to consensus</dd><dt>then</dt><dd>the first change is accepted and the second is refused</dd><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.16.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>cites</dt><dd><code>src/shared/lib/resources/opportunity/sprint-with-us.ts:631</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1998</code><br><code>src/shared/lib/resources/opportunity/team-with-us.ts:585</code><br><code>src/back-end/lib/resources/opportunity/team-with-us/index.ts:1382</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>because the panel is recorded against a version of the opportunity and changing it writes a new version, a panel change also appears in the opportunity&#39;s history as an edit, and the count of evaluators the service waits for changes with it.</dd></dl>
+  <dl><dt>given</dt><dd>an opportunity whose questions are being evaluated individually</dd><dt>when</dt><dd>its owner changes the evaluation panel, and then tries again once the opportunity has moved to consensus</dd><dt>then</dt><dd>the first change is accepted and the second is refused</dd><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.16.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled adapter-wrong</dd><dt>cites</dt><dd><code>src/shared/lib/resources/opportunity/sprint-with-us.ts:631</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1998</code><br><code>src/shared/lib/resources/opportunity/team-with-us.ts:585</code><br><code>src/back-end/lib/resources/opportunity/team-with-us/index.ts:1382</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>because the panel is recorded against a version of the opportunity and changing it writes a new version, a panel change also appears in the opportunity&#39;s history as an edit, and the count of evaluators the service waits for changes with it.</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -198,7 +198,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The membership of an evaluation panel is shown only to an administrator, the opportunity&#39;s owner, and the people on the panel itself.</p>
-  <dl><dt>given</dt><dd>an opportunity with an evaluation panel</dd><dt>when</dt><dd>a vendor, or a public sector employee who is neither the owner nor on the panel, opens the opportunity</dd><dt>then</dt><dd>no panel membership is shown to them, while an administrator, the owner and each panel member all see it</dd><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.18.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:892</code><br><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:934</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>an opportunity with an evaluation panel</dd><dt>when</dt><dd>a vendor, or a public sector employee who is neither the owner nor on the panel, opens the opportunity</dd><dt>then</dt><dd>no panel membership is shown to them, while an administrator, the owner and each panel member all see it</dd><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.18.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled adapter-wrong</dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:892</code><br><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:934</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -208,7 +208,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">A panel member may open an opportunity they sit on the panel for even before it is public, and it is listed for them under a separate heading for work they are evaluating.</p>
-  <dl><dt>given</dt><dd>a draft opportunity whose panel names a public sector employee who did not create it</dd><dt>when</dt><dd>that person opens their dashboard and then the opportunity</dd><dt>then</dt><dd>the opportunity is listed under &quot;Evaluations&quot; and they can open it, whereas another public sector employee cannot see it at all</dd><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.19.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:793</code><br><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:640</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:172</code><br><code>src/front-end/typescript/lib/pages/dashboard.tsx:524</code><br><code>src/front-end/typescript/lib/pages/dashboard.tsx:789</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>a draft opportunity whose panel names a public sector employee who did not create it</dd><dt>when</dt><dd>that person opens their dashboard and then the opportunity</dd><dt>then</dt><dd>the opportunity is listed under &quot;Evaluations&quot; and they can open it, whereas another public sector employee cannot see it at all</dd><dt>test</dt><dd><code>tests/acceptance/evaluation/R-5.19.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled adapter-wrong</dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:793</code><br><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:640</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:172</code><br><code>src/front-end/typescript/lib/pages/dashboard.tsx:524</code><br><code>src/front-end/typescript/lib/pages/dashboard.tsx:789</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>

@@ -2,7 +2,7 @@
   "target": "old",
   "base_url": "http://localhost:3000",
   "spec": "1c3743e9fb53c29de89a28045222abab29c5e27e",
-  "at": "2026-09-15T01:08:19.087Z",
+  "at": "2026-09-15T01:18:29.734Z",
   "rows": [
     {
       "id": "R-7.1",
@@ -132,7 +132,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-7.10",
@@ -181,7 +182,8 @@
           "title": "the pages the service needs are marked on the list as needed by the service",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-7.13",
@@ -300,7 +302,8 @@
           "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — a page with a title of a hundred characters and a body of fifty thousand is accepted",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-7.21",
@@ -352,7 +355,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-7.23",
@@ -464,7 +468,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.3",
@@ -492,7 +497,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.10",
@@ -511,7 +517,8 @@
           "status": "failed",
           "error": "Error: unbound: evaluation-individual-create-twu.enter_question_score — no field labelled \"Score\" on http://localhost:3000/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/proposals/00000000-0000-4000-8000-000000000841/resource-questions/evaluations/create?tab=resourceQuestions"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.11",
@@ -547,7 +554,8 @@
           "status": "failed",
           "error": "Error: evaluation-individual-list-swu.submit_scores_for_consensus — \"Submit Scores for Consensus\" is disabled on http://localhost:3000/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluation; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.14",
@@ -561,7 +569,8 @@
           "status": "failed",
           "error": "Error: evaluation-individual-list-swu.submit_scores_for_consensus — \"Submit Scores for Consensus\" is disabled on http://localhost:3000/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluation; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.16",
@@ -594,7 +603,8 @@
           "status": "failed",
           "error": "Error: evaluation-individual-list-swu.submit_scores_for_consensus — \"Submit Scores for Consensus\" is disabled on http://localhost:3000/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluation; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.17",
@@ -644,7 +654,8 @@
           "status": "failed",
           "error": "Error: unbound: opportunity-swu-create.set_evaluation_panel — no panel member matching \"00000000-0000-4000-8000-000000000104\""
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.19",
@@ -663,7 +674,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"R-5.19 draft opportunity listed for the people evaluating it\"\u001b[39m\nReceived string:    \u001b[31m\"Dashboard\u001b[39m\n\u001b[31mMy Opportunities\u001b[39m\n\u001b[31mEvaluations\u001b[39m\n\u001b[31mEvaluations\u001b[39m\n\u001b[31mView all opportunities\u001b[39m\n\u001b[31mTITLE\tSTATUS\tCREATED·\u001b[39m\n\u001b[31mSeeded closed Sprint With Us opportunity\u001b[39m\n\u001b[31mSPRINT WITH US··\u001b[39m\n\u001b[31mTeam Questions Evaluation··\u001b[39m\n\u001b[31mJul 16, 2026\u001b[39m\n\u001b[31mCASEY PLACEHOLDER··\u001b[39m\n\u001b[31mSeeded closed Team With Us opportunity\u001b[39m\n\u001b[31mTEAM WITH US··\u001b[39m\n\u001b[31mPublished··\u001b[39m\n\u001b[31mJul 16, 2026\u001b[39m\n\u001b[31mCASEY PLACEHOLDER\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.20",
@@ -705,7 +717,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-5.23",
@@ -1193,7 +1206,8 @@
           "status": "failed",
           "error": "Error: opportunity-twu-create.save_draft — the save never reached the record's address; still on http://localhost:3000/opportunities/team-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-8.20",
@@ -1222,7 +1236,8 @@
           "status": "failed",
           "error": "Error: proposal-cwu-create.submit_proposal — \"Submit Proposal\" is disabled on http://localhost:3000/opportunities/code-with-us/76df15f8-1ddc-478d-974c-0170052c1180/proposals/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-8.21",
@@ -1578,7 +1593,8 @@
           "title": "the watch itself is retained so that reactivating the account restores it",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-6.18",
@@ -1730,7 +1746,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"review\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.2",
@@ -1783,7 +1800,8 @@
           "title": "every change to an opportunity's content records an edit in its history",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.5",
@@ -1854,7 +1872,8 @@
           "status": "failed",
           "error": "Error: opportunity-twu-create.save_draft — the save never reached the record's address; still on http://localhost:3000/opportunities/team-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.9",
@@ -1910,7 +1929,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.11",
@@ -1934,7 +1954,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.12",
@@ -1958,7 +1979,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.13",
@@ -2020,7 +2042,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/4:00|16:00/\u001b[39m\nReceived string:  \u001b[31m\"Sep 28, 2026\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.15",
@@ -2100,7 +2123,8 @@
           "title": "a Team With Us evaluation question whose minimum score is not lower than its maximum is rejected",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.18",
@@ -2226,7 +2250,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Proponent 1\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.25",
@@ -2846,7 +2871,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.13",
@@ -2943,7 +2969,8 @@
           "title": "the service refuses an archive request from an organization administrator who is not the owner",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-3.19",
@@ -2961,7 +2988,8 @@
           "title": "clearing the contact phone number removes the stored number",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.20",
@@ -2995,7 +3023,8 @@
           "title": "the owner and qualification columns are not offered at all to public sector staff",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.22",
@@ -3216,7 +3245,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeFalsy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"Not Found\u001b[39m\n\u001b[31mThe page you are looking for doesn't exist.\u001b[39m\n\u001b[31mGo Home\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.2",
@@ -3230,7 +3260,8 @@
           "status": "failed",
           "error": "Error: proposal-cwu-create.save_draft — the field for \"proposalText\" is disabled on http://localhost:3000/opportunities/code-with-us/fa2ccaf6-9e94-44ca-82c5-9eb486acf86a/proposals/775d1458-b90d-4d8c-a946-54a744be7b96/edit"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-2.3",
@@ -3248,7 +3279,8 @@
           "status": "failed",
           "error": "Error: proposal-cwu-create.submit_proposal — \"Submit Proposal\" is disabled on http://localhost:3000/opportunities/code-with-us/b68b18d8-0082-4dc1-aef9-8259270f9483/proposals/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.4",
@@ -3266,7 +3298,8 @@
           "title": "only a draft proposal can be deleted, and deleting it removes it permanently",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.5",
@@ -3396,7 +3429,8 @@
           "status": "failed",
           "error": "Error: proposal-cwu-create.accept_program_terms — \"Submit\" is disabled on http://localhost:3000/opportunities/code-with-us/09d79211-fcf3-4645-a86b-481148b977a9/proposals/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.14",
@@ -3415,7 +3449,8 @@
           "status": "failed",
           "error": "Error: proposal-cwu-create.submit_proposal — \"Submit Proposal\" is disabled on http://localhost:3000/opportunities/code-with-us/4241efbf-c7b5-42fd-a3cd-0cea742f89ee/proposals/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.15",
@@ -3600,7 +3635,8 @@
           "status": "failed",
           "error": "Error: proposal-cwu-create.submit_proposal — \"Submit Proposal\" is disabled on http://localhost:3000/opportunities/code-with-us/2c0b25cf-c3cd-4f21-95b7-1ed1135f690e/proposals/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.24",
@@ -3883,7 +3919,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-4.6",
@@ -3937,7 +3974,8 @@
           "title": "they are told by email",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-4.12",
@@ -3965,7 +4003,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-4.13",
@@ -4064,7 +4103,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"Reactivate\"\u001b[39m\nReceived string:        \u001b[31m\"Digital Marketplace\u001b[39m\n\u001b[31madmin.one@example.test\u001b[39m\n\u001b[31mDashboard\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mOpportunities\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mOrganizations\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mUsers\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mContent\u001b[39m\n\u001b[31mAlex Placeholder\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mInactive\u001b[39m\n\u001b[31mAccount Type\u001b[39m\n\u001b[31mVendor\u001b[39m\n\u001b[31mProfile Picture (Optional)\u001b[39m\n\u001b[31mGitHub\u001b[39m\n\u001b[31mName\u001b[39m\n\u001b[31mEmail Address\u001b[39m\n\u001b[31m\u001b[7mReactivate\u001b[27m Account\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mReactivate this user's account to enable their access to the Digital Marketplace.\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mReactivate Account\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-4.20",
