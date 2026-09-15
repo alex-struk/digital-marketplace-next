@@ -34,3 +34,24 @@ The rules don't allow a `not-testable.yaml` entry beside a test file. So these t
 - **A `mail` accessor for one message's body** (the HTML or plain text, which `observables.yaml` already calls `html_body` and `plain_text_body`). R-6.23 needs it to confirm the link to accept the new terms. It is the same gap already recorded for R-6.12, R-6.16 and R-6.18.
 - **A way to make one delivery fail**, such as a catcher-refused address given to a seeded vendor. R-6.28 needs it for its "cannot reach" claim.
 - **A view of the order a broadcast sends in**, or a seeded state that puts the unaddressable recipient before others. Without it, R-6.28's "continues past" check relies on reachable vendors coming after that recipient, which the test can't confirm.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+The question is whether the rewritten R-6.23 and R-6.28 tests follow from their criteria and nothing else. Approved. R-6.23 checks only what its criterion states. Before announcing, it confirms that both active and deactivated vendors include someone with a standing acceptance. It then confirms that every such vendor's acceptance is withdrawn, deactivated vendors included, and that each active vendor with an address gets a message naming the terms. It does not check that deactivated vendors get no message, which appears only in the criterion's note. The link to accept the new terms is unchecked for a real reason: the mail helper returns no message body. R-6.28 now tests only the one claim that can be seen from outside the service, that a broadcast continues past a recipient with no address. The seed gives vendorWithoutEmail a null email, so that precondition is real. Both untested claims have genuine reasons. Skipping and sending to nobody leave the same trace, since neither can reach the mail catcher, and nothing in the seed or the mail setup can make one delivery fail. Neither file names a selector, route, table, column or status code, and the runner's typecheck is clean. Two limits are stated openly and accepted. The send order cannot be seen, so R-6.28 is convincing only while a vendor with an address comes after the one without. It also relies on R-6.23's rule that the announcement reaches every active vendor. The removed redo.yaml and applied.yaml entries are the redo requests and old-version rulings these rewrites answer, and no protected path is touched. The tier is STANDARD and no residual risk is marked unaccepted, so this does not escalate. The ruling would become a return if either test asserted something its criterion does not state, if the typecheck regressed, or if the send-order limit stopped being stated in the file.
+
+**Conditions:**
+- Carried forward, not the writer's: the mail helper (tests/fixtures/mail.ts) should expose a message's body, which observables.yaml already names as html_body and plain_text_body, so R-6.23 can confirm the link to read and accept the new terms.
+- Carried forward, not the writer's: the seed or contract owner should provide one active vendor whose delivery fails (for example an address the catcher is set to refuse, named in observables.yaml), so R-6.28's 'cannot reach' claim can be tested.
+- Carried forward, not the writer's: until the order a broadcast sends in can be seen, or a seeded state puts the vendor without an address before the others, R-6.28's 'continues past' evidence depends on at least one vendor with an address coming after that vendor.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `81364b13ea85cf035ee1bcc14e601ac896f7ee52`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/notifications/`, which this proposal answers for.
+
+    No diagnostics.
