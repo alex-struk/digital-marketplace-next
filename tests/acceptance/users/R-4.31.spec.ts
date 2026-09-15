@@ -1,17 +1,18 @@
 // criterion: @R-4.31 v2
-// provenance: blind, spec@1c3743e9fb53c29de89a28045222abab29c5e27e, derived 2026-09-14
+// provenance: blind, spec@08d8aac0ee7ec7fcee1a309ef183dcb17e38221b, derived 2026-09-15
 import { test, expect, persona, seed } from "../../fixtures";
 
-// The criterion's first outcome, a second deactivation of an account that is already inactive
-// being refused with a message saying so, has no request the surface can make and no
-// observation to read it by. deactivate_account on user-profile is the control on a profile,
-// which an inactive account's profile offers reactivation in place of, and no page carries an
-// already-inactive refusal. The same holds for the service accepting a deactivation an
-// administrator aims at their own account: the control the criterion says is withheld is the
-// only way to ask.
+// Only the second outcome is reachable. The first — a second deactivation of an account that
+// is already inactive being refused with a message saying so — needs a request the surface
+// cannot make: deactivate_account on user-profile is the control on a profile, an inactive
+// account's profile offers reactivation in its place, and no page carries an already-inactive
+// refusal to read. The clause that the service would accept an administrator's deactivation of
+// their own account is likewise out of reach, because the withheld control is the only way
+// the surface has to ask.
 //
-// What is reachable is the interface restriction, read against a profile that does offer the
-// control, so its absence is the absence of something the screen otherwise has.
+// Whether a deactivation control is offered is read from whether using it brings up the
+// confirmation, first on a profile that must offer it, so its absence on the administrator's
+// own profile is the absence of something the screen otherwise has.
 test("an administrator viewing their own profile is offered no deactivation control", async ({ surface }) => {
   await surface.signIn(persona.administrator);
 
@@ -27,13 +28,30 @@ test("an administrator viewing their own profile is offered no deactivation cont
     await surface.userProfile.open({ userId: seed.users.vendorOne.id });
   }
   expect(await surface.userProfile.statusBadge()).toBe(active);
-  expect(await surface.userProfile.profileTab()).toContain("Deactivate");
+
+  await surface.userProfile.deactivateAccount();
+  expect(await surface.userProfile.activationModal()).toBeTruthy();
+  await surface.userProfile.cancelActivationChange();
 
   await surface.userProfile.open({ userId: seed.users.administratorOne.id });
   expect(await surface.userProfile.idpUsernameReadonly()).toContain(seed.users.administratorOne.idp_id);
-  expect(await surface.userProfile.profileTab()).not.toContain("Deactivate");
+  try {
+    await surface.userProfile.deactivateAccount();
+  } catch {
+    // No control was offered to use.
+  }
+  expect(await surface.userProfile.activationModal()).toBeFalsy();
 
   await surface.userProfileSelf.open();
   expect(await surface.userProfileSelf.idpUsernameReadonly()).toContain(seed.users.administratorOne.idp_id);
-  expect(await surface.userProfileSelf.profileTab()).not.toContain("Deactivate");
+  try {
+    await surface.userProfileSelf.deactivateAccount();
+  } catch {
+    // No control was offered to use.
+  }
+  expect(await surface.userProfileSelf.activationModal()).toBeFalsy();
+
+  // Nothing was deactivated along the way.
+  await surface.userProfile.open({ userId: seed.users.administratorOne.id });
+  expect(await surface.userProfile.statusBadge()).toBe(active);
 });

@@ -1,5 +1,5 @@
 // criterion: @R-4.14 v1
-// provenance: blind, spec@1c3743e9fb53c29de89a28045222abab29c5e27e, derived 2026-09-14
+// provenance: blind, spec@08d8aac0ee7ec7fcee1a309ef183dcb17e38221b, derived 2026-09-15
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Persona, Surface } from "../../fixtures";
 
@@ -39,6 +39,8 @@ async function nameThemselves(surface: Surface, who: Persona, name: string): Pro
   await surface.userProfileSelf.open();
   await surface.userProfileSelf.editProfile();
   await surface.userProfileSelf.saveChanges({ name });
+  await surface.userProfileSelf.open();
+  expect(await surface.userProfileSelf.nameField()).toContain(name);
 }
 
 async function nameTwoActiveVendors(surface: Surface): Promise<void> {
@@ -67,8 +69,8 @@ test("an administrator can browse everyone registered with the service, showing 
 });
 
 test("everyone registered is listed by status, then account kind, then name", async ({ surface }) => {
-  // The given: two active vendors, a public sector employee, and a deactivated vendor. The
-  // deactivated vendor can only name themselves while able to sign in, so they are
+  // The given: two active vendors, an active public sector employee, and a deactivated vendor.
+  // The deactivated vendor can only name themselves while able to sign in, so they are
   // reactivated, name themselves, and are deactivated again before the list is read.
   await nameTwoActiveVendors(surface);
   await establishActive(surface, seed.users.staffOne.id);
@@ -83,6 +85,13 @@ test("everyone registered is listed by status, then account kind, then name", as
   await surface.userProfile.confirmActivationChange();
   await surface.userProfile.open({ userId: seed.users.vendorDeactivated.id });
   expect(await surface.userProfile.statusBadge()).not.toBe(active);
+
+  // The three accounts compared against the inactive one are still active at the moment the
+  // list is read.
+  for (const userId of [seed.users.vendorOne.id, seed.users.fileUploader.id, seed.users.staffOne.id]) {
+    await surface.userProfile.open({ userId });
+    expect(await surface.userProfile.statusBadge()).toBe(active);
+  }
 
   await surface.userList.open();
   await expect.poll(() => surface.userList.userRow()).toContain(inactiveName);
@@ -109,6 +118,8 @@ test("everyone registered is listed by status, then account kind, then name", as
 
 test("an administrator can narrow the list by typing part of a name", async ({ surface }) => {
   await nameTwoActiveVendors(surface);
+  await establishActive(surface, seed.users.staffOne.id);
+  await nameThemselves(surface, persona.publicSectorStaff, staffName);
 
   await surface.signIn(persona.administrator);
   await surface.userList.open();
@@ -116,6 +127,8 @@ test("an administrator can narrow the list by typing part of a name", async ({ s
 
   await surface.userList.searchByName({ text: "Aldous" });
 
+  // The list is given time to narrow before what remains in it is read.
   await expect.poll(() => surface.userList.userRow()).not.toContain(vendorLastByName);
+  await expect.poll(() => surface.userList.userRow()).not.toContain(staffName);
   expect(await surface.userList.userRow()).toContain(vendorFirstByName);
 });

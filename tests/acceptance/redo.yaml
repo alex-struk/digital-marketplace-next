@@ -7,27 +7,6 @@ redo:
       vendor polled is active at the moment of the broadcast, keep the vendor
       holding no email address among the recipients, and report every
       addressable vendor not reached rather than stopping at the first
-  - id: R-4.14
-    version: 1
-    why: the test assumes both accounts it names are active without establishing it,
-      and another test in the suite leaves one of them deactivated, which
-      correctly places it after every active account in the order the criterion
-      describes; it also reads the narrowed list without allowing the list time
-      to narrow after the name is typed; establish both accounts as active
-      before comparing their order, and let the list settle before reading it
-  - id: R-4.31
-    version: 2
-    why: the test uses another person's profile as proof that the screen offers a
-      deactivation control, without establishing that person's account is
-      active, and another test in the suite leaves it deactivated, so the
-      control it expects there is legitimately absent; establish an active
-      account for the comparison before looking for the control
-  - id: R-4.32
-    version: 1
-    why: the test assumes nothing is chosen when the export choices open, which the
-      criterion never says; establish that no kind and no field are chosen
-      before checking that export is unavailable, then check it becomes
-      available only once at least one kind and one field are chosen
   - id: R-7.9
     version: 1
     why: the test reads being told the page was removed only from the page's main
@@ -63,31 +42,3 @@ redo:
       entering nothing into a comment that was already empty, so nothing about
       the comment changed; allow time for the mark, and enter a comment before
       clearing it
-  - id: R-4.5
-    version: 1
-    why: the return the criterion describes is signing in again, but the test's
-      second sign-in admits the person without going through the ordinary
-      sign-in a person makes, so it cannot show what signing in again does; sign
-      the person in again the ordinary way before reading their status and their
-      mail
-  - id: R-4.9
-    version: 1
-    why: the test reads 'marked as deactivated by the person themselves' from
-      whether an administrator is offered a reactivation control, which is what
-      R-4.19 governs and R-4.9 never mentions; read the marking only from what
-      R-4.9 itself describes, or leave it unasserted where nothing shows it
-  - id: R-4.12
-    version: 1
-    why: the test takes the account-type label as the sign of administrator rights,
-      which the criterion never says changes; read whether the person holds
-      administrator rights; on a vendor's profile it demands a message on the
-      page, where the criterion is met when no way to grant the rights is
-      offered and the account is unchanged; and it requires an ordinary
-      employee's own profile to show a statement of permissions, which the
-      criterion never states
-  - id: R-4.27
-    version: 2
-    why: the test reads the invalid field's mark the instant the value is entered,
-      without allowing time for it to appear; allow time for the mark, treat a
-      save that is withheld as the refusal, and check the stored profile is
-      unchanged
