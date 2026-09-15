@@ -10,8 +10,12 @@ const target = process.env.SDLC_TARGET ?? "new";
 export default defineConfig({
   testDir: "./acceptance",
   testMatch: "**/*.spec.ts",
+  // Tests inside one file stay in order and in one worker; different files run at once,
+  // one per worker. The runner sets `SDLC_WORKERS` to however many independent copies of
+  // the target it started — each worker gets its own copy, so two tests never share data.
+  // Without it, one worker, exactly as before.
   fullyParallel: false,
-  workers: 1,
+  workers: Number(process.env.SDLC_WORKERS ?? 1),
   retries: 0,
   // A whole acceptance test, not a single wait. One criterion routinely means signing in,
   // walking a multi-step form and reading the result back, against a target running in

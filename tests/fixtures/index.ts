@@ -28,8 +28,17 @@ function requireTarget(): string {
 // left behind: a suite that quietly carries one test's leftovers into the next is exactly
 // what this exists to end. With no command named — a developer running the suite by hand
 // against their own sandbox — nothing is reset and nothing is said.
+// Which copy of the target this worker owns. Playwright numbers its workers from zero and
+// keeps the number for the whole run, so a worker always talks to the same copy — and the
+// copy it resets is its own, never one another worker is in the middle of using.
+const copy = Number(process.env.TEST_PARALLEL_INDEX ?? 0);
+
+function forThisWorker(name: string): string | undefined {
+  return process.env[`${name}_${copy}`] ?? process.env[name];
+}
+
 function resetToSeed(): void {
-  const command = process.env.SDLC_RESET_COMMAND;
+  const command = forThisWorker("SDLC_RESET_COMMAND");
   if (!command) return;
   try {
     execSync(command, { stdio: "pipe", timeout: 120000 });
@@ -48,11 +57,11 @@ export const test = base.extend<{ surface: Surface; mail: Mail; seeded: void }>(
     // A template string, not a static specifier: which adapter loads is a run-time
     // choice (the target under test), so this can only be a dynamic import.
     const mod = await import(`../adapters/${target}/index.ts`);
-    const surface: Surface = await mod.default(page, { baseURL: process.env.SDLC_TARGET_URL, persona });
+    const surface: Surface = await mod.default(page, { baseURL: forThisWorker("SDLC_TARGET_URL"), persona });
     await use(surface);
   },
   mail: async ({}, use) => {
-    await use(new Mail(process.env.SDLC_MAIL_API));
+    await use(new Mail(forThisWorker("SDLC_MAIL_API")));
   },
 });
 
