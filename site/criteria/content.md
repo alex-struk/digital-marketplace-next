@@ -15,7 +15,7 @@
 | R-7.9 | acceptance/content/R-7.9.spec.ts | fail (ruled: adapter-wrong) |
 | R-7.10 | acceptance/content/R-7.10.spec.ts | unbound |
 | R-7.11 | — | not-testable |
-| R-7.12 | acceptance/content/R-7.12.spec.ts | fail |
+| R-7.12 | acceptance/content/R-7.12.spec.ts | fail (ruled: test-wrong) |
 | R-7.13 | acceptance/content/R-7.13.spec.ts | unbound |
 | R-7.14 | — | not-testable |
 | R-7.15 | — | not-testable |
@@ -25,14 +25,14 @@
 | R-7.19 | acceptance/content/R-7.19.spec.ts | pass |
 | R-7.20 | acceptance/content/R-7.20.spec.ts | fail (ruled: defect-in-old) |
 | R-7.21 | acceptance/content/R-7.21.spec.ts | pass |
-| R-7.22 | acceptance/content/R-7.22.spec.ts | fail |
+| R-7.22 | acceptance/content/R-7.22.spec.ts | fail (ruled: test-wrong) |
 | R-7.23 | not testable: Asserting that nothing shows, compares or restores an earlier version needs an observation naming what must be absent, and content-edit names none: it has no observation of the wording it is showing, none of a history, an earlier version or a comparison, and no restore action. A test can neither find a route to a past version nor show that none exists. | not-testable |
 | R-7.24 | acceptance/content/R-7.24.spec.ts | pass |
-| R-7.25 | acceptance/content/R-7.25.spec.ts | fail |
+| R-7.25 | acceptance/content/R-7.25.spec.ts | fail (ruled: test-wrong) |
 | D-content-26 | — |  |
 | R-7.26 | acceptance/content/R-7.26.spec.ts | unbound |
 | D-content-27 | — |  |
-| R-7.27 | acceptance/content/R-7.27.spec.ts | fail |
+| R-7.27 | acceptance/content/R-7.27.spec.ts | fail (ruled: test-wrong) |
 | R-7.28 | not testable: The given is two administrators who both opened the same page before either saved. The target carries one administrator sign-in and no second one, and the surface drives a single session, so two people cannot hold the page open at once and no stale read-then-write window can be produced. The collision half needs two publishes interleaving inside one such window, and nothing in the surface reports a version-key collision or a service error on the content-edit screen. | not-testable |
 | R-7.29 | not testable: The given is a page whose body another screen embeds having been removed. The embedded pages — an opportunity's scope page, a program's evaluation instructions — are ones the service needs, which R-7.25 records the service refuses to remove: content-edit withholds the removal and a request made another way is refused, so there is no path through the surface to the state the criterion starts from. | not-testable |
 

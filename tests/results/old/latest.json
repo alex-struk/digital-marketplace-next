@@ -1,8 +1,8 @@
 {
   "target": "old",
   "base_url": "http://localhost:3000",
-  "spec": "2d9a83e439479b419845aa46aa7d9d819b38de24",
-  "at": "2026-09-15T06:36:23.083Z",
+  "spec": "05e88fb7765c5d6327f910e43f990e6c321b63fa",
+  "at": "2026-09-15T06:50:25.058Z",
   "rows": [
     {
       "id": "R-7.1",
@@ -184,7 +184,7 @@
           "error": "Error: given: this installation carries the pages the service needs\n\ngiven: this installation carries the pages the service needs\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-7.13",
@@ -356,7 +356,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-7.23",
@@ -392,7 +392,7 @@
           "error": "Error: given: \"disclaimer\" answers\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeFalsy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"Not Found·\u001b[39m\n\u001b[31mThe page you are looking for doesn't exist.·\u001b[39m\n\u001b[31mGo Home\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-7.26",
@@ -426,7 +426,7 @@
           "error": "Error: unbound: signIn.administrator-other — /auth/createsessionadmin mints a session for one fixed account, looked up by the identity-provider id \"test-admin\", and takes no parameter. No route reaches a second administrator, so this persona can be seeded and observed on the oracle but never acted as."
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-7.28",
@@ -471,7 +471,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-5.3",
@@ -500,7 +500,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-5.10",
@@ -618,7 +618,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-5.18",
@@ -649,7 +649,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "spec-wrong"
     },
     {
       "id": "R-5.19",
@@ -1873,7 +1873,7 @@
           "error": "Error: opportunity-twu-create.save_draft — the save never reached the record's address; still on http://localhost:3102/opportunities/team-with-us/create; the page shows no message"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.9",
@@ -1925,7 +1925,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.11",
@@ -1994,7 +1994,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"R-1.13 Team With Us opportunity budgeted above the Sprint With Us ceiling\"\u001b[39m\nReceived string:    \u001b[31m\"Seeded published Code With Us opportunity\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mPublished\u001b[39m\n\u001b[31mCloses Jun 1, 2030 at 4:59 PM PDT\u001b[39m\n\u001b[31mA published opportunity that exists before any test runs.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.14",
@@ -2133,7 +2133,7 @@
           "error": "Error: unbound: opportunity-twu-create.add_resource — the chooser offers no option matching \"Lighthouse Keeper\" on http://localhost:3100/opportunities/team-with-us/create"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.19",
@@ -2186,7 +2186,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/incomplete/i\u001b[39m\nReceived string:  \u001b[31m\"SUMMARY\u001b[39m\n\u001b[31mSummary\u001b[39m\n\u001b[31mOPPORTUNITY MANAGEMENT\u001b[39m\n\u001b[31mOpportunity\u001b[39m\n\u001b[31mHistory\u001b[39m\n\u001b[31mOPPORTUNITY EVALUATION\u001b[39m\n\u001b[31mProposals\u001b[39m\n\u001b[31mNEED HELP?\u001b[39m\n\u001b[31mRead Guide\u001b[39m\n\u001b[31mCode With Us: R-1.21 saved draft with no location submitted for review\u001b[39m\n\u001b[31mUpdated Sep 14, 2026\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mUnder Review\u001b[39m\n\u001b[31mCreated By\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31m0\u001b[39m\n\u001b[31mTotal Views\u001b[39m\n\u001b[31m0\u001b[39m\n\u001b[31mWatching\u001b[39m\n\u001b[31m0\u001b[39m\n\u001b[31mProposals\u001b[39m\n\u001b[31m1. Overview\u001b[39m\n\u001b[31mTitle\u001b[39m\n\u001b[31mTeaser\u001b[39m\n\u001b[31mRemote OK?\u001b[39m\n\u001b[31mYes\u001b[39m\n\u001b[31mNo\u001b[39m\n\u001b[31mRemote Description\u001b[39m\n\u001b[31mLocation\u001b[39m\n\u001b[31mFixed-Price Award\u001b[39m\n\u001b[31m$\u001b[39m\n\u001b[31mCost Recovery\u001b[39m\n\u001b[31m$\u001b[39m\n\u001b[31mRequired Skills\u001b[39m\n\u001b[31mBackend Development\u001b[39m\n\u001b[31mNext\u001b[39m\n\u001b[31mTitle: R-1.21 saved draft with no location submitted for review\u001b[39m\n\u001b[31mTeaser: A short summary of the work to be done.\u001b[39m\n\u001b[31mRemote Description: Remote work is acceptable anywhere in the province.\u001b[39m\n\u001b[31mLocation: Victoria\u001b[39m\n\u001b[31mFixed-Price Award: 5000\u001b[39m\n\u001b[31mCost Recovery: 1000\u001b[39m\n\u001b[31mSUMMARY\u001b[39m\n\u001b[31mSummary\u001b[39m\n\u001b[31mOPPORTUNITY MANAGEMENT\u001b[39m\n\u001b[31mOpportunity\u001b[39m\n\u001b[31mHistory\u001b[39m\n\u001b[31mOPPORTUNITY EVALUATION\u001b[39m\n\u001b[31mProposals\u001b[39m\n\u001b[31mNEED HELP?\u001b[39m\n\u001b[31mRead Guide\u001b[39m\n\u001b[31mCode With Us: R-1.21 saved draft with no location submitted for review\u001b[39m\n\u001b[31mUpdated Sep 14, 2026\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mUnder Review\u001b[39m\n\u001b[31mCreated By\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31m0\u001b[39m\n\u001b[31mTotal Views\u001b[39m\n\u001b[31m0\u001b[39m\n\u001b[31mWatching\u001b[39m\n\u001b[31m0\u001b[39m\n\u001b[31mProposals\u001b[39m\n\u001b[31m2. Description\u001b[39m\n\u001b[31mDescription\u001b[39m\n\u001b[31mPrevious\u001b[39m\n\u001b[31mNext\u001b[39m\n\u001b[31mDescription: A full description of the work to be done.\u001b[39m\n\u001b[31mSUMMARY\u001b[39m\n\u001b[31mSummary\u001b[39m\n\u001b[31mOPPORTUNITY MANAGEMENT\u001b[39m\n\u001b[31mOpportunity\u001b[39m\n\u001b[31mHistory\u001b[39m\n\u001b[31mOPPORTUNITY EVALUATION\u001b[39m\n\u001b[31mProposals\u001b[39m\n\u001b[31mNEED HELP?\u001b[39m\n\u001b[31mRead Guide\u001b[39m\n\u001b[31mCode With Us: R-1.21 saved draft with no location submitted for review\u001b[39m\n\u001b[31mUpdated Sep 14, 2026\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mUnder Review\u001b[39m\n\u001b[31mCreated By\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31m0\u001b[39m\n\u001b[31mTotal Views\u001b[39m\n\u001b[31m0\u001b[39m\n\u001b[31mWatching\u001b[39m\n\u001b[31m0\u001b[39m\n\u001b[31mProposals\u001b[39m\n\u001b[31m3. Details\u001b[39m\n\u001b[31mProposal Deadline\u001b[39m\n\u001b[31mAssignment Date\u001b[39m\n\u001b[31mProposed Start Date\u001b[39m\n\u001b[31mCompletion Date\u001b[39m\n\u001b[31mProject Submission Info\u001b[39m\n\u001b[31mAcceptance Criteria\u001b[39m\n\u001b[31mEvaluation Criteria\u001b[39m\n\u001b[31mPrevious\u001b[39m\n\u001b[31mNext\u001b[39m\n\u001b[31mProposal Deadline: 2026-09-27\u001b[39m\n\u001b[31mAssignment Date: 2026-10-04\u001b[39m\n\u001b[31mProposed Start Date: 2026-10-11\u001b[39m\n\u001b[31mCompletion Date: 2026-12-12\u001b[39m\n\u001b[31mAcceptance Criteria: Entered by the acceptance adapter so the form can be saved.\u001b[39m\n\u001b[31mEvaluation Criteria: Entered by the acceptance adapter so the form can be saved.\u001b[39m\n\u001b[31mSUMMARY\u001b[39m\n\u001b[31mSummary\u001b[39m\n\u001b[31mOPPORTUNITY MANAGEMENT\u001b[39m\n\u001b[31mOpportunity\u001b[39m\n\u001b[31mHistory\u001b[39m\n\u001b[31mOPPORTUNITY EVALUATION\u001b[39m\n\u001b[31mProposals\u001b[39m\n\u001b[31mNEED HELP?\u001b[39m\n\u001b[31mRead Guide\u001b[39m\n\u001b[31mCode With Us: R-1.21 saved draft with no location submitted for review\u001b[39m\n\u001b[31mUpdated Sep 14, 2026\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mUnder Review\u001b[39m\n\u001b[31mCreated By\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31m0\u001b[39m\n\u001b[31mTotal Views\u001b[39m\n\u001b[31m0\u001b[39m\n\u001b[31mWatching\u001b[39m\n\u001b[31m0\u001b[39m\n\u001b[31mProposals\u001b[39m\n\u001b[31m4. Attachments·\u001b[39m\n\u001b[31mUpload any supporting material for your opportunity here. Attachments must be smaller than 10MB.·\u001b[39m\n\u001b[31mPrevious\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.22",
@@ -2231,7 +2231,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/evaluat|question/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 30000ms exceeded while waiting on the predicate"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.25",
@@ -2526,7 +2526,7 @@
           "status": "passed"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.49",
@@ -2585,7 +2585,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.55",
@@ -2643,7 +2643,7 @@
           "error": "Error: opportunity-twu-create.save_draft — the save never reached the record's address; still on http://localhost:3101/opportunities/team-with-us/create; the page shows no message"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.56",
@@ -2671,7 +2671,7 @@
           "error": "Error: opportunity-twu-create.save_draft — the save never reached the record's address; still on http://localhost:3000/opportunities/team-with-us/create; the page shows no message"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-3.1",
@@ -3092,7 +3092,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"Not met: To qualify for one or more Service Areas, you must complete the RFQ through BC Bid.\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-3.27",
@@ -3418,7 +3418,7 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-2.15",
