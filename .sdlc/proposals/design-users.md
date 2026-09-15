@@ -52,3 +52,18 @@ I designed the fourteen users-domain pages. They're specified in `design/DESIGN.
 - **U-16:** `data-testid` is a DOM attribute, and constitution J3 forbids DOM selectors in acceptance tests. Someone needs to rule on that.
 - **U-17:** agreeing to updated terms is a confirmation dialog, since no criterion asks for a tick box.
 - **U-18:** a refused profile completion is unstated.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:ux-reviewer
+
+The question is whether the fourteen users screens serve the users criteria and are built from the design system. Ruling: return. Most of it holds up. design/screens.yaml declares 53 states and there are exactly 53 stories, one per state. Every colour, spacing and type value in design/catalogue/users.shared.tsx is a token (a search for hex, rgb, px, rem and named colours found none). 125 of the 126 test IDs are filled, and the empty one is explained. Dialog labelling, disclosure state, table caption and headers, and the error-summary link targets are wired correctly. But this persona refuses any accessibility violation, and there is one: users.shared.tsx:212 puts aria-labelledby on a div with no role. ARIA 1.2 prohibits that (axe rule aria-prohibited-attr), so the error summary rendered in all four invalid-form states is never announced by its name when it takes focus. Also, nothing was compiled or rendered and none of the checks is an accessibility scan, so zero violations is claimed but not shown. Separately, six native patterns stand in for missing design-system components (data table, section navigation, status label, file input, card, loading message). Under this persona that must go to the tech lead, not be approved at this gate. This becomes an approve, or an escalation for the new patterns only, once the violation is fixed, an automated scan of every story reports zero violations against the installed design-system release, and the native patterns are sent to the tech lead.
+
+**Conditions:**
+- Fix users.shared.tsx:212: give the error-summary wrapper a role that allows a name (role="region" or role="group"), or remove aria-labelledby from it.
+- Install @bcgov/design-system-react-components, @bcgov/design-tokens and @bcgov/bc-sans, compile the catalogue, and resolve every prop and token name listed under gap U-1.
+- Run an automated accessibility scan (axe or equivalent) over all 53 stories and attach the results showing zero violations.
+- Escalate the six native patterns (data table, section navigation, status label, file input, account-choice card, loading message) to the tech lead as new patterns not in the design system.
+- Resolve U-19: move the shared module out of design/catalogue/ or confirm the catalogue check accepts it, so the catalogue folder holds only stories.
+- Leave U-16 (test IDs versus constitution J3) and the spec gaps U-6 to U-12, U-17 and U-18 to their owners; they do not block this gate.
