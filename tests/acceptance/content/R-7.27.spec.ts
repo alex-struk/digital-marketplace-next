@@ -1,52 +1,79 @@
 // criterion: @R-7.27 v1
-// provenance: blind, spec@40605384759bd10724c1411fdc448dfd99c70aee, derived 2026-09-07
-import { test, expect, persona } from "../../fixtures";
+// provenance: blind, spec@08d8aac0ee7ec7fcee1a309ef183dcb17e38221b, derived 2026-09-15
+import { test, expect, persona, seed } from "../../fixtures";
 
-// "accessibility" is a page the service created for itself and that nothing else in this
-// domain writes to, so when this runs no person has ever touched it. It carries no seed
-// handle, so its address is written out as the criteria give it.
-const untouched = "accessibility";
-const address = `derived-authored-${Date.now().toString(36)}`;
+// The page the service created for itself carries no seed handle, so it is named by the
+// address the spec gives it. The harness puts the target back to its seed before each test
+// and the seed writes none of the service's own pages, so nobody has edited it when this
+// runs; that it is one the service created is established from its managing screen before
+// its authorship is read.
+//
+// The page an administrator created and another changed starts from the seeded ordinary
+// page, which the seed records as created by administratorOne; administrator-other then
+// changes it. The two people's names are read from their own profiles, which the seed
+// identifies, rather than written out here. That each name links to its profile is not
+// asserted: published_by and updated_by return text, and nothing returns where they lead.
+const serviceMade = "accessibility";
 
-test("the managing screen of a page the service created for itself and nobody has edited names the service itself as both publisher and last editor", async ({
+test("The managing screen of a page names who first published it and who last changed it, and names the service itself where no person is recorded — a page the service created that nobody has edited", async ({
   surface,
 }) => {
   await surface.signIn(persona.administrator);
 
-  await surface.contentEdit.open({ slug: untouched });
+  await surface.contentEdit.open({ slug: serviceMade });
+  await expect
+    .poll(() => surface.contentEdit.pageAddress(), { message: `given: this installation carries "${serviceMade}"` })
+    .toContain(serviceMade);
+  await expect
+    .poll(() => surface.contentEdit.fixedPageWarning(), { message: "given: it is a page the service created for itself" })
+    .toBeTruthy();
 
-  expect(await surface.contentEdit.publishedBy()).toContain("System");
+  await expect.poll(() => surface.contentEdit.publishedBy()).toContain("System");
   expect(await surface.contentEdit.updatedBy()).toContain("System");
 });
 
-// The criterion's second given is a page one administrator created and another later
-// changed. The target carries one administrator sign-in and no second one, so the two
-// names cannot be made to differ; what is asserted is that a page a person made and
-// changed names that person rather than the service.
-test("the managing screen of a page an administrator created and changed names who first published it and who last changed it", async ({
+test("The managing screen of a page names who first published it and who last changed it, and names the service itself where no person is recorded — a page one administrator created and another changed", async ({
   surface,
 }) => {
+  const ordinary = seed.content.ordinaryPage;
+
   await surface.signIn(persona.administrator);
 
-  await surface.contentCreate.open();
-  await surface.contentCreate.enterTitle({ title: "A page a person made" });
-  await surface.contentCreate.enterSlug({ slug: address });
-  await surface.contentCreate.enterBody({ body: "The wording it was published with." });
-  await surface.contentCreate.publishPage();
-  await surface.contentCreate.confirmPublish();
+  await surface.userProfile.open({ userId: seed.users.administratorOne.id });
+  await expect.poll(() => surface.userProfile.nameField()).toBeTruthy();
+  const creator = await surface.userProfile.nameField();
 
-  await surface.contentEdit.open({ slug: address });
+  await surface.userProfile.open({ userId: seed.users.administratorTwo.id });
+  await expect.poll(() => surface.userProfile.nameField()).toBeTruthy();
+  const changer = await surface.userProfile.nameField();
+
+  expect(changer, "given: the two administrators are different people").not.toBe(creator);
+
+  await surface.contentEdit.open({ slug: ordinary.slug });
+  await expect
+    .poll(() => surface.contentEdit.pageAddress(), { message: "given: the seeded ordinary page exists" })
+    .toContain(ordinary.slug);
+  await expect
+    .poll(() => surface.contentEdit.publishedBy(), { message: "given: the page was first published by one administrator" })
+    .toContain(creator);
+
+  await surface.signOut();
+  await surface.signIn(persona.administratorOther);
+  await surface.contentEdit.open({ slug: ordinary.slug });
   await surface.contentEdit.startEditing();
-  await surface.contentEdit.editBody({ body: "The wording it was changed to." });
+  await surface.contentEdit.editBody({ body: "Wording a second administrator gave this page" });
   await surface.contentEdit.publishChanges();
   await surface.contentEdit.confirmPublishChanges();
+  await expect.poll(() => surface.contentEdit.changesPublishedSuccess()).toBeTruthy();
+  await surface.signOut();
 
-  await surface.contentEdit.open({ slug: address });
+  await surface.signIn(persona.administrator);
+  await surface.contentEdit.open({ slug: ordinary.slug });
+
+  await expect.poll(() => surface.contentEdit.updatedBy()).toContain(changer);
   const publishedBy = await surface.contentEdit.publishedBy();
   const updatedBy = await surface.contentEdit.updatedBy();
-
-  expect(publishedBy).toBeTruthy();
+  expect(publishedBy).toContain(creator);
   expect(publishedBy).not.toContain("System");
-  expect(updatedBy).toBeTruthy();
   expect(updatedBy).not.toContain("System");
 });
