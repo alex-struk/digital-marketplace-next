@@ -24,6 +24,7 @@ import type { IncomingMessage, RequestOptions } from "node:http";
 import { request as httpsRequest } from "node:https";
 import type { Locator, Page } from "@playwright/test";
 import type { Persona, persona as PersonaTable } from "../../generated/personas";
+import { seed } from "../../generated/seed";
 import type * as S from "../../generated/surface";
 import { uploadFile } from "../../fixtures/upload";
 
@@ -198,11 +199,14 @@ export default function create(
   }
 
   // Everything above the numbered step list: the header a form carries about the thing
-  // it belongs to.
+  // it belongs to. A screen with no step list — the "Not Found" a withheld form shows —
+  // carries no such header and reads as nothing.
   async function headerText(): Promise<string> {
+    await ready();
+    if (await notFoundShown()) return "";
     const lines = await textLines();
     const step = lines.findIndex((line) => matches(/^\d+\.\s/, line));
-    return (step > 0 ? lines.slice(0, step) : lines).join("\n");
+    return step > 0 ? lines.slice(0, step).join("\n") : "";
   }
 
   const MESSAGE =
@@ -270,6 +274,8 @@ export default function create(
     const cell = await cellUnder(rowName, header);
     if (!cell) return "";
     const words = (await cell.innerText()).trim();
+    // A dash is the cell withheld or saying no, which is no mark.
+    if (/^[—–-]$/.test(words)) return "";
     if (words) return words;
     return (await cell.getByRole("img").count()) ? "yes" : "";
   }
@@ -555,6 +561,56 @@ export default function create(
     }
   }
 
+  // A wizard shows a field's error only on the step holding that field, so errors are
+  // gathered from every step in turn.
+  async function stepMessages(pattern?: RegExp): Promise<string> {
+    if (!(await currentStep())) return messages(pattern);
+    const found: string[] = [];
+    await walkSteps(async () => {
+      for (const line of (await messages(pattern)).split("\n")) {
+        if (line && !found.includes(line)) found.push(line);
+      }
+    });
+    return found.join("\n");
+  }
+
+  // The first step showing an error, where a refused form is left for the reader.
+  async function toStepShowingMessages(): Promise<void> {
+    if (!(await currentStep())) return;
+    await walkSteps(async () => (await messages()) !== "");
+  }
+
+  // What a form shows with its fields' values included: a screen's text leaves out what
+  // sits inside its boxes, a disabled read-only box included.
+  async function fieldValues(): Promise<string[]> {
+    const found: string[] = [];
+    for (const role of ["textbox", "spinbutton"] as const) {
+      const boxes = seen(page.getByRole(role));
+      const count = await boxes.count();
+      for (let i = 0; i < count; i++) {
+        const value = (await boxes.nth(i).inputValue().catch(() => "")).trim();
+        if (!value) continue;
+        const name = bareLabel(await accessibleName(boxes.nth(i)));
+        found.push(name ? `${name}: ${value}` : value);
+      }
+    }
+    return found;
+  }
+
+  async function formText(): Promise<string> {
+    return [await contentText(), ...(await fieldValues())].filter(Boolean).join("\n");
+  }
+
+  // Every step of a wizard read in turn, from the first.
+  async function everyStepText(): Promise<string> {
+    if (!(await currentStep())) return formText();
+    const parts: string[] = [];
+    await walkSteps(async () => {
+      parts.push(await formText());
+    });
+    return parts.join("\n");
+  }
+
   async function walkToStep(pattern: RegExp): Promise<boolean> {
     let reached = false;
     await walkSteps(async () => {
@@ -620,8 +676,16 @@ export default function create(
     address: ["Street Address"],
     streetaddress1: ["Street Address"],
     addressline1: ["Street Address"],
+    addressline: ["Street Address"],
+    addresslineone: ["Street Address"],
+    streetaddressone: ["Street Address"],
+    // The form labels its second address line "Street Address" as well.
     streetaddress2: ["Street Address#2"],
     addressline2: ["Street Address#2"],
+    addresslinetwo: ["Street Address#2"],
+    streetaddresstwo: ["Street Address#2"],
+    addresstwo: ["Street Address#2"],
+    address2: ["Street Address#2"],
     region: ["Province/State", "Province / State"],
     province: ["Province/State", "Province / State"],
     state: ["Province/State", "Province / State"],
@@ -801,9 +865,12 @@ export default function create(
       await settle();
     }
     await settle();
-    if (pending.length) {
+    // An empty value for a field the form does not show — a remote description once remote
+    // work is refused — asks nothing of the form, so it is not reported as unplaced.
+    const unplaced = pending.filter((entry) => asText(entry.value) !== "");
+    if (unplaced.length) {
       throw new Error(
-        `unbound: ${where} — no field on ${page.url()} takes ${pending.map((entry) => `"${entry.key}"`).join(", ")}`,
+        `unbound: ${where} — no field on ${page.url()} takes ${unplaced.map((entry) => `"${entry.key}"`).join(", ")}`,
       );
     }
   }
@@ -913,18 +980,8 @@ export default function create(
         await box.blur().catch(() => undefined);
       }
     }
-    // A yes-or-no question nobody answered ("Remote OK?*") is answered no.
-    const yes = seen(page.getByRole("radio", { name: "Yes", exact: true }));
-    const no = seen(page.getByRole("radio", { name: "No", exact: true }));
-    if (
-      (await yes.count()) &&
-      (await no.count()) &&
-      !namedLabels.has("remoteok") &&
-      !(await yes.first().isChecked()) &&
-      !(await no.first().isChecked())
-    ) {
-      await no.first().check();
-    }
+    // A yes-or-no question ("Remote OK?*") is never answered on the test's behalf: whether
+    // remote work is acceptable is itself something a criterion asks the author to state.
     await settle();
   }
 
@@ -1240,11 +1297,21 @@ export default function create(
       return findControl(page, "Add Attachment");
     };
     let control = await reach();
-    // A saved record's form is read-only until "Edit" is chosen from its Actions menu.
+    if (control && (await isDisabled(control))) control = null;
+    // A saved record's form is read-only until "Edit" is chosen, from its Actions menu or,
+    // where the record offers no menu, from the top bar itself.
     if (!control && (await fromActionsIfOffered(where, ["Edit"]))) control = await reach();
     if (!control) {
+      const edit = await findControl(navBar(), "Edit");
+      if (edit && !(await isDisabled(edit))) {
+        await edit.click();
+        await settle();
+        control = await reach();
+      }
+    }
+    if (!control) {
       throw new Error(
-        `unbound: ${where} — walked to the Attachments step and chose "Edit" where the Actions menu offered it, but no "Add Attachment" control appeared on ${page.url()}`,
+        `unbound: ${where} — walked to the Attachments step and chose "Edit" where the Actions menu or the top bar offered it, but no "Add Attachment" control appeared on ${page.url()}`,
       );
     }
     const chooser = page.waitForEvent("filechooser");
@@ -1592,8 +1659,36 @@ export default function create(
         ["Filter Opportunities", "All Opportunity Types"],
         asText(input),
       ),
-    filterByStatus: (input) =>
-      choose("opportunity-list.filter_by_status", ["All Opportunity Statuses"], asText(input)),
+    // The status chooser carries no name of its own; it is the list's other chooser, beside
+    // the one named "Filter Opportunities". Its placeholder words sit over it and take no
+    // click, so the chooser itself is typed into.
+    filterByStatus: async (input) => {
+      const where = "opportunity-list.filter_by_status";
+      await ready();
+      // The chooser offers "Draft", "Under Review", "Published", "Evaluation" and "Awarded".
+      // A status written as records store it, or as the list's "Open" group names it, is
+      // looked for under those words.
+      const given = asText(field(input, "status", "value") || input);
+      const code = given.toUpperCase().replace(/[^A-Z]+/g, "_");
+      const value =
+        /^(OPEN|PUBLISHED)$/.test(code)
+          ? "Published"
+          : /^EVAL/.test(code)
+            ? "Evaluation"
+            : /^(DRAFT|UNDER_REVIEW|AWARDED)$/.test(code)
+              ? humanized(code)
+              : given;
+      if (!value) throw new Error(`unbound: ${where} — no status was named to filter by`);
+      const boxes = seen(page.getByRole("combobox"));
+      const count = await boxes.count();
+      for (let i = 0; i < count; i++) {
+        if (/filter opportunities/i.test(await accessibleName(boxes.nth(i)))) continue;
+        await pickOption(where, boxes.nth(i), value);
+        await settle();
+        return;
+      }
+      throw new Error(`unbound: ${where} — no status chooser beside "Filter Opportunities" on ${page.url()}`);
+    },
     filterRemoteOnly: () => tick("opportunity-list.filter_remote_only", ["Remote OK"]),
     search: (input) =>
       fill("opportunity-list.search", ["Search by Title or Location"], asText(input)),
@@ -1677,7 +1772,7 @@ export default function create(
         await confirmIfAsked(`${where}.publish`, ["Publish Opportunity", "Publish"]);
         await landOn(record());
       },
-      fieldError: () => messages(),
+      fieldError: () => stepMessages(),
     };
   }
 
@@ -1694,6 +1789,7 @@ export default function create(
     add: string,
     isEmpty: (slot: number) => Promise<boolean>,
     input: unknown,
+    orderNamesSlot = true,
   ): Promise<void> {
     const onStep = await currentStep();
     if (!onStep || !matches(step, (await onStep.innerText()).trim())) {
@@ -1703,7 +1799,7 @@ export default function create(
     }
     const headings = seen(page.getByRole("heading", { name: new RegExp(`^${escapeRegExp(heading)}\\s+\\d+$`) }));
     const ordered = Number.parseInt(field(input, ...ORDER_KEYS), 10);
-    let slot = Number.isFinite(ordered) && ordered >= 0 ? ordered : -1;
+    let slot = orderNamesSlot && Number.isFinite(ordered) && ordered >= 0 ? ordered : -1;
     if (slot < 0) {
       const count = await headings.count();
       for (let i = 0; i < count && slot < 0; i++) if (await isEmpty(i)) slot = i;
@@ -1729,6 +1825,9 @@ export default function create(
         return (await box.count()) > 0 && (await box.inputValue()).trim() === "";
       },
       input,
+      // A question form has no position field: an "order" in the input is a value the form
+      // does not take, not the number of a slot to make.
+      false,
     );
   }
 
@@ -1944,13 +2043,15 @@ export default function create(
       input && typeof input === "object" && !Array.isArray(input)
         ? (input as Record<string, unknown>)
         : {};
-    const members = asList(
-      record.members ?? record.evaluators ?? (typeof input === "string" || Array.isArray(input) ? input : undefined),
-    );
-    const chair = field(input, "chair");
+    const picks = panelPicks(input);
+    // A chair named for the whole panel, as opposed to a flag on the one member given.
+    const chair =
+      record.member === undefined && record.chair && typeof record.chair !== "boolean" && !isYesNo(record.chair)
+        ? personKey(record.chair)
+        : "";
     if (!(await goToStep("Evaluation Panel"))) await advanceTo(where, "Panel Member");
-    for (let i = 0; i < members.length; i++) {
-      const slots = seen(page.getByRole("combobox", { name: "Panel Member", exact: false }));
+    const slots = panelSlots();
+    for (let i = 0; i < picks.length; i++) {
       while ((await slots.count()) <= i) {
         const more = await findControl(page, "Add an evaluator");
         if (!more) break;
@@ -1961,16 +2062,146 @@ export default function create(
       if (i >= available) {
         throw new Error(`unbound: ${where} — the panel offers no slot ${i + 1} on ${page.url()}`);
       }
-      await slots.nth(i).click();
-      const option = seen(page.getByRole("option", { name: members[i], exact: false }));
-      if (!(await option.count())) {
-        await page.keyboard.press("Escape").catch(() => undefined);
-        throw new Error(`unbound: ${where} — no panel member matching "${members[i]}"`);
-      }
-      await option.first().click();
-      await settle();
+      await pickPanelMember(where, slots.nth(i), picks[i].key);
+      if (picks[i].chair) await tickChairAt(i);
     }
     if (chair) await makeChair(where, chair);
+  }
+
+  // The chooser names each person "Name (email)". A test names them as a seed user, a
+  // persona, an identifier or an address, and each of those comes down to the address.
+  type SeedUser = { id: string; email: string | null; persona?: string; account_type: string };
+  const SEED_USERS = Object.values(seed.users) as ReadonlyArray<SeedUser>;
+
+  function seedUserFor(key: string): SeedUser | undefined {
+    const wanted = key.toLowerCase();
+    return SEED_USERS.find(
+      (user) => user.id === key || user.persona === key || (user.email ?? "").toLowerCase() === wanted,
+    );
+  }
+
+  function personKey(value: unknown): string {
+    if (value === undefined || value === null) return "";
+    if (typeof value === "string") return seedUserFor(value)?.email ?? value;
+    if (typeof value !== "object" || Array.isArray(value)) return "";
+    const record = value as Record<string, unknown>;
+    if (typeof record.email === "string" && record.email) return record.email;
+    for (const key of ["user", "member", "person"]) {
+      const found = personKey(record[key]);
+      if (found) return found;
+    }
+    if (typeof record.id === "string" && record.id) return personKey(record.id);
+    if (typeof record.name === "string" && record.name) return record.name;
+    return "";
+  }
+
+  // The people an action names, each with whether they are to chair.
+  function panelPicks(input: unknown): { key: string; chair: boolean }[] {
+    const record =
+      input && typeof input === "object" && !Array.isArray(input) ? (input as Record<string, unknown>) : {};
+    let listed: unknown = record.members ?? record.evaluators ?? record.panel;
+    if (listed === undefined && record.member !== undefined) listed = [{ member: record.member, chair: record.chair }];
+    if (listed === undefined && (typeof input === "string" || Array.isArray(input))) listed = input;
+    if (listed === undefined && (typeof record.email === "string" || typeof record.id === "string")) listed = [input];
+    const items = Array.isArray(listed) ? listed : listed === undefined ? [] : [listed];
+    return items
+      .map((item) => {
+        const flags = item && typeof item === "object" ? (item as Record<string, unknown>) : {};
+        return { key: personKey(item), chair: saysYes(flags.chair) };
+      })
+      .filter((pick) => pick.key);
+  }
+
+  function panelSlots(): Locator {
+    return seen(page.getByRole("combobox", { name: "Panel Member", exact: false }));
+  }
+
+  async function pickPanelMember(where: string, box: Locator, key: string): Promise<void> {
+    const wanted = seen(page.getByRole("option", { name: new RegExp(escapeRegExp(key), "i") }));
+    await box.click();
+    await box.fill(key).catch(() => page.keyboard.type(key));
+    await wanted.first().waitFor({ state: "visible", timeout: 4000 }).catch(() => undefined);
+    if (!(await wanted.count())) {
+      // The typed words may not filter by address; look through the whole list instead.
+      await box.fill("").catch(() => undefined);
+      await wanted.first().waitFor({ state: "visible", timeout: 2000 }).catch(() => undefined);
+    }
+    if (!(await wanted.count())) {
+      await page.keyboard.press("Escape").catch(() => undefined);
+      // Only public sector people are offered: a vendor left out is the page refusing them.
+      if (seedUserFor(key)?.account_type === "VENDOR") return;
+      throw new Error(`unbound: ${where} — the panel chooser offers nobody matching "${key}" on ${page.url()}`);
+    }
+    await wanted.first().click();
+    await settle();
+  }
+
+  async function tickChairAt(slot: number): Promise<void> {
+    const boxes = seen(page.getByRole("checkbox", { name: "Panel Chair", exact: true }));
+    if (slot >= (await boxes.count())) return;
+    if (!(await boxes.nth(slot).isChecked())) await boxes.nth(slot).click();
+    await settle();
+  }
+
+  // A member joins the first slot still empty, or a new one "Add an evaluator" makes.
+  async function addPanelMember(where: string, input: unknown): Promise<void> {
+    await editingPanel(where);
+    const picks = panelPicks(input);
+    if (!picks.length) {
+      throw new Error(`unbound: ${where} — no panel member was named in ${JSON.stringify(input)}`);
+    }
+    const slots = panelSlots();
+    for (const pick of picks) {
+      const members = await panelMembers();
+      let at = members.findIndex((member) => member.name === "" || matches(/^Panel Member\*?$/, member.name));
+      if (at < 0 || at >= (await slots.count())) {
+        const before = await slots.count();
+        const more = await findControl(page, "Add an evaluator");
+        if (!more) nothing(`${where} — the panel is full and offers no "Add an evaluator" on ${page.url()}`);
+        await more.click();
+        await settle();
+        if ((await slots.count()) <= before) {
+          nothing(`${where} — "Add an evaluator" made no new slot on ${page.url()}`);
+        }
+        at = before;
+      }
+      await pickPanelMember(where, slots.nth(at), pick.key);
+      if (pick.chair) await tickChairAt(at);
+    }
+  }
+
+  // Each slot of a panel larger than two carries "Remove this evaluator": an icon and those
+  // words drawn as one control with no button role, under the slot's "Panel Chair" box. A
+  // panel of two shows none, and that absence is the refusal.
+  async function removePanelMember(where: string, input: unknown): Promise<void> {
+    await editingPanel(where);
+    const members = await panelMembers();
+    const key = personKey(input);
+    const at = key
+      ? members.findIndex((member) => member.name.toLowerCase().includes(key.toLowerCase()))
+      : Math.min(indexOf(input), members.length - 1);
+    if (at < 0) nothing(`${where} — the panel lists nobody matching "${key}" on ${page.url()}`);
+    const top = await seen(page.getByRole("heading", { name: new RegExp(`^Evaluator ${at + 1}$`) }))
+      .first()
+      .boundingBox()
+      .catch(() => null);
+    const after = await seen(page.getByRole("heading", { name: new RegExp(`^(Evaluator ${at + 2}|Panel Chair)$`) }))
+      .first()
+      .boundingBox()
+      .catch(() => null);
+    if (!top) nothing(`${where} — no "Evaluator ${at + 1}" slot on ${page.url()}`);
+    const bottom = after ? after.y : Number.POSITIVE_INFINITY;
+    const label = await inBand(seen(page.getByText("Remove this evaluator", { exact: true })), {
+      top: top.y,
+      bottom,
+    });
+    if (!label) return;
+    const before = await panelSlots().count();
+    await label.click();
+    await settle();
+    if ((await panelSlots().count()) >= before) {
+      nothing(`${where} — pressed "Remove this evaluator" in the "Evaluator ${at + 1}" slot but the panel still has ${before} slots on ${page.url()}`);
+    }
   }
 
   // The three public opportunity pages share their shape; only the money and the middle
@@ -1997,10 +2228,21 @@ export default function create(
       },
       // The badge sits directly under the programme's name in the page header.
       status: () => valueAfter([programme]),
-      // Team With Us calls its deadline the "Closing Date".
-      proposalDeadline: () =>
+      // The header states the deadline with its time ("Closes Jun 1, 2030 at 4:59 PM PDT");
+      // the figure beside "Proposal Deadline" carries the date alone. Team With Us calls its
+      // deadline the "Closing Date".
+      proposalDeadline: async () =>
+        (await linesMatching(/^Close[sd]\b/)) ||
         valueBefore(["Proposal Deadline", "Proposals Deadline", "Closing Date"]),
-      addenda: () => tabContent(["Addenda"]),
+      // The view's tabs are list items, the Addenda one carrying its count before its name.
+      addenda: async () => {
+        await ready();
+        const tab = seen(page.getByRole("listitem").filter({ hasText: /Addenda\s*$/ }));
+        if (!(await tab.count())) return "";
+        await tab.last().click();
+        await settle();
+        return contentText();
+      },
       successfulProponent: async () => {
         const named = await findAfter(["Successful Proponent", "Awarded To"]);
         return named || linesMatching(/successful proponent/i);
@@ -2055,7 +2297,9 @@ export default function create(
       // Editing reopens the creation wizard in place; what the test gave is entered and
       // saved with the control the top bar offers for this opportunity's state.
       editDetails: async (input?: unknown) => {
-        await fromActions(`${where}.edit_details`, ["Edit"]);
+        // A reader offered no Edit — an author on their published opportunity — is refused,
+        // and that refusal is what the test reads next.
+        if (!(await fromActionsIfOffered(`${where}.edit_details`, ["Edit"]))) return;
         await settle();
         if (!entriesOf(input, ATTACHMENT_KEYS).length && !hasFiles(input)) return;
         await fillForm(`${where}.edit_details`, input, { skip: ATTACHMENT_KEYS });
@@ -2094,6 +2338,17 @@ export default function create(
         const words = field(input, "text", "body", "addendum", "description") || asText(input);
         if (words) {
           await fill(`${where}.add_addendum`, ["Addendum", "Description"], words);
+          // An addendum the form will not take keeps "Publish Addendum" disabled: the refusal.
+          // The unsaved addendum is put away and nothing is published.
+          const publishing = await findControl(navBar(), "Publish Addendum");
+          if (publishing && (await isDisabled(publishing))) {
+            const cancel = await findControl(navBar(), "Cancel");
+            if (cancel) {
+              await cancel.click();
+              await settle();
+            }
+            return;
+          }
           await press(`${where}.add_addendum`, ["Publish Addendum", "Publish", "Save"], navBar());
           await confirmDialog(`${where}.add_addendum`, ["Publish Addendum", "Publish"]);
         }
@@ -2102,7 +2357,8 @@ export default function create(
       createdByName: () => valueAfter(["Created By"]),
       lastChangedByName: () => latestHistoryAuthor(`${where}.last_changed_by_name`),
       summaryTab: () => tabContent(["Summary"]),
-      opportunityTab: () => tabContent(["Opportunity"]),
+      // The tab is the creation wizard shown one step at a time, so every step is read.
+      opportunityTab: () => inTab(["Opportunity"], everyStepText),
       addendaTab: () => tabContent(["Addenda"]),
       historyTab: () => tabContent(["History"]),
       proposalsTab: () => tabContent(["Proposals"]),
@@ -2238,22 +2494,41 @@ export default function create(
   // Submitting raises a terms dialog that must be agreed to before it will go through.
   // The top bar's "Submit" stays disabled until the proposal is complete; press() reports
   // that at once rather than waiting on it.
-  async function openTermsDialog(where: string): Promise<void> {
-    if (await dialog().count()) return;
-    // The terms are only reachable through Submit, which stays disabled while any required
-    // field is empty; the ones the test did not name are given valid values first.
-    const submit = await findControl(navBar(), "Submit");
-    if (submit && (await isDisabled(submit))) await completeRequired(true);
+  // The terms boxes an action has ticked. Closing the dialog to enter more values unticks
+  // them, so they are ticked again whenever the dialog is reopened.
+  const acceptedTerms = new Set<string>();
+
+  // Whether the terms dialog is open once this returns. When Submit stays disabled after
+  // every field the test did not name has a valid value, a value the test gave is what the
+  // form refuses: the form is left on the step showing that error and nothing is opened.
+  async function openTermsDialog(where: string): Promise<boolean> {
+    if (await dialog().count()) return true;
+    let submit = await findControl(navBar(), "Submit");
+    if (submit && (await isDisabled(submit))) {
+      await completeRequired(true);
+      submit = await findControl(navBar(), "Submit");
+    }
+    if (submit && (await isDisabled(submit))) {
+      await toStepShowingMessages();
+      return false;
+    }
     await press(where, ["Submit", "Submit Proposal"], navBar());
     await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
     if (!(await dialog().count())) {
       throw new Error(`unbound: ${where} — submitting raised no terms dialog on ${page.url()}`);
     }
+    for (const label of acceptedTerms) {
+      const box = seen(dialog().first().getByRole("checkbox", { name: label, exact: false }));
+      if ((await box.count()) && !(await box.first().isChecked())) await box.first().click();
+    }
+    await settle();
+    return true;
   }
 
   function proposalCreate(where: string, route: string, programme: string) {
     // The form sits behind the terms dialog once that is open, so values still to be
-    // entered close it first; the submit that follows opens it again.
+    // entered close it first; the submit that follows opens it again, with the terms
+    // already agreed to ticked once more.
     async function enter(member: string, input: unknown): Promise<void> {
       if (!entriesOf(input, ATTACHMENT_KEYS).length && !hasFiles(input)) return;
       if (await dialog().count()) await inDialog(`${where}.${member}`, ["Cancel"]);
@@ -2272,29 +2547,26 @@ export default function create(
       },
       submitProposal: async (input?: unknown) => {
         await enter("submit_proposal", input);
-        await openTermsDialog(`${where}.submit_proposal`);
+        if (!(await openTermsDialog(`${where}.submit_proposal`))) return;
         await inDialog(`${where}.submit_proposal`, ["Submit Proposal", "Submit"]);
         await landOn(record());
+        acceptedTerms.clear();
       },
       acceptProgramTerms: async (input?: unknown) => {
         await enter("accept_program_terms", input);
-        await openTermsDialog(`${where}.accept_program_terms`);
-        await ensureTicked(
-          `${where}.accept_program_terms`,
-          [`agree to the ${programme} Terms & Conditions`],
-          dialog().first(),
-        );
+        if (!(await openTermsDialog(`${where}.accept_program_terms`))) return;
+        const label = `agree to the ${programme} Terms & Conditions`;
+        await ensureTicked(`${where}.accept_program_terms`, [label], dialog().first());
+        acceptedTerms.add(label);
       },
       acceptAppTerms: async (input?: unknown) => {
         await enter("accept_app_terms", input);
-        await openTermsDialog(`${where}.accept_app_terms`);
-        await ensureTicked(
-          `${where}.accept_app_terms`,
-          ["Digital Marketplace Terms & Conditions for E-Bidding"],
-          dialog().first(),
-        );
+        if (!(await openTermsDialog(`${where}.accept_app_terms`))) return;
+        const label = "Digital Marketplace Terms & Conditions for E-Bidding";
+        await ensureTicked(`${where}.accept_app_terms`, [label], dialog().first());
+        acceptedTerms.add(label);
       },
-      fieldError: () => messages(),
+      fieldError: async () => ((await dialog().count()) ? messages() : stepMessages()),
     };
   }
 
@@ -2349,11 +2621,15 @@ export default function create(
     cancel: () => press("proposal-cwu-create.cancel", ["Cancel"], navBar()),
     opportunitySummary: () => headerText(),
     async termsModal() {
-      await openTermsDialog("proposal-cwu-create.terms_modal");
+      if (!(await openTermsDialog("proposal-cwu-create.terms_modal"))) {
+        nothing(`proposal-cwu-create.terms_modal — "Submit" stayed disabled with every required field filled, so no terms dialog could be opened on ${page.url()}`);
+      }
       return dialogText();
     },
     async submitDisabledUntilTermsAccepted() {
-      await openTermsDialog("proposal-cwu-create.submit_disabled_until_terms_accepted");
+      if (!(await openTermsDialog("proposal-cwu-create.submit_disabled_until_terms_accepted"))) {
+        nothing(`proposal-cwu-create.submit_disabled_until_terms_accepted — "Submit" stayed disabled with every required field filled, so no terms dialog could be opened on ${page.url()}`);
+      }
       return controlState(["Submit Proposal"], dialog().first());
     },
   };
@@ -2933,8 +3209,10 @@ export default function create(
       await openTab("organization-edit.view_twu_terms", ["TWU Qualification"]);
       await press("organization-edit.view_twu_terms", ["View Terms & Conditions"]);
     },
-    // The tab with its top-bar controls ("Edit Organization") kept.
-    organizationTab: () => inTab(["Organization"], screenText),
+    // The tab with its top-bar controls ("Edit Organization") kept, and the values of its
+    // boxes, which the screen's text leaves out while they are read-only.
+    organizationTab: () =>
+      inTab(["Organization"], async () => [await screenText(), ...(await fieldValues())].join("\n")),
     teamTab: () => tabContent(["Team"]),
     swuQualificationTab: () => tabContent(["SWU Qualification"]),
     twuQualificationTab: () => tabContent(["TWU Qualification"]),
@@ -2945,7 +3223,7 @@ export default function create(
     // them the tab's absence is the answer, and it reads as nothing.
     ownerBadge: () => inTab(["Team"], () => linesMatching(/\bOwner\b/)),
     pendingBadge: () => inTab(["Team"], () => linesMatching(/\bPending\b/)),
-    teamMemberRow: () => inTab(["Team"], tableText),
+    teamMemberRow: () => inTab(["Team"], teamRowsText),
     teamCapabilities: () => inTab(["Team"], () => sectionFrom(["Team Capabilities"])),
     swuRequirementTwoMembers: () =>
       inTab(["SWU Qualification"], () => linesMatching(/two team members/i)),
@@ -2961,8 +3239,20 @@ export default function create(
       inTab(["TWU Qualification"], () =>
         linesMatching(/agreed to the team with us|agreed to team with us/i),
       ),
+    // The areas whose boxes are ticked, written the way records store them
+    // ("Full Stack Developer" as "FULL_STACK_DEVELOPER").
     serviceAreaCheckbox: () =>
-      inTab(["TWU Qualification"], () => sectionFrom(["Service Areas"], ["Terms & Conditions"])),
+      inTab(["TWU Qualification"], async () => {
+        const boxes = seen(page.getByRole("checkbox"));
+        const count = await boxes.count();
+        const ticked: string[] = [];
+        for (let i = 0; i < count; i++) {
+          if (!(await boxes.nth(i).isChecked())) continue;
+          const name = (await accessibleName(boxes.nth(i))).trim();
+          if (name) ticked.push(name.toUpperCase().replace(/[^A-Z0-9]+/g, "_").replace(/^_|_$/g, ""));
+        }
+        return ticked.join("\n");
+      }),
     notQualifiedNotice: () => linesMatching(/not qualified/i),
     changelogEntry: () => inTab(["Changelog"], tableText),
     // A warning such as "Unable to Add Unregistered Team Members" is an alert listing the
@@ -2977,6 +3267,24 @@ export default function create(
       return (lastAnswer ? refusal((status) => status >= 400) : "") || messages();
     },
   };
+
+  // The Team table's Admin column is a box with no words, so each row states it.
+  async function teamRowsText(): Promise<string> {
+    const lines: string[] = [];
+    const tables = seen(page.getByRole("table"));
+    const tableCount = await tables.count();
+    for (let t = 0; t < tableCount; t++) {
+      const rows = tables.nth(t).getByRole("row");
+      const rowCount = await rows.count();
+      for (let r = 0; r < rowCount; r++) {
+        let text = (await rows.nth(r).innerText()).replace(/\s*\t\s*/g, " | ").replace(/\s*\n\s*/g, " ").trim();
+        const box = rows.nth(r).getByRole("checkbox");
+        if (await box.count()) text += ` | Admin: ${(await box.first().isChecked()) ? "yes" : "no"}`;
+        if (text) lines.push(text);
+      }
+    }
+    return lines.join("\n");
+  }
 
   // Every address a test handed over, wherever it put it: a list, "email", or a nested user
   // record ({ user: { email } }).
@@ -3524,10 +3832,16 @@ export default function create(
   // pressed, which is what an owner or administrator does before changing it.
   async function editingPanel(where: string): Promise<void> {
     if (await seen(page.getByRole("combobox", { name: "Panel Member", exact: false })).count()) return;
+    // On the creation wizard the panel is a step of its own.
+    if (await goToStep("Evaluation Panel")) {
+      if (await panelSlots().count()) return;
+    }
     const edit = await findControl(navBar(), "Edit");
     if (!edit) nothing(`${where} — the evaluation panel is not editable and offers no "Edit" on ${page.url()}`);
     await edit.click();
     await settle();
+    // Editing may reopen the opportunity's wizard, where the panel is its own step.
+    await goToStep("Evaluation Panel");
   }
 
   // The evaluators in order, each with who is picked and whether they chair. A page that
@@ -3555,7 +3869,7 @@ export default function create(
     const boxes = seen(page.getByRole("checkbox", { name: "Panel Chair", exact: true }));
     const count = await boxes.count();
     if (!count) nothing(`${where} — no "Panel Chair" box on ${page.url()}`);
-    const name = field(input, "member", "user", "name", "email") || (typeof input === "string" ? input : "");
+    const name = personKey(input);
     if (name) {
       const members = await panelMembers();
       const at = members.findIndex((member) => member.name.toLowerCase().includes(name.toLowerCase()));
@@ -3575,14 +3889,8 @@ export default function create(
   function evaluationPanel(where: string, route: string) {
     return {
       ...at(route),
-      addPanelMember: async (input: unknown) => {
-        await editingPanel(`${where}.add_panel_member`);
-        await setEvaluationPanel(`${where}.add_panel_member`, input);
-      },
-      removePanelMember: async () => {
-        await editingPanel(`${where}.remove_panel_member`);
-        await press(`${where}.remove_panel_member`, ["Remove this evaluator", "Remove"]);
-      },
+      addPanelMember: (input: unknown) => addPanelMember(`${where}.add_panel_member`, input),
+      removePanelMember: (input: unknown) => removePanelMember(`${where}.remove_panel_member`, input),
       choosePanelChair: (input: unknown) => makeChair(`${where}.choose_panel_chair`, input),
       markMemberAsChair: (input: unknown) => makeChair(`${where}.mark_member_as_chair`, input),
       saveEvaluationPanel: () =>
@@ -3635,6 +3943,13 @@ export default function create(
       openProponentEvaluation: (input: unknown) =>
         openRow(`${where}.open_proponent_evaluation`, input),
       submitScoresForConsensus: async () => {
+        // Disabled while any evaluation is incomplete: that refusal is what the test reads.
+        for (const name of ["Submit Scores for Consensus", "Submit for Consensus", "Submit Scores", "Submit"]) {
+          const control = await findControl(page, name);
+          if (!control) continue;
+          if (await isDisabled(control)) return;
+          break;
+        }
         await press(`${where}.submit_scores_for_consensus`, [
           "Submit Scores for Consensus",
           "Submit for Consensus",
@@ -3727,7 +4042,16 @@ export default function create(
       const kind = labels.includes("Score") ? "spinbutton" : "textbox";
       const value =
         field(input, kind === "spinbutton" ? "score" : "notes", "value") || asText(input);
-      const which = indexOf(input) || Math.max(0, Number.parseInt(field(input, "question"), 10) - 1 || 0);
+      // Questions are kept in an "order" counted from 0, the order the sheet shows them in;
+      // a "question" number counts from 1.
+      const ordered = Number.parseInt(field(input, "order", "index", "position", "row"), 10);
+      const numbered = Number.parseInt(field(input, "question", "questionNumber"), 10);
+      const which =
+        Number.isFinite(ordered) && ordered >= 0
+          ? ordered
+          : Number.isFinite(numbered) && numbered > 0
+            ? numbered - 1
+            : 0;
       let boxes: Locator | null = null;
       for (const label of labels) {
         const named = seen(page.getByRole(kind, { name: label, exact: false }));
@@ -3800,8 +4124,19 @@ export default function create(
     saveChanges: () =>
       press("evaluation-individual-edit-swu.save_changes", ["Save Changes", "Save"], navBar()),
     evaluationStatus: () => valueAfter(["Status", "Evaluation Status"]),
-    readOnlyAfterSubmitted: () => controlState(["Save Changes", "Save"], navBar()),
+    readOnlyAfterSubmitted: () => readOnlyAfterSubmitted("evaluation-individual-edit-swu.read_only_after_submitted"),
   };
+
+  // A sheet still open to change offers "Edit" or an enabled "Save Changes" in the top bar
+  // and reads as nothing; one offering neither is read-only.
+  async function readOnlyAfterSubmitted(where: string): Promise<string> {
+    await ready();
+    if (await notFoundShown()) nothing(`${where} — the evaluation answers "Not Found" on ${page.url()}`);
+    if (await findControl(navBar(), "Edit")) return "";
+    const save = await findControl(navBar(), "Save Changes");
+    if (save && !(await isDisabled(save))) return "";
+    return "read-only";
+  }
 
   const evaluationConsensusCreateSwu: S.EvaluationConsensusCreateSwuPage = {
     ...scoreSheet(
@@ -3856,7 +4191,7 @@ export default function create(
     saveChanges: () =>
       press("evaluation-individual-edit-twu.save_changes", ["Save Changes", "Save"], navBar()),
     evaluationStatus: () => valueAfter(["Status", "Evaluation Status"]),
-    readOnlyAfterSubmitted: () => controlState(["Save Changes", "Save"], navBar()),
+    readOnlyAfterSubmitted: () => readOnlyAfterSubmitted("evaluation-individual-edit-twu.read_only_after_submitted"),
   };
 
   const evaluationConsensusCreateTwu: S.EvaluationConsensusCreateTwuPage = {
@@ -4120,15 +4455,24 @@ export default function create(
   async function uploadBodyImage(where: string, input: unknown): Promise<void> {
     const files = filePaths(input);
     if (!files.length) throw new Error(`unbound: ${where} — no image file was named`);
-    const control = await findControl(page, "Choose File");
-    if (!control) {
+    // "Choose File" is the file input itself, drawn beneath the body box, which takes any
+    // click aimed at it; the file is handed to the input directly.
+    const control = page.getByRole("button", { name: "Choose File", exact: true });
+    if (!(await control.count())) {
       throw new Error(
-        `unbound: ${where} — the formatted-text editor offers no image control on ${page.url()}`,
+        `unbound: ${where} — the formatted-text editor offers no "Choose File" image control on ${page.url()}`,
       );
     }
-    const chooser = page.waitForEvent("filechooser");
-    await control.click();
-    await (await chooser).setFiles(files);
+    const taken = await control
+      .first()
+      .setInputFiles(files)
+      .then(() => true)
+      .catch(() => false);
+    if (!taken) {
+      const chooser = page.waitForEvent("filechooser", { timeout: 10000 });
+      await control.first().dispatchEvent("click");
+      await (await chooser).setFiles(files);
+    }
     await settle();
   }
 
@@ -4470,14 +4814,39 @@ export default function create(
       // form is being edited; "Add Attachment" appears only once editing has begun.
       await attachmentsStep();
     },
-    // A stored attachment is offered as a link to the address the file is kept at.
+    // A stored attachment is offered as a link to the address the file is kept at. A file
+    // just added is only previewed ("blob:") until the form is saved, so when that preview
+    // is all there is and "Save Changes" is offered, the form is saved first and the stored
+    // link waited for on the Attachments step.
     async attachmentAddress() {
-      const links = seen(page.getByRole("link"));
-      const count = await links.count();
-      const found: string[] = [];
-      for (let i = 0; i < count; i++) {
-        const href = await links.nth(i).getAttribute("href");
-        if (href && href.includes("/api/files/")) found.push(href);
+      const stored = async (): Promise<string[]> => {
+        const links = seen(page.getByRole("link"));
+        const count = await links.count();
+        const found: string[] = [];
+        for (let i = 0; i < count; i++) {
+          const href = await links.nth(i).getAttribute("href");
+          if (href && href.includes("/api/files/")) found.push(href);
+        }
+        return found;
+      };
+      let found = await stored();
+      if (!found.length && (await attachmentLink(0))) {
+        const save = await findControl(navBar(), "Save Changes");
+        if (save && !(await isDisabled(save))) {
+          await save.click();
+          await settle();
+          await confirmIfAsked("file-attachment-control.attachment_address", [
+            "Save Changes",
+            "Publish Changes",
+            "Submit Changes for Review",
+          ]);
+          await saved(["Save Changes"]);
+          await attachmentsStep();
+          for (let wait = 0; wait < 20 && !found.length; wait++) {
+            found = await stored();
+            if (!found.length) await page.waitForTimeout(500);
+          }
+        }
       }
       return found.join("\n");
     },
