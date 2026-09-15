@@ -127,6 +127,7 @@ Profile: rebuild
 - [derive-tests-users-stale-1](proposals/derive-tests-users-stale-1.md)
 - [derive-tests-users-stale-2](proposals/derive-tests-users-stale-2.md)
 - [derive-tests-users-stale-3](proposals/derive-tests-users-stale-3.md)
+- [design-harness-v1](proposals/design-harness-v1.md)
 - [design-users](proposals/design-users.md)
 - [gates-simulated-v1](proposals/gates-simulated-v1.md)
 - [intent-digital-marketplace-rebuild](proposals/intent-digital-marketplace-rebuild.md)

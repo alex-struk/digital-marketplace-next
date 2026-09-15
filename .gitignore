@@ -6,3 +6,4 @@ node_modules/
 sources/
 tests/test-results/
 tests/playwright-report/
+design/storybook-static/

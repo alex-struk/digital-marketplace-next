@@ -1,0 +1,6 @@
+gate: G-POL
+verdict: approve
+by: tech-lead
+held_by: human
+note: "Approved. Install the design harness so a design catalogue is compiled and scanned before G-DESIGN is ruled; this is the environment the UX reviewer needed and could not get from inside the stage. Measured before ruling: all 54 stories typecheck, build, render, and scan with zero axe violations, and every locked package resolves from registry.npmjs.org."
+at: 2026-09-15T15:29:59.968Z
