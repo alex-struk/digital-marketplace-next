@@ -1,0 +1,11 @@
+gate: G-DESIGN
+verdict: escalated
+by: agent:ux-reviewer
+held_by: agent
+escalate_to: tech-lead
+rationale: |2-
+  The question is whether the fourteen users screens serve the users criteria and are built from the design system. Ruling: escalate to the tech lead. Two conditions from the earlier return (the first ruling on this gate) are now met. The error-summary wrapper no longer puts aria-labelledby on a div with no role, and no such attribute remains in the catalogue. The shared module is gone, so design/catalogue holds only stories. design/screens.yaml declares 54 users states and there are exactly 54 story files, one per state. The proposal's narrative says 56, which is a miscount, not a missing screen. A search of the users stories for hex, rgb, hsl, px, rem and em values found none, and spot checks show the stories render the test IDs the diff binds to surface.yaml. Three conditions are still unmet. First, @bcgov/design-system-react-components is not installed and nothing was compiled, so the component props and token names are unchecked. Second, there is no accessibility scan of any kind, so zero violations is claimed but not shown, and this persona cannot approve an unproven zero. Third, the patterns that stand in for missing design-system components (the first ruling counted six; this proposal names three) have not gone to the tech lead. Two escalation grounds apply. A new pattern not in the design system is present. And the remaining blockers are environmental: the stage reports web access was denied and no packages are installed, so a second return to the same stage would repeat the same gaps. This becomes an approve once the tech lead has ruled on the non-design-system patterns, and a run with the design-system packages installed compiles the catalogue and attaches an axe (or equivalent) scan of all 54 stories showing zero violations.
+cost: 0.8850765
+turns: 15
+session: "c86607d7-0796-400d-a4e1-e94659dea89f"
+at: 2026-09-15T14:31:10.627Z
