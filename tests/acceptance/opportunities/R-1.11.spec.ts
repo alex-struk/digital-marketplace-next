@@ -1,17 +1,24 @@
 // criterion: @R-1.11 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
+// provenance: blind, spec@2d9a83e439479b419845aa46aa7d9d819b38de24, derived 2026-09-15
 import { test, expect, persona } from "../../fixtures";
+import type { Surface } from "../../fixtures";
 
-// Each submission is complete but for the remote-work fields, and each is made as
-// something other than a draft, so the fault the form reports can only be theirs. The
-// closing case — a remote-work description over 500 characters being rejected whether or
-// not remote work is acceptable — is taken with remote work acceptable, which is the half
-// the criterion states rather than the half its note adds.
+// Each submission is complete but for the remote-work fields, and each is made as something
+// other than a draft, so it has exactly one reason to be refused. The criterion promises a
+// refusal and nothing about a reason, so no reason is asserted.
+//
+// The refusal is read as nothing having been published: after the attempt, and a pause long
+// enough for a slow publication to land, the open opportunities must be as they were and must
+// not carry the title. A publication the form will not offer at all counts as refused, since
+// the action fails rather than waits.
 
-function inDays(days: number): string {
-  const date = new Date();
-  date.setDate(date.getDate() + days);
-  return date.toISOString().slice(0, 10);
+const statement =
+  "An opportunity that is not a draft must state whether remote work is acceptable, and must carry a remote-work description of up to 500 characters whenever remote work is acceptable.";
+
+const quietPeriod = 5000;
+
+function pacificDay(days: number): string {
+  return new Date(Date.now() + days * 86_400_000).toLocaleDateString("en-CA", { timeZone: "America/Vancouver" });
 }
 
 const complete = {
@@ -20,46 +27,57 @@ const complete = {
   description: "A full description of the work to be done.",
   reward: 5000,
   skills: ["Backend Development"],
-  proposalDeadline: inDays(14),
-  assignmentDate: inDays(21),
-  startDate: inDays(28),
-  completionDate: inDays(90),
+  proposalDeadline: pacificDay(14),
+  assignmentDate: pacificDay(21),
+  startDate: pacificDay(28),
+  completionDate: pacificDay(90),
 };
 
-test("an opportunity that is not a draft must state whether remote work is acceptable", async ({
-  surface,
-}) => {
+async function openOpportunities(surface: Surface): Promise<string> {
+  await surface.opportunityList.open();
+  return surface.opportunityList.openGroup();
+}
+
+async function expectRefused(surface: Surface, fields: Record<string, unknown> & { title: string }): Promise<void> {
   await surface.signIn(persona.administrator);
+  const before = await openOpportunities(surface);
+
   await surface.opportunityCwuCreate.open();
-  await surface.opportunityCwuCreate.publish({
+  try {
+    await surface.opportunityCwuCreate.publish(fields);
+  } catch {
+    // A publication that is not offered is the refusal; what was published is checked below.
+  }
+
+  await new Promise((resolve) => setTimeout(resolve, quietPeriod));
+  const after = await openOpportunities(surface);
+  expect(after).not.toContain(fields.title);
+  expect(after).toBe(before);
+}
+
+test(`${statement} (one that does not say whether remote work is acceptable is refused)`, async ({ surface }) => {
+  await expectRefused(surface, {
     ...complete,
     title: "R-1.11 opportunity that says nothing about remote work",
   });
-  expect(await surface.opportunityCwuCreate.fieldError()).toBeTruthy();
 });
 
-test("an opportunity that accepts remote work must carry a remote-work description", async ({
-  surface,
-}) => {
-  await surface.signIn(persona.administrator);
-  await surface.opportunityCwuCreate.open();
-  await surface.opportunityCwuCreate.publish({
+test(`${statement} (one that accepts remote work with no remote-work description is refused)`, async ({ surface }) => {
+  await expectRefused(surface, {
     ...complete,
     title: "R-1.11 opportunity accepting remote work with nothing said about it",
     remoteOk: true,
     remoteDescription: "",
   });
-  expect(await surface.opportunityCwuCreate.fieldError()).toBeTruthy();
 });
 
-test("a remote-work description of more than 500 characters is rejected", async ({ surface }) => {
-  await surface.signIn(persona.administrator);
-  await surface.opportunityCwuCreate.open();
-  await surface.opportunityCwuCreate.publish({
+test(`${statement} (one that accepts remote work with a remote-work description over 500 characters is refused)`, async ({
+  surface,
+}) => {
+  await expectRefused(surface, {
     ...complete,
     title: "R-1.11 opportunity whose remote-work description runs too long",
     remoteOk: true,
     remoteDescription: "r".repeat(501),
   });
-  expect(await surface.opportunityCwuCreate.fieldError()).toBeTruthy();
 });

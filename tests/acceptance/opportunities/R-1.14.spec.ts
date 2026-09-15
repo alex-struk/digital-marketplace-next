@@ -1,17 +1,32 @@
 // criterion: @R-1.14 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
+// provenance: blind, spec@2d9a83e439479b419845aa46aa7d9d819b38de24, derived 2026-09-15
 import { test, expect, persona } from "../../fixtures";
+import type { Surface } from "../../fixtures";
 
-// Four submissions, each with exactly one date out of its place, so a form that only
-// checked the first pair would fail the later ones. The fifth test reads the deadline back
-// off a published opportunity: the deadline observation returns free text, and no
-// observation says in which shape, so four in the afternoon is looked for in either of the
-// two ways a clock time is ordinarily written.
+// Four submissions, each with exactly one date out of its place, so a form that only checked
+// the first pair would fail the later ones. Days are counted in Pacific time, which is the
+// clock the criterion names, so "yesterday" is yesterday there whatever the machine's own
+// clock says. The criterion promises a refusal and nothing about a reason, so no reason is
+// asserted.
+//
+// The refusal is read as nothing having been published: after the attempt, and a pause long
+// enough for a slow publication to land, the open opportunities must be as they were and must
+// not carry the title. A publication the form will not offer at all counts as refused, since
+// the action fails rather than waits.
+//
+// The last test reads the deadline back off a published opportunity. The deadline
+// observation returns free text in no stated shape, so four in the afternoon is looked for in
+// either of the two ways a clock time is ordinarily written. It is the only one of the four
+// dates any observation returns; the assignment, start and completion dates are not read.
 
-function inDays(days: number): string {
-  const date = new Date();
-  date.setDate(date.getDate() + days);
-  return date.toISOString().slice(0, 10);
+const statement =
+  "An opportunity's key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen.";
+
+const settle = { timeout: 15000 };
+const quietPeriod = 5000;
+
+function pacificDay(days: number): string {
+  return new Date(Date.now() + days * 86_400_000).toLocaleDateString("en-CA", { timeZone: "America/Vancouver" });
 }
 
 const complete = {
@@ -22,67 +37,67 @@ const complete = {
   remoteDescription: "Remote work is acceptable anywhere in the province.",
   reward: 5000,
   skills: ["Backend Development"],
-  proposalDeadline: inDays(14),
-  assignmentDate: inDays(21),
-  startDate: inDays(28),
-  completionDate: inDays(90),
+  proposalDeadline: pacificDay(14),
+  assignmentDate: pacificDay(21),
+  startDate: pacificDay(28),
+  completionDate: pacificDay(90),
 };
 
-test("an opportunity that is not a draft is rejected when its proposal deadline is earlier than today", async ({
-  surface,
-}) => {
+async function openOpportunities(surface: Surface): Promise<string> {
+  await surface.opportunityList.open();
+  return surface.opportunityList.openGroup();
+}
+
+async function expectRefused(surface: Surface, fields: Record<string, unknown> & { title: string }): Promise<void> {
   await surface.signIn(persona.administrator);
+  const before = await openOpportunities(surface);
+
   await surface.opportunityCwuCreate.open();
-  await surface.opportunityCwuCreate.publish({
+  try {
+    await surface.opportunityCwuCreate.publish(fields);
+  } catch {
+    // A publication that is not offered is the refusal; what was published is checked below.
+  }
+
+  await new Promise((resolve) => setTimeout(resolve, quietPeriod));
+  const after = await openOpportunities(surface);
+  expect(after).not.toContain(fields.title);
+  expect(after).toBe(before);
+}
+
+test(`${statement} (a proposal deadline earlier than today is refused)`, async ({ surface }) => {
+  await expectRefused(surface, {
     ...complete,
     title: "R-1.14 opportunity whose deadline has already gone by",
-    proposalDeadline: inDays(-1),
+    proposalDeadline: pacificDay(-1),
   });
-  expect(await surface.opportunityCwuCreate.fieldError()).toBeTruthy();
 });
 
-test("an opportunity that is not a draft is rejected when its assignment date falls before its proposal deadline", async ({
-  surface,
-}) => {
-  await surface.signIn(persona.administrator);
-  await surface.opportunityCwuCreate.open();
-  await surface.opportunityCwuCreate.publish({
+test(`${statement} (an assignment date before the proposal deadline is refused)`, async ({ surface }) => {
+  await expectRefused(surface, {
     ...complete,
     title: "R-1.14 opportunity assigned before proposals close",
-    assignmentDate: inDays(13),
+    assignmentDate: pacificDay(13),
   });
-  expect(await surface.opportunityCwuCreate.fieldError()).toBeTruthy();
 });
 
-test("an opportunity that is not a draft is rejected when its start date falls before its assignment date", async ({
-  surface,
-}) => {
-  await surface.signIn(persona.administrator);
-  await surface.opportunityCwuCreate.open();
-  await surface.opportunityCwuCreate.publish({
+test(`${statement} (a start date before the assignment date is refused)`, async ({ surface }) => {
+  await expectRefused(surface, {
     ...complete,
     title: "R-1.14 opportunity starting before it is assigned",
-    startDate: inDays(20),
+    startDate: pacificDay(20),
   });
-  expect(await surface.opportunityCwuCreate.fieldError()).toBeTruthy();
 });
 
-test("an opportunity that is not a draft is rejected when its completion date falls before its start date", async ({
-  surface,
-}) => {
-  await surface.signIn(persona.administrator);
-  await surface.opportunityCwuCreate.open();
-  await surface.opportunityCwuCreate.publish({
+test(`${statement} (a completion date before the start date is refused)`, async ({ surface }) => {
+  await expectRefused(surface, {
     ...complete,
     title: "R-1.14 opportunity completed before it starts",
-    completionDate: inDays(27),
+    completionDate: pacificDay(27),
   });
-  expect(await surface.opportunityCwuCreate.fieldError()).toBeTruthy();
 });
 
-test("each of an opportunity's key dates is recorded as four o'clock in the afternoon on the day chosen", async ({
-  surface,
-}) => {
+test(`${statement} (the proposal deadline is recorded as 4:00 p.m. on the day chosen)`, async ({ surface }) => {
   const title = "R-1.14 opportunity whose deadline is read back for its time of day";
 
   await surface.signIn(persona.administrator);
@@ -91,5 +106,5 @@ test("each of an opportunity's key dates is recorded as four o'clock in the afte
   const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
 
   await surface.opportunityCwuView.open({ opportunityId });
-  expect(await surface.opportunityCwuView.proposalDeadline()).toMatch(/4:00|16:00/);
+  await expect.poll(() => surface.opportunityCwuView.proposalDeadline(), settle).toMatch(/4:00|16:00/);
 });

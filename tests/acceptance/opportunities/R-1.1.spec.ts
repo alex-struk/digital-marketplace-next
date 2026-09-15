@@ -1,14 +1,15 @@
-// criterion: @R-1.1 v2
-// provenance: blind, spec@08d8aac0ee7ec7fcee1a309ef183dcb17e38221b, derived 2026-09-15
+// criterion: @R-1.1 v3
+// provenance: blind, spec@2d9a83e439479b419845aa46aa7d9d819b38de24, derived 2026-09-15
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
 // The given is a published opportunity whose proposal deadline has already gone by. No form
 // accepts such a deadline, so the seed carries it for the two programs that have one ready:
 // a Sprint With Us and a Team With Us opportunity, each published with a deadline thirty days
-// in the past and three submitted proposals. No Code With Us opportunity past its deadline is
-// seeded, so that program is not exercised here. The when is a request the service handles
-// under /status, which the surface names as the scheduled transition trigger.
+// in the past, three submitted proposals and a panel of two evaluators. No Code With Us
+// opportunity past its deadline is seeded, so the Code With Us half — the announcement to the
+// author — has nothing to close and is not exercised here. The when is a request the service
+// handles under /status, which the surface names as the scheduled transition trigger.
 //
 // Closure runs inside the service and a screen shows its result only once it has finished,
 // so every reading below is repeated until the new state appears rather than taken once. Each
@@ -16,8 +17,27 @@ import type { Surface } from "../../fixtures";
 // proposal's own proponent for that proposal. The third proposal on each opportunity belongs
 // to a proponent no persona signs in as, so the two proposals a proponent can read are the
 // ones checked.
+//
+// The announcement goes to a group, and a message to a group is addressed to one person with
+// the rest as blind copies, which `mail` cannot read. So the announcement is looked for, by
+// the title of the opportunity that closed, among the messages addressed to any of the panel's
+// evaluators, and a blind copy reaching the others cannot be confirmed. The seeded author also
+// sits on both panels as an evaluator, so the message cannot be told apart from one sent to
+// the author instead.
+
+const statement =
+  "A published opportunity whose proposal deadline has passed closes on its own at the next request the service handles under /api or /status: it moves to the first evaluation stage of its program, every proposal submitted against it moves to review, and it is announced as ready for evaluation, to its author for a Code With Us opportunity and to the evaluators on its evaluation panel for a Sprint With Us or Team With Us opportunity.";
 
 const settle = { timeout: 30000 };
+
+const accounts = seed.users as unknown as Record<string, { email: string | null }>;
+
+function evaluatorsOf(panel: { members: readonly { user: string; evaluator: boolean }[] }): string[] {
+  return panel.members
+    .filter((member) => member.evaluator)
+    .map((member) => accounts[member.user.replace(/^users\./, "")]?.email)
+    .filter((email): email is string => Boolean(email));
+}
 
 async function close(surface: Surface): Promise<void> {
   await surface.scheduledTransitionTrigger.open();
@@ -44,9 +64,7 @@ async function teamProposalStatus(surface: Surface, proposalId: string): Promise
   return (await surface.proposalTwuEdit.status()).toLowerCase();
 }
 
-test("a published opportunity whose proposal deadline has passed closes on its own and moves to the first evaluation stage of its program", async ({
-  surface,
-}) => {
+test(`${statement} (it moves to the first evaluation stage of its program)`, async ({ surface }) => {
   await close(surface);
   await surface.signIn(persona.administrator);
 
@@ -69,9 +87,7 @@ test("a published opportunity whose proposal deadline has passed closes on its o
     .toContain("This opportunity has closed.");
 });
 
-test("every proposal submitted against an opportunity whose proposal deadline has passed moves to review when it closes", async ({
-  surface,
-}) => {
+test(`${statement} (every proposal submitted against it moves to review)`, async ({ surface }) => {
   await close(surface);
 
   await surface.signIn(persona.organizationOwner);
@@ -92,20 +108,27 @@ test("every proposal submitted against an opportunity whose proposal deadline ha
     .toContain("review");
 });
 
-// The notice is one message to one person, the author, so it arrives addressed to them. It is
-// told from the author's other mail by naming the opportunity that closed, and looked for as
-// present rather than counted: the closure may already have run before the test could take a
-// count, since any request under /api sets it off.
-test("the author of an opportunity whose proposal deadline has passed is notified that it is ready for evaluation when it closes", async ({
+test(`${statement} (a Sprint With Us or Team With Us opportunity is announced as ready for evaluation to the evaluators on its panel)`, async ({
   surface,
   mail,
 }) => {
-  const author = seed.users.staffOne.email;
+  const sprintEvaluators = evaluatorsOf(seed.evaluation_panels.sprintWithUs);
+  const teamEvaluators = evaluatorsOf(seed.evaluation_panels.teamWithUs);
+  expect(sprintEvaluators.length).toBeGreaterThanOrEqual(2);
+  expect(teamEvaluators.length).toBeGreaterThanOrEqual(2);
+
   await close(surface);
 
-  const names = async (title: string): Promise<boolean> =>
-    (await mail.messagesTo(author)).some((m) => `${m.Subject} ${m.Snippet}`.includes(title));
+  // Looked for as present rather than counted: the closure may already have run before the
+  // test could take a count, since any request under /api sets it off.
+  const announced = async (addresses: string[], title: string): Promise<boolean> => {
+    for (const address of addresses) {
+      const messages = await mail.messagesTo(address);
+      if (messages.some((m) => `${m.Subject} ${m.Snippet}`.includes(title))) return true;
+    }
+    return false;
+  };
 
-  await expect.poll(() => names(seed.opportunities.closedSprintWithUs.title), settle).toBe(true);
-  await expect.poll(() => names(seed.opportunities.closedTeamWithUs.title), settle).toBe(true);
+  await expect.poll(() => announced(sprintEvaluators, seed.opportunities.closedSprintWithUs.title), settle).toBe(true);
+  await expect.poll(() => announced(teamEvaluators, seed.opportunities.closedTeamWithUs.title), settle).toBe(true);
 });
