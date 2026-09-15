@@ -28,3 +28,24 @@ All seven criteria in the users domain got a test file, and none went into `not-
 - **R-4.31, second deactivation refused:** needs a way to send a deactivation against an already inactive account and read the answer. That could be a refusals entry for the deactivation request plus an `already_inactive_message` observation, or a mail/HTTP fixture over observables. The same gap covers the clause that the service accepts a deactivation of the requester's own account.
 - **R-4.32, the exported file:** its contents (active vendor and administrator present, deactivated vendor absent, administrator labelled, organization legal name) need an observation that returns the document. observables.yaml already names `exports.contact_list` and `document_contents`, but nothing on the user-list page or in any fixture exposes them.
 - **R-4.5 and R-4.9, message wording:** asserting it reliably needs a `mail` accessor over `read_one_message` that returns a message's text or HTML body.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: do the seven rewritten users tests (R-4.5, R-4.9, R-4.12, R-4.14, R-4.27, R-4.31, R-4.32) follow from their criteria and nothing else? Ruling: approve. Every assertion traces to its criterion. The six redo entries are addressed: R-4.5 returns through the sign-in screen; R-4.9 no longer infers the owner-deactivated marking from R-4.19's control; R-4.12 reads rights from the admin checkbox and accepts either no control or a refusal when the account is unchanged; R-4.14 establishes all four compared accounts as active and polls the narrowing; R-4.27 polls the invalid mark, counts a withheld save as refusal and re-reads the stored profile; R-4.31 establishes an active comparison account first; and R-4.32 now asserts export is unavailable in the state where nothing is ticked. No selectors, routes or status codes appear. The unasserted clauses name real surface gaps, confirmed against surface.yaml and the mail fixture: no deactivated_on or deactivated_by observation on user-profile, no message body from mail.messagesTo, no observation returning the exported document, and no action for a second deactivation. The fixtures reset to the seed before every test, so state these tests leave behind cannot reach other tests. The runner's typecheck passed on 47b1fbe. What would change the ruling: a calibration showing R-4.5's email test failing on a correct message, which would show it bound to wording the criterion does not state and send it back to the writer.
+
+**Conditions:**
+- R-4.27 'the email address is stored in lower case' cannot fail when no save happens: the seeded address is already lower case and attemptSave swallows a withheld save. The next derivation of R-4.27 should show the save went through, for example by saving a changed name with the capitalised email and reading both back.
+- R-4.5 'they are told by email that it has been reactivated' requires the literal word 'reactivated' in the subject or excerpt. If calibration fails there, check whether the message is correct but worded differently (test-wrong) before sending it on as a product question.
+- No test in this proposal has run under Playwright. Only the runner's typecheck is evidence so far, and the next calibration is the first check that the tests execute.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `47b1fbe668500f61b7f6d677678be05e031a59c3`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/users/`, which this proposal answers for.
+
+    No diagnostics.
