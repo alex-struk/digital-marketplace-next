@@ -38,7 +38,7 @@
 | R-1.32 | acceptance/opportunities/R-1.32.spec.ts | fail (ruled: adapter-wrong) |
 | R-1.33 | acceptance/opportunities/R-1.33.spec.ts | unbound |
 | R-1.34 | acceptance/opportunities/R-1.34.spec.ts | pass |
-| R-1.35 | acceptance/opportunities/R-1.35.spec.ts | fail (ruled: test-wrong) |
+| R-1.35 | not testable: blocked: every notice the criterion names — to the watchers, to the proponents and to the author — is sent as one announcement to a group, and the observables notes say such a message is addressed to one person with everyone else in blind copies. The criterion never says the author is sent a message of their own. The mail fixture only offers messagesTo, which searches by visible recipient, so being told cannot be distinguished from not being told for any of the three groups. The edit and the addendum themselves are reachable (opportunity-cwu-edit.edit_details and add_addendum on seed.opportunities.publishedCodeWithUs), and watchers and proponents could be arranged through toggle_watch and the proposal create pages. What unblocks it: a `mail` accessor over observables.yaml's read_one_message that returns one message's To and Bcc (copied_recipients), or a listing of every message in the catcher, plus the service's own sending address named in the contract, so the announcement can be found and its blind copies counted. | fail (ruled: test-wrong) |
 | R-1.36 | acceptance/opportunities/R-1.36.spec.ts | pass |
 | R-1.37 | acceptance/opportunities/R-1.37.spec.ts | pass |
 | R-1.38 | acceptance/opportunities/R-1.38.spec.ts | pass |

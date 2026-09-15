@@ -6,7 +6,7 @@ Profile: rebuild
 
 | Domain | proposed | accepted | implemented | verified | monitored | obsolete | open questions | total | tests | old |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 40/50 (n/t 10) | 15 pass · 18 fail · 7 unbound · 0 stale |
+| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 39/50 (n/t 11) | 15 pass · 18 fail · 7 unbound · 0 stale |
 | proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 | 28/36 (n/t 8) | 2 pass · 13 fail · 13 unbound · 0 stale |
 | organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 | 28/31 (n/t 3) | 6 pass · 10 fail · 12 unbound · 0 stale |
 | users | 0 | 32 | 0 | 0 | 0 | 4 | 1 | 36 | 25/30 (n/t 5) | 11 pass · 5 fail · 9 unbound · 0 stale |
@@ -92,6 +92,7 @@ Profile: rebuild
 - [derive-tests-opportunities-2](proposals/derive-tests-opportunities-2.md)
 - [derive-tests-opportunities-3](proposals/derive-tests-opportunities-3.md)
 - [derive-tests-opportunities-4](proposals/derive-tests-opportunities-4.md)
+- [derive-tests-opportunities-stale-1](proposals/derive-tests-opportunities-stale-1.md)
 - [derive-tests-organizations](proposals/derive-tests-organizations.md)
 - [derive-tests-organizations-2](proposals/derive-tests-organizations-2.md)
 - [derive-tests-organizations-3](proposals/derive-tests-organizations-3.md)
@@ -143,9 +144,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $302.043655
-- Rulings cost: $192.774563
-- Total cost: $494.818218
-- Agent-held rulings: 101
+- Journal cost: $305.710007
+- Rulings cost: $193.951479
+- Total cost: $499.661486
+- Agent-held rulings: 102
 - Open escalations: 0
 - Open proposals: 0

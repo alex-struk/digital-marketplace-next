@@ -1,12 +1,21 @@
 // criterion: @R-1.21 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
-import { test, expect, persona } from "../../fixtures";
+// provenance: blind, spec@08d8aac0ee7ec7fcee1a309ef183dcb17e38221b, derived 2026-09-15
+import { test, expect, persona, seed } from "../../fixtures";
 
-// The draft is complete but for its location, which is one of the fields the criterion's
+// The given is a saved draft with a field still blank, and the when is its author submitting
+// it for review. The draft is complete but for its location, one of the fields the criterion's
 // own note says is checked at this point, so the submission has exactly one reason to be
-// refused. The second half — that the person is told the opportunity is incomplete rather
-// than which field is missing — is read as the message asking for the opportunity to be
-// completed while saying nothing of the field that was left out.
+// refused. The author is a member of staff whose own statement of permissions names no
+// administrator rights, read before anything is created.
+//
+// A refusal is read as the draft still being a draft afterwards, whether the submission was
+// turned away or could not be made at all.
+//
+// What the person is told is not asserted. The refusal happens on the screen for managing the
+// saved draft, and that screen carries no observation of a message or refusal; the only
+// field_error in the surface is on the create screen, which is reached by a draft that was
+// never saved and so is not the given. A message saying the opportunity is incomplete, and
+// naming no field, cannot be read where this criterion puts it.
 
 function inDays(days: number): string {
   const date = new Date();
@@ -30,30 +39,28 @@ const allButLocation = {
 test("submitting a draft opportunity for review is refused unless the opportunity is complete", async ({
   surface,
 }) => {
-  const title = "R-1.21 incomplete draft submitted for review";
+  const title = "R-1.21 saved draft with no location submitted for review";
 
   await surface.signIn(persona.publicSectorStaff);
+  await surface.userProfile.open({ userId: seed.users.staffOne.id });
+  const permissions = (await surface.userProfile.permissionsLabel()).toLowerCase();
+  expect(permissions).toBeTruthy();
+  expect(permissions).not.toContain("admin");
+
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.saveDraft({ ...allButLocation, title });
+  expect(await surface.opportunityCwuCreate.fieldError()).toBeFalsy();
   const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
+  expect(opportunityId).toBeTruthy();
+
+  await surface.opportunityCwuView.open({ opportunityId });
+  expect((await surface.opportunityCwuView.status()).toLowerCase()).toContain("draft");
 
   await surface.opportunityCwuEdit.open({ opportunityId });
   await surface.opportunityCwuEdit.submitForReview();
 
   await surface.opportunityCwuView.open({ opportunityId });
-  expect((await surface.opportunityCwuView.status()).toLowerCase()).toContain("draft");
-});
-
-test("the person is told the opportunity is incomplete rather than which field is missing", async ({
-  surface,
-}) => {
-  const title = "R-1.21 incomplete draft whose refusal is read for what it names";
-
-  await surface.signIn(persona.publicSectorStaff);
-  await surface.opportunityCwuCreate.open();
-  await surface.opportunityCwuCreate.submitForReview({ ...allButLocation, title });
-
-  const refusal = (await surface.opportunityCwuCreate.fieldError()).toLowerCase();
-  expect(refusal).toContain("complete");
-  expect(refusal).not.toContain("location");
+  const status = (await surface.opportunityCwuView.status()).toLowerCase();
+  expect(status).toContain("draft");
+  expect(status).not.toContain("review");
 });
