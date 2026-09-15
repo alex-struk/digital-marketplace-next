@@ -7,40 +7,6 @@ redo:
       vendor polled is active at the moment of the broadcast, keep the vendor
       holding no email address among the recipients, and report every
       addressable vendor not reached rather than stopping at the first
-  - id: R-3.3
-    version: 1
-    why: the refusal of the member of public sector staff is read without
-      establishing that the account holds no administrator rights at that
-      moment, and another test in the suite grants that account administrator
-      rights during the same run; establish that the staff member is not an
-      administrator before opening the organization
-  - id: R-3.7
-    version: 1
-    why: the test signs in as the organization's owner without establishing that the
-      owner's account is active, and another test in the suite leaves that
-      account deactivated; it also looks for the invitees' email addresses on
-      the team list, which the criterion never says the list shows; establish an
-      active owner, and identify the invitees on the team list without assuming
-      it shows email addresses
-  - id: R-3.8
-    version: 1
-    why: the test reads the refusal as an error on a form field, which the criterion
-      never says it is; the criterion says the invitation itself is refused, so
-      read the refusal of the invitation, and when checking that nobody was
-      added do not assume the team list shows email addresses
-  - id: R-3.15
-    version: 1
-    why: the test reads every organization on the vendor's own page of
-      organizations, which also lists organizations they merely belong to,
-      rather than only the organizations the criterion describes as those they
-      may act on behalf of; read only the organizations the vendor is offered as
-      ones they can act for
-  - id: R-3.32
-    version: 1
-    why: the test identifies the invited person on the team list by email address,
-      which the criterion never says the list shows; identify them on the team
-      list without assuming it shows email addresses, both before and after they
-      decline
   - id: R-4.14
     version: 1
     why: the test assumes both accounts it names are active without establishing it,
@@ -97,13 +63,6 @@ redo:
       entering nothing into a comment that was already empty, so nothing about
       the comment changed; allow time for the mark, and enter a comment before
       clearing it
-  - id: R-3.27
-    version: 1
-    why: the second attempt relies on another test having accepted the terms first,
-      so it ran against terms nobody had yet accepted; accept the terms within
-      the same test before trying again, and treat an organization whose terms
-      can no longer be accepted, or whose second acceptance is turned away, as
-      refused, with the date of the first acceptance unchanged
   - id: R-2.35
     version: 1
     why: the test reads the history as the vendor, whom the criterion never names as
