@@ -1,5 +1,5 @@
 // criterion: @R-7.9 v1
-// provenance: blind, spec@08d8aac0ee7ec7fcee1a309ef183dcb17e38221b, derived 2026-09-15
+// provenance: blind, spec@2d9a83e439479b419845aa46aa7d9d819b38de24, derived 2026-09-15
 import { test, expect, persona, seed } from "../../fixtures";
 
 // The page removed is the seeded ordinary page, which the seed records as an
@@ -8,13 +8,15 @@ import { test, expect, persona, seed } from "../../fixtures";
 // holds the wording of a version it replaced as well as the current one, and can look for
 // both once the page is gone.
 //
-// Not asserted: "no version of its text survives anywhere in the service". No reading in
-// the surface shows a removed page's text, and R-7.23 says nothing in the service shows an
-// earlier version of a page, so no observation could tell a history that was erased from
-// one that is merely never shown. The test goes only as far as the page's own address,
-// which must not show either wording.
+// "No version of its text survives anywhere in the service" is taken as far as the surface
+// reaches: the page answers neither at its address nor by its identifier, and a new page
+// published afterwards at the same address carries none of the removed page's wording —
+// not in its body, and not in whatever its managing screen offers of a page's past. No
+// observation reads the service's store directly, so a history kept but never shown
+// anywhere cannot be told apart from one erased.
 const ordinary = seed.content.ordinaryPage;
 const replacement = "Wording published just before this page is removed.";
+const successor = "Wording of a new page published at the address after the removal.";
 
 test("Removing an ordinary page removes it and every version of it permanently, and its address stops answering", async ({
   surface,
@@ -34,7 +36,9 @@ test("Removing an ordinary page removes it and every version of it permanently, 
   await surface.contentEdit.editBody({ body: replacement });
   await surface.contentEdit.publishChanges();
   await surface.contentEdit.confirmPublishChanges();
-  await expect.poll(() => surface.contentEdit.changesPublishedSuccess()).toBeTruthy();
+  await expect
+    .poll(() => surface.contentEdit.changesPublishedSuccess(), { message: "given: one more version is behind the page" })
+    .toBeTruthy();
 
   // When: an administrator confirms removing it.
   await surface.contentEdit.deletePage();
@@ -42,14 +46,43 @@ test("Removing an ordinary page removes it and every version of it permanently, 
 
   // Then: they are told it was removed, and are returned to the list, which no longer
   // carries its address.
-  await expect.poll(() => surface.contentEdit.deletedSuccess()).toBeTruthy();
-  await expect.poll(() => surface.contentList.pageTitle()).toBeTruthy();
+  await expect.poll(() => surface.contentEdit.deletedSuccess(), { message: "told the page was removed" }).toBeTruthy();
+  await expect.poll(() => surface.contentList.pageTitle(), { message: "returned to the list of pages" }).toBeTruthy();
   expect(await surface.contentList.pagePublicAddress()).not.toContain(ordinary.slug);
 
-  // Its address is answered as not found, to anybody.
+  // Its address is answered as not found, to anybody, and so is its identifier.
   await surface.signOut();
   await surface.contentView.open({ slug: ordinary.slug });
   await expect.poll(() => surface.contentView.notFoundForUnknownAddress()).toBeTruthy();
+  expect(await surface.contentView.pageBody()).not.toContain(replacement);
+  expect(await surface.contentView.pageBody()).not.toContain(earlier);
+
+  await surface.contentView.open({ slug: ordinary.id });
+  await expect
+    .poll(() => surface.contentView.notFoundForUnknownAddress(), { message: "the page is gone by its identifier too" })
+    .toBeTruthy();
+
+  // No version of its text survives: a page published at the same address afterwards starts
+  // with no past, and none of the removed wording comes back with it.
+  await surface.signIn(persona.administrator);
+  await surface.contentCreate.open();
+  await surface.contentCreate.enterTitle({ title: ordinary.title });
+  await surface.contentCreate.enterSlug({ slug: ordinary.slug });
+  await surface.contentCreate.enterBody({ body: successor });
+  await surface.contentCreate.publishPage();
+  await surface.contentCreate.confirmPublish();
+
+  await surface.contentEdit.open({ slug: ordinary.slug });
+  await expect
+    .poll(() => surface.contentEdit.pageAddress(), { message: "the address could be given to a new page" })
+    .toContain(ordinary.slug);
+  const past = await surface.contentEdit.versionHistory();
+  expect(past).not.toContain(replacement);
+  expect(past).not.toContain(earlier);
+
+  await surface.signOut();
+  await surface.contentView.open({ slug: ordinary.slug });
+  await expect.poll(() => surface.contentView.pageBody()).toContain(successor);
   expect(await surface.contentView.pageBody()).not.toContain(replacement);
   expect(await surface.contentView.pageBody()).not.toContain(earlier);
 });

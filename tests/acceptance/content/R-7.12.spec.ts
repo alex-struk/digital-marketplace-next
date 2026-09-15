@@ -1,11 +1,12 @@
 // criterion: @R-7.12 v1
-// provenance: blind, spec@08d8aac0ee7ec7fcee1a309ef183dcb17e38221b, derived 2026-09-15
+// provenance: blind, spec@2d9a83e439479b419845aa46aa7d9d819b38de24, derived 2026-09-15
 import { test, expect, persona } from "../../fixtures";
 
 // The pages the service creates for itself carry no seed handle — the seed records that
 // they arrive with the installation rather than with the seed — so they are named by the
-// addresses the spec and the contract give them: the seven service-wide pages, the
-// criterion's own example among them. The harness puts the target back to its seed before
+// addresses the criterion gives them: the seven service-wide pages, its own example among
+// them. The program pages the criterion counts are not named by address anywhere in the
+// spec, so they are not guessed at. The harness puts the target back to its seed before
 // each test and the seed writes none of these, so each is as the installation left it.
 //
 // Before a page is read, the installation is established to carry it as a page the
@@ -13,8 +14,7 @@ import { test, expect, persona } from "../../fixtures";
 // would say nothing about the criterion.
 //
 // The count of twenty-two is not asserted: no observation of the list returns how many
-// pages it names, and the seed adds an ordinary page of its own, so the list is never
-// exactly what the installation was made with.
+// pages it names, and the seed adds an ordinary page of its own besides.
 const serviceWide = [
   "about",
   "accessibility",
@@ -61,7 +61,11 @@ test("A fresh installation carries a full set of the pages the service needs, ea
     .toBeTruthy();
 
   await surface.contentList.open();
+  await expect.poll(() => surface.contentList.pageTitle(), { message: "the list of pages is shown" }).toBeTruthy();
 
-  await expect.poll(() => surface.contentList.pageTitle()).toBeTruthy();
-  expect(await surface.contentList.pageIsFixed()).toBeTruthy();
+  const addresses = await surface.contentList.pagePublicAddress();
+  for (const address of serviceWide) {
+    expect.soft(addresses, `"${address}" is listed`).toContain(address);
+  }
+  expect(await surface.contentList.pageIsFixed(), "the listed pages are marked as needed by the service").toBeTruthy();
 });
