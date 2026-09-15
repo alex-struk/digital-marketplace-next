@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-organizations-5 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">121</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">121</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">108</span></a></li><li><a href="../runs.html">Run log <span class="count">9</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-organizations-5</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-15 05:51</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised organizations tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the R-3.28 test the way the first condition asks and removed its not-testable entry.</p>
+<p>I rewrote the R-3.28 test the way the first condition asks and removed its not-testable entry. I couldn&#39;t run the typecheck (the command needed approval that wasn&#39;t given), so the new file is unchecked until the runner&#39;s typecheck runs.</p>
+<p><strong>Condition 1 (write the R-3.28 test): done.</strong> I replaced <code>tests/acceptance/organizations/R-3.28.spec.ts</code>. The old file dated from an earlier spec and was sitting next to a not-testable entry, which contradicts itself. The new file has the same header as the other files in this proposal (<code>spec@2d9a83e…</code>), dated today, 2026-09-14. It uses only calls that are already bound: sign in, open <code>organizationEdit</code> for <code>seed.organizations.qualified.id</code>, <code>editServiceAreas</code>, <code>saveServiceAreas</code> and <code>serviceAreaCheckbox</code>. It holds two tests, one per outcome, each titled with the criterion&#39;s own wording:</p>
+<ul><li><strong>Replacement:</strong> an administrator opens the organization and the test waits until both seeded areas show. The administrator then saves a selection holding only the first area. When the approvals are read again, the kept area shows (the test waits for it) and the cleared area does not. If a save added to the approvals instead of replacing them, the cleared area would still show and the test would fail.</li><li><strong>Owner refused:</strong> it starts the same way, with the administrator keeping only one area. The organization&#39;s owner then tries to edit and to save a selection holding only the cleared area. As in R-3.13, a refused attempt is caught and ignored rather than treated as a failure. An administrator then reads the approvals: the kept area must show and the cleared one must not. That fails if the owner&#39;s save went through, whether it replaced the approvals or added to them.</li></ul>
+<p><strong>Refusal read caveat.</strong> The reviewer noted that some refusal checks read the page once and would pass on a page that hasn&#39;t loaded. Both final checks here only run after the test has waited for the kept area to show, so they avoid that.</p>
+<p><strong>Third area.</strong> Neither test ticks a third area. No seed record or contract entry names one, so the test would have to invent it. A comment in the file says so. That example is the only part of the criterion left untested.</p>
+<p><strong>Condition 2 (keep the block instead): not used.</strong> It was the alternative to condition 1. I removed the R-3.28 entry from <code>tests/acceptance/not-testable.yaml</code>, so the criterion has a test and no entry. A search finds no R-3.28 left in that file, and the entries on either side are unchanged.</p>
+<p><strong>Condition 3 (R-3.3, R-3.12, R-3.13 unchanged): honoured.</strong> I didn&#39;t touch those three files or any other file in the domain, and no other not-testable entry changed.</p>
+<p><strong>Missing from the contract.</strong> Nothing names a third service area. A seed record approved for one, or an observation on the organization edit page listing the areas offered for selection, would let the criterion&#39;s third tick be tested. The reviewer&#39;s suggested refusal observation would still be a cleaner way to show the owner has no editing control than trying the change and confirming nothing moved.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-15 05:52.</p>
+<div class="body"><p>Question: do the revised organizations tests follow from their criteria and nothing else? Ruling: approve. The new R-3.28 test does what the first condition of the last ruling asked. It starts from the two service areas approved on seed.organizations.qualified. An administrator saves a selection holding only the first. The test waits for that area to show, then asserts the second is gone, which fails if a save adds to the approvals instead of replacing them. The owner half has the owner try to edit and save only the second area, then an administrator reads the approvals again: the first must still show and the second must not. That fails whether the owner&#39;s save replaced the approvals or added to them. Both final reads run only after a wait, so neither passes on a page that has not loaded. Every assertion follows from the criterion, the test titles use its wording, and nothing about how the app is built leaks in. The only calls used are sign-in, organizationEdit.open, editServiceAreas, saveServiceAreas and serviceAreaCheckbox, all bound, and the runner&#39;s typecheck passed. The one part left untested is the criterion&#39;s example of ticking a third area, which no seed record or contract entry names. The test file says so in a comment. R-3.28 has no entry left in not-testable.yaml. The file&#39;s other changes only move entries or re-wrap lines, with no reason text changed. R-3.3, R-3.12 and R-3.13 differ from main only because the version approved last round was never merged. They were checked against that version&#39;s description, not with a line-by-line diff. The five warnings in the checks are about superseded tests in other domains. Caveat: the seed names service areas by code (FULL_STACK_DEVELOPER, AGILE_COACH), and whether the adapter matches those against the names the page shows is a question for calibration, not for this test. What would change the ruling: R-3.3, R-3.12 or R-3.13 differing from the approved version, or an assertion its criterion does not state.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
