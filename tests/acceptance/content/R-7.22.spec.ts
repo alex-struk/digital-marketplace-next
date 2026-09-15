@@ -1,5 +1,5 @@
 // criterion: @R-7.22 v1
-// provenance: blind, spec@08d8aac0ee7ec7fcee1a309ef183dcb17e38221b, derived 2026-09-15
+// provenance: blind, spec@2d9a83e439479b419845aa46aa7d9d819b38de24, derived 2026-09-15
 import { test, expect, persona, seed } from "../../fixtures";
 
 // The criterion's example address is "about". The address taken here is the seeded
@@ -19,6 +19,7 @@ test("No two pages may share an address, whether the clash arises on creating a 
   await expect
     .poll(() => surface.contentView.pageTitle(), { message: "given: a page is already published at the address" })
     .toBe(taken.title);
+  const existingBody = await surface.contentView.pageBody();
 
   await surface.contentCreate.open();
   await surface.contentCreate.enterTitle({ title: "A second page claiming a taken address" });
@@ -27,11 +28,15 @@ test("No two pages may share an address, whether the clash arises on creating a 
   await surface.contentCreate.publishPage();
   await surface.contentCreate.confirmPublish();
 
-  await expect.poll(() => surface.contentCreate.duplicateSlugError()).toBeTruthy();
+  await expect
+    .poll(() => surface.contentCreate.duplicateSlugError(), { message: "the address is reported as already in use" })
+    .toBeTruthy();
 
+  // The existing page is untouched.
   await surface.signOut();
   await surface.contentView.open({ slug: taken.slug });
   await expect.poll(() => surface.contentView.pageTitle()).toBe(taken.title);
+  expect(await surface.contentView.pageBody()).toBe(existingBody);
   expect(await surface.contentView.pageBody()).not.toContain(intruding);
 });
 
@@ -47,6 +52,7 @@ test("No two pages may share an address, whether the clash arises on creating a 
   await expect
     .poll(() => surface.contentView.pageTitle(), { message: "given: a page is already published at the address" })
     .toBe(taken.title);
+  const existingBody = await surface.contentView.pageBody();
 
   // A different page, published at an address of its own.
   await surface.contentCreate.open();
@@ -66,13 +72,17 @@ test("No two pages may share an address, whether the clash arises on creating a 
   await surface.contentEdit.publishChanges();
   await surface.contentEdit.confirmPublishChanges();
 
-  await expect.poll(() => surface.contentEdit.duplicateSlugError()).toBeTruthy();
+  await expect
+    .poll(() => surface.contentEdit.duplicateSlugError(), { message: "the address is reported as already in use" })
+    .toBeTruthy();
 
+  // The existing page is untouched.
   await surface.signOut();
   await surface.contentView.open({ slug: taken.slug });
   await expect.poll(() => surface.contentView.pageTitle()).toBe(taken.title);
+  expect(await surface.contentView.pageBody()).toBe(existingBody);
 
-  // The page that tried to move is still where it was.
+  // The rename was not accepted: the page that tried to move is still where it was.
   await surface.contentView.open({ slug: other });
   await expect.poll(() => surface.contentView.pageTitle()).toBe(otherTitle);
 });

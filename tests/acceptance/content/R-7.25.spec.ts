@@ -1,5 +1,5 @@
 // criterion: @R-7.25 v1
-// provenance: blind, spec@08d8aac0ee7ec7fcee1a309ef183dcb17e38221b, derived 2026-09-15
+// provenance: blind, spec@2d9a83e439479b419845aa46aa7d9d819b38de24, derived 2026-09-15
 import { test, expect, persona } from "../../fixtures";
 
 // The pages the service depends on carry no seed handle, so this one is named by the
@@ -8,12 +8,14 @@ import { test, expect, persona } from "../../fixtures";
 //
 // Removal and renaming are not taken on the screen's word alone. Each is attempted through
 // the managing screen — an action on a control that is not offered fails, and one that is
-// offered is carried through — and the page is then read where it stands. "A request made
-// another way" has no action of its own in the surface, so the attempts through the screen
-// are all a test can make.
+// offered is carried through — and the page is then read where it stands.
+//
+// Not asserted: "a request to rename or remove it made another way is refused". The
+// surface has no action that sends a request to the service other than through its
+// screens, so the attempts through the screen are all a test can make.
 const needed = "disclaimer";
 const elsewhere = `derived-moved-disclaimer-${Date.now().toString(36)}`;
-const title = "Disclaimer";
+const title = "Disclaimer, as an administrator worded it";
 const written = "Wording an administrator gave a page the service depends on.";
 
 test("A page the service itself depends on may have its title and body changed but may not be renamed or removed, and its managing screen says so", async ({
@@ -21,18 +23,25 @@ test("A page the service itself depends on may have its title and body changed b
 }) => {
   await surface.signIn(persona.administrator);
 
-  // Given: an administrator on the managing screen of a page the service needs.
+  // Given: the installation carries the page, and an administrator is on its managing screen.
+  await surface.contentView.open({ slug: needed });
+  await expect
+    .poll(() => surface.contentView.pageTitle(), { message: `given: this installation carries "${needed}"` })
+    .toBeTruthy();
+  expect(await surface.contentView.notFoundForUnknownAddress(), `given: "${needed}" answers`).toBeFalsy();
+
   await surface.contentEdit.open({ slug: needed });
   await expect
-    .poll(() => surface.contentEdit.pageAddress(), { message: `given: this installation carries "${needed}"` })
+    .poll(() => surface.contentEdit.pageAddress(), { message: `given: the managing screen of "${needed}" is open` })
     .toContain(needed);
 
   // Then: the screen says the service needs this page at this address, the address cannot
   // be typed over, and no removal is offered.
-  await expect.poll(() => surface.contentEdit.fixedPageWarning()).toBeTruthy();
-  expect(await surface.contentEdit.slugLockedForFixedPage()).toBeTruthy();
-  expect(await surface.contentEdit.deleteWithheldForFixedPage()).toBeTruthy();
+  await expect.poll(() => surface.contentEdit.fixedPageWarning(), { message: "the screen warns the page is needed" }).toBeTruthy();
+  expect(await surface.contentEdit.slugLockedForFixedPage(), "the address is locked").toBeTruthy();
+  expect(await surface.contentEdit.deleteWithheldForFixedPage(), "removal is withheld").toBeTruthy();
 
+  // No removal is genuinely offered: attempting one through the screen goes nowhere.
   const removalOffered = await surface.contentEdit.deletePage().then(
     () => true,
     () => false,
@@ -43,7 +52,7 @@ test("A page the service itself depends on may have its title and body changed b
   await surface.signOut();
   await surface.contentView.open({ slug: needed });
   await expect.poll(() => surface.contentView.pageTitle(), { message: "the page was not removed" }).toBeTruthy();
-  expect(await surface.contentView.notFoundForUnknownAddress()).toBeFalsy();
+  expect(await surface.contentView.notFoundForUnknownAddress(), "the page was not removed").toBeFalsy();
 
   // Its title and body may be changed.
   await surface.signIn(persona.administrator);

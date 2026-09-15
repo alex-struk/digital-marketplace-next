@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-15T05:16:27.600Z | derive-tests-content-stale-3 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.8582239999999999 |  |
 | 2026-09-15T05:10:19.856Z | bind-adapter-old-13 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.7371205000000001 |  |
 | 2026-09-15T04:49:35.465Z | policy-v8 | G-POL | approve | agent:tech-lead | agent-held, unsampled | $0.730707 | sample |
 | 2026-09-15T04:42:24.073Z | calibrate-old-6 | G1 | approve | agent:product-owner | agent-held, unsampled | $12.641188750000003 | sample |

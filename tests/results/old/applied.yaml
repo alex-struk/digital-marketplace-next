@@ -77,14 +77,6 @@ rulings:
     version: 2
     verb: test-wrong
     gate: calibrate-old-4
-  - id: R-7.9
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-6
-  - id: R-7.12
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-6
   - id: R-6.17
     version: 1
     verb: product-question
@@ -105,41 +97,9 @@ rulings:
     version: 1
     verb: product-question
     gate: calibrate-triage-old-6
-  - id: R-7.22
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-6
-  - id: R-7.25
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-7
-  - id: R-7.27
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-7
   - id: R-7.20
     version: 1
     verb: defect-in-old
-    gate: calibrate-old-5
-  - id: R-7.9
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-5
-  - id: R-7.12
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-5
-  - id: R-7.25
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-5
-  - id: R-7.27
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-5
-  - id: R-7.22
-    version: 1
-    verb: test-wrong
     gate: calibrate-old-5
   - id: R-5.22
     version: 1

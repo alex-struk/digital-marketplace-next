@@ -7,34 +7,6 @@ redo:
       vendor polled is active at the moment of the broadcast, keep the vendor
       holding no email address among the recipients, and report every
       addressable vendor not reached rather than stopping at the first
-  - id: R-7.9
-    version: 1
-    why: the test reads being told the page was removed only from the page's main
-      content and at once; the notice may appear anywhere on the screen, so
-      allow time and read it wherever the screen shows it
-  - id: R-7.12
-    version: 1
-    why: the test reads a page the criterion promises on a freshly prepared
-      installation without establishing that the target it runs against is one;
-      the target held none of the pages the service needs, so the absence says
-      nothing about the criterion; establish that the installation carries its
-      needed pages before reading the title and body of one
-  - id: R-7.25
-    version: 1
-    why: the test opens a page the service needs without establishing that the
-      target carries it, and it did not; establish that the page exists before
-      looking for the warning and the ways to change it, and check that removal
-      is genuinely not offered rather than accepting any reading
-  - id: R-7.27
-    version: 1
-    why: the test opens a page the service created for itself without establishing
-      that the target carries it, and it did not; establish that the page exists
-      before reading who published it and who last changed it
-  - id: R-7.22
-    version: 1
-    why: neither half completes the publish it starts, so nothing is ever sent to be
-      refused; complete the publication as an administrator would, then read
-      whether the address is reported as already in use
   - id: R-5.22
     version: 1
     why: the test reads the rejection the instant the entry is made, without
