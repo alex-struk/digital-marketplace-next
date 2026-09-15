@@ -7,13 +7,6 @@ redo:
       vendor polled is active at the moment of the broadcast, keep the vendor
       holding no email address among the recipients, and report every
       addressable vendor not reached rather than stopping at the first
-  - id: R-6.23
-    version: 1
-    why: the test tries to establish each vendor's standing acceptance, and later
-      its withdrawal, from the administrator's view of the vendor, which never
-      shows it, so it fails before any announcement is made; read each vendor's
-      acceptance and the request to accept the new terms while signed in as that
-      vendor
   - id: R-1.10
     version: 1
     why: the test demands a reason shown against a field the person never changed,

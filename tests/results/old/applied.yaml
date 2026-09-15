@@ -197,10 +197,6 @@ rulings:
     version: 2
     verb: product-question
     gate: calibrate-triage-old-8
-  - id: R-6.23
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-8
   - id: R-1.24
     version: 1
     verb: product-question
@@ -274,10 +270,6 @@ rulings:
   - id: R-8.19
     version: 1
     verb: defect-in-old
-    gate: calibrate-old-6
-  - id: R-6.23
-    version: 1
-    verb: test-wrong
     gate: calibrate-old-6
   - id: R-1.1
     version: 3
