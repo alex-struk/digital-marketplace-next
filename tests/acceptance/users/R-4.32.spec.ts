@@ -1,17 +1,18 @@
 // criterion: @R-4.32 v1
-// provenance: blind, spec@1c3743e9fb53c29de89a28045222abab29c5e27e, derived 2026-09-14
+// provenance: blind, spec@08d8aac0ee7ec7fcee1a309ef183dcb17e38221b, derived 2026-09-15
 import { test, expect, persona } from "../../fixtures";
 
 // What the exported spreadsheet holds — the active accounts, the administrator's label, the
 // organization's legal name, the deactivated account's absence — is not asserted, because no
 // observation returns the document the export hands back. observables.yaml names the
-// contact-list export and its document contents, but user-list offers only the modal, the
-// two kinds of tick and the unavailable control, so the clause a test can settle is what must
-// be chosen before the export can be asked for.
+// contact-list export and its document contents, but user-list offers only the choices, the
+// export control's availability and the export action itself, so the clause a test can settle
+// is what must be chosen before the export can be asked for.
 //
 // Nothing on user-list reports which kinds and fields are ticked, and each choice is a toggle,
-// so the test never assumes what is ticked when the choices open. It finds the empty state
-// from the export control's availability alone, then checks the rule from there.
+// so the test never assumes what is ticked when the choices open. It finds the state where
+// nothing is ticked from the export control's availability alone, then checks the rule from
+// there.
 //
 // Export is available only when at least one kind and one field are ticked. Sweeping every
 // combination of kind toggles while the fields stay put, export is unavailable at exactly the
@@ -31,7 +32,7 @@ test("at least one kind and one field must be chosen before an administrator may
   await surface.signIn(persona.administrator);
   await list.open();
   await list.openExportContactList();
-  expect(await list.exportModal()).toBeTruthy();
+  await expect.poll(() => list.exportModal()).toBeTruthy();
 
   // Toggles applied since the choices opened, as one bit per kind and one bit per field.
   let kindMask = 0;
@@ -87,9 +88,10 @@ test("at least one kind and one field must be chosen before an administrator may
   const noFieldTicked = fieldsUnavailableAsOpened.filter((m) => fieldsUnavailableWithVendorToggled.includes(m));
   expect(noFieldTicked).toHaveLength(1);
 
-  // Nothing ticked from here on.
+  // Nothing ticked from here on, and export is unavailable.
   await setKindMask(noKindTicked[0]);
   await setFieldMask(noFieldTicked[0]);
+  expect(await list.exportDisabledUntilSelection()).toBeTruthy();
 
   // A kind but no field: unavailable.
   await list.toggleExportUserType({ userType: "vendor" });
@@ -102,6 +104,13 @@ test("at least one kind and one field must be chosen before an administrator may
 
   // One kind and one field: export becomes available.
   await list.toggleExportUserType({ userType: "vendor" });
+  expect(await list.exportDisabledUntilSelection()).toBeFalsy();
+
+  // Both kinds and all four fields, as an administrator exporting the whole list would choose.
+  await list.toggleExportUserType({ userType: "public sector employee" });
+  for (const field of FIELDS.filter((f) => f !== "email address")) {
+    await list.toggleExportField({ field });
+  }
   expect(await list.exportDisabledUntilSelection()).toBeFalsy();
 
   await list.cancelExport();

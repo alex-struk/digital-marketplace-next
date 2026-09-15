@@ -51,10 +51,6 @@ rulings:
     version: 1
     verb: defect-in-old
     gate: calibrate-old-2
-  - id: R-4.14
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-4
   - id: R-8.17
     version: 1
     verb: product-question
@@ -67,14 +63,6 @@ rulings:
     version: 2
     verb: product-question
     gate: calibrate-triage-old-5
-  - id: R-4.31
-    version: 2
-    verb: product-question
-    gate: calibrate-triage-old-5
-  - id: R-4.32
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-5
   - id: R-8.17
     version: 1
     verb: defect-in-old
@@ -85,18 +73,6 @@ rulings:
     gate: calibrate-old-4
   - id: R-6.26
     version: 2
-    verb: test-wrong
-    gate: calibrate-old-4
-  - id: R-4.14
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-4
-  - id: R-4.31
-    version: 2
-    verb: test-wrong
-    gate: calibrate-old-4
-  - id: R-4.32
-    version: 1
     verb: test-wrong
     gate: calibrate-old-4
   - id: R-2.1
@@ -124,14 +100,6 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-6
     adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
-  - id: R-4.5
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-6
-  - id: R-4.9
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-6
   - id: R-5.9
     version: 1
     verb: adapter-wrong
@@ -166,10 +134,6 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-6
     adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
-  - id: R-4.12
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-6
   - id: R-7.12
     version: 1
     verb: product-question
@@ -302,10 +266,6 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-7
     adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
-  - id: R-4.27
-    version: 2
-    verb: product-question
-    gate: calibrate-triage-old-7
   - id: R-5.27
     version: 2
     verb: adapter-wrong
@@ -433,20 +393,4 @@ rulings:
   - id: R-4.19
     version: 1
     verb: defect-in-old
-    gate: calibrate-old-5
-  - id: R-4.5
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-5
-  - id: R-4.9
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-5
-  - id: R-4.12
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-5
-  - id: R-4.27
-    version: 2
-    verb: test-wrong
     gate: calibrate-old-5

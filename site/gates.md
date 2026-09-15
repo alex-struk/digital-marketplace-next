@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-15T02:50:29.801Z | derive-tests-users-stale-2 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.021512 |  |
 | 2026-09-15T02:41:50.831Z | derive-tests-proposals-stale-1 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.9310155000000001 |  |
 | 2026-09-15T02:34:58.090Z | derive-tests-organizations-stale-2 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.1911135 |  |
 | 2026-09-15T02:26:00.871Z | derive-tests-opportunities-stale-1 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.1769155 |  |

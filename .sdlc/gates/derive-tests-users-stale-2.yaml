@@ -1,0 +1,14 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the seven rewritten users tests (R-4.5, R-4.9, R-4.12, R-4.14, R-4.27, R-4.31, R-4.32) follow from their criteria and nothing else? Ruling: approve. Every assertion traces to its criterion. The six redo entries are addressed: R-4.5 returns through the sign-in screen; R-4.9 no longer infers the owner-deactivated marking from R-4.19's control; R-4.12 reads rights from the admin checkbox and accepts either no control or a refusal when the account is unchanged; R-4.14 establishes all four compared accounts as active and polls the narrowing; R-4.27 polls the invalid mark, counts a withheld save as refusal and re-reads the stored profile; R-4.31 establishes an active comparison account first; and R-4.32 now asserts export is unavailable in the state where nothing is ticked. No selectors, routes or status codes appear. The unasserted clauses name real surface gaps, confirmed against surface.yaml and the mail fixture: no deactivated_on or deactivated_by observation on user-profile, no message body from mail.messagesTo, no observation returning the exported document, and no action for a second deactivation. The fixtures reset to the seed before every test, so state these tests leave behind cannot reach other tests. The runner's typecheck passed on 47b1fbe. What would change the ruling: a calibration showing R-4.5's email test failing on a correct message, which would show it bound to wording the criterion does not state and send it back to the writer.
+conditions:
+  - "R-4.27 'the email address is stored in lower case' cannot fail when no save happens: the seeded address is already lower case and attemptSave swallows a withheld save. The next derivation of R-4.27 should show the save went through, for example by saving a changed name with the capitalised email and reading both back."
+  - "R-4.5 'they are told by email that it has been reactivated' requires the literal word 'reactivated' in the subject or excerpt. If calibration fails there, check whether the message is correct but worded differently (test-wrong) before sending it on as a product question."
+  - "No test in this proposal has run under Playwright. Only the runner's typecheck is evidence so far, and the next calibration is the first check that the tests execute."
+cost: 1.021512
+turns: 14
+session: "1189be9c-218e-42dd-9a33-4adbee225a21"
+at: 2026-09-15T02:50:29.801Z
