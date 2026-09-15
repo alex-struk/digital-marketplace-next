@@ -187,3 +187,169 @@ rebind:
       so the reopened dialog has both terms boxes unticked and 'Submit Proposal'
       disabled; keep accepted terms ticked across the reopen, or enter values
       before opening the terms.
+  - id: R-2.24
+    target: old
+    why: proposalCreate.submitProposal calls enter(), which presses Cancel on the
+      open terms dialog to type the proposal, so the reopened dialog has both
+      terms boxes unticked and 'Submit Proposal' disabled and press() throws
+      before any proposal exists; keep accepted terms ticked across the reopen.
+      In the organization test opportunityTwuCreate.setEvaluationPanel matches
+      chooser options by the seed id '00000000-0000-4000-8000-000000000102'
+      while they are named 'Name (email)'; match by the seed user's email.
+  - id: R-5.24
+    target: old
+    why: evaluationIndividualEditSwu.readOnlyAfterSubmitted returns
+      controlState(['Save Changes','Save']), whose 'absent', 'enabled' and
+      'disabled' are all non-empty, so the saved draft (score 5 and the new note
+      stored, the top bar offering 'Edit') reads as read-only; return '' when
+      the top bar offers 'Edit' or an enabled 'Save Changes'. In the submission
+      test scoreSheet.enter ignores 'order' (indexOf reads only
+      index/position/row), so only question 1 is scored and 'Submit Scores for
+      Consensus' stays disabled; map 'order' to the question slot.
+  - id: R-2.25
+    target: old
+    why: submitProposal's enter() cancels the terms dialog, so the reopened dialog
+      has both terms boxes unticked and 'Submit Proposal' disabled and press()
+      throws before any proposal exists; keep accepted terms ticked across the
+      reopen, or enter values before opening the terms.
+  - id: R-5.25
+    target: old
+    why: "in both tests scoreSheet.enter ignores 'order' (indexOf reads only
+      index/position/row), so every score lands on question 1 and 'Submit Scores
+      for Consensus' stays disabled; map 'order' to the question slot. In the
+      incomplete-set test, if 'Submit Scores for Consensus' is still disabled
+      once the complete drafts are scored, that is the refusal the test reads:
+      return quietly instead of throwing."
+  - id: R-8.25
+    target: old
+    why: in both Code With Us tests fileAttachmentControl.addAttachment picks the
+      file on '4. Attachments' but never saves the draft ('Publish', 'Save
+      Changes' and 'Cancel' still offered, the only link a 'blob:' preview), so
+      attachmentAddress returns ''; press 'Save Changes' after adding and wait
+      for an '/api/files/' link. In the Sprint With Us test setEvaluationPanel
+      matches chooser options by seed id while they are named 'Name (email)'; in
+      the proposal test submitProposal's enter() cancels the terms dialog and
+      both boxes come back unticked.
+  - id: R-3.26
+    target: old
+    why: "organizationCreate.createOrganization throws 'no field takes
+      \"addressLineTwo\"', but the form labels its second address line 'Street
+      Address' too (two 'Street Address' textboxes); map addressLineTwo to the
+      second one, and do not fail on a key whose value is empty. The first test
+      is not a binding fault: the qualified organization's page shows 'Sprint
+      With Us Qualified' and no Team With Us badge."
+  - id: R-5.27
+    target: old
+    why: scoreSheet.enter ignores the test's 'order' (indexOf reads only
+      index/position/row), so only question 1 is scored per proponent, 'Submit
+      Scores for Consensus' stays disabled and consensus is never reached; map
+      'order' to the question slot.
+  - id: R-3.28
+    target: old
+    why: organizationEdit.serviceAreaCheckbox reads every area named under 'Service
+      Areas' ('Full Stack Developer', 'Data Professional', 'Agile Coach',
+      'DevOps Specialist', 'Service Designer') whether ticked or not, and in
+      display wording, while the test names areas by seed code
+      ('FULL_STACK_DEVELOPER'); report only the ticked boxes, in the seed's code
+      form, as saveServiceAreas already matches them.
+  - id: R-5.28
+    target: old
+    why: scoreSheet.enter ignores the test's 'order' (indexOf reads only
+      index/position/row), so only question 1 is scored, 'Submit Scores for
+      Consensus' stays disabled and the opportunity never reaches consensus; map
+      'order' to the question slot.
+  - id: R-8.29
+    target: old
+    why: contentEdit.uploadBodyImage clicks 'Choose File', which is a hidden input
+      type=file under the body textarea; the textarea, the slug label and the
+      address line intercept the click for 15 s and no file chooser opens. Set
+      the files on that input directly (setInputFiles) instead of clicking it.
+  - id: R-1.31
+    target: old
+    why: submitProposal's enter() cancels the terms dialog, so the reopened dialog
+      has both terms boxes unticked and 'Submit Proposal' disabled and press()
+      throws before any proposal exists; keep accepted terms ticked across the
+      reopen.
+  - id: R-8.31
+    target: old
+    why: in the two opportunity tests fileAttachmentControl.addAttachment never
+      saves the form after picking the file, so attachmentAddress returns '' as
+      in R-8.25; press 'Save Changes' and wait for an '/api/files/' link before
+      reading it. In the proposal test submitProposal's enter() cancels the
+      terms dialog and 'Submit Proposal' comes back disabled.
+  - id: R-1.32
+    target: old
+    why: opportunityCwuView.addenda reads tabContent(['Addenda']), but the view's
+      tab is labelled with its count ('1' then 'Addenda') and is never opened,
+      so the Details tab is read and the published addendum is missed; open the
+      tab whose text ends in 'Addenda'. In the over-length test 'Publish
+      Addendum' is disabled, which is the refusal, and addAddendum's press()
+      throws; cancel the form and return quietly.
+  - id: R-5.32
+    target: old
+    why: scoreSheet.enter ignores the test's 'order' (indexOf reads only
+      index/position/row), so only question 1 is scored, 'Submit Scores for
+      Consensus' stays disabled and finalising is never reached; map 'order' to
+      the question slot.
+  - id: R-2.36
+    target: old
+    why: in both tests submitProposal's enter() cancels the terms dialog, so the
+      reopened dialog has both terms boxes unticked and 'Submit Proposal'
+      disabled and press() throws before anything is submitted or withdrawn;
+      keep accepted terms ticked across the reopen.
+  - id: R-5.36
+    target: old
+    why: "in the Sprint With Us test scoreSheet.enter ignores 'order', so only
+      question 1 is scored and 'Submit Scores for Consensus' stays disabled; map
+      'order' to the question slot. The Team With Us test is not a binding
+      fault: the seeded opportunity's resource-question evaluation page answers
+      'Not Found'."
+  - id: R-2.37
+    target: old
+    why: in the Code With Us test submitProposal's enter() cancels the terms dialog
+      and 'Submit Proposal' comes back disabled with both boxes unticked; in the
+      Sprint With Us test opportunitySwuCreate.setEvaluationPanel matches
+      chooser options by the seed id '00000000-0000-4000-8000-000000000102'
+      while they are named 'Name (email)'; match by the seed user's email.
+  - id: R-2.38
+    target: old
+    why: submitProposal's enter() cancels the terms dialog, so the reopened dialog
+      has both terms boxes unticked and 'Submit Proposal' disabled and press()
+      throws before any proposal exists to export; keep accepted terms ticked
+      across the reopen.
+  - id: R-1.39
+    target: old
+    why: "opportunityList.filterByStatus clicks the placeholder text 'All
+      Opportunity Statuses', whose react-select input container intercepts the
+      click for 15 s; click or type into the status combobox itself. In the
+      remote test opportunityCwuCreate.publish throws on remoteDescription ''
+      because Remote Description is hidden once 'Remote OK?' is No; skip empty
+      values for fields the form does not show. The program and free-text tests
+      are not shown to be binding faults: 'Sprint With Us' and 'kittiwakes' sit
+      in their controls and the list still shows the Code With Us and Kamloops
+      opportunities."
+  - id: R-1.48
+    target: old
+    why: opportunitySwuCreate.setEvaluationPanel matches chooser options by the seed
+      id '00000000-0000-4000-8000-000000000102' while they are named 'Name
+      (email)', so setup fails before anything is created; match by the seed
+      user's email. The Team With Us Save Draft staying on /create is not shown
+      to be a binding fault.
+  - id: R-1.55
+    target: old
+    why: evaluationPanelSwu.addPanelMember passes {member} to setEvaluationPanel,
+      which reads only 'members'/'evaluators', so nobody is added and all four
+      Sprint With Us tests save the draft's valid default panel (Robin
+      Placeholder as chair, Morgan Placeholder); read input.member and match the
+      chooser option by the seed user's email. The Team With Us Save Draft
+      staying on /create is not shown to be a binding fault.
+  - id: R-1.56
+    target: old
+    why: in the administrator test opportunityEdit.opportunityTab reads
+      tabContent(['Opportunity']), only the visible '1. Overview' step (Title to
+      Required Skills, then Next), so the Description on '2. Description' is
+      never read; walk every step of the tab. In the author test editDetails'
+      fromActions throws unbound when the author is offered no 'Actions' menu on
+      the published opportunity, although that absence is the refusal; return
+      quietly. In the Sprint With Us and Team With Us tests setEvaluationPanel
+      matches chooser options by seed id while they are named 'Name (email)'.

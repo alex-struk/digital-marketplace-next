@@ -8,6 +8,7 @@ applied:
   - calibrate-triage-old-5
   - calibrate-old-4
   - calibrate-triage-old-6
+  - calibrate-triage-old-7
 rulings:
   - id: R-7.18
     version: 1
@@ -354,3 +355,141 @@ rulings:
     version: 1
     verb: product-question
     gate: calibrate-triage-old-6
+  - id: R-2.24
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-5.24
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-2.25
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-5.25
+    version: 2
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-7.25
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-7
+  - id: R-8.25
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-3.26
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-3.27
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-7
+  - id: R-4.27
+    version: 2
+    verb: product-question
+    gate: calibrate-triage-old-7
+  - id: R-5.27
+    version: 2
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-7.27
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-7
+  - id: R-3.28
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-5.28
+    version: 2
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-8.29
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-1.31
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-8.31
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-1.32
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-5.32
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-1.35
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-7
+  - id: R-2.35
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-7
+  - id: R-2.36
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-5.36
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-2.37
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-2.38
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-1.39
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-1.48
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-1.53
+    version: 2
+    verb: product-question
+    gate: calibrate-triage-old-7
+  - id: R-1.55
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-1.56
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-7
+    adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
