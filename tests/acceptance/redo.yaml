@@ -63,11 +63,6 @@ redo:
       entering nothing into a comment that was already empty, so nothing about
       the comment changed; allow time for the mark, and enter a comment before
       clearing it
-  - id: R-2.35
-    version: 1
-    why: the test reads the history as the vendor, whom the criterion never names as
-      entitled to see it; read the history as someone entitled to see it, such
-      as an administrator
   - id: R-4.5
     version: 1
     why: the return the criterion describes is signing in again, but the test's
