@@ -200,8 +200,8 @@ When people are added to an evaluation panel, only the people newly added are no
 - state: accepted
 - note: the same change made while the opportunity is still a draft notifies nobody.
 
-### R-5.18 · v1 · confirmed · recovered
-The membership of an evaluation panel is shown only to an administrator, the opportunity's owner, and the people on the panel itself.
+### R-5.18 · v2 · confirmed · recovered
+The membership of an evaluation panel is returned by the service only to an administrator, the opportunity's owner and the people on the panel itself; the screen that lists and manages the panel opens only for an administrator or the opportunity's owner, and answers "Not Found" to anyone else who asks for it, a panel member included.
 - cites: src/back-end/lib/db/opportunity/sprint-with-us.ts:892
 - cites: src/back-end/lib/db/opportunity/sprint-with-us.ts:934
 - reconciliation: implemented-only

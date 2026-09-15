@@ -1,5 +1,5 @@
 {
-  "generated_from": "2d9a83e439479b419845aa46aa7d9d819b38de24",
+  "generated_from": "05e88fb7765c5d6327f910e43f990e6c321b63fa",
   "criteria": [
     {
       "id": "R-7.1",
@@ -1545,10 +1545,10 @@
     },
     {
       "id": "R-5.18",
-      "version": 1,
+      "version": 2,
       "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "The membership of an evaluation panel is shown only to an administrator, the opportunity's owner, and the people on the panel itself.",
+      "statement": "The membership of an evaluation panel is returned by the service only to an administrator, the opportunity's owner and the people on the panel itself; the screen that lists and manages the panel opens only for an administrator or the opportunity's owner, and answers \"Not Found\" to anyone else who asks for it, a panel member included.",
       "cites": [
         {
           "path": "src/back-end/lib/db/opportunity/sprint-with-us.ts",
@@ -1565,7 +1565,7 @@
       "then": "no panel membership is shown to them, while an administrator, the owner and each panel member all see it",
       "notes": [],
       "state": "accepted",
-      "raw": "### R-5.18 · v1 · confirmed · recovered",
+      "raw": "### R-5.18 · v2 · confirmed · recovered",
       "line": 203,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"

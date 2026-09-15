@@ -33,3 +33,144 @@ redo:
       service areas before editing, and it does not tick a third area as the
       given describes; establish the two starting approvals, clear one and tick
       a third, then read the approvals once the save has completed
+  - id: R-7.22
+    version: 1
+    why: "in the creation case nothing shows that the new page was ever put forward:
+      the screen stayed exactly as filled in, with no outcome of any kind,
+      neither a created page nor a refusal; establish that the creation was
+      submitted before reading whether the address was reported, and read the
+      report against the address field where it is entered"
+  - id: R-7.12
+    version: 1
+    why: the test established that this installation carries none of the pages the
+      service needs and then reported that as a failure of the criterion; a
+      given that does not hold makes the result blocked, not failed, so record
+      it as blocked until the target carries those pages
+  - id: R-7.25
+    version: 1
+    why: the test established that the page it needs, one the service depends on,
+      does not answer on this installation and then reported that as a failure
+      of the criterion; a given that does not hold makes the result blocked, not
+      failed, so record it as blocked until the target carries that page
+  - id: R-7.27
+    version: 1
+    why: the first test stopped at its given, a page the service created for itself,
+      which this installation does not carry; the second needs a second
+      administrator to act as, and this target signs in only one; record both as
+      blocked rather than failed until the target carries the page and a second
+      administrator can sign in
+  - id: R-5.1
+    version: 1
+    why: the panel of one was never assembled, because the draft's panel already
+      held a second member, so adding one person and removing the creator left
+      two; and marking another member as chair moves the chair, so the
+      two-chairs case saved a different panel with one chair, which the test
+      wrongly required to be unchanged; establish the panel's membership before
+      reducing it to exactly one, count a chair that moves rather than doubles
+      as the second chair being refused, and keep requiring the rule to be named
+      when the same person is named twice
+  - id: R-5.9
+    version: 1
+    why: the person removed from the panel stayed named as its chair, so the panel
+      put forward still had a chair and was rightly accepted; establish that the
+      panel put forward names nobody as chair before reading whether it is
+      refused, and if no available action can put such a panel forward, record
+      the criterion as blocked until one can reach the service
+  - id: R-5.17
+    version: 1
+    why: the notice to a person added to a panel reaches them as a hidden recipient,
+      and the test searched only the addressees each message shows, so it would
+      find nothing for anyone; read every recipient each message was delivered
+      to, for the person added and for the two already on the panel alike
+  - id: R-1.55
+    version: 1
+    why: in the no-chair cases the person removed stayed named as chair, so the
+      panel put forward still had one, and in the fewer-than-two case the panel
+      already held a second member, so it still had two; establish that each
+      panel is exactly the faulty panel its case names before reading its
+      refusal, keep requiring the reason when the same person is named twice,
+      and where the Team With Us draft a case depends on was never stored,
+      record that case as blocked rather than failed
+  - id: R-1.8
+    version: 1
+    why: the Team With Us case failed at its given, because the draft it saves was
+      never stored on this target, for a reason the criterion does not govern;
+      establish that the draft was stored before reading which program it
+      belongs to, and record the case as blocked rather than failed when it was
+      not
+  - id: R-1.13
+    version: 1
+    why: the Team With Us opportunity was never published, so its absence from the
+      list says nothing about a budget limit; establish that it was published
+      with its budget before reading the list, and record the case as blocked
+      rather than failed when the target would not store it
+  - id: R-1.48
+    version: 1
+    why: the Team With Us draft was never stored on this target, for a reason the
+      criterion does not govern, so the test says nothing about who may create
+      one; establish that each draft was stored before reading its state, and
+      record the Team With Us case as blocked rather than failed when it was not
+  - id: R-1.53
+    version: 2
+    why: four tests stop at setup by requiring a statement of permissions that an
+      ordinary staff member's profile does not carry, so establish the lack of
+      administrator rights from something every staff account shows; the
+      administrator's draft test stops at a Team With Us draft that was never
+      stored, so establish that each draft was stored before asking to delete
+      it, and record the Team With Us part as blocked rather than failed when it
+      was not
+  - id: R-1.56
+    version: 1
+    why: in the Sprint With Us case the administrator's publication did not take
+      effect and the opportunity was still a draft when its author changed it,
+      which the criterion permits; confirm the opportunity reads as published
+      before its author tries, and in the Team With Us case, where the draft was
+      never stored, record the case as blocked rather than failed
+  - id: R-1.10
+    version: 1
+    why: publication of the over-length teaser was withheld, with the publish
+      control left unavailable, and the test demanded a reason it could not find
+      on the step the form was left on; look for the reason against the teaser
+      where it is entered, allowing time for it, treat a publication that stays
+      unavailable as the refusal, and check that nothing was published
+  - id: R-1.18
+    version: 1
+    why: the target allocation and the service area are each chosen from a list that
+      offers nothing outside the criterion's bounds, so the out-of-range values
+      were never put forward, and in the below-one case a different, valid
+      allocation was taken in its place; treat a value that is not offered as
+      refused, confirm that the value chosen is the one the case names before
+      publishing, and record a case as blocked rather than failed when the
+      target will not store the Team With Us opportunity
+  - id: R-1.21
+    version: 1
+    why: the draft was not incomplete, because a new opportunity's location starts
+      filled in, so leaving the location out left a location in place and the
+      submission was rightly accepted for review; empty the location explicitly,
+      confirm the saved draft shows it blank, then submit it and read what the
+      author is told
+  - id: R-1.24
+    version: 1
+    why: in the Team With Us case the given was established only from the address
+      the administrator opened, which reads the same whether or not the
+      opportunity can be read; establish it from the opportunity's own title and
+      status before closure, and record the case as blocked rather than failed
+      when the opportunity cannot be read
+  - id: R-3.26
+    version: 1
+    why: the first test does not establish that the seeded organization holds its
+      service-area approval and accepted terms before reading its badge, and on
+      this target it holds no approval; the second does not confirm that the
+      administrator's approval was recorded before reading the requirements, and
+      every approval box was clear after the save; establish both before
+      reading, and record the test as blocked rather than failed when the
+      approval cannot be recorded
+  - id: R-2.14
+    version: 2
+    why: the criterion promises that the submission is refused and each offending
+      field named in the service's reply, and for a blank field the submission
+      was simply withheld with nothing shown, which the test read at once as a
+      failure; treat a submission that stays unavailable as the refusal and
+      check that no proposal was submitted, allow time for a reason where a
+      malformed value was typed, and treat an archived organization that is not
+      offered as a choice as refused
