@@ -93,6 +93,10 @@ export default function create(
   }
 
   async function go(route: string, params?: Record<string, string>): Promise<void> {
+    // A screen opened is a form begun afresh: the fields and terms an earlier form was given
+    // say nothing about this one.
+    namedLabels.clear();
+    acceptedTerms.clear();
     await page.goto(address(route, params), { waitUntil: "domcontentloaded" });
     await settle();
   }
@@ -709,6 +713,15 @@ export default function create(
     allocation: ["Resource Target Allocation"],
     targetallocation: ["Resource Target Allocation"],
     disqualificationreason: ["Reason"],
+    // The weights are the percentage fields on the creation forms' Scoring step.
+    questionsweight: ["Team Questions", "Resource Questions"],
+    teamquestionsweight: ["Team Questions"],
+    resourcequestionsweight: ["Resource Questions"],
+    codechallengeweight: ["Code Challenge"],
+    challengeweight: ["Interview/Challenge", "Code Challenge"],
+    interviewweight: ["Interview/Challenge"],
+    teamscenarioweight: ["Team Scenario"],
+    priceweight: ["Price"],
   };
 
   function labelsFor(key: string): string[] {
@@ -1288,16 +1301,24 @@ export default function create(
     if (!files.length) {
       throw new Error(`unbound: ${where} — no file was named to attach`);
     }
+    // "Add Attachment" is drawn over a "Choose File" input that takes the file. The drawn
+    // control sits out of the tab order whether or not it is usable, so the input beneath it
+    // is what shows the step is open to attachments.
+    const usable = async (): Promise<Locator | null> => {
+      const input = seen(page.getByRole("button", { name: "Choose File", exact: true }));
+      if (await input.count()) return input.first();
+      const drawn = await findControl(page, "Add Attachment");
+      return drawn && !(await isDisabled(drawn)) ? drawn : null;
+    };
     const reach = async (): Promise<Locator | null> => {
       await settle();
-      const shown = await findControl(page, "Add Attachment");
+      const shown = await usable();
       if (shown) return shown;
       if (!(await currentStep())) await enterTab(["Opportunity", "Proposal Details", "Proposal"]);
-      await walkToStep(/Attachments$/i);
-      return findControl(page, "Add Attachment");
+      if (!(await goToStep("Attachments"))) await walkToStep(/Attachments$/i);
+      return usable();
     };
     let control = await reach();
-    if (control && (await isDisabled(control))) control = null;
     // A saved record's form is read-only until "Edit" is chosen, from its Actions menu or,
     // where the record offers no menu, from the top bar itself.
     if (!control && (await fromActionsIfOffered(where, ["Edit"]))) control = await reach();
@@ -1311,12 +1332,18 @@ export default function create(
     }
     if (!control) {
       throw new Error(
-        `unbound: ${where} — walked to the Attachments step and chose "Edit" where the Actions menu or the top bar offered it, but no "Add Attachment" control appeared on ${page.url()}`,
+        `unbound: ${where} — went to the Attachments step by the step menu and by Previous/Next, and chose "Edit" where the Actions menu or the top bar offered it, but neither a "Choose File" input nor a usable "Add Attachment" control appeared on ${page.url()}`,
       );
     }
-    const chooser = page.waitForEvent("filechooser");
-    await control.click();
-    await (await chooser).setFiles(files);
+    const taken = await control
+      .setInputFiles(files)
+      .then(() => true)
+      .catch(() => false);
+    if (!taken) {
+      const chooser = page.waitForEvent("filechooser", { timeout: 10000 });
+      await control.click();
+      await (await chooser).setFiles(files);
+    }
     await settle();
   }
 
@@ -1731,12 +1758,14 @@ export default function create(
 
   // The three creation forms share a shape: a wizard, with the saving controls in the
   // top navigation. Each action enters every value it was given before pressing anything.
-  function opportunityCreate(where: string, route: string) {
+  function opportunityCreate(where: string, route: string, phased = false) {
     // Every value the test gave is entered, then every required field it did not name is
     // given a valid value, so the value under test decides whether the form will save.
     async function enter(member: string, input: unknown): Promise<void> {
       await ready();
-      await fillForm(`${where}.${member}`, input, { skip: ATTACHMENT_KEYS });
+      const { rest, phase } = phased ? phaseDatesOf(input) : { rest: input, phase: null };
+      await fillForm(`${where}.${member}`, rest, { skip: ATTACHMENT_KEYS });
+      if (phase) await addPhase(`${where}.${member}`, phase);
       if (hasFiles(input)) await addAttachment(`${where}.${member}`, input);
       await completeRequired(true);
     }
@@ -1876,6 +1905,27 @@ export default function create(
     return null;
   }
 
+  // A Sprint With Us opportunity holds its dates only on its phases, so a start or completion
+  // date given for the whole opportunity is entered as "Phase Start Date" and "Phase
+  // Completion Date" on the phase it starts with: the one the input names, else Implementation.
+  const PHASE_DATE_KEYS = ["startDate", "start_date", "completionDate", "completion_date", "endDate", "end_date"];
+
+  function phaseDatesOf(input: unknown): { rest: unknown; phase: Record<string, unknown> | null } {
+    if (!input || typeof input !== "object" || Array.isArray(input)) return { rest: input, phase: null };
+    const rest = { ...(input as Record<string, unknown>) };
+    const phase: Record<string, unknown> = {};
+    for (const key of PHASE_DATE_KEYS) {
+      if (rest[key] !== undefined && rest[key] !== null) phase[key] = rest[key];
+      delete rest[key];
+    }
+    if (!Object.keys(phase).length) return { rest: input, phase: null };
+    const starting = rest.startingPhase ?? rest.starting_phase;
+    delete rest.startingPhase;
+    delete rest.starting_phase;
+    phase.phase = typeof starting === "string" && starting ? starting : "Implementation";
+    return { rest, phase };
+  }
+
   const PHASE_FIELDS: Record<string, string> = {
     startdate: "Phase Start Date",
     phasestartdate: "Phase Start Date",
@@ -2004,7 +2054,7 @@ export default function create(
   };
 
   const opportunitySwuCreate: S.OpportunitySwuCreatePage = {
-    ...opportunityCreate("opportunity-swu-create", "/opportunities/sprint-with-us/create"),
+    ...opportunityCreate("opportunity-swu-create", "/opportunities/sprint-with-us/create", true),
     addPhase: (input) => addPhase("opportunity-swu-create.add_phase", input),
     addTeamQuestion: (input) =>
       addQuestion("opportunity-swu-create.add_team_question", "Team Questions", input),
@@ -2361,7 +2411,14 @@ export default function create(
       opportunityTab: () => inTab(["Opportunity"], everyStepText),
       addendaTab: () => tabContent(["Addenda"]),
       historyTab: () => tabContent(["History"]),
-      proposalsTab: () => tabContent(["Proposals"]),
+      // Before an opportunity closes the tab withholds every proposal, showing only a notice
+      // that they will be displayed later; that withholding reads as nothing.
+      proposalsTab: () =>
+        inTab(["Proposals"], async () => {
+          const text = await contentText();
+          const withheld = matches(/Proposals will be displayed here once this opportunity has closed/i, text);
+          return withheld && !(await seen(page.getByRole("table")).count()) ? "" : text;
+        }),
     };
   }
 
@@ -2552,19 +2609,21 @@ export default function create(
         await landOn(record());
         acceptedTerms.clear();
       },
+      // The agreement is remembered even when the dialog cannot open yet, so the submit that
+      // follows ticks it once the dialog is up.
       acceptProgramTerms: async (input?: unknown) => {
         await enter("accept_program_terms", input);
-        if (!(await openTermsDialog(`${where}.accept_program_terms`))) return;
         const label = `agree to the ${programme} Terms & Conditions`;
-        await ensureTicked(`${where}.accept_program_terms`, [label], dialog().first());
         acceptedTerms.add(label);
+        if (!(await openTermsDialog(`${where}.accept_program_terms`))) return;
+        await ensureTicked(`${where}.accept_program_terms`, [label], dialog().first());
       },
       acceptAppTerms: async (input?: unknown) => {
         await enter("accept_app_terms", input);
-        if (!(await openTermsDialog(`${where}.accept_app_terms`))) return;
         const label = "Digital Marketplace Terms & Conditions for E-Bidding";
-        await ensureTicked(`${where}.accept_app_terms`, [label], dialog().first());
         acceptedTerms.add(label);
+        if (!(await openTermsDialog(`${where}.accept_app_terms`))) return;
+        await ensureTicked(`${where}.accept_app_terms`, [label], dialog().first());
       },
       fieldError: async () => ((await dialog().count()) ? messages() : stepMessages()),
     };
@@ -2593,6 +2652,18 @@ export default function create(
     await press(where, ["Disqualify", "Disqualify Proposal"], dialog().first());
   }
 
+  // An organization handed over as a name, or as its record ({ legal_name }), or under
+  // "organization" as either.
+  function organizationName(input: unknown): string {
+    if (typeof input === "string") return input;
+    if (!input || typeof input !== "object" || Array.isArray(input)) return "";
+    const record = input as Record<string, unknown>;
+    const named = field(record, "legal_name", "legalName", "organizationName", "name");
+    if (named) return named;
+    if (record.organization !== undefined) return organizationName(record.organization);
+    return "";
+  }
+
   const proposalCwuCreate: S.ProposalCwuCreatePage = {
     ...proposalCreate(
       "proposal-cwu-create",
@@ -2615,8 +2686,25 @@ export default function create(
       await ready();
       await goToStep("Proponent");
       await chooseRadio(where, "Organization");
-      const name = field(input, "organization", "organizationName", "legalName", "name") || asText(input);
-      if (name) await choose(where, ["Organization"], name);
+      const name = organizationName(input);
+      if (!name) return;
+      // The organization is the test's to name: one the chooser does not offer — an archived
+      // one — is left unchosen, never replaced by whichever is offered first.
+      namedLabels.add(squash("Organization"));
+      const box = seen(page.getByRole("combobox", { name: labelled("Organization") })).first();
+      if (!(await box.count())) {
+        throw new Error(`unbound: ${where} — chose "Organization" but no Organization chooser appeared on ${page.url()}`);
+      }
+      await box.click();
+      const option = seen(page.getByRole("option", { name, exact: false }));
+      await option.first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
+      if (!(await option.count())) {
+        await page.keyboard.press("Escape").catch(() => undefined);
+        await settle();
+        return;
+      }
+      await option.first().click();
+      await settle();
     },
     cancel: () => press("proposal-cwu-create.cancel", ["Cancel"], navBar()),
     opportunitySummary: () => headerText(),
@@ -3066,6 +3154,77 @@ export default function create(
     await settle();
   }
 
+  // The icon drawn furthest right on the same row as a box: the one that adds another box.
+  async function markBesideRightmost(scope: Scope, box: Locator): Promise<Locator | null> {
+    const edge = await box.boundingBox();
+    if (!edge) return null;
+    const marks = seen(scope.getByRole("img"));
+    const count = await marks.count();
+    let best: Locator | null = null;
+    let furthest = Number.NEGATIVE_INFINITY;
+    for (let i = 0; i < count; i++) {
+      const mark = await marks.nth(i).boundingBox();
+      if (!mark) continue;
+      const middle = mark.y + mark.height / 2;
+      if (middle < edge.y || middle > edge.y + edge.height) continue;
+      if (mark.x < edge.x + edge.width - 1 || mark.x <= furthest) continue;
+      furthest = mark.x;
+      best = marks.nth(i);
+    }
+    return best;
+  }
+
+  async function colourOf(locator: Locator): Promise<string> {
+    return locator.evaluate((element) => getComputedStyle(element).color).catch(() => "");
+  }
+
+  // "Team Capabilities" lists all nine capabilities whatever the team holds; one held is drawn
+  // in the same ink as the section's heading, one not held is drawn muted.
+  async function heldCapabilities(): Promise<string> {
+    const heading = seen(page.getByRole("heading", { name: "Team Capabilities", exact: true })).first();
+    if (!(await heading.count())) return "";
+    const ink = await colourOf(heading);
+    const prose = await proseLines();
+    const names = (await sectionFrom(["Team Capabilities"])).split("\n").filter((line) => line && !prose.has(line));
+    const held: string[] = [];
+    for (const name of names) {
+      const shown = seen(page.getByText(name, { exact: true }));
+      const count = await shown.count();
+      if (count && (await colourOf(shown.nth(count - 1))) === ink) held.push(name);
+    }
+    return held.join("\n");
+  }
+
+  // A requirement under "Requirements" with the mark before it: a met one is marked in a
+  // colour of its own, an unmet one in the same ink as its words.
+  async function requirement(pattern: RegExp): Promise<string> {
+    const lines = await sectionFrom(["Requirements"], ["Service Areas", "Terms & Conditions"]);
+    const line = lines.split("\n").find((candidate) => matches(pattern, candidate));
+    if (!line) return "";
+    const words = seen(page.getByText(pattern));
+    const count = await words.count();
+    if (!count) return "";
+    const text = words.nth(count - 1);
+    const edge = await text.boundingBox();
+    if (!edge) return line;
+    const marks = seen(page.getByRole("img"));
+    const markCount = await marks.count();
+    let mark: Locator | null = null;
+    let nearest = Number.NEGATIVE_INFINITY;
+    for (let i = 0; i < markCount; i++) {
+      const box = await marks.nth(i).boundingBox();
+      if (!box || box.x + box.width > edge.x + 1) continue;
+      if (box.y + box.height < edge.y || box.y > edge.y + edge.height) continue;
+      if (box.x > nearest) {
+        nearest = box.x;
+        mark = marks.nth(i);
+      }
+    }
+    if (!mark) return line;
+    const met = (await colourOf(mark)) !== (await colourOf(text));
+    return `${met ? "Met" : "Not met"}: ${line}`;
+  }
+
   const organizationEdit: S.OrganizationEditPage = {
     ...at("/organizations/:orgId/edit"),
     editOrganization: async (input) => {
@@ -3117,8 +3276,27 @@ export default function create(
       const addresses = emailsIn(input);
       if (!addresses.length) addresses.push(...asList(input));
       if (addresses.length) {
-        await fill("organization-edit.add_team_members", ["Email Addresses"], addresses.join(","));
-        await inDialog("organization-edit.add_team_members", ["Add Team Member(s)", "Add"]);
+        const where = "organization-edit.add_team_members";
+        if (!(await dialog().count())) throw new Error(`unbound: ${where} — no dialog opened on ${page.url()}`);
+        const scope = dialog().first();
+        // One address per box; the icon drawn furthest right beside the last box adds another.
+        for (let i = 0; i < addresses.length; i++) {
+          const boxes = seen(scope.getByRole("textbox"));
+          if ((await boxes.count()) <= i) {
+            const adder = await markBesideRightmost(scope, boxes.last());
+            if (adder) await adder.click();
+            await boxes.nth(i).waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+            if ((await boxes.count()) <= i) {
+              throw new Error(
+                `unbound: ${where} — pressed the icon beside the last "Email Addresses" box but no box appeared for "${addresses[i]}" on ${page.url()}`,
+              );
+            }
+          }
+          await boxes.nth(i).fill(addresses[i]);
+          await boxes.nth(i).blur().catch(() => undefined);
+        }
+        await settle();
+        await inDialog(where, ["Add Team Member(s)", "Add"]);
         await dialog().first().waitFor({ state: "hidden", timeout: 15000 }).catch(() => undefined);
         await settle();
       }
@@ -3224,7 +3402,7 @@ export default function create(
     ownerBadge: () => inTab(["Team"], () => linesMatching(/\bOwner\b/)),
     pendingBadge: () => inTab(["Team"], () => linesMatching(/\bPending\b/)),
     teamMemberRow: () => inTab(["Team"], teamRowsText),
-    teamCapabilities: () => inTab(["Team"], () => sectionFrom(["Team Capabilities"])),
+    teamCapabilities: () => inTab(["Team"], heldCapabilities),
     swuRequirementTwoMembers: () =>
       inTab(["SWU Qualification"], () => linesMatching(/two team members/i)),
     swuRequirementAllCapabilities: () =>
@@ -3234,7 +3412,7 @@ export default function create(
         linesMatching(/agreed to the sprint with us|agreed to sprint with us/i),
       ),
     twuRequirementServiceArea: () =>
-      inTab(["TWU Qualification"], () => linesMatching(/service area/i)),
+      inTab(["TWU Qualification"], () => requirement(/one or more Service Areas/i)),
     twuRequirementTermsAccepted: () =>
       inTab(["TWU Qualification"], () =>
         linesMatching(/agreed to the team with us|agreed to team with us/i),
@@ -4831,16 +5009,21 @@ export default function create(
       };
       let found = await stored();
       if (!found.length && (await attachmentLink(0))) {
-        const save = await findControl(navBar(), "Save Changes");
-        if (save && !(await isDisabled(save))) {
+        // A published opportunity saves through "Publish Changes", a draft through "Save Changes".
+        const saves = ["Save Changes", "Publish Changes", "Submit Changes for Review"];
+        let save: Locator | null = null;
+        for (const name of saves) {
+          const control = await findControl(navBar(), name);
+          if (control && !(await isDisabled(control))) {
+            save = control;
+            break;
+          }
+        }
+        if (save) {
           await save.click();
           await settle();
-          await confirmIfAsked("file-attachment-control.attachment_address", [
-            "Save Changes",
-            "Publish Changes",
-            "Submit Changes for Review",
-          ]);
-          await saved(["Save Changes"]);
+          await confirmIfAsked("file-attachment-control.attachment_address", saves);
+          await saved(saves);
           await attachmentsStep();
           for (let wait = 0; wait < 20 && !found.length; wait++) {
             found = await stored();
@@ -5037,9 +5220,15 @@ export default function create(
     ...at("/content/:slug/edit"),
     uploadBodyImage: (input) => uploadBodyImage("file-embedded-image.upload_body_image", input),
     // An uploaded image goes into the text as a reference to the address it is kept at.
+    // The body refers to an upload as "![name](FILE_ID:<id>)"; the file is kept at its own
+    // address under that identifier.
     async imageAddress() {
-      const inText = /\/api\/files\/[^\s)"'\]]+/.exec(await fieldValue(["Body"]));
-      return inText ? inText[0] : storedImageAddress();
+      const body = await fieldValue(["Body"]);
+      const inText = /\/api\/files\/[^\s)"'\]]+/.exec(body);
+      if (inText) return inText[0];
+      const byId = /FILE_ID:([0-9a-f-]+)/i.exec(body);
+      if (byId) return `/api/files/${byId[1]}`;
+      return storedImageAddress();
     },
     imageInsertedIntoText: () => fieldValue(["Body"]),
     onlyJpegAndPngOffered: async () => {

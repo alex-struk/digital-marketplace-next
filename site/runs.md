@@ -47,6 +47,12 @@
 - 21:47:54 init: pipeline 9b4e4d4, packs 3, skills installed 0, skipped 0
 - 21:48:04 propose policy-v8 at G-POL
 - 21:49:35 rule policy-v8 approve at G-POL by agent:tech-lead (agent)
+- 21:49:58 oracle down old
+- 21:54:19 oracle down old
+- 21:58:52 oracle up old: http://localhost:3000 (local port 3000)
+- 22:08:43 run bind-adapter: ok, cost 4.1897415, turns 62
+- 22:08:43 propose bind-adapter-old-13 at G3
+- 22:10:19 rule bind-adapter-old-13 approve at G3 by agent:reviewer (agent)
 
 # Run record 2026-09-14
 
