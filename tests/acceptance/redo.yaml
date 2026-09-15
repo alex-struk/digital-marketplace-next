@@ -1,21 +1,4 @@
 redo:
-  - id: R-6.23
-    version: 1
-    why: the test expects a message for vendors it assumes are active without
-      establishing that they are active when the announcement is made, and the
-      first one it polls is an account another test in the suite leaves
-      deactivated; the criterion promises a message only to active vendors, so
-      establish the active and deactivated vendors the given names before
-      announcing and check each group against what the criterion says it should
-      receive
-  - id: R-6.28
-    version: 1
-    why: the test polls vendors it assumes are active without establishing it, the
-      first being an account the suite leaves deactivated, so one timeout ends
-      the check before any other vendor is looked at; establish that every
-      vendor polled is active at the moment of the broadcast, keep the vendor
-      holding no email address among the recipients, and report every
-      addressable vendor not reached rather than stopping at the first
   - id: R-6.26
     version: 2
     why: the test polls vendors it assumes are active without establishing it, the

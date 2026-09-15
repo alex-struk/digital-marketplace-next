@@ -1,23 +1,24 @@
 // criterion: @R-6.23 v1
-// provenance: blind, spec@1c3743e9fb53c29de89a28045222abab29c5e27e, derived 2026-09-14
+// provenance: blind, spec@08d8aac0ee7ec7fcee1a309ef183dcb17e38221b, derived 2026-09-15
 import { test, expect, persona, seed } from "../../fixtures";
 
-// Which vendors are active is read through the surface at the moment of the announcement,
-// never assumed from the seed: another test in the suite leaves seed.users.vendorOne
-// deactivated. The signed-in administrator's own record is the reference, since it is the
-// account doing the announcing; a vendor whose status badge reads the same is active, and one
-// whose badge reads otherwise is deactivated.
+// Which vendors are active is read through the surface at the moment of the announcement rather
+// than assumed from the seed, since a run started without a reset command carries whatever the
+// tests before it left behind. The signed-in administrator's own record is the reference, since
+// it is the account doing the announcing; a vendor whose status badge reads the same is active,
+// and one whose badge reads otherwise is deactivated.
 //
 // Withdrawal is read, as the administrator sees it, on the legal settings of every vendor who
 // held a standing acceptance before the announcement — accepted, with no warning of changed
 // terms — so a warning read afterwards belongs to this announcement and not to an earlier one.
-// A vendor already warned beforehand is left out of that check, since nothing could attribute
-// their warning to this run.
+// A vendor already warned beforehand (seed.users.vendorWithTermsReset) is left out of that
+// check, since nothing could attribute their warning to this run.
 //
-// The message is found by each active vendor's own address. That it asks them to read and
-// accept the new terms is checked as far as the listing reaches — its subject and the opening
-// of its body name the terms — because the mail fixture returns no whole body. An active
-// vendor holding no address cannot be looked up in the catcher, so only addressable ones are.
+// The message is found by each active vendor's own address. That it names the change is checked
+// as far as the catcher's listing reaches — its subject and the opening of its body name the
+// terms. The link to read and accept the new terms is not asserted: the mail fixture returns no
+// whole body. An active vendor holding no address cannot be looked up in the catcher, so only
+// addressable ones are.
 test("an administrator viewing the service's terms and conditions can announce that they have changed, which withdraws every vendor's standing acceptance and sends each active vendor a message asking them to read and accept the new terms", async ({
   surface,
   mail,
@@ -48,6 +49,7 @@ test("an administrator viewing the service's terms and conditions can announce t
   expect(standingAcceptance.filter((vendor) => deactivated.includes(vendor)).length).toBeGreaterThan(0);
 
   const activeAddresses = active.flatMap((vendor) => (vendor.email ? [vendor.email] : []));
+  expect(activeAddresses.length).toBeGreaterThan(0);
   const before = await Promise.all(activeAddresses.map(async (address) => (await mail.messagesTo(address)).length));
 
   await surface.notificationTermsBroadcast.open();
@@ -71,7 +73,10 @@ test("an administrator viewing the service's terms and conditions can announce t
 
   for (const [i, address] of activeAddresses.entries()) {
     await expect
-      .poll(async () => (await mail.messagesTo(address)).length, { timeout: 15000 })
+      .poll(async () => (await mail.messagesTo(address)).length, {
+        message: `message about changed terms reached ${address}`,
+        timeout: 15000,
+      })
       .toBeGreaterThan(before[i]);
     const message = await mail.latestTo(address);
     expect(`${message?.Subject ?? ""} ${message?.Snippet ?? ""}`).toMatch(/terms/i);
