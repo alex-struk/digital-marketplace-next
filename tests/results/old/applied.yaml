@@ -109,10 +109,6 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-6
     adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
-  - id: R-2.2
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-6
   - id: R-2.3
     version: 1
     verb: adapter-wrong
@@ -354,10 +350,6 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-7
     adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
-  - id: R-2.35
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-7
   - id: R-2.36
     version: 1
     verb: adapter-wrong
@@ -437,10 +429,6 @@ rulings:
   - id: R-2.2
     version: 2
     verb: spec-wrong
-    gate: calibrate-old-5
-  - id: R-2.35
-    version: 1
-    verb: test-wrong
     gate: calibrate-old-5
   - id: R-4.19
     version: 1
