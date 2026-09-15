@@ -33,10 +33,3 @@ redo:
       service areas before editing, and it does not tick a third area as the
       given describes; establish the two starting approvals, clear one and tick
       a third, then read the approvals once the save has completed
-  - id: R-4.5
-    version: 1
-    why: the return the criterion describes is an ordinary sign-in, and the only
-      sign-in this target completes is not one, so the test cannot show what
-      signing in again does; sign the person in the ordinary way, and if the
-      target offers no ordinary sign-in record the criterion as blocked rather
-      than failed
