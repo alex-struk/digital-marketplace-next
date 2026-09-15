@@ -1,0 +1,75 @@
+# One entry per page in spec/contract/surface.yaml, with the distinct states the page can be
+# showing. `default` is always one of them. Each state has one story at
+# design/catalogue/<page>.<state>.stories.tsx. Domains add their own entries; keep the rest.
+screens:
+  # ---------------------------------------------------------------- users
+  - page: user-sign-in
+    states: [default]
+
+  - page: user-sign-up-choose-account
+    states: [default]
+
+  - page: user-sign-up-complete
+    states: [default, terms-accepted, invalid]
+
+  - page: user-sign-out
+    states: [default, failed]
+
+  # default is /notice/authFailure.
+  - page: user-notice
+    states: [default, deactivated-own-account, not-found]
+
+  - page: user-list
+    states: [default, loading, export-open, export-ready]
+
+  # default is an administrator viewing an active public sector employee's account.
+  - page: user-profile
+    states:
+      [
+        default,
+        own-profile,
+        editing,
+        invalid,
+        admin-permission-refused,
+        deactivated-by-administrator,
+        deactivated-by-owner,
+        confirm-deactivate,
+        confirm-reactivate,
+        not-found,
+        loading,
+      ]
+
+  - page: user-profile-capabilities
+    states: [default, description-expanded, not-offered]
+
+  - page: user-profile-notifications
+    states: [default, confirm-unsubscribe, not-offered]
+
+  - page: user-profile-legal
+    states: [default, terms-updated, confirm-accept-terms, not-offered]
+
+  # default is a signed-in vendor.
+  - page: user-profile-self
+    states:
+      [
+        default,
+        public-sector,
+        administrator,
+        editing,
+        invalid,
+        save-failed,
+        confirm-deactivate,
+        sign-in-required,
+        loading,
+      ]
+
+  - page: user-profile-self-capabilities
+    states: [default, description-expanded, not-offered]
+
+  # Every kind of account has a notifications section on its own profile, so there is no
+  # not-offered state here.
+  - page: user-profile-self-notifications
+    states: [default, confirm-unsubscribe]
+
+  - page: user-profile-self-legal
+    states: [default, terms-updated, confirm-accept-terms, not-offered]
