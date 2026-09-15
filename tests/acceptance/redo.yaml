@@ -123,13 +123,6 @@ redo:
     why: neither half completes the publish it starts, so nothing is ever sent to be
       refused; complete the publication as an administrator would, then read
       whether the address is reported as already in use
-  - id: R-5.22
-    version: 1
-    why: the test reads the rejection the instant the entry is made, without
-      allowing time for it to appear, and it leaves the comment empty by
-      entering nothing into a comment that was already empty, so nothing about
-      the comment changed; allow time for the mark, and enter a comment before
-      clearing it
   - id: R-1.1
     version: 2
     why: the test reads the opportunity and its proposals immediately after the
