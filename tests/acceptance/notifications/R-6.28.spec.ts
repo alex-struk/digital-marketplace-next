@@ -1,27 +1,31 @@
 // criterion: @R-6.28 v1
-// provenance: blind, spec@1c3743e9fb53c29de89a28045222abab29c5e27e, derived 2026-09-14
+// provenance: blind, spec@08d8aac0ee7ec7fcee1a309ef183dcb17e38221b, derived 2026-09-15
 import { test, expect, persona, seed } from "../../fixtures";
 
-// The broadcast of changed terms goes to every active vendor. Which vendors are active is read
-// through the surface just before the broadcast, never assumed from the seed: another test in
-// the suite leaves seed.users.vendorOne deactivated. The signed-in administrator's own record
-// is the reference, since it is the account doing the broadcasting; a vendor whose status
-// badge reads the same is active. seed.users.vendorWithoutEmail, which holds no address, must
-// be among them, or the broadcast would have no recipient it cannot address to continue past.
+// The criterion makes three claims, and only one of them can be read from outside the service.
 //
-// Every addressable active vendor is looked at on each attempt, and the ones not reached are
-// reported together, so one vendor missing does not hide whether the rest were reached.
+// Asserted: a broadcast continues past a recipient it cannot address. The broadcast used is the
+// announcement of changed terms, which goes to every active vendor at each one's own visible
+// address, so each arrival can be found in the catcher. seed.users.vendorWithoutEmail holds no
+// address, and it has to be among the active vendors when the broadcast runs, or the broadcast
+// would have no such recipient to continue past. Whether a vendor is active is read through the
+// surface rather than assumed from the seed; the signed-in administrator's own record is the
+// reference, and a vendor whose status badge reads the same is active. Every addressable active
+// vendor is checked on each attempt, and the ones not reached are reported together. The order
+// the service sends in cannot be seen, so this holds as evidence only while at least one
+// addressable vendor comes after the one without an address. With several addressable vendors
+// around it, a run that stopped at that recipient would leave somebody unreached.
 //
-// Two parts are not asserted. Whether the service skips that recipient or composes a message
-// addressed to nobody leaves the same trace in the catcher either way, since a message with no
-// recipient cannot arrive there; the difference shows only inside the service. And a recipient
-// the service can address but cannot reach cannot be produced: every seeded address is one
-// the catcher accepts, and nothing in the surface makes one delivery fail.
-test("the service skips a recipient that holds no email address rather than composing a message addressed to nobody, and a broadcast to many people always continues past a recipient it cannot address or cannot reach", async ({
-  surface,
-  mail,
-}) => {
+// Not asserted: that the service skips the recipient rather than composing a message addressed
+// to nobody. A message with no recipient cannot arrive in the catcher either way, and the
+// service shows the difference on no page, so the two leave the same trace.
+//
+// Not asserted: that a broadcast continues past a recipient it can address but cannot reach.
+// Every seeded address is one the catcher accepts, and nothing in the surface, the seed or
+// `mail` makes one delivery fail while the others succeed.
+test("a broadcast to many people always continues past a recipient it cannot address", async ({ surface, mail }) => {
   const vendors = Object.values(seed.users).filter((user) => user.account_type === "VENDOR");
+  expect(seed.users.vendorWithoutEmail.email).toBeNull();
 
   await surface.signIn(persona.administrator);
   await surface.userProfile.open({ userId: seed.users.administratorOne.id });
@@ -35,7 +39,7 @@ test("the service skips a recipient that holds no email address rather than comp
   expect(active.map((vendor) => vendor.id)).toContain(seed.users.vendorWithoutEmail.id);
 
   const addressable = active.flatMap((vendor) => (vendor.email ? [vendor.email] : []));
-  expect(addressable.length).toBeGreaterThan(0);
+  expect(addressable.length).toBeGreaterThan(1);
   const before = new Map(
     await Promise.all(addressable.map(async (address) => [address, (await mail.messagesTo(address)).length] as const)),
   );
