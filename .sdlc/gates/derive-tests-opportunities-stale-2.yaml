@@ -1,0 +1,11 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the rewritten tests for the 11 opportunities criteria follow from those criteria and nothing else? Ruling: approve. Each assertion matches its criterion: R-1.10 and R-1.17 require a field error only because their 'then' clauses say the offending field is named, and R-1.10 asks for it only where a value was typed too long; R-1.11, R-1.12 and R-1.14 assert refusal alone (nothing published) because their criteria promise only rejection; R-1.21 asserts 'incomplete' because the criterion says the person is told so; R-1.1 v3 looks for the announcement to the panel's evaluators and R-1.17 v2 drops the position field, matching the new statements; R-1.24's checks before closure only set up the given. No selector, route, table or status code appears. The references to /api and /status come from the criterion's own text, and the seed and persona references are fixture data. The declared gaps are real: there is no seeded Code With Us opportunity past its deadline, no way to read blind copies, no observation of the assignment, start or completion date, and no two-chairs error on the panel. Parallel-run interference with the before/after comparisons is ruled out, because the Playwright config gives each worker its own copy of the target. The runner's typecheck passed with no diagnostics in this domain. Remaining risk, accepted rather than returned: the refusal checks in R-1.10 to R-1.14 and R-1.55 treat any failed action as a refusal, so an adapter that cannot perform the step would pass them vacuously. Earlier redo notes asked for this, and R-1.39 publishing a complete opportunity through the same form partly guards against it. What would change the ruling: a test asserting a message or field its criterion does not state, a not-testable or gap reason that proves not to be missing from the surface, or calibration showing these negative tests passing only because the adapter never acted.
+conditions: []
+cost: 1.159023
+turns: 10
+session: "22048d9c-1651-4f73-adc1-4c3e159a0958"
+at: 2026-09-15T05:42:10.936Z

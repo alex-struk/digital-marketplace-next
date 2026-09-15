@@ -39,3 +39,22 @@ Two criteria changed version:
 - **R-1.14:** observations of the assignment, start and completion dates on the opportunity views.
 - **R-1.55:** a two-chairs error on `evaluation-panel-swu` and `evaluation-panel-twu`.
 - **R-1.3 and R-1.21:** a clear administrator-rights observation on `user-profile-self`, so this doesn't rest on how the account type is worded.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: do the rewritten tests for the 11 opportunities criteria follow from those criteria and nothing else? Ruling: approve. Each assertion matches its criterion: R-1.10 and R-1.17 require a field error only because their 'then' clauses say the offending field is named, and R-1.10 asks for it only where a value was typed too long; R-1.11, R-1.12 and R-1.14 assert refusal alone (nothing published) because their criteria promise only rejection; R-1.21 asserts 'incomplete' because the criterion says the person is told so; R-1.1 v3 looks for the announcement to the panel's evaluators and R-1.17 v2 drops the position field, matching the new statements; R-1.24's checks before closure only set up the given. No selector, route, table or status code appears. The references to /api and /status come from the criterion's own text, and the seed and persona references are fixture data. The declared gaps are real: there is no seeded Code With Us opportunity past its deadline, no way to read blind copies, no observation of the assignment, start or completion date, and no two-chairs error on the panel. Parallel-run interference with the before/after comparisons is ruled out, because the Playwright config gives each worker its own copy of the target. The runner's typecheck passed with no diagnostics in this domain. Remaining risk, accepted rather than returned: the refusal checks in R-1.10 to R-1.14 and R-1.55 treat any failed action as a refusal, so an adapter that cannot perform the step would pass them vacuously. Earlier redo notes asked for this, and R-1.39 publishing a complete opportunity through the same form partly guards against it. What would change the ruling: a test asserting a message or field its criterion does not state, a not-testable or gap reason that proves not to be missing from the surface, or calibration showing these negative tests passing only because the adapter never acted.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `5944ac9826ecbaea607d5ed10036369d9eea2f02`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/opportunities/`, which this proposal answers for.
+
+    No diagnostics.
