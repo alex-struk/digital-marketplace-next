@@ -18,8 +18,8 @@
 | R-1.12 | acceptance/opportunities/R-1.12.spec.ts | pass |
 | R-1.13 | acceptance/opportunities/R-1.13.spec.ts | fail |
 | R-1.14 | acceptance/opportunities/R-1.14.spec.ts | pass |
-| R-1.15 | acceptance/opportunities/R-1.15.spec.ts | fail |
-| R-1.16 | acceptance/opportunities/R-1.16.spec.ts | fail |
+| R-1.15 | acceptance/opportunities/R-1.15.spec.ts | fail (ruled: adapter-wrong) |
+| R-1.16 | acceptance/opportunities/R-1.16.spec.ts | fail (ruled: adapter-wrong) |
 | R-1.17 | acceptance/opportunities/R-1.17.spec.ts | fail (ruled: spec-wrong) |
 | R-1.18 | acceptance/opportunities/R-1.18.spec.ts | fail |
 | R-1.19 | acceptance/opportunities/R-1.19.spec.ts | pass |

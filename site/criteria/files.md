@@ -23,18 +23,18 @@
 | R-8.17 | acceptance/files/R-8.17.spec.ts | fail (ruled: defect-in-old) |
 | R-8.18 | acceptance/files/R-8.18.spec.ts | fail (ruled: defect-in-old) |
 | R-8.19 | acceptance/files/R-8.19.spec.ts | fail (ruled: defect-in-old) |
-| R-8.20 | acceptance/files/R-8.20.spec.ts | fail |
+| R-8.20 | acceptance/files/R-8.20.spec.ts | fail (ruled: adapter-wrong) |
 | R-8.21 | acceptance/files/R-8.21.spec.ts | fail (ruled: defect-in-old) |
 | R-8.22 | not testable: blocked: the attempt the criterion refuses — somebody who may not read a stored file naming it as an attachment on an opportunity or a proposal — cannot be made. A file's identifier is now reachable (file-upload.stored_file_identifier), but every attaching action uploads a new file rather than naming one already stored: file-attachment-control.add_attachment and the add_attachment actions on proposal-cwu-create, proposal-swu-create and proposal-twu-create each choose bytes to send. The file-uploader persona lists attaching an existing file to something they may edit, but no action does it. An action that attaches an already-stored file by its identifier — on file-attachment-control and on the proposal edit pages — together with an observation reporting that attachment refused, would unblock it. | not-testable |
 | R-8.23 | acceptance/files/R-8.23.spec.ts | pass |
 | R-8.24 | acceptance/files/R-8.24.spec.ts | pass |
-| R-8.25 | acceptance/files/R-8.25.spec.ts | fail |
+| R-8.25 | acceptance/files/R-8.25.spec.ts | fail (ruled: adapter-wrong) |
 | R-8.26 | — | not-testable |
 | R-8.27 | acceptance/files/R-8.27.spec.ts | pass |
 | R-8.28 | acceptance/files/R-8.28.spec.ts | pass |
 | R-8.29 | acceptance/files/R-8.29.spec.ts | pass |
 | R-8.30 | acceptance/files/R-8.30.spec.ts | unbound |
-| R-8.31 | acceptance/files/R-8.31.spec.ts | fail |
+| R-8.31 | acceptance/files/R-8.31.spec.ts | fail (ruled: adapter-wrong) |
 
 ### R-8.1 · v1 · confirmed · accepted
 
