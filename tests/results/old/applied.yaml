@@ -117,11 +117,6 @@ rulings:
     version: 1
     verb: product-question
     gate: calibrate-triage-old-8
-  - id: R-3.7
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-8
-    adapter: 825caea38928bc9f643b076051a23c12c565e0a3
   - id: R-3.12
     version: 1
     verb: product-question
@@ -130,16 +125,6 @@ rulings:
     version: 1
     verb: product-question
     gate: calibrate-triage-old-8
-  - id: R-2.14
-    version: 2
-    verb: adapter-wrong
-    gate: calibrate-triage-old-8
-    adapter: 825caea38928bc9f643b076051a23c12c565e0a3
-  - id: R-5.18
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-8
-    adapter: 825caea38928bc9f643b076051a23c12c565e0a3
   - id: R-3.19
     version: 1
     verb: product-question
@@ -148,69 +133,14 @@ rulings:
     version: 1
     verb: product-question
     gate: calibrate-triage-old-8
-  - id: R-8.20
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-8
-    adapter: 825caea38928bc9f643b076051a23c12c565e0a3
   - id: R-3.22
     version: 2
     verb: product-question
     gate: calibrate-triage-old-8
-  - id: R-2.24
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-8
-    adapter: 825caea38928bc9f643b076051a23c12c565e0a3
-  - id: R-2.25
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-8
-    adapter: 825caea38928bc9f643b076051a23c12c565e0a3
-  - id: R-3.25
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-8
-    adapter: 825caea38928bc9f643b076051a23c12c565e0a3
-  - id: R-3.26
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-8
-    adapter: 825caea38928bc9f643b076051a23c12c565e0a3
   - id: R-3.28
     version: 1
     verb: product-question
     gate: calibrate-triage-old-8
-  - id: R-8.29
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-8
-    adapter: 825caea38928bc9f643b076051a23c12c565e0a3
-  - id: R-1.31
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-8
-    adapter: 825caea38928bc9f643b076051a23c12c565e0a3
-  - id: R-8.31
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-8
-    adapter: 825caea38928bc9f643b076051a23c12c565e0a3
-  - id: R-3.34
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-8
-    adapter: 825caea38928bc9f643b076051a23c12c565e0a3
-  - id: R-1.48
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-8
-    adapter: 825caea38928bc9f643b076051a23c12c565e0a3
-  - id: R-1.53
-    version: 2
-    verb: adapter-wrong
-    gate: calibrate-triage-old-8
-    adapter: 825caea38928bc9f643b076051a23c12c565e0a3
   - id: R-5.25
     version: 3
     verb: spec-wrong
