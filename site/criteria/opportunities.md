@@ -34,15 +34,15 @@
 | R-1.28 | acceptance/opportunities/R-1.28.spec.ts | pass |
 | R-1.29 | acceptance/opportunities/R-1.29.spec.ts | unbound |
 | R-1.30 | acceptance/opportunities/R-1.30.spec.ts | pass |
-| R-1.31 | acceptance/opportunities/R-1.31.spec.ts | fail |
-| R-1.32 | acceptance/opportunities/R-1.32.spec.ts | fail |
+| R-1.31 | acceptance/opportunities/R-1.31.spec.ts | fail (ruled: adapter-wrong) |
+| R-1.32 | acceptance/opportunities/R-1.32.spec.ts | fail (ruled: adapter-wrong) |
 | R-1.33 | acceptance/opportunities/R-1.33.spec.ts | unbound |
 | R-1.34 | acceptance/opportunities/R-1.34.spec.ts | pass |
 | R-1.35 | acceptance/opportunities/R-1.35.spec.ts | fail |
 | R-1.36 | acceptance/opportunities/R-1.36.spec.ts | pass |
 | R-1.37 | acceptance/opportunities/R-1.37.spec.ts | pass |
 | R-1.38 | acceptance/opportunities/R-1.38.spec.ts | pass |
-| R-1.39 | acceptance/opportunities/R-1.39.spec.ts | fail |
+| R-1.39 | acceptance/opportunities/R-1.39.spec.ts | fail (ruled: adapter-wrong) |
 | R-1.40 | not testable: blocked: the given is an opportunity that has been evaluated. The seed carries none past the first evaluation stage, so full_report would return nothing for an administrator as well as for a member of staff and the contrast the criterion turns on could not be told from the report simply not existing yet. Unblocked by seeding a completed opportunity — awarded, with its addenda, its history and its proposals behind it — in at least one program. | not-testable |
 | R-1.41 | not testable: blocked: the given is a Sprint With Us or Team With Us opportunity at the questions consensus stage. The seed stops one stage earlier, and reaching consensus means every evaluator submitting an individual evaluation for every proponent of the one closable opportunity of that program — after which no other criterion could use the same record. Both refusal observations exist, not_all_consensuses_submitted_error and no_screenable_proponent_error, and neither has an opportunity to be read on. Unblocked by seeding an opportunity at the questions consensus stage in each program, one with a consensus still unsubmitted and one where no proponent has cleared every minimum score. | not-testable |
 | R-1.42 | not testable: blocked: the given is a Sprint With Us opportunity at the code challenge stage, two stages past where the seed leaves the one closable Sprint With Us opportunity. start_team_scenario has nothing to be refused on and the part-scored proponents the refusal turns on cannot be arranged. Unblocked by seeding a Sprint With Us opportunity at the code challenge stage with one proponent scored and another neither scored nor disqualified. | not-testable |
@@ -51,7 +51,7 @@
 | R-1.45 | — |  |
 | R-1.46 | — |  |
 | R-1.47 | — |  |
-| R-1.48 | acceptance/opportunities/R-1.48.spec.ts | fail |
+| R-1.48 | acceptance/opportunities/R-1.48.spec.ts | fail (ruled: adapter-wrong) |
 | R-1.49 | not testable: blocked: the claim is about which state changes are permitted out of processing for a Team With Us opportunity, and the seed carries no Team With Us opportunity in processing. The award half could be read from the opportunity's own state once it were reachable; the recorded-transitions half needs an observation as well, since nothing returns the set of changes an opportunity's program permits. Unblocked by seeding a Team With Us opportunity in processing, and by an observation of the state changes permitted from an opportunity's current state. | not-testable |
 | R-1.50 | not testable: blocked: the refusal half needs an opportunity at the questions consensus stage, which the seed does not carry — see R-1.41 for why the one closable opportunity of each program cannot supply it. The uniqueness half is unobservable whatever the seed holds: 'exactly one path out' is a claim about no second action existing, and the absence of an action is not something an observation reports. Unblocked for its refusal half by the same seeding R-1.41 names; its uniqueness half is for a reader of the rebuilt system's own actions rather than for a test. | not-testable |
 | D-opportunities-51 | — |  |
@@ -59,8 +59,8 @@
 | R-1.52 | — |  |
 | R-1.53 | acceptance/opportunities/R-1.53.spec.ts | fail |
 | R-1.54 | — |  |
-| R-1.55 | acceptance/opportunities/R-1.55.spec.ts | fail |
-| R-1.56 | acceptance/opportunities/R-1.56.spec.ts | fail |
+| R-1.55 | acceptance/opportunities/R-1.55.spec.ts | fail (ruled: adapter-wrong) |
+| R-1.56 | acceptance/opportunities/R-1.56.spec.ts | fail (ruled: adapter-wrong) |
 
 ### R-1.1 · v2 · confirmed · accepted
 

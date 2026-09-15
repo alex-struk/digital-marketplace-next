@@ -15,7 +15,7 @@
   <span class="profile">rebuild profile</span>
 </div>
 <div class="shell">
-<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">100</span></a></li><li><a href="../proposals.html">Proposals <span class="count">100</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">89</span></a></li><li><a href="../runs.html">Run log <span class="count">9</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html" aria-current="page">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">100</span></a></li><li><a href="../proposals.html">Proposals <span class="count">100</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">90</span></a></li><li><a href="../runs.html">Run log <span class="count">9</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html" aria-current="page">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
 <main id="main">
 <div class="page-head"><h1>opportunities</h1>
 <p class="lede">57 criteria, 40 with a derived acceptance test, 10 recorded as not testable through the contract surface.</p></div>
@@ -328,7 +328,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">Public sector staff cannot see the proposals submitted against an opportunity until it has left the published state.</p>
-  <dl><dt>given</dt><dd>a published opportunity that has received proposals</dd><dt>when</dt><dd>its author or an administrator asks to see the proposals</dd><dt>then</dt><dd>the request is refused until the opportunity has closed and moved to an evaluation stage</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.31.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>cites</dt><dd><code>src/shared/lib/resources/opportunity/code-with-us.ts:344</code><br><code>src/back-end/lib/permissions.ts:426</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>a published opportunity that has received proposals</dd><dt>when</dt><dd>its author or an administrator asks to see the proposals</dd><dt>then</dt><dd>the request is refused until the opportunity has closed and moved to an evaluation stage</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.31.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled adapter-wrong</dd><dt>cites</dt><dd><code>src/shared/lib/resources/opportunity/code-with-us.ts:344</code><br><code>src/back-end/lib/permissions.ts:426</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -338,7 +338,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">An addendum of 1 to 5,000 characters may be added to any opportunity that is no longer a draft, by an administrator or by the staff member who created it, and cannot be removed afterwards.</p>
-  <dl><dt>given</dt><dd>a published opportunity</dd><dt>when</dt><dd>its author adds an addendum</dd><dt>then</dt><dd>the addendum is appended to the opportunity with its author and date, an entry is added to the opportunity&#39;s history, and there is no action that removes it</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.32.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/code-with-us.ts:846</code><br><code>src/back-end/lib/permissions.ts:403</code><br><code>src/shared/lib/validation/addendum.ts:3</code><br><code>src/back-end/docs/opportunities/code-with-us.yaml:98</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>a published opportunity</dd><dt>when</dt><dd>its author adds an addendum</dd><dt>then</dt><dd>the addendum is appended to the opportunity with its author and date, an entry is added to the opportunity&#39;s history, and there is no action that removes it</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.32.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled adapter-wrong</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/code-with-us.ts:846</code><br><code>src/back-end/lib/permissions.ts:403</code><br><code>src/shared/lib/validation/addendum.ts:3</code><br><code>src/back-end/docs/opportunities/code-with-us.yaml:98</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -408,7 +408,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location.</p>
-  <dl><dt>given</dt><dd>a list of opportunities across all three programs</dd><dt>when</dt><dd>someone selects a program, selects a state, ticks remote-only, or types words into the search box</dd><dt>then</dt><dd>only opportunities matching every chosen condition remain visible</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.39.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/opportunity/list.tsx:314</code><br><code>src/front-end/typescript/lib/pages/opportunity/list.tsx:60</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the state filter offers draft, under review, published, evaluation and awarded; there is no option for opportunities in processing or cancelled, so those can only be found by clearing the filter.</dd></dl>
+  <dl><dt>given</dt><dd>a list of opportunities across all three programs</dd><dt>when</dt><dd>someone selects a program, selects a state, ticks remote-only, or types words into the search box</dd><dt>then</dt><dd>only opportunities matching every chosen condition remain visible</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.39.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled adapter-wrong</dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/opportunity/list.tsx:314</code><br><code>src/front-end/typescript/lib/pages/opportunity/list.tsx:60</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the state filter offers draft, under review, published, evaluation and awarded; there is no option for opportunities in processing or cancelled, so those can only be found by clearing the filter.</dd></dl>
 </article>
 <article class="criterion is-not-testable" data-state="not-testable">
   <header>
@@ -498,7 +498,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs.</p>
-  <dl><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.48.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>replaces</dt><dd>R-1.44</dd></dl>
+  <dl><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.48.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled adapter-wrong</dd><dt>replaces</dt><dd>R-1.44</dd></dl>
 </article>
 <article class="criterion is-not-testable" data-state="not-testable">
   <header>
@@ -578,7 +578,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named.</p>
-  <dl><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.55.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>replaces</dt><dd>R-1.52</dd></dl>
+  <dl><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.55.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled adapter-wrong</dd><dt>replaces</dt><dd>R-1.52</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -588,7 +588,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike.</p>
-  <dl><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.56.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>replaces</dt><dd>R-1.54</dd></dl>
+  <dl><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.56.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled adapter-wrong</dd><dt>replaces</dt><dd>R-1.54</dd></dl>
 </article>
 <script>
 (function () {

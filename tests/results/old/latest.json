@@ -2,7 +2,7 @@
   "target": "old",
   "base_url": "http://localhost:3000",
   "spec": "1c3743e9fb53c29de89a28045222abab29c5e27e",
-  "at": "2026-09-15T01:18:29.734Z",
+  "at": "2026-09-15T01:24:14.535Z",
   "rows": [
     {
       "id": "R-7.1",
@@ -396,7 +396,8 @@
           "status": "failed",
           "error": "Error: unbound: content-edit.start_editing — no control labelled \"Edit\" on http://localhost:3000/content/disclaimer/edit"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-7.26",
@@ -428,7 +429,8 @@
           "title": "the managing screen of a page an administrator created and changed names who first published it and who last changed it",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-7.28",
@@ -745,7 +747,8 @@
           "status": "failed",
           "error": "Error: evaluation-individual-list-swu.submit_scores_for_consensus — \"Submit Scores for Consensus\" is disabled on http://localhost:3000/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluation; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.25",
@@ -764,7 +767,8 @@
           "status": "failed",
           "error": "Error: evaluation-individual-list-swu.submit_scores_for_consensus — \"Submit Scores for Consensus\" is disabled on http://localhost:3000/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluation; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.26",
@@ -786,7 +790,8 @@
           "status": "failed",
           "error": "Error: evaluation-individual-list-swu.submit_scores_for_consensus — \"Submit Scores for Consensus\" is disabled on http://localhost:3000/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluation; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.28",
@@ -800,7 +805,8 @@
           "status": "failed",
           "error": "Error: evaluation-individual-list-swu.submit_scores_for_consensus — \"Submit Scores for Consensus\" is disabled on http://localhost:3000/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluation; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.29",
@@ -856,7 +862,8 @@
           "status": "failed",
           "error": "Error: evaluation-individual-list-swu.submit_scores_for_consensus — \"Submit Scores for Consensus\" is disabled on http://localhost:3000/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluation; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.33",
@@ -916,7 +923,8 @@
           "status": "failed",
           "error": "Error: unbound: evaluation-individual-create-twu.enter_question_score — no field labelled \"Score\" on http://localhost:3000/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/proposals/00000000-0000-4000-8000-000000000841/resource-questions/evaluations/create?tab=resourceQuestions"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.37",
@@ -1328,7 +1336,8 @@
           "status": "failed",
           "error": "Error: proposal-cwu-create.submit_proposal — \"Submit Proposal\" is disabled on http://localhost:3000/opportunities/code-with-us/e194303c-2145-497f-a5f7-ecade6bc35cc/proposals/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-8.26",
@@ -1380,7 +1389,8 @@
           "status": "failed",
           "error": "TimeoutError: page.waitForEvent: Timeout 15000ms exceeded while waiting for event \"filechooser\"\n=========================== logs ===========================\nwaiting for event \"filechooser\"\n============================================================"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-8.30",
@@ -1418,7 +1428,8 @@
           "status": "failed",
           "error": "Error: proposal-cwu-create.submit_proposal — \"Submit Proposal\" is disabled on http://localhost:3000/opportunities/code-with-us/a206daaa-1871-4846-9cf9-d93a6f2e53e2/proposals/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-6.1",
@@ -2355,7 +2366,8 @@
           "title": "public sector staff can see the proposals once the opportunity has left the published state",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.32",
@@ -2383,7 +2395,8 @@
           "status": "failed",
           "error": "Error: opportunity-cwu-edit.add_addendum — \"Publish Addendum\" is disabled on http://localhost:3000/opportunities/code-with-us/5caf520a-85f1-4409-9697-1749f41e0831/edit?tab=addenda; the page shows: Code With Us: R-1.32 published opportunity offered an addendum that runs too long"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.33",
@@ -2434,7 +2447,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m8\u001b[39m\nReceived:   \u001b[31m8\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.36",
@@ -2510,7 +2524,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"R-1.39 published opportunity in another town\"\u001b[39m\nReceived string:        \u001b[31m\"\u001b[7mR-1.39 published opportunity in another town\u001b[27m\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mPublished\u001b[39m\n\u001b[31mCloses Oct 29, 2026 at 4:00 PM PDT\u001b[39m\n\u001b[31mA short summary of the work to be done.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mKamloops\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mR-1.39 published opportunity about kittiwakes\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mPublished\u001b[39m\n\u001b[31mCloses Oct 29, 2026 at 4:00 PM PDT\u001b[39m\n\u001b[31mA short summary of the work to be done.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mSeeded published Code With Us opportunity\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mPublished\u001b[39m\n\u001b[31mCloses Jun 1, 2030 at 4:59 PM PDT\u001b[39m\n\u001b[31mA published opportunity that exists before any test runs.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.40",
@@ -2565,7 +2580,8 @@
           "title": "a public sector employee who is not an administrator may create an opportunity under review",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.49",
@@ -2619,7 +2635,8 @@
           "title": "any other request to delete an opportunity is refused and the opportunity remains",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.55",
@@ -2653,7 +2670,8 @@
           "status": "failed",
           "error": "Error: opportunity-twu-create.save_draft — the save never reached the record's address; still on http://localhost:3000/opportunities/team-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.56",
@@ -2682,7 +2700,8 @@
           "status": "failed",
           "error": "Error: unbound: opportunity-twu-create.set_evaluation_panel — no panel member matching \"00000000-0000-4000-8000-000000000102\""
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.1",
@@ -3118,7 +3137,8 @@
           "status": "failed",
           "error": "Error: unbound: organization-create.create_organization — no field on http://localhost:3000/organizations/create takes \"addressLineTwo\""
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.27",
@@ -3136,7 +3156,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\"\u001b[39m\nReceived: \u001b[31m\"Cedar Hollow Systems Inc. agreed to the Sprint With Us Terms & Conditions on Sep 14, 2026 at 5:46 PM.\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-3.28",
@@ -3150,7 +3171,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"FULL_STACK_DEVELOPER\"\u001b[39m\nReceived string:    \u001b[31m\"Full Stack Developer\u001b[39m\n\u001b[31mData Professional\u001b[39m\n\u001b[31mAgile Coach\u001b[39m\n\u001b[31mDevOps Specialist\u001b[39m\n\u001b[31mService Designer\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.30",
@@ -3660,7 +3682,8 @@
           "status": "failed",
           "error": "Error: proposal-cwu-create.submit_proposal — \"Submit Proposal\" is disabled on http://localhost:3000/opportunities/code-with-us/e96717b1-9ec9-4d8e-a1cd-f3ca7d9f31f8/proposals/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.25",
@@ -3678,7 +3701,8 @@
           "title": "once the opportunity has closed, its submitted proposals are shown to the opportunity's author and to an administrator",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.26",
@@ -3786,7 +3810,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-2.36",
@@ -3805,7 +3830,8 @@
           "status": "failed",
           "error": "Error: proposal-cwu-create.submit_proposal — \"Submit Proposal\" is disabled on http://localhost:3000/opportunities/code-with-us/a2a97f60-5419-49d0-bd34-c3a560423221/proposals/create; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.37",
@@ -3828,7 +3854,8 @@
           "title": "staff reading a Sprint With Us copy see the anonymous proponent name before the challenge stage",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.38",
@@ -3846,7 +3873,8 @@
           "title": "public sector staff and administrators may take away every proposal of a closed opportunity in one document",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-4.1",
@@ -4247,7 +4275,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-4.28",
