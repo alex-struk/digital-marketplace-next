@@ -1,94 +1,164 @@
 // criterion: @R-1.55 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
+// provenance: blind, spec@2d9a83e439479b419845aa46aa7d9d819b38de24, derived 2026-09-15
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// The panel is named on a Sprint With Us draft of the test's own, and each test offers a
-// panel that is wrong in exactly one way. The reason named is read from the observation that
-// matches the fault, so a refusal for some other reason would not satisfy it.
+// Each test starts from a draft of its own, made by the public sector employee persona, whose
+// account the seed names as users.staffOne. A new draft already names its creator on the panel
+// as chair, so every panel below is built from that starting point into exactly the faulty
+// panel the criterion names, and differs from it, so a panel that was wrongly saved would read
+// differently afterwards. The Team With Us draft is given a resource before it is saved, and
+// its identifier is required, so the panel is only ever put forward on a draft the service
+// accepted.
 //
-// The fifth fault the criterion lists — more than one chair — is not asserted: the panel
-// surface names errors for too few members, a duplicate member, a missing chair and a member
-// who is not a public sector employee, but none that names a second chair. The criterion
-// requires the reason to be named, and no observation here reads that reason, so a refusal
-// for a second chair could not be told from a refusal for anything else.
+// "Rejected" is read by opening the panel afresh before and after the attempt and requiring
+// the two readings to be the same. A panel that cannot be assembled — a vendor never offered
+// as a choice, the last member the form will not remove — or a save that is not offered counts
+// as refused, because the actions fail rather than wait. Where the panel is assembled and put
+// forward, the observation that names its fault is waited for. The same person named twice
+// must always have its reason named.
+//
+// More than one chair has no observation naming its reason. That test rests on the panel not
+// being saved with two chairs: the chair reading afterwards either is unchanged or no longer
+// names the original chair beside another.
 
-async function sprintDraft(surface: Surface, title: string): Promise<string> {
-  await surface.opportunitySwuCreate.open();
-  await surface.opportunitySwuCreate.saveDraft({ title });
-  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
-  await surface.evaluationPanelSwu.open({ opportunityId });
-  return opportunityId;
+const statement =
+  "A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named.";
+
+const settle = { timeout: 15000 };
+const creator = seed.users.staffOne;
+
+type Panel = Surface["evaluationPanelSwu"];
+
+interface Program {
+  name: string;
+  draft(surface: Surface, title: string): Promise<string>;
+  panel(surface: Surface): Panel;
 }
 
-test("a Sprint With Us opportunity's evaluation panel is rejected with fewer than two members", async ({
-  surface,
-}) => {
-  await surface.signIn(persona.administrator);
-  await sprintDraft(surface, "R-1.55 opportunity whose panel has one member");
+const programs: Program[] = [
+  {
+    name: "Sprint With Us",
+    async draft(surface, title) {
+      await surface.opportunitySwuCreate.open();
+      await surface.opportunitySwuCreate.saveDraft({ title });
+      return surface.opportunitySwuEdit.opportunityIdentifier();
+    },
+    panel: (surface) => surface.evaluationPanelSwu,
+  },
+  {
+    name: "Team With Us",
+    async draft(surface, title) {
+      await surface.opportunityTwuCreate.open();
+      await surface.opportunityTwuCreate.addResource({ serviceArea: "Full Stack Developer", targetAllocation: 100 });
+      await surface.opportunityTwuCreate.saveDraft({ title });
+      return surface.opportunityTwuEdit.opportunityIdentifier();
+    },
+    panel: (surface) => surface.evaluationPanelTwu,
+  },
+];
 
-  await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffOne });
-  await surface.evaluationPanelSwu.markMemberAsChair({ member: seed.users.staffOne });
-  await surface.evaluationPanelSwu.saveEvaluationPanel();
+async function draftPanel(surface: Surface, program: Program, title: string) {
+  await surface.signIn(persona.publicSectorStaff);
+  const opportunityId = await program.draft(surface, title);
+  expect(opportunityId).toBeTruthy();
+  const panel = program.panel(surface);
+  await panel.open({ opportunityId });
+  const before = await panel.panelMemberRow();
+  expect(before).toBeTruthy();
+  return { opportunityId, panel, before };
+}
 
-  expect(await surface.evaluationPanelSwu.minimumMembersError()).toBeTruthy();
-});
+// Runs the steps that make the panel faulty and save it; true when one of them was refused.
+async function refusedWhileAssembling(steps: () => Promise<void>): Promise<boolean> {
+  try {
+    await steps();
+    return false;
+  } catch {
+    return true;
+  }
+}
 
-test("a Sprint With Us opportunity's evaluation panel is rejected when it names the same person twice", async ({
-  surface,
-}) => {
-  await surface.signIn(persona.administrator);
-  await sprintDraft(surface, "R-1.55 opportunity whose panel names one person twice");
+async function namedReason(read: () => Promise<string>): Promise<boolean> {
+  try {
+    return Boolean(await read());
+  } catch {
+    return false;
+  }
+}
 
-  await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffOne });
-  await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffOne });
-  await surface.evaluationPanelSwu.markMemberAsChair({ member: seed.users.staffOne });
-  await surface.evaluationPanelSwu.saveEvaluationPanel();
+async function expectPanelUnchanged(panel: Panel, opportunityId: string, before: string): Promise<void> {
+  await panel.open({ opportunityId });
+  expect(await panel.panelMemberRow()).toBe(before);
+}
 
-  expect(await surface.evaluationPanelSwu.duplicateMemberError()).toBeTruthy();
-});
+for (const program of programs) {
+  test(`${statement} (${program.name}: fewer than two members)`, async ({ surface }) => {
+    const { opportunityId, panel, before } = await draftPanel(surface, program, `R-1.55 ${program.name} panel of one`);
 
-test("a Sprint With Us opportunity's evaluation panel is rejected when no member is the chair", async ({
-  surface,
-}) => {
-  await surface.signIn(persona.administrator);
-  await sprintDraft(surface, "R-1.55 opportunity whose panel has no chair");
+    const refused = await refusedWhileAssembling(async () => {
+      await panel.addPanelMember({ member: seed.users.staffPanelEvaluator });
+      await panel.removePanelMember({ member: creator });
+      await panel.markMemberAsChair({ member: seed.users.staffPanelEvaluator });
+      await panel.saveEvaluationPanel();
+    });
 
-  await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffOne });
-  await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.administratorOne });
-  await surface.evaluationPanelSwu.saveEvaluationPanel();
-
-  expect(await surface.evaluationPanelSwu.missingChairError()).toBeTruthy();
-});
-
-test("a Sprint With Us opportunity's evaluation panel is rejected when it names anyone who is not a public sector employee", async ({
-  surface,
-}) => {
-  await surface.signIn(persona.administrator);
-  await sprintDraft(surface, "R-1.55 opportunity whose panel names a vendor");
-
-  await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffOne });
-  await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.vendorOne });
-  await surface.evaluationPanelSwu.markMemberAsChair({ member: seed.users.staffOne });
-  await surface.evaluationPanelSwu.saveEvaluationPanel();
-
-  expect(await surface.evaluationPanelSwu.nonPublicSectorMemberError()).toBeTruthy();
-});
-
-test("a Team With Us opportunity's evaluation panel is rejected with fewer than two members", async ({
-  surface,
-}) => {
-  await surface.signIn(persona.administrator);
-  await surface.opportunityTwuCreate.open();
-  await surface.opportunityTwuCreate.saveDraft({
-    title: "R-1.55 Team With Us opportunity whose panel has one member",
+    await expect.poll(async () => refused || (await namedReason(() => panel.minimumMembersError())), settle).toBe(true);
+    await expectPanelUnchanged(panel, opportunityId, before);
   });
-  const opportunityId = await surface.opportunityTwuEdit.opportunityIdentifier();
-  await surface.evaluationPanelTwu.open({ opportunityId });
 
-  await surface.evaluationPanelTwu.addPanelMember({ member: seed.users.staffOne });
-  await surface.evaluationPanelTwu.markMemberAsChair({ member: seed.users.staffOne });
-  await surface.evaluationPanelTwu.saveEvaluationPanel();
+  test(`${statement} (${program.name}: the same person twice)`, async ({ surface }) => {
+    const { opportunityId, panel, before } = await draftPanel(surface, program, `R-1.55 ${program.name} panel naming one person twice`);
 
-  expect(await surface.evaluationPanelTwu.minimumMembersError()).toBeTruthy();
-});
+    await panel.addPanelMember({ member: seed.users.staffPanelEvaluator });
+    await panel.addPanelMember({ member: seed.users.staffPanelEvaluator });
+    await refusedWhileAssembling(() => panel.saveEvaluationPanel());
+
+    await expect.poll(() => panel.duplicateMemberError(), settle).toBeTruthy();
+    await expectPanelUnchanged(panel, opportunityId, before);
+  });
+
+  test(`${statement} (${program.name}: no chair)`, async ({ surface }) => {
+    const { opportunityId, panel, before } = await draftPanel(surface, program, `R-1.55 ${program.name} panel with no chair`);
+
+    await panel.addPanelMember({ member: seed.users.staffPanelEvaluator });
+    await panel.addPanelMember({ member: seed.users.staffPanelChair });
+    const refused = await refusedWhileAssembling(async () => {
+      await panel.removePanelMember({ member: creator });
+      await panel.saveEvaluationPanel();
+    });
+
+    await expect.poll(async () => refused || (await namedReason(() => panel.missingChairError())), settle).toBe(true);
+    await expectPanelUnchanged(panel, opportunityId, before);
+  });
+
+  test(`${statement} (${program.name}: more than one chair)`, async ({ surface }) => {
+    const { opportunityId, panel } = await draftPanel(surface, program, `R-1.55 ${program.name} panel with two chairs`);
+    const chairBefore = await panel.chairField();
+    expect(chairBefore).toBeTruthy();
+
+    await panel.addPanelMember({ member: seed.users.staffPanelEvaluator });
+    await refusedWhileAssembling(async () => {
+      await panel.markMemberAsChair({ member: seed.users.staffPanelEvaluator });
+      await panel.saveEvaluationPanel();
+    });
+
+    await panel.open({ opportunityId });
+    const chairAfter = await panel.chairField();
+    expect(chairAfter === chairBefore || !chairAfter.includes(chairBefore)).toBe(true);
+  });
+
+  test(`${statement} (${program.name}: someone who is not a public sector employee)`, async ({ surface }) => {
+    const { opportunityId, panel, before } = await draftPanel(surface, program, `R-1.55 ${program.name} panel naming a vendor`);
+
+    const refused = await refusedWhileAssembling(async () => {
+      await panel.addPanelMember({ member: seed.users.vendorOne });
+      await panel.saveEvaluationPanel();
+    });
+
+    await expect
+      .poll(async () => refused || (await namedReason(() => panel.nonPublicSectorMemberError())), settle)
+      .toBe(true);
+    await expectPanelUnchanged(panel, opportunityId, before);
+  });
+}

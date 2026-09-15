@@ -1,5 +1,5 @@
 // criterion: @R-1.3 v1
-// provenance: blind, spec@08d8aac0ee7ec7fcee1a309ef183dcb17e38221b, derived 2026-09-15
+// provenance: blind, spec@2d9a83e439479b419845aa46aa7d9d819b38de24, derived 2026-09-15
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -7,15 +7,21 @@ import type { Surface } from "../../fixtures";
 // session for only one of them, so the second staff member's draft comes from the seed and is
 // read as something the first must not see, rather than as something a second session creates.
 //
-// The criterion is about staff who are not administrators, so before listing anything the
-// signed-in staff member's own statement of permissions is read and must not name
-// administrator rights. The member of staff holds a draft and an opportunity under review of
-// their own, since the criterion names both.
+// The criterion is about staff who are not administrators. That is established from the kind
+// of account the signed-in person's own profile shows, which every account carries, rather
+// than from a statement of permissions that an ordinary staff member is not shown at all. The
+// member of staff then makes a draft and an opportunity under review of their own, since the
+// criterion names both.
+//
+// The list fills in a moment after it is opened, so each reading is repeated until it settles.
 
-function inDays(days: number): string {
-  const date = new Date();
-  date.setDate(date.getDate() + days);
-  return date.toISOString().slice(0, 10);
+const statement =
+  "A member of public sector staff sees every published opportunity plus their own drafts and opportunities under review, and an administrator sees every opportunity.";
+
+const settle = { timeout: 15000 };
+
+function pacificDay(days: number): string {
+  return new Date(Date.now() + days * 86_400_000).toLocaleDateString("en-CA", { timeZone: "America/Vancouver" });
 }
 
 const complete = {
@@ -26,18 +32,18 @@ const complete = {
   remoteDescription: "Remote work is acceptable anywhere in the province.",
   reward: 5000,
   skills: ["Backend Development"],
-  proposalDeadline: inDays(14),
-  assignmentDate: inDays(21),
-  startDate: inDays(28),
-  completionDate: inDays(90),
+  proposalDeadline: pacificDay(14),
+  assignmentDate: pacificDay(21),
+  startDate: pacificDay(28),
+  completionDate: pacificDay(90),
 };
 
 async function signInAsStaffWithoutAdministratorRights(surface: Surface): Promise<void> {
   await surface.signIn(persona.publicSectorStaff);
-  await surface.userProfile.open({ userId: seed.users.staffOne.id });
-  const permissions = (await surface.userProfile.permissionsLabel()).toLowerCase();
-  expect(permissions).toBeTruthy();
-  expect(permissions).not.toContain("admin");
+  await surface.userProfileSelf.open();
+  const kind = await surface.userProfileSelf.accountType();
+  expect(kind).toBeTruthy();
+  expect(kind.toLowerCase()).not.toContain("admin");
 }
 
 async function createOwnUnpublishedWork(surface: Surface, draft: string, underReview: string): Promise<void> {
@@ -49,10 +55,10 @@ async function createOwnUnpublishedWork(surface: Surface, draft: string, underRe
   await surface.opportunityCwuCreate.submitForReview({ ...complete, title: underReview });
   const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
   await surface.opportunityCwuView.open({ opportunityId });
-  expect((await surface.opportunityCwuView.status()).toLowerCase()).toContain("review");
+  await expect.poll(async () => (await surface.opportunityCwuView.status()).toLowerCase(), settle).toContain("review");
 }
 
-test("a member of public sector staff sees every published opportunity plus their own drafts and opportunities under review", async ({
+test(`${statement} (a member of public sector staff sees every published opportunity plus their own drafts and opportunities under review)`, async ({
   surface,
 }) => {
   const draft = "R-1.3 draft of the member of staff who is signed in";
@@ -62,14 +68,14 @@ test("a member of public sector staff sees every published opportunity plus thei
   await createOwnUnpublishedWork(surface, draft, underReview);
 
   await surface.opportunityList.open();
+  await expect.poll(() => surface.opportunityList.openGroup(), settle).toContain(seed.opportunities.publishedCodeWithUs.title);
+  await expect.poll(() => surface.opportunityList.unpublishedGroup(), settle).toContain(draft);
   const unpublished = await surface.opportunityList.unpublishedGroup();
-  expect(unpublished).toContain(draft);
   expect(unpublished).toContain(underReview);
   expect(unpublished).not.toContain(seed.opportunities.draftOfOtherStaff.title);
-  expect(await surface.opportunityList.openGroup()).toContain(seed.opportunities.publishedCodeWithUs.title);
 });
 
-test("an administrator sees every opportunity", async ({ surface }) => {
+test(`${statement} (an administrator sees every opportunity)`, async ({ surface }) => {
   const draft = "R-1.3 draft of a member of staff an administrator must see";
   const underReview = "R-1.3 opportunity under review of a member of staff an administrator must see";
 
@@ -79,9 +85,9 @@ test("an administrator sees every opportunity", async ({ surface }) => {
 
   await surface.signIn(persona.administrator);
   await surface.opportunityList.open();
+  await expect.poll(() => surface.opportunityList.openGroup(), settle).toContain(seed.opportunities.publishedCodeWithUs.title);
+  await expect.poll(() => surface.opportunityList.unpublishedGroup(), settle).toContain(draft);
   const unpublished = await surface.opportunityList.unpublishedGroup();
-  expect(unpublished).toContain(draft);
   expect(unpublished).toContain(underReview);
   expect(unpublished).toContain(seed.opportunities.draftOfOtherStaff.title);
-  expect(await surface.opportunityList.openGroup()).toContain(seed.opportunities.publishedCodeWithUs.title);
 });
