@@ -1,1 +1,56 @@
-rebind: []
+rebind:
+  - id: R-7.9
+    target: old
+    why: contentEdit.deletedSuccess is linesMatching(/deleted/i), which reads
+      contentText and so cuts the page off at the footer, but the outcome is an
+      alert drawn after the footer ('Page Deleted' / 'About us has been
+      deleted.' is on the page at the failure), so it reads ''; read it with
+      alertLines(/deleted/i), the helper for outcome alerts drawn after the
+      footer.
+  - id: R-1.15
+    target: old
+    why: opportunitySwuCreate.scoreWeightError and
+      opportunityTwuCreate.scoreWeightError call messages(/100%|weight/i) on
+      whatever step publish left the form on ('8. Attachments' at the failure),
+      never on '6. Scoring' where the weights and their total are, so a refusal
+      shown there cannot be read; gather it from every step with
+      stepMessages(/100%|weight/i), as fieldError already does. The Team With Us
+      test's publish may also never have left /create, like every Team With Us
+      save in this run.
+  - id: R-1.16
+    target: old
+    why: "in the implementation-phase test opportunitySwuCreate.addPhase throws
+      unbound for 'Prototype' because phaseNamed only matches the chooser's own
+      labels 'Inception', 'Proof of Concept' and 'Implementation'; the form
+      calls the phase between inception and implementation 'Proof of Concept',
+      so map 'Prototype' to 'Proof of Concept'. The inception test is not shown
+      to be a binding fault: 'Publish' stays disabled and no step shows a
+      message."
+  - id: R-8.20
+    target: old
+    why: "in the proposal test fileAttachmentControl.attachmentAddress looks for an
+      '/api/files/' link on the page as it stands, which after submitProposal is
+      the proposal's '1. Proponent' step with an empty dialog still open, so it
+      returns ''; close the dialog and go to the proposal's '3. Attachments'
+      step (attachmentsStep) before reading the link. The Team With Us test is
+      not a binding fault: its publish never left
+      /opportunities/team-with-us/create, like every Team With Us save in this
+      run."
+  - id: R-8.25
+    target: old
+    why: "in the proposal test fileAttachmentControl.attachmentAddress returns ''
+      because it looks for the '/api/files/' link on the proposal's '1.
+      Proponent' step, with an empty dialog still open, instead of on '3.
+      Attachments'; close the dialog and go to that step before reading the
+      link. The Sprint With Us test is not a binding fault: the vendor was not
+      refused the draft's attachment before publication."
+  - id: R-8.31
+    target: old
+    why: in the opportunity test removeExistingAttachment calls advanceTo('Add
+      Attachment'), but a published opportunity shows its attachment read-only
+      (a disabled 'R-8.31 removed from an opportunity.pdf' box, with 'Actions'
+      in the top bar) until 'Edit' is chosen from the Actions menu, so it throws
+      unbound; choose 'Edit' from Actions first, as addAttachment does. In the
+      proposal test attachmentAddress returns '' from the proposal's '1.
+      Proponent' step, with an empty dialog open; close it and go to '3.
+      Attachments' before reading the link.
