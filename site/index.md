@@ -99,6 +99,8 @@ Profile: rebuild
 - [derive-tests-users-4](proposals/derive-tests-users-4.md)
 - [derive-tests-users-5](proposals/derive-tests-users-5.md)
 - [derive-tests-users-6](proposals/derive-tests-users-6.md)
+- [derive-tests-users-7](proposals/derive-tests-users-7.md)
+- [derive-tests-users-stale-1](proposals/derive-tests-users-stale-1.md)
 - [gates-simulated-v1](proposals/gates-simulated-v1.md)
 - [intent-digital-marketplace-rebuild](proposals/intent-digital-marketplace-rebuild.md)
 - [policy-v3](proposals/policy-v3.md)
@@ -132,9 +134,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $293.023747
-- Rulings cost: $159.741126
-- Total cost: $452.764873
-- Agent-held rulings: 90
+- Journal cost: $293.865185
+- Rulings cost: $162.112158
+- Total cost: $455.977343
+- Agent-held rulings: 92
 - Open escalations: 0
 - Open proposals: 0
