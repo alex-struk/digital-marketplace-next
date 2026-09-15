@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-triage-old-6 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">99</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">99</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">88</span></a></li><li><a href="../runs.html">Run log <span class="count">9</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-triage-old-6</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-15 01:08</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>69 criterion(s) fail against old: which of them did this project&#39;s own adapter cause?</h2>
+<p><strong>Recommendation.</strong> Sort R-1.1, R-2.1, R-5.1, R-2.2, R-2.3, R-1.4, R-2.4, R-4.5, R-1.8, R-4.9, R-5.9, R-7.9, R-1.10, R-5.10, R-1.11, R-1.12, R-3.12, R-4.12, R-7.12, R-2.13, R-5.13, R-1.14, R-2.14, R-5.14, R-5.16, R-1.17, R-6.17, R-3.18, R-5.18, R-3.19, R-4.19, R-5.19, R-8.19, R-7.20, R-8.20, R-3.21, R-5.22, R-7.22, R-2.23, R-1.24 with a triage condition each, so the adapter&#39;s failures are fixed there and only product questions reach the product owner.</p>
+<p>69 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:3000,">http://localhost:3000,</a> and nobody has sorted them yet. Before any reaches the product owner, say which of them this project&#39;s own adapter caused. The adapter is under <code>tests/adapters/old/</code>; read each failure against it and against the test.</p>
+<p>The 40 below are the ones to sort now; the remaining 29 come back on the next run.</p>
+<h4>R-1.1 · v2</h4>
+<p>A published opportunity whose proposal deadline has passed closes on its own at the next request the service handles under /api or /status: it moves to the first evaluation stage of its program, every proposal submitted against it moves to review, and its author is notified that it is ready for evaluation.</p>
+<ul><li>given: a published opportunity whose proposal deadline has passed</li><li>when: the service next handles any request</li><li>then: the opportunity moves to its program&#39;s first evaluation stage with the note &quot;This opportunity has closed.&quot;, its submitted proposals move to review, and its author receives a notification</li><li>test: tests/acceptance/opportunities/R-1.1.spec.ts</li></ul>
+<p><strong>a published opportunity whose proposal deadline has passed closes on its own and moves to the first evaluation stage of its program</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/evaluat|question/[39m
+Received string:  [31m&quot;&quot;[39m</code></pre>
+<p><strong>every proposal submitted against a closed opportunity moves to review</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;review&quot;[39m
+Received string:    [31m&quot;&quot;[39m</code></pre>
+<h4>R-2.1 · v1</h4>
+<p>Only a signed-in vendor who has accepted the service&#39;s terms at some point may start a proposal; a request from public sector staff, an administrator or an anonymous visitor is refused.</p>
+<ul><li>given: a visitor who is not signed in, or is signed in as public sector staff or as an administrator</li><li>when: they attempt to start a proposal against a published opportunity</li><li>then: the request is refused and no proposal is created</li><li>test: tests/acceptance/proposals/R-2.1.spec.ts</li></ul>
+<p><strong>a request to start a proposal from public sector staff, an administrator or an anonymous visitor is refused</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeFalsy[2m()[22m
+
+Received: [31m&quot;Not Found[39m
+[31mThe page you are looking for doesn&#39;t exist.[39m
+[31mGo Home&quot;[39m</code></pre>
+<h4>R-5.1 · v1</h4>
+<p>An opportunity that uses a panel must name at least two panel members, each a public sector employee, each named only once, and at most one of them marked as chair.</p>
+<ul><li>given: a public sector employee setting the evaluation panel of a Sprint With Us or Team With Us opportunity</li><li>when: they save a panel of one person, or a panel naming the same person twice, or a panel naming two chairs, or a panel naming a vendor</li><li>then: the panel is rejected with a message naming the rule that was broken, and the opportunity keeps the panel it had</li><li>test: tests/acceptance/evaluation/R-5.1.spec.ts</li></ul>
+<p><strong>an opportunity that uses a panel must name at least two panel members</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>each panel member must be named only once</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>each panel member must be a public sector employee</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-2.2 · v1</h4>
+<p>A vendor may hold at most one proposal per opportunity, and a second attempt is refused with a message saying they already have one.</p>
+<ul><li>given: a vendor who already has a proposal, in any state, against a published opportunity</li><li>when: they start a second proposal against the same opportunity</li><li>then: the request is refused with &quot;You already have a proposal for this opportunity.&quot; and no second proposal is created</li><li>test: tests/acceptance/proposals/R-2.2.spec.ts</li></ul>
+<p><strong>a vendor may hold at most one proposal per opportunity, and a second attempt is refused with a message saying they already have one</strong> — failed</p>
+<pre><code>Error: proposal-cwu-create.save_draft — the field for &quot;proposalText&quot; is disabled on http://localhost:3000/opportunities/code-with-us/fa2ccaf6-9e94-44ca-82c5-9eb486acf86a/proposals/775d1458-b90d-4d8c-a946-54a744be7b96/edit</code></pre>
+<h4>R-2.3 · v1</h4>
+<p>Submitting a proposal requires the vendor to accept both the program&#39;s terms and the service&#39;s current terms, and the act of submitting records that acceptance.</p>
+<ul><li>given: a vendor with a complete proposal whose acceptance of the current terms has been reset</li><li>when: they submit the proposal without ticking both the program terms and the service terms</li><li>then: the submit action is unavailable, and a submission that reaches the service anyway is refused</li><li>test: tests/acceptance/proposals/R-2.3.spec.ts</li></ul>
+<p><strong>the act of submitting a proposal records the vendor&#39;s acceptance of the terms</strong> — failed</p>
+<pre><code>Error: proposal-cwu-create.submit_proposal — &quot;Submit Proposal&quot; is disabled on http://localhost:3000/opportunities/code-with-us/b68b18d8-0082-4dc1-aef9-8259270f9483/proposals/create; the page shows no message</code></pre>
+<h4>R-1.4 · v1</h4>
+<p>Every change to an opportunity&#39;s content creates a new version of it and records an edit in its history; the opportunity always shows its most recent version.</p>
+<ul><li>given: a published opportunity</li><li>when: an administrator changes its description and saves</li><li>then: the opportunity shows the new description, its history gains an entry recording that it was edited, by whom and when, and the previous content is retained</li><li>test: tests/acceptance/opportunities/R-1.4.spec.ts</li></ul>
+<p><strong>every change to an opportunity&#39;s content creates a new version of it and the opportunity always shows its most recent version</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;R-1.4 the description as the administrator changed it.&quot;[39m
+Received string:    [31m&quot;SUMMARY[39m
+[31mSummary[39m
+[31mOPPORTUNITY MANAGEMENT[39m
+[31mOpportunity[39m
+[31mAddenda[39m
+[31mHistory[39m
+[31mOPPORTUNITY EVALUATION[39m
+[31mProposals[39m
+[31mNEED HELP?[39m
+[31mRead Guide[39m
+[31mCode With Us: R-1.4 published opportunity whose description was changed[39m
+[31mPublished Sep 14, 2026[39m
+[31m|[39m
+[31mUpdated Sep 14, 2026[39m
+[31mStatus[39m
+[31mPublished[39m
+[31mCreated By[39m
+… 22 more line(s)</code></pre>
+<h4>R-2.4 · v1</h4>
+<p>Only a draft proposal can be deleted, and deleting it removes it permanently.</p>
+<ul><li>given: a proposal that has been submitted</li><li>when: its author asks for it to be deleted</li><li>then: the request is refused, whereas deleting a draft succeeds and the proposal can no longer be opened</li><li>test: tests/acceptance/proposals/R-2.4.spec.ts</li></ul>
+<p><strong>a proposal that has been submitted cannot be deleted</strong> — failed</p>
+<pre><code>Error: proposal-cwu-create.submit_proposal — &quot;Submit Proposal&quot; is disabled on http://localhost:3000/opportunities/code-with-us/cd5a7665-47b5-49af-b6be-b8f6c13a7ae9/proposals/create; the page shows no message</code></pre>
+<h4>R-4.5 · v1</h4>
+<p>A person who deactivated their own account is let back in the next time they sign in, their account becomes active again, and they are told by email that it has been reactivated.</p>
+<ul><li>given: a person who deactivated their own account</li><li>when: they sign in again</li><li>then: they are signed in, their account is active once more, and they receive a message saying they have successfully reactivated it</li><li>test: tests/acceptance/users/R-4.5.spec.ts</li></ul>
+<p><strong>a person who deactivated their own account is let back in the next time they sign in, and their account becomes active again</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m&quot;[7mA[27mctive&quot;[39m
+Received: [31m&quot;[7mIna[27mctive&quot;[39m</code></pre>
+<p><strong>they are told by email that it has been reactivated</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+Expected: &gt; [32m0[39m
+Received:   [31m0[39m
+
+Call Log:
+- Timeout 10000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-1.8 · v1</h4>
+<p>Every opportunity belongs to exactly one of three procurement programs — Code With Us, Sprint With Us or Team With Us — chosen when it is created and never changed afterwards.</p>
+<ul><li>given: a member of public sector staff creating a new opportunity</li><li>when: they choose a program and complete creation</li><li>then: the opportunity is filed under that program and offers only that program&#39;s fields, stages and actions</li><li>test: tests/acceptance/opportunities/R-1.8.spec.ts</li></ul>
+<p><strong>an opportunity created under Team With Us is filed under that program alone</strong> — failed</p>
+<pre><code>Error: opportunity-twu-create.save_draft — the save never reached the record&#39;s address; still on http://localhost:3000/opportunities/team-with-us/create; the page shows no message</code></pre>
+<h4>R-4.9 · v1</h4>
+<p>A person may deactivate their own account, which ends their session at once, records the date, marks the account as deactivated by them, tells them by email and keeps the record rather than erasing it.</p>
+<ul><li>given: a signed-in person on their own profile</li><li>when: they choose to deactivate their account and confirm</li><li>then: they are signed out, shown a page confirming the deactivation, sent a message telling them they can return by signing in again, and their account is kept with the date of deactivation and the fact that they did it themselves</li><li>test: tests/acceptance/users/R-4.9.spec.ts</li></ul>
+<p><strong>the account is kept rather than erased, and is marked as deactivated by the person themselves</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: not [32m&quot;Reactivate&quot;[39m
+Received string:        [31m&quot;Digital Marketplace[39m
+[31madmin.one@example.test[39m
+[31mDashboard[39m
+[31m|[39m
+[31mOpportunities[39m
+[31m|[39m
+[31mOrganizations[39m
+[31m|[39m
+[31mUsers[39m
+[31m|[39m
+[31mContent[39m
+[31mAlex Placeholder[39m
+[31mStatus[39m
+[31mInactive[39m
+[31mAccount Type[39m
+[31mVendor[39m
+[31mProfile Picture (Optional)[39m
+… 8 more line(s)</code></pre>
+<h4>R-5.9 · v1</h4>
+<p>The service must reject an evaluation panel that names no chair, applying the same rule the browser form already applies, so that no opportunity can enter consensus with nobody able to record the agreed score.</p>
+<ul><li>test: tests/acceptance/evaluation/R-5.9.spec.ts</li></ul>
+<p><strong>the service must reject an evaluation panel that names no chair</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-7.9 · v1</h4>
+<p>Removing an ordinary page removes it and every version of it permanently, and its address stops answering.</p>
+<ul><li>given: an ordinary page with several versions behind it</li><li>when: an administrator confirms removing it</li><li>then: they are returned to the list of pages, told it was removed, its address is answered as not found, and no version of its text survives anywhere in the service</li><li>test: tests/acceptance/content/R-7.9.spec.ts</li></ul>
+<p><strong>removing an ordinary page removes it, and its address stops answering</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-1.10 · v1</h4>
+<p>An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters.</p>
+<ul><li>given: a member of public sector staff creating or editing an opportunity that is not a draft</li><li>when: they submit it with a missing title, a title over 200 characters, a teaser over 500 characters, a missing location, or a description that is missing or over 10,000 characters</li><li>then: the submission is rejected and the offending field is named in the response</li><li>test: tests/acceptance/opportunities/R-1.10.spec.ts</li></ul>
+<p><strong>an opportunity that is not a draft is rejected when its title is missing</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an opportunity that is not a draft is rejected when its title is over 200 characters</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an opportunity that is not a draft is rejected when its teaser is over 500 characters</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an opportunity that is not a draft is rejected when its location is missing</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an opportunity that is not a draft is rejected when its description is missing</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an opportunity that is not a draft is rejected when its description is over 10,000 characters</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-5.10 · v1</h4>
+<p>The refusal shown when no proponent clears every question&#39;s minimum score must name the stage that actually follows — the Code Challenge for Sprint With Us and the Challenge for Team With Us.</p>
+<ul><li>test: tests/acceptance/evaluation/R-5.10.spec.ts</li></ul>
+<p><strong>the refusal on a Sprint With Us opportunity names the Code Challenge</strong> — failed</p>
+<pre><code>Error: evaluation-individual-list-swu.submit_scores_for_consensus — &quot;Submit Scores for Consensus&quot; is disabled on http://localhost:3000/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluation; the page shows no message</code></pre>
+<p><strong>the refusal on a Team With Us opportunity names the Challenge</strong> — failed</p>
+<pre><code>Error: unbound: evaluation-individual-create-twu.enter_question_score — no field labelled &quot;Score&quot; on http://localhost:3000/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/proposals/00000000-0000-4000-8000-000000000841/resource-questions/evaluations/create?tab=resourceQuestions</code></pre>
+<h4>R-1.11 · v1</h4>
+<p>An opportunity that is not a draft must state whether remote work is acceptable, and must carry a remote-work description of up to 500 characters whenever remote work is acceptable.</p>
+<ul><li>given: a member of public sector staff creating or editing an opportunity that is not a draft</li><li>when: they mark it as accepting remote work but leave the remote-work description empty</li><li>then: the submission is rejected</li><li>test: tests/acceptance/opportunities/R-1.11.spec.ts</li></ul>
+<p><strong>an opportunity that is not a draft must state whether remote work is acceptable</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an opportunity that accepts remote work must carry a remote-work description</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>a remote-work description of more than 500 characters is rejected</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-1.12 · v1</h4>
+<p>A Code With Us opportunity must offer a reward of at least $1 and at most $70,000, and must name at least one skill.</p>
+<ul><li>given: a member of public sector staff creating or editing a Code With Us opportunity that is not a draft</li><li>when: they submit a reward outside $1 to $70,000, or submit no skills</li><li>then: the submission is rejected</li><li>test: tests/acceptance/opportunities/R-1.12.spec.ts</li></ul>
+<p><strong>a Code With Us opportunity offering a reward below one dollar is rejected</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>a Code With Us opportunity offering a reward above seventy thousand dollars is rejected</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>a Code With Us opportunity naming no skill is rejected</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-3.12 · v1</h4>
+<p>An organization&#39;s owner, its administrators and a service administrator may grant or withdraw administrator rights over the organization to an active member, but nobody may change their own rights and the owner&#39;s own membership cannot be changed this way.</p>
+<ul><li>given: an organization with an owner and two other active members, one of whom already has administrator rights</li><li>when: the owner grants administrator rights to the second member, that administrator tries to withdraw their own rights, and someone tries to change the owner&#39;s</li><li>then: the second member gains administrator rights, and both the self-change and the change to the owner are refused</li><li>test: tests/acceptance/organizations/R-3.12.spec.ts</li></ul>
+<p><strong>the owner grants administrator rights to the second member and that member gains them</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: not [32m&quot;TEAM MEMBER	CAPABILITIES	ADMIN··[39m
+[32mBlake Placeholder[39m
+[32mOwner··[39m
+[32m3·····[39m
+[32mCharlie Placeholder··[39m
+[32m3·····[39m
+[32mDana Placeholder··[39m
+[32m3&quot;[39m</code></pre>
+<p><strong>an organization administrator trying to withdraw their own rights is refused</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>a change to the owner&#39;s own membership is refused</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-4.12 · v1</h4>
+<p>Only an administrator may grant or withdraw administrator rights, only over a public sector employee&#39;s account, and a vendor can never be granted them; withdrawing the rights returns the person to an ordinary public sector employee account.</p>
+<ul><li>given: an administrator, a public sector employee and a vendor</li><li>when: the administrator opens each of the other two profiles and ticks the administrator box</li><li>then: the public sector employee becomes an administrator immediately, and the request against the vendor is refused with a message saying vendors cannot be granted administrator permissions</li><li>test: tests/acceptance/users/R-4.12.spec.ts</li></ul>
+<p><strong>a public sector employee becomes an administrator immediately when an administrator grants them administrator rights</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: not [32m&quot;Public Sector Employee&quot;[39m</code></pre>
+<p><strong>a vendor can never be granted administrator rights, and the request against a vendor&#39;s account is refused</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an ordinary public sector employee is offered no control to grant administrator rights, only a statement of their permissions</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-7.12 · v1</h4>
+<p>A fresh installation carries a full set of the pages the service needs, each holding placeholder text and titled by its own address until somebody writes it.</p>
+<ul><li>given: a newly prepared installation of the service that nobody has edited and an administrator looking at the list of pages on that installation</li><li>when: a visitor opens any of the pages the service needs, such as its terms and conditions and they read it</li><li>then: the page exists and answers, its title is its own address, and its body reads &quot;Initial version&quot; and twenty-two pages are listed, all marked as needed by the service</li><li>test: tests/acceptance/content/R-7.12.spec.ts</li></ul>
+<p><strong>a page the service needs exists and answers, its title is its own address, and its body holds placeholder text until somebody writes it</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m&quot;copyright&quot;[39m
+Received: [31m&quot;Not Found&quot;[39m</code></pre>
+<h4>R-2.13 · v1</h4>
+<p>A Code With Us proposal that is not a draft is rejected unless it carries proposal text of 1 to 10,000 characters, additional comments of at most 10,000 characters, and a complete proponent.</p>
+<ul><li>given: a vendor submitting a Code With Us proposal</li><li>when: the proposal text is empty or longer than 10,000 characters, or the additional comments are longer than 10,000 characters</li><li>then: the submission is rejected and the offending field is named in the response</li><li>test: tests/acceptance/proposals/R-2.13.spec.ts</li></ul>
+<p><strong>a Code With Us proposal that is not a draft is rejected when its proposal text is empty</strong> — failed</p>
+<pre><code>Error: proposal-cwu-create.submit_proposal — &quot;Submit&quot; is disabled on http://localhost:3000/opportunities/code-with-us/f8c6b8cf-4314-4575-95fa-ec920ce445dc/proposals/create; the page shows no message</code></pre>
+<p><strong>a Code With Us proposal that is not a draft is rejected when its proposal text is longer than 10,000 characters</strong> — failed</p>
+<pre><code>Error: proposal-cwu-create.submit_proposal — &quot;Submit&quot; is disabled on http://localhost:3000/opportunities/code-with-us/2df53e9e-3f73-4fa8-842c-1631d6f57d31/proposals/create; the page shows no message</code></pre>
+<p><strong>a Code With Us proposal that is not a draft is rejected when its additional comments are longer than 10,000 characters</strong> — failed</p>
+<pre><code>Error: proposal-cwu-create.submit_proposal — &quot;Submit&quot; is disabled on http://localhost:3000/opportunities/code-with-us/1330609c-9574-4216-ad36-28ed3a77621d/proposals/create; the page shows no message</code></pre>
+<p><strong>a Code With Us proposal that is not a draft is rejected when it carries no complete proponent</strong> — failed</p>
+<pre><code>Error: proposal-cwu-create.accept_program_terms — &quot;Submit&quot; is disabled on http://localhost:3000/opportunities/code-with-us/09d79211-fcf3-4645-a86b-481148b977a9/proposals/create; the page shows no message</code></pre>
+<h4>R-5.13 · v1</h4>
+<p>Finalising the consensus scores must be refused unless every proponent still under review of the questions has a submitted consensus, so that no proponent is left neither screened in nor screened out.</p>
+<ul><li>test: tests/acceptance/evaluation/R-5.13.spec.ts</li></ul>
+<p><strong>finalising is refused unless every proponent still under review has a submitted consensus</strong> — failed</p>
+<pre><code>Error: evaluation-individual-list-swu.submit_scores_for_consensus — &quot;Submit Scores for Consensus&quot; is disabled on http://localhost:3000/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluation; the page shows no message</code></pre>
+<h4>R-1.14 · v1</h4>
+<p>An opportunity&#39;s key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen.</p>
+<ul><li>given: a member of public sector staff creating or editing an opportunity that is not a draft</li><li>when: they submit a proposal deadline in the past, or any later date that falls before the date preceding it</li><li>then: the submission is rejected</li><li>test: tests/acceptance/opportunities/R-1.14.spec.ts</li></ul>
+<p><strong>an opportunity that is not a draft is rejected when its assignment date falls before its proposal deadline</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an opportunity that is not a draft is rejected when its start date falls before its assignment date</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an opportunity that is not a draft is rejected when its completion date falls before its start date</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>each of an opportunity&#39;s key dates is recorded as four o&#39;clock in the afternoon on the day chosen</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/4:00|16:00/[39m
+Received string:  [31m&quot;Sep 28, 2026&quot;[39m</code></pre>
+<h4>R-2.14 · v2</h4>
+<p>A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name.</p>
+<ul><li>given: a vendor submitting a Code With Us proposal as an individual</li><li>when: the legal name, email address, street address, city, province, postal code or country is missing, or the email address or phone number is malformed</li><li>then: the submission is rejected and each offending field is named in the response</li><li>test: tests/acceptance/proposals/R-2.14.spec.ts</li></ul>
+<p><strong>a Code With Us proponent named as an individual carries a legal name, an email address and a full postal address, each field validated in turn</strong> — failed</p>
+<pre><code>Error: proposal-cwu-create.accept_program_terms — &quot;Submit&quot; is disabled on http://localhost:3000/opportunities/code-with-us/54a51c70-7b88-4f0e-97f4-f1621c295732/proposals/create; the page shows no message</code></pre>
+<p><strong>a Code With Us proponent named as an organization is checked only for existence and active status</strong> — failed</p>
+<pre><code>Error: proposal-cwu-create.submit_proposal — &quot;Submit Proposal&quot; is disabled on http://localhost:3000/opportunities/code-with-us/4241efbf-c7b5-42fd-a3cd-0cea742f89ee/proposals/create; the page shows no message</code></pre>
+<h4>R-5.14 · v1</h4>
+<p>The action that finalises consensus scores must be offered to whoever the service accepts it from — the opportunity&#39;s owner as well as an administrator — so that the browser and the service agree on who may finalise.</p>
+<ul><li>test: tests/acceptance/evaluation/R-5.14.spec.ts</li></ul>
+<p><strong>the action that finalises consensus scores is offered to the opportunity&#39;s owner</strong> — failed</p>
+<pre><code>Error: evaluation-individual-list-swu.submit_scores_for_consensus — &quot;Submit Scores for Consensus&quot; is disabled on http://localhost:3000/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluation; the page shows no message</code></pre>
+<h4>R-5.16 · v1</h4>
+<p>The evaluation panel may be set or changed while an opportunity is a draft, under review, published, or in individual question evaluation, and is fixed from the consensus stage onwards.</p>
+<ul><li>given: an opportunity whose questions are being evaluated individually</li><li>when: its owner changes the evaluation panel, and then tries again once the opportunity has moved to consensus</li><li>then: the first change is accepted and the second is refused</li><li>test: tests/acceptance/evaluation/R-5.16.spec.ts</li></ul>
+<p><strong>the evaluation panel may be changed while an opportunity is under review</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-swu-create.set_evaluation_panel — no panel member matching &quot;00000000-0000-4000-8000-000000000102&quot;</code></pre>
+<p><strong>the evaluation panel may be changed while an opportunity is published</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-swu-create.set_evaluation_panel — no panel member matching &quot;00000000-0000-4000-8000-000000000102&quot;</code></pre>
+<p><strong>the evaluation panel may be changed while an opportunity is in individual question evaluation</strong> — failed</p>
+<pre><code>Error: unbound: evaluation-panel-swu.remove_panel_member — no control labelled &quot;Remove this evaluator&quot; or &quot;Remove&quot; on http://localhost:3000/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluationPanel</code></pre>
+<p><strong>the evaluation panel is fixed from the consensus stage onwards</strong> — failed</p>
+<pre><code>Error: evaluation-individual-list-swu.submit_scores_for_consensus — &quot;Submit Scores for Consensus&quot; is disabled on http://localhost:3000/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluation; the page shows no message</code></pre>
+<h4>R-1.17 · v1</h4>
+<p>Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question, a guideline, a maximum score, a response word limit and a position, and an optional minimum score that must be lower than the question&#39;s maximum score.</p>
+<ul><li>given: a member of public sector staff adding an evaluation question to an opportunity</li><li>when: they submit a question or guideline outside 1 to 1,000 characters, a score below 1, a word limit outside 1 to 3,000, a position outside 0 to 100, or a minimum score equal to or above the question&#39;s score</li><li>then: the submission is rejected and the offending field is named</li><li>test: tests/acceptance/opportunities/R-1.17.spec.ts</li></ul>
+<p><strong>an evaluation question whose question runs over one thousand characters is rejected</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an evaluation question whose guideline runs over one thousand characters is rejected</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an evaluation question whose maximum score is below one is rejected</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an evaluation question whose response word limit falls outside one to three thousand is rejected</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an evaluation question whose position falls outside nought to one hundred is rejected</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-swu-create.add_team_question — &quot;Add Question&quot; did not make a Question 102 on http://localhost:3000/opportunities/sprint-with-us/create</code></pre>
+<h4>R-6.17 · v1</h4>
+<p>A deactivated account receives no notification of any kind, including notices about opportunities it was watching, while the watch itself is retained so that reactivating the account restores it.</p>
+<ul><li>test: tests/acceptance/notifications/R-6.17.spec.ts</li></ul>
+<p><strong>a deactivated account receives no notification of any kind</strong> — failed</p>
+<pre><code>Error: organization-edit.add_team_members — &quot;Add Team Member(s)&quot; is disabled on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000304/edit?tab=team; the page shows no message</code></pre>
+<h4>R-3.18 · v1</h4>
+<p>The Edit and Archive controls on an organization&#39;s management page are offered only to a person permitted to use them — the organization&#39;s owner or a service administrator; an organization administrator who is not the owner sees the organization&#39;s profile as read-only, with no Edit and no Archive control, and the service continues to refuse a profile change or an archive request from anyone other than the owner or a service administrator.</p>
+<ul><li>test: tests/acceptance/organizations/R-3.18.spec.ts</li></ul>
+<p><strong>an organization administrator who is not the owner sees the profile read-only, with no Edit and no Archive control</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: not [32m&quot;Edit&quot;[39m
+Received string:        [31m&quot;Digital Marketplace[39m
+[31morg.admin@example.test[39m
+[31mDashboard[39m
+[31m|[39m
+[31mOpportunities[39m
+[31m|[39m
+[31mOrganizations[39m
+[31m[7mEdit[27m Organization[39m
+[31mOrganization[39m
+[31mTeam[39m
+[31mSWU Qualification[39m
+[31mTWU Qualification[39m
+[31mChangelog[39m
+[31mNorthern Pines Digital Ltd.[39m
+[31mSprint With Us Qualified[39m
+[31mProfile Picture (Optional)[39m
+[31mLegal Name[39m
+… 18 more line(s)</code></pre>
+<h4>R-5.18 · v1</h4>
+<p>The membership of an evaluation panel is shown only to an administrator, the opportunity&#39;s owner, and the people on the panel itself.</p>
+<ul><li>given: an opportunity with an evaluation panel</li><li>when: a vendor, or a public sector employee who is neither the owner nor on the panel, opens the opportunity</li><li>then: no panel membership is shown to them, while an administrator, the owner and each panel member all see it</li><li>test: tests/acceptance/evaluation/R-5.18.spec.ts</li></ul>
+<p><strong>the membership of an evaluation panel is shown to the people on the panel itself</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>no panel membership is shown to a public sector employee who is neither the owner nor on the panel</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-swu-create.set_evaluation_panel — no panel member matching &quot;00000000-0000-4000-8000-000000000104&quot;</code></pre>
+<p><strong>no panel membership is shown to a vendor</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-swu-create.set_evaluation_panel — no panel member matching &quot;00000000-0000-4000-8000-000000000104&quot;</code></pre>
+<h4>R-3.19 · v1</h4>
+<p>A change to an organization&#39;s contact phone number made while editing its profile is saved along with every other profile field, and clearing the field removes the stored number.</p>
+<ul><li>test: tests/acceptance/organizations/R-3.19.spec.ts</li></ul>
+<p><strong>a change to the contact phone number is saved along with every other profile field</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;Phone Saving Contact Name&quot;[39m
+Received string:    [31m&quot;Digital Marketplace[39m
+[31morg.owner@example.test[39m
+[31mDashboard[39m
+[31m|[39m
+[31mOpportunities[39m
+[31m|[39m
+[31mOrganizations[39m
+[31mEdit Organization[39m
+[31mOrganization[39m
+[31mTeam[39m
+[31mSWU Qualification[39m
+[31mTWU Qualification[39m
+[31mChangelog[39m
+[31mNorthern Pines Digital Ltd.[39m
+[31mSprint With Us Qualified[39m
+[31mProfile Picture (Optional)[39m
+[31mLegal Name[39m
+… 16 more line(s)</code></pre>
+<h4>R-4.19 · v1</h4>
+<p>The control to reactivate an account is offered only for an account that an administrator deactivated. An account its owner deactivated carries no reactivation control; the profile states instead that the person reactivates it themselves by signing in again, and the service continues to refuse a reactivation request made against such an account.</p>
+<ul><li>test: tests/acceptance/users/R-4.19.spec.ts</li></ul>
+<p><strong>an account its owner deactivated carries no reactivation control; the profile states instead that the person reactivates it themselves by signing in again</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: not [32m&quot;Reactivate&quot;[39m
+Received string:        [31m&quot;Digital Marketplace[39m
+[31madmin.one@example.test[39m
+[31mDashboard[39m
+[31m|[39m
+[31mOpportunities[39m
+[31m|[39m
+[31mOrganizations[39m
+[31m|[39m
+[31mUsers[39m
+[31m|[39m
+[31mContent[39m
+[31mAlex Placeholder[39m
+[31mStatus[39m
+[31mInactive[39m
+[31mAccount Type[39m
+[31mVendor[39m
+[31mProfile Picture (Optional)[39m
+… 8 more line(s)</code></pre>
+<h4>R-5.19 · v1</h4>
+<p>A panel member may open an opportunity they sit on the panel for even before it is public, and it is listed for them under a separate heading for work they are evaluating.</p>
+<ul><li>given: a draft opportunity whose panel names a public sector employee who did not create it</li><li>when: that person opens their dashboard and then the opportunity</li><li>then: the opportunity is listed under &quot;Evaluations&quot; and they can open it, whereas another public sector employee cannot see it at all</li><li>test: tests/acceptance/evaluation/R-5.19.spec.ts</li></ul>
+<p><strong>a panel member may open an opportunity they sit on the panel for even before it is public</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;draft&quot;[39m
+Received string:    [31m&quot;&quot;[39m</code></pre>
+<p><strong>an opportunity is listed for its panel members under a separate heading for work they are evaluating</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;R-5.19 draft opportunity listed for the people evaluating it&quot;[39m
+Received string:    [31m&quot;Dashboard[39m
+[31mMy Opportunities[39m
+[31mEvaluations[39m
+[31mEvaluations[39m
+[31mView all opportunities[39m
+[31mTITLE	STATUS	CREATED·[39m
+[31mSeeded closed Sprint With Us opportunity[39m
+[31mSPRINT WITH US··[39m
+[31mTeam Questions Evaluation··[39m
+[31mJul 16, 2026[39m
+[31mCASEY PLACEHOLDER··[39m
+[31mSeeded closed Team With Us opportunity[39m
+[31mTEAM WITH US··[39m
+[31mPublished··[39m
+[31mJul 16, 2026[39m
+[31mCASEY PLACEHOLDER&quot;[39m</code></pre>
+<h4>R-8.19 · v1</h4>
+<p>An attachment on an opportunity is uploaded with no read access recorded against the file itself, for all three programs alike, so that what the opportunity is attached to decides who may read it.</p>
+<ul><li>test: tests/acceptance/files/R-8.19.spec.ts</li></ul>
+<p><strong>an attachment on a Code With Us opportunity is uploaded with no read access recorded against the file itself, so that the opportunity decides who may read it</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an attachment on a Sprint With Us opportunity is uploaded with no read access recorded against the file itself, so that the opportunity decides who may read it</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an attachment on a Team With Us opportunity is uploaded with no read access recorded against the file itself, so that the opportunity decides who may read it</strong> — failed</p>
+<pre><code>Error: opportunity-twu-create.save_draft — the save never reached the record&#39;s address; still on http://localhost:3000/opportunities/team-with-us/create; the page shows no message</code></pre>
+<h4>R-7.20 · v1</h4>
+<p>A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named.</p>
+<ul><li>given: an administrator creating or changing a page</li><li>when: they submit it with an empty title, or with a body longer than fifty thousand characters</li><li>then: nothing is saved and the failing field is marked with the reason</li><li>test: tests/acceptance/content/R-7.20.spec.ts</li></ul>
+<p><strong>A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — creating a page with an empty title</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — creating a page with a title longer than a hundred characters</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — creating a page with an empty body</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-8.20 · v1</h4>
+<p>A file attached to an opportunity or a proposal is readable by whoever may read the thing it is attached to, under one rule covering Code With Us, Sprint With Us and Team With Us alike rather than a separate rule per program.</p>
+<ul><li>test: tests/acceptance/files/R-8.20.spec.ts</li></ul>
+<p><strong>a file attached to a Code With Us opportunity is readable by whoever may read the opportunity</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>a file attached to a Sprint With Us opportunity is readable by whoever may read the opportunity, under the same rule</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-swu-create.set_evaluation_panel — no panel member matching &quot;00000000-0000-4000-8000-000000000102&quot;</code></pre>
+<p><strong>a file attached to a Team With Us opportunity is readable by whoever may read the opportunity, under the same rule</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-twu-create.set_evaluation_panel — no panel member matching &quot;00000000-0000-4000-8000-000000000102&quot;</code></pre>
+<p><strong>a file attached to a proposal is readable by whoever may read the proposal</strong> — failed</p>
+<pre><code>Error: proposal-cwu-create.submit_proposal — &quot;Submit Proposal&quot; is disabled on http://localhost:3000/opportunities/code-with-us/76df15f8-1ddc-478d-974c-0170052c1180/proposals/create; the page shows no message</code></pre>
+<h4>R-3.21 · v2</h4>
+<p>In the organization list, the owner&#39;s name, the team size and both qualification marks are shown only to a service administrator and, for a given organization, to the vendors who own or administer it; every other viewer sees that organization&#39;s legal name, logo, active state and service areas alone, and the owner and qualification columns are not offered at all to a visitor who is not signed in or to public sector staff.</p>
+<ul><li>given: an organization owned by one vendor</li><li>when: a different vendor, who is neither its owner nor one of its administrators, opens the organization list</li><li>then: that organization&#39;s row shows its legal name only, with no owner, no team size and no qualification marks, while the same row shown to an administrator carries all of them</li><li>test: tests/acceptance/organizations/R-3.21.spec.ts</li></ul>
+<p><strong>a vendor who is neither owner nor administrator of an organization sees its legal name without the owner, the team size or the qualification marks</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeFalsy[2m()[22m
+
+Received: [31m&quot;—&quot;[39m</code></pre>
+<h4>R-5.22 · v1</h4>
+<p>An evaluation carries one score and one comment per question, the score being between zero and that question&#39;s maximum with at most two decimal places, and the comment being at least one word.</p>
+<ul><li>given: an evaluator scoring a proponent against a question worth five points</li><li>when: they enter six, or a score with three decimal places, or leave the comment empty</li><li>then: the entry is rejected and the evaluation cannot be submitted until every question has a score in range and a comment</li><li>test: tests/acceptance/evaluation/R-5.22.spec.ts</li></ul>
+<p><strong>a score above the question&#39;s maximum is rejected</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>an empty comment is rejected</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-7.22 · v1</h4>
+<p>No two pages may share an address, whether the clash arises on creating a page or on renaming one.</p>
+<ul><li>given: a page already published at the address &quot;about&quot;</li><li>when: an administrator creates another page at that address, or renames a different page to it</li><li>then: neither is accepted, the existing page is untouched, and the address is reported as already in use</li><li>test: tests/acceptance/content/R-7.22.spec.ts</li></ul>
+<p><strong>a page cannot be created at an address another page already holds, and the existing page is untouched</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>a page cannot be renamed to an address another page already holds, and the existing page is untouched</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-2.23 · v1</h4>
+<p>A vendor may withdraw a submitted proposal at any time, and may put a withdrawn proposal back in only while the opportunity is still accepting proposals.</p>
+<ul><li>given: a submitted proposal on an opportunity whose deadline has passed</li><li>when: the vendor withdraws it, and then tries to submit it again</li><li>then: the withdrawal is accepted and the re-submission is refused, whereas before the deadline both are accepted</li><li>test: tests/acceptance/proposals/R-2.23.spec.ts</li></ul>
+<p><strong>a vendor may withdraw a submitted proposal</strong> — failed</p>
+<pre><code>Error: proposal-cwu-create.submit_proposal — &quot;Submit Proposal&quot; is disabled on http://localhost:3000/opportunities/code-with-us/f58313ca-fc81-4b18-bb01-b82d50cc312a/proposals/create; the page shows no message</code></pre>
+<p><strong>a vendor may put a withdrawn proposal back in while the opportunity is still accepting proposals</strong> — failed</p>
+<pre><code>Error: proposal-cwu-create.submit_proposal — &quot;Submit Proposal&quot; is disabled on http://localhost:3000/opportunities/code-with-us/2c0b25cf-c3cd-4f21-95b7-1ed1135f690e/proposals/create; the page shows no message</code></pre>
+<h4>R-1.24 · v1</h4>
+<p>On closing a Sprint With Us or Team With Us opportunity, each submitted proposal is given an anonymous proponent name for use during evaluation.</p>
+<ul><li>given: a published Sprint With Us or Team With Us opportunity with submitted proposals</li><li>when: it closes at its proposal deadline</li><li>then: each submitted proposal is labelled &quot;Proponent 1&quot;, &quot;Proponent 2&quot; and so on</li><li>test: tests/acceptance/opportunities/R-1.24.spec.ts</li></ul>
+<p><strong>on closing a Team With Us opportunity, each submitted proposal is given an anonymous proponent name</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;Proponent 1&quot;[39m
+Received string:    [31m&quot;&quot;[39m</code></pre>
+<h3>Triage conditions</h3>
+<p>One condition per line, one for every failing criterion the page lists, in exactly one of these forms:</p>
+<ul><li><code>adapter-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion and the test are both fine, and this target&#39;s adapter is what failed: it read the wrong thing off the page, reported a control missing that the page does render, or answered empty where it never reached the page. <code>&lt;why&gt;</code> names what the adapter did wrong, specifically enough for the next binding run to fix it. The criterion is not touched.</li><li><code>product-question &lt;ID&gt;</code> — nothing in the evidence points at the adapter. The failure goes to the product owner, who decides whether the application, the criterion or the test is wrong. No text after the ID.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. A condition may not span more than one line. When the evidence is genuinely unclear, it is a <code>product-question</code>: a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the adapter comes back from the next binding run unchanged and costs a run to find out.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-15 01:18.</p>
+<div class="body"><p>The question was which of the 40 criteria failing against the old target were caused by this project&#39;s own adapter, after bind-adapter-old-11 changed it. Ruling: approve, with one triage line per criterion: 26 adapter-wrong and 14 product-question. I read each failure against tests/adapters/old/index.ts, the test and the saved snapshot under tests/test-results. Three new adapter faults account for most of the 26. First, completeRequired walks every create-form step and leaves the page on the last one (&#39;4. Attachments&#39;, or &#39;3. Attachments&#39; on a proposal), then Publish returns quietly on a disabled button. fieldError reads only the step on screen, so the refusal on the step holding the bad value is never seen (R-1.10, R-1.11, R-1.12, R-1.14, R-2.13, R-2.14). Second, proposalCreate&#39;s enter() cancels the terms dialog to type, which unticks both terms boxes, and submitProposal presses the still-disabled &#39;Submit Proposal&#39; (R-2.3, R-2.4, R-2.14, R-2.23, R-8.20). Third, the evaluation panel binding adds nobody when given a single {member}, and matches chooser options by seed user id when they are named &#39;Name (email)&#39; (R-5.1, R-5.9, R-5.16, R-5.18, R-5.19, R-8.20). scoreSheet.enter also ignores &#39;order&#39;, so every score lands on question 1 and &#39;Submit Scores for Consensus&#39; stays disabled (R-5.10, R-5.13, R-5.14, R-5.16). Fourteen go to the product owner because nothing points at the binding. The seeded Team With Us opportunity (id ending 801) still shows Published past its deadline, and its evaluation pages answer Not Found (R-1.1, R-1.24, and the Team With Us half of R-5.10). The Team With Us Save Draft stays on /create with no visible reason (R-1.8). A second proposal redirects to the existing draft with no &#39;already have a proposal&#39; message (R-2.2). An administrator&#39;s grant ticks Admin but Account Type still reads &#39;Public Sector Employee&#39;, and a vendor profile shows no refusal text (R-4.12). The org admin is shown &#39;Edit Organization&#39; and &#39;Archive Organization&#39; (R-3.18). After a self-deactivation, the administrator&#39;s view offers &#39;Reactivate Account&#39; (R-4.9, R-4.19). A score of 6 and an empty comment show no error (R-5.22). The content pages publish with the dialog never opened and no field marked (R-7.20). The copyright page is Not Found and the install lists only &#39;About us&#39; (R-7.12). The page is removed but no deletion message is seen (R-7.9). The product owner should see three caveats. R-7.22&#39;s tests never confirm the &#39;Publish Page?&#39; and &#39;Publish Changes?&#39; dialogs, so nothing reached the service: a test gap, not a binding fault. R-4.5 signs the vendor in through the target&#39;s session route, and whether that route runs reactivation cannot be seen from the evidence. R-7.9&#39;s contentText stops at the footer and may hide a toast rendered after it. Tier is STANDARD and no residual risk is marked unaccepted, so nothing escalates. What would change this ruling: a fresh run, with these adapter defects fixed, that still fails a criterion at the same assertion. That criterion would come back as a product question. Evidence that the session route bypasses the target&#39;s sign-in handling would move R-4.5 to adapter-wrong.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>product-question R-1.1</li><li>adapter-wrong R-2.1: proposalCwuCreate.opportunitySummary reads headerText(), which returns every line on the page when no numbered step exists, so the staff user&#39;s &#39;Not Found / The page you are looking for doesn&#39;t exist. / Go Home&#39; page was read as an opportunity summary; return &#39;&#39; when the page has no proposal step list or create heading.</li><li>adapter-wrong R-5.1: evaluationPanel.addPanelMember passes {member} to setEvaluationPanel, which reads only &#39;members&#39; or &#39;evaluators&#39;, so no member is ever added and all three tests save the draft&#39;s valid default panel (Casey Placeholder as chair, Robin Placeholder); read input.member and pick the chooser option whose text contains the seed user&#39;s email, since options are named &#39;Name (email)&#39;.</li><li>product-question R-2.2</li><li>adapter-wrong R-2.3: proposalCreate.submitProposal calls enter(), which presses Cancel on the open terms dialog to type the proposal text; closing the dialog unticks the boxes acceptProgramTerms and acceptAppTerms ticked, and openTermsDialog reopens it with both boxes unticked and &#39;Submit Proposal&#39; disabled. Enter the values before opening the terms, or tick the accepted boxes again after reopening.</li><li>adapter-wrong R-1.4: opportunityEdit.opportunityTab reads tabContent([&#39;Opportunity&#39;]), which is only the visible &#39;1. Overview&#39; step (Title, Teaser, Remote OK?, Required Skills, Next); the Description is on a later step, so neither the old nor the new description can be read. Walk every step of the tab when reading it.</li><li>adapter-wrong R-2.4: as in R-2.3, submitProposal&#39;s enter() cancels the terms dialog and the reopened dialog has both terms boxes unticked and &#39;Submit Proposal&#39; disabled, so press() throws before any proposal is submitted; keep the accepted terms ticked across the reopen.</li><li>product-question R-4.5</li><li>product-question R-1.8</li><li>product-question R-4.9</li><li>adapter-wrong R-5.9: evaluationPanel.addPanelMember passes {member} to setEvaluationPanel, which reads only &#39;members&#39;/&#39;evaluators&#39;, so staff.two is never added and the saved panel still reads &#39;Chair: Casey Placeholder (staff.one@example.test)&#39;, leaving missingChairError no chairless panel to report; read input.member and match the option by the seed user&#39;s email.</li><li>product-question R-7.9</li><li>adapter-wrong R-1.10: completeRequired(true) walks the create form to &#39;4. Attachments&#39; and publish returns quietly on the disabled Publish, but fieldError() is messages(), which reads only the step on screen, so the error on the step holding Title, Teaser, Location or Description is never read; when Publish stays disabled, go back through the steps and collect field errors from each.</li><li>adapter-wrong R-5.10: scoreSheet.enter picks the question with indexOf, which reads only &#39;index&#39;, &#39;position&#39; or &#39;row&#39; and ignores the test&#39;s &#39;order&#39;, so all four scores go into question 1 (the Sprint With Us table shows &#39;1&#39;, &#39;—&#39;, &#39;—&#39;, &#39;—&#39; per proponent) and &#39;Submit Scores for Consensus&#39; stays disabled; map &#39;order&#39; to the question slot. The Team With Us test is not a binding fault: the seeded opportunity&#39;s evaluation page answers &#39;Not Found&#39;.</li><li>adapter-wrong R-1.11: in the remote-description tests completeRequired leaves the form on &#39;4. Attachments&#39; with Publish disabled and fieldError reads only that step, so the error beside the remote-work field is never read; in the &#39;must state whether remote work is acceptable&#39; test completeRequiredHere answers the unnamed &#39;Remote OK?&#39; with No, so the opportunity published (&#39;Opportunity Published&#39;) instead of being refused. Collect errors from every step, and do not auto-answer &#39;Remote OK?&#39; when the test leaves it out.</li><li>adapter-wrong R-1.12: completeRequired leaves the create form on &#39;4. Attachments&#39; and publish returns on the disabled Publish, but fieldError() reads only that step, so the reward and skills errors on their own step are never read; collect field errors from every step when Publish stays disabled.</li><li>adapter-wrong R-3.12: organizationEdit.teamMemberRow reads tableText(), whose innerText has no trace of the Admin checkbox, so after the grant (Dana&#39;s box now checked) the reading is identical; include each row&#39;s Admin checkbox state in the reading. The two refusal tests are not binding faults: the target&#39;s box is checked and disabled and the page shows no message.</li><li>product-question R-4.12</li><li>product-question R-7.12</li><li>adapter-wrong R-2.13: openTermsDialog presses the top-bar &#39;Submit&#39;, which throws when disabled; in all four tests the form was deliberately left invalid (empty or overlong text, overlong comments, no proponent), so the disabled Submit is the refusal. Return quietly instead, and go back from &#39;3. Attachments&#39;, where completeRequired left the page, to the step holding the invalid field so fieldError can read it.</li><li>adapter-wrong R-5.13: scoreSheet.enter ignores the test&#39;s &#39;order&#39; because indexOf reads only index/position/row, so only question 1 is scored (rows read &#39;5&#39;, &#39;—&#39;, &#39;—&#39;, &#39;—&#39;), &#39;Submit Scores for Consensus&#39; stays disabled and finalising is never reached; map &#39;order&#39; to the question slot.</li><li>adapter-wrong R-1.14: completeRequired leaves the form on &#39;4. Attachments&#39; and fieldError reads only that step, so the three date-order errors are never read; and opportunityView.proposalDeadline reads the value beside &#39;Proposal Deadline&#39; (&#39;Sep 28, 2026&#39;) while the page states the time in its header line &#39;Closes Sep 28, 2026 at 4:00 PM PDT&#39;. Collect errors from every step, and read the deadline from the &#39;Closes&#39; line as opportunityList.proposalDeadline does.</li><li>adapter-wrong R-2.14: in the individual test openTermsDialog throws on the disabled top-bar &#39;Submit&#39; although the test blanked legalName on purpose, so the disabled Submit is the refusal and should end the action quietly on the step holding the field; in the organization test submitProposal&#39;s enter() cancels the terms dialog and the reopened dialog has both boxes unticked and &#39;Submit Proposal&#39; disabled.</li><li>adapter-wrong R-5.14: scoreSheet.enter ignores the test&#39;s &#39;order&#39; (indexOf reads only index/position/row), so only question 1 is scored, &#39;Submit Scores for Consensus&#39; stays disabled and the owner&#39;s finalise action is never reached; map &#39;order&#39; to the question slot.</li><li>adapter-wrong R-5.16: setEvaluationPanel looks for an option named with the seed user id &#39;00000000-0000-4000-8000-000000000102&#39;, but the chooser names people &#39;Casey Placeholder (staff.one@example.test)&#39;, so match by the seed user&#39;s email; addPanelMember adds nobody from {member}, so staff.two is never on the panel; removePanelMember ignores which member it was given and looks for a &#39;Remove&#39; button, while each panel slot offers only an unlabelled clickable icon; and scoreSheet.enter ignores &#39;order&#39;, leaving questions 2 to 4 unscored so consensus is never reached.</li><li>adapter-wrong R-1.17: in the position test fillSlot treats &#39;order&#39; as a slot number and presses &#39;Add Question&#39; at most twelve times before throwing &#39;did not make a Question 102&#39;; the team question form has no position field (only Question*, Response Guidelines*, Response Word Limit*, Score*, Minimum Score), so do not treat &#39;order&#39; as a slot for team questions. The other four tests are not binding faults: the invalid values are in the right fields on &#39;6. Team Questions&#39; and the page shows no error.</li><li>product-question R-6.17</li><li>product-question R-3.18</li><li>adapter-wrong R-5.18: addPanelMember adds nobody from {member}, so staff.one is never on the administrator&#39;s draft panel and is shown &#39;Not Found&#39;; and in the other staff and vendor tests setEvaluationPanel matches options by the id &#39;00000000-0000-4000-8000-000000000104&#39; while options are named &#39;Name (email)&#39;, so setup fails before anyone looks. Read input.member and match options by the seed user&#39;s email.</li><li>adapter-wrong R-3.19: organizationEdit.organizationTab reads screenText(), the innerText of main, which omits the values of the disabled textboxes, so the saved &#39;textbox &quot;Contact Name&quot; [disabled]: Phone Saving Contact Name&#39; reads as missing; include each field&#39;s value in the reading.</li><li>product-question R-4.19</li><li>adapter-wrong R-5.19: draftForPanelMember&#39;s addPanelMember calls add nobody because setEvaluationPanel reads only &#39;members&#39;/&#39;evaluators&#39;, so staff.one never joins the draft&#39;s panel and is shown &#39;Not Found&#39; on the draft and no row under Evaluations; read input.member and match the chooser option by the seed user&#39;s email.</li><li>adapter-wrong R-8.19: fileAttachmentControl.addAttachment picks the file into the chooser but never saves the form (&#39;Save Changes&#39; still offered, the only link is a &#39;blob:&#39; preview), and on the Sprint With Us draft never chooses &#39;Edit&#39; as the page asks, so attachmentAddress, which keeps only &#39;/api/files/&#39; links, returns &#39;&#39;; save the form after adding the attachment and wait for a stored file link. The Team With Us Save Draft staying on /create is not shown to be a binding fault.</li><li>product-question R-7.20</li><li>adapter-wrong R-8.20: in the Code With Us test addAttachment never saves the form, so only a &#39;blob:&#39; preview exists; in the Sprint With Us and Team With Us tests setEvaluationPanel matches chooser options by the seed id &#39;00000000-0000-4000-8000-000000000102&#39; while they are named &#39;Name (email)&#39;, so match by email; in the proposal test submitProposal&#39;s enter() cancels the terms dialog and both terms boxes come back unticked with &#39;Submit Proposal&#39; disabled.</li><li>adapter-wrong R-3.21: organizationList.swuQualifiedMark and twuQualifiedMark read markUnder(), which returns the withheld cell&#39;s &#39;—&#39; as a mark; read &#39;—&#39; as &#39;&#39; as ownerName now does, and when a row is named read that row rather than the first data row.</li><li>product-question R-5.22</li><li>product-question R-7.22</li><li>adapter-wrong R-2.23: both tests fail in submitProposal, whose enter() cancels the terms dialog so the reopened dialog has both terms boxes unticked and &#39;Submit Proposal&#39; disabled; keep accepted terms ticked across the reopen, or enter values before opening the terms.</li><li>product-question R-1.24</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
