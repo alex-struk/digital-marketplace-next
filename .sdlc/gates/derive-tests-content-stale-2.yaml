@@ -1,0 +1,14 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the five rewritten content tests follow from their criteria and nothing else? Ruling: return. Four files hold up. R-7.12's seven addresses are the spec's own list of service-wide pages; R-7.22 now finishes publishing before reading the duplicate-address error, and using the seeded page's address is justified; R-7.25 really attempts removal and renaming and reads the page back; R-7.27 follows the two-administrator given, and its expected failure on the old application comes from the target's missing second sign-in, not from the test. The fixtures reset the target to its seed before every test, so the tests do not interfere with each other. R-7.9 goes past its criterion: to reach versionHistory it publishes a new page at the removed page's address and requires that page's body to appear. R-7.9 says the page and every version are removed permanently and that the address stops answering; nothing in the content domain says a freed address can be claimed again, so a target that keeps removed addresses reserved would satisfy R-7.9 and still fail this test. The step also proves little, because R-7.23 says nothing in the service shows an earlier version, so an empty history would come back whether or not old text survived. What would change the ruling: R-7.9 without the new-page step, with 'no version of its text survives anywhere' recorded in a comment as not asserted, and the rest of the file unchanged.
+conditions:
+  - "R-7.9: remove the step that publishes a new page at the freed address and reads its versionHistory; R-7.9 does not say a removed page's address may be reused, so requiring that to succeed asserts something the criterion does not state"
+  - "R-7.9: record in the file's comment that 'no version of its text survives anywhere in the service' is not asserted, because no reading shows a removed page's text and R-7.23 says nothing shows earlier versions"
+  - "R-7.12, R-7.22, R-7.25 and R-7.27 need no changes and should be carried forward as written"
+cost: 1.2306155
+turns: 21
+session: "fd7aa067-dc97-4a90-9e1c-fd16095a82b4"
+at: 2026-09-15T02:02:28.353Z
