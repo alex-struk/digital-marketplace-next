@@ -4,7 +4,7 @@
 
 | id | test | old |
 | --- | --- | --- |
-| R-5.1 | acceptance/evaluation/R-5.1.spec.ts | fail (ruled: test-wrong) |
+| R-5.1 | acceptance/evaluation/R-5.1.spec.ts | fail |
 | R-5.2 | — |  |
 | R-5.3 | acceptance/evaluation/R-5.3.spec.ts | unbound |
 | R-5.4 | — |  |
@@ -12,7 +12,7 @@
 | R-5.6 | — |  |
 | R-5.7 | — |  |
 | R-5.8 | — |  |
-| R-5.9 | acceptance/evaluation/R-5.9.spec.ts | fail (ruled: test-wrong) |
+| R-5.9 | acceptance/evaluation/R-5.9.spec.ts | fail |
 | R-5.10 | acceptance/evaluation/R-5.10.spec.ts | unbound |
 | R-5.11 | not testable: blocked: the criterion turns on a public sector employee with no connection to the opportunity being refused an individual evaluation, and no such person can be signed in as. The target mints sessions for two public sector accounts, and on the seeded closed opportunities one is the owner and an evaluator and the other is the chair, so every reader a test can be is one the criterion says may read. The refusal has no observation either: evaluation-individual-edit names evaluation_status, read_only_after_submitted and the two field errors, none of which tells a refusal from a form with nothing in it. Needs a sign-in for public-sector-staff-other, which personas.yaml records as unavailable, and a refusal observation on the individual evaluation surfaces. | not-testable |
 | R-5.12 | acceptance/evaluation/R-5.12.spec.ts | unbound |
@@ -20,14 +20,14 @@
 | R-5.14 | acceptance/evaluation/R-5.14.spec.ts | unbound |
 | R-5.15 | — |  |
 | R-5.16 | acceptance/evaluation/R-5.16.spec.ts | unbound |
-| R-5.17 | acceptance/evaluation/R-5.17.spec.ts | unbound |
-| R-5.18 | acceptance/evaluation/R-5.18.spec.ts | fail (ruled: adapter-wrong) |
-| R-5.19 | acceptance/evaluation/R-5.19.spec.ts | fail (ruled: test-wrong) |
+| R-5.17 | acceptance/evaluation/R-5.17.spec.ts | fail |
+| R-5.18 | acceptance/evaluation/R-5.18.spec.ts | fail |
+| R-5.19 | acceptance/evaluation/R-5.19.spec.ts | unbound |
 | R-5.20 | acceptance/evaluation/R-5.20.spec.ts | fail (ruled: defect-in-old) |
 | R-5.21 | not testable: blocked: the two people the criterion has refused cannot be reached, and the refusal cannot be read. The seeded panel's chair is also an evaluator and the opportunity's owner is also on the panel, because the target has two public sector sign-ins and consensus waits for every evaluator, so neither a chair who does not evaluate nor an owner off the panel can attempt to score. The individual create and edit surfaces carry no refusal observation — the proposal views have wrong_stage_error and the evaluation surfaces have nothing like it — so an attempt made at the wrong stage or by the wrong person could not be told from one that simply recorded nothing. Needs a panel whose chair is not an evaluator and a refusal observation on evaluation-individual-create. | not-testable |
-| R-5.22 | acceptance/evaluation/R-5.22.spec.ts | unbound (ruled: test-wrong) |
+| R-5.22 | acceptance/evaluation/R-5.22.spec.ts | unbound |
 | R-5.23 | not testable: blocked: the given is a draft evaluation holding a score above the question's maximum and an empty comment, and the surface cannot produce one. The browser form checks each field as it is typed, which is the criterion's own note, so a draft saved through save_draft is a draft that passed those checks. The file upload page shows the shape that would reach it — upload_file_stating_its_read_access and its malformed variants are actions written for requests no form would send — so this needs an action on evaluation-individual-create that saves a draft the form would refuse, and an observation that the draft was stored as entered. | not-testable |
-| R-5.24 | acceptance/evaluation/R-5.24.spec.ts | fail (ruled: test-wrong) |
+| R-5.24 | acceptance/evaluation/R-5.24.spec.ts | pass |
 | R-5.25 | acceptance/evaluation/R-5.25.spec.ts | fail (ruled: spec-wrong) |
 | R-5.26 | not testable: blocked: the request the criterion says is rejected cannot be made. The individual edit surfaces offer save_changes and save_and_go_to_next_proponent, and the only submission in the contract is submit_scores_for_consensus on the individual list, which is the whole set for the opportunity. Nothing submits one evaluation on its own, and no observation reports a request rejected as unrecognised. Needs an action on evaluation-individual-edit that submits that one evaluation, and an observation of the refusal. | not-testable |
 | R-5.27 | acceptance/evaluation/R-5.27.spec.ts | pass |
