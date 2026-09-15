@@ -222,6 +222,7 @@ An invitation may name the invited person as an ordinary member or as an owner, 
 The Edit and Archive controls on an organization's management page are offered only to a person permitted to use them — the organization's owner or a service administrator; an organization administrator who is not the owner sees the organization's profile as read-only, with no Edit and no Archive control, and the service continues to refuse a profile change or an archive request from anyone other than the owner or a service administrator.
 - state: accepted
 - replaces: R-3.4
+- note: calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it
 
 ### R-3.19 · v1 · confirmed · authored
 A change to an organization's contact phone number made while editing its profile is saved along with every other profile field, and clearing the field removes the stored number.

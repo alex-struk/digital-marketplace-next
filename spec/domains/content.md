@@ -264,6 +264,7 @@ A page must have a title of between one and a hundred characters and a body of b
 - when: they submit it with an empty title, or with a body longer than fifty thousand characters
 - then: nothing is saved and the failing field is marked with the reason
 - state: accepted
+- note: calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it
 
 ### R-7.21 · v1 · confirmed · recovered
 A page's address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused.

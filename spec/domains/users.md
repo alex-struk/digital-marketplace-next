@@ -269,6 +269,7 @@ A person's profile details - name, email address, job title and picture - may be
 The control to reactivate an account is offered only for an account that an administrator deactivated. An account its owner deactivated carries no reactivation control; the profile states instead that the person reactivates it themselves by signing in again, and the service continues to refuse a reactivation request made against such an account.
 - state: accepted
 - replaces: R-4.10
+- note: calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it
 
 ### R-4.20 · v1 · confirmed · authored
 A person whose account an administrator reactivates is told that an administrator has reactivated their Digital Marketplace account and whom to contact with questions; the message telling a person they reactivated the account themselves is sent only when they did so by signing in again.

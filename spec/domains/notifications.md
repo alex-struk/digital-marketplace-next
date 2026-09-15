@@ -237,6 +237,7 @@ A message that the notification preference does not govern must not offer to uns
 A deactivated account receives no notification of any kind, including notices about opportunities it was watching, while the watch itself is retained so that reactivating the account restores it.
 - state: accepted
 - replaces: R-6.11
+- note: calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it
 
 ### R-6.18 · v1 · confirmed · authored
 The message announcing changed terms names every program whose proposals require a current acceptance — Code With Us, Sprint With Us and Team With Us — or names none of them rather than a subset.

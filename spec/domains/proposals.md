@@ -18,8 +18,8 @@ Only a signed-in vendor who has accepted the service's terms at some point may s
 - state: accepted
 - note: a vendor who has never accepted the terms is refused as well, so accepting the terms is a precondition of bidding at all, not only of submitting.
 
-### R-2.2 · v1 · confirmed · recovered
-A vendor may hold at most one proposal per opportunity, and a second attempt is refused with a message saying they already have one.
+### R-2.2 · v2 · confirmed · recovered
+A vendor may hold at most one proposal per opportunity: a vendor who starts a second proposal against an opportunity they already have a proposal for is taken to the proposal they already hold instead of a new one, a request to create a second one is refused with a message saying they already have one, and no second proposal is created.
 - cites: src/back-end/lib/resources/proposal/code-with-us.ts:355
 - cites: src/back-end/lib/resources/proposal/sprint-with-us/index.ts:322
 - cites: src/migrations/tasks/20200210233100_unique_proposal_constraint.ts:9

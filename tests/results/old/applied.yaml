@@ -9,6 +9,7 @@ applied:
   - calibrate-old-4
   - calibrate-triage-old-6
   - calibrate-triage-old-7
+  - calibrate-old-5
 rulings:
   - id: R-7.18
     version: 1
@@ -493,3 +494,91 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-7
     adapter: ed42cbf0e737db554505a1acdd0c7f0fb171b139
+  - id: R-7.20
+    version: 1
+    verb: defect-in-old
+    gate: calibrate-old-5
+  - id: R-7.9
+    version: 1
+    verb: test-wrong
+    gate: calibrate-old-5
+  - id: R-7.12
+    version: 1
+    verb: test-wrong
+    gate: calibrate-old-5
+  - id: R-7.25
+    version: 1
+    verb: test-wrong
+    gate: calibrate-old-5
+  - id: R-7.27
+    version: 1
+    verb: test-wrong
+    gate: calibrate-old-5
+  - id: R-7.22
+    version: 1
+    verb: test-wrong
+    gate: calibrate-old-5
+  - id: R-5.22
+    version: 1
+    verb: test-wrong
+    gate: calibrate-old-5
+  - id: R-6.17
+    version: 1
+    verb: defect-in-old
+    gate: calibrate-old-5
+  - id: R-1.1
+    version: 2
+    verb: test-wrong
+    gate: calibrate-old-5
+  - id: R-1.24
+    version: 1
+    verb: test-wrong
+    gate: calibrate-old-5
+  - id: R-1.8
+    version: 1
+    verb: test-wrong
+    gate: calibrate-old-5
+  - id: R-1.53
+    version: 2
+    verb: test-wrong
+    gate: calibrate-old-5
+  - id: R-1.35
+    version: 1
+    verb: test-wrong
+    gate: calibrate-old-5
+  - id: R-3.18
+    version: 1
+    verb: defect-in-old
+    gate: calibrate-old-5
+  - id: R-3.27
+    version: 1
+    verb: test-wrong
+    gate: calibrate-old-5
+  - id: R-2.2
+    version: 2
+    verb: spec-wrong
+    gate: calibrate-old-5
+  - id: R-2.35
+    version: 1
+    verb: test-wrong
+    gate: calibrate-old-5
+  - id: R-4.19
+    version: 1
+    verb: defect-in-old
+    gate: calibrate-old-5
+  - id: R-4.5
+    version: 1
+    verb: test-wrong
+    gate: calibrate-old-5
+  - id: R-4.9
+    version: 1
+    verb: test-wrong
+    gate: calibrate-old-5
+  - id: R-4.12
+    version: 1
+    verb: test-wrong
+    gate: calibrate-old-5
+  - id: R-4.27
+    version: 2
+    verb: test-wrong
+    gate: calibrate-old-5

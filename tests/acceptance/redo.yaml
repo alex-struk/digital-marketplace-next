@@ -95,3 +95,110 @@ redo:
       criterion never says; establish that no kind and no field are chosen
       before checking that export is unavailable, then check it becomes
       available only once at least one kind and one field are chosen
+  - id: R-7.9
+    version: 1
+    why: the test reads being told the page was removed only from the page's main
+      content and at once; the notice may appear anywhere on the screen, so
+      allow time and read it wherever the screen shows it
+  - id: R-7.12
+    version: 1
+    why: the test reads a page the criterion promises on a freshly prepared
+      installation without establishing that the target it runs against is one;
+      the target held none of the pages the service needs, so the absence says
+      nothing about the criterion; establish that the installation carries its
+      needed pages before reading the title and body of one
+  - id: R-7.25
+    version: 1
+    why: the test opens a page the service needs without establishing that the
+      target carries it, and it did not; establish that the page exists before
+      looking for the warning and the ways to change it, and check that removal
+      is genuinely not offered rather than accepting any reading
+  - id: R-7.27
+    version: 1
+    why: the test opens a page the service created for itself without establishing
+      that the target carries it, and it did not; establish that the page exists
+      before reading who published it and who last changed it
+  - id: R-7.22
+    version: 1
+    why: neither half completes the publish it starts, so nothing is ever sent to be
+      refused; complete the publication as an administrator would, then read
+      whether the address is reported as already in use
+  - id: R-5.22
+    version: 1
+    why: the test reads the rejection the instant the entry is made, without
+      allowing time for it to appear, and it leaves the comment empty by
+      entering nothing into a comment that was already empty, so nothing about
+      the comment changed; allow time for the mark, and enter a comment before
+      clearing it
+  - id: R-1.1
+    version: 2
+    why: the test reads the opportunity and its proposals immediately after the
+      request that sets closure off, without allowing the closure to complete;
+      allow time for each opportunity and its submitted proposals to reach their
+      new state, reading each as a person entitled to see it, before concluding
+  - id: R-1.24
+    version: 1
+    why: the test reads the proponent names immediately after the request that sets
+      closure off, without allowing the closure to complete; allow time for the
+      opportunity to reach evaluation before reading the names
+  - id: R-1.8
+    version: 1
+    why: the test assumes a Team With Us opportunity can be saved as a draft holding
+      only a title and a budget, which R-1.8 never says, and the refusal it met
+      concerned the draft's content, not its program; save a draft the service
+      accepts before reading which program it is filed under
+  - id: R-1.53
+    version: 2
+    why: the test assumes a Team With Us opportunity can be saved as a draft holding
+      only a title, which the criterion never says, so setup failed before any
+      deletion was asked for; save a draft the service accepts before deleting
+      it
+  - id: R-1.35
+    version: 1
+    why: the test expects the author's notice to arrive addressed to the author by
+      name, but the criterion names the author with the watchers and proponents
+      as those told and never says the author is addressed individually, so the
+      author's notice is as unobservable to the mail fixture as the watchers'
+      notices the test already leaves unasserted; observe the author's notice in
+      a way that does not depend on visible addressing, or record it as not
+      observable
+  - id: R-3.27
+    version: 1
+    why: the second attempt relies on another test having accepted the terms first,
+      so it ran against terms nobody had yet accepted; accept the terms within
+      the same test before trying again, and treat an organization whose terms
+      can no longer be accepted, or whose second acceptance is turned away, as
+      refused, with the date of the first acceptance unchanged
+  - id: R-2.35
+    version: 1
+    why: the test reads the history as the vendor, whom the criterion never names as
+      entitled to see it; read the history as someone entitled to see it, such
+      as an administrator
+  - id: R-4.5
+    version: 1
+    why: the return the criterion describes is signing in again, but the test's
+      second sign-in admits the person without going through the ordinary
+      sign-in a person makes, so it cannot show what signing in again does; sign
+      the person in again the ordinary way before reading their status and their
+      mail
+  - id: R-4.9
+    version: 1
+    why: the test reads 'marked as deactivated by the person themselves' from
+      whether an administrator is offered a reactivation control, which is what
+      R-4.19 governs and R-4.9 never mentions; read the marking only from what
+      R-4.9 itself describes, or leave it unasserted where nothing shows it
+  - id: R-4.12
+    version: 1
+    why: the test takes the account-type label as the sign of administrator rights,
+      which the criterion never says changes; read whether the person holds
+      administrator rights; on a vendor's profile it demands a message on the
+      page, where the criterion is met when no way to grant the rights is
+      offered and the account is unchanged; and it requires an ordinary
+      employee's own profile to show a statement of permissions, which the
+      criterion never states
+  - id: R-4.27
+    version: 2
+    why: the test reads the invalid field's mark the instant the value is entered,
+      without allowing time for it to appear; allow time for the mark, treat a
+      save that is withheld as the refusal, and check the stored profile is
+      unchanged

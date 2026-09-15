@@ -1,5 +1,5 @@
 {
-  "generated_from": "1c3743e9fb53c29de89a28045222abab29c5e27e",
+  "generated_from": "08d8aac0ee7ec7fcee1a309ef183dcb17e38221b",
   "criteria": [
     {
       "id": "R-7.1",
@@ -666,7 +666,9 @@
       "given": "an administrator creating or changing a page",
       "when": "they submit it with an empty title, or with a body longer than fifty thousand characters",
       "then": "nothing is saved and the failing field is marked with the reason",
-      "notes": [],
+      "notes": [
+        "calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it"
+      ],
       "state": "accepted",
       "raw": "### R-7.20 · v1 · confirmed · recovered",
       "line": 257,
@@ -698,7 +700,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.21 · v1 · confirmed · recovered",
-      "line": 268,
+      "line": 269,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -725,7 +727,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-7.22 · v1 · confirmed · recovered",
-      "line": 279,
+      "line": 280,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -754,7 +756,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.23 · v1 · confirmed · recovered",
-      "line": 289,
+      "line": 290,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -783,7 +785,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.24 · v1 · confirmed · recovered",
-      "line": 300,
+      "line": 301,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -820,7 +822,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.25 · v1 · confirmed · recovered",
-      "line": 311,
+      "line": 312,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -854,7 +856,7 @@
       ],
       "state": "obsolete",
       "raw": "### D-content-26 · v1 · inferred · recovered",
-      "line": 324,
+      "line": 325,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -887,7 +889,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.26 · v1 · confirmed · recovered",
-      "line": 337,
+      "line": 338,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -925,7 +927,7 @@
       ],
       "state": "obsolete",
       "raw": "### D-content-27 · v1 · inferred · recovered",
-      "line": 349,
+      "line": 350,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -966,7 +968,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.27 · v1 · confirmed · recovered",
-      "line": 363,
+      "line": 364,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -1000,7 +1002,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.28 · v2 · confirmed · recovered",
-      "line": 377,
+      "line": 378,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -1033,7 +1035,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.29 · v1 · confirmed · recovered",
-      "line": 390,
+      "line": 391,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -3849,7 +3851,9 @@
       "origin": "authored",
       "statement": "A deactivated account receives no notification of any kind, including notices about opportunities it was watching, while the watch itself is retained so that reactivating the account restores it.",
       "cites": [],
-      "notes": [],
+      "notes": [
+        "calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it"
+      ],
       "state": "accepted",
       "replaces": "R-6.11",
       "raw": "### R-6.17 · v1 · confirmed · authored",
@@ -3868,7 +3872,7 @@
       "state": "accepted",
       "replaces": "R-6.12",
       "raw": "### R-6.18 · v1 · confirmed · authored",
-      "line": 241,
+      "line": 242,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3885,7 +3889,7 @@
       "state": "accepted",
       "replaces": "R-6.14",
       "raw": "### R-6.19 · v1 · confirmed · authored",
-      "line": 246,
+      "line": 247,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3918,7 +3922,7 @@
       ],
       "state": "accepted",
       "raw": "### R-6.20 · v1 · confirmed · recovered",
-      "line": 252,
+      "line": 253,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3956,7 +3960,7 @@
       ],
       "state": "accepted",
       "raw": "### R-6.21 · v1 · confirmed · recovered",
-      "line": 264,
+      "line": 265,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3983,7 +3987,7 @@
       "state": "accepted",
       "supersededBy": "R-6.27",
       "raw": "### R-6.22 · v1 · confirmed · recovered",
-      "line": 278,
+      "line": 279,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -4032,7 +4036,7 @@
       ],
       "state": "accepted",
       "raw": "### R-6.23 · v1 · confirmed · recovered",
-      "line": 290,
+      "line": 291,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -4065,7 +4069,7 @@
       ],
       "state": "accepted",
       "raw": "### R-6.24 · v1 · confirmed · recovered",
-      "line": 306,
+      "line": 307,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -4106,7 +4110,7 @@
       ],
       "state": "accepted",
       "raw": "### R-6.25 · v2 · confirmed · recovered",
-      "line": 318,
+      "line": 319,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -4146,7 +4150,7 @@
       "state": "accepted",
       "supersededBy": "R-6.28",
       "raw": "### R-6.26 · v2 · confirmed · recovered",
-      "line": 332,
+      "line": 333,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -4163,7 +4167,7 @@
       "state": "accepted",
       "replaces": "R-6.22",
       "raw": "### R-6.27 · v1 · confirmed · authored",
-      "line": 348,
+      "line": 349,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -4178,7 +4182,7 @@
       "state": "accepted",
       "replaces": "R-6.26",
       "raw": "### R-6.28 · v1 · confirmed · authored",
-      "line": 354,
+      "line": 355,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -6491,7 +6495,9 @@
       "origin": "authored",
       "statement": "The Edit and Archive controls on an organization's management page are offered only to a person permitted to use them — the organization's owner or a service administrator; an organization administrator who is not the owner sees the organization's profile as read-only, with no Edit and no Archive control, and the service continues to refuse a profile change or an archive request from anyone other than the owner or a service administrator.",
       "cites": [],
-      "notes": [],
+      "notes": [
+        "calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it"
+      ],
       "state": "accepted",
       "replaces": "R-3.4",
       "raw": "### R-3.18 · v1 · confirmed · authored",
@@ -6510,7 +6516,7 @@
       "state": "accepted",
       "replaces": "R-3.5",
       "raw": "### R-3.19 · v1 · confirmed · authored",
-      "line": 226,
+      "line": 227,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6525,7 +6531,7 @@
       "state": "accepted",
       "replaces": "R-3.16",
       "raw": "### R-3.20 · v1 · confirmed · authored",
-      "line": 231,
+      "line": 232,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6562,7 +6568,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.21 · v2 · confirmed · recovered",
-      "line": 236,
+      "line": 237,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6611,7 +6617,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.22 · v2 · confirmed · recovered",
-      "line": 249,
+      "line": 250,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6642,7 +6648,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.23 · v1 · confirmed · recovered",
-      "line": 265,
+      "line": 266,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6673,7 +6679,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.24 · v1 · confirmed · recovered",
-      "line": 276,
+      "line": 277,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6710,7 +6716,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.25 · v1 · confirmed · recovered",
-      "line": 287,
+      "line": 288,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6746,7 +6752,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.26 · v1 · confirmed · recovered",
-      "line": 300,
+      "line": 301,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6787,7 +6793,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.27 · v1 · confirmed · recovered",
-      "line": 313,
+      "line": 314,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6818,7 +6824,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.28 · v1 · confirmed · recovered",
-      "line": 327,
+      "line": 328,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6856,7 +6862,7 @@
       "state": "accepted",
       "supersededBy": "R-3.35",
       "raw": "### R-3.29 · v1 · confirmed · recovered",
-      "line": 338,
+      "line": 339,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6883,7 +6889,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.30 · v1 · confirmed · recovered",
-      "line": 352,
+      "line": 353,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6918,7 +6924,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.31 · v1 · confirmed · recovered",
-      "line": 362,
+      "line": 363,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6955,7 +6961,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.32 · v1 · confirmed · recovered",
-      "line": 374,
+      "line": 375,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6998,7 +7004,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.33 · v1 · confirmed · recovered",
-      "line": 387,
+      "line": 388,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -7025,7 +7031,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.34 · v1 · confirmed · recovered",
-      "line": 401,
+      "line": 402,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -7040,7 +7046,7 @@
       "state": "accepted",
       "replaces": "R-3.29",
       "raw": "### R-3.35 · v1 · confirmed · authored",
-      "line": 411,
+      "line": 412,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -7087,10 +7093,10 @@
     },
     {
       "id": "R-2.2",
-      "version": 1,
+      "version": 2,
       "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "A vendor may hold at most one proposal per opportunity, and a second attempt is refused with a message saying they already have one.",
+      "statement": "A vendor may hold at most one proposal per opportunity: a vendor who starts a second proposal against an opportunity they already have a proposal for is taken to the proposal they already hold instead of a new one, a request to create a second one is refused with a message saying they already have one, and no second proposal is created.",
       "cites": [
         {
           "path": "src/back-end/lib/resources/proposal/code-with-us.ts",
@@ -7115,7 +7121,7 @@
       "then": "the request is refused with \"You already have a proposal for this opportunity.\" and no second proposal is created",
       "notes": [],
       "state": "accepted",
-      "raw": "### R-2.2 · v1 · confirmed · recovered",
+      "raw": "### R-2.2 · v2 · confirmed · recovered",
       "line": 21,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
@@ -9212,7 +9218,9 @@
       "origin": "authored",
       "statement": "The control to reactivate an account is offered only for an account that an administrator deactivated. An account its owner deactivated carries no reactivation control; the profile states instead that the person reactivates it themselves by signing in again, and the service continues to refuse a reactivation request made against such an account.",
       "cites": [],
-      "notes": [],
+      "notes": [
+        "calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it"
+      ],
       "state": "accepted",
       "replaces": "R-4.10",
       "raw": "### R-4.19 · v1 · confirmed · authored",
@@ -9231,7 +9239,7 @@
       "state": "accepted",
       "replaces": "R-4.11",
       "raw": "### R-4.20 · v1 · confirmed · authored",
-      "line": 273,
+      "line": 274,
       "domain": "users",
       "file": "spec/domains/users.md"
     },
@@ -9246,7 +9254,7 @@
       "state": "accepted",
       "replaces": "R-4.15",
       "raw": "### R-4.21 · v1 · confirmed · authored",
-      "line": 278,
+      "line": 279,
       "domain": "users",
       "file": "spec/domains/users.md"
     },
@@ -9275,7 +9283,7 @@
       ],
       "state": "accepted",
       "raw": "### R-4.22 · v1 · confirmed · recovered",
-      "line": 283,
+      "line": 284,
       "domain": "users",
       "file": "spec/domains/users.md"
     },
@@ -9305,7 +9313,7 @@
       ],
       "state": "accepted",
       "raw": "### R-4.23 · v2 · confirmed · recovered",
-      "line": 294,
+      "line": 295,
       "domain": "users",
       "file": "spec/domains/users.md"
     },
@@ -9342,7 +9350,7 @@
       ],
       "state": "accepted",
       "raw": "### R-4.24 · v1 · confirmed · recovered",
-      "line": 306,
+      "line": 307,
       "domain": "users",
       "file": "spec/domains/users.md"
     },
@@ -9383,7 +9391,7 @@
       ],
       "state": "accepted",
       "raw": "### R-4.25 · v1 · confirmed · recovered",
-      "line": 319,
+      "line": 320,
       "domain": "users",
       "file": "spec/domains/users.md"
     },
@@ -9412,7 +9420,7 @@
       ],
       "state": "accepted",
       "raw": "### R-4.26 · v1 · confirmed · recovered",
-      "line": 333,
+      "line": 334,
       "domain": "users",
       "file": "spec/domains/users.md"
     },
@@ -9462,7 +9470,7 @@
       ],
       "state": "accepted",
       "raw": "### R-4.27 · v2 · confirmed · recovered",
-      "line": 344,
+      "line": 345,
       "domain": "users",
       "file": "spec/domains/users.md"
     },
@@ -9491,7 +9499,7 @@
       ],
       "state": "accepted",
       "raw": "### R-4.28 · v1 · confirmed · recovered",
-      "line": 361,
+      "line": 362,
       "domain": "users",
       "file": "spec/domains/users.md"
     },
@@ -9530,7 +9538,7 @@
       ],
       "state": "obsolete",
       "raw": "### D-users-29 · v1 · inferred · recovered",
-      "line": 372,
+      "line": 373,
       "domain": "users",
       "file": "spec/domains/users.md"
     },
@@ -9575,7 +9583,7 @@
       ],
       "state": "accepted",
       "raw": "### R-4.29 · v1 · confirmed · recovered",
-      "line": 387,
+      "line": 388,
       "domain": "users",
       "file": "spec/domains/users.md"
     },
@@ -9610,7 +9618,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-4.30 · v1 · confirmed · recovered",
-      "line": 402,
+      "line": 403,
       "domain": "users",
       "file": "spec/domains/users.md"
     },
@@ -9639,7 +9647,7 @@
       ],
       "state": "accepted",
       "raw": "### R-4.31 · v2 · confirmed · recovered",
-      "line": 414,
+      "line": 415,
       "domain": "users",
       "file": "spec/domains/users.md"
     },
@@ -9673,7 +9681,7 @@
       ],
       "state": "obsolete",
       "raw": "### D-users-32 · v1 · open · recovered",
-      "line": 425,
+      "line": 426,
       "domain": "users",
       "file": "spec/domains/users.md"
     },
@@ -9723,7 +9731,7 @@
       ],
       "state": "accepted",
       "raw": "### R-4.32 · v1 · confirmed · recovered",
-      "line": 438,
+      "line": 439,
       "domain": "users",
       "file": "spec/domains/users.md"
     },
@@ -9760,7 +9768,7 @@
       ],
       "state": "accepted",
       "raw": "### R-4.33 · v1 · confirmed · recovered",
-      "line": 455,
+      "line": 456,
       "domain": "users",
       "file": "spec/domains/users.md"
     },
@@ -9793,7 +9801,7 @@
       ],
       "state": "accepted",
       "raw": "### R-4.34 · v1 · confirmed · recovered",
-      "line": 468,
+      "line": 469,
       "domain": "users",
       "file": "spec/domains/users.md"
     }
