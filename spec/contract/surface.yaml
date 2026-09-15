@@ -710,23 +710,23 @@ pages:
     route: /sign-in
     title: "Sign In"
     actions:
-      sign_in_as_vendor: { test_id: null }
-      sign_in_as_public_sector_employee: { test_id: null }
-      go_to_sign_up: { test_id: null }
+      sign_in_as_vendor: { test_id: sign-in-vendor-button }
+      sign_in_as_public_sector_employee: { test_id: sign-in-public-sector-button }
+      go_to_sign_up: { test_id: sign-in-go-to-sign-up }
     observations:
-      vendor_card: { test_id: null }
-      public_sector_card: { test_id: null }
+      vendor_card: { test_id: sign-in-vendor-card }
+      public_sector_card: { test_id: sign-in-public-sector-card }
 
   - id: user-sign-up-choose-account
     domain: users
     route: /sign-up
     title: "Choose Account Type"
     actions:
-      sign_up_as_vendor: { test_id: null }
-      sign_up_as_public_sector_employee: { test_id: null }
+      sign_up_as_vendor: { test_id: sign-up-vendor-button }
+      sign_up_as_public_sector_employee: { test_id: sign-up-public-sector-button }
     observations:
-      vendor_card: { test_id: null }
-      public_sector_card: { test_id: null }
+      vendor_card: { test_id: sign-up-vendor-card }
+      public_sector_card: { test_id: sign-up-public-sector-card }
 
   # The profile a person finishes the first time they sign in. On the oracle every
   # account a sign-in route mints already has a finished profile, so this screen sends
@@ -738,18 +738,18 @@ pages:
     route: /sign-up/complete
     title: "Complete Your Profile"
     actions:
-      change_avatar: { test_id: null }
-      accept_app_terms: { test_id: null }
-      toggle_new_opportunity_notifications: { test_id: null }
-      complete_profile: { test_id: null }
+      change_avatar: { test_id: change-avatar }
+      accept_app_terms: { test_id: sign-up-terms-checkbox }
+      toggle_new_opportunity_notifications: { test_id: sign-up-notifications-checkbox }
+      complete_profile: { test_id: sign-up-complete-button }
     observations:
-      idp_username_readonly: { test_id: null }
-      name_field: { test_id: null }
-      email_field: { test_id: null }
-      job_title_field: { test_id: null }
-      terms_checkbox: { test_id: null }
-      complete_disabled_until_terms_accepted: { test_id: null }
-      field_error: { test_id: null }
+      idp_username_readonly: { test_id: idp-username-field }
+      name_field: { test_id: name-field }
+      email_field: { test_id: email-field }
+      job_title_field: { test_id: job-title-field }
+      terms_checkbox: { test_id: sign-up-terms-checkbox }
+      complete_disabled_until_terms_accepted: { test_id: sign-up-complete-button }
+      field_error: { test_id: field-error }
 
   - id: user-sign-out
     domain: users
@@ -757,8 +757,8 @@ pages:
     title: "Signed Out"
     actions: {}
     observations:
-      signed_out_message: { test_id: null }
-      sign_out_failed_message: { test_id: null }
+      signed_out_message: { test_id: sign-out-success }
+      sign_out_failed_message: { test_id: sign-out-failed }
 
   # The notice screen holds a fixed pair of notices rather than a record: :noticeId is
   # either "deactivatedOwnAccount" or "authFailure", and any other value is answered as
@@ -769,104 +769,104 @@ pages:
     route: /notice/:noticeId
     title: "Notice"
     actions:
-      back_to_home: { test_id: null }
+      back_to_home: { test_id: notice-back-to-home }
     observations:
-      deactivated_own_account_notice: { test_id: null }
-      sign_in_failed_notice: { test_id: null }
+      deactivated_own_account_notice: { test_id: notice-deactivated-own-account }
+      sign_in_failed_notice: { test_id: notice-sign-in-failed }
 
   - id: user-list
     domain: users
     route: /users
     title: "Digital Marketplace Users"
     actions:
-      search_by_name: { test_id: null }
-      open_export_contact_list: { test_id: null }
-      toggle_export_user_type: { test_id: null }
-      toggle_export_field: { test_id: null }
-      export_contact_list: { test_id: null }
-      cancel_export: { test_id: null }
-      open_user_profile: { test_id: null }
+      search_by_name: { test_id: user-list-search }
+      open_export_contact_list: { test_id: contact-list-open-export }
+      toggle_export_user_type: { test_id: contact-list-user-type }
+      toggle_export_field: { test_id: contact-list-field }
+      export_contact_list: { test_id: contact-list-export-button }
+      cancel_export: { test_id: contact-list-cancel-button }
+      open_user_profile: { test_id: user-list-profile-link }
     observations:
-      user_row: { test_id: null }
-      status_badge: { test_id: null }
-      account_type: { test_id: null }
-      admin_check: { test_id: null }
-      export_modal: { test_id: null }
-      export_disabled_until_selection: { test_id: null }
+      user_row: { test_id: user-list-row }
+      status_badge: { test_id: user-list-status-badge }
+      account_type: { test_id: user-list-account-type }
+      admin_check: { test_id: user-list-admin-check }
+      export_modal: { test_id: contact-list-modal }
+      export_disabled_until_selection: { test_id: contact-list-export-button }
 
   - id: user-profile
     domain: users
     route: /users/:userId
     title: "User Profile"
     actions:
-      edit_profile: { test_id: null }
-      save_changes: { test_id: null }
-      cancel_editing: { test_id: null }
-      change_avatar: { test_id: null }
-      toggle_admin_permission: { test_id: null }
-      deactivate_account: { test_id: null }
-      reactivate_account: { test_id: null }
-      confirm_activation_change: { test_id: null }
-      cancel_activation_change: { test_id: null }
+      edit_profile: { test_id: profile-edit-button }
+      save_changes: { test_id: profile-save-button }
+      cancel_editing: { test_id: profile-cancel-button }
+      change_avatar: { test_id: change-avatar }
+      toggle_admin_permission: { test_id: profile-admin-checkbox }
+      deactivate_account: { test_id: profile-deactivate-button }
+      reactivate_account: { test_id: profile-reactivate-button }
+      confirm_activation_change: { test_id: activation-confirm-button }
+      cancel_activation_change: { test_id: activation-cancel-button }
     observations:
-      user_identifier: { test_id: null }
-      profile_tab: { test_id: null }
-      capabilities_tab: { test_id: null }
-      notifications_tab: { test_id: null }
-      legal_tab: { test_id: null }
-      organizations_tab: { test_id: null }
-      status_badge: { test_id: null }
-      account_type: { test_id: null }
-      permissions_label: { test_id: null }
-      admin_checkbox: { test_id: null }
-      idp_username_readonly: { test_id: null }
-      name_field: { test_id: null }
-      email_field: { test_id: null }
-      job_title_field: { test_id: null }
-      field_error: { test_id: null }
-      activation_modal: { test_id: null }
-      not_found_page: { test_id: null }
+      user_identifier: { test_id: profile-user-identifier }
+      profile_tab: { test_id: profile-tab-profile }
+      capabilities_tab: { test_id: profile-tab-capabilities }
+      notifications_tab: { test_id: profile-tab-notifications }
+      legal_tab: { test_id: profile-tab-legal }
+      organizations_tab: { test_id: profile-tab-organizations }
+      status_badge: { test_id: profile-status-badge }
+      account_type: { test_id: profile-account-type }
+      permissions_label: { test_id: profile-permissions-label }
+      admin_checkbox: { test_id: profile-admin-checkbox }
+      idp_username_readonly: { test_id: idp-username-field }
+      name_field: { test_id: name-field }
+      email_field: { test_id: email-field }
+      job_title_field: { test_id: job-title-field }
+      field_error: { test_id: field-error }
+      activation_modal: { test_id: activation-modal }
+      not_found_page: { test_id: not-found-page }
 
   - id: user-profile-capabilities
     domain: users
     route: /users/:userId?tab=capabilities
     title: "Capabilities"
     actions:
-      toggle_capability: { test_id: null }
-      expand_capability_description: { test_id: null }
+      toggle_capability: { test_id: capability-checkbox }
+      expand_capability_description: { test_id: capability-description-toggle }
     observations:
-      capability_row: { test_id: null }
-      capability_checked: { test_id: null }
-      capability_description: { test_id: null }
+      capability_row: { test_id: capability-row }
+      capability_checked: { test_id: capability-checkbox }
+      capability_description: { test_id: capability-description }
 
   - id: user-profile-notifications
     domain: users
     route: /users/:userId?tab=notifications
     title: "Notifications"
     actions:
-      toggle_new_opportunity_notifications: { test_id: null }
-      confirm_unsubscribe: { test_id: null }
-      cancel_unsubscribe: { test_id: null }
+      toggle_new_opportunity_notifications: { test_id: notifications-new-opportunities-checkbox }
+      confirm_unsubscribe: { test_id: unsubscribe-confirm-button }
+      cancel_unsubscribe: { test_id: unsubscribe-cancel-button }
     observations:
-      new_opportunities_checkbox: { test_id: null }
-      notification_email_address: { test_id: null }
-      unsubscribe_modal: { test_id: null }
+      new_opportunities_checkbox: { test_id: notifications-new-opportunities-checkbox }
+      notification_email_address: { test_id: notifications-email-address }
+      unsubscribe_modal: { test_id: unsubscribe-modal }
 
   - id: user-profile-legal
     domain: users
     route: /users/:userId?tab=legal
     title: "Policies, Terms & Agreements"
     actions:
-      open_app_terms: { test_id: null }
-      accept_updated_terms: { test_id: null }
-      confirm_accept_updated_terms: { test_id: null }
+      open_app_terms: { test_id: legal-app-terms-link }
+      accept_updated_terms: { test_id: legal-accept-updated-terms-button }
+      confirm_accept_updated_terms: { test_id: legal-accept-terms-confirm-button }
     observations:
-      privacy_policy: { test_id: null }
-      app_terms_link: { test_id: null }
-      accepted_on_notice: { test_id: null }
-      terms_updated_warning: { test_id: null }
-      program_terms_links: { test_id: null }
-      accept_updated_terms_modal: { test_id: null }
+      privacy_policy: { test_id: legal-privacy-policy }
+      app_terms_link: { test_id: legal-app-terms-link }
+      accepted_on_notice: { test_id: legal-accepted-on }
+      terms_updated_warning: { test_id: legal-terms-updated-warning }
+      program_terms_links: { test_id: legal-program-terms-link }
+      accept_updated_terms_modal: { test_id: legal-accept-terms-modal }
 
   # The same five screens as the four entries above and organization-user-memberships,
   # reached as the signed-in person's own rather than as a named account. The application
@@ -879,70 +879,70 @@ pages:
     route: /users/me
     title: "User Profile"
     actions:
-      edit_profile: { test_id: null }
-      save_changes: { test_id: null }
-      cancel_editing: { test_id: null }
-      change_avatar: { test_id: null }
-      deactivate_account: { test_id: null }
-      confirm_activation_change: { test_id: null }
-      cancel_activation_change: { test_id: null }
+      edit_profile: { test_id: profile-edit-button }
+      save_changes: { test_id: profile-save-button }
+      cancel_editing: { test_id: profile-cancel-button }
+      change_avatar: { test_id: change-avatar }
+      deactivate_account: { test_id: profile-deactivate-button }
+      confirm_activation_change: { test_id: activation-confirm-button }
+      cancel_activation_change: { test_id: activation-cancel-button }
     observations:
-      user_identifier: { test_id: null }
-      profile_tab: { test_id: null }
-      capabilities_tab: { test_id: null }
-      notifications_tab: { test_id: null }
-      legal_tab: { test_id: null }
-      organizations_tab: { test_id: null }
-      status_badge: { test_id: null }
-      account_type: { test_id: null }
-      idp_username_readonly: { test_id: null }
-      name_field: { test_id: null }
-      email_field: { test_id: null }
-      job_title_field: { test_id: null }
-      field_error: { test_id: null }
-      activation_modal: { test_id: null }
-      sign_in_required: { test_id: null }
+      user_identifier: { test_id: profile-user-identifier }
+      profile_tab: { test_id: profile-tab-profile }
+      capabilities_tab: { test_id: profile-tab-capabilities }
+      notifications_tab: { test_id: profile-tab-notifications }
+      legal_tab: { test_id: profile-tab-legal }
+      organizations_tab: { test_id: profile-tab-organizations }
+      status_badge: { test_id: profile-status-badge }
+      account_type: { test_id: profile-account-type }
+      idp_username_readonly: { test_id: idp-username-field }
+      name_field: { test_id: name-field }
+      email_field: { test_id: email-field }
+      job_title_field: { test_id: job-title-field }
+      field_error: { test_id: field-error }
+      activation_modal: { test_id: activation-modal }
+      sign_in_required: { test_id: sign-in-required }
 
   - id: user-profile-self-capabilities
     domain: users
     route: /users/me?tab=capabilities
     title: "Capabilities"
     actions:
-      toggle_capability: { test_id: null }
-      expand_capability_description: { test_id: null }
+      toggle_capability: { test_id: capability-checkbox }
+      expand_capability_description: { test_id: capability-description-toggle }
     observations:
-      capability_row: { test_id: null }
-      capability_checked: { test_id: null }
-      capability_description: { test_id: null }
+      capability_row: { test_id: capability-row }
+      capability_checked: { test_id: capability-checkbox }
+      capability_description: { test_id: capability-description }
 
   - id: user-profile-self-notifications
     domain: users
     route: /users/me?tab=notifications
     title: "Notifications"
     actions:
-      toggle_new_opportunity_notifications: { test_id: null }
-      confirm_unsubscribe: { test_id: null }
-      cancel_unsubscribe: { test_id: null }
+      toggle_new_opportunity_notifications: { test_id: notifications-new-opportunities-checkbox }
+      confirm_unsubscribe: { test_id: unsubscribe-confirm-button }
+      cancel_unsubscribe: { test_id: unsubscribe-cancel-button }
     observations:
-      new_opportunities_checkbox: { test_id: null }
-      notification_email_address: { test_id: null }
-      unsubscribe_modal: { test_id: null }
+      new_opportunities_checkbox: { test_id: notifications-new-opportunities-checkbox }
+      notification_email_address: { test_id: notifications-email-address }
+      unsubscribe_modal: { test_id: unsubscribe-modal }
 
   - id: user-profile-self-legal
     domain: users
     route: /users/me?tab=legal
     title: "Policies, Terms & Agreements"
     actions:
-      open_app_terms: { test_id: null }
-      accept_updated_terms: { test_id: null }
-      confirm_accept_updated_terms: { test_id: null }
+      open_app_terms: { test_id: legal-app-terms-link }
+      accept_updated_terms: { test_id: legal-accept-updated-terms-button }
+      confirm_accept_updated_terms: { test_id: legal-accept-terms-confirm-button }
     observations:
-      privacy_policy: { test_id: null }
-      app_terms_link: { test_id: null }
-      accepted_on_notice: { test_id: null }
-      terms_updated_warning: { test_id: null }
-      program_terms_links: { test_id: null }
-      accept_updated_terms_modal: { test_id: null }
+      privacy_policy: { test_id: legal-privacy-policy }
+      app_terms_link: { test_id: legal-app-terms-link }
+      accepted_on_notice: { test_id: legal-accepted-on }
+      terms_updated_warning: { test_id: legal-terms-updated-warning }
+      program_terms_links: { test_id: legal-program-terms-link }
+      accept_updated_terms_modal: { test_id: legal-accept-terms-modal }
 
   - id: organization-user-memberships-self
     domain: organizations

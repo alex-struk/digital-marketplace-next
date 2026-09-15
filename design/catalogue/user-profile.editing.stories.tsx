@@ -49,6 +49,11 @@ export const Editing: StoryObj = {
           <Button variant="secondary" data-testid="profile-cancel-button">Cancel</Button>
         </ButtonGroup>
       </Form>
+      {/* Editing replaces only the details; an ordinary public sector employee's permissions stay a read-only label (R-4.12). */}
+      <section aria-labelledby="permissions-heading" style={stack}>
+        <Heading level={2} id="permissions-heading">Permissions</Heading>
+        <Text elementType="p" data-testid="profile-permissions-label">You do not have administrator permissions.</Text>
+      </section>
     </div>
   ),
 };
