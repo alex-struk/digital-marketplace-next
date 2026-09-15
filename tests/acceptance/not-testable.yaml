@@ -652,3 +652,20 @@ criteria:
       is a field-level message identifying a member who is neither an evaluator
       nor the chair. Needs an add_panel_member that can withhold a role, and an
       observation of that refusal."
+  - id: R-3.28
+    version: 1
+    reason: "blocked: the when ticks a third service area beside the two the
+      organization is already approved for, and nothing a test may refer to
+      names a third. The seed carries exactly two service areas —
+      FULL_STACK_DEVELOPER and AGILE_COACH on seed.organizations.qualified, and
+      FULL_STACK_DEVELOPER alone everywhere else — the contract names none, and
+      organization-edit.service_area_checkbox is not described as listing the
+      areas the editing control offers, so the third area would have to be
+      invented. A test built on the two known areas alone cannot tell a save
+      that replaces the approvals from one that merely adds to them, which is
+      the claim itself. Unblocked by a seed handle carrying a third service area
+      (an organization, or a resource of an opportunity, approved for one), or
+      an observation on organization-edit of the service areas offered for
+      selection. The other half, that the organization's owner is offered no
+      editing control, also needs an observation of that control being offered,
+      such as organization-edit.service_areas_editable."

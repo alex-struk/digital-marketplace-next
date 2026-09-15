@@ -7,32 +7,6 @@ redo:
       vendor polled is active at the moment of the broadcast, keep the vendor
       holding no email address among the recipients, and report every
       addressable vendor not reached rather than stopping at the first
-  - id: R-3.12
-    version: 1
-    why: the test demands a message, but the criterion says only that changing one's
-      own rights and changing the owner's are refused; treat a choice that is
-      shown but cannot be changed as the refusal, and confirm afterwards that
-      both people's rights are unchanged
-  - id: R-3.3
-    version: 1
-    why: the test requires a statement of permissions to be shown for a member of
-      public sector staff who holds no administrator rights, and such a person
-      is shown none, so it stops before opening the organization; establish that
-      the account holds no administrator rights without depending on such a
-      statement being present
-  - id: R-3.13
-    version: 1
-    why: the refusal of a pending member is that they cannot be chosen as the new
-      owner and ownership is unchanged, and the criterion promises no message;
-      assert that instead; the transfer half needs a way to answer the
-      invitation that the suite does not yet provide, so record it as blocked
-      until it does
-  - id: R-3.28
-    version: 1
-    why: the test does not establish that the organization is approved for two
-      service areas before editing, and it does not tick a third area as the
-      given describes; establish the two starting approvals, clear one and tick
-      a third, then read the approvals once the save has completed
   - id: R-2.13
     version: 1
     why: for a proposal with no complete proponent the criterion promises only a
