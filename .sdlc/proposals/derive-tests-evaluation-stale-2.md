@@ -52,3 +52,24 @@ Every one of the six already had a file from an earlier derivation. Five of them
 
 - **Default panel:** R-5.1, R-5.9 and R-5.19 assume a new draft names its creator as chair, which is what the R-5.1 and R-5.9 redo notes describe. If that's wrong, the step removing the creator will fail. For R-5.1 and R-5.9, that failure is read as a refusal, so the test could pass without testing anything.
 - **Action inputs:** they follow the shapes the earlier tests used (`{ member }`, `{ order, score }`, `{ order, notes }`, `{ title }`), because the contract types them as `unknown`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: do the six evaluation tests (R-5.1, R-5.9, R-5.19, R-5.22, R-5.24, R-5.25 v3) follow from their criteria and nothing else? Ruling: approve. Each assertion traces to its criterion's statement or given/when/then, or to the redo note that sent it back (R-5.1's 'cannot be assembled or saved and panel unchanged counts as refused, keep naming the duplicate rule'; R-5.19's 'confirm by its own details, and that another employee cannot see it'; R-5.24's 'score every proponent and confirm submission took effect'). The tests use only contract actions and observations and seed handles, with no selectors, routes, tables or status codes. Each uncovered clause names a missing surface action or observation, and the surface already carries a form-bypass action (uploadFileWithoutDeclaringItsSize), so the reasons are real. Fixtures reset to seed before every test, so R-5.24 and R-5.25 submitting the same evaluator's set cannot interfere. Persona-to-account mappings match tests/seed/manifest.yaml. Pruning applied.yaml matches the approved derive-tests-content-stale-3 merge. The runner's typecheck passed with no evaluation diagnostics, and no protected path is touched. Weaknesses that fall short of a return: R-5.1 and R-5.9 treat any thrown step as a refusal, so a broken binding or a wrong 'creator is default chair' assumption passes vacuously (disclosed). R-5.9 exercises only the form layer and would pass on a target with the R-5.2 service defect (disclosed, with the missing action named). R-5.24's draft test reads absence of errors rather than a saved change. What would change the ruling: calibration evidence that a new draft does not name its creator as chair, or any assertion shown to check something its criterion does not state.
+
+**Conditions:**
+- At the next calibration, triage must check that a new Sprint With Us draft names its creator as chair before accepting a pass on R-5.1 or R-5.9. If it does not, those passes are vacuous and the tests return to derive-tests.
+- A pass on R-5.9 is recorded as covering the form's refusal only. The service's own refusal of a panel with no chair stays untested until the surface gains a panel-save action that bypasses the form on evaluation-panel-swu and -twu.
+- Carry the surface additions named in the proposal (a submit-set bypass on evaluation-individual-list, a panel-save bypass on evaluation-panel, multiple_chairs_error, score_too_many_decimal_places_error, a panel member-name observation) to the contract stage as open gaps against R-5.1, R-5.9, R-5.22 and R-5.25.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `ffc87e1ee02531bdcb2f755b74ccda487918a976`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    No diagnostics.
