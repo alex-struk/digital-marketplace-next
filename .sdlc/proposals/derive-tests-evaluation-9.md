@@ -24,3 +24,22 @@ Everything else stays as it was:
 The two parts of the criterion that still aren't tested are the same, and the file's comments still explain them:
 - **Too many decimal places:** no observation on either individual create page reports a score with too many decimal places. Something like `scoreTooManyDecimalPlacesError` would reach it.
 - **Submitting an incomplete evaluation:** no action saves a draft the form refuses, which is the same gap recorded for R-5.23.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: do the revised R-5.22 tests follow from their criterion and from nothing else, and do they meet the three conditions from derive-tests-evaluation-stale-1? Ruling: approve. Against the returned version (075c1f7), the only changes to tests/acceptance/evaluation/R-5.22.spec.ts are the requested fixes. First, all four tests now read the rejection with expect.poll and a shared 15-second timeout instead of one immediate read. Second, both empty-comment tests enter 'A full answer to the first question.' before setting the comment to '', so the comment really changes to empty, and the score of 4 still makes the comment the only thing wrong. The assertions are unchanged and follow from the criterion's example: scoreOutOfRangeError after six on a five-point question, and emptyNotesError after an empty comment, on both the Sprint With Us and Team With Us individual create pages. Nothing about how the app is built leaks in. The two untested parts still name real gaps: no observation reports a score with too many decimal places, and no action saves a draft the form refuses, the same gap recorded for R-5.23. Third, the branch leaves tests/acceptance/redo.yaml alone and the R-5.22 entry is still there, so the calibration can confirm the redo's reason is met. The runner's typecheck passed with no diagnostics under acceptance/evaluation/. One inaccuracy: the writer says tests/acceptance/not-testable.yaml is unchanged, but the proposal commit rewrote it. Sorting both versions gives identical lines: the R-5.11, R-5.21, R-5.23, R-5.26, R-5.34 and R-5.37 entries moved to the end of the file with no text changed, so it changes nothing and is not a reason to return. No protected path is touched, the tier is STANDARD and no residual risk is marked unaccepted, so nothing escalates. What would change the ruling: finding that not-testable.yaml changed more than its order, or a test asserting something the criterion does not state.
+
+**Conditions:**
+- Not the writer's: the not-testable.yaml change in this commit only reorders entries (the six evaluation entries moved to the end, no text changed). Whoever owns the proposal tooling should find out why the file was rewritten when the writer reports leaving it alone, so later diffs don't carry reorders that change nothing.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `2043f7fae5f4979525907aa5245b16ed43862806`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    No diagnostics.
