@@ -26,3 +26,24 @@ Each test runs the pending scheduled transitions to close the opportunity, signs
 - **Submission blocked until every question is complete.** To show this, a test has to save a draft containing a rejected entry and then try to submit it. The form won't save that draft, and no action saves what the form refuses. That is the same gap already recorded for R-5.23 in `not-testable.yaml`: an action on the create page that saves a refused draft. I didn't use the individual list's `submitDisabledUntilComplete` observation instead. The criterion says nothing about a disabled control, and R-5.25 already submits an incomplete set from that list.
 
 These gaps are explained in comments at the top of the file.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+
+Question: do the rewritten R-5.22 tests follow from the criterion and from nothing else, and do they address the redo they were written for? Ruling: return. The assertions themselves are sound: a score of six on a five-point question and an empty comment are each read as rejected on both the Sprint With Us and Team With Us individual create pages, which is what the criterion's example states. Nothing about how the app is built leaks in. The evaluator choice is right: the seed puts users.staffOne on both panels as an evaluator, behind persona.publicSectorStaff. The two untested parts name real gaps in the contract: no observation reports a score with too many decimal places, and no action saves a draft the form refuses, the gap already recorded for R-5.23. The runner's typecheck passed with no diagnostics under acceptance/evaluation/. But this is the redo from calibrate-old-5, whose reason was that the test reads the rejection the instant the entry is made, when the old page marks the field about half a second after a change, and that it types nothing into a comment that was already empty. That reason asked the writer to allow time for the mark and to enter a comment before clearing it. The new file does neither. All four tests still read the error with an immediate expect(await ...).toBeTruthy(), and the adapter's error read (messages()) takes whatever text is on the page at that moment without waiting. Both empty-comment tests still enter notes: "" into a box never filled. The proposal still deletes the R-5.22 entry from tests/acceptance/redo.yaml, marking that reason addressed when it is not. A blind writer can fix this: expect.poll is already used for the same purpose in tests/acceptance/content/R-7.20.spec.ts. Left as it is, the next calibration would fail the same way and could not tell a harness timing fault from the product question calibrate-triage-old-6 sent on. Tier is STANDARD and no residual risk is marked unaccepted, so nothing escalates. What would change the ruling: a version that polls each rejection until it appears or times out, and fills the comment before clearing it in both empty-comment tests. With nothing else changed, that would be approved.
+
+**Conditions:**
+- Read each rejection by retrying until it appears or times out (for example expect.poll, as tests/acceptance/content/R-7.20.spec.ts does), not with a single immediate read, in all four tests.
+- In both empty-comment tests, enter a non-empty comment for the question first, then clear it, so the comment actually changes to empty before the rejection is read.
+- Keep the R-5.22 entry in tests/acceptance/redo.yaml until the rewritten test actually meets its reason; do not delete it in a proposal that leaves the reason unmet.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `075c1f744a0a585c1ff8828684e0ecc2dd3a41dc`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    No diagnostics.
