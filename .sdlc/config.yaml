@@ -20,6 +20,7 @@ oracle:
   up: [db, mailpit]
   migrate_service: migrate
   db: { service: db, user: digmkt, database: digmkt }
+  instances: 4
 targets:
   new: { base_url: http://localhost:8080, identity: sandbox-idp }
 policy:
