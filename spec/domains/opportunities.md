@@ -1,7 +1,7 @@
 # opportunities
 
-### R-1.1 · v2 · confirmed · recovered
-A published opportunity whose proposal deadline has passed closes on its own at the next request the service handles under /api or /status: it moves to the first evaluation stage of its program, every proposal submitted against it moves to review, and its author is notified that it is ready for evaluation.
+### R-1.1 · v3 · confirmed · recovered
+A published opportunity whose proposal deadline has passed closes on its own at the next request the service handles under /api or /status: it moves to the first evaluation stage of its program, every proposal submitted against it moves to review, and it is announced as ready for evaluation, to its author for a Code With Us opportunity and to the evaluators on its evaluation panel for a Sprint With Us or Team With Us opportunity.
 - cites: src/back-end/lib/db/opportunity/code-with-us.ts:898
 - cites: src/back-end/lib/db/opportunity/sprint-with-us.ts:1442
 - cites: src/back-end/lib/db/opportunity/team-with-us.ts:1433
@@ -189,8 +189,8 @@ A Sprint With Us opportunity must have an implementation phase, and may only hav
 - then: the submission is rejected with a message saying a prototype phase must follow an inception phase
 - state: accepted
 
-### R-1.17 · v1 · confirmed · recovered
-Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question, a guideline, a maximum score, a response word limit and a position, and an optional minimum score that must be lower than the question's maximum score.
+### R-1.17 · v2 · confirmed · recovered
+Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position is set by its place in the opportunity's list of questions, which holds at most 100, and is never entered by the person; a question outside these limits is refused.
 - cites: src/shared/lib/validation/opportunity/sprint-with-us.ts:371
 - cites: src/shared/lib/validation/opportunity/team-with-us.ts:111
 - cites: src/shared/lib/resources/opportunity/sprint-with-us.ts:16

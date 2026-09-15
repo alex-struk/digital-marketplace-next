@@ -228,6 +228,7 @@ The Edit and Archive controls on an organization's management page are offered o
 A change to an organization's contact phone number made while editing its profile is saved along with every other profile field, and clearing the field removes the stored number.
 - state: accepted
 - replaces: R-3.5
+- note: calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it
 
 ### R-3.20 · v1 · confirmed · authored
 Asking for the organizations one may act on behalf of is refused as not permitted for anyone who is not a signed-in vendor, rather than answered with an empty list.
@@ -262,6 +263,7 @@ Registering an organization requires a legal name, street address, city, region,
 - then: the organization is not created and the offending field is reported as invalid, while the same submission with the optional website, second address line, contact title and phone left empty succeeds
 - state: accepted
 - note: the published interface description lists the same set of fields but says nothing about which are required or how long they may be, so the required/optional split and the hundred-character limit rest on the code alone.
+- note: calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it
 
 ### R-3.23 · v1 · confirmed · recovered
 The vendor who registers an organization becomes its owner immediately, and the organization is active from the moment it is registered.

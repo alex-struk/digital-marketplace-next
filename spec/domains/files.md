@@ -262,6 +262,7 @@ A submission carrying no file part, or read-access information that is not well-
 An attachment on an opportunity is uploaded with no read access recorded against the file itself, for all three programs alike, so that what the opportunity is attached to decides who may read it.
 - state: accepted
 - replaces: R-8.8
+- note: calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it
 
 ### R-8.20 · v1 · confirmed · authored
 A file attached to an opportunity or a proposal is readable by whoever may read the thing it is attached to, under one rule covering Code With Us, Sprint With Us and Team With Us alike rather than a separate rule per program.

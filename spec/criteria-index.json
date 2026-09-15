@@ -1,5 +1,5 @@
 {
-  "generated_from": "08d8aac0ee7ec7fcee1a309ef183dcb17e38221b",
+  "generated_from": "2d9a83e439479b419845aa46aa7d9d819b38de24",
   "criteria": [
     {
       "id": "R-7.1",
@@ -1791,10 +1791,10 @@
     },
     {
       "id": "R-5.25",
-      "version": 2,
+      "version": 3,
       "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "An evaluator submits all of their existing draft evaluations for an opportunity in a single action, and the whole set is refused with \"This evaluation could not be submitted for review because it is incomplete. Please edit, complete and save the appropriate form before trying to submit it again.\" — none of it submitted — unless every evaluation in the set carries an in-range score and a comment for every question of the opportunity; the service does not check that the evaluator holds an evaluation for every proponent, so a proponent they never opened is simply absent from the set rather than blocking the submission.",
+      "statement": "An evaluator can submit their scores for consensus only once they hold a complete evaluation, an in-range score and a comment for every question, for every proponent of the opportunity; until then submission is not offered and nothing is submitted. The service independently refuses a submitted set containing any incomplete evaluation with \"This evaluation could not be submitted for review because it is incomplete. Please edit, complete and save the appropriate form before trying to submit it again.\", submitting none of it.",
       "cites": [
         {
           "path": "src/back-end/lib/resources/opportunity/sprint-with-us/index.ts",
@@ -1823,7 +1823,7 @@
       "then": "the submission is refused with \"This evaluation could not be submitted for review because it is incomplete. Please edit, complete and save the appropriate form before trying to submit it again.\" and none of the three is submitted",
       "notes": [],
       "state": "accepted",
-      "raw": "### R-5.25 · v2 · confirmed · recovered",
+      "raw": "### R-5.25 · v3 · confirmed · recovered",
       "line": 290,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
@@ -2885,7 +2885,9 @@
       "origin": "authored",
       "statement": "An attachment on an opportunity is uploaded with no read access recorded against the file itself, for all three programs alike, so that what the opportunity is attached to decides who may read it.",
       "cites": [],
-      "notes": [],
+      "notes": [
+        "calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it"
+      ],
       "state": "accepted",
       "replaces": "R-8.8",
       "raw": "### R-8.19 · v1 · confirmed · authored",
@@ -2904,7 +2906,7 @@
       "state": "accepted",
       "replaces": "R-8.9",
       "raw": "### R-8.20 · v1 · confirmed · authored",
-      "line": 266,
+      "line": 267,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2921,7 +2923,7 @@
       "state": "accepted",
       "replaces": "R-8.14",
       "raw": "### R-8.21 · v1 · confirmed · authored",
-      "line": 271,
+      "line": 272,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2936,7 +2938,7 @@
       "state": "accepted",
       "replaces": "R-8.15",
       "raw": "### R-8.22 · v1 · confirmed · authored",
-      "line": 277,
+      "line": 278,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2969,7 +2971,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.23 · v2 · confirmed · recovered",
-      "line": 282,
+      "line": 283,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3002,7 +3004,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.24 · v2 · confirmed · recovered",
-      "line": 294,
+      "line": 295,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3043,7 +3045,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.25 · v1 · confirmed · recovered",
-      "line": 306,
+      "line": 307,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3079,7 +3081,7 @@
       "state": "accepted",
       "supersededBy": "R-8.31",
       "raw": "### R-8.26 · v1 · confirmed · recovered",
-      "line": 320,
+      "line": 321,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3116,7 +3118,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.27 · v1 · confirmed · recovered",
-      "line": 335,
+      "line": 336,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3145,7 +3147,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.28 · v1 · confirmed · recovered",
-      "line": 348,
+      "line": 349,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3186,7 +3188,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.29 · v1 · confirmed · recovered",
-      "line": 359,
+      "line": 360,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3231,7 +3233,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.30 · v1 · confirmed · recovered",
-      "line": 373,
+      "line": 374,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3246,7 +3248,7 @@
       "state": "accepted",
       "replaces": "R-8.26",
       "raw": "### R-8.31 · v1 · confirmed · authored",
-      "line": 388,
+      "line": 389,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -4188,10 +4190,10 @@
     },
     {
       "id": "R-1.1",
-      "version": 2,
+      "version": 3,
       "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "A published opportunity whose proposal deadline has passed closes on its own at the next request the service handles under /api or /status: it moves to the first evaluation stage of its program, every proposal submitted against it moves to review, and its author is notified that it is ready for evaluation.",
+      "statement": "A published opportunity whose proposal deadline has passed closes on its own at the next request the service handles under /api or /status: it moves to the first evaluation stage of its program, every proposal submitted against it moves to review, and it is announced as ready for evaluation, to its author for a Code With Us opportunity and to the evaluators on its evaluation panel for a Sprint With Us or Team With Us opportunity.",
       "cites": [
         {
           "path": "src/back-end/lib/db/opportunity/code-with-us.ts",
@@ -4226,7 +4228,7 @@
         "closure is driven by ordinary traffic rather than a clock, throttled so it runs at most once a minute, and additionally attached to the health-check route so that it still runs when the site is idle. An opportunity therefore closes at the first request after its deadline, not at the deadline itself."
       ],
       "state": "accepted",
-      "raw": "### R-1.1 · v2 · confirmed · recovered",
+      "raw": "### R-1.1 · v3 · confirmed · recovered",
       "line": 3,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
@@ -4720,10 +4722,10 @@
     },
     {
       "id": "R-1.17",
-      "version": 1,
+      "version": 2,
       "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question, a guideline, a maximum score, a response word limit and a position, and an optional minimum score that must be lower than the question's maximum score.",
+      "statement": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position is set by its place in the opportunity's list of questions, which holds at most 100, and is never entered by the person; a question outside these limits is refused.",
       "cites": [
         {
           "path": "src/shared/lib/validation/opportunity/sprint-with-us.ts",
@@ -4746,7 +4748,7 @@
         "the same limits apply to Sprint With Us \"team questions\" and Team With Us \"resource questions\"; the two differ only in name."
       ],
       "state": "accepted",
-      "raw": "### R-1.17 · v1 · confirmed · recovered",
+      "raw": "### R-1.17 · v2 · confirmed · recovered",
       "line": 192,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
@@ -6512,7 +6514,9 @@
       "origin": "authored",
       "statement": "A change to an organization's contact phone number made while editing its profile is saved along with every other profile field, and clearing the field removes the stored number.",
       "cites": [],
-      "notes": [],
+      "notes": [
+        "calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it"
+      ],
       "state": "accepted",
       "replaces": "R-3.5",
       "raw": "### R-3.19 · v1 · confirmed · authored",
@@ -6531,7 +6535,7 @@
       "state": "accepted",
       "replaces": "R-3.16",
       "raw": "### R-3.20 · v1 · confirmed · authored",
-      "line": 232,
+      "line": 233,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6568,7 +6572,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.21 · v2 · confirmed · recovered",
-      "line": 237,
+      "line": 238,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6613,11 +6617,12 @@
       "when": "they submit it with the legal name left blank, or with a contact email of \"not-an-email\"",
       "then": "the organization is not created and the offending field is reported as invalid, while the same submission with the optional website, second address line, contact title and phone left empty succeeds",
       "notes": [
-        "the published interface description lists the same set of fields but says nothing about which are required or how long they may be, so the required/optional split and the hundred-character limit rest on the code alone."
+        "the published interface description lists the same set of fields but says nothing about which are required or how long they may be, so the required/optional split and the hundred-character limit rest on the code alone.",
+        "calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it"
       ],
       "state": "accepted",
       "raw": "### R-3.22 · v2 · confirmed · recovered",
-      "line": 250,
+      "line": 251,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6648,7 +6653,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.23 · v1 · confirmed · recovered",
-      "line": 266,
+      "line": 268,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6679,7 +6684,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.24 · v1 · confirmed · recovered",
-      "line": 277,
+      "line": 279,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6716,7 +6721,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.25 · v1 · confirmed · recovered",
-      "line": 288,
+      "line": 290,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6752,7 +6757,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.26 · v1 · confirmed · recovered",
-      "line": 301,
+      "line": 303,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6793,7 +6798,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.27 · v1 · confirmed · recovered",
-      "line": 314,
+      "line": 316,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6824,7 +6829,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.28 · v1 · confirmed · recovered",
-      "line": 328,
+      "line": 330,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6862,7 +6867,7 @@
       "state": "accepted",
       "supersededBy": "R-3.35",
       "raw": "### R-3.29 · v1 · confirmed · recovered",
-      "line": 339,
+      "line": 341,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6889,7 +6894,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.30 · v1 · confirmed · recovered",
-      "line": 353,
+      "line": 355,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6924,7 +6929,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.31 · v1 · confirmed · recovered",
-      "line": 363,
+      "line": 365,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6961,7 +6966,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.32 · v1 · confirmed · recovered",
-      "line": 375,
+      "line": 377,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -7004,7 +7009,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.33 · v1 · confirmed · recovered",
-      "line": 388,
+      "line": 390,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -7031,7 +7036,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.34 · v1 · confirmed · recovered",
-      "line": 402,
+      "line": 404,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -7046,7 +7051,7 @@
       "state": "accepted",
       "replaces": "R-3.29",
       "raw": "### R-3.35 · v1 · confirmed · authored",
-      "line": 412,
+      "line": 414,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },

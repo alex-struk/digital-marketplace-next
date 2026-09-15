@@ -287,8 +287,8 @@ An evaluator may change their own evaluation only while it is still a draft and 
 - state: accepted
 - note: one evaluator cannot edit another's evaluation at any point, whatever its state.
 
-### R-5.25 · v2 · confirmed · recovered
-An evaluator submits all of their existing draft evaluations for an opportunity in a single action, and the whole set is refused with "This evaluation could not be submitted for review because it is incomplete. Please edit, complete and save the appropriate form before trying to submit it again." — none of it submitted — unless every evaluation in the set carries an in-range score and a comment for every question of the opportunity; the service does not check that the evaluator holds an evaluation for every proponent, so a proponent they never opened is simply absent from the set rather than blocking the submission.
+### R-5.25 · v3 · confirmed · recovered
+An evaluator can submit their scores for consensus only once they hold a complete evaluation, an in-range score and a comment for every question, for every proponent of the opportunity; until then submission is not offered and nothing is submitted. The service independently refuses a submitted set containing any incomplete evaluation with "This evaluation could not be submitted for review because it is incomplete. Please edit, complete and save the appropriate form before trying to submit it again.", submitting none of it.
 - cites: src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1748
 - cites: src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1825
 - cites: src/back-end/lib/resources/opportunity/team-with-us/index.ts:1205
