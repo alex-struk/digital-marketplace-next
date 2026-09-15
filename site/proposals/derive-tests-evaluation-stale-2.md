@@ -1,0 +1,74 @@
+| Field | Value |
+| --- | --- |
+| gate | G3 |
+| opened | 2026-09-15T05:23:25.182Z |
+| holder | agent:reviewer |
+
+# Do these tests follow from the evaluation criteria and from nothing else?
+
+**Recommendation.** All six criteria in the evaluation domain now have a test file, and nothing went into `tests/acceptance/not-testable.yaml`.
+
+All six criteria in the evaluation domain now have a test file, and nothing went into `tests/acceptance/not-testable.yaml`. None of the files has been run, and none has been typechecked: `tests/` has no installed dependencies, so `tsc` isn't available. I checked the types by reading them against `tsconfig.json` and `generated/surface.d.ts`. I also searched the six files for everything the separation check refuses (selectors, locators, routes, `page.`), comments included, and found nothing.
+
+Every one of the six already had a file from an earlier derivation. Five of them had notes in `redo.yaml` saying what was wrong, so I rewrote all six under the new spec commit and dealt with each note.
+
+**What changed and why**
+
+- **R-5.1 (four tests):** the old tests added people to a new draft's panel, but a new draft already names its creator as chair. So they built valid panels and nothing was refused. Each test now turns that starting panel into exactly the faulty one the criterion describes: one person, the same person twice, two chairs, or a vendor.
+  - **Refused means:** the save or the building of the panel fails (actions give up after 15 seconds instead of hanging), or the page shows the error for that rule. After that, opening the panel again must read the same as before.
+  - **Duplicate member:** this case still has to show its named error, as the redo note asked.
+  - **Two chairs:** no observation names that rule, so this test relies only on the panel being unchanged.
+  - **Program:** only Sprint With Us is tested.
+- **R-5.9 (one test):** the panel offered to the service is now truly chairless: two other public sector employees are added and the creator, the only chair, is removed. Refused means the save fails or the missing-chair error shows, and the panel must read the same afterwards. A blind test can't tell the service refusing from the browser form refusing, because every save goes through the form.
+- **R-5.19 (three tests):**
+  - **Opening:** the panel member proves they opened the draft by its identifier and by its "created by" name matching what the administrator saw. The status label is no longer used.
+  - **Listing:** the draft must appear in the dashboard's panel list, and the Evaluations tab must be there.
+  - **Hidden (new test):** the panel leaves off the public sector employee persona's account, so that person neither created the draft, sits on its panel nor is an administrator on any target. The test checks the draft appears in none of their lists and that its details aren't shown to them.
+- **R-5.22 (four tests, both programs):** I kept the fixes already in place: errors are read by retrying, and the comment is written before being cleared. The three-decimal-places case is still not tested.
+- **R-5.24 (two tests):** the submitted case now scores all three proponents on all four questions before submitting. It then confirms the submission took effect: no incomplete-evaluation error, and the list's status has changed. Only after that does it try to change a score. The change counts as refused if it can't be made or the page reports the evaluation read-only; afterwards the evaluation must still read as submitted.
+- **R-5.25 (moved to v3, three tests):**
+  - With complete drafts for two of three proponents, submission is not offered.
+  - Trying to submit anyway submits nothing: the list status is unchanged and neither evaluation is read-only.
+  - Once all three are complete, submission is offered and goes through. This shows the "not offered" result is a real difference and not just a control that never appears.
+
+**Parts of criteria the files do not cover (explained in each file's header)**
+
+- **R-5.25:** the service's own refusal of an incomplete set, with the quoted message. The form withholds submission whenever the set is incomplete, so no incomplete set ever reaches the service, and the incomplete-evaluation error has nothing to show.
+- **R-5.9:** the service applying the rule by itself, separately from the form.
+- **R-5.22:** a score with three decimal places being rejected, and the evaluation being unsubmittable afterwards. Submission is also withheld when nothing has been entered, so that reading says nothing about the bad entry.
+- **R-5.24:** a draft becoming unchangeable once consensus starts. Consensus only starts after the evaluator has submitted everything, so they have no draft left to change.
+- **R-5.1:** the panel members' actual names, and a message for the two-chair rule. The panel is compared only as the same text read twice.
+
+**Surface additions that would close those gaps**
+
+- An action on `evaluation-individual-list-swu` and its Team With Us sibling that submits the set without the form's check. The file-upload page already has actions like this for requests no form would send.
+- An action on `evaluation-panel-swu` and its Team With Us sibling that saves a panel the form would refuse.
+- A `multiple_chairs_error` observation on both panel pages.
+- An observation of a score with too many decimal places on the individual create pages, such as `score_too_many_decimal_places_error`.
+- An observation on the panel pages that lists the members by name.
+
+**Risks for whoever runs these**
+
+- **Default panel:** R-5.1, R-5.9 and R-5.19 assume a new draft names its creator as chair, which is what the R-5.1 and R-5.9 redo notes describe. If that's wrong, the step removing the creator will fail. For R-5.1 and R-5.9, that failure is read as a refusal, so the test could pass without testing anything.
+- **Action inputs:** they follow the shapes the earlier tests used (`{ member }`, `{ order, score }`, `{ order, notes }`, `{ title }`), because the contract types them as `unknown`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: do the six evaluation tests (R-5.1, R-5.9, R-5.19, R-5.22, R-5.24, R-5.25 v3) follow from their criteria and nothing else? Ruling: approve. Each assertion traces to its criterion's statement or given/when/then, or to the redo note that sent it back (R-5.1's 'cannot be assembled or saved and panel unchanged counts as refused, keep naming the duplicate rule'; R-5.19's 'confirm by its own details, and that another employee cannot see it'; R-5.24's 'score every proponent and confirm submission took effect'). The tests use only contract actions and observations and seed handles, with no selectors, routes, tables or status codes. Each uncovered clause names a missing surface action or observation, and the surface already carries a form-bypass action (uploadFileWithoutDeclaringItsSize), so the reasons are real. Fixtures reset to seed before every test, so R-5.24 and R-5.25 submitting the same evaluator's set cannot interfere. Persona-to-account mappings match tests/seed/manifest.yaml. Pruning applied.yaml matches the approved derive-tests-content-stale-3 merge. The runner's typecheck passed with no evaluation diagnostics, and no protected path is touched. Weaknesses that fall short of a return: R-5.1 and R-5.9 treat any thrown step as a refusal, so a broken binding or a wrong 'creator is default chair' assumption passes vacuously (disclosed). R-5.9 exercises only the form layer and would pass on a target with the R-5.2 service defect (disclosed, with the missing action named). R-5.24's draft test reads absence of errors rather than a saved change. What would change the ruling: calibration evidence that a new draft does not name its creator as chair, or any assertion shown to check something its criterion does not state.
+
+**Conditions:**
+- At the next calibration, triage must check that a new Sprint With Us draft names its creator as chair before accepting a pass on R-5.1 or R-5.9. If it does not, those passes are vacuous and the tests return to derive-tests.
+- A pass on R-5.9 is recorded as covering the form's refusal only. The service's own refusal of a panel with no chair stays untested until the surface gains a panel-save action that bypasses the form on evaluation-panel-swu and -twu.
+- Carry the surface additions named in the proposal (a submit-set bypass on evaluation-individual-list, a panel-save bypass on evaluation-panel, multiple_chairs_error, score_too_many_decimal_places_error, a panel member-name observation) to the contract stage as open gaps against R-5.1, R-5.9, R-5.22 and R-5.25.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `ffc87e1ee02531bdcb2f755b74ccda487918a976`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    No diagnostics.

@@ -1,29 +1,37 @@
-// criterion: @R-5.25 v2
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-13
+// criterion: @R-5.25 v3
+// provenance: blind, spec@2d9a83e439479b419845aa46aa7d9d819b38de24, derived 2026-09-15
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// Two tests for the two halves of the criterion. The first holds three drafts of which one
-// is short of a score and a comment for the last question, and asks for the whole set; the
-// refusal is read from incomplete_evaluation_error, which must carry the sentence the
-// criterion quotes, and "none of it submitted" is read from the complete evaluations still
-// being editable afterwards, since read_only_after_submitted is what a submitted evaluation
-// reports.
+// The given as stated: the evaluator — users.staffOne, on the seeded Sprint With Us panel,
+// reached through persona.publicSectorStaff — holds complete drafts for two of the three
+// seeded proponents and has not started the third. Two tests follow the two claims of the
+// first sentence, and a third shows submission is offered once every proponent is complete,
+// so that "not offered" above it is read against a submission that can be.
 //
-// The second holds two complete drafts and never opens the third proponent at all, and the
-// submission goes through: the two are submitted and the proponent nobody opened is simply
-// absent. That is the half of the criterion that distinguishes it from its first version.
+// "Nothing is submitted" is read as the list's evaluation status being what it was before
+// the attempt, and the complete evaluations still not reporting themselves read only. The
+// attempt itself is made: a withheld control fails its bounded action rather than waiting.
+//
+// The second sentence — the service's own refusal of a set containing an incomplete
+// evaluation, with the quoted message, submitting none of it — is not reached here. Every
+// submission the surface offers goes through the list's submit control, which the first
+// sentence says is withheld whenever the set is incomplete, so an incomplete set never gets
+// as far as the service and incomplete_evaluation_error has nothing to report. That half
+// needs an action on evaluation-individual-list that sends the set for consensus without
+// the form's withholding, as file-upload does for requests no form would send.
 
 const opportunityId = seed.opportunities.closedSprintWithUs.id;
 const userId = seed.users.staffOne.id;
 const questions = [0, 1, 2, 3];
-const refusal =
-  "This evaluation could not be submitted for review because it is incomplete. " +
-  "Please edit, complete and save the appropriate form before trying to submit it again.";
+const settle = { timeout: 15000 };
 
-async function draft(surface: Surface, proposalId: string, upTo: number): Promise<void> {
+const statement =
+  "An evaluator can submit their scores for consensus only once they hold a complete evaluation, an in-range score and a comment for every question, for every proponent of the opportunity; until then submission is not offered and nothing is submitted.";
+
+async function completeDraft(surface: Surface, proposalId: string): Promise<void> {
   await surface.evaluationIndividualCreateSwu.open({ opportunityId, proposalId });
-  for (const order of questions.slice(0, upTo)) {
+  for (const order of questions) {
     await surface.evaluationIndividualCreateSwu.enterQuestionScore({ order, score: 4 });
     await surface.evaluationIndividualCreateSwu.enterQuestionNotes({
       order,
@@ -33,49 +41,74 @@ async function draft(surface: Surface, proposalId: string, upTo: number): Promis
   await surface.evaluationIndividualCreateSwu.saveDraft();
 }
 
-test("the whole set is refused, none of it submitted, unless every evaluation in it is complete", async ({
-  surface,
-}) => {
+async function twoOfThreeComplete(surface: Surface): Promise<void> {
   await surface.scheduledTransitionTrigger.open();
   await surface.scheduledTransitionTrigger.runPendingTransitions();
   await surface.signIn(persona.publicSectorStaff);
+  await completeDraft(surface, seed.proposals.sprintWithUsOne.id);
+  await completeDraft(surface, seed.proposals.sprintWithUsTwo.id);
+}
 
-  await draft(surface, seed.proposals.sprintWithUsOne.id, 4);
-  await draft(surface, seed.proposals.sprintWithUsTwo.id, 4);
-  await draft(surface, seed.proposals.sprintWithUsThree.id, 3);
+async function readOrNothing(read: () => Promise<string>): Promise<string> {
+  try {
+    return await read();
+  } catch {
+    return "";
+  }
+}
+
+test(`${statement} (with complete evaluations for two of three proponents, submission is not offered)`, async ({
+  surface,
+}) => {
+  await twoOfThreeComplete(surface);
 
   await surface.evaluationIndividualListSwu.open({ opportunityId });
-  await surface.evaluationIndividualListSwu.submitScoresForConsensus();
-
-  expect(await surface.evaluationIndividualListSwu.incompleteEvaluationError()).toContain(refusal);
-
-  await surface.evaluationIndividualEditSwu.open({
-    opportunityId,
-    proposalId: seed.proposals.sprintWithUsOne.id,
-    userId,
-  });
-  expect(await surface.evaluationIndividualEditSwu.readOnlyAfterSubmitted()).toBeFalsy();
+  await expect
+    .poll(() => readOrNothing(() => surface.evaluationIndividualListSwu.submitDisabledUntilComplete()), settle)
+    .toBeTruthy();
 });
 
-test("a proponent the evaluator never opened is absent from the set rather than blocking it", async ({
+test(`${statement} (with complete evaluations for two of three proponents, nothing is submitted)`, async ({
   surface,
 }) => {
-  await surface.scheduledTransitionTrigger.open();
-  await surface.scheduledTransitionTrigger.runPendingTransitions();
-  await surface.signIn(persona.publicSectorStaff);
-
-  await draft(surface, seed.proposals.sprintWithUsOne.id, 4);
-  await draft(surface, seed.proposals.sprintWithUsTwo.id, 4);
+  await twoOfThreeComplete(surface);
 
   await surface.evaluationIndividualListSwu.open({ opportunityId });
-  await surface.evaluationIndividualListSwu.submitScoresForConsensus();
+  const before = await surface.evaluationIndividualListSwu.evaluationStatus();
+  try {
+    await surface.evaluationIndividualListSwu.submitScoresForConsensus();
+  } catch {
+    // Not offered, which is what the criterion says; what matters is what was recorded.
+  }
 
-  expect(await surface.evaluationIndividualListSwu.incompleteEvaluationError()).toBeFalsy();
+  await surface.evaluationIndividualListSwu.open({ opportunityId });
+  expect(await surface.evaluationIndividualListSwu.evaluationStatus()).toBe(before);
+
+  for (const proposalId of [seed.proposals.sprintWithUsOne.id, seed.proposals.sprintWithUsTwo.id]) {
+    await surface.evaluationIndividualEditSwu.open({ opportunityId, proposalId, userId });
+    expect(await readOrNothing(() => surface.evaluationIndividualEditSwu.readOnlyAfterSubmitted())).toBeFalsy();
+  }
+});
+
+test(`${statement} (once every proponent is complete, submission is offered and goes through)`, async ({
+  surface,
+}) => {
+  await twoOfThreeComplete(surface);
+  await completeDraft(surface, seed.proposals.sprintWithUsThree.id);
+
+  await surface.evaluationIndividualListSwu.open({ opportunityId });
+  await expect
+    .poll(() => readOrNothing(() => surface.evaluationIndividualListSwu.submitDisabledUntilComplete()), settle)
+    .toBeFalsy();
+  await surface.evaluationIndividualListSwu.submitScoresForConsensus();
+  expect(await readOrNothing(() => surface.evaluationIndividualListSwu.incompleteEvaluationError())).toBeFalsy();
 
   await surface.evaluationIndividualEditSwu.open({
     opportunityId,
     proposalId: seed.proposals.sprintWithUsOne.id,
     userId,
   });
-  expect(await surface.evaluationIndividualEditSwu.readOnlyAfterSubmitted()).toBeTruthy();
+  await expect
+    .poll(() => readOrNothing(() => surface.evaluationIndividualEditSwu.readOnlyAfterSubmitted()), settle)
+    .toBeTruthy();
 });

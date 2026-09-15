@@ -1,25 +1,22 @@
 // criterion: @R-5.22 v1
-// provenance: blind, spec@08d8aac0ee7ec7fcee1a309ef183dcb17e38221b, derived 2026-09-15
+// provenance: blind, spec@2d9a83e439479b419845aa46aa7d9d819b38de24, derived 2026-09-15
 import { test, expect, persona, seed } from "../../fixtures";
 
 // Every question of both seeded closed opportunities is worth five points, which is what
-// tests/seed records, so six is above the maximum for any of the four and the criterion's
-// own example can be used as it is written. The evaluator is users.staffOne, who sits on
-// both seeded panels as an evaluator and is reached through persona.publicSectorStaff.
+// tests/seed records, so six is above the maximum for any of them and the criterion's own
+// example can be used as written. The evaluator is users.staffOne, who sits on both seeded
+// panels as an evaluator and is reached through persona.publicSectorStaff.
 //
 // The score with three decimal places is not tested here. The individual create pages
 // report a rejected score only as score_out_of_range_error, and a too-precise score inside
-// the range is not out of range, so no observation on either page says such an entry was
-// refused. That half needs a decimal-places observation on evaluation-individual-create-swu
-// and -twu, such as score_too_many_decimal_places_error.
+// the range is not out of range, so no observation says such an entry was refused. That half
+// needs a decimal-places observation on evaluation-individual-create-swu and -twu.
 //
 // The last clause of the then — that the evaluation cannot be submitted until every question
-// carries a score and a comment — is not tested here. Showing it would mean saving the
-// rejected entry as a draft and submitting it, and the form refuses to save that draft,
-// which is what the R-5.23 entry in not-testable.yaml records: it needs an action on
-// evaluation-individual-create that saves a draft the form would refuse. A disabled submit
-// control on the individual list is not read in its place: the criterion says nothing about
-// a disabled control, and R-5.25 submits an incomplete set from that same list.
+// carries a score and a comment — is not tested here. Submission is offered or withheld for
+// the whole set on the individual list, and it is withheld just the same when nothing at all
+// has been entered, so reading it after a rejected entry would say nothing about the entry.
+// R-5.25 reads that withholding on its own terms.
 //
 // The page marks a field a moment after it changes, so each rejection is read by retrying
 // until it appears or the wait runs out. An empty comment is reached by writing a comment
