@@ -2,7 +2,7 @@
   "target": "old",
   "base_url": "http://localhost:3000",
   "spec": "08d8aac0ee7ec7fcee1a309ef183dcb17e38221b",
-  "at": "2026-09-15T04:13:26.523Z",
+  "at": "2026-09-15T04:30:42.743Z",
   "rows": [
     {
       "id": "R-7.1",
@@ -466,7 +466,8 @@
           "status": "failed",
           "error": "Error: evaluation-panel-swu.save_evaluation_panel — \"Save Changes\" is disabled on http://localhost:3000/opportunities/sprint-with-us/592d5cb1-733f-407b-9b53-c8a02dd46a35/edit?tab=evaluationPanel; the page shows no message"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-5.3",
@@ -494,7 +495,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-5.10",
@@ -645,7 +647,8 @@
           "status": "failed",
           "error": "Error: unbound: opportunity-swu-create.publish — no field on http://localhost:3000/opportunities/sprint-with-us/create takes \"startDate\", \"completionDate\", \"questionsWeight\", \"codeChallengeWeight\", \"teamScenarioWeight\", \"priceWeight\""
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.19",
@@ -663,7 +666,8 @@
           "title": "an opportunity is listed for its panel members under a separate heading for work they are evaluating",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-5.20",
@@ -740,7 +744,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-5.25",
@@ -759,7 +764,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-5.26",
@@ -1198,7 +1204,8 @@
           "status": "failed",
           "error": "Error: opportunity-twu-create.save_draft — the save never reached the record's address; still on http://localhost:3000/opportunities/team-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-8.20",
@@ -1227,7 +1234,8 @@
           "status": "failed",
           "error": "Error: unbound: proposal-cwu-create.add_attachment — walked to the Attachments step and chose \"Edit\" where the Actions menu or the top bar offered it, but no \"Add Attachment\" control appeared on http://localhost:3000/opportunities/code-with-us/c6b5ebe3-21dd-492c-bff4-f3383a2f9d03/proposals/create"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-8.21",
@@ -1369,7 +1377,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-8.30",
@@ -1406,7 +1415,8 @@
           "status": "failed",
           "error": "Error: unbound: proposal-cwu-create.add_attachment — walked to the Attachments step and chose \"Edit\" where the Actions menu or the top bar offered it, but no \"Add Attachment\" control appeared on http://localhost:3000/opportunities/code-with-us/7c576acc-b61d-4920-a69b-72695a3e8da8/proposals/create"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-6.1",
@@ -1653,7 +1663,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m0\u001b[39m\nReceived:   \u001b[31m0\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-6.24",
@@ -1737,7 +1748,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 30000ms exceeded while waiting on the predicate"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.2",
@@ -1773,7 +1785,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.4",
@@ -1915,7 +1928,8 @@
           "title": "an opportunity that is not a draft is rejected when its description is over 10,000 characters",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.11",
@@ -1937,7 +1951,8 @@
           "title": "a remote-work description of more than 500 characters is rejected",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.12",
@@ -1959,7 +1974,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.13",
@@ -2019,7 +2035,8 @@
           "title": "each of an opportunity's key dates is recorded as four o'clock in the afternoon on the day chosen",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.15",
@@ -2096,7 +2113,8 @@
           "title": "a Team With Us evaluation question whose minimum score is not lower than its maximum is rejected",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.18",
@@ -2172,7 +2190,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.22",
@@ -2216,7 +2235,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/evaluat|question/\u001b[39m\nReceived string:  \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 30000ms exceeded while waiting on the predicate"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.25",
@@ -2320,7 +2340,8 @@
           "title": "public sector staff can see the proposals once the opportunity has left the published state",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.32",
@@ -2461,7 +2482,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"R-1.39 published opportunity in another town\"\u001b[39m\nReceived string:        \u001b[31m\"R-1.39 published opportunity about kittiwakes\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mPublished\u001b[39m\n\u001b[31mCloses Oct 29, 2026 at 4:00 PM PDT\u001b[39m\n\u001b[31mA short summary of the work to be done.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31m\u001b[7mR-1.39 published opportunity in another town\u001b[27m\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mPublished\u001b[39m\n\u001b[31mCloses Oct 29, 2026 at 4:00 PM PDT\u001b[39m\n\u001b[31mA short summary of the work to be done.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mKamloops\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mSeeded published Code With Us opportunity\u001b[39m\n\u001b[31mCode With Us\u001b[39m\n\u001b[31mPublished\u001b[39m\n\u001b[31mCloses Jun 1, 2030 at 4:59 PM PDT\u001b[39m\n\u001b[31mA published opportunity that exists before any test runs.\u001b[39m\n\u001b[31m$5,000\u001b[39m\n\u001b[31mVictoria\u001b[39m\n\u001b[31mRemote OK\u001b[39m\n\u001b[31mWatch\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.40",
@@ -2516,7 +2538,8 @@
           "title": "a public sector employee who is not an administrator may create an opportunity under review",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.49",
@@ -2574,7 +2597,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.55",
@@ -2608,7 +2632,8 @@
           "status": "failed",
           "error": "Error: opportunity-twu-create.save_draft — the save never reached the record's address; still on http://localhost:3000/opportunities/team-with-us/create; the page shows no message"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-1.56",
@@ -2683,7 +2708,8 @@
           "title": "an organization's full record can be opened by its owner, by its administrator and by a service administrator",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-3.6",
@@ -2715,7 +2741,8 @@
           "status": "failed",
           "error": "Error: organization-edit.add_team_members — \"Add Team Member(s)\" is disabled on http://localhost:3000/organizations/00000000-0000-4000-8000-000000000302/edit?tab=team; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.8",
@@ -2807,7 +2834,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-3.13",
@@ -2826,7 +2854,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-3.14",
@@ -2908,7 +2937,8 @@
           "title": "clearing the contact phone number removes the stored number",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-3.20",
@@ -2964,7 +2994,8 @@
           "title": "the same submission with the optional website, second address line, contact title and phone left empty succeeds",
           "status": "passed"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-3.23",
@@ -3012,7 +3043,8 @@
           "status": "failed",
           "error": "Error: organization-edit.add_team_members — \"Add Team Member(s)\" is disabled on http://localhost:3000/organizations/ae9ed216-bb89-465a-b644-f5c54c13df7a/edit?tab=team; the page shows no message"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.26",
@@ -3031,7 +3063,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"Juniper Reach Service Area Only Ltd.\u001b[39m\n\u001b[32mTo qualify for one or more Service Areas, you must complete the RFQ through BC Bid.\u001b[39m\n\u001b[32mService Areas\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.27",
@@ -3062,7 +3095,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"FULL_STACK_DEVELOPER\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-3.30",
@@ -3130,7 +3164,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"Technical Architecture\"\u001b[39m\nReceived string:        \u001b[31m\"This is a summary of the capabilities your organization's team possesses as whole, only including the capabilities of confirmed (non-pending) members. Team members can claim capabilities in their user profiles in the \\\"Capabilities\\\" section.\u001b[39m\n\u001b[31mAgile Coaching\u001b[39m\n\u001b[31mBackend Development\u001b[39m\n\u001b[31mDelivery Management\u001b[39m\n\u001b[31mDevOps Engineering\u001b[39m\n\u001b[31mFrontend Development\u001b[39m\n\u001b[31mSecurity Engineering\u001b[39m\n\u001b[31m\u001b[7mTechnical Architecture\u001b[27m\u001b[39m\n\u001b[31mUser Experience Design\u001b[39m\n\u001b[31mUser Research\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.35",
@@ -3332,7 +3367,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-2.14",
@@ -3351,7 +3387,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.15",
@@ -3559,7 +3596,8 @@
           "title": "a vendor never sees another vendor's proposal",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.25",
@@ -3577,7 +3615,8 @@
           "title": "once the opportunity has closed, its submitted proposals are shown to the opportunity's author and to an administrator",
           "status": "passed"
         }
-      ]
+      ],
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.26",
@@ -3820,7 +3859,8 @@
           "status": "failed",
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 10000ms exceeded while waiting on the predicate"
         }
-      ]
+      ],
+      "triage": "product-question"
     },
     {
       "id": "R-4.6",

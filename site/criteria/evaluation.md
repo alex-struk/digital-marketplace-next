@@ -21,7 +21,7 @@
 | R-5.15 | — |  |
 | R-5.16 | acceptance/evaluation/R-5.16.spec.ts | unbound |
 | R-5.17 | acceptance/evaluation/R-5.17.spec.ts | unbound |
-| R-5.18 | acceptance/evaluation/R-5.18.spec.ts | fail |
+| R-5.18 | acceptance/evaluation/R-5.18.spec.ts | fail (ruled: adapter-wrong) |
 | R-5.19 | acceptance/evaluation/R-5.19.spec.ts | fail |
 | R-5.20 | acceptance/evaluation/R-5.20.spec.ts | fail (ruled: defect-in-old) |
 | R-5.21 | not testable: blocked: the two people the criterion has refused cannot be reached, and the refusal cannot be read. The seeded panel's chair is also an evaluator and the opportunity's owner is also on the panel, because the target has two public sector sign-ins and consensus waits for every evaluator, so neither a chair who does not evaluate nor an owner off the panel can attempt to score. The individual create and edit surfaces carry no refusal observation — the proposal views have wrong_stage_error and the evaluation surfaces have nothing like it — so an attempt made at the wrong stage or by the wrong person could not be told from one that simply recorded nothing. Needs a panel whose chair is not an evaluator and a refusal observation on evaluation-individual-create. | not-testable |

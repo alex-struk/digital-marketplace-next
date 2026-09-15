@@ -34,7 +34,7 @@
 | R-1.28 | acceptance/opportunities/R-1.28.spec.ts | pass |
 | R-1.29 | acceptance/opportunities/R-1.29.spec.ts | unbound |
 | R-1.30 | acceptance/opportunities/R-1.30.spec.ts | pass |
-| R-1.31 | acceptance/opportunities/R-1.31.spec.ts | fail |
+| R-1.31 | acceptance/opportunities/R-1.31.spec.ts | fail (ruled: adapter-wrong) |
 | R-1.32 | acceptance/opportunities/R-1.32.spec.ts | pass |
 | R-1.33 | acceptance/opportunities/R-1.33.spec.ts | unbound |
 | R-1.34 | acceptance/opportunities/R-1.34.spec.ts | pass |
@@ -51,13 +51,13 @@
 | R-1.45 | — |  |
 | R-1.46 | — |  |
 | R-1.47 | — |  |
-| R-1.48 | acceptance/opportunities/R-1.48.spec.ts | fail |
+| R-1.48 | acceptance/opportunities/R-1.48.spec.ts | fail (ruled: adapter-wrong) |
 | R-1.49 | not testable: blocked: the claim is about which state changes are permitted out of processing for a Team With Us opportunity, and the seed carries no Team With Us opportunity in processing. The award half could be read from the opportunity's own state once it were reachable; the recorded-transitions half needs an observation as well, since nothing returns the set of changes an opportunity's program permits. Unblocked by seeding a Team With Us opportunity in processing, and by an observation of the state changes permitted from an opportunity's current state. | not-testable |
 | R-1.50 | not testable: blocked: the refusal half needs an opportunity at the questions consensus stage, which the seed does not carry — see R-1.41 for why the one closable opportunity of each program cannot supply it. The uniqueness half is unobservable whatever the seed holds: 'exactly one path out' is a claim about no second action existing, and the absence of an action is not something an observation reports. Unblocked for its refusal half by the same seeding R-1.41 names; its uniqueness half is for a reader of the rebuilt system's own actions rather than for a test. | not-testable |
 | D-opportunities-51 | — |  |
 | R-1.51 | not testable: unobservable: nothing the service does could show that a state it does not define is gone. No action requests a move to a suspended state, no observation returns the states an opportunity may hold or the states the list's state filter offers, and the mapping of a historical record onto a defined state happens before the rebuilt system reads it, which is a property of the migration rather than of anything the running service answers with. No addition to the surface would help; this is a claim a human accepts about the rebuild rather than one a test can settle. | not-testable |
 | R-1.52 | — |  |
-| R-1.53 | acceptance/opportunities/R-1.53.spec.ts | fail |
+| R-1.53 | acceptance/opportunities/R-1.53.spec.ts | fail (ruled: adapter-wrong) |
 | R-1.54 | — |  |
 | R-1.55 | acceptance/opportunities/R-1.55.spec.ts | fail |
 | R-1.56 | acceptance/opportunities/R-1.56.spec.ts | unbound |
