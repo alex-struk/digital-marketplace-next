@@ -1,34 +1,76 @@
 // criterion: @R-3.27 v1
-// provenance: blind, spec@40605384759bd10724c1411fdc448dfd99c70aee, derived 2026-09-07
+// provenance: blind, spec@08d8aac0ee7ec7fcee1a309ef183dcb17e38221b, derived 2026-09-15
 import { test, expect, persona, seed } from "../../fixtures";
+import type { Surface } from "../../fixtures";
 
-test("the owner reading the Sprint With Us terms and accepting them has the acceptance recorded with its date", async ({
-  surface,
-}) => {
+// The given is an organization whose Sprint With Us terms have not been accepted: the seed's
+// unqualified organization, owned by seed.users.vendorOne. Each test accepts the terms itself,
+// and establishes first that they stand unaccepted, rather than relying on another test.
+const organization = seed.organizations.unqualified;
+
+// The owner is established as active rather than assumed. The signed-in administrator is active
+// by being signed in at all, so their own status badge is what "active" reads as.
+async function establishActive(surface: Surface, userId: string): Promise<void> {
+  await surface.signIn(persona.administrator);
+  await surface.userProfile.open({ userId: seed.users.administratorOne.id });
+  const active = await surface.userProfile.statusBadge();
+  await surface.userProfile.open({ userId });
+  if ((await surface.userProfile.statusBadge()) !== active) {
+    await surface.userProfile.reactivateAccount();
+    await surface.userProfile.confirmActivationChange();
+    await surface.userProfile.open({ userId });
+  }
+  expect(await surface.userProfile.statusBadge()).toBe(active);
+}
+
+// The owner reads the terms, which stand unaccepted, and accepts them. Returns the notice of the
+// acceptance, which carries its date.
+async function ownerAcceptsSprintWithUsTerms(surface: Surface): Promise<string> {
   await surface.signIn(persona.vendor);
+  await surface.organizationSwuTerms.open({ orgId: organization.id });
+  expect(await surface.organizationSwuTerms.acceptedOnNotice()).toBeFalsy();
+  expect(await surface.organizationSwuTerms.termsBody()).toBeTruthy();
 
-  // Read on the qualification page while the terms stand unaccepted. The reading after
-  // acceptance is told apart from this one rather than merely being non-empty; what the
-  // page calls either state is its own business.
-  await surface.organizationEdit.open({ orgId: seed.organizations.unqualified.id });
-  const termsUnaccepted = await surface.organizationEdit.swuRequirementTermsAccepted();
-
-  await surface.organizationSwuTerms.open({ orgId: seed.organizations.unqualified.id });
   await surface.organizationSwuTerms.acceptTerms();
 
-  expect(await surface.organizationSwuTerms.acceptedOnNotice()).toBeTruthy();
+  await surface.organizationSwuTerms.open({ orgId: organization.id });
+  await expect.poll(() => surface.organizationSwuTerms.acceptedOnNotice()).toMatch(/\d/);
+  return surface.organizationSwuTerms.acceptedOnNotice();
+}
 
-  await surface.organizationEdit.open({ orgId: seed.organizations.unqualified.id });
-  expect(await surface.organizationEdit.swuRequirementTermsAccepted()).not.toBe(termsUnaccepted);
+test("accepting an organization's Sprint With Us terms records the date of acceptance, and the acceptance is shown on the qualification page", async ({
+  surface,
+}) => {
+  await establishActive(surface, seed.users.vendorOne.id);
+
+  // Read on the qualification page while the terms stand unaccepted, so the reading after
+  // acceptance is told apart from this one; what the page calls either state is its own business.
+  await surface.signIn(persona.vendor);
+  await surface.organizationEdit.open({ orgId: organization.id });
+  const termsUnaccepted = await surface.organizationEdit.swuRequirementTermsAccepted();
+
+  await ownerAcceptsSprintWithUsTerms(surface);
+
+  await surface.organizationEdit.open({ orgId: organization.id });
+  await expect.poll(() => surface.organizationEdit.swuRequirementTermsAccepted()).not.toBe(termsUnaccepted);
 });
 
 test("a second attempt to accept the same terms for the same organization is refused", async ({ surface }) => {
-  await surface.signIn(persona.vendor);
-  await surface.organizationSwuTerms.open({ orgId: seed.organizations.unqualified.id });
-  const firstAcceptance = await surface.organizationSwuTerms.acceptedOnNotice();
+  await establishActive(surface, seed.users.vendorOne.id);
+  const firstAcceptance = await ownerAcceptsSprintWithUsTerms(surface);
 
-  await surface.organizationSwuTerms.acceptTerms();
+  // The terms page offering no acceptance any more is as much a refusal as an acceptance that
+  // is turned away, so an accept control that cannot be used is not a failure here. The page
+  // names no observation of the "already accepted" message, so what is asserted is that no
+  // second acceptance was recorded: the notice still carries the first acceptance's date.
+  await surface.organizationSwuTerms.open({ orgId: organization.id });
+  try {
+    await surface.organizationSwuTerms.acceptTerms();
+  } catch {
+    // no acceptance offered
+  }
 
-  // Nothing further is recorded: the acceptance still shows the date of the first one.
+  await surface.organizationSwuTerms.open({ orgId: organization.id });
+  await expect.poll(() => surface.organizationSwuTerms.acceptedOnNotice()).toBeTruthy();
   expect(await surface.organizationSwuTerms.acceptedOnNotice()).toBe(firstAcceptance);
 });

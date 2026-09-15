@@ -17,6 +17,24 @@ criteria:
       are not permitted" from "you may act for nothing". Needs an observation
       such as organization-list.refused_when_not_permitted, or a page of its own
       for the organizations one may act on behalf of.
+  - id: R-3.15
+    version: 1
+    reason: "blocked: the outcome is which organizations a vendor is offered as
+      ones they may act on behalf of, and nothing in the surface reads that set.
+      The only place it is offered is the organization picker on
+      proposal-swu-create and proposal-twu-create, where choose_organization is an
+      action with no observation of the organizations it offers or of a choice it
+      refuses. organization-list.my_organizations and the owned and affiliated
+      tables on organization-user-memberships(-self) read the organizations a
+      vendor belongs to, which include those where they are only an ordinary
+      member, and the affiliated table does not tell an administered organization
+      from a member one, so none of them separates the four organizations the
+      given describes. The given itself can be built through the surface
+      (add_team_members, approve_invitation, toggle_member_admin_status,
+      archive_organization). Unblocked by an observation of the organizations
+      offered for a vendor to act on behalf of, such as
+      proposal-swu-create.organization_choices and its Team With Us sibling, or an
+      organization-list observation that reads only those organizations."
   - id: R-3.35
     version: 1
     reason: The claim is about where the accept and the decline choice inside an
