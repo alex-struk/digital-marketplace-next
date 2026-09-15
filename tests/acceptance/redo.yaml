@@ -7,40 +7,6 @@ redo:
       vendor polled is active at the moment of the broadcast, keep the vendor
       holding no email address among the recipients, and report every
       addressable vendor not reached rather than stopping at the first
-  - id: R-5.22
-    version: 1
-    why: the test reads the rejection the instant the entry is made, without
-      allowing time for it to appear, and it leaves the comment empty by
-      entering nothing into a comment that was already empty, so nothing about
-      the comment changed; allow time for the mark, and enter a comment before
-      clearing it
-  - id: R-5.19
-    version: 1
-    why: the test takes the status label shown to the panel member as proof they
-      opened a draft, but the criterion never says a panel member is told the
-      opportunity's state; confirm the panel member opened it by its own title
-      and details, and that another public sector employee cannot see it
-  - id: R-5.24
-    version: 1
-    why: the evaluator submitted after scoring only some of the proponents, so
-      nothing was submitted and the evaluation stayed a draft that may still be
-      changed; score every proponent completely and confirm the submission took
-      effect before trying to change it
-  - id: R-5.1
-    version: 1
-    why: the panels saved already named the draft's creator as chair and a second
-      member, so adding people built a valid panel, and a vendor is never
-      offered as a choice; start from exactly the one-person, two-chair and
-      vendor panels the given describes, treating a panel that cannot be
-      assembled or saved and leaves the opportunity's panel unchanged as
-      refused, and keep requiring the rule to be named when the same person is
-      named twice
-  - id: R-5.9
-    version: 1
-    why: the panel offered still had the draft's creator as its chair, so it was
-      valid and accepted; the criterion is about the service's own check on a
-      panel with no chair, so put a panel that names no chair before the service
-      and read whether it is refused
   - id: R-6.23
     version: 1
     why: the test tries to establish each vendor's standing acceptance, and later

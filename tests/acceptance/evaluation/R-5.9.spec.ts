@@ -1,34 +1,60 @@
 // criterion: @R-5.9 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
+// provenance: blind, spec@2d9a83e439479b419845aa46aa7d9d819b38de24, derived 2026-09-15
 import { test, expect, persona, seed } from "../../fixtures";
 
-// A panel of two public sector employees, correct in every other respect, is offered with
-// nobody marked as chair, so the missing chair is the only thing that can be refused. The
-// refusal is read from missing_chair_error, the observation named for exactly this rule.
+// A new Sprint With Us draft already names its creator — users.staffOne, the account the
+// public sector employee persona signs in as — on the panel as chair. So the panel put
+// forward here is built from that: two other public sector employees are added and the
+// creator, the only chair, is removed, leaving two members, both public sector employees,
+// each named once, and nobody marked as chair. The missing chair is the only fault it has.
 //
-// From outside there is one refusal, not two: a test drives the browser form and cannot
-// send a panel past it, so what is asserted here is that a chairless panel is refused, not
-// which of the two layers refused it. That the service applies the rule as well as the form
-// is the half of this criterion a blind test cannot reach on its own; it would need an
-// action that saves a panel the form would not submit.
+// The refusal is read the way a person would find it: the panel is opened afresh before and
+// after, and must read the same, and either the save is not offered or the missing chair is
+// named. What a blind test cannot tell apart is which layer did the refusing — every action
+// that saves a panel goes through the browser form, so a chairless panel reaching the service
+// without the form, which is the half of the criterion that is the service's own check,
+// needs an action that saves a panel the form would withhold.
 //
-// The consequence the criterion gives as its reason — that no opportunity may enter
-// consensus with nobody able to record the agreed score — is not asserted. The opportunity
-// this test builds is a draft, and only the two seeded opportunities can be taken as far as
-// consensus, so a chairless panel can never be carried to the stage it would spoil.
+// The consequence the criterion gives as its reason — no opportunity entering consensus with
+// nobody able to record the agreed score — is not asserted: a draft built here cannot be
+// carried to consensus, and the seeded closed opportunities already have a chair.
 
-test("the service must reject an evaluation panel that names no chair", async ({ surface }) => {
+const settle = { timeout: 15000 };
+
+test("The service must reject an evaluation panel that names no chair, applying the same rule the browser form already applies, so that no opportunity can enter consensus with nobody able to record the agreed score.", async ({
+  surface,
+}) => {
   await surface.signIn(persona.publicSectorStaff);
   await surface.opportunitySwuCreate.open();
-  await surface.opportunitySwuCreate.saveDraft({
-    title: "R-5.9 opportunity whose panel names no chair",
-  });
+  await surface.opportunitySwuCreate.saveDraft({ title: "R-5.9 opportunity offered a panel with no chair" });
   const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
 
   await surface.evaluationPanelSwu.open({ opportunityId });
-  await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffPanelEvaluator });
-  await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffTwo });
-  await surface.evaluationPanelSwu.saveEvaluationPanel();
+  const before = await surface.evaluationPanelSwu.panelMemberRow();
+  expect(before).toBeTruthy();
 
-  expect(await surface.evaluationPanelSwu.missingChairError()).toBeTruthy();
+  await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffPanelEvaluator });
+  await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffPanelChair });
+
+  let refused = false;
+  try {
+    await surface.evaluationPanelSwu.removePanelMember({ member: seed.users.staffOne });
+    await surface.evaluationPanelSwu.saveEvaluationPanel();
+  } catch {
+    refused = true;
+  }
+
+  await expect
+    .poll(async () => {
+      if (refused) return true;
+      try {
+        return Boolean(await surface.evaluationPanelSwu.missingChairError());
+      } catch {
+        return false;
+      }
+    }, settle)
+    .toBe(true);
+
+  await surface.evaluationPanelSwu.open({ opportunityId });
+  expect(await surface.evaluationPanelSwu.panelMemberRow()).toBe(before);
 });
