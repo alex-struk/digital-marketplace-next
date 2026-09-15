@@ -431,6 +431,30 @@ criteria:
       attempted. Unblocked by the first-time personas R-4.1 needs, one of them
       without an email address, and a mail.all() (or equivalent) over
       read_messages."
+  - id: R-4.5
+    version: 1
+    reason: "blocked: the when is the person signing in again the ordinary way,
+      through the identity provider, and that is the one step no target this
+      contract runs against lets a test take. On the oracle surface.signIn uses
+      the session-route mechanism in personas.yaml, which D-users-29 and the
+      openapi entry for the direct vendor route describe as creating a session
+      without the identity provider and without looking at the account's status,
+      so it passes over exactly the check that reactivates a self-deactivated
+      account. user-sign-in.sign_in_as_vendor starts the real hand-off
+      (startSignIn redirects to the identity provider), but nothing in the
+      contract completes that hand-off for a seeded persona there. A test built
+      on either would record what a sign-in that is not the one described does,
+      and fail or pass for that reason rather than the criterion's. The rest is
+      reachable: user-profile-self.deactivate_account and
+      confirm_activation_change produce the given for persona.vendor,
+      user-profile.status_badge read by persona.administrator shows the account
+      active again, and mail.messagesTo(seed.users.vendorOne.email) catches the
+      message, though telling the self-reactivation message apart from any other
+      needs the message body R-4.20 asks for. Unblocked by an ordinary
+      identity-provider sign-in a test can complete for a seeded persona on every
+      target, for example a sandbox-idp mechanism configured for the oracle too,
+      or a user-sign-in action that finishes the identity provider's sign-in for
+      a named persona; R-4.4 and R-4.20's self-reactivation half need the same."
   - id: R-4.13
     version: 1
     reason: "unobservable: the outcome is that the service offers no way to create
