@@ -1,54 +1,78 @@
 // criterion: @R-7.22 v1
-// provenance: blind, spec@40605384759bd10724c1411fdc448dfd99c70aee, derived 2026-09-07
+// provenance: blind, spec@08d8aac0ee7ec7fcee1a309ef183dcb17e38221b, derived 2026-09-15
 import { test, expect, persona, seed } from "../../fixtures";
 
-// The address already taken is the seeded page's own, so the clash is with a record rather
-// than with something this test put there a moment earlier.
-const rename = `derived-rename-clash-${Date.now().toString(36)}`;
+// The criterion's example address is "about". The address taken here is the seeded
+// ordinary page's instead: the rule is the same for any address, and the seeded page is a
+// record the test can establish is there, where a page the installation is meant to carry
+// may not be. Both halves complete the publication they start, as an administrator would,
+// so that the clashing submission is actually sent before its refusal is read.
+const taken = seed.content.ordinaryPage;
+const intruding = "Wording that should never reach a reader.";
 
-test("a page cannot be created at an address another page already holds, and the existing page is untouched", async ({
+test("No two pages may share an address, whether the clash arises on creating a page or on renaming one — on creating a page", async ({
   surface,
 }) => {
   await surface.signIn(persona.administrator);
+
+  await surface.contentView.open({ slug: taken.slug });
+  await expect
+    .poll(() => surface.contentView.pageTitle(), { message: "given: a page is already published at the address" })
+    .toBe(taken.title);
 
   await surface.contentCreate.open();
   await surface.contentCreate.enterTitle({ title: "A second page claiming a taken address" });
-  await surface.contentCreate.enterSlug({ slug: seed.content.ordinaryPage.slug });
-  await surface.contentCreate.enterBody({ body: "Wording that should never reach a reader." });
+  await surface.contentCreate.enterSlug({ slug: taken.slug });
+  await surface.contentCreate.enterBody({ body: intruding });
   await surface.contentCreate.publishPage();
+  await surface.contentCreate.confirmPublish();
 
-  expect(await surface.contentCreate.duplicateSlugError()).toBeTruthy();
+  await expect.poll(() => surface.contentCreate.duplicateSlugError()).toBeTruthy();
 
   await surface.signOut();
-  await surface.contentView.open({ slug: seed.content.ordinaryPage.slug });
-  expect(await surface.contentView.pageTitle()).toBe(seed.content.ordinaryPage.title);
-  expect(await surface.contentView.pageBody()).not.toContain("Wording that should never reach a reader.");
+  await surface.contentView.open({ slug: taken.slug });
+  await expect.poll(() => surface.contentView.pageTitle()).toBe(taken.title);
+  expect(await surface.contentView.pageBody()).not.toContain(intruding);
 });
 
-test("a page cannot be renamed to an address another page already holds, and the existing page is untouched", async ({
+test("No two pages may share an address, whether the clash arises on creating a page or on renaming one — on renaming one", async ({
   surface,
 }) => {
+  const other = `derived-rename-clash-${Date.now().toString(36)}`;
+  const otherTitle = "A page that will try to take a taken address";
+
   await surface.signIn(persona.administrator);
 
+  await surface.contentView.open({ slug: taken.slug });
+  await expect
+    .poll(() => surface.contentView.pageTitle(), { message: "given: a page is already published at the address" })
+    .toBe(taken.title);
+
+  // A different page, published at an address of its own.
   await surface.contentCreate.open();
-  await surface.contentCreate.enterTitle({ title: "A page that will try to take a taken address" });
-  await surface.contentCreate.enterSlug({ slug: rename });
+  await surface.contentCreate.enterTitle({ title: otherTitle });
+  await surface.contentCreate.enterSlug({ slug: other });
   await surface.contentCreate.enterBody({ body: "Wording belonging to the page doing the renaming." });
   await surface.contentCreate.publishPage();
   await surface.contentCreate.confirmPublish();
 
-  await surface.contentEdit.open({ slug: rename });
-  await surface.contentEdit.startEditing();
-  await surface.contentEdit.editSlug({ slug: seed.content.ordinaryPage.slug });
-  await surface.contentEdit.publishChanges();
+  await surface.contentEdit.open({ slug: other });
+  await expect
+    .poll(() => surface.contentEdit.pageAddress(), { message: "given: a different page exists to be renamed" })
+    .toContain(other);
 
-  expect(await surface.contentEdit.duplicateSlugError()).toBeTruthy();
+  await surface.contentEdit.startEditing();
+  await surface.contentEdit.editSlug({ slug: taken.slug });
+  await surface.contentEdit.publishChanges();
+  await surface.contentEdit.confirmPublishChanges();
+
+  await expect.poll(() => surface.contentEdit.duplicateSlugError()).toBeTruthy();
 
   await surface.signOut();
-  await surface.contentView.open({ slug: seed.content.ordinaryPage.slug });
-  expect(await surface.contentView.pageTitle()).toBe(seed.content.ordinaryPage.title);
+  await surface.contentView.open({ slug: taken.slug });
+  await expect.poll(() => surface.contentView.pageTitle()).toBe(taken.title);
 
-  // And the page that tried to move is still where it was.
-  await surface.contentView.open({ slug: rename });
-  expect(await surface.contentView.pageTitle()).toBe("A page that will try to take a taken address");
+  // The page that tried to move is still where it was.
+  await surface.contentView.open({ slug: other });
+  await expect.poll(() => surface.contentView.pageTitle()).toBe(otherTitle);
 });

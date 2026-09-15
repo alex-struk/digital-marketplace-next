@@ -1,35 +1,67 @@
 // criterion: @R-7.12 v1
-// provenance: blind, spec@40605384759bd10724c1411fdc448dfd99c70aee, derived 2026-09-07
+// provenance: blind, spec@08d8aac0ee7ec7fcee1a309ef183dcb17e38221b, derived 2026-09-15
 import { test, expect, persona } from "../../fixtures";
 
-// The pages the service creates for itself have no seed handle — the seed manifest records
-// deliberately that they arrive with the installation rather than with the seed — so the
-// one addressed here is written out by the address the criteria give it. "copyright" is
-// chosen because no other test in this domain writes to it, so it is still the placeholder
-// the criterion describes when this runs.
+// The pages the service creates for itself carry no seed handle — the seed records that
+// they arrive with the installation rather than with the seed — so they are named by the
+// addresses the spec and the contract give them: the seven service-wide pages, the
+// criterion's own example among them. The harness puts the target back to its seed before
+// each test and the seed writes none of these, so each is as the installation left it.
 //
-// Two parts of the outcome are not asserted. That twenty-two pages are listed cannot be:
-// no observation returns the number of rows on the list, and the seed adds an ordinary
-// page of its own, so the list is never exactly the set the installation was made with.
-// Nor can the installation be returned to a fresh state — nothing in the surface resets it.
-const needed = "copyright";
+// Before a page is read, the installation is established to carry it as a page the
+// service needs: a target that holds none of them has not met the given, and its reading
+// would say nothing about the criterion.
+//
+// The count of twenty-two is not asserted: no observation of the list returns how many
+// pages it names, and the seed adds an ordinary page of its own, so the list is never
+// exactly what the installation was made with.
+const serviceWide = [
+  "about",
+  "accessibility",
+  "copyright",
+  "disclaimer",
+  "privacy",
+  "markdown-guide",
+  "terms-and-conditions",
+] as const;
 
-test("a page the service needs exists and answers, its title is its own address, and its body holds placeholder text until somebody writes it", async ({
+test("A fresh installation carries a full set of the pages the service needs, each holding placeholder text and titled by its own address until somebody writes it — a visitor reading one", async ({
   surface,
 }) => {
-  await surface.contentView.open({ slug: needed });
+  await surface.signIn(persona.administrator);
+  for (const address of serviceWide) {
+    await surface.contentEdit.open({ slug: address });
+    await expect
+      .poll(() => surface.contentEdit.fixedPageWarning(), {
+        message: `given: this installation carries "${address}" as a page the service needs`,
+      })
+      .toBeTruthy();
+  }
+  await surface.signOut();
 
-  expect(await surface.contentView.pageTitle()).toBe(needed);
-  expect(await surface.contentView.pageBody()).toContain("Initial version");
+  for (const address of serviceWide) {
+    await surface.contentView.open({ slug: address });
+    await expect.poll(() => surface.contentView.pageTitle(), { message: `"${address}" answers` }).toBeTruthy();
+    expect.soft(await surface.contentView.notFoundForUnknownAddress(), `"${address}" answers`).toBeFalsy();
+    expect.soft(await surface.contentView.pageTitle(), `"${address}" is titled by its own address`).toBe(address);
+    expect.soft(await surface.contentView.pageBody(), `"${address}" holds placeholder text`).toContain("Initial version");
+  }
 });
 
-// The marking the criterion states is the one on the list of pages, so it is read there.
-// contentList.pageIsFixed() names no row, so what this asserts is that the list carries
-// the marking, not that the row carrying it is the page the test above reads.
-test("the pages the service needs are marked on the list as needed by the service", async ({ surface }) => {
+test("A fresh installation carries a full set of the pages the service needs, each holding placeholder text and titled by its own address until somebody writes it — an administrator looking at the list of pages", async ({
+  surface,
+}) => {
   await surface.signIn(persona.administrator);
+
+  await surface.contentEdit.open({ slug: serviceWide[0] });
+  await expect
+    .poll(() => surface.contentEdit.fixedPageWarning(), {
+      message: "given: this installation carries the pages the service needs",
+    })
+    .toBeTruthy();
 
   await surface.contentList.open();
 
+  await expect.poll(() => surface.contentList.pageTitle()).toBeTruthy();
   expect(await surface.contentList.pageIsFixed()).toBeTruthy();
 });
