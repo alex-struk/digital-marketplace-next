@@ -84,6 +84,8 @@
 - 00:54:21 run design: post-checks failed
 - 08:25:52 init: pipeline 07cdf21, packs 3, skills installed 0, skipped 0
 - 08:29:10 init: pipeline ccf387f, packs 3, skills installed 0, skipped 0
+- 08:29:41 propose design-harness-v1 at G-POL
+- 08:29:59 rule design-harness-v1 approve at G-POL by tech-lead (human)
 
 # Run record 2026-09-14
 
