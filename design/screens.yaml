@@ -1,0 +1,54 @@
+screens:
+  # users domain — see design/DESIGN.md, "Domain: users"
+  - page: user-sign-in
+    states: [default]
+  - page: user-sign-up-choose-account
+    states: [default]
+  - page: user-sign-up-complete
+    states: [default, terms-accepted, invalid, save-failed]
+  - page: user-sign-out
+    states: [default, loading, failed]
+  - page: user-notice
+    states: [default, sign-in-failed, not-found]
+  - page: user-list
+    states: [default, loading, export-open, export-ready, not-found]
+  - page: user-profile
+    states:
+      [
+        default,
+        loading,
+        not-found,
+        own,
+        editing,
+        invalid,
+        admin-refused,
+        deactivate-confirm,
+        deactivated-by-admin,
+        reactivate-confirm,
+        deactivated-by-owner,
+      ]
+  - page: user-profile-capabilities
+    states: [default, section-unavailable]
+  - page: user-profile-notifications
+    states: [default, unsubscribe-confirm, section-unavailable]
+  - page: user-profile-legal
+    states: [default, terms-updated, accept-terms-confirm, section-unavailable]
+  - page: user-profile-self
+    states:
+      [
+        default,
+        public-sector,
+        administrator,
+        loading,
+        editing,
+        invalid,
+        save-failed,
+        deactivate-confirm,
+        sign-in-required,
+      ]
+  - page: user-profile-self-capabilities
+    states: [default, section-unavailable]
+  - page: user-profile-self-notifications
+    states: [default, unsubscribe-confirm]
+  - page: user-profile-self-legal
+    states: [default, terms-updated, accept-terms-confirm, section-unavailable]
