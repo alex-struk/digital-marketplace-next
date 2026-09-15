@@ -47,3 +47,22 @@ I've fixed every finding in `tests/adapters/old/index.ts` and checked the key ne
 **Routes.** Every route I opened resolved. The only "Not Found" pages are the Team With Us evaluation pages the reviewer already cleared as not a binding fault.
 
 **Effect on the target.** My Choose File check uploaded one small text file, `probe.txt`, to its file store. I left the About page without saving it, and saved no drafts or panels.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: does the old adapter bind every surface action and observation, and nothing else? Approve. What I checked: (1) Nothing under tests/acceptance changed, and neither did tests/adapters/old/bindings.yaml. A git diff against main for those paths came back empty. (2) The runner compiled the proposal checkout itself and reports no errors under adapters/old/ (exit 0). That settles the author's own note that it could not typecheck. (3) The change leaves less decided by the adapter, not more. The old code ticked 'No' on any 'Remote OK?' question the test left blank. That was the adapter answering a question the criteria ask the author to answer, and it is gone. The other new behaviours only move around or find things: a question's 'order' now picks that question on the score sheet, a named person or seed user becomes their email so the chooser can find them, and errors are collected from every step of the form. Where the page refuses an action, the adapter now stops quietly instead of throwing: Submit stays disabled, 'Publish Addendum' stays disabled, a panel of two shows no remove control, a vendor is not offered in the chooser, or 'Submit Scores for Consensus' is disabled. The test then reads the page and makes the pass-or-fail call itself. The only place the adapter produces a word of its own is readOnlyAfterSubmitted. It returns 'read-only' when the top bar offers neither Edit nor an enabled Save Changes, which is how that page shows it cannot be changed. The status filter maps OPEN to Published and evaluation codes to Evaluation, and service areas are written as seed codes. Both translate the test's words into the page's words and decide nothing. (4) The two 'unbound' reasons added are real. termsModal and submitDisabledUntilTermsAccepted report unbound only when Submit is still disabled after every required field is filled, so the terms dialog never appears. (5) One point I checked more closely: attachmentAddress, a reader, now presses Save Changes when the file has only a browser preview and no stored link yet. A reader that saves could hide a criterion about files not being stored before a save. I read every test that calls attachmentAddress (R-8.19, 8.20, 8.25, 8.31). Each one uses it only to get the stored file's id right after adding the file, and none asserts anything about the unsaved state. So today the save is just a way to reach the stored link. The residual risks the author lists are stated openly and none is marked unaccepted: R-3.21's reader still takes no row name, and an attachment that is never saved disappears when the page is reopened. Tier is STANDARD, so this does not go to a human. What would change the ruling: a test or criterion that checks an attachment before it is saved, or that expects nothing to be stored until the author saves. The save inside attachmentAddress would then be deciding that outcome and would have to move into an explicit action. The same applies if the runner's typecheck turns out to be from a different revision than 8fab995.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `8fab9959695e7f3c7b69550ffbcdac3cfd16912f`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    No diagnostics.
