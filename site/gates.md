@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-15T07:19:54.107Z | design-users | G-DESIGN | return | agent:ux-reviewer | agent-held, unsampled | $0.9132874999999998 | sample |
 | 2026-09-15T06:50:24.422Z | calibrate-old-7 | G1 | approve | agent:product-owner | agent-held, unsampled | $4.9757430000000005 |  |
 | 2026-09-15T06:36:22.513Z | calibrate-triage-old-9 | G3 | approve | agent:reviewer | agent-held, unsampled | $4.828529499999999 |  |
 | 2026-09-15T05:59:31.234Z | derive-tests-users-stale-3 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.7208005000000002 |  |
