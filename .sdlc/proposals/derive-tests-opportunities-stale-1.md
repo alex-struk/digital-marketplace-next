@@ -41,3 +41,22 @@ Every opportunity a test builds is complete, and its state is read before anyone
 - **`mail`:** no way to read one message's To and Bcc. `observables.yaml` already names `read_one_message` and `copied_recipients` (the blind-copy list); the fixture lacks them. A listing of every message would also work. This blocks R-1.35, and it also needs the service's own sending address named in the contract.
 - **Seed or personas:** the third proponent has no persona, so its proposal can't be read. The seed also has no Code With Us opportunity past its deadline, which R-1.1 would need to cover that program.
 - **`user-profile`:** no plain observation of whether an account holds administrator rights. Reading the permissions statement for the word "admin" is the closest thing available, and it could misjudge an account if that wording differs.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: do the rewritten R-1.1, R-1.3, R-1.8, R-1.21, R-1.24 and R-1.53 tests, and the blocked entry for R-1.35, follow from their criteria and from nothing else? Ruling: approve. Each redo note is answered. R-1.1 and R-1.24 now repeat each reading until closure has finished, and each reading is made by someone entitled to see it. R-1.3, R-1.21 and R-1.53 first establish that the staff member holds no administrator rights. R-1.8 and R-1.53 build complete opportunities in all three programs and check that each was accepted before acting on it. R-1.21 submits a saved draft. Every assertion traces to the spec text. 'This opportunity has closed.' and 'Proponent 1/2/3' are quoted from the criteria. The /evaluat|question/ status pattern uses the stage names the spec itself gives ('team questions', 'resource questions'). The author notice in R-1.1 is identified by the opportunity's title, and the criterion's 'notified that it is ready' has to identify which opportunity 'it' is. The seed confirms staffOne wrote both closed opportunities. R-1.53 exercises every clause in all three programs, as the criterion's 'alike' requires. No selector, route, table or status code appears. The two gaps are real, checked against the repo. The Code With Us edit page offers no reading of a message or refusal (surface.d.ts:165), so R-1.21 cannot observe what the person is told. The mail fixture offers only messagesTo, and observables.yaml says group messages go to one visible recipient with the rest as blind copies, so R-1.35 is genuinely blocked. The runner's typecheck passed with no diagnostics for this proposal's files. The check warnings concern other domains, no adapter or application file changed, and the tier is STANDARD, so nothing requires escalation. What would change the ruling: a calibration failure showing a test asserts something the criterion does not say, such as a closure notice that correctly omits the opportunity's title; or the surface gaining an incomplete-submission message on the edit pages, or a way to read a message's blind copies. Either of those would bring R-1.21's message half, or R-1.35, back for derivation rather than leaving them excused.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `2a9b8bd2b087340881be6be1bf21f36d840d04c1`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/opportunities/`, which this proposal answers for.
+
+    No diagnostics.
