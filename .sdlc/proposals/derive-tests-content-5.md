@@ -23,3 +23,22 @@ I removed the reused-address step from R-7.9 and changed nothing else, so the co
 **Not checked:** I could not compile the edited file, because running the type-checker needed a permission that wasn't given. The risk is small: I only deleted calls, and every remaining call is one the reviewer already saw in the returned version.
 
 No condition was left undone. No surface action or observation is missing for this round. R-7.9's "no version survives" clause stays unasserted for the reasons above. That is a limit of what the service shows, not a missing piece of the contract.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: do the revised content tests now test only what their criteria say? Ruling: approve. Compared with the returned version (returned/derive-tests-content-stale-2), R-7.9 is the only test file that changed, and it changed in exactly the two ways the last ruling asked for. The step that created a new page at the removed page's address and read its version history is gone. The file's comment now says 'no version of its text survives anywhere in the service' is not checked, because nothing in the surface shows a removed page's text and R-7.23 says nothing shows an earlier version. What R-7.9 still checks follows from its given, when and then: it uses the seeded ordinary page, which the seed records as having three versions, and publishes one more change; it waits for the removal message; it confirms the return to a list that no longer shows the address; and, signed out, it confirms the address answers as not found and shows neither wording. No selector, route, status code or column name appears, and every action and reading used is declared in tests/generated/surface.d.ts. R-7.12, R-7.22, R-7.25 and R-7.27 are the same as the version already found to need no changes, and persona.administratorOther exists in tests/generated/personas.ts. not-testable.yaml differs from main only in order: the seven content entries moved to the end, and the 60 lines removed match the 60 lines added exactly. The runner's type-check on this revision passed with no errors under acceptance/content, which covers the check the writer could not run. All checks are green; the warnings are about outdated tests in other domains. No protected path is touched, and the tier is STANDARD with no unaccepted risk, so this is not escalated. What would change the ruling: a calibration run showing the product gives no not-found answer at a removed page's address, or showing bodyBeingEdited comes back empty on the edit screen, since R-7.9's last check would then pass without proving anything.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `2989774330c56115651b94866fbaa7f1fd81c4fe`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/content/`, which this proposal answers for.
+
+    No diagnostics.
