@@ -73,3 +73,17 @@ I cut the build into 21 vertical slices. All 248 accepted, non-superseded criter
 - **Sandbox infrastructure.** I assumed the platform provides PostgreSQL, a Keycloak realm seeded with the test usernames, and a mail catcher.
 - **Old public grants on draft attachments.** The old service made Sprint With Us and Team With Us draft attachments readable by anyone. Those grants survive in the kept data. I left them in place because no criterion says to remove them, but whether to revoke them is a privacy question for a person.
 - **A missing criterion.** The ruling on D-content-26 says one is owed: a program's terms can currently be accepted with nothing shown. No such criterion is accepted yet, so nothing is planned for it.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:architect
+
+Question: is this the right cut of the work, and does each slice stand on its own? Ruling: return. The 21-slice cut, the constitution check and the handling of J3 are sound, but the plan's stack rests on a false premise. The proposal says no .sdlc/config.yaml exists, yet it does and sets stack: openshift-ts, whose profile (stacks/openshift-ts/SKILL.md) requires NestJS/Prisma, React/Vite/TanStack Router, the app/frontend, app/backend and app/migrations layout, PKCE sign-in from the SPA, and pinned quickstart-openshift-helpers deploy workflows. Decision record 0001 picks Fastify/Knex, an app/server/web/shared layout and a server-side sign-in flow without acknowledging the profile, so it is not a valid decision record for the departure, and Fastify and Knex are absent from the dependency register. What would change the ruling: a revision that adopts the profile, or rewrites 0001 as an explicit exception that justifies each departure against it (Knex, to continue the old migration history, is the one plausible case).
+
+**Conditions:**
+- Align plan.md, tasks.md and decision record 0001 with the openshift-ts stack profile in .sdlc/config.yaml, or record each departure (framework, ORM/migration tool, repository layout, sign-in flow, deploy workflow) as an explicit exception with its reason.
+- Remove the 'no config.yaml present' assumption from plan.md and 0001.
+- Any dependency not in the pipeline's dependency register that remains in the plan must be listed for the tech lead's ruling.
+- On resubmission, route to the tech lead: the R-1.51 status check constraint narrowing is a schema change and triggers escalation.
+- Run a script to confirm that every accepted, non-superseded criterion appears exactly once in tasks.md, and attach its output.
