@@ -3,6 +3,7 @@
 # Run record 2026-09-19
 
 - 22:58:16 init: pipeline e706371, packs 3, skills installed 0, skipped 0
+- 22:59:07 rule design-users-2 approve at G-DESIGN by agent:tech-lead (agent)
 
 # Run record 2026-09-15
 
@@ -86,6 +87,9 @@
 - 23:50:24 rule calibrate-old-7 approve at G1 by agent:product-owner (agent)
 - 23:50:26 run calibrate: ok, cost 0, turns 0
 - 00:54:21 run design: post-checks failed
+- 07:28:44 run design: ok, cost 3.9304075000000003, turns 97
+- 07:28:44 propose design-users-2 at G-DESIGN
+- 07:31:10 rule design-users-2 escalated at G-DESIGN to tech-lead by agent:ux-reviewer
 - 08:25:52 init: pipeline 07cdf21, packs 3, skills installed 0, skipped 0
 - 08:29:10 init: pipeline ccf387f, packs 3, skills installed 0, skipped 0
 - 08:29:41 propose design-harness-v1 at G-POL

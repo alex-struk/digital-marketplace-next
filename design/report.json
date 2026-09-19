@@ -1,0 +1,350 @@
+{
+  "generated": "2026-09-15T15:30:25.938Z",
+  "axe": "4.13.0",
+  "catalogue": "978a1320a4112add05a6694a90486177c4584848ab9bd751f1c636f9620e1fe3",
+  "ok": true,
+  "messages": [],
+  "compile": [
+    {
+      "step": "typecheck",
+      "ok": true,
+      "output": ""
+    },
+    {
+      "step": "build",
+      "ok": true,
+      "output": ""
+    }
+  ],
+  "stories": [
+    {
+      "id": "users-user-list-default--default",
+      "title": "users/user-list/default",
+      "file": "./catalogue/user-list.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-list-export-open--export-open",
+      "title": "users/user-list/export-open",
+      "file": "./catalogue/user-list.export-open.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-list-export-ready--export-ready",
+      "title": "users/user-list/export-ready",
+      "file": "./catalogue/user-list.export-ready.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-list-loading--loading",
+      "title": "users/user-list/loading",
+      "file": "./catalogue/user-list.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-list-not-found--not-found",
+      "title": "users/user-list/not-found",
+      "file": "./catalogue/user-list.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-notice-default--default",
+      "title": "users/user-notice/default",
+      "file": "./catalogue/user-notice.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-notice-not-found--not-found",
+      "title": "users/user-notice/not-found",
+      "file": "./catalogue/user-notice.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-notice-sign-in-failed--sign-in-failed",
+      "title": "users/user-notice/sign-in-failed",
+      "file": "./catalogue/user-notice.sign-in-failed.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-capabilities-default--default",
+      "title": "users/user-profile-capabilities/default",
+      "file": "./catalogue/user-profile-capabilities.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-capabilities-section-unavailable--section-unavailable",
+      "title": "users/user-profile-capabilities/section-unavailable",
+      "file": "./catalogue/user-profile-capabilities.section-unavailable.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-legal-accept-terms-confirm--accept-terms-confirm",
+      "title": "users/user-profile-legal/accept-terms-confirm",
+      "file": "./catalogue/user-profile-legal.accept-terms-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-legal-default--default",
+      "title": "users/user-profile-legal/default",
+      "file": "./catalogue/user-profile-legal.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-legal-section-unavailable--section-unavailable",
+      "title": "users/user-profile-legal/section-unavailable",
+      "file": "./catalogue/user-profile-legal.section-unavailable.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-legal-terms-updated--terms-updated",
+      "title": "users/user-profile-legal/terms-updated",
+      "file": "./catalogue/user-profile-legal.terms-updated.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-notifications-default--default",
+      "title": "users/user-profile-notifications/default",
+      "file": "./catalogue/user-profile-notifications.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-notifications-section-unavailable--section-unavailable",
+      "title": "users/user-profile-notifications/section-unavailable",
+      "file": "./catalogue/user-profile-notifications.section-unavailable.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-notifications-unsubscribe-confirm--unsubscribe-confirm",
+      "title": "users/user-profile-notifications/unsubscribe-confirm",
+      "file": "./catalogue/user-profile-notifications.unsubscribe-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-self-capabilities-default--default",
+      "title": "users/user-profile-self-capabilities/default",
+      "file": "./catalogue/user-profile-self-capabilities.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-self-capabilities-section-unavailable--section-unavailable",
+      "title": "users/user-profile-self-capabilities/section-unavailable",
+      "file": "./catalogue/user-profile-self-capabilities.section-unavailable.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-self-legal-accept-terms-confirm--accept-terms-confirm",
+      "title": "users/user-profile-self-legal/accept-terms-confirm",
+      "file": "./catalogue/user-profile-self-legal.accept-terms-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-self-legal-default--default",
+      "title": "users/user-profile-self-legal/default",
+      "file": "./catalogue/user-profile-self-legal.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-self-legal-section-unavailable--section-unavailable",
+      "title": "users/user-profile-self-legal/section-unavailable",
+      "file": "./catalogue/user-profile-self-legal.section-unavailable.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-self-legal-terms-updated--terms-updated",
+      "title": "users/user-profile-self-legal/terms-updated",
+      "file": "./catalogue/user-profile-self-legal.terms-updated.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-self-notifications-default--default",
+      "title": "users/user-profile-self-notifications/default",
+      "file": "./catalogue/user-profile-self-notifications.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-self-notifications-unsubscribe-confirm--unsubscribe-confirm",
+      "title": "users/user-profile-self-notifications/unsubscribe-confirm",
+      "file": "./catalogue/user-profile-self-notifications.unsubscribe-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-self-administrator--administrator",
+      "title": "users/user-profile-self/administrator",
+      "file": "./catalogue/user-profile-self.administrator.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-self-deactivate-confirm--deactivate-confirm",
+      "title": "users/user-profile-self/deactivate-confirm",
+      "file": "./catalogue/user-profile-self.deactivate-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-self-default--default",
+      "title": "users/user-profile-self/default",
+      "file": "./catalogue/user-profile-self.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-self-editing--editing",
+      "title": "users/user-profile-self/editing",
+      "file": "./catalogue/user-profile-self.editing.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-self-invalid--invalid",
+      "title": "users/user-profile-self/invalid",
+      "file": "./catalogue/user-profile-self.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-self-loading--loading",
+      "title": "users/user-profile-self/loading",
+      "file": "./catalogue/user-profile-self.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-self-public-sector--public-sector",
+      "title": "users/user-profile-self/public-sector",
+      "file": "./catalogue/user-profile-self.public-sector.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-self-save-failed--save-failed",
+      "title": "users/user-profile-self/save-failed",
+      "file": "./catalogue/user-profile-self.save-failed.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-self-sign-in-required--sign-in-required",
+      "title": "users/user-profile-self/sign-in-required",
+      "file": "./catalogue/user-profile-self.sign-in-required.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-admin-refused--admin-refused",
+      "title": "users/user-profile/admin-refused",
+      "file": "./catalogue/user-profile.admin-refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-deactivate-confirm--deactivate-confirm",
+      "title": "users/user-profile/deactivate-confirm",
+      "file": "./catalogue/user-profile.deactivate-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-deactivated-by-admin--deactivated-by-admin",
+      "title": "users/user-profile/deactivated-by-admin",
+      "file": "./catalogue/user-profile.deactivated-by-admin.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-deactivated-by-owner--deactivated-by-owner",
+      "title": "users/user-profile/deactivated-by-owner",
+      "file": "./catalogue/user-profile.deactivated-by-owner.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-default--default",
+      "title": "users/user-profile/default",
+      "file": "./catalogue/user-profile.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-editing--editing",
+      "title": "users/user-profile/editing",
+      "file": "./catalogue/user-profile.editing.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-invalid--invalid",
+      "title": "users/user-profile/invalid",
+      "file": "./catalogue/user-profile.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-loading--loading",
+      "title": "users/user-profile/loading",
+      "file": "./catalogue/user-profile.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-not-found--not-found",
+      "title": "users/user-profile/not-found",
+      "file": "./catalogue/user-profile.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-own--own",
+      "title": "users/user-profile/own",
+      "file": "./catalogue/user-profile.own.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-profile-reactivate-confirm--reactivate-confirm",
+      "title": "users/user-profile/reactivate-confirm",
+      "file": "./catalogue/user-profile.reactivate-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-sign-in-default--default",
+      "title": "users/user-sign-in/default",
+      "file": "./catalogue/user-sign-in.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-sign-out-default--default",
+      "title": "users/user-sign-out/default",
+      "file": "./catalogue/user-sign-out.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-sign-out-failed--failed",
+      "title": "users/user-sign-out/failed",
+      "file": "./catalogue/user-sign-out.failed.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-sign-out-loading--loading",
+      "title": "users/user-sign-out/loading",
+      "file": "./catalogue/user-sign-out.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-sign-up-choose-account-default--default",
+      "title": "users/user-sign-up-choose-account/default",
+      "file": "./catalogue/user-sign-up-choose-account.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-sign-up-complete-default--default",
+      "title": "users/user-sign-up-complete/default",
+      "file": "./catalogue/user-sign-up-complete.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-sign-up-complete-invalid--invalid",
+      "title": "users/user-sign-up-complete/invalid",
+      "file": "./catalogue/user-sign-up-complete.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-sign-up-complete-save-failed--save-failed",
+      "title": "users/user-sign-up-complete/save-failed",
+      "file": "./catalogue/user-sign-up-complete.save-failed.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-sign-up-complete-terms-accepted--terms-accepted",
+      "title": "users/user-sign-up-complete/terms-accepted",
+      "file": "./catalogue/user-sign-up-complete.terms-accepted.stories.tsx",
+      "violations": []
+    }
+  ],
+  "totals": {
+    "stories": 54,
+    "violations": 0,
+    "failed": 0
+  }
+}
