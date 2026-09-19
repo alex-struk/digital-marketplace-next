@@ -1243,13 +1243,13 @@ pages:
     route: /users/me?tab=notifications&unsubscribe
     title: "Unsubscribe"
     actions:
-      confirm_unsubscribe: { test_id: null }
-      cancel_unsubscribe: { test_id: null }
+      confirm_unsubscribe: { test_id: unsubscribe-confirm-button }
+      cancel_unsubscribe: { test_id: unsubscribe-cancel-button }
     observations:
-      unsubscribe_confirmation: { test_id: null }
-      confirmation_names_signed_in_address: { test_id: null }
-      resolves_to_signed_in_person: { test_id: null }
-      sign_in_required: { test_id: null }
+      unsubscribe_confirmation: { test_id: unsubscribe-modal }
+      confirmation_names_signed_in_address: { test_id: unsubscribe-confirmation-address }
+      resolves_to_signed_in_person: { test_id: notifications-email-address }
+      sign_in_required: { test_id: sign-in-required }
 
   # The same route as opportunity-list, which the opportunities domain owns. Listed
   # separately because the new-opportunity notification control on that page belongs
@@ -1259,38 +1259,38 @@ pages:
     route: /opportunities
     title: "New-opportunity notification control"
     actions:
-      toggle_new_opportunity_notifications: { test_id: null }
+      toggle_new_opportunity_notifications: { test_id: notification-optin-toggle }
     observations:
-      notification_control: { test_id: null }
-      notification_control_state: { test_id: null }
-      notification_control_hidden_on_narrow_screen: { test_id: null }
+      notification_control: { test_id: notification-optin-control }
+      notification_control_state: { test_id: notification-optin-state }
+      notification_control_hidden_on_narrow_screen: { test_id: notification-optin-control }
 
   - id: notification-terms-broadcast
     domain: notifications
     route: /content/terms-and-conditions/edit
     title: "Terms and conditions"
     actions:
-      notify_vendors_of_updated_terms: { test_id: null }
-      confirm_notify_vendors: { test_id: null }
-      cancel_notify_vendors: { test_id: null }
+      notify_vendors_of_updated_terms: { test_id: notify-vendors-button }
+      confirm_notify_vendors: { test_id: notify-vendors-confirm-button }
+      cancel_notify_vendors: { test_id: notify-vendors-cancel-button }
     observations:
-      notify_vendors_control: { test_id: null }
-      notify_vendors_confirmation: { test_id: null }
-      notify_vendors_success: { test_id: null }
-      notify_vendors_failure: { test_id: null }
+      notify_vendors_control: { test_id: notify-vendors-button }
+      notify_vendors_confirmation: { test_id: notify-vendors-dialog }
+      notify_vendors_success: { test_id: notify-vendors-success }
+      notify_vendors_failure: { test_id: notify-vendors-failure }
 
   - id: notification-email-reference
     domain: notifications
     route: /admin/email-notification-reference
     title: "Email Notification Reference"
     actions:
-      open_reference: { test_id: null }
+      open_reference: { test_id: email-reference-page }
     observations:
-      message_group_title: { test_id: null }
-      message_subject: { test_id: null }
-      message_summary: { test_id: null }
-      message_body: { test_id: null }
-      refused_for_non_administrator: { test_id: null }
+      message_group_title: { test_id: email-reference-group-title }
+      message_subject: { test_id: email-reference-subject }
+      message_summary: { test_id: email-reference-summary }
+      message_body: { test_id: email-reference-body }
+      refused_for_non_administrator: { test_id: not-found-page }
 
   # The footer, which every screen carries. Listed as a surface of its own because the
   # five links on it are the service's whole standing offer of its own legal and

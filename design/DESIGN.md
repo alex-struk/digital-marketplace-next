@@ -1177,3 +1177,292 @@ something, the story says it is the design's own wording or a placeholder.
 16. **Failures of immediate changes.** No criterion says what a person sees when withdrawing
     rights, approving an invitation or saving service areas fails, or when a create or save fails
     for a reason other than validation.
+
+---
+
+## Domain: notifications
+
+Most of this domain has no screen. Turning notifications off for an environment (R-6.1), failed
+delivery (R-6.2), the test marker (R-6.3), the single sender (R-6.4), the plain-text form (R-6.5),
+batching and hidden recipients (R-6.8, R-6.15), silence for deactivated accounts (R-6.17), new
+accounts starting with notices off (R-6.20) and skipping recipients with no address (R-6.28) all
+happen in the sending machinery, and nothing here designs them. What this domain puts on a screen is
+small. It covers four places, and three of them are parts of pages other domains own:
+
+- **notification-unsubscribe-landing.** This is the users domain's own notification settings
+  (`user-profile-self-notifications`), reached from an email's Unsubscribe offer, and it arrives with
+  the question already asked.
+- **notification-optin-opportunity-list.** This is one control on the opportunities domain's list
+  of opportunities.
+- **notification-terms-broadcast.** This is one section on the content domain's management page for
+  the terms and conditions page.
+- **notification-email-reference.** This is the one page the domain owns outright: the
+  administrator's preview of every email.
+
+Every state named in `design/screens.yaml` has a story at
+`design/catalogue/<page>.<state>.stories.tsx`, and the story is what a build copies. Where a story
+shows another domain's part of the page, that part is trimmed or shown as a placeholder frame, and
+the other domain's own design governs it.
+
+### Components this domain is built from
+
+All from `@bcgov/design-system-react-components` 0.8.1, unless the entry says otherwise. Only
+components and props that the earlier domains' catalogues already compile with are used. No new
+design-system component is introduced.
+
+| Component | Used for |
+| --- | --- |
+| `Heading` | One H1 per screen. H2 for the opt-in section, the terms broadcast section, and each event group on the reference page. H3 for each message within a group. |
+| `Text` | Body copy. It also carries the control's current state on the list, the scope sentence on the settings page, the placeholder frame, and `size="small" color="secondary"` for the line above an H1 and each email's footer link. |
+| `Button` | "Email me about new opportunities" and "Stop emailing me about new opportunities" (`secondary`). "Notify vendors of updated terms" (`secondary`, because the page's primary action is the content domain's). The dialog confirmations are `primary` and Cancel is `secondary`. |
+| `Checkbox` | The new-opportunities checkbox on the settings page. This is the users domain's control, reused unchanged. |
+| `Link` | The profile section links, the reference page's contents, and the links inside each sample email. |
+| `Modal` + `AlertDialog` | The unsubscribe question (`warning`, the users domain's dialog with the same test IDs) and the terms-broadcast question (`warning`). |
+| `InlineAlert` | The terms broadcast's outcome: `success` with `role="status"`, or `danger` with `role="alert"`. It is also used for the sign-in prompt (`info`, the users domain's `sign-in-required`). Each alert that carries a test ID is wrapped in a `div` that holds the ID. |
+| `ProgressCircle` | Indeterminate loading, inside a `role="status"` container, next to visible text. |
+| `Select`, `TextField`, `Checkbox` | These appear only as the opportunities domain's filter row, reproduced around the opt-in control. |
+
+**The opt-in is a `Button` whose text changes, not a checkbox or `ToggleButton`.** R-6.21 says
+"the control changes to offer the opposite choice", so the control names the choice it offers
+("Email me about new opportunities" or "Stop emailing me about new opportunities"). The current
+state is a separate sentence in words before it ("You are not emailed when new opportunities are
+posted."). `ToggleButton` was rejected because it shows its pressed state through styling, which
+the opportunities domain already ruled out for Watch.
+
+### This project's own components (not design-system components)
+
+These are built from standard HTML and styled only with tokens. None is a design-system component.
+
+- **Card section.** This is the earlier domains' `<section aria-labelledby>` with a
+  `--surface-color-border-default` border and a `--layout-border-radius-medium` radius, reused. It
+  holds the opt-in control on the list, and the placeholder frame for the content domain's part of
+  the terms page.
+- **Key facts list.** This is the opportunities domain's `<dl>`, reused. Each sample message's
+  Subject and "Who receives it and why" is a `dt` in `--typography-font-weights-bold` followed by
+  its `dd`.
+- **Email preview frame.** This one is new in this domain. It is a `<div role="group"
+  aria-label="Email body: <subject>">` with a `--surface-color-border-medium` border and a
+  `--layout-border-radius-medium` radius, and it holds one sample message as its recipient would
+  see it. The design system has nothing for showing a document inside a page. The message's own
+  title is set in bold text, not as a heading, so the page's outline stays page → event → message.
+  The emails' own formatting belongs to the sending machinery. A build renders the message's body
+  markup into this frame. It does not use an `iframe`, because an unlabelled or untitled frame
+  would break the outline and the scan.
+
+No token beyond those the earlier domains list is used:
+`--layout-margin-{none,small,medium,large}`, `--layout-padding-{none,small,large}`,
+`--layout-border-width-small`, `--layout-border-radius-{medium,circular}`,
+`--surface-color-border-{default,medium}`, and `--typography-font-weights-bold`.
+
+### How each screen is laid out
+
+- **Unsubscribe landing.** This is the users domain's notifications section, unchanged: the H1
+  "Notifications", the profile section navigation, the sentence naming the address, the checkbox,
+  and the `role="status"` region. It adds one sentence stating the choice's scope ("This setting
+  covers only emails announcing newly published opportunities…"). R-6.16 means a reader who arrives
+  from any other kind of email must not be led to think this choice stops it. On arrival, the
+  unsubscribe `AlertDialog` is already open. It names the account that is signed in ("You are
+  signed in as …"), and that account's address in a `span` of its own, because R-6.7 says it acts
+  on whoever is signed in, not whoever the email was sent to. The document title is the surface
+  title, "Unsubscribe", while the question is open. After that, it is the settings page's own
+  title.
+- **Opt-in on the list.** A card section follows the opportunities domain's filter form and comes
+  before the first group of opportunities. It holds an H2 "New opportunity emails", the state
+  sentence, the button, and a `role="status"` region. It sits outside the `role="search"` form,
+  because it is not a filter. It appears once, before whichever group is first. That matches R-6.21's
+  note, which says it sits where the reader looks first. **There is no breakpoint and no media query
+  on it.** It flex-wraps and is present at every width, including 320 CSS pixels (R-6.27).
+- **Terms broadcast.** The content domain's page comes first: the small line "Manage a page", the H1
+  "Terms and conditions", and the page's own content and controls. Then comes a section with the H2
+  "Notify vendors of updated terms". It holds two sentences on what the action does and whom it
+  reaches, then the button. The outcome alert appears at the top of that section, directly under
+  its H2. The section is rendered only on the page whose slug is `terms-and-conditions`, and only
+  for an administrator (R-6.23). It is offered while the page is being viewed, not while its edit
+  form is open (gap 11).
+- **Email reference.** The H1 "Email Notification Reference", then one sentence saying that the
+  samples are invented. A `<nav>` titled "Events that send email" lists in-page links to every
+  event. Then there is one section per event, whose H2 is the event ("A Code With Us opportunity is
+  submitted for review"). Inside it is one `<article>` per message, whose H3 names the recipient
+  ("To the opportunity's author"). Each article holds the key facts (Subject, and "Who receives it
+  and why" **only where a summary is written**; otherwise the row is left out rather than shown
+  empty, R-6.13) and the email preview frame. Every message the service can send is listed
+  (R-6.19). Nothing is collapsed behind a disclosure, so a find-in-page reaches every subject.
+
+### Forms, decisions and immediate saves
+
+This domain has no form with fields to validate. It has one immediate save and two confirmed
+decisions.
+
+- **The opt-in saves at once** (R-6.21, with no confirmation in either direction, as its note
+  records). Focus stays on the button. Its text changes, and the `role="status"` region announces
+  the outcome ("Saved. You will be emailed when the next opportunity is posted."), because a
+  focused button's changed name is not reliably announced. The state sentence changes with it.
+  While the request is in flight the button is not pressed again. A failure is not designed (gap
+  7).
+- **Unsubscribing asks first.** This is the users domain's dialog. Its title is "Stop emails about
+  new opportunities?", and its buttons are "Keep receiving them" and "Unsubscribe". Unsubscribe
+  clears the checkbox, closes the dialog, returns focus to the checkbox, and announces the outcome
+  in the status region (`unsubscribed`). "Keep receiving them" or Escape closes the dialog and
+  changes nothing, which leaves the ordinary settings page (`user-profile-self-notifications`,
+  `default`).
+- **Notifying vendors asks first** (R-6.23: "chooses to notify vendors and confirms"). The dialog is
+  an `AlertDialog` with the `warning` variant. Its title is "Notify vendors that the terms have
+  changed?". The body says that every acceptance is withdrawn, that active vendors are emailed, and
+  that a withdrawn acceptance cannot be restored. The buttons are "Notify vendors" and "Cancel".
+  Focus moves in and stays in, Escape dismisses it, and focus returns to the opening button.
+- **The success message says only what the service knows** (R-6.24). It is reported at once, and
+  titled "Vendors have been notified". Its body says that the acceptances have been withdrawn, that
+  the emails are being sent now, and that this page will not report whether each one arrives
+  (R-6.2). The criterion describes the administrator being told at once, and the design keeps that.
+  It does not let the message claim that delivery happened.
+
+### Loading, empty, refused, signed out
+
+- **Loading.** This follows the users domain's pattern. The unsubscribe landing asks nothing until
+  the signed-in account has arrived, because the question must name that account's address
+  (`loading`). The reference page renders its H1 at once, while the samples are composed.
+- **Signed out.** The unsubscribe landing sends a visitor who is not signed in to the users
+  domain's sign-in screen. Its `sign-in-required` alert is worded for this arrival: the visitor is
+  returned to their settings with the question asked, and the change applies to the account they
+  sign in with (R-6.7). On the list, a visitor who is not signed in is not shown the opt-in at all.
+  Nothing replaces it (`signed-out`).
+- **Refused.** Anybody but an administrator who asks for the reference page is given the shared
+  missing page (`not-found-page`), as every earlier domain does for its refusals. The terms
+  broadcast is never rendered for anyone but an administrator, so its refusal has no screen.
+- **Empty.** Nothing in this domain can be empty. The reference page always has every message.
+
+### Accessibility obligations
+
+WCAG 2.1 AA applies (P1, J5). The users domain's list applies here too. This domain adds:
+
+- **State in words.** The opt-in's state is a sentence, and the button names the choice it
+  offers, so neither depends on colour or a pressed style.
+- **Nothing hidden by width** (R-6.27, and WCAG 1.4.10). The opt-in reflows at 320 pixels and
+  400% zoom and is never removed at a breakpoint.
+- **Announcements.** The opt-in, unsubscribing and a successful broadcast are announced through
+  `role="status"`. A failed broadcast uses `role="alert"`. Loading uses `role="status"`.
+- **The reference page is navigable at length.** It has a contents `nav` with in-page links, an H2
+  per event, and an H3 per message, so a screen reader's heading list is the catalogue. Each preview
+  frame is a named group ("Email body: <subject>"). The link text inside the samples ("Unsubscribe",
+  "Manage your notification settings") repeats across messages, and that is acceptable only because
+  each link sits inside a named group. A build that drops the group label must add the subject to
+  each link's accessible name.
+- **Dialogs** follow the alert-dialog pattern that the earlier domains describe.
+- **Checks still required.** The scan checks rendered stories, not conformance. A screen-reader check
+  of the unsubscribe dialog opening on arrival, a keyboard check of the reference page's in-page
+  links, and a 320-pixel check of the opt-in on a real list must be done before the build is
+  accepted.
+
+### Test IDs
+
+The users domain's rules apply: one ID per kind of element, an action and an observation on the
+same element share its ID, and the same element keeps its ID on every page.
+
+| Page | Surface name | Test ID |
+| --- | --- | --- |
+| notification-unsubscribe-landing | `confirm_unsubscribe` | `unsubscribe-confirm-button` (the users domain's, reused) |
+| | `cancel_unsubscribe` | `unsubscribe-cancel-button` (reused) |
+| | `unsubscribe_confirmation` | `unsubscribe-modal` (reused) |
+| | `confirmation_names_signed_in_address` | `unsubscribe-confirmation-address`, the `span` inside the dialog holding the address |
+| | `resolves_to_signed_in_person` | `notifications-email-address` (reused), the sentence naming whose settings these are |
+| | `sign_in_required` | `sign-in-required` (the users domain's, reused) |
+| notification-optin-opportunity-list | `toggle_new_opportunity_notifications` | `notification-optin-toggle` |
+| | `notification_control` | `notification-optin-control`, the section |
+| | `notification_control_state` | `notification-optin-state`, the state sentence |
+| | `notification_control_hidden_on_narrow_screen` | `notification-optin-control`: see gap 1 |
+| notification-terms-broadcast | `notify_vendors_of_updated_terms`, `notify_vendors_control` | `notify-vendors-button` |
+| | `confirm_notify_vendors` | `notify-vendors-confirm-button` |
+| | `cancel_notify_vendors` | `notify-vendors-cancel-button` |
+| | `notify_vendors_confirmation` | `notify-vendors-dialog` |
+| | `notify_vendors_success` | `notify-vendors-success` |
+| | `notify_vendors_failure` | `notify-vendors-failure` |
+| notification-email-reference | `open_reference` | `email-reference-page`, the page wrapper (opening the address is the action, as with the opportunities domain's `/status`) |
+| | `message_group_title` | `email-reference-group-title`, a `span` inside each event's H2 |
+| | `message_subject` | `email-reference-subject` |
+| | `message_summary` | `email-reference-summary`, present only where a summary is written |
+| | `message_body` | `email-reference-body`, the preview frame |
+| | `refused_for_non_administrator` | `not-found-page` (reused) |
+
+The group title's ID is on a `span` inside the `Heading`, because no earlier story shows that
+`Heading` passes a `data-*` attribute through.
+
+### Per-screen notes
+
+**notification-unsubscribe-landing** has four states. `default` is the dialog open on arrival,
+naming the signed-in address. `loading` is the account not yet arrived, with no question asked.
+`unsubscribed` means the dialog was confirmed: the checkbox is cleared and the outcome is announced.
+`sign-in-required` is a visitor who is not signed in. There is no `cancelled` state, because
+cancelling leaves the users domain's settings page exactly as its `default` story shows. The users
+domain's `user-profile-self-notifications.unsubscribe-confirm` story shows the same dialog without
+the profile navigation. The two should match, and this design's version is the whole page.
+
+**notification-optin-opportunity-list** has three states. `default` is a signed-in vendor with
+emails off. `subscribed` is just after turning them on, with the opposite choice offered and the
+outcome announced. `signed-out` has no control. A public sector employee sees the same control. The
+list's other states (`staff`, `loading`) are the opportunities domain's, and the control sits in
+the same place in them. The opportunities domain's per-screen note says the control goes at "the
+end of the filter row". This design places it after the filter form instead, for the reason given
+under layout.
+
+**notification-terms-broadcast** has four states. `default` is an administrator viewing the terms
+page, with the section offered. `notify-confirm` is the question. `notified` is the success
+message. `notify-failed` is the failure message, with the button still offered.
+
+**notification-email-reference** has three states: `default`, `loading` and `not-found`. The
+`default` story shows five events as a pattern. They include a message sent to hidden batches
+(R-6.8), a pair from one event with and without a summary, and an evaluation-panel message of the
+kind the old page omitted (R-6.14, R-6.19). They also include the not-awarded message, which leads
+with the title and the winner (R-6.25), and the changed-terms message naming all three programs
+(R-6.18). Only the new-opportunity announcement ends with Unsubscribe. Every other sample ends
+with "Manage your notification settings" (R-6.16).
+
+### Gaps
+
+These are work for the spec. None was filled with invented behaviour. Where a story had to show
+words that no criterion gives, the story or this list says so.
+
+1. **An observation named for a superseded criterion.** `notification_control_hidden_on_narrow_screen`
+   is R-6.22's wording, and R-6.27 replaced it: the control must be shown at every width. The
+   observation is bound to the control itself (`notification-optin-control`), so a test can find
+   it at a narrow width and assert that it is **visible**. The name says the opposite of the
+   accepted rule. The contract stage should rename it (for example `notification_control_on_narrow_screen`).
+   This stage may not rename it.
+2. **R-6.6 and R-6.16 disagree.** R-6.6 (accepted, v2) says every message ends with an Unsubscribe
+   offer. R-6.16 says a message the preference does not govern must not offer to unsubscribe. R-6.6's
+   own note leans on R-6.10, which is superseded. The reference page's samples follow R-6.16, the
+   later authored rule. R-6.6 should be narrowed to the messages the preference governs.
+3. **Which messages the preference governs.** R-6.16 implies that some messages are outside the
+   choice but does not list them. The only list, "the announcement of newly published
+   opportunities and nothing else", is in R-6.10, which is superseded. The settings page's scope
+   sentence and the samples' footers follow R-6.10's scope. If the ruling on R-6.10 widens the
+   choice, both change.
+4. **The wording after an immediate save.** No criterion words what a person is told after
+   unsubscribing or after using the opt-in. The announcements in the stories are the design's own.
+5. **Unsubscribing when already unsubscribed.** No criterion says what the landing shows to a
+   person whose new-opportunity emails are already off: the same question, which would change
+   nothing, or a statement that they are already unsubscribed. No state is designed for it.
+6. **The opt-in for a visitor who is not signed in.** R-6.21 offers it to a signed-in person. It is
+   not stated whether a visitor should be invited to sign in to get these emails. Nothing is shown.
+7. **The opt-in failing to save.** It is not stated what a person sees, or whether the button's
+   text reverts.
+8. **What a failed broadcast means.** `notify_vendors_failure` is observed, but no criterion says
+   what can fail, what the administrator is told, or whether some acceptances may already be
+   withdrawn when it does. R-6.24 says the withdrawal completes before the response. The alert names
+   no cause and makes no claim about the acceptances.
+9. **The content of every message.** R-6.19 requires every message the service can send on the
+   reference page. The spec gives neither that list nor the subject, summary or body of any
+   message: "nothing outside the code describes the content of any individual message". The count
+   of sixty-two comes from the old service. The stories' subjects, summaries and bodies are
+   placeholders. The events are taken from the criteria. The service's logo (R-6.3), which heads
+   every message, is not in the preview frame, because the token set has no size for an image.
+10. **What a refused reference page looks like.** R-6.13 says only "refused". The shared missing
+    page is used, as every earlier domain does.
+11. **When the broadcast is offered.** R-6.23 says an administrator "viewing" the terms page. It
+    does not say whether the section is offered while the page's edit form is open, whether it
+    should require that the terms were changed since the last announcement, or whether a second
+    announcement may follow the first. The design offers it in the page's view mode, every time.
+12. **The test marker on the reference page.** R-6.3 marks every message sent from a test
+    environment. It does not say whether the subjects previewed on the reference page carry the
+    marker. The samples show none.
+13. **Loading states are the design's own.** No criterion describes a delay on the landing or the
+    reference page. They exist because both depend on data that arrives after the page.
