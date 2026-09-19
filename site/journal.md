@@ -1,5 +1,82 @@
 # Journal
 
+## 125 · plan · 2026-09-19
+
+cost $5.5609435000000005 · turns 71
+
+I've cut the build into **21 vertical slices** covering all **248 criteria** the index marks accepted and not superseded. Each criterion is in exactly one slice. I checked that by comparing the IDs in `plan/tasks.md` against the index itself, not by counting. There were no gaps, no duplicates and nothing extra. I also wrote `plan/plan.md` with its constitution check, and seven decision records in `docs/decisions/`.
+
+**What each slice delivers, in build order:**
+1. A visitor can read a published page. This slice also stands up the running shell: the container, the connection to the kept schema, the sandbox deployment, the not-found screen and the footer.
+2. Sign-in, sign-up and sign-out through Keycloak, plus the mail pipeline. The welcome message is the first thing sent through it.
+3. A person's own profile: capabilities, the new-opportunity notice setting, the unsubscribe landing, the profile picture, and deactivating and reactivating one's own account.
+4. Administrators manage accounts.
+5. Administrators manage pages and announce changed terms. This settles the formatted-text editor that later forms reuse, and sends the first message to many people at once.
+6. Staff draft and publish a Code With Us opportunity; anyone can find and read it.
+7. Looking after a published opportunity: history, addenda, notes, watching, cancelling.
+8. Attachments on opportunities, and the general file store beneath them.
+9. Registering and looking after an organization.
+10. An organization's team: invitations, members, rights, ownership.
+11. A vendor proposes on Code With Us.
+12. Code With Us evaluation and award, including the deadline hook that closes opportunities.
+13. Organizations qualify for Sprint With Us and Team With Us.
+14. A Sprint With Us opportunity with its evaluation panel.
+15. A Sprint With Us proposal.
+16. Individual evaluation by the panel.
+17. Consensus and screening proponents in.
+18. The Sprint With Us challenges through to award.
+19. Team With Us end to end.
+20. Printable copies and reports.
+21. The administrator's page previewing every message the service sends.
+
+The order follows a rule: each earlier slice settles something the later ones reuse. Code With Us, the simplest program, is carried through to award first, so Sprint With Us and Team With Us extend a working path instead of building a new one.
+
+**Hardest to place.** `plan/plan.md` records the reason for each of these:
+- **R-6.19** (every message appears on the preview page) can only be true once every message exists, so it goes last.
+- **R-1.1** (closing at the deadline) and **R-1.19** (an opportunity's full life from draft to award) cover all three programs. They sit in slice 12, where a program is first carried from draft to award.
+- **R-7.29** (an embedded page that is missing leaves an empty section) is a content criterion, but its only stated case is the Sprint With Us opportunity page, so it sits in slice 14.
+- **R-8.20, R-8.22, R-8.25 and R-8.31** cover proposal attachments as well as opportunity ones. They sit in slice 8, and slice 11 must reuse that rule rather than write a second one.
+- **R-4.13** says no way exists to create the first administrator. It is a statement that something is absent, so there is nothing to build for it.
+
+**Contradictions that need a ruling:**
+- **R-5.11 against R-5.28**, on who may read an individual evaluation before consensus. Both are accepted. Slice 16 is blocked on this, and the plan deliberately leaves that permission unbuilt.
+- **R-8.24 and R-8.23 against R-8.18.** The first two still point at a superseded criterion that treats malformed uploads as a service fault. R-8.18 is built in the meantime.
+- **R-6.6 against R-6.16**, on which messages offer Unsubscribe. R-6.16 is built.
+- **R-7.12** gives twenty-two pages for a fresh installation, but later rulings leave sixteen. Sixteen are built.
+- **R-1.51** does not name the state that stored "suspended" opportunities should become. Record 0006 proposes "cancelled", and the migration must not run on real data before a ruling.
+
+**Constitution rules that bore on the plan:**
+- **P1 and P2:** screens are copied from the design's scanned stories, and a slice counts as done only after an axe scan, a keyboard check and a check at 320 pixels wide.
+- **P3:** synthetic data only. A privacy impact assessment must be recorded before any real data or the suspended-state migration touches this service.
+- **P4:** the service deploys to OpenShift sandbox namespaces only.
+- **P6 and P7:** this is a proposal for plan approval, and the acceptance proof comes from a separate workspace.
+- **J3:** the old test-only session routes are not built, even though `openapi.yaml` still describes them.
+- **J5:** Keycloak and the existing schema are kept, with four changes, each either additive or required by a criterion.
+- No exception under J6 was needed.
+
+**Decision records written:**
+- 0001: one TypeScript container serving both the API and the React screens.
+- 0002: keep the schema and continue the old migration history as the starting point; lists the four data changes.
+- 0003: sign-in through Keycloak only, with no test session routes.
+- 0004: opportunities close through a check on each request, not a scheduler.
+- 0005: mail is sent after the change is saved, with no retries, and from one list of message kinds.
+- 0006: the suspended-state mapping.
+- 0007: formatted text is Markdown, and embedded markup is never run.
+
+**Assumptions nobody has ruled on:**
+- **Server stack:** Node 22, Express 5, Knex, React Router and Vite. Nothing in the spec or constitution names one. The client libraries are the ones the design pinned.
+- **Sandbox sign-in:** the sandbox Keycloak realm sets a claim that stands in for the government and code-hosting providers, and the account kind is read from it.
+- **Sandbox services:** Keycloak, PostgreSQL and a mail catcher come with the sandbox environment, since running environments is out of scope.
+- **Stored text:** page bodies are Markdown, and the image marker uses the spelling existing rows already hold. Slices 1 and 5 confirm both against the old application.
+- **Migrations:** the sandbox's PostgreSQL version can run the old migration history unchanged.
+- **Approved tools:** `.sdlc/config.yaml` is not in this workspace, so the build must check its tools against it before slice 1.
+
+**What I could not do:** the workspace is not a git repository, so nothing is committed. The plan also records mismatches between the contract and the criteria that it cannot fix itself:
+- `/proposals` is still listed although its criterion is obsolete.
+- An observation is still named for the superseded rule that hid a control on narrow screens.
+- Actions confirmed in a dialog are named as one step, but take two on the screen.
+- The home page's figures have no criterion saying what they count.
+
 ## 124 · design · 2026-09-19
 
 cost $15.151712000000002 · turns 161
