@@ -52,3 +52,17 @@ The shared validation and permission rules now live in `app/backend/src/rules/`,
 - Migrations can run as an init container under the quickstart's charts.
 - Prisma introspection of the old schema is good enough to use.
 - The mapping of "suspended" records to cancelled, and the other open items already in the plan, are unchanged.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+
+The question is whether the plan is the right cut of the work, with each slice standing on its own. The architect passed everything it could check and escalated two points: narrowing the opportunity status check constraints for R-1.51, and dependencies it could not check against a register. No register exists in the workspace. Ruling: approve. The part of the architect's account that decided this is its note that the constraint change alters no column or table shape, has a criterion behind it, and has a code-only fallback already written into 0002. That is a narrow schema change backed by evidence, not a loosening of J5, so I approve it. I also approve both departures from the stack profile. Knex runs migrations only, to keep the old history and keep a Prisma bookkeeping table out of the kept schema. Administrator rights come from the users table because R-4.19, R-4.20 and R-4.4 require it, and each departure records what would reverse it. I approve the dependency list as the plan's first choices (knex/pg, react-aria-components 1.17.0, keycloak-js, jose, express-openapi-validator, openapi-typescript and openapi-fetch, nodemailer, sharp, markdown-it and dompurify, the quickstart's Caddy image). A substitute needs the same ruling. No platform article changes, no gate is removed, J3 holds, and the tier is STANDARD, so nothing requires escalation to Alex. The coverage script plan/check-coverage.mjs was still not run: this session also needs an approval to run it and cannot get one. Coverage rests on the architect's independent hand check (248 of 248, each placed once), so running the script is a condition before building starts. What would change the ruling: a failing coverage run, or a register or policy that excludes a listed dependency, turns this into a return. A ruling that narrowing a check constraint breaches J5 changes only R-1.51's enforcement, to the code-only path.
+
+**Conditions:**
+- Run `node plan/check-coverage.mjs .` and attach the output before Slice 1 starts; any FAIL returns the plan to G2
+- Add the coverage script to CI so a changed criteria: line cannot pass unchecked
+- Remove drafting history from the decision records (0001's 'Supersedes… was wrong to do so' line, the 'revised after the first G2 return' status lines, and 'The first version put…' in 0001) and state only the current decision
+- Items 5 (suspended maps to cancelled) and 7 (historical public grants on draft attachments) stay open for a human ruling; they do not block Slice 1
+- Pipeline owner: sessions cannot run scripts without an approval they cannot get, and the dependency register this gate refers to does not exist in the workspace; both are pipeline gaps, not plan defects
