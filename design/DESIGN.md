@@ -786,3 +786,394 @@ had to show something, the story marks it as illustrative or placeholder.
 25. **Dates in the stories are empty.** A `DatePicker` value needs `@internationalized/date`, which
     the catalogue's `package.json` does not declare, and this stage does not own that file. So the
     date pickers render empty, even in the `editing` stories. A build sets them from the record.
+
+---
+
+## Domain: organizations
+
+These screens cover the public organization list, registering an organization, the organization's
+management page (`/organizations/:orgId/edit`, with five tabs), the two program-terms pages, and a
+vendor's own organizations, which is a section of their profile reached two ways: by account
+identifier (`organization-user-memberships`) and as the signed-in person
+(`organization-user-memberships-self`). The two memberships pages render the same design and differ
+only in their addresses. Every state named in `design/screens.yaml` has a story at
+`design/catalogue/<page>.<state>.stories.tsx`, and the story is what a build copies.
+
+One decision shapes most of the domain: **a control is offered only to the people the service
+lets use it.** The criteria say, again and again, who may do what (R-3.3, R-3.9, R-3.12, R-3.13,
+R-3.18, R-3.27, R-3.28), and R-3.18 exists because the old service showed controls to people it then
+refused. So the screens decide what to render from the viewer's role, and the service's refusals
+remain as safeguards that the screen does not trigger. The tables under "Who is offered what" below
+are the rule a build follows.
+
+### Components this domain is built from
+
+All from `@bcgov/design-system-react-components` 0.8.1, unless the entry says otherwise. Only
+components and props that the users and opportunities catalogues already compile with are used.
+
+| Component | Used for |
+| --- | --- |
+| `Heading` | One H1 per screen. On the management page the H1 is the organization's legal name, with the surface title ("Edit Organization") as small text above it, as the opportunities domain does for its manage pages. On the terms pages the H1 is the surface title and the organization's name is the small line. H2 per tab or section, H3 inside. |
+| `Text` | Body copy. `size="small" color="secondary"` for the organization ID, table captions, the reason a submit is unavailable, and the line above an H1. |
+| `Button` | Every command. `primary` once per view for the main action (Edit organization, Save changes, Add team members, Accept terms and conditions, the dialog confirmations). `secondary` for Cancel, Change owner, Edit service areas. `secondary` with `danger` for Archive organization. `tertiary size="small"` for the per-row commands in tables (Accept, Decline, Leave, Approve, Remove, Give or Remove administrator rights), with `danger` on the ones that end something. |
+| `ButtonGroup` | Form submit rows, the team toolbar, dialog button rows, and the terms page's Accept and Cancel. |
+| `Link` | Navigation: organization names, the management tabs, the profile section links, and the links to the terms pages. `isButton` for "Create organization" and "My organizations", which navigate but read as commands. |
+| `TextField` | Every organization profile field. Read-only details are `TextField` with `isReadOnly`, as in the users domain, so the label and value are exposed the same way in view and edit. `type="url"`, `type="email"` and `type="tel"` where they apply. |
+| `Checkbox`, `CheckboxGroup` | The service-area editor, and the statement that must be confirmed before administrator rights are given. |
+| `Select` | The new owner in the Change owner dialog. |
+| `Form` | Always `validationBehavior="aria"`. |
+| `InlineAlert` | The not-qualified notices (`info`), the unregistered-invitee warning (`warning`), invitation refusals and the list refusal (`danger`, `role="alert"`), and the list of problems before an unavailable submit button (`danger`). Each carrying a test ID is wrapped in a `div` that holds it. |
+| `Modal` + `AlertDialog` | Yes/no decisions: archive (`destructive`), give administrator rights (`confirmation`), remove a member (`destructive`), join an organization (`confirmation`), decline an invitation and leave an organization (`destructive`). |
+| `Modal` + `Dialog` | The two small forms: Add team members and Change owner. |
+| `ProgressCircle` | Indeterminate loading, inside `role="status"` next to visible text. |
+| `FileTrigger` (from `react-aria-components`) | Opens the logo chooser behind a `Button`, as the users domain does for the profile picture. The file rules are the files domain's. |
+
+**Row commands are buttons, not switches.** The design system's `Switch` and `ToggleButton` save a
+state as soon as they change. Giving administrator rights must first ask for a statement to be
+confirmed (R-3.12's note), so it is a `Button` that opens a dialog, and its text names the change
+("Give administrator rights", "Remove administrator rights"). That also makes the state readable in
+words in the Membership column rather than from a control's appearance.
+
+### This project's own components (not design-system components)
+
+These are built from standard HTML and styled only with tokens. None of them is a design-system
+component, and none may be presented as one. The first four are the users and opportunities
+domains' own components, reused unchanged.
+
+- **Status badge.** A `<span>` with a `--surface-color-border-medium` border and a
+  `--layout-border-radius-circular` radius, always carrying its meaning in words. Here it shows
+  Owner, Administrator, Member and Pending in team and membership tables, the "Sprint With Us
+  qualified" and "Team With Us qualified" badges beside the organization's name, and Met or Not
+  met on each qualification requirement.
+- **Data table.** A native `<table>` with a `<caption>` and `scope="col"` headers, inside a
+  focusable `role="region"` that scrolls horizontally at narrow widths. Used for the organization
+  list, the team, the changelog, and the owned and affiliated organizations.
+- **Section navigation.** A `<nav>` of `Link`s with `aria-current="page"` on the current one. The
+  management page's tabs are `<nav aria-label="Organization sections">`, one address per tab
+  (`?tab=organization`, `team`, `swu-qualification`, `twu-qualification`, `changelog`). The memberships
+  pages carry the users domain's `<nav aria-label="Profile sections">` with Organizations current.
+- **Card section.** A `<section aria-labelledby>` with a `--surface-color-border-default` border and
+  a `--layout-border-radius-medium` radius. Used to group the create form's three parts and to set
+  off the terms text.
+- **Pagination.** New in this domain. A `<nav aria-label="Pages of organizations">` holding a list:
+  "Page N of M" as text, a `Link` per page number (`aria-label="Page N"`, `aria-current="page"` on
+  the current one), and "Previous page" / "Next page" `Link`s where there is such a page. Links,
+  not buttons, because each page has its own address (`/organizations?page=N`). No component in
+  the design system as this catalogue uses it paginates a list; if the installed version has one,
+  it replaces this.
+- **Requirement list.** New in this domain. A `<ul>` with an `aria-label` naming the program, one
+  `<li>` per qualification requirement, each beginning with a Met / Not met status badge and then
+  the requirement in words. The design system has no checklist component, and a list is what a
+  screen reader announces as "list, three items".
+
+The tokens used are the ones the two earlier domains list, and no others:
+`--layout-margin-{none,small,medium,large}`, `--layout-padding-{none,small,large}`,
+`--layout-border-width-small`, `--layout-border-radius-{medium,circular}` and
+`--surface-color-border-{default,medium}`. No colour, size or radius value is written anywhere.
+
+### How a screen is laid out
+
+The users domain's layout: a single-column grid with `--layout-margin-large` between regions and
+`--layout-padding-large` around the page. Action rows flex-wrap. The regions come in this order:
+
+- **Organization list.** The H1; the vendor's "Create organization" and "My organizations"; the
+  table; the pagination.
+- **Management page.** "Edit Organization" as small text; the H1 (the legal name); a row with the
+  qualified badges and the organization ID; the tabs; any page alert; the current tab's H2 section.
+  The Organization tab ends with a separate "Archive this organization" section where Archive is
+  offered.
+- **Create.** The H1, one sentence saying the registrant becomes the owner and how optional fields
+  are marked, the three card sections (Organization details, Address, Contact), the reason or list
+  of problems, and the submit row.
+- **Memberships.** The H1 ("My Organizations"), the profile section navigation, then "Organizations
+  you own" (Create organization, then its table or its empty message) and "Organizations you belong
+  to" (its table or its empty message).
+- **Terms.** The organization's name as small text, the H1, the accepted date when there is one, the
+  terms text in a card section, then what accepting means and the buttons.
+- **Document title and focus.** The document title is the surface title. On client-side navigation,
+  focus goes to the H1.
+
+### Forms and validation
+
+These rules apply to the registration form (`organization-create`) and the Organization tab in
+edit mode (`organization-edit`, `editing` and `invalid`). They are the same form.
+
+- **Fields** (R-3.22). Required, each 1–100 characters: legal name, street address, city,
+  province or state, postal or ZIP code, country, contact name. Required, in a valid email format
+  and of any length: contact email address. Optional: website, address line 2 (up to 100), contact
+  title (up to 100), contact phone number, and the logo. An optional field left empty is never an
+  error; one that is filled in must be in a valid format.
+- **Required marking.** `isRequired` on the component; optional fields say "(optional)" in the
+  label; one sentence above the form says so. Text limits are enforced as the person types through
+  `maxLength`, and the limit is stated in the legal name's description.
+- **Submit is unavailable until the form is valid.** The surface observes
+  `submit_disabled_until_valid`, so "Create organization" and, for the same form, "Save changes" are
+  `isDisabled` until every required field is filled and every filled field is valid. A disabled
+  React Aria button cannot take focus, so the reason is **visible text placed before the button**
+  and also referenced by `aria-describedby`: "Fill in every required field to create the
+  organization" while nothing is wrong yet, and, once something is, a `danger` `InlineAlert` titled
+  "Fix N fields to create the organization" (or "…to save your changes") listing one `Link` per
+  problem to the field's `id`. Each item carries `data-testid="field-error"`. This list does not
+  take `role="alert"` or move focus, because it updates as the person works.
+- **When a field is checked.** When the person leaves it, and never on each keystroke. An invalid
+  field gets `isInvalid` and an `errorMessage` directly under it that says what to do ("Enter the
+  organization's legal name"; "Enter an email address in a valid format, like name@example.com";
+  "Enter the full website address, like https://example.com, or leave it blank"). The value typed
+  is kept.
+- **The contact phone number** (R-3.19) is saved with every other field. On the edit form its
+  description says "Clear this field to remove the number", because clearing it removes the stored
+  number.
+- **Creating** makes the vendor the owner and opens the new organization's management page
+  (R-3.23), whose `organization-identifier` the test reads.
+- **Cancel** on create returns to the organization list; on edit it returns to the read-only
+  Organization tab with nothing saved.
+
+### Confirmation dialogs and immediate changes
+
+| Action | Where | Kind | Confirm (test ID) | Other |
+| --- | --- | --- | --- | --- |
+| Archive organization | Organization tab | `AlertDialog` `destructive` | "Archive organization" (`organization-archive-confirm`) | Cancel (`organization-dialog-cancel`). The body says what archiving does (R-3.6); when a service administrator archives an organization they do not own, it adds that the owner will be emailed (R-3.24). |
+| Add team members | Team tab | `Dialog` | "Send invitations" (`organization-invite-submit`) | One `TextField` per address (`organization-invite-email-field`), "Add another email address" (`organization-invite-add-email`), Cancel. |
+| Give administrator rights | Team tab row | `AlertDialog` `confirmation` | "Give administrator rights" (`organization-admin-rights-confirm`), disabled until the statement checkbox (`organization-admin-terms-checkbox`) is ticked, with the reason in visible text | Cancel. |
+| Remove a member | Team tab row | `AlertDialog` `destructive` | "Remove from team" (`organization-member-remove-confirm`) | Cancel. On a pending row the same dialog is worded as withdrawing the invitation. |
+| Change owner | Team tab | `Dialog` | "Change owner" (`organization-change-owner-confirm`) | `Select` "New owner" (`organization-new-owner-field`) listing active members only; Cancel. |
+| Accept an invitation | Memberships | `AlertDialog` `confirmation` (`membership-accept-dialog`) | "Join organization" (`membership-confirm-button`) | Cancel (`membership-dialog-cancel`). |
+| Decline an invitation | Memberships | `AlertDialog` `destructive` (`membership-decline-dialog`) | "Decline invitation" (`membership-confirm-button`) | Cancel. |
+| Leave an organization | Memberships | `AlertDialog` `destructive` (`membership-leave-dialog`) | "Leave organization" (`membership-confirm-button`) | Cancel. |
+
+Every dialog's title is a question naming the organization or person, its body says what will
+happen and who will be emailed, focus moves in and stays in, Escape dismisses it, and focus returns
+to the control that opened it. Nothing changes until the confirm button is pressed.
+
+**R-3.35.** The accept and decline choices in an invitation email both open the person's own
+organizations page with the matching dialog already open, exactly as in the `accept-confirm` and
+`decline-confirm` stories. Arriving by the email and pressing Accept or Decline on the page give the
+same dialog.
+
+**Three changes act at once, without a dialog:** withdrawing administrator rights, a service
+administrator approving a pending invitation on the invitee's behalf, and saving service areas. Each
+is reversible, and none has a criterion asking for confirmation. The outcome is announced in a
+`role="status"` region after the table or form.
+
+### Loading, empty, refused, not found
+
+- **Loading.** The users domain's pattern. The H1 renders at once (on the management page, the
+  surface title stands in until the name arrives), and a `role="status"` row holds a
+  `ProgressCircle` and matching text. Stories: `organization-list.loading`,
+  `organization-edit.loading`, and both memberships pages' `loading`.
+- **Not found.** The shared missing page (H1 "Page not found", `data-testid="not-found-page"`),
+  which never says "not allowed". It is shown on the management page to an ordinary member, public
+  sector staff, and anyone else who neither owns nor administers the organization and is not a
+  service administrator (R-3.3, whose note says "not found"), and for an archived or unknown
+  organization. It is also shown on the create page to anyone but a signed-in vendor who has
+  accepted the terms (R-3.2; see gap 3).
+- **Refused list.** `organization-list.refused` shows a `danger` `InlineAlert` in place of the
+  table, so a refusal can never be read as an empty list (see gap 1).
+- **Empty.** The memberships pages have an `empty` state, because the surface observes both empty
+  messages. Each section says so in a sentence instead of showing a table with no rows. The
+  organization list has no empty state (gap 2).
+- **Section not offered.** A memberships page asked for by anyone whose profile does not offer the
+  Organizations section shows the profile section instead, as R-4.34 says: an administrator looking
+  at somebody else's account, and a public sector employee looking at their own. These are the
+  `section-unavailable` states, built exactly as the users domain's.
+
+### Who is offered what
+
+**Organization list** (R-3.1, R-3.2, R-3.3, R-3.21):
+
+| Viewer | Columns | Name is a link | Create organization, My organizations |
+| --- | --- | --- | --- |
+| Visitor not signed in; public sector staff | Organization only | no | no |
+| Vendor | Organization, Owner, Team size, Sprint With Us qualified, Team With Us qualified; the last four are filled only on rows the vendor owns or administers, and are empty cells elsewhere | only on rows they own or administer | yes |
+| Service administrator | All five, filled on every row | every row | no |
+
+The caption tells a vendor why some cells are empty. The list is ordered by legal name, holds
+fifty organizations a page, and never lists an archived organization.
+
+**Management page**:
+
+| Control | Owner | Organization administrator | Service administrator |
+| --- | --- | --- | --- |
+| Edit organization, Archive organization (R-3.18) | yes | no: the profile is read-only, with a sentence saying only the owner can change it | yes |
+| Add team members (R-3.7) | yes | yes | yes |
+| Give / remove administrator rights (R-3.12) | on active members other than the owner and themselves | the same | the same |
+| Remove (R-3.10, R-3.11) | on every row but the owner's | the same, and not their own row | on every row but the owner's |
+| Approve a pending member (R-3.9) | no | no | yes |
+| Change owner (R-3.13) | no | no | yes, when there is at least one member besides the owner |
+| Edit service areas (R-3.28) | no: the approved areas are listed as text | no | yes |
+| Links to the terms pages | "Read and accept …" | "Read and accept …" | "Read …" |
+
+**Terms pages** (R-3.27): Accept is offered to the organization's owner and administrators while
+the terms are unaccepted. A service administrator reads the terms with no Accept, and a sentence
+says only the organization's own people can accept them. Once accepted, the page states when, and
+Accept is not offered again.
+
+**Memberships pages**: Accept and Decline on a pending invitation, Leave on an active membership
+(not on an organization the person owns, whose last owner cannot leave, R-3.11). The organization
+name is a link only where the person owns or administers it (R-3.3); an ordinary member sees it as
+text.
+
+### Accessibility obligations
+
+WCAG 2.1 AA applies (P1, J5). The users domain's list applies here too; this domain adds:
+
+- **Status is words.** Every badge (Owner, Pending, qualified, Met, Not met) and every qualification
+  mark ("Yes" / "No") is text. No state is carried by colour or an icon alone.
+- **Row commands name their row.** Visible text stays short ("Remove", "Accept", "Leave"); the
+  `aria-label` begins with that visible text and names the person or organization ("Remove Test
+  Vendor Four", "Accept the invitation from Tidewater Analytics Inc."), satisfying 2.5.3.
+- **Disabled submit buttons explain themselves** in visible text before the button, referenced by
+  `aria-describedby`, because a disabled button cannot be focused to discover why.
+- **Tables** have a caption and column headers, and their scroll region can be reached by keyboard.
+  An empty cell on the list (a column a vendor may not see for that row) is explained by the
+  caption.
+- **Pagination** marks the current page with `aria-current="page"`, and number-only links carry
+  `aria-label="Page N"`.
+- **Announcements.** Loading and immediate changes use `role="status"`. Refusals and the
+  unregistered-invitee warning use `role="alert"`.
+- **Checks still required.** Keyboard-only use of the team table's row commands and of the dialogs,
+  screen-reader checks of the requirement lists and of the dialog opened on arrival from an email,
+  and 400% zoom of the team table have not been done. They are required before the build is
+  accepted.
+
+### Test IDs
+
+The users domain's rules apply: one ID per kind of element, an action and an observation on the
+same element share its ID, and the same element keeps its ID on every page. In this domain:
+
+- **Shared across pages.** `organization-create-link` (the list and both memberships pages);
+  `organization-swu-qualified-mark` (the list and the memberships pages; `organization-twu-qualified-mark`
+  is on the list only); `organization-pending-badge` (the team table and the memberships pages);
+  `field-error` and `not-found-page` (the users domain's, reused); `profile-tab-*` (the users
+  domain's, on the memberships pages).
+- **The same element serves two names.** `organization-submit-button` is both `create_organization`
+  and `submit_disabled_until_valid`.
+- **Actions bound to the control that starts them.** `add_team_members`, `change_owner`,
+  `archive_organization`, `remove_team_member`, `toggle_member_admin_status` (when giving rights),
+  and `approve_invitation`, `reject_invitation`, `leave_organization` on the memberships pages each
+  open a dialog. The action is bound to the opening control, as the opportunities domain binds
+  `publish`. The adapter completes it with the extra IDs in the table above (gap 11).
+- **`accept_org_admin_terms`** is the statement checkbox inside the administrator-rights dialog,
+  `organization-admin-terms-checkbox`.
+- **`accept_confirmation` and `decline_confirmation`** are the dialogs themselves,
+  `membership-accept-dialog` and `membership-decline-dialog`.
+- **`refused_when_not_permitted`** is the wrapper of the refusal alert, `organization-list-refused`.
+- **`invalid_membership_type_error`** is the wrapper of that refusal's alert on the Team tab,
+  `organization-invalid-membership-type-error`.
+- **`team_capabilities`** is the Team capabilities section; each capability in it is
+  `organization-team-capability`.
+
+**Extra IDs, not named in the surface, that the stories carry for the adapter:** every profile
+field (`organization-legal-name-field`, `organization-website-field`,
+`organization-street-address-field`, `organization-address-line-2-field`, `organization-city-field`,
+`organization-region-field`, `organization-mail-code-field`, `organization-country-field`,
+`organization-contact-name-field`, `organization-contact-title-field`,
+`organization-contact-email-field`, `organization-contact-phone-field`); `organization-list-row`,
+`organization-list-team-size`; the dialogs (`organization-archive-dialog`,
+`organization-invite-dialog`, `organization-admin-rights-dialog`, `organization-member-remove-dialog`,
+`organization-change-owner-dialog`, `membership-leave-dialog`) and their buttons (listed above);
+`organization-invite-refused`, `organization-invite-unregistered`; `organization-service-area` (an
+approved area shown as text); `organization-cancel-service-areas-button`;
+`organization-swu-terms-accepted-on` (the acceptance date on the qualification tab).
+
+### Per-screen notes
+
+**organization-list** — `default` (a vendor, owning one listed organization and administering
+another), `administrator`, `signed-out` (which is also what public sector staff see, since R-3.21
+gives them the same columns and they cannot create), `loading`, `refused`.
+
+**organization-create** — `default` (blank, Create unavailable with the reason), `invalid` (the
+legal name left blank and a contact email of "not-an-email", R-3.22's own example), `ready` (every
+required field valid, every optional field empty, Create available), `not-found`.
+
+**organization-edit** — the Organization tab: `default` (the owner, both qualified badges showing,
+Edit and Archive offered), `org-admin` (read-only, no Edit, no Archive, R-3.18), `editing`,
+`invalid`, `archive-confirm` (a service administrator, so the owner-email sentence shows). The Team
+tab: `team` (the owner's view: a pending invitee who does not count, R-3.7, R-3.34),
+`team-administrator` (Approve and Change owner), `invite-open`, `invite-refused` (R-3.8's two
+refusals), `invite-invalid-type` (R-3.17), `invite-unregistered` (R-3.30), `admin-rights-confirm`,
+`remove-member-confirm`, `change-owner` (the pending invitee is not a choice, R-3.13). The
+qualification tabs: `swu-qualification` (R-3.25's example: two requirements met, terms unmet, not
+qualified), `swu-qualified` (all met, the badge showing, the acceptance date, R-3.27),
+`twu-qualification` (R-3.26's example, as the owner sees it, with no editing control, R-3.28),
+`twu-administrator` (Edit service areas offered), `service-areas-editing` (R-3.28's example: one of
+two kept, one cleared, a third ticked). And `changelog` (R-3.33's two entries, "Admin Rights Removed"
+above "Admin Rights Given"), `not-found`, `loading`. A fully qualified Team With Us tab is the
+`swu-qualified` story's pattern applied to the Team With Us requirements; it has no story of its own
+because no criterion turns on it.
+
+**organization-swu-terms / organization-twu-terms** — `default` (Accept offered), `accepted` (the
+date, no Accept), `administrator` (no Accept).
+
+**organization-user-memberships / organization-user-memberships-self** — `default`, `empty`,
+`loading`, `accept-confirm`, `decline-confirm`, `leave-confirm`, `section-unavailable`. The owned
+table shows each organization's team size (active members only) and its Sprint With Us
+qualification. The affiliated table shows the membership (Member, Administrator, or the Pending
+badge) and the row's commands. An archived organization is in neither table (R-3.6, R-3.15).
+
+### Gaps
+
+These are work for the spec. None was filled with invented behaviour; where the design had to show
+something, the story says it is the design's own wording or a placeholder.
+
+1. **Who is refused the organization list, and when.** R-3.1 says anyone may browse the list, and
+   no criterion refuses it. The surface's `refused_when_not_permitted`, with its comment about
+   telling a refusal from an empty list, reads like R-3.20 (the organizations one may act for are
+   refused to non-vendors, where the old service returned an empty list), but that request has no
+   screen of its own in the surface. The design shows a refusal distinctly (`refused`), with
+   wording taken from R-3.20. Which request produces it on this page needs a ruling.
+2. **An empty organization list.** R-3.1 does not say what an empty list shows, so no state is
+   designed. R-3.1's note (a page past the last returns the first) is not reachable from the
+   screen, because pagination offers only pages that exist.
+3. **What a refused registration looks like.** R-3.2 says a request from anyone but a vendor who
+   has accepted the terms is refused, not what is shown. The design reuses the missing page, as the
+   opportunities domain does for its create pages. Whether a visitor who is not signed in should
+   be sent to sign in, and what a vendor who has not accepted the terms is shown, are not stated.
+4. **Submitting an invalid form versus a submit that is unavailable.** R-3.22's example submits an
+   invalid form and has the field reported, while the surface observes the submit button disabled
+   until the form is valid. The design reports each field when the person leaves it and lists the
+   problems before the unavailable button, so the field is reported before any submission. A
+   submission the service rejects anyway (for example, from outside the screen) has no wording.
+5. **Formats of the website and the phone number.** R-3.22 says each is "rejected if given in an
+   invalid format", and does not say what a valid one is. The website's description asks for a
+   full address; the phone number has no description, because there is nothing true to say yet.
+6. **Wording of messages the surface observes but no criterion words:** the two empty messages on
+   the memberships pages, the not-qualified notices, the refusal on the list, the invitation
+   refusals (R-3.8 and R-3.17 are paraphrased), the unregistered-invitee warning (R-3.30 is
+   paraphrased), and the dialog texts. All are the design's own.
+7. **Several invitations at once.** R-3.7 invites two addresses at once but does not say what
+   happens when some are refused and others are not. The design reports each refused address by
+   name and leaves the others sent.
+8. **The administrator-rights statement.** R-3.12's note says a statement about what the rights
+   allow must be confirmed first; its text is not in the spec, so the story shows a placeholder. The
+   criteria do not say whether withdrawing rights asks first; the design withdraws at once.
+9. **The changelog's wording for a transfer of ownership.** R-3.33 gives "Admin Rights Given" and
+   "Admin Rights Removed" only. "Ownership Transferred" in the story is a placeholder.
+10. **Refusals the screen never triggers.** Because controls are offered only to those allowed to
+    use them, these criteria's messages have no screen: removing the sole owner (R-3.11, "sole
+    owner"), changing one's own or the owner's rights (R-3.12), accepting on another's behalf
+    (R-3.9), accepting terms twice (R-3.27, "already accepted"), and a profile change or archive by
+    an organization administrator (R-3.18). If a test must see them on a screen, the surface needs
+    observations for them and the spec needs their wording.
+11. **Actions completed in a dialog.** As in the opportunities domain's gap 10, the surface names
+    one action where the screen needs two steps (open, then confirm). Either the surface gains
+    `confirm_*` entries, or the contract accepts the extra IDs listed above.
+12. **Who may accept program terms, and who may open the terms pages.** R-3.27's note says a
+    service administrator is not offered Accept and that acceptance is "in practice an act of the
+    organization's own people". Whether an organization administrator (not only the owner) may
+    accept is not stated; the design offers it to both. Who is refused the terms pages, and what
+    they see, is not stated, so no refused state is designed.
+13. **The list's other fields.** R-3.21 says every viewer sees an organization's logo, active state
+    and service areas. The list shows only non-archived organizations, so the active state adds
+    nothing, and no criterion says the list shows service areas, so it does not. The logo is not in
+    the stories: an image beside the name needs a size, and the token set used here has no size
+    token for an image. That is a finding for the tokens, not a value to type.
+14. **Content the spec does not carry:** the service's list of capabilities (which "every
+    capability" in R-3.25 depends on), the Team With Us service-area names, and the program terms
+    text. The stories use placeholders and say so.
+15. **The address an invitation email opens** (R-3.35). The surface says both choices land on the
+    memberships page with the decision prepared; how the address names the invitation and the
+    choice is not specified, and is the build's to decide within the existing route.
+16. **Failures of immediate changes.** No criterion says what a person sees when withdrawing
+    rights, approving an invitation or saving service areas fails, or when a create or save fails
+    for a reason other than validation.

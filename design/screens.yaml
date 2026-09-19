@@ -136,3 +136,43 @@ screens:
     states: [default, not-found, loading]
   - page: scheduled-transition-trigger
     states: [default]
+
+  # organizations domain — see design/DESIGN.md, "Domain: organizations"
+  - page: organization-list
+    states: [default, administrator, signed-out, loading, refused]
+  - page: organization-create
+    states: [default, invalid, ready, not-found]
+  - page: organization-edit
+    states:
+      [
+        default,
+        org-admin,
+        editing,
+        invalid,
+        archive-confirm,
+        team,
+        team-administrator,
+        invite-open,
+        invite-refused,
+        invite-invalid-type,
+        invite-unregistered,
+        admin-rights-confirm,
+        remove-member-confirm,
+        change-owner,
+        swu-qualification,
+        swu-qualified,
+        twu-qualification,
+        twu-administrator,
+        service-areas-editing,
+        changelog,
+        not-found,
+        loading,
+      ]
+  - page: organization-swu-terms
+    states: [default, accepted, administrator]
+  - page: organization-twu-terms
+    states: [default, accepted, administrator]
+  - page: organization-user-memberships
+    states: [default, empty, loading, accept-confirm, decline-confirm, leave-confirm, section-unavailable]
+  - page: organization-user-memberships-self
+    states: [default, empty, loading, accept-confirm, decline-confirm, leave-confirm, section-unavailable]
