@@ -344,3 +344,63 @@ screens:
     states: [default, no-organization, empty, loading]
   - page: proposal-list-stub
     states: [default]
+
+  # evaluation domain — see design/DESIGN.md, "Domain: evaluation"
+  - page: evaluation-panel-dashboard
+    states: [default, empty, loading]
+  - page: evaluation-panel-swu
+    states: [default, invalid, too-few, refused, locked, not-found, loading]
+  - page: evaluation-panel-twu
+    states: [default, invalid, too-few, refused, locked, not-found, loading]
+  - page: evaluation-instructions-swu
+    states: [default, not-found, loading]
+  - page: evaluation-instructions-twu
+    states: [default, not-found, loading]
+  - page: evaluation-individual-list-swu
+    states: [default, ready, submitted, refused, not-found, loading]
+  - page: evaluation-individual-list-twu
+    states: [default, ready, submitted, refused, not-found, loading]
+  - page: evaluation-consensus-list-swu
+    states:
+      [
+        default,
+        ready,
+        submit-confirm,
+        submitted,
+        finalize-confirm,
+        not-all-submitted,
+        no-screenable,
+        withheld,
+        not-found,
+        loading,
+      ]
+  - page: evaluation-consensus-list-twu
+    states:
+      [
+        default,
+        ready,
+        submit-confirm,
+        submitted,
+        finalize-confirm,
+        not-all-submitted,
+        no-screenable,
+        withheld,
+        not-found,
+        loading,
+      ]
+  - page: evaluation-individual-create-swu
+    states: [default, invalid, duplicate, not-found, loading]
+  - page: evaluation-individual-edit-swu
+    states: [default, invalid, submitted, not-found, loading]
+  - page: evaluation-consensus-create-swu
+    states: [default, invalid, duplicate, chair-only, not-found, loading]
+  - page: evaluation-consensus-edit-swu
+    states: [default, submitted, invalid, not-found, loading]
+  - page: evaluation-individual-create-twu
+    states: [default, invalid, duplicate, not-found, loading]
+  - page: evaluation-individual-edit-twu
+    states: [default, invalid, submitted, not-found, loading]
+  - page: evaluation-consensus-create-twu
+    states: [default, invalid, duplicate, chair-only, not-found, loading]
+  - page: evaluation-consensus-edit-twu
+    states: [default, submitted, invalid, not-found, loading]

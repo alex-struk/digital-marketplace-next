@@ -2645,3 +2645,382 @@ to show something, the story marks it as illustrative or placeholder.
     domain's.
 18. **Content the spec does not carry.** Every name, organization, capability, question, amount,
     score, rank, date and identifier in the stories is illustrative and synthetic.
+
+---
+
+## Domain: evaluation
+
+Evaluation is how a closed Sprint With Us or Team With Us opportunity's questions are scored by a
+panel. There are five kinds of screen:
+
+- **Panel dashboard** (`evaluation-panel-dashboard`). The "Evaluations" section of `/dashboard`,
+  listing the opportunities whose panel the signed-in person sits on (R-5.19).
+- **Panel tab** (`evaluation-panel-*`). The owner's or an administrator's editor for the panel on
+  the manage page (`?tab=evaluationPanel`, R-5.1, R-5.16, R-5.18).
+- **Evaluator tabs** (`evaluation-instructions-*`, `evaluation-individual-list-*`). What an evaluator
+  is offered on the manage page: the program's instructions, and their own list of proponents with
+  the one submit action (R-5.25, R-5.34).
+- **Consensus tab** (`evaluation-consensus-list-*`). The chair's list of agreed scores and their
+  submit action, and the owner's and administrator's view of it, where finalizing happens
+  (R-5.12 to R-5.14, R-5.31 to R-5.33).
+- **Scoring forms** (`evaluation-individual-create-*`, `-edit-*`, `evaluation-consensus-create-*`,
+  `-edit-*`). One proponent, one score and one comment per question (R-5.22, R-5.29).
+
+Every state named in `design/screens.yaml` has a story at
+`design/catalogue/<page>.<state>.stories.tsx`, and the story is what a build copies. As in the
+proposals domain, where a story shows a dialog or a refusal the page behind it may be trimmed, and a
+`size="small" color="secondary"` line says which story holds the rest. That line is a catalogue
+note, and a build does not render it.
+
+The two programs share one design, as R-5.36 says the evaluations do. The Sprint With Us and Team
+With Us versions of a page have the same layout, components, states and test IDs. They differ only
+in the words the criteria give them:
+
+| | Sprint With Us | Team With Us |
+| --- | --- | --- |
+| The questions | team questions (`team-questions` in the address) | resource questions (`resource-questions`) |
+| Status words | "Team questions: individual evaluation", "Team questions: consensus" | "Resource questions: …" |
+| Carried forward | up to four (R-5.32) | up to three |
+| The next stage | the code challenge; "Code Challenge" in the refusal (R-5.10) | the challenge; "Challenge" in the refusal |
+| Duplicate refusal (R-5.3) | "You already have a team question evaluation for this proposal." | "…a resource question evaluation…" |
+
+### Components this domain is built from
+
+All from `@bcgov/design-system-react-components` 0.8.1. No component or prop is new to the catalogue:
+every one used here already compiles in an earlier domain's stories.
+
+| Component | Used for |
+| --- | --- |
+| `Heading` | One H1 per screen. On the tabs it is the opportunity's title, as the opportunities domain decided. On a scoring form it is the proponent's anonymous name ("Proponent 2"), because that is who is being scored. H2 is the tab's name, or each question on a read-only form. H3 only inside the instructions. |
+| `Text` | Body copy. `size="small" color="secondary"` for the page-kind line above the H1, "Proponent 2 of 3", the question's worth and minimum, captions, and the label above a proponent's response. `color="danger"` only for the panel's group error (too few members), which is also in the error summary. |
+| `Button` | Every command. `primary` once per view for the next step: Save evaluation panel, Submit scores for consensus, Submit final consensus scores, Save and go to next proponent, and the dialogs' confirm buttons. `secondary` for Save draft, Save changes, Save and go to previous proponent, and Add an evaluator. `tertiary size="small"` for Remove on a panel row. Finalize consensus scores is the opportunities domain's button in its action bar. |
+| `ButtonGroup` | Each form's save row (`ariaLabel` "Evaluation panel actions", "Evaluation actions", "Consensus actions") and the opportunities domain's action bar. |
+| `Link` | The manage-page tabs, the dashboard's section links and rows, "Start evaluation", "Continue evaluation", "View evaluation", "Start consensus", "Edit consensus", "Back to …", and every item in an error summary. |
+| `Select` | Each panel member ("Public sector employee") and the panel's Chair. |
+| `Checkbox` | "Chair" on each evaluator row. |
+| `NumberField` | Each score. There is no `minValue` or `maxValue`, as in the opportunities and proposals domains: the range is stated in the description and checked by the form, so a score out of range is shown as refused, not silently changed. |
+| `TextArea` | Each comment. |
+| `Form` | Always `validationBehavior="aria"`. |
+| `InlineAlert` | `danger` for error summaries and service refusals (with `role="alert"`); `info` for the five notices that explain a state: the panel is fixed, the scores are withheld, the evaluation is submitted and read-only, the consensus is submitted and still editable, and a panel member is not the chair. Each is wrapped in a `div` that carries the test ID, because `InlineAlert` does not pass `data-*` through. |
+| `Modal` + `AlertDialog` | Submit the final consensus scores, and Finalize the consensus scores. Both `confirmation`: neither destroys anything, but finalizing cannot be undone and both notify people. |
+| `ProgressCircle` | Indeterminate loading, inside `role="status"` next to visible text. |
+
+### This project's own components (not design-system components)
+
+All but one are reused unchanged from earlier domains. None is a design-system component, and
+none may be presented as one.
+
+- **Status badge.** The users domain's `<span>` with a token border and circular radius. Here it
+  carries an evaluation's or a consensus's state in words: "Not started", "Draft: incomplete",
+  "Draft: complete", "Submitted".
+- **Data table.** The users domain's native `<table>` with a caption and `scope="col"` headers, in a
+  focusable `role="region"` that scrolls sideways at narrow widths. Used for the dashboard's
+  Evaluations list, the evaluator's list, the consensus list, the fixed panel, and each question's
+  "Evaluators' scores" on the consensus forms.
+- **Section navigation (tabs).** The users domain's `<nav>` of `Link`s with `aria-current="page"`,
+  as the opportunities domain uses it for the manage page. On the dashboard the two links are
+  in-page links to the two sections, as the proposals domain's dashboard does.
+- **Repeated-item group.** A `<fieldset>` and `<legend>` for each evaluator on the panel and each
+  question on a scoring form.
+- **Key facts list.** The opportunities domain's `<dl>`, used on a submitted evaluation for "Your
+  score" and "Your comment".
+- **Response block (new).** A `div` with a `--layout-border-width-small` inline-start border in
+  `--surface-color-border-medium` and `--layout-padding-small`, holding a small "Proponent 2's
+  response" label and the response text, so the proponent's words are set apart from the question
+  and from the evaluator's own fields. The design system's `Callout` is an emphasis box with its own
+  title and icon, which would make every response look like a warning or a note; a quotation needs
+  no emphasis.
+
+The only tokens used are those earlier domains list: `--layout-margin-{none,xsmall,small,medium,large}`,
+`--layout-padding-{none,small,large}`, `--layout-border-width-small`,
+`--layout-border-radius-{medium,circular}`, `--surface-color-border-{default,medium}`,
+`--typography-font-weights-bold` and `--typography-bold-body`. No colour, size or radius value is
+written anywhere in the catalogue.
+
+### How a screen is laid out
+
+The users domain's single column, with `--layout-margin-large` between regions and rows that wrap.
+
+- **Tabs** (panel, instructions, evaluation, consensus). The opportunities domain's manage page,
+  unchanged: "Manage a … opportunity" as small text, the H1, status and ID, the action bar, the tabs,
+  any page alert, and the tab's H2 section. Only the tab's section is this domain's.
+- **Scoring forms.** The page kind as small text ("Evaluate a Sprint With Us proponent", "Agree a
+  Team With Us consensus"), the H1 (the anonymous name), the opportunity's title with "Proponent 2
+  of 3", the status badge on the edit pages, "Back to your evaluations" or "Back to the consensus",
+  one sentence on how scores are entered and when they are checked, any error summary or refusal,
+  then one fieldset per question and the save row. Each question fieldset holds, in order: the
+  question, its worth and minimum score, the proponent's response, the evaluators' scores (consensus
+  forms only), the score and the comment.
+- **Dashboard.** H1 "Dashboard", Create an opportunity, the section links, "My opportunities" (the
+  opportunities domain's section, unchanged), then "Evaluations" with a sentence, and the table or the
+  empty message. The Evaluations section is shown to every public sector employee and administrator,
+  so its empty message has somewhere to live.
+
+**Who sees which tabs** (R-5.34). The manage page's tabs depend on the person as well as the stage:
+
+| Person | Tabs this domain adds or relies on |
+| --- | --- |
+| Evaluator | Instructions, Evaluation. The chair, if also an evaluator, adds Consensus once the opportunity reaches consensus. |
+| Chair who does not evaluate | Consensus, from the consensus stage. |
+| Opportunity's owner, administrator | Evaluation panel (always), and Consensus from closing — the opportunities domain's tab list. |
+| Anyone else | None of them. |
+
+A row on the dashboard's Evaluations list opens the manage page without a tab. The page then opens
+on the first tab the person is offered: Instructions for an evaluator, Consensus for a chair who does
+not evaluate.
+
+### Forms and validation
+
+- **The panel** (R-5.1, R-5.9). One fieldset per evaluator ("Evaluator 1", "Evaluator 2"), each with a
+  `Select` of public sector employees, a "Chair" checkbox, and Remove. "Add an evaluator" follows the
+  last row. Then a separate "Chair" `Select`. The chair is one fact shown in two places: ticking
+  Chair on a row sets the Chair field to that evaluator and clears any other row's tick; choosing a
+  person in the Chair field ticks their row if they are an evaluator, or leaves every row unticked if
+  they chair without evaluating (R-5.15's note). So a panel can never hold two chairs.
+- **Checked on save.** Save evaluation panel checks, in this order: at least two members; nobody
+  named twice; a chair chosen. Each failure is listed in the error summary, and the panel is not
+  saved — "It is still the panel it was before", as R-5.1 requires. A duplicate is shown on the
+  second row's `Select`. No chair is shown on the Chair field. Too few members is a group error after
+  the rows, because no one field is wrong.
+- **What the form cannot check.** The list offers only public sector employees, so a vendor can
+  reach the panel only if the service is sent one, or an account changes between loading and
+  saving. The service's refusal is shown on the member's row, naming them (the `refused` story). The
+  same row slot carries R-5.37's refusal of a member who is neither evaluator nor chair, which this
+  form cannot produce, because every row is an evaluator.
+- **Scores and comments** (R-5.22). Each score's description states its range: "Between 0 and 5,
+  with up to two decimal places." Each comment's says "At least one word, explaining the score."
+  The form checks each field when the person leaves it and again on every save. The messages are:
+  "Enter a score between 0 and 5 for question 1.", "Enter a score with no more than two decimal
+  places for question 2.", "Enter a comment for question 2."
+- **Saving never refuses a draft** (R-5.23). Save draft, Save changes and the two Save-and-go
+  buttons always save what is on the screen, and move on where they say they will. When something is
+  wrong, the error summary says "Your draft was saved as you entered it. Your scores cannot be
+  submitted until these are fixed.", and the proponent's row on the list reads "Draft: incomplete".
+  This keeps the form and the service in agreement. The alternative, refusing to save, is gap 8.
+- **Submitting** (R-5.25, R-5.26). There is no submit on a scoring form. The evaluator submits the
+  whole set from the Evaluation tab, and the button is disabled, described by the sentence before
+  it, until every proponent reads "Draft: complete". The chair's "Submit final consensus scores"
+  works the same way, one consensus per proponent (R-5.13, R-5.7's note).
+- **The service's own words** are used where a criterion quotes them: R-5.3's duplicate refusal,
+  R-5.25's incomplete refusal, R-5.4's "Not all consensuses have been submitted." (kept for R-5.13's
+  case too), and R-5.10's corrected "screened into the Code Challenge" / "the Challenge". Everything
+  else is the design's own wording (gap 6).
+- **Anonymity** (R-5.35). Proponents are listed and headed by their anonymous names, in that order.
+  The organization's name is absent from the markup of every evaluation screen, not hidden with
+  styling, following the proposals domain.
+
+### Dialogs
+
+Only the two consensus actions ask first; the surface names a confirmation for both. Each dialog is
+a `Modal` holding an `AlertDialog`: its title is a question, its body says what happens and who is
+told, and its buttons name the action. Focus moves in, stays in, and returns to the opening button;
+Escape dismisses.
+
+| Action | Variant | Confirm button (test ID) | Other |
+| --- | --- | --- | --- |
+| Submit final consensus scores | `confirmation` (`evaluation-submit-consensus-dialog`) | "Submit consensus scores" (`evaluation-submit-consensus-confirm`) | Cancel (`evaluation-dialog-cancel`). The body says the owner and every administrator are told (R-5.31), and that a consensus can still be changed (R-5.30). |
+| Finalize consensus scores | `confirmation` (`evaluation-finalize-dialog`) | "Finalize consensus scores" (`evaluation-finalize-confirm`) | Cancel (`evaluation-dialog-cancel`). The body says what finalizing does (R-5.32), that the chair and owner are told (R-5.33), and that it cannot be undone. |
+
+"Submit scores for consensus" does not ask first, because the surface names no confirmation for
+it. It cannot be undone either (R-5.24), so the sentence before the button says so (gap 15).
+
+### Loading, empty, refused, not found
+
+- **Loading.** The H1 renders at once, with a `role="status"` row holding a `ProgressCircle` and
+  matching text below it.
+- **Not found.** The users domain's shared missing page (`not-found-page`), which never says "not
+  allowed". R-5.18 requires it for the panel tab. The design uses it too for the other tabs and the
+  scoring forms, whenever the person is not someone the criteria let in (gap 5).
+- **Refused, with a reason.** Where the person belongs on the page but may not do the thing, the
+  page explains instead of disappearing: the owner who is not on the panel (`withheld`, R-5.12), and
+  a panel member who is not the chair on the consensus form (`chair-only`, R-5.29). A panel member
+  already knows the opportunity exists, so explaining leaks nothing.
+- **Service refusals** — duplicates (R-5.3, R-5.29), an incomplete set (R-5.25), and the two
+  finalize refusals — are `danger` alerts with `role="alert"`, in a `tabIndex={-1}` wrapper that
+  takes focus. A duplicate offers a link to the evaluation or consensus that already exists.
+- **Empty.** Only the dashboard's Evaluations list has a designed empty state. A list with no
+  proponents is not designed (gap 14).
+
+### Accessibility obligations
+
+WCAG 2.1 AA applies (P1, J5). The users, opportunities and proposals domains' lists apply here too.
+This domain adds the following.
+
+- **Status is words.** Every evaluation and consensus state is written out. Scores are written "4 out
+  of 5". A disabled submit button is described by the visible sentence before it, which says what
+  enables it.
+- **Controls with the same visible text are told apart** (WCAG 2.5.3). "Chair" and "Remove" repeat on
+  every panel row, so each has an `aria-label` that begins with its visible text and names its row
+  ("Chair: evaluator 2", "Remove evaluator 2"). The list links ("Continue evaluation: Proponent 2",
+  "Edit consensus: Proponent 3") do the same. Each score and comment names its question in its
+  label ("Score for question 1", "Agreed comment for question 2").
+- **Long forms are navigable.** Each question is a fieldset with a legend, so a screen reader
+  announces which question a field belongs to. The error summary links to every field it names.
+- **The evaluators' scores are a table, not a layout.** Each question's table has a caption
+  ("Evaluators' scores for question 1") and column headers, so a score is announced with its
+  evaluator.
+- **Announcements.** Loading uses `role="status"`. Refusals and error summaries use `role="alert"`,
+  and focus moves to them.
+- **Checks still required.** Keyboard use of the panel's two linked chair controls, screen-reader
+  checks of the two dialogs, and 400% zoom of the consensus form's tables have not been done. They
+  are required before the build is accepted.
+
+### Test IDs
+
+The rules are the users domain's: one ID per kind of element; an action and an observation on the
+same element share its ID; the same element keeps its ID on every page. The two programs' pages share
+every ID, as do the create and edit forms, and the individual and consensus forms.
+
+- **Reused from other domains:** `not-found-page`, `field-error` (users); `opportunity-status`,
+  `opportunity-identifier`, `opportunity-tab-*`, `dashboard-opportunity-link`,
+  `finalize-consensus-button`, `advance-refused-message` (opportunities); `proposal-proponent-name`
+  (proposals, which asked that every screen naming a proponent reuse it).
+- **New tab IDs:** `opportunity-tab-instructions` and `opportunity-tab-evaluation`, following the
+  opportunities domain's `opportunity-tab-*` pattern. That domain's tab lists should gain them.
+
+The following bindings are not obvious from their names:
+
+- `finalize_consensus_scores` is `finalize-consensus-button`, the opportunities domain's button in the
+  shared action bar, as that domain's gap 13 asked. It is one control with two surface names.
+  Pressing it opens `evaluation-finalize-dialog`, and `confirm_finalize_consensus` is the dialog's
+  confirm.
+- `not_all_consensuses_submitted_error` and `no_screenable_proponent_error` are
+  `evaluation-not-all-submitted-error` and `evaluation-no-screenable-error`, each nested inside the
+  opportunities domain's `advance-refused-message` wrapper. It is the same alert, and the inner ID
+  says which refusal it is.
+- `choose_panel_chair` and `chair_field` are both the Chair `Select`, `evaluation-panel-chair-field`.
+  `mark_member_as_chair` is the per-row checkbox, `evaluation-panel-member-chair`, one per row, told
+  apart by accessible name (gap 2).
+- `panel_member_row` is `evaluation-panel-member-row`: the fieldset on the form, and the table row on
+  the fixed panel.
+- The four panel errors, `score_out_of_range_error` and `empty_notes_error` are carried by the links
+  in the error summary (`evaluation-panel-*-error`, `evaluation-score-error`,
+  `evaluation-notes-error`). Each is inside a `field-error` list item, so the users domain's pattern
+  holds and each rule still has its own ID. There is one link per problem, so there may be more than
+  one `evaluation-score-error`.
+- `evaluations_tab` and `show_panel_opportunities` are both the "Evaluations" section link,
+  `dashboard-show-evaluations`. `open_opportunity` is `dashboard-opportunity-link`, the same element
+  kind as in the opportunities domain's table.
+- `visible_to_evaluators_only` is the Instructions tab link, `opportunity-tab-instructions`. A test
+  observes its presence for an evaluator and its absence for anyone else (and gets the missing page
+  at the address itself).
+- `own_evaluations_only` is the evaluator's table, `evaluation-individual-table`, whose caption says
+  "Your evaluations". Its rows are one per proponent and carry only the reader's own status.
+- `submit_disabled_until_complete` is the submit button, `evaluation-submit-for-consensus`, whose
+  disabled state is the observation.
+- `proponent_row` is `evaluation-proponent-row` on both the evaluation and the consensus lists.
+- `anonymous_proponent_name` is `proposal-proponent-name` everywhere, including the H1 of each
+  scoring form.
+- `enter_question_score` and `enter_question_notes` are `evaluation-question-score-field` and
+  `evaluation-question-notes-field`, one per question. The field's label names the question.
+- `read_only_after_submitted`, `editable_after_submitted`, `chair_only`, `empty_for_owner_not_on_panel`
+  and `panel_locked_after_consensus` are each the wrapper of the `info` notice that explains the
+  state.
+
+**Extra IDs, not named in the surface, that the stories carry for the adapter:**
+`evaluation-panel-member-field` (each member's `Select`), `evaluation-consensus-table`,
+`dashboard-panel-opportunity-row`, and `evaluation-save-previous` on the individual edit pages
+(gap 10).
+
+### Per-screen notes
+
+**evaluation-panel-dashboard**: `default` (three panels, one a draft, with the reader's role on
+each, R-5.19), `empty`, `loading`.
+
+**evaluation-panel-swu / -twu**: `default` (the owner, published), `invalid` (a duplicate and no
+chair), `too-few` (one member), `refused` (a member the service refused, R-5.1, R-5.37), `locked`
+(consensus onward: the panel as a table, R-5.16), `not-found` (R-5.18), `loading`. Saving on a
+published opportunity notifies only the people newly added (R-5.17). The introduction says so, and
+nothing on the screen shows the notification.
+
+**evaluation-instructions-swu / -twu**: `default`, `not-found`, `loading`. The body is the program's
+evaluation instructions content page, rendered read-only (R-5.34 note).
+
+**evaluation-individual-list-swu / -twu**: `default` (part-way: complete, incomplete, not started),
+`ready` (all complete, submit offered), `submitted` (all read-only, R-5.24; the consensus stage begins
+by itself when the last evaluator submits, R-5.27), `refused` (R-5.25's message), `not-found`,
+`loading`.
+
+**evaluation-consensus-list-swu / -twu**: the chair's `default`, `ready`, `submit-confirm` and
+`submitted` (still editable, R-5.30); the administrator's `finalize-confirm`, `not-all-submitted`
+(R-5.13) and `no-screenable` (R-5.10); the owner's `withheld` (R-5.12, with Finalize still offered,
+R-5.14); `not-found`; `loading`. An administrator, and an owner who is on the panel but is not the
+chair, see the list with its statuses and no links (gap 11).
+
+**evaluation-individual-create-swu / -twu**: `default` (the second of three proponents), `invalid`,
+`duplicate` (R-5.3), `not-found` (R-5.21), `loading`.
+
+**evaluation-individual-edit-swu / -twu**: `default` (a draft), `invalid`, `submitted` (read-only, no
+save controls, R-5.24), `not-found`, `loading`.
+
+**evaluation-consensus-create-swu / -twu**: `default`, `invalid` (the same rules, R-5.29's note),
+`duplicate`, `chair-only` (a non-chair panel member reads the evaluators' scores, R-5.28), `not-found`,
+`loading`.
+
+**evaluation-consensus-edit-swu / -twu**: `default` (a draft), `submitted` (still editable,
+R-5.30), `invalid`, `not-found`, `loading`.
+
+### Gaps
+
+These are work for the spec. None of them was filled with invented behaviour. Where the design had to
+show something, the story marks it as illustrative or says which gap it rests on.
+
+1. **Does a chair who does not evaluate count toward the minimum of two?** R-5.1 asks for "at least
+   two panel members"; R-5.15's note describes "two evaluators plus a separate chair". Whether one
+   evaluator and a separate chair is a valid panel is not stated. The design's message says "two
+   members", and the `too-few` story shows one person, where both readings agree.
+2. **Two chair controls, one fact.** The surface names both `choose_panel_chair` and
+   `mark_member_as_chair`. The design keeps both and ties them together (see "Forms and
+   validation"). Also, the opportunities domain's create-page panel editor gives each member
+   Evaluator and Chair checkboxes and no Chair field, which is a different arrangement for the same
+   panel. The two should be one design. This domain's is the one the surface describes, so the
+   create page's `evaluation-panel-editor` should take it, which only the opportunities domain can
+   change.
+3. **Who may read an individual evaluation contradicts itself.** R-5.11 (authored) opens it to the
+   administrator, the owner and the panel "at every stage". R-5.28 closes it to everyone but its
+   author before consensus, and to an administrator not on the panel until the question stages have
+   passed, while its own note says "an administrator can read an individual evaluation at any stage".
+   The `not-found` story for the edit pages does not choose. A ruling is needed before the build.
+4. **Where panel members see the panel.** R-5.18 says each panel member sees the membership, but the
+   only panel screen answers them "Not Found". No criterion says where they see it, so it is not
+   placed.
+5. **What a tab's address answers to someone not offered the tab.** R-5.34 says who is offered
+   Instructions, Evaluation and Consensus, but not what happens when someone else opens the address.
+   The design uses the missing page, following R-5.18. Falling back to the first tab they are offered
+   would be the other reading.
+6. **Wording the spec does not give.** The panel's messages (R-5.1 asks only for "a message naming
+   the rule"), the evaluation status words, the empty dashboard message, the notices and the dialog
+   text are the design's own.
+7. **The owner may finalize without seeing what they finalize.** R-5.12 withholds the agreed scores
+   from an owner not on the panel until the next stage. R-5.14 offers that owner the finalize action.
+   Together they ask the owner to confirm scores they cannot read. Designed as the criteria say; a
+   ruling on whether the owner should see the scores once they may finalize is needed.
+8. **Saving a draft with an invalid entry** (R-5.23's note). The design saves as entered and lists
+   the problems, so the form and the service agree. Refusing to save until the entry is valid is the
+   other reading, and would need a different message.
+9. **The duplicate consensus refusal has no wording** (R-5.29). The stories follow R-5.3's sentence:
+   "You already have a team question consensus for this proposal."
+10. **Previous proponent on the edit pages.** The surface names `save_and_go_to_previous_proponent` on
+    the individual create pages only. R-5.35 is about moving through the proponents in either
+    direction, so the individual edit pages carry the same button with the same ID. The consensus
+    pages carry neither, as the surface names neither. What the first and last proponent's buttons do
+    is not stated; the stories show a middle proponent.
+11. **Reading the agreed scores.** R-5.28 lets an administrator read a consensus at any stage, but the
+    only consensus page is the chair's edit form at the chair's address. The design gives the
+    administrator and the owner the consensus list with statuses and no links. Where they read the
+    scores themselves (perhaps the proposals domain's team-questions tab, R-2.29) needs placing.
+12. **After finalizing.** R-5.30 lets the chair change a consensus "until it is finalised". What the
+    chair's list and forms show afterwards is not stated, so there is no `finalized` state.
+13. **What else an evaluator sees on the manage page.** R-5.34 names the evaluator's tabs, but not
+    whether they also see Summary, Proposals or anything else, nor what a panel member sees on a
+    draft they open from the dashboard (R-5.19) before there is anything to evaluate. The stories
+    show the evaluator's two tabs only.
+14. **An opportunity with no proponents to evaluate.** R-5.20 assumes submitted proposals. What the
+    evaluation list shows with none is not stated, and it is not designed.
+15. **"Submit scores for consensus" has no confirmation.** It cannot be undone (R-5.24), and the
+    chair's comparable action has a confirmation in the surface, but this one does not. The design
+    states the consequence before the button rather than adding a dialog the surface cannot bind.
+16. **Instructions content.** The instructions are site content, one page per program (R-5.34's
+    note). Their address and text are the content domain's; the stories' text is a placeholder.
+17. **Content the spec does not carry.** Every name, question, response, score, comment, date and
+    identifier in the stories is illustrative and synthetic, and none is the seed's.

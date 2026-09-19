@@ -128,6 +128,7 @@ Profile: rebuild
 - [derive-tests-users-stale-2](proposals/derive-tests-users-stale-2.md)
 - [derive-tests-users-stale-3](proposals/derive-tests-users-stale-3.md)
 - [design-content](proposals/design-content.md)
+- [design-evaluation](proposals/design-evaluation.md)
 - [design-files](proposals/design-files.md)
 - [design-harness-v1](proposals/design-harness-v1.md)
 - [design-notifications](proposals/design-notifications.md)
@@ -171,9 +172,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $397.882778
-- Rulings cost: $243.314192
-- Total cost: $641.19697
-- Agent-held rulings: 128
+- Journal cost: $413.03449
+- Rulings cost: $244.016093
+- Total cost: $657.050583
+- Agent-held rulings: 129
 - Open escalations: 0
 - Open proposals: 0

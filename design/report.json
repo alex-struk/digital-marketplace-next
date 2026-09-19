@@ -1,7 +1,7 @@
 {
-  "generated": "2026-09-19T08:28:18.812Z",
+  "generated": "2026-09-19T09:01:12.307Z",
   "axe": "4.13.0",
-  "catalogue": "50544d4839976dc830f014f3b781fab2512bfb3144c59de038532147a06ec997",
+  "catalogue": "8b8f997008459a4e978f639fb951c491a34a3df3d462229ff81e486388493116",
   "ok": true,
   "messages": [],
   "compile": [
@@ -177,6 +177,588 @@
       "id": "content-content-view-not-found--not-found",
       "title": "content/content-view/not-found",
       "file": "./catalogue/content-view.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-create-swu-chair-only--chair-only",
+      "title": "evaluation/evaluation-consensus-create-swu/chair-only",
+      "file": "./catalogue/evaluation-consensus-create-swu.chair-only.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-create-swu-default--default",
+      "title": "evaluation/evaluation-consensus-create-swu/default",
+      "file": "./catalogue/evaluation-consensus-create-swu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-create-swu-duplicate--duplicate",
+      "title": "evaluation/evaluation-consensus-create-swu/duplicate",
+      "file": "./catalogue/evaluation-consensus-create-swu.duplicate.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-create-swu-invalid--invalid",
+      "title": "evaluation/evaluation-consensus-create-swu/invalid",
+      "file": "./catalogue/evaluation-consensus-create-swu.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-create-swu-loading--loading",
+      "title": "evaluation/evaluation-consensus-create-swu/loading",
+      "file": "./catalogue/evaluation-consensus-create-swu.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-create-swu-not-found--not-found",
+      "title": "evaluation/evaluation-consensus-create-swu/not-found",
+      "file": "./catalogue/evaluation-consensus-create-swu.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-create-twu-chair-only--chair-only",
+      "title": "evaluation/evaluation-consensus-create-twu/chair-only",
+      "file": "./catalogue/evaluation-consensus-create-twu.chair-only.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-create-twu-default--default",
+      "title": "evaluation/evaluation-consensus-create-twu/default",
+      "file": "./catalogue/evaluation-consensus-create-twu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-create-twu-duplicate--duplicate",
+      "title": "evaluation/evaluation-consensus-create-twu/duplicate",
+      "file": "./catalogue/evaluation-consensus-create-twu.duplicate.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-create-twu-invalid--invalid",
+      "title": "evaluation/evaluation-consensus-create-twu/invalid",
+      "file": "./catalogue/evaluation-consensus-create-twu.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-create-twu-loading--loading",
+      "title": "evaluation/evaluation-consensus-create-twu/loading",
+      "file": "./catalogue/evaluation-consensus-create-twu.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-create-twu-not-found--not-found",
+      "title": "evaluation/evaluation-consensus-create-twu/not-found",
+      "file": "./catalogue/evaluation-consensus-create-twu.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-edit-swu-default--default",
+      "title": "evaluation/evaluation-consensus-edit-swu/default",
+      "file": "./catalogue/evaluation-consensus-edit-swu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-edit-swu-invalid--invalid",
+      "title": "evaluation/evaluation-consensus-edit-swu/invalid",
+      "file": "./catalogue/evaluation-consensus-edit-swu.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-edit-swu-loading--loading",
+      "title": "evaluation/evaluation-consensus-edit-swu/loading",
+      "file": "./catalogue/evaluation-consensus-edit-swu.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-edit-swu-not-found--not-found",
+      "title": "evaluation/evaluation-consensus-edit-swu/not-found",
+      "file": "./catalogue/evaluation-consensus-edit-swu.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-edit-swu-submitted--submitted",
+      "title": "evaluation/evaluation-consensus-edit-swu/submitted",
+      "file": "./catalogue/evaluation-consensus-edit-swu.submitted.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-edit-twu-default--default",
+      "title": "evaluation/evaluation-consensus-edit-twu/default",
+      "file": "./catalogue/evaluation-consensus-edit-twu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-edit-twu-invalid--invalid",
+      "title": "evaluation/evaluation-consensus-edit-twu/invalid",
+      "file": "./catalogue/evaluation-consensus-edit-twu.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-edit-twu-loading--loading",
+      "title": "evaluation/evaluation-consensus-edit-twu/loading",
+      "file": "./catalogue/evaluation-consensus-edit-twu.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-edit-twu-not-found--not-found",
+      "title": "evaluation/evaluation-consensus-edit-twu/not-found",
+      "file": "./catalogue/evaluation-consensus-edit-twu.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-edit-twu-submitted--submitted",
+      "title": "evaluation/evaluation-consensus-edit-twu/submitted",
+      "file": "./catalogue/evaluation-consensus-edit-twu.submitted.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-swu-default--default",
+      "title": "evaluation/evaluation-consensus-list-swu/default",
+      "file": "./catalogue/evaluation-consensus-list-swu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-swu-finalize-confirm--finalize-confirm",
+      "title": "evaluation/evaluation-consensus-list-swu/finalize-confirm",
+      "file": "./catalogue/evaluation-consensus-list-swu.finalize-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-swu-loading--loading",
+      "title": "evaluation/evaluation-consensus-list-swu/loading",
+      "file": "./catalogue/evaluation-consensus-list-swu.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-swu-no-screenable--no-screenable",
+      "title": "evaluation/evaluation-consensus-list-swu/no-screenable",
+      "file": "./catalogue/evaluation-consensus-list-swu.no-screenable.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-swu-not-all-submitted--not-all-submitted",
+      "title": "evaluation/evaluation-consensus-list-swu/not-all-submitted",
+      "file": "./catalogue/evaluation-consensus-list-swu.not-all-submitted.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-swu-not-found--not-found",
+      "title": "evaluation/evaluation-consensus-list-swu/not-found",
+      "file": "./catalogue/evaluation-consensus-list-swu.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-swu-ready--ready",
+      "title": "evaluation/evaluation-consensus-list-swu/ready",
+      "file": "./catalogue/evaluation-consensus-list-swu.ready.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-swu-submit-confirm--submit-confirm",
+      "title": "evaluation/evaluation-consensus-list-swu/submit-confirm",
+      "file": "./catalogue/evaluation-consensus-list-swu.submit-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-swu-submitted--submitted",
+      "title": "evaluation/evaluation-consensus-list-swu/submitted",
+      "file": "./catalogue/evaluation-consensus-list-swu.submitted.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-swu-withheld--withheld",
+      "title": "evaluation/evaluation-consensus-list-swu/withheld",
+      "file": "./catalogue/evaluation-consensus-list-swu.withheld.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-twu-default--default",
+      "title": "evaluation/evaluation-consensus-list-twu/default",
+      "file": "./catalogue/evaluation-consensus-list-twu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-twu-finalize-confirm--finalize-confirm",
+      "title": "evaluation/evaluation-consensus-list-twu/finalize-confirm",
+      "file": "./catalogue/evaluation-consensus-list-twu.finalize-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-twu-loading--loading",
+      "title": "evaluation/evaluation-consensus-list-twu/loading",
+      "file": "./catalogue/evaluation-consensus-list-twu.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-twu-no-screenable--no-screenable",
+      "title": "evaluation/evaluation-consensus-list-twu/no-screenable",
+      "file": "./catalogue/evaluation-consensus-list-twu.no-screenable.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-twu-not-all-submitted--not-all-submitted",
+      "title": "evaluation/evaluation-consensus-list-twu/not-all-submitted",
+      "file": "./catalogue/evaluation-consensus-list-twu.not-all-submitted.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-twu-not-found--not-found",
+      "title": "evaluation/evaluation-consensus-list-twu/not-found",
+      "file": "./catalogue/evaluation-consensus-list-twu.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-twu-ready--ready",
+      "title": "evaluation/evaluation-consensus-list-twu/ready",
+      "file": "./catalogue/evaluation-consensus-list-twu.ready.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-twu-submit-confirm--submit-confirm",
+      "title": "evaluation/evaluation-consensus-list-twu/submit-confirm",
+      "file": "./catalogue/evaluation-consensus-list-twu.submit-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-twu-submitted--submitted",
+      "title": "evaluation/evaluation-consensus-list-twu/submitted",
+      "file": "./catalogue/evaluation-consensus-list-twu.submitted.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-consensus-list-twu-withheld--withheld",
+      "title": "evaluation/evaluation-consensus-list-twu/withheld",
+      "file": "./catalogue/evaluation-consensus-list-twu.withheld.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-create-swu-default--default",
+      "title": "evaluation/evaluation-individual-create-swu/default",
+      "file": "./catalogue/evaluation-individual-create-swu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-create-swu-duplicate--duplicate",
+      "title": "evaluation/evaluation-individual-create-swu/duplicate",
+      "file": "./catalogue/evaluation-individual-create-swu.duplicate.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-create-swu-invalid--invalid",
+      "title": "evaluation/evaluation-individual-create-swu/invalid",
+      "file": "./catalogue/evaluation-individual-create-swu.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-create-swu-loading--loading",
+      "title": "evaluation/evaluation-individual-create-swu/loading",
+      "file": "./catalogue/evaluation-individual-create-swu.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-create-swu-not-found--not-found",
+      "title": "evaluation/evaluation-individual-create-swu/not-found",
+      "file": "./catalogue/evaluation-individual-create-swu.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-create-twu-default--default",
+      "title": "evaluation/evaluation-individual-create-twu/default",
+      "file": "./catalogue/evaluation-individual-create-twu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-create-twu-duplicate--duplicate",
+      "title": "evaluation/evaluation-individual-create-twu/duplicate",
+      "file": "./catalogue/evaluation-individual-create-twu.duplicate.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-create-twu-invalid--invalid",
+      "title": "evaluation/evaluation-individual-create-twu/invalid",
+      "file": "./catalogue/evaluation-individual-create-twu.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-create-twu-loading--loading",
+      "title": "evaluation/evaluation-individual-create-twu/loading",
+      "file": "./catalogue/evaluation-individual-create-twu.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-create-twu-not-found--not-found",
+      "title": "evaluation/evaluation-individual-create-twu/not-found",
+      "file": "./catalogue/evaluation-individual-create-twu.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-edit-swu-default--default",
+      "title": "evaluation/evaluation-individual-edit-swu/default",
+      "file": "./catalogue/evaluation-individual-edit-swu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-edit-swu-invalid--invalid",
+      "title": "evaluation/evaluation-individual-edit-swu/invalid",
+      "file": "./catalogue/evaluation-individual-edit-swu.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-edit-swu-loading--loading",
+      "title": "evaluation/evaluation-individual-edit-swu/loading",
+      "file": "./catalogue/evaluation-individual-edit-swu.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-edit-swu-not-found--not-found",
+      "title": "evaluation/evaluation-individual-edit-swu/not-found",
+      "file": "./catalogue/evaluation-individual-edit-swu.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-edit-swu-submitted--submitted",
+      "title": "evaluation/evaluation-individual-edit-swu/submitted",
+      "file": "./catalogue/evaluation-individual-edit-swu.submitted.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-edit-twu-default--default",
+      "title": "evaluation/evaluation-individual-edit-twu/default",
+      "file": "./catalogue/evaluation-individual-edit-twu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-edit-twu-invalid--invalid",
+      "title": "evaluation/evaluation-individual-edit-twu/invalid",
+      "file": "./catalogue/evaluation-individual-edit-twu.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-edit-twu-loading--loading",
+      "title": "evaluation/evaluation-individual-edit-twu/loading",
+      "file": "./catalogue/evaluation-individual-edit-twu.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-edit-twu-not-found--not-found",
+      "title": "evaluation/evaluation-individual-edit-twu/not-found",
+      "file": "./catalogue/evaluation-individual-edit-twu.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-edit-twu-submitted--submitted",
+      "title": "evaluation/evaluation-individual-edit-twu/submitted",
+      "file": "./catalogue/evaluation-individual-edit-twu.submitted.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-list-swu-default--default",
+      "title": "evaluation/evaluation-individual-list-swu/default",
+      "file": "./catalogue/evaluation-individual-list-swu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-list-swu-loading--loading",
+      "title": "evaluation/evaluation-individual-list-swu/loading",
+      "file": "./catalogue/evaluation-individual-list-swu.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-list-swu-not-found--not-found",
+      "title": "evaluation/evaluation-individual-list-swu/not-found",
+      "file": "./catalogue/evaluation-individual-list-swu.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-list-swu-ready--ready",
+      "title": "evaluation/evaluation-individual-list-swu/ready",
+      "file": "./catalogue/evaluation-individual-list-swu.ready.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-list-swu-refused--refused",
+      "title": "evaluation/evaluation-individual-list-swu/refused",
+      "file": "./catalogue/evaluation-individual-list-swu.refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-list-swu-submitted--submitted",
+      "title": "evaluation/evaluation-individual-list-swu/submitted",
+      "file": "./catalogue/evaluation-individual-list-swu.submitted.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-list-twu-default--default",
+      "title": "evaluation/evaluation-individual-list-twu/default",
+      "file": "./catalogue/evaluation-individual-list-twu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-list-twu-loading--loading",
+      "title": "evaluation/evaluation-individual-list-twu/loading",
+      "file": "./catalogue/evaluation-individual-list-twu.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-list-twu-not-found--not-found",
+      "title": "evaluation/evaluation-individual-list-twu/not-found",
+      "file": "./catalogue/evaluation-individual-list-twu.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-list-twu-ready--ready",
+      "title": "evaluation/evaluation-individual-list-twu/ready",
+      "file": "./catalogue/evaluation-individual-list-twu.ready.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-list-twu-refused--refused",
+      "title": "evaluation/evaluation-individual-list-twu/refused",
+      "file": "./catalogue/evaluation-individual-list-twu.refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-individual-list-twu-submitted--submitted",
+      "title": "evaluation/evaluation-individual-list-twu/submitted",
+      "file": "./catalogue/evaluation-individual-list-twu.submitted.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-instructions-swu-default--default",
+      "title": "evaluation/evaluation-instructions-swu/default",
+      "file": "./catalogue/evaluation-instructions-swu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-instructions-swu-loading--loading",
+      "title": "evaluation/evaluation-instructions-swu/loading",
+      "file": "./catalogue/evaluation-instructions-swu.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-instructions-swu-not-found--not-found",
+      "title": "evaluation/evaluation-instructions-swu/not-found",
+      "file": "./catalogue/evaluation-instructions-swu.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-instructions-twu-default--default",
+      "title": "evaluation/evaluation-instructions-twu/default",
+      "file": "./catalogue/evaluation-instructions-twu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-instructions-twu-loading--loading",
+      "title": "evaluation/evaluation-instructions-twu/loading",
+      "file": "./catalogue/evaluation-instructions-twu.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-instructions-twu-not-found--not-found",
+      "title": "evaluation/evaluation-instructions-twu/not-found",
+      "file": "./catalogue/evaluation-instructions-twu.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-dashboard-default--default",
+      "title": "evaluation/evaluation-panel-dashboard/default",
+      "file": "./catalogue/evaluation-panel-dashboard.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-dashboard-empty--empty",
+      "title": "evaluation/evaluation-panel-dashboard/empty",
+      "file": "./catalogue/evaluation-panel-dashboard.empty.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-dashboard-loading--loading",
+      "title": "evaluation/evaluation-panel-dashboard/loading",
+      "file": "./catalogue/evaluation-panel-dashboard.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-swu-default--default",
+      "title": "evaluation/evaluation-panel-swu/default",
+      "file": "./catalogue/evaluation-panel-swu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-swu-invalid--invalid",
+      "title": "evaluation/evaluation-panel-swu/invalid",
+      "file": "./catalogue/evaluation-panel-swu.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-swu-loading--loading",
+      "title": "evaluation/evaluation-panel-swu/loading",
+      "file": "./catalogue/evaluation-panel-swu.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-swu-locked--locked",
+      "title": "evaluation/evaluation-panel-swu/locked",
+      "file": "./catalogue/evaluation-panel-swu.locked.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-swu-not-found--not-found",
+      "title": "evaluation/evaluation-panel-swu/not-found",
+      "file": "./catalogue/evaluation-panel-swu.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-swu-refused--refused",
+      "title": "evaluation/evaluation-panel-swu/refused",
+      "file": "./catalogue/evaluation-panel-swu.refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-swu-too-few--too-few",
+      "title": "evaluation/evaluation-panel-swu/too-few",
+      "file": "./catalogue/evaluation-panel-swu.too-few.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-twu-default--default",
+      "title": "evaluation/evaluation-panel-twu/default",
+      "file": "./catalogue/evaluation-panel-twu.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-twu-invalid--invalid",
+      "title": "evaluation/evaluation-panel-twu/invalid",
+      "file": "./catalogue/evaluation-panel-twu.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-twu-loading--loading",
+      "title": "evaluation/evaluation-panel-twu/loading",
+      "file": "./catalogue/evaluation-panel-twu.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-twu-locked--locked",
+      "title": "evaluation/evaluation-panel-twu/locked",
+      "file": "./catalogue/evaluation-panel-twu.locked.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-twu-not-found--not-found",
+      "title": "evaluation/evaluation-panel-twu/not-found",
+      "file": "./catalogue/evaluation-panel-twu.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-twu-refused--refused",
+      "title": "evaluation/evaluation-panel-twu/refused",
+      "file": "./catalogue/evaluation-panel-twu.refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "evaluation-evaluation-panel-twu-too-few--too-few",
+      "title": "evaluation/evaluation-panel-twu/too-few",
+      "file": "./catalogue/evaluation-panel-twu.too-few.stories.tsx",
       "violations": []
     },
     {
@@ -2335,7 +2917,7 @@
     }
   ],
   "totals": {
-    "stories": 386,
+    "stories": 483,
     "violations": 0,
     "failed": 0
   }

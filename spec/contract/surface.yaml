@@ -972,52 +972,52 @@ pages:
     route: /dashboard
     title: "Evaluations"
     actions:
-      show_my_opportunities: { test_id: null }
-      show_panel_opportunities: { test_id: null }
-      open_opportunity: { test_id: null }
+      show_my_opportunities: { test_id: dashboard-show-my-opportunities }
+      show_panel_opportunities: { test_id: dashboard-show-evaluations }
+      open_opportunity: { test_id: dashboard-opportunity-link }
     observations:
-      evaluations_tab: { test_id: null }
-      panel_opportunities_table: { test_id: null }
-      opportunity_status: { test_id: null }
-      empty_panel_opportunities_message: { test_id: null }
+      evaluations_tab: { test_id: dashboard-show-evaluations }
+      panel_opportunities_table: { test_id: dashboard-panel-opportunities-table }
+      opportunity_status: { test_id: opportunity-status }
+      empty_panel_opportunities_message: { test_id: dashboard-empty-panel-message }
 
   - id: evaluation-panel-swu
     domain: evaluation
     route: /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluationPanel
     title: "Evaluation Panel"
     actions:
-      add_panel_member: { test_id: null }
-      remove_panel_member: { test_id: null }
-      choose_panel_chair: { test_id: null }
-      mark_member_as_chair: { test_id: null }
-      save_evaluation_panel: { test_id: null }
+      add_panel_member: { test_id: evaluation-panel-add-member }
+      remove_panel_member: { test_id: evaluation-panel-remove-member }
+      choose_panel_chair: { test_id: evaluation-panel-chair-field }
+      mark_member_as_chair: { test_id: evaluation-panel-member-chair }
+      save_evaluation_panel: { test_id: evaluation-panel-save }
     observations:
-      panel_member_row: { test_id: null }
-      chair_field: { test_id: null }
-      minimum_members_error: { test_id: null }
-      duplicate_member_error: { test_id: null }
-      non_public_sector_member_error: { test_id: null }
-      missing_chair_error: { test_id: null }
-      panel_locked_after_consensus: { test_id: null }
+      panel_member_row: { test_id: evaluation-panel-member-row }
+      chair_field: { test_id: evaluation-panel-chair-field }
+      minimum_members_error: { test_id: evaluation-panel-minimum-error }
+      duplicate_member_error: { test_id: evaluation-panel-duplicate-error }
+      non_public_sector_member_error: { test_id: evaluation-panel-not-public-sector-error }
+      missing_chair_error: { test_id: evaluation-panel-missing-chair-error }
+      panel_locked_after_consensus: { test_id: evaluation-panel-locked-message }
 
   - id: evaluation-panel-twu
     domain: evaluation
     route: /opportunities/team-with-us/:opportunityId/edit?tab=evaluationPanel
     title: "Evaluation Panel"
     actions:
-      add_panel_member: { test_id: null }
-      remove_panel_member: { test_id: null }
-      choose_panel_chair: { test_id: null }
-      mark_member_as_chair: { test_id: null }
-      save_evaluation_panel: { test_id: null }
+      add_panel_member: { test_id: evaluation-panel-add-member }
+      remove_panel_member: { test_id: evaluation-panel-remove-member }
+      choose_panel_chair: { test_id: evaluation-panel-chair-field }
+      mark_member_as_chair: { test_id: evaluation-panel-member-chair }
+      save_evaluation_panel: { test_id: evaluation-panel-save }
     observations:
-      panel_member_row: { test_id: null }
-      chair_field: { test_id: null }
-      minimum_members_error: { test_id: null }
-      duplicate_member_error: { test_id: null }
-      non_public_sector_member_error: { test_id: null }
-      missing_chair_error: { test_id: null }
-      panel_locked_after_consensus: { test_id: null }
+      panel_member_row: { test_id: evaluation-panel-member-row }
+      chair_field: { test_id: evaluation-panel-chair-field }
+      minimum_members_error: { test_id: evaluation-panel-minimum-error }
+      duplicate_member_error: { test_id: evaluation-panel-duplicate-error }
+      non_public_sector_member_error: { test_id: evaluation-panel-not-public-sector-error }
+      missing_chair_error: { test_id: evaluation-panel-missing-chair-error }
+      panel_locked_after_consensus: { test_id: evaluation-panel-locked-message }
 
   - id: evaluation-instructions-swu
     domain: evaluation
@@ -1025,8 +1025,8 @@ pages:
     title: "Instructions"
     actions: {}
     observations:
-      instructions_body: { test_id: null }
-      visible_to_evaluators_only: { test_id: null }
+      instructions_body: { test_id: evaluation-instructions-body }
+      visible_to_evaluators_only: { test_id: opportunity-tab-instructions }
 
   - id: evaluation-instructions-twu
     domain: evaluation
@@ -1034,204 +1034,204 @@ pages:
     title: "Instructions"
     actions: {}
     observations:
-      instructions_body: { test_id: null }
-      visible_to_evaluators_only: { test_id: null }
+      instructions_body: { test_id: evaluation-instructions-body }
+      visible_to_evaluators_only: { test_id: opportunity-tab-instructions }
 
   - id: evaluation-individual-list-swu
     domain: evaluation
     route: /opportunities/sprint-with-us/:opportunityId/edit?tab=evaluation
     title: "Evaluation"
     actions:
-      open_proponent_evaluation: { test_id: null }
-      submit_scores_for_consensus: { test_id: null }
+      open_proponent_evaluation: { test_id: evaluation-open-proponent }
+      submit_scores_for_consensus: { test_id: evaluation-submit-for-consensus }
     observations:
-      proponent_row: { test_id: null }
-      anonymous_proponent_name: { test_id: null }
-      evaluation_status: { test_id: null }
-      submit_disabled_until_complete: { test_id: null }
-      incomplete_evaluation_error: { test_id: null }
-      own_evaluations_only: { test_id: null }
+      proponent_row: { test_id: evaluation-proponent-row }
+      anonymous_proponent_name: { test_id: proposal-proponent-name }
+      evaluation_status: { test_id: evaluation-status }
+      submit_disabled_until_complete: { test_id: evaluation-submit-for-consensus }
+      incomplete_evaluation_error: { test_id: evaluation-incomplete-error }
+      own_evaluations_only: { test_id: evaluation-individual-table }
 
   - id: evaluation-individual-list-twu
     domain: evaluation
     route: /opportunities/team-with-us/:opportunityId/edit?tab=evaluation
     title: "Evaluation"
     actions:
-      open_proponent_evaluation: { test_id: null }
-      submit_scores_for_consensus: { test_id: null }
+      open_proponent_evaluation: { test_id: evaluation-open-proponent }
+      submit_scores_for_consensus: { test_id: evaluation-submit-for-consensus }
     observations:
-      proponent_row: { test_id: null }
-      anonymous_proponent_name: { test_id: null }
-      evaluation_status: { test_id: null }
-      submit_disabled_until_complete: { test_id: null }
-      incomplete_evaluation_error: { test_id: null }
-      own_evaluations_only: { test_id: null }
+      proponent_row: { test_id: evaluation-proponent-row }
+      anonymous_proponent_name: { test_id: proposal-proponent-name }
+      evaluation_status: { test_id: evaluation-status }
+      submit_disabled_until_complete: { test_id: evaluation-submit-for-consensus }
+      incomplete_evaluation_error: { test_id: evaluation-incomplete-error }
+      own_evaluations_only: { test_id: evaluation-individual-table }
 
   - id: evaluation-consensus-list-swu
     domain: evaluation
     route: /opportunities/sprint-with-us/:opportunityId/edit?tab=consensus
     title: "Consensus"
     actions:
-      open_proponent_consensus: { test_id: null }
-      submit_final_consensus_scores: { test_id: null }
-      confirm_submit_consensus: { test_id: null }
-      finalize_consensus_scores: { test_id: null }
-      confirm_finalize_consensus: { test_id: null }
-      cancel_modal: { test_id: null }
+      open_proponent_consensus: { test_id: evaluation-open-consensus }
+      submit_final_consensus_scores: { test_id: evaluation-submit-consensus }
+      confirm_submit_consensus: { test_id: evaluation-submit-consensus-confirm }
+      finalize_consensus_scores: { test_id: finalize-consensus-button }
+      confirm_finalize_consensus: { test_id: evaluation-finalize-confirm }
+      cancel_modal: { test_id: evaluation-dialog-cancel }
     observations:
-      proponent_row: { test_id: null }
-      consensus_status: { test_id: null }
-      submit_confirmation_modal: { test_id: null }
-      finalize_confirmation_modal: { test_id: null }
-      not_all_consensuses_submitted_error: { test_id: null }
-      no_screenable_proponent_error: { test_id: null }
-      empty_for_owner_not_on_panel: { test_id: null }
+      proponent_row: { test_id: evaluation-proponent-row }
+      consensus_status: { test_id: evaluation-consensus-status }
+      submit_confirmation_modal: { test_id: evaluation-submit-consensus-dialog }
+      finalize_confirmation_modal: { test_id: evaluation-finalize-dialog }
+      not_all_consensuses_submitted_error: { test_id: evaluation-not-all-submitted-error }
+      no_screenable_proponent_error: { test_id: evaluation-no-screenable-error }
+      empty_for_owner_not_on_panel: { test_id: evaluation-consensus-withheld-message }
 
   - id: evaluation-consensus-list-twu
     domain: evaluation
     route: /opportunities/team-with-us/:opportunityId/edit?tab=consensus
     title: "Consensus"
     actions:
-      open_proponent_consensus: { test_id: null }
-      submit_final_consensus_scores: { test_id: null }
-      confirm_submit_consensus: { test_id: null }
-      finalize_consensus_scores: { test_id: null }
-      confirm_finalize_consensus: { test_id: null }
-      cancel_modal: { test_id: null }
+      open_proponent_consensus: { test_id: evaluation-open-consensus }
+      submit_final_consensus_scores: { test_id: evaluation-submit-consensus }
+      confirm_submit_consensus: { test_id: evaluation-submit-consensus-confirm }
+      finalize_consensus_scores: { test_id: finalize-consensus-button }
+      confirm_finalize_consensus: { test_id: evaluation-finalize-confirm }
+      cancel_modal: { test_id: evaluation-dialog-cancel }
     observations:
-      proponent_row: { test_id: null }
-      consensus_status: { test_id: null }
-      submit_confirmation_modal: { test_id: null }
-      finalize_confirmation_modal: { test_id: null }
-      not_all_consensuses_submitted_error: { test_id: null }
-      no_screenable_proponent_error: { test_id: null }
-      empty_for_owner_not_on_panel: { test_id: null }
+      proponent_row: { test_id: evaluation-proponent-row }
+      consensus_status: { test_id: evaluation-consensus-status }
+      submit_confirmation_modal: { test_id: evaluation-submit-consensus-dialog }
+      finalize_confirmation_modal: { test_id: evaluation-finalize-dialog }
+      not_all_consensuses_submitted_error: { test_id: evaluation-not-all-submitted-error }
+      no_screenable_proponent_error: { test_id: evaluation-no-screenable-error }
+      empty_for_owner_not_on_panel: { test_id: evaluation-consensus-withheld-message }
 
   - id: evaluation-individual-create-swu
     domain: evaluation
     route: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/evaluations/create
     title: "Evaluate a Sprint With Us proponent"
     actions:
-      enter_question_score: { test_id: null }
-      enter_question_notes: { test_id: null }
-      save_draft: { test_id: null }
-      save_and_go_to_next_proponent: { test_id: null }
-      save_and_go_to_previous_proponent: { test_id: null }
+      enter_question_score: { test_id: evaluation-question-score-field }
+      enter_question_notes: { test_id: evaluation-question-notes-field }
+      save_draft: { test_id: evaluation-save-draft }
+      save_and_go_to_next_proponent: { test_id: evaluation-save-next }
+      save_and_go_to_previous_proponent: { test_id: evaluation-save-previous }
     observations:
-      anonymous_proponent_name: { test_id: null }
-      question_response: { test_id: null }
-      score_out_of_range_error: { test_id: null }
-      empty_notes_error: { test_id: null }
-      duplicate_evaluation_error: { test_id: null }
+      anonymous_proponent_name: { test_id: proposal-proponent-name }
+      question_response: { test_id: evaluation-question-response }
+      score_out_of_range_error: { test_id: evaluation-score-error }
+      empty_notes_error: { test_id: evaluation-notes-error }
+      duplicate_evaluation_error: { test_id: evaluation-duplicate-error }
 
   - id: evaluation-individual-edit-swu
     domain: evaluation
     route: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/evaluations/:userId/edit
     title: "Sprint With Us evaluation"
     actions:
-      enter_question_score: { test_id: null }
-      enter_question_notes: { test_id: null }
-      save_changes: { test_id: null }
-      save_and_go_to_next_proponent: { test_id: null }
+      enter_question_score: { test_id: evaluation-question-score-field }
+      enter_question_notes: { test_id: evaluation-question-notes-field }
+      save_changes: { test_id: evaluation-save-changes }
+      save_and_go_to_next_proponent: { test_id: evaluation-save-next }
     observations:
-      evaluation_status: { test_id: null }
-      read_only_after_submitted: { test_id: null }
-      score_out_of_range_error: { test_id: null }
-      empty_notes_error: { test_id: null }
+      evaluation_status: { test_id: evaluation-status }
+      read_only_after_submitted: { test_id: evaluation-read-only-notice }
+      score_out_of_range_error: { test_id: evaluation-score-error }
+      empty_notes_error: { test_id: evaluation-notes-error }
 
   - id: evaluation-consensus-create-swu
     domain: evaluation
     route: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/create
     title: "Agree a Sprint With Us consensus"
     actions:
-      enter_question_score: { test_id: null }
-      enter_question_notes: { test_id: null }
-      save_draft: { test_id: null }
-      save_and_go_to_next_proponent: { test_id: null }
+      enter_question_score: { test_id: evaluation-question-score-field }
+      enter_question_notes: { test_id: evaluation-question-notes-field }
+      save_draft: { test_id: evaluation-save-draft }
+      save_and_go_to_next_proponent: { test_id: evaluation-save-next }
     observations:
-      anonymous_proponent_name: { test_id: null }
-      panel_member_score: { test_id: null }
-      panel_member_notes: { test_id: null }
-      chair_only: { test_id: null }
-      duplicate_consensus_error: { test_id: null }
+      anonymous_proponent_name: { test_id: proposal-proponent-name }
+      panel_member_score: { test_id: evaluation-panel-member-score }
+      panel_member_notes: { test_id: evaluation-panel-member-notes }
+      chair_only: { test_id: evaluation-chair-only-message }
+      duplicate_consensus_error: { test_id: evaluation-duplicate-consensus-error }
 
   - id: evaluation-consensus-edit-swu
     domain: evaluation
     route: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/:userId/edit
     title: "Sprint With Us consensus"
     actions:
-      enter_question_score: { test_id: null }
-      enter_question_notes: { test_id: null }
-      save_changes: { test_id: null }
-      save_and_go_to_next_proponent: { test_id: null }
+      enter_question_score: { test_id: evaluation-question-score-field }
+      enter_question_notes: { test_id: evaluation-question-notes-field }
+      save_changes: { test_id: evaluation-save-changes }
+      save_and_go_to_next_proponent: { test_id: evaluation-save-next }
     observations:
-      consensus_status: { test_id: null }
-      editable_after_submitted: { test_id: null }
-      panel_member_score: { test_id: null }
-      panel_member_notes: { test_id: null }
+      consensus_status: { test_id: evaluation-consensus-status }
+      editable_after_submitted: { test_id: evaluation-editable-notice }
+      panel_member_score: { test_id: evaluation-panel-member-score }
+      panel_member_notes: { test_id: evaluation-panel-member-notes }
 
   - id: evaluation-individual-create-twu
     domain: evaluation
     route: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/evaluations/create
     title: "Evaluate a Team With Us proponent"
     actions:
-      enter_question_score: { test_id: null }
-      enter_question_notes: { test_id: null }
-      save_draft: { test_id: null }
-      save_and_go_to_next_proponent: { test_id: null }
-      save_and_go_to_previous_proponent: { test_id: null }
+      enter_question_score: { test_id: evaluation-question-score-field }
+      enter_question_notes: { test_id: evaluation-question-notes-field }
+      save_draft: { test_id: evaluation-save-draft }
+      save_and_go_to_next_proponent: { test_id: evaluation-save-next }
+      save_and_go_to_previous_proponent: { test_id: evaluation-save-previous }
     observations:
-      anonymous_proponent_name: { test_id: null }
-      question_response: { test_id: null }
-      score_out_of_range_error: { test_id: null }
-      empty_notes_error: { test_id: null }
-      duplicate_evaluation_error: { test_id: null }
+      anonymous_proponent_name: { test_id: proposal-proponent-name }
+      question_response: { test_id: evaluation-question-response }
+      score_out_of_range_error: { test_id: evaluation-score-error }
+      empty_notes_error: { test_id: evaluation-notes-error }
+      duplicate_evaluation_error: { test_id: evaluation-duplicate-error }
 
   - id: evaluation-individual-edit-twu
     domain: evaluation
     route: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/evaluations/:userId/edit
     title: "Team With Us evaluation"
     actions:
-      enter_question_score: { test_id: null }
-      enter_question_notes: { test_id: null }
-      save_changes: { test_id: null }
-      save_and_go_to_next_proponent: { test_id: null }
+      enter_question_score: { test_id: evaluation-question-score-field }
+      enter_question_notes: { test_id: evaluation-question-notes-field }
+      save_changes: { test_id: evaluation-save-changes }
+      save_and_go_to_next_proponent: { test_id: evaluation-save-next }
     observations:
-      evaluation_status: { test_id: null }
-      read_only_after_submitted: { test_id: null }
-      score_out_of_range_error: { test_id: null }
-      empty_notes_error: { test_id: null }
+      evaluation_status: { test_id: evaluation-status }
+      read_only_after_submitted: { test_id: evaluation-read-only-notice }
+      score_out_of_range_error: { test_id: evaluation-score-error }
+      empty_notes_error: { test_id: evaluation-notes-error }
 
   - id: evaluation-consensus-create-twu
     domain: evaluation
     route: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/create
     title: "Agree a Team With Us consensus"
     actions:
-      enter_question_score: { test_id: null }
-      enter_question_notes: { test_id: null }
-      save_draft: { test_id: null }
-      save_and_go_to_next_proponent: { test_id: null }
+      enter_question_score: { test_id: evaluation-question-score-field }
+      enter_question_notes: { test_id: evaluation-question-notes-field }
+      save_draft: { test_id: evaluation-save-draft }
+      save_and_go_to_next_proponent: { test_id: evaluation-save-next }
     observations:
-      anonymous_proponent_name: { test_id: null }
-      panel_member_score: { test_id: null }
-      panel_member_notes: { test_id: null }
-      chair_only: { test_id: null }
-      duplicate_consensus_error: { test_id: null }
+      anonymous_proponent_name: { test_id: proposal-proponent-name }
+      panel_member_score: { test_id: evaluation-panel-member-score }
+      panel_member_notes: { test_id: evaluation-panel-member-notes }
+      chair_only: { test_id: evaluation-chair-only-message }
+      duplicate_consensus_error: { test_id: evaluation-duplicate-consensus-error }
 
   - id: evaluation-consensus-edit-twu
     domain: evaluation
     route: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/:userId/edit
     title: "Team With Us consensus"
     actions:
-      enter_question_score: { test_id: null }
-      enter_question_notes: { test_id: null }
-      save_changes: { test_id: null }
-      save_and_go_to_next_proponent: { test_id: null }
+      enter_question_score: { test_id: evaluation-question-score-field }
+      enter_question_notes: { test_id: evaluation-question-notes-field }
+      save_changes: { test_id: evaluation-save-changes }
+      save_and_go_to_next_proponent: { test_id: evaluation-save-next }
     observations:
-      consensus_status: { test_id: null }
-      editable_after_submitted: { test_id: null }
-      panel_member_score: { test_id: null }
-      panel_member_notes: { test_id: null }
+      consensus_status: { test_id: evaluation-consensus-status }
+      editable_after_submitted: { test_id: evaluation-editable-notice }
+      panel_member_score: { test_id: evaluation-panel-member-score }
+      panel_member_notes: { test_id: evaluation-panel-member-notes }
 
   # Notifications. The one page a person can act on directly is their own
   # notification settings, which the users domain already lists as
