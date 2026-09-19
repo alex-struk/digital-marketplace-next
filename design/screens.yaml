@@ -52,3 +52,87 @@ screens:
     states: [default, unsubscribe-confirm]
   - page: user-profile-self-legal
     states: [default, terms-updated, accept-terms-confirm, section-unavailable]
+
+  # opportunities domain — see design/DESIGN.md, "Domain: opportunities"
+  - page: home
+    states: [default, loading]
+  - page: opportunity-dashboard
+    states: [default, administrator, empty, loading]
+  - page: opportunity-list
+    states: [default, staff, signed-out, loading]
+  - page: opportunity-program-select
+    states: [default, not-found]
+  - page: opportunity-cwu-create
+    states: [default, administrator, invalid, publish-confirm, not-found]
+  - page: opportunity-cwu-view
+    states: [default, signed-out, author, awarded, not-found, loading]
+  - page: opportunity-cwu-edit
+    states:
+      [
+        default,
+        draft,
+        under-review,
+        editing,
+        incomplete,
+        addenda-tab,
+        history-tab,
+        publish-confirm,
+        cancel-confirm,
+        delete-confirm,
+        not-found,
+        loading,
+      ]
+  - page: opportunity-cwu-complete
+    states: [default, not-found, loading]
+  - page: opportunity-swu-create
+    states: [default, administrator, invalid, publish-confirm, not-found]
+  - page: opportunity-swu-view
+    states: [default, signed-out, author, awarded, not-found, loading]
+  - page: opportunity-swu-edit
+    states:
+      [
+        default,
+        draft,
+        under-review,
+        editing,
+        incomplete,
+        addenda-tab,
+        history-tab,
+        publish-confirm,
+        cancel-confirm,
+        delete-confirm,
+        consensus,
+        consensus-refused,
+        code-challenge,
+        team-scenario-refused,
+        not-found,
+        loading,
+      ]
+  - page: opportunity-swu-complete
+    states: [default, not-found, loading]
+  - page: opportunity-twu-create
+    states: [default, administrator, invalid, publish-confirm, not-found]
+  - page: opportunity-twu-view
+    states: [default, signed-out, author, awarded, not-found, loading]
+  - page: opportunity-twu-edit
+    states:
+      [
+        default,
+        draft,
+        under-review,
+        editing,
+        incomplete,
+        addenda-tab,
+        history-tab,
+        publish-confirm,
+        cancel-confirm,
+        delete-confirm,
+        consensus,
+        consensus-refused,
+        not-found,
+        loading,
+      ]
+  - page: opportunity-twu-complete
+    states: [default, not-found, loading]
+  - page: scheduled-transition-trigger
+    states: [default]

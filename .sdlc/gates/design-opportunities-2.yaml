@@ -1,0 +1,13 @@
+gate: G-DESIGN
+verdict: approve
+by: agent:ux-reviewer
+held_by: agent
+rationale: |2-
+  Question: do the opportunities screens serve the opportunities criteria, and are they built from the design system? Approved. The condition the proposal left open is met. design/report.json on the branch was rescanned at 2026-09-19T06:52:43Z and lists the renamed stories opportunities/home-page/default and opportunities/home-page/loading. It reports ok: true, the typecheck and build passed, and no story has any accessibility violations. The egress check and the report-freshness check both pass. The components come from @bcgov/design-system-react-components 0.8.1. The status badge, key-facts list, cards, fieldsets, table and tab navigation are built from standard HTML, styled only with tokens, and named in design/DESIGN.md as the project's own. The stories use design tokens with no typed colour or spacing values. The gaps in the criteria are recorded rather than filled with invented behaviour, which this persona accepts. The test warnings are about other domains. This ruling would change to return if a later scan found any violation or a compile failure, or if the catalogue changed without a matching new report.
+conditions:
+  - "design/report.json must be regenerated, and still show zero violations, whenever a catalogue story changes before merge"
+  - "Before the build is accepted, the manual accessibility checks that design/DESIGN.md lists as outstanding must be done: keyboard-only use of the long forms, multi-select and DatePicker, screen-reader checks of the dialogs and error summary, and 400% zoom"
+cost: 0.672212
+turns: 7
+session: "3293a2e2-88f9-4f30-80c5-231658eddad1"
+at: 2026-09-19T06:54:16.637Z

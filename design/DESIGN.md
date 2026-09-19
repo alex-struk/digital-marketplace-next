@@ -346,3 +346,443 @@ These are work for the spec. None of them was filled with invented behaviour.
     names listed above could not be checked against the live design-system repository in this run.
     A build must confirm them against the installed package versions. If a token is missing, it
     must be raised here rather than replaced by a typed value.
+
+---
+
+## Domain: opportunities
+
+These screens cover the home page, the staff dashboard, the public opportunity list, choosing a
+program, and, for each of the three programs, the create form, the public view, the manage page
+(`…/edit`, with its tabs) and the administrator's complete report. They also cover `/status`, the
+address that closes opportunities past their deadline. Every state named in `design/screens.yaml`
+has a story at `design/catalogue/<page>.<state>.stories.tsx`, and the story is what a build copies.
+
+The three programs share one design. The Code With Us, Sprint With Us and Team With Us versions of
+a page have the same layout, components and test IDs. They differ only in the sections their
+criteria require: reward and skills (Code With Us), phases, team questions, four scoring weights
+and a panel (Sprint With Us), and resources, resource questions, three weights and a panel (Team
+With Us). A reader who knows one program's page therefore knows all three.
+
+### Components this domain is built from
+
+All from `@bcgov/design-system-react-components` 0.8.1, unless the entry says otherwise. The props
+used were checked against that version's type declarations, and the catalogue compiles against
+them (see note 24).
+
+| Component | Used for |
+| --- | --- |
+| `Heading` | One H1 per screen, then H2 per section and H3 inside a section. Levels follow the outline. |
+| `Text` | Body copy. `size="small" color="secondary"` is used for the program line above an H1, the opportunity ID, captions and group ordering notes. `color="danger"` is used only for the group-level errors (phases, weights), which also appear in the error summary. |
+| `Button` | Every command. `primary` is used once per view for the next step (Submit for review, Publish, Finalize consensus scores, Start team scenario, Save changes, Add addendum, Add note). `secondary` is used for Edit, Save draft and "Add a …" repeaters. `secondary` with `danger` is used for Delete and Cancel opportunity. `tertiary size="small"` is used to remove one repeated item. |
+| `ButtonGroup` | The manage page's action bar (`ariaLabel="Opportunity actions"`), and each form's submit row. |
+| `Link` | Navigation: opportunity titles, manage-page tabs, and the dashboard's rows. `isButton` is used where navigation should look like a command (Browse opportunities, Sign in, Create an opportunity, the program choices, Start a proposal, Manage this opportunity). |
+| `TextField` | Title, location, and the list's `type="search"` box. |
+| `TextArea` | Teaser, remote-work description, description, question and guideline, the addendum, the private note, and the cancellation note. `maxLength` is always the limit the criterion states. |
+| `NumberField` | Reward and budgets (`formatOptions` currency CAD, narrow symbol, no decimals), scores, word limits, weights and allocations. **No `minValue`/`maxValue`.** The limits are stated in the description and checked on submit, so a field never silently changes what somebody typed, and the rejection the criteria describe can be shown. |
+| `DatePicker` | The proposal deadline, assignment, start and completion dates, and each phase's dates. |
+| `Select` | Program and status filters. Skills use `selectionMode="multiple"`. Also the service area and each panel member. |
+| `RadioGroup` + `Radio` | "Is remote work acceptable?" (Yes / No), which R-1.11 requires an answer to. |
+| `Checkbox` | Watch, the remote-only filter, and a panel member's Evaluator and Chair marks. |
+| `Form` | Always `validationBehavior="aria"`, as in the users domain. |
+| `InlineAlert` | The error summary (`danger`), "This opportunity is incomplete" (R-1.21), and refused stage changes (R-1.41, R-1.42). Each is wrapped in a `div` that carries the test ID, because `InlineAlert` does not pass `data-*` through. |
+| `Modal` + `AlertDialog` | Publish (`confirmation`), and Cancel opportunity and Delete (`destructive`). |
+| `ProgressCircle` | Indeterminate loading, inside `role="status"` next to visible text, as in the users domain. |
+| `FileTrigger` (from `react-aria-components`) | Opens the file chooser behind the "Add attachment" `Button`. The file rules and the attachment list belong to the files domain (`file-attachment-control`). |
+
+**Watch is a `Checkbox`, not a `ToggleButton`.** The design system has a `ToggleButton`, but its
+selected state is conveyed by styling. A checkbox shows its state with a tick as well as colour
+(P1), and it matches the users domain's other immediate-save controls. On the list, each checkbox
+has a visible label of "Watch" and `aria-label="Watch <title>"`, so the accessible name begins with
+the visible text (WCAG 2.5.3). On the view page the label is "Watch this opportunity".
+
+### This project's own components (not design-system components)
+
+These are built from standard HTML and styled only with tokens. None of them is a design-system
+component, and none may be presented as one.
+
+- **Status badge.** It is the users domain's badge, reused unchanged: a `<span>` with a
+  `--surface-color-border-medium` border and a `--layout-border-radius-circular` radius. It always
+  carries the status in words (for example "Draft" or "Team questions: consensus") and sits after a
+  visible "Status:" label or in a Status column. The design system's `Tag` is an interactive grid
+  item inside `TagGroup`, which is the wrong role for a static status.
+- **Key facts list.** A `<dl>` whose items are `div`s holding a `dt` (bold, via
+  `--typography-font-weights-bold`) and a `dd`. The items flex-wrap with `--layout-margin-large`
+  gaps, so they reflow at 320 pixels without a breakpoint. The design system has no
+  description-list component.
+- **Opportunity card.** An `<article>` in a `<li>`, labelled by its H3 title link, with a
+  `--surface-color-border-default` border and a `--layout-border-radius-medium` radius. It is used on
+  the opportunity list. The design system's `Callout` is an emphasis box with its own title
+  markup, not a list item, so it does not fit.
+- **Card section.** A `<section aria-labelledby>` with the same border and radius. It is used for
+  the program cards and to group each part of a long form. This is the same treatment the users
+  domain gives its sign-in cards.
+- **Repeated-item group.** A `<fieldset>` and `<legend>` ("Question 1", "Resource 1", "Implementation
+  phase", "Panel member 2"), with a token border and the legend set in `--typography-bold-body`. The
+  design system has no fieldset component, and a legend is what names the group to assistive
+  technology.
+- **Data table.** It is the users domain's table, reused: a native `<table>` with a `<caption>`
+  and `scope="col"` headers, inside a focusable `role="region"` that scrolls horizontally at narrow
+  widths. It is used for the dashboard and the History tab.
+- **Manage-page tabs.** It is the users domain's section navigation, reused: a `<nav
+  aria-label="Opportunity sections">` of `Link`s, with `aria-current="page"` on the current tab.
+  Each tab has its own address (`?tab=…`), as the surface requires, so these are links and not a
+  tabs widget.
+
+### How a screen is laid out
+
+The layout is the users domain's: a single-column grid with `--layout-margin-large` between regions
+and `--layout-padding-large` around the page. Action rows and filter rows flex-wrap. No value is
+typed anywhere. The only tokens used are `--layout-margin-{none,xsmall,small,medium,large}`,
+`--layout-padding-{none,small,large}`, `--layout-border-width-small`,
+`--layout-border-radius-{medium,circular}`, `--surface-color-border-{default,medium}`,
+`--typography-font-weights-bold`, `--typography-bold-body` and `--typography-regular-display`
+(the home page's figures, which the token set describes as extra-large body text, not a heading).
+
+The regions of each kind of page come in this order:
+
+- **View** (`opportunity-*-view`). The program name as small text, then the H1 (the opportunity's
+  own title), the teaser, the key facts, the opportunity ID, the actions (Watch, Start a proposal or
+  Manage this opportunity), and then H2 sections: Successful proponent (when awarded), Description,
+  the program's own section (Skills, Phases or Resources), Key dates and Addenda.
+- **Manage** (`opportunity-*-edit`). "Manage a … opportunity" as small text, then the H1 (the
+  opportunity's title), the status and ID row, the action bar, the tabs, any page alert, and the
+  current tab's H2 section. The action bar and tabs are the same on every tab, including the tabs
+  other domains design (the evaluation panel, instructions, evaluation and consensus).
+- **Create** (`opportunity-*-create`). The H1, one sentence on what "required" means, the error
+  summary when there is one, the form sections in card sections, and the submit row.
+- **Document title.** It is always the surface title ("Code With Us opportunity", "Manage a Team
+  With Us opportunity"). On client-side navigation, focus goes to the H1. On view, manage and report
+  pages the H1 is the opportunity's title, because that is what a person is looking for. The
+  surface title appears as the small line above it.
+
+### Forms and validation
+
+These rules apply to the three create forms and to the Opportunity tab in edit mode.
+
+- **Drafts are never checked** (R-1.9). "Save draft" saves whatever is there. Blank dates become
+  fourteen days from today, and that is done by the service, not the form. Every form says so in
+  one sentence at the top: "Required fields are needed to submit for review or publish."
+- **Required marking.** `isRequired` is set on each field that R-1.10 to R-1.18 require for
+  submission or publication. Optional fields say "(optional)" in the label. The remote-work
+  description becomes required, and says so in its description, when "Yes" is chosen.
+- **The limits are stated before input.** Each field's description gives its rule in plain words
+  ("Up to 200 characters.", "Between $1 and $70,000.", "Between 1 and 100.", "Lower than the
+  maximum score."). Text limits are enforced as the person types, through `maxLength`. Number
+  limits are checked only on submit.
+- **When validation runs.** On Submit for review, Publish, or Save changes, and never on each
+  keystroke.
+- **An invalid field** gets `isInvalid` and an `errorMessage` directly under it, and keeps the value
+  the person entered. The message says what to do ("Enter a reward between $1 and $70,000").
+- **Group-level errors** belong to a group, not a field: "A prototype phase must follow an
+  inception phase." (R-1.16) and "The scoring weights must total 100%." (R-1.15, `score-weight-error`).
+  Each appears as a `Text color="danger"` paragraph with an `id`, placed directly after the group.
+  The weight fields point at it with `aria-describedby`. The live total ("Total: 90%") sits in a
+  `role="status"` region, so the sum is heard as it changes.
+- **The error summary** follows the users domain's pattern. A `danger` `InlineAlert` titled "This
+  opportunity has N problems" (or "Your changes have N problems" when editing) sits in a
+  `tabIndex={-1}` wrapper that receives focus. It holds one `Link` per problem to the field or
+  group `id`, and every list item carries `data-testid="field-error"`.
+- **"Incomplete" is different from invalid** (R-1.21). Submitting an existing draft for review from
+  the manage page checks completeness only, and the person is told the opportunity is incomplete,
+  not which field is missing. It is a `danger` `InlineAlert` with `role="alert"`, titled "This
+  opportunity is incomplete", with the text "It could not be submitted for review. Edit the
+  opportunity, complete and save the form, and then submit it again."
+- **Who is offered which submit.** A public sector employee is offered Save draft and Submit for
+  review. An administrator is offered Save draft and Publish (R-1.22, R-1.48). Publish is never
+  rendered for anyone else, so the refusal R-1.48 describes is the service's safeguard, not
+  something the screen shows.
+- **Repeating items** (phases, questions, resources, panel members) are fieldsets with a numbered
+  legend. Each has its own tertiary "Remove …" button, and there is one secondary "Add a …" button
+  after the last of them. A question's position is its order in the list (R-1.17). It is never
+  typed.
+- **The evaluation panel on create** is a container (`evaluation-panel-editor`) holding one fieldset
+  per member: a `Select` of public sector employees, and Evaluator and Chair checkboxes. Its
+  detailed rules and messages are the evaluation domain's (`evaluation-panel-swu` / `-twu`). Once
+  the opportunity exists, the panel is changed on its Evaluation panel tab and is not part of the
+  Opportunity tab's form.
+
+### Confirmation dialogs
+
+Publishing, cancelling and deleting change what everyone else sees and cannot be undone, so each
+one asks first. The dialog is a `Modal` holding an `AlertDialog`. Its title is a question, its body
+says who will be told, and its buttons name the action. Focus moves in, stays in, returns to the
+opening button when the dialog closes, and Escape dismisses it.
+
+| Action | Variant | Confirm button (test ID) | Other |
+| --- | --- | --- | --- |
+| Publish | `confirmation` | "Publish opportunity" (`opportunity-publish-confirm`) | Cancel (`opportunity-dialog-cancel`) |
+| Cancel opportunity | `destructive` | "Cancel opportunity" (`opportunity-cancel-confirm`) | Keep opportunity (`opportunity-dialog-cancel`); optional "Note" `TextArea`, up to 1,000 characters (R-1.28) |
+| Delete | `destructive` | "Delete opportunity" (`opportunity-delete-confirm`) | Cancel (`opportunity-dialog-cancel`) |
+
+The addendum and the private note do not ask first. The screen states each one's consequence in a
+sentence before its button: an addendum cannot be removed and notifies watchers, proponents and
+the author (R-1.32, R-1.35), and a note is private (R-1.33). Submit for review does not ask
+either. See gap 10 for what this means for the surface.
+
+### Immediate saves: Watch
+
+Watch saves as soon as it is ticked or cleared. A sentence before it says what watching does, and
+the outcome is announced in a `role="status"` region after it. Watch is offered only to a
+signed-in person who did not create the opportunity. It is not rendered on their own opportunity,
+so the refusal in R-1.5's note ("You cannot subscribe to your own opportunity.") is never
+triggered from the screen, and a checkbox cannot send a duplicate.
+
+### Loading, empty, refused, not found
+
+- **Loading.** This follows the users domain's pattern. The H1 renders at once, and below it a
+  `role="status"` row holds a `ProgressCircle` and matching text. On the home page, only the
+  figures wait.
+- **Not found and refused.** All of these show the users domain's shared missing page (H1 "Page not
+  found", `data-testid="not-found-page"`), which never says "not allowed": a draft or an
+  opportunity under review opened by a vendor or a visitor (R-1.2, which says "not found"), a
+  vendor or visitor on a create page (R-1.7), anyone but an administrator on a complete report
+  (R-1.40), and anyone without access on a manage page. R-1.2 states the wording. The other three
+  only say "refused" (gap 6).
+- **Empty.** Only the dashboard has a designed empty state (`empty`), because the surface observes
+  one. Its wording is the design's own (gap 3). A list group with nothing in it, and a search that
+  matches nothing, are not designed (gap 4).
+- **Reporting withheld** (R-1.30 note). On a draft or an opportunity under review, the Summary tab
+  shows "Views, watchers and proposals are counted once the opportunity is published." in place of
+  the three counts.
+
+### Who is offered what on the manage page
+
+The action bar shows only what the person may do in the opportunity's current state (R-1.20,
+R-1.22, R-1.28, R-1.53, R-1.56, R-5.14):
+
+| State | Author (not an administrator) | Administrator |
+| --- | --- | --- |
+| Draft | Edit, Submit for review, Delete | Edit, Publish, Delete |
+| Under review | nothing (see gap 16) | Edit, Publish, Delete |
+| Published, any evaluation stage, processing | nothing: editing after publication is administrator-only | Edit, Cancel opportunity |
+| Team questions or resource questions consensus | Finalize consensus scores | Edit, Finalize consensus scores, Cancel opportunity |
+| Code challenge (Sprint With Us) | Start team scenario | Edit, Start team scenario, Cancel opportunity |
+| Awarded, cancelled | nothing | nothing |
+
+The tabs follow the stage:
+
+| Stage | Tabs |
+| --- | --- |
+| Draft | Summary, Opportunity, History, and for Sprint With Us and Team With Us, Evaluation panel |
+| Under review, published | The same, plus Addenda (an addendum needs a non-draft, R-1.32) |
+| From closing onward | All the tabs for the program: Proposals (R-1.31), and Team questions, Code challenge, Team scenario (Sprint With Us) or Resource questions, Challenge (Team With Us), and Consensus. The evaluation domain adds Instructions and Evaluation for evaluators (R-5.34). |
+
+### Accessibility obligations
+
+WCAG 2.1 AA applies (P1, J5). This domain adds the following to the users domain's list, which
+applies here too.
+
+- **Status is words.** The status badge always carries the state's name. The Watch state has a tick
+  as well as colour. Group errors are text, and each one is also in the error summary.
+- **Long forms are navigable.** Each form part is a labelled section with a heading, so it can be
+  reached from a screen reader's heading list, and each repeated item is a fieldset with a legend.
+- **Controls with the same visible text are told apart.** On the list, Watch has an `aria-label`
+  naming the opportunity. Remove buttons name their item ("Remove question 1"). Panel members'
+  `Select`s sit inside numbered legends.
+- **Announcements.** Loading, the live weight total, and immediate saves use `role="status"`.
+  Refusals and the error summary use `role="alert"`, and focus moves to the summary.
+- **Tables and tabs.** Tables have a caption and column headers, and their scroll region is
+  focusable. The current tab has `aria-current="page"`.
+- **Checks still required.** Keyboard-only use of the long forms, of `Select` with multiple
+  selection and of `DatePicker`, screen-reader checks of the dialogs and the error summary, and
+  400% zoom have not been done. They are required before the build is accepted.
+
+### Test IDs
+
+The rules are the users domain's: one ID per kind of element; an action and an observation on the
+same element share its ID; the same element keeps its ID on every page. The IDs shared across
+this domain's pages are:
+
+- `opportunity-status`, `opportunity-proposal-deadline`, `opportunity-watch-toggle`: on the
+  dashboard, the list and the views.
+- `opportunity-identifier`, `opportunity-created-by`, `opportunity-last-changed-by`: on the views and
+  the manage pages.
+- `opportunity-save-draft`, `opportunity-submit-for-review`, `opportunity-publish`, `field-error`:
+  on the create pages and the manage pages. `field-error` is the users domain's ID, reused.
+- `opportunity-tab-*`: on every manage page.
+- `not-found-page`: the users domain's ID, reused.
+
+The following bindings are not obvious from their names:
+
+- `own_opportunities_only` and `all_opportunities_for_administrator` are both bound to
+  `dashboard-opportunity-row`. A test tells them apart by which rows it finds, in the `default`
+  and `administrator` stories.
+- `set_evaluation_panel` is bound to `evaluation-panel-editor`, the container for the panel
+  controls. The controls inside it are the evaluation domain's to name.
+- `edit_evaluation_panel` is bound to the Evaluation panel tab link
+  (`opportunity-tab-evaluation-panel`), the same element as `evaluation_panel_tab`. Following it
+  opens the panel editor, which the evaluation domain designs.
+- `run_pending_transitions` is bound to `service-status-page`, the wrapper of the page `/status`
+  returns. Requesting the address is the action, and the wrapper shows the request landed.
+- `add_attachment` is `attachment-add-button`. It is used wherever this domain places the
+  attachment trigger (the create forms, the Opportunity tab and the history note).
+
+**Other domains should reuse these IDs for the same controls:**
+`finalize-consensus-button` for the evaluation domain's `finalize_consensus_scores` (it is one
+control, in the shared action bar, gap 13); `attachment-add-button` for the files domain's
+`add_attachment` on `file-attachment-control`; and `opportunity-status` wherever an opportunity's
+status is shown.
+
+**Extra IDs, not named in the surface, that the stories carry for the adapter:** the dialog
+buttons (`opportunity-publish-confirm`, `opportunity-cancel-confirm`, `opportunity-delete-confirm`,
+`opportunity-dialog-cancel`), the dialogs themselves (`opportunity-*-dialog`), form fields
+(`opportunity-title-field` and the like), `opportunity-save-changes`, `opportunity-cancel-edit`,
+`addendum-text-field`, `note-text-field`, `opportunity-cancel-note-field`,
+`opportunity-incomplete-message` and `advance-refused-message`.
+
+### Per-screen notes
+
+**home** — `default`, `loading`. The page has the H1, a sentence on what the service is, Browse
+opportunities, Sign in and Sign up, the two awarded figures in a key-facts list, and links to the
+three programs' learn-more pages. `home-page` wraps the whole page, so a test can confirm it
+renders for a visitor who has not signed in. `loading` exists because the figures come from the
+service while everything else is static. The figures are illustrative (gap 1).
+
+**opportunity-dashboard** — `default` (a public sector employee's own opportunities),
+`administrator` (every opportunity, with a Created by column, R-1.3), `empty`, `loading`. Each row's
+title is `open_opportunity` and leads to the manage page. The evaluation domain's "Evaluations"
+navigation for panel members (R-5.19, `evaluation-panel-dashboard`) sits between the H1 and the
+table, and that domain designs it.
+
+**opportunity-list** — `default` (a signed-in vendor: Open and Closed, with Watch), `staff`
+(adds the Unpublished group of the person's own drafts and opportunities under review, and no
+Watch on their own), `signed-out` (no Watch), `loading`. Groups and their order follow R-1.38 and
+its note, and each group states its order under its heading. The filters apply as they change and
+announce the count through `role="status"` (R-1.39). The notifications domain's new-opportunity
+control (`notification-optin-opportunity-list`) belongs at the end of the filter row, and that
+domain designs it.
+
+**opportunity-program-select** — `default`, `not-found`. There are three card sections, each with
+the program's maximum budget (`program-max-budget`: up to $70,000, R-1.12; up to $5,000,000, R-1.13;
+no upper limit, R-1.13) and a Create link. A sentence above the cards says the program cannot be
+changed later (R-1.8).
+
+**opportunity-cwu-create / -swu-create / -twu-create** — `default` (public sector employee),
+`administrator` (Publish in place of Submit for review), `invalid`, `publish-confirm`, `not-found`.
+The invalid stories show each program's own rules. Code With Us shows missing fields, the remote
+description, a reward over the limit and no skills. Sprint With Us shows a budget over the limit,
+an inception phase without a prototype phase, a minimum score that is not below the maximum, and
+weights totalling 90%. Team With Us shows a missing title, an allocation of 120% and weights
+totalling 90%.
+
+**opportunity-cwu-view / -swu-view / -twu-view** — `default` (signed-in vendor, open: Watch and
+Start a proposal), `signed-out` (nothing to act on), `author` (Created by and Last changed by
+shown, R-1.29; no Watch; a link to manage), `awarded` (the successful proponent's name only,
+R-1.27), `not-found` (R-1.2), `loading`. Start a proposal is offered only to a vendor while the
+opportunity is open (R-2.1, R-2.15). The published date is the first publication (R-1.23). Opening
+the page counts as a view (R-1.6), which has no visible effect. The files domain places the
+attachment list in the Description section.
+
+**opportunity-cwu-edit / -swu-edit / -twu-edit** — `default` (an administrator after closing:
+Summary with reporting counts), `draft` (the author: Submit for review, Delete, no counts),
+`under-review` (an administrator: Publish, Delete), `editing` (the Opportunity tab as a form, with
+a sentence that saving notifies watchers, proponents and the author, R-1.4, R-1.35), `incomplete`
+(R-1.21), `addenda-tab`, `history-tab` (the history, newest first; Code With Us and Sprint With Us
+add the private note form, R-1.33, and Team With Us has none), `publish-confirm`, `cancel-confirm`,
+`delete-confirm`, `not-found`, `loading`.
+
+Sprint With Us and Team With Us also have `consensus` (Finalize consensus scores offered, R-1.50,
+R-5.14) and `consensus-refused`. The Sprint With Us refusal is "Not all consensuses have been
+submitted." The Team With Us refusal is "You must have at least one proponent that can be screened
+into the Challenge.", naming the stage that follows, as R-5.10 requires. Sprint With Us also has
+`code-challenge` (Start team scenario) and `team-scenario-refused` (R-1.42). An invalid edit is
+presented exactly as in the create page's `invalid` story, so it has no story of its own.
+
+**opportunity-cwu-complete / -swu-complete / -twu-complete** — `default`, `not-found`, `loading`.
+The report is one `<article>` (`opportunity-full-report`) with the opportunity, its addenda, its
+history and every proposal in order. There are no tabs and nothing to expand, so it reads, and
+prints, as one continuous document (R-1.40).
+
+**scheduled-transition-trigger** — `default`. The page has an H1 "Service status" and one sentence
+saying the service is up. A request to it also runs the closing hook (R-1.1). The page shows
+nothing about what closed, because the criterion does not say it should.
+
+### Gaps
+
+These are work for the spec. None of them was filled with invented behaviour. Where the design
+had to show something, the story marks it as illustrative or placeholder.
+
+1. **The home page's figures.** No criterion defines "total awarded opportunity count" or "value":
+   which programs count, whether the value is the reward, the budget or the winning price, and how
+   it is rounded. The surface names them, so they are placed, with illustrative numbers.
+2. **The home page when signed in.** No criterion says whether Sign in and Sign up are still
+   offered to a signed-in person.
+3. **The dashboard.** Its row order, its columns, and the wording of its empty message are not
+   stated. That an administrator's dashboard lists every opportunity comes from the surface's
+   `all_opportunities_for_administrator` and R-1.3, which is about listing, not the dashboard.
+4. **Empty list groups and searches that match nothing** (R-1.38, R-1.39). Neither criterion says
+   what these show. Also, R-1.39's note records a status filter with no Processing or Cancelled
+   option. The design carries that set as recorded, but whether the rebuild should keep the
+   omission, and whether vendors should be offered Draft and Under review at all, needs a ruling.
+5. **The program cards.** The descriptions are placeholder copy. The Team With Us "no upper limit"
+   repeats R-1.13, whose note asks for a human ruling.
+6. **What a refusal looks like.** R-1.7 (create), R-1.40 (report) and R-1.22 say "refused" without
+   saying what is shown. The design reuses the missing page, following R-1.2 and the users domain.
+   Whether a visitor who has not signed in should be sent to sign in instead is not stated.
+7. **An administrator's submit choices on create.** R-1.48 says who may create as published. It does
+   not say whether an administrator should also be offered Submit for review. The design offers
+   Publish in its place.
+8. **Completion date.** Whether it is required outside a draft is not stated (R-1.9, R-1.14). It is
+   marked "(optional)". The Sprint With Us phase dates' ordering rules are not stated either.
+9. **Dates for a closed opportunity.** R-1.14's note says an edit after the deadline is measured
+   against the past deadline. The deadline description "It cannot be before today" is wrong in
+   that case, and the right wording is not stated.
+10. **A confirmation is two steps; the surface names one.** `publish`, `cancel_opportunity` and
+    `delete_opportunity` each open a confirmation. The adapter binding the action has to press the
+    documented `*-confirm` button as well. Either the surface gains `confirm_*` entries (as the
+    evaluation surface has for its dialogs), or the contract accepts the two-step binding.
+11. **Watch failures.** No criterion states what a person sees when watching or unwatching fails.
+12. **What a signed-out visitor is offered on a view.** Nothing is designed. Whether to offer "Sign
+    in to propose" is not stated (R-2.1).
+13. **One finalize control, two names.** `opportunity-*-edit.finalize_question_consensuses` and
+    `evaluation-consensus-list-*.finalize_consensus_scores` are the same action on the same page.
+    This design puts it in the shared action bar as `finalize-consensus-button`. The evaluation
+    domain should bind to it rather than add a second control. R-1.41 says the refusal "reason is
+    named", but only R-5.4 and R-5.10 give wording, and the design uses theirs.
+14. **Tab contents with no owner.** The surface names the Proposals, Team questions, Code
+    challenge, Team scenario, Resource questions and Challenge tabs as observations, but gives no
+    page for what is on them. They are not designed here. The proposals domain's scoring criteria
+    (R-2.26 to R-2.33) probably belong on them. When each stage tab appears is also inferred: the
+    Proposals tab only from R-1.31, and the others by extension.
+15. **R-1.42 and R-1.21 wording.** Only a paraphrase is given ("a message saying all proponents
+    must be scored first"; "saying the opportunity is incomplete and asking the author to complete
+    and save the form"). The stories' sentences follow those paraphrases.
+16. **Deletion under review** (R-1.53's open question). The design offers Delete to the author only
+    on a draft, and to an administrator on a draft or an opportunity under review, as the accepted
+    statement says. If the ruling lets authors delete under review, the Under review row of the
+    table above changes. Whether an author may still edit an opportunity under review is not
+    stated either (R-1.56 covers only published ones), so the design offers the author nothing
+    there.
+17. **Private notes on Team With Us** (R-1.33's note). The design follows the criterion, so there
+    is no note on Team With Us. If that is ruled a gap to close, the Team With Us History tab takes
+    the same note form as the other two programs.
+18. **A proponent's contact details and score on an awarded opportunity** (R-1.27). They are shown
+    to those permitted, but the surface has no observation for them and no criterion says where
+    they go. The design puts them under "Successful proponent" for permitted viewers. There is no
+    story, because no state of the surface separates them.
+19. **Cancelled opportunities.** No criterion says what a cancelled opportunity's page shows beyond
+    its status, so there is no `cancelled` state. Historical "suspended" records (R-1.51) are mapped
+    before the rebuild reads them, so nothing displays that state.
+20. **Content the spec does not carry.** The skills list, the five Team With Us service areas'
+    names, the program descriptions and all record text in the stories are placeholders, marked as
+    such.
+21. **Formatted text.** The description is "formatted text" in the old service, and the files
+    domain's `file-embedded-image` inserts images into it. The design system has no rich-text
+    editor. The stories use a `TextArea`. The editor, and whether it is this project's own
+    component, is a decision for the content and files domains, and when made it belongs in the
+    own-components list above.
+22. **The service level agreement link** (R-7.18) appears on the program cards and the three forms,
+    but its address is the content domain's to settle. It is not placed in these stories.
+23. **Whether `/status` returns a page.** The surface treats it as a page, and this design gives it a
+    minimal one. If the build returns plain text, the adapter reads the response body instead and
+    the two IDs have nothing to bind to.
+24. **The catalogue is compiled and scanned.** The pipeline typechecks and builds the catalogue
+    and runs axe over every story, and writes the result to `design/report.json`. The component
+    names and props follow the type declarations of `@bcgov/design-system-react-components`
+    0.8.1, and the token names follow `@bcgov/design-tokens` 5.0.0's `variables.css`. The home
+    page's stories are titled `opportunities/home-page/default` and
+    `opportunities/home-page/loading`. This is not a gap in the criteria; it is kept here so the
+    numbering of the gaps below does not change.
+25. **Dates in the stories are empty.** A `DatePicker` value needs `@internationalized/date`, which
+    the catalogue's `package.json` does not declare, and this stage does not own that file. So the
+    date pickers render empty, even in the `editing` stories. A build sets them from the record.
