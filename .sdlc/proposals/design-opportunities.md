@@ -50,3 +50,15 @@ The project's own components are listed openly in DESIGN.md: the status badge, t
 - **Missing content.** The skills list, the five Team With Us service-area names and the program descriptions are not in the spec; the stories use placeholders marked as such.
 - **Rich text.** The description needs a formatted-text editor, which the design system does not have; the stories use a plain text area for now.
 - **Empty date pickers.** Setting a date needs a package the catalogue does not declare, and I don't own `package.json`.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:ux-reviewer
+
+Question: do the opportunities screens serve the criteria, and are they built from the design system? Ruling: return. Reason: the egress check fails. The home page's Storybook titles ('opportunities/home/default' and 'opportunities/home/loading') contain '/home/', which the local-home-path rule reads as a home directory, and design/report.json copies those titles. It is a false positive, not a path leak, but this gate does not pass a failing check. The rest of the proposal meets the bar. report.json was regenerated at 2026-09-19T06:48:53Z, before the proposal opened: typecheck and build pass, and axe reports 0 violations across 151 stories, so the proposal's statement that nothing was compiled or scanned is out of date. The new opportunity stories contain no typed pixel, rem or em values and no hex or rgb colours. Components come from the design system, and the project's own components (key-facts list, opportunity card, card section, repeated-item fieldset, and the users domain's badge, table and tab links) are named as its own in design/DESIGN.md. Watch as a Checkbox instead of ToggleButton is justified because its state shows as a tick, not only as colour. The tier is STANDARD, so nothing needs a human. What would change the ruling: rename the home page's story group so no title contains '/home/', re-run the scan so report.json matches the catalogue with 0 violations and the egress check passes, and correct gap 24 and the proposal text so they no longer say the catalogue is unscanned. With those done, this approves.
+
+**Conditions:**
+- Rename the home page's Storybook titles (for example 'opportunities/home-page/default' and 'opportunities/home-page/loading') so no committed string contains '/home/'.
+- Re-run node scan.mjs so design/report.json matches the current catalogue digest, reports 0 violations, and the egress check passes.
+- Correct gap 24 in design/DESIGN.md and the proposal's summary so they state the catalogue was compiled and scanned, without describing the earlier text.
