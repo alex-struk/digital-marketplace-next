@@ -44,3 +44,17 @@ I designed the notifications domain's four pages. That covers 14 states across f
 - **Undecided cases:** unsubscribing when already unsubscribed, whether a signed-out visitor should be invited to sign in, when the announcement is offered and whether it may be repeated, whether previewed subjects carry the test marker, and what the refusal on the reference page looks like.
 
 One inconsistency for the users domain: their `unsubscribe-confirm` story leaves out the profile section links, while mine includes them. The two should match.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:ux-reviewer
+
+Question: do the notifications domain's four pages serve its criteria and are they built from the design system? Ruling: approve. design/report.json covers all 14 new stories (216 total) with zero accessibility violations; every state in design/screens.yaml has a story; the new stories contain no hard-coded colour or size values, only the token set the earlier domains already use; every action and observation on the four notification surfaces in spec/contract/surface.yaml that had a null test ID now has one, reusing the users domain's IDs where the element is the same; components are the design system's Heading, Text, Button, Link, Modal/AlertDialog, InlineAlert and ProgressCircle, and the single new component (the email preview frame) is standard HTML styled only with tokens and listed in DESIGN.md as the project's own. Using a Button whose text names the choice, rather than ToggleButton, keeps state out of styling alone. The tier is STANDARD with no low-confidence signal, so no escalation. The open gaps (conflicting criteria R-6.6/R-6.16, no email content in the spec, undesigned failure states) are recorded without invented behaviour, which the persona accepts. What would change this ruling: any violation in a rescan, an untokenised value, or a test ID missing from the contract.
+
+**Conditions:**
+- Contract stage renames notification_control_hidden_on_narrow_screen (named for the replaced R-6.22) so the test asserts the control is visible at narrow widths, per R-6.27.
+- Spec resolves the R-6.6 vs R-6.16 conflict and states which emails the notification setting governs; the reference page's placeholder samples are replaced once the spec gives message content.
+- Spec reconciles the notification-terms-broadcast route (/content/terms-and-conditions/edit) with the design's choice to offer the action in view mode rather than while editing (gap 11).
+- Users domain aligns its user-profile-self-notifications.unsubscribe-confirm story with this domain's whole-page version (profile section links included).
+- The screen-reader, keyboard and 320px checks listed in DESIGN.md are done before the build is accepted.
