@@ -186,3 +186,31 @@ screens:
     states: [default, notify-confirm, notified, notify-failed]
   - page: notification-email-reference
     states: [default, loading, not-found]
+
+  # content domain — see design/DESIGN.md, "Domain: content"
+  - page: content-footer
+    states: [default]
+  - page: content-service-level-agreement-link
+    states: [default]
+  - page: content-list
+    states: [default, deleted, loading, not-found]
+  - page: content-create
+    states: [default, invalid, ready, publish-confirm, duplicate-slug, not-found]
+  - page: content-edit
+    states:
+      [
+        default,
+        fixed,
+        created,
+        editing,
+        editing-fixed,
+        invalid,
+        duplicate-slug,
+        publish-confirm,
+        changes-published,
+        delete-confirm,
+        loading,
+        not-found,
+      ]
+  - page: content-view
+    states: [default, loading, not-found]
