@@ -1,5 +1,5 @@
 <!-- Headings adapted from github/spec-kit's plan template. -->
-# Plan — {{PROJECT_NAME}}
+# Plan — digital-marketplace-next
 
 ## Summary
 What this plan implements and the slice of the spec it covers, in a few sentences.

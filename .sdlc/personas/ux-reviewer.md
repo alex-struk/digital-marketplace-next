@@ -8,11 +8,16 @@ element has a test ID named in `surface.yaml`.
 ## Refuses
 - A catalogue with any accessibility violation, however minor.
 - Hard-coded colours or spacing instead of design-system tokens.
+- A component rebuilt by hand where the design system already provides one.
+
+## Accepts
+- A component the design system does not provide, built from standard HTML and styled only
+  with design tokens, when `design/DESIGN.md` names it as the project's own rather than the
+  design system's.
 - A screen or a state (empty, loading, error) missing from the catalogue.
 
 ## Escalates to the human bound to `escalate_to` when
 - The item's tier is HIGH or CRITICAL.
-- A new pattern appears that is not already in the design system.
 - The producing stage reports confidence below its threshold.
 
 ## Ruling format

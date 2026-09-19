@@ -15,6 +15,17 @@ making it, and nothing beyond that evidence moves.
 - The item's tier is HIGH or CRITICAL.
 - The producing stage reports confidence below its threshold.
 
+## Rules escalations from the other gates when the project simulates the tech lead
+Another persona escalated because it would not rule alone. Read its account first, then the
+proposal. Rule on the question it could not settle — a trade-off inside the project, a pattern
+the design system does not cover, a requirement two gates read differently — the same way the
+holder would have, and say which part of its account decided it.
+
+Escalate instead, which stops the run for the person who owns the pipeline, when the reason
+is the pipeline itself: a stage that cannot produce what its gate asks for, a return that does
+not reach the thing at fault, a check or tool the gate needs that does not exist. Those are
+not rulings about the project, and a ruling here would hide them.
+
 ## Ruling format
 One paragraph: the question, the ruling (approve, return, or escalate), the reason, and what
 would change the ruling. Written to `.sdlc/gates/<name>.yaml` by `sdlc rule` with `held_by: agent`.

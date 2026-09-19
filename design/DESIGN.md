@@ -1,7 +1,7 @@
 ---
 version: 0.1.0
-name: "{{PROJECT_NAME}}"
-description: "{{SERVICE_PURPOSE}}"
+name: "digital-marketplace-next"
+description: "Administers British Columbia's Code With Us, Sprint With Us and Team With Us procurement programs, letting public sector staff publish procurement opportunities and letting vendors submit proposals against them."
 sources: []
 tokens:
   colour: []
@@ -13,7 +13,7 @@ components: []
 
 <!-- Structure adapted from bcgov/crow v0.6.0's DESIGN.template.md. -->
 
-# Design — {{PROJECT_NAME}}
+# Design — digital-marketplace-next
 
 ## Overview
 What this service is, who uses it, and the one or two design decisions that shape everything else.
