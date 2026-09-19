@@ -2172,3 +2172,476 @@ words that no criterion gives, the story or this list says so.
     keeping its proportions.
 13. **Content the spec does not carry.** File names, sizes, identifiers, the fingerprint, dates and
     the page text in the stories are illustrative. The identifiers are synthetic.
+
+---
+
+## Domain: proposals
+
+A proposal is a vendor's bid against one opportunity. This domain's screens fall into five kinds:
+
+- **Create** (`proposal-*-create`). The vendor's form for a new proposal.
+- **Manage** (`proposal-*-edit`). The vendor's own proposal: read it, edit it, submit, withdraw or
+  delete it, read its history, and once there is a decision, its scores.
+- **Evaluate** (`proposal-*-view`). What public sector staff and administrators see after the
+  opportunity closes: the proposal, its stage tabs, score entry, award and disqualification.
+- **Export** (`proposal-*-export-one`, `proposal-*-export-all`). A printable copy of one proposal,
+  and, for staff only, every proposal of an opportunity in one document.
+- **Vendor dashboard** (`proposal-vendor-dashboard`) and the `/proposals` address
+  (`proposal-list-stub`).
+
+Every state named in `design/screens.yaml` has a story at
+`design/catalogue/<page>.<state>.stories.tsx`. The story is what a build copies. Where a story
+shows a dialog or a refusal, the page behind it is trimmed to its header and action bar. A
+visible `size="small" color="secondary"` line in the story says which story holds the rest. That
+line is a catalogue note, and a build does not render it.
+
+The three programs share one design, as they do in the opportunities domain. The Code With Us,
+Sprint With Us and Team With Us versions of a page have the same layout, components and test IDs.
+They differ only in the parts their criteria require:
+
+- **Code With Us.** A proponent that is an individual or an organization (R-2.14), proposal text
+  and comments (R-2.13), and one score (R-2.26).
+- **Sprint With Us.** An organization, a team for each phase with at most one scrum master,
+  capability coverage, phase and total cost (R-2.19), team questions (R-2.21) and references. The
+  stages are team questions, code challenge and team scenario.
+- **Team With Us.** An organization, team members named against resources with hourly rates
+  (R-2.20), an estimated cost against the budget (R-2.10) and resource questions (R-2.21). The
+  stages are resource questions and challenge.
+
+### Components this domain is built from
+
+All from `@bcgov/design-system-react-components` 0.8.1, unless the entry says otherwise. No
+component is new to the catalogue. Every component and prop used here is one the earlier domains'
+stories already compile with.
+
+| Component | Used for |
+| --- | --- |
+| `Heading` | One H1 per screen, H2 for each section or tab, and H3 inside a tab. Levels 1 to 3 only. Deeper structure uses table captions and ordered lists instead of a fourth level. On a manage page the H1 is the opportunity's title. On an evaluate page it is the proponent's name, as the reader is allowed to see it. |
+| `Text` | Body copy. `size="small" color="secondary"` for the page-kind line above the H1, stated limits, word counts and captions. `color="danger"` only for group errors (scrum masters, capabilities, cost, service area, duplicate or pending member), and each of those is also in the error summary. |
+| `Button` | Every command. `primary` is used once per view for the next step: Submit proposal, Save changes and submit, Enter score, Award, or the stage's score button. `secondary` is used for Edit, Save draft, Save changes, Add team member, Add a reference, Screen in and Screen out. `secondary` with `danger` is used for Withdraw, Delete and Disqualify. `tertiary` is used for Cancel, and `tertiary size="small"` to remove one repeated item. |
+| `ButtonGroup` | The action bar (`ariaLabel="Proposal actions"`), each form's submit row, each stage tab's actions, and dialog buttons. |
+| `Link` | Navigation: the tabs, the opportunity, the printable copy, links in error summaries, the dashboard's rows, the terms documents, and the attachment download links. |
+| `TextField` | The Code With Us individual's name, email, phone and address, reference details, and stored attachment names (`isReadOnly`, as in the files domain). |
+| `TextArea` | Proposal text and comments (`maxLength={10000}`), question responses, and the disqualification reason (`maxLength={5000}`). |
+| `NumberField` | Phase cost (`formatOptions` currency CAD, no decimals), hourly rate (currency, two decimals), and each score. There is no `minValue` or `maxValue`, as in the opportunities domain. The limit is stated and checked on submit, so the refusals the criteria describe can be shown and nothing is silently changed. |
+| `Select` | The organization, and the team member to add to a phase or resource. |
+| `RadioGroup` + `Radio` | Code With Us "Who is submitting this proposal?" (An individual / An organization). |
+| `Checkbox` | Scrum master (one per team member per phase), the two terms acceptances, and "Name proponents anonymously" on export-all. |
+| `Form` | Always `validationBehavior="aria"`. |
+| `InlineAlert` | Error summaries (`danger`), service refusals (`danger`, `role="alert"`), the wrong-stage refusal (`danger`) and the unqualified-organization notice (`warning`). Each is wrapped in a `div` that carries the test ID, because `InlineAlert` does not pass `data-*` through. |
+| `Modal` + `Dialog` | The terms dialog and the score dialog. These are small forms, not yes/no decisions. |
+| `Modal` + `AlertDialog` | Delete (`destructive`), Withdraw (`warning`), Award (`confirmation`) and Disqualify (`destructive`, with its reason field inside). |
+| `ProgressCircle` | Indeterminate loading, inside `role="status"` next to visible text. |
+| `FileTrigger` (from `react-aria-components`) | Behind "Add attachment". The attachment rows are the files domain's `file-attachment-control`, placed in the proposal form. |
+
+### This project's own components (not design-system components)
+
+These are all reused from earlier domains, unchanged, and none is new here. None of them is a
+design-system component, and none may be presented as one.
+
+- **Status badge.** The users domain's `<span>` with a token border and circular radius. It always
+  carries the status in words ("Draft", "Under review: team questions", "Not awarded"). Team
+  member membership ("Active", "Membership pending") uses the same badge.
+- **Key facts list.** The opportunities domain's `<dl>` of `dt`/`dd` pairs that flex-wrap. It is
+  used for the manage and evaluate headers, the Scores section, the Scoresheet and the export
+  headers. The design system has no description-list component.
+- **Card section.** A `<section aria-labelledby>` with the token border and radius, used for each
+  part of a proposal form, the opportunity summary, and each proposal in export-all (an
+  `<article>` there).
+- **Repeated-item group.** A `<fieldset>` and `<legend>` for each phase team, resource, question
+  and reference. A legend is what names the group to assistive technology, and the design system
+  has none.
+- **Data table.** The users domain's native `<table>` with a caption and `scope="col"` headers, in
+  a focusable `role="region"` that scrolls horizontally at narrow widths. It is used for team
+  tables, question responses, history, and the dashboard.
+- **Section navigation (tabs).** The users domain's `<nav>` of `Link`s with `aria-current="page"`.
+  On manage and evaluate pages each tab is an address (`?tab=…`). On the dashboard the two links
+  are in-page links to the two sections (see gap 9).
+- **Attachment list.** The files domain's control, placed in the proposal forms.
+
+Layout uses only the tokens earlier domains list: `--layout-margin-{none,xsmall,small,medium,large}`,
+`--layout-padding-{none,small,large}`, `--layout-border-width-small`,
+`--layout-border-radius-{medium,circular}`, `--surface-color-border-{default,medium}`,
+`--typography-font-weights-bold` and `--typography-bold-body`. No colour, size or radius value is
+written anywhere in the catalogue.
+
+### How a screen is laid out
+
+The users domain's single column, with `--layout-margin-large` between regions and action rows
+that wrap.
+
+- **Create.** The H1 ("Create a … proposal"), then the opportunity summary card, which gives the
+  opportunity, its reward or budget, and its deadline (`proposal-opportunity-summary`). Then one
+  sentence on drafts, any error summary or refusal, the form's card sections in the order listed
+  below, one sentence about the terms, and the submit row: Cancel, Save draft, Submit proposal.
+  - Code With Us: Proponent, Proposal, Attachments.
+  - Sprint With Us: Organization, Team (one fieldset per phase), Capabilities, Cost, Team
+    questions, References, Attachments.
+  - Team With Us: Organization, Team (one fieldset per resource), Cost, Resource questions,
+    Attachments.
+- **Manage.** "Manage a … proposal" as small text, then the H1 (the opportunity's title). Then
+  the key facts: status, submitted time (not on a draft), proposal ID, opportunity ID, deadline.
+  Then links to the opportunity and to the printable copy, the action bar (`proposal-actions`),
+  the tabs, any page alert, and the current tab. While editing, the action bar gives way to the
+  form's save row, and the Proposal tab becomes the create page's form, filled in.
+- **Evaluate.** "… proposal" as small text, then the H1 (the proponent's name as this reader may
+  see it: "Proponent 1" until the stage that reveals names, R-2.37). Then the key facts, a Scores
+  section with every stage score, the printable-copy link, the action bar, the tabs, any
+  refusal, and the current tab. A stage score not yet entered reads "Not yet scored". A
+  calculated score not yet calculated (price, total) reads "Not yet calculated".
+- **Export.** "Back to the proposal" and Print, then one `<article>` that is the whole document
+  (`proposal-export-document`). There is nothing to expand and no tabs, so it reads and prints as
+  one continuous page. Attachments are listed by name, not linked, because a printed link is
+  useless.
+- **Dashboard.** H1 "Dashboard", the section links, then "My proposals" and "My organizations'
+  proposals", each with its own H2 and table or empty message.
+
+### Forms and validation
+
+- **Drafts are never checked, except attachments** (R-2.12). Save draft saves whatever is there.
+  The one sentence at the top of every form says so: "A draft can be saved with any field blank.
+  Every required field is needed to submit." An attachment refused on a draft save is shown on
+  its row, as the files domain designs it.
+- **Required marking.** `isRequired` is set on each field a criterion requires for submission.
+  Optional fields say "(optional)" in the label.
+- **Limits are stated before input.** Proposal text is "Between 1 and 10,000 characters." Comments
+  are "Up to 10,000 characters." Each question response gives "Up to N words." with a live
+  `role="status"` word count under it. A phase cost gives "Up to the phase's maximum budget of
+  $…". An hourly rate gives "At least $1." A score gives "Between 0 and 100, with up to two
+  decimal places." A reason gives "Between 1 and 5,000 characters."
+- **When validation runs.** On Submit proposal, Save changes, Save changes and submit, Enter
+  score and Disqualify proposal. Never on each keystroke. Live totals (cost, word count) update as
+  the person types but do not mark anything invalid.
+- **An invalid field** gets `isInvalid` and an `errorMessage` under it, keeps what was typed, and
+  is listed in the error summary. The summary is a `danger` `InlineAlert` titled "This proposal
+  has N problems" (or "Your changes have N problems" when editing), in a `tabIndex={-1}` wrapper
+  that takes focus. Each item is a `Link` to the field or group, with `data-testid="field-error"`.
+- **Group errors** belong to a group, not a field. Each is a `Text color="danger"` in a `div` with
+  an `id`, placed at the end of its group and linked from the summary:
+  - two scrum masters in a phase (R-2.19)
+  - a capability no one covers (R-2.19, `proposal-capability-gap-error`)
+  - a total over budget (R-2.19, `proposal-budget-exceeded-error`; R-2.10 on Team With Us)
+  - a service area the organization lacks (R-2.17, `proposal-service-area-error`)
+  - a person who is not an active member ("User is not an active member of the organization.",
+    R-2.18)
+  - a person named twice ("Please select unique team members.", R-2.18)
+- **The service's own words are used verbatim** where a criterion quotes them: "You already have a
+  proposal for this opportunity." (R-2.2), "This opportunity is no longer accepting proposals."
+  (R-2.15), "Please select a different organization." (R-2.11), "An organization must be specified
+  before submitting." (R-2.16), "The selected organization does not satisfy this opportunity's
+  service areas." (R-2.17), the two R-2.18 messages, "Organization cannot be changed once the
+  proposal has been submitted" (R-2.22), and "The opportunity is not in the correct stage of
+  evaluation to perform that action." (R-2.28). Where no wording is given, the design writes an
+  instruction ("Enter a postal code").
+- **Only the phases the opportunity has.** A Sprint With Us form renders one team fieldset per
+  phase the opportunity requires, and no way to add or remove a phase. So "a team for every
+  required phase and no other" (R-2.19) cannot be broken from the form. The service's refusal is
+  still shown at the Team section if it happens.
+- **A pending team member is shown, not hidden** (R-2.18 note). They keep their row with a
+  "Membership pending" badge (`proposal-pending-team-member`), so the vendor can see why
+  submission is refused.
+- **The organization is a choice among the vendor's own** (R-2.14, R-2.24). The `Select` lists the
+  organizations the vendor owns or administers. Its description says it must be qualified
+  (R-2.16, R-2.17). On a submitted proposal it says it cannot be changed until the proposal is
+  withdrawn (R-2.22).
+- **The terms are asked for on submit** (R-2.3). Submit proposal, and Save changes and submit,
+  open the terms dialog (`proposal-terms-dialog`). It links both documents and holds two
+  checkboxes: the program's terms and the Digital Marketplace terms. Its Submit proposal button
+  (`proposal-submit-confirm`) is disabled, and described by "Tick both boxes to submit.", until
+  both are ticked. Submitting records the acceptance. The service refuses a submission that
+  reaches it without them.
+- **Refusals the screen could not prevent.** The deadline having passed, a duplicate, an
+  organization already named, lost qualification, a wrong stage: each is shown as a `danger`
+  alert (`role="alert"`) or a field error, in the place the matching story shows. Focus moves to
+  the alert.
+- **An invalid edit looks like an invalid create.** The manage page's `editing` state shows the
+  same form. Its invalid, over-budget and refused variants are exactly the create page's
+  `invalid`, `over-budget` and `refused` stories, so they have no stories of their own.
+
+### Dialogs
+
+Each dialog is a `Modal` whose title is a question or an action, whose body says what happens and
+who is told, and whose buttons name the action. Focus moves in, stays in, returns to the opening
+button when the dialog closes, and Escape dismisses it.
+
+| Action | Dialog | Confirm button (test ID) | Other |
+| --- | --- | --- | --- |
+| Submit proposal / Save changes and submit | `Dialog` (`proposal-terms-dialog`) | "Submit proposal" (`proposal-submit-confirm`), disabled until both terms are ticked | Cancel (`proposal-dialog-cancel`) |
+| Delete | `AlertDialog destructive` (`proposal-delete-dialog`) | "Delete proposal" (`proposal-delete-confirm`) | Cancel |
+| Withdraw | `AlertDialog warning` (`proposal-withdraw-dialog`) | "Withdraw proposal" (`proposal-withdraw-confirm`) | Keep proposal. The body gives the deadline until which it can go back in, and says the vendor and administrators are told (R-2.23, R-2.36). |
+| Enter score (every stage) | `Dialog` (`proposal-score-dialog`) | "Enter score" (`proposal-score-confirm`); field `proposal-score-field` | Cancel |
+| Award | `AlertDialog confirmation` (`proposal-award-dialog`) | "Award proposal" (`proposal-award-confirm`) | Cancel. The body says the others still in contention become not awarded, and who is sent which notice (R-2.33, R-2.36). |
+| Disqualify | `AlertDialog destructive` (`proposal-disqualify-dialog`) | "Disqualify proposal" (`proposal-disqualify-confirm`); reason `proposal-disqualify-reason-field` | Cancel |
+
+### Who is offered what
+
+**Manage page (the vendor who wrote it, or who owns or administers its organization, R-2.24):**
+
+| Proposal state | Action bar | Tabs |
+| --- | --- | --- |
+| Draft | Edit, Submit proposal, Delete (R-2.4) | Proposal, History |
+| Submitted, under review, evaluated | Edit, Withdraw (R-2.23) | Proposal, History |
+| Withdrawn | Edit, Submit proposal (R-2.23) | Proposal, History |
+| Awarded, not awarded | Withdraw | Proposal, History; Sprint With Us and Team With Us add Scoresheet (R-2.32) |
+
+Scores and rank appear only once the proposal is awarded or not awarded (R-2.32). Code With Us
+shows them in a "Result" block at the top of the Proposal tab (`proposal-score`, `proposal-rank`).
+Sprint With Us and Team With Us show them on the Scoresheet tab, with the anonymous name
+evaluators saw (`proposal-anonymous-name`) and the total (`proposal-total-score`).
+
+**Evaluate page (public sector staff and administrators, only after closing, R-2.25):**
+
+| Stage | Action bar | Stage tab actions |
+| --- | --- | --- |
+| Code With Us, under review | Enter score, Disqualify | — |
+| Code With Us, evaluated | Award, Disqualify | — |
+| Sprint With Us, any review stage | Disqualify (R-2.34) | Code challenge tab: Enter code challenge score, Screen in to team scenario, Screen out from team scenario. Team scenario tab: Enter team scenario score. |
+| Team With Us, any review stage | Disqualify | Resource questions tab: Enter resource question scores, Screen in to challenge, Screen out from challenge. Challenge tab: Enter challenge score. |
+| Fully evaluated, or previously not awarded | Award, Disqualify (R-2.33 note) | as above |
+| Awarded, disqualified, withdrawn | nothing | as above |
+
+**The stage tabs' buttons are always present from closing onward**, and each tab says in one
+sentence which stage the opportunity is at. A person who presses one at the wrong stage is told
+"The opportunity is not in the correct stage of evaluation to perform that action." in an alert
+above the tab (`proposal-wrong-stage-error`, R-2.28). The design keeps the button rather than
+hiding it, for two reasons. R-2.28 describes the refusal as behaviour to keep. And a hidden button
+would leave the criterion's "when" with nothing to act on. Gap 4 records this as a choice for
+review.
+
+### Loading, empty, refused, not found
+
+- **Loading.** The H1 renders at once. Below it, a `role="status"` row holds a `ProgressCircle`
+  and matching text.
+- **Not found and refused.** These all show the users domain's shared missing page (H1 "Page not
+  found", `not-found-page`), which never says "not allowed":
+  - a create page for anyone but a vendor who has accepted the terms (R-2.1)
+  - another vendor's proposal, or a deleted draft (R-2.4, R-2.24)
+  - an evaluate page before closing, or for a draft (R-2.25)
+  - export-all for a vendor (R-2.38)
+  - any export the reader is not entitled to (R-2.37)
+- **Empty.** Only the dashboard has designed empty states, one message per list
+  (`dashboard-empty-my-proposals`, `dashboard-empty-org-proposals`). The wording is the design's
+  own (gap 8). A vendor who owns no organization gets no organizations' heading at all
+  (`no-organization`), because R-2.24 gives that heading only to owners.
+- **Starting a second proposal** (R-2.2). The opportunity's "Start a proposal" takes a vendor who
+  already holds one to that proposal's manage page. So the `refused` alert on create appears only
+  if a second create reaches the service anyway.
+
+### Accessibility obligations
+
+WCAG 2.1 AA applies (P1, J5). The users and opportunities domains' lists apply here too. This
+domain adds the following.
+
+- **Status is words.** Every status, membership and capability-coverage value is written out
+  ("Membership pending", "Security engineering: not covered"). Scores are numbers with their
+  unit. Nothing is conveyed by colour alone.
+- **Controls with the same visible text are told apart.** "Add team member", "Remove" and "Scrum
+  master" repeat once per phase, resource or person. Each has an `aria-label` that begins with its
+  visible text and names its target ("Add team member to the prototype phase", "Scrum master: Test
+  Designer, implementation phase"), meeting WCAG 2.5.3.
+- **Long forms are navigable.** Each form part is a labelled section with a heading. Each
+  repeated item is a fieldset with a legend. The error summary links to every problem.
+- **Announcements.** Word counts and live cost totals use `role="status"`. Refusals and error
+  summaries use `role="alert"`, and focus moves to them. A disabled Submit proposal in the terms
+  dialog is described by the sentence that says what enables it.
+- **Anonymity is a real withholding, not a visual one.** Until the stage that reveals names, the
+  organization's name is absent from the markup of the evaluate page and the staff export. It is
+  not hidden with styling.
+- **Region names are unique.** The Code With Us proposal body's section is "Proposal text", so
+  that it does not share a landmark name with the Proposal tab.
+- **Checks still required.** Keyboard use of the multi-part forms, screen-reader checks of the
+  terms and score dialogs, and 400% zoom of the team tables have not been done. They are required
+  before the build is accepted.
+
+### Test IDs
+
+The rules are the users domain's: one ID per kind of element; an action and an observation on the
+same element share its ID; the same element keeps its ID on every page. So the three programs'
+pages share IDs throughout.
+
+- **Reused from other domains:** `field-error`, `not-found-page` (users); `opportunity-identifier`
+  (opportunities); `attachment-add-button`, `attachment-remove-button` and
+  `attachment-download-link` (files).
+- **The manage and evaluate headers:** `proposal-status`, `proposal-identifier`,
+  `proposal-submitted-at` and `proposal-actions` (the wrapper of the action bar, bound to
+  `available_actions`).
+- **Tabs:** `proposal-tab-proposal`, `proposal-tab-history`, `proposal-tab-scoresheet`,
+  `proposal-tab-team-questions`, `proposal-tab-code-challenge`, `proposal-tab-team-scenario`,
+  `proposal-tab-resource-questions` and `proposal-tab-challenge`.
+- **Scores:** `proposal-score`, `proposal-rank`, `proposal-questions-score`,
+  `proposal-challenge-score`, `proposal-scenario-score`, `proposal-price-score` and
+  `proposal-total-score`.
+
+The following bindings are not obvious from their names:
+
+- `submit_proposal` is bound to `proposal-submit`, the button that opens the terms dialog.
+  Completing a submission takes two more steps: ticking `proposal-accept-program-terms` and
+  `proposal-accept-app-terms`, then pressing `proposal-submit-confirm`.
+  `submit_disabled_until_terms_accepted` is bound to that confirm button, whose disabled state is
+  the observation. The same two-step pattern applies to `withdraw_proposal`, `delete_proposal`,
+  `award_proposal`, `disqualify_proposal` and every score action. Each opens a dialog whose confirm
+  button is listed under "Dialogs" (gap 10).
+- `proponent` (cwu-view) and `anonymous_proponent_name` (swu-export-one) are both bound to
+  `proposal-proponent-name`. It is the one element that names the proponent as this reader may
+  see it: an organization, an individual, or "Proponent 1". A test compares its text between the
+  staff copy and the vendor's copy.
+- `anonymous_proponent_name` on the manage pages is a different element,
+  `proposal-anonymous-name`, on the Scoresheet. It tells the vendor which anonymous name
+  evaluators saw.
+- `choose_organization` is bound to the organization `Select` (`proposal-organization-field`), on
+  both create pages and on the Code With Us create page's organization choice.
+- `add_phase_team_member` and `add_team_member_for_resource` are both bound to
+  `proposal-add-team-member`. There is one per phase or resource, told apart by accessible name.
+  `set_scrum_master` is bound to `proposal-scrum-master`, one per person per phase.
+  `answer_team_question` and `answer_resource_question` are both bound to
+  `proposal-question-response-field`, one per question.
+- `screen_in_to_team_scenario` and `screen_in_to_challenge` are both bound to
+  `proposal-screen-in`, and the two screen-outs to `proposal-screen-out`. Each program has only
+  one.
+- `exported_proposal` is bound to `proposal-export-document` on all six export pages. On
+  export-one it is the article. On export-all it is the container of every proposal, each of
+  which is a `proposal-export-item`.
+- `show_my_proposals` and `show_org_proposals` are bound to the two in-page section links. The
+  dashboard's `proposal_status` is bound to the row's status badge, `proposal-status`, which is the
+  same element kind as the manage page's.
+- `placeholder_text` is bound to `proposal-list-placeholder` (gap 1).
+
+**Extra IDs, not named in the surface, that the stories carry for the adapter:**
+
+- Dialogs and their buttons: `proposal-dialog-cancel`, `proposal-*-dialog`, `proposal-*-confirm`,
+  `proposal-score-field`, `proposal-disqualify-reason-field`.
+- Form fields: `proposal-legal-name-field`, `proposal-email-field`, `proposal-text-field`,
+  `proposal-comments-field`, and the like.
+- Controls: `proposal-cancel-edit`, `proposal-export-link` on manage pages,
+  `proposal-export-anonymous-toggle`, `proposal-export-item`.
+- Messages: `proposal-refused-message`, `proposal-submit-refused-message`.
+- Tables and rows: `proposal-history-table`, `dashboard-proposal-row`, `dashboard-proposal-link`.
+
+**Other domains should reuse** `proposal-status` wherever a proposal's status is shown, for
+example on the opportunities domain's Proposals tab. They should also reuse
+`proposal-proponent-name` wherever a proponent is named.
+
+### Per-screen notes
+
+**proposal-cwu-create**: `default` (an individual, blank), `organization` (the organization
+choice), `invalid` (R-2.13, R-2.14), `refused` (R-2.2; R-2.15 and R-2.11 appear in the same
+places), `terms` (R-2.3), `not-found` (R-2.1). Only this program's create page has Cancel in the
+surface. The other two carry the same button with the same ID, for consistency.
+
+**proposal-swu-create**: `default`, `invalid` (six problems across R-2.18, R-2.19 and R-2.21,
+including the pending member), `unqualified-organization` (R-2.16), `refused` (organization
+already named, R-2.11), `terms`, `not-found`.
+
+**proposal-twu-create**: `default`, `invalid` (service area, rate below $1, duplicate member,
+empty response: R-2.17, R-2.18, R-2.20, R-2.21), `over-budget` (R-2.10), `unqualified-organization`
+(R-2.17), `refused`, `terms`, `not-found`. Over budget is its own state because it is a computed
+total, not a field, and its illustrative rates contradict the invalid story's rate below $1.
+
+**proposal-cwu-edit / -swu-edit / -twu-edit**: `default` (submitted), `draft`, `editing`,
+`terms`, `delete-confirm`, `withdraw-confirm`, `submit-refused`, `history-tab` (R-2.9, R-2.35),
+`not-found`, `loading`. Code With Us adds `awarded` (score and rank, R-2.32). Sprint With Us and
+Team With Us add `organization-locked` (R-2.22) and `scoresheet-tab`. A withdrawn proposal before
+the deadline is the `submit-refused` page without its alert, so it has no state of its own. The
+surface gives Code With Us `add_attachment` and `remove_attachment` on this page. The other two
+programs' editing stories place the same control but the surface does not name it (gap 12).
+
+**proposal-cwu-view**: `default`, `score-dialog`, `score-invalid`, `evaluated`, `award-confirm`,
+`disqualify-dialog`, `disqualify-invalid`, `history-tab` (the score recorded as "87%", R-2.26),
+`not-found`, `loading`.
+
+**proposal-swu-view**: `default` (team questions, anonymous), `team-questions-tab` (consensus
+scores, R-2.29), `code-challenge-tab` (names revealed, R-2.37), `score-dialog`,
+`team-scenario-tab`, `wrong-stage` (R-2.28), `evaluated` (price, total and rank, R-2.30, R-2.31),
+`award-confirm`, `disqualify-dialog`, `history-tab`, `not-found`, `loading`. The score dialog and
+the disqualify reason are refused at the field exactly as in the Code With Us invalid stories.
+
+**proposal-twu-view**: `default`, `resource-questions-tab`, `challenge-tab`, `score-dialog`,
+`wrong-stage`, `evaluated`, `award-confirm`, `disqualify-dialog`, `history-tab`, `not-found`,
+`loading`.
+
+**proposal-*-export-one**: `default`, `not-found`, `loading`. Sprint With Us and Team With Us add
+`anonymous`, the staff copy before the stage that reveals names (R-2.37).
+
+**proposal-*-export-all**: `default`, `anonymous` (R-2.38), `not-found` (a vendor), `loading`.
+Only submitted proposals are in the document (R-2.25).
+
+**proposal-vendor-dashboard**: `default` (both lists), `no-organization`, `empty`, `loading`. Rows
+lead to the manage page. The same `/dashboard` route is the opportunities domain's staff
+dashboard and the evaluation domain's panel tab. Which one renders is decided by who is signed
+in.
+
+**proposal-list-stub**: `default` (see gap 1).
+
+### Gaps
+
+These are work for the spec. None of them was filled with invented behaviour. Where the design had
+to show something, the story marks it as illustrative or placeholder.
+
+1. **`/proposals` is in the surface but its criterion is obsolete.** D-proposals-37 is marked
+   obsolete, and its note says the `proposal-list-stub` entry "is removed with it". But
+   `spec/contract/surface.yaml` still carries the page with `placeholder_text`, and this stage may
+   not remove it. The design gives the address the least it can: an H1, one sentence saying
+   proposals are on the dashboard, and a link there. It does not reproduce the old "Proposal List"
+   words. The contract should either drop the entry, as the note says, or a criterion should
+   state what the address shows.
+2. **The vendor's History tab has no surface entry.** R-2.9 gives vendors their proposal's history
+   in all three programs, and the stories place a History tab on every manage page
+   (`proposal-tab-history`). But the surface's `proposal-*-edit` entries have no `history_tab`, so
+   a test of R-2.9 has nothing to bind to.
+3. **History versus hidden scores.** R-2.35 puts every score entry in the history. R-2.9 lets the
+   vendor read that history. R-2.32 hides scores from the vendor until award. No criterion says
+   whether the vendor's history leaves out score entries, or their values, before then. The
+   `history-tab` stories show a decided proposal, where all three agree. The undecided case is not
+   designed.
+4. **Stage buttons at the wrong stage.** R-2.28 describes a refusal, so the design keeps each
+   stage's score button on its tab and lets the service refuse it (see "Who is offered what").
+   Hiding the buttons until their stage would be the gentler design, but it would leave R-2.28
+   with no way to be exercised from the screen. A ruling is needed on which to build.
+5. **`score_resource_questions` has no criterion.** Only R-2.7's note says Team With Us "still has a
+   scoreQuestions action". No criterion says how it relates to the evaluation panel's consensus
+   (R-2.29), who uses it, or what it enters. The button is placed on the Resource questions tab
+   and opens the score dialog with one field per question. That is the extent of the design.
+6. **References have no criterion.** The surface names `add_reference` on the Sprint With Us create
+   page, but no criterion says what a reference holds, how many are needed, or whether any are
+   required. The fieldset's Name, Email address and Phone number fields are placeholders.
+7. **Team With Us cost formula** (R-2.10). The criterion says rates are applied "at each resource's
+   target allocation across the opportunity's contract period", but not the hours in a day or
+   which days count. The estimated cost in the stories ($412,500, $918,750) is illustrative. R-2.30's
+   note gives the bid used for price scoring as rate times allocation, which the stories show as
+   "$220.00 an hour".
+8. **Dashboard wording, columns and order** (R-2.24). No criterion gives the columns, the row
+   order or the empty messages. The stories order rows by last update, and the messages are the
+   design's own.
+9. **`show_my_proposals` and `show_org_proposals`.** R-2.24 says only that the two lists are under
+   separate headings. Nothing says they are switched between. The design shows both at once and
+   makes the two actions in-page links that move focus to each list, which keeps the surface's
+   names meaningful without inventing a toggle.
+10. **A confirmation is two steps; the surface names one.** This is the same as the opportunities
+    domain's gap 10: submit, withdraw, delete, award, disqualify and every score entry each open a
+    dialog whose confirm button carries its own ID. Either the surface gains `confirm_*` entries,
+    or the contract accepts the two-step binding recorded under "Test IDs".
+11. **Choosing anonymity on export-all** (R-2.38). The criterion says staff "choose whether that
+    document names the proponents", but the surface has no action for the choice. The design uses
+    a checkbox (`proposal-export-anonymous-toggle`). The surface should gain an action, or the
+    choice should be a query on the route, which only the contract stage can add.
+12. **Attachments on Sprint With Us and Team With Us manage pages.** The surface names
+    `add_attachment` and `remove_attachment` on `proposal-cwu-edit` only. The files domain's
+    control appears on the other two programs' editing stories with the same IDs, but a test has
+    no surface entry to reach them.
+13. **Team With Us export-one has no `anonymous_proponent_name`.** R-2.37 covers both Sprint With Us
+    and Team With Us, and both `anonymous` stories carry `proposal-proponent-name`. Only the Sprint
+    With Us entry names the observation.
+14. **What staff see of an anonymous proposal.** R-2.37 withholds the proponent's name, and the
+    design withholds the organization. Team member names are still shown, and they can identify
+    the proponent. Whether they should also be withheld is not stated.
+15. **Where the vendor sees the anonymous name.** The surface puts `anonymous_proponent_name` on
+    the manage pages, but no criterion says a vendor is told their anonymous name, or when. The
+    design shows it only on the Scoresheet, after the decision.
+16. **Withdrawing after award.** R-2.23 says "at any time", so Withdraw stays in the action bar on
+    an awarded or not-awarded proposal. Whether withdrawing an awarded proposal is meant, and what
+    it does to the award, is not stated.
+17. **Program terms documents.** The terms dialog links `/content/<program>-terms-and-conditions`,
+    the addresses the users domain's legal section already uses. Their content is the content
+    domain's.
+18. **Content the spec does not carry.** Every name, organization, capability, question, amount,
+    score, rank, date and identifier in the stories is illustrative and synthetic.
