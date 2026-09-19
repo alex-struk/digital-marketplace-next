@@ -56,3 +56,16 @@ Pages behind a dialog or refusal are trimmed to their header and action bar. A v
 - **Withdrawal after award:** R-2.23 says "at any time", so Withdraw stays offered; what that does to an award isn't stated.
 
 **What I could not do.** I couldn't run a script, a typecheck or the scan here, so the stories were written by hand. They use only components and props that sibling stories already compile with, and I restructured a few spots to avoid a fourth heading level I couldn't verify. There was no earlier report for this domain to read.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:ux-reviewer
+
+Question: do the 17 proposals pages serve their criteria, and are they built from the design system? Ruling: approve. Evidence: design/report.json lists all 115 proposals stories, records zero accessibility violations across the catalogue, and passes typecheck and build. Every action and observation on the 17 proposal-* pages in spec/contract/surface.yaml has a test ID. A sample of about 30 of those IDs (stage score buttons, screen in/out, dashboard section links and tables, wrong-stage alert, list-stub placeholder, anonymous name) all appear in the stories. A search for written-out colours or sizes (hex, px, rem, rgb) in the proposals stories finds none. There are no raw interactive HTML elements and no fourth heading level. The only non-design-system parts are the badge, key-facts list, fieldsets, tables and tab navigation, all reused from earlier domains and named in DESIGN.md as the project's own. The tier is STANDARD and no confidence score falls below its threshold, so no escalation is triggered. The 18 recorded gaps are open spec and contract questions, not invented behaviour, and the persona accepts missing states. What would change this ruling: any violation on a rerun of the scan, or the report's catalogue fingerprint not matching the stories on this branch.
+
+**Conditions:**
+- The spec stage must rule on gap 4: whether a stage's score button is shown at the wrong stage so that R-2.28 can be reached, or hidden until its stage. The build follows that ruling.
+- The spec stage must resolve gap 3: what a vendor's history shows about score entries before award (R-2.9, R-2.32, R-2.35). The design shows only the decided case.
+- The contract stage must resolve the surface gaps: history_tab on proposal-*-edit (gap 2); attachment actions on proposal-swu-edit and proposal-twu-edit (gap 12); anonymous_proponent_name on proposal-twu-export-one (gap 13); an action for the export-all anonymity choice (gap 11); confirm_* entries or acceptance of the two-step dialog binding (gap 10); and removal of proposal-list-stub, as the obsolete D-proposals-37 says (gap 1).
+- The checks DESIGN.md lists as still required (keyboard use of the multi-part forms, screen-reader checks of the terms and score dialogs, 400% zoom of the team tables) must be done before the build is accepted.
