@@ -1,7 +1,7 @@
 {
-  "generated": "2026-09-15T15:30:25.938Z",
+  "generated": "2026-09-19T06:52:43.264Z",
   "axe": "4.13.0",
-  "catalogue": "978a1320a4112add05a6694a90486177c4584848ab9bd751f1c636f9620e1fe3",
+  "catalogue": "905b694f065b407d421879eebd2127efafd56f1988d97da6616d39ea69b2e0db",
   "ok": true,
   "messages": [],
   "compile": [
@@ -17,6 +17,588 @@
     }
   ],
   "stories": [
+    {
+      "id": "opportunities-home-page-default--default",
+      "title": "opportunities/home-page/default",
+      "file": "./catalogue/home.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-home-page-loading--loading",
+      "title": "opportunities/home-page/loading",
+      "file": "./catalogue/home.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-complete-default--default",
+      "title": "opportunities/opportunity-cwu-complete/default",
+      "file": "./catalogue/opportunity-cwu-complete.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-complete-loading--loading",
+      "title": "opportunities/opportunity-cwu-complete/loading",
+      "file": "./catalogue/opportunity-cwu-complete.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-complete-not-found--not-found",
+      "title": "opportunities/opportunity-cwu-complete/not-found",
+      "file": "./catalogue/opportunity-cwu-complete.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-create-administrator--administrator",
+      "title": "opportunities/opportunity-cwu-create/administrator",
+      "file": "./catalogue/opportunity-cwu-create.administrator.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-create-default--default",
+      "title": "opportunities/opportunity-cwu-create/default",
+      "file": "./catalogue/opportunity-cwu-create.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-create-invalid--invalid",
+      "title": "opportunities/opportunity-cwu-create/invalid",
+      "file": "./catalogue/opportunity-cwu-create.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-create-not-found--not-found",
+      "title": "opportunities/opportunity-cwu-create/not-found",
+      "file": "./catalogue/opportunity-cwu-create.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-create-publish-confirm--publish-confirm",
+      "title": "opportunities/opportunity-cwu-create/publish-confirm",
+      "file": "./catalogue/opportunity-cwu-create.publish-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-edit-addenda-tab--addenda-tab",
+      "title": "opportunities/opportunity-cwu-edit/addenda-tab",
+      "file": "./catalogue/opportunity-cwu-edit.addenda-tab.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-edit-cancel-confirm--cancel-confirm",
+      "title": "opportunities/opportunity-cwu-edit/cancel-confirm",
+      "file": "./catalogue/opportunity-cwu-edit.cancel-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-edit-default--default",
+      "title": "opportunities/opportunity-cwu-edit/default",
+      "file": "./catalogue/opportunity-cwu-edit.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-edit-delete-confirm--delete-confirm",
+      "title": "opportunities/opportunity-cwu-edit/delete-confirm",
+      "file": "./catalogue/opportunity-cwu-edit.delete-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-edit-draft--draft",
+      "title": "opportunities/opportunity-cwu-edit/draft",
+      "file": "./catalogue/opportunity-cwu-edit.draft.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-edit-editing--editing",
+      "title": "opportunities/opportunity-cwu-edit/editing",
+      "file": "./catalogue/opportunity-cwu-edit.editing.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-edit-history-tab--history-tab",
+      "title": "opportunities/opportunity-cwu-edit/history-tab",
+      "file": "./catalogue/opportunity-cwu-edit.history-tab.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-edit-incomplete--incomplete",
+      "title": "opportunities/opportunity-cwu-edit/incomplete",
+      "file": "./catalogue/opportunity-cwu-edit.incomplete.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-edit-loading--loading",
+      "title": "opportunities/opportunity-cwu-edit/loading",
+      "file": "./catalogue/opportunity-cwu-edit.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-edit-not-found--not-found",
+      "title": "opportunities/opportunity-cwu-edit/not-found",
+      "file": "./catalogue/opportunity-cwu-edit.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-edit-publish-confirm--publish-confirm",
+      "title": "opportunities/opportunity-cwu-edit/publish-confirm",
+      "file": "./catalogue/opportunity-cwu-edit.publish-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-edit-under-review--under-review",
+      "title": "opportunities/opportunity-cwu-edit/under-review",
+      "file": "./catalogue/opportunity-cwu-edit.under-review.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-view-author--author",
+      "title": "opportunities/opportunity-cwu-view/author",
+      "file": "./catalogue/opportunity-cwu-view.author.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-view-awarded--awarded",
+      "title": "opportunities/opportunity-cwu-view/awarded",
+      "file": "./catalogue/opportunity-cwu-view.awarded.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-view-default--default",
+      "title": "opportunities/opportunity-cwu-view/default",
+      "file": "./catalogue/opportunity-cwu-view.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-view-loading--loading",
+      "title": "opportunities/opportunity-cwu-view/loading",
+      "file": "./catalogue/opportunity-cwu-view.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-view-not-found--not-found",
+      "title": "opportunities/opportunity-cwu-view/not-found",
+      "file": "./catalogue/opportunity-cwu-view.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-cwu-view-signed-out--signed-out",
+      "title": "opportunities/opportunity-cwu-view/signed-out",
+      "file": "./catalogue/opportunity-cwu-view.signed-out.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-dashboard-administrator--administrator",
+      "title": "opportunities/opportunity-dashboard/administrator",
+      "file": "./catalogue/opportunity-dashboard.administrator.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-dashboard-default--default",
+      "title": "opportunities/opportunity-dashboard/default",
+      "file": "./catalogue/opportunity-dashboard.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-dashboard-empty--empty",
+      "title": "opportunities/opportunity-dashboard/empty",
+      "file": "./catalogue/opportunity-dashboard.empty.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-dashboard-loading--loading",
+      "title": "opportunities/opportunity-dashboard/loading",
+      "file": "./catalogue/opportunity-dashboard.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-list-default--default",
+      "title": "opportunities/opportunity-list/default",
+      "file": "./catalogue/opportunity-list.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-list-loading--loading",
+      "title": "opportunities/opportunity-list/loading",
+      "file": "./catalogue/opportunity-list.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-list-signed-out--signed-out",
+      "title": "opportunities/opportunity-list/signed-out",
+      "file": "./catalogue/opportunity-list.signed-out.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-list-staff--staff",
+      "title": "opportunities/opportunity-list/staff",
+      "file": "./catalogue/opportunity-list.staff.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-program-select-default--default",
+      "title": "opportunities/opportunity-program-select/default",
+      "file": "./catalogue/opportunity-program-select.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-program-select-not-found--not-found",
+      "title": "opportunities/opportunity-program-select/not-found",
+      "file": "./catalogue/opportunity-program-select.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-complete-default--default",
+      "title": "opportunities/opportunity-swu-complete/default",
+      "file": "./catalogue/opportunity-swu-complete.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-complete-loading--loading",
+      "title": "opportunities/opportunity-swu-complete/loading",
+      "file": "./catalogue/opportunity-swu-complete.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-complete-not-found--not-found",
+      "title": "opportunities/opportunity-swu-complete/not-found",
+      "file": "./catalogue/opportunity-swu-complete.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-create-administrator--administrator",
+      "title": "opportunities/opportunity-swu-create/administrator",
+      "file": "./catalogue/opportunity-swu-create.administrator.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-create-default--default",
+      "title": "opportunities/opportunity-swu-create/default",
+      "file": "./catalogue/opportunity-swu-create.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-create-invalid--invalid",
+      "title": "opportunities/opportunity-swu-create/invalid",
+      "file": "./catalogue/opportunity-swu-create.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-create-not-found--not-found",
+      "title": "opportunities/opportunity-swu-create/not-found",
+      "file": "./catalogue/opportunity-swu-create.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-create-publish-confirm--publish-confirm",
+      "title": "opportunities/opportunity-swu-create/publish-confirm",
+      "file": "./catalogue/opportunity-swu-create.publish-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-edit-addenda-tab--addenda-tab",
+      "title": "opportunities/opportunity-swu-edit/addenda-tab",
+      "file": "./catalogue/opportunity-swu-edit.addenda-tab.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-edit-cancel-confirm--cancel-confirm",
+      "title": "opportunities/opportunity-swu-edit/cancel-confirm",
+      "file": "./catalogue/opportunity-swu-edit.cancel-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-edit-code-challenge--code-challenge",
+      "title": "opportunities/opportunity-swu-edit/code-challenge",
+      "file": "./catalogue/opportunity-swu-edit.code-challenge.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-edit-consensus-refused--consensus-refused",
+      "title": "opportunities/opportunity-swu-edit/consensus-refused",
+      "file": "./catalogue/opportunity-swu-edit.consensus-refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-edit-consensus--consensus",
+      "title": "opportunities/opportunity-swu-edit/consensus",
+      "file": "./catalogue/opportunity-swu-edit.consensus.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-edit-default--default",
+      "title": "opportunities/opportunity-swu-edit/default",
+      "file": "./catalogue/opportunity-swu-edit.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-edit-delete-confirm--delete-confirm",
+      "title": "opportunities/opportunity-swu-edit/delete-confirm",
+      "file": "./catalogue/opportunity-swu-edit.delete-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-edit-draft--draft",
+      "title": "opportunities/opportunity-swu-edit/draft",
+      "file": "./catalogue/opportunity-swu-edit.draft.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-edit-editing--editing",
+      "title": "opportunities/opportunity-swu-edit/editing",
+      "file": "./catalogue/opportunity-swu-edit.editing.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-edit-history-tab--history-tab",
+      "title": "opportunities/opportunity-swu-edit/history-tab",
+      "file": "./catalogue/opportunity-swu-edit.history-tab.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-edit-incomplete--incomplete",
+      "title": "opportunities/opportunity-swu-edit/incomplete",
+      "file": "./catalogue/opportunity-swu-edit.incomplete.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-edit-loading--loading",
+      "title": "opportunities/opportunity-swu-edit/loading",
+      "file": "./catalogue/opportunity-swu-edit.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-edit-not-found--not-found",
+      "title": "opportunities/opportunity-swu-edit/not-found",
+      "file": "./catalogue/opportunity-swu-edit.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-edit-publish-confirm--publish-confirm",
+      "title": "opportunities/opportunity-swu-edit/publish-confirm",
+      "file": "./catalogue/opportunity-swu-edit.publish-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-edit-team-scenario-refused--team-scenario-refused",
+      "title": "opportunities/opportunity-swu-edit/team-scenario-refused",
+      "file": "./catalogue/opportunity-swu-edit.team-scenario-refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-edit-under-review--under-review",
+      "title": "opportunities/opportunity-swu-edit/under-review",
+      "file": "./catalogue/opportunity-swu-edit.under-review.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-view-author--author",
+      "title": "opportunities/opportunity-swu-view/author",
+      "file": "./catalogue/opportunity-swu-view.author.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-view-awarded--awarded",
+      "title": "opportunities/opportunity-swu-view/awarded",
+      "file": "./catalogue/opportunity-swu-view.awarded.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-view-default--default",
+      "title": "opportunities/opportunity-swu-view/default",
+      "file": "./catalogue/opportunity-swu-view.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-view-loading--loading",
+      "title": "opportunities/opportunity-swu-view/loading",
+      "file": "./catalogue/opportunity-swu-view.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-view-not-found--not-found",
+      "title": "opportunities/opportunity-swu-view/not-found",
+      "file": "./catalogue/opportunity-swu-view.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-swu-view-signed-out--signed-out",
+      "title": "opportunities/opportunity-swu-view/signed-out",
+      "file": "./catalogue/opportunity-swu-view.signed-out.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-complete-default--default",
+      "title": "opportunities/opportunity-twu-complete/default",
+      "file": "./catalogue/opportunity-twu-complete.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-complete-loading--loading",
+      "title": "opportunities/opportunity-twu-complete/loading",
+      "file": "./catalogue/opportunity-twu-complete.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-complete-not-found--not-found",
+      "title": "opportunities/opportunity-twu-complete/not-found",
+      "file": "./catalogue/opportunity-twu-complete.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-create-administrator--administrator",
+      "title": "opportunities/opportunity-twu-create/administrator",
+      "file": "./catalogue/opportunity-twu-create.administrator.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-create-default--default",
+      "title": "opportunities/opportunity-twu-create/default",
+      "file": "./catalogue/opportunity-twu-create.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-create-invalid--invalid",
+      "title": "opportunities/opportunity-twu-create/invalid",
+      "file": "./catalogue/opportunity-twu-create.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-create-not-found--not-found",
+      "title": "opportunities/opportunity-twu-create/not-found",
+      "file": "./catalogue/opportunity-twu-create.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-create-publish-confirm--publish-confirm",
+      "title": "opportunities/opportunity-twu-create/publish-confirm",
+      "file": "./catalogue/opportunity-twu-create.publish-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-edit-addenda-tab--addenda-tab",
+      "title": "opportunities/opportunity-twu-edit/addenda-tab",
+      "file": "./catalogue/opportunity-twu-edit.addenda-tab.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-edit-cancel-confirm--cancel-confirm",
+      "title": "opportunities/opportunity-twu-edit/cancel-confirm",
+      "file": "./catalogue/opportunity-twu-edit.cancel-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-edit-consensus-refused--consensus-refused",
+      "title": "opportunities/opportunity-twu-edit/consensus-refused",
+      "file": "./catalogue/opportunity-twu-edit.consensus-refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-edit-consensus--consensus",
+      "title": "opportunities/opportunity-twu-edit/consensus",
+      "file": "./catalogue/opportunity-twu-edit.consensus.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-edit-default--default",
+      "title": "opportunities/opportunity-twu-edit/default",
+      "file": "./catalogue/opportunity-twu-edit.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-edit-delete-confirm--delete-confirm",
+      "title": "opportunities/opportunity-twu-edit/delete-confirm",
+      "file": "./catalogue/opportunity-twu-edit.delete-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-edit-draft--draft",
+      "title": "opportunities/opportunity-twu-edit/draft",
+      "file": "./catalogue/opportunity-twu-edit.draft.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-edit-editing--editing",
+      "title": "opportunities/opportunity-twu-edit/editing",
+      "file": "./catalogue/opportunity-twu-edit.editing.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-edit-history-tab--history-tab",
+      "title": "opportunities/opportunity-twu-edit/history-tab",
+      "file": "./catalogue/opportunity-twu-edit.history-tab.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-edit-incomplete--incomplete",
+      "title": "opportunities/opportunity-twu-edit/incomplete",
+      "file": "./catalogue/opportunity-twu-edit.incomplete.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-edit-loading--loading",
+      "title": "opportunities/opportunity-twu-edit/loading",
+      "file": "./catalogue/opportunity-twu-edit.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-edit-not-found--not-found",
+      "title": "opportunities/opportunity-twu-edit/not-found",
+      "file": "./catalogue/opportunity-twu-edit.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-edit-publish-confirm--publish-confirm",
+      "title": "opportunities/opportunity-twu-edit/publish-confirm",
+      "file": "./catalogue/opportunity-twu-edit.publish-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-edit-under-review--under-review",
+      "title": "opportunities/opportunity-twu-edit/under-review",
+      "file": "./catalogue/opportunity-twu-edit.under-review.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-view-author--author",
+      "title": "opportunities/opportunity-twu-view/author",
+      "file": "./catalogue/opportunity-twu-view.author.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-view-awarded--awarded",
+      "title": "opportunities/opportunity-twu-view/awarded",
+      "file": "./catalogue/opportunity-twu-view.awarded.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-view-default--default",
+      "title": "opportunities/opportunity-twu-view/default",
+      "file": "./catalogue/opportunity-twu-view.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-view-loading--loading",
+      "title": "opportunities/opportunity-twu-view/loading",
+      "file": "./catalogue/opportunity-twu-view.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-view-not-found--not-found",
+      "title": "opportunities/opportunity-twu-view/not-found",
+      "file": "./catalogue/opportunity-twu-view.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-opportunity-twu-view-signed-out--signed-out",
+      "title": "opportunities/opportunity-twu-view/signed-out",
+      "file": "./catalogue/opportunity-twu-view.signed-out.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "opportunities-scheduled-transition-trigger-default--default",
+      "title": "opportunities/scheduled-transition-trigger/default",
+      "file": "./catalogue/scheduled-transition-trigger.default.stories.tsx",
+      "violations": []
+    },
     {
       "id": "users-user-list-default--default",
       "title": "users/user-list/default",
@@ -343,7 +925,7 @@
     }
   ],
   "totals": {
-    "stories": 54,
+    "stories": 151,
     "violations": 0,
     "failed": 0
   }
