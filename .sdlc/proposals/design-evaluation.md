@@ -53,3 +53,15 @@ The others:
 - The instructions text is a placeholder.
 
 **What I couldn't do.** With no shell, I couldn't run the story generator I'd drafted (it sits unused in my scratchpad), so I wrote all 97 files by hand. I kept to component props that already compile elsewhere in the catalogue.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:ux-reviewer
+
+Question: do the 17 evaluation screens serve the evaluation criteria, and are they built from the design system? Ruling: approve. design/report.json (generated 2026-09-19T09:01, before the proposal opened) shows typecheck and build passing and all 97 evaluation stories scanned by axe 4.13.0 with zero violations. No hard-coded colour, spacing or pixel values appear in the evaluation catalogue; only design-system tokens are used. Components come from @bcgov/design-system-react-components or are project components reused from earlier domains. The one new component (the response block) is plain HTML styled only with tokens and is named and justified in DESIGN.md as the project's own, which the brief accepts. Every surface ID in spec/contract/surface.yaml is bound to a test ID. Missing screens and states are recorded as gaps rather than invented, which the brief accepts. The tier is STANDARD, so there is no escalation. This ruling would change to return if a re-run of the report showed any axe violation or compile failure for an evaluation story, or if a build introduced literal values in place of tokens.
+
+**Conditions:**
+- Before the evaluation build, the spec must rule on gap 3 (the R-5.11 vs R-5.28 contradiction on who may read an individual evaluation) and gap 7 (the owner may finalize scores R-5.12 withholds from them).
+- Before the build is accepted, the manual accessibility checks DESIGN.md lists must be done: keyboard use of the two linked chair controls, screen-reader checks of both consensus dialogs, and 400% zoom of the consensus form tables.
+- The opportunities domain must align its create-page panel editor with this domain's panel design (gap 2) and add opportunity-tab-instructions and opportunity-tab-evaluation to its tab lists.
