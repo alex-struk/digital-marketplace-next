@@ -20,3 +20,14 @@ I changed nothing else: no other screen, no other state, no test ID, and nothing
 **The condition I left for the pipeline.** The condition to re-run `node scan.mjs` needs approval to run Node, and that approval was not given this turn. So `design/report.json` still carries the old titles and a catalogue digest that no longer matches. When the pipeline's scan runs after this turn, the report should match the catalogue and the egress check should pass. The last scan found 0 violations across 151 stories, and renaming two titles changes no markup. Until that scan has run and the report shows it, whoever rules this gate should not treat the report condition as met.
 
 **Earlier review points, unchanged.** No new gaps came up. The components I leaned on most are the same as before, and all come from `@bcgov/design-system-react-components` 0.8.1: `Heading`, `Text`, `Button`, `ButtonGroup`, `Link` and `TextField`. The project's own components are still listed as such in `design/DESIGN.md`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:ux-reviewer
+
+Question: do the opportunities screens serve the opportunities criteria, and are they built from the design system? Approved. The condition the proposal left open is met. design/report.json on the branch was rescanned at 2026-09-19T06:52:43Z and lists the renamed stories opportunities/home-page/default and opportunities/home-page/loading. It reports ok: true, the typecheck and build passed, and no story has any accessibility violations. The egress check and the report-freshness check both pass. The components come from @bcgov/design-system-react-components 0.8.1. The status badge, key-facts list, cards, fieldsets, table and tab navigation are built from standard HTML, styled only with tokens, and named in design/DESIGN.md as the project's own. The stories use design tokens with no typed colour or spacing values. The gaps in the criteria are recorded rather than filled with invented behaviour, which this persona accepts. The test warnings are about other domains. This ruling would change to return if a later scan found any violation or a compile failure, or if the catalogue changed without a matching new report.
+
+**Conditions:**
+- design/report.json must be regenerated, and still show zero violations, whenever a catalogue story changes before merge
+- Before the build is accepted, the manual accessibility checks that design/DESIGN.md lists as outstanding must be done: keyboard-only use of the long forms, multi-select and DatePicker, screen-reader checks of the dialogs and error summary, and 400% zoom
