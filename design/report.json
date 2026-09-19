@@ -1,7 +1,7 @@
 {
-  "generated": "2026-09-19T07:13:22.906Z",
+  "generated": "2026-09-19T07:22:18.836Z",
   "axe": "4.13.0",
-  "catalogue": "59f5af05793c07823c50f563da29e5c346b85d34cb0e3600c8442ec93e99a82c",
+  "catalogue": "3cdf8541284ae923aada9f0cb5ca526385b4cfaaf258ecae815e3ccb0974081d",
   "ok": true,
   "messages": [],
   "compile": [
@@ -27,6 +27,90 @@
       "id": "opportunities-home-page-loading--loading",
       "title": "opportunities/home-page/loading",
       "file": "./catalogue/home.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-notification-email-reference-default--default",
+      "title": "notifications/notification-email-reference/default",
+      "file": "./catalogue/notification-email-reference.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-notification-email-reference-loading--loading",
+      "title": "notifications/notification-email-reference/loading",
+      "file": "./catalogue/notification-email-reference.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-notification-email-reference-not-found--not-found",
+      "title": "notifications/notification-email-reference/not-found",
+      "file": "./catalogue/notification-email-reference.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-notification-optin-opportunity-list-default--default",
+      "title": "notifications/notification-optin-opportunity-list/default",
+      "file": "./catalogue/notification-optin-opportunity-list.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-notification-optin-opportunity-list-signed-out--signed-out",
+      "title": "notifications/notification-optin-opportunity-list/signed-out",
+      "file": "./catalogue/notification-optin-opportunity-list.signed-out.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-notification-optin-opportunity-list-subscribed--subscribed",
+      "title": "notifications/notification-optin-opportunity-list/subscribed",
+      "file": "./catalogue/notification-optin-opportunity-list.subscribed.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-notification-terms-broadcast-default--default",
+      "title": "notifications/notification-terms-broadcast/default",
+      "file": "./catalogue/notification-terms-broadcast.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-notification-terms-broadcast-notified--notified",
+      "title": "notifications/notification-terms-broadcast/notified",
+      "file": "./catalogue/notification-terms-broadcast.notified.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-notification-terms-broadcast-notify-confirm--notify-confirm",
+      "title": "notifications/notification-terms-broadcast/notify-confirm",
+      "file": "./catalogue/notification-terms-broadcast.notify-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-notification-terms-broadcast-notify-failed--notify-failed",
+      "title": "notifications/notification-terms-broadcast/notify-failed",
+      "file": "./catalogue/notification-terms-broadcast.notify-failed.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-notification-unsubscribe-landing-default--default",
+      "title": "notifications/notification-unsubscribe-landing/default",
+      "file": "./catalogue/notification-unsubscribe-landing.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-notification-unsubscribe-landing-loading--loading",
+      "title": "notifications/notification-unsubscribe-landing/loading",
+      "file": "./catalogue/notification-unsubscribe-landing.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-notification-unsubscribe-landing-sign-in-required--sign-in-required",
+      "title": "notifications/notification-unsubscribe-landing/sign-in-required",
+      "file": "./catalogue/notification-unsubscribe-landing.sign-in-required.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "notifications-notification-unsubscribe-landing-unsubscribed--unsubscribed",
+      "title": "notifications/notification-unsubscribe-landing/unsubscribed",
+      "file": "./catalogue/notification-unsubscribe-landing.unsubscribed.stories.tsx",
       "violations": []
     },
     {
@@ -1231,7 +1315,7 @@
     }
   ],
   "totals": {
-    "stories": 202,
+    "stories": 216,
     "violations": 0,
     "failed": 0
   }

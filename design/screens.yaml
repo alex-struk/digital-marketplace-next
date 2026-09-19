@@ -176,3 +176,13 @@ screens:
     states: [default, empty, loading, accept-confirm, decline-confirm, leave-confirm, section-unavailable]
   - page: organization-user-memberships-self
     states: [default, empty, loading, accept-confirm, decline-confirm, leave-confirm, section-unavailable]
+
+  # notifications domain — see design/DESIGN.md, "Domain: notifications"
+  - page: notification-unsubscribe-landing
+    states: [default, loading, unsubscribed, sign-in-required]
+  - page: notification-optin-opportunity-list
+    states: [default, subscribed, signed-out]
+  - page: notification-terms-broadcast
+    states: [default, notify-confirm, notified, notify-failed]
+  - page: notification-email-reference
+    states: [default, loading, not-found]
