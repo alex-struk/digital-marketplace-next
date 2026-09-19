@@ -164,9 +164,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $345.54531
+- Journal cost: $350.912576
 - Rulings cost: $238.018558
-- Total cost: $583.563868
+- Total cost: $588.931134
 - Agent-held rulings: 121
 - Open escalations: 0
 - Open proposals: 0

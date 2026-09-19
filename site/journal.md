@@ -1,5 +1,11 @@
 # Journal
 
+## 117 · design · 2026-09-19
+
+cost $5.367266000000001 · turns 41
+
+the agent turn reported failure with no output; the session hit the turn cap (error_max_turns)
+
 ## 116 · design · 2026-09-15
 
 cost $3.9304075000000003 · turns 97
