@@ -214,3 +214,17 @@ screens:
       ]
   - page: content-view
     states: [default, loading, not-found]
+
+  # files domain — see design/DESIGN.md, "Domain: files"
+  - page: file-upload
+    states: [default, signed-out, too-large, name-too-long, invalid-read-access, no-file, fault]
+  - page: file-description
+    states: [default, refused, not-found]
+  - page: file-download
+    states: [default, refused, not-found]
+  - page: file-attachment-control
+    states: [default, empty, new-attachment, invalid, too-large, public-view]
+  - page: file-image-picker
+    states: [default, empty, chosen, rejected]
+  - page: file-embedded-image
+    states: [default, uploading, inserted, failed, published]

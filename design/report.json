@@ -1,7 +1,7 @@
 {
-  "generated": "2026-09-19T07:34:29.253Z",
+  "generated": "2026-09-19T07:47:57.414Z",
   "axe": "4.13.0",
-  "catalogue": "8b9196655179325d38caefedbdb67bceb95405288b357e4c81646a512bb454a7",
+  "catalogue": "7cbddd74d5695337a156bdb55053d941f1e8ec16b50ae4f15a98827a1ba6e944",
   "ok": true,
   "messages": [],
   "compile": [
@@ -177,6 +177,174 @@
       "id": "content-content-view-not-found--not-found",
       "title": "content/content-view/not-found",
       "file": "./catalogue/content-view.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-attachment-control-default--default",
+      "title": "files/file-attachment-control/default",
+      "file": "./catalogue/file-attachment-control.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-attachment-control-empty--empty",
+      "title": "files/file-attachment-control/empty",
+      "file": "./catalogue/file-attachment-control.empty.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-attachment-control-invalid--invalid",
+      "title": "files/file-attachment-control/invalid",
+      "file": "./catalogue/file-attachment-control.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-attachment-control-new-attachment--new-attachment",
+      "title": "files/file-attachment-control/new-attachment",
+      "file": "./catalogue/file-attachment-control.new-attachment.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-attachment-control-public-view--public-view",
+      "title": "files/file-attachment-control/public-view",
+      "file": "./catalogue/file-attachment-control.public-view.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-attachment-control-too-large--too-large",
+      "title": "files/file-attachment-control/too-large",
+      "file": "./catalogue/file-attachment-control.too-large.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-description-default--default",
+      "title": "files/file-description/default",
+      "file": "./catalogue/file-description.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-description-not-found--not-found",
+      "title": "files/file-description/not-found",
+      "file": "./catalogue/file-description.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-description-refused--refused",
+      "title": "files/file-description/refused",
+      "file": "./catalogue/file-description.refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-download-default--default",
+      "title": "files/file-download/default",
+      "file": "./catalogue/file-download.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-download-not-found--not-found",
+      "title": "files/file-download/not-found",
+      "file": "./catalogue/file-download.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-download-refused--refused",
+      "title": "files/file-download/refused",
+      "file": "./catalogue/file-download.refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-embedded-image-default--default",
+      "title": "files/file-embedded-image/default",
+      "file": "./catalogue/file-embedded-image.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-embedded-image-failed--failed",
+      "title": "files/file-embedded-image/failed",
+      "file": "./catalogue/file-embedded-image.failed.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-embedded-image-inserted--inserted",
+      "title": "files/file-embedded-image/inserted",
+      "file": "./catalogue/file-embedded-image.inserted.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-embedded-image-published--published",
+      "title": "files/file-embedded-image/published",
+      "file": "./catalogue/file-embedded-image.published.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-embedded-image-uploading--uploading",
+      "title": "files/file-embedded-image/uploading",
+      "file": "./catalogue/file-embedded-image.uploading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-image-picker-chosen--chosen",
+      "title": "files/file-image-picker/chosen",
+      "file": "./catalogue/file-image-picker.chosen.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-image-picker-default--default",
+      "title": "files/file-image-picker/default",
+      "file": "./catalogue/file-image-picker.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-image-picker-empty--empty",
+      "title": "files/file-image-picker/empty",
+      "file": "./catalogue/file-image-picker.empty.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-image-picker-rejected--rejected",
+      "title": "files/file-image-picker/rejected",
+      "file": "./catalogue/file-image-picker.rejected.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-upload-default--default",
+      "title": "files/file-upload/default",
+      "file": "./catalogue/file-upload.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-upload-fault--fault",
+      "title": "files/file-upload/fault",
+      "file": "./catalogue/file-upload.fault.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-upload-invalid-read-access--invalid-read-access",
+      "title": "files/file-upload/invalid-read-access",
+      "file": "./catalogue/file-upload.invalid-read-access.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-upload-name-too-long--name-too-long",
+      "title": "files/file-upload/name-too-long",
+      "file": "./catalogue/file-upload.name-too-long.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-upload-no-file--no-file",
+      "title": "files/file-upload/no-file",
+      "file": "./catalogue/file-upload.no-file.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-upload-signed-out--signed-out",
+      "title": "files/file-upload/signed-out",
+      "file": "./catalogue/file-upload.signed-out.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "files-file-upload-too-large--too-large",
+      "title": "files/file-upload/too-large",
+      "file": "./catalogue/file-upload.too-large.stories.tsx",
       "violations": []
     },
     {
@@ -1477,7 +1645,7 @@
     }
   ],
   "totals": {
-    "stories": 243,
+    "stories": 271,
     "violations": 0,
     "failed": 0
   }

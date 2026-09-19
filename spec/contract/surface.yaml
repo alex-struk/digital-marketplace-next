@@ -1439,20 +1439,20 @@ pages:
     route: /api/files
     title: "Storing a file"
     actions:
-      upload_file: { test_id: null }
-      upload_file_stating_its_read_access: { test_id: null }
-      upload_file_without_declaring_its_size: { test_id: null }
-      upload_file_with_no_file_part: { test_id: null }
-      upload_file_with_unrecognised_read_access: { test_id: null }
-      upload_file_with_malformed_read_access: { test_id: null }
+      upload_file: { test_id: file-upload-request }
+      upload_file_stating_its_read_access: { test_id: file-upload-request }
+      upload_file_without_declaring_its_size: { test_id: file-upload-request }
+      upload_file_with_no_file_part: { test_id: file-upload-request }
+      upload_file_with_unrecognised_read_access: { test_id: file-upload-request }
+      upload_file_with_malformed_read_access: { test_id: file-upload-request }
     observations:
-      stored_file_identifier: { test_id: null }
-      refused_for_size: { test_id: null }
-      size_limit_named_in_refusal: { test_id: null }
-      refused_for_file_name_length: { test_id: null }
-      refused_for_read_access: { test_id: null }
-      refused_when_signed_out: { test_id: null }
-      service_fault: { test_id: null }
+      stored_file_identifier: { test_id: file-upload-stored-id }
+      refused_for_size: { test_id: file-upload-refused-size }
+      size_limit_named_in_refusal: { test_id: file-upload-size-limit }
+      refused_for_file_name_length: { test_id: file-upload-refused-name }
+      refused_for_read_access: { test_id: file-upload-refused-read-access }
+      refused_when_signed_out: { test_id: file-upload-refused-signed-out }
+      service_fault: { test_id: file-upload-service-fault }
 
   # The same address as file-download without the request for its content. The service
   # answers with a description of the stored file under the same permission rules as the
@@ -1464,29 +1464,29 @@ pages:
     title: "A stored file's description"
     actions: {}
     observations:
-      file_identifier: { test_id: null }
-      file_name: { test_id: null }
-      stored_date: { test_id: null }
-      stored_content_identifier: { test_id: null }
-      refused_when_not_permitted: { test_id: null }
-      refused_for_unknown_file: { test_id: null }
-      not_found_for_administrator: { test_id: null }
+      file_identifier: { test_id: file-description-id }
+      file_name: { test_id: file-description-name }
+      stored_date: { test_id: file-description-stored-date }
+      stored_content_identifier: { test_id: file-description-content-id }
+      refused_when_not_permitted: { test_id: file-refused }
+      refused_for_unknown_file: { test_id: file-refused }
+      not_found_for_administrator: { test_id: file-not-found }
 
   - id: file-download
     domain: files
     route: /api/files/:fileId?type=blob
     title: "A stored file"
     actions:
-      download_file: { test_id: null }
+      download_file: { test_id: file-download-request }
     observations:
-      file_contents: { test_id: null }
-      file_name_on_save: { test_id: null }
-      offered_as_download_not_displayed: { test_id: null }
-      content_type_from_name: { test_id: null }
-      readable_when_signed_out_if_public: { test_id: null }
-      refused_when_not_permitted: { test_id: null }
-      refused_for_unknown_file: { test_id: null }
-      not_found_for_administrator: { test_id: null }
+      file_contents: { test_id: file-download-body }
+      file_name_on_save: { test_id: file-download-filename }
+      offered_as_download_not_displayed: { test_id: file-download-disposition }
+      content_type_from_name: { test_id: file-download-content-type }
+      readable_when_signed_out_if_public: { test_id: file-download-response }
+      refused_when_not_permitted: { test_id: file-refused }
+      refused_for_unknown_file: { test_id: file-refused }
+      not_found_for_administrator: { test_id: file-not-found }
 
   # The attachment control, shared by the three opportunity forms and the Code With
   # Us proposal form. Appears at /opportunities/code-with-us/create and .../edit and
@@ -1507,22 +1507,22 @@ pages:
     route: /opportunities/:program/:opportunityId/edit?tab=opportunity
     title: "Attachments"
     actions:
-      add_attachment: { test_id: null }
-      rename_new_attachment: { test_id: null }
-      remove_new_attachment: { test_id: null }
-      remove_existing_attachment: { test_id: null }
-      download_attachment: { test_id: null }
+      add_attachment: { test_id: attachment-add-button }
+      rename_new_attachment: { test_id: attachment-name-field }
+      remove_new_attachment: { test_id: attachment-remove-button }
+      remove_existing_attachment: { test_id: attachment-remove-button }
+      download_attachment: { test_id: attachment-download-link }
     observations:
-      attachment_address: { test_id: null }
-      size_limit_stated_before_choosing: { test_id: null }
-      upload_refused_for_size: { test_id: null }
-      new_attachment_row: { test_id: null }
-      existing_attachment_row: { test_id: null }
-      existing_attachment_name_read_only: { test_id: null }
-      original_extension_restored: { test_id: null }
-      file_name_error: { test_id: null }
-      remove_control_hidden_when_not_removable: { test_id: null }
-      attachment_list_on_public_view: { test_id: null }
+      attachment_address: { test_id: attachment-download-link }
+      size_limit_stated_before_choosing: { test_id: attachment-size-limit }
+      upload_refused_for_size: { test_id: attachment-size-error }
+      new_attachment_row: { test_id: attachment-new-row }
+      existing_attachment_row: { test_id: attachment-existing-row }
+      existing_attachment_name_read_only: { test_id: attachment-existing-name }
+      original_extension_restored: { test_id: attachment-resulting-name }
+      file_name_error: { test_id: attachment-name-field }
+      remove_control_hidden_when_not_removable: { test_id: attachment-remove-button }
+      attachment_list_on_public_view: { test_id: attachment-list }
 
   # The image picker for a profile picture and an organization logo. Appears at
   # /sign-up/complete, /users/:userId, /organizations/create and
@@ -1533,19 +1533,19 @@ pages:
     route: /users/me
     title: "Profile picture and organization logo"
     actions:
-      choose_image: { test_id: null }
+      choose_image: { test_id: change-avatar }
     observations:
-      image_address: { test_id: null }
-      current_image: { test_id: null }
-      chosen_image_preview: { test_id: null }
-      only_jpeg_and_png_offered: { test_id: null }
-      rejected_image_error: { test_id: null }
-      image_readable_when_signed_out: { test_id: null }
+      image_address: { test_id: profile-image }
+      current_image: { test_id: profile-image }
+      chosen_image_preview: { test_id: profile-image-preview }
+      only_jpeg_and_png_offered: { test_id: image-file-rule }
+      rejected_image_error: { test_id: image-rejected-error }
+      image_readable_when_signed_out: { test_id: profile-image }
       # The size the image was stored at, read back from the stored image itself. Two
       # criteria turn on a large picture being narrowed or shortened to 500 pixels while
       # keeping its proportions, and on an unreadable one being kept at its own size.
-      stored_image_width: { test_id: null }
-      stored_image_height: { test_id: null }
+      stored_image_width: { test_id: profile-image }
+      stored_image_height: { test_id: profile-image }
 
   # The image control inside the formatted-text editor, shared by every page that
   # embeds one — /content/create, /content/:slug/edit, the three opportunity forms
@@ -1555,11 +1555,11 @@ pages:
     route: /content/:slug/edit
     title: "Image in formatted text"
     actions:
-      upload_body_image: { test_id: null }
+      upload_body_image: { test_id: content-body-image-button }
     observations:
-      image_address: { test_id: null }
-      image_inserted_into_text: { test_id: null }
-      only_jpeg_and_png_offered: { test_id: null }
-      uploading_indicator: { test_id: null }
-      image_rendered_in_published_text: { test_id: null }
-      upload_failure_leaves_text_unchanged: { test_id: null }
+      image_address: { test_id: content-body-image }
+      image_inserted_into_text: { test_id: content-body-field }
+      only_jpeg_and_png_offered: { test_id: image-file-rule }
+      uploading_indicator: { test_id: embedded-image-uploading }
+      image_rendered_in_published_text: { test_id: content-body-image }
+      upload_failure_leaves_text_unchanged: { test_id: content-body-field }

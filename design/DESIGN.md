@@ -1842,3 +1842,333 @@ words that no criterion gives, the story or this list says so.
 14. **Content the spec does not carry.** Every page body in the stories is a placeholder, marked as
     such. The people named ("Test Administrator", "Test Administrator Two") are synthetic, in the
     users domain's style, and the page "hackathon-rules" is an invented ordinary page.
+
+---
+
+## Domain: files
+
+A stored file is the same thing wherever it comes from: an attachment on an opportunity or a
+proposal, a profile picture, an organization's logo, or an image placed in formatted text. It has a
+name, an uploader, a date and a rule about who may read it. It is written once and never changed
+(R-8.6). This domain owns no screen of its own. The surface gives it six entries, and they come in
+two kinds:
+
+- **Three service addresses** (`file-upload`, `file-description`, `file-download`). These answer
+  with data or with the file itself, never with a page. Most of this domain's criteria are about
+  them: who may upload, what is refused and how, and who may read.
+- **Three shared controls** that sit on pages other domains own. `file-attachment-control` is the
+  attachment list on the three opportunity forms, the Code With Us proposal form and the opportunity
+  history note. `file-image-picker` is the profile picture on the profile screens and at sign-up,
+  and the logo on the organization forms. `file-embedded-image` is "Insert image" in the content
+  domain's body editor, wherever that editor appears.
+
+Every state named in `design/screens.yaml` has a story at
+`design/catalogue/<page>.<state>.stories.tsx`. For the three controls, the story is what a build
+copies. The host page around each control is trimmed to a frame, and a line in the story says
+whose design the trimmed part is. For the three addresses, the story is a **response reference**
+(see below). A build does not render it.
+
+Two decisions shape the domain:
+
+- **Limits are stated before a file is chosen** (R-8.17). Every control that takes a file has a
+  sentence next to its trigger that gives the accepted types and the 10 MB limit. The trigger
+  points at that sentence with `aria-describedby`. A person should never find out about a limit
+  only by breaking it.
+- **Who can see a file is said where the file is added.** A profile picture, a logo and an
+  inserted image are readable by anyone (R-8.28, R-8.29). An attachment is readable by whoever
+  can read the thing it is attached to (R-8.20). Each control says this in one plain sentence,
+  because the person adding the file cannot take it back: a file is never removed (R-8.26, R-8.31).
+
+### Components this domain is built from
+
+All from `@bcgov/design-system-react-components` 0.8.1, unless the entry says otherwise. No
+component is new to the catalogue. Every component and prop used here is one the earlier domains'
+stories already compile with.
+
+| Component | Used for |
+| --- | --- |
+| `Heading` | The host page's H1 (kept in each frame so the outline is real), the host section's H2, and the "Attachments" H3 in the opportunity form. On the three service addresses, the H1 is the surface title and there are H2s for "Request" and "Answer". |
+| `Text` | Body copy. `size="small" color="secondary"` is used for the stated rule next to each file trigger, the resulting-name line under a renamed attachment, and the notes that mark a trimmed frame. |
+| `Button` | "Add attachment" and the profile picture trigger are `secondary`. "Insert image" is `tertiary size="small"`, inside the content domain's toolbar. Remove is `secondary size="small"`, with an `aria-label` that begins with its visible text and names the file ("Remove Statement of work.pdf"). |
+| `FileTrigger` (from `react-aria-components`) | Every file chooser. `acceptedFileTypes={["image/jpeg", "image/png"]}` is set on the image picker and on "Insert image". The attachment trigger accepts any type, because no criterion restricts an attachment's type (R-8.23 note). |
+| `TextField` | An attachment's name. On a new attachment it is editable and optional (R-8.27). On a stored attachment it is `isReadOnly` with the description "Already stored, so its name cannot be changed.", as the users domain shows read-only details. |
+| `Link` | Each attachment's download link. Its `href` is the file's own address, `/api/files/<id>?type=blob`, because every download in the interface is that request (R-8.10). |
+| `InlineAlert` | `danger` with `role="alert"` for a file that is too large, a rejected picture, and an image that could not be inserted. Each is wrapped in a `div` that carries the test ID. |
+| `ProgressCircle` | The uploading indicator for an inserted image, inside a `role="status"` row next to visible text. |
+| `Form`, `ButtonGroup`, `TextArea`, `Toolbar` | Only as the host pages use them, in the trimmed frames. |
+
+### This project's own components (not design-system components)
+
+These are built from standard HTML and styled only with tokens. None of them is a design-system
+component, and none may be presented as one.
+
+- **Attachment list.** This is new in this domain. It is a `<ul>` with no bullets. Each `<li>` is a
+  row with a `--surface-color-border-medium` border and a `--layout-border-radius-medium` radius. A
+  stored row holds the read-only name, the download link and Remove. A new row holds a line giving
+  the chosen file's name and size, the name field, the resulting-name line and Remove. The design
+  system has no file list or file-upload component. `FileTrigger` only opens the chooser, and it
+  shows nothing about what was chosen.
+- **Picture preview.** This is new in this domain. It is a plain `<img>` with `max-width: 100%` and
+  `height: auto`, so a picture is shown at the size it was stored, up to the width of the column. The
+  design system has no image or avatar component. The **alternative text** says what the image is for
+  ("Your current profile picture"), or, for an image in formatted text, whatever the author wrote.
+- **Response reference.** This is new in this domain, and it exists only in the catalogue. It is a
+  `<dl>` built as the opportunities domain's key facts list, stacked in one column. There are two of
+  them under "Request" and "Answer" H2s. It sets out what a caller sends to one of the three service
+  addresses and what comes back, so that each part of the answer the surface names has an element to
+  carry its test ID. **A build does not render it.** The service answers these addresses with data
+  or with the file. See "The three service addresses" below.
+- **Status line.** This is the users domain's pattern, reused. It is a `role="status"` container
+  holding visible text, used for "harbour.png is ready…" and "…was inserted at the cursor".
+
+No token beyond those the earlier domains list is used: `--layout-margin-{none,xsmall,small,medium,large}`,
+`--layout-padding-{none,small,large}`, `--layout-border-width-small`,
+`--layout-border-radius-medium`, `--surface-color-border-{default,medium}` and
+`--typography-font-weights-bold`. `max-width: 100%` and `height: auto` on the picture preview are
+not spacing, type or radius values. They stop an image overflowing its column (see gap 11 on
+display size).
+
+### How each control is laid out
+
+The users domain's layout applies: a single column, with `--layout-margin-large` between regions,
+`--layout-margin-medium` inside a section, and action rows that wrap.
+
+- **Attachment control** (`file-attachment-control`). This is the last card section of the
+  Opportunity tab in edit mode, headed "Attachments" (H3), where the opportunities domain placed
+  it. The order inside it is: one sentence saying who can read an attachment and that removing one
+  withdraws that access once the form is saved (R-8.20, R-8.31); the attachment list, or "No
+  attachments have been added."; the stated rule, "Any type of file, up to 10 MB each."; and then
+  "Add attachment". On a create form it is the same control with no stored rows. On the opportunity's
+  own page (`public-view`) the same list sits at the end of the Description section, under an
+  "Attachments" H3, as plain download links with no names to edit and no Remove.
+- **Image picker** (`file-image-picker`). This is a `role="group"` labelled "Profile picture
+  (optional)", or "Logo (optional)" on the organization forms. It sits where the users and
+  organizations domains put their trigger. The order inside it is: the stored picture, or "No
+  profile picture has been added."; a status line after a new file is chosen; any rejection; the
+  stated rule; and then the trigger. The rule reads "A JPEG or PNG image, up to 10 MB. A picture
+  wider or taller than 500 pixels is made smaller to fit, keeping its proportions. Anyone can see
+  your profile picture, including people who are not signed in." (R-8.13, R-8.17, R-8.28, R-8.30).
+- **Inserted image** (`file-embedded-image`). The rule sits directly under the formatting toolbar:
+  "Insert image takes a JPEG or PNG image, up to 10 MB. An inserted image is stored as soon as you
+  choose it and anyone can see it." The uploading line, the success line and any failure appear
+  between the rule and the body field, so each is next to the thing it is about.
+
+### Forms and validation
+
+- **When a file is uploaded.** An attachment and a profile picture or logo are uploaded when the
+  host form is saved. That is why a new attachment can still be renamed and removed (R-8.27 note),
+  and why Cancel discards a chosen picture. An inserted image is uploaded as soon as it is chosen,
+  because its reference has to go into the text (R-8.29).
+- **Renaming an attachment** (R-8.27). The name field is optional. Its description says that
+  leaving it empty keeps the original name and that the ending is added if it is left off. Under it,
+  the resulting-name line ("Will be saved as: Statement of work.pdf") updates as the person types,
+  so the restored ending is visible before saving. It is tied to the field by `aria-describedby`.
+  The field has no `maxLength`, so a long name is marked with its reason rather than silently cut.
+- **A name that is too long** (R-8.23). Saving is refused, and the error is the field's own
+  `errorMessage`, against that attachment and not the form as a whole (R-8.27 note): "The file name
+  must be between 1 and 255 characters long. With its ending, this one is 264." Focus moves to the
+  field. What was typed is kept.
+- **A file that is too large** (R-8.17). The size is checked as soon as the file is chosen. The row
+  shows a `danger` alert, "site-survey.pdf is too large to attach", which gives the file's size and
+  the limit and says to remove it. The host form cannot be saved while the row is there. If the
+  service refuses an oversized upload anyway, the same alert appears on the same row. On "Insert
+  image" the same refusal names the file and says nothing was added to the body.
+- **A rejected picture** (R-8.21, R-8.30). The chooser offers only JPEG and PNG files, but a person
+  can still pick "all files". A picture whose name does not end in .jpg, .jpeg or .png is refused,
+  and so is one whose content is not a JPEG or PNG. The refusal is a `danger` alert inside the
+  picture group, titled "<name> cannot be used as a profile picture", and it says the stored picture
+  has been kept. Its wrapper takes focus. The rest of the profile form keeps what was typed.
+- **An inserted image's reference** (R-8.29). This is an internal marker carrying the file's
+  identifier, never a web address. The stories show it as `![Describe this image](@file/<identifier>)`.
+  The marker's exact spelling is the build's choice (see gap 9). "Describe this image" is selected
+  when it is inserted, so that typing replaces it, and the success line asks for a description.
+
+### The three service addresses
+
+`file-upload`, `file-description` and `file-download` answer with data or with the file, so there is
+nothing on them for a person to see. What the stories give instead is the response reference: the
+request a caller sends, and the parts of the answer the surface names, each on an element carrying
+its test ID. **The adapter reads the test IDs as names for those parts of the HTTP answer**, not as
+elements it will find in a browser:
+
+| Test ID | What it names in the answer |
+| --- | --- |
+| `file-upload-request` | The upload request itself. All six upload actions bind here, and each differs only in what it sends: a file and a name with a read-access statement, with no declared size, with no file part, with a kind of access the service does not know, or with read-access information that is not well-formed. |
+| `file-upload-stored-id` | The identifier in the stored record that a successful upload returns (R-8.2). |
+| `file-upload-refused-size`, `file-upload-size-limit` | The refusal of an oversized upload as the requester's error, and the limit named in its message (R-8.17). |
+| `file-upload-refused-name` | The bad-request refusal of a name over 255 characters, whose message gives the permitted length (R-8.23). |
+| `file-upload-refused-read-access` | The bad-request refusal of read-access information that is missing, unrecognised or not well-formed (R-8.18, R-8.24). |
+| `file-upload-refused-signed-out` | The not-permitted refusal of an upload from a visitor who is not signed in (R-8.1). |
+| `file-upload-service-fault` | A fault of the service. It is the one answer that R-8.17, R-8.18 and R-8.24 say a requester's mistake must never get. |
+| `file-description-id`, `-name`, `-stored-date`, `-content-id` | The four parts of a file's description (R-8.11). `-content-id` is the fingerprint two identical uploads share (R-8.5). |
+| `file-download-body`, `-content-type`, `-disposition`, `-filename` | The bytes, the content type worked out from the name, the instruction to save rather than display, and the name for saving (R-8.10). |
+| `file-download-response`, `file-download-request` | A successful answer at all, with the request that got it. `readable_when_signed_out_if_public` binds to the response, because the default story's request is made signed out. |
+| `file-refused` | Not authorized. It is shared by both addresses and by both of their refusals, because R-8.12 gives a missing file and a forbidden one the same answer for anyone but an administrator. |
+| `file-not-found` | The administrator's "not found" for an identifier no file carries (R-8.12). |
+
+The states are the distinct answers: for the upload, `default` (stored), `signed-out`, `too-large`,
+`name-too-long`, `invalid-read-access`, `no-file` and `fault`; for the description and the download,
+`default`, `refused` and `not-found`. Every refusal says what was stored, which is always nothing,
+and that the working copy is gone (R-8.18). A refusal of the no-file kind is not written to the
+error log (R-8.18).
+
+### Loading, empty, refused, not found
+
+- **Empty.** An opportunity with no attachments says "No attachments have been added." A profile
+  with no picture says "No profile picture has been added." Both keep the stated rule and the
+  trigger. An editor with no images is the ordinary editor.
+- **Loading.** Only the inserted image has a loading state of its own (`uploading`), which
+  `uploading_indicator` names. While it lasts, "Insert image" is disabled so a second upload cannot
+  race the first, and the rest of the editor stays usable. The attachment and picture uploads
+  happen inside the host form's save, so the host form's saving behaviour covers them.
+- **Refused.** Refusals of an upload appear on the thing that was refused: the attachment's row,
+  the picture group, or above the body field. They never appear as a page-level alert. A download
+  link someone may not follow is never shown to them, because each list is shown only to people who
+  can read the thing it hangs on (R-8.20). What a browser shows if a refused address is opened
+  directly is gap 4.
+- **Not found.** None of the controls has one. The host page's not-found state governs.
+
+### Accessibility obligations
+
+WCAG 2.1 AA applies (P1, J5). The users domain's list applies here too. This domain adds:
+
+- **Rules before choice.** Each file trigger has `aria-describedby` pointing at its stated rule, so
+  a screen reader hears the types and the limit before the chooser opens.
+- **Named removals and downloads.** "Remove" carries an `aria-label` that begins with its visible
+  word and adds the file's name, so the accessible name contains the visible label (WCAG 2.5.3).
+  Download links name the file in their visible text.
+- **Images.** A profile picture's `alt` says what it is. An inserted image carries placeholder
+  alternative text, which is selected so that the author replaces it. The content domain's renderer
+  shows an image written without alternative text with `alt=""` (its accessibility obligations).
+- **Announcements.** Uploading, "ready" and "inserted" are `role="status"`. Every refusal is
+  `role="alert"`. After a refused save, focus goes to the refused field or alert.
+- **Words, not colour.** Every refusal names the file and the reason in text. A read-only name is
+  exposed as read-only, and its description says why.
+- **Reflow.** Attachment rows wrap. The preview never exceeds the column, so a 2000-pixel image
+  causes no horizontal scroll at 320 pixels.
+- **Checks still required.** Keyboard use of each chooser, a screen-reader pass of the
+  resulting-name line as someone types, and the focus move after a refused save have not been done
+  by hand. They are required before the build is accepted.
+
+### Test IDs
+
+The users domain's rules apply. One ID is used per kind of element. An action and an observation on
+the same element share its ID. The same control keeps its ID on every page it appears on.
+
+- **Reused from other domains, as they asked.** `attachment-add-button` (the opportunities
+  domain's), `change-avatar` (the users domain's), `content-body-image-button` and
+  `content-body-field` (the content domain's). The proposals domain's `add_attachment` on the Code
+  With Us proposal forms should also be `attachment-add-button`, because it is this same control.
+- **One element for several names.** `attachment-download-link` is both `download_attachment` and
+  `attachment_address`: the address is its `href`. `attachment-remove-button` is
+  `remove_new_attachment`, `remove_existing_attachment` and `remove_control_hidden_when_not_removable`.
+  A test tells a new row from a stored one by its row (`attachment-new-row`,
+  `attachment-existing-row`), and asserts the button is absent in `public-view`.
+  `attachment-name-field` is both `rename_new_attachment` and `file_name_error`: the error is the
+  field's own `errorMessage`, and the field is marked invalid. `profile-image` is `current_image`,
+  `image_address` (its `src`), `image_readable_when_signed_out` (its `src`, fetched signed out) and
+  `stored_image_width` and `stored_image_height` (its natural width and height, which are the stored
+  image's, since it is shown from the stored file). `content-body-field` is both
+  `image_inserted_into_text` (its value holds the marker) and `upload_failure_leaves_text_unchanged`
+  (its value is as it was). `content-body-image` is both `image_rendered_in_published_text` and the
+  editor's `image_address` (its `src`, once the renderer has resolved the marker).
+- **Shared between two controls.** `image-file-rule` is `only_jpeg_and_png_offered` on both the
+  picker and the inserted image. It is the stated rule, and the trigger's chooser carries the matching
+  `acceptedFileTypes`.
+- **For the content domain's renderer.** Every image it renders must carry
+  `data-testid="content-body-image"`, as every link it renders carries `content-body-link`.
+
+**Extra IDs, not named in the surface, that the stories carry for the adapter:**
+`file-upload-stored` (the stored-record answer), `file-upload-refused-no-file`,
+`file-description-answer` and `embedded-image-error` (the failure alert when an inserted image is
+refused). `attachment-list` is bound to `attachment_list_on_public_view`, and the edit-mode list
+carries the same ID.
+
+### Per-screen notes
+
+**file-upload** — `default` (stored), `signed-out` (R-8.1), `too-large` (R-8.17), `name-too-long`
+(R-8.23), `invalid-read-access` (R-8.24, and R-8.18 for data that is not well-formed), `no-file`
+(R-8.18), `fault`. These are response references, not screens.
+
+**file-description** — `default` (R-8.5, R-8.11), `refused` (R-8.7, R-8.12), `not-found` (an
+administrator, R-8.12). These are response references.
+
+**file-download** — `default` (a public file read signed out, R-8.7, R-8.10), `refused`, `not-found`.
+These are response references.
+
+**file-attachment-control** — `default` (two stored attachments on the Opportunity tab in edit
+mode), `empty`, `new-attachment` (renamed, with the ending shown restored, R-8.27), `invalid` (a
+name over 255 characters, R-8.23), `too-large` (R-8.17), `public-view` (the opportunity's own page,
+no Remove). The stories use a Code With Us opportunity. The Sprint With Us and Team With Us forms,
+the proposal form and the history note use the same control, and since R-8.19 and R-8.20 there is
+no program-specific difference in what it shows.
+
+**file-image-picker** — `default` (a stored picture, shown at its stored size), `empty`, `chosen`
+(a preview from the person's own device, not yet stored), `rejected` (R-8.30, R-8.21). The
+organization logo uses the same design with "Logo" in place of "Profile picture", and the
+organizations domain's trigger ID, `organization-logo-button`.
+
+**file-embedded-image** — `default`, `uploading`, `inserted` (the marker in the text, R-8.29),
+`failed` (too large, and the body unchanged), `published` (the reader's view of the same page, where
+the marker has become the image). `published` is the content domain's public page, shown here
+because two of this control's observations are only visible there.
+
+### Gaps
+
+These are work for the spec. None was filled with invented behaviour. Where a story had to show
+words that no criterion gives, the story or this list says so.
+
+1. **An upload that declares no size.** The surface names `upload_file_without_declaring_its_size`.
+   R-8.3 said such an upload is refused, but R-8.17 replaces R-8.3 and says nothing about it. The
+   action is bound, but there is no state for its answer, because no accepted criterion says what
+   it should be.
+2. **An upload with no usable name.** R-8.23 (accepted, v2) still says this "fails as the service
+   fault described by R-8.4". R-8.4 has been superseded by R-8.18, which calls that kind of failure
+   wrong but lists only a missing file part and malformed read-access information. Whether a
+   missing name should be a bad request needs restating. No state was given to it.
+3. **Not authorized or not found** (R-8.12, conflicting, left open for a ruling). The design follows
+   the accepted wording: anyone but an administrator gets "not authorized" for a missing file, and
+   an administrator gets "not found". If the ruling goes the other way, the `refused` and
+   `not-found` states stay, and only who sees which changes.
+4. **What a person sees when a refused address is opened in a browser.** A download link is only
+   shown to people who may follow it. But a retained or shared link opened later, for example after
+   an attachment is removed (R-8.31), gets the service's bare refusal. No criterion says whether a
+   browser should be shown a page instead, so none was designed.
+5. **When an existing attachment cannot be removed.** The surface observes
+   `remove_control_hidden_when_not_removable`, but no criterion in any domain says when a stored
+   attachment on an editable form is not removable. The design hides Remove only where nothing can
+   be edited (`public-view`). If some opportunity statuses should lock attachments, the
+   opportunities domain needs a criterion and this control needs a state.
+6. **Status codes and wording.** The criteria say "not permitted", "bad request", "not authorized",
+   "not found" and "the requester's error", but give no status numbers. R-8.17's oversized-upload
+   refusal does not say which requester's-error status it is. Every message is the design's own,
+   except R-8.23's "between 1 and 255 characters long" and R-8.24's "the information provided was
+   invalid".
+7. **Where the size is checked.** The design checks an attachment's size, and a picture's name
+   ending, as soon as the file is chosen, and also shows the service's own refusal in the same place.
+   No criterion requires the early check. It adds no rule, only an earlier warning of the service's.
+8. **Other domains' stories disagree with this domain's rules.** The opportunities domain's editing
+   stories say "The accepted file types and size limit are shown when you choose a file", which
+   contradicts R-8.17 (stated before choosing). The users domain's profile stories use
+   `acceptedFileTypes={["image/*"]}`, which offers types R-8.30 refuses. This domain cannot edit
+   those stories. They should adopt this control's stated rule and `["image/jpeg", "image/png"]`.
+9. **The marker's form, and the image's alternative text** (R-8.29). The criterion fixes that the
+   stored text carries an internal marker and not an address, but not how it is spelled. The stories
+   use `@file/<identifier>` as an illustration. No criterion says an inserted image gets alternative
+   text. The design inserts a placeholder for the author to replace, which the content domain's gap
+   11 also asks the formatting guide to explain.
+10. **An inserted image stored but never used.** An image is stored the moment it is chosen and is
+    readable by anyone (R-8.29). If the author then deletes the marker or cancels the edit, the
+    image stays stored and public, and nothing refers to it. R-8.31 covers detached attachments, but
+    not images placed in text. The editor's sentence says the image is stored at once. What should
+    happen to it afterwards is unanswered.
+11. **Display size of a picture.** No token gives an avatar or thumbnail size, so a picture is shown
+    at its stored size, which is at most 500 pixels (R-8.13), and never wider than its column. A
+    smaller display size would need a token, or a decision to accept a fixed value.
+12. **Other ways a picture can fail.** R-8.21 says a readable image that cannot be resized is kept
+    at its own size. That is not a failure, and the person is told nothing. Whether they should be
+    told is not stated. What happens to an image over both 500-pixel limits at once is left open by
+    R-8.13's note. The design states only the outcome the criterion fixes: made smaller to fit,
+    keeping its proportions.
+13. **Content the spec does not carry.** File names, sizes, identifiers, the fingerprint, dates and
+    the page text in the stories are illustrative. The identifiers are synthetic.
