@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-19T08:31:20.266Z | design-proposals | G-DESIGN | approve | agent:ux-reviewer | agent-held, unsampled | $1.0224075 |  |
 | 2026-09-19T07:49:45.304Z | design-files | G-DESIGN | approve | agent:ux-reviewer | agent-held, unsampled | $0.6529599999999999 |  |
 | 2026-09-19T07:36:12.472Z | design-content | G-DESIGN | approve | agent:ux-reviewer | agent-held, unsampled | $0.5963170000000001 |  |
 | 2026-09-19T07:24:04.197Z | design-notifications | G-DESIGN | approve | agent:ux-reviewer | agent-held, unsampled | $0.8219654999999999 |  |

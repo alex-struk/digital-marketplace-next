@@ -134,6 +134,7 @@ Profile: rebuild
 - [design-opportunities](proposals/design-opportunities.md)
 - [design-opportunities-2](proposals/design-opportunities-2.md)
 - [design-organizations](proposals/design-organizations.md)
+- [design-proposals](proposals/design-proposals.md)
 - [design-users](proposals/design-users.md)
 - [design-users-2](proposals/design-users-2.md)
 - [gates-simulated-v1](proposals/gates-simulated-v1.md)
@@ -170,9 +171,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $377.067237
-- Rulings cost: $242.291785
-- Total cost: $619.359022
-- Agent-held rulings: 127
+- Journal cost: $397.882778
+- Rulings cost: $243.314192
+- Total cost: $641.19697
+- Agent-held rulings: 128
 - Open escalations: 0
 - Open proposals: 0

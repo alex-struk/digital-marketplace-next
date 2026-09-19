@@ -228,3 +228,119 @@ screens:
     states: [default, empty, chosen, rejected]
   - page: file-embedded-image
     states: [default, uploading, inserted, failed, published]
+
+  # proposals domain — see design/DESIGN.md, "Domain: proposals"
+  - page: proposal-cwu-create
+    states: [default, organization, invalid, refused, terms, not-found]
+  - page: proposal-swu-create
+    states: [default, invalid, unqualified-organization, refused, terms, not-found]
+  - page: proposal-twu-create
+    states: [default, invalid, over-budget, unqualified-organization, refused, terms, not-found]
+  - page: proposal-cwu-edit
+    states:
+      [
+        default,
+        draft,
+        editing,
+        terms,
+        delete-confirm,
+        withdraw-confirm,
+        submit-refused,
+        awarded,
+        history-tab,
+        not-found,
+        loading,
+      ]
+  - page: proposal-swu-edit
+    states:
+      [
+        default,
+        draft,
+        editing,
+        organization-locked,
+        terms,
+        delete-confirm,
+        withdraw-confirm,
+        submit-refused,
+        scoresheet-tab,
+        history-tab,
+        not-found,
+        loading,
+      ]
+  - page: proposal-twu-edit
+    states:
+      [
+        default,
+        draft,
+        editing,
+        organization-locked,
+        terms,
+        delete-confirm,
+        withdraw-confirm,
+        submit-refused,
+        scoresheet-tab,
+        history-tab,
+        not-found,
+        loading,
+      ]
+  - page: proposal-cwu-view
+    states:
+      [
+        default,
+        score-dialog,
+        score-invalid,
+        evaluated,
+        award-confirm,
+        disqualify-dialog,
+        disqualify-invalid,
+        history-tab,
+        not-found,
+        loading,
+      ]
+  - page: proposal-swu-view
+    states:
+      [
+        default,
+        team-questions-tab,
+        code-challenge-tab,
+        score-dialog,
+        team-scenario-tab,
+        wrong-stage,
+        evaluated,
+        award-confirm,
+        disqualify-dialog,
+        history-tab,
+        not-found,
+        loading,
+      ]
+  - page: proposal-twu-view
+    states:
+      [
+        default,
+        resource-questions-tab,
+        challenge-tab,
+        score-dialog,
+        wrong-stage,
+        evaluated,
+        award-confirm,
+        disqualify-dialog,
+        history-tab,
+        not-found,
+        loading,
+      ]
+  - page: proposal-cwu-export-one
+    states: [default, not-found, loading]
+  - page: proposal-swu-export-one
+    states: [default, anonymous, not-found, loading]
+  - page: proposal-twu-export-one
+    states: [default, anonymous, not-found, loading]
+  - page: proposal-cwu-export-all
+    states: [default, anonymous, not-found, loading]
+  - page: proposal-swu-export-all
+    states: [default, anonymous, not-found, loading]
+  - page: proposal-twu-export-all
+    states: [default, anonymous, not-found, loading]
+  - page: proposal-vendor-dashboard
+    states: [default, no-organization, empty, loading]
+  - page: proposal-list-stub
+    states: [default]
