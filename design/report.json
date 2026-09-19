@@ -1,7 +1,7 @@
 {
-  "generated": "2026-09-19T07:22:18.836Z",
+  "generated": "2026-09-19T07:34:29.253Z",
   "axe": "4.13.0",
-  "catalogue": "3cdf8541284ae923aada9f0cb5ca526385b4cfaaf258ecae815e3ccb0974081d",
+  "catalogue": "8b9196655179325d38caefedbdb67bceb95405288b357e4c81646a512bb454a7",
   "ok": true,
   "messages": [],
   "compile": [
@@ -17,6 +17,168 @@
     }
   ],
   "stories": [
+    {
+      "id": "content-content-create-default--default",
+      "title": "content/content-create/default",
+      "file": "./catalogue/content-create.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-create-duplicate-slug--duplicate-slug",
+      "title": "content/content-create/duplicate-slug",
+      "file": "./catalogue/content-create.duplicate-slug.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-create-invalid--invalid",
+      "title": "content/content-create/invalid",
+      "file": "./catalogue/content-create.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-create-not-found--not-found",
+      "title": "content/content-create/not-found",
+      "file": "./catalogue/content-create.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-create-publish-confirm--publish-confirm",
+      "title": "content/content-create/publish-confirm",
+      "file": "./catalogue/content-create.publish-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-create-ready--ready",
+      "title": "content/content-create/ready",
+      "file": "./catalogue/content-create.ready.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-edit-changes-published--changes-published",
+      "title": "content/content-edit/changes-published",
+      "file": "./catalogue/content-edit.changes-published.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-edit-created--created",
+      "title": "content/content-edit/created",
+      "file": "./catalogue/content-edit.created.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-edit-default--default",
+      "title": "content/content-edit/default",
+      "file": "./catalogue/content-edit.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-edit-delete-confirm--delete-confirm",
+      "title": "content/content-edit/delete-confirm",
+      "file": "./catalogue/content-edit.delete-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-edit-duplicate-slug--duplicate-slug",
+      "title": "content/content-edit/duplicate-slug",
+      "file": "./catalogue/content-edit.duplicate-slug.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-edit-editing-fixed--editing-fixed",
+      "title": "content/content-edit/editing-fixed",
+      "file": "./catalogue/content-edit.editing-fixed.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-edit-editing--editing",
+      "title": "content/content-edit/editing",
+      "file": "./catalogue/content-edit.editing.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-edit-fixed--fixed",
+      "title": "content/content-edit/fixed",
+      "file": "./catalogue/content-edit.fixed.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-edit-invalid--invalid",
+      "title": "content/content-edit/invalid",
+      "file": "./catalogue/content-edit.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-edit-loading--loading",
+      "title": "content/content-edit/loading",
+      "file": "./catalogue/content-edit.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-edit-not-found--not-found",
+      "title": "content/content-edit/not-found",
+      "file": "./catalogue/content-edit.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-edit-publish-confirm--publish-confirm",
+      "title": "content/content-edit/publish-confirm",
+      "file": "./catalogue/content-edit.publish-confirm.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-footer-default--default",
+      "title": "content/content-footer/default",
+      "file": "./catalogue/content-footer.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-list-default--default",
+      "title": "content/content-list/default",
+      "file": "./catalogue/content-list.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-list-deleted--deleted",
+      "title": "content/content-list/deleted",
+      "file": "./catalogue/content-list.deleted.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-list-loading--loading",
+      "title": "content/content-list/loading",
+      "file": "./catalogue/content-list.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-list-not-found--not-found",
+      "title": "content/content-list/not-found",
+      "file": "./catalogue/content-list.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-service-level-agreement-link-default--default",
+      "title": "content/content-service-level-agreement-link/default",
+      "file": "./catalogue/content-service-level-agreement-link.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-view-default--default",
+      "title": "content/content-view/default",
+      "file": "./catalogue/content-view.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-view-loading--loading",
+      "title": "content/content-view/loading",
+      "file": "./catalogue/content-view.loading.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-view-not-found--not-found",
+      "title": "content/content-view/not-found",
+      "file": "./catalogue/content-view.not-found.stories.tsx",
+      "violations": []
+    },
     {
       "id": "opportunities-home-page-default--default",
       "title": "opportunities/home-page/default",
@@ -1315,7 +1477,7 @@
     }
   ],
   "totals": {
-    "stories": 216,
+    "stories": 243,
     "violations": 0,
     "failed": 0
   }

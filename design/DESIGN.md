@@ -1466,3 +1466,379 @@ words that no criterion gives, the story or this list says so.
     marker. The samples show none.
 13. **Loading states are the design's own.** No criterion describes a delay on the landing or the
     reference page. They exist because both depend on data that arrives after the page.
+
+---
+
+## Domain: content
+
+The service's own prose is held as pages: a title, a body of formatted text and a short address,
+readable by anyone at `/content/<address>` and managed by an administrator. This domain designs six
+surfaces: the footer's five links to those pages (`content-footer`), the service level agreement
+link on the Code With Us learn-more screen (`content-service-level-agreement-link`), the
+administrator's list of pages (`content-list`), creating a page (`content-create`), a page's
+managing screen (`content-edit`), and the public page itself (`content-view`). Every state named in
+`design/screens.yaml` has a story at `design/catalogue/<page>.<state>.stories.tsx`, and the story is
+what a build copies.
+
+Two decisions shape the domain:
+
+- **There are two kinds of page, and the screen always says which.** An ordinary page can be
+  renamed and deleted. A page the service needs (R-7.25) can only have its title and body changed.
+  The list marks it, and its managing screen carries a warning, offers no Delete, and shows the
+  address read-only. Nothing tries to be clever about it: the control that cannot be used is not
+  rendered, and the warning says why.
+- **Publishing is the only save, and it is public at once.** No page is ever a draft (R-7.1 note).
+  So every publish, whether creating or changing a page, asks to be confirmed, and the confirmation
+  says the words go public straight away.
+
+### Components this domain is built from
+
+All from `@bcgov/design-system-react-components` 0.8.1, unless the entry says otherwise. `Footer`
+and `FooterLinks` are new to the catalogue. Their props were checked against the type declarations
+of the installed 0.8.1 package. Everything else is used exactly as the earlier domains use it.
+
+| Component | Used for |
+| --- | --- |
+| `Footer` + `FooterLinks` | The site footer. `FooterLinks` is given the title "About this service" and the five page links. The `Footer`'s own default acknowledgement, logo, contact block and copyright are kept. |
+| `Heading` | One H1 per screen. On the managing screen the H1 is the page's own title, with "Manage a page" as small text above it, as the opportunities and organizations domains do for their manage pages. On the public page the H1 is the page's title. |
+| `Text` | Body copy. `size="small" color="secondary"` is used for the line above an H1, the address rule, the resulting public address, the table caption, and the public page's address line. |
+| `Button` | Every command. `primary` is used for Edit page, Publish page, Publish changes and the dialog confirmations. `secondary` is used for Cancel. `secondary` with `danger` is used for Delete page, and `primary` with `danger` for its confirmation. `tertiary size="small"` is used for the formatting buttons in the body editor. |
+| `ButtonGroup` | The managing screen's action row (`ariaLabel="Page actions"`), and each form's submit row. |
+| `Link` | Titles and addresses in the list, the public address and the authors on the managing screen, the formatting-guide link, the footer links, and the service level agreement link. `isButton` is used for "Create page". |
+| `TextField` | Title and address. In view mode on the managing screen they are `isReadOnly`, as in the users domain. The address of a page the service needs is `isReadOnly` in edit mode too. |
+| `TextArea` | The body, in the body editor. It is also `isReadOnly` in view mode. **No `maxLength`** on the title or the body. R-7.20 requires a body that is too long to be marked with its reason, and a `maxLength` would silently cut it instead. |
+| `Form` | Always `validationBehavior="aria"`. |
+| `InlineAlert` | The needed-page warning (`warning`), published and removed confirmations (`success`, `role="status"`), the address-in-use refusal (`danger`, `role="alert"`), and the list of problems before an unavailable publish button (`danger`). Each alert that carries a test ID is wrapped in a `div` that holds it. |
+| `Modal` + `AlertDialog` | Publish page and Publish changes (`confirmation`), Delete page (`destructive`). |
+| `ProgressCircle` | Indeterminate loading, inside `role="status"` next to visible text. |
+| `FileTrigger` (from `react-aria-components`) | "Insert image" in the body editor, with `acceptedFileTypes` set to JPEG and PNG. What happens after a file is chosen belongs to the files domain (`file-embedded-image`). |
+
+### This project's own components (not design-system components)
+
+These are built from standard HTML, or from `react-aria-components` (the library the design system
+is itself built on), and styled only with tokens. None of them is a design-system component, and
+none may be presented as one.
+
+- **Body editor.** This is new in this domain. The design system has no rich-text or markdown
+  editor, and the opportunities domain's gap 21 left this decision to the content domain. The
+  editor is a composition, not a new widget: a `Toolbar` from `react-aria-components`, labelled
+  "Formatting for Body", holding design-system `Button`s (Bold, Italic, Heading, Bulleted list,
+  Numbered list, Link) and the "Insert image" `FileTrigger`. Below it is the design system's
+  `TextArea`, and after that a `Link` to the formatting guide at `/content/markdown-guide`, which
+  opens in a new tab so the form is not lost (R-7.26). `Toolbar` gives the arrow-key movement a
+  toolbar is expected to have, and there is no design-system toolbar. Each formatting button wraps
+  the selection in marked-up text, or inserts it at the cursor. The body is stored as marked-up
+  text, exactly as typed. Other domains that edit formatted text (an opportunity's description)
+  should reuse this editor rather than building a second one.
+- **Formatted-text renderer.** This is new in this domain. It turns a page's stored body into
+  headings, paragraphs, lists, links and images. **Raw markup in the body is escaped and shown as
+  text, never executed**, and the same renderer is used on the page's own address and wherever
+  another screen embeds a body (R-7.17). A build must not use a second renderer anywhere. Every link
+  it renders carries `data-testid="content-body-link"`, and every image fits within the width of
+  the text column. It is not a design-system component because the design system renders no
+  document content.
+- **Key facts list.** This is the opportunities domain's `<dl>`, reused. It holds the dates and
+  authors on the managing screen, and the dates on the public page.
+- **Data table.** This is the users domain's table, reused. It is used for the list of pages.
+- **Status badge.** This is the users domain's badge, reused. It carries "Yes" in the list's
+  "Needed by the service" column. An ordinary page shows plain "No", so the column reads in words
+  either way.
+
+No token beyond those the earlier domains list is used: `--layout-margin-{none,small,medium,large}`,
+`--layout-padding-{small,large}`, `--layout-border-width-small`,
+`--layout-border-radius-{medium,circular}`, `--surface-color-border-{default,medium}` and
+`--typography-font-weights-bold`.
+
+### How each screen is laid out
+
+The users domain's layout applies: a single-column grid, with `--layout-margin-large` between
+regions and `--layout-padding-large` around the page. Action rows wrap.
+
+- **Footer.** It sits on every screen, after the main content, whatever the viewer's sign-in state
+  (R-7.19). The five links appear in the order R-7.19 names them (About, Disclaimer, Privacy,
+  Accessibility, Copyright), and each opens `/content/<address>`. The footer is identical signed in
+  and signed out.
+- **Service level agreement link.** It is an inline link in the sentence beside a program's cost,
+  and its visible text is "service level agreement". Its target is `/content/service-level-agreement`,
+  a page the service creates for itself (R-7.18). The same link, with the same test ID, belongs on
+  the three program cards and the three opportunity forms (see gap 7).
+- **List** (`content-list`). The H1 "Content Management" is followed, on the same row, by the
+  primary "Create page" link. Then comes one sentence explaining "Needed by the service", then the
+  table. The table has five columns: Title (a link to the managing screen), Public address (a link
+  to the public page), Needed by the service, Created, and Last updated. Its caption says the rows
+  are in order of title (R-7.5). After a page is removed, the success alert sits between the H1 row
+  and the sentence.
+- **Create** (`content-create`). The H1, then one sentence saying every field is required and the
+  page is public as soon as it is published. Then Title; Address, with the address rule and the
+  resulting public address under it; the body editor; the reason Publish is unavailable, or the
+  list of problems; and then Cancel and Publish page.
+- **Managing screen** (`content-edit`), view mode. "Manage a page" as small text, then the H1 (the
+  page's title), then the key facts: Public address, Published, Published by, Last updated, Last
+  updated by (R-7.27). After them come any alert, the needed-page warning, the action row (Edit
+  page, and Delete page for an ordinary page), and then the section "Current wording", holding the
+  title, address and body read-only. There is no history section of any kind (R-7.23). On the page
+  at `terms-and-conditions`, the notifications domain's "Notify vendors of updated terms" section
+  follows "Current wording" (R-7.13, `notification-terms-broadcast`).
+- **Managing screen, edit mode.** The small line and the H1 stay. The needed-page warning stays, if
+  there is one. Then comes the section "Edit the page": one sentence on what is required and that
+  changes go public at once, then the same fields as create, then Cancel and Publish changes. The
+  key facts and Delete page are not shown while editing, so the only way out is Cancel or Publish
+  changes.
+- **Public page** (`content-view`). An `<article>` labelled by its H1 (the page's title). Under the
+  H1 are the key facts, Published and Last updated (R-7.1). Then comes the rendered body, and last a
+  small line giving the page's address. No authorship is shown (R-7.27 note).
+- **Document title and focus.** The document title is the page's own title on the public page, and
+  the surface title everywhere else. On client-side navigation, focus goes to the H1.
+
+### Forms and validation
+
+These rules apply to the create form, and to the managing screen in edit mode. It is the same form.
+
+- **Fields.** Title: required, 1–100 characters (R-7.20). Address: required on create and when
+  editing an ordinary page. It must be lowercase letters and numbers in groups joined by single
+  hyphens (R-7.21), and it must not be in use by another page (R-7.22). Body: required, 1–50,000
+  characters, formatted text (R-7.20, R-7.26).
+- **The address rule is stated before input** (R-7.21 note). It is a paragraph under the field
+  (`content-slug-rule`), tied to it by `aria-describedby`, and reads "Use lowercase letters and
+  numbers, in groups joined by single hyphens, like about-us. No capital letters, spaces or
+  underscores, and no hyphen at the start or end." Under it, the **full public address** updates as
+  the person types (`content-resulting-address`). While the address is invalid, that line says the
+  public address will be shown once the address is valid.
+- **Renaming says what it does** (R-7.24). When an ordinary page is edited, the address field's
+  description says "Changing the address moves the page at once. Links to the old address will stop
+  working." (see gap 8).
+- **A page the service needs** has its address as a read-only field, with the description "The
+  service needs this page at this address, so the address cannot be changed." (R-7.25).
+- **When a field is checked.** When the person leaves it, and never on each keystroke. This follows
+  the organizations domain's pattern, because the surface observes the publish button as
+  unavailable until the form is valid. An invalid field gets `isInvalid` and an `errorMessage`
+  directly under it that says what to do: "Enter a title"; "Use only lowercase letters and numbers
+  joined by single hyphens, like hackathon-rules"; "The body is 50,012 characters long. Shorten it
+  to 50,000 characters or fewer." The value the person typed is always kept.
+- **Publish is unavailable until the form is valid** (`publish_disabled_until_valid`). Publish page
+  and Publish changes are `isDisabled` while any field is empty or invalid. Because a disabled
+  button cannot take focus, the reason is given as **visible text before the button**, and is also
+  referenced by `aria-describedby`. While nothing is wrong yet, that text says "Fill in the title,
+  address and body to publish the page." Once something is wrong, it is a `danger` `InlineAlert`
+  titled "Fix N fields to publish the page" (or "…to publish your changes"), with one `Link` per
+  problem to the field's `id`. Each item carries `data-testid="field-error"`. The list does not
+  take `role="alert"` or move focus, because it updates as the person works. Once the form is
+  valid, the text says the person will be asked to confirm.
+- **An address already in use** (R-7.22) can only be known by the service, so it is reported after
+  the person confirms. The confirmation closes and a `danger` `InlineAlert` with `role="alert"`
+  appears at the top of the form, titled "This address is already in use". It names the address,
+  says nothing was created or published, and links to the field. The alert's wrapper takes focus.
+  The address field is marked "Another page already uses this address. Choose a different one."
+  Everything typed is kept, and the existing page is untouched.
+- **Inserting an image** (R-7.26). "Insert image" offers JPEG and PNG files. The uploaded image's
+  reference is inserted into the body at the cursor. The uploading indicator and the failure
+  message are the files domain's (`file-embedded-image`).
+- **Cancel.** On create, it returns to the list. On edit, it returns to view mode with nothing
+  saved. Neither asks first, because nothing has been published.
+- **After publishing.** Creating opens the new page's managing screen, with a `success` alert
+  "Page published" that gives its public address (R-7.7). Publishing changes returns to view mode
+  with a `success` alert "Changes published", and the key facts show the new updated date and the
+  person who made the change (R-7.8, R-7.27). Both alerts use `role="status"`.
+
+### Confirmation dialogs
+
+| Action | Variant | Title | Confirm (test ID) | Other |
+| --- | --- | --- | --- | --- |
+| Publish page | `confirmation` | "Publish this page?" | "Publish page" (`content-publish-confirm`) | Cancel (`content-dialog-cancel`). The body names the public address and says anyone can read it, signed in or not. |
+| Publish changes | `confirmation` | "Publish your changes?" | "Publish changes" (`content-publish-changes-confirm`) | Cancel. The body says readers see the new wording at once, and that the replaced wording is kept on record but cannot be viewed or restored from the service (R-7.8, R-7.23). |
+| Delete page | `destructive` | "Delete "<title>"?" | "Delete page" (`content-delete-confirm`, `danger`) | Cancel. The body says the page and every earlier version go permanently, the address stops answering, links to it will find the not-found page, and this cannot be undone (R-7.9). |
+
+Focus moves into the dialog and stays there, Escape dismisses it, and focus returns to the control
+that opened it. Nothing changes until the confirm button is pressed. After a deletion, the person is
+taken to the list, where a `success` alert "Page removed" names the page and its old address
+(R-7.9).
+
+### Loading, empty, refused, not found
+
+- **Loading.** This follows the users domain's pattern: a `role="status"` row holding a
+  `ProgressCircle` and matching text. The list and the managing screen render their H1 at once (the
+  managing screen uses the surface title "Manage a page" until the page's title arrives). The public
+  page shows only the status row, because its H1 is the page's own title and nothing else stands
+  in for it.
+- **Not found and refused.** These all use the shared missing page (H1 "Page not found",
+  `data-testid="not-found-page"`). It is shown on the public page for an address no page holds and
+  for a malformed address, which look the same to a person (R-7.2, R-7.3). It is shown on the list,
+  the create page and the managing screen to anyone but an administrator (R-7.6, which says
+  "not-found"). And it is shown on the managing screen for an address no page holds. The navigation
+  menu offers the content area only to an administrator (R-7.6). The menu is not this domain's
+  surface, so it is stated here for whoever designs it.
+- **Empty.** The list has no empty state. It can never be empty, because the pages the service needs
+  cannot be removed (R-7.25) and a fresh installation creates them (R-7.12).
+- **An embedded body that is missing** (R-7.29) belongs to the screens that embed it. Following that
+  criterion, the embedding section is left empty and the rest of the screen works. Those screens are
+  other domains'.
+
+### Accessibility obligations
+
+WCAG 2.1 AA applies (P1, J5). The users domain's list applies here too. This domain adds:
+
+- **Formatted text is safe and structured.** The renderer outputs real headings, lists and links,
+  never executes raw markup (R-7.17), and must not break the page's outline. A body's own headings
+  start at H2 under the page's H1. An image written without alternative text is rendered with
+  `alt=""`, and the formatting guide must tell authors to describe their images (see gap 11).
+- **The footer is a `contentinfo` landmark**, provided by the design system's `Footer`. Its links
+  are titled "About this service" through `FooterLinks`' `figcaption`.
+- **Words, not colour.** "Needed by the service" reads "Yes" or "No". The needed-page warning is
+  text. A read-only address is exposed as read-only, and its reason is its description.
+- **Disabled publish buttons explain themselves** in visible text before the button, referenced by
+  `aria-describedby`.
+- **The formatting toolbar** is a labelled `toolbar` with arrow-key movement, and each button has a
+  visible text label rather than an icon.
+- **A link that opens a new tab says so** in its text ("How to format text (opens in a new tab)").
+- **Dates** are `<time datetime>` elements.
+- **Checks still required.** Keyboard use of the formatting toolbar and the image chooser, a
+  screen-reader check of the address rule and the resulting-address line as the person types, and
+  a check of a real body with headings, lists and images through the renderer have not been done.
+  They are required before the build is accepted.
+
+### Test IDs
+
+The users domain's rules apply: one ID per kind of element, an action and an observation on the
+same element share its ID, and the same element keeps its ID on every page. The IDs shared across
+this domain's pages are:
+
+- **The same field on create and edit.** `content-title-field`, `content-slug-field`,
+  `content-body-field`, `content-body-image-button`, `content-slug-rule`,
+  `content-resulting-address`, `content-cancel-button`, `content-duplicate-slug-error`.
+- **The same fact on the managing screen and the public page.** `content-page-address`,
+  `content-published-date`, `content-updated-date`.
+- **Reused from the users domain.** `field-error` and `not-found-page`.
+
+The following bindings are not obvious from their names:
+
+- **The same element serves two names.** `content-publish-button` is both `publish_page` and
+  `publish_disabled_until_valid`. `content-slug-field` is both `edit_slug` and
+  `slug_locked_for_fixed_page`: on a page the service needs, it is read-only. `content-delete-button`
+  is both `delete_page` and `delete_withheld_for_fixed_page`: on a page the service needs, it is
+  absent (the `fixed` and `editing-fixed` stories). `service-level-agreement-link` is
+  `follow_service_level_agreement_link`, `service_level_agreement_link` and `link_target_address`:
+  the target is the link's `href`. On the list, `content-list-title-link` is both
+  `open_page_for_editing` and `page_title`, and `content-list-address-link` is both
+  `open_public_page` and `page_public_address`.
+- **An outcome shown on the screen the person lands on.** `content-create.published_success` is
+  `content-published-success`, which is on the managing screen the person is taken to
+  (`content-edit.created`). `content-edit.deleted_success` is `content-deleted-success`, which is on
+  the list the person is returned to (`content-list.deleted`). R-7.7 and R-7.9 say where the person
+  goes. The adapter reads these after the navigation (see gap 3).
+- **Page wrappers.** `content-page` is the public page's `<article>`. It is
+  `readable_when_signed_out`, and it is also `answer_at_link_target` for the service level agreement
+  link, because a page answering there is that article. When the page does not answer,
+  `not-found-page` appears instead. `site-footer` wraps the footer, for `present_when_signed_out`.
+- **Order.** `ordered_by_title` is `content-list-table`. A test reads the order of the
+  `content-list-title-link`s inside it.
+- **Links in a body.** `follow_body_link` is `content-body-link`, which the renderer puts on every
+  link it renders.
+- **Something that must be absent.** `version_history` is `content-version-history`, and **no story
+  renders it, on purpose**. R-7.23 says nothing in the service shows an earlier version, and the
+  surface's own comment says the observation exists to come back empty. A build must never render
+  an element with this ID (see gap 1).
+- **Other domains should bind to these.** The files domain's `file-embedded-image.upload_body_image`
+  should be `content-body-image-button`, which is the same control. The opportunities domain should
+  use `service-level-agreement-link` on the program cards and the three forms.
+
+**Extra IDs, not named in the surface, that the stories carry for the adapter:**
+`content-list-row` (one table row), `content-publish-changes-dialog` and `content-delete-dialog`
+(the dialogs whose confirm buttons the surface names), and `content-dialog-cancel` (Cancel in every
+dialog of this domain).
+
+### Per-screen notes
+
+**content-footer** — `default`. The footer as a visitor who is not signed in sees it, under a
+placeholder home page. Signed-in viewers see the same footer, so there is no second state.
+
+**content-service-level-agreement-link** — `default`. The link in the cost section of the Code With
+Us learn-more screen. The rest of that screen is a placeholder frame, because no page in the
+surface designs it. What the link leads to is `content-view.default`: a page that answers.
+
+**content-list** — `default` (an administrator; the needed pages still titled by their address,
+R-7.12; one ordinary page), `deleted` (returned here after removing a page, R-7.9), `loading`,
+`not-found` (R-7.6).
+
+**content-create** — `default` (blank; Publish page unavailable, with the reason), `invalid` (an
+empty title and an address with capitals and an underscore, R-7.20, R-7.21), `ready` (valid; the
+full public address shown; Publish page available), `publish-confirm`, `duplicate-slug` (confirmed
+at "about", refused, R-7.22), `not-found`.
+
+**content-edit** — `default` (an ordinary page two administrators have touched, each named and
+linked, R-7.27), `fixed` ("about", never edited: the warning, no Delete, "System" as publisher and
+last editor, "Initial version" as the body, R-7.12, R-7.25, R-7.27), `created` (just created,
+R-7.7), `editing`, `editing-fixed` (address read-only, R-7.25), `invalid` (title cleared, body too
+long, R-7.20), `duplicate-slug` (a rename to "about" refused, R-7.22), `publish-confirm`,
+`changes-published` (R-7.8), `delete-confirm` (R-7.9), `loading`, `not-found`. The terms page's
+broadcast section, and its states, are the notifications domain's.
+
+**content-view** — `default` (the page at "privacy" read by a visitor who is not signed in,
+R-7.1), `loading`, `not-found` (R-7.2, R-7.3).
+
+### Gaps
+
+These are work for the spec. None was filled with invented behaviour. Where a story had to show
+words that no criterion gives, the story or this list says so.
+
+1. **An observation that must be absent.** `content-edit.version_history` is bound to
+   `content-version-history`, which appears in no story, because R-7.23 says there is no history to
+   show. A test can only assert that it is absent. If the contract wants every bound ID to be
+   present somewhere, this observation should become a statement about the page (for example,
+   "only the current wording is offered") rather than a named element.
+2. **How many pages a fresh installation has.** R-7.12 (accepted) says twenty-two pages, all needed
+   by the service. D-content-27's ruling, although that row is obsolete, says the rebuild does not
+   create the seven unlinked guides and scope page. R-7.18 adds the service level agreement page.
+   On those rulings a fresh installation has sixteen pages, not twenty-two. The list's design does
+   not depend on the count, but R-7.12's figure and list need restating.
+3. **Outcomes the surface puts on the wrong page.** `content-create.published_success` and
+   `content-edit.deleted_success` are shown on the screen the person is sent to (R-7.7, R-7.9), not
+   on the page the surface lists them under. They are bound to IDs in `content-edit.created` and
+   `content-list.deleted`. The surface could move them, or the adapter can read them after the
+   navigation.
+4. **Invalid submission against an unavailable button.** R-7.20 says a submission with an empty
+   title or an overlong body is refused with the failing field named. The surface observes the
+   publish button as disabled until the form is valid. The design marks each field when the person
+   leaves it and keeps publishing unavailable, as the organizations domain does (its gap 4). A
+   refusal of such a submission made outside the screen has no wording.
+5. **Message wording.** Every message is the design's own: the needed-page warning, the
+   address-in-use refusal, the success alerts, the dialog texts, the address rule's phrasing, and
+   the "Needed by the service" column heading. R-7.21's note says the rule is stated on the form but
+   does not give its words.
+6. **The public page's address line.** The surface names `content-view.page_address`, but no
+   criterion says the public page shows its own address. The design adds a small line at the end
+   of the article ("Address of this page: /content/privacy") so the observation has something to
+   bind to. If that is not wanted, the observation should be read from the browser's address
+   instead, and the line removed.
+7. **The learn-more screen and the other five service level agreement links.** The surface's route
+   for this link is `/learn-more/code-with-us`, but no page in the surface designs the learn-more
+   screens, and no criterion says what they contain. Only the link is designed. The program cards
+   and the three opportunity forms also carry the link (R-7.18). The opportunities domain left its
+   address to this domain (its gap 22): it is `/content/service-level-agreement`. What the service
+   level agreement says is not in the spec. On a fresh installation it will read "Initial version",
+   like every page the service creates (R-7.12's note warns that this leaves legal pages as
+   placeholders).
+8. **Warning of a rename.** R-7.24's note records that nothing warned the administrator that
+   renaming breaks links. The design states it in the address field's description, because it is
+   true (R-7.24) and costs nothing. It adds no behaviour: there is no extra confirmation and no
+   redirect. This needs a ruling if the spec wants the old silence kept.
+9. **Two administrators editing one page** (R-7.28). A submission carries no record of the version
+   it was based on, so the screen cannot warn of an overwrite, and no `conflict` state is designed.
+   The rarer collision that R-7.28 says is refused "with a service error" has no wording, and no
+   criterion says what the administrator is shown. If the rebuild adds a version check, this screen
+   needs a conflict state and the spec needs its wording.
+10. **Failures not worded.** No criterion says what an administrator sees when publishing, deleting
+    or loading the list fails for a reason other than validation or a clash of addresses.
+11. **The editor's detail.** R-7.26 says "formatting shortcuts" but not which. The six in the
+    toolbar are the design's choice. Which markup dialect is stored, whether there is a preview,
+    and whether an image is inserted with alternative text are not stated. The formatting guide page
+    is itself an editable page that reads "Initial version" until written (R-7.26 note), so authors
+    are offered no real help on a fresh installation. It should include how to describe an image.
+12. **Dates.** No criterion gives the date format or time zone for published, created and updated
+    dates. The stories use "September 19, 2026" as illustration.
+13. **The footer's other content.** R-7.19 covers only the five links. The design system `Footer`'s
+    defaults (the land acknowledgement, the B.C. Government logo, the gov.bc.ca contact block and
+    the copyright line) are kept, because nothing says to replace them. Whether the service wants
+    its own contact details there is not stated.
+14. **Content the spec does not carry.** Every page body in the stories is a placeholder, marked as
+    such. The people named ("Test Administrator", "Test Administrator Two") are synthetic, in the
+    users domain's style, and the page "hackathon-rules" is an invented ordinary page.
