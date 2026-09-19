@@ -130,6 +130,7 @@ Profile: rebuild
 - [design-harness-v1](proposals/design-harness-v1.md)
 - [design-opportunities](proposals/design-opportunities.md)
 - [design-opportunities-2](proposals/design-opportunities-2.md)
+- [design-organizations](proposals/design-organizations.md)
 - [design-users](proposals/design-users.md)
 - [design-users-2](proposals/design-users-2.md)
 - [gates-simulated-v1](proposals/gates-simulated-v1.md)
@@ -166,9 +167,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $351.35847
-- Rulings cost: $239.465281
-- Total cost: $590.823751
-- Agent-held rulings: 123
+- Journal cost: $360.574122
+- Rulings cost: $240.220542
+- Total cost: $600.794664
+- Agent-held rulings: 124
 - Open escalations: 0
 - Open proposals: 0

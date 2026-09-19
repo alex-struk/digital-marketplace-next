@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-19T07:15:04.550Z | design-organizations | G-DESIGN | approve | agent:ux-reviewer | agent-held, unsampled | $0.7552610000000001 | sample |
 | 2026-09-19T06:54:16.637Z | design-opportunities-2 | G-DESIGN | approve | agent:ux-reviewer | agent-held, unsampled | $0.672212 | sample |
 | 2026-09-19T06:50:36.821Z | design-opportunities | G-DESIGN | return | agent:ux-reviewer | agent-held, unsampled | $0.7745110000000001 | sample |
 | 2026-09-19T05:59:07.791Z | design-users-2 | G-DESIGN | approve | agent:tech-lead | agent-held, unsampled | $0.9991049999999999 | sample |

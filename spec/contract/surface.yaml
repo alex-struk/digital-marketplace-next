@@ -589,121 +589,121 @@ pages:
     route: /organizations
     title: "Digital Marketplace Organizations"
     actions:
-      change_page: { test_id: null }
-      open_organization: { test_id: null }
-      create_organization: { test_id: null }
-      my_organizations: { test_id: null }
+      change_page: { test_id: organization-list-page-link }
+      open_organization: { test_id: organization-list-name-link }
+      create_organization: { test_id: organization-create-link }
+      my_organizations: { test_id: organization-list-my-organizations }
     observations:
-      organization_name: { test_id: null }
-      owner_name: { test_id: null }
-      swu_qualified_mark: { test_id: null }
-      twu_qualified_mark: { test_id: null }
-      pagination: { test_id: null }
+      organization_name: { test_id: organization-list-name }
+      owner_name: { test_id: organization-list-owner }
+      swu_qualified_mark: { test_id: organization-swu-qualified-mark }
+      twu_qualified_mark: { test_id: organization-twu-qualified-mark }
+      pagination: { test_id: organization-list-pagination }
       # Being refused the list and being shown an empty one are different answers, and a
       # criterion turns on telling them apart.
-      refused_when_not_permitted: { test_id: null }
+      refused_when_not_permitted: { test_id: organization-list-refused }
 
   - id: organization-create
     domain: organizations
     route: /organizations/create
     title: "Create Organization"
     actions:
-      create_organization: { test_id: null }
-      cancel: { test_id: null }
-      change_logo: { test_id: null }
+      create_organization: { test_id: organization-submit-button }
+      cancel: { test_id: organization-create-cancel }
+      change_logo: { test_id: organization-logo-button }
     observations:
-      field_error: { test_id: null }
-      submit_disabled_until_valid: { test_id: null }
+      field_error: { test_id: field-error }
+      submit_disabled_until_valid: { test_id: organization-submit-button }
 
   - id: organization-edit
     domain: organizations
     route: /organizations/:orgId/edit
     title: "Edit Organization"
     actions:
-      edit_organization: { test_id: null }
-      save_changes: { test_id: null }
-      cancel_editing: { test_id: null }
-      archive_organization: { test_id: null }
-      add_team_members: { test_id: null }
-      approve_pending_member: { test_id: null }
-      remove_team_member: { test_id: null }
-      toggle_member_admin_status: { test_id: null }
-      accept_org_admin_terms: { test_id: null }
-      change_owner: { test_id: null }
-      edit_service_areas: { test_id: null }
-      save_service_areas: { test_id: null }
-      view_swu_terms: { test_id: null }
-      view_twu_terms: { test_id: null }
+      edit_organization: { test_id: organization-edit-button }
+      save_changes: { test_id: organization-save-button }
+      cancel_editing: { test_id: organization-cancel-edit-button }
+      archive_organization: { test_id: organization-archive-button }
+      add_team_members: { test_id: organization-add-team-members-button }
+      approve_pending_member: { test_id: organization-member-approve-button }
+      remove_team_member: { test_id: organization-member-remove-button }
+      toggle_member_admin_status: { test_id: organization-member-admin-toggle }
+      accept_org_admin_terms: { test_id: organization-admin-terms-checkbox }
+      change_owner: { test_id: organization-change-owner-button }
+      edit_service_areas: { test_id: organization-edit-service-areas-button }
+      save_service_areas: { test_id: organization-save-service-areas-button }
+      view_swu_terms: { test_id: organization-view-swu-terms-link }
+      view_twu_terms: { test_id: organization-view-twu-terms-link }
     observations:
-      organization_identifier: { test_id: null }
-      organization_tab: { test_id: null }
-      team_tab: { test_id: null }
-      swu_qualification_tab: { test_id: null }
-      twu_qualification_tab: { test_id: null }
-      changelog_tab: { test_id: null }
-      swu_qualified_badge: { test_id: null }
-      twu_qualified_badge: { test_id: null }
-      owner_badge: { test_id: null }
-      pending_badge: { test_id: null }
-      team_member_row: { test_id: null }
-      team_capabilities: { test_id: null }
-      swu_requirement_two_members: { test_id: null }
-      swu_requirement_all_capabilities: { test_id: null }
-      swu_requirement_terms_accepted: { test_id: null }
-      twu_requirement_service_area: { test_id: null }
-      twu_requirement_terms_accepted: { test_id: null }
-      service_area_checkbox: { test_id: null }
-      not_qualified_notice: { test_id: null }
-      changelog_entry: { test_id: null }
-      field_error: { test_id: null }
+      organization_identifier: { test_id: organization-identifier }
+      organization_tab: { test_id: organization-tab-organization }
+      team_tab: { test_id: organization-tab-team }
+      swu_qualification_tab: { test_id: organization-tab-swu-qualification }
+      twu_qualification_tab: { test_id: organization-tab-twu-qualification }
+      changelog_tab: { test_id: organization-tab-changelog }
+      swu_qualified_badge: { test_id: organization-swu-qualified-badge }
+      twu_qualified_badge: { test_id: organization-twu-qualified-badge }
+      owner_badge: { test_id: organization-owner-badge }
+      pending_badge: { test_id: organization-pending-badge }
+      team_member_row: { test_id: organization-team-member-row }
+      team_capabilities: { test_id: organization-team-capabilities }
+      swu_requirement_two_members: { test_id: organization-swu-requirement-two-members }
+      swu_requirement_all_capabilities: { test_id: organization-swu-requirement-all-capabilities }
+      swu_requirement_terms_accepted: { test_id: organization-swu-requirement-terms-accepted }
+      twu_requirement_service_area: { test_id: organization-twu-requirement-service-area }
+      twu_requirement_terms_accepted: { test_id: organization-twu-requirement-terms-accepted }
+      service_area_checkbox: { test_id: organization-service-area-checkbox }
+      not_qualified_notice: { test_id: organization-not-qualified-notice }
+      changelog_entry: { test_id: organization-changelog-entry }
+      field_error: { test_id: field-error }
       # add_team_members carries the kind of membership the invitation is for. The team
       # surface offers only one, and a criterion turns on every other kind being refused.
-      invalid_membership_type_error: { test_id: null }
+      invalid_membership_type_error: { test_id: organization-invalid-membership-type-error }
 
   - id: organization-swu-terms
     domain: organizations
     route: /organizations/:orgId/sprint-with-us-terms-and-conditions
     title: "Sprint With Us Terms & Conditions"
     actions:
-      accept_terms: { test_id: null }
-      cancel: { test_id: null }
+      accept_terms: { test_id: organization-accept-terms-button }
+      cancel: { test_id: organization-terms-cancel }
     observations:
-      terms_body: { test_id: null }
-      accepted_on_notice: { test_id: null }
+      terms_body: { test_id: organization-terms-body }
+      accepted_on_notice: { test_id: organization-terms-accepted-on }
 
   - id: organization-twu-terms
     domain: organizations
     route: /organizations/:orgId/team-with-us-terms-and-conditions
     title: "Team With Us Terms & Conditions"
     actions:
-      accept_terms: { test_id: null }
-      cancel: { test_id: null }
+      accept_terms: { test_id: organization-accept-terms-button }
+      cancel: { test_id: organization-terms-cancel }
     observations:
-      terms_body: { test_id: null }
-      accepted_on_notice: { test_id: null }
+      terms_body: { test_id: organization-terms-body }
+      accepted_on_notice: { test_id: organization-terms-accepted-on }
 
   - id: organization-user-memberships
     domain: organizations
     route: /users/:userId?tab=organizations
     title: "My Organizations"
     actions:
-      approve_invitation: { test_id: null }
-      reject_invitation: { test_id: null }
-      leave_organization: { test_id: null }
-      create_organization: { test_id: null }
-      open_organization: { test_id: null }
+      approve_invitation: { test_id: membership-approve-button }
+      reject_invitation: { test_id: membership-reject-button }
+      leave_organization: { test_id: membership-leave-button }
+      create_organization: { test_id: organization-create-link }
+      open_organization: { test_id: membership-organization-link }
     observations:
-      owned_organizations_table: { test_id: null }
-      affiliated_organizations_table: { test_id: null }
-      pending_badge: { test_id: null }
-      team_member_count: { test_id: null }
-      swu_qualified_mark: { test_id: null }
-      empty_owned_message: { test_id: null }
-      empty_affiliated_message: { test_id: null }
+      owned_organizations_table: { test_id: membership-owned-table }
+      affiliated_organizations_table: { test_id: membership-affiliated-table }
+      pending_badge: { test_id: organization-pending-badge }
+      team_member_count: { test_id: membership-team-member-count }
+      swu_qualified_mark: { test_id: organization-swu-qualified-mark }
+      empty_owned_message: { test_id: membership-empty-owned }
+      empty_affiliated_message: { test_id: membership-empty-affiliated }
       # An invitation arrives as a message offering to accept or to decline, and both
       # choices land here with the answer already prepared and waiting to be confirmed.
-      accept_confirmation: { test_id: null }
-      decline_confirmation: { test_id: null }
+      accept_confirmation: { test_id: membership-accept-dialog }
+      decline_confirmation: { test_id: membership-decline-dialog }
 
   - id: user-sign-in
     domain: users
@@ -949,23 +949,23 @@ pages:
     route: /users/me?tab=organizations
     title: "My Organizations"
     actions:
-      approve_invitation: { test_id: null }
-      reject_invitation: { test_id: null }
-      leave_organization: { test_id: null }
-      create_organization: { test_id: null }
-      open_organization: { test_id: null }
+      approve_invitation: { test_id: membership-approve-button }
+      reject_invitation: { test_id: membership-reject-button }
+      leave_organization: { test_id: membership-leave-button }
+      create_organization: { test_id: organization-create-link }
+      open_organization: { test_id: membership-organization-link }
     observations:
-      owned_organizations_table: { test_id: null }
-      affiliated_organizations_table: { test_id: null }
-      pending_badge: { test_id: null }
-      team_member_count: { test_id: null }
-      swu_qualified_mark: { test_id: null }
-      empty_owned_message: { test_id: null }
-      empty_affiliated_message: { test_id: null }
+      owned_organizations_table: { test_id: membership-owned-table }
+      affiliated_organizations_table: { test_id: membership-affiliated-table }
+      pending_badge: { test_id: organization-pending-badge }
+      team_member_count: { test_id: membership-team-member-count }
+      swu_qualified_mark: { test_id: organization-swu-qualified-mark }
+      empty_owned_message: { test_id: membership-empty-owned }
+      empty_affiliated_message: { test_id: membership-empty-affiliated }
       # An invitation arrives as a message offering to accept or to decline, and both
       # choices land here with the answer already prepared and waiting to be confirmed.
-      accept_confirmation: { test_id: null }
-      decline_confirmation: { test_id: null }
+      accept_confirmation: { test_id: membership-accept-dialog }
+      decline_confirmation: { test_id: membership-decline-dialog }
 
   - id: evaluation-panel-dashboard
     domain: evaluation
