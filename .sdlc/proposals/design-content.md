@@ -54,3 +54,15 @@ All 14 are recorded in `DESIGN.md`. None was filled by inventing behaviour.
 - **Editor detail.** Which formatting shortcuts, which markup dialect, whether there is a preview, and how images get alternative text are all unstated.
 - **Dates and footer.** No date format or time zone is given. Whether the footer keeps the design system's default gov.bc.ca contact block is not stated.
 - **Placeholder wording.** Every message and every page body in the stories is the design's own wording or a marked placeholder.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:ux-reviewer
+
+Question: do the six content-domain screens serve the content criteria, and are they built from the design system? Ruling: approve. All 27 states in design/screens.yaml have a story. The regenerated design/report.json (07:34, after the stories were written) shows every content story compiling with zero axe violations, and the catalogue totals are 243 stories, 0 violations, 0 failures. A search of the content stories finds no hard-coded colour or size values; they use only the design-system tokens the earlier domains already use. Commands, fields, alerts and dialogs are the design system's own components. The body editor and formatted-text renderer are this project's own, which the persona accepts: the design system provides neither, they are built from react-aria-components and design-system parts styled only with tokens, and DESIGN.md names them as the project's own. Every test ID in surface.yaml is filled. version_history is deliberately left without a story, because R-7.23 says nothing may show an earlier version, and gap 1 records this. The tier is STANDARD and no low confidence was reported, so there is nothing to escalate. What would change the ruling: an accessibility violation in any content story on a rescan, a hard-coded style value, a replacement for a component the design system already provides, or a state in screens.yaml without its story.
+
+**Conditions:**
+- Before the build is accepted, do the accessibility checks DESIGN.md lists as still required: keyboard use of the formatting toolbar and the image chooser, a screen-reader check of the address rule and the resulting-address line as the person types, and a real body with headings, lists and images run through the renderer.
+- A build must never render an element with data-testid content-version-history (R-7.23).
+- The 14 gaps in DESIGN.md's content section go to the spec owner. The most pressing are the page count for a fresh installation (R-7.12 says 22, the rulings make it 16) and whether renaming a page should warn that old links break (R-7.24).
