@@ -61,3 +61,15 @@ I've designed the seven organizations screens. The pipeline hasn't compiled or s
 I fixed the `landmark-unique` failure on the default stories of `organization-user-memberships` and `organization-user-memberships-self`. The scan now needs to run again to confirm it clears.
 
 **Journal addition:** Both stories had two landmarks with the same role and the same name. The "Organizations you own" section is labelled by its heading. The scrollable table wrapper inside it is also a region, and it is labelled by the table's caption, which read the same "Organizations you own". I changed that caption in both files to "Owned organizations, with team size and Sprint With Us qualification", so each region now has its own name. Nothing else changed: no test IDs, structure, other stories, `DESIGN.md` or `screens.yaml`. The empty-state stories had no inner table region, so they had no clash and were left alone. The affiliated table's caption was already different from its section heading.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:ux-reviewer
+
+Question: do the seven organizations screens serve the criteria and use the design system? Ruling: approve. design/report.json was generated at 07:13 and committed with the landmark-unique fix at 07:14. It shows typecheck and build passing, and all 51 organizations/* stories with zero axe violations. The memberships default stories now carry the renamed caption, so the landmark clash is gone. A search of the organizations stories found no hard-coded colour, px or rem values; only layout keywords such as 100% remain. The screens are built from @bcgov design-system components (TextField, Button, ButtonGroup, Link, InlineAlert, Modal with AlertDialog or Dialog, Select, Checkbox). Pagination and Requirement list are the only new hand-built components, both declared in DESIGN.md as the project's own and styled only with tokens. The 16 gaps are recorded rather than invented, and a missing state such as the empty organization list is acceptable. Tier is STANDARD, so there is no escalation. This would change to return if a rescan showed any violation, or if the installed design system turned out to have a pagination component and the hand-built one were kept.
+
+**Conditions:**
+- If the installed @bcgov/design-system-react-components has a pagination component, replace the project's Pagination with it before build.
+- The manual accessibility checks listed in DESIGN.md (keyboard-only use of team-table row commands and dialogs, screen-reader checks of the requirement lists and of the dialog opened from an invitation email, 400% zoom of the team table) must be done before the build is accepted.
+- Spec gaps 1, 10, 11 and 12 (list refusal, refusals no screen triggers, two-step dialog actions, who may accept terms) go to the spec owner for a ruling.
