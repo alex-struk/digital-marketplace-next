@@ -45,3 +45,15 @@ Every control states the accepted types and the 10 MB limit next to its trigger,
 12. **Resize outcomes:** R-8.21 and R-8.13 leave the person's view of an image that couldn't be resized, and one over both limits, unstated.
 
 Keyboard, screen-reader and focus checks on the choosers are listed in `DESIGN.md` as still to be done by hand before the build is accepted.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:ux-reviewer
+
+Question: do the six files entries serve the files criteria and come from the design system? Ruling: approve. design/report.json on the branch lists all 28 new stories (file-upload x7, file-description x3, file-download x3, file-attachment-control x6, file-image-picker x4, file-embedded-image x5) with zero axe violations (271 stories in the catalogue, 0 violations, 0 failed), and every state in design/screens.yaml has a matching story. A search of the new stories finds no hard-coded colour, px, rem or em value. The only literals are maxWidth 100% and height auto on picture previews, which limit reflow rather than set spacing and are declared in DESIGN.md. Design-system components (Button, TextField, Link, InlineAlert, ProgressCircle, Text, Heading) are used where they exist, with FileTrigger from react-aria-components as the earlier domains use it. The three project-owned pieces (attachment list, picture preview, response reference) are plain HTML styled with tokens and named in DESIGN.md as the project's own, which this persona accepts. Test IDs requested by other domains are reused. Treating the three service addresses as response references follows the already-approved scheduled-transition-trigger precedent, and DESIGN.md maps each test ID to the part of the HTTP answer it names, so it needs no escalation at STANDARD tier. The 13 gaps are recorded, not filled with invented behaviour. The ruling would change to return if a later scan showed any violation, if a literal colour or spacing value appeared, or if a project-owned component turned out to duplicate one the design system has; it would change to escalate if the tier were raised to HIGH.
+
+**Conditions:**
+- Before the build is accepted, do the checks DESIGN.md lists as still to be done by hand: keyboard use of each file chooser, a screen-reader pass of the 'Will be saved as' line as someone types, and the focus move after a refused save.
+- Send gap 8 to the opportunities and users domains: their stories should state the file limits before a file is chosen (R-8.17) and restrict the profile picker to acceptedFileTypes image/jpeg and image/png (R-8.30).
+- The content domain's renderer must add data-testid="content-body-image" to every image it renders, and the proposals domain's add_attachment should bind to attachment-add-button, as DESIGN.md asks.
