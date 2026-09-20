@@ -2,7 +2,7 @@
   "pipeline": {
     "repo": "alex-struk/agentic-sdlc",
     "ref": "main",
-    "commit": "c09b390cc8a6d236c583cbbc790f97097797488e"
+    "commit": "bcdee03d0a04797739252d12b137d39fc5898c64"
   },
   "packs": [
     {
@@ -41,5 +41,5 @@
       "name": "bcgov-agent-skills"
     }
   ],
-  "created": "2026-09-19T10:10:24.969Z"
+  "created": "2026-09-20T22:28:36.059Z"
 }

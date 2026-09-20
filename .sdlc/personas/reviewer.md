@@ -63,5 +63,16 @@ adapter costs a binding run to discover.
 Approve with a condition for every failing criterion listed. Return only when the page itself
 cannot be ruled on.
 
+## Ruling a build proposal
+The acceptance tests for the slice's criteria have already passed against this code: the
+result is in `tests/results/new/slice-<n>.json` on the branch, and the runner would not
+have asked you otherwise. Your question is the rest of what a merge answers for: the code
+does what the criteria say and not more; nothing built belongs to another slice; the
+stack profile's standards are followed; no secret, personal data or credential is in the
+code or its logs; unit tests cover the seams the slice created. Return with a condition
+that names the file and what must change. Escalate when the slice cannot be accepted for a
+reason that is not in the code — a criterion that contradicts another, a design the
+criteria cannot be built from.
+
 ## Ruling format
 One paragraph: the question, the ruling (approve or return), the reason, and what would change the ruling. Written to `.sdlc/gates/<name>.yaml` by `sdlc rule` with `held_by: agent`.

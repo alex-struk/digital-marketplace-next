@@ -1,3 +1,8 @@
+---
+# The gates this persona never rules alone: the runner escalates them to `escalate_to`
+# without asking for a turn. The prose below says why; this is what the runner acts on.
+escalates: [G-POL]
+---
 # Persona: tech-lead (holds G-POL when configured)
 
 ## Cares about

@@ -1,6 +1,12 @@
 ---
 name: stack-openshift-ts
 description: Coding, testing, auth and deploy standards for the openshift-ts stack profile, built on bcgov/quickstart-openshift (React/Vite/TanStack Router frontend, NestJS/Prisma/Postgres backend, Keycloak OIDC, OpenAPI-first APIs).
+# What this stack's toolchain generates. `init` adds these to the project's `.gitignore`,
+# so compiled output never reaches a proposal — where it is not evidence, and where it is
+# large enough to crowd the code out of the diff a gate is ruled on.
+ignore:
+  - "app/*/dist/"
+  - "app/frontend/.vite/"
 ---
 
 ## Use when
