@@ -1,0 +1,26 @@
+{
+  "name": "@digital-marketplace/migrations",
+  "private": true,
+  "version": "0.1.0",
+  "description": "The kept PostgreSQL schema's Knex migration history, and the rebuild's migrations appended to it.",
+  "type": "commonjs",
+  "scripts": {
+    "migrate": "knex --knexfile knexfile.cjs migrate:latest",
+    "migrate:rollback": "knex --knexfile knexfile.cjs migrate:rollback",
+    "migrate:status": "knex --knexfile knexfile.cjs migrate:status",
+    "seed": "node scripts/seed.cjs",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "knex": "3.3.0",
+    "pg": "8.23.0"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.8",
+    "@electric-sql/pglite-socket": "0.2.11",
+    "@types/node": "22.20.4",
+    "typescript": "5.9.3",
+    "vitest": "5.0.1"
+  }
+}
