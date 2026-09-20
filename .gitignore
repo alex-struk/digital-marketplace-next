@@ -9,3 +9,4 @@ tests/playwright-report/
 design/storybook-static/
 app/*/dist/
 app/frontend/.vite/
+.agents/
