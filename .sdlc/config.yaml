@@ -22,7 +22,7 @@ oracle:
   db: { service: db, user: digmkt, database: digmkt }
   instances: 4
 targets:
-  new: { base_url: http://localhost:8080, identity: sandbox-idp }
+  new: { base_url: http://localhost:3000, identity: sandbox-idp }
 policy:
   gates:
     G0: { holder: "agent:product-owner", escalate_to: tech-lead, human_sample_per_week: 5 }
