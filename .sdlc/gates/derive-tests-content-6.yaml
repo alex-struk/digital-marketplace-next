@@ -1,0 +1,11 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Verified against the branch: spec/contract/surface.yaml:1410 gives content-view only page_address, page_title, page_body, the two dates, readable_when_signed_out and not_found_for_unknown_address, with no observation that distinguishes markup which took effect from markup shown as text, so no assertion on page_body can pass against a conforming service and fail against one that executes an embedded body. The screens that embed a body (organization-swu-terms.terms_body, organization-twu-terms.terms_body, evaluation-instructions-swu/twu.instructions_body) embed pages no surface addresses by handle, and tests/seed/003-content.sql seeds only about-us, so no second rendering of an authored body can be produced — the same wall already recorded for R-7.14. The remaining clause is already asserted by tests/acceptance/content/R-7.1.spec.ts against the same page and observation, so a reduced R-7.17 file would have reported the whole criterion met on borrowed evidence, which is the defect the previous ruling named. Both blocked reasons name real missing surface, the entry matches the file's established blocked/Unblocked form, and the diff touches only the deleted spec and that entry; typecheck passed with no diagnostics under acceptance/content and the tests-check warnings are pre-existing and in other domains. Noted for the spec stage, carried as no condition: R-7.14 and R-7.17 are opposed on both clauses and both sit accepted at v1, which only matters once the contract unblocks them.
+conditions: []
+cost: 1.1922745000000001
+turns: 24
+session: "c88deab5-b25a-422a-b4c2-6551fe6a7030"
+at: 2026-09-21T16:59:55.787Z

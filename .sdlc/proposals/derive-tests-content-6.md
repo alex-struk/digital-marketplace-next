@@ -30,3 +30,22 @@ That leaves only *the body is rendered as formatted text*. I could have kept the
 **Surface gaps for the contract stage, by name.** An observation on `content-view` distinguishing markup that took effect from markup that reached the reader as text. A seed handle for one of the service's own embedded pages — the program qualification terms or evaluation instructions bodies — and an observation of that body as the embedding screen renders it.
 
 **Scope.** Nothing else was touched. One file deleted under `tests/acceptance/content/`, one entry added to `tests/acceptance/not-testable.yaml`. No other spec file was re-derived, no header date rewritten, no existing not-testable entry altered. Nothing under `spec/`, `tests/seed/`, `tests/fixtures/` or the other read-only paths was modified, and `tests/acceptance/attestations.yaml` neither needed nor received a change — it is empty and names no file. I was not able to run a YAML parse to confirm the file loads, as the sandbox declined the interpreter; I verified the entry by reading it back instead. It is a plain double-quoted scalar with no embedded double quotes, matching the style of every entry around it.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Verified against the branch: spec/contract/surface.yaml:1410 gives content-view only page_address, page_title, page_body, the two dates, readable_when_signed_out and not_found_for_unknown_address, with no observation that distinguishes markup which took effect from markup shown as text, so no assertion on page_body can pass against a conforming service and fail against one that executes an embedded body. The screens that embed a body (organization-swu-terms.terms_body, organization-twu-terms.terms_body, evaluation-instructions-swu/twu.instructions_body) embed pages no surface addresses by handle, and tests/seed/003-content.sql seeds only about-us, so no second rendering of an authored body can be produced — the same wall already recorded for R-7.14. The remaining clause is already asserted by tests/acceptance/content/R-7.1.spec.ts against the same page and observation, so a reduced R-7.17 file would have reported the whole criterion met on borrowed evidence, which is the defect the previous ruling named. Both blocked reasons name real missing surface, the entry matches the file's established blocked/Unblocked form, and the diff touches only the deleted spec and that entry; typecheck passed with no diagnostics under acceptance/content and the tests-check warnings are pre-existing and in other domains. Noted for the spec stage, carried as no condition: R-7.14 and R-7.17 are opposed on both clauses and both sit accepted at v1, which only matters once the contract unblocks them.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `59c489137730a034857d889304e74ba8a9c8f586`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/content/`, which this proposal answers for.
+
+    No diagnostics.
