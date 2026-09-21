@@ -174,3 +174,21 @@ redo:
       check that no proposal was submitted, allow time for a reason where a
       malformed value was typed, and treat an archived organization that is not
       offered as a choice as refused
+  - id: R-7.17
+    version: 1
+    why: the test signs in as an administrator and authors a page through the create
+      screen — entering a title, an address and a body, then publishing and
+      confirming — in order to obtain a body containing markup; the criterion
+      asks only that a page's body be rendered as formatted text and that markup
+      embedded in it never be executed, and asks for nobody to author a page.
+    verb: test-overreaches
+  - id: R-7.18
+    version: 1
+    why: after reading the page while signed out, the test signs in as an
+      administrator and asserts that the page's editing screen shows a
+      fixed-page warning, that its address field is locked and that its delete
+      control is withheld; the criterion asks only that the service level
+      agreement page stand on a fresh installation as one the service creates
+      for itself, so that the screens linking to it resolve, and says nothing
+      about an editing screen or its controls.
+    verb: test-overreaches
