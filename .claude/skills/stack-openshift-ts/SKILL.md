@@ -7,6 +7,14 @@ description: Coding, testing, auth and deploy standards for the openshift-ts sta
 ignore:
   - "app/*/dist/"
   - "app/frontend/.vite/"
+# What this stack's toolchain writes and the project commits: a resolved dependency tree
+# and the API client generated from the contract. They belong in the repository and they
+# are never evidence about a change, so they are left out of the diff a gate is ruled on,
+# where one of them can be larger than the whole prompt budget.
+bulk:
+  - "app/package-lock.json"
+  - "app/*/package-lock.json"
+  - "app/frontend/src/api/contract.d.ts"
 ---
 
 ## Use when

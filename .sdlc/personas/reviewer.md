@@ -113,5 +113,34 @@ the suite could not exercise is still rulable. Escalate when the slice cannot be
 for a reason that is not in the code — a criterion that contradicts another, a design the
 criteria cannot be built from.
 
+## A condition whose work belongs to another stage
+
+Every condition you attach to a return is read by the stage that acts on it, and that stage
+can only change what its own run produces. A condition naming something else — an artifact
+another stage wrote, a file its workspace does not even hold — is an instruction it cannot
+carry out, and an agent told to do something it cannot do either fails or finds a way round
+it. A test that reaches past its criterion has its own form, above. So does everything else
+whose work is another stage's:
+
+```
+addressed-to <stage>: <what that stage has to change, and what showed it>
+```
+
+The stage is the one that would produce that artifact again: `plan` for what a slice claims,
+`design` for a screen, `archaeology` for recovered evidence, `derive-tests` for a domain's
+suite, `build` for the application. The condition is filed where that stage reads it and is
+left out of the list the stage you are returning is given — which is told the condition
+exists and which stage it went to, so it can see why its list is shorter than your ruling.
+
+This reaches an artifact whose own gate has already approved it, which is the case it exists
+for: what downstream work proves about an upstream decision is routinely not knowable when
+that decision is ruled. Reopening is not accepting. The request changes nothing by itself,
+and what the addressed stage produces is a fresh proposal at its own gate, ruled there. An
+approval may not carry the form at all.
+
+Say what has to change and what showed it, specifically. The stage it reaches sees none of
+what you are looking at — not this proposal, not the diff, not the result — so your reason is
+the whole of what travels, and a condition carrying none is refused.
+
 ## Ruling format
 One paragraph: the question, the ruling (approve or return), the reason, and what would change the ruling. Written to `.sdlc/gates/<name>.yaml` by `sdlc rule` with `held_by: agent`.

@@ -2,7 +2,7 @@
   "pipeline": {
     "repo": "alex-struk/agentic-sdlc",
     "ref": "main",
-    "commit": "589d90dbb27c6574de386fb27337c1bea21c86eb"
+    "commit": "231c0bdcd84e7d6061222c19925a31c0a630dcbc"
   },
   "packs": [
     {
@@ -41,12 +41,12 @@
       "name": "bcgov-agent-skills"
     }
   ],
-  "created": "2026-09-20T22:48:24.593Z",
   "briefs": {
-    "architect.md": "da8b1879c9672d19",
+    "architect.md": "57e2a5bcb1f9847d",
     "product-owner.md": "d75f8d91858b842d",
-    "reviewer.md": "be9e337fa9c25520",
-    "tech-lead.md": "7e1fd3196df8d19d",
-    "ux-reviewer.md": "b1c0bc59cf7949b2"
-  }
+    "reviewer.md": "fa9b56520f8e6b03",
+    "tech-lead.md": "3347a0a8e7a3c3c9",
+    "ux-reviewer.md": "958a8ad783f0caf1"
+  },
+  "created": "2026-09-21T05:31:39.816Z"
 }
