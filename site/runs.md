@@ -11,6 +11,8 @@
 - 18:14:10 run verify: regenerated .sdlc/runs/2026-09-21.md, site/runs.html, site/runs.md
 - 18:53:17 verify slice 1: R-7.1, R-7.2, R-7.3, R-7.4, R-7.12, R-7.17, R-7.18, R-7.19 have no binding on the new target yet.
 - 18:53:17 run verify: regenerated .sdlc/runs/2026-09-21.md, site/runs.html, site/runs.md
+- 19:41:18 verify slice 1: returned — the sandbox did not start, so nothing was verified. the sandbox is not up: its identity dependency did not answer at http://localhost:8080/realms/digital-marketplace Next: sdlc run build --slice 1 --revise
+- 19:41:18 run verify: regenerated .sdlc/runs/2026-09-21.md, site/runs.html, site/runs.md
 
 # Run record 2026-09-20
 
