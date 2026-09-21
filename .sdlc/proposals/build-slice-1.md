@@ -41,12 +41,12 @@ A clean `rm -rf node_modules && npm install && npm run check` now passes: three 
 
 npm install in app/ failed:
 npm error
-npm error Error: ENOENT: no such file or directory, open '/home/alstruk/GitHub/digital-marketplace-next/app/node_modules/.bin/prisma_schema_build_bg.wasm'
+npm error Error: ENOENT: no such file or directory, open './app/node_modules/.bin/prisma_schema_build_bg.wasm'
 npm error     at Object.openSync (node:fs:561:18)
 npm error     at Object.readFileSync (node:fs:445:35)
-npm error     at /home/alstruk/GitHub/digital-marketplace-next/app/node_modules/.bin/prisma:49:9832
-npm error     at /home/alstruk/GitHub/digital-marketplace-next/app/node_modules/.bin/prisma:2:263
-npm error     at Object.<anonymous> (/home/alstruk/GitHub/digital-marketplace-next/app/node_modules/.bin/prisma:259:154)
+npm error     at ./app/node_modules/.bin/prisma:49:9832
+npm error     at ./app/node_modules/.bin/prisma:2:263
+npm error     at Object.<anonymous> (./app/node_modules/.bin/prisma:259:154)
 npm error     at Module._compile (node:internal/modules/cjs/loader:1854:14)
 npm error     at Object..js (node:internal/modules/cjs/loader:1985:10)
 npm error     at Module.load (node:internal/modules/cjs/loader:1577:32)
@@ -55,18 +55,18 @@ npm error     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19) {
 npm error   errno: -2,
 npm error   code: 'ENOENT',
 npm error   syscall: 'open',
-npm error   path: '/home/alstruk/GitHub/digital-marketplace-next/app/node_modules/.bin/prisma_schema_build_bg.wasm'
+npm error   path: './app/node_modules/.bin/prisma_schema_build_bg.wasm'
 npm error }
 npm error
 npm error Node.js v24.16.0
-npm error A complete log of this run can be found in: /home/alstruk/.npm/_logs/2026-09-20T22_03_55_913Z-debug-0.log
+npm error A complete log of this run can be found in: ~/.npm/_logs/2026-09-20T22_03_55_913Z-debug-0.log
 npm --prefix app run check failed:
 Node.js v24.16.0
 npm error Lifecycle script `typecheck` failed with error:
 npm error code 1
-npm error path /home/alstruk/GitHub/digital-marketplace-next/app/backend
+npm error path ./app/backend
 npm error workspace @digital-marketplace/backend@0.1.0
-npm error location /home/alstruk/GitHub/digital-marketplace-next/app/backend
+npm error location ./app/backend
 npm error command failed
 npm error command sh -c tsc --noEmit -p tsconfig.json
 
@@ -76,7 +76,7 @@ node:internal/modules/cjs/loader:1503
 
 Error: Cannot find module '../lib/tsc.js'
 Require stack:
-- /home/alstruk/GitHub/digital-marketplace-next/app/node_modules/.bin/tsc
+- ./app/node_modules/.bin/tsc
     at Module._resolveFilename (node:internal/modules/cjs/loader:1500:15)
     at wrapResolveFilename (node:internal/modules/cjs/loader:1071:27)
     at defaultResolveImplForCJSLoading (node:internal/modules/cjs/loader:1095:10)
@@ -85,19 +85,19 @@ Require stack:
     at wrapModuleLoad (node:internal/modules/cjs/loader:255:19)
     at Module.require (node:internal/modules/cjs/loader:1600:12)
     at require (node:internal/modules/helpers:153:16)
-    at Object.<anonymous> (/home/alstruk/GitHub/digital-marketplace-next/app/node_modules/.bin/tsc:2:1)
+    at Object.<anonymous> (./app/node_modules/.bin/tsc:2:1)
     at Module._compile (node:internal/modules/cjs/loader:1854:14) {
   code: 'MODULE_NOT_FOUND',
   requireStack: [
-    '/home/alstruk/GitHub/digital-marketplace-next/app/node_modules/.bin/tsc'
+    './app/node_modules/.bin/tsc'
   ]
 }
 
 Node.js v24.16.0
 npm error Lifecycle script `typecheck` failed with error:
 npm error code 1
-npm error path /home/alstruk/GitHub/digital-marketplace-next/app/frontend
+npm error path ./app/frontend
 npm error workspace @digital-marketplace/frontend@0.1.0
-npm error location /home/alstruk/GitHub/digital-marketplace-next/app/frontend
+npm error location ./app/frontend
 npm error command failed
 npm error command sh -c tsc --noEmit -p tsconfig.json
