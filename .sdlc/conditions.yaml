@@ -1,0 +1,23 @@
+conditions:
+  - ref: build-slice-1-4#1
+    text: "The account reports R-7.12 and R-7.17 as criteria this slice treated as
+      its own to answer for and exercised. verify records both as never asserted
+      against the application, and what stands behind the claim is one
+      hand-driven session nobody can repeat: no Docker, no browser, and a
+      stand-in database that dropped its connection and answered a request with
+      a 500 mid-run. Driving the running application was the right response to
+      the last ruling and what it found reads as correct; presenting it as
+      having exercised a criterion is not, because a criterion is asserted by
+      the acceptance suite and by nothing else. In the next revision's account,
+      say what the session showed and say plainly that neither criterion is
+      asserted. Keep what that session put into the tree:
+      app/frontend/tests/content-view.test.tsx pins the seeded page's rendered
+      wording and both of its dates, and
+      app/frontend/tests/formatted-text.test.tsx is where the never-executed
+      behaviour is held."
+    from: build-slice-1-4
+    family: build-slice-1
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-09-21T23:10:55.272Z
