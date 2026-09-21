@@ -1,0 +1,13 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  There is no verify result for slice 1 on this branch, so nothing has been established about R-7.1, R-7.2, R-7.3, R-7.4, R-7.17, R-7.18 or R-7.19 in either direction and an approval is refused. The three conditions this stage could carry were carried: R-7.12 has moved to the Slice 5 screen that can demonstrate it, the identity provider's README now names the test that holds the realm-key rule, and the egress check passes. What remains is that the proposal writes off R-7.17 and R-7.18 as unexercisable on the strength of tests that were replaced before this revision began, and that one of the replacements asserts something its criterion does not say. A current pass for this tree, covering R-7.17 and R-7.18, is what would change the ruling.
+conditions:
+  - "The proposal's account of its own work says the acceptance tests for R-7.17 and R-7.18 sign in as an administrator, author a page through the create screen, and assert on a page's editing screen, and that both criteria therefore remain unestablished for this tree. The content domain's tests for those two criteria were re-derived and merged before this revision began, and neither signs anybody in: one reads the seeded ordinary page while signed out and checks that the formatting marks in its wording were rendered rather than shown, and the other follows the service level agreement link and checks that an answer stands at the address it leads to. The seeded ordinary page's third version carries a bold-marked word, so the first test has the body it needs. Do not carry that claim into the next revision's account, and treat R-7.17 and R-7.18 as criteria this slice is answerable for and must be exercised against."
+  - "addressed-to derive-tests: the content domain's test for R-7.17 asserts that the rendered page body matches no angle bracket. The criterion says a body's embedded markup is never executed; it does not say a body may not show an angle bracket, so a page whose wording legitimately contains 'a < b', rendered as text and never executed, meets the criterion and fails the test. The page the test reads is the seed's ordinary page, whose wording contains no markup at all, so the assertion also establishes nothing about the clause it stands in for — it would pass unchanged against an application that executed embedded markup. Replace it with an assertion that follows from what the criterion states, or record the never-executed clause as not testable, which the test's own note already argues: the surface hands back the rendered body as text, so an executed body and a stripped one come back alike."
+cost: 1.700411
+turns: 9
+session: "b820033f-5488-4964-aeef-f11265945a42"
+at: 2026-09-21T16:45:56.595Z
