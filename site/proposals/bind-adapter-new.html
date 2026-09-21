@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">140</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">140</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">128</span></a></li><li><a href="../runs.html">Run log <span class="count">12</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-21 03:27</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> Both files are written and verified against the contract.</p>
+<p>Both files are written and verified against the contract. Here is my journal.</p>
+<hr>
+<p><strong>What I was asked to do, and what I found</strong></p>
+<p>I wrote the adapter binding the abstract <code>Surface</code> to the target called &quot;new&quot;, running at the address the pipeline gave me, and the <code>bindings.yaml</code> beside it. I opened the target in a browser and bound against what is on the screen; there is no source in this workspace and I used none.</p>
+<p>The target is a single-page client with its own router in front of a service. Four addresses render a page of their own: the home page at <code>/</code>, a published page at <code>/content/:slug</code>, the three program explainers at <code>/learn-more/:program</code>, and <code>/status</code>, which answers <code>OK</code> as plain text from the service rather than the client. Every other address the surface names — the dashboard, all the opportunity, proposal, organization, user and evaluation screens, the content management screens, the notice and sign-in screens — is answered by the client&#39;s own &quot;Page not found&quot; screen. I checked each of them by opening it, including the parameterised ones opened with the seeded identifiers from <code>tests/seed/manifest.yaml</code>, so that &quot;the route needs a value&quot; was never the reason anything was reported missing.</p>
+<p>There is no sign-in of any kind. <code>/sign-in</code> and <code>/auth/sign-in</code> both end on &quot;Page not found&quot;, and the home page&#39;s own &quot;Sign in&quot; link leads to the first of them. No identity provider form is reachable from the target, so no session can be established and no screen that would need one can be reached from any state. <code>signIn</code> still makes the attempt at run time — the sign-in screen, then the home page&#39;s offer, then a username-and-password form wherever it lands — and reports <code>unbound: signIn.&lt;persona id&gt; — …</code> with what it actually found, naming the addresses it tried. The username comes from the persona table and the password only from the environment variable; neither the adapter nor the bindings file contains a password. Signing in as the anonymous visitor is the one case that works, because being signed out is the whole of that state.</p>
+<p>The file addresses under <code>/api</code> are not usable either. A validation layer shaped like the contract sits in front of them — a GET on the collection is refused as a wrong method, a JSON body as a wrong media type, a malformed read-access part as a bad request — but nothing is registered behind it: a well-formed upload answers 404 <code>Cannot POST /api/files</code>, and a well-formed identifier answers 404 <code>Cannot GET /api/files/&lt;id&gt;</code>. So nothing can be stored and nothing read back, and the whole files domain is unbound, as are the attachment, image-picker and embedded-image controls, whose host forms are not pages here either.</p>
+<p><strong>What is bound</strong></p>
+<p>Twenty-eight members across five pages: the home page&#39;s three links and its readable content; <code>/status</code> as both the request that runs pending transitions and the reading that the service is up; the footer&#39;s five links, as controls and as the addresses they lead to, and the footer itself; the service level agreement link on the Code With Us explainer, its address and what the service answers at it; and the published-page screen — its title, body, address, published and updated dates, its readability signed out, and the not-found answer at an address with no page behind it. The content seed is present and correct on this target: the one administrator-made page carries its seeded identifier, title, dates and third-version body, with the markdown rendered.</p>
+<p><strong>What is not, on pages that do exist</strong></p>
+<p>Two things, and they are the only cases where a page renders but the contract&#39;s member is not on it. The home page carries no total of awarded opportunities and no total of their value — no such figure and no label naming one anywhere on it; the adapter looks for them and reports unbound with what the page does read. And following a link in a page&#39;s body is unbound because no seeded page has a link in its body and this target has no create or edit screen on which to write one; the adapter will follow one if a page ever carries it.</p>
+<p><strong>Two decisions worth stating</strong></p>
+<p>For a page that is not on this target, <code>open()</code> throws the same <code>unbound:</code> shape its members do, rather than quietly succeeding. A test that opens such a page and reads nothing else must not be told it worked, and a plain failure there would be read as the rebuild misbehaving rather than as the page being absent. Second, I kept the difference between empty and unbound strict: the published-page readers return an empty string where the address genuinely holds no page, and only throw where the place itself could not be reached.</p>
+<p><strong>What I could not do</strong></p>
+<p>I could not run anything. The workspace has no installed dependencies, so neither the suite nor <code>tsc --noEmit</code> could be run, and script execution was not available to me. The adapter is therefore verified by driving the browser by hand — every bound control was located by role and accessible name in the live page and the readings checked against what the page shows — and by mechanical comparison of the member lists against <code>spec/contract/surface.yaml</code>: the page order, the actions and observations of every page, and their names are identical to the contract in both files, and the adapter&#39;s surface properties match the generated type exactly. It has not been executed by Playwright.</p>
+<p>One incidental finding for whoever rules on this: the home page offers &quot;Browse opportunities&quot;, &quot;Sign in&quot; and &quot;Sign up&quot;, and all three lead to addresses the client answers with &quot;Page not found&quot;.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-21 03:32.</p>
+<div class="body"><p>The adapter is navigation and locators only: no expect/assert anywhere in tests/adapters/new/index.ts, no credential in the code (the password is read from SDLC_SANDBOX_PASSWORD and never printed), and nothing under tests/acceptance changed. The unbound reasons are real and checkable: the shipped client bundle registers exactly three routes (/, /learn-more/$program, /content/$slug) plus a &#39;Page not found&#39; component, and the backend dist ships status, content and rules but no files module, so the &#39;not a page on this target&#39; and &#39;Cannot POST /api/files&#39; reasons hold against this build. Coverage reconciles mechanically: 88 contract pages equal 88 binding pages in the same order, member names match the contract on every page checked, and 809 members minus 28 bound minus 3 hand-written unbound equals the 778 member strings in the absent() lists -- which matters because absent() casts through &#39;as unknown as T&#39; and the passing typecheck alone would not catch a dropped member. The egress check fails on lines in .sdlc/proposals/build-slice-1.md and its site/ copy, introduced by commits 43157ab and 2948a1a, not by this proposal.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>Not this stage&#39;s file, carried forward: the local home paths in .sdlc/proposals/build-slice-1.md and site/proposals/build-slice-1.{md,html} (rule E-2, pasted npm error stack traces) must be scrubbed when build-slice-1 is rewritten, or the branch stays red on egress.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

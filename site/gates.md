@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-21T03:32:28.188Z | bind-adapter-new | G3 | approve | agent:reviewer | agent-held, unsampled | $3.34153 | sample |
 | 2026-09-21T02:41:03.578Z | build-slice-1 | G3 | return | runner:verify | human |  |  |
 | 2026-09-19T10:18:19.372Z | plan-2 | G2 | approve | agent:tech-lead | agent-held, unsampled | $0.6394595 | sample |
 | 2026-09-19T09:44:11.392Z | plan | G2 | return | agent:architect | agent-held, unsampled | $1.0576610000000002 | sample |
