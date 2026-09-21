@@ -1,0 +1,1170 @@
+# What this adapter binds against the running "new" target, and what it does not.
+#
+# Four addresses render a page of their own on this target: / , /content/:slug ,
+# /learn-more/:program and /status. Everything else in the surface — the dashboard, the
+# opportunity, proposal, organization, user and evaluation screens, the content management
+# screens and the file addresses under /api — is answered by the client's own "Page not
+# found" screen or by a 404 from the service, and there is no sign-in anywhere, so no
+# signed-in state exists in which any of them might appear.
+target: new
+pages:
+  home:
+    actions:
+      browse_opportunities: bound
+      sign_in: bound
+      sign_up: bound
+    observations:
+      total_awarded_opportunity_count: "unbound: opened the home page and read the whole of it; it carries no count of awarded opportunities and no label naming one"
+      total_awarded_opportunity_value: "unbound: opened the home page and read the whole of it; it carries no total value of awarded opportunities and no label naming one"
+      readable_when_signed_out: bound
+
+  opportunity-dashboard:
+    actions:
+      create_opportunity: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+      open_opportunity: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+    observations:
+      my_opportunities_table: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+      opportunity_status: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+      own_opportunities_only: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+      all_opportunities_for_administrator: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+      empty_my_opportunities_message: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+
+  opportunity-list:
+    actions:
+      filter_by_program: "unbound: /opportunities is not a page on this target; the home page's Browse opportunities link leads there and it shows the service's own Page not found screen"
+      filter_by_status: "unbound: /opportunities is not a page on this target; the home page's Browse opportunities link leads there and it shows the service's own Page not found screen"
+      filter_remote_only: "unbound: /opportunities is not a page on this target; the home page's Browse opportunities link leads there and it shows the service's own Page not found screen"
+      search: "unbound: /opportunities is not a page on this target; the home page's Browse opportunities link leads there and it shows the service's own Page not found screen"
+      toggle_watch: "unbound: /opportunities is not a page on this target; the home page's Browse opportunities link leads there and it shows the service's own Page not found screen"
+    observations:
+      unpublished_group: "unbound: /opportunities is not a page on this target; it shows the service's own Page not found screen"
+      open_group: "unbound: /opportunities is not a page on this target; it shows the service's own Page not found screen"
+      closed_group: "unbound: /opportunities is not a page on this target; it shows the service's own Page not found screen"
+      opportunity_status: "unbound: /opportunities is not a page on this target; it shows the service's own Page not found screen"
+      proposal_deadline: "unbound: /opportunities is not a page on this target; it shows the service's own Page not found screen"
+
+  opportunity-program-select:
+    actions:
+      choose_code_with_us: "unbound: /opportunities/create is not a page on this target; it shows the service's own Page not found screen"
+      choose_sprint_with_us: "unbound: /opportunities/create is not a page on this target; it shows the service's own Page not found screen"
+      choose_team_with_us: "unbound: /opportunities/create is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      program_card: "unbound: /opportunities/create is not a page on this target; it shows the service's own Page not found screen"
+      max_budget: "unbound: /opportunities/create is not a page on this target; it shows the service's own Page not found screen"
+
+  opportunity-cwu-create:
+    actions:
+      save_draft: "unbound: /opportunities/code-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+      submit_for_review: "unbound: /opportunities/code-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+      publish: "unbound: /opportunities/code-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+      add_attachment: "unbound: /opportunities/code-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      field_error: "unbound: /opportunities/code-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+
+  opportunity-cwu-view:
+    actions:
+      toggle_watch: "unbound: /opportunities/code-with-us/:opportunityId is not a page on this target; opened with the seeded published opportunity's identifier it shows the service's own Page not found screen"
+      start_proposal: "unbound: /opportunities/code-with-us/:opportunityId is not a page on this target; opened with the seeded published opportunity's identifier it shows the service's own Page not found screen"
+    observations:
+      opportunity_identifier: "unbound: /opportunities/code-with-us/:opportunityId is not a page on this target; opened with the seeded published opportunity's identifier it shows the service's own Page not found screen"
+      status: "unbound: /opportunities/code-with-us/:opportunityId is not a page on this target; opened with the seeded published opportunity's identifier it shows the service's own Page not found screen"
+      published_date: "unbound: /opportunities/code-with-us/:opportunityId is not a page on this target; opened with the seeded published opportunity's identifier it shows the service's own Page not found screen"
+      created_by_name: "unbound: /opportunities/code-with-us/:opportunityId is not a page on this target; opened with the seeded published opportunity's identifier it shows the service's own Page not found screen"
+      last_changed_by_name: "unbound: /opportunities/code-with-us/:opportunityId is not a page on this target; opened with the seeded published opportunity's identifier it shows the service's own Page not found screen"
+      proposal_deadline: "unbound: /opportunities/code-with-us/:opportunityId is not a page on this target; opened with the seeded published opportunity's identifier it shows the service's own Page not found screen"
+      reward: "unbound: /opportunities/code-with-us/:opportunityId is not a page on this target; opened with the seeded published opportunity's identifier it shows the service's own Page not found screen"
+      addenda: "unbound: /opportunities/code-with-us/:opportunityId is not a page on this target; opened with the seeded published opportunity's identifier it shows the service's own Page not found screen"
+      successful_proponent: "unbound: /opportunities/code-with-us/:opportunityId is not a page on this target; opened with the seeded published opportunity's identifier it shows the service's own Page not found screen"
+
+  opportunity-cwu-edit:
+    actions:
+      edit_details: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; opened with the seeded opportunity's identifier it shows the service's own Page not found screen"
+      submit_for_review: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; opened with the seeded opportunity's identifier it shows the service's own Page not found screen"
+      publish: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; opened with the seeded opportunity's identifier it shows the service's own Page not found screen"
+      cancel_opportunity: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; opened with the seeded opportunity's identifier it shows the service's own Page not found screen"
+      delete_opportunity: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; opened with the seeded opportunity's identifier it shows the service's own Page not found screen"
+      add_addendum: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; opened with the seeded opportunity's identifier it shows the service's own Page not found screen"
+      add_note: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; opened with the seeded opportunity's identifier it shows the service's own Page not found screen"
+    observations:
+      opportunity_identifier: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      created_by_name: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      last_changed_by_name: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      summary_tab: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      opportunity_tab: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      addenda_tab: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      history_tab: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      proposals_tab: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      reporting_views: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      reporting_watchers: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      reporting_proposals: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+
+  opportunity-cwu-complete:
+    actions: {}
+    observations:
+      full_report: "unbound: /opportunities/code-with-us/:opportunityId/complete is not a page on this target; it shows the service's own Page not found screen"
+
+  opportunity-swu-create:
+    actions:
+      save_draft: "unbound: /opportunities/sprint-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+      submit_for_review: "unbound: /opportunities/sprint-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+      publish: "unbound: /opportunities/sprint-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+      add_phase: "unbound: /opportunities/sprint-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+      add_team_question: "unbound: /opportunities/sprint-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+      set_evaluation_panel: "unbound: /opportunities/sprint-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      field_error: "unbound: /opportunities/sprint-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+      score_weight_error: "unbound: /opportunities/sprint-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+
+  opportunity-swu-view:
+    actions:
+      toggle_watch: "unbound: /opportunities/sprint-with-us/:opportunityId is not a page on this target; opened with the seeded closed opportunity's identifier it shows the service's own Page not found screen"
+      start_proposal: "unbound: /opportunities/sprint-with-us/:opportunityId is not a page on this target; opened with the seeded closed opportunity's identifier it shows the service's own Page not found screen"
+    observations:
+      opportunity_identifier: "unbound: /opportunities/sprint-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      status: "unbound: /opportunities/sprint-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      published_date: "unbound: /opportunities/sprint-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      created_by_name: "unbound: /opportunities/sprint-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      last_changed_by_name: "unbound: /opportunities/sprint-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      proposal_deadline: "unbound: /opportunities/sprint-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      total_max_budget: "unbound: /opportunities/sprint-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      phases: "unbound: /opportunities/sprint-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      addenda: "unbound: /opportunities/sprint-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      successful_proponent: "unbound: /opportunities/sprint-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+
+  opportunity-swu-edit:
+    actions:
+      edit_details: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      submit_for_review: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      publish: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      cancel_opportunity: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      delete_opportunity: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      add_addendum: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      add_note: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      edit_evaluation_panel: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      finalize_question_consensuses: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      start_team_scenario: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      opportunity_identifier: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      created_by_name: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      last_changed_by_name: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      summary_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      opportunity_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      addenda_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      history_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      proposals_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      team_questions_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      code_challenge_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      team_scenario_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      evaluation_panel_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      consensus_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+
+  opportunity-swu-complete:
+    actions: {}
+    observations:
+      full_report: "unbound: /opportunities/sprint-with-us/:opportunityId/complete is not a page on this target; it shows the service's own Page not found screen"
+
+  opportunity-twu-create:
+    actions:
+      save_draft: "unbound: /opportunities/team-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+      submit_for_review: "unbound: /opportunities/team-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+      publish: "unbound: /opportunities/team-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+      add_resource: "unbound: /opportunities/team-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+      add_resource_question: "unbound: /opportunities/team-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+      set_evaluation_panel: "unbound: /opportunities/team-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      field_error: "unbound: /opportunities/team-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+      score_weight_error: "unbound: /opportunities/team-with-us/create is not a page on this target; it shows the service's own Page not found screen"
+
+  opportunity-twu-view:
+    actions:
+      toggle_watch: "unbound: /opportunities/team-with-us/:opportunityId is not a page on this target; opened with the seeded closed opportunity's identifier it shows the service's own Page not found screen"
+      start_proposal: "unbound: /opportunities/team-with-us/:opportunityId is not a page on this target; opened with the seeded closed opportunity's identifier it shows the service's own Page not found screen"
+    observations:
+      opportunity_identifier: "unbound: /opportunities/team-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      status: "unbound: /opportunities/team-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      published_date: "unbound: /opportunities/team-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      created_by_name: "unbound: /opportunities/team-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      last_changed_by_name: "unbound: /opportunities/team-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      proposal_deadline: "unbound: /opportunities/team-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      max_budget: "unbound: /opportunities/team-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      resources: "unbound: /opportunities/team-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      addenda: "unbound: /opportunities/team-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      successful_proponent: "unbound: /opportunities/team-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+
+  opportunity-twu-edit:
+    actions:
+      edit_details: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      submit_for_review: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      publish: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      cancel_opportunity: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      delete_opportunity: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      add_addendum: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      edit_evaluation_panel: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      finalize_question_consensuses: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      opportunity_identifier: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      created_by_name: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      last_changed_by_name: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      summary_tab: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      opportunity_tab: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      addenda_tab: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      history_tab: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      proposals_tab: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      resource_questions_tab: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      challenge_tab: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      evaluation_panel_tab: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      consensus_tab: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+
+  opportunity-twu-complete:
+    actions: {}
+    observations:
+      full_report: "unbound: /opportunities/team-with-us/:opportunityId/complete is not a page on this target; it shows the service's own Page not found screen"
+
+  scheduled-transition-trigger:
+    actions:
+      run_pending_transitions: bound
+    observations:
+      service_is_up: bound
+
+  proposal-cwu-create:
+    actions:
+      choose_proponent_individual: "unbound: /opportunities/code-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      choose_proponent_organization: "unbound: /opportunities/code-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      add_attachment: "unbound: /opportunities/code-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      save_draft: "unbound: /opportunities/code-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      submit_proposal: "unbound: /opportunities/code-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      accept_program_terms: "unbound: /opportunities/code-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      accept_app_terms: "unbound: /opportunities/code-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      cancel: "unbound: /opportunities/code-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      field_error: "unbound: /opportunities/code-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      opportunity_summary: "unbound: /opportunities/code-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      terms_modal: "unbound: /opportunities/code-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      submit_disabled_until_terms_accepted: "unbound: /opportunities/code-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+
+  proposal-cwu-edit:
+    actions:
+      start_editing: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      save_changes: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      save_changes_and_submit: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      submit_proposal: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      withdraw_proposal: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      delete_proposal: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      add_attachment: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      remove_attachment: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      proposal_identifier: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      opportunity_identifier: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      proposal_tab: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      status: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      submitted_at: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      score: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      rank: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      available_actions: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+
+  proposal-cwu-view:
+    actions:
+      enter_score: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      award_proposal: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      disqualify_proposal: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      proposal_identifier: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      proposal_tab: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      history_tab: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      proponent: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      score: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      rank: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      export_link: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+
+  proposal-cwu-export-one:
+    actions: {}
+    observations:
+      exported_proposal: "unbound: /opportunities/code-with-us/:opportunityId/proposals/:proposalId/export is not a page on this target; it shows the service's own Page not found screen"
+
+  proposal-cwu-export-all:
+    actions: {}
+    observations:
+      exported_proposal: "unbound: /opportunities/code-with-us/:opportunityId/proposals/export is not a page on this target; it shows the service's own Page not found screen"
+
+  proposal-swu-create:
+    actions:
+      choose_organization: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      add_phase_team_member: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      set_scrum_master: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      set_phase_proposed_cost: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      answer_team_question: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      add_reference: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      add_attachment: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      save_draft: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      submit_proposal: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      accept_program_terms: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      accept_app_terms: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      field_error: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      capability_gap_error: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      budget_exceeded_error: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      unqualified_organization_notice: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      pending_team_member: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+
+  proposal-swu-edit:
+    actions:
+      start_editing: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      save_changes: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      save_changes_and_submit: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      submit_proposal: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      withdraw_proposal: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      delete_proposal: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      proposal_identifier: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      opportunity_identifier: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      proposal_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      scoresheet_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      status: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      anonymous_proponent_name: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      total_score: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      rank: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+
+  proposal-swu-view:
+    actions:
+      score_code_challenge: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      screen_in_to_team_scenario: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      screen_out_from_team_scenario: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      score_team_scenario: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      award_proposal: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      disqualify_proposal: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      proposal_identifier: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      proposal_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      team_questions_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      code_challenge_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      team_scenario_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      history_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      wrong_stage_error: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      questions_score: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      challenge_score: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      scenario_score: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      price_score: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      total_score: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+
+  proposal-swu-export-one:
+    actions: {}
+    observations:
+      exported_proposal: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export is not a page on this target; it shows the service's own Page not found screen"
+      anonymous_proponent_name: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export is not a page on this target; it shows the service's own Page not found screen"
+
+  proposal-swu-export-all:
+    actions: {}
+    observations:
+      exported_proposal: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/export is not a page on this target; it shows the service's own Page not found screen"
+
+  proposal-twu-create:
+    actions:
+      choose_organization: "unbound: /opportunities/team-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      add_team_member_for_resource: "unbound: /opportunities/team-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      set_hourly_rate: "unbound: /opportunities/team-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      answer_resource_question: "unbound: /opportunities/team-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      add_attachment: "unbound: /opportunities/team-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      save_draft: "unbound: /opportunities/team-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      submit_proposal: "unbound: /opportunities/team-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      accept_program_terms: "unbound: /opportunities/team-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      accept_app_terms: "unbound: /opportunities/team-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      field_error: "unbound: /opportunities/team-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      service_area_error: "unbound: /opportunities/team-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      unqualified_organization_notice: "unbound: /opportunities/team-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+
+  proposal-twu-edit:
+    actions:
+      start_editing: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      save_changes: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      save_changes_and_submit: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      submit_proposal: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      withdraw_proposal: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      delete_proposal: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      proposal_identifier: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      opportunity_identifier: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      proposal_tab: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      scoresheet_tab: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      status: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      anonymous_proponent_name: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      total_score: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      rank: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+
+  proposal-twu-view:
+    actions:
+      score_resource_questions: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      screen_in_to_challenge: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      screen_out_from_challenge: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      score_challenge: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      award_proposal: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      disqualify_proposal: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      proposal_identifier: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      proposal_tab: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      resource_questions_tab: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      challenge_tab: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      history_tab: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      wrong_stage_error: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      questions_score: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      challenge_score: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      price_score: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      total_score: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+
+  proposal-twu-export-one:
+    actions: {}
+    observations:
+      exported_proposal: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/export is not a page on this target; it shows the service's own Page not found screen"
+
+  proposal-twu-export-all:
+    actions: {}
+    observations:
+      exported_proposal: "unbound: /opportunities/team-with-us/:opportunityId/proposals/export is not a page on this target; it shows the service's own Page not found screen"
+
+  proposal-vendor-dashboard:
+    actions:
+      show_my_proposals: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+      show_org_proposals: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+    observations:
+      my_proposals_table: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+      org_proposals_table: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+      proposal_status: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+      empty_my_proposals_message: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+      empty_org_proposals_message: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+
+  proposal-list-stub:
+    actions: {}
+    observations:
+      placeholder_text: "unbound: /proposals is not a page on this target; it shows the service's own Page not found screen"
+
+  organization-list:
+    actions:
+      change_page: "unbound: /organizations is not a page on this target; it shows the service's own Page not found screen"
+      open_organization: "unbound: /organizations is not a page on this target; it shows the service's own Page not found screen"
+      create_organization: "unbound: /organizations is not a page on this target; it shows the service's own Page not found screen"
+      my_organizations: "unbound: /organizations is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      organization_name: "unbound: /organizations is not a page on this target; it shows the service's own Page not found screen"
+      owner_name: "unbound: /organizations is not a page on this target; it shows the service's own Page not found screen"
+      swu_qualified_mark: "unbound: /organizations is not a page on this target; it shows the service's own Page not found screen"
+      twu_qualified_mark: "unbound: /organizations is not a page on this target; it shows the service's own Page not found screen"
+      pagination: "unbound: /organizations is not a page on this target; it shows the service's own Page not found screen"
+      refused_when_not_permitted: "unbound: /organizations is not a page on this target; it shows the service's own Page not found screen, which is what it shows everybody rather than a refusal"
+
+  organization-create:
+    actions:
+      create_organization: "unbound: /organizations/create is not a page on this target; it shows the service's own Page not found screen"
+      cancel: "unbound: /organizations/create is not a page on this target; it shows the service's own Page not found screen"
+      change_logo: "unbound: /organizations/create is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      field_error: "unbound: /organizations/create is not a page on this target; it shows the service's own Page not found screen"
+      submit_disabled_until_valid: "unbound: /organizations/create is not a page on this target; it shows the service's own Page not found screen"
+
+  organization-edit:
+    actions:
+      edit_organization: "unbound: /organizations/:orgId/edit is not a page on this target; opened with a seeded organization's identifier it shows the service's own Page not found screen"
+      save_changes: "unbound: /organizations/:orgId/edit is not a page on this target; opened with a seeded organization's identifier it shows the service's own Page not found screen"
+      cancel_editing: "unbound: /organizations/:orgId/edit is not a page on this target; opened with a seeded organization's identifier it shows the service's own Page not found screen"
+      archive_organization: "unbound: /organizations/:orgId/edit is not a page on this target; opened with a seeded organization's identifier it shows the service's own Page not found screen"
+      add_team_members: "unbound: /organizations/:orgId/edit is not a page on this target; opened with a seeded organization's identifier it shows the service's own Page not found screen"
+      approve_pending_member: "unbound: /organizations/:orgId/edit is not a page on this target; opened with a seeded organization's identifier it shows the service's own Page not found screen"
+      remove_team_member: "unbound: /organizations/:orgId/edit is not a page on this target; opened with a seeded organization's identifier it shows the service's own Page not found screen"
+      toggle_member_admin_status: "unbound: /organizations/:orgId/edit is not a page on this target; opened with a seeded organization's identifier it shows the service's own Page not found screen"
+      accept_org_admin_terms: "unbound: /organizations/:orgId/edit is not a page on this target; opened with a seeded organization's identifier it shows the service's own Page not found screen"
+      change_owner: "unbound: /organizations/:orgId/edit is not a page on this target; opened with a seeded organization's identifier it shows the service's own Page not found screen"
+      edit_service_areas: "unbound: /organizations/:orgId/edit is not a page on this target; opened with a seeded organization's identifier it shows the service's own Page not found screen"
+      save_service_areas: "unbound: /organizations/:orgId/edit is not a page on this target; opened with a seeded organization's identifier it shows the service's own Page not found screen"
+      view_swu_terms: "unbound: /organizations/:orgId/edit is not a page on this target; opened with a seeded organization's identifier it shows the service's own Page not found screen"
+      view_twu_terms: "unbound: /organizations/:orgId/edit is not a page on this target; opened with a seeded organization's identifier it shows the service's own Page not found screen"
+    observations:
+      organization_identifier: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      organization_tab: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      team_tab: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      swu_qualification_tab: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      twu_qualification_tab: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      changelog_tab: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      swu_qualified_badge: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      twu_qualified_badge: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      owner_badge: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      pending_badge: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      team_member_row: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      team_capabilities: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      swu_requirement_two_members: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      swu_requirement_all_capabilities: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      swu_requirement_terms_accepted: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      twu_requirement_service_area: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      twu_requirement_terms_accepted: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      service_area_checkbox: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      not_qualified_notice: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      changelog_entry: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      field_error: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      invalid_membership_type_error: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+
+  organization-swu-terms:
+    actions:
+      accept_terms: "unbound: /organizations/:orgId/sprint-with-us-terms-and-conditions is not a page on this target; it shows the service's own Page not found screen"
+      cancel: "unbound: /organizations/:orgId/sprint-with-us-terms-and-conditions is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      terms_body: "unbound: /organizations/:orgId/sprint-with-us-terms-and-conditions is not a page on this target; it shows the service's own Page not found screen"
+      accepted_on_notice: "unbound: /organizations/:orgId/sprint-with-us-terms-and-conditions is not a page on this target; it shows the service's own Page not found screen"
+
+  organization-twu-terms:
+    actions:
+      accept_terms: "unbound: /organizations/:orgId/team-with-us-terms-and-conditions is not a page on this target; it shows the service's own Page not found screen"
+      cancel: "unbound: /organizations/:orgId/team-with-us-terms-and-conditions is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      terms_body: "unbound: /organizations/:orgId/team-with-us-terms-and-conditions is not a page on this target; it shows the service's own Page not found screen"
+      accepted_on_notice: "unbound: /organizations/:orgId/team-with-us-terms-and-conditions is not a page on this target; it shows the service's own Page not found screen"
+
+  organization-user-memberships:
+    actions:
+      approve_invitation: "unbound: /users/:userId?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      reject_invitation: "unbound: /users/:userId?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      leave_organization: "unbound: /users/:userId?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      create_organization: "unbound: /users/:userId?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      open_organization: "unbound: /users/:userId?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      owned_organizations_table: "unbound: /users/:userId?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      affiliated_organizations_table: "unbound: /users/:userId?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      pending_badge: "unbound: /users/:userId?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      team_member_count: "unbound: /users/:userId?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      swu_qualified_mark: "unbound: /users/:userId?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      empty_owned_message: "unbound: /users/:userId?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      empty_affiliated_message: "unbound: /users/:userId?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      accept_confirmation: "unbound: /users/:userId?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      decline_confirmation: "unbound: /users/:userId?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+
+  user-sign-in:
+    actions:
+      sign_in_as_vendor: "unbound: /sign-in is not a page on this target; the home page's Sign in link leads there and it shows the service's own Page not found screen, and /auth/sign-in does the same"
+      sign_in_as_public_sector_employee: "unbound: /sign-in is not a page on this target; the home page's Sign in link leads there and it shows the service's own Page not found screen, and /auth/sign-in does the same"
+      go_to_sign_up: "unbound: /sign-in is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      vendor_card: "unbound: /sign-in is not a page on this target; it shows the service's own Page not found screen"
+      public_sector_card: "unbound: /sign-in is not a page on this target; it shows the service's own Page not found screen"
+
+  user-sign-up-choose-account:
+    actions:
+      sign_up_as_vendor: "unbound: /sign-up is not a page on this target; the home page's Sign up link leads there and it shows the service's own Page not found screen"
+      sign_up_as_public_sector_employee: "unbound: /sign-up is not a page on this target; the home page's Sign up link leads there and it shows the service's own Page not found screen"
+    observations:
+      vendor_card: "unbound: /sign-up is not a page on this target; it shows the service's own Page not found screen"
+      public_sector_card: "unbound: /sign-up is not a page on this target; it shows the service's own Page not found screen"
+
+  user-sign-up-complete:
+    actions:
+      change_avatar: "unbound: /sign-up/complete is not a page on this target; it shows the service's own Page not found screen"
+      accept_app_terms: "unbound: /sign-up/complete is not a page on this target; it shows the service's own Page not found screen"
+      toggle_new_opportunity_notifications: "unbound: /sign-up/complete is not a page on this target; it shows the service's own Page not found screen"
+      complete_profile: "unbound: /sign-up/complete is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      idp_username_readonly: "unbound: /sign-up/complete is not a page on this target; it shows the service's own Page not found screen"
+      name_field: "unbound: /sign-up/complete is not a page on this target; it shows the service's own Page not found screen"
+      email_field: "unbound: /sign-up/complete is not a page on this target; it shows the service's own Page not found screen"
+      job_title_field: "unbound: /sign-up/complete is not a page on this target; it shows the service's own Page not found screen"
+      terms_checkbox: "unbound: /sign-up/complete is not a page on this target; it shows the service's own Page not found screen"
+      complete_disabled_until_terms_accepted: "unbound: /sign-up/complete is not a page on this target; it shows the service's own Page not found screen"
+      field_error: "unbound: /sign-up/complete is not a page on this target; it shows the service's own Page not found screen"
+
+  user-sign-out:
+    actions: {}
+    observations:
+      signed_out_message: "unbound: /sign-out is not a page on this target; it shows the service's own Page not found screen, and there is no session for it to end"
+      sign_out_failed_message: "unbound: /sign-out is not a page on this target; it shows the service's own Page not found screen, and there is no session for it to end"
+
+  user-notice:
+    actions:
+      back_to_home: "unbound: /notice/:noticeId is not a page on this target; opened as deactivatedOwnAccount and as authFailure it shows the service's own Page not found screen"
+    observations:
+      deactivated_own_account_notice: "unbound: /notice/deactivatedOwnAccount is not a page on this target; it shows the service's own Page not found screen"
+      sign_in_failed_notice: "unbound: /notice/authFailure is not a page on this target; it shows the service's own Page not found screen"
+
+  user-list:
+    actions:
+      search_by_name: "unbound: /users is not a page on this target; it shows the service's own Page not found screen"
+      open_export_contact_list: "unbound: /users is not a page on this target; it shows the service's own Page not found screen"
+      toggle_export_user_type: "unbound: /users is not a page on this target; it shows the service's own Page not found screen"
+      toggle_export_field: "unbound: /users is not a page on this target; it shows the service's own Page not found screen"
+      export_contact_list: "unbound: /users is not a page on this target; it shows the service's own Page not found screen"
+      cancel_export: "unbound: /users is not a page on this target; it shows the service's own Page not found screen"
+      open_user_profile: "unbound: /users is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      user_row: "unbound: /users is not a page on this target; it shows the service's own Page not found screen"
+      status_badge: "unbound: /users is not a page on this target; it shows the service's own Page not found screen"
+      account_type: "unbound: /users is not a page on this target; it shows the service's own Page not found screen"
+      admin_check: "unbound: /users is not a page on this target; it shows the service's own Page not found screen"
+      export_modal: "unbound: /users is not a page on this target; it shows the service's own Page not found screen"
+      export_disabled_until_selection: "unbound: /users is not a page on this target; it shows the service's own Page not found screen"
+
+  user-profile:
+    actions:
+      edit_profile: "unbound: /users/:userId is not a page on this target; opened with a seeded account's identifier it shows the service's own Page not found screen"
+      save_changes: "unbound: /users/:userId is not a page on this target; opened with a seeded account's identifier it shows the service's own Page not found screen"
+      cancel_editing: "unbound: /users/:userId is not a page on this target; opened with a seeded account's identifier it shows the service's own Page not found screen"
+      change_avatar: "unbound: /users/:userId is not a page on this target; opened with a seeded account's identifier it shows the service's own Page not found screen"
+      toggle_admin_permission: "unbound: /users/:userId is not a page on this target; opened with a seeded account's identifier it shows the service's own Page not found screen"
+      deactivate_account: "unbound: /users/:userId is not a page on this target; opened with a seeded account's identifier it shows the service's own Page not found screen"
+      reactivate_account: "unbound: /users/:userId is not a page on this target; opened with a seeded account's identifier it shows the service's own Page not found screen"
+      confirm_activation_change: "unbound: /users/:userId is not a page on this target; opened with a seeded account's identifier it shows the service's own Page not found screen"
+      cancel_activation_change: "unbound: /users/:userId is not a page on this target; opened with a seeded account's identifier it shows the service's own Page not found screen"
+    observations:
+      user_identifier: "unbound: /users/:userId is not a page on this target; it shows the service's own Page not found screen"
+      profile_tab: "unbound: /users/:userId is not a page on this target; it shows the service's own Page not found screen"
+      capabilities_tab: "unbound: /users/:userId is not a page on this target; it shows the service's own Page not found screen"
+      notifications_tab: "unbound: /users/:userId is not a page on this target; it shows the service's own Page not found screen"
+      legal_tab: "unbound: /users/:userId is not a page on this target; it shows the service's own Page not found screen"
+      organizations_tab: "unbound: /users/:userId is not a page on this target; it shows the service's own Page not found screen"
+      status_badge: "unbound: /users/:userId is not a page on this target; it shows the service's own Page not found screen"
+      account_type: "unbound: /users/:userId is not a page on this target; it shows the service's own Page not found screen"
+      permissions_label: "unbound: /users/:userId is not a page on this target; it shows the service's own Page not found screen"
+      admin_checkbox: "unbound: /users/:userId is not a page on this target; it shows the service's own Page not found screen"
+      idp_username_readonly: "unbound: /users/:userId is not a page on this target; it shows the service's own Page not found screen"
+      name_field: "unbound: /users/:userId is not a page on this target; it shows the service's own Page not found screen"
+      email_field: "unbound: /users/:userId is not a page on this target; it shows the service's own Page not found screen"
+      job_title_field: "unbound: /users/:userId is not a page on this target; it shows the service's own Page not found screen"
+      field_error: "unbound: /users/:userId is not a page on this target; it shows the service's own Page not found screen"
+      activation_modal: "unbound: /users/:userId is not a page on this target; it shows the service's own Page not found screen"
+      not_found_page: "unbound: /users/:userId is not a page on this target; every identifier, known or unknown, is answered with the service's own Page not found screen, so a profile that is not found cannot be told from one that is"
+
+  user-profile-capabilities:
+    actions:
+      toggle_capability: "unbound: /users/:userId?tab=capabilities is not a page on this target; it shows the service's own Page not found screen"
+      expand_capability_description: "unbound: /users/:userId?tab=capabilities is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      capability_row: "unbound: /users/:userId?tab=capabilities is not a page on this target; it shows the service's own Page not found screen"
+      capability_checked: "unbound: /users/:userId?tab=capabilities is not a page on this target; it shows the service's own Page not found screen"
+      capability_description: "unbound: /users/:userId?tab=capabilities is not a page on this target; it shows the service's own Page not found screen"
+
+  user-profile-notifications:
+    actions:
+      toggle_new_opportunity_notifications: "unbound: /users/:userId?tab=notifications is not a page on this target; it shows the service's own Page not found screen"
+      confirm_unsubscribe: "unbound: /users/:userId?tab=notifications is not a page on this target; it shows the service's own Page not found screen"
+      cancel_unsubscribe: "unbound: /users/:userId?tab=notifications is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      new_opportunities_checkbox: "unbound: /users/:userId?tab=notifications is not a page on this target; it shows the service's own Page not found screen"
+      notification_email_address: "unbound: /users/:userId?tab=notifications is not a page on this target; it shows the service's own Page not found screen"
+      unsubscribe_modal: "unbound: /users/:userId?tab=notifications is not a page on this target; it shows the service's own Page not found screen"
+
+  user-profile-legal:
+    actions:
+      open_app_terms: "unbound: /users/:userId?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+      accept_updated_terms: "unbound: /users/:userId?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+      confirm_accept_updated_terms: "unbound: /users/:userId?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      privacy_policy: "unbound: /users/:userId?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+      app_terms_link: "unbound: /users/:userId?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+      accepted_on_notice: "unbound: /users/:userId?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+      terms_updated_warning: "unbound: /users/:userId?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+      program_terms_links: "unbound: /users/:userId?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+      accept_updated_terms_modal: "unbound: /users/:userId?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+
+  user-profile-self:
+    actions:
+      edit_profile: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen, and there is no sign-in with which to be the person it would be about"
+      save_changes: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      cancel_editing: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      change_avatar: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      deactivate_account: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      confirm_activation_change: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      cancel_activation_change: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      user_identifier: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      profile_tab: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      capabilities_tab: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      notifications_tab: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      legal_tab: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      organizations_tab: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      status_badge: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      account_type: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      idp_username_readonly: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      name_field: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      email_field: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      job_title_field: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      field_error: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      activation_modal: "unbound: /users/me is not a page on this target; it shows the service's own Page not found screen"
+      sign_in_required: "unbound: /users/me is not a page on this target; a signed-out visitor is shown the service's own Page not found screen rather than any request to sign in"
+
+  user-profile-self-capabilities:
+    actions:
+      toggle_capability: "unbound: /users/me?tab=capabilities is not a page on this target; it shows the service's own Page not found screen"
+      expand_capability_description: "unbound: /users/me?tab=capabilities is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      capability_row: "unbound: /users/me?tab=capabilities is not a page on this target; it shows the service's own Page not found screen"
+      capability_checked: "unbound: /users/me?tab=capabilities is not a page on this target; it shows the service's own Page not found screen"
+      capability_description: "unbound: /users/me?tab=capabilities is not a page on this target; it shows the service's own Page not found screen"
+
+  user-profile-self-notifications:
+    actions:
+      toggle_new_opportunity_notifications: "unbound: /users/me?tab=notifications is not a page on this target; it shows the service's own Page not found screen"
+      confirm_unsubscribe: "unbound: /users/me?tab=notifications is not a page on this target; it shows the service's own Page not found screen"
+      cancel_unsubscribe: "unbound: /users/me?tab=notifications is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      new_opportunities_checkbox: "unbound: /users/me?tab=notifications is not a page on this target; it shows the service's own Page not found screen"
+      notification_email_address: "unbound: /users/me?tab=notifications is not a page on this target; it shows the service's own Page not found screen"
+      unsubscribe_modal: "unbound: /users/me?tab=notifications is not a page on this target; it shows the service's own Page not found screen"
+
+  user-profile-self-legal:
+    actions:
+      open_app_terms: "unbound: /users/me?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+      accept_updated_terms: "unbound: /users/me?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+      confirm_accept_updated_terms: "unbound: /users/me?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      privacy_policy: "unbound: /users/me?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+      app_terms_link: "unbound: /users/me?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+      accepted_on_notice: "unbound: /users/me?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+      terms_updated_warning: "unbound: /users/me?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+      program_terms_links: "unbound: /users/me?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+      accept_updated_terms_modal: "unbound: /users/me?tab=legal is not a page on this target; it shows the service's own Page not found screen"
+
+  organization-user-memberships-self:
+    actions:
+      approve_invitation: "unbound: /users/me?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      reject_invitation: "unbound: /users/me?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      leave_organization: "unbound: /users/me?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      create_organization: "unbound: /users/me?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      open_organization: "unbound: /users/me?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      owned_organizations_table: "unbound: /users/me?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      affiliated_organizations_table: "unbound: /users/me?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      pending_badge: "unbound: /users/me?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      team_member_count: "unbound: /users/me?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      swu_qualified_mark: "unbound: /users/me?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      empty_owned_message: "unbound: /users/me?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      empty_affiliated_message: "unbound: /users/me?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      accept_confirmation: "unbound: /users/me?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+      decline_confirmation: "unbound: /users/me?tab=organizations is not a page on this target; it shows the service's own Page not found screen"
+
+  evaluation-panel-dashboard:
+    actions:
+      show_my_opportunities: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+      show_panel_opportunities: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+      open_opportunity: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+    observations:
+      evaluations_tab: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+      panel_opportunities_table: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+      opportunity_status: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+      empty_panel_opportunities_message: "unbound: /dashboard is not a page on this target; opening it shows the service's own Page not found screen"
+
+  evaluation-panel-swu:
+    actions:
+      add_panel_member: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached; /opportunities/sprint-with-us/:opportunityId/edit shows the service's own Page not found screen"
+      remove_panel_member: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      choose_panel_chair: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      mark_member_as_chair: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      save_evaluation_panel: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+    observations:
+      panel_member_row: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      chair_field: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      minimum_members_error: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      duplicate_member_error: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      non_public_sector_member_error: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      missing_chair_error: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      panel_locked_after_consensus: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+
+  evaluation-panel-twu:
+    actions:
+      add_panel_member: "unbound: the Team With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached; /opportunities/team-with-us/:opportunityId/edit shows the service's own Page not found screen"
+      remove_panel_member: "unbound: the Team With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      choose_panel_chair: "unbound: the Team With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      mark_member_as_chair: "unbound: the Team With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      save_evaluation_panel: "unbound: the Team With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+    observations:
+      panel_member_row: "unbound: the Team With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      chair_field: "unbound: the Team With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      minimum_members_error: "unbound: the Team With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      duplicate_member_error: "unbound: the Team With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      non_public_sector_member_error: "unbound: the Team With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      missing_chair_error: "unbound: the Team With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+      panel_locked_after_consensus: "unbound: the Team With Us management screen is not a page on this target, so its evaluationPanel tab cannot be reached"
+
+  evaluation-instructions-swu:
+    actions: {}
+    observations:
+      instructions_body: "unbound: the Sprint With Us management screen is not a page on this target, so its instructions tab cannot be reached"
+      visible_to_evaluators_only: "unbound: the Sprint With Us management screen is not a page on this target, so its instructions tab cannot be reached"
+
+  evaluation-instructions-twu:
+    actions: {}
+    observations:
+      instructions_body: "unbound: the Team With Us management screen is not a page on this target, so its instructions tab cannot be reached"
+      visible_to_evaluators_only: "unbound: the Team With Us management screen is not a page on this target, so its instructions tab cannot be reached"
+
+  evaluation-individual-list-swu:
+    actions:
+      open_proponent_evaluation: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluation tab cannot be reached"
+      submit_scores_for_consensus: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluation tab cannot be reached"
+    observations:
+      proponent_row: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluation tab cannot be reached"
+      anonymous_proponent_name: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluation tab cannot be reached"
+      evaluation_status: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluation tab cannot be reached"
+      submit_disabled_until_complete: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluation tab cannot be reached"
+      incomplete_evaluation_error: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluation tab cannot be reached"
+      own_evaluations_only: "unbound: the Sprint With Us management screen is not a page on this target, so its evaluation tab cannot be reached"
+
+  evaluation-individual-list-twu:
+    actions:
+      open_proponent_evaluation: "unbound: the Team With Us management screen is not a page on this target, so its evaluation tab cannot be reached"
+      submit_scores_for_consensus: "unbound: the Team With Us management screen is not a page on this target, so its evaluation tab cannot be reached"
+    observations:
+      proponent_row: "unbound: the Team With Us management screen is not a page on this target, so its evaluation tab cannot be reached"
+      anonymous_proponent_name: "unbound: the Team With Us management screen is not a page on this target, so its evaluation tab cannot be reached"
+      evaluation_status: "unbound: the Team With Us management screen is not a page on this target, so its evaluation tab cannot be reached"
+      submit_disabled_until_complete: "unbound: the Team With Us management screen is not a page on this target, so its evaluation tab cannot be reached"
+      incomplete_evaluation_error: "unbound: the Team With Us management screen is not a page on this target, so its evaluation tab cannot be reached"
+      own_evaluations_only: "unbound: the Team With Us management screen is not a page on this target, so its evaluation tab cannot be reached"
+
+  evaluation-consensus-list-swu:
+    actions:
+      open_proponent_consensus: "unbound: the Sprint With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      submit_final_consensus_scores: "unbound: the Sprint With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      confirm_submit_consensus: "unbound: the Sprint With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      finalize_consensus_scores: "unbound: the Sprint With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      confirm_finalize_consensus: "unbound: the Sprint With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      cancel_modal: "unbound: the Sprint With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+    observations:
+      proponent_row: "unbound: the Sprint With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      consensus_status: "unbound: the Sprint With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      submit_confirmation_modal: "unbound: the Sprint With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      finalize_confirmation_modal: "unbound: the Sprint With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      not_all_consensuses_submitted_error: "unbound: the Sprint With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      no_screenable_proponent_error: "unbound: the Sprint With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      empty_for_owner_not_on_panel: "unbound: the Sprint With Us management screen is not a page on this target, so its consensus tab cannot be reached; an owner kept from the tab cannot be told from a page that does not exist"
+
+  evaluation-consensus-list-twu:
+    actions:
+      open_proponent_consensus: "unbound: the Team With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      submit_final_consensus_scores: "unbound: the Team With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      confirm_submit_consensus: "unbound: the Team With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      finalize_consensus_scores: "unbound: the Team With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      confirm_finalize_consensus: "unbound: the Team With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      cancel_modal: "unbound: the Team With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+    observations:
+      proponent_row: "unbound: the Team With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      consensus_status: "unbound: the Team With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      submit_confirmation_modal: "unbound: the Team With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      finalize_confirmation_modal: "unbound: the Team With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      not_all_consensuses_submitted_error: "unbound: the Team With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      no_screenable_proponent_error: "unbound: the Team With Us management screen is not a page on this target, so its consensus tab cannot be reached"
+      empty_for_owner_not_on_panel: "unbound: the Team With Us management screen is not a page on this target, so its consensus tab cannot be reached; an owner kept from the tab cannot be told from a page that does not exist"
+
+  evaluation-individual-create-swu:
+    actions:
+      enter_question_score: "unbound: the Sprint With Us individual evaluation screen is not a page on this target; opened with the seeded closed opportunity and one of its seeded proposals it shows the service's own Page not found screen"
+      enter_question_notes: "unbound: the Sprint With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      save_draft: "unbound: the Sprint With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      save_and_go_to_next_proponent: "unbound: the Sprint With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      save_and_go_to_previous_proponent: "unbound: the Sprint With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      anonymous_proponent_name: "unbound: the Sprint With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      question_response: "unbound: the Sprint With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      score_out_of_range_error: "unbound: the Sprint With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      empty_notes_error: "unbound: the Sprint With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      duplicate_evaluation_error: "unbound: the Sprint With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+
+  evaluation-individual-edit-swu:
+    actions:
+      enter_question_score: "unbound: the Sprint With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      enter_question_notes: "unbound: the Sprint With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      save_changes: "unbound: the Sprint With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      save_and_go_to_next_proponent: "unbound: the Sprint With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      evaluation_status: "unbound: the Sprint With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      read_only_after_submitted: "unbound: the Sprint With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      score_out_of_range_error: "unbound: the Sprint With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      empty_notes_error: "unbound: the Sprint With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+
+  evaluation-consensus-create-swu:
+    actions:
+      enter_question_score: "unbound: the Sprint With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      enter_question_notes: "unbound: the Sprint With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      save_draft: "unbound: the Sprint With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      save_and_go_to_next_proponent: "unbound: the Sprint With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      anonymous_proponent_name: "unbound: the Sprint With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      panel_member_score: "unbound: the Sprint With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      panel_member_notes: "unbound: the Sprint With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      chair_only: "unbound: the Sprint With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      duplicate_consensus_error: "unbound: the Sprint With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+
+  evaluation-consensus-edit-swu:
+    actions:
+      enter_question_score: "unbound: the Sprint With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      enter_question_notes: "unbound: the Sprint With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      save_changes: "unbound: the Sprint With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      save_and_go_to_next_proponent: "unbound: the Sprint With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      consensus_status: "unbound: the Sprint With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      editable_after_submitted: "unbound: the Sprint With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      panel_member_score: "unbound: the Sprint With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      panel_member_notes: "unbound: the Sprint With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+
+  evaluation-individual-create-twu:
+    actions:
+      enter_question_score: "unbound: the Team With Us individual evaluation screen is not a page on this target; opened with the seeded closed opportunity and one of its seeded proposals it shows the service's own Page not found screen"
+      enter_question_notes: "unbound: the Team With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      save_draft: "unbound: the Team With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      save_and_go_to_next_proponent: "unbound: the Team With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      save_and_go_to_previous_proponent: "unbound: the Team With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      anonymous_proponent_name: "unbound: the Team With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      question_response: "unbound: the Team With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      score_out_of_range_error: "unbound: the Team With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      empty_notes_error: "unbound: the Team With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      duplicate_evaluation_error: "unbound: the Team With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+
+  evaluation-individual-edit-twu:
+    actions:
+      enter_question_score: "unbound: the Team With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      enter_question_notes: "unbound: the Team With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      save_changes: "unbound: the Team With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      save_and_go_to_next_proponent: "unbound: the Team With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      evaluation_status: "unbound: the Team With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      read_only_after_submitted: "unbound: the Team With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      score_out_of_range_error: "unbound: the Team With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      empty_notes_error: "unbound: the Team With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+
+  evaluation-consensus-create-twu:
+    actions:
+      enter_question_score: "unbound: the Team With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      enter_question_notes: "unbound: the Team With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      save_draft: "unbound: the Team With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      save_and_go_to_next_proponent: "unbound: the Team With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      anonymous_proponent_name: "unbound: the Team With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      panel_member_score: "unbound: the Team With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      panel_member_notes: "unbound: the Team With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      chair_only: "unbound: the Team With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      duplicate_consensus_error: "unbound: the Team With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+
+  evaluation-consensus-edit-twu:
+    actions:
+      enter_question_score: "unbound: the Team With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      enter_question_notes: "unbound: the Team With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      save_changes: "unbound: the Team With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      save_and_go_to_next_proponent: "unbound: the Team With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      consensus_status: "unbound: the Team With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      editable_after_submitted: "unbound: the Team With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      panel_member_score: "unbound: the Team With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+      panel_member_notes: "unbound: the Team With Us consensus screen is not a page on this target; it shows the service's own Page not found screen"
+
+  notification-unsubscribe-landing:
+    actions:
+      confirm_unsubscribe: "unbound: /users/me?tab=notifications&unsubscribe is not a page on this target; it shows the service's own Page not found screen"
+      cancel_unsubscribe: "unbound: /users/me?tab=notifications&unsubscribe is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      unsubscribe_confirmation: "unbound: /users/me?tab=notifications&unsubscribe is not a page on this target; it shows the service's own Page not found screen"
+      confirmation_names_signed_in_address: "unbound: /users/me?tab=notifications&unsubscribe is not a page on this target; it shows the service's own Page not found screen"
+      resolves_to_signed_in_person: "unbound: /users/me?tab=notifications&unsubscribe is not a page on this target; it shows the service's own Page not found screen"
+      sign_in_required: "unbound: /users/me?tab=notifications&unsubscribe is not a page on this target; a signed-out visitor is shown the service's own Page not found screen rather than any request to sign in"
+
+  notification-optin-opportunity-list:
+    actions:
+      toggle_new_opportunity_notifications: "unbound: /opportunities is not a page on this target, so the notification control that sits on it cannot be reached; it shows the service's own Page not found screen"
+    observations:
+      notification_control: "unbound: /opportunities is not a page on this target, so the notification control that sits on it cannot be reached"
+      notification_control_state: "unbound: /opportunities is not a page on this target, so the notification control that sits on it cannot be reached"
+      notification_control_hidden_on_narrow_screen: "unbound: /opportunities is not a page on this target, so the notification control that sits on it cannot be reached at any width"
+
+  notification-terms-broadcast:
+    actions:
+      notify_vendors_of_updated_terms: "unbound: /content/terms-and-conditions/edit is not a page on this target; the page itself is readable at /content/terms-and-conditions but there is no editing screen, so it shows the service's own Page not found screen"
+      confirm_notify_vendors: "unbound: /content/terms-and-conditions/edit is not a page on this target; it shows the service's own Page not found screen"
+      cancel_notify_vendors: "unbound: /content/terms-and-conditions/edit is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      notify_vendors_control: "unbound: /content/terms-and-conditions/edit is not a page on this target; it shows the service's own Page not found screen"
+      notify_vendors_confirmation: "unbound: /content/terms-and-conditions/edit is not a page on this target; it shows the service's own Page not found screen"
+      notify_vendors_success: "unbound: /content/terms-and-conditions/edit is not a page on this target; it shows the service's own Page not found screen"
+      notify_vendors_failure: "unbound: /content/terms-and-conditions/edit is not a page on this target; it shows the service's own Page not found screen"
+
+  notification-email-reference:
+    actions:
+      open_reference: "unbound: /admin/email-notification-reference is not on this target; the service answers the address with a 404 of its own and the client has no route for it either"
+    observations:
+      message_group_title: "unbound: /admin/email-notification-reference is not on this target; the service answers the address with a 404 of its own"
+      message_subject: "unbound: /admin/email-notification-reference is not on this target; the service answers the address with a 404 of its own"
+      message_summary: "unbound: /admin/email-notification-reference is not on this target; the service answers the address with a 404 of its own"
+      message_body: "unbound: /admin/email-notification-reference is not on this target; the service answers the address with a 404 of its own"
+      refused_for_non_administrator: "unbound: /admin/email-notification-reference is not on this target; everybody is answered with the same 404, so a refusal cannot be told from an address that does not exist"
+
+  content-footer:
+    actions:
+      open_about: bound
+      open_disclaimer: bound
+      open_privacy: bound
+      open_accessibility: bound
+      open_copyright: bound
+    observations:
+      about_link: bound
+      disclaimer_link: bound
+      privacy_link: bound
+      accessibility_link: bound
+      copyright_link: bound
+      present_when_signed_out: bound
+
+  content-service-level-agreement-link:
+    actions:
+      follow_service_level_agreement_link: bound
+    observations:
+      service_level_agreement_link: bound
+      link_target_address: bound
+      answer_at_link_target: bound
+
+  content-list:
+    actions:
+      open_page_for_editing: "unbound: /content is not a page on this target; it shows the service's own Page not found screen"
+      open_public_page: "unbound: /content is not a page on this target; it shows the service's own Page not found screen"
+      create_page: "unbound: /content is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      page_title: "unbound: /content is not a page on this target; it shows the service's own Page not found screen"
+      page_public_address: "unbound: /content is not a page on this target; it shows the service's own Page not found screen"
+      page_is_fixed: "unbound: /content is not a page on this target; it shows the service's own Page not found screen"
+      page_created_date: "unbound: /content is not a page on this target; it shows the service's own Page not found screen"
+      page_updated_date: "unbound: /content is not a page on this target; it shows the service's own Page not found screen"
+      ordered_by_title: "unbound: /content is not a page on this target; it shows the service's own Page not found screen"
+      refused_for_non_administrator: "unbound: /content is not a page on this target; everybody is shown the same Page not found screen, so a refusal cannot be told from an address that does not exist"
+
+  content-create:
+    actions:
+      enter_title: "unbound: /content/create is not a page on this target; it shows the service's own Page not found screen"
+      enter_slug: "unbound: /content/create is not a page on this target; it shows the service's own Page not found screen"
+      enter_body: "unbound: /content/create is not a page on this target; it shows the service's own Page not found screen"
+      upload_body_image: "unbound: /content/create is not a page on this target; it shows the service's own Page not found screen"
+      publish_page: "unbound: /content/create is not a page on this target; it shows the service's own Page not found screen"
+      confirm_publish: "unbound: /content/create is not a page on this target; it shows the service's own Page not found screen"
+      cancel: "unbound: /content/create is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      field_error: "unbound: /content/create is not a page on this target; it shows the service's own Page not found screen"
+      slug_rule_help: "unbound: /content/create is not a page on this target; it shows the service's own Page not found screen"
+      resulting_public_address: "unbound: /content/create is not a page on this target; it shows the service's own Page not found screen"
+      publish_disabled_until_valid: "unbound: /content/create is not a page on this target; it shows the service's own Page not found screen"
+      publish_confirmation: "unbound: /content/create is not a page on this target; it shows the service's own Page not found screen"
+      published_success: "unbound: /content/create is not a page on this target; it shows the service's own Page not found screen"
+      duplicate_slug_error: "unbound: /content/create is not a page on this target; it shows the service's own Page not found screen"
+      refused_for_non_administrator: "unbound: /content/create is not a page on this target; everybody is shown the same Page not found screen, so a refusal cannot be told from an address that does not exist"
+
+  content-edit:
+    actions:
+      start_editing: "unbound: /content/:slug/edit is not a page on this target; opened for the seeded page about-us and for a fixed page alike it shows the service's own Page not found screen"
+      edit_title: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      edit_slug: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      edit_body: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      upload_body_image: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      publish_changes: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      confirm_publish_changes: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      cancel_editing: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      delete_page: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      confirm_delete_page: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+    observations:
+      page_address: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      published_date: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      updated_date: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      published_by: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      updated_by: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      fixed_page_warning: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      slug_locked_for_fixed_page: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      delete_withheld_for_fixed_page: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      field_error: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      duplicate_slug_error: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      changes_published_success: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      deleted_success: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      refused_for_non_administrator: "unbound: /content/:slug/edit is not a page on this target; everybody is shown the same Page not found screen, so a refusal cannot be told from an address that does not exist"
+      body_being_edited: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      version_history: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+
+  content-view:
+    actions:
+      follow_body_link: "unbound: opened the seeded page at /content/about-us, which is the one page with a body of its own, and the fixed pages beside it; no body carries a link, and this target has no create or edit screen on which a page with one could be written"
+    observations:
+      page_address: bound
+      page_title: bound
+      page_body: bound
+      published_date: bound
+      updated_date: bound
+      readable_when_signed_out: bound
+      not_found_for_unknown_address: bound
+
+  file-upload:
+    actions:
+      upload_file: "unbound: POST /api/files answers 404 Cannot POST /api/files on this target; the contract's own schema check runs in front of the address, but no handler is registered behind it, so nothing can be stored"
+      upload_file_stating_its_read_access: "unbound: POST /api/files answers 404 Cannot POST /api/files on this target, whatever read access the request states"
+      upload_file_without_declaring_its_size: "unbound: POST /api/files answers 404 Cannot POST /api/files on this target, with or without a declared size"
+      upload_file_with_no_file_part: "unbound: POST /api/files answers 404 Cannot POST /api/files on this target, with or without a file part"
+      upload_file_with_unrecognised_read_access: "unbound: POST /api/files answers 404 Cannot POST /api/files on this target, so an unrecognised read access cannot be refused on its own account"
+      upload_file_with_malformed_read_access: "unbound: POST /api/files answers 404 Cannot POST /api/files on this target, so a malformed read access cannot be refused on its own account"
+    observations:
+      stored_file_identifier: "unbound: no upload succeeds on this target, so no stored file has an identifier to read"
+      refused_for_size: "unbound: POST /api/files answers 404 Cannot POST /api/files whatever the size of what is sent, so a refusal for size cannot be told from the address not being there"
+      size_limit_named_in_refusal: "unbound: POST /api/files answers 404 Cannot POST /api/files and names no size limit"
+      refused_for_file_name_length: "unbound: POST /api/files answers 404 Cannot POST /api/files whatever the file is named"
+      refused_for_read_access: "unbound: POST /api/files answers 404 Cannot POST /api/files whatever read access is stated"
+      refused_when_signed_out: "unbound: POST /api/files answers 404 Cannot POST /api/files rather than refusing a signed-out sender, and this target has no sign-in with which to be anybody else"
+      service_fault: "unbound: POST /api/files answers 404 Cannot POST /api/files and never reaches anything that could fault"
+
+  file-description:
+    actions: {}
+    observations:
+      file_identifier: "unbound: GET /api/files/:fileId answers 404 Cannot GET for a well-formed identifier on this target, and nothing can be uploaded, so there is no stored file to describe"
+      file_name: "unbound: GET /api/files/:fileId answers 404 Cannot GET for a well-formed identifier on this target, and nothing can be uploaded"
+      stored_date: "unbound: GET /api/files/:fileId answers 404 Cannot GET for a well-formed identifier on this target, and nothing can be uploaded"
+      stored_content_identifier: "unbound: GET /api/files/:fileId answers 404 Cannot GET for a well-formed identifier on this target, and nothing can be uploaded"
+      refused_when_not_permitted: "unbound: GET /api/files/:fileId answers the same 404 to everybody on this target, so a refusal cannot be told from the address not being there"
+      refused_for_unknown_file: "unbound: GET /api/files/:fileId answers the same 404 to every identifier on this target, so an unknown file cannot be told from a known one"
+      not_found_for_administrator: "unbound: GET /api/files/:fileId answers the same 404 to everybody on this target, and there is no sign-in with which to be an administrator"
+
+  file-download:
+    actions:
+      download_file: "unbound: GET /api/files/:fileId?type=blob answers 404 Cannot GET for a well-formed identifier on this target, and nothing can be uploaded to download"
+    observations:
+      file_contents: "unbound: GET /api/files/:fileId?type=blob answers 404 Cannot GET on this target, and nothing can be uploaded"
+      file_name_on_save: "unbound: GET /api/files/:fileId?type=blob answers 404 Cannot GET on this target, so no name is offered for saving"
+      offered_as_download_not_displayed: "unbound: GET /api/files/:fileId?type=blob answers 404 Cannot GET on this target, so nothing is offered either way"
+      content_type_from_name: "unbound: GET /api/files/:fileId?type=blob answers 404 Cannot GET on this target, so no content type is answered for a stored file"
+      readable_when_signed_out_if_public: "unbound: GET /api/files/:fileId?type=blob answers 404 Cannot GET on this target, signed out or otherwise"
+      refused_when_not_permitted: "unbound: GET /api/files/:fileId?type=blob answers the same 404 to everybody on this target, so a refusal cannot be told from the address not being there"
+      refused_for_unknown_file: "unbound: GET /api/files/:fileId?type=blob answers the same 404 to every identifier on this target"
+      not_found_for_administrator: "unbound: GET /api/files/:fileId?type=blob answers the same 404 to everybody on this target, and there is no sign-in with which to be an administrator"
+
+  file-attachment-control:
+    actions:
+      add_attachment: "unbound: the attachment control sits on the opportunity and proposal forms, and none of those is a page on this target; /opportunities/:program/:opportunityId/edit shows the service's own Page not found screen"
+      rename_new_attachment: "unbound: the attachment control sits on the opportunity and proposal forms, and none of those is a page on this target"
+      remove_new_attachment: "unbound: the attachment control sits on the opportunity and proposal forms, and none of those is a page on this target"
+      remove_existing_attachment: "unbound: the attachment control sits on the opportunity and proposal forms, and none of those is a page on this target"
+      download_attachment: "unbound: the attachment control sits on the opportunity and proposal forms, and none of those is a page on this target"
+    observations:
+      attachment_address: "unbound: the attachment control sits on the opportunity and proposal forms, and none of those is a page on this target"
+      size_limit_stated_before_choosing: "unbound: the attachment control sits on the opportunity and proposal forms, and none of those is a page on this target"
+      upload_refused_for_size: "unbound: the attachment control sits on the opportunity and proposal forms, and none of those is a page on this target"
+      new_attachment_row: "unbound: the attachment control sits on the opportunity and proposal forms, and none of those is a page on this target"
+      existing_attachment_row: "unbound: the attachment control sits on the opportunity and proposal forms, and none of those is a page on this target"
+      existing_attachment_name_read_only: "unbound: the attachment control sits on the opportunity and proposal forms, and none of those is a page on this target"
+      original_extension_restored: "unbound: the attachment control sits on the opportunity and proposal forms, and none of those is a page on this target"
+      file_name_error: "unbound: the attachment control sits on the opportunity and proposal forms, and none of those is a page on this target"
+      remove_control_hidden_when_not_removable: "unbound: the attachment control sits on the opportunity and proposal forms, and none of those is a page on this target"
+      attachment_list_on_public_view: "unbound: the attachment control sits on the opportunity and proposal forms, and none of those is a page on this target, nor is the public opportunity view"
+
+  file-image-picker:
+    actions:
+      choose_image: "unbound: the image picker sits on the profile and organization screens, and /users/me, /users/:userId, /organizations/create and /organizations/:orgId/edit all show the service's own Page not found screen on this target"
+    observations:
+      image_address: "unbound: the image picker sits on the profile and organization screens, none of which is a page on this target"
+      current_image: "unbound: the image picker sits on the profile and organization screens, none of which is a page on this target"
+      chosen_image_preview: "unbound: the image picker sits on the profile and organization screens, none of which is a page on this target"
+      only_jpeg_and_png_offered: "unbound: the image picker sits on the profile and organization screens, none of which is a page on this target"
+      rejected_image_error: "unbound: the image picker sits on the profile and organization screens, none of which is a page on this target"
+      image_readable_when_signed_out: "unbound: the image picker sits on the profile and organization screens, none of which is a page on this target, and no image can be stored to be read back"
+      stored_image_width: "unbound: the image picker sits on the profile and organization screens, none of which is a page on this target, and no image can be stored to be measured"
+      stored_image_height: "unbound: the image picker sits on the profile and organization screens, none of which is a page on this target, and no image can be stored to be measured"
+
+  file-embedded-image:
+    actions:
+      upload_body_image: "unbound: the formatted-text editor sits on the content and opportunity forms, and none of those is a page on this target; /content/:slug/edit shows the service's own Page not found screen"
+    observations:
+      image_address: "unbound: the formatted-text editor sits on the content and opportunity forms, and none of those is a page on this target"
+      image_inserted_into_text: "unbound: the formatted-text editor sits on the content and opportunity forms, and none of those is a page on this target"
+      only_jpeg_and_png_offered: "unbound: the formatted-text editor sits on the content and opportunity forms, and none of those is a page on this target"
+      uploading_indicator: "unbound: the formatted-text editor sits on the content and opportunity forms, and none of those is a page on this target"
+      image_rendered_in_published_text: "unbound: the formatted-text editor sits on the content and opportunity forms, and none of those is a page on this target"
+      upload_failure_leaves_text_unchanged: "unbound: the formatted-text editor sits on the content and opportunity forms, and none of those is a page on this target"
