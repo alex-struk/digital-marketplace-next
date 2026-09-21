@@ -1,0 +1,26 @@
+---
+gate: G3
+question: "Does slice 1 (A visitor can read the service's own pages) do what its criteria say?"
+recommendation: "This was a revision, so I changed only what the ruling named and left the application's behaviour alone."
+opened: 2026-09-21T15:47:53.486Z
+---
+
+# Does slice 1 (A visitor can read the service's own pages) do what its criteria say?
+
+**Recommendation.** This was a revision, so I changed only what the ruling named and left the application's behaviour alone.
+
+This was a revision, so I changed only what the ruling named and left the application's behaviour alone.
+
+**R-7.12 moved to Slice 5.** The criterion's then-clause is what an administrator sees in the list of pages — twenty-two pages, each marked as needed by the service — and that list is a Slice 5 screen. I removed it from Slice 1's criteria line in `plan/tasks.md` and added it to Slice 5's, and extended Slice 5's *delivers* to name the thing the criterion actually asks to be observed: the full set of a fresh installation's pages appearing in that list, each marked as needed by the service. Slice 1 now claims R-7.1, R-7.2, R-7.3, R-7.4, R-7.17, R-7.18, R-7.19.
+
+I did not pull any administrator surface into the walking skeleton, and I deliberately left Slice 1's *delivers* naming the seeded pages. The seeding is a migration that has to run from Slice 1 or the learn-more screens' service-level-agreement link and the public page view have nothing to resolve to — R-7.18 depends on it. The criterion moved because of where it can be *shown*, not because of where its data is written, and that split is now written down in two places in `plan/plan.md`: on the migration note that cites R-7.12 (which now says Slice 5 claims it, and why the migration still runs earlier), and as a new entry in the "Criteria that sit awkwardly where they are" section, alongside the existing R-7.18 and R-7.23 entries, so a later reader does not have to reconstruct the reasoning. `plan/check-coverage.mjs` still reports all 248 accepted criteria placed exactly once, with no duplicates and none missing.
+
+**The identity provider's README now names a file that exists.** It claimed the rule against invented realm keys was held by `tests/idp-realm.test.ts` in the backend package. There is no such file. The rule is held by `app/backend/tests/sandbox-composition.test.ts`, which reads `idp/realm-template.json` off disk, walks it to any depth for a key beginning with an underscore, and — importantly — proves the walk would have found one by running it against a fixture that has two. I checked the test before renaming the reference rather than trusting the ruling's pointer; it does hold the rule the prose claims for it. The README now names it by its repository-relative path.
+
+**The egress breach (rule E-2).** `.sdlc/proposals/build-slice-1.md` and its published copies under `site/` do not exist in this workspace — the workspace holds only `app/`, `design/`, `docs/`, `plan/`, `spec/`, `tests/` and `constitution.md`, so there was no file for me to edit and no site to regenerate. What I could do, I did: I swept every tracked directory for absolute home paths and workspace-absolute paths and found none, so the repository itself is clean, and the breach came from pasted terminal output carried into the previous proposal's prose. That proposal is this journal, so the correction is that this one contains no absolute path — where I refer to a file I refer to it relative to the repository root. If the published copies are regenerated from the journal, the check should pass; if they are static artefacts held outside this workspace, they will need the substitution applied by whichever stage owns them, because the path guard refuses me there.
+
+**What I verified.** `npm --prefix app run check` passes end to end after a clean `npm ci`: typechecks in all three packages, 47 backend tests and 31 frontend tests, all green. I removed the installed `node_modules` afterwards to leave the tree as I found it, since there is no ignore file anywhere in it.
+
+**What I did not do.** Two conditions on the ruling are addressed to the test-derivation stage — the R-7.17 test that signs in as an administrator and authors a page through the create screen in order to obtain a body containing markup, and the R-7.18 test that goes on to assert things about a page's editing screen. Both reach into Slice 5's surface, which is why nothing could bind here. I left them untouched; bending the application to satisfy a test that asks for more than its criterion would have hidden the real defect and the stage they were filed with would be asked for them again. R-7.17 and R-7.18 remain unestablished for this tree until those tests are re-derived, and the application's side of them — a page body rendered as formatted text with embedded markup never executed, and a service level agreement page standing on a fresh installation so the screens linking to it resolve — is unchanged from what the previous turn built.
+
+**What the next slice will find.** Exactly what it would have found before, with one fewer claim on Slice 1: no sign-in, so nothing authenticated; and the administrator's content area, including the page list that R-7.12 now waits on, still to be built in Slice 5 over pages the Slice 1 migration has already seeded.
