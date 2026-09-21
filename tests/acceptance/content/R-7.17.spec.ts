@@ -1,42 +1,40 @@
 // criterion: @R-7.17 v1
-// provenance: blind, spec@40605384759bd10724c1411fdc448dfd99c70aee, derived 2026-09-07
-import { test, expect, persona } from "../../fixtures";
+// provenance: blind, spec@05e88fb7765c5d6327f910e43f990e6c321b63fa, derived 2026-09-21
+import { test, expect, seed } from "../../fixtures";
 
-// A page is built carrying both a formatting mark and a piece of raw markup. If the body
-// is rendered as formatted text only, the formatting mark is gone from what a reader sees.
+// The criterion is about how a page's body reaches a reader. It asks for nobody to author a
+// page, so nobody does and nobody signs in: the body read here is one the installation
+// already holds, the seeded ordinary page, whose wording carries a formatting mark around
+// one of its words.
 //
-// Two halves of the criterion are not asserted. "Never executed" is not: contentView
-// .pageBody() hands back the rendered body as text, and a rebuild that renders the markup
-// as literal characters and one that strips it out are both conforming, so neither the
-// markup's presence nor its absence in that text tells execution from non-execution. The
-// raw markup is still written into the body, so the page under test is the one the
-// criterion describes, but nothing is claimed about how it comes back.
-//
-// Nor is the claim that the same body renders identically wherever another screen embeds
-// it. The bodies other screens embed belong to the pages the service creates for itself,
-// which the seed does not name and which no surface addresses by handle, so no body a
-// test can write reaches an embedded rendering.
-const address = `derived-markup-${Date.now().toString(36)}`;
-const markup = "<b>this was written as markup</b>";
-const body = `A **formatted** word and then ${markup} left raw.`;
+// Two of the criterion's clauses are left unasserted, because nothing in the surface reaches
+// them. Execution cannot be told from stripping: content_view.page_body hands back the
+// rendered body as text, so a body whose markup was run and a body whose markup was taken
+// out come back alike, and the only thing that can be read is that no markup reaches the
+// reader in the wording's place. And the comparison of the two renderings has no second
+// rendering to make: the screens that embed a body — the two program qualification terms
+// screens and the two evaluation instructions screens — embed pages the service creates for
+// itself, which the seed does not name and which no surface addresses by handle, so the
+// seeded page's body cannot be got into an embedded rendering to compare.
+const ordinary = seed.content.ordinaryPage;
+const settle = { timeout: 15000 };
 
-test("a page's body is rendered as formatted text only", async ({
+test("A page's body is rendered as formatted text only; markup embedded in it is never executed, and the same body renders identically on the page's own address and wherever another screen embeds it", async ({
   surface,
 }) => {
-  await surface.signIn(persona.administrator);
+  // Given: a page that answers at its own address.
+  await surface.contentView.open({ slug: ordinary.slug });
+  await expect
+    .poll(() => surface.contentView.pageTitle(), { message: "given: the page answers at its own address", ...settle })
+    .toBe(ordinary.title);
 
-  await surface.contentCreate.open();
-  await surface.contentCreate.enterTitle({ title: "A page carrying raw markup" });
-  await surface.contentCreate.enterSlug({ slug: address });
-  await surface.contentCreate.enterBody({ body });
-  await surface.contentCreate.publishPage();
-  await surface.contentCreate.confirmPublish();
-
-  await surface.signOut();
-  await surface.contentView.open({ slug: address });
-
+  // When: a reader reads its body.
   const rendered = await surface.contentView.pageBody();
-  // Formatted: the marks around the emphasised word have been consumed.
-  expect(rendered).toContain("formatted");
-  expect(rendered).not.toContain("**");
+
+  // Then: it is formatted text. The marks the seeded wording carries around its emphasised
+  // word were consumed into formatting rather than shown as characters to the reader...
+  expect(rendered, "the body is shown").toBeTruthy();
+  expect(rendered, "the formatting marks were rendered, not shown literally").not.toContain("**");
+  // ...and nothing markup-shaped stands in the reader's text in their place.
+  expect(rendered, "no markup reaches the reader as markup").not.toMatch(/[<>]/);
 });

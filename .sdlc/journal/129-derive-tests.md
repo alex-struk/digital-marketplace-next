@@ -1,0 +1,30 @@
+---
+stage: "derive-tests"
+title: "derive tests"
+at: "2026-09-21T05:42:09.699Z"
+cost: 4.296419500000001
+turns: 46
+session: "94c50366-5a2b-48ce-b271-459f3f088db9"
+---
+
+Done. Here is the journal entry for this run.
+
+---
+
+**What I did.** Six content-domain criteria were sent back for re-derivation. Three came back as tests, three as recorded blockages.
+
+**Written as tests (3).**
+
+*R-7.22* (no two pages may share an address) keeps its two halves — the clash on creating and the clash on renaming — but each now waits for the screen to answer the submission at all before any refusal is read. The previous derivation read the duplicate-address report straight after clicking publish, and on a screen that simply sat as it was filled in that read came back empty with nothing to say whether the creation had ever been put forward. Both halves now put the submission forward defensively (a publish that cannot be clicked, and a confirmation that is never asked for, are both tolerated), then poll until the screen has said *something* — a created page, a published change, or a report — and only then read the outcome against the address field where the address was entered, accepting either the dedicated duplicate-address report or the mark against the field. The address is also confirmed to have landed in the address field before publishing, via the screen's statement of the address the page would stand at. Both halves still close by reading the existing page to show it is untouched. The rename half still creates its own second page first: the criterion's given needs a different page to do the renaming, and no page that already exists can be renamed (the seeded ordinary page is the one under attack, and the pages the service needs cannot be renamed at all).
+
+*R-7.17* (a body is rendered as formatted text only) no longer authors anything. The previous test signed in as an administrator and wrote a page through the create screen purely to plant markup in a body; the criterion asks for no authorship and no create screen, so the test now reads the body of the page the seed already carries, signed out, on the page's own address, and asserts that the formatting marks its wording carries were rendered rather than shown, and that nothing markup-shaped reaches the reader in their place. Two of the criterion's clauses stay unasserted, with the reason in the file: execution cannot be told from stripping through an observation that hands back the rendered body as text, and the comparison with an embedded rendering has no second rendering to make, since every screen that embeds a body embeds a page the seed does not name.
+
+*R-7.18* (the service level agreement page stands on a fresh installation) drops everything the previous test did after reading the page — it had gone on to open the editing screen and assert a fixed-page warning, a locked address and a withheld delete, none of which the criterion mentions. The criterion asks only that the screens linking to the page resolve, and the contract now carries a surface for exactly that: the link, the address it leads to, and the answer at that address. The test opens that screen signed out, confirms the link is offered and names an address, follows it, and reads that a page answers there. Only one of the five linking screens is separately addressed by the surface, so what is asserted is the thing all five depend on.
+
+**Recorded as blocked (3), their test files deleted.** All three were failing on a given that does not hold, which is a blockage rather than a refutation.
+
+*R-7.12* and *R-7.25* and the first half of *R-7.27* all founder on the same single gap: the seed names exactly one content record, an ordinary page an administrator made, and names none of the pages the service creates for itself. Those pages arrive with the installation's own migrations. Both screens that open a page take an address, so a test about a page the service needs has no address to give that comes from a handle rather than from a guess — the deleted tests all guessed, from a note in the spec, and then reported the guess's absence as the criterion failing. Every observation these criteria need already exists on the editing screen; the missing thing is the handle.
+
+*R-7.27*'s second half needs a second administrator to make the later change. The seed carries the account and the contract carries the persona, but that persona's session-route sign-in is recorded as unavailable — the route mints a session for one fixed administrator and takes no parameter.
+
+**What the contract stage would need to add, by name.** A content seed group naming the pages the service creates for itself, each carrying its address, so they can be opened by handle (unblocks R-7.12, R-7.25 and half of R-7.27). A `content-list` observation of how many pages are listed, since the list reads titles, addresses and the fixed mark but returns no count (R-7.12's count of twenty-two). A sign-in that reaches `persona.administrator_other` on the target under test (the rest of R-7.27). Beyond those, two things I did not record as blocked because no addition would clearly help: a way to observe that markup was not *executed* as distinct from removed, and a way to get a body a test controls into one of the screens that embed a body — both bear on R-7.17, whose file notes them in place.

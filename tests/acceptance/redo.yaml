@@ -33,32 +33,6 @@ redo:
       service areas before editing, and it does not tick a third area as the
       given describes; establish the two starting approvals, clear one and tick
       a third, then read the approvals once the save has completed
-  - id: R-7.22
-    version: 1
-    why: "in the creation case nothing shows that the new page was ever put forward:
-      the screen stayed exactly as filled in, with no outcome of any kind,
-      neither a created page nor a refusal; establish that the creation was
-      submitted before reading whether the address was reported, and read the
-      report against the address field where it is entered"
-  - id: R-7.12
-    version: 1
-    why: the test established that this installation carries none of the pages the
-      service needs and then reported that as a failure of the criterion; a
-      given that does not hold makes the result blocked, not failed, so record
-      it as blocked until the target carries those pages
-  - id: R-7.25
-    version: 1
-    why: the test established that the page it needs, one the service depends on,
-      does not answer on this installation and then reported that as a failure
-      of the criterion; a given that does not hold makes the result blocked, not
-      failed, so record it as blocked until the target carries that page
-  - id: R-7.27
-    version: 1
-    why: the first test stopped at its given, a page the service created for itself,
-      which this installation does not carry; the second needs a second
-      administrator to act as, and this target signs in only one; record both as
-      blocked rather than failed until the target carries the page and a second
-      administrator can sign in
   - id: R-5.1
     version: 1
     why: the panel of one was never assembled, because the draft's panel already
@@ -174,21 +148,3 @@ redo:
       check that no proposal was submitted, allow time for a reason where a
       malformed value was typed, and treat an archived organization that is not
       offered as a choice as refused
-  - id: R-7.17
-    version: 1
-    why: the test signs in as an administrator and authors a page through the create
-      screen — entering a title, an address and a body, then publishing and
-      confirming — in order to obtain a body containing markup; the criterion
-      asks only that a page's body be rendered as formatted text and that markup
-      embedded in it never be executed, and asks for nobody to author a page.
-    verb: test-overreaches
-  - id: R-7.18
-    version: 1
-    why: after reading the page while signed out, the test signs in as an
-      administrator and asserts that the page's editing screen shows a
-      fixed-page warning, that its address field is locked and that its delete
-      control is withheld; the criterion asks only that the service level
-      agreement page stand on a fresh installation as one the service creates
-      for itself, so that the screens linking to it resolve, and says nothing
-      about an editing screen or its controls.
-    verb: test-overreaches
