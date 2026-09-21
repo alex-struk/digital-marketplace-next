@@ -18,3 +18,65 @@ requests:
     by: agent:reviewer
     at: 2026-09-21T16:45:56.619Z
     taken: 2026-09-21T16:52:30.791Z
+  - stage: plan
+    why: "plan/tasks.md line 11 still lists R-7.12 among slice 1's criteria, and
+      slice 5 (an administrator can write and manage the service's pages) does
+      not list it, although the G3 ruling on build-slice-1-3 recorded that
+      R-7.12 had moved to the slice 5 screen that can demonstrate it. Because
+      the plan never carried that, verify still claims R-7.12 for slice 1, where
+      its then-clause cannot be reached at all: the criterion's given is an
+      administrator looking at the list of pages, and slice 1 builds no such
+      list. Move it in both places, so plan/check-coverage.mjs still finds it in
+      exactly one slice. While it is open: the criterion's then-clause names
+      twenty-two pages, plan/plan.md ('The data it inherits', item 3) chose
+      twenty-two minus the seven nothing links to plus the service level
+      agreement page, which is the sixteen the application's migration now
+      creates, and tests/seed/manifest.yaml says nineteen. Whichever slice ends
+      up holding R-7.12 will be asserted against one of those three numbers, and
+      the plan is where the sixteen was chosen."
+    from: build-slice-1-4
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-21T23:10:55.233Z
+  - stage: plan
+    why: "R-7.17 has two clauses — a page's body is rendered as formatted text only
+      with embedded markup never executed, and the same body renders identically
+      on the page's own address and wherever another screen embeds it. Slice 1
+      claims the criterion, and it builds no screen that embeds another page's
+      body: its learn-more screens carry their own prose, so the second clause
+      has nowhere to be read and the content suite records it as untestable. The
+      first screen that embeds a page body is the Sprint With Us opportunity
+      screen, which arrives with R-7.29 in slice 11. Say where that clause is
+      asserted — either by moving R-7.17 to the slice whose screens embed a
+      body, or by splitting it so slice 1 answers for the rendering and slice 11
+      for the sameness — so the clause has a named home instead of being
+      recorded as never asserted for the rest of the build."
+    from: build-slice-1-4
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-21T23:10:55.233Z
+  - stage: derive-tests
+    why: "the content suite records R-7.17's never-executed clause as not testable
+      on the ground that content-view hands the rendered body back as a single
+      piece of text, so a body whose markup was run and a body whose markup was
+      taken out come back alike. That reason names the wrong thing as missing.
+      The criterion turns on whether embedded markup is shown as text or
+      executed, and the text of a rendered body separates those two whenever the
+      body holds markup to begin with: a body containing <script>x</script>
+      comes back carrying that string when the markup is shown, and without it
+      when the markup is run or stripped, and a renderer that strips it fails
+      the criterion's first clause too. What is actually missing is a page whose
+      stored body embeds markup — the acceptance seed's only content body is
+      'The third and current version of this page, with a **formatted** word in
+      it.' A request to add such a body, with a handle, has been filed against
+      the seed. Until it lands, write the reason as the seed holding no body
+      with markup in it rather than as the surface being unable to show the
+      difference, so the gap is recorded where it can be closed; when it lands,
+      derive a test for the clause and read it against that body. The second
+      clause, the same body rendering identically wherever another screen embeds
+      it, genuinely has nowhere to be read while no screen embeds a page body,
+      and that reason stands as it is."
+    from: build-slice-1-4
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-21T23:10:55.233Z
