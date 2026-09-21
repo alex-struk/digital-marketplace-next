@@ -31,6 +31,13 @@ is the pipeline itself: a stage that cannot produce what its gate asks for, a re
 not reach the thing at fault, a check or tool the gate needs that does not exist. Those are
 not rulings about the project, and a ruling here would hide them.
 
+A build slice escalated after three failed builds reaches this persona with the failures on it.
+Where one of them is a criterion `verify` could not exercise at all, and the criterion is right
+while the test derived from it asks for something the criterion never did, the condition line
+`test-overreaches <ID>: <what the test demands that the criterion does not ask for>` on a return
+files that one test to be written again and carries the reason to whoever writes it. It says
+nothing about the criterion, which stays unverified until a regenerated test binds and passes.
+
 ## Ruling format
 One paragraph: the question, the ruling (approve, return, or escalate), the reason, and what
 would change the ruling. Written to `.sdlc/gates/<name>.yaml` by `sdlc rule` with `held_by: agent`.

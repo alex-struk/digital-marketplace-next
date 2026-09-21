@@ -41,5 +41,12 @@
       "name": "bcgov-agent-skills"
     }
   ],
-  "created": "2026-09-20T22:48:24.593Z"
+  "created": "2026-09-20T22:48:24.593Z",
+  "briefs": {
+    "architect.md": "da8b1879c9672d19",
+    "product-owner.md": "d75f8d91858b842d",
+    "reviewer.md": "be9e337fa9c25520",
+    "tech-lead.md": "7e1fd3196df8d19d",
+    "ux-reviewer.md": "b1c0bc59cf7949b2"
+  }
 }
