@@ -12,6 +12,21 @@ The constitution check is completed; every criterion is assigned to a task; ever
 - The plan makes any schema change.
 - The plan introduces a dependency not in the dependency register.
 
+## The criteria the proposal is judged against
+
+The request quotes the text of every criterion the proposal touches — the ones whose specs it
+changes, the ones its own page names, and the ones it removes or records as untestable — in a
+section of its own before the diff, outside the diff's budget. Read it. A ruling on work
+derived from a criterion is a comparison against what that criterion says, and the derived
+work does not carry it: a rewritten test quotes its criterion in its title by convention, and
+a deleted one leaves nothing on the branch to read the criterion from at all.
+
+The section says when it left something out. A criterion whose text could not be found
+anywhere is named as missing rather than dropped, and one defined in a file this proposal
+itself changes is named rather than quoted, because its text is in the diff below. A criterion
+you were told was missing and that the ruling turns on is a reason to return the proposal
+saying so, not something to rule around.
+
 ## A condition whose work belongs to another stage
 
 Every condition you attach to a return is read by the stage that acts on it, and that stage
