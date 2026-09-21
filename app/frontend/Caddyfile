@@ -1,0 +1,33 @@
+# One origin: this server answers for every screen and forwards the service's own addresses
+# to the backend (decision record 0001). A browser, and the acceptance suite, see one host.
+{
+	admin off
+	auto_https off
+	log {
+		format json
+	}
+}
+
+:3000 {
+	encode gzip
+
+	handle /api/* {
+		reverse_proxy {$BACKEND_ORIGIN:backend:3001}
+	}
+
+	handle /status {
+		reverse_proxy {$BACKEND_ORIGIN:backend:3001}
+	}
+
+	handle /admin/* {
+		reverse_proxy {$BACKEND_ORIGIN:backend:3001}
+	}
+
+	# Every other address is a screen. The single-page app's router answers it, and shows
+	# the not-found screen for an address it does not know.
+	handle {
+		root * /srv
+		try_files {path} /index.html
+		file_server
+	}
+}
