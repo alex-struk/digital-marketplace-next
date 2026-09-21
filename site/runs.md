@@ -28,6 +28,9 @@
 - 09:55:20 run derive-tests: ok, cost 1.2523449999999998, turns 23
 - 09:55:20 propose derive-tests-content-6 at G3
 - 09:59:55 rule derive-tests-content-6 approve at G3 by agent:reviewer (agent)
+- 10:44:36 verify slice 1: the sandbox did not start, so nothing was verified.
+- 11:55:49 verify slice 1 verified: every claimed criterion passes against the application in build-slice-1-4. Ready for G3.
+- 11:55:50 run verify: regenerated 163 files in .sdlc, site
 
 # Run record 2026-09-20
 
