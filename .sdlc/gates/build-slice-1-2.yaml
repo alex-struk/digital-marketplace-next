@@ -1,0 +1,16 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  verify is a current unbound for this tree (48be1c2 = HEAD:app), so nothing was established about R-7.12, R-7.17 or R-7.18 and an approval is refused. The adapter's reason is genuine — Slice 1 correctly builds no sign-in, which is Slice 2's — but the three criteria split two ways. R-7.17 and R-7.18 have tests that reach past their criteria into Slice 5's page-authoring screens, so there is nothing for the adapter to bind; they are returned for re-derivation. R-7.12 is a placement defect rather than a test defect: its criterion asserts what an administrator sees in the list of pages, a surface plan/tasks.md builds in Slice 5, so no test can demonstrate it here and the criterion should move. The egress check also fails on this branch and the identity provider's README names a test file that does not exist.
+conditions:
+  - "test-overreaches R-7.17: the test signs in as an administrator and authors a page through the create screen — entering a title, an address and a body, then publishing and confirming — in order to obtain a body containing markup; the criterion asks only that a page's body be rendered as formatted text and that markup embedded in it never be executed, and asks for nobody to author a page."
+  - "test-overreaches R-7.18: after reading the page while signed out, the test signs in as an administrator and asserts that the page's editing screen shows a fixed-page warning, that its address field is locked and that its delete control is withheld; the criterion asks only that the service level agreement page stand on a fresh installation as one the service creates for itself, so that the screens linking to it resolve, and says nothing about an editing screen or its controls."
+  - "R-7.12 is claimed by a slice that cannot demonstrate it. The criterion's own then-clause is what an administrator sees in the list of pages — that the pages are listed and marked as needed by the service — and plan/tasks.md:31-32 builds the page list in Slice 5. Move R-7.12 to Slice 5 in plan/tasks.md and plan/plan.md, leaving Slice 1 to claim R-7.1, R-7.2, R-7.3, R-7.4, R-7.17, R-7.18 and R-7.19; do not pull the administrator's content area forward into the walking skeleton."
+  - "The egress check fails on this branch: a pasted npm error trace in .sdlc/proposals/build-slice-1.md (lines 44-101) and its published copies site/proposals/build-slice-1.md and site/proposals/build-slice-1.html carry a local home path (rule E-2). Replace the absolute paths in those traces with repository-relative ones and regenerate the site copies so the check passes."
+  - "app/compose/idp/README.md says the rule against invented realm keys is held by 'tests/idp-realm.test.ts' in the backend package; no such file exists. Name app/backend/tests/sandbox-composition.test.ts, which is the test that actually holds it."
+cost: 1.814474
+turns: 16
+session: "adb4da79-4f0a-4e14-b1f5-460a6037f64d"
+at: 2026-09-21T05:04:21.703Z
