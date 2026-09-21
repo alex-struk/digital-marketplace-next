@@ -2,7 +2,7 @@
   "slice": 1,
   "proposal": "build-slice-1-2",
   "app_tree": "48be1c2c2d16b9b950c9b72a048f08185d3417b3",
-  "at": "2026-09-21T02:51:20.276Z",
+  "at": "2026-09-21T03:33:57.720Z",
   "verdict": "unbound",
   "rows": [
     {
@@ -10,12 +10,11 @@
       "version": 1,
       "domain": "content",
       "file": "tests/acceptance/content/R-7.1.spec.ts",
-      "result": "unbound",
+      "result": "pass",
       "tests": [
         {
-          "title": "unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet",
-          "status": "failed",
-          "error": "Error: unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet"
+          "title": "anyone, including a visitor who has not signed in, can read a page by its address and sees its title, its body as formatted text, and the dates it was first published and last updated",
+          "status": "passed"
         }
       ]
     },
@@ -24,12 +23,11 @@
       "version": 1,
       "domain": "content",
       "file": "tests/acceptance/content/R-7.2.spec.ts",
-      "result": "unbound",
+      "result": "pass",
       "tests": [
         {
-          "title": "unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet",
-          "status": "failed",
-          "error": "Error: unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet"
+          "title": "a request for a page at an address that no page holds is answered as not found",
+          "status": "passed"
         }
       ]
     },
@@ -38,12 +36,11 @@
       "version": 1,
       "domain": "content",
       "file": "tests/acceptance/content/R-7.3.spec.ts",
-      "result": "unbound",
+      "result": "pass",
       "tests": [
         {
-          "title": "unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet",
-          "status": "failed",
-          "error": "Error: unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet"
+          "title": "a visitor using the service sees the not-found screen either way, whether the address is malformed or merely one no page holds",
+          "status": "passed"
         }
       ]
     },
@@ -52,12 +49,15 @@
       "version": 1,
       "domain": "content",
       "file": "tests/acceptance/content/R-7.4.spec.ts",
-      "result": "unbound",
+      "result": "pass",
       "tests": [
         {
-          "title": "unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet",
-          "status": "failed",
-          "error": "Error: unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet"
+          "title": "a page can also be read by its identifier",
+          "status": "passed"
+        },
+        {
+          "title": "the service falls back to treating the same value as an address when no page carries that identifier",
+          "status": "passed"
         }
       ]
     },
@@ -69,9 +69,14 @@
       "result": "unbound",
       "tests": [
         {
-          "title": "unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet",
+          "title": "A fresh installation carries a full set of the pages the service needs, each holding placeholder text and titled by its own address until somebody writes it — a visitor reading one",
           "status": "failed",
-          "error": "Error: unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet"
+          "error": "Error: unbound: signIn.administrator — this target offers no way to sign in: \"/sign-in\" and the home page's \"Sign in\" link both end on the service's own \"Page not found\" screen, and no identity provider form with a username and a password is reachable from it (ended on http://localhost:3000/sign-in)"
+        },
+        {
+          "title": "A fresh installation carries a full set of the pages the service needs, each holding placeholder text and titled by its own address until somebody writes it — an administrator looking at the list of pages",
+          "status": "failed",
+          "error": "Error: unbound: signIn.administrator — this target offers no way to sign in: \"/sign-in\" and the home page's \"Sign in\" link both end on the service's own \"Page not found\" screen, and no identity provider form with a username and a password is reachable from it (ended on http://localhost:3000/sign-in)"
         }
       ]
     },
@@ -83,9 +88,9 @@
       "result": "unbound",
       "tests": [
         {
-          "title": "unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet",
+          "title": "a page's body is rendered as formatted text only",
           "status": "failed",
-          "error": "Error: unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet"
+          "error": "Error: unbound: signIn.administrator — this target offers no way to sign in: \"/sign-in\" and the home page's \"Sign in\" link both end on the service's own \"Page not found\" screen, and no identity provider form with a username and a password is reachable from it (ended on http://localhost:3000/sign-in)"
         }
       ]
     },
@@ -97,9 +102,9 @@
       "result": "unbound",
       "tests": [
         {
-          "title": "unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet",
+          "title": "the service level agreement page is one the service creates for itself",
           "status": "failed",
-          "error": "Error: unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet"
+          "error": "Error: unbound: signIn.administrator — this target offers no way to sign in: \"/sign-in\" and the home page's \"Sign in\" link both end on the service's own \"Page not found\" screen, and no identity provider form with a username and a password is reachable from it (ended on http://localhost:3000/sign-in)"
         }
       ]
     },
@@ -108,12 +113,11 @@
       "version": 1,
       "domain": "content",
       "file": "tests/acceptance/content/R-7.19.spec.ts",
-      "result": "unbound",
+      "result": "pass",
       "tests": [
         {
-          "title": "unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet",
-          "status": "failed",
-          "error": "Error: unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet"
+          "title": "the service links its own footer to five of its pages, so every screen offers the about, disclaimer, privacy, accessibility and copyright pages to any visitor",
+          "status": "passed"
         }
       ]
     }
