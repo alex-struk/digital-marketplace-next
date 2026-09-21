@@ -38,6 +38,7 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-09-21T23:10:55.233Z
+    taken: 2026-09-21T23:38:05.073Z
   - stage: plan
     why: "R-7.17 has two clauses — a page's body is rendered as formatted text only
       with embedded markup never executed, and the same body renders identically
@@ -55,6 +56,7 @@ requests:
     gate: G3
     by: agent:reviewer
     at: 2026-09-21T23:10:55.233Z
+    taken: 2026-09-21T23:38:05.073Z
   - stage: derive-tests
     why: "the content suite records R-7.17's never-executed clause as not testable
       on the ground that content-view hands the rendered body back as a single
