@@ -45,6 +45,7 @@ Profile: rebuild
 - [bind-adapter-old-9](proposals/bind-adapter-old-9.md)
 - [brief-v1](proposals/brief-v1.md)
 - [budget-v1](proposals/budget-v1.md)
+- [build-slice-1](proposals/build-slice-1.md)
 - [calibrate-old-2](proposals/calibrate-old-2.md)
 - [calibrate-old-3](proposals/calibrate-old-3.md)
 - [calibrate-old-4](proposals/calibrate-old-4.md)
