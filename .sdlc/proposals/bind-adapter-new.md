@@ -40,3 +40,22 @@ For a page that is not on this target, `open()` throws the same `unbound:` shape
 I could not run anything. The workspace has no installed dependencies, so neither the suite nor `tsc --noEmit` could be run, and script execution was not available to me. The adapter is therefore verified by driving the browser by hand — every bound control was located by role and accessible name in the live page and the readings checked against what the page shows — and by mechanical comparison of the member lists against `spec/contract/surface.yaml`: the page order, the actions and observations of every page, and their names are identical to the contract in both files, and the adapter's surface properties match the generated type exactly. It has not been executed by Playwright.
 
 One incidental finding for whoever rules on this: the home page offers "Browse opportunities", "Sign in" and "Sign up", and all three lead to addresses the client answers with "Page not found".
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+The adapter is navigation and locators only: no expect/assert anywhere in tests/adapters/new/index.ts, no credential in the code (the password is read from SDLC_SANDBOX_PASSWORD and never printed), and nothing under tests/acceptance changed. The unbound reasons are real and checkable: the shipped client bundle registers exactly three routes (/, /learn-more/$program, /content/$slug) plus a 'Page not found' component, and the backend dist ships status, content and rules but no files module, so the 'not a page on this target' and 'Cannot POST /api/files' reasons hold against this build. Coverage reconciles mechanically: 88 contract pages equal 88 binding pages in the same order, member names match the contract on every page checked, and 809 members minus 28 bound minus 3 hand-written unbound equals the 778 member strings in the absent() lists -- which matters because absent() casts through 'as unknown as T' and the passing typecheck alone would not catch a dropped member. The egress check fails on lines in .sdlc/proposals/build-slice-1.md and its site/ copy, introduced by commits 43157ab and 2948a1a, not by this proposal.
+
+**Conditions:**
+- Not this stage's file, carried forward: the local home paths in .sdlc/proposals/build-slice-1.md and site/proposals/build-slice-1.{md,html} (rule E-2, pasted npm error stack traces) must be scrubbed when build-slice-1 is rewritten, or the branch stays red on egress.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `f2dc11ddb247bbc4a4adde8bb24ce6abc34ad459`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
