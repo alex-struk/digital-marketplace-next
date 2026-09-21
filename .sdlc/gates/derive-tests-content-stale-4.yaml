@@ -1,0 +1,11 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Every assertion in the three derived tests follows from a clause of its own criterion and nothing else: R-7.22 establishes the clashing submission was put forward before reading the refusal and asserts only non-acceptance, the address reported in use at the field, and the existing page untouched; R-7.17 no longer authors a page and reads only the seeded body, recording the execution-vs-stripping and embedded-rendering clauses as unassertable with the reason in the file; R-7.18 drops the editing-screen assertions entirely and reads only the link, its address and the answer at it, through the content-service-level-agreement-link surface that the contract carries (surface.d.ts:1092). No test names a route, a selector, a table, a column or a status. The three blockage records are real and specific: the seed defines one content record and its own note says the service's own pages arrive with migrations, so R-7.12 and R-7.25 have no address that comes from a handle; content-list carries no count observation, which is R-7.12's second gap; and persona.administratorOther's session-route sign-in is recorded unavailable in personas.ts:319, which is R-7.27's second half. Each names what the contract stage would have to add. The applied.yaml deletions match the established pattern for this stage (2bdaf6f), typecheck passes with no diagnostics under acceptance/content/, and the remaining check warnings belong to other domains and to persona template drift, not to this proposal.
+conditions: []
+cost: 1.7114675000000001
+turns: 22
+session: "1114ba7c-5fb2-4c15-9302-ee9a4b03e1dc"
+at: 2026-09-21T15:39:07.356Z

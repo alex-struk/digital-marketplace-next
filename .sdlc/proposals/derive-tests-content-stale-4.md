@@ -30,3 +30,22 @@ Done. Here is the journal entry for this run.
 *R-7.27*'s second half needs a second administrator to make the later change. The seed carries the account and the contract carries the persona, but that persona's session-route sign-in is recorded as unavailable — the route mints a session for one fixed administrator and takes no parameter.
 
 **What the contract stage would need to add, by name.** A content seed group naming the pages the service creates for itself, each carrying its address, so they can be opened by handle (unblocks R-7.12, R-7.25 and half of R-7.27). A `content-list` observation of how many pages are listed, since the list reads titles, addresses and the fixed mark but returns no count (R-7.12's count of twenty-two). A sign-in that reaches `persona.administrator_other` on the target under test (the rest of R-7.27). Beyond those, two things I did not record as blocked because no addition would clearly help: a way to observe that markup was not *executed* as distinct from removed, and a way to get a body a test controls into one of the screens that embed a body — both bear on R-7.17, whose file notes them in place.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Every assertion in the three derived tests follows from a clause of its own criterion and nothing else: R-7.22 establishes the clashing submission was put forward before reading the refusal and asserts only non-acceptance, the address reported in use at the field, and the existing page untouched; R-7.17 no longer authors a page and reads only the seeded body, recording the execution-vs-stripping and embedded-rendering clauses as unassertable with the reason in the file; R-7.18 drops the editing-screen assertions entirely and reads only the link, its address and the answer at it, through the content-service-level-agreement-link surface that the contract carries (surface.d.ts:1092). No test names a route, a selector, a table, a column or a status. The three blockage records are real and specific: the seed defines one content record and its own note says the service's own pages arrive with migrations, so R-7.12 and R-7.25 have no address that comes from a handle; content-list carries no count observation, which is R-7.12's second gap; and persona.administratorOther's session-route sign-in is recorded unavailable in personas.ts:319, which is R-7.27's second half. Each names what the contract stage would have to add. The applied.yaml deletions match the established pattern for this stage (2bdaf6f), typecheck passes with no diagnostics under acceptance/content/, and the remaining check warnings belong to other domains and to persona template drift, not to this proposal.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `dfa912a2d26fcbbbd019a5d5bc46b31e9274a0f7`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/content/`, which this proposal answers for.
+
+    No diagnostics.
