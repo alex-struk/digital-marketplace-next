@@ -1,0 +1,121 @@
+{
+  "slice": 1,
+  "proposal": "build-slice-1",
+  "app_tree": "a4a2fe5e956264a95f90a9d800b01b13d4a31f7a",
+  "at": "2026-09-21T00:33:21.349Z",
+  "verdict": "unbound",
+  "rows": [
+    {
+      "id": "R-7.1",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.1.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet",
+          "status": "failed",
+          "error": "Error: unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet"
+        }
+      ]
+    },
+    {
+      "id": "R-7.2",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.2.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet",
+          "status": "failed",
+          "error": "Error: unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet"
+        }
+      ]
+    },
+    {
+      "id": "R-7.3",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.3.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet",
+          "status": "failed",
+          "error": "Error: unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet"
+        }
+      ]
+    },
+    {
+      "id": "R-7.4",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.4.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet",
+          "status": "failed",
+          "error": "Error: unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet"
+        }
+      ]
+    },
+    {
+      "id": "R-7.12",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.12.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet",
+          "status": "failed",
+          "error": "Error: unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet"
+        }
+      ]
+    },
+    {
+      "id": "R-7.17",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.17.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet",
+          "status": "failed",
+          "error": "Error: unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet"
+        }
+      ]
+    },
+    {
+      "id": "R-7.18",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.18.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet",
+          "status": "failed",
+          "error": "Error: unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet"
+        }
+      ]
+    },
+    {
+      "id": "R-7.19",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.19.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet",
+          "status": "failed",
+          "error": "Error: unbound: tests/adapters/new/index.ts does not exist, so nothing on new can be driven yet"
+        }
+      ]
+    }
+  ]
+}
