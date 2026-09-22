@@ -1,0 +1,37 @@
+{
+  "name": "@digital-marketplace/backend",
+  "private": true,
+  "version": "0.1.0",
+  "description": "The Digital Marketplace service: the recovered HTTP contract over the kept PostgreSQL schema.",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/main.js",
+    "dev": "tsc -p tsconfig.build.json --watch",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "vitest run",
+    "db:pull": "node scripts/prisma.mjs db pull && node scripts/prisma.mjs generate",
+    "postinstall": "node scripts/prisma.mjs generate"
+  },
+  "dependencies": {
+    "@nestjs/common": "12.0.3",
+    "@nestjs/core": "12.0.3",
+    "@nestjs/platform-express": "12.0.3",
+    "@prisma/client": "6.19.3",
+    "express": "5.1.0",
+    "express-openapi-validator": "5.6.2",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.1",
+    "yaml": "2.9.1"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "0.5.8",
+    "@electric-sql/pglite-socket": "0.2.11",
+    "@types/express": "5.0.0",
+    "knex": "3.3.0",
+    "@types/node": "22.20.4",
+    "prisma": "6.19.3",
+    "typescript": "5.9.3",
+    "vitest": "5.0.1"
+  }
+}

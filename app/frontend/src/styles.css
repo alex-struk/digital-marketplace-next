@@ -1,0 +1,21 @@
+/*
+ * Only what the design system does not already cover. The banner's own skip link is the
+ * design system's, so there is none here.
+ *
+ * Every value is a token. No colour, size or radius is written here.
+ */
+
+body {
+  margin: var(--layout-margin-none);
+  font-family: "BC Sans", sans-serif;
+}
+
+main {
+  display: block;
+}
+
+/* A body's own images never run wider than the text they sit in. */
+[data-testid="content-page-body"] img {
+  max-width: 100%;
+  height: auto;
+}
