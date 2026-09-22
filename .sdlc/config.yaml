@@ -14,7 +14,7 @@ oracle:
   target: old
   compose: sources/old/docker-compose.yml
   seed: tests/seed/
-  base_url: http://localhost:3000
+  base_url: http://localhost:4300
   identity: session-route
   service: app
   up: [db, mailpit]
@@ -23,7 +23,7 @@ oracle:
   instances: 4
 targets:
   new:
-    base_url: http://localhost:3000
+    base_url: http://localhost:4300
     identity: sandbox-idp
     depends_on: { identity: http://localhost:8080/realms/digital-marketplace }
 policy:
