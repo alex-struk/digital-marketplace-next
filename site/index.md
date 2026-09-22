@@ -49,6 +49,7 @@ Profile: rebuild
 - [build-slice-1](proposals/build-slice-1.md)
 - [build-slice-1-2](proposals/build-slice-1-2.md)
 - [build-slice-1-3](proposals/build-slice-1-3.md)
+- [build-slice-1-4](proposals/build-slice-1-4.md)
 - [calibrate-old-2](proposals/calibrate-old-2.md)
 - [calibrate-old-3](proposals/calibrate-old-3.md)
 - [calibrate-old-4](proposals/calibrate-old-4.md)
@@ -183,8 +184,8 @@ Profile: rebuild
 ## Totals
 
 - Journal cost: $483.491432
-- Rulings cost: $256.903769
-- Total cost: $740.395201
-- Agent-held rulings: 138
+- Rulings cost: $259.666545
+- Total cost: $743.157977
+- Agent-held rulings: 139
 - Open escalations: 0
 - Open proposals: 0

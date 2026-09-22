@@ -6,6 +6,10 @@
 - 20:28:54 run derive-tests: ok, cost 0.989502, turns 18
 - 20:28:54 propose derive-tests-content-7 at G3
 - 20:33:54 rule derive-tests-content-7 approve at G3 by agent:reviewer (agent)
+- 20:40:09 verify slice 1: the sandbox did not start, so nothing was verified.
+- 20:43:25 run build: pre-checks failed
+- 20:44:23 run build: proposal build-slice-1-5 still open
+- 20:46:21 run build: pre-checks failed
 
 # Run record 2026-09-21
 
