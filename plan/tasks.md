@@ -8,8 +8,8 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 `plan/check-coverage.mjs` checks the placement.
 
 ### Slice 1 · A visitor can read the service's own pages
-- criteria: R-7.1, R-7.2, R-7.3, R-7.4, R-7.12, R-7.17, R-7.18, R-7.19
-- delivers: the walking skeleton — the openshift-ts scaffold (`app/frontend` React/Vite/TanStack Router, `app/backend` NestJS/Prisma, `app/migrations`, `app/compose`) deployed to the OpenShift sandbox by the pinned `bcgov/quickstart-openshift-helpers` workflows, the Knex init container continuing the kept schema's migration history with Prisma introspecting the result, contract validation at the backend boundary and the generated frontend client, one origin through the frontend's forwarding of `/api`, `/status` and `/admin`, `/status`, the site header and footer with its five page links, the home page shell, the three learn-more screens with their service level agreement link, the public page view at `/content/:slug` with formatted-text rendering that never executes markup, the not-found screen, and the seeded set of pages a fresh installation needs (including the service level agreement page)
+- criteria: R-7.1, R-7.2, R-7.3, R-7.4, R-7.18, R-7.19
+- delivers: the walking skeleton — the openshift-ts scaffold (`app/frontend` React/Vite/TanStack Router, `app/backend` NestJS/Prisma, `app/migrations`, `app/compose`) deployed to the OpenShift sandbox by the pinned `bcgov/quickstart-openshift-helpers` workflows, the Knex init container continuing the kept schema's migration history with Prisma introspecting the result, contract validation at the backend boundary and the generated frontend client, one origin through the frontend's forwarding of `/api`, `/status` and `/admin`, `/status`, the site header and footer with its five page links, the home page shell, the three learn-more screens with their service level agreement link, the public page view at `/content/:slug` with formatted-text rendering that never executes markup, the not-found screen, and the migration that seeds the sixteen pages a fresh installation needs (including the service level agreement page), which lands here because R-7.18's links must resolve — the list those pages appear on, and the count they are asserted against, belong to slice 5 with R-7.12 (see `docs/decisions/0007`)
 - depends on: nothing
 
 ### Slice 2 · A person can sign in, finish signing up and sign out
@@ -28,8 +28,8 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 3
 
 ### Slice 5 · An administrator can write and manage the service's pages
-- criteria: R-7.5, R-7.6, R-7.7, R-7.8, R-7.9, R-7.10, R-7.16, R-7.20, R-7.21, R-7.22, R-7.23, R-7.24, R-7.25, R-7.26, R-7.27, R-7.28, R-8.29
-- delivers: the content area — page list, create, edit, rename, publish with kept versions, remove, protection of the pages the service needs, authorship shown to administrators, the formatted-text editor with its guidance link and embedded image upload, and one permission-refusal shape for every page request
+- criteria: R-7.5, R-7.6, R-7.7, R-7.8, R-7.9, R-7.10, R-7.12, R-7.16, R-7.20, R-7.21, R-7.22, R-7.23, R-7.24, R-7.25, R-7.26, R-7.27, R-7.28, R-8.29
+- delivers: the content area — page list, create, edit, rename, publish with kept versions, remove, protection of the pages the service needs, authorship shown to administrators, the formatted-text editor with its guidance link and embedded image upload, one permission-refusal shape for every page request, and the list's showing of what slice 1's migration seeded: sixteen pages on a fresh installation, each titled by its own address, bodied "Initial version" and marked as needed by the service (R-7.12; the sixteen are enumerated and the count settled in `docs/decisions/0007`)
 - depends on: Slice 3
 
 ### Slice 6 · An administrator can announce changed terms, and vendors accept them again
@@ -53,8 +53,8 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 8
 
 ### Slice 10 · Staff can create Sprint With Us and Team With Us opportunities with an evaluation panel
-- criteria: R-1.13, R-1.15, R-1.16, R-1.17, R-1.18, R-1.43, R-1.55, R-5.1, R-5.9, R-5.16, R-5.17, R-5.18, R-5.37, R-7.29
-- delivers: the Sprint With Us and Team With Us create forms, manage pages and public views — budgets, phases, capabilities, resources and service areas, evaluation questions, evaluation weights — the evaluation panel tab with its membership, chair and role rules and the window in which it may change, notices to newly added panel members, and the embedded scope content that stays empty rather than breaking the view when its page is missing
+- criteria: R-1.13, R-1.15, R-1.16, R-1.17, R-1.18, R-1.43, R-1.55, R-5.1, R-5.9, R-5.16, R-5.17, R-5.18, R-5.37, R-7.17, R-7.29
+- delivers: the Sprint With Us and Team With Us create forms, manage pages and public views — budgets, phases, capabilities, resources and service areas, evaluation questions, evaluation weights — the evaluation panel tab with its membership, chair and role rules and the window in which it may change, notices to newly added panel members, the embedded scope content that stays empty rather than breaking the view when its page is missing, and the first screen that embeds another page's body, where that body is shown as formatted text with markup never executed and renders identically to the same page at its own address (R-7.17, whose renderer slice 1 built)
 - depends on: Slice 7
 
 ### Slice 11 · A vendor can register and look after an organization

@@ -1,5 +1,9 @@
 # Run log
 
+# Run record 2026-09-22
+
+- 20:25:41 rule plan-3 approve at G2 by agent:architect (agent)
+
 # Run record 2026-09-21
 
 - 17:18:24 verify slice 1: returned — R-7.1, R-7.2, R-7.3, R-7.4, R-7.12, R-7.17, R-7.18, R-7.19 fail. Next: sdlc run build --slice 1 --revise
@@ -35,6 +39,8 @@
 - 12:16:15 run verify: regenerated 5 files in .sdlc, site
 - 12:17:41 verify slice 1: 6 of the 8 criteria this slice claims pass against the application in build-slice-1-4; the other 2 were never asserted against it at all — R-7.12, R-7.17.
 - 12:17:41 run verify: regenerated 3 files in .sdlc, site
+- 16:38:05 run plan: ok, cost 2.1282375000000004, turns 29
+- 16:38:05 propose plan-3 at G2
 
 # Run record 2026-09-20
 

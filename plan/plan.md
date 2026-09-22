@@ -90,9 +90,14 @@ their bytes and read-access grants, subscriptions, counters, and the service-are
    schema change and is escalated to the tech lead** (0002). If the tech lead rules against it, the
    data mapping stays and R-1.51's "cannot be stored" is enforced in code alone.
 2. The service level agreement page is created as a page the service needs (R-7.18).
-3. A *fresh* installation is seeded with the needed pages minus the seven nothing links to; rows an
-   existing installation already holds are left alone (R-7.12, and the note recorded against
-   D-content-27).
+3. A *fresh* installation is seeded with the pages the service needs: the twenty-two R-7.12's note
+   enumerates, minus the seven nothing in the rebuild links to (the ruling recorded against
+   D-content-27, which that ruling made obsolete), plus the service level agreement page from item
+   2 — **sixteen** pages, listed one by one in decision record 0007. Rows an existing installation
+   already holds are left alone. Sixteen is the number R-7.12 is asserted against: not the
+   twenty-two of its then-clause, which describes the old installation before both rulings, and not
+   the nineteen the acceptance suite's seed manifest currently carries, which matches neither. 0007
+   says why sixteen, which sixteen, and what would reverse it.
 
 **Changes in behaviour over the same data, done in code.** Team With Us processing may now go to
 awarded (R-1.49); panels must have exactly one chair and every member a role (R-1.55, R-5.9,
@@ -164,6 +169,28 @@ reader's attention.
 - **R-1.25 (Slice 19)** is generic — "every proposal in contention scored at its program's final
   stage" — but for Code With Us the equivalent is R-2.27, which Slice 16 delivers. R-1.25 sits
   where the last program's final stage exists.
+- **R-7.12 (Slice 5)** is about seeded data, and the migration that writes that data lands in Slice
+  1, where R-7.18's links have to resolve. The criterion is nonetheless placed in Slice 5, because
+  its given is an administrator looking at the list of pages and Slice 1 builds no such list: in
+  Slice 1 its then-clause could not be reached at all. Only the assertion moves; the seeding does
+  not. The count it is asserted against is sixteen, as "The data it inherits" item 3 and decision
+  record 0007 settle — the criterion's own "twenty-two pages are listed" was recovered from the old
+  installation, and two later rulings changed that set in opposite directions. The rebuild answers
+  to the criterion's statement, a full set of the pages the service needs, each a placeholder
+  titled by its own address; it cannot also show twenty-two of them.
+- **R-7.17 (Slice 10)** has two clauses: a page's body renders as formatted text with embedded
+  markup never executed, and the same body renders identically on the page's own address and
+  wherever another screen embeds it. Slice 1 builds the renderer and the public page view, so it
+  can show the first clause — but it builds no screen that embeds another page's body (its
+  learn-more screens carry their own prose), so the second clause has nothing to be read against
+  there. The first screen that embeds a page body is the Sprint With Us opportunity screen, which
+  arrives with R-7.29 in Slice 10; the program terms screens (Slice 13) and the evaluation
+  instructions (Slice 17) follow. The whole criterion therefore sits in Slice 10, the one place
+  both clauses can be read together, while Slice 1 keeps the renderer under its own unit tests as
+  part of its definition of done. The G3 ruling's other option — splitting the criterion so Slice 1
+  answers for the rendering and Slice 10 for the sameness — needs a second criterion ID, which is
+  the spec's to author and not the plan's to invent; it is listed under "For ruling" below, and if
+  it is authored the rendering half returns to Slice 1 with nothing else changing.
 - **R-7.18 (Slice 1)** names five places that link to the service level agreement page; only the
   learn-more screens exist in Slice 1. The page is seeded there, and the program cards and the three
   forms in slices 7 and 10 link to an address already known to resolve.
@@ -237,7 +264,7 @@ cheap to reverse now and expensive to reverse later.
    | `openapi-typescript` + `openapi-fetch` *(proposed)* | the frontend's API client, generated from the contract | produces types only plus a thin fetch wrapper |
    | `nodemailer` *(proposed)* | sending mail over SMTP | the standard Node SMTP client |
    | `sharp` *(proposed)* | checking image types and resizing profile pictures and logos (R-8 criteria) | fast, and runs without a writable root filesystem |
-   | a Markdown renderer and an HTML sanitizer, e.g. `markdown-it` + `dompurify` *(proposed)* | formatted text that never runs markup (R-7.19) | the builder of Slice 1 should match the old application's renderer, so pages keep their meaning |
+   | a Markdown renderer and an HTML sanitizer, e.g. `markdown-it` + `dompurify` *(proposed)* | formatted text that never runs markup (R-7.17) | the builder of Slice 1 should match the old application's renderer, so pages keep their meaning |
    | the frontend container's web server (the quickstart's Caddy image) | serving the single-page app and forwarding the API | comes with the quickstart scaffold |
 
    A package marked *proposed* is the plan's first choice. The builder may substitute an
@@ -260,6 +287,19 @@ cheap to reverse now and expensive to reverse later.
 8. **The owed terms-page criterion.** The ruling recorded against D-content-26 says a criterion is
    owed for a program's qualification terms being acceptable with nothing shown in their place. No
    such criterion is accepted yet, so nothing in Slice 13 plans for it.
+9. **How many pages a fresh installation carries** (0007). The plan has chosen sixteen and
+   enumerated them, so no builder has to choose. Two things follow that are not the plan's to do.
+   R-7.12's then-clause still says twenty-two, and no installation of the rebuild will ever show
+   that number; whether the clause is re-authored against the seeded set is the spec's call, and
+   until it is, the criterion is read by its statement and its enumerated set rather than by its
+   count. And the acceptance suite's seed manifest carries nineteen, which is neither the old
+   twenty-two nor the rebuilt sixteen; it needs reconciling to sixteen by whoever owns it, and the
+   plan is not moved to meet it (P7).
+10. **Splitting R-7.17.** The criterion asks for two things — safe rendering, and the same body
+    rendering the same way wherever it appears — that are demonstrable in different slices. The
+    plan places the whole of it in Slice 10, where both can be read. If the spec would rather split
+    it, a second criterion covering the rendering clause alone belongs to Slice 1, which builds the
+    renderer; nothing else in the slice list moves.
 
 ## Coverage check
 
@@ -270,8 +310,10 @@ reports any placed ID that is unknown or not accepted. Run it with
 
 The planning session could not run it: running a script needed an approval that session could not
 get. Its output is therefore **not** attached, and whoever next holds a shell should run it. In its
-place, the placements were checked by hand against the index, domain by domain. The revision did not
-change any `criteria:` line.
+place, the placements were checked by hand against the index, domain by domain. This revision moved
+two IDs and no others: R-7.12 from Slice 1 to Slice 5, and R-7.17 from Slice 1 to Slice 10. Both
+stay in the content domain, and both land in slices the table below already lists, so every count in
+it is unchanged.
 
 | Domain | Accepted, not superseded | Placed | Slices |
 | --- | --- | --- | --- |
@@ -317,7 +359,11 @@ exception is needed, so J6 stays empty.
 
 **P5 — Spec as source of truth.** This plan, the slice list and the decision records are versioned
 files. Every slice names its criteria by permanent ID; every assumption the plan makes is written
-down under "For ruling" or in a decision record rather than left in conversation.
+down under "For ruling" or in a decision record rather than left in conversation. Where a criterion
+and a later ruling on the same domain disagree about a number — R-7.12's twenty-two seeded pages
+against the ruling that dropped seven and R-7.18 that added one — the plan does not average them or
+leave the builder to guess: it states the number it builds, enumerates it (0007), and routes the
+wording of the criterion back to the spec, which is the only place it can be changed.
 
 **P6 — Human checkpoints.** This plan is a proposal for G2; it approves nothing itself. Each slice
 ends in review at G3. No agent merges its own work.
@@ -325,7 +371,12 @@ ends in review at G3. No agent merges its own work.
 **P7 — Test integrity.** The plan does not depend on, and was not cut around, any acceptance test.
 The slice builders write unit and integration tests for their own code; the acceptance proof comes
 from the separate suite derived from the spec, run against the `-test` namespace. The contract is
-kept (0003) precisely so that suite needs no knowledge of the implementation.
+kept (0003) precisely so that suite needs no knowledge of the implementation. Where the suite and
+the plan already disagree — its seed manifest carries nineteen seeded pages, the plan builds
+sixteen — the plan is settled from the criteria and the rulings on them, and the manifest is what
+moves. Criteria are placed in the slice whose screens can actually reach their given and then
+clauses (R-7.12 and R-7.17 were moved for that reason in this revision), so that no clause is
+recorded as untestable merely because it was planned into a slice that builds no screen for it.
 
 **P8 — Approved tools.** The plan introduces no MCP server, model route or skill pack. It uses only
 the stack profile and the skill packs already installed in this workspace's `.claude/skills/`

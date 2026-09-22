@@ -28,6 +28,10 @@ reverse-engineer it later:
 | Create the service level agreement page as a page the service needs. | R-7.18 | data |
 | On a fresh installation, create the set of needed pages minus the seven nothing links to (the three programs' opportunity and proposal guides, and the Team With Us opportunity scope page). Rows already present in an existing installation are left untouched. | R-7.12 and the ruling recorded against D-content-27 | data |
 
+Together the last two rows seed sixteen pages on a fresh installation. Decision record 0007 names
+all sixteen and settles that count against the twenty-two in R-7.12's then-clause; R-7.12 is
+asserted against it in Slice 5, where the list of pages exists.
+
 Everything else the accepted criteria change about stored behaviour is done in code, not in the
 schema: the Team With Us processing → awarded transition (R-1.49), the panel chair and role rules
 (R-1.55, R-5.9, R-5.37), notifications defaulting off for new accounts (R-6.20, set on insert), and
