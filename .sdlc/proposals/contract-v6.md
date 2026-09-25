@@ -42,3 +42,13 @@ Personas, the seed, the manifest and `openapi.yaml` are unchanged. The earlier c
 
 re-address missing-test/R-5.9 to derive-tests: evaluation-panel-request now carries submit_panel_with_no_chair and missing_chair_error, read alongside the existing panel_as_stored
 re-address missing-test/R-6.2 to derive-tests: mail-delivery-fault (refuse_delivery, restore_delivery, delivery_refused), backed by observables email.delivery_fault and the catcher's fault switch enabled in .sdlc/oracle/compose.yml; checked on the running oracle — a refused message is logged and never retried
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+
+The question is whether this contract lets tests reach R-5.9 and R-6.2, and whether the five criteria still owed are owed for honest reasons. Approve. R-5.9: evaluation-panel-request gains submit_panel_with_no_chair and missing_chair_error, read next to panel_as_stored. That is enough to test the rebuild's obligation, and the proposal says plainly that the old application will diverge because it accepts a chairless panel, the defect R-5.2 records. R-6.2: the catcher's fault switch (mailpit chaos, 451 at 100% probability) stands in for the criterion's given of an unreachable mail server. I checked this against sources/old/src/back-end/lib/mailer/transport.ts: send() logs the error, resolves and never retries, so the application treats a refused message and an unreachable server the same way. The switch is on in compose but refuses nothing until a test asks, and the surface page and the observables entry both say the fault must be lifted when the test ends and that the later message must be waited for. The oracle was checked end to end and left down. The five still owed each rest on something outside the contract: a second copy started with notifications off (R-6.1), a way to hold delivery (R-6.24), sign-in routes that find their account by account type and a fixed identity-provider id, so there is only one administrator and one government account (R-7.28, R-5.34), and one seed shared by every test, which conflicts with R-7.12 (R-7.29). The failing generated check, tests/generated/surface.d.ts, is the expected lag of a surface change: the typings must be regenerated from this contract before derive-tests writes R-5.9 and R-6.2. It is not a defect in the contract. What would change this ruling: evidence that the old mailer retries or records a refused send differently from an unreachable server, or a test that could leave the fault on across tests despite the stated obligation.
+
+**Conditions:**
+none
