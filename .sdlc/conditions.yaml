@@ -92,3 +92,31 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-25T10:05:00.162Z
+    closed:
+      outcome: met
+      why: R-1.49 now uses only seed.opportunities.twuChallengeLastToScoreForAward and
+        its proposals twuAwardChallengeLast and twuAwardChallengeScored. It is
+        one test in tests/acceptance/opportunities/R-1.49.spec.ts that reads
+        offered_state_changes (award and cancel) before awarding, so the reading
+        no longer depends on run order.
+      by: agent:reviewer
+      at: 2026-09-25T10:26:50.709Z
+  - ref: derive-tests-opportunities-5#2
+    text: "R-1.35: the two tests each call arrangeWatcherAndProponent
+      (tests/acceptance/opportunities/R-1.35.spec.ts:53) on
+      seed.opportunities.publishedCodeWithUs, a record loaded once and never
+      reset. toggleWatch as persona.competingVendor (line 70) is a toggle, so
+      the second test's call turns the watch off again. Its poll that the
+      watcher count exceeds the earlier count (line 76) then fails on a correct
+      application, and persona.vendor submitting a second proposal to the same
+      opportunity puts the proposal-count poll (line 77) at the same risk. Set
+      up the watcher and the proponent once: for example, one test that sets
+      them up and then makes the details change and adds the addendum in turn,
+      clearing the mail catcher before each and checking all three people are
+      reached after each."
+    from: derive-tests-opportunities-5
+    family: derive-tests-opportunities
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-25T10:26:50.699Z
