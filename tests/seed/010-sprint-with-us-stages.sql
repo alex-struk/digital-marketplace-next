@@ -324,5 +324,17 @@ BEGIN
     ARRAY[admin, staff2]::uuid[], admin);
   PERFORM pg_temp.seed_swu_proposal(23, 1, v[1], o[1], staff, 'SUBMITTED', 420000, NULL, NULL, NULL, ARRAY[admin, staff2]::uuid[], admin, NULL, NULL, NULL);
   PERFORM pg_temp.seed_swu_proposal(23, 2, v[2], o[2], staff, 'SUBMITTED', 460000, NULL, NULL, NULL, ARRAY[admin, staff2]::uuid[], admin, NULL, NULL, NULL);
+
+  -- 24. At individual evaluation, belonging to the second member of staff, with the
+  --     administrator as chair and evaluator and the government account as an evaluator
+  --     only. With 21, 22 and 23 it gives the government account each of the four
+  --     relationships an evaluation's tools are split by — an evaluator who is neither
+  --     owner nor chair (24), a chair who is neither owner nor evaluator (22), an owner who
+  --     is not on the panel (23), and nobody at all (21) — so the split can be read through
+  --     one sign-in (R-5.34). No evaluation is begun.
+  PERFORM pg_temp.seed_swu_opportunity(24, 'Seeded Sprint With Us opportunity with an evaluator who neither owns nor chairs it', staff2, 'EVAL_QUESTIONS_INDIVIDUAL',
+    ARRAY[admin, staff]::uuid[], admin);
+  PERFORM pg_temp.seed_swu_proposal(24, 1, v[1], o[1], staff2, 'UNDER_REVIEW_QUESTIONS', 420000, NULL, NULL, NULL, ARRAY[admin, staff]::uuid[], admin, NULL, NULL, NULL);
+  PERFORM pg_temp.seed_swu_proposal(24, 2, v[2], o[2], staff2, 'UNDER_REVIEW_QUESTIONS', 460000, NULL, NULL, NULL, ARRAY[admin, staff]::uuid[], admin, NULL, NULL, NULL);
 END
 $$;

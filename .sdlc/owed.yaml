@@ -965,10 +965,10 @@ owed:
     by: runner
     at: 2026-09-25T07:55:52.736Z
     kept:
-      by: contract-v7
+      by: contract-v8
       gate: G1
       approved_by: agent:product-owner
-      at: 2026-09-25T12:41:44.863Z
+      at: 2026-09-25T13:33:56.853Z
   - kind: missing-test
     item: R-6.2
     id: R-6.2
@@ -1437,10 +1437,10 @@ owed:
     by: runner
     at: 2026-09-25T07:55:52.736Z
     kept:
-      by: contract-v7
+      by: contract-v8
       gate: G1
       approved_by: agent:product-owner
-      at: 2026-09-25T12:41:44.863Z
+      at: 2026-09-25T13:33:56.853Z
   - kind: missing-test
     item: R-6.25
     id: R-6.25
@@ -1946,7 +1946,7 @@ owed:
     id: R-7.17
     version: 1
     domain: content
-    stage: contract
+    stage: derive-tests
     why: "blocked: the criterion's two distinctive clauses each need something that
       is missing, and for the first of them what is missing is the body, not the
       observation. That embedded markup is never executed can be read off
@@ -2028,6 +2028,15 @@ owed:
         proposal: derive-tests-content-9
         gate: G3
         at: 2026-09-25T13:20:03.010Z
+      - from: contract
+        to: derive-tests
+        why: content-view.body_element_names and content-view.body_script_ran, with
+          seed.content.scriptProbePage carrying markup that raises a dialog if
+          it runs
+        by: contract-v8
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-25T13:33:56.853Z
     target: old
     clause: markup embedded in it is never executed
     restates:
@@ -2089,7 +2098,7 @@ owed:
     id: R-7.28
     version: 2
     domain: content
-    stage: contract
+    stage: derive-tests
     why: The given is two administrators who both opened the same page before either
       saved. The target carries one administrator sign-in and no second one, and
       the surface drives a single session, so two people cannot hold the page
@@ -2099,11 +2108,17 @@ owed:
       error on the content-edit screen.
     by: runner
     at: 2026-09-25T07:55:52.736Z
-    kept:
-      by: contract-v7
-      gate: G1
-      approved_by: agent:product-owner
-      at: 2026-09-25T12:41:44.863Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: the silent-overwrite half is reachable by holding content-edit open while
+          content-request.change_page_by_request changes the same page, then
+          publishing from the screen (documented on content-request); the
+          version-key collision clause remains unreachable
+        by: contract-v8
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-25T13:33:56.853Z
   - kind: missing-test
     item: R-7.29
     id: R-7.29
@@ -2352,7 +2367,7 @@ owed:
     id: R-5.34
     version: 2
     domain: evaluation
-    stage: contract
+    stage: derive-tests
     why: "blocked: the criterion needs four different people looking at one
       opportunity — an evaluator, the chair, the owner and an unrelated public
       sector employee — and the target mints sessions for two public sector
@@ -2365,11 +2380,19 @@ owed:
       administrator, is exercised by R-5.18."
     by: runner
     at: 2026-09-25T07:55:52.736Z
-    kept:
-      by: contract-v7
-      gate: G1
-      approved_by: agent:product-owner
-      at: 2026-09-25T12:41:44.863Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: seeded opportunities.swuEvaluatorNotOwnerNorChair (the government account
+          is an evaluator only), which with swuLapsedChairNotEvaluator,
+          swuLapsedOwnerOffPanel and swuCodeChallengeOfOtherStaff puts
+          persona.publicSectorStaff in all four relationships; plus the new
+          observations instructions_tab and evaluation_tab on
+          opportunity-swu-edit and opportunity-twu-edit
+        by: contract-v8
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-25T13:33:56.853Z
   - kind: missing-test
     item: R-5.37
     id: R-5.37
