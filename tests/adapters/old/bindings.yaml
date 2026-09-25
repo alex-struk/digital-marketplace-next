@@ -154,6 +154,8 @@ pages:
       team_scenario_tab: bound
       evaluation_panel_tab: bound
       consensus_tab: bound
+      instructions_tab: bound
+      evaluation_tab: bound
 
   opportunity-swu-complete:
     actions: {}
@@ -214,6 +216,8 @@ pages:
       challenge_tab: bound
       evaluation_panel_tab: bound
       consensus_tab: bound
+      instructions_tab: bound
+      evaluation_tab: bound
       offered_state_changes: bound
 
   opportunity-twu-complete:
@@ -1091,6 +1095,8 @@ pages:
       page_address: bound
       page_title: bound
       page_body: bound
+      body_element_names: bound
+      body_script_ran: bound
       published_date: bound
       updated_date: bound
       readable_when_signed_out: bound

@@ -56,6 +56,21 @@ export default function create(
   void ctx.persona;
   const baseURL = String(ctx.baseURL ?? "").replace(/\/+$/, "");
 
+  // Every dialog (alert, confirm, prompt) the page raises since it last loaded a screen.
+  // Markup in a page's body that ran as script shows itself this way and no other, so the
+  // record is kept from the moment the adapter exists, not from when it is asked. The
+  // dialog is then dismissed — what the browser does with one nobody listens for — a moment
+  // later, so a test listening for it itself has already answered it and the dismissal
+  // quietly does nothing.
+  const raisedDialogs: string[] = [];
+  page.on("framenavigated", (frame) => {
+    if (frame === page.mainFrame()) raisedDialogs.length = 0;
+  });
+  page.on("dialog", (raised) => {
+    raisedDialogs.push(`${raised.type()}: ${raised.message()}`);
+    setTimeout(() => raised.dismiss().catch(() => undefined), 0);
+  });
+
   // ---------------------------------------------------------------- navigation
 
   function address(route: string, params?: Record<string, string>): string {
@@ -528,6 +543,23 @@ export default function create(
 
   async function tabContent(labels: string[]): Promise<string> {
     return inTab(labels, contentText);
+  }
+
+  // A tab whose name is also an ordinary word on the screen ("Instructions", "Evaluation")
+  // is taken only as the screen's own "?tab=" link, so a reader not offered it reads as
+  // nothing rather than as whatever else carries the word.
+  async function linkedTabContent(label: string): Promise<string> {
+    await ready();
+    const links = seen(page.getByRole("link", { name: label, exact: true }));
+    const count = await links.count();
+    for (let i = 0; i < count; i++) {
+      const href = (await links.nth(i).getAttribute("href")) ?? "";
+      if (!href.includes("tab=")) continue;
+      await links.nth(i).click();
+      await ready();
+      return contentText();
+    }
+    return "";
   }
 
   // The whole screen with only the standing footer taken off, the top bar's controls kept.
@@ -2653,6 +2685,12 @@ export default function create(
     teamScenarioTab: () => tabContent(["Team Scenario"]),
     evaluationPanelTab: () => tabContent(["Evaluation Panel"]),
     consensusTab: () => tabContent(["Consensus"]),
+    // Offered only to an evaluator on the opportunity's panel. Spread in rather than written
+    // into the literal, so the page still type-checks against a surface that lacks them.
+    ...{
+      instructionsTab: () => linkedTabContent("Instructions"),
+      evaluationTab: () => linkedTabContent("Evaluation"),
+    },
   };
 
   const opportunityTwuEdit: Open<S.OpportunityTwuEditPage> = {
@@ -2679,6 +2717,9 @@ export default function create(
     challengeTab: () => tabContent(["Challenge", "Interview/Challenge", "Code Challenge"]),
     evaluationPanelTab: () => tabContent(["Evaluation Panel"]),
     consensusTab: () => tabContent(["Consensus"]),
+    // Offered only to an evaluator on the opportunity's panel.
+    instructionsTab: () => linkedTabContent("Instructions"),
+    evaluationTab: () => linkedTabContent("Evaluation"),
   };
 
   const opportunityCwuComplete: S.OpportunityCwuCompletePage = {
@@ -4916,6 +4957,42 @@ export default function create(
       return (await heading.count()) ? (await heading.first().innerText()).trim() : "";
     },
     pageBody: () => contentText(),
+    // Spread in rather than written into the literal, so the page still type-checks against a
+    // surface that lacks these two readers.
+    ...{
+    // The rendered body is what follows the page's heading and its dated line: every element
+    // inside it, in document order. The markup is written into a paragraph as typed, so an
+    // inline script or image the page kept shows up here by name even when it did not run.
+    bodyElementNames: async () => {
+      await ready();
+      const heading = seen(page.getByRole("heading", { level: 1 }));
+      if (!(await heading.count())) {
+        nothing(`content-view.body_element_names — no page heading on ${page.url()} to find the body after`);
+      }
+      const names = await heading.first().evaluate((title) => {
+        const found: string[] = [];
+        const walk = (element: Element) => {
+          for (const child of Array.from(element.children)) {
+            found.push(child.tagName.toLowerCase());
+            walk(child);
+          }
+        };
+        for (let part = title.nextElementSibling; part; part = part.nextElementSibling) {
+          const words = (part as HTMLElement).innerText ?? "";
+          if (/^\s*(Published|Updated)\b/.test(words)) continue;
+          walk(part);
+        }
+        return found;
+      });
+      return names.join("\n");
+    },
+    // A dialog raised on opening or in the few seconds after is markup in the body running.
+    bodyScriptRan: async () => {
+      await ready();
+      await page.waitForTimeout(3000);
+      return raisedDialogs.length ? "yes" : "";
+    },
+    },
     publishedDate: () => linesMatching(/^Published /),
     updatedDate: () => linesMatching(/^Updated /),
     readableWhenSignedOut: () => contentText(),
