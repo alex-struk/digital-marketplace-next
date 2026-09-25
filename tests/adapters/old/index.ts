@@ -4843,6 +4843,20 @@ export default function create(
     await settle();
   }
 
+  // The name shown under "Published By" or "Updated By" links to that person's profile;
+  // a page no person wrote names "System" as plain words, with no link, and reads empty.
+  async function personLink(where: string, labels: string[]): Promise<string> {
+    await ready();
+    const name = await findAfter(labels);
+    if (name === null) {
+      throw new Error(`unbound: ${where} — no "${labels[0]}" label on ${page.url()}`);
+    }
+    const link = seen(page.getByRole("link", { name, exact: true }));
+    if (!(await link.count())) return "";
+    const href = (await link.first().getAttribute("href")) ?? "";
+    return href ? new URL(href, baseURL).pathname : "";
+  }
+
   const contentEdit: S.ContentEditPage = {
     ...at("/content/:slug/edit"),
     startEditing: () => press("content-edit.start_editing", ["Edit"], navBar()),
@@ -4865,6 +4879,12 @@ export default function create(
     updatedDate: () => linesMatching(/^Updated (?!By\b)/),
     publishedBy: () => valueAfter(["Published By"]),
     updatedBy: () => valueAfter(["Updated By"]),
+    // Spread rather than listed, so the page still compiles against a
+    // ContentEditPage that predates these two members.
+    ...{
+      publishedByLink: () => personLink("content-edit.published_by_link", ["Published By"]),
+      updatedByLink: () => personLink("content-edit.updated_by_link", ["Updated By"]),
+    },
     fixedPageWarning: () => linesMatching(/"fixed" page|fixed. page/i),
     slugLockedForFixedPage: () => linesMatching(/slug cannot be changed/i),
     deleteWithheldForFixedPage: () => controlState(["Delete"], navBar()),

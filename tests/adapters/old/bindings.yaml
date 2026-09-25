@@ -1071,6 +1071,8 @@ pages:
       updated_date: bound
       published_by: bound
       updated_by: bound
+      published_by_link: bound
+      updated_by_link: bound
       fixed_page_warning: bound
       slug_locked_for_fixed_page: bound
       delete_withheld_for_fixed_page: bound
