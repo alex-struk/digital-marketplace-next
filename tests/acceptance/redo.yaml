@@ -51,6 +51,11 @@ redo:
       reducing it to exactly one, count a chair that moves rather than doubles
       as the second chair being refused, and keep requiring the rule to be named
       when the same person is named twice
+    closed: &a2
+      outcome: met
+      why: derived again by a derive-tests run on evaluation
+      by: runner:derive-tests
+      at: 2026-09-25T11:19:39.965Z
   - id: R-5.9
     version: 1
     why: the person removed from the panel stayed named as its chair, so the panel
@@ -58,12 +63,14 @@ redo:
       panel put forward names nobody as chair before reading whether it is
       refused, and if no available action can put such a panel forward, record
       the criterion as blocked until one can reach the service
+    closed: *a2
   - id: R-5.17
     version: 1
     why: the notice to a person added to a panel reaches them as a hidden recipient,
       and the test searched only the addressees each message shows, so it would
       find nothing for anyone; read every recipient each message was delivered
       to, for the person added and for the two already on the panel alike
+    closed: *a2
   - id: R-1.55
     version: 1
     why: in the no-chair cases the person removed stayed named as chair, so the
@@ -73,7 +80,7 @@ redo:
       refusal, keep requiring the reason when the same person is named twice,
       and where the Team With Us draft a case depends on was never stored,
       record that case as blocked rather than failed
-    closed: &a2
+    closed: &a3
       outcome: met
       why: derived again by derive-tests-opportunities-stale-3, in the line of work
         approved as derive-tests-opportunities-7
@@ -88,21 +95,21 @@ redo:
       establish that the draft was stored before reading which program it
       belongs to, and record the case as blocked rather than failed when it was
       not
-    closed: *a2
+    closed: *a3
   - id: R-1.13
     version: 1
     why: the Team With Us opportunity was never published, so its absence from the
       list says nothing about a budget limit; establish that it was published
       with its budget before reading the list, and record the case as blocked
       rather than failed when the target would not store it
-    closed: *a2
+    closed: *a3
   - id: R-1.48
     version: 1
     why: the Team With Us draft was never stored on this target, for a reason the
       criterion does not govern, so the test says nothing about who may create
       one; establish that each draft was stored before reading its state, and
       record the Team With Us case as blocked rather than failed when it was not
-    closed: *a2
+    closed: *a3
   - id: R-1.53
     version: 2
     why: four tests stop at setup by requiring a statement of permissions that an
@@ -112,7 +119,7 @@ redo:
       stored, so establish that each draft was stored before asking to delete
       it, and record the Team With Us part as blocked rather than failed when it
       was not
-    closed: *a2
+    closed: *a3
   - id: R-1.56
     version: 1
     why: in the Sprint With Us case the administrator's publication did not take
@@ -120,7 +127,7 @@ redo:
       which the criterion permits; confirm the opportunity reads as published
       before its author tries, and in the Team With Us case, where the draft was
       never stored, record the case as blocked rather than failed
-    closed: *a2
+    closed: *a3
   - id: R-1.10
     version: 1
     why: publication of the over-length teaser was withheld, with the publish
@@ -128,7 +135,7 @@ redo:
       on the step the form was left on; look for the reason against the teaser
       where it is entered, allowing time for it, treat a publication that stays
       unavailable as the refusal, and check that nothing was published
-    closed: *a2
+    closed: *a3
   - id: R-1.18
     version: 1
     why: the target allocation and the service area are each chosen from a list that
@@ -138,7 +145,7 @@ redo:
       refused, confirm that the value chosen is the one the case names before
       publishing, and record a case as blocked rather than failed when the
       target will not store the Team With Us opportunity
-    closed: *a2
+    closed: *a3
   - id: R-1.21
     version: 1
     why: the draft was not incomplete, because a new opportunity's location starts
@@ -146,7 +153,7 @@ redo:
       submission was rightly accepted for review; empty the location explicitly,
       confirm the saved draft shows it blank, then submit it and read what the
       author is told
-    closed: *a2
+    closed: *a3
   - id: R-1.24
     version: 1
     why: in the Team With Us case the given was established only from the address
@@ -154,7 +161,7 @@ redo:
       opportunity can be read; establish it from the opportunity's own title and
       status before closure, and record the case as blocked rather than failed
       when the opportunity cannot be read
-    closed: *a2
+    closed: *a3
   - id: R-3.26
     version: 1
     why: the first test does not establish that the seeded organization holds its

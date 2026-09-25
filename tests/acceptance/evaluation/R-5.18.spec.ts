@@ -1,157 +1,104 @@
-// criterion: @R-5.18 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
+// criterion: @R-5.18 v2
+// provenance: blind, spec@05e88fb7765c5d6327f910e43f990e6c321b63fa, derived 2026-09-25
 import { test, expect, persona, seed } from "../../fixtures";
-import type { Surface } from "../../fixtures";
 
-// Membership is read as panel_member_row being there or not being there. Which people a
-// panel names is not readable — the observation returns the rows, not the people a test
-// asked for — so each test is built so that presence and absence are the whole answer: the
-// panel is named on the opportunity before anybody looks, and the only thing that varies is
-// who is looking.
+// Two readings, matching the criterion's two halves.
 //
-// Who can be looked with is narrow. The target mints a session for one public sector
-// employee besides the administrator, so the panel member who is neither owner nor
-// administrator has to be that same account, and the unrelated public sector employee has
-// to be an opportunity that account is neither the owner of nor on the panel of. The two
-// tests that withhold the panel use a published opportunity, so that the person looking can
-// open the opportunity itself and the panel is the only thing they are refused.
+// What the service returns is read through evaluation-panel-request, the service's own answer
+// for one opportunity, whose panel_as_stored is the membership that answer carries for the
+// signed-in person. The screen that lists and manages the panel is evaluation-panel-swu, and
+// whether it opened is read as panel_member_row being there or not.
+//
+// Every person is reached on a seeded Sprint With Us opportunity where their connection is
+// fixed by the seed rather than built:
+//   - swuLapsedOwnerOffPanel belongs to users.staffOne (persona.publicSectorStaff), who is not
+//     on its panel: the owner;
+//   - swuLapsedChairNotEvaluator belongs to users.staffTwo and names users.staffOne as its
+//     chair: a panel member who is neither the owner nor an administrator;
+//   - swuCodeChallengeOfOtherStaff belongs to users.staffTwo, and users.staffOne has no
+//     connection to it at all: the public sector employee who is neither owner nor on the panel.
+// The administrator and a vendor are looked with on those same records.
+//
+// The screen's "Not Found" is not asserted by its wording: the panel screen carries no
+// observation of a not-found answer, so its refusal is read as the panel not being shown.
 
-function inDays(days: number): string {
-  const date = new Date();
-  date.setDate(date.getDate() + days);
-  return date.toISOString().slice(0, 10);
-}
+const settle = { timeout: 15000 };
+const program = "sprint-with-us";
+const ownerOffPanel = seed.opportunities.swuLapsedOwnerOffPanel.id;
+const memberNotOwner = seed.opportunities.swuLapsedChairNotEvaluator.id;
+const unconnected = seed.opportunities.swuCodeChallengeOfOtherStaff.id;
 
-const details = {
-  teaser: "A short summary of the work to be done.",
-  location: "Victoria",
-  description: "A full description of the work to be done.",
-  remoteOk: true,
-  remoteDescription: "Remote work is acceptable anywhere in the province.",
-  proposalDeadline: inDays(14),
-  assignmentDate: inDays(21),
-  startDate: inDays(28),
-  completionDate: inDays(90),
-  mandatorySkills: ["Frontend Development"],
-  totalMaxBudget: 500000,
-  questionsWeight: 25,
-  codeChallengeWeight: 25,
-  teamScenarioWeight: 25,
-  priceWeight: 25,
-};
-
-// Neither of these two accounts can be signed in as on this target, so a panel of the two
-// of them is a panel that nobody a test can act as sits on.
-const panelOfStrangers = {
-  members: [seed.users.staffPanelEvaluator, seed.users.staffPanelChair],
-  chair: seed.users.staffPanelChair,
-};
-
-async function draftWithPanel(surface: Surface, title: string): Promise<string> {
-  await surface.opportunitySwuCreate.open();
-  await surface.opportunitySwuCreate.saveDraft({ title });
-  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
-  await surface.evaluationPanelSwu.open({ opportunityId });
-  for (const member of panelOfStrangers.members) {
-    await surface.evaluationPanelSwu.addPanelMember({ member });
+async function readOrEmpty(read: () => Promise<string>): Promise<string> {
+  try {
+    return (await read()) ?? "";
+  } catch {
+    return "";
   }
-  await surface.evaluationPanelSwu.markMemberAsChair({ member: panelOfStrangers.chair });
-  await surface.evaluationPanelSwu.saveEvaluationPanel();
-  return opportunityId;
 }
 
-async function publishedWithPanel(surface: Surface, title: string): Promise<string> {
-  await surface.opportunitySwuCreate.open();
-  await surface.opportunitySwuCreate.addPhase({
-    phase: "Implementation",
-    startDate: inDays(28),
-    completionDate: inDays(90),
-    maxBudget: 500000,
-    capabilities: ["Frontend Development"],
-  });
-  await surface.opportunitySwuCreate.addTeamQuestion({
-    question: "Describe how your team has delivered work of this kind before.",
-    guideline: "Answer with one worked example.",
-    score: 20,
-    wordLimit: 300,
-    order: 0,
-  });
-  await surface.opportunitySwuCreate.setEvaluationPanel(panelOfStrangers);
-  await surface.opportunitySwuCreate.publish({ ...details, title });
-  return await surface.opportunitySwuEdit.opportunityIdentifier();
-}
-
-test("the membership of an evaluation panel is shown to the opportunity's owner", async ({
+test("The membership of an evaluation panel is returned by the service to an administrator, the opportunity's owner and the people on the panel itself", async ({
   surface,
 }) => {
-  await surface.signIn(persona.publicSectorStaff);
-  const opportunityId = await draftWithPanel(
-    surface,
-    "R-5.18 opportunity whose owner reads its panel",
-  );
-
-  await surface.evaluationPanelSwu.open({ opportunityId });
-  expect(await surface.evaluationPanelSwu.panelMemberRow()).toBeTruthy();
-});
-
-test("the membership of an evaluation panel is shown to an administrator", async ({ surface }) => {
-  await surface.signIn(persona.publicSectorStaff);
-  const opportunityId = await draftWithPanel(
-    surface,
-    "R-5.18 opportunity whose panel an administrator reads",
-  );
-  await surface.signOut();
+  await surface.scheduledTransitionTrigger.open();
+  await surface.scheduledTransitionTrigger.runPendingTransitions();
 
   await surface.signIn(persona.administrator);
-  await surface.evaluationPanelSwu.open({ opportunityId });
-  expect(await surface.evaluationPanelSwu.panelMemberRow()).toBeTruthy();
-});
-
-test("the membership of an evaluation panel is shown to the people on the panel itself", async ({
-  surface,
-}) => {
-  await surface.signIn(persona.administrator);
-  await surface.opportunitySwuCreate.open();
-  await surface.opportunitySwuCreate.saveDraft({
-    title: "R-5.18 opportunity whose panel one of its own members reads",
-  });
-  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
-  await surface.evaluationPanelSwu.open({ opportunityId });
-  await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffOne });
-  await surface.evaluationPanelSwu.addPanelMember({ member: seed.users.staffPanelEvaluator });
-  await surface.evaluationPanelSwu.markMemberAsChair({ member: seed.users.staffPanelEvaluator });
-  await surface.evaluationPanelSwu.saveEvaluationPanel();
-  await surface.signOut();
-
-  await surface.signIn(persona.evaluationPanelEvaluator);
-  await surface.evaluationPanelSwu.open({ opportunityId });
-  expect(await surface.evaluationPanelSwu.panelMemberRow()).toBeTruthy();
-});
-
-test("no panel membership is shown to a public sector employee who is neither the owner nor on the panel", async ({
-  surface,
-}) => {
-  await surface.signIn(persona.administrator);
-  const opportunityId = await publishedWithPanel(
-    surface,
-    "R-5.18 opportunity an unrelated public sector employee asked for the panel of",
-  );
+  await surface.evaluationPanelRequest.open({ program, opportunityId: ownerOffPanel });
+  await expect.poll(() => readOrEmpty(() => surface.evaluationPanelRequest.panelAsStored()), settle).toBeTruthy();
   await surface.signOut();
 
   await surface.signIn(persona.publicSectorStaff);
-  await surface.evaluationPanelSwu.open({ opportunityId });
-  expect(await surface.evaluationPanelSwu.panelMemberRow()).toBeFalsy();
+  await surface.evaluationPanelRequest.open({ program, opportunityId: ownerOffPanel });
+  await expect.poll(() => readOrEmpty(() => surface.evaluationPanelRequest.panelAsStored()), settle).toBeTruthy();
+
+  await surface.evaluationPanelRequest.open({ program, opportunityId: memberNotOwner });
+  await expect.poll(() => readOrEmpty(() => surface.evaluationPanelRequest.panelAsStored()), settle).toBeTruthy();
 });
 
-test("no panel membership is shown to a vendor", async ({ surface }) => {
-  await surface.signIn(persona.administrator);
-  const opportunityId = await publishedWithPanel(
-    surface,
-    "R-5.18 opportunity a vendor asked for the panel of",
-  );
+test("The membership of an evaluation panel is returned by the service to nobody else: not to a vendor, nor to a public sector employee who is neither the owner nor on the panel", async ({
+  surface,
+}) => {
+  await surface.signIn(persona.publicSectorStaff);
+  await surface.evaluationPanelRequest.open({ program, opportunityId: unconnected });
+  expect(await readOrEmpty(() => surface.evaluationPanelRequest.panelAsStored())).toBeFalsy();
   await surface.signOut();
 
   await surface.signIn(persona.vendor);
-  await surface.evaluationPanelSwu.open({ opportunityId });
-  expect(await surface.evaluationPanelSwu.panelMemberRow()).toBeFalsy();
+  await surface.evaluationPanelRequest.open({ program, opportunityId: unconnected });
+  expect(await readOrEmpty(() => surface.evaluationPanelRequest.panelAsStored())).toBeFalsy();
+});
+
+test("The screen that lists and manages the panel opens for an administrator or the opportunity's owner", async ({
+  surface,
+}) => {
+  await surface.scheduledTransitionTrigger.open();
+  await surface.scheduledTransitionTrigger.runPendingTransitions();
+
+  await surface.signIn(persona.administrator);
+  await surface.evaluationPanelSwu.open({ opportunityId: ownerOffPanel });
+  await expect.poll(() => readOrEmpty(() => surface.evaluationPanelSwu.panelMemberRow()), settle).toBeTruthy();
+  await surface.signOut();
+
+  await surface.signIn(persona.publicSectorStaff);
+  await surface.evaluationPanelSwu.open({ opportunityId: ownerOffPanel });
+  await expect.poll(() => readOrEmpty(() => surface.evaluationPanelSwu.panelMemberRow()), settle).toBeTruthy();
+});
+
+test("The screen that lists and manages the panel answers \"Not Found\" to anyone else who asks for it, a panel member included", async ({
+  surface,
+}) => {
+  await surface.scheduledTransitionTrigger.open();
+  await surface.scheduledTransitionTrigger.runPendingTransitions();
+
+  await surface.signIn(persona.publicSectorStaff);
+  await surface.evaluationPanelSwu.open({ opportunityId: memberNotOwner });
+  expect(await readOrEmpty(() => surface.evaluationPanelSwu.panelMemberRow())).toBeFalsy();
+
+  await surface.evaluationPanelSwu.open({ opportunityId: unconnected });
+  expect(await readOrEmpty(() => surface.evaluationPanelSwu.panelMemberRow())).toBeFalsy();
+  await surface.signOut();
+
+  await surface.signIn(persona.vendor);
+  await surface.evaluationPanelSwu.open({ opportunityId: unconnected });
+  expect(await readOrEmpty(() => surface.evaluationPanelSwu.panelMemberRow())).toBeFalsy();
 });

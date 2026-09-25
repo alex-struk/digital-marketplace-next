@@ -2029,7 +2029,7 @@ owed:
     id: R-5.11
     version: 1
     domain: evaluation
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the criterion turns on a public sector employee with no
       connection to the opportunity being refused an individual evaluation, and
       no such person can be signed in as. The target mints sessions for two
@@ -2077,12 +2077,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T11:21:02.832Z
+    target: old
   - kind: missing-test
     item: R-5.21
     id: R-5.21
     version: 1
     domain: evaluation
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the two people the criterion has refused cannot be reached, and
       the refusal cannot be read. The seeded panel's chair is also an evaluator
       and the opportunity's owner is also on the panel, because the target has
@@ -2128,12 +2134,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T11:21:02.832Z
+    target: old
   - kind: missing-test
     item: R-5.23
     id: R-5.23
     version: 1
     domain: evaluation
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the given is a draft evaluation holding a score above the
       question's maximum and an empty comment, and the surface cannot produce
       one. The browser form checks each field as it is typed, which is the
@@ -2175,12 +2187,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T11:21:02.832Z
+    target: old
   - kind: missing-test
     item: R-5.26
     id: R-5.26
     version: 1
     domain: evaluation
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the request the criterion says is rejected cannot be made. The
       individual edit surfaces offer save_changes and
       save_and_go_to_next_proponent, and the only submission in the contract is
@@ -2219,6 +2237,12 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T11:21:02.832Z
+    target: old
   - kind: missing-test
     item: R-5.34
     id: R-5.34
@@ -2247,7 +2271,7 @@ owed:
     id: R-5.37
     version: 1
     domain: evaluation
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the panel a test can submit never holds a member with no role.
       The three actions that put somebody on a panel — add_panel_member,
       choose_panel_chair and mark_member_as_chair — each give that member a
@@ -2290,6 +2314,12 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T11:21:02.832Z
+    target: old
   - kind: missing-test
     item: R-3.17
     id: R-3.17
@@ -2676,3 +2706,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+  - kind: missing-test
+    item: R-5.9
+    id: R-5.9
+    version: 1
+    domain: evaluation
+    stage: contract
+    why: evaluation-panel-request.submit_panel_with_no_chair (two public sector
+      members, both evaluators, neither marked chair, sent to the service
+      without the browser form) and evaluation-panel-request.missing_chair_error
+      (the service's refusal naming the missing chair), read alongside the
+      existing panel_as_stored to show the panel was not stored
+    from: derive-tests-evaluation-stale-3
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-25T11:21:02.832Z
