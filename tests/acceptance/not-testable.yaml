@@ -296,27 +296,6 @@ criteria:
       the service refuses to remove: content-edit withholds the removal and a
       request made another way is refused, so there is no path through the
       surface to the state the criterion starts from."
-  - id: R-5.9
-    version: 1
-    reason: "blocked: the criterion is about the service refusing a panel that
-      names no chair, and no action puts such a panel before the service. Every
-      action that saves a panel — save_evaluation_panel on evaluation-panel-swu
-      and evaluation-panel-twu, set_evaluation_panel and edit_evaluation_panel on
-      the opportunity screens — goes through the browser form, which the
-      criterion itself says already refuses a panel with no chair, so a refusal
-      read there is the form's and says nothing of the service; and removing
-      the chair from those screens leaves the removed person still named as
-      chair, so the panel put forward is not chairless at all. The one request
-      page for panels, evaluation-panel-request, offers only
-      submit_panel_with_member_holding_no_role. Unblocked by an action that
-      submits a panel of two public sector evaluators with nobody marked chair
-      straight to the service, and an observation of the service's refusal."
-    missing: "evaluation-panel-request.submit_panel_with_no_chair (two public
-      sector members, both evaluators, neither marked chair, sent to the service
-      without the browser form) and evaluation-panel-request.missing_chair_error
-      (the service's refusal naming the missing chair), read alongside the
-      existing panel_as_stored to show the panel was not stored"
-    owner: contract
   - id: R-5.34
     version: 2
     reason: "blocked: the criterion needs four different people looking at one

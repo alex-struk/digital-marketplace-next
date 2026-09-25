@@ -94,6 +94,7 @@ export interface Surface {
   fileEmbeddedImage: FileEmbeddedImagePage;
   caughtMessage: CaughtMessagePage;
   caughtMessageList: CaughtMessageListPage;
+  mailDeliveryFault: MailDeliveryFaultPage;
   organizationActingForList: OrganizationActingForListPage;
   affiliationInvitationRequest: AffiliationInvitationRequestPage;
   userListRequest: UserListRequestPage;
@@ -1301,6 +1302,13 @@ export interface CaughtMessageListPage {
   messageCount(): Promise<string>;
 }
 
+export interface MailDeliveryFaultPage {
+  open(): Promise<void>;
+  refuseDelivery(input?: unknown): Promise<void>;
+  restoreDelivery(input?: unknown): Promise<void>;
+  deliveryRefused(): Promise<string>;
+}
+
 export interface OrganizationActingForListPage {
   open(): Promise<void>;
   organizationsOffered(): Promise<string>;
@@ -1359,7 +1367,9 @@ export interface EvaluationIndividualRequestTwuPage {
 export interface EvaluationPanelRequestPage {
   open(params: { program: string; opportunityId: string }): Promise<void>;
   submitPanelWithMemberHoldingNoRole(input?: unknown): Promise<void>;
+  submitPanelWithNoChair(input?: unknown): Promise<void>;
   memberWithoutRoleError(): Promise<string>;
+  missingChairError(): Promise<string>;
   panelAsStored(): Promise<string>;
 }
 
