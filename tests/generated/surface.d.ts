@@ -92,6 +92,16 @@ export interface Surface {
   fileAttachmentControl: FileAttachmentControlPage;
   fileImagePicker: FileImagePickerPage;
   fileEmbeddedImage: FileEmbeddedImagePage;
+  caughtMessage: CaughtMessagePage;
+  caughtMessageList: CaughtMessageListPage;
+  organizationActingForList: OrganizationActingForListPage;
+  affiliationInvitationRequest: AffiliationInvitationRequestPage;
+  userListRequest: UserListRequestPage;
+  contentRequest: ContentRequestPage;
+  evaluationIndividualRequestSwu: EvaluationIndividualRequestSwuPage;
+  evaluationIndividualRequestTwu: EvaluationIndividualRequestTwuPage;
+  evaluationPanelRequest: EvaluationPanelRequestPage;
+  fileAttachByIdentifier: FileAttachByIdentifierPage;
 }
 
 export interface HomePage {
@@ -160,6 +170,8 @@ export interface OpportunityCwuViewPage {
   reward(): Promise<string>;
   addenda(): Promise<string>;
   successfulProponent(): Promise<string>;
+  successfulProponentContactDetails(): Promise<string>;
+  successfulProponentScore(): Promise<string>;
 }
 
 export interface OpportunityCwuEditPage {
@@ -213,8 +225,11 @@ export interface OpportunitySwuViewPage {
   proposalDeadline(): Promise<string>;
   totalMaxBudget(): Promise<string>;
   phases(): Promise<string>;
+  scopeSection(): Promise<string>;
   addenda(): Promise<string>;
   successfulProponent(): Promise<string>;
+  successfulProponentContactDetails(): Promise<string>;
+  successfulProponentScore(): Promise<string>;
 }
 
 export interface OpportunitySwuEditPage {
@@ -273,8 +288,11 @@ export interface OpportunityTwuViewPage {
   proposalDeadline(): Promise<string>;
   maxBudget(): Promise<string>;
   resources(): Promise<string>;
+  termsSection(): Promise<string>;
   addenda(): Promise<string>;
   successfulProponent(): Promise<string>;
+  successfulProponentContactDetails(): Promise<string>;
+  successfulProponentScore(): Promise<string>;
 }
 
 export interface OpportunityTwuEditPage {
@@ -299,6 +317,7 @@ export interface OpportunityTwuEditPage {
   challengeTab(): Promise<string>;
   evaluationPanelTab(): Promise<string>;
   consensusTab(): Promise<string>;
+  offeredStateChanges(): Promise<string>;
 }
 
 export interface OpportunityTwuCompletePage {
@@ -945,6 +964,7 @@ export interface EvaluationIndividualCreateSwuPage {
   scoreOutOfRangeError(): Promise<string>;
   emptyNotesError(): Promise<string>;
   duplicateEvaluationError(): Promise<string>;
+  refusedWhenNotPermitted(): Promise<string>;
 }
 
 export interface EvaluationIndividualEditSwuPage {
@@ -957,6 +977,7 @@ export interface EvaluationIndividualEditSwuPage {
   readOnlyAfterSubmitted(): Promise<string>;
   scoreOutOfRangeError(): Promise<string>;
   emptyNotesError(): Promise<string>;
+  refusedWhenNotPermitted(): Promise<string>;
 }
 
 export interface EvaluationConsensusCreateSwuPage {
@@ -996,6 +1017,7 @@ export interface EvaluationIndividualCreateTwuPage {
   scoreOutOfRangeError(): Promise<string>;
   emptyNotesError(): Promise<string>;
   duplicateEvaluationError(): Promise<string>;
+  refusedWhenNotPermitted(): Promise<string>;
 }
 
 export interface EvaluationIndividualEditTwuPage {
@@ -1008,6 +1030,7 @@ export interface EvaluationIndividualEditTwuPage {
   readOnlyAfterSubmitted(): Promise<string>;
   scoreOutOfRangeError(): Promise<string>;
   emptyNotesError(): Promise<string>;
+  refusedWhenNotPermitted(): Promise<string>;
 }
 
 export interface EvaluationConsensusCreateTwuPage {
@@ -1109,6 +1132,7 @@ export interface ContentListPage {
   pageUpdatedDate(): Promise<string>;
   orderedByTitle(): Promise<string>;
   refusedForNonAdministrator(): Promise<string>;
+  pageCount(): Promise<string>;
 }
 
 export interface ContentCreatePage {
@@ -1253,4 +1277,96 @@ export interface FileEmbeddedImagePage {
   uploadingIndicator(): Promise<string>;
   imageRenderedInPublishedText(): Promise<string>;
   uploadFailureLeavesTextUnchanged(): Promise<string>;
+}
+
+export interface CaughtMessagePage {
+  open(params: { messageId: string }): Promise<void>;
+  followLinkInBody(input?: unknown): Promise<void>;
+  visibleRecipients(): Promise<string>;
+  copiedRecipients(): Promise<string>;
+  sender(): Promise<string>;
+  replyTo(): Promise<string>;
+  subject(): Promise<string>;
+  htmlBody(): Promise<string>;
+  plainTextBody(): Promise<string>;
+  logoAddress(): Promise<string>;
+  linksInBody(): Promise<string>;
+}
+
+export interface CaughtMessageListPage {
+  open(): Promise<void>;
+  messageIdentifiers(): Promise<string>;
+  messageSubjects(): Promise<string>;
+  messageVisibleRecipients(): Promise<string>;
+  messageCount(): Promise<string>;
+}
+
+export interface OrganizationActingForListPage {
+  open(): Promise<void>;
+  organizationsOffered(): Promise<string>;
+  refusedWhenNotPermitted(): Promise<string>;
+}
+
+export interface AffiliationInvitationRequestPage {
+  open(): Promise<void>;
+  inviteWithMembershipType(input?: unknown): Promise<void>;
+  invitationCreated(): Promise<string>;
+  invalidMembershipTypeError(): Promise<string>;
+}
+
+export interface UserListRequestPage {
+  open(): Promise<void>;
+  accountsAnswered(): Promise<string>;
+  refusedWhenNotPermitted(): Promise<string>;
+  refusalStatus(): Promise<string>;
+}
+
+export interface ContentRequestPage {
+  open(params: { slug: string }): Promise<void>;
+  readPageListByRequest(input?: unknown): Promise<void>;
+  readPageByRequest(input?: unknown): Promise<void>;
+  createPageByRequest(input?: unknown): Promise<void>;
+  changePageByRequest(input?: unknown): Promise<void>;
+  renamePageByRequest(input?: unknown): Promise<void>;
+  removePageByRequest(input?: unknown): Promise<void>;
+  requestAccepted(): Promise<string>;
+  refusalStatus(): Promise<string>;
+  refusalShape(): Promise<string>;
+}
+
+export interface EvaluationIndividualRequestSwuPage {
+  open(params: { proposalId: string; userId: string }): Promise<void>;
+  saveDraftAsEntered(input?: unknown): Promise<void>;
+  submitThisEvaluationAlone(input?: unknown): Promise<void>;
+  storedScores(): Promise<string>;
+  storedNotes(): Promise<string>;
+  evaluationStatus(): Promise<string>;
+  refusedAsUnrecognised(): Promise<string>;
+  refusedAtSubmission(): Promise<string>;
+}
+
+export interface EvaluationIndividualRequestTwuPage {
+  open(params: { proposalId: string; userId: string }): Promise<void>;
+  saveDraftAsEntered(input?: unknown): Promise<void>;
+  submitThisEvaluationAlone(input?: unknown): Promise<void>;
+  storedScores(): Promise<string>;
+  storedNotes(): Promise<string>;
+  evaluationStatus(): Promise<string>;
+  refusedAsUnrecognised(): Promise<string>;
+  refusedAtSubmission(): Promise<string>;
+}
+
+export interface EvaluationPanelRequestPage {
+  open(params: { program: string; opportunityId: string }): Promise<void>;
+  submitPanelWithMemberHoldingNoRole(input?: unknown): Promise<void>;
+  memberWithoutRoleError(): Promise<string>;
+  panelAsStored(): Promise<string>;
+}
+
+export interface FileAttachByIdentifierPage {
+  open(params: { recordKind: string; program: string; recordId: string }): Promise<void>;
+  attachStoredFile(input?: unknown): Promise<void>;
+  attachmentAccepted(): Promise<string>;
+  attachmentRefused(): Promise<string>;
+  attachedFileIdentifiers(): Promise<string>;
 }
