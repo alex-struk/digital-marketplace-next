@@ -55,3 +55,17 @@ conditions:
         redirects agree on a builder's machine.
       by: agent:reviewer
       at: 2026-09-25T02:15:02.483Z
+  - ref: bind-adapter-old-14#1
+    text: "tests/adapters/old/index.ts fileAttachByIdentifier.attachStoredFile: when
+      the record cannot be read (current.status !== 200 or the body is not an
+      object), do not stand a GET in for the attach. Send the PUT {tag:
+      \"edit\", value: {attachments: [<fileId>]}} (or the smallest edit body the
+      service accepts) to openedRecord anyway, so attachment_refused and
+      attachment_accepted read the service's answer to the attach itself and not
+      to a read of the record."
+    from: bind-adapter-old-14
+    family: bind-adapter-old
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-09-25T09:45:40.890Z
