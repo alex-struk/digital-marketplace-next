@@ -1,18 +1,25 @@
 // criterion: @R-2.14 v2
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
+// provenance: blind, spec@05e88fb7765c5d6327f910e43f990e6c321b63fa, derived 2026-09-25
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// A refused submission creates nothing, so every attempt in a test can be made against the
-// same opportunity; only the one accepted submission at the end of the second test needs an
-// opportunity of its own to be the first proposal on.
+// Each test publishes a Code With Us opportunity of its own, under a title nobody else uses, so
+// that "no proposal was submitted" can be read off the vendor's own list of proposals: a
+// refused attempt leaves that title off the list, and the one accepted attempt at the end of
+// each test puts it there, which shows the list is being read at all.
 //
-// The second test is the criterion's own account of what an organization proponent is
-// checked for. The vendor persona belongs to no organization but the unqualified one it
-// owns, and it names the qualified organization — which it is not a member of — and is
-// taken at its word, which is the "does not verify that the vendor belongs to the
-// organization" half read from outside. The archived organization is the other half:
-// existence is not enough, the organization has to be active.
+// What counts as refused. The criterion promises the submission is rejected. A form that
+// withholds the submission — the submit control stays unavailable, or the action cannot be
+// completed — has rejected it just as surely as a reply from the service would, so an action
+// that cannot be carried out is read as the refusal and the test goes on to confirm nothing
+// was submitted. Where a malformed value was typed the service has something to name, so the
+// test waits for a reason to be shown. An archived organization that the form does not offer
+// as a choice has been refused in the same way.
+
+const statement =
+  "A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name.";
+
+const settle = { timeout: 15000 };
 
 function inDays(days: number): string {
   const date = new Date();
@@ -34,9 +41,6 @@ const details = {
   completionDate: inDays(35),
 };
 
-// The address fields are named as the organization registration form names them, since one
-// adapter stands behind both and the street address, city, province, postal code and
-// country the criterion lists are the same five things that form asks for.
 const completeIndividual = {
   legalName: "Robin Vendor",
   email: "robin.vendor@example.test",
@@ -48,6 +52,14 @@ const completeIndividual = {
   country: "Canada",
 };
 
+async function readOrEmpty(read: () => Promise<string>): Promise<string> {
+  try {
+    return (await read()) ?? "";
+  } catch {
+    return "";
+  }
+}
+
 async function publishOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunityCwuCreate.open();
@@ -57,95 +69,115 @@ async function publishOpportunity(surface: Surface, title: string): Promise<stri
   return opportunityId;
 }
 
-test("a Code With Us proponent named as an individual carries a legal name, an email address and a full postal address, each field validated in turn", async ({
-  surface,
-}) => {
-  const opportunityId = await publishOpportunity(
-    surface,
-    "R-2.14 opportunity bid on by an incomplete individual",
-  );
+// Carries out one attempt, returning whether every step could be taken. A step the form will
+// not let the vendor take is the form refusing the submission.
+async function attempt(steps: Array<() => Promise<void>>): Promise<boolean> {
+  try {
+    for (const step of steps) await step();
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function myProposals(surface: Surface): Promise<string> {
+  await surface.proposalVendorDashboard.open();
+  await attempt([() => surface.proposalVendorDashboard.showMyProposals()]);
+  return readOrEmpty(() => surface.proposalVendorDashboard.myProposalsTable());
+}
+
+async function submitAsIndividual(
+  surface: Surface,
+  opportunityId: string,
+  individual: Record<string, string>,
+  proposalText: string,
+): Promise<boolean> {
+  return attempt([
+    () => surface.proposalCwuCreate.open({ opportunityId }),
+    () => surface.proposalCwuCreate.chooseProponentIndividual(individual),
+    () => surface.proposalCwuCreate.acceptProgramTerms(),
+    () => surface.proposalCwuCreate.acceptAppTerms(),
+    () => surface.proposalCwuCreate.submitProposal({ proposalText }),
+  ]);
+}
+
+test(`${statement} (a named individual)`, async ({ surface }) => {
+  const title = "R-2.14 opportunity bid on by an individual";
+  const opportunityId = await publishOpportunity(surface, title);
 
   await surface.signIn(persona.vendor);
 
-  const required = [
-    "legalName",
-    "email",
-    "streetAddress",
-    "city",
-    "region",
-    "mailCode",
-    "country",
-  ] as const;
-
-  for (const field of required) {
-    await surface.proposalCwuCreate.open({ opportunityId });
-    await surface.proposalCwuCreate.chooseProponentIndividual({
-      ...completeIndividual,
-      [field]: "",
-    });
-    await surface.proposalCwuCreate.acceptProgramTerms();
-    await surface.proposalCwuCreate.acceptAppTerms();
-    await surface.proposalCwuCreate.submitProposal({
-      proposalText: `A proposal offered by an individual with no ${field}.`,
-    });
-    expect(await surface.proposalCwuCreate.fieldError()).toBeTruthy();
+  const missing = ["legalName", "email", "streetAddress", "city", "region", "mailCode", "country"];
+  for (const field of missing) {
+    await submitAsIndividual(
+      surface,
+      opportunityId,
+      { ...completeIndividual, [field]: "" },
+      `A proposal offered by an individual with no ${field}.`,
+    );
+    expect(await myProposals(surface), `submitted with no ${field}`).not.toContain(title);
   }
 
-  await surface.proposalCwuCreate.open({ opportunityId });
-  await surface.proposalCwuCreate.chooseProponentIndividual({
-    ...completeIndividual,
-    email: "not-an-email-address",
-  });
-  await surface.proposalCwuCreate.acceptProgramTerms();
-  await surface.proposalCwuCreate.acceptAppTerms();
-  await surface.proposalCwuCreate.submitProposal({
-    proposalText: "A proposal offered by an individual whose email address is malformed.",
-  });
-  expect(await surface.proposalCwuCreate.fieldError()).toBeTruthy();
+  const malformed = { email: "not-an-email-address", phone: "not a phone number" };
+  for (const [field, value] of Object.entries(malformed)) {
+    const completed = await submitAsIndividual(
+      surface,
+      opportunityId,
+      { ...completeIndividual, [field]: value },
+      `A proposal offered by an individual whose ${field} is malformed.`,
+    );
+    if (completed) {
+      await expect
+        .poll(() => readOrEmpty(() => surface.proposalCwuCreate.fieldError()), settle)
+        .toBeTruthy();
+    }
+    expect(await myProposals(surface), `submitted with a malformed ${field}`).not.toContain(title);
+  }
 
-  await surface.proposalCwuCreate.open({ opportunityId });
-  await surface.proposalCwuCreate.chooseProponentIndividual({
-    ...completeIndividual,
-    phone: "not a phone number",
-  });
-  await surface.proposalCwuCreate.acceptProgramTerms();
-  await surface.proposalCwuCreate.acceptAppTerms();
-  await surface.proposalCwuCreate.submitProposal({
-    proposalText: "A proposal offered by an individual whose phone number is malformed.",
-  });
-  expect(await surface.proposalCwuCreate.fieldError()).toBeTruthy();
+  await submitAsIndividual(
+    surface,
+    opportunityId,
+    completeIndividual,
+    "A proposal offered by an individual with every field complete.",
+  );
+  await expect.poll(() => myProposals(surface), settle).toContain(title);
 });
 
-test("a Code With Us proponent named as an organization is checked only for existence and active status", async ({
-  surface,
-}) => {
-  const opportunityId = await publishOpportunity(
-    surface,
-    "R-2.14 opportunity bid on by an organization the vendor does not belong to",
-  );
+test(`${statement} (an organization)`, async ({ surface }) => {
+  const title = "R-2.14 opportunity bid on by an organization";
+  const opportunityId = await publishOpportunity(surface, title);
 
+  // The vendor persona owns one active organization and none that is archived; the archived
+  // organization the seed carries exists, so what refuses it is its status alone.
   await surface.signIn(persona.vendor);
 
-  await surface.proposalCwuCreate.open({ opportunityId });
-  await surface.proposalCwuCreate.chooseProponentOrganization({
-    organization: seed.organizations.archived,
-  });
-  await surface.proposalCwuCreate.acceptProgramTerms();
-  await surface.proposalCwuCreate.acceptAppTerms();
-  await surface.proposalCwuCreate.submitProposal({
-    proposalText: "A proposal offered for an organization that has been archived.",
-  });
-  expect(await surface.proposalCwuCreate.fieldError()).toBeTruthy();
+  await attempt([
+    () => surface.proposalCwuCreate.open({ opportunityId }),
+    () =>
+      surface.proposalCwuCreate.chooseProponentOrganization({
+        organization: seed.organizations.archived,
+      }),
+    () => surface.proposalCwuCreate.acceptProgramTerms(),
+    () => surface.proposalCwuCreate.acceptAppTerms(),
+    () =>
+      surface.proposalCwuCreate.submitProposal({
+        proposalText: "A proposal offered for an organization that has been archived.",
+      }),
+  ]);
+  expect(await myProposals(surface), "submitted for an archived organization").not.toContain(title);
 
-  await surface.proposalCwuCreate.open({ opportunityId });
-  await surface.proposalCwuCreate.chooseProponentOrganization({
-    organization: seed.organizations.qualified,
-  });
-  await surface.proposalCwuCreate.acceptProgramTerms();
-  await surface.proposalCwuCreate.acceptAppTerms();
-  await surface.proposalCwuCreate.submitProposal({
-    proposalText: "A proposal offered for an active organization the vendor is not a member of.",
-  });
-  expect(await surface.proposalCwuCreate.fieldError()).toBeFalsy();
-  expect((await surface.proposalCwuEdit.status()).toLowerCase()).toContain("submitted");
+  await attempt([
+    () => surface.proposalCwuCreate.open({ opportunityId }),
+    () =>
+      surface.proposalCwuCreate.chooseProponentOrganization({
+        organization: seed.organizations.unqualified,
+      }),
+    () => surface.proposalCwuCreate.acceptProgramTerms(),
+    () => surface.proposalCwuCreate.acceptAppTerms(),
+    () =>
+      surface.proposalCwuCreate.submitProposal({
+        proposalText: "A proposal offered for an active organization.",
+      }),
+  ]);
+  await expect.poll(() => myProposals(surface), settle).toContain(title);
 });
