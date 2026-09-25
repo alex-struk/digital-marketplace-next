@@ -450,6 +450,16 @@ export const seed = {
       "body": "Formatting marks make **these words bold**. Raw markup tries to make <strong>these words bold</strong> and <em>these words emphasised</em>.",
       "note": "Carries raw markup beside formatting marks, as typed. Whether the markup takes effect, shows as literal text or is taken out is the application's rendering."
     },
+    "scriptProbePage": {
+      "id": "00000000-0000-4000-8000-000000000504",
+      "slug": "script-probe-sample",
+      "title": "Script probe sample",
+      "fixed": false,
+      "versions": 1,
+      "created_by": "users.administratorOne",
+      "body": "This body carries markup that would run as script. <script>alert(\"script-probe\")</script> <img src=\"/no-such-image.png\" onerror=\"alert('script-probe')\"> <em>These words are in an emphasis tag.</em>",
+      "note": "Carries, as typed, two pieces of markup that each raise a dialog saying \"script-probe\" if they run — an inline script and an image failure handler — and an emphasis tag. content-view's body_script_ran and body_element_names report whether any of it took effect (R-7.17). The body is stored on one line; the breaks here are for reading."
+    },
     "changedByAnotherAdministrator": {
       "id": "00000000-0000-4000-8000-000000000503",
       "slug": "changed-by-another-administrator",
@@ -1008,6 +1018,34 @@ export const seed = {
         "R-5.21"
       ]
     },
+    "swuEvaluatorNotOwnerNorChair": {
+      "id": "00000000-0000-4000-a024-000000000001",
+      "version_id": "00000000-0000-4000-a024-000000000002",
+      "program": "sprint-with-us",
+      "title": "Seeded Sprint With Us opportunity with an evaluator who neither owns nor chairs it",
+      "seeded_status": "EVAL_QUESTIONS_INDIVIDUAL",
+      "owner": "users.staffTwo",
+      "panel": [
+        {
+          "user": "users.administratorOne",
+          "chair": true,
+          "evaluator": true
+        },
+        {
+          "user": "users.staffOne",
+          "chair": false,
+          "evaluator": true
+        }
+      ],
+      "proposals": [
+        "proposals.swuEvaluatorOnlyOne",
+        "proposals.swuEvaluatorOnlyTwo"
+      ],
+      "for": [
+        "R-5.34"
+      ],
+      "note": "Being evaluated, no evaluation begun. users.staffOne (persona.publicSectorStaff) is an evaluator here and neither the owner nor the chair. Together with swuLapsedChairNotEvaluator (staffOne the chair only), swuLapsedOwnerOffPanel (staffOne the owner only) and swuCodeChallengeOfOtherStaff (staffOne unconnected), one sign-in stands in each of the four relationships an evaluation's tools are split by. The two lapsed ones become \"being evaluated\" once the application closes them (scheduled-transition-trigger); this one and swuCodeChallengeOfOtherStaff already are."
+    },
     "twuConsensusFiveProponents": {
       "id": "00000000-0000-4000-a031-000000000001",
       "version_id": "00000000-0000-4000-a031-000000000002",
@@ -1435,6 +1473,16 @@ export const seed = {
       "id": "00000000-0000-4000-a023-000000000102",
       "opportunity": "opportunities.swuLapsedOwnerOffPanel",
       "seeded_status": "SUBMITTED"
+    },
+    "swuEvaluatorOnlyOne": {
+      "id": "00000000-0000-4000-a024-000000000101",
+      "opportunity": "opportunities.swuEvaluatorNotOwnerNorChair",
+      "seeded_status": "UNDER_REVIEW_QUESTIONS"
+    },
+    "swuEvaluatorOnlyTwo": {
+      "id": "00000000-0000-4000-a024-000000000102",
+      "opportunity": "opportunities.swuEvaluatorNotOwnerNorChair",
+      "seeded_status": "UNDER_REVIEW_QUESTIONS"
     },
     "twuFiveOne": {
       "id": "00000000-0000-4000-a031-000000000101",

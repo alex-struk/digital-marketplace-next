@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Made by | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-25T14:03:37.606Z | derive-tests-evaluation-stale-5 | G3 | approve | agent:reviewer | persona agent | $0.46620700000000004 |  |
 | 2026-09-25T14:00:22.089Z | bind-adapter-old-18 | G3 | approve | agent:reviewer | persona agent | $0.4853098 |  |
 | 2026-09-25T13:33:56.735Z | contract-v8 | G1 | approve | agent:product-owner | persona agent | $0.4083696 | sample |
 | 2026-09-25T13:00:12.774Z | derive-tests-content-9 | G3 | approve | agent:reviewer | persona agent | $0.5210338 |  |

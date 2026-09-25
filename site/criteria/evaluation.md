@@ -37,7 +37,7 @@
 | R-5.31 | acceptance/evaluation/R-5.31.spec.ts |  | unbound |
 | R-5.32 | acceptance/evaluation/R-5.32.spec.ts |  | unbound |
 | R-5.33 | acceptance/evaluation/R-5.33.spec.ts |  | unbound |
-| R-5.34 | not testable: blocked: the criterion needs four different people looking at one opportunity — an evaluator, the chair, the owner and an unrelated public sector employee — and the target mints sessions for two public sector accounts. On the seeded opportunities one of them is the owner and an evaluator at once and the other is the chair and an administrator at once, so three of the four roles collapse into two people and the fourth cannot be signed in as at all. Needs a sign-in for public-sector-staff-other and a panel whose chair is neither the owner nor an administrator. The one part that is reachable, the panel being shown only to the owner and an administrator, is exercised by R-5.18. |  | not-testable |
+| R-5.34 | acceptance/evaluation/R-5.34.spec.ts |  | not-testable |
 | R-5.35 | acceptance/evaluation/R-5.35.spec.ts |  | unbound |
 | R-5.36 | acceptance/evaluation/R-5.36.spec.ts |  | unbound |
 | R-5.37 | acceptance/evaluation/R-5.37.spec.ts |  | not-testable |

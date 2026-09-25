@@ -2367,7 +2367,7 @@ owed:
     id: R-5.34
     version: 2
     domain: evaluation
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the criterion needs four different people looking at one
       opportunity — an evaluator, the chair, the owner and an unrelated public
       sector employee — and the target mints sessions for two public sector
@@ -2393,6 +2393,12 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-25T13:33:56.853Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v2 exists and has not run
+        by: runner
+        at: 2026-09-25T14:03:37.639Z
+    target: old
   - kind: missing-test
     item: R-5.37
     id: R-5.37

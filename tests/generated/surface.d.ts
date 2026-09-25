@@ -258,6 +258,8 @@ export interface OpportunitySwuEditPage {
   teamScenarioTab(): Promise<string>;
   evaluationPanelTab(): Promise<string>;
   consensusTab(): Promise<string>;
+  instructionsTab(): Promise<string>;
+  evaluationTab(): Promise<string>;
 }
 
 export interface OpportunitySwuCompletePage {
@@ -318,6 +320,8 @@ export interface OpportunityTwuEditPage {
   challengeTab(): Promise<string>;
   evaluationPanelTab(): Promise<string>;
   consensusTab(): Promise<string>;
+  instructionsTab(): Promise<string>;
+  evaluationTab(): Promise<string>;
   offeredStateChanges(): Promise<string>;
 }
 
@@ -1192,6 +1196,8 @@ export interface ContentViewPage {
   pageAddress(): Promise<string>;
   pageTitle(): Promise<string>;
   pageBody(): Promise<string>;
+  bodyElementNames(): Promise<string>;
+  bodyScriptRan(): Promise<string>;
   publishedDate(): Promise<string>;
   updatedDate(): Promise<string>;
   readableWhenSignedOut(): Promise<string>;
