@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Made by | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-25T22:00:22.833Z | policy-agents-backend | G-POL | approve | tech-lead | a person |  |  |
 | 2026-09-25T18:09:06.894Z | calibrate-triage-old-10 | G3 | withdrawn | agent:tech-lead | persona agent |  |  |
 | 2026-09-25T14:11:29.309Z | derive-tests-files-stale-2 | G3 | approve | agent:reviewer | persona agent | $0.39572840000000004 |  |
 | 2026-09-25T14:08:20.045Z | derive-tests-content-10 | G3 | approve | agent:reviewer | persona agent | $0.7098442 |  |
