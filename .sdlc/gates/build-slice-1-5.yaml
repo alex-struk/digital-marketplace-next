@@ -1,0 +1,8 @@
+gate: G3
+verdict: return
+by: tech-lead
+held_by: human
+note: "Returned by the tech lead. The build cannot be verified where the pipeline looks for it: .sdlc/config.yaml targets the rebuilt application at http://localhost:4300, and this branch publishes it on 3000. Not approved, because no passing verify exists for this tree; not withdrawn, because the work is sound and needs only its address changed. Condition build-slice-1-4#1 stays open and travels with the revision."
+conditions:
+  - "The application must answer on the address .sdlc/config.yaml gives the new target, http://localhost:4300: the host port app/compose/compose.yaml publishes for the frontend, the redirectUris, webOrigins and post.logout.redirect.uris in app/compose/idp/realm-template.json, the addresses stated in app/README.md and app/compose/idp/README.md, and the port asserted in app/backend/tests/sandbox-composition.test.ts. The port inside the container is the build's own choice."
+at: 2026-09-25T01:57:15.865Z
