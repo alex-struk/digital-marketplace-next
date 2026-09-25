@@ -2717,7 +2717,7 @@ owed:
     id: R-5.9
     version: 1
     domain: evaluation
-    stage: derive-tests
+    stage: calibrate
     why: evaluation-panel-request.submit_panel_with_no_chair (two public sector
       members, both evaluators, neither marked chair, sent to the service
       without the browser form) and evaluation-panel-request.missing_chair_error
@@ -2736,8 +2736,20 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-25T11:33:11.781Z
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-5.9 v1 fail"
-      by: runner
-      at: 2026-09-25T11:52:38.626Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T12:05:13.830Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-5.9 v1 fail"
+          by: runner
+          at: 2026-09-25T11:52:38.626Z
+        why: "tests/results/old/latest.json: R-5.9 v1 fail is not a result of the test
+          for R-5.9 as it stood when the item was closed at 7cc148e8; the row is
+          ruled test-wrong"
+        by: runner
+        at: 2026-09-25T12:05:13.830Z
+    target: old
