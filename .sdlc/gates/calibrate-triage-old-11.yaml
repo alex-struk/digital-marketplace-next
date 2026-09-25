@@ -1,0 +1,8 @@
+gate: G3
+verdict: withdrawn
+by: agent:tech-lead
+held_by: agent
+note: 41 unruled failures include navigation timeouts across all four oracle
+  copies and six domains; rerun the suite before asking the reviewer to classify
+  them
+at: 2026-09-25T23:44:00.603Z
