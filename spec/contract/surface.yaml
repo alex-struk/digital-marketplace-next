@@ -35,9 +35,20 @@
 #   follows the link needs no identifier at all.
 #
 #   From a fixed set the application itself defines. :program is one of code-with-us,
-#   sprint-with-us and team-with-us. :noticeId is one of deactivatedOwnAccount and
-#   authFailure, and any other value is answered as not found. :userId on an evaluation
-#   or consensus screen is the panel member's own account, which the seed names.
+#   sprint-with-us and team-with-us. :recordKind is opportunities or proposals.
+#   :noticeId is one of deactivatedOwnAccount and authFailure, and any other value is
+#   answered as not found. :userId on an evaluation or consensus screen is the panel
+#   member's own account, which the seed names. The :slug of each page the service needs
+#   for itself is fixed by the service and named in the manifest's content group.
+#
+#   From the mail catcher. :messageId on caught-message is the catcher's identifier for a
+#   message, returned by mail.messagesTo and by caught-message-list.
+#
+# The seed also carries opportunities already standing at each stage of evaluation, one
+# per criterion that moves one on, so a criterion about consensus, the code challenge,
+# the team scenario, processing or an award starts from its own record rather than from
+# walking the one lapsed opportunity of its program through every stage before it. Their
+# handles are in the manifest's opportunities group, each naming the criteria it serves.
 #
 # A screen that is also reachable as the signed-in person's own carries a second entry
 # with no parameter in its route: the application resolves "me" in place of an account
@@ -131,6 +142,11 @@ pages:
       reward: { test_id: opportunity-reward }
       addenda: { test_id: opportunity-addenda }
       successful_proponent: { test_id: opportunity-successful-proponent }
+      # What an awarded opportunity shows about its winner beyond the name: the contact
+      # details and the score, which only a reader permitted to see proposal scores is
+      # shown. Empty for anybody else, and for an opportunity not yet awarded.
+      successful_proponent_contact_details: { test_id: null }
+      successful_proponent_score: { test_id: null }
 
   - id: opportunity-cwu-edit
     domain: opportunities
@@ -196,8 +212,17 @@ pages:
       proposal_deadline: { test_id: opportunity-proposal-deadline }
       total_max_budget: { test_id: opportunity-total-max-budget }
       phases: { test_id: opportunity-phases }
+      # The body of the page at "sprint-with-us-opportunity-scope" (seed.content
+      # .servicePageSprintWithUsOpportunityScope) as this screen embeds it, rendered. Empty
+      # when that page cannot be read.
+      scope_section: { test_id: null }
       addenda: { test_id: opportunity-addenda }
       successful_proponent: { test_id: opportunity-successful-proponent }
+      # What an awarded opportunity shows about its winner beyond the name: the contact
+      # details and the score, which only a reader permitted to see proposal scores is
+      # shown. Empty for anybody else, and for an opportunity not yet awarded.
+      successful_proponent_contact_details: { test_id: null }
+      successful_proponent_score: { test_id: null }
 
   - id: opportunity-swu-edit
     domain: opportunities
@@ -268,8 +293,16 @@ pages:
       proposal_deadline: { test_id: opportunity-proposal-deadline }
       max_budget: { test_id: opportunity-max-budget }
       resources: { test_id: opportunity-resources }
+      # The body of the page at "team-with-us-terms-and-conditions" (seed.content
+      # .servicePageTeamWithUsTerms) as this screen embeds it, rendered.
+      terms_section: { test_id: null }
       addenda: { test_id: opportunity-addenda }
       successful_proponent: { test_id: opportunity-successful-proponent }
+      # What an awarded opportunity shows about its winner beyond the name: the contact
+      # details and the score, which only a reader permitted to see proposal scores is
+      # shown. Empty for anybody else, and for an opportunity not yet awarded.
+      successful_proponent_contact_details: { test_id: null }
+      successful_proponent_score: { test_id: null }
 
   - id: opportunity-twu-edit
     domain: opportunities
@@ -297,6 +330,11 @@ pages:
       challenge_tab: { test_id: opportunity-tab-challenge }
       evaluation_panel_tab: { test_id: opportunity-tab-evaluation-panel }
       consensus_tab: { test_id: opportunity-tab-consensus }
+      # The changes of state this screen offers the signed-in person from the state the
+      # opportunity is in now — award, cancel, move to the next stage — named in the
+      # criteria's words. A criterion turns on which changes a Team With Us opportunity in
+      # processing permits, and "offered here" is how that set reaches a reader.
+      offered_state_changes: { test_id: null }
 
   - id: opportunity-twu-complete
     domain: opportunities
@@ -1123,6 +1161,9 @@ pages:
       score_out_of_range_error: { test_id: evaluation-score-error }
       empty_notes_error: { test_id: evaluation-notes-error }
       duplicate_evaluation_error: { test_id: evaluation-duplicate-error }
+      # The person may not record an evaluation of this proponent — not an evaluator on the
+      # panel, or not at this stage — as distinct from a form that simply recorded nothing.
+      refused_when_not_permitted: { test_id: null }
 
   - id: evaluation-individual-edit-swu
     domain: evaluation
@@ -1138,6 +1179,10 @@ pages:
       read_only_after_submitted: { test_id: evaluation-read-only-notice }
       score_out_of_range_error: { test_id: evaluation-score-error }
       empty_notes_error: { test_id: evaluation-notes-error }
+      # The reader may not see this evaluation at all, as distinct from an evaluation with
+      # nothing in it. Read by a public sector employee with no connection to the
+      # opportunity, on seed.opportunities.swuCodeChallengeOfOtherStaff.
+      refused_when_not_permitted: { test_id: null }
 
   - id: evaluation-consensus-create-swu
     domain: evaluation
@@ -1186,6 +1231,7 @@ pages:
       score_out_of_range_error: { test_id: evaluation-score-error }
       empty_notes_error: { test_id: evaluation-notes-error }
       duplicate_evaluation_error: { test_id: evaluation-duplicate-error }
+      refused_when_not_permitted: { test_id: null }
 
   - id: evaluation-individual-edit-twu
     domain: evaluation
@@ -1201,6 +1247,7 @@ pages:
       read_only_after_submitted: { test_id: evaluation-read-only-notice }
       score_out_of_range_error: { test_id: evaluation-score-error }
       empty_notes_error: { test_id: evaluation-notes-error }
+      refused_when_not_permitted: { test_id: null }
 
   - id: evaluation-consensus-create-twu
     domain: evaluation
@@ -1346,6 +1393,11 @@ pages:
       page_updated_date: { test_id: content-list-updated }
       ordered_by_title: { test_id: content-list-table }
       refused_for_non_administrator: { test_id: not-found-page }
+      # How many pages the list holds. On the seeded installation that is the twenty-two
+      # pages the service needs for itself (seed.content, fixed: true) plus the ordinary
+      # pages the seed adds (fixed: false), so a count of the service's own pages is this
+      # less the ordinary ones.
+      page_count: { test_id: null }
 
   - id: content-create
     domain: content
@@ -1563,3 +1615,184 @@ pages:
       uploading_indicator: { test_id: embedded-image-uploading }
       image_rendered_in_published_text: { test_id: content-body-image }
       upload_failure_leaves_text_unchanged: { test_id: content-body-field }
+
+  # One message the service sent, read back from the mail catcher rather than from the
+  # service. Served by the catcher at ${SDLC_MAIL_API} (spec/contract/observables.yaml,
+  # email.read_one_message), not at the target's base URL, which is what "origin" says.
+  #
+  # A criterion about what a message says, who else it reached, who it came from or where
+  # its links lead needs one message's headers and bodies, and the catcher's listing and
+  # search carry neither the blind copies, the sender nor either body. :messageId is the
+  # catcher's own identifier for the message: the ID of a result of mail.messagesTo, or one
+  # of caught-message-list.message_identifiers.
+  - id: caught-message
+    domain: notifications
+    origin: mail-catcher
+    route: /api/v1/message/:messageId
+    title: "A message the service sent"
+    actions:
+      # Opens, in the browser, the link in the formatted body whose label is given — the
+      # accept and decline choices of an invitation, an unsubscribe offer, a sign-in link.
+      # The browser lands wherever the service sends it, which the landing page's own
+      # observations then read.
+      follow_link_in_body: { test_id: null }
+    observations:
+      visible_recipients: { test_id: null }
+      copied_recipients: { test_id: null }
+      sender: { test_id: null }
+      reply_to: { test_id: null }
+      subject: { test_id: null }
+      html_body: { test_id: null }
+      plain_text_body: { test_id: null }
+      # The address of the image at the top of the formatted body, which is where the
+      # service's logo, or its test variant, is shown.
+      logo_address: { test_id: null }
+      # Every link in the formatted body, each as its label and where it leads.
+      links_in_body: { test_id: null }
+
+  # Every message in the mail catcher, newest first. The mail fixture searches by one
+  # visible recipient, and a message addressed to nobody visibly, or to a person with no
+  # address, is found only by listing. Read the three observations together: the nth
+  # identifier, subject and visible recipient belong to the same message.
+  - id: caught-message-list
+    domain: notifications
+    origin: mail-catcher
+    route: /api/v1/messages
+    title: "Every message the service sent"
+    actions: {}
+    observations:
+      message_identifiers: { test_id: null }
+      message_subjects: { test_id: null }
+      message_visible_recipients: { test_id: null }
+      message_count: { test_id: null }
+
+  # Requests the screens never make. The entries below are addresses of the service's own
+  # interface (spec/contract/openapi.yaml), listed because criteria describe the service's
+  # answer to a request that no screen sends — a membership type the team page never
+  # offers, a draft the form would not let through, a single evaluation submitted on its
+  # own — or the form a refusal takes, which a screen reports only as prose. The file
+  # upload entries above are the same kind of page. Each action is made as the signed-in
+  # person, carrying their session, and each observation reads the service's answer.
+
+  # The organizations the signed-in person may act on behalf of, as the service answers
+  # when asked for them — the list a proposal's organization is chosen from.
+  - id: organization-acting-for-list
+    domain: organizations
+    route: /api/ownedOrganizations
+    title: "Organizations one may act for"
+    actions: {}
+    observations:
+      organizations_offered: { test_id: null }
+      # Answered as not permitted, as distinct from an empty list.
+      refused_when_not_permitted: { test_id: null }
+
+  # An invitation to join an organization, made as a request so that it can name any
+  # membership type.
+  - id: affiliation-invitation-request
+    domain: organizations
+    route: /api/affiliations
+    title: "Invite somebody to an organization"
+    actions:
+      # Input: the inviting organization (a seed.organizations handle), the invited
+      # person's email address, and the membership type to name.
+      invite_with_membership_type: { test_id: null }
+    observations:
+      invitation_created: { test_id: null }
+      invalid_membership_type_error: { test_id: null }
+
+  # The list of everyone registered with the service, as the service answers the request
+  # for it, whatever the screen shows.
+  - id: user-list-request
+    domain: users
+    route: /api/users
+    title: "Everyone registered with the service"
+    actions: {}
+    observations:
+      accounts_answered: { test_id: null }
+      refused_when_not_permitted: { test_id: null }
+      refusal_status: { test_id: null }
+
+  # Requests to read, create, change, rename or remove a page, as the service answers
+  # them. :slug is the page's address; reading the list and creating a page address the
+  # collection rather than one page and ignore it.
+  - id: content-request
+    domain: content
+    route: /api/content/:slug
+    title: "Requests about a page"
+    actions:
+      read_page_list_by_request: { test_id: null }
+      read_page_by_request: { test_id: null }
+      create_page_by_request: { test_id: null }
+      change_page_by_request: { test_id: null }
+      rename_page_by_request: { test_id: null }
+      remove_page_by_request: { test_id: null }
+    observations:
+      request_accepted: { test_id: null }
+      refusal_status: { test_id: null }
+      # The form of the refused answer — which fields it carries and how the reason is
+      # named — so that two refusals can be compared (observables.yaml, refusals.shape).
+      refusal_shape: { test_id: null }
+
+  # One panel member's individual evaluation of one proponent, as a request. :userId is
+  # the panel member, as on evaluation-individual-edit-swu.
+  - id: evaluation-individual-request-swu
+    domain: evaluation
+    route: /api/proposal/sprint-with-us/:proposalId/team-questions/evaluations/:userId
+    title: "A Sprint With Us individual evaluation, by request"
+    actions:
+      # Input: the four scores and notes exactly as given, including a score above the
+      # question's maximum or an empty note, which the form refuses as it is typed.
+      save_draft_as_entered: { test_id: null }
+      # Asks for this one evaluation to be submitted by itself, rather than the whole set.
+      submit_this_evaluation_alone: { test_id: null }
+    observations:
+      stored_scores: { test_id: null }
+      stored_notes: { test_id: null }
+      evaluation_status: { test_id: null }
+      refused_as_unrecognised: { test_id: null }
+      refused_at_submission: { test_id: null }
+
+  - id: evaluation-individual-request-twu
+    domain: evaluation
+    route: /api/proposal/team-with-us/:proposalId/resource-questions/evaluations/:userId
+    title: "A Team With Us individual evaluation, by request"
+    actions:
+      save_draft_as_entered: { test_id: null }
+      submit_this_evaluation_alone: { test_id: null }
+    observations:
+      stored_scores: { test_id: null }
+      stored_notes: { test_id: null }
+      evaluation_status: { test_id: null }
+      refused_as_unrecognised: { test_id: null }
+      refused_at_submission: { test_id: null }
+
+  # An opportunity's evaluation panel submitted as a request, so that it can hold a
+  # member who is neither an evaluator nor the chair, which none of the panel screen's
+  # controls can compose. :program is sprint-with-us or team-with-us.
+  - id: evaluation-panel-request
+    domain: evaluation
+    route: /api/opportunities/:program/:opportunityId
+    title: "An evaluation panel, by request"
+    actions:
+      submit_panel_with_member_holding_no_role: { test_id: null }
+    observations:
+      member_without_role_error: { test_id: null }
+      panel_as_stored: { test_id: null }
+
+  # A stored file named as an attachment by its identifier, on something the signed-in
+  # person may edit. :recordKind is opportunities or proposals, :program one of
+  # code-with-us, sprint-with-us and team-with-us, and :recordId the opportunity or
+  # proposal. The identifier comes from file-upload.stored_file_identifier, from
+  # file-attachment-control.attachment_address, or from seed.stored_files.
+  - id: file-attach-by-identifier
+    domain: files
+    route: /api/:recordKind/:program/:recordId
+    title: "Attach a stored file by its identifier"
+    actions:
+      # Input: the stored file's identifier. Saves the record as it stands with that file
+      # added to its attachments.
+      attach_stored_file: { test_id: null }
+    observations:
+      attachment_accepted: { test_id: null }
+      attachment_refused: { test_id: null }
+      attached_file_identifiers: { test_id: null }

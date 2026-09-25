@@ -8,6 +8,15 @@
 - 19:11:34 propose build-slice-1-6 at G3
 - 19:15:02 rule build-slice-1-6 approve at G3 by agent:reviewer (agent)
 - 23:15:51 init: pipeline 7e3286c, packs 3, skills installed 0, skipped 0, briefs 5 written, 0 left as the project has them
+- 23:53:29 run contract: authentication check failed
+- 00:19:46 oracle up old: http://localhost:4300 (local port 4300)
+- 00:39:33 oracle down old
+- 00:43:46 oracle up old: http://localhost:4300 (local port 4300)
+- 00:44:39 oracle down old
+- 00:46:01 run contract: post-checks failed
+- 00:54:47 run contract: ok, cost 0, turns 0
+- 00:54:47 propose contract-v4 at G1
+- 00:55:52 rule contract-v4 approve at G1 by agent:product-owner (agent)
 
 # Run record 2026-09-22
 

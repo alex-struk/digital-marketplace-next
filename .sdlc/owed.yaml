@@ -1,0 +1,1166 @@
+owed:
+  - kind: missing-test
+    item: R-2.15
+    id: R-2.15
+    version: 2
+    domain: proposals
+    stage: contract
+    why: "blocked: the Code With Us half needs a published Code With Us opportunity
+      whose proposal deadline has passed, and there is none. The one seeded Code
+      With Us opportunity is open until 2030, and the create form refuses a
+      deadline earlier than the day it is filled in, so the refusal the
+      criterion quotes — \"This opportunity is no longer accepting proposals.\"
+      — has nothing to be raised against. The half that holds in all three
+      programs needs a draft proposal against an opportunity already past its
+      deadline: the two seeded closed opportunities are past theirs, but every
+      vendor who could bid on one has already bid and every qualified
+      organization is already named on a proposal of its own, so no draft can be
+      added, and the deadline hook sits in front of the service's own routes so
+      the state before the closure cannot be held still. Unblocked by seeding a
+      Code With Us opportunity past its proposal deadline, and a draft proposal
+      against a closed opportunity."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-2.26
+    id: R-2.26
+    version: 1
+    domain: proposals
+    stage: contract
+    why: "blocked: the given is a Code With Us proposal under review, and a proposal
+      reaches review only when its opportunity closes. The closure itself is now
+      reachable — run_pending_transitions on scheduled-transition-trigger runs
+      the deadline hook — but only the Sprint With Us and Team With Us
+      opportunities are seeded past their deadlines. No Code With Us opportunity
+      can be given a deadline in the past, so enter_score on proposal-cwu-view
+      has no proposal to act on, and neither the score, the move to evaluated
+      nor the refusal of an out-of-range score has anything to be read on.
+      Unblocked by seeding a Code With Us opportunity past its proposal deadline
+      carrying a submitted proposal."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-2.27
+    id: R-2.27
+    version: 1
+    domain: proposals
+    stage: contract
+    why: "blocked: the when is the last proposal still in contention being scored,
+      which means carrying proposals all the way to evaluated. On the two seeded
+      closed opportunities that is a single path — score every proponent's
+      questions, agree those scores as a panel, finalise them, screen in, score
+      the challenge and then the scenario — and the seed carries one closed
+      opportunity per program. The first test to walk that path takes the
+      opportunity with it, so the criteria behind the closure cannot each have
+      one. Unblocked by seeding a closed opportunity for each criterion that has
+      to move one, or by seeding opportunities already standing at the later
+      evaluation stages."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-2.29
+    id: R-2.29
+    version: 1
+    domain: proposals
+    stage: contract
+    why: "blocked: two things are missing. The ranking and the cut need the panel's
+      agreed scores finalised, which consumes the one seeded closed opportunity
+      of that program (see R-2.27). And the criterion describes six proponents
+      of whom five clear every minimum and four go forward; the seed carries
+      three per opportunity and says so itself. The size of the cut therefore
+      cannot be shown even once, and the half that three proponents could show —
+      one below a question's minimum score being left behind — needs the same
+      finalisation. Unblocked by a closed opportunity of its own carrying six
+      proponents."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-2.30
+    id: R-2.30
+    version: 1
+    domain: proposals
+    stage: contract
+    why: "blocked: the given is two proposals still in contention with a team
+      scenario score being entered against one of them, which is the last stage
+      of the evaluation. Reaching it means walking the whole chain on the one
+      seeded closed Sprint With Us opportunity and leaving nothing behind for
+      the other criteria (see R-2.27), so the price_score observations on the
+      two proposal views have nothing to return and the lowest bid among
+      proposals in contention is never worked out. Unblocked by a closed
+      opportunity of its own, or by one seeded at the code challenge stage with
+      its question scores already recorded."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-2.31
+    id: R-2.31
+    version: 1
+    domain: proposals
+    stage: contract
+    why: "blocked: the given is a proposal carrying a score for every stage, which
+      is the end of the chain that consumes the one seeded closed opportunity of
+      its program (see R-2.27). Until then total_score and rank have nothing to
+      return and no two proposals can be ranked against each other. Unblocked by
+      a closed opportunity of its own, or by one seeded with every stage scored
+      but the last."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-2.32
+    id: R-2.32
+    version: 1
+    domain: proposals
+    stage: contract
+    why: "blocked: the given is a vendor's proposal that has been scored, and the
+      then needs it to become awarded or passed over. Both lie at the end of the
+      evaluation chain, which consumes the one seeded closed opportunity of its
+      program (see R-2.27). Before any score exists the withholding cannot be
+      told from the score simply not being there: score and rank read as empty
+      on an unscored proposal for a reason that has nothing to do with who is
+      looking. Unblocked by a closed opportunity of its own carrying scored
+      proposals."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-2.33
+    id: R-2.33
+    version: 1
+    domain: proposals
+    stage: contract
+    why: "blocked: only a fully evaluated proposal, or one previously passed over,
+      may be awarded, and reaching evaluated consumes the one seeded closed
+      opportunity of its program (see R-2.27). award_proposal is offered on all
+      three proposal views and has nothing it may act on, so neither the other
+      proposals being marked not awarded nor the opportunity becoming awarded
+      can be read. Unblocked by a closed opportunity of its own carrying one
+      evaluated proposal, one disqualified and one withdrawn, which is the given
+      the criterion states."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-1.25
+    id: R-1.25
+    version: 1
+    domain: opportunities
+    stage: contract
+    why: "blocked: the given is an opportunity at its program's final evaluation
+      stage, and the seed carries none. Each program has exactly one closable
+      opportunity, seeded at the first evaluation stage, and reaching the last
+      one means walking that single record through consensus and every stage
+      after it — which no second test could then repeat, because the seed is
+      applied once and nothing resets it. Unblocked by seeding an opportunity
+      already at each program's final evaluation stage, with its proposals
+      scored up to that point."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-1.26
+    id: R-1.26
+    version: 1
+    domain: opportunities
+    stage: contract
+    why: "blocked: the given is an opportunity in processing, which the seed does
+      not carry and which lies past the whole of evaluation on the one closable
+      opportunity of each program. award_proposal is offered on all three
+      proposal views and has nothing to act on. Unblocked by seeding an
+      opportunity in processing, in each program, with more than one proposal
+      still in contention so that the others can be seen to be marked not
+      awarded."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-1.27
+    id: R-1.27
+    version: 1
+    domain: opportunities
+    stage: contract
+    why: "blocked: the given is an awarded opportunity, which needs processing,
+      which needs the whole of evaluation on the one closable opportunity of
+      each program. successful_proponent is named on all three opportunity views
+      and has nothing to return. The withheld half needs an observation as well:
+      no observation names the successful proponent's contact details, so their
+      being withheld from a reader who may not see the score cannot be told from
+      their not being shown to anybody. Unblocked by seeding an awarded
+      opportunity and by an observation of the successful proponent's contact
+      details."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-1.40
+    id: R-1.40
+    version: 1
+    domain: opportunities
+    stage: contract
+    why: "blocked: the given is an opportunity that has been evaluated. The seed
+      carries none past the first evaluation stage, so full_report would return
+      nothing for an administrator as well as for a member of staff and the
+      contrast the criterion turns on could not be told from the report simply
+      not existing yet. Unblocked by seeding a completed opportunity — awarded,
+      with its addenda, its history and its proposals behind it — in at least
+      one program."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-1.41
+    id: R-1.41
+    version: 1
+    domain: opportunities
+    stage: contract
+    why: "blocked: the given is a Sprint With Us or Team With Us opportunity at the
+      questions consensus stage. The seed stops one stage earlier, and reaching
+      consensus means every evaluator submitting an individual evaluation for
+      every proponent of the one closable opportunity of that program — after
+      which no other criterion could use the same record. Both refusal
+      observations exist, not_all_consensuses_submitted_error and
+      no_screenable_proponent_error, and neither has an opportunity to be read
+      on. Unblocked by seeding an opportunity at the questions consensus stage
+      in each program, one with a consensus still unsubmitted and one where no
+      proponent has cleared every minimum score."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-1.42
+    id: R-1.42
+    version: 1
+    domain: opportunities
+    stage: contract
+    why: "blocked: the given is a Sprint With Us opportunity at the code challenge
+      stage, two stages past where the seed leaves the one closable Sprint With
+      Us opportunity. start_team_scenario has nothing to be refused on and the
+      part-scored proponents the refusal turns on cannot be arranged. Unblocked
+      by seeding a Sprint With Us opportunity at the code challenge stage with
+      one proponent scored and another neither scored nor disqualified."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-1.43
+    id: R-1.43
+    version: 1
+    domain: opportunities
+    stage: contract
+    why: "blocked: the given is an opportunity that has reached the consensus stage
+      or beyond, which the seed does not carry and which the one closable
+      opportunity of each program can only be walked to once.
+      panel_locked_after_consensus names exactly this outcome and has nothing to
+      be read on. The permitted half of the rule — changing the panel while the
+      opportunity is a draft — is exercised by R-1.55. Unblocked by seeding an
+      opportunity at the consensus stage with an evaluation panel already
+      named."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-1.49
+    id: R-1.49
+    version: 1
+    domain: opportunities
+    stage: contract
+    why: "blocked: the claim is about which state changes are permitted out of
+      processing for a Team With Us opportunity, and the seed carries no Team
+      With Us opportunity in processing. The award half could be read from the
+      opportunity's own state once it were reachable; the recorded-transitions
+      half needs an observation as well, since nothing returns the set of
+      changes an opportunity's program permits. Unblocked by seeding a Team With
+      Us opportunity in processing, and by an observation of the state changes
+      permitted from an opportunity's current state."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-1.50
+    id: R-1.50
+    version: 1
+    domain: opportunities
+    stage: contract
+    why: "blocked: the refusal half needs an opportunity at the questions consensus
+      stage, which the seed does not carry — see R-1.41 for why the one closable
+      opportunity of each program cannot supply it. The uniqueness half is
+      unobservable whatever the seed holds: 'exactly one path out' is a claim
+      about no second action existing, and the absence of an action is not
+      something an observation reports. Unblocked for its refusal half by the
+      same seeding R-1.41 names; its uniqueness half is for a reader of the
+      rebuilt system's own actions rather than for a test."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-1.35
+    id: R-1.35
+    version: 1
+    domain: opportunities
+    stage: contract
+    why: "blocked: every notice the criterion names — to the watchers, to the
+      proponents and to the author — is sent as one announcement to a group, and
+      the observables notes say such a message is addressed to one person with
+      everyone else in blind copies. The criterion never says the author is sent
+      a message of their own. The mail fixture only offers messagesTo, which
+      searches by visible recipient, so being told cannot be distinguished from
+      not being told for any of the three groups. The edit and the addendum
+      themselves are reachable (opportunity-cwu-edit.edit_details and
+      add_addendum on seed.opportunities.publishedCodeWithUs), and watchers and
+      proponents could be arranged through toggle_watch and the proposal create
+      pages. What unblocks it: a `mail` accessor over observables.yaml's
+      read_one_message that returns one message's To and Bcc
+      (copied_recipients), or a listing of every message in the catcher, plus
+      the service's own sending address named in the contract, so the
+      announcement can be found and its blind copies counted."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-1.51
+    id: R-1.51
+    version: 1
+    domain: opportunities
+    stage: contract
+    why: "unobservable: nothing the service does could show that a state it does not
+      define is gone. No action requests a move to a suspended state, no
+      observation returns the states an opportunity may hold or the states the
+      list's state filter offers, and the mapping of a historical record onto a
+      defined state happens before the rebuilt system reads it, which is a
+      property of the migration rather than of anything the running service
+      answers with. No addition to the surface would help; this is a claim a
+      human accepts about the rebuild rather than one a test can settle."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-8.3
+    id: R-8.3
+    version: 1
+    domain: files
+    stage: contract
+    why: "Neither half of the given can be produced and the outcome cannot be read.
+      No action declares, or withholds, the size of a submission — a file
+      reaches the service only through add_attachment, choose_image or
+      upload_body_image, each of which submits whatever it is handed — and no
+      observation reports an upload refused for size: file_download names only
+      contents, name, type, disposition and its two refusals, and the attachment
+      control names only file_name_error. The outcome the criterion actually
+      turns on, a fault of the service rather than a message about the file, has
+      no observation reporting a fault of the service at all."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-8.4
+    id: R-8.4
+    version: 1
+    domain: files
+    stage: contract
+    why: The given is a submission carrying no file part or read-access information
+      that is not well-formed data. Every upload in the surface is made by a
+      control that assembles the submission itself, so a malformed one cannot be
+      sent; and the outcome — failing as an unexpected fault and being written
+      to the service's error log — has no observation, since the surface names
+      nothing that reports a fault of the service and observables.yaml exposes
+      no log.
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-8.8
+    id: R-8.8
+    version: 1
+    domain: files
+    stage: contract
+    why: The when is a visitor who is not signed in asking for the attachment of a
+      draft opportunity by its identifier. A visitor cannot open an unpublished
+      opportunity, so there is no download to follow, and no observation returns
+      the identifier of a file a test has uploaded, so it cannot be asked for
+      directly. The criterion's own note says the identifier is published
+      nowhere, which is exactly the reach the surface lacks.
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-8.9
+    id: R-8.9
+    version: 1
+    domain: files
+    stage: contract
+    why: Nothing in the surface attaches a file to a Team With Us proposal and then
+      offers it to the opportunity's owner. The attachment control is listed on
+      the three opportunity forms and the Code With Us proposal form only, so it
+      has no download to follow on a Team With Us proposal, and
+      proposal-twu-view names no attachment action or observation. The
+      criterion's outcome — the owner being refused — therefore has no request
+      to make.
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-8.15
+    id: R-8.15
+    version: 1
+    domain: files
+    stage: contract
+    why: The given is a file uploaded by one person and readable only by them, whose
+      identifier a second person then names as an attachment. No observation
+      returns a stored file's identifier, so the second person has nothing to
+      name; and no action attaches a file by identifier rather than by choosing
+      one from the machine the test runs on.
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-8.16
+    id: R-8.16
+    version: 1
+    domain: files
+    stage: contract
+    why: "unobservable: the claim is about a working directory on the service's own
+      machine — a copy written there before the file is stored and removed once
+      the upload is answered. Nothing the service answers ever mentions that
+      directory: an upload's answer carries the stored record, and a stored
+      file's description and bytes carry nothing about where the upload waited.
+      Whether a working copy was written, and whether it is gone, can only be
+      seen by reading that machine's filesystem, which is the implementation
+      rather than anything the service shows, so no page, action or observation
+      added to the contract would reach it without exposing the host's disk."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-8.22
+    id: R-8.22
+    version: 1
+    domain: files
+    stage: contract
+    why: "blocked: the attempt the criterion refuses — somebody who may not read a
+      stored file naming it as an attachment on an opportunity or a proposal —
+      cannot be made. A file's identifier is now reachable
+      (file-upload.stored_file_identifier), but every attaching action uploads a
+      new file rather than naming one already stored:
+      file-attachment-control.add_attachment and the add_attachment actions on
+      proposal-cwu-create, proposal-swu-create and proposal-twu-create each
+      choose bytes to send. The file-uploader persona lists attaching an
+      existing file to something they may edit, but no action does it. An action
+      that attaches an already-stored file by its identifier — on
+      file-attachment-control and on the proposal edit pages — together with an
+      observation reporting that attachment refused, would unblock it."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-8.26
+    id: R-8.26
+    version: 1
+    domain: files
+    stage: contract
+    why: The claim is about the file after the opportunity it was attached to is
+      gone. Once the opportunity is deleted there is no screen carrying a
+      download to follow, and no observation returns the file's identifier for
+      it to be asked for directly, so whether it remains stored and readable
+      cannot be read either way.
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-6.1
+    id: R-6.1
+    version: 1
+    domain: notifications
+    stage: contract
+    why: "blocked: the given is a target started with notifications switched off, a
+      setting the service reads once at start-up. The oracle runs with them on,
+      and nothing in the surface, the personas or the fixtures selects or
+      reconfigures a target. Unblocked by a second target (or a harness variable
+      the contract names) started with notifications disabled; against it an
+      opportunity can be published through opportunityCwuCreate.publish and the
+      catcher read empty with `mail`."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-6.2
+    id: R-6.2
+    version: 1
+    domain: notifications
+    stage: contract
+    why: "blocked: the given is a mail server that cannot be reached, or a message
+      that cannot be composed. Nothing in the surface or `mail` breaks, holds or
+      intercepts delivery — `mail` only searches and clears the catcher.
+      Unblocked by a target variant whose mail settings point at an unreachable
+      server; the action's own success observation, and an empty catcher once
+      delivery is restored (no retry), would then be readable through what
+      already exists."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-6.3
+    id: R-6.3
+    version: 1
+    domain: notifications
+    stage: contract
+    why: "blocked: the oracle turns the test marking on, but the contract never
+      names the marker, so a marked subject cannot be told from an unmarked one;
+      and the test logo sits in the message body, which the mail fixture does
+      not return. Needs the marker's text named in observables.yaml and a `mail`
+      accessor that reads one message's HTML body by its ID (observables.yaml
+      already names read_one_message and html_body)."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-6.4
+    id: R-6.4
+    version: 2
+    domain: notifications
+    stage: contract
+    why: "blocked: sender and reply-to are headers of one message, and the mail
+      fixture returns only Subject, Snippet, To and ID. Needs a `mail` accessor
+      for one message's From and Reply-To (observables.yaml names `sender: from`
+      and read_one_message), and the configured sender named in the contract so
+      that 'the same for every kind of message' can be compared against it."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-6.5
+    id: R-6.5
+    version: 1
+    domain: notifications
+    stage: contract
+    why: "blocked: comparing the plain-text form with the formatted one needs both
+      bodies of one message. The mail fixture exposes neither; its snippet is a
+      summary the catcher makes, not evidence that a plain-text part was sent.
+      Needs a `mail` accessor returning one message's HTML and Text
+      (observables.yaml names html_body and plain_text_body)."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-6.8
+    id: R-6.8
+    version: 1
+    domain: notifications
+    stage: contract
+    why: "blocked: two things are missing. The batch's recipients are blind copies
+      and the mail fixture has no accessor for them, so neither batch size nor
+      hiding can be counted — needs a `mail` accessor for one message's To and
+      Bcc (observables.yaml names copied_recipients). And more than fifty
+      accounts that have asked for new-opportunity notices exist neither in the
+      seed nor through any surface action; the seed could create them, or the
+      contract could name a smaller configured batch size on the oracle."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-6.9
+    id: R-6.9
+    version: 1
+    domain: notifications
+    stage: contract
+    why: The claim is about the visible address line of a panel notice listing all
+      of its recipients. `mail.messagesTo` searches by one visible address and
+      hands back `To` as an opaque value, so the addresses of the other
+      recipients of the same message cannot be read.
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-6.11
+    id: R-6.11
+    version: 1
+    domain: notifications
+    stage: contract
+    why: Both halves turn on the notice about a watched opportunity, which is sent
+      as a batch of blind copies. The mail fixture searches by visible recipient
+      only, so a message that did reach a deactivated watcher would not be
+      found, and its absence from a search would be equally consistent with it
+      having been sent.
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-6.12
+    id: R-6.12
+    version: 1
+    domain: notifications
+    stage: contract
+    why: The criterion is about the wording inside one message. The mail fixture
+      exposes no message body, and the reference page's observations
+      (message_subject, message_summary, message_body) name no way to select one
+      message among the fifty on the page, so a containment assertion over the
+      page as a whole would be satisfied by any message that happens to name a
+      program.
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-6.15
+    id: R-6.15
+    version: 1
+    domain: notifications
+    stage: contract
+    why: "blocked: requires reading, for one multi-recipient notice, both its
+      visible recipient and its list of blind copies; the mail fixture searches
+      by one visible address and returns neither, so hiding cannot be told from
+      not sending. The notices themselves are reachable (evaluationPanelSwu,
+      opportunitySwuEdit.editEvaluationPanel, opportunityCwuEdit.addAddendum).
+      Needs a `mail` accessor for one message's To and Bcc, and the service's
+      own address named in the contract."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-6.16
+    id: R-6.16
+    version: 1
+    domain: notifications
+    stage: contract
+    why: "blocked: the claim is about what stands at the foot of particular messages
+      — an unsubscribe offer, or a plain link to the settings. The mail fixture
+      exposes no body, and the reference page returns its bodies as one reading
+      with no way to select a single message. Needs a `mail` accessor for one
+      message's body (or a per-message body observation on
+      notification-email-reference), and the contract naming which messages the
+      notification preference governs."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-6.18
+    id: R-6.18
+    version: 1
+    domain: notifications
+    stage: contract
+    why: "blocked: naming all three programs or none is a fact about the body of the
+      changed-terms message. The broadcast is reachable
+      (notificationTermsBroadcast), but no `mail` accessor returns a body and
+      the reference page cannot be asked for that one message's body. Needs a
+      `mail` accessor for one message's Text or HTML body."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-6.20
+    id: R-6.20
+    version: 1
+    domain: notifications
+    stage: contract
+    why: "blocked: the given is an account being created for the first time. Every
+      persona signs in as an account the seed already holds, and no surface
+      action creates one. Needs a persona whose sign-in reaches an identity the
+      seed does not hold (a fresh sandbox identity), after which
+      userSignUpComplete and
+      userProfileSelfNotifications.newOpportunitiesCheckbox already read the
+      result."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-6.24
+    id: R-6.24
+    version: 1
+    domain: notifications
+    stage: contract
+    why: "blocked: what this adds to R-6.23 is ordering — success reported before
+      any message is sent. Nothing reports send progress and nothing can hold
+      delivery, so checking the catcher at the moment success appears is a race
+      against the background sending, not a test of it. Needs a way to hold or
+      slow the mail catcher's acceptance of messages, so that
+      notifyVendorsSuccess can be read while no message has yet arrived."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-6.25
+    id: R-6.25
+    version: 2
+    domain: notifications
+    stage: contract
+    why: "blocked: every part of the claim — title and winner leading the message,
+      the em dash where no successful proponent is recorded, the offer to sign
+      in and see one's own score — is body content, which no `mail` accessor
+      returns. Needs a `mail` accessor for one message's body, and a starting
+      state from which an award can be made with three proponents: the only
+      seeded Code With Us opportunity has no proposals and a deadline years
+      away, and the two closed opportunities need their whole evaluation run
+      first. The seed could hold a closed Code With Us opportunity with three
+      submitted proposals."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-4.1
+    id: R-4.1
+    version: 1
+    domain: users
+    stage: contract
+    why: "blocked: the given is a person with no account on the service, and no
+      persona is one. Every persona in personas.yaml signs in as an account
+      tests/seed already carries, and no page, action or observation creates an
+      account, so no first sign-in can be made and no account can be watched
+      coming into existence. Reading the kind of an account the seed already
+      gave a kind would assert the seed rather than the service's decision.
+      Unblocked by personas whose sandbox identities have no seeded account —
+      one government identity, one code-hosting identity, and one the service
+      recognises as neither for the refusal in the note — and, since the seed is
+      applied once and a first sign-in can only happen once, by a way to return
+      such an identity to never having signed in before each run."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-4.2
+    id: R-4.2
+    version: 1
+    domain: users
+    stage: contract
+    why: "blocked: the when is an account being created, which no persona brings
+      about (see R-4.1), so the welcome message has nothing to follow. The
+      withheld half needs two further things: a first-time persona whose
+      identity supplies no email address (seed.users.vendorWithoutEmail already
+      has an account), and a mail accessor that lists every message in the
+      catcher — observables.yaml names read_messages, but the mail fixture only
+      searches by one visible recipient, and a person with no address has no
+      address to search by, so an empty search cannot show that nothing was
+      attempted. Unblocked by the first-time personas R-4.1 needs, one of them
+      without an email address, and a mail.all() (or equivalent) over
+      read_messages."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-4.5
+    id: R-4.5
+    version: 1
+    domain: users
+    stage: contract
+    why: "blocked: the when is the person signing in again the ordinary way, through
+      the identity provider, and that is the one step no target this contract
+      runs against lets a test take. On the oracle surface.signIn uses the
+      session-route mechanism in personas.yaml, which D-users-29 and the openapi
+      entry for the direct vendor route describe as creating a session without
+      the identity provider and without looking at the account's status, so it
+      passes over exactly the check that reactivates a self-deactivated account.
+      user-sign-in.sign_in_as_vendor starts the real hand-off (startSignIn
+      redirects to the identity provider), but nothing in the contract completes
+      that hand-off for a seeded persona there. A test built on either would
+      record what a sign-in that is not the one described does, and fail or pass
+      for that reason rather than the criterion's. The rest is reachable:
+      user-profile-self.deactivate_account and confirm_activation_change produce
+      the given for persona.vendor, user-profile.status_badge read by
+      persona.administrator shows the account active again, and
+      mail.messagesTo(seed.users.vendorOne.email) catches the message, though
+      telling the self-reactivation message apart from any other needs the
+      message body R-4.20 asks for. Unblocked by an ordinary identity-provider
+      sign-in a test can complete for a seeded persona on every target, for
+      example a sandbox-idp mechanism configured for the oracle too, or a
+      user-sign-in action that finishes the identity provider's sign-in for a
+      named persona; R-4.4 and R-4.20's self-reactivation half need the same."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-4.13
+    id: R-4.13
+    version: 1
+    domain: users
+    stage: contract
+    why: "unobservable: the outcome is that the service offers no way to create an
+      administrator where none exists, and that only a change to the stored data
+      outside the service can. That is the absence of an action anywhere in the
+      service, and no observation reports an absence of that kind — a test could
+      only show that the particular controls it knows of do not do it, never
+      that no other route exists. The given could be seeded (a seed with no
+      administrator account), but that would not help: the claim a test would
+      then have to settle is still the non-existence of a route, and the
+      documented manual route lies outside the service by definition. This is a
+      property to be accepted by a reader of the rebuilt system's routes, not
+      settled by a test."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-4.20
+    id: R-4.20
+    version: 1
+    domain: users
+    stage: contract
+    why: "blocked: both halves turn on which message was sent, and the two messages
+      differ only in their wording — one says an administrator reactivated the
+      account and names whom to contact, the other says the person reactivated
+      it themselves. The mail fixture returns Subject, Snippet, To and ID from
+      the search listing and offers no way to read one message; the Snippet was
+      considered and rejected, because it is a leading excerpt the catcher cuts
+      at a length of its own choosing, so a phrase missing from it proves
+      nothing. The email notification reference describes messages rather than
+      the one that was sent (see R-6.12). Unblocked by a mail accessor over
+      observables.yaml's read_one_message returning the message's
+      plain_text_body (Text) or html_body (HTML); both halves are then
+      reachable, since an administrator's reactivation of
+      seed.users.vendorDeactivated and a self-deactivated vendor signing in
+      again can each be produced."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-4.21
+    id: R-4.21
+    version: 1
+    domain: users
+    stage: contract
+    why: "blocked: the claim is that the request is refused rather than answered,
+      and user-list carries no refusal observation — it names user_row,
+      status_badge, account_type, admin_check and the two export observations,
+      none of which tells 'you are not permitted' from a screen with nothing on
+      it. A test could only assert that a public sector employee who is not an
+      administrator sees no rows, which was equally true of the superseded
+      R-4.15, where the interface withheld the screen while the service answered
+      the request in full. The disclosure the criterion guards against is a
+      property of the service's answer, which observables.yaml's refusals
+      section reads for files and exports but not for the list of users.
+      Unblocked by user-list.refused_for_non_administrator (reported to a
+      signed-in public sector employee and to a visitor who is not signed in
+      alike), or by a refusals entry naming the user-list request's status."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-7.11
+    id: R-7.11
+    version: 1
+    domain: content
+    stage: contract
+    why: "The claim is about the shape of a refused answer — a permission refusal
+      reported as though the submission were faulty. Nothing returns that shape:
+      observables.yaml names a `refusal` status for files and for exports but
+      nothing for a page request, and the content surfaces offer only free-text
+      refused_for_non_administrator and field_error, which cannot be compared
+      for the shape of the answer that produced them."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-7.14
+    id: R-7.14
+    version: 1
+    domain: content
+    stage: contract
+    why: The criterion is a contrast between two renderings of one body, and the
+      second cannot be produced. The screens that embed a page's body — the
+      program qualification terms screens and the evaluation instructions screen
+      — embed pages the service creates for itself, which the seed does not name
+      and which no surface addresses by handle, so the body a test writes
+      through content-create or content-edit cannot be got into an embedded
+      rendering, and the bodies organization-swu-terms, organization-twu-terms
+      and the two evaluation-instructions surfaces do report are ones no test
+      can put raw markup into.
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-7.15
+    id: R-7.15
+    version: 1
+    domain: content
+    stage: contract
+    why: The when is following the service level agreement link offered beside the
+      cost of a program. No surface exists for the learn-more index, and no
+      action on any surface follows a service level agreement link — the program
+      cards are reachable only as opportunity_program_select.program_card, an
+      observation with no link to follow — so the five places the criterion
+      names cannot be reached and the link cannot be followed to whatever
+      answers it.
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-7.16
+    id: R-7.16
+    version: 1
+    domain: content
+    stage: contract
+    why: "Same missing observation as R-7.11, across a wider set of requests: the
+      criterion is about every page request answering a permission refusal in
+      one shape, and no observation returns the shape or status of a refused
+      page request. refused_for_non_administrator is free text on each surface,
+      so two refusals cannot be shown to be the same shape, only to have both
+      happened."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-7.17
+    id: R-7.17
+    version: 1
+    domain: content
+    stage: contract
+    why: "blocked: the criterion's two distinctive clauses each need something that
+      is missing, and for the first of them what is missing is the body, not the
+      observation. That embedded markup is never executed can be read off
+      content-view's page_body once there is a body with markup in it: the
+      rendered text of such a body carries the markup as a string when it
+      reaches the reader as text, and does not carry it when it is executed or
+      taken out, and a rendering that takes it out fails the criterion's
+      formatted-text clause as well. The acceptance seed holds no such body —
+      its only page, content.ordinaryPage, carries 'The third and current
+      version of this page, with a **formatted** word in it.' — so the clause
+      has nothing to be read against. That the same body renders identically on
+      its own address and wherever another screen embeds it has no second
+      rendering to compare: the screens that embed a body, the two program
+      qualification terms screens and the two evaluation instructions screens,
+      embed pages the service creates for itself, which the seed does not name
+      and which no surface addresses by handle, so a body a test can author
+      cannot be got into an embedded rendering. The remaining clause, that the
+      body reaches the reader as formatted text, is already asserted by R-7.1
+      against the same page and the same observation. Unblocked, for the first
+      clause, by a seeded page body embedding markup under a handle of its own,
+      against which page_body can be read; and, for the second, by a seed handle
+      for one of the pages another screen embeds together with an observation of
+      that embedded rendering."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-7.23
+    id: R-7.23
+    version: 1
+    domain: content
+    stage: contract
+    why: "Asserting that nothing shows, compares or restores an earlier version
+      needs an observation naming what must be absent, and content-edit names
+      none: it has no observation of the wording it is showing, none of a
+      history, an earlier version or a comparison, and no restore action. A test
+      can neither find a route to a past version nor show that none exists."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-7.28
+    id: R-7.28
+    version: 2
+    domain: content
+    stage: contract
+    why: The given is two administrators who both opened the same page before either
+      saved. The target carries one administrator sign-in and no second one, and
+      the surface drives a single session, so two people cannot hold the page
+      open at once and no stale read-then-write window can be produced. The
+      collision half needs two publishes interleaving inside one such window,
+      and nothing in the surface reports a version-key collision or a service
+      error on the content-edit screen.
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-7.29
+    id: R-7.29
+    version: 1
+    domain: content
+    stage: contract
+    why: "The given is a page whose body another screen embeds having been removed.
+      The embedded pages — an opportunity's scope page, a program's evaluation
+      instructions — are ones the service needs, which R-7.25 records the
+      service refuses to remove: content-edit withholds the removal and a
+      request made another way is refused, so there is no path through the
+      surface to the state the criterion starts from."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-5.11
+    id: R-5.11
+    version: 1
+    domain: evaluation
+    stage: contract
+    why: "blocked: the criterion turns on a public sector employee with no
+      connection to the opportunity being refused an individual evaluation, and
+      no such person can be signed in as. The target mints sessions for two
+      public sector accounts, and on the seeded closed opportunities one is the
+      owner and an evaluator and the other is the chair, so every reader a test
+      can be is one the criterion says may read. The refusal has no observation
+      either: evaluation-individual-edit names evaluation_status,
+      read_only_after_submitted and the two field errors, none of which tells a
+      refusal from a form with nothing in it. Needs a sign-in for
+      public-sector-staff-other, which personas.yaml records as unavailable, and
+      a refusal observation on the individual evaluation surfaces."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-5.21
+    id: R-5.21
+    version: 1
+    domain: evaluation
+    stage: contract
+    why: "blocked: the two people the criterion has refused cannot be reached, and
+      the refusal cannot be read. The seeded panel's chair is also an evaluator
+      and the opportunity's owner is also on the panel, because the target has
+      two public sector sign-ins and consensus waits for every evaluator, so
+      neither a chair who does not evaluate nor an owner off the panel can
+      attempt to score. The individual create and edit surfaces carry no refusal
+      observation — the proposal views have wrong_stage_error and the evaluation
+      surfaces have nothing like it — so an attempt made at the wrong stage or
+      by the wrong person could not be told from one that simply recorded
+      nothing. Needs a panel whose chair is not an evaluator and a refusal
+      observation on evaluation-individual-create."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-5.23
+    id: R-5.23
+    version: 1
+    domain: evaluation
+    stage: contract
+    why: "blocked: the given is a draft evaluation holding a score above the
+      question's maximum and an empty comment, and the surface cannot produce
+      one. The browser form checks each field as it is typed, which is the
+      criterion's own note, so a draft saved through save_draft is a draft that
+      passed those checks. The file upload page shows the shape that would reach
+      it — upload_file_stating_its_read_access and its malformed variants are
+      actions written for requests no form would send — so this needs an action
+      on evaluation-individual-create that saves a draft the form would refuse,
+      and an observation that the draft was stored as entered."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-5.26
+    id: R-5.26
+    version: 1
+    domain: evaluation
+    stage: contract
+    why: "blocked: the request the criterion says is rejected cannot be made. The
+      individual edit surfaces offer save_changes and
+      save_and_go_to_next_proponent, and the only submission in the contract is
+      submit_scores_for_consensus on the individual list, which is the whole set
+      for the opportunity. Nothing submits one evaluation on its own, and no
+      observation reports a request rejected as unrecognised. Needs an action on
+      evaluation-individual-edit that submits that one evaluation, and an
+      observation of the refusal."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-5.34
+    id: R-5.34
+    version: 2
+    domain: evaluation
+    stage: contract
+    why: "blocked: the criterion needs four different people looking at one
+      opportunity — an evaluator, the chair, the owner and an unrelated public
+      sector employee — and the target mints sessions for two public sector
+      accounts. On the seeded opportunities one of them is the owner and an
+      evaluator at once and the other is the chair and an administrator at once,
+      so three of the four roles collapse into two people and the fourth cannot
+      be signed in as at all. Needs a sign-in for public-sector-staff-other and
+      a panel whose chair is neither the owner nor an administrator. The one
+      part that is reachable, the panel being shown only to the owner and an
+      administrator, is exercised by R-5.18."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-5.37
+    id: R-5.37
+    version: 1
+    domain: evaluation
+    stage: contract
+    why: "blocked: the panel a test can submit never holds a member with no role.
+      The three actions that put somebody on a panel — add_panel_member,
+      choose_panel_chair and mark_member_as_chair — each give that member a
+      role, and nothing adds one without, so the offending panel cannot be
+      composed. The outcome is unreadable as well: the panel surfaces name
+      minimum_members_error, duplicate_member_error,
+      non_public_sector_member_error and missing_chair_error, and none of them
+      is a field-level message identifying a member who is neither an evaluator
+      nor the chair. Needs an add_panel_member that can withhold a role, and an
+      observation of that refusal."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-3.17
+    id: R-3.17
+    version: 1
+    domain: organizations
+    stage: contract
+    why: The only way the surface creates an invitation is organization-edit's
+      add_team_members, whose subject is email addresses; no page in the
+      contract offers a membership type on an invitation, so a test cannot send
+      one other than the "member" the team surface always sends, and therefore
+      cannot reach the rejection of any other type. Needs an add_team_members
+      that carries a membership type, and an observation of the
+      invalid-membership-type refusal.
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-3.20
+    id: R-3.20
+    version: 1
+    domain: organizations
+    stage: contract
+    why: The criterion turns entirely on telling a refusal apart from an empty
+      answer, and no page in the organizations domain carries a refusal
+      observation — organization-list offers organization_name, owner_name, the
+      two qualification marks and pagination, none of which distinguishes "you
+      are not permitted" from "you may act for nothing". Needs an observation
+      such as organization-list.refused_when_not_permitted, or a page of its own
+      for the organizations one may act on behalf of.
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-3.15
+    id: R-3.15
+    version: 1
+    domain: organizations
+    stage: contract
+    why: "blocked: the outcome is which organizations a vendor is offered as ones
+      they may act on behalf of, and nothing in the surface reads that set. The
+      only place it is offered is the organization picker on proposal-swu-create
+      and proposal-twu-create, where choose_organization is an action with no
+      observation of the organizations it offers or of a choice it refuses.
+      organization-list.my_organizations and the owned and affiliated tables on
+      organization-user-memberships(-self) read the organizations a vendor
+      belongs to, which include those where they are only an ordinary member,
+      and the affiliated table does not tell an administered organization from a
+      member one, so none of them separates the four organizations the given
+      describes. The given itself can be built through the surface
+      (add_team_members, approve_invitation, toggle_member_admin_status,
+      archive_organization). Unblocked by an observation of the organizations
+      offered for a vendor to act on behalf of, such as
+      proposal-swu-create.organization_choices and its Team With Us sibling, or
+      an organization-list observation that reads only those organizations."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-3.35
+    id: R-3.35
+    version: 1
+    domain: organizations
+    stage: contract
+    why: The claim is about where the accept and the decline choice inside an
+      invitation email lead. The email observable reaches a message's subject,
+      snippet and recipient through the mail catcher, and the Mail fixture
+      exposes only those, so a test cannot read the message body or follow
+      either choice; organization-user-memberships also carries no observation
+      of an accept or a decline confirmation standing ready. Needs a mail
+      observation of the message body or its links, and an observation of the
+      prepared confirmation on organization-user-memberships.
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-7.12
+    id: R-7.12
+    version: 1
+    domain: content
+    stage: contract
+    why: "blocked: the given is a fresh installation carrying the pages the service
+      needs, and no such page can be named. The seed defines one content record,
+      content.ordinary_page, which it records as the only page an administrator
+      made; the pages the service creates for itself arrive with the
+      installation's own migrations and the seed names none of them, so
+      content-view.open and content-edit.open, which both take an address, have
+      no address to be given that comes from the seed rather than from a guess.
+      The count the criterion makes is out of reach for a second reason:
+      content-list reads page_title, page_public_address and page_is_fixed but
+      returns no count of the pages it lists, and the seed adds an ordinary page
+      of its own to whatever the installation carries. Unblocked by the seed
+      naming the pages the service needs — a content group of handles carrying
+      each one's address, so a test can open them by handle instead of by guess
+      — and by a content-list observation of how many pages are listed."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-7.25
+    id: R-7.25
+    version: 1
+    domain: content
+    stage: contract
+    why: "blocked: the given is an administrator on the managing screen of a page
+      the service itself depends on, and no such page can be reached. The seed
+      names one content record and records it as an ordinary page an
+      administrator made, not one the service depends on; the pages the service
+      depends on are created by the installation's own migrations and carry no
+      seed handle, so content-edit.open, which takes an address, has no address
+      for one that comes from the seed rather than from a guess. Every
+      observation the criterion needs is already on content-edit —
+      fixed_page_warning, slug_locked_for_fixed_page and
+      delete_withheld_for_fixed_page — and none of them can be read on a page
+      the criterion is about until one can be opened. Unblocked by the seed
+      naming a page the service depends on, so its address comes from a handle.
+      A separate half stays out of reach even then: \"a request to rename or
+      remove it made another way is refused\" needs a way to send the service a
+      request other than through its own screens, and the surface has none."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
+  - kind: missing-test
+    item: R-7.27
+    id: R-7.27
+    version: 1
+    domain: content
+    stage: contract
+    why: "blocked: both halves of the given are out of reach. The first is a page
+      the service created for itself and nobody has edited: the seed names no
+      such page — its one content record is an ordinary page an administrator
+      made — so content-edit.open has no address for one that comes from a
+      handle rather than from a guess, and content-edit.published_by and
+      updated_by cannot be read where the service is the name they should carry.
+      The second is a page one administrator created and another later changed:
+      the seed carries users.administrator_two and the contract carries
+      persona.administrator_other, but that persona's sign_in marks its session
+      route unavailable — the route mints a session for one fixed administrator
+      and takes no parameter, so no second administrator is reachable through it
+      — and the change the given describes cannot be made by anybody else.
+      Unblocked by the seed naming a page the service created for itself, and by
+      a sign-in that reaches persona.administrator_other on the target under
+      test."
+    by: runner
+    at: 2026-09-25T07:55:52.736Z
