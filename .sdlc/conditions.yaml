@@ -222,3 +222,12 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-25T12:47:48.079Z
+    closed:
+      outcome: met
+      why: tests/acceptance/content/R-7.27.spec.ts second test asserts
+        publishedBy/updatedBy equal seed.users.administratorOne.name and
+        administratorTwo.name, and publishedByLink/updatedByLink contain each
+        person's seeded id, read through the contract observations with no route
+        in the test.
+      by: agent:reviewer
+      at: 2026-09-25T13:00:12.793Z
