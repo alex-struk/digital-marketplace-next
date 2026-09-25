@@ -1,12 +1,6 @@
 gate: G-POL
-verdict: escalated
-by: agent:tech-lead
-held_by: agent
-escalate_to: tech-lead
-stalled: "agent:tech-lead escalated to tech-lead, the role it holds itself, so no seat this pipeline can fill is waiting on it: a person has to rule it, or the proposal has to be withdrawn."
-rationale: |2-
-  mandatory escalation: tech-lead does not rule G-POL alone
-cost: 0
-turns: 0
-session: ""
-at: 2026-09-25T21:53:29.070Z
+verdict: approve
+by: tech-lead
+held_by: human
+note: "Approved: run this project's agents on Codex; bind-adapter and contract stay on Claude until they can run isolated."
+at: 2026-09-25T22:00:22.833Z
