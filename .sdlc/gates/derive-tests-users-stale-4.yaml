@@ -1,0 +1,11 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the fourteen new tests for R-4.1, R-4.2, R-4.5, R-4.20 and R-4.21 follow from those criteria and nothing else? Approve. Each assertion traces to its criterion's text. R-4.1 checks an active account of the right kind carrying the persona's own sandbox username (first-time-gov / first-time-vendor, as personas.yaml names them), with name and email held only to being present since the contract never states their values, and observes reuse by the account identifier across a second sign-in. R-4.2 checks welcome wording plus a sign-in link via caught-message.links_in_body, and shows the withheld half by an emptied catcher's message count, the only observation that can show nothing was attempted for a person with no address. R-4.5 checks that the person is signed in, active and the same account, plus the criterion's own 'successfully reactivated' wording. R-4.20 separates the administrator's message from the self-reactivation one by the criterion's terms. R-4.21 reads user-list-request, which the contract defines as the service's answer whatever the screen shows, and keeps a refusal apart from an empty answer, which is the distinction that separates it from the superseded R-4.15. No selector, route, table or implementation detail leaks into any test. Every not-testable entry removed was a 'blocked' entry whose named missing pieces the contract now carries. The runner's typecheck reports no diagnostics under acceptance/users/; its one failure is in adapters/new/, outside this proposal. The softest assertion is R-4.20's /contact/ match: the criterion requires the message to say whom to contact, and a message naming a contact without the word would fail on wording rather than behaviour. The author declared that risk, and at calibration it would be a product question rather than a defect in the test. What would change this ruling: a typecheck diagnostic under acceptance/users/, or evidence that the mail catcher is shared across parallel instances so that R-4.2's zero-count check cannot hold. The owed missing-test conditions for these five criteria stay open until their tests run.
+conditions: []
+cost: 0.5651866000000001
+turns: 4
+session: "03940e1a-afff-400e-8d76-9b9589f48998"
+at: 2026-09-25T11:12:24.571Z

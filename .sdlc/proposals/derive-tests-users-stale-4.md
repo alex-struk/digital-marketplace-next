@@ -41,3 +41,26 @@ The five criteria became 14 tests:
 The one thing the contract could still add is a persona whose identity is recognised as neither kind, for R-4.1's note about the refusal.
 
 **One thing to flag.** The remaining entries in `not-testable.yaml` from earlier runs, such as R-4.13 and R-7.11, have no `missing` or `owner` field, which the run rules say will be refused. I didn't change them because they are outside the criteria this run was given, but whoever next edits that file will have to fill them in. Nothing outside `tests/acceptance` was changed.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: do the fourteen new tests for R-4.1, R-4.2, R-4.5, R-4.20 and R-4.21 follow from those criteria and nothing else? Approve. Each assertion traces to its criterion's text. R-4.1 checks an active account of the right kind carrying the persona's own sandbox username (first-time-gov / first-time-vendor, as personas.yaml names them), with name and email held only to being present since the contract never states their values, and observes reuse by the account identifier across a second sign-in. R-4.2 checks welcome wording plus a sign-in link via caught-message.links_in_body, and shows the withheld half by an emptied catcher's message count, the only observation that can show nothing was attempted for a person with no address. R-4.5 checks that the person is signed in, active and the same account, plus the criterion's own 'successfully reactivated' wording. R-4.20 separates the administrator's message from the self-reactivation one by the criterion's terms. R-4.21 reads user-list-request, which the contract defines as the service's answer whatever the screen shows, and keeps a refusal apart from an empty answer, which is the distinction that separates it from the superseded R-4.15. No selector, route, table or implementation detail leaks into any test. Every not-testable entry removed was a 'blocked' entry whose named missing pieces the contract now carries. The runner's typecheck reports no diagnostics under acceptance/users/; its one failure is in adapters/new/, outside this proposal. The softest assertion is R-4.20's /contact/ match: the criterion requires the message to say whom to contact, and a message naming a contact without the word would fail on wording rather than behaviour. The author declared that risk, and at calibration it would be a product question rather than a defect in the test. What would change this ruling: a typecheck diagnostic under acceptance/users/, or evidence that the mail catcher is shared across parallel instances so that R-4.2's zero-count check cannot hold. The owed missing-test conditions for these five criteria stay open until their tests run.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `4f09bd7773f0ece3d85c74d97083b29717a3f910`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/users/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 1 diagnostic
