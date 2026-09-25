@@ -183,10 +183,6 @@ rulings:
     version: 1
     verb: product-question
     gate: calibrate-triage-old-9
-  - id: R-1.8
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-9
   - id: R-5.9
     version: 1
     verb: product-question
@@ -196,14 +192,6 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-9
     adapter: 0a4e132473a0ec53a7411a6af638efdcb1e1a60e
-  - id: R-1.10
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-9
-  - id: R-1.13
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-9
   - id: R-2.14
     version: 2
     verb: product-question
@@ -222,10 +210,6 @@ rulings:
     version: 1
     verb: product-question
     gate: calibrate-triage-old-9
-  - id: R-1.18
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-9
   - id: R-5.18
     version: 1
     verb: product-question
@@ -235,14 +219,6 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-9
     adapter: 0a4e132473a0ec53a7411a6af638efdcb1e1a60e
-  - id: R-1.21
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-9
-  - id: R-1.24
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-9
   - id: R-8.25
     version: 1
     verb: adapter-wrong
@@ -257,22 +233,6 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-9
     adapter: 0a4e132473a0ec53a7411a6af638efdcb1e1a60e
-  - id: R-1.48
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-9
-  - id: R-1.53
-    version: 2
-    verb: product-question
-    gate: calibrate-triage-old-9
-  - id: R-1.55
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-9
-  - id: R-1.56
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-9
   - id: R-5.18
     version: 2
     verb: spec-wrong
@@ -286,46 +246,6 @@ rulings:
     verb: test-wrong
     gate: calibrate-old-7
   - id: R-5.17
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-7
-  - id: R-1.55
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-7
-  - id: R-1.8
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-7
-  - id: R-1.13
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-7
-  - id: R-1.48
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-7
-  - id: R-1.53
-    version: 2
-    verb: test-wrong
-    gate: calibrate-old-7
-  - id: R-1.56
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-7
-  - id: R-1.10
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-7
-  - id: R-1.18
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-7
-  - id: R-1.21
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-7
-  - id: R-1.24
     version: 1
     verb: test-wrong
     gate: calibrate-old-7
