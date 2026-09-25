@@ -974,7 +974,7 @@ owed:
     id: R-6.2
     version: 1
     domain: notifications
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the given is a mail server that cannot be reached, or a message
       that cannot be composed. Nothing in the surface or `mail` breaks, holds or
       intercepts delivery — `mail` only searches and clears the catcher.
@@ -995,12 +995,18 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-25T11:33:11.781Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T12:15:43.328Z
+    target: old
   - kind: missing-test
     item: R-6.3
     id: R-6.3
     version: 1
     domain: notifications
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the oracle turns the test marking on, but the contract never
       names the marker, so a marked subject cannot be told from an unmarked one;
       and the test logo sits in the message body, which the mail fixture does
@@ -1034,12 +1040,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T12:15:43.328Z
+    target: old
   - kind: missing-test
     item: R-6.4
     id: R-6.4
     version: 2
     domain: notifications
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: sender and reply-to are headers of one message, and the mail
       fixture returns only Subject, Snippet, To and ID. Needs a `mail` accessor
       for one message's From and Reply-To (observables.yaml names `sender: from`
@@ -1071,12 +1083,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v2 exists and has not run
+        by: runner
+        at: 2026-09-25T12:15:43.328Z
+    target: old
   - kind: missing-test
     item: R-6.5
     id: R-6.5
     version: 1
     domain: notifications
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: comparing the plain-text form with the formatted one needs both
       bodies of one message. The mail fixture exposes neither; its snippet is a
       summary the catcher makes, not evidence that a plain-text part was sent.
@@ -1107,12 +1125,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T12:15:43.328Z
+    target: old
   - kind: missing-test
     item: R-6.8
     id: R-6.8
     version: 1
     domain: notifications
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: two things are missing. The batch's recipients are blind copies
       and the mail fixture has no accessor for them, so neither batch size nor
       hiding can be counted — needs a `mail` accessor for one message's To and
@@ -1150,6 +1174,12 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T12:15:43.328Z
+    target: old
   - kind: missing-test
     item: R-6.9
     id: R-6.9
@@ -1212,7 +1242,7 @@ owed:
     id: R-6.15
     version: 1
     domain: notifications
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: requires reading, for one multi-recipient notice, both its
       visible recipient and its list of blind copies; the mail fixture searches
       by one visible address and returns neither, so hiding cannot be told from
@@ -1250,12 +1280,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T12:15:43.328Z
+    target: old
   - kind: missing-test
     item: R-6.16
     id: R-6.16
     version: 1
     domain: notifications
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the claim is about what stands at the foot of particular messages
       — an unsubscribe offer, or a plain link to the settings. The mail fixture
       exposes no body, and the reference page returns its bodies as one reading
@@ -1292,12 +1328,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T12:15:43.328Z
+    target: old
   - kind: missing-test
     item: R-6.18
     id: R-6.18
     version: 1
     domain: notifications
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: naming all three programs or none is a fact about the body of the
       changed-terms message. The broadcast is reachable
       (notificationTermsBroadcast), but no `mail` accessor returns a body and
@@ -1328,12 +1370,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T12:15:43.328Z
+    target: old
   - kind: missing-test
     item: R-6.20
     id: R-6.20
     version: 1
     domain: notifications
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the given is an account being created for the first time. Every
       persona signs in as an account the seed already holds, and no surface
       action creates one. Needs a persona whose sign-in reaches an identity the
@@ -1368,6 +1416,12 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T12:15:43.328Z
+    target: old
   - kind: missing-test
     item: R-6.24
     id: R-6.24
@@ -1392,7 +1446,7 @@ owed:
     id: R-6.25
     version: 2
     domain: notifications
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: every part of the claim — title and winner leading the message,
       the em dash where no successful proponent is recorded, the offer to sign
       in and see one's own score — is body content, which no `mail` accessor
@@ -1431,6 +1485,12 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v2 exists and has not run
+        by: runner
+        at: 2026-09-25T12:15:43.328Z
+    target: old
   - kind: missing-test
     item: R-4.1
     id: R-4.1
