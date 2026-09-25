@@ -2109,7 +2109,7 @@ owed:
     id: R-7.29
     version: 1
     domain: content
-    stage: contract
+    stage: ratify
     why: "The given is a page whose body another screen embeds having been removed.
       The embedded pages — an opportunity's scope page, a program's evaluation
       instructions — are ones the service needs, which R-7.25 records the
@@ -2118,11 +2118,16 @@ owed:
       surface to the state the criterion starts from."
     by: runner
     at: 2026-09-25T07:55:52.736Z
-    kept:
-      by: contract-v7
-      gate: G1
-      approved_by: agent:product-owner
-      at: 2026-09-25T12:41:44.863Z
+    readdressed:
+      - from: contract
+        to: ratify
+        why: the given (an embedded page removed) contradicts R-7.25, under which the
+          service refuses to remove or rename the pages it embeds, and those
+          pages are looked up by one site-wide address, so no per-test seed can
+          make one missing without breaking every other test; ratify should
+          decide whether to recast the given or retire the criterion
+        by: contract-v8
+        at: 2026-09-25T13:33:01.981Z
   - kind: missing-test
     item: R-5.11
     id: R-5.11
