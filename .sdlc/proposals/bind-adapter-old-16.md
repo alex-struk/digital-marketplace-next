@@ -49,3 +49,26 @@ I fixed both compile errors the check named in `tests/adapters/old/index.ts`. I 
 Nothing else changed, including `bindings.yaml`.
 
 **Journal addition:** The acceptance suite failed to compile with two errors in the evaluation-panel-request page. The suite was being compiled against an older generated surface that has that page but not its `submitPanelWithNoChair` action, so the compiler rejected the member as unknown and could no longer type its `input` parameter. I declared the page with the file's existing `Open<…>` wrapper, as it already does for four other pages that gained members since an earlier surface, and wrote the parameter out as `input?: unknown`, which matches the newer surface. No other code and no binding changed. I could not run the compiler in this session to confirm the fix, because running it needed approval that was not given.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: does the 'old' adapter bind the five surface members this contract adds (mail-delivery-fault's refuse_delivery, restore_delivery and delivery_refused, and evaluation-panel-request's submit_panel_with_no_chair and missing_chair_error), and do nothing more than bind them? Ruling: approve. The diff touches only tests/adapters/old/index.ts and bindings.yaml. Nothing under tests/acceptance or tests/generated changed, and no protected path was touched. Each binding only drives or reads the target. The mail-delivery-fault actions switch the mail catcher's fault setting to 100 and back to 0. delivery_refused reports the setting it reads back as 'refused <code>' or as empty. submit_panel_with_no_chair sends the members it is given as the whole panel, all evaluators and none the chair. missing_chair_error returns the service's refusal, or empty when the panel was accepted. None of them asserts anything or decides whether a test passes. The empty-versus-throw split follows the file's own rule: an empty answer means the page answered with nothing, while unbound: means the place could not be reached. The fall-back to unbound: for a missing chaos endpoint, an unknown seed name or no prior chairless send is genuine. The runner's typecheck on this revision reports zero diagnostics under adapters/old/. The suite's exit code 2 comes from one diagnostic in adapters/new/, which this proposal does not answer for. The Open<PageOf<...>> wrapper and the PageOf fallback are the file's documented way to compile against both an older and a newer generated surface. That explains why it compiles even though tests/generated/surface.d.ts is stale (the generated check fails and that file lacks both new members). The stale file needs regenerating by sdlc, which is not this stage's work. The author states that the target accepts a chairless panel with 200. That is evidence for the product owner once R-5.9 has a test, not a flaw in the adapter. The six re-checked calibration findings (R-7.9, R-1.15, R-1.16, R-8.20, R-8.25, R-8.31) involved no code change, and the receipt says which were checked on the running target and which only by reading the code. What would change the ruling: a typecheck diagnostic under adapters/old/ once surface.d.ts is regenerated, or calibration showing that the chaos endpoint or the panel binding reads something other than what its member names.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `00e1168af9330d21b072fc444d645ba73a80daec`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 1 diagnostic
