@@ -43,3 +43,26 @@ If `contract` wants those covered, it would need to supply two things:
 A few assumptions could make these tests fail even if the target is correct. The `caughtMessage` readings (recipients, sender, bodies) and `deliveryRefused` are each handed back as a single string, and the contract doesn't say what shape it takes. The tests pull email addresses out with a pattern and parse the list of message identifiers loosely, the same way the existing R-5.17 test does. Pinning down those formats in `surface.yaml` would make the tests less fragile.
 
 Nothing asked me to change a file outside `tests/acceptance`, and I didn't. My one attempt to run a helper script over `not-testable.yaml` was declined, so I made the same removals directly with the editor.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Do these tests follow from the notifications criteria and from nothing else? Approve. I checked each of the ten new tests against the text of its own criterion. R-6.3 checks the '[TEST] ' subject prefix and the test logo. R-6.4 checks the one configured sender, 'Digital Marketplace <donotreply@example.test>', and that there is no separate reply-to. R-6.5 checks that the plain text carries the same words and links as the formatted body. R-6.8 checks for three batches, each with at most 50 blind copies and only the service's own address visible. R-6.15 checks that the panel notice and the owner notice hide their recipients. R-6.16 checks for no unsubscribe offer and a link to the reader's own notification settings. R-6.18 checks that the changed-terms message names all three programs or none. R-6.20 checks that a new account has notices off and is not sent the announcement. R-6.25 checks for the title and winner ahead of the sign-in offer, plus mention of the reader's score. R-6.2 checks that the opportunity still publishes with no failure recorded and that nothing is sent again after delivery is restored. Every value these tests compare against (sender, address, test marker, logo ending, batch size, which messages the preference governs) is named in spec/contract/observables.yaml, and I confirmed each one there. No selector, route, table or status code appears. The two parts left without a test, a message that cannot be composed (R-6.2) and the em dash for an award with no successful proponent recorded (R-6.25), are real limits: no action on the surface can create either situation. The runner's typecheck reported no diagnostics under acceptance/notifications/; its one error is in adapters/new/, which this proposal does not answer for. Some readings are strict and could fail against a correct service: 'leads with' taken as coming before the sign-in wording in R-6.25, the need for at least one batched message in R-6.15, and the word-by-word comparison in R-6.5. If the calibration run shows one of these failing because the test demands more than its criterion says, triage should return it as test-overreaches, and that would change this ruling for that test. The missing-test conditions stay open until each test runs, which this ruling cannot settle.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `7ae4258e9e72ccac090e93cb0244022587ae05a9`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/notifications/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 1 diagnostic
