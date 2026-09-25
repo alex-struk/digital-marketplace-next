@@ -21,6 +21,7 @@ export const seed = {
       "id": "00000000-0000-4000-8000-000000000101",
       "persona": "administrator",
       "idp_id": "test-admin",
+      "name": "Robin Placeholder",
       "email": "admin.one@example.test",
       "account_type": "ADMIN"
     },
@@ -193,6 +194,7 @@ export const seed = {
       "id": "00000000-0000-4000-8000-000000000106",
       "persona": "administrator-other",
       "idp_id": "admin-second",
+      "name": "Morgan Placeholder",
       "email": "admin.two@example.test",
       "account_type": "ADMIN"
     },

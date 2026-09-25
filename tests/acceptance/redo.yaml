@@ -205,3 +205,8 @@ redo:
       executed from removed markup, record that clause as not-testable with that
       reason instead of asserting a literal rendering.
     verb: test-overreaches
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on content
+      by: runner:derive-tests
+      at: 2026-09-25T12:59:06.967Z
