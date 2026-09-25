@@ -1,0 +1,39 @@
+// Prisma reads the kept PostgreSQL schema and never migrates it (decision record 0001,
+// departure 1). Knex owns the schema's history, in app/migrations.
+//
+// This file is introspected, not authored: `npm run db:pull --workspace backend` runs
+// `prisma db pull` against a migrated database and writes what is there. It currently holds
+// only the models slice 1 reads, because that is all `prisma db pull` had been asked for;
+// later slices pull the rest of the kept schema in as they reach it.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model content {
+  id        String   @id @db.Uuid
+  createdAt DateTime @db.Timestamptz(6)
+  createdBy String?  @db.Uuid
+  slug      String   @unique
+  fixed     Boolean  @default(false)
+
+  contentVersions contentVersions[]
+}
+
+model contentVersions {
+  id        Int
+  contentId String   @db.Uuid
+  title     String
+  body      String
+  createdAt DateTime @db.Timestamptz(6)
+  createdBy String?  @db.Uuid
+
+  content content @relation(fields: [contentId], references: [id], onDelete: Cascade)
+
+  @@id([id, contentId])
+}

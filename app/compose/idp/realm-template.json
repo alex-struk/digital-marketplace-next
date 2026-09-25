@@ -1,0 +1,248 @@
+{
+  "realm": "digital-marketplace",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": false,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": false,
+  "editUsernameAllowed": false,
+  "clients": [
+    {
+      "clientId": "digital-marketplace-app",
+      "name": "Digital Marketplace",
+      "description": "The single-page app. A public client under PKCE, so no secret is held in a browser (decision record 0004).",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "serviceAccountsEnabled": false,
+      "fullScopeAllowed": true,
+      "redirectUris": ["http://localhost:4300/*"],
+      "webOrigins": ["http://localhost:4300"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256",
+        "post.logout.redirect.uris": "http://localhost:4300/*"
+      }
+    }
+  ],
+  "users": [
+    {
+      "username": "test-admin",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "admin.one@example.test",
+      "firstName": "Robin",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["idir"], "account_type": ["ADMIN"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    },
+    {
+      "username": "admin-second",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "admin.two@example.test",
+      "firstName": "Morgan",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["idir"], "account_type": ["ADMIN"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    },
+    {
+      "username": "test-gov",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "staff.one@example.test",
+      "firstName": "Casey",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["idir"], "account_type": ["GOV"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    },
+    {
+      "username": "gov-second",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "staff.two@example.test",
+      "firstName": "Devon",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["idir"], "account_type": ["GOV"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    },
+    {
+      "username": "gov-panel-evaluator",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "panel.evaluator@example.test",
+      "firstName": "Emery",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["idir"], "account_type": ["GOV"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    },
+    {
+      "username": "gov-panel-chair",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "panel.chair@example.test",
+      "firstName": "Emerson",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["idir"], "account_type": ["GOV"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    },
+    {
+      "username": "test-vendor-1",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "vendor.one@example.test",
+      "firstName": "Alex",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    },
+    {
+      "username": "test-vendor-2",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "org.owner@example.test",
+      "firstName": "Blake",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    },
+    {
+      "username": "test-vendor-3",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "org.admin@example.test",
+      "firstName": "Charlie",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    },
+    {
+      "username": "test-vendor-4",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "org.member@example.test",
+      "firstName": "Dana",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    },
+    {
+      "username": "test-vendor-5",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "vendor.deactivated@example.test",
+      "firstName": "Ellis",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    },
+    {
+      "username": "test-vendor-6",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "file.owner@example.test",
+      "firstName": "Finley",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    },
+    {
+      "username": "test-vendor-7",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Gray",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    },
+    {
+      "username": "test-vendor-8",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "vendor.notices.off@example.test",
+      "firstName": "Harper",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    },
+    {
+      "username": "test-vendor-9",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "vendor.invited@example.test",
+      "firstName": "Indigo",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    },
+    {
+      "username": "test-vendor-10",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "vendor.terms.reset@example.test",
+      "firstName": "Jules",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    },
+    {
+      "username": "test-vendor-11",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "proponent.two@example.test",
+      "firstName": "Kai",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    },
+    {
+      "username": "test-vendor-12",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "proponent.three@example.test",
+      "firstName": "Larkin",
+      "lastName": "Placeholder",
+      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "credentials": [
+        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+      ]
+    }
+  ]
+}
