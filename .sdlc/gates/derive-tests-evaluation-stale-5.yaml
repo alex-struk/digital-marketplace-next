@@ -1,0 +1,11 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether the R-5.34 tests follow from the criterion and nothing else. They do, so I approve. There are five tests. Four are the given/when/then's four people: the evaluator, the chair, the owner and an unrelated employee. The fifth is the administrator named in the statement. I checked the seed on the branch: persona.publicSectorStaff (users.staffOne) is an evaluator only on swuEvaluatorNotOwnerNorChair, the chair only (not an evaluator) on swuLapsedChairNotEvaluator, the owner off the panel on swuLapsedOwnerOffPanel, and unconnected on swuCodeChallengeOfOtherStaff (EVAL_CC). The administrator is an evaluator on swuLapsedChairNotEvaluator but neither the chair nor the owner, so the consensus and panel tabs offered there can only come from being an administrator. Each 'absent' assertion is one of the criterion's 'only X sees' restrictions. Each 'present' assertion is in its then-clause or its statement's list of administrator permissions. The only names used are the contract's four tab observations, with no selectors, routes or status codes. The runner's typecheck reports no errors under acceptance/evaluation; the failure is two errors in adapters/new, which this proposal does not answer for. The removed not-testable entry was blocked only on separating the roles, and the new seeded opportunity and the two new tab observations answer that. One weakness: the unrelated-employee test reads all four tabs as absent without waiting for anything to appear first, so it could pass before the page renders. There is no positive observation to wait on, since that person may well get Not Found. Every tab is asserted present in another test, so an unbound tab would still surface. I would return if a run shows the two lapsed opportunities never reach the stage where these tabs appear, or that the unrelated employee's page opens without offering any tab. missing-test/R-5.34 stays open until the test runs at v2.
+conditions: []
+cost: 0.46620700000000004
+turns: 4
+session: "92ed46b5-2c63-4528-bf9d-a9332195afa9"
+at: 2026-09-25T14:03:37.606Z

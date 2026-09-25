@@ -37,3 +37,26 @@ Nothing else was needed from the surface, and I found nothing more for the contr
 ## Fix turn
 
 I fixed the failed check in `tests/acceptance/evaluation/R-5.34.spec.ts`, but I didn't re-run the check afterwards. The check flagged every line where a test used a local variable named `page`. That variable was only a short name for `surface.opportunitySwuEdit`, but the check treats the word `page` as a reach past `surface`. I renamed it to `edit` in all five tests. That covers the reads the check listed, such as `() => edit.consensusTab()`, and the unflagged lines that assign it (`const edit = surface.opportunitySwuEdit;`), which contain the same word. A search now finds no `page` left in the file. Every call still goes through `surface.opportunitySwuEdit` to the same four tab observations, so what the tests sign in as, open and assert is unchanged. R-5.34 still has a test file and no entry in `not-testable.yaml`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+The question is whether the R-5.34 tests follow from the criterion and nothing else. They do, so I approve. There are five tests. Four are the given/when/then's four people: the evaluator, the chair, the owner and an unrelated employee. The fifth is the administrator named in the statement. I checked the seed on the branch: persona.publicSectorStaff (users.staffOne) is an evaluator only on swuEvaluatorNotOwnerNorChair, the chair only (not an evaluator) on swuLapsedChairNotEvaluator, the owner off the panel on swuLapsedOwnerOffPanel, and unconnected on swuCodeChallengeOfOtherStaff (EVAL_CC). The administrator is an evaluator on swuLapsedChairNotEvaluator but neither the chair nor the owner, so the consensus and panel tabs offered there can only come from being an administrator. Each 'absent' assertion is one of the criterion's 'only X sees' restrictions. Each 'present' assertion is in its then-clause or its statement's list of administrator permissions. The only names used are the contract's four tab observations, with no selectors, routes or status codes. The runner's typecheck reports no errors under acceptance/evaluation; the failure is two errors in adapters/new, which this proposal does not answer for. The removed not-testable entry was blocked only on separating the roles, and the new seeded opportunity and the two new tab observations answer that. One weakness: the unrelated-employee test reads all four tabs as absent without waiting for anything to appear first, so it could pass before the page renders. There is no positive observation to wait on, since that person may well get Not Found. Every tab is asserted present in another test, so an unbound tab would still surface. I would return if a run shows the two lapsed opportunities never reach the stage where these tabs appear, or that the unrelated employee's page opens without offering any tab. missing-test/R-5.34 stays open until the test runs at v2.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `352a7f958baa72fdbbecc28bc905c8df7f0aaf60`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
