@@ -5606,6 +5606,40 @@ export default function create(
     },
   };
 
+  // The catcher's own fault injection (Mailpit "chaos"): while its sender fault is certain,
+  // its SMTP server refuses every message at the first command, so nothing is caught.
+  // Checked on this catcher: PUT with the sender's probability at 100 and then 0 is
+  // answered 200 with the settings now in force.
+  let chaosAnswer: Record<string, unknown> | null = null;
+
+  async function chaos(where: string, probability?: number): Promise<void> {
+    const target = `${mailApi(where)}/api/v1/chaos`;
+    const sent =
+      probability === undefined
+        ? page.request.get(target)
+        : page.request.put(target, { data: { Sender: { ErrorCode: 451, Probability: probability } } });
+    const response = await sent.catch((error: unknown) => {
+      throw new Error(`unbound: ${where} — the mail catcher at ${target} could not be reached (${String(error)})`);
+    });
+    if (response.status() !== 200) {
+      nothing(`${where} — the mail catcher answered ${response.status()} for ${target}; its fault injection is not switched on`);
+    }
+    chaosAnswer = (await response.json().catch(() => null)) as Record<string, unknown> | null;
+  }
+
+  const mailDeliveryFault: PageOf<"mailDeliveryFault"> = {
+    open: () => chaos("mail-delivery-fault.open"),
+    refuseDelivery: () => chaos("mail-delivery-fault.refuse_delivery", 100),
+    restoreDelivery: () => chaos("mail-delivery-fault.restore_delivery", 0),
+    // "refused <code>" while the fault is in force, as the catcher reads it now; nothing
+    // when delivery is accepted.
+    async deliveryRefused() {
+      await chaos("mail-delivery-fault.delivery_refused");
+      const sender = (chaosAnswer?.Sender ?? {}) as Record<string, unknown>;
+      return Number(sender.Probability ?? 0) >= 100 ? `refused ${String(sender.ErrorCode ?? "")}`.trim() : "";
+    },
+  };
+
   // ================================================================ requests no screen makes
 
   // Each of these is a request to the service's own interface, made from the browser's
@@ -5941,6 +5975,23 @@ export default function create(
   // With Us opportunity, the panel as it stands is taken and such a panel is answered
   // 503 {"database":["Database error."]}.
   let openedPanel = "";
+  let lastPanelSent = "";
+
+  // Every member an input names: a list of them, a list under a key such as "members", or
+  // one member per field.
+  function namesIn(input: unknown): string[] {
+    if (input === undefined || input === null) return [];
+    if (typeof input === "string") return input.split(/\s*,\s*/).filter(Boolean);
+    if (typeof input === "number") return [String(input)];
+    if (Array.isArray(input)) return input.flatMap((each) => namesIn(each));
+    const record = input as Record<string, unknown>;
+    for (const key of ["members", "users", "evaluators", "panel"]) {
+      if (record[key] !== undefined) return namesIn(record[key]);
+    }
+    const single = field(record, "user", "userId", "member", "handle", "email", "id");
+    if (single) return [single];
+    return Object.values(record).flatMap((each) => namesIn(each));
+  }
 
   function panelNow(record: unknown): { user: string; chair: boolean; evaluator: boolean; order: number }[] {
     const panel = (record as Record<string, unknown> | null)?.evaluationPanel;
@@ -5957,7 +6008,7 @@ export default function create(
     });
   }
 
-  const evaluationPanelRequest: PageOf<"evaluationPanelRequest"> = {
+  const evaluationPanelRequest: Open<PageOf<"evaluationPanelRequest">> = {
     open: async (params) => {
       openedPanel = address("/api/opportunities/:program/:opportunityId", params);
       await send("evaluation-panel-request.open", "GET", openedPanel);
@@ -5973,7 +6024,30 @@ export default function create(
       members.push({ user, chair: false, evaluator: false, order: members.length });
       await send(where, "PUT", openedPanel, { tag: "editEvaluationPanel", value: members });
     },
+    // Two or more public sector members, every one an evaluator and none the chair, sent as
+    // the whole panel. On this target, as an administrator on the seeded closed Sprint With
+    // Us opportunity, the service took such a panel (200) and stored it without a chair.
+    async submitPanelWithNoChair(input?: unknown) {
+      const where = "evaluation-panel-request.submit_panel_with_no_chair";
+      if (!openedPanel) nothing(`${where} — no opportunity has been opened`);
+      const named = namesIn(input);
+      if (!named.length) nothing(`${where} — the input names no members`);
+      const members = named.map((each, order) => {
+        const user = userIdFor(each);
+        if (!user) nothing(`${where} — "${each}" is not a seeded account, an identifier or an address the seed knows`);
+        return { user, chair: false, evaluator: true, order };
+      });
+      lastPanelSent = "no-chair";
+      await send(where, "PUT", openedPanel, { tag: "editEvaluationPanel", value: members });
+    },
     memberWithoutRoleError: async () => refusal((status) => status >= 400),
+    // The refusal of the chairless panel just sent; the service accepting it reads as nothing.
+    missingChairError: async () => {
+      if (lastPanelSent !== "no-chair") {
+        nothing("evaluation-panel-request.missing_chair_error — no panel without a chair has been sent");
+      }
+      return refusal((status) => status >= 400);
+    },
     // One member per line as the service now holds the panel.
     panelAsStored: async () => {
       if (!openedPanel) nothing("evaluation-panel-request.panel_as_stored — no opportunity has been opened");
@@ -6141,6 +6215,7 @@ export default function create(
     fileEmbeddedImage,
     caughtMessage,
     caughtMessageList,
+    mailDeliveryFault,
     organizationActingForList,
     affiliationInvitationRequest,
     userListRequest,

@@ -1200,6 +1200,13 @@ pages:
       message_visible_recipients: bound
       message_count: bound
 
+  mail-delivery-fault:
+    actions:
+      refuse_delivery: bound
+      restore_delivery: bound
+    observations:
+      delivery_refused: bound
+
   organization-acting-for-list:
     actions: {}
     observations:
@@ -1258,8 +1265,10 @@ pages:
   evaluation-panel-request:
     actions:
       submit_panel_with_member_holding_no_role: bound
+      submit_panel_with_no_chair: bound
     observations:
       member_without_role_error: bound
+      missing_chair_error: bound
       panel_as_stored: bound
 
   file-attach-by-identifier:
