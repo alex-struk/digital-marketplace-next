@@ -136,18 +136,6 @@ criteria:
       property of the migration rather than of anything the running service
       answers with. No addition to the surface would help; this is a claim a
       human accepts about the rebuild rather than one a test can settle."
-  - id: R-5.34
-    version: 2
-    reason: "blocked: the criterion needs four different people looking at one
-      opportunity — an evaluator, the chair, the owner and an unrelated public
-      sector employee — and the target mints sessions for two public sector
-      accounts. On the seeded opportunities one of them is the owner and an
-      evaluator at once and the other is the chair and an administrator at once,
-      so three of the four roles collapse into two people and the fourth cannot
-      be signed in as at all. Needs a sign-in for public-sector-staff-other and
-      a panel whose chair is neither the owner nor an administrator. The one
-      part that is reachable, the panel being shown only to the owner and an
-      administrator, is exercised by R-5.18."
   - id: R-7.11
     version: 1
     reason: "The claim is about the shape of a refused answer — a permission refusal
