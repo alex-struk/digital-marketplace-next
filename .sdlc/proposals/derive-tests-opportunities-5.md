@@ -29,3 +29,27 @@ The criterion's statement is itself about the offered changes and the award path
 **Checks.** Permission to run `tsc` was declined in this session. Instead I checked the three new seed handles against `tests/generated/seed.ts`. The surface calls and fixture imports are the same ones the previous version used, which that review compiled cleanly. Whoever rules next should still run the compiler and the separation check over this file.
 
 **Surface.** For this condition I needed no surface action or observation that doesn't already exist.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+
+Do the revised opportunities tests now follow from their criteria and from nothing else? Returned. The condition left on R-1.49 is met: it now runs only on seed.opportunities.twuChallengeLastToScoreForAward with twuAwardChallengeLast and twuAwardChallengeScored. It is one test that scores the last proponent, confirms processing, requires award and cancel among the offered state changes, and only then awards and confirms awarded. Its assertions follow from the criterion and it no longer shares a record with R-1.25. The runner's typecheck reports no diagnostics under acceptance/opportunities/; its one diagnostic is in adapters/new/, outside this proposal. The newly written R-1.25, R-1.26, R-1.27, R-1.40, R-1.41, R-1.42, R-1.43 and R-1.50 assert what their criteria state, or less where their comments say so. R-1.35 repeats the defect the last round was returned for. Both of its tests call arrangeWatcherAndProponent on seed.opportunities.publishedCodeWithUs, and that record is loaded once and never reset. The watch action is a toggle, so the second test's toggleWatch as persona.competingVendor turns the watch the first test set back off. Its poll that watchers exceed the earlier count then fails on a correct application. The same vendor also submits a second proposal to the same opportunity, which the proposal-count poll depends on. Those failures come from run order, not from anything R-1.35 governs. What would change the ruling: R-1.35 reworked so that the watcher and the proponent are set up only once on the shared record.
+
+**Conditions:**
+- condition-met derive-tests-opportunities-stale-3#2: R-1.49 now uses only seed.opportunities.twuChallengeLastToScoreForAward and its proposals twuAwardChallengeLast and twuAwardChallengeScored. It is one test in tests/acceptance/opportunities/R-1.49.spec.ts that reads offered_state_changes (award and cancel) before awarding, so the reading no longer depends on run order.
+- R-1.35: the two tests each call arrangeWatcherAndProponent (tests/acceptance/opportunities/R-1.35.spec.ts:53) on seed.opportunities.publishedCodeWithUs, a record loaded once and never reset. toggleWatch as persona.competingVendor (line 70) is a toggle, so the second test's call turns the watch off again. Its poll that the watcher count exceeds the earlier count (line 76) then fails on a correct application, and persona.vendor submitting a second proposal to the same opportunity puts the proposal-count poll (line 77) at the same risk. Set up the watcher and the proponent once: for example, one test that sets them up and then makes the details change and adds the addendum in turn, clearing the mail catcher before each and checking all three people are reached after each.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `0e8c62106f94141fdae1e68cfcb1d159bff32b04`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/opportunities/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 1 diagnostic
