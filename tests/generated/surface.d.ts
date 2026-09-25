@@ -1172,6 +1172,8 @@ export interface ContentEditPage {
   updatedDate(): Promise<string>;
   publishedBy(): Promise<string>;
   updatedBy(): Promise<string>;
+  publishedByLink(): Promise<string>;
+  updatedByLink(): Promise<string>;
   fixedPageWarning(): Promise<string>;
   slugLockedForFixedPage(): Promise<string>;
   deleteWithheldForFixedPage(): Promise<string>;

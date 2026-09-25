@@ -12,7 +12,7 @@ Profile: rebuild
 | users | 0 | 32 | 0 | 0 | 0 | 4 | 1 | 36 | 29/30 (n/t 1) |  | 14 pass · 1 fail · 9 unbound · 0 stale |
 | evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 | 29/30 (n/t 1) |  | 3 pass · 6 fail · 15 unbound · 0 stale |
 | notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 19/21 (n/t 2) |  | 7 pass · 3 fail · 3 unbound · 0 stale |
-| content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 | 18/26 (n/t 8) |  | 12 pass · 7 fail · 3 unbound · 0 stale |
+| content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 | 24/26 (n/t 2) |  | 12 pass · 7 fail · 3 unbound · 0 stale |
 | files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 22/24 (n/t 2) |  | 15 pass · 7 fail · 1 unbound · 0 stale |
 | **Totals** | 0 | 286 | 0 | 0 | 0 | 9 | 3 | 295 |  |  |  |
 
@@ -86,6 +86,8 @@ Profile: rebuild
 - [derive-tests-content-5](proposals/derive-tests-content-5.md)
 - [derive-tests-content-6](proposals/derive-tests-content-6.md)
 - [derive-tests-content-7](proposals/derive-tests-content-7.md)
+- [derive-tests-content-8](proposals/derive-tests-content-8.md)
+- [derive-tests-content-9](proposals/derive-tests-content-9.md)
 - [derive-tests-content-stale-1](proposals/derive-tests-content-stale-1.md)
 - [derive-tests-content-stale-2](proposals/derive-tests-content-stale-2.md)
 - [derive-tests-content-stale-3](proposals/derive-tests-content-stale-3.md)
@@ -205,10 +207,10 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $528.023044
-- Rulings cost: $273.042584
-- Total cost: $801.065628
-- Agent-held rulings: 160
+- Journal cost: $528.569014
+- Rulings cost: $274.287981
+- Total cost: $802.856995
+- Agent-held rulings: 162
 - Runner rulings (automatic, no seat held): 1
 - Human rulings: 8
 - Rulings whose seat this page does not recognise: 0
