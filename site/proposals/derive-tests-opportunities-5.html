@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-5 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">155</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">155</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">138</span></a></li><li><a href="../runs.html">Run log <span class="count">14</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-5</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-25 10:25</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised opportunities tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I couldn&#39;t run the compiler in this session, so the file has not been typechecked.</p>
+<p>I&#39;ve addressed the ruling&#39;s one condition for this stage: R-1.49 now runs on its own record. I couldn&#39;t run the compiler in this session, so the file has not been typechecked.</p>
+<p><strong>The condition (R-1.49).</strong> Before I started, the contract stage had already added the record the reviewer asked for: <code>seed.opportunities.twuChallengeLastToScoreForAward</code>, with the proposals <code>twuAwardChallengeScored</code> and <code>twuAwardChallengeLast</code>. It is marked for R-1.49 alone, and all three handles are in <code>tests/generated/seed.ts</code>. I moved R-1.49 onto it, so nothing in the test touches <code>twuChallengeLastToScore</code> or its proposals any more, and R-1.25&#39;s Team With Us case now has that record to itself.</p>
+<p>To make reading the offered state changes independent of the award, I used the condition&#39;s first option: put the reading first in one test. There is only one record for R-1.49, so two tests on it would still depend on which ran first. Separate records for each would have needed a third seed record, and adding one isn&#39;t this stage&#39;s job.</p>
+<p><code>tests/acceptance/opportunities/R-1.49.spec.ts</code> now holds one test, titled with the criterion&#39;s statement. It:</p>
+<ol><li>signs in as the administrator,</li><li>scores the last proponent on the challenge,</li><li>confirms the opportunity reads as in processing,</li><li>reads the offered state changes and requires both award and cancel among them,</li><li>awards the proposal scored first and confirms the opportunity reads as awarded.</li></ol>
+<p>The criterion&#39;s statement is itself about the offered changes and the award path agreeing, so checking both in one test is a fair reading of it. The assertions are the same as before, and the test still does not check that award and cancel are the <em>only</em> changes offered. The header is unchanged apart from the file content. Its &quot;derived&quot; date is today, which is what it already said.</p>
+<p><strong>What I didn&#39;t touch.</strong> No other file under <code>tests/acceptance/opportunities/</code> and no entry in <code>tests/acceptance/not-testable.yaml</code>. The seed request addressed to the contract stage was theirs, and it turned out to be done already. I wrote nothing under <code>tests/seed</code>, <code>tests/fixtures</code> or any other read-only path.</p>
+<p><strong>Checks.</strong> Permission to run <code>tsc</code> was declined in this session. Instead I checked the three new seed handles against <code>tests/generated/seed.ts</code>. The surface calls and fixture imports are the same ones the previous version used, which that review compiled cleanly. Whoever rules next should still run the compiler and the separation check over this file.</p>
+<p><strong>Surface.</strong> For this condition I needed no surface action or observation that doesn&#39;t already exist.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:reviewer (persona agent) on 2026-09-25 10:26.</p>
+<div class="body"><p>Do the revised opportunities tests now follow from their criteria and from nothing else? Returned. The condition left on R-1.49 is met: it now runs only on seed.opportunities.twuChallengeLastToScoreForAward with twuAwardChallengeLast and twuAwardChallengeScored. It is one test that scores the last proponent, confirms processing, requires award and cancel among the offered state changes, and only then awards and confirms awarded. Its assertions follow from the criterion and it no longer shares a record with R-1.25. The runner&#39;s typecheck reports no diagnostics under acceptance/opportunities/; its one diagnostic is in adapters/new/, outside this proposal. The newly written R-1.25, R-1.26, R-1.27, R-1.40, R-1.41, R-1.42, R-1.43 and R-1.50 assert what their criteria state, or less where their comments say so. R-1.35 repeats the defect the last round was returned for. Both of its tests call arrangeWatcherAndProponent on seed.opportunities.publishedCodeWithUs, and that record is loaded once and never reset. The watch action is a toggle, so the second test&#39;s toggleWatch as persona.competingVendor turns the watch the first test set back off. Its poll that watchers exceed the earlier count then fails on a correct application. The same vendor also submits a second proposal to the same opportunity, which the proposal-count poll depends on. Those failures come from run order, not from anything R-1.35 governs. What would change the ruling: R-1.35 reworked so that the watcher and the proponent are set up only once on the shared record.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met derive-tests-opportunities-stale-3#2: R-1.49 now uses only seed.opportunities.twuChallengeLastToScoreForAward and its proposals twuAwardChallengeLast and twuAwardChallengeScored. It is one test in tests/acceptance/opportunities/R-1.49.spec.ts that reads offered_state_changes (award and cancel) before awarding, so the reading no longer depends on run order.</li><li>R-1.35: the two tests each call arrangeWatcherAndProponent (tests/acceptance/opportunities/R-1.35.spec.ts:53) on seed.opportunities.publishedCodeWithUs, a record loaded once and never reset. toggleWatch as persona.competingVendor (line 70) is a toggle, so the second test&#39;s call turns the watch off again. Its poll that the watcher count exceeds the earlier count (line 76) then fails on a correct application, and persona.vendor submitting a second proposal to the same opportunity puts the proposal-count poll (line 77) at the same risk. Set up the watcher and the proponent once: for example, one test that sets them up and then makes the details change and adds the addendum in turn, clearing the mail catcher before each and checking all three people are reached after each.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
