@@ -44,3 +44,28 @@ I wrote tests for all six criteria in the content domain: R-7.12, R-7.16, R-7.17
 ## Fix turn
 
 I renamed a local variable in four files so the separation check no longer reads it as Playwright's `page` object. Every line the check named was a use of that variable, never the real page object, but the check matches the text `page.`. The variable held a seeded content record: `seed.content.ordinaryPage` in R-7.16 and R-7.23, `seed.content.servicePageDisclaimer` in R-7.25, and the loop and filter variable over the seed's content handles in R-7.12. I renamed it from `page` to `record`, including its declaration where the check had not named that line (R-7.16, R-7.23 and R-7.25), so each file still refers to one defined name. No test logic, title, header, import or observation changed, and `not-testable.yaml` was not touched. A search of `tests/acceptance/content/` now finds no `page.`, `const page` or `(page)` anywhere. I did not compile the files or run the check again in this stage, so whether the check now passes is still unconfirmed.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+
+Question: do the six content tests follow from their criteria and nothing else? Returned. R-7.12, R-7.23, R-7.25 and R-7.27 stay within their criteria, their seed handles and observations exist, and per-test reset to seed (tests/fixtures/index.ts) means the edits R-7.17 and R-7.25 make to fixed pages cannot leak into R-7.12 or R-7.27; the typecheck reports no diagnostic under acceptance/content/. Two tests assert what their criterion does not say. R-7.17 requires the seeded <strong>/<em> spans to reach the reader as literal text, on the page and in both embeddings, but the criterion only says markup is never executed: a renderer that removes the tags meets the criterion and fails this test, and the seed's own note on rawMarkupPage says taking the markup out is a legitimate rendering. The writer's comment concedes the observation cannot tell removal from execution, which makes that clause not-testable against page_body, not a licence to require the literal rendering. R-7.16 requires every refusal to match /403|forbidden/i, and a status code is implementation leaking into a test whose criterion says only 'reported as a permission refusal'; the rest of R-7.16 is sound (the vendor's refused list read follows from R-7.5, R-7.11 is superseded, and the conditional read-one test is honest about R-7.1). Would approve once R-7.17 asserts only what never-executed and identical-rendering state (keeping the whitespace-normalised equality, dropping the literal-tag requirement or recording that clause as not-testable with its real reason) and R-7.16 expresses the permission refusal without a status code. Minor, not a return reason: R-7.12 reads a single page_is_fixed value where the criterion says all twenty-two are marked.
+
+**Conditions:**
+- test-overreaches R-7.17: both tests require the tagged spans in the seeded body (<strong>these words bold</strong>, <em>these words emphasised</em>) to appear verbatim as literal text in the rendered body, on the page's own address and in the scope and terms embeddings; the criterion requires only that embedded markup is never executed and that the body renders identically on its own address and wherever it is embedded, so a rendering that removes the tags without executing them satisfies it and must not fail the test. Keep the own-address versus embedded equality; where no observation can distinguish executed from removed markup, record that clause as not-testable with that reason instead of asserting a literal rendering.
+- R-7.16: tests/acceptance/content/R-7.16.spec.ts asserts refusal_status matches /403|forbidden/i in both tests; the criterion says only that the refusal is reported as a permission refusal, and an HTTP status code is implementation, not contract. Express that the refusal is for lack of permission without naming a status code, keeping the same-status and same-shape comparisons across read-the-list, create, change, rename and remove.
+- addressed-to contract: R-7.27 says the second page's managing screen names the two administrators, each linked to their profile, and the derived test can check neither: the generated seed carries no display name for users.administratorOne or users.administratorTwo, and content-edit has no observation reporting where published_by and updated_by link. Add the two administrators' names to the seed and an observation of each name's link target on content-edit.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `e79896d003f0596b8eea7fc8648d4547208567a6`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/content/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 1 diagnostic
