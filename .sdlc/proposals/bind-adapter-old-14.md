@@ -47,3 +47,22 @@ Every route in the contract that I opened resolved on the target. I didn't chang
 I fixed only what the compile check named. I couldn't run `tsc` in this session because the command needed approval, so the fix has been checked by reading the code but not compiled.
 
 **Journal addition.** All 33 compile errors had one cause. They come from checking the adapter against a `surface.d.ts` generated from an earlier contract, one that lacks the pages and members this workspace's contract adds. The workspace's own `tests/generated/surface.d.ts` declares all of them: `CaughtMessagePage`, `offeredStateChanges`, `pageCount`, `stored_files` and the rest. So I made the adapter compile against either version and changed no binding logic. I added two type helpers at the top of `tests/adapters/old/index.ts`. `Open<T>` is the page type plus room for extra members, and it now types the eight pages that gained members: the Sprint With Us and Team With Us opportunity views, the Team With Us opportunity edit page, the four individual-evaluation create and edit pages, and the content list. The older surface therefore no longer rejects `scopeSection`, `termsSection`, `offeredStateChanges`, `refusedWhenNotPermitted` and `pageCount` as unknown properties. None of those five members takes a parameter. `PageOf<"key">` gives the ten new pages (the two caught-message pages, the acting-for list, the four request pages, the two per-program evaluation request pages and attach-by-identifier) their exact type when the surface declares them. When it doesn't, it falls back to a map of callables that take `any[]`, so their `params` and `input` parameters are no longer implicitly `any`. `fileIdFor` now reads the seeded stored files through an `unknown` cast, so it compiles with or without that seed entry. The final object is built as a local constant and then returned, so the older surface doesn't reject its ten new page keys as unknown properties; against the current surface it is still checked in full. `bindings.yaml` and every page's behaviour are unchanged, including the six binding fixes from the calibration findings.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+
+The question is whether this adapter binds every surface action and observation on old and nothing else, while staying navigation and locators only. The runner-owned typecheck passed with no diagnostics under adapters/old/, nothing under tests/acceptance changed, and the six calibration fixes (R-7.9 alert after the footer, R-1.15 messages gathered across steps, R-1.16 prototype mapped to Proof of Concept, R-8.20/R-8.25/R-8.31 dismissing the dialog and moving to the Attachments step, R-8.31 choosing Edit before changing an attachment) are locator and navigation changes that match their findings. The new mail-catcher, request-level and screen readers report what the target answered and do not judge it. One binding does decide an outcome: file-attach-by-identifier.attach_stored_file never sends the attach when the person cannot read the record. It sends a GET in its place, so attachment_refused reports a refusal of an attach that was never attempted. A service that refused the read but accepted the write would pass, which is the access-control gap the file criteria exist to close. Returned so the adapter makes the real request. Not blocking: the generated surface.d.ts does not match the contract, so the PageOf/Open fallbacks mean the ten new pages were typechecked loosely rather than against their contract signatures; regenerating that file is not this stage's work. The ruling would change to approve once attach_stored_file always issues the change request and attachment_refused reads the service's own answer to it.
+
+**Conditions:**
+- tests/adapters/old/index.ts fileAttachByIdentifier.attachStoredFile: when the record cannot be read (current.status !== 200 or the body is not an object), do not stand a GET in for the attach. Send the PUT {tag: "edit", value: {attachments: [<fileId>]}} (or the smallest edit body the service accepts) to openedRecord anyway, so attachment_refused and attachment_accepted read the service's answer to the attach itself and not to a read of the record.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `47fc5f4dc3c0a8fbf95f08a11c722fc6b49e7ca8`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    No diagnostics.
