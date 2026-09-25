@@ -4,17 +4,17 @@ Profile: rebuild
 
 ## Coverage
 
-| Domain | proposed | accepted | implemented | verified | monitored | obsolete | open questions | total | tests | old |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 39/50 (n/t 11) | 22 pass · 14 fail · 3 unbound · 0 stale |
-| proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 | 28/36 (n/t 8) | 7 pass · 1 fail · 20 unbound · 0 stale |
-| organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 | 27/31 (n/t 4) | 12 pass · 5 fail · 10 unbound · 0 stale |
-| users | 0 | 32 | 0 | 0 | 0 | 4 | 1 | 36 | 24/30 (n/t 6) | 14 pass · 1 fail · 9 unbound · 0 stale |
-| evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 | 24/30 (n/t 6) | 3 pass · 6 fail · 15 unbound · 0 stale |
-| notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 9/21 (n/t 12) | 7 pass · 3 fail · 3 unbound · 0 stale |
-| content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 | 18/26 (n/t 8) | 12 pass · 7 fail · 3 unbound · 0 stale |
-| files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 22/24 (n/t 2) | 15 pass · 7 fail · 1 unbound · 0 stale |
-| **Totals** | 0 | 286 | 0 | 0 | 0 | 9 | 3 | 295 |  |  |
+| Domain | proposed | accepted | implemented | verified | monitored | obsolete | open questions | total | tests | new | old |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 39/50 (n/t 11) |  | 22 pass · 14 fail · 3 unbound · 0 stale |
+| proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 | 28/36 (n/t 8) |  | 7 pass · 1 fail · 20 unbound · 0 stale |
+| organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 | 27/31 (n/t 4) |  | 12 pass · 5 fail · 10 unbound · 0 stale |
+| users | 0 | 32 | 0 | 0 | 0 | 4 | 1 | 36 | 24/30 (n/t 6) |  | 14 pass · 1 fail · 9 unbound · 0 stale |
+| evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 | 24/30 (n/t 6) |  | 3 pass · 6 fail · 15 unbound · 0 stale |
+| notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 9/21 (n/t 12) |  | 7 pass · 3 fail · 3 unbound · 0 stale |
+| content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 | 18/26 (n/t 8) |  | 12 pass · 7 fail · 3 unbound · 0 stale |
+| files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 22/24 (n/t 2) |  | 15 pass · 7 fail · 1 unbound · 0 stale |
+| **Totals** | 0 | 286 | 0 | 0 | 0 | 9 | 3 | 295 |  |  |  |
 
 ## Pages
 
@@ -51,6 +51,7 @@ Profile: rebuild
 - [build-slice-1-3](proposals/build-slice-1-3.md)
 - [build-slice-1-4](proposals/build-slice-1-4.md)
 - [build-slice-1-5](proposals/build-slice-1-5.md)
+- [build-slice-1-6](proposals/build-slice-1-6.md)
 - [calibrate-old-2](proposals/calibrate-old-2.md)
 - [calibrate-old-3](proposals/calibrate-old-3.md)
 - [calibrate-old-4](proposals/calibrate-old-4.md)
@@ -184,10 +185,10 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $483.491432
-- Rulings cost: $259.666545
-- Total cost: $743.157977
-- Agent-held rulings: 139
+- Journal cost: $483.921105
+- Rulings cost: $260.515889
+- Total cost: $744.436994
+- Agent-held rulings: 140
 - Runner rulings (automatic, no seat held): 1
 - Human rulings: 8
 - Rulings whose seat this page does not recognise: 0

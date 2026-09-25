@@ -1,0 +1,91 @@
+{
+  "slice": 1,
+  "proposal": "build-slice-1-6",
+  "app_tree": "17112d4c60ac1422df706440435465d64b8971bb",
+  "at": "2026-09-25T02:13:47.992Z",
+  "verdict": "pass",
+  "rows": [
+    {
+      "id": "R-7.1",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.1.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "anyone, including a visitor who has not signed in, can read a page by its address and sees its title, its body as formatted text, and the dates it was first published and last updated",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-7.2",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.2.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a request for a page at an address that no page holds is answered as not found",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-7.3",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.3.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a visitor using the service sees the not-found screen either way, whether the address is malformed or merely one no page holds",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-7.4",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.4.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a page can also be read by its identifier",
+          "status": "passed"
+        },
+        {
+          "title": "the service falls back to treating the same value as an address when no page carries that identifier",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-7.18",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.18.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "The service level agreement page is one the service creates for itself, so every screen that links to it — the learn-more index, the program cards, and the Code With Us, Sprint With Us and Team With Us opportunity forms — resolves on a fresh installation",
+          "status": "passed"
+        }
+      ]
+    },
+    {
+      "id": "R-7.19",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.19.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the service links its own footer to five of its pages, so every screen offers the about, disclaimer, privacy, accessibility and copyright pages to any visitor",
+          "status": "passed"
+        }
+      ]
+    }
+  ]
+}

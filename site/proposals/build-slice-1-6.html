@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-1-6 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">149</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">149</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">133</span></a></li><li><a href="../runs.html">Run log <span class="count">14</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-1-6</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-25 02:11</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 1 (A visitor can read the service&#39;s own pages) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> <code>npm --prefix app run check</code> now passes: all three packages typecheck and the unit tests pass (15 + 47 + 33).</p>
+<p>I&#39;ve moved the application&#39;s address from port 3000 to <a href="http://localhost:4300,">http://localhost:4300,</a> as the ruling asked, and made no other changes. <code>npm --prefix app run check</code> now passes: all three packages typecheck and the unit tests pass (15 + 47 + 33). I have not brought the sandbox up with Docker, so none of this has been checked against a running application.</p>
+<p><strong>What changed.</strong> The frontend service in <code>app/compose/compose.yaml</code> is now published as <code>4300:3000</code>. Only the host port was fixed by the ruling, so the frontend still listens on 3000 inside its container, and its Caddyfile and Dockerfile are unchanged. A comment in the compose file now says which port is which. No other service in that file publishes 4300, and the identity provider stays at 8080. The client in <code>app/compose/idp/realm-template.json</code> now allows only <code>http://localhost:4300</code> for its sign-in redirects, its web origin and its sign-out redirects. The addresses in <code>app/README.md</code> and <code>app/compose/idp/README.md</code> now say 4300. The test in <code>app/backend/tests/sandbox-composition.test.ts</code> now asserts that the frontend is the only service on host port 4300.</p>
+<p><strong>One change the ruling did not name.</strong> The local dev server in <code>app/frontend/vite.config.ts</code> also defaults to 4300 now. The identity provider only accepts redirects back to 4300, so a dev server left on 3000 could not sign anyone in, and the README&#39;s dev instructions say 4300 too.</p>
+<p><strong>A file I could not change.</strong> <code>spec/contract/openapi.yaml</code> still gives <code>http://localhost:3000</code> as its default server address. That file belongs to the contract stage, so I left it. The application doesn&#39;t read it: the frontend client sends requests to whatever address the page itself was loaded from (<code>app/frontend/src/api/client.ts</code>), so it works on 4300. Changing that default would be for the contract stage to decide.</p>
+<p><strong>Condition build-slice-1-4#1.</strong> An earlier revision reported R-7.12 and R-7.17 as exercised on the strength of one session driving the application by hand. That session was run without Docker or a browser, against a stand-in database that dropped its connection and returned a 500 partway through, and nobody can repeat it. It showed:</p>
+<ul><li>the seeded page served at its own address with its expected wording and both of its dates;</li><li>markup inside a page&#39;s body shown as plain text and never run.</li></ul>
+<p>That is all it showed. <strong>Neither R-7.12 nor R-7.17 is asserted.</strong> A criterion is asserted only by the acceptance suite, and no verify run has touched either one. R-7.12 belongs to slice 5 in the plan, with the list of pages and the count it is checked against; this slice only creates the sixteen pages so the links required by R-7.18 have somewhere to go. What that session left in the tree is still here and unchanged:</p>
+<ul><li><code>app/frontend/tests/content-view.test.tsx</code> pins the seeded page&#39;s wording and both its dates;</li><li><code>app/frontend/tests/formatted-text.test.tsx</code> holds the rule that markup is never executed.</li></ul>
+<p><strong>Slice 1&#39;s criteria.</strong> R-7.1, R-7.2, R-7.3, R-7.4, R-7.18 and R-7.19 are built exactly as the previous revision built them. The only thing this revision changes for them is the port they are served on.</p>
+<p><strong>What is still open.</strong> There is still no passing verify for this tree. The next verify run, pointed at 4300, is the first thing that can assert these criteria.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-25 02:15.</p>
+<div class="body"><p>Question: does slice 1 (a visitor can read the service&#39;s own pages) do what R-7.1, R-7.2, R-7.3, R-7.4, R-7.18 and R-7.19 say, and no more? Ruling: approve. Verify is a current pass for build-slice-1-6 against tree 17112d4, with all six claimed criteria exercised and met. The code matches them. readPageLookup in app/backend/src/rules/content.ts reads a value as an identifier first and as an address second (R-7.4), and a value that is neither is refused as malformed with a 400 rather than answered with a 404 (R-7.3). An address no page holds answers not found (R-7.2), and the single-page app shows its not-found screen for both. The footer carries the five page links (R-7.19) and the learn-more screens link the service level agreement (R-7.18). Nothing belonging to another slice is built: the navigation menu (R-7.6) and the managing screen are explicitly deferred. Unit tests cover the lookup rules, the service against a stand-in store, the contract boundary, the refusal shape, and an end-to-end run over the real migrations in PGlite. No credential is in the tree: the sandbox password is read from the environment and substituted at start-up. Nothing under .github, spec, tests/acceptance or .sdlc/config.yaml changed. Both owed instructions are settled: the application now answers on 4300 everywhere the 1-5 ruling named, and the account states plainly that R-7.12 and R-7.17 are not asserted while keeping the two test files the 1-4 ruling asked to keep. Not blocking: the contract&#39;s default server address of 3000 is the contract stage&#39;s own file and is not read by the application. The ruling would change on a stale or failing verify result or on a change to a protected path.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met build-slice-1-5#1: app/compose/compose.yaml publishes the frontend as 4300:3000; redirectUris, webOrigins and post.logout.redirect.uris in app/compose/idp/realm-template.json are <a href="http://localhost:4300;">http://localhost:4300;</a> app/README.md and app/compose/idp/README.md state 4300; app/backend/tests/sandbox-composition.test.ts asserts the frontend is the only service on host port 4300. The dev server in app/frontend/vite.config.ts also defaults to 4300, so the sign-in redirects agree on a builder&#39;s machine.</li><li>condition-met build-slice-1-4#1: the build-slice-1-6 proposal account says what the hand-driven session showed and states that neither R-7.12 nor R-7.17 is asserted; app/frontend/tests/content-view.test.tsx and app/frontend/tests/formatted-text.test.tsx remain in the tree unchanged.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

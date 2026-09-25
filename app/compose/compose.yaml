@@ -1,0 +1,152 @@
+# Everything the application needs to run on one machine: the application itself, its
+# database, a sandbox identity provider, a mail catcher, and the seed.
+#
+# For a builder's machine only. Nothing here is referred to by a deploy workflow (the stack
+# profile), and no address here belongs to any environment but this one.
+#
+# The identity provider's accounts sign in with the password SDLC_SANDBOX_PASSWORD holds. It
+# is read from the environment and written into no file in this repository.
+#
+#   SDLC_SANDBOX_PASSWORD=... docker compose -f app/compose/compose.yaml up --build
+#   SDLC_SANDBOX_PASSWORD=... docker compose -f app/compose/compose.yaml up seed
+#
+# The application answers on http://localhost:4300 (the frontend listens on 3000 inside its
+# container; only the host port is fixed).
+
+name: digital-marketplace
+
+x-database-url: &database-url
+  DATABASE_URL: postgresql://marketplace:marketplace@database:5432/digital_marketplace
+
+services:
+  # The single-page app, and the web server that forwards /api, /status and /admin to the
+  # service, so a browser sees one origin (decision record 0001).
+  frontend:
+    build:
+      context: ../..
+      dockerfile: app/frontend/Dockerfile
+    environment:
+      BACKEND_ORIGIN: backend:3001
+    ports:
+      - "4300:3000"
+    depends_on:
+      backend:
+        condition: service_started
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ../..
+      dockerfile: app/backend/Dockerfile
+    environment:
+      <<: *database-url
+      PORT: "3001"
+      NODE_ENV: production
+      SMTP_HOST: mail
+      SMTP_PORT: "1025"
+      OIDC_ISSUER: http://idp:8080/realms/digital-marketplace
+      OIDC_CLIENT_ID: digital-marketplace-app
+    expose:
+      - "3001"
+    depends_on:
+      database:
+        condition: service_healthy
+      migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  # The schema's history, run before the service starts. In a sandbox namespace this same
+  # image is the backend's init container (decision record 0001, departure 1).
+  migrate:
+    build:
+      context: ../..
+      dockerfile: app/migrations/Dockerfile
+    environment:
+      <<: *database-url
+    depends_on:
+      database:
+        condition: service_healthy
+    restart: "no"
+
+  # Puts the data back to the state tests/seed/manifest.yaml describes: it wipes whatever is
+  # there, runs the whole migration history, and applies tests/seed/*.sql in order. Running
+  # it twice leaves the same data.
+  #
+  # It is asked for by name — `docker compose up seed` — and so does not run with the rest.
+  seed:
+    build:
+      context: ../..
+      dockerfile: app/migrations/Dockerfile
+    command: ["npm", "run", "seed"]
+    environment:
+      <<: *database-url
+      SEED_DIR: /srv/seed
+    volumes:
+      - ../../tests/seed:/srv/seed:ro
+    depends_on:
+      database:
+        condition: service_healthy
+    profiles: ["seed"]
+    restart: "no"
+
+  database:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: marketplace
+      POSTGRES_PASSWORD: marketplace
+      POSTGRES_DB: digital_marketplace
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U marketplace -d digital_marketplace"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - database:/var/lib/postgresql/data
+    expose:
+      - "5432"
+    restart: unless-stopped
+
+  # Renders the realm with the password the environment holds, into a volume. The password
+  # reaches no file in this repository. See app/compose/idp/README.md.
+  idp-realm:
+    image: node:22-alpine
+    environment:
+      SDLC_SANDBOX_PASSWORD: ${SDLC_SANDBOX_PASSWORD:-}
+    volumes:
+      - ./idp/realm-template.json:/template/realm.json:ro
+      - ./idp/render-realm.mjs:/render-realm.mjs:ro
+      - idp-import:/import
+    command: ["node", "/render-realm.mjs"]
+    restart: "no"
+
+  idp:
+    image: quay.io/keycloak/keycloak:26.0
+    command: ["start-dev", "--import-realm", "--http-port=8080"]
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${SDLC_SANDBOX_PASSWORD:-}
+      KC_HEALTH_ENABLED: "true"
+    volumes:
+      - idp-import:/opt/keycloak/data/import:ro
+    ports:
+      - "8080:8080"
+    depends_on:
+      idp-realm:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  # Every message the service sends arrives here and goes no further. Read it at
+  # http://localhost:8025.
+  mail:
+    image: axllent/mailpit:latest
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: "1"
+      MP_SMTP_AUTH_ALLOW_INSECURE: "1"
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    restart: unless-stopped
+
+volumes:
+  database:
+  idp-import:

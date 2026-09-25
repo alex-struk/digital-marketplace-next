@@ -1,0 +1,24 @@
+{
+  "name": "digital-marketplace-next",
+  "private": true,
+  "version": "0.1.0",
+  "description": "The rebuilt Digital Marketplace: frontend, backend and the kept schema's migrations.",
+  "type": "module",
+  "workspaces": [
+    "migrations",
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "check": "npm run typecheck --workspaces --if-present && npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "generate:api": "npm run generate:api --workspace frontend",
+    "migrate": "npm run migrate --workspace migrations",
+    "seed": "npm run seed --workspace migrations"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
