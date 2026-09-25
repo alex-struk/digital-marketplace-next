@@ -1,19 +1,19 @@
 // criterion: @R-1.10 v1
-// provenance: blind, spec@2d9a83e439479b419845aa46aa7d9d819b38de24, derived 2026-09-15
+// provenance: blind, spec@05e88fb7765c5d6327f910e43f990e6c321b63fa, derived 2026-09-25
 import { test, expect, persona } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// Each submission below is complete but for the one field the criterion names, and is made
-// as something other than a draft, so it has exactly one reason to be refused.
+// Each submission below is a Code With Us opportunity made by an administrator as a
+// publication rather than a draft, complete but for the one field the criterion names, so it
+// has exactly one reason to be refused.
 //
-// The refusal is read as nothing having been published: the open opportunities are read
-// before the attempt and again after a pause long enough for a slow publication to land, and
-// must read the same. A publication the form will not offer at all counts as refused, since
-// the action fails rather than waits.
-//
-// Where the person has typed something that runs too long, the field is named in reply, and
-// that is waited for rather than read the instant the value is entered. Where the field is
-// simply left blank the person never touched it, so no reason is demanded against it.
+// Being rejected is read two ways, and both must hold. First, the publication is refused: a
+// publication the form will not offer at all is the refusal, since the action fails rather
+// than waits; where the form does let the value through, the reason is looked for against the
+// field where it was entered, and waited for. Where a field is simply left blank no reason is
+// demanded, since nothing was typed into it to answer. Second, nothing was published: the open
+// opportunities are read before the attempt and again after a pause long enough for a slow
+// publication to land, and must read the same.
 
 const statement =
   "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters.";
@@ -45,13 +45,28 @@ async function openOpportunities(surface: Surface): Promise<string> {
   return surface.opportunityList.openGroup();
 }
 
-async function attemptPublication(surface: Surface, fields: Record<string, unknown>): Promise<void> {
+// True when the form would not offer the publication at all.
+async function publicationUnavailable(surface: Surface, fields: Record<string, unknown>): Promise<boolean> {
   await surface.opportunityCwuCreate.open();
   try {
     await surface.opportunityCwuCreate.publish(fields);
+    return false;
   } catch {
-    // A publication that is not offered is the refusal; what was published is checked below.
+    return true;
   }
+}
+
+async function expectReasonGiven(surface: Surface, unavailable: boolean): Promise<void> {
+  if (unavailable) return;
+  await expect
+    .poll(async () => {
+      try {
+        return await surface.opportunityCwuCreate.fieldError();
+      } catch {
+        return "";
+      }
+    }, settle)
+    .toBeTruthy();
 }
 
 async function expectNothingPublished(surface: Surface, before: string, title: string): Promise<void> {
@@ -65,7 +80,7 @@ test(`${statement} (a missing title)`, async ({ surface }) => {
   await surface.signIn(persona.administrator);
   const before = await openOpportunities(surface);
 
-  await attemptPublication(surface, { ...complete, title: "", location: "R-1.10 Untitled Cove" });
+  await publicationUnavailable(surface, { ...complete, title: "", location: "R-1.10 Untitled Cove" });
 
   await expectNothingPublished(surface, before, "");
 });
@@ -75,8 +90,8 @@ test(`${statement} (a title over 200 characters)`, async ({ surface }) => {
   await surface.signIn(persona.administrator);
   const before = await openOpportunities(surface);
 
-  await attemptPublication(surface, { ...complete, title });
-  await expect.poll(() => surface.opportunityCwuCreate.fieldError(), settle).toBeTruthy();
+  const unavailable = await publicationUnavailable(surface, { ...complete, title });
+  await expectReasonGiven(surface, unavailable);
 
   await expectNothingPublished(surface, before, title.slice(0, 40));
 });
@@ -86,8 +101,8 @@ test(`${statement} (a teaser over 500 characters)`, async ({ surface }) => {
   await surface.signIn(persona.administrator);
   const before = await openOpportunities(surface);
 
-  await attemptPublication(surface, { ...complete, title, teaser: "t".repeat(501) });
-  await expect.poll(() => surface.opportunityCwuCreate.fieldError(), settle).toBeTruthy();
+  const unavailable = await publicationUnavailable(surface, { ...complete, title, teaser: "t".repeat(501) });
+  await expectReasonGiven(surface, unavailable);
 
   await expectNothingPublished(surface, before, title);
 });
@@ -97,7 +112,7 @@ test(`${statement} (a missing location)`, async ({ surface }) => {
   await surface.signIn(persona.administrator);
   const before = await openOpportunities(surface);
 
-  await attemptPublication(surface, { ...complete, title, location: "" });
+  await publicationUnavailable(surface, { ...complete, title, location: "" });
 
   await expectNothingPublished(surface, before, title);
 });
@@ -107,7 +122,7 @@ test(`${statement} (a missing description)`, async ({ surface }) => {
   await surface.signIn(persona.administrator);
   const before = await openOpportunities(surface);
 
-  await attemptPublication(surface, { ...complete, title, description: "" });
+  await publicationUnavailable(surface, { ...complete, title, description: "" });
 
   await expectNothingPublished(surface, before, title);
 });
@@ -117,8 +132,8 @@ test(`${statement} (a description over 10,000 characters)`, async ({ surface }) 
   await surface.signIn(persona.administrator);
   const before = await openOpportunities(surface);
 
-  await attemptPublication(surface, { ...complete, title, description: "d".repeat(10001) });
-  await expect.poll(() => surface.opportunityCwuCreate.fieldError(), settle).toBeTruthy();
+  const unavailable = await publicationUnavailable(surface, { ...complete, title, description: "d".repeat(10001) });
+  await expectReasonGiven(surface, unavailable);
 
   await expectNothingPublished(surface, before, title);
 });

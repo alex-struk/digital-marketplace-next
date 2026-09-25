@@ -15,11 +15,11 @@
   <span class="profile">rebuild profile</span>
 </div>
 <div class="shell">
-<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">155</span></a></li><li><a href="../proposals.html">Proposals <span class="count">155</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">138</span></a></li><li><a href="../runs.html">Run log <span class="count">14</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html" aria-current="page">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">157</span></a></li><li><a href="../proposals.html">Proposals <span class="count">157</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">139</span></a></li><li><a href="../runs.html">Run log <span class="count">14</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html" aria-current="page">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
 <main id="main">
 <div class="page-head"><h1>opportunities</h1>
-<p class="lede">57 criteria, 39 with a derived acceptance test, 11 recorded as not testable through the contract surface.</p></div>
-<div class="filters" hidden><button type="button" data-filter="all" aria-pressed="true">All (57)</button><button type="button" data-filter="tested" aria-pressed="false">Has a test (39)</button><button type="button" data-filter="not-testable" aria-pressed="false">Not testable (11)</button><button type="button" data-filter="untested" aria-pressed="false">No test yet (0)</button><button type="button" data-filter="obsolete" aria-pressed="false">Obsolete (1)</button></div>
+<p class="lede">57 criteria, 49 with a derived acceptance test, 1 recorded as not testable through the contract surface.</p></div>
+<div class="filters" hidden><button type="button" data-filter="all" aria-pressed="true">All (57)</button><button type="button" data-filter="tested" aria-pressed="false">Has a test (49)</button><button type="button" data-filter="not-testable" aria-pressed="false">Not testable (1)</button><button type="button" data-filter="untested" aria-pressed="false">No test yet (0)</button><button type="button" data-filter="obsolete" aria-pressed="false">Obsolete (1)</button></div>
 <article class="criterion" data-state="tested">
   <header>
     <span class="id">R-1.1</span>
@@ -260,7 +260,7 @@
   <p class="statement">On closing a Sprint With Us or Team With Us opportunity, each submitted proposal is given an anonymous proponent name for use during evaluation.</p>
   <dl><dt>given</dt><dd>a published Sprint With Us or Team With Us opportunity with submitted proposals</dd><dt>when</dt><dd>it closes at its proposal deadline</dd><dt>then</dt><dd>each submitted proposal is labelled &quot;Proponent 1&quot;, &quot;Proponent 2&quot; and so on</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.24.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled test-wrong</dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/sprint-with-us.ts:1498</code><br><code>src/back-end/lib/db/opportunity/team-with-us.ts:1488</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>Code With Us does not anonymise proponents.</dd></dl>
 </article>
-<article class="criterion is-not-testable" data-state="not-testable">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-1.25</span>
     <span class="chip open">accepted</span>
@@ -268,9 +268,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">An opportunity moves to processing on its own once every proposal still in contention has been scored at its program&#39;s final evaluation stage.</p>
-  <dl><dt>given</dt><dd>an opportunity at its final evaluation stage with at least one proposal still in contention</dd><dt>when</dt><dd>the last of those proposals is scored</dd><dt>then</dt><dd>the opportunity moves to processing and the change is recorded with a note saying it was moved automatically because all proposals have been evaluated</dd><dt>not testable</dt><dd>blocked: the given is an opportunity at its program&#39;s final evaluation stage, and the seed carries none. Each program has exactly one closable opportunity, seeded at the first evaluation stage, and reaching the last one means walking that single record through consensus and every stage after it — which no second test could then repeat, because the seed is applied once and nothing resets it. Unblocked by seeding an opportunity already at each program&#39;s final evaluation stage, with its proposals scored up to that point.</dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/back-end/lib/db/proposal/code-with-us.ts:1064</code><br><code>src/back-end/lib/db/proposal/sprint-with-us.ts:2136</code><br><code>src/back-end/lib/db/proposal/team-with-us.ts:1789</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>an opportunity at its final evaluation stage with at least one proposal still in contention</dd><dt>when</dt><dd>the last of those proposals is scored</dd><dt>then</dt><dd>the opportunity moves to processing and the change is recorded with a note saying it was moved automatically because all proposals have been evaluated</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.25.spec.ts</code></dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/back-end/lib/db/proposal/code-with-us.ts:1064</code><br><code>src/back-end/lib/db/proposal/sprint-with-us.ts:2136</code><br><code>src/back-end/lib/db/proposal/team-with-us.ts:1789</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
-<article class="criterion is-not-testable" data-state="not-testable">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-1.26</span>
     <span class="chip open">accepted</span>
@@ -278,9 +278,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">Awarding a proposal moves its opportunity to awarded and records the winning proponent against it; every other proposal still in contention is marked not awarded.</p>
-  <dl><dt>given</dt><dd>an opportunity in processing with proposals against it</dd><dt>when</dt><dd>an administrator awards one of those proposals</dd><dt>then</dt><dd>the opportunity moves to awarded, the winning proponent is recorded against it, and the remaining proposals are marked not awarded</dd><dt>not testable</dt><dd>blocked: the given is an opportunity in processing, which the seed does not carry and which lies past the whole of evaluation on the one closable opportunity of each program. award_proposal is offered on all three proposal views and has nothing to act on. Unblocked by seeding an opportunity in processing, in each program, with more than one proposal still in contention so that the others can be seen to be marked not awarded.</dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/back-end/lib/db/proposal/code-with-us.ts:1159</code><br><code>src/back-end/lib/db/proposal/sprint-with-us.ts:1733</code><br><code>src/back-end/lib/db/proposal/team-with-us.ts:1463</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>an opportunity in processing with proposals against it</dd><dt>when</dt><dd>an administrator awards one of those proposals</dd><dt>then</dt><dd>the opportunity moves to awarded, the winning proponent is recorded against it, and the remaining proposals are marked not awarded</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.26.spec.ts</code></dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/back-end/lib/db/proposal/code-with-us.ts:1159</code><br><code>src/back-end/lib/db/proposal/sprint-with-us.ts:1733</code><br><code>src/back-end/lib/db/proposal/team-with-us.ts:1463</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
-<article class="criterion is-not-testable" data-state="not-testable">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-1.27</span>
     <span class="chip open">accepted</span>
@@ -288,7 +288,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score.</p>
-  <dl><dt>given</dt><dd>an awarded opportunity</dd><dt>when</dt><dd>a visitor who may not see proposal scores views it</dd><dt>then</dt><dd>the successful proponent&#39;s name is shown and their contact details and score are withheld</dd><dt>not testable</dt><dd>blocked: the given is an awarded opportunity, which needs processing, which needs the whole of evaluation on the one closable opportunity of each program. successful_proponent is named on all three opportunity views and has nothing to return. The withheld half needs an observation as well: no observation names the successful proponent&#39;s contact details, so their being withheld from a reader who may not see the score cannot be told from their not being shown to anybody. Unblocked by seeding an awarded opportunity and by an observation of the successful proponent&#39;s contact details.</dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/code-with-us.ts:445</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>an awarded opportunity</dd><dt>when</dt><dd>a visitor who may not see proposal scores views it</dd><dt>then</dt><dd>the successful proponent&#39;s name is shown and their contact details and score are withheld</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.27.spec.ts</code></dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/code-with-us.ts:445</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -360,7 +360,7 @@
   <p class="statement">Publishing an opportunity notifies everyone who has asked for new-opportunity notifications, and separately confirms the publication to the opportunity&#39;s author.</p>
   <dl><dt>given</dt><dd>an opportunity ready to be published and people who have turned notifications on</dd><dt>when</dt><dd>an administrator publishes it</dd><dt>then</dt><dd>each of those people receives a notice that a new opportunity has been posted, and the opportunity&#39;s author receives a confirmation</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.34.spec.ts</code></dd><dt>against old</dt><dd><span class="chip pass">pass</span></dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx:146</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
-<article class="criterion is-not-testable" data-state="not-testable">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-1.35</span>
     <span class="chip open">accepted</span>
@@ -368,7 +368,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">Changing or adding an addendum to an opportunity that is neither a draft nor cancelled notifies everyone watching it, everyone who has submitted a proposal to it, and its author.</p>
-  <dl><dt>given</dt><dd>a published opportunity with watchers and submitted proposals</dd><dt>when</dt><dd>an administrator edits it or adds an addendum</dd><dt>then</dt><dd>its watchers, its proponents and its author are each notified once</dd><dt>not testable</dt><dd>blocked: every notice the criterion names — to the watchers, to the proponents and to the author — is sent as one announcement to a group, and the observables notes say such a message is addressed to one person with everyone else in blind copies. The criterion never says the author is sent a message of their own. The mail fixture only offers messagesTo, which searches by visible recipient, so being told cannot be distinguished from not being told for any of the three groups. The edit and the addendum themselves are reachable (opportunity-cwu-edit.edit_details and add_addendum on seed.opportunities.publishedCodeWithUs), and watchers and proponents could be arranged through toggle_watch and the proposal create pages. What unblocks it: a `mail` accessor over observables.yaml&#39;s read_one_message that returns one message&#39;s To and Bcc (copied_recipients), or a listing of every message in the catcher, plus the service&#39;s own sending address named in the contract, so the announcement can be found and its blind copies counted.</dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx:168</code><br><code>src/back-end/lib/resources/opportunity/code-with-us.ts:919</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>nobody is notified when the opportunity is a draft or has been cancelled.</dd></dl>
+  <dl><dt>given</dt><dd>a published opportunity with watchers and submitted proposals</dd><dt>when</dt><dd>an administrator edits it or adds an addendum</dd><dt>then</dt><dd>its watchers, its proponents and its author are each notified once</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.35.spec.ts</code></dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/back-end/lib/mailer/notifications/opportunity/code-with-us.tsx:168</code><br><code>src/back-end/lib/resources/opportunity/code-with-us.ts:919</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>nobody is notified when the opportunity is a draft or has been cancelled.</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -410,7 +410,7 @@
   <p class="statement">The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location.</p>
   <dl><dt>given</dt><dd>a list of opportunities across all three programs</dd><dt>when</dt><dd>someone selects a program, selects a state, ticks remote-only, or types words into the search box</dd><dt>then</dt><dd>only opportunities matching every chosen condition remain visible</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.39.spec.ts</code></dd><dt>against old</dt><dd><span class="chip pass">pass</span></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/opportunity/list.tsx:314</code><br><code>src/front-end/typescript/lib/pages/opportunity/list.tsx:60</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>the state filter offers draft, under review, published, evaluation and awarded; there is no option for opportunities in processing or cancelled, so those can only be found by clearing the filter.</dd></dl>
 </article>
-<article class="criterion is-not-testable" data-state="not-testable">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-1.40</span>
     <span class="chip open">accepted</span>
@@ -418,9 +418,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">Only an administrator can open the full report of a completed opportunity, which shows the opportunity, its addenda, its history and every proposal in one continuous document.</p>
-  <dl><dt>given</dt><dd>an opportunity that has been evaluated</dd><dt>when</dt><dd>a member of public sector staff who is not an administrator opens its report address</dd><dt>then</dt><dd>they are refused, while an administrator opening the same address sees the whole record in one document</dd><dt>not testable</dt><dd>blocked: the given is an opportunity that has been evaluated. The seed carries none past the first evaluation stage, so full_report would return nothing for an administrator as well as for a member of staff and the contrast the criterion turns on could not be told from the report simply not existing yet. Unblocked by seeding a completed opportunity — awarded, with its addenda, its history and its proposals behind it — in at least one program.</dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/opportunity/code-with-us/complete/index.tsx:184</code><br><code>src/front-end/typescript/lib/app/router.ts:741</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>an opportunity that has been evaluated</dd><dt>when</dt><dd>a member of public sector staff who is not an administrator opens its report address</dd><dt>then</dt><dd>they are refused, while an administrator opening the same address sees the whole record in one document</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.40.spec.ts</code></dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/opportunity/code-with-us/complete/index.tsx:184</code><br><code>src/front-end/typescript/lib/app/router.ts:741</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
-<article class="criterion is-not-testable" data-state="not-testable">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-1.41</span>
     <span class="chip open">accepted</span>
@@ -428,9 +428,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">Advancing a Sprint With Us or Team With Us opportunity out of the consensus stage is refused unless every consensus evaluation has been submitted and at least one proponent has met the minimum score on every question that sets one.</p>
-  <dl><dt>given</dt><dd>a Sprint With Us or Team With Us opportunity at the questions consensus stage</dd><dt>when</dt><dd>its author asks to move it on while a consensus is unsubmitted, or while no proponent has cleared every question&#39;s minimum score</dd><dt>then</dt><dd>the request is refused and the reason is named</dd><dt>not testable</dt><dd>blocked: the given is a Sprint With Us or Team With Us opportunity at the questions consensus stage. The seed stops one stage earlier, and reaching consensus means every evaluator submitting an individual evaluation for every proponent of the one closable opportunity of that program — after which no other criterion could use the same record. Both refusal observations exist, not_all_consensuses_submitted_error and no_screenable_proponent_error, and neither has an opportunity to be read on. Unblocked by seeding an opportunity at the questions consensus stage in each program, one with a consensus still unsubmitted and one where no proponent has cleared every minimum score.</dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1481</code><br><code>src/back-end/lib/resources/opportunity/team-with-us/index.ts:973</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>a Sprint With Us or Team With Us opportunity at the questions consensus stage</dd><dt>when</dt><dd>its author asks to move it on while a consensus is unsubmitted, or while no proponent has cleared every question&#39;s minimum score</dd><dt>then</dt><dd>the request is refused and the reason is named</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.41.spec.ts</code></dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1481</code><br><code>src/back-end/lib/resources/opportunity/team-with-us/index.ts:973</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
-<article class="criterion is-not-testable" data-state="not-testable">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-1.42</span>
     <span class="chip open">accepted</span>
@@ -438,9 +438,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">Advancing a Sprint With Us opportunity to the team scenario stage is refused unless every proponent in the code challenge has been scored or disqualified and at least one remains screened in.</p>
-  <dl><dt>given</dt><dd>a Sprint With Us opportunity at the code challenge stage</dd><dt>when</dt><dd>its author asks to move it to the team scenario stage while a proponent is unscored and not disqualified</dd><dt>then</dt><dd>the request is refused with a message saying all proponents must be scored first</dd><dt>not testable</dt><dd>blocked: the given is a Sprint With Us opportunity at the code challenge stage, two stages past where the seed leaves the one closable Sprint With Us opportunity. start_team_scenario has nothing to be refused on and the part-scored proponents the refusal turns on cannot be arranged. Unblocked by seeding a Sprint With Us opportunity at the code challenge stage with one proponent scored and another neither scored nor disqualified.</dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1593</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>a Sprint With Us opportunity at the code challenge stage</dd><dt>when</dt><dd>its author asks to move it to the team scenario stage while a proponent is unscored and not disqualified</dd><dt>then</dt><dd>the request is refused with a message saying all proponents must be scored first</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.42.spec.ts</code></dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1593</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
-<article class="criterion is-not-testable" data-state="not-testable">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-1.43</span>
     <span class="chip open">accepted</span>
@@ -448,7 +448,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The evaluation panel of a Sprint With Us or Team With Us opportunity may be changed only while the opportunity is a draft, under review, published, or at the first questions stage.</p>
-  <dl><dt>given</dt><dd>a Sprint With Us or Team With Us opportunity that has reached the consensus stage or beyond</dd><dt>when</dt><dd>its author asks to change the evaluation panel</dd><dt>then</dt><dd>the request is refused and the panel stays as it was</dd><dt>not testable</dt><dd>blocked: the given is an opportunity that has reached the consensus stage or beyond, which the seed does not carry and which the one closable opportunity of each program can only be walked to once. panel_locked_after_consensus names exactly this outcome and has nothing to be read on. The permitted half of the rule — changing the panel while the opportunity is a draft — is exercised by R-1.55. Unblocked by seeding an opportunity at the consensus stage with an evaluation panel already named.</dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/shared/lib/resources/opportunity/sprint-with-us.ts:631</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1997</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>a Sprint With Us or Team With Us opportunity that has reached the consensus stage or beyond</dd><dt>when</dt><dd>its author asks to change the evaluation panel</dd><dt>then</dt><dd>the request is refused and the panel stays as it was</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.43.spec.ts</code></dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/shared/lib/resources/opportunity/sprint-with-us.ts:631</code><br><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1997</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
 <article class="criterion" data-state="untested">
   <header>
@@ -500,7 +500,7 @@
   <p class="statement">Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs.</p>
   <dl><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.48.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled test-wrong</dd><dt>replaces</dt><dd>R-1.44</dd></dl>
 </article>
-<article class="criterion is-not-testable" data-state="not-testable">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-1.49</span>
     <span class="chip open">accepted</span>
@@ -508,9 +508,9 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The permitted state changes for a Team With Us opportunity in processing are awarded and cancelled, matching Code With Us and Sprint With Us, so the recorded transitions and the award path agree.</p>
-  <dl><dt>not testable</dt><dd>blocked: the claim is about which state changes are permitted out of processing for a Team With Us opportunity, and the seed carries no Team With Us opportunity in processing. The award half could be read from the opportunity&#39;s own state once it were reachable; the recorded-transitions half needs an observation as well, since nothing returns the set of changes an opportunity&#39;s program permits. Unblocked by seeding a Team With Us opportunity in processing, and by an observation of the state changes permitted from an opportunity&#39;s current state.</dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>replaces</dt><dd>R-1.45</dd></dl>
+  <dl><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.49.spec.ts</code></dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>replaces</dt><dd>R-1.45</dd></dl>
 </article>
-<article class="criterion is-not-testable" data-state="not-testable">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-1.50</span>
     <span class="chip open">accepted</span>
@@ -518,7 +518,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">There is exactly one path out of a questions consensus stage, and it refuses to advance unless every consensus evaluation has been submitted and at least one proponent has met the minimum score on every question that sets one.</p>
-  <dl><dt>not testable</dt><dd>blocked: the refusal half needs an opportunity at the questions consensus stage, which the seed does not carry — see R-1.41 for why the one closable opportunity of each program cannot supply it. The uniqueness half is unobservable whatever the seed holds: &#39;exactly one path out&#39; is a claim about no second action existing, and the absence of an action is not something an observation reports. Unblocked for its refusal half by the same seeding R-1.41 names; its uniqueness half is for a reader of the rebuilt system&#39;s own actions rather than for a test.</dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>replaces</dt><dd>R-1.46</dd></dl>
+  <dl><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.50.spec.ts</code></dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>replaces</dt><dd>R-1.46</dd></dl>
 </article>
 <article class="criterion is-obsolete" data-state="obsolete">
   <header>

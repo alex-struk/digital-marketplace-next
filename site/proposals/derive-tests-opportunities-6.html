@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-6 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">157</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">157</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">139</span></a></li><li><a href="../runs.html">Run log <span class="count">14</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-6</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-25 10:27</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised opportunities tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I reworked R-1.35 so the watcher and the proponent are set up only once on the shared record.</p>
+<p>I reworked R-1.35 so the watcher and the proponent are set up only once on the shared record. That was the only condition, and I didn&#39;t touch any other file. I couldn&#39;t run the typecheck: this session wasn&#39;t allowed to run commands.</p>
+<p><strong>R-1.35 (<code>tests/acceptance/opportunities/R-1.35.spec.ts</code>):</strong> The file used to have two tests, and each one called <code>arrangeWatcherAndProponent</code> on <code>seed.opportunities.publishedCodeWithUs</code>. That record is loaded once and never reset. So the second test&#39;s <code>toggleWatch</code> as <code>persona.competingVendor</code> turned the first test&#39;s watch back off, and <code>persona.vendor</code> submitted a second proposal to the same opportunity. The file now has one test, titled with the criterion&#39;s own statement, and it works through the setup once:</p>
+<ol><li>It sets up the watcher and the proponent a single time. This keeps the existing check that the administrator&#39;s reporting shows more watchers and more proposals than before.</li><li>It clears the mail catcher, changes the opportunity&#39;s details, and checks that the watcher, the proponent and the author are each reached.</li><li>It clears the catcher again, adds an addendum, and runs the same check on all three.</li></ol>
+<p>This follows the reviewer&#39;s suggested shape. One test fits because the criterion has a single given, with &quot;edits it or adds an addendum&quot; as one when. The helper functions, the recipient-matching logic and the assertions are unchanged. I only merged the two test bodies and rewrote the explanatory comment to say why the setup happens once. The header stays as it was: the file&#39;s content did change, and its derived date was already today&#39;s, 2026-09-25.</p>
+<p><strong>Not verified:</strong> I couldn&#39;t confirm the reviewer&#39;s result that the typecheck shows no diagnostics under <code>acceptance/opportunities/</code>. The edit only rearranges calls that were already in the file and already typechecked, so I don&#39;t expect new diagnostics, but the next run should confirm that.</p>
+<p>I changed nothing in <code>tests/acceptance/not-testable.yaml</code>, <code>tests/generated</code>, or any other opportunities spec. No criterion became untestable, and I found no surface action or observation missing for this criterion.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:reviewer (persona agent) on 2026-09-25 10:29.</p>
+<div class="body"><p>Do the revised opportunities tests now follow from their criteria and from nothing else? Returned. The condition owed from derive-tests-opportunities-5 is met: R-1.35 is now one test that sets up the watcher and the proponent once on seed.opportunities.publishedCodeWithUs. It then clears the catcher, changes the details and checks that all three people are reached, and clears it again, adds an addendum and checks again. Its assertions follow from the criterion. It checks that each person is reached, not that each is notified exactly once, so it asserts less than the criterion and nothing it does not ask for. The runner&#39;s typecheck reports no diagnostics under acceptance/opportunities/; its one diagnostic is in adapters/new/, outside this proposal. The other specs are unchanged since the last ruling passed them. The run-order defect has moved across files, though. R-1.31.spec.ts, lines 19-26, which this proposal does not change, also has persona.vendor submit a proposal against the same seeded record, and a vendor holds at most one proposal per opportunity. Whenever R-1.31 runs first, R-1.35&#39;s submission by persona.vendor adds nothing, and its poll that the proposal count exceeds the earlier reading fails on a correct application. That failure comes from run order, not from anything R-1.35 governs. What would change the ruling: R-1.35 establishes its proponent in a way that holds whatever order the suite runs in.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met derive-tests-opportunities-5#2: tests/acceptance/opportunities/R-1.35.spec.ts is now a single test. arrangeWatcherAndProponent runs once, then the catcher is cleared before the details change and before the addendum, and expectEachReached checks the watcher, the proponent and the author after each, so nothing in the file toggles the watch twice or submits twice.</li><li>R-1.35: tests/acceptance/opportunities/R-1.35.spec.ts, lines 61-68, has persona.vendor submit a proposal against seed.opportunities.publishedCodeWithUs and then polls that the reported proposal count exceeds the earlier reading (line 79). tests/acceptance/opportunities/R-1.31.spec.ts, lines 19-26, has the same persona submit against the same record, which is loaded once and never reset, and a vendor holds at most one proposal per opportunity. When R-1.31 runs first, R-1.35&#39;s submission adds nothing and the poll fails on a correct application. Establish the proponent so it holds in either order: for example, submit as a persona no other spec submits with against this record, or accept that persona.vendor&#39;s proposal may already exist and establish that a submitted proposal from them is there rather than that the count went up.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

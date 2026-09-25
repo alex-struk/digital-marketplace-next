@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-7 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">157</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">157</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">139</span></a></li><li><a href="../runs.html">Run log <span class="count">14</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-7</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-25 10:30</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised opportunities tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I acted on the reviewer&#39;s one condition, and only in <code>tests/acceptance/opportunities/R-1.35.spec.ts</code>.</p>
+<p>I acted on the reviewer&#39;s one condition, and only in <code>tests/acceptance/opportunities/R-1.35.spec.ts</code>. No other spec file and no entry in <code>tests/acceptance/not-testable.yaml</code> was touched.</p>
+<p><strong>The condition on R-1.35.</strong> I took the reviewer&#39;s second suggestion: I accept that <code>persona.vendor</code> may already have a proposal on <code>seed.opportunities.publishedCodeWithUs</code>, and check that a submitted one is there rather than that the proposal count went up. The vendor still tries to submit. That attempt is now wrapped so that a refusal (because the vendor already holds one) doesn&#39;t stop the test. The given is then read back on the vendor&#39;s own dashboard: <code>surface.proposalVendorDashboard.open()</code>, then <code>showMyProposals()</code>, then <code>myProposalsTable()</code>. The test polls until the row naming the seeded opportunity&#39;s title says it was submitted. That holds whether R-1.31 or R-1.35 runs first. A draft or withdrawn proposal would not pass, so the test still requires the proponent to have actually submitted.</p>
+<p>The watcher side is unchanged. <code>persona.competingVendor</code> toggles watch once, and the administrator still polls that the reported watcher count rose. No other spec toggles watch as that persona on this record, so that reading doesn&#39;t depend on run order. I removed the helper that read the proposal count and the assertion on it, since nothing uses them now. The rest of the test is untouched: the check that the opportunity is published, clearing the mail catcher, changing the details, adding the addendum, and checking that the watcher, the proponent and the author are each reached. The header comment explains the new arrangement. The header&#39;s <code>derived 2026-09-25</code> stays as it was because it is already today, and the file&#39;s content did change.</p>
+<p>I rejected the reviewer&#39;s other suggestion, a persona that no other spec uses to submit against this record. Specs in the files domain already submit against seeded Code With Us opportunities as <code>organizationAdmin</code>, and any persona I picked could be taken by a later derivation. Reading the vendor&#39;s own proposal is order-independent by construction.</p>
+<p><strong>What I could not do.</strong> I could not run the typecheck: running <code>tsc</code> here needs an approval that wasn&#39;t available. Every call I added (<code>proposalVendorDashboard.open</code>, <code>showMyProposals</code>, <code>myProposalsTable</code>) is declared in <code>tests/generated/surface.d.ts</code> with the signature I used, but whoever runs this next should confirm there are still no diagnostics under <code>acceptance/opportunities/</code>.</p>
+<p>One point for whoever writes the contract next: the test assumes <code>my_proposals_table</code> puts each proposal on its own line, with the opportunity&#39;s title and its status in that row. The contract doesn&#39;t describe the table&#39;s shape. An observation for one proposal&#39;s status on a given opportunity (<code>proposalStatus()</code> exists but isn&#39;t tied to a row) would make this check less dependent on layout. No surface action or observation was missing for this condition, and nothing asked me to change files outside my stage&#39;s paths.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-25 10:31.</p>
+<div class="body"><p>Do the revised opportunities tests now follow from their criteria and nothing else? Yes: approved. Only tests/acceptance/opportunities/R-1.35.spec.ts changed since derive-tests-opportunities-6, and it acts on that ruling&#39;s one condition. The proponent is no longer shown by a proposal count going up, which failed on a correct application whenever R-1.31 ran first. The vendor&#39;s submission is attempted, and a refusal is tolerated. The test then waits until the vendor&#39;s own dashboard lists a submitted proposal against the seeded opportunity. That holds in either order, and a draft or withdrawn proposal still would not pass. The watcher side is order-independent: persona.competingVendor maps to seed.users.proponentTwo, the watcher whose mail is checked, and no other spec toggles watch as that persona on this record. No proposals-domain spec touches this record, so nothing withdraws the vendor&#39;s proposal. The runner&#39;s typecheck reports no diagnostics under acceptance/opportunities/; its one diagnostic is under adapters/new/, which this proposal does not answer for. The test checks that each of watcher, proponent and author is reached but not that each is reached exactly once. That asserts less than the criterion states, not more, so it is not grounds to return. This ruling would change if a diagnostic appeared under acceptance/opportunities/, or if a verify run showed that my_proposals_table does not put each proposal&#39;s title and status on one line. The test relies on that layout and the contract does not describe it. The missing-test entries listed stay open until their tests run; a ruling cannot close them.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met derive-tests-opportunities-6#2: tests/acceptance/opportunities/R-1.35.spec.ts no longer reads a proposal count; arrangeWatcherAndProponent wraps persona.vendor&#39;s submission in a try/catch and then polls ownProposalRow (proposalVendorDashboard.open, showMyProposals, myProposalsTable) until the row naming seed.opportunities.publishedCodeWithUs.title matches /submit/, which holds whether R-1.31 or R-1.35 runs first</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
