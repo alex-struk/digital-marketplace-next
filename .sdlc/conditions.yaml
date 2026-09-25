@@ -182,3 +182,17 @@ conditions:
         its wording'.
       by: agent:reviewer
       at: 2026-09-25T11:52:38.590Z
+  - ref: derive-tests-content-stale-5#2
+    text: "R-7.16: tests/acceptance/content/R-7.16.spec.ts asserts refusal_status
+      matches /403|forbidden/i in both tests; the criterion says only that the
+      refusal is reported as a permission refusal, and an HTTP status code is
+      implementation, not contract. Express that the refusal is for lack of
+      permission without naming a status code, keeping the same-status and
+      same-shape comparisons across read-the-list, create, change, rename and
+      remove."
+    from: derive-tests-content-stale-5
+    family: derive-tests-content-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-25T12:39:27.274Z
