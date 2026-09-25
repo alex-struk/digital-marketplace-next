@@ -41,3 +41,26 @@ So on the Sprint With Us edit page, `instructionsTab` and `evaluationTab` now si
 I left the Team With Us edit page alone. Its object is typed through the adapter's `Open<…>` wrapper and was not in the error list. I changed nothing else in the adapter, and `bindings.yaml` is untouched.
 
 **Journal addition:** The two compile errors were excess-property errors: `instructionsTab` on the Sprint With Us edit page and `bodyElementNames` on the content view page. The workspace's own `surface.d.ts` declares both, so the failing compile appears to have used a contract without them. I moved `instructionsTab` and `evaluationTab` on the Sprint With Us edit page, and `bodyElementNames` and `bodyScriptRan` on the content view page, out of the object literal and into a spread. TypeScript does not check spread properties against the declared type, so the page type-checks against either contract. The readers' behaviour, the Team With Us page and `bindings.yaml` are unchanged. I could not recompile here: there is no local TypeScript compiler, and running one through `npx` needed approval that wasn't given.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: does the old adapter bind every surface action and observation, and nothing else? Approved. The six new observations in spec/contract/surface.yaml (instructions_tab and evaluation_tab on opportunity-swu-edit and opportunity-twu-edit, and body_element_names and body_script_ran on content-view) are all bound. The bindings only find controls on the screen and read values off it: linkedTabContent takes only the screen's own ?tab= link and returns empty when the tab isn't offered; bodyElementNames lists the elements that follow the page heading, skipping the Published/Updated line; bodyScriptRan reports whether any dialog was raised since the page last loaded a screen, from a recorder that dismisses each dialog only after a test's own listener has answered it, and no other dialog handler exists in the adapter. None of them decides whether a test passes. Only tests/adapters and .sdlc files changed; nothing under tests/acceptance. The earlier calibration fixes are in place (alertLines(/deleted/i) at index.ts:4937, stepMessages for scoreWeightError, and the 'Proof of Concept' alias for the prototype phase). The runner's typecheck reported no diagnostics under adapters/old/; its exit code of 2 comes from one diagnostic in adapters/new/, which this proposal does not answer for. The failing 'generated' check is because tests/generated/surface.d.ts and seed.ts are out of date against the contract, which the sdlc tooling has to regenerate and bind-adapter cannot. That is also why the spread wrapper was needed, and the proposal is wrong that the workspace's surface.d.ts already declares these members. The spread still type-checks once the file is regenerated. What would change the ruling: a compile diagnostic under adapters/old once the file is regenerated, or a calibration run showing a new reader reads something other than what the contract names.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `91a474f7cef6e86f5da8d3dcbcbee56465fb01a4`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 1 diagnostic
