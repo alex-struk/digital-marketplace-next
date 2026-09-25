@@ -1,0 +1,12 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether this adapter binds every surface action and observation on old and nothing else, while staying navigation and locators only. The runner-owned typecheck passed with no diagnostics under adapters/old/, nothing under tests/acceptance changed, and the six calibration fixes (R-7.9 alert after the footer, R-1.15 messages gathered across steps, R-1.16 prototype mapped to Proof of Concept, R-8.20/R-8.25/R-8.31 dismissing the dialog and moving to the Attachments step, R-8.31 choosing Edit before changing an attachment) are locator and navigation changes that match their findings. The new mail-catcher, request-level and screen readers report what the target answered and do not judge it. One binding does decide an outcome: file-attach-by-identifier.attach_stored_file never sends the attach when the person cannot read the record. It sends a GET in its place, so attachment_refused reports a refusal of an attach that was never attempted. A service that refused the read but accepted the write would pass, which is the access-control gap the file criteria exist to close. Returned so the adapter makes the real request. Not blocking: the generated surface.d.ts does not match the contract, so the PageOf/Open fallbacks mean the ten new pages were typechecked loosely rather than against their contract signatures; regenerating that file is not this stage's work. The ruling would change to approve once attach_stored_file always issues the change request and attachment_refused reads the service's own answer to it.
+conditions:
+  - "tests/adapters/old/index.ts fileAttachByIdentifier.attachStoredFile: when the record cannot be read (current.status !== 200 or the body is not an object), do not stand a GET in for the attach. Send the PUT {tag: \"edit\", value: {attachments: [<fileId>]}} (or the smallest edit body the service accepts) to openedRecord anyway, so attachment_refused and attachment_accepted read the service's answer to the attach itself and not to a read of the record."
+cost: 0.5413572
+turns: 1
+session: "036d7632-e2c7-4af3-8d45-04be8e806f8e"
+at: 2026-09-25T09:45:40.879Z
