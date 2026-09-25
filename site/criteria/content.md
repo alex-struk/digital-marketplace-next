@@ -8,32 +8,32 @@
 | R-7.2 | acceptance/content/R-7.2.spec.ts |  | pass |
 | R-7.3 | acceptance/content/R-7.3.spec.ts |  | pass |
 | R-7.4 | acceptance/content/R-7.4.spec.ts |  | pass |
-| R-7.5 | acceptance/content/R-7.5.spec.ts |  | pass |
-| R-7.6 | acceptance/content/R-7.6.spec.ts |  | pass |
+| R-7.5 | acceptance/content/R-7.5.spec.ts |  | fail |
+| R-7.6 | acceptance/content/R-7.6.spec.ts |  | fail |
 | R-7.7 | acceptance/content/R-7.7.spec.ts |  | pass |
 | R-7.8 | acceptance/content/R-7.8.spec.ts |  | pass |
-| R-7.9 | acceptance/content/R-7.9.spec.ts |  | fail (ruled: adapter-wrong) |
-| R-7.10 | acceptance/content/R-7.10.spec.ts |  | unbound |
+| R-7.9 | acceptance/content/R-7.9.spec.ts |  | pass |
+| R-7.10 | acceptance/content/R-7.10.spec.ts |  | fail |
 | R-7.11 | — |  | not-testable |
-| R-7.12 | acceptance/content/R-7.12.spec.ts |  | fail (ruled: test-wrong) |
-| R-7.13 | acceptance/content/R-7.13.spec.ts |  | unbound |
+| R-7.12 | acceptance/content/R-7.12.spec.ts |  | fail |
+| R-7.13 | acceptance/content/R-7.13.spec.ts |  | pass |
 | R-7.14 | — |  | not-testable |
 | R-7.15 | — |  | not-testable |
-| R-7.16 | acceptance/content/R-7.16.spec.ts |  | not-testable |
-| R-7.17 | acceptance/content/R-7.17.spec.ts |  | pass |
+| R-7.16 | acceptance/content/R-7.16.spec.ts |  | fail |
+| R-7.17 | acceptance/content/R-7.17.spec.ts |  | fail |
 | R-7.18 | acceptance/content/R-7.18.spec.ts |  | fail (ruled: defect-in-old) |
 | R-7.19 | acceptance/content/R-7.19.spec.ts |  | pass |
 | R-7.20 | acceptance/content/R-7.20.spec.ts |  | fail (ruled: defect-in-old) |
 | R-7.21 | acceptance/content/R-7.21.spec.ts |  | pass |
-| R-7.22 | acceptance/content/R-7.22.spec.ts |  | fail (ruled: test-wrong) |
-| R-7.23 | acceptance/content/R-7.23.spec.ts |  | not-testable |
+| R-7.22 | acceptance/content/R-7.22.spec.ts |  | fail |
+| R-7.23 | acceptance/content/R-7.23.spec.ts |  | pass |
 | R-7.24 | acceptance/content/R-7.24.spec.ts |  | pass |
-| R-7.25 | acceptance/content/R-7.25.spec.ts |  | fail (ruled: test-wrong) |
+| R-7.25 | acceptance/content/R-7.25.spec.ts |  | unbound |
 | D-content-26 | — |  |  |
 | R-7.26 | acceptance/content/R-7.26.spec.ts |  | unbound |
 | D-content-27 | — |  |  |
-| R-7.27 | acceptance/content/R-7.27.spec.ts |  | fail (ruled: test-wrong) |
-| R-7.28 | acceptance/content/R-7.28.spec.ts |  | not-testable |
+| R-7.27 | acceptance/content/R-7.27.spec.ts |  | pass |
+| R-7.28 | acceptance/content/R-7.28.spec.ts |  | pass |
 | R-7.29 | not testable: The given is a page whose body another screen embeds having been removed. The embedded pages — an opportunity's scope page, a program's evaluation instructions — are ones the service needs, which R-7.25 records the service refuses to remove: content-edit withholds the removal and a request made another way is refused, so there is no path through the surface to the state the criterion starts from. |  | not-testable |
 
 ### R-7.1 · v1 · confirmed · accepted
