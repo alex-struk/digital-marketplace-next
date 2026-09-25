@@ -13,7 +13,6 @@ The problem is real for a named user group; the outcome is measurable; constrain
 
 ## Escalates to the human bound to `escalate_to` when
 - The item's tier is HIGH or CRITICAL.
-- The producing stage reports confidence below its threshold.
 - Two readings of the intent are both plausible.
 
 ## Ruling format
@@ -41,7 +40,7 @@ After `ratify` runs, any criterion still `inferred` or `open` has not been minte
 
 A criterion sent back with `recovery-wrong` is not listed on a follow-up: it is waiting on archaeology reading the old application again, not on a ruling. It comes back into this loop once it has been recovered again, with whatever confidence that recovery graded it.
 
-**A criterion may be answered with `contract` or `spike` once.** Neither verb ever raises a criterion's confidence — `contract` leaves it exactly as recovered, and `spike` only records a question — so repeating either one on a follow-up is a non-answer: it leaves the criterion exactly where it is and asks the same thing a third time. A follow-up page marks every criterion already answered that way; on one of those, rule it for real: `confirm` it if the answer came back, `edit` it if the wording was the problem, `obsolete` it if the behaviour should not be carried forward, or `defect` it if the old system was wrong and the new one needs something else. Deciding it wrongly is recoverable; leaving it open forever is not — and it does not stay open forever regardless: a criterion still short of the contract after two follow-up rulings is marked `obsolete` by `ratify` itself, noted "unresolved after two rulings", so the loop always closes even if this persona never rules on it directly.
+**A criterion may be answered with `contract` or `spike` once.** Neither verb ever raises a criterion's confidence — `contract` leaves it exactly as recovered, and `spike` only records a question — so repeating either one on a follow-up is a non-answer: it leaves the criterion exactly where it is and asks the same thing a third time. A follow-up page marks every criterion already answered that way; on one of those, rule it for real: `confirm` it if the answer came back, `edit` it if the wording was the problem, `obsolete` it if the behaviour should not be carried forward, or `defect` it if the old system was wrong and the new one needs something else. Deciding it wrongly is recoverable; leaving it open forever is not — and it does not stay open forever regardless: once a domain has had the follow-up rulings the project's policy allows (`policy.loops.ratify_follow_ups`, two by default), the next follow-up goes to this gate's escalation target rather than to this persona, or, where the policy says so, `ratify` marks what is still unresolved `obsolete` itself.
 
 ## Calibration rulings
 

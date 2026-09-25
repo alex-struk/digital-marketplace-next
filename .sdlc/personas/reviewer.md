@@ -11,7 +11,6 @@ The PR does what its slice said it would do; the evidence receipt lists what was
 ## Escalates to the human bound to `escalate_to` when
 - The item's tier is HIGH or CRITICAL.
 - The receipt marks any residual risk as unaccepted.
-- Every Nth decision, per `human_sample_per_week`.
 
 ## The criteria the proposal is judged against
 
@@ -112,6 +111,14 @@ branch. Read it first, because it decides which question you are answering.
   nothing built belongs to another slice; the stack profile's standards are followed; no
   secret, personal data or credential is in the code or its logs; unit tests cover the seams
   the slice created. Return with a condition that names the file and what must change.
+- **`pass-unasserted`** — nothing the slice claims failed, and a criterion was never put to
+  the application at all: one the contract surface offers no way to exercise, or one somebody
+  vouched for in place of a test. The section names each and quotes the reason recorded for
+  it. Everything the `pass` question asks still applies, and one more thing is yours alone:
+  whether the slice can be accepted with those criteria unasserted. Approve it on the
+  strength of what was asserted, or return with a condition saying what would have to be
+  asserted and against what. Nothing in the pipeline decides that, and no later gate asks it
+  again.
 - **`fail`** — a criterion the slice claims was exercised and not met. The failing rows
   carry the test's own error. Return with a condition for each, naming what must change.
 - **`unbound`** — the adapter could not bind something a test calls, so nothing was
@@ -121,8 +128,9 @@ branch. Read it first, because it decides which question you are answering.
 - **no result, or a result recorded against an earlier application tree** — nothing current
   has been established about this code at all. Return, saying so, or escalate.
 
-An approval is refused unless the result is a current `pass` for this proposal, so on any
-other verdict the ruling is a return or an escalation. Both are open to you whatever the
+An approval is refused unless the result is current for this proposal and nothing the slice
+claims failed, so on a `fail`, an `unbound` or no current result at all the ruling is a
+return or an escalation. Both are open to you whatever the
 result says: neither asserts anything about the application, which is exactly why a slice
 the suite could not exercise is still rulable. Escalate when the slice cannot be accepted
 for a reason that is not in the code — a criterion that contradicts another, a design the
@@ -146,6 +154,11 @@ The stage is the one that would produce that artifact again: `plan` for what a s
 suite, `build` for the application. The condition is filed where that stage reads it and is
 left out of the list the stage you are returning is given — which is told the condition
 exists and which stage it went to, so it can see why its list is shorter than your ruling.
+
+Two conditions you address to the same stage arrive together. One `--revise` run is handed
+every open request addressed to it, each in your words, and answers them as one round — so
+write both where both are true, rather than choosing between them or folding two asks into
+one sentence.
 
 This reaches an artifact whose own gate has already approved it, which is the case it exists
 for: what downstream work proves about an upstream decision is routinely not knowable when

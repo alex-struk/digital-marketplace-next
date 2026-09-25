@@ -45,6 +45,11 @@ suite, `build` for the application. The condition is filed where that stage read
 left out of the list the stage you are returning is given — which is told the condition
 exists and which stage it went to, so it can see why its list is shorter than your ruling.
 
+Two conditions you address to the same stage arrive together. One `--revise` run is handed
+every open request addressed to it, each in your words, and answers them as one round — so
+write both where both are true, rather than choosing between them or folding two asks into
+one sentence.
+
 This reaches an artifact whose own gate has already approved it, which is the case it exists
 for: what downstream work proves about an upstream decision is routinely not knowable when
 that decision is ruled. Reopening is not accepting. The request changes nothing by itself,
