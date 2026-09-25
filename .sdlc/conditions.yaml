@@ -196,3 +196,29 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-25T12:39:27.274Z
+    closed:
+      outcome: met
+      why: tests/acceptance/content/R-7.16.spec.ts no longer matches /403|forbidden/i;
+        both tests take an administrator's malformed-submission refusal (a
+        create at the address 'Not_A_Slug') as the contrast and require each
+        vendor refusal to be a refusal whose status differs from it, keeping the
+        same-status and same-shape comparisons across read-the-list, create,
+        change, rename and remove.
+      by: agent:reviewer
+      at: 2026-09-25T12:47:48.090Z
+  - ref: derive-tests-content-8#3
+    text: "R-7.27: tests/acceptance/content/R-7.27.spec.ts checks only that the
+      second page's publisher and last editor are two different names other than
+      'System'. The criterion says the managing screen names the two people,
+      each linked to their profile, and the generated seed now carries each
+      administrator's name and content-edit now offers publishedByLink and
+      updatedByLink. Assert that published_by and updated_by are the seeded
+      names of the administrator who published the page and the one who changed
+      it, and that each name carries a link to that person's profile, read
+      through those observations without writing a route into the test."
+    from: derive-tests-content-8
+    family: derive-tests-content
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-25T12:47:48.079Z
