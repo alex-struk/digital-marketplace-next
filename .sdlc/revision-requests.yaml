@@ -83,3 +83,16 @@ requests:
     by: agent:reviewer
     at: 2026-09-21T23:10:55.233Z
     taken: 2026-09-22T03:28:54.162Z
+  - stage: contract
+    why: "seed a second Team With Us opportunity at the challenge stage with one
+      proponent scored and one still to score (like
+      opportunities.twuChallengeLastToScore) for R-1.49 alone. Evidence:
+      tests/seed/manifest.yaml:770 holds one such record, and R-1.25's Team With
+      Us case, R-1.49's offered-changes test and R-1.49's award test all score
+      proposals.twuChallengeLast on it. R-1.49's award test then leaves it
+      awarded. The seed is loaded once and never reset, so on a correct
+      application those results depend on run order."
+    from: derive-tests-opportunities-stale-3
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-25T10:05:00.137Z
