@@ -159,3 +159,16 @@ conditions:
         holds whether R-1.31 or R-1.35 runs first
       by: agent:reviewer
       at: 2026-09-25T10:31:42.746Z
+  - ref: derive-tests-evaluation-stale-4#1
+    text: "tests/acceptance/evaluation/R-5.9.spec.ts: remove the assertion that the
+      refusal's text contains 'chair'. R-5.9 requires only that the service
+      reject a panel naming no chair; it says nothing about the refusal's
+      wording, so the test may check only that missing_chair_error reports a
+      refusal (has text) and that panel_as_stored is unchanged after reopening
+      the request page. Keep both of those checks as they are."
+    from: derive-tests-evaluation-stale-4
+    family: derive-tests-evaluation-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-25T11:51:22.419Z
