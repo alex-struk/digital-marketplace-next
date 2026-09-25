@@ -62,12 +62,19 @@ owed:
         by: runner
         at: 2026-09-25T10:59:12.021Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-2.15 v2 fail"
-      file_sha: 5d3c92ab83b337dde63f42f4edda3d2a9b23b390
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-2.15 v2 fail"
+          file_sha: 5d3c92ab83b337dde63f42f4edda3d2a9b23b390
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-2.15 v2 fail is not a result of the test
+          for R-2.15: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-2.26
     id: R-2.26
@@ -121,12 +128,19 @@ owed:
         by: runner
         at: 2026-09-25T10:59:12.021Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-2.26 v1 fail"
-      file_sha: 9a2378df8d253a287e49d620b4654adf50c5342b
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-2.26 v1 fail"
+          file_sha: 9a2378df8d253a287e49d620b4654adf50c5342b
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-2.26 v1 fail is not a result of the test
+          for R-2.26: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-2.27
     id: R-2.27
@@ -179,12 +193,19 @@ owed:
         by: runner
         at: 2026-09-25T10:59:12.021Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-2.27 v1 fail"
-      file_sha: 4f0818ff415339330f963a34c7fd9af556bdcd4e
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-2.27 v1 fail"
+          file_sha: 4f0818ff415339330f963a34c7fd9af556bdcd4e
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-2.27 v1 fail is not a result of the test
+          for R-2.27: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-2.29
     id: R-2.29
@@ -235,12 +256,19 @@ owed:
         by: runner
         at: 2026-09-25T10:59:12.021Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-2.29 v1 fail"
-      file_sha: 4ec2668f5d20ed62691be39ced1d2529f837c9a1
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-2.29 v1 fail"
+          file_sha: 4ec2668f5d20ed62691be39ced1d2529f837c9a1
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-2.29 v1 fail is not a result of the test
+          for R-2.29: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-2.30
     id: R-2.30
@@ -291,12 +319,19 @@ owed:
         by: runner
         at: 2026-09-25T10:59:12.021Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-2.30 v1 fail"
-      file_sha: 2e9d0089dac2bd23704796ab3ee1dbcb428b863d
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-2.30 v1 fail"
+          file_sha: 2e9d0089dac2bd23704796ab3ee1dbcb428b863d
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-2.30 v1 fail is not a result of the test
+          for R-2.30: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-2.31
     id: R-2.31
@@ -341,12 +376,19 @@ owed:
         by: runner
         at: 2026-09-25T10:59:12.021Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-2.31 v1 fail"
-      file_sha: 2f18342835a96211378352ab4c5672ddd76bb83f
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-2.31 v1 fail"
+          file_sha: 2f18342835a96211378352ab4c5672ddd76bb83f
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-2.31 v1 fail is not a result of the test
+          for R-2.31: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-2.32
     id: R-2.32
@@ -395,12 +437,19 @@ owed:
         by: runner
         at: 2026-09-25T10:59:12.021Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-2.32 v1 fail"
-      file_sha: 63786badf2abda007467b16f473c14b637fda84a
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-2.32 v1 fail"
+          file_sha: 63786badf2abda007467b16f473c14b637fda84a
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-2.32 v1 fail is not a result of the test
+          for R-2.32: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-2.33
     id: R-2.33
@@ -449,12 +498,19 @@ owed:
         by: runner
         at: 2026-09-25T10:59:12.021Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-2.33 v1 fail"
-      file_sha: 1b9e10533f88f3d7d5b28016237792b75d081cb4
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-2.33 v1 fail"
+          file_sha: 1b9e10533f88f3d7d5b28016237792b75d081cb4
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-2.33 v1 fail is not a result of the test
+          for R-2.33: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-1.25
     id: R-1.25
@@ -486,12 +542,19 @@ owed:
         by: runner
         at: 2026-09-25T10:31:42.786Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-1.25 v1 fail"
-      file_sha: a18c381c4e081798bbded735a6c0cc55ede3b625
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-1.25 v1 fail"
+          file_sha: a18c381c4e081798bbded735a6c0cc55ede3b625
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-1.25 v1 fail is not a result of the test
+          for R-1.25: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-1.26
     id: R-1.26
@@ -521,12 +584,19 @@ owed:
         by: runner
         at: 2026-09-25T10:31:42.786Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-1.26 v1 fail"
-      file_sha: d8f87b87521de83f1f3f36bb5fc18739e7d9a15a
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-1.26 v1 fail"
+          file_sha: d8f87b87521de83f1f3f36bb5fc18739e7d9a15a
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-1.26 v1 fail is not a result of the test
+          for R-1.26: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-1.27
     id: R-1.27
@@ -560,12 +630,19 @@ owed:
         by: runner
         at: 2026-09-25T10:31:42.786Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-1.27 v1 fail"
-      file_sha: 2f51f85116408924d12d0efc939645dff0033326
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-1.27 v1 fail"
+          file_sha: 2f51f85116408924d12d0efc939645dff0033326
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-1.27 v1 fail is not a result of the test
+          for R-1.27: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-1.40
     id: R-1.40
@@ -596,12 +673,19 @@ owed:
         by: runner
         at: 2026-09-25T10:31:42.786Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-1.40 v1 fail"
-      file_sha: d909587610283cc0a7c1ec85e6ac669847c23272
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-1.40 v1 fail"
+          file_sha: d909587610283cc0a7c1ec85e6ac669847c23272
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-1.40 v1 fail is not a result of the test
+          for R-1.40: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-1.41
     id: R-1.41
@@ -635,12 +719,19 @@ owed:
         by: runner
         at: 2026-09-25T10:31:42.786Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-1.41 v1 fail"
-      file_sha: 962a2ec24a86f0e58d5a72284ef6fb26b7dd444a
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-1.41 v1 fail"
+          file_sha: 962a2ec24a86f0e58d5a72284ef6fb26b7dd444a
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-1.41 v1 fail is not a result of the test
+          for R-1.41: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-1.42
     id: R-1.42
@@ -669,12 +760,19 @@ owed:
         by: runner
         at: 2026-09-25T10:31:42.786Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-1.42 v1 fail"
-      file_sha: 1910b9a936156020a2b037da8f65c465b0a9ac4f
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-1.42 v1 fail"
+          file_sha: 1910b9a936156020a2b037da8f65c465b0a9ac4f
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-1.42 v1 fail is not a result of the test
+          for R-1.42: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-1.43
     id: R-1.43
@@ -705,12 +803,19 @@ owed:
         by: runner
         at: 2026-09-25T10:31:42.786Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-1.43 v1 fail"
-      file_sha: 5ecc1e927df31ef56346b4d1c5d80c023152ad7e
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-1.43 v1 fail"
+          file_sha: 5ecc1e927df31ef56346b4d1c5d80c023152ad7e
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-1.43 v1 fail is not a result of the test
+          for R-1.43: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-1.49
     id: R-1.49
@@ -743,12 +848,19 @@ owed:
         by: runner
         at: 2026-09-25T10:31:42.786Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-1.49 v1 fail"
-      file_sha: 4af893ad6570aae2e689e68b13c9543bca6bfbb1
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-1.49 v1 fail"
+          file_sha: 4af893ad6570aae2e689e68b13c9543bca6bfbb1
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-1.49 v1 fail is not a result of the test
+          for R-1.49: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-1.50
     id: R-1.50
@@ -780,12 +892,19 @@ owed:
         by: runner
         at: 2026-09-25T10:31:42.786Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-1.50 v1 fail"
-      file_sha: 8c482af339113f9b120042324278cd34a9c88f72
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-1.50 v1 fail"
+          file_sha: 8c482af339113f9b120042324278cd34a9c88f72
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-1.50 v1 fail is not a result of the test
+          for R-1.50: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-1.35
     id: R-1.35
@@ -824,12 +943,19 @@ owed:
         by: runner
         at: 2026-09-25T10:31:42.786Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-1.35 v1 fail"
-      file_sha: 09ede3d9bfece18b62b03c9bcf5420a79f918d62
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-1.35 v1 fail"
+          file_sha: 09ede3d9bfece18b62b03c9bcf5420a79f918d62
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-1.35 v1 fail is not a result of the test
+          for R-1.35: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-1.51
     id: R-1.51
@@ -1044,12 +1170,19 @@ owed:
         by: runner
         at: 2026-09-25T14:11:29.343Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-8.22 v1 fail"
-      file_sha: 1cd3bf318a0e03f83c1b33a1dd4423b791149876
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-8.22 v1 fail"
+          file_sha: 1cd3bf318a0e03f83c1b33a1dd4423b791149876
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-8.22 v1 fail is not a result of the test
+          for R-8.22: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-8.26
     id: R-8.26
@@ -1121,12 +1254,19 @@ owed:
         by: runner
         at: 2026-09-25T12:15:43.328Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-6.2 v1 fail"
-      file_sha: 45743f1c89227564c8248c167b730400e3e025dd
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-6.2 v1 fail"
+          file_sha: 45743f1c89227564c8248c167b730400e3e025dd
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-6.2 v1 fail is not a result of the test
+          for R-6.2: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-6.3
     id: R-6.3
@@ -1172,12 +1312,19 @@ owed:
         by: runner
         at: 2026-09-25T12:15:43.328Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-6.3 v1 fail"
-      file_sha: d1a9745fa3e8ac6d8d2ec1730c2f5bd86b3bf00d
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-6.3 v1 fail"
+          file_sha: d1a9745fa3e8ac6d8d2ec1730c2f5bd86b3bf00d
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-6.3 v1 fail is not a result of the test
+          for R-6.3: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-6.4
     id: R-6.4
@@ -1221,12 +1368,19 @@ owed:
         by: runner
         at: 2026-09-25T12:15:43.328Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-6.4 v2 fail"
-      file_sha: 2f9d29bf00cac9bef57bdd64e71c81dfb0608d11
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-6.4 v2 fail"
+          file_sha: 2f9d29bf00cac9bef57bdd64e71c81dfb0608d11
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-6.4 v2 fail is not a result of the test
+          for R-6.4: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-6.5
     id: R-6.5
@@ -1269,12 +1423,19 @@ owed:
         by: runner
         at: 2026-09-25T12:15:43.328Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-6.5 v1 fail"
-      file_sha: 0b80488201f94a0446679a23a43672088208f6e2
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-6.5 v1 fail"
+          file_sha: 0b80488201f94a0446679a23a43672088208f6e2
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-6.5 v1 fail is not a result of the test
+          for R-6.5: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-6.8
     id: R-6.8
@@ -1324,12 +1485,19 @@ owed:
         by: runner
         at: 2026-09-25T12:15:43.328Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-6.8 v1 fail"
-      file_sha: 93f67a730eb9465d1f151e7d5db467ed3c703474
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-6.8 v1 fail"
+          file_sha: 93f67a730eb9465d1f151e7d5db467ed3c703474
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-6.8 v1 fail is not a result of the test
+          for R-6.8: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-6.9
     id: R-6.9
@@ -1436,12 +1604,19 @@ owed:
         by: runner
         at: 2026-09-25T12:15:43.328Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-6.15 v1 fail"
-      file_sha: 6f0039750ad77cbe645a2b1b5be45cce814cc2a7
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-6.15 v1 fail"
+          file_sha: 6f0039750ad77cbe645a2b1b5be45cce814cc2a7
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-6.15 v1 fail is not a result of the test
+          for R-6.15: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-6.16
     id: R-6.16
@@ -1490,12 +1665,19 @@ owed:
         by: runner
         at: 2026-09-25T12:15:43.328Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-6.16 v1 fail"
-      file_sha: 0aa1d7f85e8d3531de53c0a07fd883712d6a8629
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-6.16 v1 fail"
+          file_sha: 0aa1d7f85e8d3531de53c0a07fd883712d6a8629
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-6.16 v1 fail is not a result of the test
+          for R-6.16: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-6.18
     id: R-6.18
@@ -1538,12 +1720,19 @@ owed:
         by: runner
         at: 2026-09-25T12:15:43.328Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-6.18 v1 fail"
-      file_sha: 26bc7e05183ae73ea52d4fc0bfc71768a935ba35
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-6.18 v1 fail"
+          file_sha: 26bc7e05183ae73ea52d4fc0bfc71768a935ba35
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-6.18 v1 fail is not a result of the test
+          for R-6.18: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-6.20
     id: R-6.20
@@ -1590,12 +1779,19 @@ owed:
         by: runner
         at: 2026-09-25T12:15:43.328Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-6.20 v1 fail"
-      file_sha: ae95bbeec8fc2c066b19ade1425e52a54280b3f6
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-6.20 v1 fail"
+          file_sha: ae95bbeec8fc2c066b19ade1425e52a54280b3f6
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-6.20 v1 fail is not a result of the test
+          for R-6.20: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-6.24
     id: R-6.24
@@ -1665,12 +1861,19 @@ owed:
         by: runner
         at: 2026-09-25T12:15:43.328Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-6.25 v2 fail"
-      file_sha: 69f382b61b8033d4541fc64ce04d448320bf3e4e
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-6.25 v2 fail"
+          file_sha: 69f382b61b8033d4541fc64ce04d448320bf3e4e
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-6.25 v2 fail is not a result of the test
+          for R-6.25: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-4.1
     id: R-4.1
@@ -1728,12 +1931,19 @@ owed:
         by: runner
         at: 2026-09-25T11:12:24.603Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-4.1 v1 fail"
-      file_sha: 3890cff45760ce7fd62352ec8823b0f71c9bf730
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-4.1 v1 fail"
+          file_sha: 3890cff45760ce7fd62352ec8823b0f71c9bf730
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-4.1 v1 fail is not a result of the test
+          for R-4.1: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-4.2
     id: R-4.2
@@ -1790,12 +2000,19 @@ owed:
         by: runner
         at: 2026-09-25T11:12:24.603Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-4.2 v1 fail"
-      file_sha: b880ed664ada2d14833e6c193567686a1e1247bb
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-4.2 v1 fail"
+          file_sha: b880ed664ada2d14833e6c193567686a1e1247bb
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-4.2 v1 fail is not a result of the test
+          for R-4.2: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-4.5
     id: R-4.5
@@ -1876,12 +2093,19 @@ owed:
         by: runner
         at: 2026-09-25T11:12:24.603Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-4.5 v1 fail"
-      file_sha: bbaff548892c8352cadda76e8c84e42d6504aa8b
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-4.5 v1 fail"
+          file_sha: bbaff548892c8352cadda76e8c84e42d6504aa8b
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-4.5 v1 fail is not a result of the test
+          for R-4.5: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-4.13
     id: R-4.13
@@ -1970,12 +2194,19 @@ owed:
         by: runner
         at: 2026-09-25T11:12:24.603Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-4.20 v1 fail"
-      file_sha: f61428ec0f59343cf9775f1546d92faa2e542561
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-4.20 v1 fail"
+          file_sha: f61428ec0f59343cf9775f1546d92faa2e542561
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-4.20 v1 fail is not a result of the test
+          for R-4.20: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-4.21
     id: R-4.21
@@ -2035,12 +2266,19 @@ owed:
         by: runner
         at: 2026-09-25T11:12:24.603Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-4.21 v1 fail"
-      file_sha: 77dd467a303b8ed79d4d1f3c07d2e5a9bb6c4d32
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-4.21 v1 fail"
+          file_sha: 77dd467a303b8ed79d4d1f3c07d2e5a9bb6c4d32
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-4.21 v1 fail is not a result of the test
+          for R-4.21: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-7.11
     id: R-7.11
@@ -2151,12 +2389,19 @@ owed:
         by: runner
         at: 2026-09-25T13:00:12.833Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-7.16 v1 fail"
-      file_sha: c9d8a5f9269cad2d325fdabdb67ae4cacbd5dda3
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-7.16 v1 fail"
+          file_sha: c9d8a5f9269cad2d325fdabdb67ae4cacbd5dda3
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-7.16 v1 fail is not a result of the test
+          for R-7.16: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-7.17
     id: R-7.17
@@ -2452,12 +2697,19 @@ owed:
         by: runner
         at: 2026-09-25T11:21:02.832Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-5.11 v1 fail"
-      file_sha: 5fa36f640e420c10d63815d48e338ce8b26cf258
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-5.11 v1 fail"
+          file_sha: 5fa36f640e420c10d63815d48e338ce8b26cf258
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-5.11 v1 fail is not a result of the test
+          for R-5.11: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-5.21
     id: R-5.21
@@ -2515,12 +2767,19 @@ owed:
         by: runner
         at: 2026-09-25T11:21:02.832Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-5.21 v1 fail"
-      file_sha: ee390d7e9a68c8e676b7fc2af096482e45ce88d0
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-5.21 v1 fail"
+          file_sha: ee390d7e9a68c8e676b7fc2af096482e45ce88d0
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-5.21 v1 fail is not a result of the test
+          for R-5.21: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-5.23
     id: R-5.23
@@ -2574,12 +2833,19 @@ owed:
         by: runner
         at: 2026-09-25T11:21:02.832Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-5.23 v1 fail"
-      file_sha: 2c825263f27844de6a8afaf4b8e6981dc34cd622
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-5.23 v1 fail"
+          file_sha: 2c825263f27844de6a8afaf4b8e6981dc34cd622
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-5.23 v1 fail is not a result of the test
+          for R-5.23: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-5.26
     id: R-5.26
@@ -2630,12 +2896,19 @@ owed:
         by: runner
         at: 2026-09-25T11:21:02.832Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-5.26 v1 fail"
-      file_sha: 5783cff0c95b074e2f864aab33dfa9ac4e17ca6d
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-5.26 v1 fail"
+          file_sha: 5783cff0c95b074e2f864aab33dfa9ac4e17ca6d
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-5.26 v1 fail is not a result of the test
+          for R-5.26: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-5.34
     id: R-5.34
@@ -2673,12 +2946,19 @@ owed:
         by: runner
         at: 2026-09-25T14:03:37.639Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-5.34 v2 fail"
-      file_sha: c195369b90bc8ccf7c8408b0a294205b8d1bcd5c
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-5.34 v2 fail"
+          file_sha: c195369b90bc8ccf7c8408b0a294205b8d1bcd5c
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-5.34 v2 fail is not a result of the test
+          for R-5.34: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-5.37
     id: R-5.37
@@ -2733,12 +3013,19 @@ owed:
         by: runner
         at: 2026-09-25T11:21:02.832Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-5.37 v1 fail"
-      file_sha: af446ae7f9f0d180d2644b15ee8c188723a3dcbc
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-5.37 v1 fail"
+          file_sha: af446ae7f9f0d180d2644b15ee8c188723a3dcbc
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-5.37 v1 fail is not a result of the test
+          for R-5.37: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-3.17
     id: R-3.17
@@ -2787,12 +3074,19 @@ owed:
         by: runner
         at: 2026-09-25T11:07:34.352Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-3.17 v1 fail"
-      file_sha: 50536cbda313ac1bc6a8c80ee86b4d727637535b
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-3.17 v1 fail"
+          file_sha: 50536cbda313ac1bc6a8c80ee86b4d727637535b
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-3.17 v1 fail is not a result of the test
+          for R-3.17: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-3.20
     id: R-3.20
@@ -2840,12 +3134,19 @@ owed:
         by: runner
         at: 2026-09-25T11:07:34.352Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-3.20 v1 fail"
-      file_sha: cb3af47223e5150a3c541a932721b0e5d3513648
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-3.20 v1 fail"
+          file_sha: cb3af47223e5150a3c541a932721b0e5d3513648
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-3.20 v1 fail is not a result of the test
+          for R-3.20: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-3.15
     id: R-3.15
@@ -2911,12 +3212,19 @@ owed:
         by: runner
         at: 2026-09-25T11:07:34.352Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-3.15 v1 fail"
-      file_sha: b7ac74e85592fe2486900e9149a86b1843be7c38
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-3.15 v1 fail"
+          file_sha: b7ac74e85592fe2486900e9149a86b1843be7c38
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-3.15 v1 fail is not a result of the test
+          for R-3.15: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-3.35
     id: R-3.35
@@ -2970,12 +3278,19 @@ owed:
         by: runner
         at: 2026-09-25T11:07:34.352Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-3.35 v1 fail"
-      file_sha: d9b681418cfff400563097378376682b4ed42b6a
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
+    reopened:
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-3.35 v1 fail"
+          file_sha: d9b681418cfff400563097378376682b4ed42b6a
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-3.35 v1 fail is not a result of the test
+          for R-3.35: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
   - kind: missing-test
     item: R-7.12
     id: R-7.12
@@ -3219,10 +3534,16 @@ owed:
           ruled test-wrong"
         by: runner
         at: 2026-09-25T12:05:13.830Z
+      - closed:
+          outcome: met
+          why: "tests/results/old/latest.json: R-5.9 v1 fail"
+          file_sha: a077dfe2f532a06d5b82d6f4eaa936c1ced60113
+          by: runner
+          at: 2026-09-25T17:33:29.585Z
+        why: "tests/results/old/latest.json: R-5.9 v1 fail is not a result of the test
+          for R-5.9: when the item was closed at e1b9bc5f, its test never
+          reached the target, which could not be reset to its seed or could not
+          be reached"
+        by: runner
+        at: 2026-09-25T18:21:03.309Z
     target: old
-    closed:
-      outcome: met
-      why: "tests/results/old/latest.json: R-5.9 v1 fail"
-      file_sha: a077dfe2f532a06d5b82d6f4eaa936c1ced60113
-      by: runner
-      at: 2026-09-25T17:33:29.585Z
