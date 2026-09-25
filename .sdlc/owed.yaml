@@ -2098,7 +2098,7 @@ owed:
     id: R-7.28
     version: 2
     domain: content
-    stage: derive-tests
+    stage: ratify
     why: The given is two administrators who both opened the same page before either
       saved. The target carries one administrator sign-in and no second one, and
       the surface drives a single session, so two people cannot hold the page
@@ -2119,6 +2119,19 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-25T13:33:56.853Z
+      - from: derive-tests
+        to: ratify
+        why: a statement of the clause in terms something observes, or a ruling that
+          withdraws it as a property of the service's storage accepted without a
+          test; the interleaving happens inside one server request that nothing
+          on the surface can open, hold or force
+        by: agent:reviewer
+        proposal: derive-tests-content-stale-6
+        gate: G3
+        at: 2026-09-25T14:06:17.095Z
+    clause: only two publishes interleaving inside a single read-then-write window
+      collide on the version key, and there the second is refused with a service
+      error rather than silently winning
   - kind: missing-test
     item: R-7.29
     id: R-7.29
