@@ -1445,6 +1445,11 @@ pages:
       updated_date: { test_id: content-updated-date }
       published_by: { test_id: content-published-by }
       updated_by: { test_id: content-updated-by }
+      # Where each name links: the profile of the person named, the user-profile page's
+      # route (/users/:userId) with that person's identifier. A page no person published
+      # or updated shows a placeholder name with no link, and these come back empty.
+      published_by_link: { test_id: content-published-by }
+      updated_by_link: { test_id: content-updated-by }
       fixed_page_warning: { test_id: content-fixed-page-warning }
       slug_locked_for_fixed_page: { test_id: content-slug-field }
       delete_withheld_for_fixed_page: { test_id: content-delete-button }

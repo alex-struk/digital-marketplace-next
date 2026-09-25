@@ -965,10 +965,10 @@ owed:
     by: runner
     at: 2026-09-25T07:55:52.736Z
     kept:
-      by: contract-v6
+      by: contract-v7
       gate: G1
       approved_by: agent:product-owner
-      at: 2026-09-25T11:33:11.781Z
+      at: 2026-09-25T12:41:44.863Z
   - kind: missing-test
     item: R-6.2
     id: R-6.2
@@ -1437,10 +1437,10 @@ owed:
     by: runner
     at: 2026-09-25T07:55:52.736Z
     kept:
-      by: contract-v6
+      by: contract-v7
       gate: G1
       approved_by: agent:product-owner
-      at: 2026-09-25T11:33:11.781Z
+      at: 2026-09-25T12:41:44.863Z
   - kind: missing-test
     item: R-6.25
     id: R-6.25
@@ -2067,10 +2067,10 @@ owed:
     by: runner
     at: 2026-09-25T07:55:52.736Z
     kept:
-      by: contract-v6
+      by: contract-v7
       gate: G1
       approved_by: agent:product-owner
-      at: 2026-09-25T11:33:11.781Z
+      at: 2026-09-25T12:41:44.863Z
   - kind: missing-test
     item: R-7.29
     id: R-7.29
@@ -2086,10 +2086,10 @@ owed:
     by: runner
     at: 2026-09-25T07:55:52.736Z
     kept:
-      by: contract-v6
+      by: contract-v7
       gate: G1
       approved_by: agent:product-owner
-      at: 2026-09-25T11:33:11.781Z
+      at: 2026-09-25T12:41:44.863Z
   - kind: missing-test
     item: R-5.11
     id: R-5.11
@@ -2328,10 +2328,10 @@ owed:
     by: runner
     at: 2026-09-25T07:55:52.736Z
     kept:
-      by: contract-v6
+      by: contract-v7
       gate: G1
       approved_by: agent:product-owner
-      at: 2026-09-25T11:33:11.781Z
+      at: 2026-09-25T12:41:44.863Z
   - kind: missing-test
     item: R-5.37
     id: R-5.37
