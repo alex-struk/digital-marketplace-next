@@ -7,6 +7,12 @@ redo:
       vendor polled is active at the moment of the broadcast, keep the vendor
       holding no email address among the recipients, and report every
       addressable vendor not reached rather than stopping at the first
+    closed:
+      outcome: withdrawn
+      why: R-6.26 is superseded by R-6.28, which carries what it asked; no test is
+        derived for it
+      by: runner
+      at: 2026-09-25T12:15:43.299Z
   - id: R-3.12
     version: 1
     why: the test demands a message, but the criterion says only that changing one's
