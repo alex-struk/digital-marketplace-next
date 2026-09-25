@@ -50,6 +50,7 @@ Profile: rebuild
 - [build-slice-1-2](proposals/build-slice-1-2.md)
 - [build-slice-1-3](proposals/build-slice-1-3.md)
 - [build-slice-1-4](proposals/build-slice-1-4.md)
+- [build-slice-1-5](proposals/build-slice-1-5.md)
 - [calibrate-old-2](proposals/calibrate-old-2.md)
 - [calibrate-old-3](proposals/calibrate-old-3.md)
 - [calibrate-old-4](proposals/calibrate-old-4.md)
@@ -188,7 +189,7 @@ Profile: rebuild
 - Total cost: $743.157977
 - Agent-held rulings: 139
 - Runner rulings (automatic, no seat held): 1
-- Human rulings: 7
+- Human rulings: 8
 - Rulings whose seat this page does not recognise: 0
 - Open escalations: 0
 - Stalled proposals: 0

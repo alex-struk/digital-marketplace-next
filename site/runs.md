@@ -1,5 +1,10 @@
 # Run log
 
+# Run record 2026-09-25
+
+- 19:13:59 verify slice 1 verified: every claimed criterion passes against the application in build-slice-1-6. Ready for G3.
+- 19:14:00 run verify: regenerated 167 files in .sdlc, site
+
 # Run record 2026-09-22
 
 - 20:25:41 rule plan-3 approve at G2 by agent:architect (agent)
