@@ -73,6 +73,12 @@
 - 06:33:01 run contract: ok, cost 3.1582132000000005, turns 72
 - 06:33:01 propose contract-v8 at G1
 - 06:33:56 rule contract-v8 approve at G1 by agent:product-owner (agent)
+- 06:49:38 run bind-adapter: pre-checks failed
+- 06:50:26 oracle down old
+- 06:54:40 oracle up old: http://localhost:4300 (local port 4300)
+- 06:59:13 run bind-adapter: ok after a fix turn, cost 1.6185694000000002, turns 51
+- 06:59:13 propose bind-adapter-old-18 at G3
+- 07:00:22 rule bind-adapter-old-18 approve at G3 by agent:reviewer (agent)
 
 # Run record 2026-09-22
 
