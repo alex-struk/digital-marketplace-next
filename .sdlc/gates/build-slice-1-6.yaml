@@ -1,0 +1,13 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does slice 1 (a visitor can read the service's own pages) do what R-7.1, R-7.2, R-7.3, R-7.4, R-7.18 and R-7.19 say, and no more? Ruling: approve. Verify is a current pass for build-slice-1-6 against tree 17112d4, with all six claimed criteria exercised and met. The code matches them. readPageLookup in app/backend/src/rules/content.ts reads a value as an identifier first and as an address second (R-7.4), and a value that is neither is refused as malformed with a 400 rather than answered with a 404 (R-7.3). An address no page holds answers not found (R-7.2), and the single-page app shows its not-found screen for both. The footer carries the five page links (R-7.19) and the learn-more screens link the service level agreement (R-7.18). Nothing belonging to another slice is built: the navigation menu (R-7.6) and the managing screen are explicitly deferred. Unit tests cover the lookup rules, the service against a stand-in store, the contract boundary, the refusal shape, and an end-to-end run over the real migrations in PGlite. No credential is in the tree: the sandbox password is read from the environment and substituted at start-up. Nothing under .github, spec, tests/acceptance or .sdlc/config.yaml changed. Both owed instructions are settled: the application now answers on 4300 everywhere the 1-5 ruling named, and the account states plainly that R-7.12 and R-7.17 are not asserted while keeping the two test files the 1-4 ruling asked to keep. Not blocking: the contract's default server address of 3000 is the contract stage's own file and is not read by the application. The ruling would change on a stale or failing verify result or on a change to a protected path.
+conditions:
+  - "condition-met build-slice-1-5#1: app/compose/compose.yaml publishes the frontend as 4300:3000; redirectUris, webOrigins and post.logout.redirect.uris in app/compose/idp/realm-template.json are http://localhost:4300; app/README.md and app/compose/idp/README.md state 4300; app/backend/tests/sandbox-composition.test.ts asserts the frontend is the only service on host port 4300. The dev server in app/frontend/vite.config.ts also defaults to 4300, so the sign-in redirects agree on a builder's machine."
+  - "condition-met build-slice-1-4#1: the build-slice-1-6 proposal account says what the hand-driven session showed and states that neither R-7.12 nor R-7.17 is asserted; app/frontend/tests/content-view.test.tsx and app/frontend/tests/formatted-text.test.tsx remain in the tree unchanged."
+cost: 0.8493436000000001
+turns: 7
+session: "cdecd100-9536-4438-96b9-26c0c5723e95"
+at: 2026-09-25T02:15:02.441Z
