@@ -1666,6 +1666,32 @@ pages:
       message_visible_recipients: { test_id: null }
       message_count: { test_id: null }
 
+  # A mail server that will not take delivery, for the criteria whose given is a message
+  # that cannot be delivered. Served by the catcher at ${SDLC_MAIL_API}
+  # (spec/contract/observables.yaml, email.delivery_fault), not by the target: the catcher
+  # answers every attempt to send with a refusal while the fault is in force, which is
+  # what the service meets when its mail server cannot deliver. The target itself is not
+  # reconfigured, so its own mail settings, and everything it does besides sending, are
+  # exactly as in every other test.
+  #
+  # The fault outlives the test that set it unless it is lifted, and the harness does not
+  # lift it when it puts the data back to the seed. A test that uses refuse_delivery must
+  # call restore_delivery when it ends, pass or fail.
+  - id: mail-delivery-fault
+    domain: notifications
+    origin: mail-catcher
+    route: /api/v1/chaos
+    title: "A mail server that refuses delivery"
+    actions:
+      # Every message the service tries to send from now on is refused by the mail server
+      # at the start of the attempt, so nothing reaches the catcher.
+      refuse_delivery: { test_id: null }
+      # Delivery is accepted again. Messages refused earlier stay refused: the catcher keeps
+      # nothing of them, so one that turns up afterwards was sent again by the service.
+      restore_delivery: { test_id: null }
+    observations:
+      delivery_refused: { test_id: null }
+
   # Requests the screens never make. The entries below are addresses of the service's own
   # interface (spec/contract/openapi.yaml), listed because criteria describe the service's
   # answer to a request that no screen sends — a membership type the team page never
@@ -1767,16 +1793,26 @@ pages:
       refused_at_submission: { test_id: null }
 
   # An opportunity's evaluation panel submitted as a request, so that it can hold a
-  # member who is neither an evaluator nor the chair, which none of the panel screen's
-  # controls can compose. :program is sprint-with-us or team-with-us.
+  # panel none of the panel screen's controls can compose: a member who is neither an
+  # evaluator nor the chair, or no chair at all. :program is sprint-with-us or
+  # team-with-us, and :opportunityId an opportunity whose panel may still be changed — one
+  # the test has just created (opportunity_identifier on the page it lands on) or a seeded
+  # one still before its deadline.
   - id: evaluation-panel-request
     domain: evaluation
     route: /api/opportunities/:program/:opportunityId
     title: "An evaluation panel, by request"
     actions:
       submit_panel_with_member_holding_no_role: { test_id: null }
+      # Input: two public sector members (seed users handles), both evaluators and
+      # neither marked as chair. The browser form will not send this panel; the request
+      # carries it to the service as given.
+      submit_panel_with_no_chair: { test_id: null }
     observations:
       member_without_role_error: { test_id: null }
+      # The service's refusal of a panel that names no chair, read from its answer. Absent
+      # when the service accepts the panel, which panel_as_stored then shows.
+      missing_chair_error: { test_id: null }
       panel_as_stored: { test_id: null }
 
   # A stored file named as an attachment by its identifier, on something the signed-in

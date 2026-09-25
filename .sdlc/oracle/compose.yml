@@ -128,6 +128,10 @@ services:
       MP_SMTP_AUTH_ACCEPT_ANY: "1"
       MP_SMTP_AUTH_ALLOW_INSECURE: "1"
       MP_MAX_MESSAGES: "5000"
+      # Lets a test make the SMTP server refuse delivery through the catcher's own API
+      # (spec/contract/observables.yaml, email.delivery_fault). Nothing is refused until a
+      # test asks for it, so every other test sees an ordinary mail server.
+      MP_ENABLE_CHAOS: "true"
 
   # A one-off that runs the application's own migrations. It is behind a profile, so it
   # takes no part in an ordinary "up"; run it explicitly, once, before the seed.
