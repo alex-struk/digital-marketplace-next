@@ -4,6 +4,7 @@
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2026-09-25T12:44:31.641Z | bind-adapter-old-17 | G3 | approve | agent:reviewer | persona agent | $0.3468004 |  |
 | 2026-09-25T12:41:44.746Z | contract-v7 | G1 | approve | agent:product-owner | persona agent | $0.3896208 | sample |
+| 2026-09-25T12:39:27.216Z | derive-tests-content-stale-5 | G3 | return | agent:reviewer | persona agent | $0.6954425999999999 |  |
 | 2026-09-25T12:15:43.299Z | derive-tests-notifications-stale-5 | G3 | approve | agent:reviewer | persona agent | $0.6486104 |  |
 | 2026-09-25T11:52:38.573Z | derive-tests-evaluation-10 | G3 | approve | agent:reviewer | persona agent | $0.34903 |  |
 | 2026-09-25T11:51:22.408Z | derive-tests-evaluation-stale-4 | G3 | return | agent:reviewer | persona agent | $0.35251 |  |
