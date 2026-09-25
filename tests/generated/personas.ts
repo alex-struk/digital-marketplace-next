@@ -338,6 +338,71 @@ export const persona = {
         "username": "gov-second"
       }
     }
+  },
+  "firstTimePublicSectorEmployee": {
+    "id": "first-time-public-sector-employee",
+    "can": [
+      "sign in for the first time with a government identity",
+      "have an account created for them",
+      "receive a welcome message"
+    ],
+    "signIn": {
+      "session-route": {
+        "unavailable": "The oracle has no identity provider. Its three sign-in routes look up an account that already exists by a fixed identity-provider id and refuse when there is none, so a first sign-in — the one that creates an account — cannot happen there."
+      },
+      "sandbox-idp": {
+        "username": "first-time-gov"
+      }
+    }
+  },
+  "firstTimeVendor": {
+    "id": "first-time-vendor",
+    "can": [
+      "sign in for the first time with a code-hosting identity",
+      "have an account created for them",
+      "complete their profile",
+      "receive a welcome message"
+    ],
+    "signIn": {
+      "session-route": {
+        "unavailable": "The oracle has no identity provider. Its three sign-in routes look up an account that already exists by a fixed identity-provider id and refuse when there is none, so a first sign-in — the one that creates an account — cannot happen there."
+      },
+      "sandbox-idp": {
+        "username": "first-time-vendor"
+      }
+    }
+  },
+  "firstTimeVendorWithoutEmail": {
+    "id": "first-time-vendor-without-email",
+    "can": [
+      "sign in for the first time without sharing an email address",
+      "have an account created with no email address"
+    ],
+    "signIn": {
+      "session-route": {
+        "unavailable": "The oracle has no identity provider. Its three sign-in routes look up an account that already exists by a fixed identity-provider id and refuse when there is none, so a first sign-in — the one that creates an account — cannot happen there."
+      },
+      "sandbox-idp": {
+        "username": "first-time-vendor-no-email"
+      }
+    }
+  },
+  "selfReactivatingVendor": {
+    "id": "self-reactivating-vendor",
+    "can": [
+      "deactivate their own account",
+      "sign in again through the identity provider",
+      "have their account reactivated by doing so",
+      "receive the message saying they reactivated it"
+    ],
+    "signIn": {
+      "session-route": {
+        "unavailable": "/auth/createsessionvendor/13 reaches this account, but it creates a session without the identity provider and without looking at the account's status, so it is not the sign-in that reactivates a self-deactivated account. The oracle has no identity provider to sign in through, so the ordinary sign-in this persona exists for cannot happen there."
+      },
+      "sandbox-idp": {
+        "username": "test-vendor-13"
+      }
+    }
   }
 } as const;
 
