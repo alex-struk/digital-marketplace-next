@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-15 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">152</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">152</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">137</span></a></li><li><a href="../runs.html">Run log <span class="count">14</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-15</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-25 09:46</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I changed one method, <code>fileAttachByIdentifier.attachStoredFile</code> in <code>tests/adapters/old/index.ts</code>.</p>
+<p>I changed one method, <code>fileAttachByIdentifier.attachStoredFile</code> in <code>tests/adapters/old/index.ts</code>. I could not verify the change: the sandbox needed approval to run the typecheck, a script comparing <code>bindings.yaml</code> against the contract, and a direct request to the target.</p>
+<p><strong>The fix.</strong> The ruling returned the adapter because, when the signed-in person could not read the record, the attach binding sent a read of the record instead of the attach. <code>attachment_refused</code> then reported the refusal of a read, not of an attach. A service that refused the read but accepted the write would have passed, which is the gap the file criteria are meant to close.</p>
+<p>The binding now always sends the attach, a PUT to the opened record:</p>
+<ul><li><strong>Readable record:</strong> the full record goes back with the new file identifier added to its attachments, as before.</li><li><strong>Unreadable record:</strong> only the attachment goes, as <code>{tag: &quot;edit&quot;, value: {attachments: [&lt;fileId&gt;]}}</code>, the body the ruling named.</li></ul>
+<p>So <code>attachment_accepted</code> and <code>attachment_refused</code> now read the service&#39;s answer to the attach itself, whoever is signed in. <code>attached_file_identifiers</code> still reads the record afterwards and is unchanged. Nothing else in the adapter changed; the other bindings and the six calibration fixes the ruling accepted stay as they were.</p>
+<p><strong>The 66 listed members.</strong> These were already in <code>bindings.yaml</code> as <code>bound</code> from the earlier pass, and the ruling accepted them, so I did not walk the target again. I spot-checked the file for the listed pages and names: all were present. The full comparison against the contract did not run.</p>
+<p><strong>Unverified.</strong> None of these checks ran:</p>
+<ul><li><strong>Typecheck:</strong> the runner&#39;s own typecheck should confirm the edit compiles; it reuses helpers already in the file (<code>send</code>, <code>peek</code>, <code>editValue</code>, <code>fileIdFor</code>).</li><li><strong>Bindings comparison:</strong> the script checking that every contract name appears in <code>bindings.yaml</code> exactly once.</li><li><strong>Probe of the target:</strong> an anonymous PUT with the reduced body, to see what the target answers to it.</li></ul>
+<p>One thing to watch: the service may reject the reduced body as malformed before it checks permission. <code>attachment_refused</code> would then report a refusal that is about the body&#39;s shape rather than access. What it reports is still the service&#39;s own answer to the attach, which is what the ruling asked for.</p>
+<p><strong>Pages that did not resolve.</strong> I found none in this revision. The earlier pass reported none either, and I opened no pages this time.</p>
+<p><strong>Outside this stage.</strong> As the ruling noted, <code>tests/generated/surface.d.ts</code> does not match the contract, so the newer pages still typecheck loosely. Regenerating it is not this stage&#39;s work, and I left it untouched.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-25 09:47.</p>
+<div class="body"><p>Question: does this adapter bind every surface action and observation on old, and nothing else? Approved. The last ruling returned the adapter for one reason: when the record could not be read, <code>fileAttachByIdentifier.attachStoredFile</code> sent a read of the record in place of the attach. So <code>attachment_refused</code> would have reported the refusal of a read, and a service that refused reads but accepted writes would have passed. This revision always sends the PUT to the opened record. A readable record gets the full edit body with the file added. An unreadable one gets <code>{tag: &quot;edit&quot;, value: {attachments: [&lt;fileId&gt;]}}</code>, the smallest body the ruling asked for. The earlier <code>peek</code> is a side read that does not change <code>lastAnswer</code>, so <code>attachment_accepted</code> and <code>attachment_refused</code> now read the service&#39;s answer to the attach itself. The typecheck the runner ran on this revision passed with no diagnostics under <code>adapters/old/</code>, which covers the check the author could not run. The adapter is still only an adapter. The new bindings navigate pages, make requests from the signed-in session, and read or reshape what comes back. The places that filter lines (the award banner, the refusal screen, the refusal shape) choose which text to report and do not decide whether a test passes. The diff touches no protected path and nothing under <code>tests/acceptance</code>. The other bindings and calibration fixes were accepted last round and are unchanged. The tier is STANDARD and no risk is marked unaccepted, so nothing needs escalating. The author notes one risk: the target might reject the reduced body as malformed before it checks permission. That is still the service&#39;s own answer to the attach, and it is what the condition asked for. The failing generated check (<code>surface.d.ts</code>, <code>personas.ts</code> and <code>seed.ts</code> do not match the contract) is not work this stage can deliver, and it is why the adapter uses the <code>PageOf</code>/<code>Open</code> types. What would change this ruling: a binding run against the target shows the attach binding reaching something other than the attach, or a regenerated surface shows a listed member missing from <code>bindings.yaml</code> or listed twice.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met bind-adapter-old-14#1: tests/adapters/old/index.ts fileAttachByIdentifier.attachStoredFile now always sends PUT {tag: &quot;edit&quot;, ...} to openedRecord. It sends the full edit value when the record is readable and {attachments: [fileIdFor(named)]} when it is not, so attachment_accepted and attachment_refused read the service&#39;s answer to the attach itself. The runner&#39;s typecheck of revision 7f565820 passed.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
