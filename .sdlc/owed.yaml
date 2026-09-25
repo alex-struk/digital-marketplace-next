@@ -883,7 +883,7 @@ owed:
     id: R-8.22
     version: 1
     domain: files
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the attempt the criterion refuses — somebody who may not read a
       stored file naming it as an attachment on an opportunity or a proposal —
       cannot be made. A file's identifier is now reachable
@@ -930,6 +930,12 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T14:11:29.343Z
+    target: old
   - kind: missing-test
     item: R-8.26
     id: R-8.26

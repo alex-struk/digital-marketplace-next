@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-files-stale-2 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">177</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">177</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">155</span></a></li><li><a href="../runs.html">Run log <span class="count">14</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-files-stale-2</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-25 14:10</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the files criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> R-8.22 (v1), the one criterion I was given, now has a test at <code>tests/acceptance/files/R-8.22.spec.ts</code>.</p>
+<p>R-8.22 (v1), the one criterion I was given, now has a test at <code>tests/acceptance/files/R-8.22.spec.ts</code>. I deleted its entry from <code>tests/acceptance/not-testable.yaml</code>, so it is no longer recorded as untestable. None of the tests have been run, and I could not type-check the file because the workspace would not run the compiler without approval.</p>
+<p><strong>What changed in the contract.</strong> The entry was blocked because every way to attach a file uploaded new bytes. Nothing could name a file that was already stored. The contract has since added two things. The first is a page called <code>file-attach-by-identifier</code>, which works for both opportunities and proposals. It has one action, <code>attach_stored_file</code>, and three observations: <code>attachment_accepted</code>, <code>attachment_refused</code> and <code>attached_file_identifiers</code>. The second is a seeded file, <code>seed.stored_files.privateOfFileUploader</code>, which has no read-access entries, so only the person who uploaded it can read it.</p>
+<p><strong>What the test checks.</strong> The criterion covers two kinds of record and has two outcomes, so the file holds four tests:</p>
+<ul><li><strong>Opportunity, refused:</strong> the public-sector staff persona saves their own draft Code With Us opportunity. They try to attach the private seeded file by its identifier. The test expects <code>attachment_refused</code> to be set, <code>attachment_accepted</code> not to be set, and the file&#39;s identifier to be missing from the record&#39;s attachments.</li><li><strong>Opportunity, allowed:</strong> the same person on the same kind of draft attaches a file they uploaded themselves. The test expects it to be accepted and the identifier to appear in the attachments.</li><li><strong>Proposal, refused and allowed:</strong> the same pair, with the vendor persona using their own draft individual proposal on <code>seed.opportunities.publishedCodeWithUs</code>.</li></ul>
+<p>The allowed tests are there to show that a refusal comes from the person not being allowed to read the file, not from attaching by identifier being refused in general.</p>
+<p><strong>Two assumptions to note:</strong></p>
+<ul><li><strong>The action&#39;s input:</strong> the contract says only that <code>attach_stored_file</code> takes &quot;the stored file&#39;s identifier&quot;. I passed it as <code>{ fileId }</code>. If the adapter expects a different shape, that is where a failure would come from.</li><li><strong>Program coverage:</strong> I used Code With Us only. The page accepts all three programs, and the criterion names none of them. I wrote no clause entry for Sprint With Us or Team With Us, because the criterion states no requirement per program.</li></ul>
+<p><strong>Missing from the surface:</strong> nothing for this criterion. I did not change any path outside <code>tests/acceptance</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-25 14:11.</p>
+<div class="body"><p>Do the tests for R-8.22 follow from the criterion and nothing else? Yes. R-8.22 says a file may be attached to an opportunity or proposal only by someone permitted to read it. The two refused tests have a person who may not read seed.stored_files.privateOfFileUploader (readable by its uploader alone, per the seed manifest) name it on their own draft opportunity or draft proposal. They assert only what the criterion implies: attachment_refused is set, attachment_accepted is not, and the id is absent from attached_file_identifiers. The paired allowed tests (same person and record kind, a file they uploaded and so may read) establish that the refusal comes from read permission rather than from attaching by identifier being refused in general. Every page, action and observation used is in the contract (file-attach-by-identifier with attach_stored_file and its three observations), and no selector, route, status code or storage detail appears. Deleting the not-testable entry is sound: the missing action and refusal observation it named now exist on the surface. The runner&#39;s typecheck reports no diagnostics under acceptance/files; its two failures are in adapters/new, which this proposal does not answer for. The { fileId } input shape and Code With Us-only coverage are acceptable: the first is the adapter&#39;s to bind, and the criterion names no program. The tests have not run yet; missing-test/R-8.22 closes itself when a result row records them. A verify result of unbound caused by the tests demanding something the criterion does not ask for would turn this into a test-overreaches return.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
