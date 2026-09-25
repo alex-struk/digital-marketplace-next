@@ -296,39 +296,6 @@ criteria:
       the service refuses to remove: content-edit withholds the removal and a
       request made another way is refused, so there is no path through the
       surface to the state the criterion starts from."
-  - id: R-5.9
-    version: 1
-    reason: "blocked: the criterion is about the service refusing a panel that
-      names no chair, and no action puts such a panel before the service. Every
-      action that saves a panel — save_evaluation_panel on evaluation-panel-swu
-      and evaluation-panel-twu, set_evaluation_panel and edit_evaluation_panel on
-      the opportunity screens — goes through the browser form, which the
-      criterion itself says already refuses a panel with no chair, so a refusal
-      read there is the form's and says nothing of the service; and removing
-      the chair from those screens leaves the removed person still named as
-      chair, so the panel put forward is not chairless at all. The one request
-      page for panels, evaluation-panel-request, offers only
-      submit_panel_with_member_holding_no_role. Unblocked by an action that
-      submits a panel of two public sector evaluators with nobody marked chair
-      straight to the service, and an observation of the service's refusal."
-    missing: "evaluation-panel-request.submit_panel_with_no_chair (two public
-      sector members, both evaluators, neither marked chair, sent to the service
-      without the browser form) and evaluation-panel-request.missing_chair_error
-      (the service's refusal naming the missing chair), read alongside the
-      existing panel_as_stored to show the panel was not stored"
-    owner: contract
-  - id: R-5.34
-    version: 2
-    reason: "blocked: the criterion needs four different people looking at one
-      opportunity — an evaluator, the chair, the owner and an unrelated public
-      sector employee — and the target mints sessions for two public sector
-      accounts. On the seeded opportunities one of them is the owner and an
-      evaluator at once and the other is the chair and an administrator at once,
-      so three of the four roles collapse into two people and the fourth cannot
-      be signed in as at all. Needs a sign-in for public-sector-staff-other and
-      a panel whose chair is neither the owner nor an administrator. The one
-      part that is reachable, the panel being shown only to the owner and an
-      administrator, is exercised by R-5.18."
   - id: R-7.12
     version: 1
     reason: "blocked: the given is a fresh installation carrying the pages the
@@ -389,3 +356,15 @@ criteria:
       property of the migration rather than of anything the running service
       answers with. No addition to the surface would help; this is a claim a
       human accepts about the rebuild rather than one a test can settle."
+  - id: R-5.34
+    version: 2
+    reason: "blocked: the criterion needs four different people looking at one
+      opportunity — an evaluator, the chair, the owner and an unrelated public
+      sector employee — and the target mints sessions for two public sector
+      accounts. On the seeded opportunities one of them is the owner and an
+      evaluator at once and the other is the chair and an administrator at once,
+      so three of the four roles collapse into two people and the fourth cannot
+      be signed in as at all. Needs a sign-in for public-sector-staff-other and
+      a panel whose chair is neither the owner nor an administrator. The one
+      part that is reachable, the panel being shown only to the owner and an
+      administrator, is exercised by R-5.18."
