@@ -26,3 +26,26 @@ The allowed tests are there to show that a refusal comes from the person not bei
 - **Program coverage:** I used Code With Us only. The page accepts all three programs, and the criterion names none of them. I wrote no clause entry for Sprint With Us or Team With Us, because the criterion states no requirement per program.
 
 **Missing from the surface:** nothing for this criterion. I did not change any path outside `tests/acceptance`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Do the tests for R-8.22 follow from the criterion and nothing else? Yes. R-8.22 says a file may be attached to an opportunity or proposal only by someone permitted to read it. The two refused tests have a person who may not read seed.stored_files.privateOfFileUploader (readable by its uploader alone, per the seed manifest) name it on their own draft opportunity or draft proposal. They assert only what the criterion implies: attachment_refused is set, attachment_accepted is not, and the id is absent from attached_file_identifiers. The paired allowed tests (same person and record kind, a file they uploaded and so may read) establish that the refusal comes from read permission rather than from attaching by identifier being refused in general. Every page, action and observation used is in the contract (file-attach-by-identifier with attach_stored_file and its three observations), and no selector, route, status code or storage detail appears. Deleting the not-testable entry is sound: the missing action and refusal observation it named now exist on the surface. The runner's typecheck reports no diagnostics under acceptance/files; its two failures are in adapters/new, which this proposal does not answer for. The { fileId } input shape and Code With Us-only coverage are acceptable: the first is the adapter's to bind, and the criterion names no program. The tests have not run yet; missing-test/R-8.22 closes itself when a result row records them. A verify result of unbound caused by the tests demanding something the criterion does not ask for would turn this into a test-overreaches return.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `c9e930ec5e26628cf50be7cb5a32a54b70e30419`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/files/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
