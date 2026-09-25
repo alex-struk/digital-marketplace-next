@@ -192,3 +192,16 @@ redo:
       why: derived again by a derive-tests run on proposals
       by: runner:derive-tests
       at: 2026-09-25T10:58:09.922Z
+  - id: R-7.17
+    version: 1
+    why: both tests require the tagged spans in the seeded body (<strong>these words
+      bold</strong>, <em>these words emphasised</em>) to appear verbatim as
+      literal text in the rendered body, on the page's own address and in the
+      scope and terms embeddings; the criterion requires only that embedded
+      markup is never executed and that the body renders identically on its own
+      address and wherever it is embedded, so a rendering that removes the tags
+      without executing them satisfies it and must not fail the test. Keep the
+      own-address versus embedded equality; where no observation can distinguish
+      executed from removed markup, record that clause as not-testable with that
+      reason instead of asserting a literal rendering.
+    verb: test-overreaches
