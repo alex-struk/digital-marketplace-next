@@ -4,7 +4,7 @@ owed:
     id: R-2.15
     version: 2
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: "blocked: the Code With Us half needs a published Code With Us opportunity
       whose proposal deadline has passed, and there is none. The one seeded Code
       With Us opportunity is open until 2030, and the create form refuses a
@@ -49,12 +49,19 @@ owed:
           closed opportunity."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: seed.opportunities.cwuLapsedWithDraft with
+          proposals.cwuLapsedWithDraftDraft
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-2.26
     id: R-2.26
     version: 1
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: "blocked: the given is a Code With Us proposal under review, and a proposal
       reaches review only when its opportunity closes. The closure itself is now
       reachable — run_pending_transitions on scheduled-transition-trigger runs
@@ -90,12 +97,18 @@ owed:
           submitted proposal."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: seed.opportunities.cwuLapsedForScoring
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-2.27
     id: R-2.27
     version: 1
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: "blocked: the when is the last proposal still in contention being scored,
       which means carrying proposals all the way to evaluated. On the two seeded
       closed opportunities that is a single path — score every proponent's
@@ -130,12 +143,18 @@ owed:
           opportunities already standing at the later evaluation stages."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: seed.opportunities.cwuLapsedWithThreeProposals
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-2.29
     id: R-2.29
     version: 1
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: "blocked: two things are missing. The ranking and the cut need the panel's
       agreed scores finalised, which consumes the one seeded closed opportunity
       of that program (see R-2.27). And the criterion describes six proponents
@@ -168,12 +187,18 @@ owed:
           opportunity of its own carrying six proponents."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: seed.opportunities.swuConsensusSixProponents and twuConsensusFiveProponents
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-2.30
     id: R-2.30
     version: 1
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: "blocked: the given is two proposals still in contention with a team
       scenario score being entered against one of them, which is the last stage
       of the evaluation. Reaching it means walking the whole chain on the one
@@ -206,12 +231,18 @@ owed:
           code challenge stage with its question scores already recorded."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: seed.opportunities.swuTeamScenarioLastToScoreA
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-2.31
     id: R-2.31
     version: 1
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: "blocked: the given is a proposal carrying a score for every stage, which
       is the end of the chain that consumes the one seeded closed opportunity of
       its program (see R-2.27). Until then total_score and rank have nothing to
@@ -238,12 +269,18 @@ owed:
           seeded with every stage scored but the last."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: seed.opportunities.swuTeamScenarioLastToScoreB
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-2.32
     id: R-2.32
     version: 1
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: "blocked: the given is a vendor's proposal that has been scored, and the
       then needs it to become awarded or passed over. Both lie at the end of the
       evaluation chain, which consumes the one seeded closed opportunity of its
@@ -274,12 +311,18 @@ owed:
           carrying scored proposals."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: seed.opportunities.swuProcessingA
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-2.33
     id: R-2.33
     version: 1
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: "blocked: only a fully evaluated proposal, or one previously passed over,
       may be awarded, and reaching evaluated consumes the one seeded closed
       opportunity of its program (see R-2.27). award_proposal is offered on all
@@ -310,6 +353,12 @@ owed:
           which is the given the criterion states."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: seed.opportunities.cwuLapsedForAward (two submitted, one withdrawn)
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-1.25
     id: R-1.25
@@ -786,7 +835,7 @@ owed:
     id: R-8.22
     version: 1
     domain: files
-    stage: contract
+    stage: derive-tests
     why: "blocked: the attempt the criterion refuses — somebody who may not read a
       stored file naming it as an attachment on an opportunity or a proposal —
       cannot be made. A file's identifier is now reachable
@@ -826,6 +875,13 @@ owed:
           an observation reporting that attachment refused, would unblock it."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: seed.stored_files.privateOfFileUploader and
+          file-attach-by-identifier.attachment_refused
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-8.26
     id: R-8.26
@@ -890,7 +946,7 @@ owed:
     id: R-6.3
     version: 1
     domain: notifications
-    stage: contract
+    stage: derive-tests
     why: "blocked: the oracle turns the test marking on, but the contract never
       names the marker, so a marked subject cannot be told from an unmarked one;
       and the test logo sits in the message body, which the mail fixture does
@@ -918,12 +974,18 @@ owed:
           html_body)."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: caught-message.subject and logo_address, observables email.test_marker
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-6.4
     id: R-6.4
     version: 2
     domain: notifications
-    stage: contract
+    stage: derive-tests
     why: "blocked: sender and reply-to are headers of one message, and the mail
       fixture returns only Subject, Snippet, To and ID. Needs a `mail` accessor
       for one message's From and Reply-To (observables.yaml names `sender: from`
@@ -949,12 +1011,18 @@ owed:
           compared against it."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: caught-message.sender and reply_to, observables email.configured_sender
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-6.5
     id: R-6.5
     version: 1
     domain: notifications
-    stage: contract
+    stage: derive-tests
     why: "blocked: comparing the plain-text form with the formatted one needs both
       bodies of one message. The mail fixture exposes neither; its snippet is a
       summary the catcher makes, not evidence that a plain-text part was sent.
@@ -979,12 +1047,18 @@ owed:
           Text (observables.yaml names html_body and plain_text_body)."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: caught-message.html_body and plain_text_body
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-6.8
     id: R-6.8
     version: 1
     domain: notifications
-    stage: contract
+    stage: derive-tests
     why: "blocked: two things are missing. The batch's recipients are blind copies
       and the mail fixture has no accessor for them, so neither batch size nor
       hiding can be counted — needs a `mail` accessor for one message's To and
@@ -1015,6 +1089,13 @@ owed:
           size on the oracle."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: seed.subscribers (139 due the announcement), caught-message-list,
+          caught-message.copied_recipients
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-6.9
     id: R-6.9
@@ -1077,7 +1158,7 @@ owed:
     id: R-6.15
     version: 1
     domain: notifications
-    stage: contract
+    stage: derive-tests
     why: "blocked: requires reading, for one multi-recipient notice, both its
       visible recipient and its list of blind copies; the mail fixture searches
       by one visible address and returns neither, so hiding cannot be told from
@@ -1108,12 +1189,19 @@ owed:
           contract."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: caught-message.visible_recipients and copied_recipients, observables
+          email.configured_sender_address
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-6.16
     id: R-6.16
     version: 1
     domain: notifications
-    stage: contract
+    stage: derive-tests
     why: "blocked: the claim is about what stands at the foot of particular messages
       — an unsubscribe offer, or a plain link to the settings. The mail fixture
       exposes no body, and the reference page returns its bodies as one reading
@@ -1143,12 +1231,19 @@ owed:
           the notification preference governs."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: caught-message.links_in_body, observables
+          email.governed_by_notification_setting
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-6.18
     id: R-6.18
     version: 1
     domain: notifications
-    stage: contract
+    stage: derive-tests
     why: "blocked: naming all three programs or none is a fact about the body of the
       changed-terms message. The broadcast is reachable
       (notificationTermsBroadcast), but no `mail` accessor returns a body and
@@ -1173,12 +1268,18 @@ owed:
           Needs a `mail` accessor for one message's Text or HTML body."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: caught-message.plain_text_body
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-6.20
     id: R-6.20
     version: 1
     domain: notifications
-    stage: contract
+    stage: derive-tests
     why: "blocked: the given is an account being created for the first time. Every
       persona signs in as an account the seed already holds, and no surface
       action creates one. Needs a persona whose sign-in reaches an identity the
@@ -1207,6 +1308,12 @@ owed:
           result."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: persona first-time-vendor (sandbox-idp; unavailable on the oracle)
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-6.24
     id: R-6.24
@@ -1231,7 +1338,7 @@ owed:
     id: R-6.25
     version: 2
     domain: notifications
-    stage: contract
+    stage: derive-tests
     why: "blocked: every part of the claim — title and winner leading the message,
       the em dash where no successful proponent is recorded, the offer to sign
       in and see one's own score — is body content, which no `mail` accessor
@@ -1264,12 +1371,18 @@ owed:
           opportunity with three submitted proposals."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: seed.opportunities.cwuLapsedForAwardNotices and caught-message.html_body
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-4.1
     id: R-4.1
     version: 1
     domain: users
-    stage: contract
+    stage: derive-tests
     why: "blocked: the given is a person with no account on the service, and no
       persona is one. Every persona in personas.yaml signs in as an account
       tests/seed already carries, and no page, action or observation creates an
@@ -1308,12 +1421,19 @@ owed:
           signed in before each run."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: personas first-time-public-sector-employee and first-time-vendor
+          (unavailable on the oracle)
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-4.2
     id: R-4.2
     version: 1
     domain: users
-    stage: contract
+    stage: derive-tests
     why: "blocked: the when is an account being created, which no persona brings
       about (see R-4.1), so the welcome message has nothing to follow. The
       withheld half needs two further things: a first-time persona whose
@@ -1351,12 +1471,19 @@ owed:
           equivalent) over read_messages."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: personas first-time-vendor and first-time-vendor-without-email, plus
+          caught-message-list
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-4.5
     id: R-4.5
     version: 1
     domain: users
-    stage: contract
+    stage: derive-tests
     why: "blocked: the when is the person signing in again the ordinary way, through
       the identity provider, and that is the one step no target this contract
       runs against lets a test take. On the oracle surface.signIn uses the
@@ -1418,6 +1545,13 @@ owed:
           self-reactivation half need the same."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: persona self-reactivating-vendor (seed.users.vendorReturning; unavailable
+          on the oracle)
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-4.13
     id: R-4.13
@@ -1451,7 +1585,7 @@ owed:
     id: R-4.20
     version: 1
     domain: users
-    stage: contract
+    stage: derive-tests
     why: "blocked: both halves turn on which message was sent, and the two messages
       differ only in their wording — one says an administrator reactivated the
       account and names whom to contact, the other says the person reactivated
@@ -1494,12 +1628,18 @@ owed:
           self-deactivated vendor signing in again can each be produced."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: caught-message.plain_text_body, persona self-reactivating-vendor
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-4.21
     id: R-4.21
     version: 1
     domain: users
-    stage: contract
+    stage: derive-tests
     why: "blocked: the claim is that the request is refused rather than answered,
       and user-list carries no refusal observation — it names user_row,
       status_badge, account_type, admin_check and the two export observations,
@@ -1541,6 +1681,12 @@ owed:
           or by a refusals entry naming the user-list request's status."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: user-list-request.refused_when_not_permitted and refusal_status
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-7.11
     id: R-7.11
@@ -1610,7 +1756,7 @@ owed:
     id: R-7.16
     version: 1
     domain: content
-    stage: contract
+    stage: derive-tests
     why: "Same missing observation as R-7.11, across a wider set of requests: the
       criterion is about every page request answering a permission refusal in
       one shape, and no observation returns the shape or status of a refused
@@ -1638,12 +1784,19 @@ owed:
           only to have both happened."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: content-request (read, create, change, rename and remove by request) with
+          refusal_shape
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-7.17
     id: R-7.17
     version: 1
     domain: content
-    stage: contract
+    stage: derive-tests
     why: "blocked: the criterion's two distinctive clauses each need something that
       is missing, and for the first of them what is missing is the body, not the
       observation. That embedded markup is never executed can be read off
@@ -1706,12 +1859,19 @@ owed:
           that embedded rendering."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: seed.content.rawMarkupPage, plus opportunity-swu-view.scope_section and
+          opportunity-twu-view.terms_section for the embedded rendering
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-7.23
     id: R-7.23
     version: 1
     domain: content
-    stage: contract
+    stage: derive-tests
     why: "Asserting that nothing shows, compares or restores an earlier version
       needs an observation naming what must be absent, and content-edit names
       none: it has no observation of the wording it is showing, none of a
@@ -1739,6 +1899,14 @@ owed:
           that none exists."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: content-edit.version_history and body_being_edited on
+          seed.content.ordinaryPage (three versions; added in an earlier
+          contract run)
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-7.28
     id: R-7.28
@@ -1783,7 +1951,7 @@ owed:
     id: R-5.11
     version: 1
     domain: evaluation
-    stage: contract
+    stage: derive-tests
     why: "blocked: the criterion turns on a public sector employee with no
       connection to the opportunity being refused an individual evaluation, and
       no such person can be signed in as. The target mints sessions for two
@@ -1823,12 +1991,20 @@ owed:
           surfaces."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: seed.opportunities.swuCodeChallengeOfOtherStaff (the government account has
+          no connection to it) and
+          evaluation-individual-edit-swu.refused_when_not_permitted
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-5.21
     id: R-5.21
     version: 1
     domain: evaluation
-    stage: contract
+    stage: derive-tests
     why: "blocked: the two people the criterion has refused cannot be reached, and
       the refusal cannot be read. The seeded panel's chair is also an evaluator
       and the opportunity's owner is also on the panel, because the target has
@@ -1867,12 +2043,19 @@ owed:
           evaluation-individual-create."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: seed.opportunities.swuLapsedChairNotEvaluator and swuLapsedOwnerOffPanel,
+          plus evaluation-individual-create-swu.refused_when_not_permitted
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-5.23
     id: R-5.23
     version: 1
     domain: evaluation
-    stage: contract
+    stage: derive-tests
     why: "blocked: the given is a draft evaluation holding a score above the
       question's maximum and an empty comment, and the surface cannot produce
       one. The browser form checks each field as it is typed, which is the
@@ -1907,12 +2090,19 @@ owed:
           stored as entered."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: evaluation-individual-request-swu.save_draft_as_entered, stored_scores and
+          refused_at_submission
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-5.26
     id: R-5.26
     version: 1
     domain: evaluation
-    stage: contract
+    stage: derive-tests
     why: "blocked: the request the criterion says is rejected cannot be made. The
       individual edit surfaces offer save_changes and
       save_and_go_to_next_proponent, and the only submission in the contract is
@@ -1944,6 +2134,13 @@ owed:
           evaluation, and an observation of the refusal."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: evaluation-individual-request-swu.submit_this_evaluation_alone and
+          refused_as_unrecognised
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-5.34
     id: R-5.34
@@ -1972,7 +2169,7 @@ owed:
     id: R-5.37
     version: 1
     domain: evaluation
-    stage: contract
+    stage: derive-tests
     why: "blocked: the panel a test can submit never holds a member with no role.
       The three actions that put somebody on a panel — add_panel_member,
       choose_panel_chair and mark_member_as_chair — each give that member a
@@ -2008,12 +2205,19 @@ owed:
           role, and an observation of that refusal."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: evaluation-panel-request.submit_panel_with_member_holding_no_role and
+          member_without_role_error
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-3.17
     id: R-3.17
     version: 1
     domain: organizations
-    stage: contract
+    stage: derive-tests
     why: The only way the surface creates an invitation is organization-edit's
       add_team_members, whose subject is email addresses; no page in the
       contract offers a membership type on an invitation, so a test cannot send
@@ -2043,12 +2247,19 @@ owed:
           the invalid-membership-type refusal.
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: affiliation-invitation-request.invite_with_membership_type and
+          invalid_membership_type_error
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-3.20
     id: R-3.20
     version: 1
     domain: organizations
-    stage: contract
+    stage: derive-tests
     why: The criterion turns entirely on telling a refusal apart from an empty
       answer, and no page in the organizations domain carries a refusal
       observation — organization-list offers organization_name, owner_name, the
@@ -2078,12 +2289,18 @@ owed:
           the organizations one may act on behalf of.
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: organization-acting-for-list.refused_when_not_permitted
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-3.15
     id: R-3.15
     version: 1
     domain: organizations
-    stage: contract
+    stage: derive-tests
     why: "blocked: the outcome is which organizations a vendor is offered as ones
       they may act on behalf of, and nothing in the surface reads that set. The
       only place it is offered is the organization picker on proposal-swu-create
@@ -2131,12 +2348,18 @@ owed:
           organizations."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: organization-acting-for-list.organizations_offered
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-3.35
     id: R-3.35
     version: 1
     domain: organizations
-    stage: contract
+    stage: derive-tests
     why: The claim is about where the accept and the decline choice inside an
       invitation email lead. The email observable reaches a message's subject,
       snippet and recipient through the mail catcher, and the Mail fixture
@@ -2170,12 +2393,20 @@ owed:
           organization-user-memberships.
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: caught-message.follow_link_in_body and links_in_body, with
+          organization-user-memberships.accept_confirmation and
+          decline_confirmation
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-7.12
     id: R-7.12
     version: 1
     domain: content
-    stage: contract
+    stage: derive-tests
     why: "blocked: the given is a fresh installation carrying the pages the service
       needs, and no such page can be named. The seed defines one content record,
       content.ordinary_page, which it records as the only page an administrator
@@ -2219,12 +2450,18 @@ owed:
           how many pages are listed."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: seed.content.servicePage* handles by address, and content-list.page_count
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-7.25
     id: R-7.25
     version: 1
     domain: content
-    stage: contract
+    stage: derive-tests
     why: "blocked: the given is an administrator on the managing screen of a page
       the service itself depends on, and no such page can be reached. The seed
       names one content record and records it as an ordinary page an
@@ -2271,12 +2508,19 @@ owed:
           surface has none."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: seed.content.servicePage* handles, plus
+          content-request.rename_page_by_request and remove_page_by_request
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
   - kind: missing-test
     item: R-7.27
     id: R-7.27
     version: 1
     domain: content
-    stage: contract
+    stage: derive-tests
     why: "blocked: both halves of the given are out of reach. The first is a page
       the service created for itself and nobody has edited: the seed names no
       such page — its one content record is an ordinary page an administrator
@@ -2323,3 +2567,10 @@ owed:
           persona.administrator_other on the target under test."
         by: agent:reviewer
         at: 2026-09-25T10:31:42.786Z
+      - from: contract
+        to: derive-tests
+        why: seed.content.servicePageDisclaimer (never edited) and
+          seed.content.changedByAnotherAdministrator
+        by: runner
+        reverts: derive-tests-opportunities-7
+        at: 2026-09-25T10:41:10.715Z
