@@ -774,13 +774,27 @@ opportunities:
     title: Seeded Team With Us opportunity at the challenge
     seeded_status: EVAL_C
     proposals: [proposals.twuChallengeScored, proposals.twuChallengeLast]
-    for: [R-1.49, R-1.25]
+    for: [R-1.25]
     note: >-
       The first proponent scored on the challenge (80), the second the last left to score.
       Seeded one step short of processing because the old application's database refuses
       PROCESSING for a Team With Us opportunity: the migration 20250506164908 rebuilt the
       status constraint from a list without it. On the oracle, entering the last score is
       therefore where the move to processing is attempted and refused.
+  twuChallengeLastToScoreForAward:
+    id: 00000000-0000-4000-a033-000000000001
+    version_id: 00000000-0000-4000-a033-000000000002
+    program: team-with-us
+    title: Seeded second Team With Us opportunity at its challenge
+    seeded_status: EVAL_C
+    proposals: [proposals.twuAwardChallengeScored, proposals.twuAwardChallengeLast]
+    for: [R-1.49]
+    note: >-
+      The same starting point as opportunities.twuChallengeLastToScore, with the same
+      panel, proponents, scores and rates, kept for R-1.49 alone. R-1.49 scores the last
+      proponent and then awards, which changes the opportunity for good, and the seed is
+      loaded once per run. Keeping it apart from the record R-1.25 uses means neither
+      result depends on the order the tests run in.
 
 resources:
   teamWithUsDeveloper:
@@ -932,6 +946,8 @@ proposals:
   twuFiveFive: { id: 00000000-0000-4000-a031-000000000105, opportunity: opportunities.twuConsensusFiveProponents, organization: organizations.proponentFive, question_total: 17, below_a_minimum: true }
   twuChallengeScored: { id: 00000000-0000-4000-a032-000000000101, opportunity: opportunities.twuChallengeLastToScore, seeded_status: EVALUATED_CHALLENGE, hourly_rate: 110 }
   twuChallengeLast: { id: 00000000-0000-4000-a032-000000000102, opportunity: opportunities.twuChallengeLastToScore, seeded_status: UNDER_REVIEW_CHALLENGE, hourly_rate: 135 }
+  twuAwardChallengeScored: { id: 00000000-0000-4000-a033-000000000101, opportunity: opportunities.twuChallengeLastToScoreForAward, seeded_status: EVALUATED_CHALLENGE, hourly_rate: 110 }
+  twuAwardChallengeLast: { id: 00000000-0000-4000-a033-000000000102, opportunity: opportunities.twuChallengeLastToScoreForAward, seeded_status: UNDER_REVIEW_CHALLENGE, hourly_rate: 135 }
 
 stored_files:
   # Stored files. The bytes are in the database like the record, so each is served in

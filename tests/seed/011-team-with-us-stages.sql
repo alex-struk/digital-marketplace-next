@@ -1,10 +1,11 @@
 -- Team With Us opportunities standing at later stages of evaluation.
 --
 -- The same reasoning as 010-sprint-with-us-stages.sql, for the other program with an
--- evaluation panel. Two are seeded: one at the questions consensus with five proponents,
+-- evaluation panel. Three are seeded: one at the questions consensus with five proponents,
 -- because a criterion describes the Team With Us cut at the end of the questions as
--- carrying the top three forward, and one at the challenge with its last score still to
--- enter, because criteria turn on what follows that score. The panel is the
+-- carrying the top three forward, and two at the challenge with the last score still to
+-- enter, because criteria turn on what follows that score and one of them changes the
+-- opportunity for good. The panel is the
 -- one 006 and 007 explain: the government account as an evaluator and the administrator
 -- as chair and evaluator.
 --
@@ -200,7 +201,7 @@ BEGIN
   PERFORM pg_temp.seed_twu_proposal(31, 5, v[5], o[5], staff, 'UNDER_REVIEW_QUESTIONS', 100, ARRAY[5, 5, 5, 2], panel, admin, NULL, NULL);
 
   -- 32. At the challenge, one proponent scored and the other the last left to score
-  --     (R-1.49, R-1.25). Scoring the second is what moves a Team With Us opportunity to
+  --     (R-1.25). Scoring the second is what moves a Team With Us opportunity to
   --     processing. It is seeded one step short of processing because the old
   --     application's database refuses that state for this program: the Team With Us
   --     evaluation migration (20250506164908) rebuilt the opportunity status constraint
@@ -211,5 +212,13 @@ BEGIN
   PERFORM pg_temp.seed_twu_opportunity(32, 'Seeded Team With Us opportunity at the challenge', staff, 'EVAL_C', panel, admin);
   PERFORM pg_temp.seed_twu_proposal(32, 1, v[1], o[1], staff, 'EVALUATED_CHALLENGE', 110, ARRAY[5, 5, 5, 5], panel, admin, 80, 100);
   PERFORM pg_temp.seed_twu_proposal(32, 2, v[2], o[2], staff, 'UNDER_REVIEW_CHALLENGE', 135, ARRAY[4, 4, 4, 4], panel, admin, NULL, NULL);
+
+  -- 33. The same starting point as 32, held apart for R-1.49 alone. R-1.49 scores the last
+  --     proponent and then awards, which leaves its opportunity changed for good; the seed
+  --     is loaded once per run, so R-1.25 keeps 32 to itself and never finds 33 already
+  --     scored or awarded, whichever order the tests run in.
+  PERFORM pg_temp.seed_twu_opportunity(33, 'Seeded second Team With Us opportunity at its challenge', staff, 'EVAL_C', panel, admin);
+  PERFORM pg_temp.seed_twu_proposal(33, 1, v[1], o[1], staff, 'EVALUATED_CHALLENGE', 110, ARRAY[5, 5, 5, 5], panel, admin, 80, 100);
+  PERFORM pg_temp.seed_twu_proposal(33, 2, v[2], o[2], staff, 'UNDER_REVIEW_CHALLENGE', 135, ARRAY[4, 4, 4, 4], panel, admin, NULL, NULL);
 END
 $$;
