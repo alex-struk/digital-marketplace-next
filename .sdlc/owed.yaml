@@ -965,16 +965,16 @@ owed:
     by: runner
     at: 2026-09-25T07:55:52.736Z
     kept:
-      by: contract-v5
+      by: contract-v6
       gate: G1
       approved_by: agent:product-owner
-      at: 2026-09-25T10:24:31.297Z
+      at: 2026-09-25T11:33:11.781Z
   - kind: missing-test
     item: R-6.2
     id: R-6.2
     version: 1
     domain: notifications
-    stage: contract
+    stage: derive-tests
     why: "blocked: the given is a mail server that cannot be reached, or a message
       that cannot be composed. Nothing in the surface or `mail` breaks, holds or
       intercepts delivery — `mail` only searches and clears the catcher.
@@ -984,11 +984,17 @@ owed:
       already exists."
     by: runner
     at: 2026-09-25T07:55:52.736Z
-    kept:
-      by: contract-v5
-      gate: G1
-      approved_by: agent:product-owner
-      at: 2026-09-25T10:24:31.297Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: mail-delivery-fault (refuse_delivery, restore_delivery, delivery_refused),
+          backed by observables email.delivery_fault and the catcher's fault
+          switch enabled in .sdlc/oracle/compose.yml; checked on the running
+          oracle — a refused message is logged and never retried
+        by: contract-v6
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-25T11:33:11.781Z
   - kind: missing-test
     item: R-6.3
     id: R-6.3
@@ -1377,10 +1383,10 @@ owed:
     by: runner
     at: 2026-09-25T07:55:52.736Z
     kept:
-      by: contract-v5
+      by: contract-v6
       gate: G1
       approved_by: agent:product-owner
-      at: 2026-09-25T10:24:31.297Z
+      at: 2026-09-25T11:33:11.781Z
   - kind: missing-test
     item: R-6.25
     id: R-6.25
@@ -2001,10 +2007,10 @@ owed:
     by: runner
     at: 2026-09-25T07:55:52.736Z
     kept:
-      by: contract-v5
+      by: contract-v6
       gate: G1
       approved_by: agent:product-owner
-      at: 2026-09-25T10:24:31.297Z
+      at: 2026-09-25T11:33:11.781Z
   - kind: missing-test
     item: R-7.29
     id: R-7.29
@@ -2020,10 +2026,10 @@ owed:
     by: runner
     at: 2026-09-25T07:55:52.736Z
     kept:
-      by: contract-v5
+      by: contract-v6
       gate: G1
       approved_by: agent:product-owner
-      at: 2026-09-25T10:24:31.297Z
+      at: 2026-09-25T11:33:11.781Z
   - kind: missing-test
     item: R-5.11
     id: R-5.11
@@ -2262,10 +2268,10 @@ owed:
     by: runner
     at: 2026-09-25T07:55:52.736Z
     kept:
-      by: contract-v5
+      by: contract-v6
       gate: G1
       approved_by: agent:product-owner
-      at: 2026-09-25T10:24:31.297Z
+      at: 2026-09-25T11:33:11.781Z
   - kind: missing-test
     item: R-5.37
     id: R-5.37
@@ -2711,7 +2717,7 @@ owed:
     id: R-5.9
     version: 1
     domain: evaluation
-    stage: contract
+    stage: derive-tests
     why: evaluation-panel-request.submit_panel_with_no_chair (two public sector
       members, both evaluators, neither marked chair, sent to the service
       without the browser form) and evaluation-panel-request.missing_chair_error
@@ -2721,3 +2727,12 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-25T11:21:02.832Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: evaluation-panel-request now carries submit_panel_with_no_chair and
+          missing_chair_error, read alongside the existing panel_as_stored
+        by: contract-v6
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-25T11:33:11.781Z

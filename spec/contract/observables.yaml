@@ -28,7 +28,35 @@ email:
   # The pages in spec/contract/surface.yaml that read these fields, one message at a time
   # (caught-message, by the catcher's identifier) and all messages at once
   # (caught-message-list). Both are served by the catcher, not by the target.
-  surfaces: [caught-message, caught-message-list]
+  surfaces: [caught-message, caught-message-list, mail-delivery-fault]
+  # A mail server that refuses delivery, for the criteria whose given is a message that
+  # cannot be delivered. The catcher's fault injection (mailpit "chaos", switched on in
+  # .sdlc/oracle/compose.yml) makes its SMTP server answer the sender's first command with
+  # a refusal while it is in force. The service sends each message over a fresh connection
+  # and treats a refusal the way it treats any failure to deliver
+  # (src/back-end/lib/mailer/transport.ts: the error is logged, the send resolves, nothing
+  # is retried), so this is the same thing to the service as an unreachable mail server.
+  # A rebuilt target under test is given a catcher configured the same way.
+  delivery_fault:
+    read: GET ${SDLC_MAIL_API}/api/v1/chaos
+    refuse: >-
+      PUT ${SDLC_MAIL_API}/api/v1/chaos with body
+      {"Sender": {"ErrorCode": 451, "Probability": 100}}
+    restore: >-
+      PUT ${SDLC_MAIL_API}/api/v1/chaos with body
+      {"Sender": {"ErrorCode": 451, "Probability": 0}}
+    observable:
+      in_force: Sender.Probability in the answer to read is 100
+    notes:
+      - The fault is the catcher's, not the target's, and putting the data back to the
+        seed does not lift it. A test that refuses delivery restores it when it ends,
+        pass or fail, or every later test on the same catcher reads an empty inbox.
+      - While the fault is in force the catcher stores nothing, so absence is the whole
+        of what a test sees. A test asserting that nothing was retried restores delivery,
+        triggers something that does send (so the catcher is shown to be accepting
+        again), and then finds only that later message. The later message can land a
+        moment after the service has answered, so wait for it to appear rather than
+        reading once.
   # How every target is configured to send, so that "the same sender for every kind of
   # message" and "the service's own address as the visible recipient" have a value to be
   # compared with. The oracle sets these in .sdlc/oracle/compose.yml; a rebuilt target
