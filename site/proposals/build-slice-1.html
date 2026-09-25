@@ -44,7 +44,7 @@
 <p>}</p>
 <p>Node.js v24.16.0 npm error Lifecycle script <code>typecheck</code> failed with error: npm error code 1 npm error path ./app/frontend npm error workspace @digital-marketplace/frontend@0.1.0 npm error location ./app/frontend npm error command failed npm error command sh -c tsc --noEmit -p tsconfig.json</p></div>
 <section class="ruling"><h2>Ruling</h2>
-<p><span class="chip return">return</span> by runner:verify on 2026-09-21 02:41.</p>
+<p><span class="chip return">return</span> by runner:verify (the runner, automatically) on 2026-09-21 02:41.</p>
 <div class="body"><p>Slice 1 builds an application that does not start, so none of its criteria could be tested. The compose file, the images it builds and the configuration they read are all part of this build, and each condition names a service, what became of it and what it said on the way down.</p></div>
 <h3>Conditions</h3><ol class="conditions"><li>sandbox idp: is restarting, so it starts, dies and starts again. Its own log ends:
 idp-1  | 2026-09-21 02:39:54,392 ERROR [org.keycloak.quarkus.runtime.cli.ExecutionExceptionHandler] (main) ERROR: Failed to start server in (development) mode

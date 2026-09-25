@@ -1,151 +1,151 @@
 # Gate log
 
-| When | Proposal | Gate | Verdict | By | Held | Cost | Sample |
+| When | Proposal | Gate | Verdict | By | Made by | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 2026-09-22T03:33:54.010Z | derive-tests-content-7 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.753037 |  |
-| 2026-09-22T03:25:41.946Z | plan-3 | G2 | approve | agent:architect | agent-held, unsampled | $0.6773610000000001 | sample |
-| 2026-09-21T23:10:55.198Z | build-slice-1-4 | G3 | return | agent:reviewer | agent-held, unsampled | $2.7627764999999997 |  |
-| 2026-09-21T16:59:55.787Z | derive-tests-content-6 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.1922745000000001 | sample |
-| 2026-09-21T16:45:56.595Z | build-slice-1-3 | G3 | return | agent:reviewer | agent-held, unsampled | $1.700411 | sample |
-| 2026-09-21T15:39:07.356Z | derive-tests-content-stale-4 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.7114675000000001 | sample |
-| 2026-09-21T05:04:21.703Z | build-slice-1-2 | G3 | return | agent:reviewer | agent-held, unsampled | $1.814474 | sample |
-| 2026-09-21T03:32:28.188Z | bind-adapter-new | G3 | approve | agent:reviewer | agent-held, unsampled | $3.34153 | sample |
-| 2026-09-21T02:41:03.578Z | build-slice-1 | G3 | return | runner:verify | human |  |  |
-| 2026-09-19T10:18:19.372Z | plan-2 | G2 | approve | agent:tech-lead | agent-held, unsampled | $0.6394595 | sample |
-| 2026-09-19T09:44:11.392Z | plan | G2 | return | agent:architect | agent-held, unsampled | $1.0576610000000002 | sample |
-| 2026-09-19T09:04:31.120Z | design-evaluation | G-DESIGN | approve | agent:ux-reviewer | agent-held, unsampled | $0.701901 |  |
-| 2026-09-19T08:31:20.266Z | design-proposals | G-DESIGN | approve | agent:ux-reviewer | agent-held, unsampled | $1.0224075 |  |
-| 2026-09-19T07:49:45.304Z | design-files | G-DESIGN | approve | agent:ux-reviewer | agent-held, unsampled | $0.6529599999999999 |  |
-| 2026-09-19T07:36:12.472Z | design-content | G-DESIGN | approve | agent:ux-reviewer | agent-held, unsampled | $0.5963170000000001 |  |
-| 2026-09-19T07:24:04.197Z | design-notifications | G-DESIGN | approve | agent:ux-reviewer | agent-held, unsampled | $0.8219654999999999 |  |
-| 2026-09-19T07:15:04.550Z | design-organizations | G-DESIGN | approve | agent:ux-reviewer | agent-held, unsampled | $0.7552610000000001 | sample |
-| 2026-09-19T06:54:16.637Z | design-opportunities-2 | G-DESIGN | approve | agent:ux-reviewer | agent-held, unsampled | $0.672212 | sample |
-| 2026-09-19T06:50:36.821Z | design-opportunities | G-DESIGN | return | agent:ux-reviewer | agent-held, unsampled | $0.7745110000000001 | sample |
-| 2026-09-19T05:59:07.791Z | design-users-2 | G-DESIGN | approve | agent:tech-lead | agent-held, unsampled | $0.9991049999999999 | sample |
-| 2026-09-15T15:29:59.968Z | design-harness-v1 | G-POL | approve | tech-lead | human |  |  |
-| 2026-09-15T07:19:54.107Z | design-users | G-DESIGN | return | agent:ux-reviewer | agent-held, unsampled | $0.9132874999999998 | sample |
-| 2026-09-15T06:50:24.422Z | calibrate-old-7 | G1 | approve | agent:product-owner | agent-held, unsampled | $4.9757430000000005 |  |
-| 2026-09-15T06:36:22.513Z | calibrate-triage-old-9 | G3 | approve | agent:reviewer | agent-held, unsampled | $4.828529499999999 |  |
-| 2026-09-15T05:59:31.234Z | derive-tests-users-stale-3 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.7208005000000002 |  |
-| 2026-09-15T05:55:45.816Z | derive-tests-proposals-stale-2 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.482036 |  |
-| 2026-09-15T05:52:42.012Z | derive-tests-organizations-5 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.868816 |  |
-| 2026-09-15T05:49:15.328Z | derive-tests-organizations-stale-3 | G3 | return | agent:reviewer | agent-held, unsampled | $1.050222 |  |
-| 2026-09-15T05:42:10.936Z | derive-tests-opportunities-stale-2 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.159023 |  |
-| 2026-09-15T05:30:27.923Z | derive-tests-notifications-stale-4 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.815701 |  |
-| 2026-09-15T05:26:12.207Z | derive-tests-evaluation-stale-2 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.2930375 |  |
-| 2026-09-15T05:16:27.600Z | derive-tests-content-stale-3 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.8582239999999999 |  |
-| 2026-09-15T05:10:19.856Z | bind-adapter-old-13 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.7371205000000001 |  |
-| 2026-09-15T04:49:35.465Z | policy-v8 | G-POL | approve | agent:tech-lead | agent-held, unsampled | $0.730707 | sample |
-| 2026-09-15T04:42:24.073Z | calibrate-old-6 | G1 | approve | agent:product-owner | agent-held, unsampled | $12.641188750000003 | sample |
-| 2026-09-15T04:30:42.198Z | calibrate-triage-old-8 | G3 | approve | agent:reviewer | agent-held, unsampled | $7.849897499999999 |  |
-| 2026-09-15T02:50:29.801Z | derive-tests-users-stale-2 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.021512 |  |
-| 2026-09-15T02:41:50.831Z | derive-tests-proposals-stale-1 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.9310155000000001 |  |
-| 2026-09-15T02:34:58.090Z | derive-tests-organizations-stale-2 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.1911135 |  |
-| 2026-09-15T02:26:00.871Z | derive-tests-opportunities-stale-1 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.1769155 |  |
-| 2026-09-15T02:16:28.455Z | derive-tests-notifications-stale-3 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.699169 |  |
-| 2026-09-15T02:12:02.573Z | derive-tests-evaluation-9 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.7993695000000001 |  |
-| 2026-09-15T02:08:53.491Z | derive-tests-evaluation-stale-1 | G3 | return | agent:reviewer | agent-held, unsampled | $0.7642785 |  |
-| 2026-09-15T02:05:13.613Z | derive-tests-content-5 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.0793195 |  |
-| 2026-09-15T02:02:28.353Z | derive-tests-content-stale-2 | G3 | return | agent:reviewer | agent-held, unsampled | $1.2306155 |  |
-| 2026-09-15T01:53:28.357Z | bind-adapter-old-12 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.5614429999999999 |  |
-| 2026-09-15T01:33:50.452Z | calibrate-old-5 | G1 | approve | agent:product-owner | agent-held, unsampled | $12.387614000000001 | sample |
-| 2026-09-15T01:24:14.014Z | calibrate-triage-old-7 | G3 | approve | agent:reviewer | agent-held, unsampled | $2.935193 |  |
-| 2026-09-15T01:18:29.207Z | calibrate-triage-old-6 | G3 | approve | agent:reviewer | agent-held, unsampled | $10.205403000000002 |  |
-| 2026-09-15T00:02:10.905Z | derive-tests-users-7 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.0232930000000002 |  |
-| 2026-09-14T23:56:48.009Z | derive-tests-users-stale-1 | G3 | return | agent:reviewer | agent-held, unsampled | $1.3477394999999999 |  |
-| 2026-09-14T23:44:38.728Z | derive-tests-organizations-stale-1 | G3 | return | agent:reviewer | agent-held, unsampled | $1.244548 |  |
-| 2026-09-14T23:32:55.574Z | derive-tests-content-stale-1 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.8040944999999999 |  |
-| 2026-09-14T23:28:03.513Z | derive-tests-notifications-5 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.067928 |  |
-| 2026-09-14T23:22:09.369Z | derive-tests-notifications-stale-2 | G3 | return | agent:reviewer | agent-held, unsampled | $0.6170655 |  |
-| 2026-09-14T23:17:41.667Z | bind-adapter-old-11 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.304556 |  |
-| 2026-09-14T21:27:36.405Z | calibrate-old-4 | G1 | approve | agent:product-owner | agent-held, unsampled | $2.980218 | sample |
-| 2026-09-14T21:20:19.245Z | calibrate-triage-old-5 | G3 | approve | agent:reviewer | agent-held, unsampled | $3.026904 |  |
-| 2026-09-14T21:15:48.283Z | calibrate-triage-old-4 | G3 | approve | agent:reviewer | agent-held, unsampled | $4.5032365 |  |
-| 2026-09-14T20:27:40.633Z | derive-tests-notifications-stale-1 | G3 | return | agent:reviewer | agent-held, unsampled | $0.8744565 |  |
-| 2026-09-14T20:22:36.086Z | derive-tests-files-stale-1 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.4922625 |  |
-| 2026-09-14T20:19:53.915Z | bind-adapter-old-10 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.8793859999999999 |  |
-| 2026-09-14T19:42:15.316Z | calibrate-old-3 | G1 | approve | agent:product-owner | agent-held, unsampled | $3.6160150000000004 | sample |
-| 2026-09-14T19:34:53.954Z | calibrate-old-2 | G1 | approve | agent:product-owner | agent-held, unsampled | $2.7109894999999997 | sample |
-| 2026-09-14T19:28:20.784Z | calibrate-triage-old-3 | G3 | approve | agent:reviewer | agent-held, unsampled | $3.0239210000000005 |  |
-| 2026-09-14T19:24:18.116Z | calibrate-triage-old-2 | G3 | approve | agent:reviewer | agent-held, unsampled | $4.876077 |  |
-| 2026-09-14T19:18:13.786Z | calibrate-triage-old-1 | G3 | approve | agent:reviewer | agent-held, unsampled | $5.976158500000001 |  |
-| 2026-09-14T14:47:58.202Z | bind-adapter-old-9 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.550903 |  |
-| 2026-09-14T14:45:49.733Z | bind-adapter-old-8 | G3 | return | agent:reviewer | agent-held, unsampled | $0.8093655000000002 |  |
-| 2026-09-14T14:35:45.743Z | bind-adapter-old-7 | G3 | return | agent:reviewer | agent-held, unsampled | $1.2487715000000001 |  |
-| 2026-09-14T06:30:58.296Z | bind-adapter-old-6 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.39978299999999994 |  |
-| 2026-09-14T02:33:58.853Z | derive-tests-files-3 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.215816 |  |
-| 2026-09-14T02:30:53.495Z | derive-tests-notifications-4 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.808122 |  |
-| 2026-09-14T02:29:12.853Z | derive-tests-files-2 | G3 | return | agent:reviewer | agent-held, unsampled | $1.8050614999999999 |  |
-| 2026-09-14T02:10:23.968Z | derive-tests-notifications-3 | G3 | return | agent:reviewer | agent-held, unsampled | $1.1371640000000003 |  |
-| 2026-09-14T02:06:29.868Z | derive-tests-users-6 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.0268160000000002 |  |
-| 2026-09-14T01:43:25.120Z | derive-tests-notifications-2 | G3 | return | agent:reviewer | agent-held, unsampled | $1.2337595 |  |
-| 2026-09-14T00:41:09.960Z | derive-tests-evaluation-8 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.8956884999999999 |  |
-| 2026-09-14T00:39:23.856Z | derive-tests-evaluation-7 | G3 | return | agent:reviewer | agent-held, unsampled | $1.4190049999999998 | sample |
-| 2026-09-14T00:30:28.019Z | derive-tests-opportunities-4 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.4914475000000005 | sample |
-| 2026-09-14T00:17:36.822Z | bind-adapter-old-5 | G3 | approve | agent:reviewer | agent-held, unsampled | $0.7340654999999998 | sample |
-| 2026-09-14T00:13:59.062Z | bind-adapter-old-4 | G3 | return | agent:reviewer | agent-held, unsampled | $0.57247 | sample |
-| 2026-09-14T00:02:11.596Z | bind-adapter-old-3 | G3 | return | agent:reviewer | agent-held, unsampled | $0.9867469999999999 | sample |
-| 2026-09-13T23:38:31.021Z | derive-tests-proposals-5 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.906938 |  |
-| 2026-09-13T23:35:47.283Z | derive-tests-opportunities-3 | G3 | return | agent:reviewer | agent-held, unsampled | $2.229104 |  |
-| 2026-09-13T23:32:40.323Z | derive-tests-evaluation-6 | G3 | return | agent:reviewer | agent-held, unsampled | $2.196463 |  |
-| 2026-09-11T08:02:35.455Z | contract-v3 | G1 | approve | agent:product-owner | agent-held, unsampled | $2.1395790000000003 |  |
-| 2026-09-11T07:12:16.831Z | contract-v2 | G1 | approve | agent:product-owner | agent-held, unsampled | $1.6571035000000003 |  |
-| 2026-09-11T03:52:12.505Z | bind-adapter-old-2 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.8121815000000001 |  |
-| 2026-09-11T02:47:37.809Z | policy-v6 | G-POL | approve | agent:tech-lead | agent-held, unsampled | $1.0059275 | sample |
-| 2026-09-11T02:33:05.782Z | policy-v5 | G-POL | approve | agent:tech-lead | agent-held, unsampled | $0.9082300000000001 | sample |
-| 2026-09-11T00:05:11.751Z | bind-adapter-old | G3 | return | tech-lead | human |  |  |
-| 2026-09-10T20:45:57.042Z | policy-v4 | G-POL | approve | agent:tech-lead | agent-held, unsampled | $1.0093640000000001 | sample |
-| 2026-09-09T01:37:03.859Z | derive-tests-evaluation | G3 | approve | agent:reviewer | agent-held, unsampled | $3.3692595 |  |
-| 2026-09-09T01:18:05.643Z | derive-tests-users | G3 | approve | agent:reviewer | agent-held, unsampled | $3.9504760000000005 |  |
-| 2026-09-09T00:50:03.165Z | derive-tests-proposals-4 | G3 | approve | agent:reviewer | agent-held, unsampled | $3.178329 |  |
-| 2026-09-09T00:21:36.072Z | derive-tests-proposals | G3 | return | agent:reviewer | agent-held, unsampled | $4.763955 |  |
-| 2026-09-08T23:47:07.017Z | ratify-users-2 | G1 | approve | agent:product-owner | agent-held, unsampled | $1.4315825 |  |
-| 2026-09-07T17:02:28.202Z | derive-tests-content-4 | G3 | approve | agent:reviewer | agent-held, unsampled | $2.2845554999999997 |  |
-| 2026-09-07T16:55:24.741Z | derive-tests-evaluation-5 | G3 | return | agent:reviewer | agent-held, unsampled | $1.4347524999999999 |  |
-| 2026-09-07T16:49:16.347Z | derive-tests-evaluation-4 | G3 | return | agent:reviewer | agent-held, unsampled | $3.2960729999999994 |  |
-| 2026-09-07T16:39:02.945Z | derive-tests-users-5 | G3 | return | agent:reviewer | agent-held, unsampled | $0.8361945 |  |
-| 2026-09-07T16:34:54.476Z | derive-tests-users-4 | G3 | return | agent:reviewer | agent-held, unsampled | $1.4303275000000002 |  |
-| 2026-09-07T16:28:55.164Z | derive-tests-organizations-4 | G3 | approve | agent:reviewer | agent-held, unsampled | $2.0732649999999997 |  |
-| 2026-09-07T16:14:22.186Z | derive-tests-proposals-3 | G3 | return | tech-lead | human |  |  |
-| 2026-09-07T16:00:48.195Z | derive-tests-opportunities-2 | G3 | approve | agent:reviewer | agent-held, unsampled | $1.8502399999999994 |  |
-| 2026-09-07T15:57:25.227Z | derive-tests-opportunities | G3 | return | agent:reviewer | agent-held, unsampled | $2.4990725000000005 |  |
-| 2026-09-07T15:36:32.609Z | derive-tests-content-3 | G3 | return | agent:reviewer | agent-held, unsampled | $0.8531714999999999 |  |
-| 2026-09-07T15:32:36.627Z | derive-tests-content-2 | G3 | return | agent:reviewer | agent-held, unsampled | $1.2788545000000002 |  |
-| 2026-09-07T15:26:52.465Z | derive-tests-evaluation-3 | G3 | return | agent:reviewer | agent-held, unsampled | $1.737879 |  |
-| 2026-09-07T15:20:04.898Z | derive-tests-evaluation-2 | G3 | return | agent:reviewer | agent-held, unsampled | $1.7549505 |  |
-| 2026-09-07T15:15:46.274Z | derive-tests-users-3 | G3 | return | agent:reviewer | agent-held, unsampled | $2.0168455 |  |
-| 2026-09-07T15:07:45.090Z | derive-tests-users-2 | G3 | return | agent:reviewer | agent-held, unsampled | $1.1403435 |  |
-| 2026-09-07T15:01:14.832Z | derive-tests-organizations-3 | G3 | return | agent:reviewer | agent-held, unsampled | $1.2934305000000001 |  |
-| 2026-09-07T14:53:42.779Z | derive-tests-organizations-2 | G3 | return | agent:reviewer | agent-held, unsampled | $1.406234 |  |
-| 2026-09-07T14:40:12.082Z | derive-tests-proposals-2 | G3 | return | agent:reviewer | agent-held, unsampled | $1.611306 | sample |
-| 2026-09-07T14:35:49.196Z | derive-tests-files | G3 | approve | agent:reviewer | agent-held, unsampled | $2.0853965000000003 | sample |
-| 2026-09-07T14:21:45.559Z | derive-tests-content | G3 | return | agent:reviewer | agent-held, unsampled | $1.3792719999999998 | sample |
-| 2026-09-07T14:07:24.759Z | derive-tests-notifications | G3 | approve | agent:reviewer | agent-held, unsampled | $2.500539499999999 | sample |
-| 2026-09-07T13:10:27.199Z | derive-tests-organizations | G3 | return | agent:reviewer | agent-held, unsampled | $2.164838 | sample |
-| 2026-09-07T11:52:04.374Z | contract-v1 | G1 | approve | agent:product-owner | agent-held, unsampled | $0.8271335 |  |
-| 2026-09-07T11:06:06.838Z | policy-v3 | G-POL | approve | agent:tech-lead | agent-held, unsampled | $0.722108 | sample |
-| 2026-09-07T08:48:15.694Z | ratify-files-1 | G1 | approve | agent:product-owner | agent-held, unsampled | $1.6447765 |  |
-| 2026-09-07T08:44:52.769Z | archaeology-files | G1 | approve | agent:product-owner | agent-held, unsampled | $1.1771920000000002 |  |
-| 2026-09-07T08:31:47.620Z | ratify-content-3 | G1 | approve | agent:product-owner | agent-held, unsampled | $1.735584 |  |
-| 2026-09-07T05:24:09.848Z | ratify-content-1 | G1 | return | agent:product-owner | agent-held, unsampled | $2.0596085000000004 |  |
-| 2026-09-07T05:20:01.631Z | archaeology-content | G1 | approve | agent:product-owner | agent-held, unsampled | $1.4539885000000001 |  |
-| 2026-09-07T05:06:31.038Z | ratify-notifications-1 | G1 | approve | agent:product-owner | agent-held, unsampled | $2.5982749999999997 |  |
-| 2026-09-07T05:01:46.930Z | archaeology-notifications | G1 | approve | agent:product-owner | agent-held, unsampled | $1.887629 |  |
-| 2026-09-07T04:46:54.367Z | ratify-evaluation-1 | G1 | approve | agent:product-owner | agent-held, unsampled | $2.6974549999999997 |  |
-| 2026-09-07T04:41:56.303Z | archaeology-evaluation | G1 | approve | agent:product-owner | agent-held, unsampled | $1.0940745 |  |
-| 2026-09-07T04:16:50.081Z | ratify-users-1 | G1 | approve | agent:product-owner | agent-held, unsampled | $2.0127850000000005 |  |
-| 2026-09-07T04:12:53.844Z | archaeology-users | G1 | approve | agent:product-owner | agent-held, unsampled | $1.863165 |  |
-| 2026-09-07T03:46:46.694Z | ratify-organizations-1 | G1 | approve | agent:product-owner | agent-held, unsampled | $1.9592464999999997 |  |
-| 2026-09-07T03:42:43.219Z | archaeology-organizations | G1 | approve | agent:product-owner | agent-held, unsampled | $1.2634264999999998 |  |
-| 2026-09-07T03:31:13.677Z | ratify-proposals-1 | G1 | approve | agent:product-owner | agent-held, unsampled | $3.361662499999999 | sample |
-| 2026-09-07T03:26:07.201Z | archaeology-proposals | G1 | approve | agent:product-owner | agent-held, unsampled | $2.0290945 | sample |
-| 2026-09-07T03:10:55.180Z | ratify-opportunities-2 | G1 | approve | agent:product-owner | agent-held, unsampled | $1.7399120000000001 | sample |
-| 2026-09-07T03:07:13.475Z | ratify-opportunities-1 | G1 | approve | agent:product-owner | agent-held, unsampled | $2.6438360000000003 | sample |
-| 2026-09-07T01:21:29.623Z | archaeology-opportunities | G1 | approve | agent:product-owner | agent-held, unsampled | $1.0044805 | sample |
-| 2026-09-07T00:56:00.781Z | spec-readme-v1 | G-POL | approve | tech-lead | human |  |  |
-| 2026-09-07T00:33:52.294Z | budget-v1 | G-POL | approve | tech-lead | human |  |  |
-| 2026-09-07T00:19:15.459Z | intent-digital-marketplace-rebuild | G0 | approve | agent:product-owner | agent-held, unsampled | $0.6074485 | sample |
-| 2026-09-07T00:17:45.636Z | brief-v1 | G0 | approve | agent:product-owner | agent-held, unsampled | $0.539408 | sample |
-| 2026-09-06T16:18:34.048Z | probe-ruling | G3 | approve | agent:reviewer | agent-held, unsampled |  | sample |
-| 2026-09-06T09:25:55.241Z | gates-simulated-v1 | G-POL | approve | tech-lead | human |  |  |
-| 2026-09-06T09:25:53.831Z | constitution-v1 | G-POL | approve | tech-lead | human |  |  |
+| 2026-09-22T03:33:54.010Z | derive-tests-content-7 | G3 | approve | agent:reviewer | persona agent | $0.753037 |  |
+| 2026-09-22T03:25:41.946Z | plan-3 | G2 | approve | agent:architect | persona agent | $0.6773610000000001 | sample |
+| 2026-09-21T23:10:55.198Z | build-slice-1-4 | G3 | return | agent:reviewer | persona agent | $2.7627764999999997 |  |
+| 2026-09-21T16:59:55.787Z | derive-tests-content-6 | G3 | approve | agent:reviewer | persona agent | $1.1922745000000001 | sample |
+| 2026-09-21T16:45:56.595Z | build-slice-1-3 | G3 | return | agent:reviewer | persona agent | $1.700411 | sample |
+| 2026-09-21T15:39:07.356Z | derive-tests-content-stale-4 | G3 | approve | agent:reviewer | persona agent | $1.7114675000000001 | sample |
+| 2026-09-21T05:04:21.703Z | build-slice-1-2 | G3 | return | agent:reviewer | persona agent | $1.814474 | sample |
+| 2026-09-21T03:32:28.188Z | bind-adapter-new | G3 | approve | agent:reviewer | persona agent | $3.34153 | sample |
+| 2026-09-21T02:41:03.578Z | build-slice-1 | G3 | return | runner:verify | the runner, automatically |  |  |
+| 2026-09-19T10:18:19.372Z | plan-2 | G2 | approve | agent:tech-lead | persona agent | $0.6394595 | sample |
+| 2026-09-19T09:44:11.392Z | plan | G2 | return | agent:architect | persona agent | $1.0576610000000002 | sample |
+| 2026-09-19T09:04:31.120Z | design-evaluation | G-DESIGN | approve | agent:ux-reviewer | persona agent | $0.701901 |  |
+| 2026-09-19T08:31:20.266Z | design-proposals | G-DESIGN | approve | agent:ux-reviewer | persona agent | $1.0224075 |  |
+| 2026-09-19T07:49:45.304Z | design-files | G-DESIGN | approve | agent:ux-reviewer | persona agent | $0.6529599999999999 |  |
+| 2026-09-19T07:36:12.472Z | design-content | G-DESIGN | approve | agent:ux-reviewer | persona agent | $0.5963170000000001 |  |
+| 2026-09-19T07:24:04.197Z | design-notifications | G-DESIGN | approve | agent:ux-reviewer | persona agent | $0.8219654999999999 |  |
+| 2026-09-19T07:15:04.550Z | design-organizations | G-DESIGN | approve | agent:ux-reviewer | persona agent | $0.7552610000000001 | sample |
+| 2026-09-19T06:54:16.637Z | design-opportunities-2 | G-DESIGN | approve | agent:ux-reviewer | persona agent | $0.672212 | sample |
+| 2026-09-19T06:50:36.821Z | design-opportunities | G-DESIGN | return | agent:ux-reviewer | persona agent | $0.7745110000000001 | sample |
+| 2026-09-19T05:59:07.791Z | design-users-2 | G-DESIGN | approve | agent:tech-lead | persona agent | $0.9991049999999999 | sample |
+| 2026-09-15T15:29:59.968Z | design-harness-v1 | G-POL | approve | tech-lead | a person |  |  |
+| 2026-09-15T07:19:54.107Z | design-users | G-DESIGN | return | agent:ux-reviewer | persona agent | $0.9132874999999998 | sample |
+| 2026-09-15T06:50:24.422Z | calibrate-old-7 | G1 | approve | agent:product-owner | persona agent | $4.9757430000000005 |  |
+| 2026-09-15T06:36:22.513Z | calibrate-triage-old-9 | G3 | approve | agent:reviewer | persona agent | $4.828529499999999 |  |
+| 2026-09-15T05:59:31.234Z | derive-tests-users-stale-3 | G3 | approve | agent:reviewer | persona agent | $0.7208005000000002 |  |
+| 2026-09-15T05:55:45.816Z | derive-tests-proposals-stale-2 | G3 | approve | agent:reviewer | persona agent | $0.482036 |  |
+| 2026-09-15T05:52:42.012Z | derive-tests-organizations-5 | G3 | approve | agent:reviewer | persona agent | $0.868816 |  |
+| 2026-09-15T05:49:15.328Z | derive-tests-organizations-stale-3 | G3 | return | agent:reviewer | persona agent | $1.050222 |  |
+| 2026-09-15T05:42:10.936Z | derive-tests-opportunities-stale-2 | G3 | approve | agent:reviewer | persona agent | $1.159023 |  |
+| 2026-09-15T05:30:27.923Z | derive-tests-notifications-stale-4 | G3 | approve | agent:reviewer | persona agent | $0.815701 |  |
+| 2026-09-15T05:26:12.207Z | derive-tests-evaluation-stale-2 | G3 | approve | agent:reviewer | persona agent | $1.2930375 |  |
+| 2026-09-15T05:16:27.600Z | derive-tests-content-stale-3 | G3 | approve | agent:reviewer | persona agent | $0.8582239999999999 |  |
+| 2026-09-15T05:10:19.856Z | bind-adapter-old-13 | G3 | approve | agent:reviewer | persona agent | $0.7371205000000001 |  |
+| 2026-09-15T04:49:35.465Z | policy-v8 | G-POL | approve | agent:tech-lead | persona agent | $0.730707 | sample |
+| 2026-09-15T04:42:24.073Z | calibrate-old-6 | G1 | approve | agent:product-owner | persona agent | $12.641188750000003 | sample |
+| 2026-09-15T04:30:42.198Z | calibrate-triage-old-8 | G3 | approve | agent:reviewer | persona agent | $7.849897499999999 |  |
+| 2026-09-15T02:50:29.801Z | derive-tests-users-stale-2 | G3 | approve | agent:reviewer | persona agent | $1.021512 |  |
+| 2026-09-15T02:41:50.831Z | derive-tests-proposals-stale-1 | G3 | approve | agent:reviewer | persona agent | $0.9310155000000001 |  |
+| 2026-09-15T02:34:58.090Z | derive-tests-organizations-stale-2 | G3 | approve | agent:reviewer | persona agent | $1.1911135 |  |
+| 2026-09-15T02:26:00.871Z | derive-tests-opportunities-stale-1 | G3 | approve | agent:reviewer | persona agent | $1.1769155 |  |
+| 2026-09-15T02:16:28.455Z | derive-tests-notifications-stale-3 | G3 | approve | agent:reviewer | persona agent | $0.699169 |  |
+| 2026-09-15T02:12:02.573Z | derive-tests-evaluation-9 | G3 | approve | agent:reviewer | persona agent | $0.7993695000000001 |  |
+| 2026-09-15T02:08:53.491Z | derive-tests-evaluation-stale-1 | G3 | return | agent:reviewer | persona agent | $0.7642785 |  |
+| 2026-09-15T02:05:13.613Z | derive-tests-content-5 | G3 | approve | agent:reviewer | persona agent | $1.0793195 |  |
+| 2026-09-15T02:02:28.353Z | derive-tests-content-stale-2 | G3 | return | agent:reviewer | persona agent | $1.2306155 |  |
+| 2026-09-15T01:53:28.357Z | bind-adapter-old-12 | G3 | approve | agent:reviewer | persona agent | $0.5614429999999999 |  |
+| 2026-09-15T01:33:50.452Z | calibrate-old-5 | G1 | approve | agent:product-owner | persona agent | $12.387614000000001 | sample |
+| 2026-09-15T01:24:14.014Z | calibrate-triage-old-7 | G3 | approve | agent:reviewer | persona agent | $2.935193 |  |
+| 2026-09-15T01:18:29.207Z | calibrate-triage-old-6 | G3 | approve | agent:reviewer | persona agent | $10.205403000000002 |  |
+| 2026-09-15T00:02:10.905Z | derive-tests-users-7 | G3 | approve | agent:reviewer | persona agent | $1.0232930000000002 |  |
+| 2026-09-14T23:56:48.009Z | derive-tests-users-stale-1 | G3 | return | agent:reviewer | persona agent | $1.3477394999999999 |  |
+| 2026-09-14T23:44:38.728Z | derive-tests-organizations-stale-1 | G3 | return | agent:reviewer | persona agent | $1.244548 |  |
+| 2026-09-14T23:32:55.574Z | derive-tests-content-stale-1 | G3 | approve | agent:reviewer | persona agent | $0.8040944999999999 |  |
+| 2026-09-14T23:28:03.513Z | derive-tests-notifications-5 | G3 | approve | agent:reviewer | persona agent | $1.067928 |  |
+| 2026-09-14T23:22:09.369Z | derive-tests-notifications-stale-2 | G3 | return | agent:reviewer | persona agent | $0.6170655 |  |
+| 2026-09-14T23:17:41.667Z | bind-adapter-old-11 | G3 | approve | agent:reviewer | persona agent | $1.304556 |  |
+| 2026-09-14T21:27:36.405Z | calibrate-old-4 | G1 | approve | agent:product-owner | persona agent | $2.980218 | sample |
+| 2026-09-14T21:20:19.245Z | calibrate-triage-old-5 | G3 | approve | agent:reviewer | persona agent | $3.026904 |  |
+| 2026-09-14T21:15:48.283Z | calibrate-triage-old-4 | G3 | approve | agent:reviewer | persona agent | $4.5032365 |  |
+| 2026-09-14T20:27:40.633Z | derive-tests-notifications-stale-1 | G3 | return | agent:reviewer | persona agent | $0.8744565 |  |
+| 2026-09-14T20:22:36.086Z | derive-tests-files-stale-1 | G3 | approve | agent:reviewer | persona agent | $0.4922625 |  |
+| 2026-09-14T20:19:53.915Z | bind-adapter-old-10 | G3 | approve | agent:reviewer | persona agent | $0.8793859999999999 |  |
+| 2026-09-14T19:42:15.316Z | calibrate-old-3 | G1 | approve | agent:product-owner | persona agent | $3.6160150000000004 | sample |
+| 2026-09-14T19:34:53.954Z | calibrate-old-2 | G1 | approve | agent:product-owner | persona agent | $2.7109894999999997 | sample |
+| 2026-09-14T19:28:20.784Z | calibrate-triage-old-3 | G3 | approve | agent:reviewer | persona agent | $3.0239210000000005 |  |
+| 2026-09-14T19:24:18.116Z | calibrate-triage-old-2 | G3 | approve | agent:reviewer | persona agent | $4.876077 |  |
+| 2026-09-14T19:18:13.786Z | calibrate-triage-old-1 | G3 | approve | agent:reviewer | persona agent | $5.976158500000001 |  |
+| 2026-09-14T14:47:58.202Z | bind-adapter-old-9 | G3 | approve | agent:reviewer | persona agent | $0.550903 |  |
+| 2026-09-14T14:45:49.733Z | bind-adapter-old-8 | G3 | return | agent:reviewer | persona agent | $0.8093655000000002 |  |
+| 2026-09-14T14:35:45.743Z | bind-adapter-old-7 | G3 | return | agent:reviewer | persona agent | $1.2487715000000001 |  |
+| 2026-09-14T06:30:58.296Z | bind-adapter-old-6 | G3 | approve | agent:reviewer | persona agent | $0.39978299999999994 |  |
+| 2026-09-14T02:33:58.853Z | derive-tests-files-3 | G3 | approve | agent:reviewer | persona agent | $1.215816 |  |
+| 2026-09-14T02:30:53.495Z | derive-tests-notifications-4 | G3 | approve | agent:reviewer | persona agent | $0.808122 |  |
+| 2026-09-14T02:29:12.853Z | derive-tests-files-2 | G3 | return | agent:reviewer | persona agent | $1.8050614999999999 |  |
+| 2026-09-14T02:10:23.968Z | derive-tests-notifications-3 | G3 | return | agent:reviewer | persona agent | $1.1371640000000003 |  |
+| 2026-09-14T02:06:29.868Z | derive-tests-users-6 | G3 | approve | agent:reviewer | persona agent | $1.0268160000000002 |  |
+| 2026-09-14T01:43:25.120Z | derive-tests-notifications-2 | G3 | return | agent:reviewer | persona agent | $1.2337595 |  |
+| 2026-09-14T00:41:09.960Z | derive-tests-evaluation-8 | G3 | approve | agent:reviewer | persona agent | $0.8956884999999999 |  |
+| 2026-09-14T00:39:23.856Z | derive-tests-evaluation-7 | G3 | return | agent:reviewer | persona agent | $1.4190049999999998 | sample |
+| 2026-09-14T00:30:28.019Z | derive-tests-opportunities-4 | G3 | approve | agent:reviewer | persona agent | $1.4914475000000005 | sample |
+| 2026-09-14T00:17:36.822Z | bind-adapter-old-5 | G3 | approve | agent:reviewer | persona agent | $0.7340654999999998 | sample |
+| 2026-09-14T00:13:59.062Z | bind-adapter-old-4 | G3 | return | agent:reviewer | persona agent | $0.57247 | sample |
+| 2026-09-14T00:02:11.596Z | bind-adapter-old-3 | G3 | return | agent:reviewer | persona agent | $0.9867469999999999 | sample |
+| 2026-09-13T23:38:31.021Z | derive-tests-proposals-5 | G3 | approve | agent:reviewer | persona agent | $1.906938 |  |
+| 2026-09-13T23:35:47.283Z | derive-tests-opportunities-3 | G3 | return | agent:reviewer | persona agent | $2.229104 |  |
+| 2026-09-13T23:32:40.323Z | derive-tests-evaluation-6 | G3 | return | agent:reviewer | persona agent | $2.196463 |  |
+| 2026-09-11T08:02:35.455Z | contract-v3 | G1 | approve | agent:product-owner | persona agent | $2.1395790000000003 |  |
+| 2026-09-11T07:12:16.831Z | contract-v2 | G1 | approve | agent:product-owner | persona agent | $1.6571035000000003 |  |
+| 2026-09-11T03:52:12.505Z | bind-adapter-old-2 | G3 | approve | agent:reviewer | persona agent | $1.8121815000000001 |  |
+| 2026-09-11T02:47:37.809Z | policy-v6 | G-POL | approve | agent:tech-lead | persona agent | $1.0059275 | sample |
+| 2026-09-11T02:33:05.782Z | policy-v5 | G-POL | approve | agent:tech-lead | persona agent | $0.9082300000000001 | sample |
+| 2026-09-11T00:05:11.751Z | bind-adapter-old | G3 | return | tech-lead | a person |  |  |
+| 2026-09-10T20:45:57.042Z | policy-v4 | G-POL | approve | agent:tech-lead | persona agent | $1.0093640000000001 | sample |
+| 2026-09-09T01:37:03.859Z | derive-tests-evaluation | G3 | approve | agent:reviewer | persona agent | $3.3692595 |  |
+| 2026-09-09T01:18:05.643Z | derive-tests-users | G3 | approve | agent:reviewer | persona agent | $3.9504760000000005 |  |
+| 2026-09-09T00:50:03.165Z | derive-tests-proposals-4 | G3 | approve | agent:reviewer | persona agent | $3.178329 |  |
+| 2026-09-09T00:21:36.072Z | derive-tests-proposals | G3 | return | agent:reviewer | persona agent | $4.763955 |  |
+| 2026-09-08T23:47:07.017Z | ratify-users-2 | G1 | approve | agent:product-owner | persona agent | $1.4315825 |  |
+| 2026-09-07T17:02:28.202Z | derive-tests-content-4 | G3 | approve | agent:reviewer | persona agent | $2.2845554999999997 |  |
+| 2026-09-07T16:55:24.741Z | derive-tests-evaluation-5 | G3 | return | agent:reviewer | persona agent | $1.4347524999999999 |  |
+| 2026-09-07T16:49:16.347Z | derive-tests-evaluation-4 | G3 | return | agent:reviewer | persona agent | $3.2960729999999994 |  |
+| 2026-09-07T16:39:02.945Z | derive-tests-users-5 | G3 | return | agent:reviewer | persona agent | $0.8361945 |  |
+| 2026-09-07T16:34:54.476Z | derive-tests-users-4 | G3 | return | agent:reviewer | persona agent | $1.4303275000000002 |  |
+| 2026-09-07T16:28:55.164Z | derive-tests-organizations-4 | G3 | approve | agent:reviewer | persona agent | $2.0732649999999997 |  |
+| 2026-09-07T16:14:22.186Z | derive-tests-proposals-3 | G3 | return | tech-lead | a person |  |  |
+| 2026-09-07T16:00:48.195Z | derive-tests-opportunities-2 | G3 | approve | agent:reviewer | persona agent | $1.8502399999999994 |  |
+| 2026-09-07T15:57:25.227Z | derive-tests-opportunities | G3 | return | agent:reviewer | persona agent | $2.4990725000000005 |  |
+| 2026-09-07T15:36:32.609Z | derive-tests-content-3 | G3 | return | agent:reviewer | persona agent | $0.8531714999999999 |  |
+| 2026-09-07T15:32:36.627Z | derive-tests-content-2 | G3 | return | agent:reviewer | persona agent | $1.2788545000000002 |  |
+| 2026-09-07T15:26:52.465Z | derive-tests-evaluation-3 | G3 | return | agent:reviewer | persona agent | $1.737879 |  |
+| 2026-09-07T15:20:04.898Z | derive-tests-evaluation-2 | G3 | return | agent:reviewer | persona agent | $1.7549505 |  |
+| 2026-09-07T15:15:46.274Z | derive-tests-users-3 | G3 | return | agent:reviewer | persona agent | $2.0168455 |  |
+| 2026-09-07T15:07:45.090Z | derive-tests-users-2 | G3 | return | agent:reviewer | persona agent | $1.1403435 |  |
+| 2026-09-07T15:01:14.832Z | derive-tests-organizations-3 | G3 | return | agent:reviewer | persona agent | $1.2934305000000001 |  |
+| 2026-09-07T14:53:42.779Z | derive-tests-organizations-2 | G3 | return | agent:reviewer | persona agent | $1.406234 |  |
+| 2026-09-07T14:40:12.082Z | derive-tests-proposals-2 | G3 | return | agent:reviewer | persona agent | $1.611306 | sample |
+| 2026-09-07T14:35:49.196Z | derive-tests-files | G3 | approve | agent:reviewer | persona agent | $2.0853965000000003 | sample |
+| 2026-09-07T14:21:45.559Z | derive-tests-content | G3 | return | agent:reviewer | persona agent | $1.3792719999999998 | sample |
+| 2026-09-07T14:07:24.759Z | derive-tests-notifications | G3 | approve | agent:reviewer | persona agent | $2.500539499999999 | sample |
+| 2026-09-07T13:10:27.199Z | derive-tests-organizations | G3 | return | agent:reviewer | persona agent | $2.164838 | sample |
+| 2026-09-07T11:52:04.374Z | contract-v1 | G1 | approve | agent:product-owner | persona agent | $0.8271335 |  |
+| 2026-09-07T11:06:06.838Z | policy-v3 | G-POL | approve | agent:tech-lead | persona agent | $0.722108 | sample |
+| 2026-09-07T08:48:15.694Z | ratify-files-1 | G1 | approve | agent:product-owner | persona agent | $1.6447765 |  |
+| 2026-09-07T08:44:52.769Z | archaeology-files | G1 | approve | agent:product-owner | persona agent | $1.1771920000000002 |  |
+| 2026-09-07T08:31:47.620Z | ratify-content-3 | G1 | approve | agent:product-owner | persona agent | $1.735584 |  |
+| 2026-09-07T05:24:09.848Z | ratify-content-1 | G1 | return | agent:product-owner | persona agent | $2.0596085000000004 |  |
+| 2026-09-07T05:20:01.631Z | archaeology-content | G1 | approve | agent:product-owner | persona agent | $1.4539885000000001 |  |
+| 2026-09-07T05:06:31.038Z | ratify-notifications-1 | G1 | approve | agent:product-owner | persona agent | $2.5982749999999997 |  |
+| 2026-09-07T05:01:46.930Z | archaeology-notifications | G1 | approve | agent:product-owner | persona agent | $1.887629 |  |
+| 2026-09-07T04:46:54.367Z | ratify-evaluation-1 | G1 | approve | agent:product-owner | persona agent | $2.6974549999999997 |  |
+| 2026-09-07T04:41:56.303Z | archaeology-evaluation | G1 | approve | agent:product-owner | persona agent | $1.0940745 |  |
+| 2026-09-07T04:16:50.081Z | ratify-users-1 | G1 | approve | agent:product-owner | persona agent | $2.0127850000000005 |  |
+| 2026-09-07T04:12:53.844Z | archaeology-users | G1 | approve | agent:product-owner | persona agent | $1.863165 |  |
+| 2026-09-07T03:46:46.694Z | ratify-organizations-1 | G1 | approve | agent:product-owner | persona agent | $1.9592464999999997 |  |
+| 2026-09-07T03:42:43.219Z | archaeology-organizations | G1 | approve | agent:product-owner | persona agent | $1.2634264999999998 |  |
+| 2026-09-07T03:31:13.677Z | ratify-proposals-1 | G1 | approve | agent:product-owner | persona agent | $3.361662499999999 | sample |
+| 2026-09-07T03:26:07.201Z | archaeology-proposals | G1 | approve | agent:product-owner | persona agent | $2.0290945 | sample |
+| 2026-09-07T03:10:55.180Z | ratify-opportunities-2 | G1 | approve | agent:product-owner | persona agent | $1.7399120000000001 | sample |
+| 2026-09-07T03:07:13.475Z | ratify-opportunities-1 | G1 | approve | agent:product-owner | persona agent | $2.6438360000000003 | sample |
+| 2026-09-07T01:21:29.623Z | archaeology-opportunities | G1 | approve | agent:product-owner | persona agent | $1.0044805 | sample |
+| 2026-09-07T00:56:00.781Z | spec-readme-v1 | G-POL | approve | tech-lead | a person |  |  |
+| 2026-09-07T00:33:52.294Z | budget-v1 | G-POL | approve | tech-lead | a person |  |  |
+| 2026-09-07T00:19:15.459Z | intent-digital-marketplace-rebuild | G0 | approve | agent:product-owner | persona agent | $0.6074485 | sample |
+| 2026-09-07T00:17:45.636Z | brief-v1 | G0 | approve | agent:product-owner | persona agent | $0.539408 | sample |
+| 2026-09-06T16:18:34.048Z | probe-ruling | G3 | approve | agent:reviewer | persona agent |  | sample |
+| 2026-09-06T09:25:55.241Z | gates-simulated-v1 | G-POL | approve | tech-lead | a person |  |  |
+| 2026-09-06T09:25:53.831Z | constitution-v1 | G-POL | approve | tech-lead | a person |  |  |

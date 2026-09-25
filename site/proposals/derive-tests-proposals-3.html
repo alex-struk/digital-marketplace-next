@@ -34,7 +34,7 @@
 <p>What is needed to close this: take <code>tests/acceptance/not-testable.yaml</code> as it stands on main, append the three proposals rows R-2.6, R-2.7 and R-2.8 exactly as they read in this workspace, and change nothing else. That is a mechanical operation for anyone with the repo, and it makes the file&#39;s diff additive as the condition requires. The more durable fix is upstream of me: this stage should be handed a workspace built from main with the slice applied on top, or at least a readable base revision, so that a shared file like this one cannot be regenerated out from under other slices without the stage being able to notice or repair it.</p>
 <p>I also recorded two notes for future runs: that <code>not-testable.yaml</code> is shared across every domain slice and must be appended to rather than regenerated, and that this workspace has no access to main, so &quot;restore from main&quot; conditions cannot be honoured inside it.</p></div>
 <section class="ruling"><h2>Ruling</h2>
-<p><span class="chip return">return</span> by tech-lead on 2026-09-07 16:14.</p>
+<p><span class="chip return">return</span> by tech-lead (a person) on 2026-09-07 16:14.</p>
 </section>
 </main>
 </div>

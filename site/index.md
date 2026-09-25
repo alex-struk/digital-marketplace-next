@@ -187,5 +187,9 @@ Profile: rebuild
 - Rulings cost: $259.666545
 - Total cost: $743.157977
 - Agent-held rulings: 139
+- Runner rulings (automatic, no seat held): 1
+- Human rulings: 7
+- Rulings whose seat this page does not recognise: 0
 - Open escalations: 0
+- Stalled proposals: 0
 - Open proposals: 0
