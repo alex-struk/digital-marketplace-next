@@ -1,0 +1,13 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the R-7.17 and R-7.28 tests assert only what their criteria say? Return. R-7.28 is sound. Its new test checks the reachable part of the criterion: a publish from an editor opened before the page was changed underneath it is reported as published, and the public page then shows the editor's wording and not the change made in between. The same-sign-in stand-in for a second administrator follows from the criterion's own statement that no version record is kept. The rewritten not-testable entry for the collision clause is real: the interleaving happens inside one server request that nothing on the surface can open or hold, so it goes to ratify. R-7.17's new test goes past its criterion. The criterion says embedded markup is never executed. It does not say the markup is removed, yet the test also requires that no script element appears among body_element_names. The old app keeps an inert script element in the rendered body (p, script, img, em), which meets never-executed as written, so the test would fail for something nobody asked for. The proposal itself declines to decide between literal text and removal, and this check partly decides it. The typecheck has no diagnostics under acceptance/content. What would change the ruling: the R-7.17 never-executed test with the script-element check removed or reduced to checking that nothing ran, everything else unchanged.
+conditions:
+  - "test-overreaches R-7.17: the never-executed test requires that no script element appears among the rendered body's elements, but the criterion only says embedded markup is never executed. It does not say markup is removed, and an inert script element that never runs meets the criterion. Assert only that nothing in the body ran (with the page reached and its words shown), and do not assert whether the markup survives as an element, as literal text, or not at all."
+  - "missing-test R-7.28: only two publishes interleaving inside a single read-then-write window collide on the version key, and there the second is refused with a service error rather than silently winning — owed by ratify: a statement of the clause in terms something observes, or a ruling that withdraws it as a property of the service's storage accepted without a test; the interleaving happens inside one server request that nothing on the surface can open, hold or force"
+cost: 0.41624099999999997
+turns: 4
+session: "b26b63f4-f6f3-459e-81a8-19b84911ccaa"
+at: 2026-09-25T14:06:17.049Z
