@@ -12,7 +12,7 @@
 | R-5.6 | — |  |  |
 | R-5.7 | — |  |  |
 | R-5.8 | — |  |  |
-| R-5.9 | not testable: blocked: the criterion is about the service refusing a panel that names no chair, and no action puts such a panel before the service. Every action that saves a panel — save_evaluation_panel on evaluation-panel-swu and evaluation-panel-twu, set_evaluation_panel and edit_evaluation_panel on the opportunity screens — goes through the browser form, which the criterion itself says already refuses a panel with no chair, so a refusal read there is the form's and says nothing of the service; and removing the chair from those screens leaves the removed person still named as chair, so the panel put forward is not chairless at all. The one request page for panels, evaluation-panel-request, offers only submit_panel_with_member_holding_no_role. Unblocked by an action that submits a panel of two public sector evaluators with nobody marked chair straight to the service, and an observation of the service's refusal. |  | fail (ruled: test-wrong) |
+| R-5.9 | acceptance/evaluation/R-5.9.spec.ts |  | fail (ruled: test-wrong) |
 | R-5.10 | acceptance/evaluation/R-5.10.spec.ts |  | unbound |
 | R-5.11 | acceptance/evaluation/R-5.11.spec.ts |  | not-testable |
 | R-5.12 | acceptance/evaluation/R-5.12.spec.ts |  | unbound |

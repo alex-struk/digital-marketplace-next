@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-evaluation-10 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">165</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">165</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">146</span></a></li><li><a href="../runs.html">Run log <span class="count">14</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-evaluation-10</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-25 11:51</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised evaluation tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I acted on the one condition.</p>
+<p>I acted on the one condition. I did not change any other file.</p>
+<p><strong>Condition 1, <code>tests/acceptance/evaluation/R-5.9.spec.ts</code>:</strong> I removed the assertion that checked whether the refusal text contained &quot;chair&quot; (<code>expect((await request.missingChairError()).toLowerCase()).toContain(&quot;chair&quot;)</code>). The reviewer is right that R-5.9 only requires the service to reject a panel with no chair. The criterion says nothing about how the refusal is worded. The word &quot;chair&quot; came from the contract&#39;s description of the observation, not from the criterion. So a service that refused the panel in other words would meet R-5.9 but still fail the test.</p>
+<p>The two checks the reviewer asked to keep are unchanged:</p>
+<ul><li>The test waits until <code>missingChairError()</code> returns text, which shows a refusal was reported.</li><li>After reopening <code>evaluationPanelRequest</code> for the same opportunity, <code>panelAsStored()</code> still matches the reading taken before the submission.</li></ul>
+<p>The file&#39;s header comment described the refusal as &quot;naming the missing chair&quot;, which would now be wrong. I changed it to say the refusal counts &quot;whatever its wording&quot;. Nothing else in the file changed: the title, the sign-in, the draft opportunity, the members and the rest of the flow are all as they were. The header&#39;s derived date was already 2026-09-25, which is today, so I left it alone.</p>
+<p>Nothing else was touched. The other files in <code>tests/acceptance/evaluation/</code>, every entry in <code>tests/acceptance/not-testable.yaml</code> and <code>tests/generated</code> are byte-for-byte as I found them. R-5.9 still has no entry in <code>not-testable.yaml</code>, which matches the reviewer&#39;s finding that the contract now provides the action and observation it needs.</p>
+<p>I did not run the typecheck or the tests after this edit. Removing one assertion does not add any new call to <code>surface</code>. Every condition was acted on, and I needed no new surface actions or observations. As the reviewer noted, missing-test/R-5.9 stays open until this test actually runs.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-25 11:52.</p>
+<div class="body"><p>The question is whether the revised evaluation tests follow from their criteria and nothing else. They do, so I approve. R-5.9 says only that the service must reject a panel that names no chair. The test now asserts two things. First, it polls until missing_chair_error returns any text, which shows a refusal was reported. Second, after reopening evaluation-panel-request for the same opportunity, panel_as_stored reads exactly what it read before the submission, which shows nothing was stored. The earlier check on the refusal&#39;s wording is gone, and the header comment now says the refusal counts whatever its wording. The panel goes through evaluation-panel-request, so any refusal it reads comes from the service and not the browser form, which is the distinction the criterion draws. Nothing about how the application is built leaks in: the only inputs are the contract&#39;s program/opportunityId parameters, seeded members and a draft title. The runner&#39;s typecheck reports no diagnostics under acceptance/evaluation/. The one failure is in adapters/new/, which this proposal is not answerable for. In not-testable.yaml, R-5.9&#39;s entry is removed, which is right now that the contract provides submit_panel_with_no_chair and missing_chair_error. R-5.34&#39;s entry is moved but its text is unchanged. Its reason is real: the target signs in only two public sector accounts, so the four distinct roles the criterion needs cannot all be reached. The surface.d.ts additions are regenerated contract output and pass the generated check. One weakness is not an overreach: if panel_as_stored could not be read either time, the before/after comparison would pass on two empty readings. It asserts nothing the criterion does not ask for. What would change this ruling: a typecheck diagnostic under acceptance/evaluation/, or the contract showing that missing_chair_error or submit_panel_with_no_chair does something other than what the test relies on. missing-test/R-5.9 stays open until this test actually runs, which no ruling can settle.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met derive-tests-evaluation-stale-4#1: the assertion that the refusal&#39;s text contains &#39;chair&#39; is removed from tests/acceptance/evaluation/R-5.9.spec.ts; the test keeps the poll that missing_chair_error returns text and the check that panel_as_stored after reopening evaluation-panel-request equals the reading taken before the submission, and the header comment now reads &#39;a refusal, whatever its wording&#39;.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

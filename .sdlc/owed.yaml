@@ -2736,3 +2736,8 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-25T11:33:11.781Z
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-5.9 v1 fail"
+      by: runner
+      at: 2026-09-25T11:52:38.626Z

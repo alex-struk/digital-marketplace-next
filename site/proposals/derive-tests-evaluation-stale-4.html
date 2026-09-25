@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-evaluation-stale-4 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">165</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">165</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">146</span></a></li><li><a href="../runs.html">Run log <span class="count">14</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-evaluation-stale-4</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-25 11:50</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the evaluation criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I wrote a test for R-5.9 (v1).</p>
+<p>I wrote a test for R-5.9 (v1). It was the only criterion in this run, so one of one now has a test. Its entry is gone from <code>tests/acceptance/not-testable.yaml</code>, so the criterion is on the test side only. I couldn&#39;t typecheck or run the test: the type-checker command needed approval that wasn&#39;t given in this session. The test copies the calls of the existing R-5.37 test, which uses the same request page.</p>
+<p><strong>What changed.</strong> The entry for R-5.9 was blocked because only the browser form could submit a panel, and the form already refuses one with no chair, so any refusal seen there came from the form. The contract has now added the two missing pieces to <code>evaluation-panel-request</code>:</p>
+<ul><li><code>submit_panel_with_no_chair</code>: sends two public sector members, both evaluators and neither the chair, straight to the service.</li><li><code>missing_chair_error</code>: the service&#39;s refusal.</li></ul>
+<p>It already had <code>panel_as_stored</code>, which shows the panel the service holds. Together these are everything the entry said was missing.</p>
+<p><strong>What the test does.</strong> It is <code>tests/acceptance/evaluation/R-5.9.spec.ts</code>, one <code>test()</code> titled with the criterion&#39;s own statement, because the criterion has a single outcome:</p>
+<ol><li>Signs in as <code>persona.publicSectorStaff</code> and saves a new Sprint With Us draft, so its panel can still be changed. It gets the draft&#39;s identifier from <code>opportunitySwuEdit.opportunityIdentifier()</code>.</li><li>Opens the request page for that opportunity and records <code>panelAsStored()</code> as it stands.</li><li>Submits a panel of <code>seed.users.staffOne</code> and <code>seed.users.staffTwo</code>, with nobody as chair.</li><li>Waits for <code>missingChairError()</code> to have text and checks that the text mentions &quot;chair&quot;.</li><li>Opens the page again and checks that <code>panelAsStored()</code> is exactly what it was before.</li></ol>
+<p>I read &quot;reject&quot; as both a refusal and nothing stored, because the criterion is about no opportunity reaching consensus without a chair.</p>
+<p>Two assumptions could fail when the test runs:</p>
+<ul><li><strong>The action&#39;s input.</strong> The contract describes it only as &quot;two public sector members (seed users handles)&quot;. I passed them as <code>{ members: [...] }</code>, the nearest form to R-5.37, which passes <code>{ member }</code> to its sibling action. If the adapter expects another shape, the test will fail on that call, not on the requirement.</li><li><strong>The wording check.</strong> Checking that the refusal says &quot;chair&quot; is my reading of &quot;the service&#39;s refusal naming the missing chair&quot; in the contract&#39;s own note. The contract doesn&#39;t fix any wording beyond that.</li></ul>
+<p><strong>What stays open.</strong> I found no surface action or observation missing for this criterion. I covered only Sprint With Us. The criterion talks about &quot;an evaluation panel&quot; in general, and the request page also accepts <code>team-with-us</code>, so a Team With Us version could be added if the ruling wants both programs.</p>
+<p>I changed nothing outside <code>tests/acceptance</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:reviewer (persona agent) on 2026-09-25 11:51.</p>
+<div class="body"><p>Question: does tests/acceptance/evaluation/R-5.9.spec.ts follow from R-5.9 and nothing else? Ruling: return. The test sends a chairless panel to the service through evaluation-panel-request.submit_panel_with_no_chair, not through the browser form, so any refusal it reads is the service&#39;s own. It reads &#39;reject&#39; as a refusal being reported (missing_chair_error has text) plus the stored panel being unchanged on reopening (panel_as_stored equals its earlier reading). R-5.9&#39;s purpose, that no opportunity reaches consensus without a chair, supports that reading. The test uses only surface calls, personas and seed handles, and the runner&#39;s typecheck reports no diagnostics under acceptance/evaluation (its one diagnostic is in adapters/new). Removing R-5.9 from not-testable.yaml is justified because the contract now carries the action and observation that entry named as missing. One assertion goes past the criterion: expect(missingChairError().toLowerCase()).toContain(&#39;chair&#39;) sets a rule about the refusal&#39;s wording. R-5.9 only requires that the service reject the panel. The word comes from the contract&#39;s description of the observation, not from the criterion, unlike R-5.37, which explicitly requires a message identifying the offending member. A new service that refuses the panel with other wording would meet R-5.9 and still fail this test. Would approve once that assertion is removed and the other two checks are kept unchanged. Covering Sprint With Us alone is enough, since the criterion states one rule for any evaluation panel. missing-test/R-5.9 stays open until the test runs.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>tests/acceptance/evaluation/R-5.9.spec.ts: remove the assertion that the refusal&#39;s text contains &#39;chair&#39;. R-5.9 requires only that the service reject a panel naming no chair; it says nothing about the refusal&#39;s wording, so the test may check only that missing_chair_error reports a refusal (has text) and that panel_as_stored is unchanged after reopening the request page. Keep both of those checks as they are.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
