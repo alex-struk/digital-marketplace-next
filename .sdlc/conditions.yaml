@@ -79,3 +79,16 @@ conditions:
         runner's typecheck of revision 7f565820 passed."
       by: agent:reviewer
       at: 2026-09-25T09:47:25.558Z
+  - ref: derive-tests-opportunities-stale-3#2
+    text: "R-1.49: once the contract stage has supplied a Team With Us record of its
+      own, move both R-1.49 tests onto it so that no other test scores or awards
+      it. Make the reading of offered state changes independent of the award
+      test: put the reading first in one test, or give the two tests separate
+      records. As written, the award leaves the opportunity awarded and the
+      offered-changes test then fails for a reason R-1.49 does not govern."
+    from: derive-tests-opportunities-stale-3
+    family: derive-tests-opportunities-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-25T10:05:00.162Z
