@@ -44,3 +44,26 @@ I wrote tests for all nine criteria except R-5.9, which is now recorded as block
 - In R-5.37, "identifying the offending member" is taken to mean naming them by name, email or id. If the service identifies the member by position instead, that test fails.
 
 I changed nothing outside `tests/acceptance`. The R-5.34 entry in `not-testable.yaml` isn't in this run's list, so I left it as it was.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: do these evaluation tests follow from their criteria and nothing else? Approved. The runner's typecheck error is confined to adapters/new; acceptance/evaluation has no diagnostics. Each test asserts only what its criterion says. R-5.1 builds each faulty panel explicitly and requires the rule named where the contract offers an observation; its two-chair case accepts a chair that moves as the refusal, as the prior redo instructed. R-5.17 counts visible and blind-copy recipients and establishes that the panel names exactly two people and that the opportunity is not a draft before adding the third. R-5.18 v2 covers both halves: panel_as_stored is the service's per-opportunity answer (surface.yaml evaluation-panel-request), and the panel screen opens only for the administrator and the owner. R-5.11, R-5.21, R-5.23, R-5.26 and R-5.37 use the seeds and observations the contract added, and no selectors, routes or status codes leak in. The fixtures reset to the seed before every test, so the tests that share a seeded proponent cannot collide. R-5.9's blocked reason is real: no action puts a chairless panel before the service outside the browser form, and the reason names the missing request action and observation, owned by contract. Some tests under-assert: R-5.18's Not Found wording, R-5.23's stored empty comment, and R-5.18's refusal reads, which are not polled. The ruling would change if a run showed R-5.37's reading of 'identifying' or R-5.18's use of panel_as_stored failing for a reason the criterion does not govern; that would call for a test-overreaches return or the contract adding a plain panel read.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `2f4e9a829bc090ed18f9d864a98a00e28cb7a4f1`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 1 diagnostic
