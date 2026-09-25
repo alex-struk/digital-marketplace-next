@@ -1,0 +1,12 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does tests/acceptance/evaluation/R-5.9.spec.ts follow from R-5.9 and nothing else? Ruling: return. The test sends a chairless panel to the service through evaluation-panel-request.submit_panel_with_no_chair, not through the browser form, so any refusal it reads is the service's own. It reads 'reject' as a refusal being reported (missing_chair_error has text) plus the stored panel being unchanged on reopening (panel_as_stored equals its earlier reading). R-5.9's purpose, that no opportunity reaches consensus without a chair, supports that reading. The test uses only surface calls, personas and seed handles, and the runner's typecheck reports no diagnostics under acceptance/evaluation (its one diagnostic is in adapters/new). Removing R-5.9 from not-testable.yaml is justified because the contract now carries the action and observation that entry named as missing. One assertion goes past the criterion: expect(missingChairError().toLowerCase()).toContain('chair') sets a rule about the refusal's wording. R-5.9 only requires that the service reject the panel. The word comes from the contract's description of the observation, not from the criterion, unlike R-5.37, which explicitly requires a message identifying the offending member. A new service that refuses the panel with other wording would meet R-5.9 and still fail this test. Would approve once that assertion is removed and the other two checks are kept unchanged. Covering Sprint With Us alone is enough, since the criterion states one rule for any evaluation panel. missing-test/R-5.9 stays open until the test runs.
+conditions:
+  - "tests/acceptance/evaluation/R-5.9.spec.ts: remove the assertion that the refusal's text contains 'chair'. R-5.9 requires only that the service reject a panel naming no chair; it says nothing about the refusal's wording, so the test may check only that missing_chair_error reports a refusal (has text) and that panel_as_stored is unchanged after reopening the request page. Keep both of those checks as they are."
+cost: 0.35251
+turns: 1
+session: "cc18994c-574f-42d2-8c6b-b0cc54964b8e"
+at: 2026-09-25T11:51:22.408Z
