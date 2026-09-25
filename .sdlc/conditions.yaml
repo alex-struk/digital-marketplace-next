@@ -149,3 +149,13 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-25T10:29:02.491Z
+    closed:
+      outcome: met
+      why: tests/acceptance/opportunities/R-1.35.spec.ts no longer reads a proposal
+        count; arrangeWatcherAndProponent wraps persona.vendor's submission in a
+        try/catch and then polls ownProposalRow (proposalVendorDashboard.open,
+        showMyProposals, myProposalsTable) until the row naming
+        seed.opportunities.publishedCodeWithUs.title matches /submit/, which
+        holds whether R-1.31 or R-1.35 runs first
+      by: agent:reviewer
+      at: 2026-09-25T10:31:42.746Z
