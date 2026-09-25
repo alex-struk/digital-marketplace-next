@@ -23,16 +23,16 @@
 | R-8.17 | acceptance/files/R-8.17.spec.ts |  | fail (ruled: defect-in-old) |
 | R-8.18 | acceptance/files/R-8.18.spec.ts |  | fail (ruled: defect-in-old) |
 | R-8.19 | acceptance/files/R-8.19.spec.ts |  | fail (ruled: defect-in-old) |
-| R-8.20 | acceptance/files/R-8.20.spec.ts |  | fail |
+| R-8.20 | acceptance/files/R-8.20.spec.ts |  | pass |
 | R-8.21 | acceptance/files/R-8.21.spec.ts |  | fail (ruled: defect-in-old) |
 | R-8.22 | acceptance/files/R-8.22.spec.ts |  | fail |
 | R-8.23 | acceptance/files/R-8.23.spec.ts |  | fail |
 | R-8.24 | acceptance/files/R-8.24.spec.ts |  | fail |
 | R-8.25 | acceptance/files/R-8.25.spec.ts |  | fail |
 | R-8.26 | — |  | not-testable |
-| R-8.27 | acceptance/files/R-8.27.spec.ts |  | fail |
+| R-8.27 | acceptance/files/R-8.27.spec.ts |  | pass |
 | R-8.28 | acceptance/files/R-8.28.spec.ts |  | fail |
-| R-8.29 | acceptance/files/R-8.29.spec.ts |  | fail |
+| R-8.29 | acceptance/files/R-8.29.spec.ts |  | pass |
 | R-8.30 | acceptance/files/R-8.30.spec.ts |  | fail |
 | R-8.31 | acceptance/files/R-8.31.spec.ts |  | fail |
 

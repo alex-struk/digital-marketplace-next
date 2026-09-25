@@ -6,40 +6,40 @@
 | --- | --- | --- | --- |
 | R-5.1 | acceptance/evaluation/R-5.1.spec.ts |  | fail |
 | R-5.2 | — |  |  |
-| R-5.3 | acceptance/evaluation/R-5.3.spec.ts |  | fail |
+| R-5.3 | acceptance/evaluation/R-5.3.spec.ts |  | unbound |
 | R-5.4 | — |  |  |
 | R-5.5 | — |  |  |
 | R-5.6 | — |  |  |
 | R-5.7 | — |  |  |
 | R-5.8 | — |  |  |
 | R-5.9 | acceptance/evaluation/R-5.9.spec.ts |  | fail |
-| R-5.10 | acceptance/evaluation/R-5.10.spec.ts |  | fail |
-| R-5.11 | acceptance/evaluation/R-5.11.spec.ts |  | fail |
-| R-5.12 | acceptance/evaluation/R-5.12.spec.ts |  | fail |
-| R-5.13 | acceptance/evaluation/R-5.13.spec.ts |  | fail |
-| R-5.14 | acceptance/evaluation/R-5.14.spec.ts |  | fail |
+| R-5.10 | acceptance/evaluation/R-5.10.spec.ts |  | unbound |
+| R-5.11 | acceptance/evaluation/R-5.11.spec.ts |  | pass |
+| R-5.12 | acceptance/evaluation/R-5.12.spec.ts |  | unbound |
+| R-5.13 | acceptance/evaluation/R-5.13.spec.ts |  | unbound |
+| R-5.14 | acceptance/evaluation/R-5.14.spec.ts |  | unbound |
 | R-5.15 | — |  |  |
-| R-5.16 | acceptance/evaluation/R-5.16.spec.ts |  | fail |
-| R-5.17 | acceptance/evaluation/R-5.17.spec.ts |  | fail |
-| R-5.18 | acceptance/evaluation/R-5.18.spec.ts |  | fail (ruled: spec-wrong) |
-| R-5.19 | acceptance/evaluation/R-5.19.spec.ts |  | fail |
-| R-5.20 | acceptance/evaluation/R-5.20.spec.ts |  | fail (ruled: defect-in-old) |
+| R-5.16 | acceptance/evaluation/R-5.16.spec.ts |  | unbound |
+| R-5.17 | acceptance/evaluation/R-5.17.spec.ts |  | pass |
+| R-5.18 | acceptance/evaluation/R-5.18.spec.ts |  | pass (ruled: spec-wrong) |
+| R-5.19 | acceptance/evaluation/R-5.19.spec.ts |  | unbound |
+| R-5.20 | acceptance/evaluation/R-5.20.spec.ts |  | pass (ruled: defect-in-old) |
 | R-5.21 | acceptance/evaluation/R-5.21.spec.ts |  | fail |
-| R-5.22 | acceptance/evaluation/R-5.22.spec.ts |  | fail |
-| R-5.23 | acceptance/evaluation/R-5.23.spec.ts |  | fail |
-| R-5.24 | acceptance/evaluation/R-5.24.spec.ts |  | fail |
+| R-5.22 | acceptance/evaluation/R-5.22.spec.ts |  | pass |
+| R-5.23 | acceptance/evaluation/R-5.23.spec.ts |  | unbound |
+| R-5.24 | acceptance/evaluation/R-5.24.spec.ts |  | pass |
 | R-5.25 | acceptance/evaluation/R-5.25.spec.ts |  | fail (ruled: spec-wrong) |
-| R-5.26 | acceptance/evaluation/R-5.26.spec.ts |  | fail |
-| R-5.27 | acceptance/evaluation/R-5.27.spec.ts |  | fail |
-| R-5.28 | acceptance/evaluation/R-5.28.spec.ts |  | fail |
+| R-5.26 | acceptance/evaluation/R-5.26.spec.ts |  | pass |
+| R-5.27 | acceptance/evaluation/R-5.27.spec.ts |  | pass |
+| R-5.28 | acceptance/evaluation/R-5.28.spec.ts |  | pass |
 | R-5.29 | acceptance/evaluation/R-5.29.spec.ts |  | fail |
-| R-5.30 | acceptance/evaluation/R-5.30.spec.ts |  | fail |
-| R-5.31 | acceptance/evaluation/R-5.31.spec.ts |  | fail |
-| R-5.32 | acceptance/evaluation/R-5.32.spec.ts |  | fail |
-| R-5.33 | acceptance/evaluation/R-5.33.spec.ts |  | fail |
-| R-5.34 | acceptance/evaluation/R-5.34.spec.ts |  | fail |
-| R-5.35 | acceptance/evaluation/R-5.35.spec.ts |  | fail |
-| R-5.36 | acceptance/evaluation/R-5.36.spec.ts |  | fail |
+| R-5.30 | acceptance/evaluation/R-5.30.spec.ts |  | unbound |
+| R-5.31 | acceptance/evaluation/R-5.31.spec.ts |  | unbound |
+| R-5.32 | acceptance/evaluation/R-5.32.spec.ts |  | unbound |
+| R-5.33 | acceptance/evaluation/R-5.33.spec.ts |  | unbound |
+| R-5.34 | acceptance/evaluation/R-5.34.spec.ts |  | pass |
+| R-5.35 | acceptance/evaluation/R-5.35.spec.ts |  | unbound |
+| R-5.36 | acceptance/evaluation/R-5.36.spec.ts |  | unbound |
 | R-5.37 | acceptance/evaluation/R-5.37.spec.ts |  | fail |
 
 ### R-5.1 · v1 · confirmed · accepted
