@@ -29,3 +29,26 @@ It checks nothing more about the markup. The second test covers "renders identic
 **What I could not do.** I did not rerun the typecheck: running it needed approval, and I didn't get it. The only change is removing one assertion and the lines that fed it. No new surface call or import came in, so I expect no new diagnostics, but I haven't checked that.
 
 **Surface gaps.** This revision needed no surface action or observation that is missing.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+The question is whether the revised content tests follow from their criteria and nothing else. Approve. The one condition from the last ruling has been carried out: the never-executed test for R-7.17 no longer asserts that no script element survives in the body. It asserts only what the criterion states. The seeded probe page is reached on its own address and shows its words as text, and bodyScriptRan reports that nothing in the body executed. That covers both the inline script and the image failure handler. The test says in its own comment that it does not rule on whether the markup stays inert, shows as literal text or is removed, which is exactly what the criterion leaves open. The title check only confirms the right page was reached. The identical-rendering test is unchanged in substance and still follows from the criterion's second clause. It compares the normalised body on the page's own address with what each embedding screen shows, and guards against two empty renderings matching. R-7.28's test and its not-testable entry are unchanged and were already judged sound. The condition on R-7.28's collision clause stays addressed to ratify. No selector, route, table or status code leaks into either file. The runner's typecheck reports no diagnostics under acceptance/content. Its two diagnostics are in adapters/new, which this proposal does not answer for. missing-test/R-7.17 is not marked met here: it closes only when this test runs at the criterion's current version, and it is not withdrawn because the test is still owed. The ruling would change to a return if the calibrate run showed the probe test depending on anything the criterion does not state, or if a content diagnostic appeared in the typecheck.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `efc6cb2a426eca98ee049293ce79eb78bf62a7bd`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/content/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
