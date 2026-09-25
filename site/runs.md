@@ -17,6 +17,10 @@
 - 00:54:47 run contract: ok, cost 0, turns 0
 - 00:54:47 propose contract-v4 at G1
 - 00:55:52 rule contract-v4 approve at G1 by agent:product-owner (agent)
+- 01:16:40 run bind-adapter: pre-checks failed
+- 02:08:51 oracle down old
+- 02:13:16 oracle up old: http://localhost:4300 (local port 4300)
+- 02:17:11 run bind-adapter: post-checks failed
 
 # Run record 2026-09-22
 

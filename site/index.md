@@ -186,9 +186,9 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $503.292372
+- Journal cost: $505.365096
 - Rulings cost: $261.369756
-- Total cost: $764.662128
+- Total cost: $766.734852
 - Agent-held rulings: 141
 - Runner rulings (automatic, no seat held): 1
 - Human rulings: 8
