@@ -1946,7 +1946,7 @@ owed:
     id: R-7.17
     version: 1
     domain: content
-    stage: calibrate
+    stage: contract
     why: "blocked: the criterion's two distinctive clauses each need something that
       is missing, and for the first of them what is missing is the body, not the
       observation. That embedded markup is never executed can be read off
@@ -2021,7 +2021,22 @@ owed:
         why: a test for v1 exists and has not run
         by: runner
         at: 2026-09-25T13:00:12.833Z
+      - from: calibrate
+        to: contract
+        why: an observation reporting whether markup in a page body took effect
+        by: agent:reviewer
+        proposal: derive-tests-content-9
+        gate: G3
+        at: 2026-09-25T13:20:03.010Z
     target: old
+    clause: markup embedded in it is never executed
+    restates:
+      - ref: derive-tests-content-9#2
+        text: "R-7.17's clause 'markup embedded in it is never executed' is not asserted
+          by any test and is not recorded in not-testable.yaml: a pass on R-7.17
+          establishes only the identical-rendering clause. It stays open until
+          the contract offers an observation reporting whether markup in a page
+          body took effect."
   - kind: missing-test
     item: R-7.23
     id: R-7.23
