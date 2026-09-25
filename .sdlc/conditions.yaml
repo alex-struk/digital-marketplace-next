@@ -69,3 +69,13 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-09-25T09:45:40.890Z
+    closed:
+      outcome: met
+      why: "tests/adapters/old/index.ts fileAttachByIdentifier.attachStoredFile now
+        always sends PUT {tag: \"edit\", ...} to openedRecord. It sends the full
+        edit value when the record is readable and {attachments:
+        [fileIdFor(named)]} when it is not, so attachment_accepted and
+        attachment_refused read the service's answer to the attach itself. The
+        runner's typecheck of revision 7f565820 passed."
+      by: agent:reviewer
+      at: 2026-09-25T09:47:25.558Z
