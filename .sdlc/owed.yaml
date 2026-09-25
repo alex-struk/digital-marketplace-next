@@ -1430,7 +1430,7 @@ owed:
     id: R-4.1
     version: 1
     domain: users
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the given is a person with no account on the service, and no
       persona is one. Every persona in personas.yaml signs in as an account
       tests/seed already carries, and no page, action or observation creates an
@@ -1476,12 +1476,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T11:12:24.603Z
+    target: old
   - kind: missing-test
     item: R-4.2
     id: R-4.2
     version: 1
     domain: users
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the when is an account being created, which no persona brings
       about (see R-4.1), so the welcome message has nothing to follow. The
       withheld half needs two further things: a first-time persona whose
@@ -1526,12 +1532,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T11:12:24.603Z
+    target: old
   - kind: missing-test
     item: R-4.5
     id: R-4.5
     version: 1
     domain: users
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the when is the person signing in again the ordinary way, through
       the identity provider, and that is the one step no target this contract
       runs against lets a test take. On the oracle surface.signIn uses the
@@ -1600,6 +1612,12 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T11:12:24.603Z
+    target: old
   - kind: missing-test
     item: R-4.13
     id: R-4.13
@@ -1633,7 +1651,7 @@ owed:
     id: R-4.20
     version: 1
     domain: users
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: both halves turn on which message was sent, and the two messages
       differ only in their wording — one says an administrator reactivated the
       account and names whom to contact, the other says the person reactivated
@@ -1682,12 +1700,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T11:12:24.603Z
+    target: old
   - kind: missing-test
     item: R-4.21
     id: R-4.21
     version: 1
     domain: users
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the claim is that the request is refused rather than answered,
       and user-list carries no refusal observation — it names user_row,
       status_badge, account_type, admin_check and the two export observations,
@@ -1735,6 +1759,12 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T11:12:24.603Z
+    target: old
   - kind: missing-test
     item: R-7.11
     id: R-7.11

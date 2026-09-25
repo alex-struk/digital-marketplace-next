@@ -198,57 +198,6 @@ criteria:
       away, and the two closed opportunities need their whole evaluation run
       first. The seed could hold a closed Code With Us opportunity with three
       submitted proposals."
-  - id: R-4.1
-    version: 1
-    reason: "blocked: the given is a person with no account on the service, and no
-      persona is one. Every persona in personas.yaml signs in as an account
-      tests/seed already carries, and no page, action or observation creates an
-      account, so no first sign-in can be made and no account can be watched
-      coming into existence. Reading the kind of an account the seed already
-      gave a kind would assert the seed rather than the service's decision.
-      Unblocked by personas whose sandbox identities have no seeded account —
-      one government identity, one code-hosting identity, and one the service
-      recognises as neither for the refusal in the note — and, since the seed is
-      applied once and a first sign-in can only happen once, by a way to return
-      such an identity to never having signed in before each run."
-  - id: R-4.2
-    version: 1
-    reason: "blocked: the when is an account being created, which no persona brings
-      about (see R-4.1), so the welcome message has nothing to follow. The
-      withheld half needs two further things: a first-time persona whose
-      identity supplies no email address (seed.users.vendorWithoutEmail already
-      has an account), and a mail accessor that lists every message in the
-      catcher — observables.yaml names read_messages, but the mail fixture only
-      searches by one visible recipient, and a person with no address has no
-      address to search by, so an empty search cannot show that nothing was
-      attempted. Unblocked by the first-time personas R-4.1 needs, one of them
-      without an email address, and a mail.all() (or equivalent) over
-      read_messages."
-  - id: R-4.5
-    version: 1
-    reason: "blocked: the when is the person signing in again the ordinary way,
-      through the identity provider, and that is the one step no target this
-      contract runs against lets a test take. On the oracle surface.signIn uses
-      the session-route mechanism in personas.yaml, which D-users-29 and the
-      openapi entry for the direct vendor route describe as creating a session
-      without the identity provider and without looking at the account's status,
-      so it passes over exactly the check that reactivates a self-deactivated
-      account. user-sign-in.sign_in_as_vendor starts the real hand-off
-      (startSignIn redirects to the identity provider), but nothing in the
-      contract completes that hand-off for a seeded persona there. A test built
-      on either would record what a sign-in that is not the one described does,
-      and fail or pass for that reason rather than the criterion's. The rest is
-      reachable: user-profile-self.deactivate_account and
-      confirm_activation_change produce the given for persona.vendor,
-      user-profile.status_badge read by persona.administrator shows the account
-      active again, and mail.messagesTo(seed.users.vendorOne.email) catches the
-      message, though telling the self-reactivation message apart from any other
-      needs the message body R-4.20 asks for. Unblocked by an ordinary
-      identity-provider sign-in a test can complete for a seeded persona on
-      every target, for example a sandbox-idp mechanism configured for the
-      oracle too, or a user-sign-in action that finishes the identity provider's
-      sign-in for a named persona; R-4.4 and R-4.20's self-reactivation half
-      need the same."
   - id: R-4.13
     version: 1
     reason: "unobservable: the outcome is that the service offers no way to create
@@ -262,37 +211,6 @@ criteria:
       documented manual route lies outside the service by definition. This is a
       property to be accepted by a reader of the rebuilt system's routes, not
       settled by a test."
-  - id: R-4.20
-    version: 1
-    reason: "blocked: both halves turn on which message was sent, and the two
-      messages differ only in their wording — one says an administrator
-      reactivated the account and names whom to contact, the other says the
-      person reactivated it themselves. The mail fixture returns Subject,
-      Snippet, To and ID from the search listing and offers no way to read one
-      message; the Snippet was considered and rejected, because it is a leading
-      excerpt the catcher cuts at a length of its own choosing, so a phrase
-      missing from it proves nothing. The email notification reference describes
-      messages rather than the one that was sent (see R-6.12). Unblocked by a
-      mail accessor over observables.yaml's read_one_message returning the
-      message's plain_text_body (Text) or html_body (HTML); both halves are then
-      reachable, since an administrator's reactivation of
-      seed.users.vendorDeactivated and a self-deactivated vendor signing in
-      again can each be produced."
-  - id: R-4.21
-    version: 1
-    reason: "blocked: the claim is that the request is refused rather than answered,
-      and user-list carries no refusal observation — it names user_row,
-      status_badge, account_type, admin_check and the two export observations,
-      none of which tells 'you are not permitted' from a screen with nothing on
-      it. A test could only assert that a public sector employee who is not an
-      administrator sees no rows, which was equally true of the superseded
-      R-4.15, where the interface withheld the screen while the service answered
-      the request in full. The disclosure the criterion guards against is a
-      property of the service's answer, which observables.yaml's refusals
-      section reads for files and exports but not for the list of users.
-      Unblocked by user-list.refused_for_non_administrator (reported to a
-      signed-in public sector employee and to a visitor who is not signed in
-      alike), or by a refusals entry naming the user-list request's status."
   - id: R-7.11
     version: 1
     reason: "The claim is about the shape of a refused answer — a permission refusal
