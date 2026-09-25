@@ -28,3 +28,27 @@ The contract says each link goes to the named person's profile, and a profile is
 Whoever rules next should decide whether the entry is still wanted despite that check. If it is, it would be `unobservable:` with owner `ratify`, because the clause could only be tested if the criterion were restated in terms something can observe. Alternatively the contract could add an observation that reports whether any markup in the body took effect, which would make it `blocked:` with owner `contract`.
 
 **Surface additions this would need:** an observation on `content-view`, and on the screens that embed page bodies, reporting whether markup in the body took effect.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: do the revised R-7.27 and R-7.17 tests follow from their criteria and nothing else? Approve. R-7.27 now asserts published_by and updated_by equal the seeded names of administratorOne and administratorTwo and that each link carries that person's identifier, which is what the criterion's 'names the two people, each linked to their profile' asks and what derive-tests-content-8#3 required, with no route written into the test. R-7.17 no longer demands a literal rendering of markup; it asserts only the identical-rendering clause (own address vs the SWU scope section and TWU terms section, whitespace-collapsed), guarded against empty-matches-empty by the tagged words, and every assertion follows from the criterion. Tests that overwrite service pages (R-7.17, R-7.25) do not contaminate R-7.12 or R-7.27 because the fixture resets the target to seed before every test. The runner's typecheck reports no diagnostics under acceptance/content; its single failure is in adapters/new, outside this proposal. The remaining gap is R-7.17's never-executed clause: it is genuinely unobservable through page_body, and derive-tests cannot record it in not-testable.yaml while the criterion keeps a test file, so a passing R-7.17 result will establish only the identical-rendering clause. That is recorded below rather than returned, because derive-tests cannot act on it. What would change the ruling: a content-edit or content-view observation reporting whether markup in a body took effect. Once the contract offers one, the never-executed clause should be derived and asserted.
+
+**Conditions:**
+- condition-met derive-tests-content-8#3: tests/acceptance/content/R-7.27.spec.ts second test asserts publishedBy/updatedBy equal seed.users.administratorOne.name and administratorTwo.name, and publishedByLink/updatedByLink contain each person's seeded id, read through the contract observations with no route in the test.
+- R-7.17's clause 'markup embedded in it is never executed' is not asserted by any test and is not recorded in not-testable.yaml: a pass on R-7.17 establishes only the identical-rendering clause. It stays open until the contract offers an observation reporting whether markup in a page body took effect.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `c38be5c360fa5f8bc201c321614a1a3995ae290e`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/content/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 1 diagnostic
