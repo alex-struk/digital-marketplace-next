@@ -28,6 +28,15 @@ import { seed } from "../../generated/seed";
 import type * as S from "../../generated/surface";
 import { uploadFile } from "../../fixtures/upload";
 
+// The surface this adapter is compiled against may be the one generated from this contract
+// or one generated from an earlier one, so it has to compile against both. A page only the
+// newer surface declares is typed through PageOf, and a page that gained members is typed
+// Open so a member the older surface lacks is not refused as an unknown property.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type Members = { [member: string]: (...args: any[]) => any };
+type PageOf<K extends string> = S.Surface extends { [P in K]: infer T } ? T : Members;
+type Open<T> = T & { [member: string]: unknown };
+
 type Scope = Page | Locator;
 
 // Two ways an observation can come up with nothing, and they are not the same answer.
@@ -353,6 +362,22 @@ export default function create(
 
   async function dialogText(): Promise<string> {
     return (await dialog().count()) ? (await dialog().first().innerText()).trim() : "";
+  }
+
+  // A dialog left open by an earlier action is put away without choosing anything in it.
+  async function dismissDialog(): Promise<void> {
+    if (!(await dialog().count())) return;
+    await page.keyboard.press("Escape").catch(() => undefined);
+    await dialog().first().waitFor({ state: "hidden", timeout: 2000 }).catch(() => undefined);
+    for (const name of ["Cancel", "Close", "×"]) {
+      if (!(await dialog().count())) break;
+      const control = await findControl(dialog().first(), name);
+      if (control) {
+        await control.click().catch(() => undefined);
+        await dialog().first().waitFor({ state: "hidden", timeout: 5000 }).catch(() => undefined);
+      }
+    }
+    await settle();
   }
 
   async function inDialog(where: string, names: string[]): Promise<void> {
@@ -1352,7 +1377,7 @@ export default function create(
   }
 
   async function renameAttachment(where: string, input: unknown): Promise<void> {
-    await advanceTo(where, "Add Attachment");
+    await attachmentsOpenToChange(where);
     const boxes = attachmentNameBoxes();
     const count = await boxes.count();
     if (!count) {
@@ -1404,9 +1429,33 @@ export default function create(
     return null;
   }
 
+  // The Attachments step open to change. A saved record — a published opportunity, a
+  // submitted proposal — shows its attachments read-only, in disabled boxes, until "Edit"
+  // is chosen from its Actions menu or, where it offers no menu, from the top bar.
+  async function attachmentsOpenToChange(where: string): Promise<void> {
+    const open = async (): Promise<boolean> =>
+      (await seen(page.getByText("Add Attachment", { exact: false })).count()) > 0;
+    await settle();
+    if (await open()) return;
+    await attachmentsStep();
+    if (await open()) return;
+    let editing = await fromActionsIfOffered(where, ["Edit"]);
+    if (!editing) {
+      const edit = await findControl(navBar(), "Edit");
+      if (edit && !(await isDisabled(edit))) {
+        await edit.click();
+        await settle();
+        editing = true;
+      }
+    }
+    if (editing) await attachmentsStep();
+    // Says what was tried when the step still offers no change.
+    await advanceTo(where, "Add Attachment");
+  }
+
   // The mark drawn right beside an attachment's name takes it off the list.
   async function removeAttachment(where: string, input: unknown): Promise<void> {
-    await advanceTo(where, "Add Attachment");
+    await attachmentsOpenToChange(where);
     const boxes = attachmentNameBoxes();
     const count = await boxes.count();
     if (count) {
@@ -1864,8 +1913,16 @@ export default function create(
   // start with and then shows that phase and every later one, each folded under its name.
   const PHASES = ["Inception", "Proof of Concept", "Implementation"];
 
+  // The criteria call the phase between inception and implementation the "prototype"
+  // phase; the form calls it "Proof of Concept".
+  const PHASE_ALIASES: Record<string, string> = { prototype: "Proof of Concept" };
+
   function phaseNamed(value: string): string {
-    return PHASES.find((phase) => squash(phase) === squash(value)) ?? value;
+    return (
+      PHASES.find((phase) => squash(phase) === squash(value)) ??
+      PHASE_ALIASES[squash(value).replace(/phase$/, "")] ??
+      value
+    );
   }
 
   // The part of the phases step between one phase's name and the next phase's name.
@@ -2060,7 +2117,9 @@ export default function create(
       addQuestion("opportunity-swu-create.add_team_question", "Team Questions", input),
     setEvaluationPanel: (input) =>
       setEvaluationPanel("opportunity-swu-create.set_evaluation_panel", input),
-    scoreWeightError: () => messages(/100%|weight/i),
+    // The weights and their total are on the Scoring step, wherever publishing left the
+    // form, so the refusal is gathered from every step.
+    scoreWeightError: () => stepMessages(/100%|weight/i),
   };
 
   const opportunityTwuCreate: S.OpportunityTwuCreatePage = {
@@ -2082,7 +2141,9 @@ export default function create(
       addQuestion("opportunity-twu-create.add_resource_question", "Resource Questions", input),
     setEvaluationPanel: (input) =>
       setEvaluationPanel("opportunity-twu-create.set_evaluation_panel", input),
-    scoreWeightError: () => messages(/100%|weight/i),
+    // The weights and their total are on the Scoring step, wherever publishing left the
+    // form, so the refusal is gathered from every step.
+    scoreWeightError: () => stepMessages(/100%|weight/i),
   };
 
   // The panel is a list of evaluator slots plus a chair. More slots are added one at a
@@ -2297,7 +2358,51 @@ export default function create(
         const named = await findAfter(["Successful Proponent", "Awarded To"]);
         return named || linesMatching(/successful proponent/i);
       },
+      // An awarded opportunity announces its winner in a banner above the header ("This
+      // opportunity was awarded to <name>."), the lines up to "Published <date>" being all
+      // it says about them. Seen as an administrator on the seeded awarded Code With Us and
+      // Sprint With Us opportunities, the banner carries the name alone, so what is read
+      // here is whatever else the banner says of that kind — for this target, nothing.
+      successfulProponentContactDetails: async () =>
+        (await awardBanner(`${where}.successful_proponent_contact_details`))
+          .filter((line) => matches(/@|\bphone\b|\bcontact\b|\+?\d[\d ()-]{6,}\d/i, line))
+          .join("\n"),
+      successfulProponentScore: async () =>
+        (await awardBanner(`${where}.successful_proponent_score`))
+          .filter((line) => matches(/score|points|\d+(\.\d+)?\s*%/i, line))
+          .join("\n"),
     };
+  }
+
+  // The lines of an awarded opportunity's banner after the sentence naming the winner.
+  // A page that loaded without such a banner — not awarded, or not shown to this reader —
+  // has nothing to say about the winner.
+  async function awardBanner(where: string): Promise<string[]> {
+    await ready();
+    if (await notFoundShown()) nothing(`${where} — the opportunity answers "Not Found" on ${page.url()}`);
+    const lines = await textLines();
+    const start = lines.findIndex((line) => matches(/awarded to\s/i, line));
+    if (start < 0) return [];
+    const said: string[] = [];
+    for (let i = start + 1; i < lines.length && !matches(/^Published\s/, lines[i]); i++) said.push(lines[i]);
+    return said;
+  }
+
+  // A fixed page the opportunity embeds, shown under a tab of the public view: the body
+  // between the tab's own heading and the "Got Questions?" that closes every tab.
+  async function embeddedSection(where: string, tab: string): Promise<string> {
+    await ready();
+    if (await notFoundShown()) nothing(`${where} — the opportunity answers "Not Found" on ${page.url()}`);
+    const item = seen(page.getByRole("listitem").filter({ hasText: new RegExp(`^\\s*${escapeRegExp(tab)}\\s*$`) }));
+    if (!(await item.count())) return "";
+    await item.last().click();
+    await settle();
+    const lines = await textLines();
+    const start = lines.lastIndexOf(tab);
+    if (start < 0) return "";
+    const body: string[] = [];
+    for (let i = start + 1; i < lines.length && lines[i] !== "Got Questions?"; i++) body.push(lines[i]);
+    return body.join("\n");
   }
 
   // All three programmes label their money "Value", so a programme's figure is read only
@@ -2317,7 +2422,7 @@ export default function create(
     reward: () => programmeValue("Code With Us", ["Value", "Fixed-Price Award", "Reward"]),
   };
 
-  const opportunitySwuView: S.OpportunitySwuViewPage = {
+  const opportunitySwuView: Open<S.OpportunitySwuViewPage> = {
     ...opportunityView(
       "opportunity-swu-view",
       "/opportunities/sprint-with-us/:opportunityId",
@@ -2326,9 +2431,11 @@ export default function create(
     totalMaxBudget: () =>
       programmeValue("Sprint With Us", ["Total Maximum Budget", "Maximum Budget", "Value"]),
     phases: () => sectionFrom(["Phases of Work", "Phases"], ["Addenda", "Attachments"]),
+    // The scope page is embedded under the "Scope & Contract" tab.
+    scopeSection: () => embeddedSection("opportunity-swu-view.scope_section", "Scope & Contract"),
   };
 
-  const opportunityTwuView: S.OpportunityTwuViewPage = {
+  const opportunityTwuView: Open<S.OpportunityTwuViewPage> = {
     ...opportunityView(
       "opportunity-twu-view",
       "/opportunities/team-with-us/:opportunityId",
@@ -2338,6 +2445,8 @@ export default function create(
       programmeValue("Team With Us", ["Maximum Contract Value", "Maximum Budget", "Value"]),
     // The resources sought are listed under "Service Areas" with their allocation.
     resources: () => sectionFrom(["Service Areas"], ["Required Skills", "Addenda"]),
+    // The Team With Us terms are embedded under the "Competition Rules" tab.
+    termsSection: () => embeddedSection("opportunity-twu-view.terms_section", "Competition Rules"),
   };
 
   // The management pages share a sidebar of tabs and an Actions menu.
@@ -2422,6 +2531,60 @@ export default function create(
     };
   }
 
+  // The controls in the top bar besides the site's own links and the signed-in address,
+  // with an Actions menu read out entry by entry in place of its toggle.
+  async function topBarControls(): Promise<string[]> {
+    const bar = navBar();
+    const siteLinks = new Set<string>();
+    const links = seen(bar.getByRole("link"));
+    for (let i = 0; i < (await links.count()); i++) {
+      siteLinks.add((await links.nth(i).innerText()).trim());
+    }
+    const lines = (await bar.innerText())
+      .split("\n")
+      .map((line) => line.trim())
+      .filter((line) => line && line !== "|" && !siteLinks.has(line) && !line.includes("@"));
+    const found: string[] = [];
+    for (const line of lines) {
+      if (line !== "Actions") {
+        found.push(line);
+        continue;
+      }
+      for (const entry of (await actionsMenuText()).split("\n")) if (entry.trim()) found.push(entry.trim());
+      await closeActionsMenu();
+    }
+    return found;
+  }
+
+  // Every change of state the management screen offers this reader from where the
+  // opportunity stands, gathered from the top bar of each of its tabs in turn: the
+  // Opportunity tab offers "Cancel" and its Actions menu, the Consensus tab "Finalize
+  // Consensus Scores", and so on. Awarding is offered on a proposal's own screen, not here.
+  async function offeredStateChanges(where: string): Promise<string> {
+    await ready();
+    if (await notFoundShown()) nothing(`${where} — the opportunity answers "Not Found" on ${page.url()}`);
+    const home = page.url();
+    // The screen's own tabs only: the consensus tab also links each proponent's sheet,
+    // which is an address of its own ending in "/edit?tab=".
+    const own = `${new URL(home).pathname}?tab=`;
+    const tabs: string[] = [];
+    const links = seen(page.getByRole("link"));
+    for (let i = 0; i < (await links.count()); i++) {
+      const href = (await links.nth(i).getAttribute("href")) ?? "";
+      const path = href ? new URL(href, home).pathname + new URL(href, home).search : "";
+      if (path.startsWith(own) && !tabs.includes(href)) tabs.push(href);
+    }
+    const offered: string[] = [];
+    for (const href of tabs.length ? tabs : [home]) {
+      await page.goto(new URL(href, home).toString(), { waitUntil: "domcontentloaded" });
+      await ready();
+      for (const control of await topBarControls()) if (!offered.includes(control)) offered.push(control);
+    }
+    await page.goto(home, { waitUntil: "domcontentloaded" });
+    await ready();
+    return offered.join("\n");
+  }
+
   const noteIsNotOffered = (where: string) => async (): Promise<void> => {
     throw new Error(
       `unbound: ${where}.add_note — the History tab lists entries but offers no control for adding a note`,
@@ -2492,7 +2655,7 @@ export default function create(
     consensusTab: () => tabContent(["Consensus"]),
   };
 
-  const opportunityTwuEdit: S.OpportunityTwuEditPage = {
+  const opportunityTwuEdit: Open<S.OpportunityTwuEditPage> = {
     ...opportunityEdit("opportunity-twu-edit", "/opportunities/team-with-us/:opportunityId/edit"),
     editEvaluationPanel: async () => {
       await openTab("opportunity-twu-edit.edit_evaluation_panel", ["Evaluation Panel"]);
@@ -2511,6 +2674,7 @@ export default function create(
         "Submit",
       ]);
     },
+    offeredStateChanges: () => offeredStateChanges("opportunity-twu-edit.offered_state_changes"),
     resourceQuestionsTab: () => tabContent(["Resource Questions"]),
     challengeTab: () => tabContent(["Challenge", "Interview/Challenge", "Code Challenge"]),
     evaluationPanelTab: () => tabContent(["Evaluation Panel"]),
@@ -4276,7 +4440,7 @@ export default function create(
     };
   }
 
-  const evaluationIndividualCreateSwu: S.EvaluationIndividualCreateSwuPage = {
+  const evaluationIndividualCreateSwu: Open<S.EvaluationIndividualCreateSwuPage> = {
     ...scoreSheet(
       "evaluation-individual-create-swu",
       "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/evaluations/create",
@@ -4292,9 +4456,10 @@ export default function create(
     anonymousProponentName: () => anonymousProponent(),
     questionResponse: () => contentText(),
     duplicateEvaluationError: () => messages(/already|duplicate/i),
+    refusedWhenNotPermitted: () => refusedScreen(),
   };
 
-  const evaluationIndividualEditSwu: S.EvaluationIndividualEditSwuPage = {
+  const evaluationIndividualEditSwu: Open<S.EvaluationIndividualEditSwuPage> = {
     ...scoreSheet(
       "evaluation-individual-edit-swu",
       "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/evaluations/:userId/edit",
@@ -4303,7 +4468,19 @@ export default function create(
       press("evaluation-individual-edit-swu.save_changes", ["Save Changes", "Save"], navBar()),
     evaluationStatus: () => valueAfter(["Status", "Evaluation Status"]),
     readOnlyAfterSubmitted: () => readOnlyAfterSubmitted("evaluation-individual-edit-swu.read_only_after_submitted"),
+    refusedWhenNotPermitted: () => refusedScreen(),
   };
+
+  // An evaluation screen this reader may not use answers with the site's "Not Found"
+  // screen: signed in as the one public sector account the session routes reach, on the
+  // seeded Sprint With Us opportunity whose panel is somebody else, both the evaluation
+  // and the create screen show "Not Found — The page you are looking for doesn't exist."
+  // A screen that opened on the score sheet refused nothing and reads as nothing.
+  async function refusedScreen(): Promise<string> {
+    await ready();
+    if (await notFoundShown()) return linesMatching(/^Not Found$|doesn't exist|permission/i);
+    return linesMatching(/do not have permission|not permitted|not authori[sz]ed/i);
+  }
 
   // A sheet still open to change offers "Edit" or an enabled "Save Changes" in the top bar
   // and reads as nothing; one offering neither is read-only.
@@ -4343,7 +4520,7 @@ export default function create(
     panelMemberNotes: () => contentText(),
   };
 
-  const evaluationIndividualCreateTwu: S.EvaluationIndividualCreateTwuPage = {
+  const evaluationIndividualCreateTwu: Open<S.EvaluationIndividualCreateTwuPage> = {
     ...scoreSheet(
       "evaluation-individual-create-twu",
       "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/evaluations/create",
@@ -4359,9 +4536,10 @@ export default function create(
     anonymousProponentName: () => anonymousProponent(),
     questionResponse: () => contentText(),
     duplicateEvaluationError: () => messages(/already|duplicate/i),
+    refusedWhenNotPermitted: () => refusedScreen(),
   };
 
-  const evaluationIndividualEditTwu: S.EvaluationIndividualEditTwuPage = {
+  const evaluationIndividualEditTwu: Open<S.EvaluationIndividualEditTwuPage> = {
     ...scoreSheet(
       "evaluation-individual-edit-twu",
       "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/evaluations/:userId/edit",
@@ -4370,6 +4548,7 @@ export default function create(
       press("evaluation-individual-edit-twu.save_changes", ["Save Changes", "Save"], navBar()),
     evaluationStatus: () => valueAfter(["Status", "Evaluation Status"]),
     readOnlyAfterSubmitted: () => readOnlyAfterSubmitted("evaluation-individual-edit-twu.read_only_after_submitted"),
+    refusedWhenNotPermitted: () => refusedScreen(),
   };
 
   const evaluationConsensusCreateTwu: S.EvaluationConsensusCreateTwuPage = {
@@ -4547,7 +4726,7 @@ export default function create(
     },
   };
 
-  const contentList: S.ContentListPage = {
+  const contentList: Open<S.ContentListPage> = {
     ...at("/content"),
     openPageForEditing: (input) => openNamed("content-list.open_page_for_editing", input),
     openPublicPage: async (input) => {
@@ -4574,6 +4753,16 @@ export default function create(
     pageUpdatedDate: () => textUnder("", "Updated"),
     orderedByTitle: () => tableText(),
     refusedForNonAdministrator: () => contentText(),
+    // One row of the table per page, under a header row of column names. A reader shown
+    // no table (the "Not Found" a non-administrator gets) is shown no pages to count.
+    async pageCount() {
+      await ready();
+      const table = seen(page.getByRole("table"));
+      if (!(await table.count())) return "";
+      await seen(table.first().getByRole("cell")).first().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+      const rows = table.first().getByRole("row").filter({ has: page.getByRole("cell") });
+      return String(await rows.count());
+    },
   };
 
   const contentCreate: S.ContentCreatePage = {
@@ -4682,7 +4871,9 @@ export default function create(
     fieldError: () => messages(),
     duplicateSlugError: () => messages(/slug/i),
     changesPublishedSuccess: () => linesMatching(/published/i),
-    deletedSuccess: () => linesMatching(/deleted/i),
+    // "Page Deleted" is announced as an alert drawn after the footer, which the page's
+    // own content leaves off.
+    deletedSuccess: () => alertLines(/deleted/i),
     refusedForNonAdministrator: () => contentText(),
     // The form states "This page is available at /content/<slug>." under the slug.
     async pageAddress() {
@@ -4997,6 +5188,11 @@ export default function create(
     // is all there is and "Save Changes" is offered, the form is saved first and the stored
     // link waited for on the Attachments step.
     async attachmentAddress() {
+      // Wherever the last action left the form — a proposal just submitted sits on its
+      // first step, sometimes with an emptied dialog still open — the links are on the
+      // Attachments step.
+      await dismissDialog();
+      await attachmentsStep();
       const stored = async (): Promise<string[]> => {
         const links = seen(page.getByRole("link"));
         const count = await links.count();
@@ -5250,7 +5446,609 @@ export default function create(
     uploadFailureLeavesTextUnchanged: () => fieldValue(["Body"]),
   };
 
-  return {
+  // ================================================================ caught mail
+
+  // The mail catcher is not the target: it is Mailpit, at the address the harness names in
+  // SDLC_MAIL_API. Its listing carries an identifier, a subject and the visible recipients;
+  // one message read by its identifier carries the rest — sender, blind copies, reply-to
+  // and both bodies. Every message this target sends comes from "Digital Marketplace
+  // <donotreply@example.test>", is addressed visibly to that same address, and reaches its
+  // real recipients as blind copies.
+
+  type MailAddress = { Name?: string; Address?: string };
+  type CaughtMessage = {
+    ID: string;
+    From?: MailAddress | null;
+    To?: MailAddress[] | null;
+    Cc?: MailAddress[] | null;
+    Bcc?: MailAddress[] | null;
+    ReplyTo?: MailAddress[] | null;
+    Subject?: string;
+    HTML?: string;
+    Text?: string;
+  };
+
+  function mailApi(where: string): string {
+    const api = (process.env.SDLC_MAIL_API ?? "").replace(/\/+$/, "");
+    return api || nothing(`${where} — SDLC_MAIL_API is not set, so there is no mail catcher to read`);
+  }
+
+  const mailbox = (address: MailAddress | null | undefined): string =>
+    !address?.Address ? "" : address.Name ? `${address.Name} <${address.Address}>` : address.Address;
+  const mailboxes = (list: MailAddress[] | null | undefined): string =>
+    (list ?? []).map(mailbox).filter(Boolean).join("\n");
+
+  async function mailJson(where: string, path: string): Promise<unknown> {
+    const target = mailApi(where) + path;
+    const response = await page.request.get(target).catch((error: unknown) => {
+      throw new Error(`unbound: ${where} — the mail catcher at ${target} could not be reached (${String(error)})`);
+    });
+    if (response.status() !== 200) {
+      nothing(`${where} — the mail catcher answered ${response.status()} for ${target}`);
+    }
+    return response.json();
+  }
+
+  let openedMessage: CaughtMessage | null = null;
+
+  function message(where: string): CaughtMessage {
+    return openedMessage ?? nothing(`${where} — no message has been opened`);
+  }
+
+  const decodeEntities = (words: string): string =>
+    words
+      .replace(/&nbsp;/g, " ")
+      .replace(/&quot;/g, '"')
+      .replace(/&#x27;|&#39;/g, "'")
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&amp;/g, "&");
+
+  // Every link of the formatted body as its label and where it leads. A link drawn as a
+  // picture (the logo at the top) is labelled by the picture's own words.
+  function bodyLinks(html: string): { label: string; href: string }[] {
+    const found: { label: string; href: string }[] = [];
+    const anchor = /<a\b([^>]*)>([\s\S]*?)<\/a>/gi;
+    let match: RegExpExecArray | null;
+    while ((match = anchor.exec(html)) !== null) {
+      const href = /\bhref\s*=\s*"([^"]*)"/i.exec(match[1])?.[1] ?? /\bhref\s*=\s*'([^']*)'/i.exec(match[1])?.[1];
+      if (!href) continue;
+      let label = decodeEntities(match[2].replace(/<[^>]*>/g, " ")).replace(/\s+/g, " ").trim();
+      if (!label) label = decodeEntities(/\balt\s*=\s*"([^"]*)"/i.exec(match[2])?.[1] ?? "").trim();
+      found.push({ label, href: decodeEntities(href) });
+    }
+    return found;
+  }
+
+  const caughtMessage: PageOf<"caughtMessage"> = {
+    async open(params) {
+      const id = params?.messageId;
+      if (!id) nothing("caught-message.open — no message identifier was given");
+      openedMessage = (await mailJson(
+        "caught-message.open",
+        `/api/v1/message/${encodeURIComponent(id)}`,
+      )) as CaughtMessage;
+    },
+    // Opens, in the browser, the link of the formatted body carrying the label given — its
+    // exact words first, then any link whose words contain them.
+    async followLinkInBody(input) {
+      const where = "caught-message.follow_link_in_body";
+      const wanted = (field(input, "label", "link", "name", "text") || asText(input)).trim();
+      if (!wanted) nothing(`${where} — no link label was given`);
+      const links = bodyLinks(message(where).HTML ?? "");
+      const lower = wanted.toLowerCase();
+      const link =
+        links.find((each) => each.label.toLowerCase() === lower) ??
+        links.find((each) => each.label.toLowerCase().includes(lower));
+      if (!link) {
+        nothing(
+          `${where} — the message's formatted body has no link labelled "${wanted}" (its links: ${
+            links.map((each) => `"${each.label}"`).join(", ") || "none"
+          })`,
+        );
+      }
+      await page.goto(link.href, { waitUntil: "domcontentloaded" });
+      await settle();
+    },
+    visibleRecipients: async () => mailboxes(message("caught-message.visible_recipients").To),
+    copiedRecipients: async () => mailboxes(message("caught-message.copied_recipients").Bcc),
+    sender: async () => mailbox(message("caught-message.sender").From),
+    replyTo: async () => mailboxes(message("caught-message.reply_to").ReplyTo),
+    subject: async () => message("caught-message.subject").Subject ?? "",
+    htmlBody: async () => message("caught-message.html_body").HTML ?? "",
+    plainTextBody: async () => message("caught-message.plain_text_body").Text ?? "",
+    // The first picture of the formatted body is the logo, drawn inside a link home.
+    logoAddress: async () =>
+      decodeEntities(/<img\b[^>]*\bsrc\s*=\s*"([^"]*)"/i.exec(message("caught-message.logo_address").HTML ?? "")?.[1] ?? ""),
+    linksInBody: async () =>
+      bodyLinks(message("caught-message.links_in_body").HTML ?? "")
+        .map((each) => `${each.label} -> ${each.href}`)
+        .join("\n"),
+  };
+
+  let caughtList: CaughtMessage[] | null = null;
+  let caughtTotal = 0;
+
+  function caught(where: string): CaughtMessage[] {
+    return caughtList ?? nothing(`${where} — the list of caught messages has not been opened`);
+  }
+
+  const caughtMessageList: PageOf<"caughtMessageList"> = {
+    // Newest first, read a page at a time until the catcher's own total is reached.
+    async open() {
+      const all: CaughtMessage[] = [];
+      let total = 0;
+      for (let start = 0; start < 100000; ) {
+        const got = (await mailJson(
+          "caught-message-list.open",
+          `/api/v1/messages?start=${start}&limit=500`,
+        )) as { messages?: CaughtMessage[]; messages_count?: number; total?: number };
+        const batch = got.messages ?? [];
+        total = got.messages_count ?? got.total ?? all.length + batch.length;
+        all.push(...batch);
+        start += batch.length;
+        if (!batch.length || all.length >= total) break;
+      }
+      caughtList = all;
+      caughtTotal = Math.max(total, all.length);
+    },
+    messageIdentifiers: async () => caught("caught-message-list.message_identifiers").map((each) => each.ID).join("\n"),
+    messageSubjects: async () =>
+      caught("caught-message-list.message_subjects").map((each) => each.Subject ?? "").join("\n"),
+    // One line per message, its visible recipients separated by commas.
+    messageVisibleRecipients: async () =>
+      caught("caught-message-list.message_visible_recipients")
+        .map((each) => (each.To ?? []).map(mailbox).filter(Boolean).join(", "))
+        .join("\n"),
+    messageCount: async () => {
+      caught("caught-message-list.message_count");
+      return String(caughtTotal);
+    },
+  };
+
+  // ================================================================ requests no screen makes
+
+  // Each of these is a request to the service's own interface, made from the browser's
+  // session so it carries the signed-in person, and the latest answer is what the
+  // observations read — the same answer the file pages above keep.
+  async function send(where: string, method: string, target: string, data?: unknown): Promise<Answer> {
+    const response = await page.request
+      .fetch(target, { method, ...(data === undefined ? {} : { data }) })
+      .catch((error: unknown) => {
+        throw new Error(`unbound: ${where} — ${method} ${target} could not be made (${String(error)})`);
+      });
+    const got: Answer = {
+      status: response.status(),
+      headers: response.headers(),
+      body: await response.text().catch(() => ""),
+    };
+    lastAnswer = got;
+    return got;
+  }
+
+  // A record read on the side, to learn what a request must carry, without taking the
+  // place of the answer the observations read.
+  async function peek(target: string): Promise<{ status: number; json: unknown }> {
+    const response = await page.request.get(target).catch(() => null);
+    if (!response) return { status: 0, json: null };
+    let json: unknown = null;
+    try {
+      json = JSON.parse(await response.text());
+    } catch {
+      json = null;
+    }
+    return { status: response.status(), json };
+  }
+
+  function parsedAnswer(): unknown {
+    try {
+      return JSON.parse(lastAnswer?.body ?? "");
+    } catch {
+      return null;
+    }
+  }
+
+  // An answer that went through reads as its status and body; a refusal reads as nothing.
+  function accepted(what: string): string {
+    const got = answer(what);
+    return got.status < 300 ? `${got.status} ${got.body}` : "";
+  }
+
+  // The form a refused answer takes: its body with every word of prose replaced by the
+  // kind of thing it is, so two refusals can be compared by the fields they carry and how
+  // they name their reason, not by their wording.
+  function shapeOf(value: unknown): unknown {
+    if (Array.isArray(value)) return value.length ? [shapeOf(value[0])] : [];
+    if (value && typeof value === "object") {
+      return Object.fromEntries(
+        Object.entries(value as Record<string, unknown>).map(([key, inner]) => [key, shapeOf(inner)]),
+      );
+    }
+    return value === null ? null : typeof value;
+  }
+
+  const UUID_ONLY = new RegExp(`^${UUID}$`);
+
+  function handleIn(group: Record<string, unknown>, key: string): Record<string, unknown> | undefined {
+    const found = group[key];
+    return found && typeof found === "object" ? (found as Record<string, unknown>) : undefined;
+  }
+
+  // A person named as a seed handle, a persona, an identifier or an address, as the
+  // service's identifier for them.
+  function userIdFor(value: string): string {
+    const byHandle = handleIn(seed.users as Record<string, unknown>, value);
+    if (byHandle?.id) return String(byHandle.id);
+    if (UUID_ONLY.test(value)) return value;
+    return seedUserFor(value)?.id ?? "";
+  }
+
+  function emailFor(value: string): string {
+    const byHandle = handleIn(seed.users as Record<string, unknown>, value);
+    if (byHandle?.email) return String(byHandle.email);
+    return seedUserFor(value)?.email ?? value;
+  }
+
+  function organizationIdFor(value: string): string {
+    const byHandle = handleIn(seed.organizations as Record<string, unknown>, value);
+    return byHandle?.id ? String(byHandle.id) : value;
+  }
+
+  function fileIdFor(value: string): string {
+    const byHandle = handleIn((seed as unknown as Record<string, unknown>).stored_files as Record<string, unknown>, value);
+    if (byHandle?.id) return String(byHandle.id);
+    const inAddress = new RegExp(`/api/files/(${UUID})`).exec(value);
+    return inAddress ? inAddress[1] : value;
+  }
+
+  const organizationActingForList: PageOf<"organizationActingForList"> = {
+    open: async () => {
+      await send("organization-acting-for-list.open", "GET", `${baseURL}/api/ownedOrganizations`);
+    },
+    // The organizations answered, one legal name per line. Signed out, this target answers
+    // an empty list rather than refusing.
+    organizationsOffered: async () => {
+      const got = answer("organization-acting-for-list.organizations_offered");
+      if (got.status !== 200) return "";
+      const listed = parsedAnswer();
+      return Array.isArray(listed)
+        ? listed.map((each) => String((each as Record<string, unknown>).legalName ?? "")).join("\n")
+        : "";
+    },
+    refusedWhenNotPermitted: async () => refusal((status) => status === 401 || status === 403),
+  };
+
+  const affiliationInvitationRequest: PageOf<"affiliationInvitationRequest"> = {
+    open: async () => {
+      await send("affiliation-invitation-request.open", "GET", `${baseURL}/api/affiliations`);
+    },
+    async inviteWithMembershipType(input) {
+      const where = "affiliation-invitation-request.invite_with_membership_type";
+      const organization = field(input, "organization", "organizationId", "org", "orgId");
+      const invitee = field(input, "email", "userEmail", "invitee", "address", "user");
+      const membershipType = field(input, "membershipType", "membership_type", "type", "role");
+      for (const [key, value] of [["organization", organization], ["email", invitee], ["membershipType", membershipType]]) {
+        if (!value) nothing(`${where} — the input names no ${key} to send`);
+      }
+      await send(where, "POST", `${baseURL}/api/affiliations`, {
+        userEmail: emailFor(invitee),
+        organization: organizationIdFor(organization),
+        membershipType,
+      });
+    },
+    invitationCreated: async () => accepted("affiliation-invitation-request.invitation_created"),
+    // The refusal whole, when it is about the membership type; this target names the field
+    // ({"membershipType":["Invalid membership type provided."]}).
+    invalidMembershipTypeError: async () =>
+      refusal((status) => status >= 400, /membershipType|membership type/i),
+  };
+
+  const userListRequest: PageOf<"userListRequest"> = {
+    open: async () => {
+      await send("user-list-request.open", "GET", `${baseURL}/api/users`);
+    },
+    // One account per line: its name, address, kind and standing.
+    accountsAnswered: async () => {
+      const got = answer("user-list-request.accounts_answered");
+      if (got.status !== 200) return "";
+      const listed = parsedAnswer();
+      if (!Array.isArray(listed)) return "";
+      return listed
+        .map((each) => {
+          const account = each as Record<string, unknown>;
+          return `${account.name ?? ""} <${account.email ?? ""}> ${account.type ?? ""} ${account.status ?? ""}`.trim();
+        })
+        .join("\n");
+    },
+    refusedWhenNotPermitted: async () => refusal((status) => status === 401 || status === 403),
+    refusalStatus: async () => {
+      const got = answer("user-list-request.refusal_status");
+      return got.status >= 400 ? String(got.status) : "";
+    },
+  };
+
+  // A page is read by its address, but changed and removed only by its identifier: asked
+  // to change "about" by its address, this target answers 404. So the page is looked up by
+  // its address first, and the request made against the identifier that finds; when the
+  // lookup finds nothing, the address itself is sent and the service answers for it.
+  let openedSlug = "";
+
+  function slugFrom(input: unknown): string {
+    return field(input, "slug", "address", "page") || (typeof input === "string" ? input : "") || openedSlug;
+  }
+
+  async function pageRecord(slug: string): Promise<Record<string, unknown> | null> {
+    const found = await peek(`${baseURL}/api/content/${encodeURIComponent(slug)}`);
+    return found.status === 200 && found.json && typeof found.json === "object"
+      ? (found.json as Record<string, unknown>)
+      : null;
+  }
+
+  function pageFields(input: unknown): Record<string, unknown> {
+    const given: Record<string, unknown> = {};
+    if (!input || typeof input !== "object" || Array.isArray(input)) return given;
+    const record = input as Record<string, unknown>;
+    for (const key of ["title", "slug", "body", "fixed"]) if (record[key] !== undefined) given[key] = record[key];
+    return given;
+  }
+
+  async function changePage(where: string, input: unknown, renamed?: string): Promise<void> {
+    const slug = slugFrom(input);
+    if (!slug) nothing(`${where} — no page was opened or named`);
+    const current = await pageRecord(slug);
+    const body: Record<string, unknown> = {
+      title: current?.title,
+      slug: current?.slug ?? slug,
+      body: current?.body,
+      ...pageFields(input),
+    };
+    if (renamed !== undefined) body.slug = renamed;
+    await send(where, "PUT", `${baseURL}/api/content/${encodeURIComponent(String(current?.id ?? slug))}`, body);
+  }
+
+  const contentRequest: PageOf<"contentRequest"> = {
+    open: async (params) => {
+      openedSlug = params?.slug ?? "";
+    },
+    readPageListByRequest: async () => {
+      await send("content-request.read_page_list_by_request", "GET", `${baseURL}/api/content`);
+    },
+    readPageByRequest: async (input) => {
+      const where = "content-request.read_page_by_request";
+      const slug = slugFrom(input);
+      if (!slug) nothing(`${where} — no page was opened or named`);
+      await send(where, "GET", `${baseURL}/api/content/${encodeURIComponent(slug)}`);
+    },
+    createPageByRequest: async (input) => {
+      const where = "content-request.create_page_by_request";
+      const given = pageFields(input);
+      if (!Object.keys(given).length) nothing(`${where} — the input names no title, address or body to send`);
+      await send(where, "POST", `${baseURL}/api/content`, given);
+    },
+    changePageByRequest: (input) => changePage("content-request.change_page_by_request", input),
+    renamePageByRequest: async (input) => {
+      const where = "content-request.rename_page_by_request";
+      const to = field(input, "to", "newSlug", "new_slug", "renameTo", "rename_to");
+      if (!to) nothing(`${where} — the input names no new address ("to") to rename the page to`);
+      // The page being renamed is the one opened, unless the input names it as "from".
+      const from = field(input, "from", "oldSlug", "old_slug") || openedSlug || field(input, "slug");
+      await changePage(where, { ...pageFields(input), slug: from }, to);
+    },
+    removePageByRequest: async (input) => {
+      const where = "content-request.remove_page_by_request";
+      const slug = slugFrom(input);
+      if (!slug) nothing(`${where} — no page was opened or named`);
+      const current = await pageRecord(slug);
+      await send(where, "DELETE", `${baseURL}/api/content/${encodeURIComponent(String(current?.id ?? slug))}`);
+    },
+    requestAccepted: async () => accepted("content-request.request_accepted"),
+    refusalStatus: async () => {
+      const got = answer("content-request.refusal_status");
+      return got.status >= 400 ? String(got.status) : "";
+    },
+    refusalShape: async () => {
+      const got = answer("content-request.refusal_shape");
+      if (got.status < 400) return "";
+      const parsed = parsedAnswer();
+      return parsed === null ? typeof got.body : JSON.stringify(shapeOf(parsed));
+    },
+  };
+
+  // One panel member's own scores for one proponent. The service keeps a sheet under the
+  // proposal and the member; the first save creates it (POST, as the score sheet's "Save
+  // Draft" does, with {status: "DRAFT", scores: [{order, score, notes}]}) and every later
+  // one changes it (PUT {tag: "edit", value: {scores}}). Asked to submit one sheet by
+  // itself (PUT {tag: "submit"}), this target answers 400 {"evaluation":{"tag":"parseFailure"}}
+  // whatever the value — tried with none, "", null, {}, [], true, 1 and a note.
+  function scoresFrom(input: unknown): { order: number; score: unknown; notes: unknown }[] {
+    const record = input && typeof input === "object" && !Array.isArray(input) ? (input as Record<string, unknown>) : {};
+    const listed = Array.isArray(input) ? input : Array.isArray(record.scores) ? record.scores : null;
+    const notes = Array.isArray(record.notes) ? record.notes : null;
+    if (!listed) return [];
+    return listed.map((each, i) => {
+      if (each && typeof each === "object") {
+        const one = each as Record<string, unknown>;
+        const order = Number(one.order ?? (one.question !== undefined ? Number(one.question) - 1 : i));
+        return { order, score: one.score ?? one.value, notes: one.notes ?? one.note ?? notes?.[i] ?? "" };
+      }
+      return { order: i, score: each, notes: notes?.[i] ?? "" };
+    });
+  }
+
+  function evaluationRequest(where: string, route: string) {
+    let opened = "";
+    let lastWasSubmission = false;
+    const stored = async (what: string): Promise<Record<string, unknown> | null> => {
+      if (!opened) nothing(`${where}.${what} — no evaluation has been opened`);
+      const found = await peek(opened);
+      return found.status === 200 && found.json && typeof found.json === "object"
+        ? (found.json as Record<string, unknown>)
+        : null;
+    };
+    const storedScores = async (what: string): Promise<Record<string, unknown>[]> => {
+      const scores = (await stored(what))?.scores;
+      return Array.isArray(scores) ? (scores as Record<string, unknown>[]) : [];
+    };
+    return {
+      open: async (params?: Record<string, string>) => {
+        opened = address(route, params);
+        lastWasSubmission = false;
+        await send(`${where}.open`, "GET", opened);
+      },
+      saveDraftAsEntered: async (input?: unknown) => {
+        const what = `${where}.save_draft_as_entered`;
+        if (!opened) nothing(`${what} — no evaluation has been opened`);
+        const scores = scoresFrom(input);
+        if (!scores.length) nothing(`${what} — the input carries no scores to send`);
+        lastWasSubmission = false;
+        if ((await peek(opened)).status === 200) {
+          await send(what, "PUT", opened, { tag: "edit", value: { scores } });
+        } else {
+          await send(what, "POST", opened.replace(/\/[^/]+$/, ""), { status: "DRAFT", scores });
+        }
+      },
+      submitThisEvaluationAlone: async () => {
+        const what = `${where}.submit_this_evaluation_alone`;
+        if (!opened) nothing(`${what} — no evaluation has been opened`);
+        lastWasSubmission = true;
+        await send(what, "PUT", opened, { tag: "submit", value: "" });
+      },
+      // One line per question, in the sheet's order, as "<order>: <score>".
+      storedScores: async () =>
+        (await storedScores("stored_scores")).map((each) => `${each.order}: ${each.score ?? ""}`).join("\n"),
+      storedNotes: async () =>
+        (await storedScores("stored_notes")).map((each) => `${each.order}: ${each.notes ?? ""}`).join("\n"),
+      evaluationStatus: async () => String((await stored("evaluation_status"))?.status ?? ""),
+      // A request the service could not make sense of: this target names it "parseFailure".
+      refusedAsUnrecognised: async () =>
+        refusal((status) => status >= 400, /parseFailure|unrecogni[sz]ed|not a valid|unknown/i),
+      refusedAtSubmission: async () => (lastWasSubmission ? refusal((status) => status >= 400) : ""),
+    };
+  }
+
+  const evaluationIndividualRequestSwu: PageOf<"evaluationIndividualRequestSwu"> = evaluationRequest(
+    "evaluation-individual-request-swu",
+    "/api/proposal/sprint-with-us/:proposalId/team-questions/evaluations/:userId",
+  );
+  const evaluationIndividualRequestTwu: PageOf<"evaluationIndividualRequestTwu"> = evaluationRequest(
+    "evaluation-individual-request-twu",
+    "/api/proposal/team-with-us/:proposalId/resource-questions/evaluations/:userId",
+  );
+
+  // The panel is sent as the opportunity's "editEvaluationPanel" change, every member as
+  // {user, chair, evaluator, order}: the members it has now, and the one the test names
+  // holding neither role. On this target, as an administrator on the seeded closed Sprint
+  // With Us opportunity, the panel as it stands is taken and such a panel is answered
+  // 503 {"database":["Database error."]}.
+  let openedPanel = "";
+
+  function panelNow(record: unknown): { user: string; chair: boolean; evaluator: boolean; order: number }[] {
+    const panel = (record as Record<string, unknown> | null)?.evaluationPanel;
+    if (!Array.isArray(panel)) return [];
+    return panel.map((each, i) => {
+      const member = each as Record<string, unknown>;
+      const user = member.user as Record<string, unknown> | string | undefined;
+      return {
+        user: typeof user === "string" ? user : String(user?.id ?? ""),
+        chair: member.chair === true,
+        evaluator: member.evaluator === true,
+        order: Number(member.order ?? i),
+      };
+    });
+  }
+
+  const evaluationPanelRequest: PageOf<"evaluationPanelRequest"> = {
+    open: async (params) => {
+      openedPanel = address("/api/opportunities/:program/:opportunityId", params);
+      await send("evaluation-panel-request.open", "GET", openedPanel);
+    },
+    async submitPanelWithMemberHoldingNoRole(input) {
+      const where = "evaluation-panel-request.submit_panel_with_member_holding_no_role";
+      if (!openedPanel) nothing(`${where} — no opportunity has been opened`);
+      const named = field(input, "member", "user", "userId", "email", "person") || asText(input);
+      if (!named) nothing(`${where} — the input names no member to add`);
+      const user = userIdFor(named);
+      if (!user) nothing(`${where} — "${named}" is not a seeded account, an identifier or an address the seed knows`);
+      const members = panelNow((await peek(openedPanel)).json).filter((member) => member.user !== user);
+      members.push({ user, chair: false, evaluator: false, order: members.length });
+      await send(where, "PUT", openedPanel, { tag: "editEvaluationPanel", value: members });
+    },
+    memberWithoutRoleError: async () => refusal((status) => status >= 400),
+    // One member per line as the service now holds the panel.
+    panelAsStored: async () => {
+      if (!openedPanel) nothing("evaluation-panel-request.panel_as_stored — no opportunity has been opened");
+      const stored = ((await peek(openedPanel)).json as Record<string, unknown> | null)?.evaluationPanel;
+      const panel = Array.isArray(stored) ? (stored as Record<string, unknown>[]) : [];
+      return panel
+        .map((member) => {
+          const user = (member.user ?? {}) as Record<string, unknown>;
+          return `${user.name ?? user.id ?? ""} <${user.email ?? ""}> chair: ${member.chair === true} evaluator: ${member.evaluator === true}`;
+        })
+        .join("\n");
+    },
+  };
+
+  // An opportunity or proposal saved as it stands with one more stored file among its
+  // attachments: the record as the service answers it, each nested record it names (its
+  // author, its organization, its opportunity) given as that record's identifier, sent back
+  // as the "edit" change. Checked on a Code With Us opportunity as an administrator and on a
+  // vendor's own draft Code With Us proposal, both of which the service took.
+  let openedRecord = "";
+
+  function editValue(record: Record<string, unknown>, fileId: string): Record<string, unknown> {
+    const value: Record<string, unknown> = { ...record };
+    for (const [key, inner] of Object.entries(value)) {
+      if (inner && typeof inner === "object" && !Array.isArray(inner) && "id" in (inner as object)) {
+        value[key] = (inner as Record<string, unknown>).id;
+      }
+    }
+    const attached = Array.isArray(record.attachments) ? (record.attachments as unknown[]) : [];
+    value.attachments = [
+      ...attached.map((each) => (each && typeof each === "object" ? (each as Record<string, unknown>).id : each)),
+      fileId,
+    ];
+    return value;
+  }
+
+  const fileAttachByIdentifier: PageOf<"fileAttachByIdentifier"> = {
+    open: async (params) => {
+      openedRecord = address("/api/:recordKind/:program/:recordId", params);
+      await send("file-attach-by-identifier.open", "GET", openedRecord);
+    },
+    async attachStoredFile(input) {
+      const where = "file-attach-by-identifier.attach_stored_file";
+      if (!openedRecord) nothing(`${where} — no opportunity or proposal has been opened`);
+      const named = field(input, "fileId", "file_id", "id", "file", "identifier", "address") || asText(input);
+      if (!named) nothing(`${where} — the input names no stored file`);
+      const current = await peek(openedRecord);
+      const readable =
+        current.status === 200 && !!current.json && typeof current.json === "object" && !Array.isArray(current.json);
+      // When this person cannot read the record there is nothing to save it from, so the
+      // attach is still sent, carrying only the attachment; the service's answer to that
+      // change is what attachment_accepted and attachment_refused read.
+      await send(where, "PUT", openedRecord, {
+        tag: "edit",
+        value: readable
+          ? editValue(current.json as Record<string, unknown>, fileIdFor(named))
+          : { attachments: [fileIdFor(named)] },
+      });
+    },
+    attachmentAccepted: async () => accepted("file-attach-by-identifier.attachment_accepted"),
+    attachmentRefused: async () => refusal((status) => status >= 400),
+    // The identifiers of the files the record holds now, one per line.
+    attachedFileIdentifiers: async () => {
+      if (!openedRecord) nothing("file-attach-by-identifier.attached_file_identifiers — no record has been opened");
+      const held = ((await peek(openedRecord)).json as Record<string, unknown> | null)?.attachments;
+      const attached = Array.isArray(held) ? (held as unknown[]) : [];
+      return attached
+        .map((each) => (each && typeof each === "object" ? String((each as Record<string, unknown>).id ?? "") : String(each)))
+        .join("\n");
+    },
+  };
+
+  // Bound first and returned after, so a page only the newer surface declares is not refused
+  // as an unknown property when this compiles against an older one.
+  const surface = {
     signIn,
     signOut,
     home,
@@ -5341,5 +6139,16 @@ export default function create(
     fileAttachmentControl,
     fileImagePicker,
     fileEmbeddedImage,
+    caughtMessage,
+    caughtMessageList,
+    organizationActingForList,
+    affiliationInvitationRequest,
+    userListRequest,
+    contentRequest,
+    evaluationIndividualRequestSwu,
+    evaluationIndividualRequestTwu,
+    evaluationPanelRequest,
+    fileAttachByIdentifier,
   };
+  return surface;
 }
