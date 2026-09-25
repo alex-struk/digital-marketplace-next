@@ -39,6 +39,12 @@ For a `derive-tests-*` proposal, check each test against its own criterion and n
   contract.
 - Every `not-testable` reason is real: it names what is actually missing from the surface (a page,
   an action, an observation), not that the criterion was inconvenient or out of scope.
+- Every clause of the criterion is asserted by its test, or named by a `not-testable.yaml` entry
+  carrying `clause` beside the test. A test that asserts part of its criterion with no such entry
+  reads as a test of the whole: its first passing run closes the criterion's missing test, and
+  the rest is owed by nobody. That is grounds to return, with a condition naming the clause and
+  asking for the entry, or for the assertion where the surface reaches it. It is not a note on an
+  approval.
 
 For a `bind-adapter-*` proposal, check that the adapter stays an adapter:
 
@@ -51,6 +57,19 @@ For a `bind-adapter-*` proposal, check that the adapter stays an adapter:
 Return rather than approve when a test asserts something its criterion does not say — the fix
 belongs to whoever writes the test, not to a note in the ruling that the reviewer let it through
 anyway.
+
+A free-text condition on an approval is kept on the gate file and read by no stage: nothing asks
+after it again. Where you approve and a clause of a criterion is still asserted by no test —
+because you judge the test writer cannot assert it until another stage supplies something, or
+because it surfaced in a build — keep it owed in the form that records it:
+
+```
+missing-test <ID>: <clause> — owed by <stage>: <what is missing>
+```
+
+It puts the clause on the criterion's missing test, owed by the stage you name and handed to it
+when it next runs, and no run of the test that exists closes it. Name the stage that supplies
+what is missing, never `derive-tests`: a clause the writer could assert and did not is a return.
 
 ## A criterion that could not be exercised at all
 
@@ -150,12 +169,17 @@ addressed-to <stage>: <what that stage has to change, and what showed it>
 ```
 
 The stage is the one that would produce that artifact again: `plan` for what a slice claims,
-`design` for a screen, `archaeology` for recovered evidence, `derive-tests` for a domain's
-suite, `build` for the application. The condition is filed where that stage reads it and is
-left out of the list the stage you are returning is given — which is told the condition
-exists and which stage it went to, so it can see why its list is shorter than your ruling.
+`design` for a screen, `archaeology` for recovered evidence, `contract` for the contract and
+the seed records the tests act on, `derive-tests` for a domain's suite, `bind-adapter` for a
+target's bindings, `build` for the application. A stage no run of which takes a request —
+`verify`, `ratify`, `calibrate` — cannot be named, and a ruling that names one is refused.
+The condition is filed where that stage reads it and is left out of the list the stage you
+are returning is given — which is told the condition exists and which stage it went to, so it
+can see why its list is shorter than your ruling. The proposal you return is not revised
+until that stage has answered and its answer is approved, so the revision is built on the
+answer rather than on what you said has to change.
 
-Two conditions you address to the same stage arrive together. One `--revise` run is handed
+Two conditions you address to the same stage arrive together. One run of that stage is handed
 every open request addressed to it, each in your words, and answers them as one round — so
 write both where both are true, rather than choosing between them or folding two asks into
 one sentence.

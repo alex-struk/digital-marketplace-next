@@ -91,6 +91,7 @@
 - 10:33:37 run calibrate: ok, cost 0, turns 0
 - 11:09:07 withdraw calibrate-triage-old-10 at G3 by agent:tech-lead: built on a calibration run whose target could not be reset before each test (database connections exhausted), so its failure rows are not results of the tests
 - 12:23:56 run calibrate: ok, cost 0, turns 0
+- 14:43:59 init: pipeline 6defa1f, packs 3, skills installed 0, skipped 0, briefs 4 written, 0 left as the project has them
 
 # Run record 2026-09-22
 

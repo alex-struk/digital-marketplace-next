@@ -50,12 +50,17 @@ addressed-to <stage>: <what that stage has to change, and what showed it>
 ```
 
 The stage is the one that would produce that artifact again: `plan` for what a slice claims,
-`design` for a screen, `archaeology` for recovered evidence, `derive-tests` for a domain's
-suite, `build` for the application. The condition is filed where that stage reads it and is
-left out of the list the stage you are returning is given — which is told the condition
-exists and which stage it went to, so it can see why its list is shorter than your ruling.
+`design` for a screen, `archaeology` for recovered evidence, `contract` for the contract and
+the seed records the tests act on, `derive-tests` for a domain's suite, `bind-adapter` for a
+target's bindings, `build` for the application. A stage no run of which takes a request —
+`verify`, `ratify`, `calibrate` — cannot be named, and a ruling that names one is refused.
+The condition is filed where that stage reads it and is left out of the list the stage you
+are returning is given — which is told the condition exists and which stage it went to, so it
+can see why its list is shorter than your ruling. The proposal you return is not revised
+until that stage has answered and its answer is approved, so the revision is built on the
+answer rather than on what you said has to change.
 
-Two conditions you address to the same stage arrive together. One `--revise` run is handed
+Two conditions you address to the same stage arrive together. One run of that stage is handed
 every open request addressed to it, each in your words, and answers them as one round — so
 write both where both are true, rather than choosing between them or folding two asks into
 one sentence.
