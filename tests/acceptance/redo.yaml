@@ -13,6 +13,11 @@ redo:
       own rights and changing the owner's are refused; treat a choice that is
       shown but cannot be changed as the refusal, and confirm afterwards that
       both people's rights are unchanged
+    closed: &a1
+      outcome: met
+      why: derived again by a derive-tests run on organizations
+      by: runner:derive-tests
+      at: 2026-09-25T11:06:36.320Z
   - id: R-3.3
     version: 1
     why: the test requires a statement of permissions to be shown for a member of
@@ -20,6 +25,7 @@ redo:
       is shown none, so it stops before opening the organization; establish that
       the account holds no administrator rights without depending on such a
       statement being present
+    closed: *a1
   - id: R-3.13
     version: 1
     why: the refusal of a pending member is that they cannot be chosen as the new
@@ -27,12 +33,14 @@ redo:
       assert that instead; the transfer half needs a way to answer the
       invitation that the suite does not yet provide, so record it as blocked
       until it does
+    closed: *a1
   - id: R-3.28
     version: 1
     why: the test does not establish that the organization is approved for two
       service areas before editing, and it does not tick a third area as the
       given describes; establish the two starting approvals, clear one and tick
       a third, then read the approvals once the save has completed
+    closed: *a1
   - id: R-5.1
     version: 1
     why: the panel of one was never assembled, because the draft's panel already
@@ -65,7 +73,7 @@ redo:
       refusal, keep requiring the reason when the same person is named twice,
       and where the Team With Us draft a case depends on was never stored,
       record that case as blocked rather than failed
-    closed: &a1
+    closed: &a2
       outcome: met
       why: derived again by derive-tests-opportunities-stale-3, in the line of work
         approved as derive-tests-opportunities-7
@@ -80,21 +88,21 @@ redo:
       establish that the draft was stored before reading which program it
       belongs to, and record the case as blocked rather than failed when it was
       not
-    closed: *a1
+    closed: *a2
   - id: R-1.13
     version: 1
     why: the Team With Us opportunity was never published, so its absence from the
       list says nothing about a budget limit; establish that it was published
       with its budget before reading the list, and record the case as blocked
       rather than failed when the target would not store it
-    closed: *a1
+    closed: *a2
   - id: R-1.48
     version: 1
     why: the Team With Us draft was never stored on this target, for a reason the
       criterion does not govern, so the test says nothing about who may create
       one; establish that each draft was stored before reading its state, and
       record the Team With Us case as blocked rather than failed when it was not
-    closed: *a1
+    closed: *a2
   - id: R-1.53
     version: 2
     why: four tests stop at setup by requiring a statement of permissions that an
@@ -104,7 +112,7 @@ redo:
       stored, so establish that each draft was stored before asking to delete
       it, and record the Team With Us part as blocked rather than failed when it
       was not
-    closed: *a1
+    closed: *a2
   - id: R-1.56
     version: 1
     why: in the Sprint With Us case the administrator's publication did not take
@@ -112,7 +120,7 @@ redo:
       which the criterion permits; confirm the opportunity reads as published
       before its author tries, and in the Team With Us case, where the draft was
       never stored, record the case as blocked rather than failed
-    closed: *a1
+    closed: *a2
   - id: R-1.10
     version: 1
     why: publication of the over-length teaser was withheld, with the publish
@@ -120,7 +128,7 @@ redo:
       on the step the form was left on; look for the reason against the teaser
       where it is entered, allowing time for it, treat a publication that stays
       unavailable as the refusal, and check that nothing was published
-    closed: *a1
+    closed: *a2
   - id: R-1.18
     version: 1
     why: the target allocation and the service area are each chosen from a list that
@@ -130,7 +138,7 @@ redo:
       refused, confirm that the value chosen is the one the case names before
       publishing, and record a case as blocked rather than failed when the
       target will not store the Team With Us opportunity
-    closed: *a1
+    closed: *a2
   - id: R-1.21
     version: 1
     why: the draft was not incomplete, because a new opportunity's location starts
@@ -138,7 +146,7 @@ redo:
       submission was rightly accepted for review; empty the location explicitly,
       confirm the saved draft shows it blank, then submit it and read what the
       author is told
-    closed: *a1
+    closed: *a2
   - id: R-1.24
     version: 1
     why: in the Team With Us case the given was established only from the address
@@ -146,7 +154,7 @@ redo:
       opportunity can be read; establish it from the opportunity's own title and
       status before closure, and record the case as blocked rather than failed
       when the opportunity cannot be read
-    closed: *a1
+    closed: *a2
   - id: R-3.26
     version: 1
     why: the first test does not establish that the seeded organization holds its
@@ -156,6 +164,7 @@ redo:
       every approval box was clear after the save; establish both before
       reading, and record the test as blocked rather than failed when the
       approval cannot be recorded
+    closed: *a1
   - id: R-2.14
     version: 2
     why: the criterion promises that the submission is refused and each offending
