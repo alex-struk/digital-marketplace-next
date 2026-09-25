@@ -304,7 +304,11 @@ personas:
   # meeting another's — two of them holding the same page open, one saving over the
   # other. The oracle carries the account but has one administrator sign-in route and no
   # parameter on it, so on the oracle this persona can be observed and not acted as. On
-  # the rebuilt target it signs in like any other.
+  # the rebuilt target it signs in like any other. Where the criterion is only that a
+  # page changed underneath an open editing screen is silently published over, the change
+  # underneath can be made by the administrator's own session through content-request
+  # while content-edit stays open (see that entry in surface.yaml); what needs this
+  # persona is a criterion that names who made each change.
   - id: administrator-other
     domain: content
     can:

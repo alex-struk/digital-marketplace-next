@@ -253,6 +253,12 @@ pages:
       team_scenario_tab: { test_id: opportunity-tab-team-scenario }
       evaluation_panel_tab: { test_id: opportunity-tab-evaluation-panel }
       consensus_tab: { test_id: opportunity-tab-consensus }
+      # The two evaluation tabs offered only to an evaluator: the program's evaluation
+      # instructions and the evaluator's own list of individual evaluations. With
+      # evaluation_panel_tab and consensus_tab these are the four an evaluation's tools
+      # are split into, each present or absent for the signed-in person.
+      instructions_tab: { test_id: null }
+      evaluation_tab: { test_id: null }
 
   - id: opportunity-swu-complete
     domain: opportunities
@@ -330,6 +336,9 @@ pages:
       challenge_tab: { test_id: opportunity-tab-challenge }
       evaluation_panel_tab: { test_id: opportunity-tab-evaluation-panel }
       consensus_tab: { test_id: opportunity-tab-consensus }
+      # As on opportunity-swu-edit: offered only to an evaluator.
+      instructions_tab: { test_id: null }
+      evaluation_tab: { test_id: null }
       # The changes of state this screen offers the signed-in person from the state the
       # opportunity is in now — award, cancel, move to the next stage — named in the
       # criteria's words. A criterion turns on which changes a Team With Us opportunity in
@@ -1474,6 +1483,16 @@ pages:
       page_address: { test_id: content-page-address }
       page_title: { test_id: content-page-title }
       page_body: { test_id: content-page-body }
+      # What markup written into the body did when the page rendered, which page_body's
+      # text cannot show: markup that ran and markup that was taken out leave the same words.
+      # body_element_names is the name of every element the rendered body is made of, in
+      # document order, one per line (p, strong, em, a, img, script, ...). body_script_ran
+      # is "yes" when anything in the body ran as script while the page rendered — read as
+      # a dialog (alert, confirm or prompt) the page raised on opening or within a few
+      # seconds after — and empty otherwise. seed.content.scriptProbePage carries markup
+      # that raises one if it runs.
+      body_element_names: { test_id: null }
+      body_script_ran: { test_id: null }
       published_date: { test_id: content-published-date }
       updated_date: { test_id: content-updated-date }
       readable_when_signed_out: { test_id: content-page }
@@ -1746,6 +1765,15 @@ pages:
   # Requests to read, create, change, rename or remove a page, as the service answers
   # them. :slug is the page's address; reading the list and creating a page address the
   # collection rather than one page and ignore it.
+  #
+  # A request is sent from the signed-in person's session without moving the browser, so
+  # whatever screen is open stays open, holding what it read. That is how a page changed
+  # "by another administrator since it was opened" is reached: open content-edit, start
+  # editing, change the same page here, then publish from the screen, which still holds
+  # the wording it read before. On the oracle the change made here comes from the same
+  # administrator account as the screen (administrator-other has no sign-in there); the
+  # service carries no record of the version a change was based on, so which account
+  # sent it does not decide whether the stale publish is accepted.
   - id: content-request
     domain: content
     route: /api/content/:slug
