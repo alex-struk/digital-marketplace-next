@@ -12,7 +12,7 @@ Profile: rebuild
 | users | 0 | 32 | 0 | 0 | 0 | 4 | 1 | 36 | 29/30 (n/t 1) |  | 14 pass · 1 fail · 9 unbound · 0 stale |
 | evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 | 30/30 |  | 3 pass · 6 fail · 15 unbound · 0 stale |
 | notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 19/21 (n/t 2) |  | 7 pass · 3 fail · 3 unbound · 0 stale |
-| content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 | 24/26 (n/t 2) |  | 12 pass · 7 fail · 3 unbound · 0 stale |
+| content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 | 25/26 (n/t 1) |  | 12 pass · 7 fail · 3 unbound · 0 stale |
 | files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 22/24 (n/t 2) |  | 15 pass · 7 fail · 1 unbound · 0 stale |
 | **Totals** | 0 | 286 | 0 | 0 | 0 | 9 | 3 | 295 |  |  |  |
 
@@ -82,6 +82,7 @@ Profile: rebuild
 - [contract-v7](proposals/contract-v7.md)
 - [contract-v8](proposals/contract-v8.md)
 - [derive-tests-content](proposals/derive-tests-content.md)
+- [derive-tests-content-10](proposals/derive-tests-content-10.md)
 - [derive-tests-content-2](proposals/derive-tests-content-2.md)
 - [derive-tests-content-3](proposals/derive-tests-content-3.md)
 - [derive-tests-content-4](proposals/derive-tests-content-4.md)
@@ -95,6 +96,7 @@ Profile: rebuild
 - [derive-tests-content-stale-3](proposals/derive-tests-content-stale-3.md)
 - [derive-tests-content-stale-4](proposals/derive-tests-content-stale-4.md)
 - [derive-tests-content-stale-5](proposals/derive-tests-content-stale-5.md)
+- [derive-tests-content-stale-6](proposals/derive-tests-content-stale-6.md)
 - [derive-tests-evaluation](proposals/derive-tests-evaluation.md)
 - [derive-tests-evaluation-10](proposals/derive-tests-evaluation-10.md)
 - [derive-tests-evaluation-2](proposals/derive-tests-evaluation-2.md)
@@ -210,10 +212,10 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $534.161558
-- Rulings cost: $275.647868
-- Total cost: $809.809426
-- Agent-held rulings: 165
+- Journal cost: $534.384111
+- Rulings cost: $276.773953
+- Total cost: $811.158064
+- Agent-held rulings: 167
 - Runner rulings (automatic, no seat held): 1
 - Human rulings: 8
 - Rulings whose seat this page does not recognise: 0

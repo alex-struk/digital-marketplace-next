@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-content-10 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">176</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">176</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">154</span></a></li><li><a href="../runs.html">Run log <span class="count">14</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-content-10</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-25 14:07</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised content tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the R-7.17 test as the ruling asked.</p>
+<p>I rewrote the R-7.17 test as the ruling asked. Nothing else in the content domain changed.</p>
+<p><strong>The ruling&#39;s one condition.</strong> The never-executed test in <code>tests/acceptance/content/R-7.17.spec.ts</code> required that no script element appear among <code>body_element_names</code>. The criterion only says embedded markup is never executed. It does not say the markup is removed, so an inert script element that never runs meets it. I replaced the file with a new one that drops that check. The file&#39;s comment now says the test does not rule on whether the markup stays as an inert element, shows as literal text, or is taken out.</p>
+<p><strong>What the R-7.17 tests now assert.</strong> The first test opens <code>seed.content.scriptProbePage</code> on its own address. It checks that:</p>
+<ul><li>the page is reached and shows its seeded title;</li><li>its words are shown (&quot;These words are in an emphasis tag.&quot;);</li><li><code>bodyScriptRan()</code> reports nothing ran, which covers both the inline script and the image failure handler in the seeded body.</li></ul>
+<p>It checks nothing more about the markup. The second test covers &quot;renders identically&quot; and is unchanged in substance. An administrator publishes the seeded raw-markup body to the Sprint With Us scope page and the Team With Us terms page. The test then checks that each page&#39;s normalised body on its own address matches what the opportunity view embeds. It also checks that the words inside each tagged span appear, so two empty screens can&#39;t pass as a match. The header lines are exactly as given; the derived date was already 2026-09-25 and is unchanged.</p>
+<p><strong>What I left alone.</strong></p>
+<ul><li><strong>R-7.28:</strong> its test and its not-testable entry stay byte-for-byte. The reviewer called both sound.</li><li><strong>The collision clause of R-7.28:</strong> the condition asking for it to be restated or withdrawn is addressed to ratify, so I did not act on it.</li><li><strong><code>not-testable.yaml</code>:</strong> R-7.17 has no entry there and needs none, because the test now asserts both of its clauses. Nothing in the file changed.</li><li><strong>Everything else:</strong> no other file under <code>tests/acceptance/content/</code> and no generated file was changed.</li></ul>
+<p><strong>What I could not do.</strong> I did not rerun the typecheck: running it needed approval, and I didn&#39;t get it. The only change is removing one assertion and the lines that fed it. No new surface call or import came in, so I expect no new diagnostics, but I haven&#39;t checked that.</p>
+<p><strong>Surface gaps.</strong> This revision needed no surface action or observation that is missing.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent) on 2026-09-25 14:08.</p>
+<div class="body"><p>The question is whether the revised content tests follow from their criteria and nothing else. Approve. The one condition from the last ruling has been carried out: the never-executed test for R-7.17 no longer asserts that no script element survives in the body. It asserts only what the criterion states. The seeded probe page is reached on its own address and shows its words as text, and bodyScriptRan reports that nothing in the body executed. That covers both the inline script and the image failure handler. The test says in its own comment that it does not rule on whether the markup stays inert, shows as literal text or is removed, which is exactly what the criterion leaves open. The title check only confirms the right page was reached. The identical-rendering test is unchanged in substance and still follows from the criterion&#39;s second clause. It compares the normalised body on the page&#39;s own address with what each embedding screen shows, and guards against two empty renderings matching. R-7.28&#39;s test and its not-testable entry are unchanged and were already judged sound. The condition on R-7.28&#39;s collision clause stays addressed to ratify. No selector, route, table or status code leaks into either file. The runner&#39;s typecheck reports no diagnostics under acceptance/content. Its two diagnostics are in adapters/new, which this proposal does not answer for. missing-test/R-7.17 is not marked met here: it closes only when this test runs at the criterion&#39;s current version, and it is not withdrawn because the test is still owed. The ruling would change to a return if the calibrate run showed the probe test depending on anything the criterion does not state, or if a content diagnostic appeared in the typecheck.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
