@@ -2,12 +2,15 @@
 // provenance: blind, spec@05e88fb7765c5d6327f910e43f990e6c321b63fa, derived 2026-09-25
 import { test, expect, persona, seed } from "../../fixtures";
 
-// seed.content.rawMarkupPage carries raw markup beside formatting marks, as typed. The criterion
-// asks that the markup is never executed; it does not say whether it is then shown as literal
-// text or taken out, and page_body reads the rendered text, in which markup that ran and markup
-// that was taken out leave the same words behind. No observation separates the two, so the
-// never-executed clause is not asserted here. What is asserted is the other clause: the same
-// body reads identically on the page's own address and on the screens that embed it.
+// The never-executed clause is read against seed.content.scriptProbePage, whose body carries an
+// inline script and an image failure handler, each raising a dialog if it runs. content-view's
+// body_script_ran reports whether anything in the body ran, and that is all the test asserts of
+// the markup. Whether it is then kept as an inert element, shown as literal text or taken out,
+// the criterion does not say, so none of those is asserted.
+//
+// seed.content.rawMarkupPage carries raw markup beside formatting marks, as typed, and is used
+// for the second clause: the same body reads identically on the page's own address and on the
+// screens that embed it.
 //
 // The Sprint With Us scope page is what opportunity-swu-view embeds as scope_section, and the
 // Team With Us terms page is what opportunity-twu-view embeds as terms_section. An
@@ -23,6 +26,18 @@ const taggedWords = [...markupPage.body.matchAll(/<(\w+)>([^<]*)<\/\1>/g)].map((
 function normalised(text: string): string {
   return text.replace(/\s+/g, " ").trim();
 }
+
+test("a page's body is rendered as formatted text only; markup embedded in it is never executed", async ({
+  surface,
+}) => {
+  const probe = seed.content.scriptProbePage;
+  await surface.contentView.open({ slug: probe.slug });
+
+  expect(await surface.contentView.pageTitle()).toBe(probe.title);
+  expect(await surface.contentView.pageBody()).toContain("These words are in an emphasis tag.");
+
+  expect(await surface.contentView.bodyScriptRan()).toBeFalsy();
+});
 
 test("the same body renders identically on the page's own address and wherever another screen embeds it", async ({
   surface,

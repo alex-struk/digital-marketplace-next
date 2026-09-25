@@ -166,13 +166,26 @@ criteria:
       answers it.
   - id: R-7.28
     version: 2
-    reason: The given is two administrators who both opened the same page before
-      either saved. The target carries one administrator sign-in and no second
-      one, and the surface drives a single session, so two people cannot hold
-      the page open at once and no stale read-then-write window can be produced.
-      The collision half needs two publishes interleaving inside one such
-      window, and nothing in the surface reports a version-key collision or a
-      service error on the content-edit screen.
+    clause: only two publishes interleaving inside a single read-then-write window
+      collide on the version key, and there the second is refused with a service
+      error rather than silently winning
+    reason: "unobservable: the collision happens only when two publishes land
+      between the service reading a page's latest version and writing the next
+      one — a window inside a single request that nothing outside the service
+      opens, holds or can see. The surface's actions complete one at a time, and
+      even two requests sent at once through content-request would interleave
+      inside that window only by chance, so a passing run would say nothing
+      about whether the second is refused and a failing one nothing about
+      whether it won. Content-edit also names no observation of a service error
+      on publish, but adding one would not help: without a way to force the
+      interleaving there is nothing for it to report. The stale-publish half,
+      which is the criterion's reachable consequence, is asserted by
+      R-7.28.spec.ts."
+    missing: a statement of the clause in terms something observes — for example,
+      what a content-edit publish reports when the service refuses it — or,
+      failing that, a ruling that withdraws the clause as a property of the
+      service's storage accepted without a test
+    owner: ratify
   - id: R-7.29
     version: 1
     reason: "The given is a page whose body another screen embeds having been

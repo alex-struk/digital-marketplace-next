@@ -220,3 +220,8 @@ redo:
       assert whether the markup survives as an element, as literal text, or not
       at all.
     verb: test-overreaches
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on content
+      by: runner:derive-tests
+      at: 2026-09-25T14:07:15.074Z
