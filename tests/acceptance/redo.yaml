@@ -210,3 +210,13 @@ redo:
       why: derived again by a derive-tests run on content
       by: runner:derive-tests
       at: 2026-09-25T12:59:06.967Z
+  - id: R-7.17
+    version: 1
+    why: the never-executed test requires that no script element appears among the
+      rendered body's elements, but the criterion only says embedded markup is
+      never executed. It does not say markup is removed, and an inert script
+      element that never runs meets the criterion. Assert only that nothing in
+      the body ran (with the page reached and its words shown), and do not
+      assert whether the markup survives as an element, as literal text, or not
+      at all.
+    verb: test-overreaches
