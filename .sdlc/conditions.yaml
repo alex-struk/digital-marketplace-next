@@ -172,3 +172,13 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-25T11:51:22.419Z
+    closed:
+      outcome: met
+      why: the assertion that the refusal's text contains 'chair' is removed from
+        tests/acceptance/evaluation/R-5.9.spec.ts; the test keeps the poll that
+        missing_chair_error returns text and the check that panel_as_stored
+        after reopening evaluation-panel-request equals the reading taken before
+        the submission, and the header comment now reads 'a refusal, whatever
+        its wording'.
+      by: agent:reviewer
+      at: 2026-09-25T11:52:38.590Z
