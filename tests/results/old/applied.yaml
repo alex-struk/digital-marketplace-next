@@ -147,36 +147,6 @@ rulings:
     version: 2
     verb: defect-in-old
     gate: calibrate-old-6
-  - id: R-7.9
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-9
-    adapter: 0a4e132473a0ec53a7411a6af638efdcb1e1a60e
-  - id: R-1.15
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-9
-    adapter: 0a4e132473a0ec53a7411a6af638efdcb1e1a60e
-  - id: R-1.16
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-9
-    adapter: 0a4e132473a0ec53a7411a6af638efdcb1e1a60e
-  - id: R-8.20
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-9
-    adapter: 0a4e132473a0ec53a7411a6af638efdcb1e1a60e
-  - id: R-8.25
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-9
-    adapter: 0a4e132473a0ec53a7411a6af638efdcb1e1a60e
-  - id: R-8.31
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-9
-    adapter: 0a4e132473a0ec53a7411a6af638efdcb1e1a60e
   - id: R-5.18
     version: 2
     verb: spec-wrong

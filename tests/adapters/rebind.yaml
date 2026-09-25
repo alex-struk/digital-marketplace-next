@@ -7,6 +7,11 @@ rebind:
       deleted.' is on the page at the failure), so it reads ''; read it with
       alertLines(/deleted/i), the helper for outcome alerts drawn after the
       footer.
+    closed: &a1
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-25T14:11:49.907Z
   - id: R-1.15
     target: old
     why: opportunitySwuCreate.scoreWeightError and
@@ -17,6 +22,7 @@ rebind:
       stepMessages(/100%|weight/i), as fieldError already does. The Team With Us
       test's publish may also never have left /create, like every Team With Us
       save in this run.
+    closed: *a1
   - id: R-1.16
     target: old
     why: "in the implementation-phase test opportunitySwuCreate.addPhase throws
@@ -26,6 +32,7 @@ rebind:
       so map 'Prototype' to 'Proof of Concept'. The inception test is not shown
       to be a binding fault: 'Publish' stays disabled and no step shows a
       message."
+    closed: *a1
   - id: R-8.20
     target: old
     why: "in the proposal test fileAttachmentControl.attachmentAddress looks for an
@@ -36,6 +43,7 @@ rebind:
       not a binding fault: its publish never left
       /opportunities/team-with-us/create, like every Team With Us save in this
       run."
+    closed: *a1
   - id: R-8.25
     target: old
     why: "in the proposal test fileAttachmentControl.attachmentAddress returns ''
@@ -44,6 +52,7 @@ rebind:
       Attachments'; close the dialog and go to that step before reading the
       link. The Sprint With Us test is not a binding fault: the vendor was not
       refused the draft's attachment before publication."
+    closed: *a1
   - id: R-8.31
     target: old
     why: in the opportunity test removeExistingAttachment calls advanceTo('Add
@@ -54,3 +63,4 @@ rebind:
       proposal test attachmentAddress returns '' from the proposal's '1.
       Proponent' step, with an empty dialog open; close it and go to '3.
       Attachments' before reading the link.
+    closed: *a1
