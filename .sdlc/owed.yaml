@@ -2265,7 +2265,7 @@ owed:
     id: R-3.17
     version: 1
     domain: organizations
-    stage: derive-tests
+    stage: calibrate
     why: The only way the surface creates an invitation is organization-edit's
       add_team_members, whose subject is email addresses; no page in the
       contract offers a membership type on an invitation, so a test cannot send
@@ -2302,12 +2302,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T11:07:34.352Z
+    target: old
   - kind: missing-test
     item: R-3.20
     id: R-3.20
     version: 1
     domain: organizations
-    stage: derive-tests
+    stage: calibrate
     why: The criterion turns entirely on telling a refusal apart from an empty
       answer, and no page in the organizations domain carries a refusal
       observation — organization-list offers organization_name, owner_name, the
@@ -2343,12 +2349,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T11:07:34.352Z
+    target: old
   - kind: missing-test
     item: R-3.15
     id: R-3.15
     version: 1
     domain: organizations
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the outcome is which organizations a vendor is offered as ones
       they may act on behalf of, and nothing in the surface reads that set. The
       only place it is offered is the organization picker on proposal-swu-create
@@ -2402,12 +2414,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T11:07:34.352Z
+    target: old
   - kind: missing-test
     item: R-3.35
     id: R-3.35
     version: 1
     domain: organizations
-    stage: derive-tests
+    stage: calibrate
     why: The claim is about where the accept and the decline choice inside an
       invitation email lead. The email observable reaches a message's subject,
       snippet and recipient through the mail catcher, and the Mail fixture
@@ -2449,6 +2467,12 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T11:07:34.352Z
+    target: old
   - kind: missing-test
     item: R-7.12
     id: R-7.12

@@ -15,11 +15,11 @@
   <span class="profile">rebuild profile</span>
 </div>
 <div class="shell">
-<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">158</span></a></li><li><a href="../proposals.html">Proposals <span class="count">158</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">140</span></a></li><li><a href="../runs.html">Run log <span class="count">14</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html" aria-current="page">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">159</span></a></li><li><a href="../proposals.html">Proposals <span class="count">159</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">141</span></a></li><li><a href="../runs.html">Run log <span class="count">14</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html" aria-current="page">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
 <main id="main">
 <div class="page-head"><h1>organizations</h1>
-<p class="lede">35 criteria, 27 with a derived acceptance test, 4 recorded as not testable through the contract surface.</p></div>
-<div class="filters" hidden><button type="button" data-filter="all" aria-pressed="true">All (35)</button><button type="button" data-filter="tested" aria-pressed="false">Has a test (27)</button><button type="button" data-filter="not-testable" aria-pressed="false">Not testable (4)</button><button type="button" data-filter="untested" aria-pressed="false">No test yet (0)</button><button type="button" data-filter="obsolete" aria-pressed="false">Obsolete (0)</button></div>
+<p class="lede">35 criteria, 31 with a derived acceptance test, 0 recorded as not testable through the contract surface.</p></div>
+<div class="filters" hidden><button type="button" data-filter="all" aria-pressed="true">All (35)</button><button type="button" data-filter="tested" aria-pressed="false">Has a test (31)</button><button type="button" data-filter="not-testable" aria-pressed="false">Not testable (0)</button><button type="button" data-filter="untested" aria-pressed="false">No test yet (0)</button><button type="button" data-filter="obsolete" aria-pressed="false">Obsolete (0)</button></div>
 <article class="criterion" data-state="tested">
   <header>
     <span class="id">R-3.1</span>
@@ -160,7 +160,7 @@
   <p class="statement">The list of an organization&#39;s team members can be read only by a service administrator or by someone who owns or administers that organization.</p>
   <dl><dt>given</dt><dd>an organization with an owner and one ordinary member</dd><dt>when</dt><dd>that ordinary member, and separately a vendor unconnected to the organization, asks for the organization&#39;s team list</dd><dt>then</dt><dd>both are refused, while the owner and a service administrator receive the list</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.14.spec.ts</code></dd><dt>against old</dt><dd><span class="chip pass">pass</span></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:258</code><br><code>src/back-end/lib/resources/affiliation.ts:98</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
-<article class="criterion is-not-testable" data-state="not-testable">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-3.15</span>
     <span class="chip open">accepted</span>
@@ -168,7 +168,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The organizations a vendor may act on behalf of are those they own and those they administer, excluding any that have been archived.</p>
-  <dl><dt>given</dt><dd>a vendor who owns one organization, administers a second, is an ordinary member of a third, and owns a fourth that has been archived</dd><dt>when</dt><dd>they ask for the organizations they can act for</dd><dt>then</dt><dd>the first two are returned and the third and fourth are not</dd><dt>not testable</dt><dd>blocked: the outcome is which organizations a vendor is offered as ones they may act on behalf of, and nothing in the surface reads that set. The only place it is offered is the organization picker on proposal-swu-create and proposal-twu-create, where choose_organization is an action with no observation of the organizations it offers or of a choice it refuses. organization-list.my_organizations and the owned and affiliated tables on organization-user-memberships(-self) read the organizations a vendor belongs to, which include those where they are only an ordinary member, and the affiliated table does not tell an administered organization from a member one, so none of them separates the four organizations the given describes. The given itself can be built through the surface (add_team_members, approve_invitation, toggle_member_admin_status, archive_organization). Unblocked by an observation of the organizations offered for a vendor to act on behalf of, such as proposal-swu-create.organization_choices and its Team With Us sibling, or an organization-list observation that reads only those organizations.</dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/back-end/lib/db/organization.ts:541</code><br><code>src/back-end/lib/resources/owned-organization.ts:28</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>a vendor who owns one organization, administers a second, is an ordinary member of a third, and owns a fourth that has been archived</dd><dt>when</dt><dd>they ask for the organizations they can act for</dd><dt>then</dt><dd>the first two are returned and the third and fourth are not</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.15.spec.ts</code></dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/back-end/lib/db/organization.ts:541</code><br><code>src/back-end/lib/resources/owned-organization.ts:28</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
 <article class="criterion" data-state="untested">
   <header>
@@ -180,7 +180,7 @@
   <p class="statement">Asking for the organizations one may act on behalf of as anyone other than a vendor returns an empty list rather than being refused.</p>
   <dl><dt>given</dt><dd>a signed-in member of public sector staff, and a visitor who is not signed in</dd><dt>when</dt><dd>each asks for the organizations they may act on behalf of</dd><dt>then</dt><dd>each receives an empty list and neither is told they are not permitted</dd><dt>cites</dt><dd><code>src/back-end/lib/resources/owned-organization.ts:25</code><br><code>src/back-end/lib/db/organization.ts:542</code></dd><dt>reconciliation</dt><dd>defect</dd><dt>superseded by</dt><dd>R-3.20</dd><dt>note</dt><dd>the permission rule for this request is written but never applied — the check tests that the rule exists rather than running it — so nothing is refused here. No harm follows, because the underlying lookup returns nothing for anyone who is not a vendor, but the outcome is an empty success where a refusal was intended. No corrected criterion has been written because it has not been decided whether the new system should refuse or should keep answering with an empty list.</dd><dt>note</dt><dd>superseded by R-3.20</dd></dl>
 </article>
-<article class="criterion is-not-testable" data-state="not-testable">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-3.17</span>
     <span class="chip open">accepted</span>
@@ -188,7 +188,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">An invitation may name the invited person as an ordinary member or as an owner, and any other membership type is rejected.</p>
-  <dl><dt>given</dt><dd>an organization whose owner is inviting a team member</dd><dt>when</dt><dd>the invitation names a membership type other than member or owner</dd><dt>then</dt><dd>the invitation is refused as an invalid membership type</dd><dt>not testable</dt><dd>The only way the surface creates an invitation is organization-edit&#39;s add_team_members, whose subject is email addresses; no page in the contract offers a membership type on an invitation, so a test cannot send one other than the &quot;member&quot; the team surface always sends, and therefore cannot reach the rejection of any other type. Needs an add_team_members that carries a membership type, and an observation of the invalid-membership-type refusal.</dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/shared/lib/resources/affiliation.ts:85</code><br><code>src/back-end/lib/resources/affiliation.ts:186</code><br><code>src/back-end/docs/affiliation.yaml:83</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>administrator rights are never granted by an invitation; they are granted afterwards to a member who has already joined, as in R-3.12. In practice the team page always sends &quot;member&quot;.</dd></dl>
+  <dl><dt>given</dt><dd>an organization whose owner is inviting a team member</dd><dt>when</dt><dd>the invitation names a membership type other than member or owner</dd><dt>then</dt><dd>the invitation is refused as an invalid membership type</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.17.spec.ts</code></dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>cites</dt><dd><code>src/shared/lib/resources/affiliation.ts:85</code><br><code>src/back-end/lib/resources/affiliation.ts:186</code><br><code>src/back-end/docs/affiliation.yaml:83</code></dd><dt>reconciliation</dt><dd>implemented-only</dd><dt>note</dt><dd>administrator rights are never granted by an invitation; they are granted afterwards to a member who has already joined, as in R-3.12. In practice the team page always sends &quot;member&quot;.</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -210,7 +210,7 @@
   <p class="statement">A change to an organization&#39;s contact phone number made while editing its profile is saved along with every other profile field, and clearing the field removes the stored number.</p>
   <dl><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.19.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled defect-in-old</dd><dt>replaces</dt><dd>R-3.5</dd><dt>note</dt><dd>calibrate 2026-09-15: the old target fails this; kept, the rebuild must pass it</dd></dl>
 </article>
-<article class="criterion is-not-testable" data-state="not-testable">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-3.20</span>
     <span class="chip open">accepted</span>
@@ -218,7 +218,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">Asking for the organizations one may act on behalf of is refused as not permitted for anyone who is not a signed-in vendor, rather than answered with an empty list.</p>
-  <dl><dt>not testable</dt><dd>The criterion turns entirely on telling a refusal apart from an empty answer, and no page in the organizations domain carries a refusal observation — organization-list offers organization_name, owner_name, the two qualification marks and pagination, none of which distinguishes &quot;you are not permitted&quot; from &quot;you may act for nothing&quot;. Needs an observation such as organization-list.refused_when_not_permitted, or a page of its own for the organizations one may act on behalf of.</dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>replaces</dt><dd>R-3.16</dd></dl>
+  <dl><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.20.spec.ts</code></dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>replaces</dt><dd>R-3.16</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -360,7 +360,7 @@
   <p class="statement">An organization&#39;s summary of team capabilities counts only members who have accepted their invitation.</p>
   <dl><dt>given</dt><dd>an organization whose only member holding a given capability has been invited but has not yet accepted</dd><dt>when</dt><dd>the owner opens the organization&#39;s team page</dd><dt>then</dt><dd>that capability is shown as one the team does not have, and it becomes shown as held once the invitation is accepted</dd><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.34.spec.ts</code></dd><dt>against old</dt><dd><span class="chip unbound">unbound</span></dd><dt>cites</dt><dd><code>src/front-end/typescript/lib/pages/organization/edit/tab/team.tsx:104</code><br><code>src/back-end/lib/db/organization.ts:211</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
-<article class="criterion is-not-testable" data-state="not-testable">
+<article class="criterion" data-state="tested">
   <header>
     <span class="id">R-3.35</span>
     <span class="chip open">accepted</span>
@@ -368,7 +368,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The accept and the decline choice offered in an invitation email both open the invited person&#39;s own organizations page with the matching confirmation ready, so a person can decline from the message as readily as they can accept.</p>
-  <dl><dt>not testable</dt><dd>The claim is about where the accept and the decline choice inside an invitation email lead. The email observable reaches a message&#39;s subject, snippet and recipient through the mail catcher, and the Mail fixture exposes only those, so a test cannot read the message body or follow either choice; organization-user-memberships also carries no observation of an accept or a decline confirmation standing ready. Needs a mail observation of the message body or its links, and an observation of the prepared confirmation on organization-user-memberships.</dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>replaces</dt><dd>R-3.29</dd></dl>
+  <dl><dt>test</dt><dd><code>tests/acceptance/organizations/R-3.35.spec.ts</code></dd><dt>against old</dt><dd><span class="chip not-testable">not-testable</span></dd><dt>replaces</dt><dd>R-3.29</dd></dl>
 </article>
 <script>
 (function () {
