@@ -1,0 +1,35 @@
+| Field | Value |
+| --- | --- |
+| gate | G1 |
+| opened | 2026-09-25T10:23:50.875Z |
+| holder | agent:product-owner |
+
+# Is this the contract the tests will act through?
+
+**Recommendation.** I seeded a second Team With Us opportunity at the challenge stage so R-1.49 no longer shares a record with R-1.25.
+
+I seeded a second Team With Us opportunity at the challenge stage so R-1.49 no longer shares a record with R-1.25. I could not start the oracle to prove the new rows load: the session's permission settings blocked every command that expands the CLI's path variable, and blocked the YAML parse check too.
+
+**What changed.** The new record is `opportunities.twuChallengeLastToScoreForAward`, titled "Seeded second Team With Us opportunity at its challenge", with identifier `00000000-0000-4000-a033-000000000001`. The seeding functions create it with the same starting point as `opportunities.twuChallengeLastToScore`: the same two-person panel, the same four resource questions, and two proponents. The first, `proposals.twuAwardChallengeScored`, is already scored on the challenge (80) at a rate of 110. The second, `proposals.twuAwardChallengeLast`, is at a rate of 135 and is the last one left to score. The seed sets up the stage before the last score and nothing after it: the application still produces the scoring, the attempted move to processing, and the award. I gave it a title that doesn't contain the existing record's title, so a test finding either one by title matches only one.
+
+The existing record's manifest entry is now `for: [R-1.25]` only, and the comment in `tests/seed/011-team-with-us-stages.sql` says the same. The file header now says three opportunities are seeded instead of two. Nothing else in `spec/contract/`, the other seed files or the oracle override changed.
+
+**Something the test writer should know.** The ruling said R-1.49 has two tests, one for offered changes and one for the award, and both score `proposals.twuChallengeLast`. The ruling asked for one record for R-1.49, so both of those tests now point at the new record and still share it. If the offered-changes test needs the last proponent still unscored when it runs, it can still depend on test order relative to R-1.49's award test. I left that alone because the ruling didn't name it. If it bites, it takes a third record built the same way.
+
+**Checks.** I read the edits back and confirmed the manifest identifiers match what the seed's ID helper produces for opportunity 33 (`sid(33, 1)` gives `…a033-000000000001`, and proposals get `100 + p`). No other seed file or contract file uses the `a033` range. The session blocked the YAML parse and `git diff`, so neither was run. `node $SDLC_BIN oracle up` and `oracle down` were both refused, so nothing was started and no container is left running. **Whether the new rows load and show through the application has not been shown in this run.** The next stage or the gate should run `oracle up` once before relying on it.
+
+**Missing tests this stage owes: I supplied none of the six this run.** This revision was limited to what the ruling named, so each stays owed by this stage, with the reasons below.
+
+- **R-6.1 (notifications switched off), R-6.2 (mail server unreachable) and R-6.24 (success reported before any mail is sent):** all three need a second target, or a variable the contract names, where the service's mail setup is different. One would start with notifications off, one would point at an unreachable mail server, and one would hold mail at the catcher. That is a change to the oracle override and the observables, which this revision didn't cover. One target with its mail settings as a variable would likely unblock R-6.1 and R-6.2 together. R-6.24 also needs a way to hold delivery at the catcher.
+- **R-7.28 (two administrators) and R-5.34 (four different people on one opportunity):** both need sign-ins the old application does not seem to offer: a second administrator, and a public sector employee unconnected to the opportunity. A future run should check whether the session route can sign in as seeded users beyond the fixed accounts before recording either persona as unavailable.
+- **R-7.29 (an embedded page already removed):** the screens refuse to remove a page another screen needs, but the seed could delete that page's row directly. That fits the seed's purpose of setting up a starting point the screens can't reach. It is this stage's to supply, and it was only left out because this revision was limited to the ruling.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+
+The question is whether this revision gives R-1.49 a Team With Us record of its own, so that its tests no longer share the challenge-stage record R-1.25 depends on. It does, and I approve. Opportunity 33 is built by the same seeding calls as opportunity 32: the same staff owner, the same panel with the administrator as chair, EVAL_C, and two proponents. One is already scored on the challenge (80) at a rate of 110. The other, at 135, is the last left to score. I checked the identifiers myself. pg_temp.sid(33, 1) gives 00000000-0000-4000-a033-000000000001, the version is sid(n, 2), and the proposals are sid(n, 100 + p), which matches the new manifest entries. No other seed or contract file uses the a033 range. The title does not contain the existing record's title, so a test that finds a record by title cannot match both. The manifest now points R-1.25 only at the existing record and R-1.49 only at the new one. That is exactly the separation the G3 revision request asked for, and nothing outside the ruling's scope was touched. The FAIL on the 'generated' check does not block this approval. tests/generated/seed.ts on main already has no entry for twuChallengeLastToScore, so the generated files were already out of date before this branch and are rebuilt by the pipeline's own regenerate commits. One risk remains, and the proposal states it openly: the oracle was never started, so nobody has seen the new rows load. I accept that risk because opportunity 33 is a line-for-line copy of opportunity 32, which already loads. If the first oracle run shows opportunity 33 or its proposals missing, this approval should be reversed. I am deliberately not closing the owed condition derive-tests-opportunities-stale-3#2. It is asked of derive-tests, and its second half is still unmet: the offered-changes test must not depend on the award test having run first, either by reading first within one test or by using separate records. The proposal says itself that both R-1.49 tests now share opportunity 33, so that half has to be settled when derive-tests moves the tests. The six missing tests this stage owes (R-6.1, R-6.2, R-6.24, R-7.28, R-5.34, R-7.29) stay open because this revision was limited to what the ruling named. The cheapest of them is R-7.29, where the seed deletes an embedded page's row directly, and it should be supplied on the next contract run. No criterion text changes here, so there are no criterion conditions.
+
+**Conditions:**
+none
