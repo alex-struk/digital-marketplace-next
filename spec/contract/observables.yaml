@@ -20,10 +20,40 @@ email:
     recipient: to
     copied_recipients: bcc
     sender: from
+    reply_to: ReplyTo
     subject: subject
     html_body: HTML
     plain_text_body: Text
     sent_at: Date
+  # The pages in spec/contract/surface.yaml that read these fields, one message at a time
+  # (caught-message, by the catcher's identifier) and all messages at once
+  # (caught-message-list). Both are served by the catcher, not by the target.
+  surfaces: [caught-message, caught-message-list]
+  # How every target is configured to send, so that "the same sender for every kind of
+  # message" and "the service's own address as the visible recipient" have a value to be
+  # compared with. The oracle sets these in .sdlc/oracle/compose.yml; a rebuilt target
+  # under test is configured the same way.
+  configured_sender: "Digital Marketplace <donotreply@example.test>"
+  configured_sender_address: donotreply@example.test
+  # The application sets no reply-to of its own; a message's ReplyTo is empty unless the
+  # sender is taken as the reply address.
+  # The marking a test environment puts on every message (VITE_SHOW_TEST_INDICATOR,
+  # which the oracle turns on). The subject begins with the marker, and the image at the
+  # top of the formatted body is the test variant of the logo.
+  test_marker:
+    subject_prefix: "[TEST] "
+    logo_address_ends_with: images/logo_test.png
+    ordinary_logo_address_ends_with: images/logo.png
+  # The one kind of message a person's notification setting governs: the announcement of
+  # a newly published opportunity, in each of the three programs, sent to every account
+  # that has asked for new-opportunity notices and has not been deactivated
+  # (src/back-end/lib/db/user.ts readManyUsersNotificationsOn). Every other message is
+  # sent whatever the setting says.
+  governed_by_notification_setting:
+    - new Code With Us opportunity announcement
+    - new Sprint With Us opportunity announcement
+    - new Team With Us opportunity announcement
+  batch_size: 50
   notes:
     - A message is addressed to one person and every other recipient is a blind copy, so
       a test that reads only the visible recipient of a batch sees one address and not
@@ -36,10 +66,13 @@ email:
     - >-
       Some messages the code sets out to send do not arrive. The messages that follow an
       ordinary request — an invitation to join an organization, for one — reach the
-      catcher within the same second. The messages the deadline hook sets out to send when
-      it closes an opportunity do not. Closing a Sprint With Us and a Team With Us
-      opportunity, each with an evaluation panel of two, left nothing in the catcher and
-      nothing in the application's log. The hook hands the notification off without
+      catcher within the same second. When the deadline hook closes a Code With Us
+      opportunity, its notice arrives too ("Your Code With Us Opportunity is Ready to Be
+      Evaluated"; closing the seeded lapsed Code With Us opportunities on a fresh start
+      put twelve of them in the catcher). The messages the same hook sets out to send when
+      it closes a Sprint With Us or Team With Us opportunity do not: closing those, each
+      with an evaluation panel, has left nothing in the catcher and nothing in the
+      application's log. The hook hands the notification off without
       waiting for it and does so from inside the transaction that is closing the
       opportunity, so whatever happens to it happens out of sight. A criterion about who
       is told when an opportunity closes should therefore be measured against the target
@@ -97,10 +130,22 @@ refusals:
     shape: >-
       the form of the answered body — which fields it carries and how the reason is
       named — so that two refusals can be compared and not merely both be seen to happen
+  surfaces:
+    - content-request
+    - user-list-request
+    - organization-acting-for-list
+    - affiliation-invitation-request
+    - evaluation-individual-request-swu
+    - evaluation-individual-request-twu
+    - evaluation-panel-request
+    - file-attach-by-identifier
   notes:
     - A screen reports a refusal as prose, which is evidence that one happened and not
       evidence of what form the answer took. A criterion comparing two refusals must
-      read the answers themselves.
+      read the answers themselves, through the request-level pages listed above.
+    - The service's operational log, where some faults are written, is not observable.
+      A criterion that says a fault is "recorded in the service's error log" can be
+      tested for the fault and not for the record of it.
 
 exports:
   # Two surfaces hand a test a document rather than a screen. Both are reached as
@@ -134,6 +179,12 @@ scheduled_transitions:
       hook.
     - The transition happens inside the request that triggers it, so a test should
       trigger and then read, rather than reading and waiting.
+    - Right after the data has been put back to the seed, the first request has been seen
+      to leave a lapsed opportunity still published, and the next to close it. A test that
+      needs a closure should trigger, read, and trigger once more if what it reads is
+      still open.
+    - The seed carries opportunities already standing at later stages. Those are not
+      moved by this trigger; only a published opportunity whose deadline has passed is.
 
 counters:
   # Views and watchers of an opportunity are counted, and the counts appear on the

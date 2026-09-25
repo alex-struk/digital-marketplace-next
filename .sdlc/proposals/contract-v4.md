@@ -1,0 +1,149 @@
+---
+gate: G1
+question: "Is this the contract the tests will act through?"
+recommendation: "**What this run was for.** The contract was already mature: 88 pages, 19 personas, a seven-file seed and an oracle that started last time."
+opened: 2026-09-25T07:54:47.326Z
+---
+
+# Is this the contract the tests will act through?
+
+**Recommendation.** **What this run was for.** The contract was already mature: 88 pages, 19 personas, a seven-file seed and an oracle that started last time.
+
+I couldn't restore it: that command needs an approval this run can't get. I'll note it in the journal.
+
+---
+
+## Journal: contract, 2026-09-25
+
+**What this run was for.** The contract was already mature: 88 pages, 19 personas, a seven-file seed and an oracle that started last time. This run worked through the 69 items that test writers had recorded as untestable and owed to this stage. The biggest thing I found was not on that list: a defect in the seed that breaks every test after the first.
+
+**The seed defect, and its fix.** Before every test the harness runs `sdlc oracle reseed`. That empties every table except the migration bookkeeping and then reapplies the seed. Emptying every table also removes three kinds of rows the application's own migrations had written:
+- the five service areas;
+- the 22 pages the service needs for itself (its terms, guides, scope pages and evaluation instructions);
+- one account the evaluation-panel migration creates for itself.
+
+Nothing ever put them back. I reseeded one oracle copy and read it through the application:
+- only the one seeded page was left;
+- organizations had no service areas;
+- the seeded Team With Us opportunity answered "Database error.", because its resource pointed at a service area that no longer existed.
+
+The new first file, `000-installation.sql`, restores exactly what those migrations write, and only where a row is missing. On a freshly migrated database it changes nothing: I confirmed a service page still carries the identifier the migration gave it. After a reseed it puts back the same rows, except that each service page gets a fixed identifier instead of the migration's random one. Tests address those pages by their address, which never changes.
+
+**A finding about the old application.** The Team With Us evaluation migration (20250506164908) rebuilt the opportunity status check from a list that has no PROCESSING. That undoes the earlier migration (20250404161957) that had added it. So the old application's database refuses to store a Team With Us opportunity in processing. The automatic move there after the last challenge score cannot succeed, and my first seed attempt was refused for exactly this reason. I seeded that opportunity one step earlier instead, at the challenge stage with one score left to enter. A test entering that score will see what the oracle actually does. This matters for R-1.49 and for the Team With Us half of R-1.25.
+
+**Seed.** Fourteen files now, plus the manifest. Beyond the restore file:
+- **More accounts.** Three more qualified organizations with their owners (reachable as vendors 14, 15 and 16). One vendor set aside to deactivate their own account (vendor 13). And 120 accounts that have asked for new-opportunity notices. With the other seeded accounts that also asked, 139 people are due each announcement, which is three batches of at most fifty.
+- **Code With Us (8 opportunities).** Six lapsed opportunities: one holding a draft, one for scoring, one with three proposals, one for the final stage, one with a proposal withdrawn before the deadline, and one for award notices. Plus one in processing and one awarded.
+- **Sprint With Us (13 opportunities).**
+  - At consensus: one with a consensus still outstanding, one where nobody clears a minimum score, and one with six proponents.
+  - One at the code challenge, partly scored.
+  - Three identical ones at the team scenario, where the next score entered is the last human-entered score.
+  - Two identical ones in processing.
+  - One awarded.
+  - One at the code challenge belonging to the second staff member, whom no sign-in reaches.
+  - Two lapsed ones whose panels allow a chair who does not evaluate, and an owner who is not on the panel.
+- **Team With Us (2 opportunities).** One at consensus with five proponents, and the challenge-stage one described above.
+- **Two stored files.** File bytes live in the database, so seeded files are fully served. One is readable only by its uploader. The other is attached to the seeded Team With Us proposal.
+- **Two pages.** One whose body contains raw markup, and one that one administrator published and the second administrator later changed.
+
+Each record that a criterion moves forward belongs to that criterion alone. Records nothing moves (a refusal, a read-only view) are shared, and the manifest names the criteria each serves. What I seeded is the starting condition: individual evaluations are submitted before consensus, and scores exist only where the given-clause states them. No totals, ranks or score-entry events are written. The application derives the totals and ranks itself, and I read them back: question scores 100/90/80/70/60/85 for the six proponents, and a total of 87.5 with rank 1 at the team scenario stage. The manifest's "not seeded" list is corrected. It had said file bytes live on disk and that the evaluation stages and six proponents were out of reach.
+
+**Pages.** There are now 98 (ten new), each with `test_id: null` where the design gate will fill it in:
+- **Mail catcher.** `caught-message` and `caught-message-list`, both marked `origin: mail-catcher`. They give tests one message's recipients, blind copies, sender, reply-to, both bodies, logo address and links, plus a way to follow a link. The `mail` fixture only searches by visible recipient, and it is written by the pipeline's init, not by any stage.
+- **Requests the screens never send:** `organization-acting-for-list`, `affiliation-invitation-request`, `user-list-request`, `content-request`, `evaluation-individual-request-swu` and `-twu`, `evaluation-panel-request`, `file-attach-by-identifier`.
+- **New observations on existing pages:**
+  - the refusal on the individual evaluation screens;
+  - the states a Team With Us opportunity's management screen offers to move to;
+  - the successful proponent's contact details and score on all three opportunity views;
+  - the embedded scope and terms sections;
+  - a page count on the content list.
+
+**Personas.** Four are new. Three first-time identities (a government one, a vendor, and a vendor with no email address) and a vendor who returns through the identity provider. Each signs in through the sandbox identity provider on the rebuilt target and is marked unavailable on the oracle, with the reason. The oracle has no identity provider, and its session routes only look up accounts that already exist, with no status check. The rebuilt target's identity-provider realm has to carry `first-time-gov`, `first-time-vendor`, `first-time-vendor-no-email` and `test-vendor-13`, with the kind of identity each entry names. The existing personas are unchanged. I reread the sign-in routes: they match accounts on a fixed type and identity-provider id, so the second administrator and second staff member really cannot be signed in as.
+
+**Observables.** Added: the configured sender, the test marker (a `[TEST] ` subject prefix and the `images/logo_test.png` logo), and which messages the notification setting governs (only the three new-opportunity announcements). Also a note that the service's error log cannot be observed, and a note that right after a reseed the first request was seen to leave a lapsed opportunity still open. The note about closure notices now says what I measured: Code With Us closure notices do arrive (twelve on a fresh start); Sprint With Us and Team With Us ones still do not.
+
+**The oracle.** I didn't change the override. A fresh start came up on the first attempt: 78 migrations and all 14 seed files on each of four copies. I checked records through the application: seeded pages, the six-proponent consensus, the Team With Us opportunity closing, a seeded file served to its uploader and refused (401) to a visitor, and the mail API answering. One fragility: the migrate service reinstalls development dependencies over the network for every copy, and one copy had to retry its download. The oracle is down again. I couldn't run `sdlc checks`, `docker exec` or `git checkout`, because each needed an approval this run couldn't get. So the YAML was checked by reading, not parsed. Also, `.sdlc/runs/2026-09-25.md` carries two lines the CLI appended during start and stop, and it needs restoring by someone who can.
+
+**What stays owed, and why:**
+- **R-6.1, R-6.2:** need a target started with notifications off, or with an unreachable mail server. The harness runs one configuration.
+- **R-6.24:** needs mail delivery held back, which the mail catcher cannot do.
+- **R-7.28:** needs a second administrator, and the oracle has no way to sign in as one.
+- **R-7.29:** its starting state is a service page removed, which the service refuses to do. Removing one in the seed would break every other test.
+- **R-5.34:** needs four distinct public sector people, and the oracle reaches two (one of them an administrator).
+
+re-address missing-test/R-2.15 to derive-tests: seed.opportunities.cwuLapsedWithDraft with proposals.cwuLapsedWithDraftDraft
+re-address missing-test/R-2.26 to derive-tests: seed.opportunities.cwuLapsedForScoring
+re-address missing-test/R-2.27 to derive-tests: seed.opportunities.cwuLapsedWithThreeProposals
+re-address missing-test/R-2.29 to derive-tests: seed.opportunities.swuConsensusSixProponents and twuConsensusFiveProponents
+re-address missing-test/R-2.30 to derive-tests: seed.opportunities.swuTeamScenarioLastToScoreA
+re-address missing-test/R-2.31 to derive-tests: seed.opportunities.swuTeamScenarioLastToScoreB
+re-address missing-test/R-2.32 to derive-tests: seed.opportunities.swuProcessingA
+re-address missing-test/R-2.33 to derive-tests: seed.opportunities.cwuLapsedForAward (two submitted, one withdrawn)
+re-address missing-test/R-1.25 to derive-tests: seed.opportunities.cwuLapsedAtFinalStage, swuTeamScenarioLastToScoreC, twuChallengeLastToScore
+re-address missing-test/R-1.26 to derive-tests: seed.opportunities.cwuInProcessing and swuProcessingB
+re-address missing-test/R-1.27 to derive-tests: seed.opportunities.cwuAwarded and swuAwarded, plus successful_proponent_contact_details and successful_proponent_score on the opportunity views
+re-address missing-test/R-1.40 to derive-tests: seed.opportunities.cwuAwarded and swuAwarded (add an addendum first if the test needs one)
+re-address missing-test/R-1.41 to derive-tests: seed.opportunities.swuConsensusOneOutstanding and swuConsensusNobodyScreenable
+re-address missing-test/R-1.42 to derive-tests: seed.opportunities.swuCodeChallengePartlyScored
+re-address missing-test/R-1.43 to derive-tests: seed.opportunities.swuConsensusOneOutstanding
+re-address missing-test/R-1.49 to derive-tests: seed.opportunities.twuChallengeLastToScore and opportunity-twu-edit.offered_state_changes (the oracle's database refuses processing for this program)
+re-address missing-test/R-1.50 to derive-tests: refusal half via seed.opportunities.swuConsensusOneOutstanding; the "exactly one path" half remains unobservable
+re-address missing-test/R-1.35 to derive-tests: caught-message.visible_recipients and copied_recipients, observables email.configured_sender_address
+re-address missing-test/R-6.3 to derive-tests: caught-message.subject and logo_address, observables email.test_marker
+re-address missing-test/R-6.4 to derive-tests: caught-message.sender and reply_to, observables email.configured_sender
+re-address missing-test/R-6.5 to derive-tests: caught-message.html_body and plain_text_body
+re-address missing-test/R-6.8 to derive-tests: seed.subscribers (139 due the announcement), caught-message-list, caught-message.copied_recipients
+re-address missing-test/R-6.9 to derive-tests: caught-message.visible_recipients
+re-address missing-test/R-6.11 to derive-tests: caught-message-list and caught-message.copied_recipients
+re-address missing-test/R-6.12 to derive-tests: caught-message.plain_text_body on the notification-terms-broadcast message
+re-address missing-test/R-6.15 to derive-tests: caught-message.visible_recipients and copied_recipients, observables email.configured_sender_address
+re-address missing-test/R-6.16 to derive-tests: caught-message.links_in_body, observables email.governed_by_notification_setting
+re-address missing-test/R-6.18 to derive-tests: caught-message.plain_text_body
+re-address missing-test/R-6.25 to derive-tests: seed.opportunities.cwuLapsedForAwardNotices and caught-message.html_body
+re-address missing-test/R-6.20 to derive-tests: persona first-time-vendor (sandbox-idp; unavailable on the oracle)
+re-address missing-test/R-4.1 to derive-tests: personas first-time-public-sector-employee and first-time-vendor (unavailable on the oracle)
+re-address missing-test/R-4.2 to derive-tests: personas first-time-vendor and first-time-vendor-without-email, plus caught-message-list
+re-address missing-test/R-4.5 to derive-tests: persona self-reactivating-vendor (seed.users.vendorReturning; unavailable on the oracle)
+re-address missing-test/R-4.20 to derive-tests: caught-message.plain_text_body, persona self-reactivating-vendor
+re-address missing-test/R-4.21 to derive-tests: user-list-request.refused_when_not_permitted and refusal_status
+re-address missing-test/R-3.15 to derive-tests: organization-acting-for-list.organizations_offered
+re-address missing-test/R-3.20 to derive-tests: organization-acting-for-list.refused_when_not_permitted
+re-address missing-test/R-3.17 to derive-tests: affiliation-invitation-request.invite_with_membership_type and invalid_membership_type_error
+re-address missing-test/R-3.35 to derive-tests: caught-message.follow_link_in_body and links_in_body, with organization-user-memberships.accept_confirmation and decline_confirmation
+re-address missing-test/R-7.11 to derive-tests: content-request refusal_status and refusal_shape
+re-address missing-test/R-7.16 to derive-tests: content-request (read, create, change, rename and remove by request) with refusal_shape
+re-address missing-test/R-7.12 to derive-tests: seed.content.servicePage* handles by address, and content-list.page_count
+re-address missing-test/R-7.25 to derive-tests: seed.content.servicePage* handles, plus content-request.rename_page_by_request and remove_page_by_request
+re-address missing-test/R-7.27 to derive-tests: seed.content.servicePageDisclaimer (never edited) and seed.content.changedByAnotherAdministrator
+re-address missing-test/R-7.17 to derive-tests: seed.content.rawMarkupPage, plus opportunity-swu-view.scope_section and opportunity-twu-view.terms_section for the embedded rendering
+re-address missing-test/R-7.14 to derive-tests: seed.content.rawMarkupPage, the service-page handles, and scope_section and terms_section
+re-address missing-test/R-7.15 to derive-tests: content-service-level-agreement-link.follow_service_level_agreement_link and answer_at_link_target (added in an earlier contract run)
+re-address missing-test/R-7.23 to derive-tests: content-edit.version_history and body_being_edited on seed.content.ordinaryPage (three versions; added in an earlier contract run)
+re-address missing-test/R-8.3 to derive-tests: file-upload.upload_file_without_declaring_its_size, refused_for_size and service_fault (added in an earlier contract run)
+re-address missing-test/R-8.4 to derive-tests: file-upload.upload_file_with_no_file_part, upload_file_with_malformed_read_access and service_fault; the error-log clause is unobservable (see observables refusals notes)
+re-address missing-test/R-8.8 to derive-tests: file-attachment-control.add_attachment and attachment_address, then file-download signed out (added in an earlier contract run)
+re-address missing-test/R-8.9 to derive-tests: seed.stored_files.teamWithUsProposalAttachment on proposals.teamWithUsOne, read through file-download
+re-address missing-test/R-8.15 to derive-tests: seed.stored_files.privateOfFileUploader and file-attach-by-identifier.attach_stored_file
+re-address missing-test/R-8.22 to derive-tests: seed.stored_files.privateOfFileUploader and file-attach-by-identifier.attachment_refused
+re-address missing-test/R-8.26 to derive-tests: file-attachment-control.attachment_address, delete_opportunity, then file-download (added in an earlier contract run)
+re-address missing-test/R-5.11 to derive-tests: seed.opportunities.swuCodeChallengeOfOtherStaff (the government account has no connection to it) and evaluation-individual-edit-swu.refused_when_not_permitted
+re-address missing-test/R-5.21 to derive-tests: seed.opportunities.swuLapsedChairNotEvaluator and swuLapsedOwnerOffPanel, plus evaluation-individual-create-swu.refused_when_not_permitted
+re-address missing-test/R-5.23 to derive-tests: evaluation-individual-request-swu.save_draft_as_entered, stored_scores and refused_at_submission
+re-address missing-test/R-5.26 to derive-tests: evaluation-individual-request-swu.submit_this_evaluation_alone and refused_as_unrecognised
+re-address missing-test/R-5.37 to derive-tests: evaluation-panel-request.submit_panel_with_member_holding_no_role and member_without_role_error
+re-address missing-test/R-1.51 to ratify: that an undefined state is gone is not observable through anything the service answers; it is a property of the migration of historical records
+re-address missing-test/R-8.16 to ratify: a working copy on the service's own disk is visible only by reading the host's filesystem, never through the service
+re-address missing-test/R-4.13 to ratify: the claim is that no route exists to create a first administrator, and a test cannot observe the absence of a route
+
+## Fix turn
+
+I could not make this fix. The failed check flags `.sdlc/runs/2026-09-25.md`, and the only difference in that file from the committed version is three lines: two `oracle down old` entries and one `oracle up old` entry, stamped 00:39:33, 00:43:46 and 00:44:39. I didn't write them. The pipeline's own `node $SDLC_BIN oracle up` and `oracle down` commands append them, and the task told me to run those commands to prove the oracle starts.
+
+I tried three ways to take the lines back out. Editing the file was rejected by the stage guard hook, which says the contract stage may not edit `.sdlc/runs/`. That is correct, since that path isn't mine. `git checkout -- <file>` and `git restore <file>` both need a permission approval this session can't give.
+
+The file still carries those three lines, and nothing else in the contract output changed. The oracle's last recorded state is `down`, so no container is left running.
+
+Any stage allowed to touch `.sdlc/runs/`, or a person, can clear the check by running `git restore .sdlc/runs/2026-09-25.md`. The lasting fix is for the pipeline to treat the log lines its own oracle commands write as outside the contract stage's diff. As it stands, any contract run that does the required oracle proof will trip this same check.
+
+contract may only change spec/contract/, tests/seed/ and .sdlc/oracle/, but also touched: .sdlc/runs/2026-09-25.md
+contract may only change spec/contract/, tests/seed/ and .sdlc/oracle/, but also touched: .sdlc/runs/2026-09-25.md

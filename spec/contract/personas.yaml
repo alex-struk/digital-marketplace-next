@@ -344,3 +344,85 @@ personas:
           route, reaches a second non-administrator public sector account, so this
           persona can be seeded and observed on the oracle but never acted as.
       sandbox-idp: { username: gov-second }
+
+  # People signing in for the first time. Each is an identity the sandbox identity
+  # provider carries and tests/seed/ does not: there is no account for it until the
+  # service creates one at its first sign-in, which is what the criteria about account
+  # creation, the welcome message and the starting notification setting are about. The
+  # kind of identity each holds — a government identity or a code-hosting one — is what
+  # the service decides the account's kind from, so the sandbox identity provider must
+  # present each with the kind its entry names. A first sign-in can happen once per
+  # starting state, so these depend on the target being put back to the seed before each
+  # test, which the harness does.
+  - id: first-time-public-sector-employee
+    domain: users
+    can:
+      [
+        sign in for the first time with a government identity,
+        have an account created for them,
+        receive a welcome message
+      ]
+    sign_in:
+      session-route:
+        unavailable: >-
+          The oracle has no identity provider. Its three sign-in routes look up an account
+          that already exists by a fixed identity-provider id and refuse when there is none,
+          so a first sign-in — the one that creates an account — cannot happen there.
+      sandbox-idp: { username: first-time-gov }
+
+  - id: first-time-vendor
+    domain: users
+    can:
+      [
+        sign in for the first time with a code-hosting identity,
+        have an account created for them,
+        complete their profile,
+        receive a welcome message
+      ]
+    sign_in:
+      session-route:
+        unavailable: >-
+          The oracle has no identity provider. Its three sign-in routes look up an account
+          that already exists by a fixed identity-provider id and refuse when there is none,
+          so a first sign-in — the one that creates an account — cannot happen there.
+      sandbox-idp: { username: first-time-vendor }
+
+  # A code-hosting identity that shares no email address, signing in for the first time.
+  - id: first-time-vendor-without-email
+    domain: users
+    can:
+      [
+        sign in for the first time without sharing an email address,
+        have an account created with no email address
+      ]
+    sign_in:
+      session-route:
+        unavailable: >-
+          The oracle has no identity provider. Its three sign-in routes look up an account
+          that already exists by a fixed identity-provider id and refuse when there is none,
+          so a first sign-in — the one that creates an account — cannot happen there.
+      sandbox-idp: { username: first-time-vendor-no-email }
+
+  # A vendor who deactivates their own account and then signs in again the ordinary way,
+  # through the identity provider. The account is tests/seed users.vendorReturning, kept
+  # apart from every other persona's so that deactivating it disturbs nothing else. On the
+  # rebuilt target the first sign-in (to deactivate) and the second (to return) are both
+  # through the sandbox identity provider.
+  - id: self-reactivating-vendor
+    domain: users
+    can:
+      [
+        deactivate their own account,
+        sign in again through the identity provider,
+        have their account reactivated by doing so,
+        receive the message saying they reactivated it
+      ]
+    sign_in:
+      session-route:
+        unavailable: >-
+          /auth/createsessionvendor/13 reaches this account, but it creates a session
+          without the identity provider and without looking at the account's status, so it
+          is not the sign-in that reactivates a self-deactivated account. The oracle has no
+          identity provider to sign in through, so the ordinary sign-in this persona exists
+          for cannot happen there.
+      sandbox-idp: { username: test-vendor-13 }
