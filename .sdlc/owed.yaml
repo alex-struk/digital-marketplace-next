@@ -4,7 +4,7 @@ owed:
     id: R-2.15
     version: 2
     domain: proposals
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the Code With Us half needs a published Code With Us opportunity
       whose proposal deadline has passed, and there is none. The one seeded Code
       With Us opportunity is open until 2030, and the create form refuses a
@@ -56,12 +56,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v2 exists and has not run
+        by: runner
+        at: 2026-09-25T10:59:12.021Z
+    target: old
   - kind: missing-test
     item: R-2.26
     id: R-2.26
     version: 1
     domain: proposals
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the given is a Code With Us proposal under review, and a proposal
       reaches review only when its opportunity closes. The closure itself is now
       reachable — run_pending_transitions on scheduled-transition-trigger runs
@@ -103,12 +109,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T10:59:12.021Z
+    target: old
   - kind: missing-test
     item: R-2.27
     id: R-2.27
     version: 1
     domain: proposals
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the when is the last proposal still in contention being scored,
       which means carrying proposals all the way to evaluated. On the two seeded
       closed opportunities that is a single path — score every proponent's
@@ -149,12 +161,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T10:59:12.021Z
+    target: old
   - kind: missing-test
     item: R-2.29
     id: R-2.29
     version: 1
     domain: proposals
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: two things are missing. The ranking and the cut need the panel's
       agreed scores finalised, which consumes the one seeded closed opportunity
       of that program (see R-2.27). And the criterion describes six proponents
@@ -193,12 +211,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T10:59:12.021Z
+    target: old
   - kind: missing-test
     item: R-2.30
     id: R-2.30
     version: 1
     domain: proposals
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the given is two proposals still in contention with a team
       scenario score being entered against one of them, which is the last stage
       of the evaluation. Reaching it means walking the whole chain on the one
@@ -237,12 +261,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T10:59:12.021Z
+    target: old
   - kind: missing-test
     item: R-2.31
     id: R-2.31
     version: 1
     domain: proposals
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the given is a proposal carrying a score for every stage, which
       is the end of the chain that consumes the one seeded closed opportunity of
       its program (see R-2.27). Until then total_score and rank have nothing to
@@ -275,12 +305,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T10:59:12.021Z
+    target: old
   - kind: missing-test
     item: R-2.32
     id: R-2.32
     version: 1
     domain: proposals
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the given is a vendor's proposal that has been scored, and the
       then needs it to become awarded or passed over. Both lie at the end of the
       evaluation chain, which consumes the one seeded closed opportunity of its
@@ -317,12 +353,18 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T10:59:12.021Z
+    target: old
   - kind: missing-test
     item: R-2.33
     id: R-2.33
     version: 1
     domain: proposals
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: only a fully evaluated proposal, or one previously passed over,
       may be awarded, and reaching evaluated consumes the one seeded closed
       opportunity of its program (see R-2.27). award_proposal is offered on all
@@ -359,6 +401,12 @@ owed:
         by: runner
         reverts: derive-tests-opportunities-7
         at: 2026-09-25T10:41:10.715Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-25T10:59:12.021Z
+    target: old
   - kind: missing-test
     item: R-1.25
     id: R-1.25

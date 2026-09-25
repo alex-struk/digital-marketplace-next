@@ -165,3 +165,8 @@ redo:
       check that no proposal was submitted, allow time for a reason where a
       malformed value was typed, and treat an archived organization that is not
       offered as a choice as refused
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on proposals
+      by: runner:derive-tests
+      at: 2026-09-25T10:58:09.922Z
