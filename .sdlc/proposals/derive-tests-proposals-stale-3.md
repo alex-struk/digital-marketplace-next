@@ -39,3 +39,26 @@ I wrote tests for all nine proposals criteria, so none of them is still recorded
 - the stated weights, shown on the opportunity's view or management screen, or named in the manifest for the later-stage opportunities.
 
 I changed nothing outside `tests/acceptance`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: do the nine proposals tests (R-2.14 rewritten; R-2.15, R-2.26, R-2.27, R-2.29, R-2.30, R-2.31, R-2.32, R-2.33 newly derived) follow from their criteria and from nothing else? Ruling: approve. Every assertion is one its criterion states or a weaker reading of it: R-2.26 checks the move to evaluated and the "87%" in history, and that out-of-range scores leave nothing recorded; R-2.27 checks the automatic move to processing with the quoted note only after the last in-contention proposal is scored; R-2.29 checks the top four (Sprint With Us) or three (Team With Us) are carried and that the below-minimum proponent is left behind even though it outscores carried ones; R-2.30 checks the price score of 50 at the moment the last human score is entered; R-2.31 checks the total against the stated weights and the rank only once fully evaluated; R-2.32 establishes the score exists before showing the vendor sees none, then checks both the awarded and the passed-over case; R-2.33 checks the proposal and the opportunity become awarded and the disqualified and withdrawn proposals record no award. Where a test reads less than its criterion states (R-2.14's field naming for missing fields, R-2.15's quoted message on the draft half, status read through history), the proposal names the missing contract observation rather than inventing one, and the R-2.14 rewrite follows exactly what the earlier G3 redo request asked for. Nothing about how the application is built leaks in: no selectors, routes, tables or status codes; the R-2.31 weights are the seeded given, which the criterion calls stated weights. The eight not-testable entries are removed because the seed now provides the givens their reasons asked for. Shared seeded opportunities across tests are safe because the fixtures reset the target to its seed before every test. The runner's typecheck exit code 2 comes from one error in adapters/new/; there are none under acceptance/proposals/. What would change this: a calibration run showing a test fails because it reads something its criterion does not state, which would come back through calibrate-triage.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `1e13fa68f299b68f6eea6e20598a2dd238f78452`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/proposals/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 1 diagnostic
