@@ -1,0 +1,11 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does bind-adapter-old-17 bind every surface action and observation on old, and nothing else? Approve. The change binds content-edit.published_by_link and updated_by_link exactly as spec/contract/surface.yaml describes them. The new personLink helper finds the name under the 'Published By' or 'Updated By' label, finds the link with that exact name, and returns its path (/users/<id>). It returns an empty string when a page no person wrote shows a placeholder name with no link, as the contract says, and throws unbound: only when the label itself is missing. That is location and reading only, with no assertion and no business logic. bindings.yaml marks both bound under the contract's names, and nothing under tests/acceptance changed. The runner's typecheck on this revision shows no diagnostics under adapters/old/. The suite's non-zero exit comes from one diagnostic in adapters/new/, which this proposal does not answer for. The 'generated' check fails because tests/generated/surface.d.ts is behind the contract; regenerating it is the pipeline's job, not this stage's. That lag is why the adapter adds the two readers through a spread, which does no harm once the file is regenerated. The six calibration findings needed no code change and were left as they were. The open derive-tests instruction on the R-7.16 test (derive-tests-content-stale-5#2) is not settled here and stays open. The ruling would change if a compile error appeared under adapters/old/, or if a binding returned the whole link address or failed on a placeholder-name page.
+conditions: []
+cost: 0.3468004
+turns: 2
+session: "fe6c456f-17c8-4202-b566-b1c58430f46f"
+at: 2026-09-25T12:44:31.641Z

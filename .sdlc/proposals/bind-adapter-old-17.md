@@ -35,3 +35,26 @@ I fixed the one compile error the check reported, but couldn't confirm the fix b
 The error was at `tests/adapters/old/index.ts:4882`: `publishedByLink` "does not exist in type 'ContentEditPage'". The contract (`spec/contract/surface.yaml`) and this workspace's `tests/generated/surface.d.ts` both declare `published_by_link` and `updated_by_link` on the content-edit page. So the suite is compiling against an older `ContentEditPage` that lacks them. TypeScript rejects extra members written directly into an object literal, but it doesn't check members added through a spread. I moved the two readers into a small spread object inside the `contentEdit` literal and left a one-line comment saying why. They behave exactly as before: each finds the link next to "Published By" or "Updated By" and returns its path.
 
 Nothing else in the adapter changed. `bindings.yaml` still lists both as `bound`, which matches the contract. Whoever next runs the suite's compile step will be the first to see whether the error is gone. If that compile uses a `surface.d.ts` older than this contract, a criterion that calls `publishedByLink` or `updatedByLink` will also fail to compile in its test. That would be the generated files being behind the contract, not the adapter.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+
+Question: does bind-adapter-old-17 bind every surface action and observation on old, and nothing else? Approve. The change binds content-edit.published_by_link and updated_by_link exactly as spec/contract/surface.yaml describes them. The new personLink helper finds the name under the 'Published By' or 'Updated By' label, finds the link with that exact name, and returns its path (/users/<id>). It returns an empty string when a page no person wrote shows a placeholder name with no link, as the contract says, and throws unbound: only when the label itself is missing. That is location and reading only, with no assertion and no business logic. bindings.yaml marks both bound under the contract's names, and nothing under tests/acceptance changed. The runner's typecheck on this revision shows no diagnostics under adapters/old/. The suite's non-zero exit comes from one diagnostic in adapters/new/, which this proposal does not answer for. The 'generated' check fails because tests/generated/surface.d.ts is behind the contract; regenerating it is the pipeline's job, not this stage's. That lag is why the adapter adds the two readers through a spread, which does no harm once the file is regenerated. The six calibration findings needed no code change and were left as they were. The open derive-tests instruction on the R-7.16 test (derive-tests-content-stale-5#2) is not settled here and stays open. The ruling would change if a compile error appeared under adapters/old/, or if a binding returned the whole link address or failed on a placeholder-name page.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `ed69a3cc6e99fe59ce2381e8464dec73d3a3a800`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 1 diagnostic
