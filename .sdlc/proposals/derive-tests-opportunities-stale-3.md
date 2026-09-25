@@ -46,3 +46,27 @@ Whoever collects results needs to count these skips as blocked, not passed.
 - A seeded Team With Us opportunity in processing (R-1.26) and Team With Us consensus records like the Sprint With Us ones (R-1.41) would let those criteria be tested in all programs.
 
 I did not touch `redo.yaml` or anything outside `tests/acceptance`.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+
+Do these tests follow from the opportunities criteria and from nothing else? Assertion by assertion they do, but the suite cannot be accepted yet. The compiler reports no errors under acceptance/opportunities (its one error is in adapters/new/, outside this proposal) and the separation check passes. The ten rewritten tests now confirm their starting state before reading the outcome. The ten owed tests assert only what their criteria state, or less where they say so: R-1.35 checks each person was reached but not 'once', R-1.49 checks award and cancel are both offered but not that they are the only changes, and R-1.50 checks only that both routes the surface offers for leaving consensus refuse. Each blocked skip names something outside its criterion that the target is missing. Return because three tests change one seeded record that is loaded once and never reset: seed.opportunities.twuChallengeLastToScore. R-1.25's Team With Us case scores proposals.twuChallengeLast and first requires the opportunity not yet to be in processing. Both R-1.49 tests score the same proposal again, and R-1.49's second test awards twuChallengeScored, which leaves the opportunity awarded. On a correct application, whichever test runs later finds the proposal already scored or the opportunity already awarded, and fails for a reason neither criterion governs. The test writer cannot add a seed record, and R-1.49 must award while R-1.25 needs the record untouched, so the contract stage must seed a separate record. What would change the ruling: R-1.49 moved onto a Team With Us record of its own, with its offered-changes reading and its award put in an order that no longer depends on which test runs first.
+
+**Conditions:**
+- addressed-to contract: seed a second Team With Us opportunity at the challenge stage with one proponent scored and one still to score (like opportunities.twuChallengeLastToScore) for R-1.49 alone. Evidence: tests/seed/manifest.yaml:770 holds one such record, and R-1.25's Team With Us case, R-1.49's offered-changes test and R-1.49's award test all score proposals.twuChallengeLast on it. R-1.49's award test then leaves it awarded. The seed is loaded once and never reset, so on a correct application those results depend on run order.
+- R-1.49: once the contract stage has supplied a Team With Us record of its own, move both R-1.49 tests onto it so that no other test scores or awards it. Make the reading of offered state changes independent of the award test: put the reading first in one test, or give the two tests separate records. As written, the award leaves the opportunity awarded and the offered-changes test then fails for a reason R-1.49 does not govern.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `8c2943ac6592674315efaff9afd663b41b326cf6`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/opportunities/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 1 diagnostic
