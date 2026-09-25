@@ -1,0 +1,8 @@
+gate: G3
+verdict: withdrawn
+by: agent:tech-lead
+held_by: agent
+note: built on a calibration run whose target could not be reset before each
+  test (database connections exhausted), so its failure rows are not results of
+  the tests
+at: 2026-09-25T18:09:06.894Z
