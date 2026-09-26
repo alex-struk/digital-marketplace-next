@@ -1465,6 +1465,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-6.4 v2 pass"
+      file_sha: 2f9d29bf00cac9bef57bdd64e71c81dfb0608d11
+      by: runner
+      at: 2026-09-26T00:29:36.682Z
   - kind: missing-test
     item: R-6.5
     id: R-6.5
@@ -1588,6 +1594,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-6.8 v1 pass"
+      file_sha: 93f67a730eb9465d1f151e7d5db467ed3c703474
+      by: runner
+      at: 2026-09-26T00:29:36.682Z
   - kind: missing-test
     item: R-6.9
     id: R-6.9

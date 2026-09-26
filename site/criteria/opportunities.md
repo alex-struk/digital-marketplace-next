@@ -12,7 +12,7 @@
 | R-1.6 | acceptance/opportunities/R-1.6.spec.ts |  | pass |
 | R-1.7 | acceptance/opportunities/R-1.7.spec.ts |  | fail |
 | R-1.8 | acceptance/opportunities/R-1.8.spec.ts |  | pass |
-| R-1.9 | acceptance/opportunities/R-1.9.spec.ts |  | fail |
+| R-1.9 | acceptance/opportunities/R-1.9.spec.ts |  | pass |
 | R-1.10 | acceptance/opportunities/R-1.10.spec.ts |  | fail |
 | R-1.11 | acceptance/opportunities/R-1.11.spec.ts |  | pass |
 | R-1.12 | acceptance/opportunities/R-1.12.spec.ts |  | pass |

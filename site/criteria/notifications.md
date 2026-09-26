@@ -6,12 +6,12 @@
 | --- | --- | --- | --- |
 | R-6.1 | not testable: blocked: the given is a target started with notifications switched off, a setting the service reads once at start-up. The oracle runs with them on, and nothing in the surface, the personas or the fixtures selects or reconfigures a target. Unblocked by a second target (or a harness variable the contract names) started with notifications disabled; against it an opportunity can be published through opportunityCwuCreate.publish and the catcher read empty with `mail`. |  | not-testable |
 | R-6.2 | acceptance/notifications/R-6.2.spec.ts |  | fail |
-| R-6.3 | acceptance/notifications/R-6.3.spec.ts |  | pass |
-| R-6.4 | acceptance/notifications/R-6.4.spec.ts |  | unbound |
-| R-6.5 | acceptance/notifications/R-6.5.spec.ts |  | fail |
+| R-6.3 | acceptance/notifications/R-6.3.spec.ts |  | unbound |
+| R-6.4 | acceptance/notifications/R-6.4.spec.ts |  | pass |
+| R-6.5 | acceptance/notifications/R-6.5.spec.ts |  | unbound |
 | R-6.6 | acceptance/notifications/R-6.6.spec.ts |  | pass |
 | R-6.7 | acceptance/notifications/R-6.7.spec.ts |  | pass |
-| R-6.8 | acceptance/notifications/R-6.8.spec.ts |  | unbound |
+| R-6.8 | acceptance/notifications/R-6.8.spec.ts |  | pass |
 | R-6.9 | — |  | not-testable |
 | R-6.10 | — |  | pass |
 | R-6.11 | — |  | not-testable |

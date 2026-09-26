@@ -9,11 +9,11 @@
 | R-7.3 | acceptance/content/R-7.3.spec.ts |  | pass |
 | R-7.4 | acceptance/content/R-7.4.spec.ts |  | pass |
 | R-7.5 | acceptance/content/R-7.5.spec.ts |  | fail |
-| R-7.6 | acceptance/content/R-7.6.spec.ts |  | fail |
+| R-7.6 | acceptance/content/R-7.6.spec.ts |  | pass |
 | R-7.7 | acceptance/content/R-7.7.spec.ts |  | pass |
 | R-7.8 | acceptance/content/R-7.8.spec.ts |  | pass |
 | R-7.9 | acceptance/content/R-7.9.spec.ts |  | pass |
-| R-7.10 | acceptance/content/R-7.10.spec.ts |  | unbound |
+| R-7.10 | acceptance/content/R-7.10.spec.ts |  | fail |
 | R-7.11 | — |  | not-testable |
 | R-7.12 | acceptance/content/R-7.12.spec.ts |  | fail |
 | R-7.13 | acceptance/content/R-7.13.spec.ts |  | pass |

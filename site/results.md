@@ -13,6 +13,7 @@ no calibration ruling open.
 
 | file | at | pass | fail | unbound | stale | not-testable | attested |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-25-3.json | 2026-09-26T00:29:36.679Z | 86 | 92 | 69 | 0 | 18 | 0 |
 | 2026-09-25-2.json | 2026-09-25T19:23:54.176Z | 83 | 94 | 70 | 0 | 18 | 0 |
 | 2026-09-25.json | 2026-09-25T17:33:29.541Z | 14 | 231 | 2 | 0 | 18 | 0 |
 | 2026-09-15-3.json | 2026-09-15T06:28:59.030Z | 92 | 44 | 64 | 0 | 65 | 0 |
@@ -23,5 +24,5 @@ no calibration ruling open.
 | 2026-09-14.json | 2026-09-14T10:59:25.166Z | 30 | 173 | 0 | 0 | 62 | 0 |
 | 2026-09-11.json | 2026-09-11T04:52:21.727Z | 13 | 154 | 0 | 0 | 98 | 0 |
 
-Open calibration proposal: calibrate-triage-old-11.
+no calibration ruling open.
 

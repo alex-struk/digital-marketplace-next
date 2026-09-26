@@ -12,7 +12,7 @@
 | R-4.6 | acceptance/users/R-4.6.spec.ts |  | fail |
 | R-4.7 | — |  |  |
 | R-4.8 | acceptance/users/R-4.8.spec.ts |  | fail |
-| R-4.9 | acceptance/users/R-4.9.spec.ts |  | fail |
+| R-4.9 | acceptance/users/R-4.9.spec.ts |  | pass |
 | R-4.10 | — |  |  |
 | R-4.11 | — |  |  |
 | R-4.12 | acceptance/users/R-4.12.spec.ts |  | pass |
@@ -23,7 +23,7 @@
 | R-4.17 | acceptance/users/R-4.17.spec.ts |  | fail |
 | R-4.18 | acceptance/users/R-4.18.spec.ts |  | fail |
 | R-4.19 | acceptance/users/R-4.19.spec.ts |  | fail (ruled: defect-in-old) |
-| R-4.20 | acceptance/users/R-4.20.spec.ts |  | fail |
+| R-4.20 | acceptance/users/R-4.20.spec.ts |  | unbound |
 | R-4.21 | acceptance/users/R-4.21.spec.ts |  | fail |
 | R-4.22 | acceptance/users/R-4.22.spec.ts |  | pass |
 | R-4.23 | acceptance/users/R-4.23.spec.ts |  | fail |

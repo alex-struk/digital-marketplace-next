@@ -1,5 +1,9 @@
 # Run log
 
+# Run record 2026-09-26
+
+- 17:29:38 run calibrate: ok, cost 0, turns 0
+
 # Run record 2026-09-25
 
 - 19:13:59 verify slice 1 verified: every claimed criterion passes against the application in build-slice-1-6. Ready for G3.
@@ -95,6 +99,7 @@
 - 14:53:15 propose policy-agents-backend at G-POL
 - 14:53:29 rule policy-agents-backend escalated at G-POL to tech-lead by agent:tech-lead — stalled: agent:tech-lead escalated to tech-lead, the role it holds itself, so no seat this pipeline can fill is waiting on it: a person has to rule it, or the proposal has to be withdrawn.
 - 15:00:22 rule policy-agents-backend approve at G-POL by tech-lead (human)
+- 16:44:00 withdraw calibrate-triage-old-11 at G3 by agent:tech-lead: 41 unruled failures include navigation timeouts across all four oracle copies and six domains; rerun the suite before asking the reviewer to classify them
 
 # Run record 2026-09-22
 
