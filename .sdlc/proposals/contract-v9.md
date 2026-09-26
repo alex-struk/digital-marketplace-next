@@ -46,3 +46,14 @@ Two things for whoever reads the calibration results:
 **Owed items I couldn't supply.** No lines are written for them, so both stay owed by contract.
 - **missing-test/R-6.1** needs a copy of the application started with notifications switched off (`DISABLE_NOTIFICATIONS=1`, read once at start-up). A second app service in the override would need a published port. The harness only provides three port variables (app, database, mail), and I can't invent a fourth. It needs a pipeline or config change: a second oracle target, or a harness-provided port for one.
 - **missing-test/R-6.24** needs the mail catcher to hold messages so a test can see success reported before any message arrives. Mailpit's fault injection (already enabled) can refuse messages but can't delay them. Refusing them shows success doesn't depend on delivery, but not that it comes first. A delaying relay a test could switch on and off would need its own harness-allocated control port. A fixed delay on all mail would slow every mail test and change timing for all of them.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:product-owner
+**Ruled on:** codex, the CLI's default model (codex-cli 0.157.0)
+
+Is this the contract the tests will act through? Return: the successful 42-request burst supports the two-second throttle as a mitigation, but does not establish that jobs cannot overlap or that closures always complete within seconds. Likewise, not awaiting a job does not establish that it runs only after the response. These unsupported timing guarantees appear in the contract tests will consume. Revise the observables and compose commentary to distinguish throttled starts from serialized completion and asynchronous work from guaranteed response ordering; specify a bounded polling procedure whose timeout reports failure rather than assumes closure. Those corrections would support approval. R-6.1 and R-6.24 remain unchanged, with their missing-test obligations explicitly outstanding.
+
+**Conditions:**
+none
