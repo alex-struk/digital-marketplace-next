@@ -12,7 +12,7 @@
 -- What is seeded is the condition, not the outcome. Six of the eight are PUBLISHED with a
 -- deadline thirty days ago and carry proposals that are SUBMITTED, WITHDRAWN before the
 -- deadline, or still DRAFT; the application's own hook (in front of /status and every
--- route under /api, throttled to zero on the oracle) closes each one, moving it to
+-- route under /api, throttled to two seconds on the oracle) closes each one, moving it to
 -- EVALUATION and its submitted proposals to UNDER_REVIEW. Two are further on, because the
 -- criteria given them start further on: one in PROCESSING with its proposals already
 -- scored, which is where an award is made, and one already AWARDED, which is what the

@@ -358,7 +358,8 @@ pages:
   # passed is moved on by a hook that runs in front of this address and in front of the
   # resource routes under /api, and nowhere else. Requesting it is how a test brings a
   # closure about deliberately instead of waiting for a clock, and the oracle sets the
-  # hook's throttle to zero so one request is enough. Without an entry here the criteria
+  # hook's throttle to two seconds so the closure follows within seconds
+  # (spec/contract/observables.yaml, scheduled_transitions). Without an entry here the criteria
   # that begin "when the proposal deadline passes" have no "when" a test can perform.
   - id: scheduled-transition-trigger
     domain: opportunities

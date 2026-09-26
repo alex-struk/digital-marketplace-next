@@ -199,18 +199,17 @@ scheduled_transitions:
   observable:
     opportunity_status: read back from the opportunity's own page or list entry
   notes:
-    - The oracle sets the throttle interval to zero, so one request to the trigger is
-      enough to run the transitions. A request to any route under /api would do as well,
-      since the hooks sit in front of those too; the trigger above is named because it
-      needs no session and changes nothing else. Opening a screen does not run them —
-      the authentication routes, the administrator routes and the screens carry no such
-      hook.
-    - The transition happens inside the request that triggers it, so a test should
-      trigger and then read, rather than reading and waiting.
-    - Right after the data has been put back to the seed, the first request has been seen
-      to leave a lapsed opportunity still published, and the next to close it. A test that
-      needs a closure should trigger, read, and trigger once more if what it reads is
-      still open.
+    - The oracle sets the throttle interval to two seconds. A request to the trigger runs
+      the transitions at once if they have not run in the last two seconds, and otherwise
+      runs them once more when the two seconds are up. A request to any route under /api
+      would do as well, since the hooks sit in front of those too; the trigger above is
+      named because it needs no session and changes nothing else. Opening a screen does
+      not run them — the authentication routes, the administrator routes and the screens
+      carry no such hook.
+    - The transition runs after the request that triggers it has been answered, not
+      inside it, so the answer does not mean the closure has happened. A test that needs
+      a closure should trigger, then read the opportunity until it shows the new status,
+      allowing a few seconds, and trigger again if it is still open after that.
     - The seed carries opportunities already standing at later stages. Those are not
       moved by this trigger; only a published opportunity whose deadline has passed is.
 
