@@ -26,3 +26,27 @@ The two header lines are unchanged. The "derived" date was already 2026-09-28, t
 **Not verified.** I read the new code against `surface.d.ts`, and the calls it makes exist there with the right signatures. But until the runner's typecheck runs, it is not confirmed that `acceptance/organizations/` still has no diagnostics.
 
 There were no conditions I could not act on, and nothing asked me to change a path outside this stage's boundary.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the revised organizations tests follow from their criteria and nothing else, and does the R-3.9 revision settle derive-tests-organizations-6#3? Ruling: approve. The test 'an invitation that is not pending cannot be accepted' now asserts the refusal itself: the second approveInvitation from the invited person's own memberships page must be rejected (the accept action is not offered for a membership that is no longer pending), no acceptance confirmation may be shown, and the membership must still be active and still the invited person's. That is the first option the earlier ruling offered, and it assumes no exact message. The other R-3.9 tests (owner refused, invited person accepts, administrator accepts on their behalf) each follow from a clause of the criterion. R-3.31 asserts that the owner's message identifies the invited person as having approved or joined, and that the member's message names the organization and says they joined, which matches the criterion's 'then' without assuming exact wording. No selector, route, status code or table name leaks in; every call goes through the contract surface. The runner's typecheck reports no diagnostics under acceptance/organizations/; the two it reports are in adapters/new/, which this proposal does not answer for. Residual weakness, accepted: a rejected adapter call cannot tell 'not offered' apart from a failure for another reason, and the final active-membership check only partly covers that. If a later build offers the action and refuses it with a message, the fix is a contract observation for that message, not a change to this test. What would change the ruling: a typecheck diagnostic under acceptance/organizations/, or evidence that the self-memberships page offers the accept action for an active membership.
+
+**Conditions:**
+- condition-met derive-tests-organizations-6#3: tests/acceptance/organizations/R-3.9.spec.ts, test 'an invitation that is not pending cannot be accepted', now requires the second organizationUserMembershipsSelf.approveInvitation to be rejected (the accept action is not offered for the now-active membership) and requires acceptConfirmation() to show nothing, before re-checking that the membership is active and still the invited person's; no exact message is assumed
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `c9456f316be03433b3bc029a5b9967046d472be3`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/organizations/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
