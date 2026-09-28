@@ -28,7 +28,7 @@ email:
   # The pages in spec/contract/surface.yaml that read these fields, one message at a time
   # (caught-message, by the catcher's identifier) and all messages at once
   # (caught-message-list). Both are served by the catcher, not by the target.
-  surfaces: [caught-message, caught-message-list, mail-delivery-fault]
+  surfaces: [caught-message, caught-message-list, mail-delivery-fault, mail-delivery-delay]
   # A mail server that refuses delivery, for the criteria whose given is a message that
   # cannot be delivered. The catcher's fault injection (mailpit "chaos", switched on in
   # .sdlc/oracle/compose.yml) makes its SMTP server answer the sender's first command with
@@ -57,6 +57,45 @@ email:
         again), and then finds only that later message. The later message can land a
         moment after the service has answered, so wait for it to appear rather than
         reading once.
+  # A mail server that answers slowly, for the criteria about the order of an answer and
+  # the messages behind it (R-6.24: an announcement of changed terms reported as done
+  # before any message has been sent). The service reaches the catcher's SMTP port through
+  # a pass-through proxy (mail-hold in .sdlc/oracle/compose.yml) whose control API is
+  # served beside the catcher's under ${SDLC_MAIL_API}/hold. With nothing in force it
+  # changes nothing. slow delays every reply the mail server makes by three seconds.
+  #
+  # Three seconds, and not longer, because the service gives up on a mail server that has
+  # not greeted it within five (src/back-end/config.ts, greetingTimeout), and a longer
+  # delay would turn a slow server into a refusing one. A message needs at least three
+  # replies before its content is sent (to the sender, the recipient and the start of the
+  # content), so while the delay is in force none reaches the catcher sooner than nine
+  # seconds after the service begins sending it — fifteen on a fresh connection, which
+  # also waits for the greeting and the introduction.
+  #
+  # How a test uses it: slow; take the action; read the service's answer as soon as it
+  # appears, and read the catcher (caught-message-list.message_count) at that moment; lift
+  # the delay; then wait for the messages to appear, which shows they were on their way
+  # rather than dropped. A service that waited for its messages before answering would
+  # not answer until they had reached the catcher.
+  # A rebuilt target under test is given a catcher configured the same way.
+  delivery_delay:
+    read: GET ${SDLC_MAIL_API}/hold/proxies/smtp/toxics
+    slow: >-
+      POST ${SDLC_MAIL_API}/hold/proxies/smtp/toxics with body
+      {"name": "hold", "type": "latency", "stream": "downstream", "toxicity": 1,
+       "attributes": {"latency": 3000, "jitter": 0}}
+    restore: DELETE ${SDLC_MAIL_API}/hold/proxies/smtp/toxics/hold
+    restore_everything: POST ${SDLC_MAIL_API}/hold/reset
+    observable:
+      in_force: the answer to read lists a toxic named "hold"
+    notes:
+      - The delay is the proxy's, not the target's, and putting the data back to the seed
+        does not lift it. A test that slows delivery restores it when it ends, pass or
+        fail. Asking to slow when the delay is already in force is answered with a
+        conflict; restore first.
+      - Lifting the delay while messages are on their way lets them finish at full speed;
+        nothing is dropped. Refusal (delivery_fault) and delay can be combined, though no
+        criterion needs it.
   # How every target is configured to send, so that "the same sender for every kind of
   # message" and "the service's own address as the visible recipient" have a value to be
   # compared with. The oracle sets these in .sdlc/oracle/compose.yml; a rebuilt target
@@ -118,6 +157,31 @@ email:
       its identifier. A criterion about who else a batch reached, about what a message
       says, or about which sender it came from is reachable only that way, so whatever
       reads the catcher must offer both calls and not the listing alone.
+
+configurations:
+  # Settings the service reads once at start-up and that one criterion is about, so that a
+  # test cannot reach them by acting on a running service. Each is selected by an
+  # environment variable set where the oracle is started (`sdlc oracle up` passes its own
+  # environment through to Compose); left unset, the oracle runs with the default, which
+  # is what every other criterion is measured against.
+  notifications_disabled:
+    for: [R-6.1]
+    select: SDLC_ORACLE_DISABLE_NOTIFICATIONS=1
+    default: notifications on
+    sets: DISABLE_NOTIFICATIONS=1 on the application (src/back-end/config.ts)
+    observable:
+      in_force: >-
+        no message reaches the catcher for an action that sends one under the default —
+        publishing an opportunity (opportunity-cwu-create.publish) — while the action
+        itself reports success
+    notes:
+      - Nothing the service shows tells a test which configuration it is running against.
+        The harness that starts an oracle this way must say so to the tests it runs
+        against it, by exporting the same variable to the test process; a test for R-6.1
+        reads that variable and treats an instance without it as not offering the
+        criterion's given, rather than as a failure.
+      - Every other criterion that expects a message is false on such an instance, so it
+        is started for R-6.1 alone and never shared with the rest of the suite.
 
 files:
   # A stored file is reached at its own address, whatever page put it there. The

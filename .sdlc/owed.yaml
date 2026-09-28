@@ -1290,10 +1290,10 @@ owed:
     by: runner
     at: 2026-09-25T07:55:52.736Z
     kept:
-      by: contract-v10
+      by: contract-v11
       gate: G1
       approved_by: agent:product-owner
-      at: 2026-09-28T02:27:00.700Z
+      at: 2026-09-28T04:08:21.082Z
   - kind: missing-test
     item: R-6.2
     id: R-6.2
@@ -1915,10 +1915,10 @@ owed:
     by: runner
     at: 2026-09-25T07:55:52.736Z
     kept:
-      by: contract-v10
+      by: contract-v11
       gate: G1
       approved_by: agent:product-owner
-      at: 2026-09-28T02:27:00.700Z
+      at: 2026-09-28T04:08:21.082Z
   - kind: missing-test
     item: R-6.25
     id: R-6.25
@@ -3730,3 +3730,8 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-28T03:40:06.033Z
+    kept:
+      by: contract-v11
+      gate: G1
+      approved_by: agent:product-owner
+      at: 2026-09-28T04:08:21.082Z

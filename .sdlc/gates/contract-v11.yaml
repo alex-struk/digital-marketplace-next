@@ -1,0 +1,17 @@
+gate: G1
+verdict: approve
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  Question: is this the contract the tests will act through? Ruling: approve. The contract adds a setup for each of two criteria that could not be tested before. R-6.1 needs a service started with notifications switched off, which the oracle now does when SDLC_ORACLE_DISABLE_NOTIFICATIONS=1 is set; the contract says that instance serves R-6.1 alone and is never shared with the suite. R-6.24 needs messages to still be on their way when success is reported, which a pass-through mail proxy now provides by answering every reply three seconds late, under the application's five-second greeting timeout, so a slow server never turns into a refusing one. With no delay set the proxy passes everything through unchanged, and notifications default to on, so no other criterion is measured differently. The seed manifest fix changes only the shape of five handles, not their contents, and now names the nineteen accounts outside the subscriber group that are due the announcement. No criterion conditions: R-6.1 and R-6.24 are already confirmed and their wording is unchanged. The four owed instructions from derive-tests-opportunities-stale-4 stay open: #1 to #3 ask for test changes this proposal does not make, and #4 is moot in substance because the seed now names the nineteen accounts, but withdrawing it belongs to the next derive-tests ruling on R-1.34, which should also have the test assert them. Before the next stage runs, tests/generated/surface.d.ts and tests/generated/seed.ts must be regenerated with sdlc, because the generated check fails against the new contract, and the manifest check has not been re-run on the edited handles. What would change the ruling: either check still failing after regeneration, or the three-second delay proving able to trip the greeting timeout.
+reprompt: |2-
+  The first reply ruled approve. 1 condition line(s) did not match the ratification grammar: "condition-withdrawn derive-tests-opportunities-stale-4#4: it asked for a not-testable entry because the seed gave the nineteen accounts outside the subscriber group only as a total; tests/seed/manifest.yaml new_opportunity_notices.receive_the_announcement now names each one, so R-1.34's test should assert them rather than record them as untestable". Asked again in the ratification grammar.
+conditions: []
+cost: 0.8590679999999999
+turns: 10
+session: "bc4ec0ac-ff5f-4fcc-af7e-3ea79187ab4e"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T04:08:20.782Z

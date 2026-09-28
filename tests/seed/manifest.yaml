@@ -369,13 +369,58 @@ affiliations:
     membership_type: OWNER
     membership_status: ACTIVE
 
-# The one hundred and twenty accounts that have asked for new-opportunity notices.
-# Identifiers 00000000-0000-4000-8001-000000000001 to ...000000000120, addresses
-# subscriber.001@example.test to subscriber.120@example.test. Together with the other
-# seeded accounts that have asked, are not deactivated and have an address (nineteen of
-# them), 139 accounts are due the announcement of a newly published opportunity — more
-# than one hundred and no more than one hundred and fifty, which is three batches of at
-# most fifty whether or not the person publishing is counted among them.
+# Who is due the announcement of a newly published opportunity. The application selects
+# every account whose new-opportunity notice setting is on and that has not been
+# deactivated (src/back-end/lib/db/user.ts readManyUsersNotificationsOn), in every account
+# type, and blind-copies them in batches of fifty. The seed sets that up as follows.
+new_opportunity_notices:
+  # Setting on, not deactivated, with an address: each of these nineteen receives the
+  # announcement, beside the one hundred and twenty in the subscriber group below.
+  receive_the_announcement:
+    id: seed-notices-receive-the-announcement
+    members:
+      - users.administratorOne       # admin.one@example.test
+      - users.administratorTwo       # admin.two@example.test
+      - users.staffOne               # staff.one@example.test
+      - users.staffTwo               # staff.two@example.test
+      - users.staffPanelEvaluator    # panel.evaluator@example.test
+      - users.staffPanelChair        # panel.chair@example.test
+      - users.vendorOne              # vendor.one@example.test
+      - users.organizationOwner      # org.owner@example.test
+      - users.organizationAdmin      # org.admin@example.test
+      - users.organizationMember     # org.member@example.test
+      - users.fileUploader           # file.owner@example.test
+      - users.invitedVendor          # vendor.invited@example.test
+      - users.vendorWithTermsReset   # vendor.terms.reset@example.test
+      - users.proponentTwo           # proponent.two@example.test
+      - users.proponentThree         # proponent.three@example.test
+      - users.vendorReturning        # vendor.returning@example.test
+      - users.proponentFour          # proponent.four@example.test
+      - users.proponentFive          # proponent.five@example.test
+      - users.proponentSix           # proponent.six@example.test
+  # Seeded accounts the announcement does not reach, each for its own reason.
+  do_not_receive:
+    id: seed-notices-do-not-receive
+    members:
+      users.vendorWithNoticesOff: setting off
+      users.vendorDeactivated: setting on, but deactivated, so not selected
+      users.vendorWithoutEmail: >-
+        setting on and not deactivated, so selected and counted into a batch, but it has no
+        address; its place in the blind-copy list is empty and nobody receives anything for it
+      users.migrationUser: setting off
+  selected:
+    id: seed-notices-selected
+    count: 140      # the nineteen, users.vendorWithoutEmail and the subscriber group
+  with_an_address:
+    id: seed-notices-with-an-address
+    count: 139
+  batches:
+    id: seed-notices-batches
+    count: 3        # of at most fifty, whether or not the person publishing is counted
+
+# The one hundred and twenty accounts that have asked for new-opportunity notices, and have
+# no other part in the seed. Identifiers 00000000-0000-4000-8001-000000000001 to
+# ...000000000120, addresses subscriber.001@example.test to subscriber.120@example.test.
 subscribers:
   first:
     id: 00000000-0000-4000-8001-000000000001

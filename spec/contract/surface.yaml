@@ -1718,6 +1718,29 @@ pages:
     observations:
       delivery_refused: { test_id: null }
 
+  # A mail server that is slow to answer, for the criteria about the order of an answer
+  # and the messages behind it — an action reported as done while its messages are still
+  # being sent. Served beside the catcher at ${SDLC_MAIL_API}/hold (observables.yaml,
+  # email.delivery_delay), not by the target. While the delay is in force every reply the
+  # mail server makes reaches the service three seconds late, so each message takes
+  # several of those delays to reach the catcher and none can arrive sooner than nine
+  # seconds after the service starts sending it. Nothing is refused or lost: when the
+  # delay is lifted, messages already on their way arrive.
+  #
+  # The delay outlives the test that set it, and putting the data back to the seed does
+  # not lift it. A test that uses slow_delivery must call restore_delivery_speed when it
+  # ends, pass or fail.
+  - id: mail-delivery-delay
+    domain: notifications
+    origin: mail-catcher
+    route: /hold/proxies/smtp/toxics
+    title: "A mail server that is slow to answer"
+    actions:
+      slow_delivery: { test_id: null }
+      restore_delivery_speed: { test_id: null }
+    observations:
+      delivery_slowed: { test_id: null }
+
   # Requests the screens never make. The entries below are addresses of the service's own
   # interface (spec/contract/openapi.yaml), listed because criteria describe the service's
   # answer to a request that no screen sends — a membership type the team page never
