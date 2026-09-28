@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-old-10 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">218</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">214</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">187</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-old-10</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-09-28 17:39</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr></tbody></table></div>
+<div class="body"><h2>22 criterion(s) fail against old: which of them is the application&#39;s fault, which the spec&#39;s, and which the test&#39;s?</h2>
+<p><strong>Recommendation.</strong> Rule on R-6.1, R-5.3, R-1.9, R-3.9, R-5.10, R-5.13, R-2.14, R-6.15, R-1.16, R-6.16, R-7.16, R-5.19, R-4.20, R-1.25, R-1.27, R-1.29, R-2.30, R-8.30, R-3.31, R-2.35, R-3.35, R-1.49 with a calibration condition, so the next calibrate run can apply it.</p>
+<p>22 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:4300,">http://localhost:4300,</a> with no ruling yet. The tests are blind: they were written from the criteria alone, by an agent that never saw the application. So a failure means one of exactly three things, and only you can say which: the application is wrong, the criterion is wrong, or the test is wrong.</p>
+<p>Rule on each one below. Until every failure carries a ruling, this question is asked again on every calibration run.</p>
+<h4>R-6.1 · v1</h4>
+<p>When notifications are switched off for an environment, nothing the service does sends a message, and every action that would have sent one still completes normally.</p>
+<ul><li>given: a service configured with notifications disabled</li><li>when: a person does something that would ordinarily notify somebody, such as publishing an opportunity</li><li>then: the action succeeds and reports success, and no message is sent to anybody</li><li>test: tests/acceptance/notifications/R-6.1.spec.ts</li></ul>
+<pre><code>no result recorded</code></pre>
+<h4>R-5.3 · v1</h4>
+<p>An evaluator holds at most one evaluation per proponent, and a second attempt is refused with a message saying they already have one.</p>
+<ul><li>given: an evaluator who has already started an evaluation of one proponent</li><li>when: they start a second evaluation of the same proponent</li><li>then: the request is refused with &quot;You already have a team question evaluation for this proposal.&quot; and no second evaluation is created</li><li>test: tests/acceptance/evaluation/R-5.3.spec.ts</li></ul>
+<p><strong>an evaluator holds at most one evaluation per proponent, and a second attempt is refused</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-1.9 · v2</h4>
+<p>An opportunity saved as a draft is accepted with incomplete content; when its proposal deadline, assignment date or start date is missing or invalid it is set to fourteen days from the day of saving, and its completion date is left empty.</p>
+<ul><li>given: a member of public sector staff filling in a new opportunity</li><li>when: they save it as a draft with fields still blank</li><li>then: the draft is stored, no content validation error is raised, and absent dates are set to fourteen days from the day of saving</li><li>test: tests/acceptance/opportunities/R-1.9.spec.ts</li></ul>
+<p><strong>a draft whose proposal deadline is missing is given one fourteen days from the day of saving</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;12&quot;[39m
+Received string:    [31m&quot;Closed Oct 11, 2026 at 4:00 PM PDT&quot;[39m</code></pre>
+<h4>R-3.9 · v1</h4>
+<p>A pending invitation becomes an active membership only when the invited person accepts it, or when an administrator accepts it on their behalf; nobody else can accept it and an invitation that is not pending cannot be accepted.</p>
+<ul><li>given: a person with a pending invitation to an organization</li><li>when: the organization&#39;s owner tries to accept it on their behalf, and then the invited person accepts it themselves</li><li>then: the owner&#39;s attempt is refused, the invited person&#39;s acceptance makes the membership active, and a further attempt to accept the now-active membership is refused as not pending</li><li>test: tests/acceptance/organizations/R-3.9.spec.ts</li></ul>
+<p><strong>the organization owner&#39;s attempt to accept a pending invitation on the invited person&#39;s behalf is refused</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>a further attempt to accept the now-active membership is refused as not pending</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-5.10 · v1</h4>
+<p>The refusal shown when no proponent clears every question&#39;s minimum score must name the stage that actually follows — the Code Challenge for Sprint With Us and the Challenge for Team With Us.</p>
+<ul><li>test: tests/acceptance/evaluation/R-5.10.spec.ts</li></ul>
+<p><strong>the refusal on a Sprint With Us opportunity names the Code Challenge</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;code challenge&quot;[39m
+Received string:    [31m&quot;&quot;[39m</code></pre>
+<p><strong>the refusal on a Team With Us opportunity names the Challenge</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;challenge&quot;[39m
+Received string:    [31m&quot;&quot;[39m</code></pre>
+<h4>R-5.13 · v1</h4>
+<p>Finalising the consensus scores must be refused unless every proponent still under review of the questions has a submitted consensus, so that no proponent is left neither screened in nor screened out.</p>
+<ul><li>test: tests/acceptance/evaluation/R-5.13.spec.ts</li></ul>
+<p><strong>finalising is refused unless every proponent still under review has a submitted consensus</strong> — failed</p>
+<pre><code>Error: evaluation-consensus-list-swu.submit_final_consensus_scores — &quot;Submit Final Consensus Scores&quot; is disabled on http://localhost:3101/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=consensus; the page shows no message</code></pre>
+<h4>R-2.14 · v2</h4>
+<p>A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name.</p>
+<ul><li>given: a vendor submitting a Code With Us proposal as an individual</li><li>when: the legal name, email address, street address, city, province, postal code or country is missing, or the email address or phone number is malformed</li><li>then: the submission is rejected and each offending field is named in the response</li><li>test: tests/acceptance/proposals/R-2.14.spec.ts</li></ul>
+<p><strong>A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name. (a named individual)</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-6.15 · v1</h4>
+<p>A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service&#39;s own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity&#39;s owner exactly as it does to every other multi-recipient notice.</p>
+<ul><li>test: tests/acceptance/notifications/R-6.15.spec.ts</li></ul>
+<p><strong>A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service&#39;s own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity&#39;s owner exactly as it does to every other multi-recipient notice (the notice sent to an opportunity&#39;s owner)</strong> — failed</p>
+<pre><code>Error: visible recipients of aVNB72vPxrfnJWpY7CJCFK
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+[32m- Expected  - 1[39m
+[31m+ Received  + 3[39m
+
+[2m  Array [[22m
+[32m-   &quot;donotreply@example.test&quot;,[39m
+[31m+   &quot;staff.one@example.test&quot;,[39m
+[31m+   &quot;admin.one@example.test&quot;,[39m
+[31m+   &quot;admin.two@example.test&quot;,[39m
+[2m  ][22m</code></pre>
+<h4>R-1.16 · v1</h4>
+<p>A Sprint With Us opportunity must have an implementation phase, and may only have an inception phase if it also has a prototype phase.</p>
+<ul><li>given: a member of public sector staff creating or editing a Sprint With Us opportunity that is not a draft</li><li>when: they include an inception phase but no prototype phase</li><li>then: the submission is rejected with a message saying a prototype phase must follow an inception phase</li><li>test: tests/acceptance/opportunities/R-1.16.spec.ts</li></ul>
+<p><strong>a Sprint With Us opportunity must have an implementation phase</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-6.16 · v1</h4>
+<p>A message that the notification preference does not govern must not offer to unsubscribe; it links to the reader&#39;s notification settings without implying that any choice there will stop messages of that kind.</p>
+<ul><li>test: tests/acceptance/notifications/R-6.16.spec.ts</li></ul>
+<p><strong>A message that the notification preference does not govern must not offer to unsubscribe; it links to the reader&#39;s notification settings without implying that any choice there will stop messages of that kind.</strong> — failed</p>
+<pre><code>Error: links offering to unsubscribe
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+[32m- Expected  - 1[39m
+[31m+ Received  + 6[39m
+
+[32m- Array [][39m
+[31m+ Array [[39m
+[31m+   Object {[39m
+[31m+     &quot;href&quot;: &quot;http://localhost:3102/users/me?tab=notifications&amp;unsubscribe&quot;,[39m
+[31m+     &quot;label&quot;: &quot;Unsubscribe&quot;,[39m
+[31m+   },[39m
+[31m+ ][39m</code></pre>
+<h4>R-7.16 · v1</h4>
+<p>A request refused for lack of permission is reported as a permission refusal, in the same shape for every page request, whether it reads the list, reads one page, or creates, changes or removes one.</p>
+<ul><li>test: tests/acceptance/content/R-7.16.spec.ts</li></ul>
+<p><strong>a request refused for lack of permission is reported as a permission refusal, in the same shape for every page request, whether it reads the list, creates, changes or removes one</strong> — failed</p>
+<pre><code>Error: create
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m&quot;[\&quot;string\&quot;]&quot;[39m
+Received: [31m&quot;[7m{\&quot;permissions\&quot;:[27m[\&quot;string\&quot;][7m}[27m&quot;[39m</code></pre>
+<h4>R-5.19 · v1</h4>
+<p>A panel member may open an opportunity they sit on the panel for even before it is public, and it is listed for them under a separate heading for work they are evaluating.</p>
+<ul><li>given: a draft opportunity whose panel names a public sector employee who did not create it</li><li>when: that person opens their dashboard and then the opportunity</li><li>then: the opportunity is listed under &quot;Evaluations&quot; and they can open it, whereas another public sector employee cannot see it at all</li><li>test: tests/acceptance/evaluation/R-5.19.spec.ts</li></ul>
+<p><strong>A panel member may open an opportunity they sit on the panel for even before it is public</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>A panel member&#39;s opportunity is listed for them under a separate heading for work they are evaluating</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>A draft opportunity is not seen at all by a public sector employee who neither created it nor sits on its panel</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-4.20 · v1</h4>
+<p>A person whose account an administrator reactivates is told that an administrator has reactivated their Digital Marketplace account and whom to contact with questions; the message telling a person they reactivated the account themselves is sent only when they did so by signing in again.</p>
+<ul><li>test: tests/acceptance/users/R-4.20.spec.ts</li></ul>
+<p><strong>a person whose account an administrator reactivates is told that an administrator has reactivated their Digital Marketplace account and whom to contact with questions</strong> — failed</p>
+<pre><code>Error: no message says an administrator reactivated the account
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31mundefined[39m</code></pre>
+<p><strong>the message telling a person they reactivated the account themselves is not sent when an administrator reactivates it</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: not [32m/successfully reactivated/i[39m
+Received string:      [31m&quot;Digital Marketplace [http://localhost:3100/images/logo_test.png]http://localhost:3100Your Account Has Been ReactivatedYou have[39m
+[31m[7msuccessfully reactivated[27m your Digital Marketplace account.Sign In [http://localhost:3100/sign-in]Unsubscribe[39m
+[31m[http://localhost:3100/users/me?tab=notifications&amp;unsubscribe]&quot;[39m</code></pre>
+<p><strong>the message telling a person they reactivated the account themselves is sent when they did so by signing in again</strong> — failed</p>
+<pre><code>Error: unbound: signIn.self-reactivating-vendor — /auth/createsessionvendor/13 reaches this account, but it creates a session without the identity provider and without looking at the account&#39;s status, so it is not the sign-in that reactivates a self-deactivated account. The oracle has no identity provider to sign in through, so the ordinary sign-in this persona exists for cannot happen there.</code></pre>
+<h4>R-1.25 · v1</h4>
+<p>An opportunity moves to processing on its own once every proposal still in contention has been scored at its program&#39;s final evaluation stage.</p>
+<ul><li>given: an opportunity at its final evaluation stage with at least one proposal still in contention</li><li>when: the last of those proposals is scored</li><li>then: the opportunity moves to processing and the change is recorded with a note saying it was moved automatically because all proposals have been evaluated</li><li>test: tests/acceptance/opportunities/R-1.25.spec.ts</li></ul>
+<p><strong>An opportunity moves to processing on its own once every proposal still in contention has been scored at its program&#39;s final evaluation stage. (Team With Us)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/processing/[39m
+Received string:  [31m&quot;evaluation challenge&quot;[39m
+
+Call Log:
+- Timeout 30000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-1.27 · v1</h4>
+<p>An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score.</p>
+<ul><li>given: an awarded opportunity</li><li>when: a visitor who may not see proposal scores views it</li><li>then: the successful proponent&#39;s name is shown and their contact details and score are withheld</li><li>test: tests/acceptance/opportunities/R-1.27.spec.ts</li></ul>
+<p><strong>An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score. (Code With Us: a reader permitted to see proposal scores)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score. (Sprint With Us: a reader permitted to see proposal scores)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-1.29 · v1</h4>
+<p>The names of the people who created and last changed an opportunity are shown only to administrators and to those people themselves.</p>
+<ul><li>given: a published opportunity</li><li>when: it is viewed by someone who is neither an administrator nor the person who created or last changed it</li><li>then: the creating and changing people&#39;s names are absent from what is shown</li><li>test: tests/acceptance/opportunities/R-1.29.spec.ts</li></ul>
+<p><strong>the names of the people who created and last changed an opportunity are shown to an administrator</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>the names of the people who created and last changed an opportunity are shown to those people themselves</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-2.30 · v1</h4>
+<p>A proposal&#39;s price score is its share of the lowest bid among the proposals still in contention, expressed as a percentage, and it is calculated when the last human-entered score is recorded.</p>
+<ul><li>given: two Sprint With Us proposals still in contention, bidding 100,000 and 200,000</li><li>when: a team scenario score is entered for the higher bid</li><li>then: that proposal is given a price score of 50, its history records the calculated price score, and it becomes fully evaluated</li><li>test: tests/acceptance/proposals/R-2.30.spec.ts</li></ul>
+<p><strong>A proposal&#39;s price score is its share of the lowest bid among the proposals still in contention, expressed as a percentage, and it is calculated when the last human-entered score is recorded.</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/(^|[^\d.])50(\.0+)?(?![\d])/[39m
+Received string:  [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 30000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-8.30 · v1</h4>
+<p>A profile picture or an organization logo whose name does not end in .jpg, .jpeg or .png is refused.</p>
+<ul><li>given: a signed-in person choosing a new profile picture</li><li>when: they upload a file named &quot;portrait.gif&quot;</li><li>then: the upload is refused for having an ending that is not allowed, and no file is stored</li><li>test: tests/acceptance/files/R-8.30.spec.ts</li></ul>
+<p><strong>a profile picture or an organization logo whose name does not end in .jpg, .jpeg or .png is refused</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-3.31 · v1</h4>
+<p>When a person accepts an invitation, the organization&#39;s owner is told they have joined and the new member is told they may now be put forward on the organization&#39;s proposals.</p>
+<ul><li>given: a person with a pending invitation to an organization</li><li>when: they accept it</li><li>then: the organization&#39;s owner receives a message saying the person approved the request, and the person receives a message saying they have joined the organization&#39;s team</li><li>test: tests/acceptance/organizations/R-3.31.spec.ts</li></ul>
+<p><strong>when a person accepts an invitation the organization&#39;s owner is told they approved the request and the new member is told they have joined the team</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+Expected: &gt; [32m0[39m
+Received:   [31m0[39m</code></pre>
+<h4>R-2.35 · v1</h4>
+<p>Every change of state and every score entered against a proposal is recorded in its history with who did it, when, and any note given.</p>
+<ul><li>given: a proposal that has been submitted, reviewed and scored</li><li>when: someone entitled to see its history opens it</li><li>then: the history lists each state change and each score entry, newest first, each with its author, its time and its note</li><li>test: tests/acceptance/proposals/R-2.35.spec.ts</li></ul>
+<p><strong>every change of state and every score entered against a proposal is recorded in its history with who did it, when, and any note given</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;disqualif&quot;[39m
+Received string:    [31m&quot;non-compliant | r-2.35 the proponent&#39;s named team is no longer available. | sep 28, 2026 10:27 am pdt robin placeholder[39m
+[31mevaluated (cc) | — | sep 28, 2026 10:27 am pdt robin placeholder[39m
+[31mcode challenge score entered | a code challenge score of \&quot;80\&quot; was entered. | sep 28, 2026 10:27 am pdt robin placeholder[39m
+[31munder review (cc) | — | sep 28, 2026 10:27 am pdt robin placeholder[39m
+[31mteam questions score entered | team question scores were entered. q1: 5; q2: 5; q3: 5; q4: 5. | sep 28, 2026 10:27 am pdt robin placeholder[39m
+[31munder review (tq) | — | sep 28, 2026 10:26 am pdt system[39m
+[31msubmitted | — | aug 19, 2026 10:26 am pdt blake placeholder[39m
+[31mdraft | — | aug 9, 2026 10:26 am pdt blake placeholder&quot;[39m</code></pre>
+<h4>R-3.35 · v1</h4>
+<p>The accept and the decline choice offered in an invitation email both open the invited person&#39;s own organizations page with the matching confirmation ready, so a person can decline from the message as readily as they can accept.</p>
+<ul><li>test: tests/acceptance/organizations/R-3.35.spec.ts</li></ul>
+<p><strong>the decline choice offered in an invitation email opens the invited person&#39;s own organizations page with the decline confirmation ready</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 5000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-1.49 · v1</h4>
+<p>The permitted state changes for a Team With Us opportunity in processing are awarded and cancelled, matching Code With Us and Sprint With Us, so the recorded transitions and the award path agree.</p>
+<ul><li>test: tests/acceptance/opportunities/R-1.49.spec.ts</li></ul>
+<p><strong>The permitted state changes for a Team With Us opportunity in processing are awarded and cancelled, matching Code With Us and Sprint With Us, so the recorded transitions and the award path agree.</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/processing/[39m
+Received string:  [31m&quot;evaluation challenge&quot;[39m
+
+Call Log:
+- Timeout 30000ms exceeded while waiting on the predicate</code></pre>
+<h3>Calibration conditions</h3>
+<p>One condition per line, and exactly one of these forms:</p>
+<ul><li><code>defect-in-old &lt;ID&gt;</code> — the old application really does fail this and the criterion is right anyway. The test stands as written and the rebuild has to pass it; the criterion keeps a note saying so. No text after the ID.</li><li><code>spec-wrong &lt;ID&gt;: &lt;corrected statement&gt;</code> — the criterion misdescribes what the old application does. The statement is replaced and its version bumped, which marks the test stale so <code>derive-tests --stale</code> writes it again from the corrected criterion.</li><li><code>test-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion is right and the test is not. The id goes to <code>tests/acceptance/redo.yaml</code> for <code>derive-tests</code> to redo, still blind, and <code>&lt;why&gt;</code> records what the test got wrong without describing how the application is built.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. <code>defect-in-old</code> takes no text; the other two require a colon and text on the same line. A condition may not span more than one line.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-09-28 17:45.</p>
+<div class="body"><p>Question: which of the 22 criteria failing against old are the application&#39;s fault, the spec&#39;s, or the test&#39;s? Ruling: approve with 20 conditions: 8 defect-in-old, 1 spec-wrong, 11 test-wrong. R-1.9 and R-6.1 are deliberately left unruled. Each was checked against the old source, the test and the saved page snapshot.</p>
+<p>DEFECTS IN OLD. Most are authored corrections, and old still shows the defect they correct. R-5.10: the finalise refusal is sent back as a service message, but the consensus tab shows only a generic &#39;could not be finalized&#39; toast, so no stage is ever named; Team With Us would also name the Code Challenge (team-with-us/index.ts:1016-1021). R-6.15: the deadline and consensus notices put every recipient in the visible To line (sprint-with-us.tsx:564-697, team-with-us.tsx:230-292, 639). R-6.16: every templated message, including the invitation, carries an Unsubscribe link (templates.tsx:410-417). R-7.16: listing refuses with a bare array, while create, update and delete refuse with {permissions:[...]} (content.ts:55, 204, 324, 385). R-4.20: an administrator&#39;s reactivation sends the self-reactivation message, and the administrator version is only ever previewed (user.ts:304-311). The third R-4.20 test cannot bind on the oracle for lack of an identity provider; the test stands for the rebuild. R-3.35: the Reject link uses tab=organization, which does not parse, so the page opens on the profile tab with no confirmation (affiliation.tsx:267). R-1.25 is recovered and right: migration 20250506164908 rebuilt the Team With Us status check without Processing, so the automatic move fails and the error is swallowed (db/proposal/team-with-us.ts:1759-1802). R-1.49 fails behind the same fault, and old would fail it regardless, since Processing permits only Canceled (team-with-us.ts:483-484).</p>
+<p>SPEC WRONG. R-1.29: old strips the creator&#39;s and last editor&#39;s names from the data for everyone else (db/opportunity/code-with-us.ts:243-258). It never shows a last editor&#39;s name anywhere, and never shows either name on the public page, so &#39;shown only to&#39; promises a showing that old never makes. The corrected statement records the restriction, which is what old does.</p>
+<p>TEST WRONG. Old behaves as the criterion says, and the test asserts more.</p>
+<ul><li>Refusals: R-3.9 (the owner is offered no approve control; the not-pending case never makes the membership active first), R-5.3 (a second start returns the evaluator to their existing evaluation; the quoted refusal exists only at the service), R-5.13 (with a proponent missing a consensus, the final submission cannot be made at all) and R-1.16 (the implementation phase cannot be removed). In each, the test demanded a message the criterion does not promise at that point.</li><li>Wrong page: R-5.19 fails in setup, reading a creator name from a page that never shows one. R-2.30 reads the price score where old does not show it; the calculation is lowest/own*100. R-1.27 still reads contact details only on the public page, although old shows them where the awarded proposal is summarised to a permitted reader.</li><li>Timing: R-3.31 reads the mailbox once, and both messages are sent just after the acceptance returns. R-8.30 reads the refusal before saving, and old refuses the .gif when the choice is saved.</li><li>R-2.35 requires the word &#39;disqualif&#39;, and old labels that state &#39;Non-compliant&#39;.</li><li>R-2.14 runs ten attempts through the wizard, which cannot fit the 120 s limit.</li></ul>
+<p>Note on R-5.13: old&#39;s service checks only that existing consensuses are submitted (sprint-with-us/index.ts:1503-1511). It would accept a finalise with a proponent missing, so the rebuild must refuse at the service, not only in the page.</p>
+<p>UNRULED. R-1.9 is not a product question. The test leaves the deadline blank, but the adapter fills every blank required date (UTC day, +14) before saving the draft. The default-date rule was never exercised; old&#39;s own default is now+14 days, matching the criterion. Triage should reclassify it adapter-wrong. R-6.1 still has no result, because the oracle has never run with SDLC_ORACLE_DISABLE_NOTIFICATIONS=1. It is unblocked by that run, not by a ruling.</p>
+<p>What would change this ruling: evidence that old&#39;s service refuses a finalise with a missing consensus would make no difference (R-5.13 stays test-wrong). Evidence that old shows a last editor&#39;s name to anyone would return R-1.29 to its original wording.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>defect-in-old R-5.10</li><li>defect-in-old R-6.15</li><li>defect-in-old R-6.16</li><li>defect-in-old R-7.16</li><li>defect-in-old R-4.20</li><li>defect-in-old R-3.35</li><li>defect-in-old R-1.25</li><li>defect-in-old R-1.49</li><li>spec-wrong R-1.29: The names of the people who created and last changed an opportunity are withheld from anyone who is neither an administrator nor one of those people.</li><li>test-wrong R-3.9: the criterion says the owner&#39;s attempt is refused, not that a message is shown; an owner who is offered no way to accept has been refused, so establish afterwards that the membership is still pending. The &#39;not pending&#39; case never makes the membership active first; have the invited person accept, then make a further attempt and establish that the membership is unchanged</li><li>test-wrong R-5.3: a second start that returns the evaluator to the evaluation they already hold has refused a second evaluation; establish afterwards that exactly one evaluation by that evaluator exists for the proponent, and require the quoted message only where a second evaluation is actually requested of the service</li><li>test-wrong R-5.13: the criterion promises that finalising is refused, not a message, and not the step at which it is stopped; when the final consensus cannot be submitted or finalised while a proponent lacks a submitted consensus, finalising has been refused. Establish that the opportunity remains in consensus and no proponent was screened in or out, and still attempt the finalise wherever the service accepts such a request</li><li>test-wrong R-1.16: the test tries to publish without an implementation phase, but where a person is given no way to leave that phase out, the rule is being kept; establish that the published opportunity carries an implementation phase instead of demanding a refusal message, and keep the inception-without-prototype case as written</li><li>test-wrong R-5.19: the test fails in its own setup, requiring the creator&#39;s name to be shown on the opportunity&#39;s public page, which the criterion never promises; establish that the panel member did not create the opportunity from the seeded record or from who created it, then check the dashboard listing and access as the criterion states</li><li>test-wrong R-2.30: the test reads the price score from a page where it is not shown, and the criterion does not say where it appears; read it wherever an entitled reader is shown the proposal&#39;s individual scores, together with the history entry and the evaluated state</li><li>test-wrong R-1.27: contact details are still read only from the opportunity&#39;s public page; for the reader permitted to see scores, read the successful proponent&#39;s contact details and score wherever that reader is shown the awarded proposal or the award summary, and keep checking that a visitor is shown neither anywhere they can reach</li><li>test-wrong R-3.31: the mailbox is read once, immediately after the acceptance returns, but the messages may be sent just afterwards; wait for both messages to arrive within a bounded time before concluding either is missing</li><li>test-wrong R-8.30: the test reads the refusal right after choosing the file and then abandons the change, but the criterion is about the upload, which happens when the choice is saved; save the change, then read the refusal and establish that the stored picture is unchanged</li><li>test-wrong R-2.35: the criterion names state changes and score entries, not the words used to label them; the test required the word &#39;disqualif&#39;, but the state can be shown under another label; establish that each state change and score entry appears newest first with its author, time and note, matching the disqualification by its note rather than by a label</li><li>test-wrong R-2.14: ten proposal attempts in one test cannot finish within the time a single test is allowed; give each missing or malformed field its own test, or allow the test the time its attempts need, so that a timeout never stands in for a result</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

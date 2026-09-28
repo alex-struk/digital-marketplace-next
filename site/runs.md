@@ -114,6 +114,8 @@
 - 10:38:27 rule calibrate-triage-old-17 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.282 (Claude Code))
 - 10:39:02 deviation: next named `sdlc run bind-adapter --target old`; ran `sdlc run calibrate --target old`; reason: The reviewer has sorted every failure of the last calibration; the fifteen product questions do not depend on the adapter work next names, and ruling them now lets any test redos they produce join the same round instead of costing another full calibration.
 - 10:39:07 run calibrate: ok, cost 0, turns 0
+- 10:39:10 propose calibrate-old-10 at G1
+- 10:45:14 rule calibrate-old-10 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.282 (Claude Code))
 
 # Run record 2026-09-26
 
