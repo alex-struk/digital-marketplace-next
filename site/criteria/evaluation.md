@@ -19,7 +19,7 @@
 | R-5.13 | acceptance/evaluation/R-5.13.spec.ts |  | fail (ruled: test-wrong) |
 | R-5.14 | acceptance/evaluation/R-5.14.spec.ts |  | fail |
 | R-5.15 | — |  |  |
-| R-5.16 | acceptance/evaluation/R-5.16.spec.ts |  | fail |
+| R-5.16 | acceptance/evaluation/R-5.16.spec.ts |  | fail (ruled: adapter-wrong) |
 | R-5.17 | acceptance/evaluation/R-5.17.spec.ts |  | pass |
 | R-5.18 | acceptance/evaluation/R-5.18.spec.ts |  | pass (ruled: spec-wrong) |
 | R-5.19 | acceptance/evaluation/R-5.19.spec.ts |  | fail (ruled: test-wrong) |
