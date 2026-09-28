@@ -411,3 +411,41 @@ conditions:
         checking account status…', and the comment above signIn describes this"
       by: agent:tech-lead
       at: 2026-09-28T14:43:09.744Z
+  - ref: derive-tests-evaluation-stale-8#1
+    text: "tests/acceptance/evaluation/R-5.29.spec.ts: the clause 'only the chair
+      may record ... while the opportunity is in consensus' has its permitted
+      half unasserted — in the evaluator test, after the evaluator's attempt,
+      have the chair record a consensus for the outstanding (third) proponent
+      through evaluationConsensusCreateSwu without swallowing failure, and
+      assert consensusStatusOf(chair, outstanding) is non-empty afterwards, so
+      the refusals in this file are measured against a write that is shown to
+      succeed"
+    from: derive-tests-evaluation-stale-8
+    family: derive-tests-evaluation-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-28T16:18:53.498Z
+  - ref: derive-tests-evaluation-stale-8#2
+    text: "tests/acceptance/evaluation/R-5.29.spec.ts: in the evaluator test, before
+      the chair records, assert that the outstanding proponent has no consensus
+      under the chair's user id as well as under the evaluator's (the seed
+      leaves it not begun), so an evaluator attempt that was accepted and stored
+      as the proponent's consensus cannot pass unseen"
+    from: derive-tests-evaluation-stale-8
+    family: derive-tests-evaluation-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-28T16:18:53.498Z
+  - ref: derive-tests-evaluation-stale-8#3
+    text: "tests/acceptance/evaluation/R-5.29.spec.ts: note — the duplicate test's
+      Proponent-name count is weak if proponentRow returns one row; the missing
+      definition of proponent_row is already carried by the not-testable entry's
+      contract addition and needs no change here"
+    from: derive-tests-evaluation-stale-8
+    family: derive-tests-evaluation-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-28T16:18:53.498Z
