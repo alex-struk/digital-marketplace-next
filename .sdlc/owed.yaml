@@ -3889,7 +3889,7 @@ owed:
     id: R-5.29
     version: 1
     domain: evaluation
-    stage: contract
+    stage: derive-tests
     why: an observation on evaluation-consensus-edit-swu and
       evaluation-consensus-edit-twu returning the agreed score and note stored
       for each question (for example agreed_scores and agreed_notes), or a
@@ -3900,3 +3900,16 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-28T16:20:27.248Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: added evaluation-consensus-request-swu and evaluation-consensus-request-twu
+          (change_consensus_by_request; stored_scores, stored_notes,
+          consensus_status, request_accepted, refused_when_not_permitted), plus
+          the seeded opportunities swuConsensusAllAgreed, swuPastConsensus,
+          twuConsensusAllAgreed and twuPastConsensus with their proposals, whose
+          chair's consensus agreed scores are in the manifest
+        by: contract-v16
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-28T16:32:20.421Z

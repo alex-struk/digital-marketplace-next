@@ -1850,6 +1850,52 @@ pages:
       refused_as_unrecognised: { test_id: null }
       refused_at_submission: { test_id: null }
 
+  # One consensus — the chair's agreed scores and notes for one proponent — as a request.
+  # :userId is the panel member whose consensus it is, which is the chair: on the seeded
+  # panels users.administratorOne. The screens show the panel members' own scores beside
+  # the form but not the consensus as it stands, so this is where a test reads what a
+  # consensus holds, and where it sends a change that no screen offers the person making
+  # it (an evaluator who is not the chair changing the chair's consensus, or anybody
+  # changing one after the opportunity has moved past consensus).
+  #
+  # The service lets an administrator read a consensus at any stage, and a public sector
+  # employee on the panel read it during consensus or once the question stages are past, so
+  # a test reads the result as the administrator. The starting points are
+  # seed.opportunities.swuConsensusAllAgreed and swuPastConsensus, whose proposals'
+  # agreed_scores the manifest gives.
+  - id: evaluation-consensus-request-swu
+    domain: evaluation
+    route: /api/proposal/sprint-with-us/:proposalId/team-questions/consensus/:userId
+    title: "A Sprint With Us consensus, by request"
+    actions:
+      # Input: an agreed score and note for each of the four questions, by question order.
+      # Replaces what the consensus holds, as the edit screen's save does.
+      change_consensus_by_request: { test_id: null }
+    observations:
+      # The agreed score for each question, by question order, as stored.
+      stored_scores: { test_id: null }
+      # The note for each question, by question order, as stored.
+      stored_notes: { test_id: null }
+      consensus_status: { test_id: null }
+      # The service accepted the change (a successful answer carrying the consensus).
+      request_accepted: { test_id: null }
+      # The service refused the change or the read (an answer naming a permission or
+      # not-found error), as distinct from one it accepted.
+      refused_when_not_permitted: { test_id: null }
+
+  - id: evaluation-consensus-request-twu
+    domain: evaluation
+    route: /api/proposal/team-with-us/:proposalId/resource-questions/consensus/:userId
+    title: "A Team With Us consensus, by request"
+    actions:
+      change_consensus_by_request: { test_id: null }
+    observations:
+      stored_scores: { test_id: null }
+      stored_notes: { test_id: null }
+      consensus_status: { test_id: null }
+      request_accepted: { test_id: null }
+      refused_when_not_permitted: { test_id: null }
+
   # An opportunity's evaluation panel submitted as a request, so that it can hold a
   # panel none of the panel screen's controls can compose: a member who is neither an
   # evaluator nor the chair, or no chair at all. :program is sprint-with-us or

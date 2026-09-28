@@ -102,6 +102,8 @@ export interface Surface {
   contentRequest: ContentRequestPage;
   evaluationIndividualRequestSwu: EvaluationIndividualRequestSwuPage;
   evaluationIndividualRequestTwu: EvaluationIndividualRequestTwuPage;
+  evaluationConsensusRequestSwu: EvaluationConsensusRequestSwuPage;
+  evaluationConsensusRequestTwu: EvaluationConsensusRequestTwuPage;
   evaluationPanelRequest: EvaluationPanelRequestPage;
   fileAttachByIdentifier: FileAttachByIdentifierPage;
 }
@@ -1378,6 +1380,26 @@ export interface EvaluationIndividualRequestTwuPage {
   evaluationStatus(): Promise<string>;
   refusedAsUnrecognised(): Promise<string>;
   refusedAtSubmission(): Promise<string>;
+}
+
+export interface EvaluationConsensusRequestSwuPage {
+  open(params: { proposalId: string; userId: string }): Promise<void>;
+  changeConsensusByRequest(input?: unknown): Promise<void>;
+  storedScores(): Promise<string>;
+  storedNotes(): Promise<string>;
+  consensusStatus(): Promise<string>;
+  requestAccepted(): Promise<string>;
+  refusedWhenNotPermitted(): Promise<string>;
+}
+
+export interface EvaluationConsensusRequestTwuPage {
+  open(params: { proposalId: string; userId: string }): Promise<void>;
+  changeConsensusByRequest(input?: unknown): Promise<void>;
+  storedScores(): Promise<string>;
+  storedNotes(): Promise<string>;
+  consensusStatus(): Promise<string>;
+  requestAccepted(): Promise<string>;
+  refusedWhenNotPermitted(): Promise<string>;
 }
 
 export interface EvaluationPanelRequestPage {
