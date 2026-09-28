@@ -12,8 +12,8 @@
 | R-3.6 | acceptance/organizations/R-3.6.spec.ts |  | pass |
 | R-3.7 | acceptance/organizations/R-3.7.spec.ts |  | pass |
 | R-3.8 | acceptance/organizations/R-3.8.spec.ts |  | pass |
-| R-3.9 | acceptance/organizations/R-3.9.spec.ts |  | fail |
-| R-3.10 | acceptance/organizations/R-3.10.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-3.9 | acceptance/organizations/R-3.9.spec.ts |  | fail (ruled: test-wrong) |
+| R-3.10 | acceptance/organizations/R-3.10.spec.ts |  | pass |
 | R-3.11 | acceptance/organizations/R-3.11.spec.ts |  | pass |
 | R-3.12 | acceptance/organizations/R-3.12.spec.ts |  | pass |
 | R-3.13 | acceptance/organizations/R-3.13.spec.ts |  | pass |
@@ -28,17 +28,17 @@
 | R-3.22 | acceptance/organizations/R-3.22.spec.ts |  | fail (ruled: defect-in-old) |
 | R-3.23 | acceptance/organizations/R-3.23.spec.ts |  | pass |
 | R-3.24 | acceptance/organizations/R-3.24.spec.ts |  | pass |
-| R-3.25 | acceptance/organizations/R-3.25.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-3.25 | acceptance/organizations/R-3.25.spec.ts |  | pass |
 | R-3.26 | acceptance/organizations/R-3.26.spec.ts |  | pass |
 | R-3.27 | acceptance/organizations/R-3.27.spec.ts |  | pass |
 | R-3.28 | acceptance/organizations/R-3.28.spec.ts |  | pass |
 | R-3.29 | — |  |  |
 | R-3.30 | acceptance/organizations/R-3.30.spec.ts |  | pass |
-| R-3.31 | acceptance/organizations/R-3.31.spec.ts |  | fail |
+| R-3.31 | acceptance/organizations/R-3.31.spec.ts |  | fail (ruled: test-wrong) |
 | R-3.32 | acceptance/organizations/R-3.32.spec.ts |  | pass |
 | R-3.33 | acceptance/organizations/R-3.33.spec.ts |  | pass |
 | R-3.34 | acceptance/organizations/R-3.34.spec.ts |  | pass |
-| R-3.35 | acceptance/organizations/R-3.35.spec.ts |  | fail |
+| R-3.35 | acceptance/organizations/R-3.35.spec.ts |  | fail (ruled: defect-in-old) |
 
 ### R-3.1 · v1 · confirmed · accepted
 
@@ -450,3 +450,4 @@ An organization's summary of team capabilities counts only members who have acce
 
 The accept and the decline choice offered in an invitation email both open the invited person's own organizations page with the matching confirmation ready, so a person can decline from the message as readily as they can accept.
 - replaces: R-3.29
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it

@@ -15,7 +15,7 @@
   <span class="profile">rebuild profile</span>
 </div>
 <div class="shell">
-<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">221</span></a></li><li><a href="../proposals.html">Proposals <span class="count">217</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">188</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html" aria-current="page">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">221</span></a></li><li><a href="../proposals.html">Proposals <span class="count">217</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">189</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html" aria-current="page">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
 <main id="main">
 <div class="page-head"><h1>notifications</h1>
 <p class="lede">28 criteria, 21 with a derived acceptance test, 0 recorded as not testable through the contract surface.</p></div>
@@ -168,7 +168,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service&#39;s own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity&#39;s owner exactly as it does to every other multi-recipient notice.</p>
-  <dl><dt>test</dt><dd><code>tests/acceptance/notifications/R-6.15.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>replaces</dt><dd>R-6.9</dd></dl>
+  <dl><dt>test</dt><dd><code>tests/acceptance/notifications/R-6.15.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled defect-in-old</dd><dt>replaces</dt><dd>R-6.9</dd><dt>note</dt><dd>calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -178,7 +178,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">A message that the notification preference does not govern must not offer to unsubscribe; it links to the reader&#39;s notification settings without implying that any choice there will stop messages of that kind.</p>
-  <dl><dt>test</dt><dd><code>tests/acceptance/notifications/R-6.16.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>replaces</dt><dd>R-6.10</dd></dl>
+  <dl><dt>test</dt><dd><code>tests/acceptance/notifications/R-6.16.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled defect-in-old</dd><dt>replaces</dt><dd>R-6.10</dd><dt>note</dt><dd>calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>

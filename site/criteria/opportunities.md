@@ -19,7 +19,7 @@
 | R-1.13 | acceptance/opportunities/R-1.13.spec.ts |  | pass |
 | R-1.14 | acceptance/opportunities/R-1.14.spec.ts |  | pass |
 | R-1.15 | acceptance/opportunities/R-1.15.spec.ts |  | pass |
-| R-1.16 | acceptance/opportunities/R-1.16.spec.ts |  | fail |
+| R-1.16 | acceptance/opportunities/R-1.16.spec.ts |  | fail (ruled: test-wrong) |
 | R-1.17 | acceptance/opportunities/R-1.17.spec.ts |  | fail (ruled: spec-wrong) |
 | R-1.18 | acceptance/opportunities/R-1.18.spec.ts |  | pass |
 | R-1.19 | acceptance/opportunities/R-1.19.spec.ts |  | pass |
@@ -28,11 +28,11 @@
 | R-1.22 | acceptance/opportunities/R-1.22.spec.ts |  | pass |
 | R-1.23 | acceptance/opportunities/R-1.23.spec.ts |  | pass |
 | R-1.24 | acceptance/opportunities/R-1.24.spec.ts |  | pass |
-| R-1.25 | acceptance/opportunities/R-1.25.spec.ts |  | fail |
+| R-1.25 | acceptance/opportunities/R-1.25.spec.ts |  | fail (ruled: defect-in-old) |
 | R-1.26 | acceptance/opportunities/R-1.26.spec.ts |  | pass |
-| R-1.27 | acceptance/opportunities/R-1.27.spec.ts |  | fail |
+| R-1.27 | acceptance/opportunities/R-1.27.spec.ts |  | fail (ruled: test-wrong) |
 | R-1.28 | acceptance/opportunities/R-1.28.spec.ts |  | pass |
-| R-1.29 | acceptance/opportunities/R-1.29.spec.ts |  | fail |
+| R-1.29 | acceptance/opportunities/R-1.29.spec.ts |  | stale (ruled: spec-wrong) |
 | R-1.30 | acceptance/opportunities/R-1.30.spec.ts |  | pass |
 | R-1.31 | acceptance/opportunities/R-1.31.spec.ts |  | pass |
 | R-1.32 | acceptance/opportunities/R-1.32.spec.ts |  | pass |
@@ -52,7 +52,7 @@
 | R-1.46 | — |  |  |
 | R-1.47 | — |  |  |
 | R-1.48 | acceptance/opportunities/R-1.48.spec.ts |  | pass |
-| R-1.49 | acceptance/opportunities/R-1.49.spec.ts |  | fail |
+| R-1.49 | acceptance/opportunities/R-1.49.spec.ts |  | fail (ruled: defect-in-old) |
 | R-1.50 | acceptance/opportunities/R-1.50.spec.ts |  | pass |
 | D-opportunities-51 | — |  |  |
 | R-1.51 | not testable: unobservable: nothing the service does could show that a state it does not define is gone. No action requests a move to a suspended state, no observation returns the states an opportunity may hold or the states the list's state filter offers, and the mapping of a historical record onto a defined state happens before the rebuilt system reads it, which is a property of the migration rather than of anything the running service answers with. No addition to the surface would help; this is a claim a human accepts about the rebuild rather than one a test can settle. |  | not-testable |
@@ -354,6 +354,7 @@ An opportunity moves to processing on its own once every proposal still in conte
 - given: an opportunity at its final evaluation stage with at least one proposal still in contention
 - when: the last of those proposals is scored
 - then: the opportunity moves to processing and the change is recorded with a note saying it was moved automatically because all proposals have been evaluated
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.26 · v1 · confirmed · accepted
 
@@ -388,9 +389,9 @@ Only an administrator may cancel an opportunity, and only once it has been publi
 - then: the opportunity moves to cancelled and stops accepting proposals
 - note: a draft or under-review opportunity cannot be cancelled — it is deleted instead.
 
-### R-1.29 · v1 · confirmed · accepted
+### R-1.29 · v2 · confirmed · accepted
 
-The names of the people who created and last changed an opportunity are shown only to administrators and to those people themselves.
+The names of the people who created and last changed an opportunity are withheld from anyone who is neither an administrator nor one of those people.
 - cites: src/back-end/lib/db/opportunity/code-with-us.ts:243
 - reconciliation: implemented-only
 - given: a published opportunity
@@ -610,6 +611,7 @@ Creating an opportunity with its state set to published is refused unless the re
 
 The permitted state changes for a Team With Us opportunity in processing are awarded and cancelled, matching Code With Us and Sprint With Us, so the recorded transitions and the award path agree.
 - replaces: R-1.45
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.50 · v1 · confirmed · accepted
 

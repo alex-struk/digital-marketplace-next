@@ -18,8 +18,8 @@
 | R-6.12 | — |  | not-testable |
 | R-6.13 | acceptance/notifications/R-6.13.spec.ts |  | pass |
 | R-6.14 | — |  | pass |
-| R-6.15 | acceptance/notifications/R-6.15.spec.ts |  | fail |
-| R-6.16 | acceptance/notifications/R-6.16.spec.ts |  | fail |
+| R-6.15 | acceptance/notifications/R-6.15.spec.ts |  | fail (ruled: defect-in-old) |
+| R-6.16 | acceptance/notifications/R-6.16.spec.ts |  | fail (ruled: defect-in-old) |
 | R-6.17 | acceptance/notifications/R-6.17.spec.ts |  | fail (ruled: defect-in-old) |
 | R-6.18 | acceptance/notifications/R-6.18.spec.ts |  | pass |
 | R-6.19 | acceptance/notifications/R-6.19.spec.ts |  | fail (ruled: defect-in-old) |
@@ -239,11 +239,13 @@ The reference page does not show every message the service can send: twelve of t
 
 A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service's own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity's owner exactly as it does to every other multi-recipient notice.
 - replaces: R-6.9
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-6.16 · v1 · confirmed · accepted
 
 A message that the notification preference does not govern must not offer to unsubscribe; it links to the reader's notification settings without implying that any choice there will stop messages of that kind.
 - replaces: R-6.10
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-6.17 · v1 · confirmed · accepted
 

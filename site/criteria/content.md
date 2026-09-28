@@ -13,13 +13,13 @@
 | R-7.7 | acceptance/content/R-7.7.spec.ts |  | pass |
 | R-7.8 | acceptance/content/R-7.8.spec.ts |  | pass |
 | R-7.9 | acceptance/content/R-7.9.spec.ts |  | pass |
-| R-7.10 | acceptance/content/R-7.10.spec.ts |  | unbound |
+| R-7.10 | acceptance/content/R-7.10.spec.ts |  | pass |
 | R-7.11 | — |  | not-testable |
 | R-7.12 | acceptance/content/R-7.12.spec.ts |  | pass |
 | R-7.13 | acceptance/content/R-7.13.spec.ts |  | pass |
 | R-7.14 | — |  | not-testable |
 | R-7.15 | — |  | not-testable |
-| R-7.16 | acceptance/content/R-7.16.spec.ts |  | fail |
+| R-7.16 | acceptance/content/R-7.16.spec.ts |  | fail (ruled: defect-in-old) |
 | R-7.17 | acceptance/content/R-7.17.spec.ts |  | fail (ruled: defect-in-old) |
 | R-7.18 | acceptance/content/R-7.18.spec.ts |  | fail (ruled: defect-in-old) |
 | R-7.19 | acceptance/content/R-7.19.spec.ts |  | pass |
@@ -240,6 +240,7 @@ The service links from five places to a service level agreement page that it nev
 
 A request refused for lack of permission is reported as a permission refusal, in the same shape for every page request, whether it reads the list, reads one page, or creates, changes or removes one.
 - replaces: R-7.11
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-7.17 · v1 · confirmed · accepted
 
