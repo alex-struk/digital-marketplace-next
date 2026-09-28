@@ -19,10 +19,11 @@ import type { Surface } from "../../fixtures";
 // service stores it; the criterion is only that no uniqueness refusal is given, so that is
 // what the test asserts.
 //
-// What the form offers is read from the team-member choice on each create page. The seed
-// gives the three outsiders' names but not the active members', so the test asserts that
-// none of the three is offered, that somebody is, and that naming a person changes what is
-// offered to leave them out.
+// What the form offers is read from the team-member choice on each create page, by account
+// name as the seed gives it. Each of the organization's three active people is offered, the
+// person whose membership ended and the person outside it are not, and a person once named
+// is offered no longer. On Sprint With Us the person whose invitation is unanswered is
+// listed too, marked pending, as the criterion's note says: shown as pending, not hidden.
 
 const notActiveMember = "User is not an active member of the organization.";
 const notUnique = "Please select unique team members.";
@@ -253,13 +254,35 @@ test(`${statement} (a Sprint With Us phase naming the same person twice meets no
   expect(messages, "a Sprint With Us phase was refused for naming a person twice").not.toContain(notUnique);
 });
 
-async function expectOnlyActiveMembersOffered(read: () => Promise<string>, where: string): Promise<string> {
-  await expect.poll(() => readOrEmpty(read), { ...settle, message: `${where} offers somebody` }).toBeTruthy();
-  const offered = await readOrEmpty(read);
-  for (const [who, person] of outsiders) {
-    expect(offered, `${where} offers ${who}`).not.toContain(person.name);
+const activeMembers: Array<[string, { name: string }]> = [
+  ["the organization's owner", seed.users.organizationOwner],
+  ["the organization's administrator", seed.users.organizationAdmin],
+  ["the organization's member", seed.users.organizationMember],
+];
+
+async function readChoices(read: () => Promise<string>, where: string): Promise<string> {
+  await expect
+    .poll(() => readOrEmpty(read), { ...settle, message: `${where} offers the organization's active members` })
+    .toContain(seed.users.organizationMember.name);
+  return readOrEmpty(read);
+}
+
+// Every active member is offered except the one already named, if any; the person whose
+// membership ended and the person outside the organization never are.
+function expectOffered(offered: string, named: { name: string } | null, where: string): void {
+  for (const [who, person] of activeMembers) {
+    if (named && person.name === named.name) {
+      expect(offered, `${where} still offers ${who}, already named`).not.toContain(person.name);
+    } else {
+      expect(offered, `${where} does not offer ${who}`).toContain(person.name);
+    }
   }
-  return offered;
+  expect(offered, `${where} offers a person whose membership has ended`).not.toContain(
+    seed.users.teamCandidateFormer.name,
+  );
+  expect(offered, `${where} offers a person who belongs to no organization`).not.toContain(
+    seed.users.teamCandidateOutsider.name,
+  );
 }
 
 test(`${statement} (the Team With Us form offers only active members, and not a person already named)`, async ({
@@ -271,13 +294,24 @@ test(`${statement} (the Team With Us form offers only active members, and not a 
   await surface.proposalTwuCreate.open({ opportunityId });
   await surface.proposalTwuCreate.chooseOrganization({ organization });
   const read = () => surface.proposalTwuCreate.teamMemberChoices();
-  const before = await expectOnlyActiveMembersOffered(read, "the Team With Us team choice");
+  const where = "the Team With Us team choice";
 
-  await surface.proposalTwuCreate.addTeamMemberForResource({ resource: fullStack, member: seed.users.organizationAdmin });
+  const before = await readChoices(read, where);
+  expectOffered(before, null, where);
+  expect(before, `${where} offers a person whose invitation is unanswered`).not.toContain(
+    seed.users.teamCandidatePending.name,
+  );
+
+  const named = seed.users.organizationAdmin;
+  await surface.proposalTwuCreate.addTeamMemberForResource({ resource: fullStack, member: named });
   await expect
-    .poll(() => readOrEmpty(read), { ...settle, message: "the choice still offers the person just named" })
-    .not.toBe(before);
-  await expectOnlyActiveMembersOffered(read, "the Team With Us team choice after naming a member");
+    .poll(() => readOrEmpty(read), { ...settle, message: `${where} still offers the person just named` })
+    .not.toContain(named.name);
+  const after = await readOrEmpty(read);
+  expectOffered(after, named, `${where} after naming a member`);
+  expect(after, `${where} after naming a member offers a person whose invitation is unanswered`).not.toContain(
+    seed.users.teamCandidatePending.name,
+  );
 });
 
 test(`${statement} (the Sprint With Us form offers only active members, and not a person already named)`, async ({
@@ -289,11 +323,15 @@ test(`${statement} (the Sprint With Us form offers only active members, and not 
   await surface.proposalSwuCreate.open({ opportunityId });
   await surface.proposalSwuCreate.chooseOrganization({ organization });
   const read = () => surface.proposalSwuCreate.teamMemberChoices();
-  const before = await expectOnlyActiveMembersOffered(read, "the Sprint With Us phase team choice");
+  const where = "the Sprint With Us phase team choice";
 
-  await surface.proposalSwuCreate.addPhaseTeamMember({ phase: "Implementation", member: seed.users.organizationOwner });
+  const before = await readChoices(read, where);
+  expectOffered(before, null, where);
+
+  const named = seed.users.organizationOwner;
+  await surface.proposalSwuCreate.addPhaseTeamMember({ phase: "Implementation", member: named });
   await expect
-    .poll(() => readOrEmpty(read), { ...settle, message: "the choice still offers the person just named" })
-    .not.toBe(before);
-  await expectOnlyActiveMembersOffered(read, "the Sprint With Us phase team choice after naming a member");
+    .poll(() => readOrEmpty(read), { ...settle, message: `${where} still offers the person just named` })
+    .not.toContain(named.name);
+  expectOffered(await readOrEmpty(read), named, `${where} after naming a member`);
 });
