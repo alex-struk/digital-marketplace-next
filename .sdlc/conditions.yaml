@@ -677,6 +677,15 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-28T22:07:27.168Z
+    closed:
+      outcome: met
+      why: tests/acceptance/organizations/R-3.31.spec.ts now waits up to 30s and
+        asserts that the owner's message identifies the invited person (email or
+        profile name) together with approv/join, and that the invited person's
+        message contains the organization's legal name and 'join'; no exact
+        sentence is assumed.
+      by: agent:reviewer
+      at: 2026-09-28T22:09:40.300Z
   - ref: derive-tests-organizations-stale-5#2
     text: "R-3.9: no change is asked for; keep the file as it stands on this branch."
     from: derive-tests-organizations-stale-5
@@ -685,3 +694,28 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-28T22:07:27.168Z
+    closed:
+      outcome: withdrawn
+      why: the file was kept as asked, but read against R-3.9 its final test does not
+        assert the refusal of a further acceptance, so leaving the file
+        unchanged is no longer asked for; the condition below replaces it.
+      by: agent:reviewer
+      at: 2026-09-28T22:09:40.308Z
+  - ref: derive-tests-organizations-6#3
+    text: "R-3.9: in tests/acceptance/organizations/R-3.9.spec.ts, the test 'an
+      invitation that is not pending cannot be accepted' asserts only that the
+      membership is still active after the second attempt, which is equally true
+      if the service wrongly accepted it again. Assert the refusal itself
+      through what the surface shows for that attempt: either the accept action
+      is not offered for the now-active membership, or the attempt produces no
+      acceptance confirmation. Do not assume an exact message. If the surface
+      cannot show a refusal, add a
+      tests/acceptance/organizations/not-testable.yaml entry for R-3.9 carrying
+      `clause` for 'a further attempt to accept the now-active membership is
+      refused as not pending' and naming the missing observation."
+    from: derive-tests-organizations-6
+    family: derive-tests-organizations
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-28T22:09:40.277Z
