@@ -27,6 +27,17 @@
 #
 #  - Mail. A mailpit container receives everything the application sends and offers it
 #    back over its own HTTP API, which is what spec/contract/observables.yaml reads.
+#    The application reaches mailpit's SMTP port through mail-hold, a TCP proxy that
+#    passes every byte through unchanged until a test asks it to slow the mail server's
+#    replies (observables.yaml, email.delivery_delay). Its control API and mailpit's own
+#    API are served together on the one published mail port by mail-api, a small reverse
+#    proxy: mailpit's API at the root, as before, and mail-hold's under /hold. mailpit
+#    depends on both, so starting mailpit starts them.
+#
+#  - Notifications switched off. DISABLE_NOTIFICATIONS is the application's own switch,
+#    read once at start-up. It stays off unless the environment the oracle is started
+#    from sets SDLC_ORACLE_DISABLE_NOTIFICATIONS=1, which selects the configuration one
+#    criterion (R-6.1) is about. Every other criterion runs against the default.
 #
 #  - The base file's second database, test-db, is put behind a profile so it does not
 #    start. It belongs to the old repository's own test tooling, is not the oracle's
@@ -82,15 +93,15 @@ services:
       # FILE_STORAGE_DIR/__tmp, so this one value fixes both.
       FILE_STORAGE_DIR: /tmp/dm-storage
 
-      # Mail goes to the mailpit container below and nowhere else.
-      MAILER_HOST: mailpit
+      # Mail goes to the mailpit container below and nowhere else, by way of mail-hold.
+      MAILER_HOST: mail-hold
       MAILER_PORT: "1025"
       MAILER_USERNAME: ""
       MAILER_PASSWORD: ""
       MAILER_FROM: Digital Marketplace <donotreply@example.test>
       MAILER_REPLY: donotreply@example.test
       MAILER_BATCH_SIZE: "50"
-      DISABLE_NOTIFICATIONS: "0"
+      DISABLE_NOTIFICATIONS: "${SDLC_ORACLE_DISABLE_NOTIFICATIONS:-0}"
       # Marks every subject as a test message, which is itself a recovered behaviour.
       VITE_SHOW_TEST_INDICATOR: "1"
 
@@ -133,10 +144,11 @@ services:
     image: axllent/mailpit:v1.28.0
     container_name: dm_mailpit
     restart: always
-    ports:
-      # The HTTP API and web interface. spec/contract/observables.yaml reads this as
-      # ${SDLC_MAIL_API}.
-      - "${SDLC_MAIL_API_PORT}:8025"
+    # Its HTTP API and web interface (8025) are published through mail-api, below, which
+    # spec/contract/observables.yaml reads as ${SDLC_MAIL_API}.
+    depends_on:
+      - mail-api
+      - mail-hold
     environment:
       MP_SMTP_AUTH_ACCEPT_ANY: "1"
       MP_SMTP_AUTH_ALLOW_INSECURE: "1"
@@ -145,6 +157,29 @@ services:
       # (spec/contract/observables.yaml, email.delivery_fault). Nothing is refused until a
       # test asks for it, so every other test sees an ordinary mail server.
       MP_ENABLE_CHAOS: "true"
+
+  # A TCP proxy between the application and mailpit's SMTP port. With no toxic in place it
+  # passes every byte through as it comes, so the application sees mailpit and nothing
+  # else. A test that needs messages to be still on their way at a moment it chooses adds
+  # a latency toxic through the control API (observables.yaml, email.delivery_delay) and
+  # removes it afterwards.
+  mail-hold:
+    image: ghcr.io/shopify/toxiproxy:2.9.0
+    command: ["-host=0.0.0.0", "-config=/etc/toxiproxy.json"]
+    configs:
+      - source: mail-hold-proxies
+        target: /etc/toxiproxy.json
+
+  # The one published mail port: mailpit's API at the root and mail-hold's control API
+  # under /hold. The control API refuses a request whose User-Agent looks like a browser,
+  # which a test's HTTP client may well send, so the gateway names itself instead.
+  mail-api:
+    image: caddy:2.8.4-alpine
+    ports:
+      - "${SDLC_MAIL_API_PORT}:8025"
+    configs:
+      - source: mail-api-routes
+        target: /etc/caddy/Caddyfile
 
   # A one-off that runs the application's own migrations. It is behind a profile, so it
   # takes no part in an ordinary "up"; run it explicitly, once, before the seed.
@@ -178,3 +213,24 @@ services:
     entrypoint: ["sh", "-c"]
     command:
       - "yarn install --frozen-lockfile && npm run migrations:latest"
+
+configs:
+  mail-hold-proxies:
+    content: |
+      [{"name": "smtp", "listen": "0.0.0.0:1025", "upstream": "mailpit:1025", "enabled": true}]
+  mail-api-routes:
+    content: |
+      {
+        admin off
+        auto_https off
+      }
+      :8025 {
+        handle_path /hold/* {
+          reverse_proxy mail-hold:8474 {
+            header_up User-Agent sdlc-oracle-mail-api
+          }
+        }
+        handle {
+          reverse_proxy mailpit:8025
+        }
+      }
