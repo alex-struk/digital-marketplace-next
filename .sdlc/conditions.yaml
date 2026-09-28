@@ -605,6 +605,16 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-28T19:24:55.573Z
+    closed:
+      outcome: met
+      why: the inception-without-prototype test in
+        tests/acceptance/opportunities/R-1.16.spec.ts now asserts field_error
+        matches both /prototype/i and /inception/i, then asserts the opportunity
+        is not published (view status not /published/i when an identifier was
+        reached, otherwise its title absent from the dashboard's
+        own-opportunities table)
+      by: agent:reviewer
+      at: 2026-09-28T19:26:51.085Z
   - ref: derive-tests-opportunities-stale-6#2
     text: "R-1.16 (implementation phase): do not let a failed read count as the rule
       holding. If neither an opportunity identifier nor the dashboard can be
@@ -615,3 +625,12 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-28T19:24:55.573Z
+    closed:
+      outcome: met
+      why: in tests/acceptance/opportunities/R-1.16.spec.ts only the
+        opportunity-identifier read is wrapped (landedOpportunityId); the
+        dashboard open and myOpportunitiesTable read are uncaught, so a
+        dashboard that cannot be read fails the test instead of passing on an
+        empty string
+      by: agent:reviewer
+      at: 2026-09-28T19:26:51.095Z
