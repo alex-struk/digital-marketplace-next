@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  The question is whether this adapter binds every surface action and observation on old, and nothing else, now that bind-adapter has hit its rebind loop limit on R-2.4, R-2.10, R-2.17, R-2.20, R-2.22, R-2.28, R-2.31 and R-5.16. I approve. What decided it is that the escalation's account is about the loop count, not about something the adapter still gets wrong. Each third send asked for a specific behaviour, and the current adapter has each one. On a submitted proposal, deleteProposal returns without error once 'Proposal Status' is not a draft (index.ts:4270-4281). saveChanges now applies the named organization through the Organization chooser before saving, instead of discarding its input (index.ts:4244-4246). chooseProposalOrganization reads back which organization is chosen and clears a pre-selected one the test did not name (index.ts:3693-3712). priceScore and wrongStageError are bound to their own readers. The new diff is small and matches its purpose. It adds 16 date observations across the public and management pages of the three programmes, each with the label seen on the target, and names each one `bound` in bindings.yaml. It changes nothing else, and it supplies the observations the open R-1.9 missing-test condition names. The runner's type check reports no diagnostics under adapters/old/. The two it does report are in adapters/new/, which this proposal does not answer for. The authoring agent could not run the suite, and it inferred the Team With Us terms-dialog behaviour from the Code With Us dialog. calibrate's next run tests both of those, so neither needs a further round here. I would return this if calibration shows that any of the eight escalated criteria still fails on an adapter fault: a thrown refusal, a dialog left open, or a wrong organization chosen. I would also return it if the new date readers resolve to values other than the seeded ones.
+conditions: []
+cost: 0.4314242
+turns: 5
+session: "ebad265d-377d-4cfb-9ea7-09434786d95f"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T19:48:53.312Z
