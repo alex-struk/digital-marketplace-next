@@ -1334,6 +1334,73 @@ export const seed = {
         "R-5.29"
       ],
       "note": "As opportunities.swuPastConsensus, for Team With Us: moved on to the challenge, both proponents screened in and neither scored, the chair's consensus standing at 4, 4, 4, 4 and 3, 3, 3, 3."
+    },
+    "swuEvaluationAlreadyBegun": {
+      "id": "00000000-0000-4000-a028-000000000001",
+      "version_id": "00000000-0000-4000-a028-000000000002",
+      "program": "sprint-with-us",
+      "title": "Seeded Sprint With Us opportunity with an evaluation already begun",
+      "seeded_status": "EVAL_QUESTIONS_INDIVIDUAL",
+      "owner": "users.staffOne",
+      "proposals": [
+        "proposals.swuAlreadyBegunEvaluated",
+        "proposals.swuAlreadyBegunUntouched"
+      ],
+      "for": [
+        "R-5.3"
+      ]
+    },
+    "twuEvaluationAlreadyBegun": {
+      "id": "00000000-0000-4000-a036-000000000001",
+      "version_id": "00000000-0000-4000-a036-000000000002",
+      "program": "team-with-us",
+      "title": "Seeded Team With Us opportunity with an evaluation already begun",
+      "seeded_status": "EVAL_QUESTIONS_INDIVIDUAL",
+      "owner": "users.staffOne",
+      "proposals": [
+        "proposals.twuAlreadyBegunEvaluated",
+        "proposals.twuAlreadyBegunUntouched"
+      ],
+      "for": [
+        "R-5.3"
+      ]
+    },
+    "swuConsensusSixProponentsForHistory": {
+      "id": "00000000-0000-4000-a029-000000000001",
+      "version_id": "00000000-0000-4000-a029-000000000002",
+      "program": "sprint-with-us",
+      "title": "Seeded second Sprint With Us opportunity at consensus with six proponents",
+      "seeded_status": "EVAL_QUESTIONS_CONSENSUS",
+      "owner": "users.staffOne",
+      "proposals": [
+        "proposals.swuHistoryOne",
+        "proposals.swuHistoryTwo",
+        "proposals.swuHistoryThree",
+        "proposals.swuHistoryFour",
+        "proposals.swuHistoryFive",
+        "proposals.swuHistorySix"
+      ],
+      "for": [
+        "R-5.32"
+      ]
+    },
+    "twuConsensusFiveProponentsForHistory": {
+      "id": "00000000-0000-4000-a037-000000000001",
+      "version_id": "00000000-0000-4000-a037-000000000002",
+      "program": "team-with-us",
+      "title": "Seeded second Team With Us opportunity at consensus with five proponents",
+      "seeded_status": "EVAL_QUESTIONS_CONSENSUS",
+      "owner": "users.staffOne",
+      "proposals": [
+        "proposals.twuHistoryOne",
+        "proposals.twuHistoryTwo",
+        "proposals.twuHistoryThree",
+        "proposals.twuHistoryFour",
+        "proposals.twuHistoryFive"
+      ],
+      "for": [
+        "R-5.32"
+      ]
     }
   },
   "resources": {
@@ -1792,6 +1859,93 @@ export const seed = {
         3
       ]
     },
+    "swuAlreadyBegunEvaluated": {
+      "id": "00000000-0000-4000-a028-000000000101",
+      "opportunity": "opportunities.swuEvaluationAlreadyBegun",
+      "seeded_status": "UNDER_REVIEW_QUESTIONS",
+      "evaluation_of_staffOne": {
+        "status": "DRAFT",
+        "scores": [
+          3,
+          3,
+          3,
+          3
+        ]
+      }
+    },
+    "swuAlreadyBegunUntouched": {
+      "id": "00000000-0000-4000-a028-000000000102",
+      "opportunity": "opportunities.swuEvaluationAlreadyBegun",
+      "seeded_status": "UNDER_REVIEW_QUESTIONS",
+      "evaluation_of_staffOne": "none"
+    },
+    "swuHistoryOne": {
+      "id": "00000000-0000-4000-a029-000000000101",
+      "opportunity": "opportunities.swuConsensusSixProponentsForHistory",
+      "organization": "organizations.qualified",
+      "agreed_scores": [
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    "swuHistoryTwo": {
+      "id": "00000000-0000-4000-a029-000000000102",
+      "opportunity": "opportunities.swuConsensusSixProponentsForHistory",
+      "organization": "organizations.proponentTwo",
+      "agreed_scores": [
+        5,
+        5,
+        4,
+        4
+      ]
+    },
+    "swuHistoryThree": {
+      "id": "00000000-0000-4000-a029-000000000103",
+      "opportunity": "opportunities.swuConsensusSixProponentsForHistory",
+      "organization": "organizations.proponentThree",
+      "agreed_scores": [
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    "swuHistoryFour": {
+      "id": "00000000-0000-4000-a029-000000000104",
+      "opportunity": "opportunities.swuConsensusSixProponentsForHistory",
+      "organization": "organizations.proponentFour",
+      "agreed_scores": [
+        4,
+        4,
+        3,
+        3
+      ]
+    },
+    "swuHistoryFive": {
+      "id": "00000000-0000-4000-a029-000000000105",
+      "opportunity": "opportunities.swuConsensusSixProponentsForHistory",
+      "organization": "organizations.proponentFive",
+      "agreed_scores": [
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    "swuHistorySix": {
+      "id": "00000000-0000-4000-a029-000000000106",
+      "opportunity": "opportunities.swuConsensusSixProponentsForHistory",
+      "organization": "organizations.proponentSix",
+      "agreed_scores": [
+        5,
+        5,
+        5,
+        2
+      ],
+      "below_a_minimum": true
+    },
     "twuFiveOne": {
       "id": "00000000-0000-4000-a031-000000000101",
       "opportunity": "opportunities.twuConsensusFiveProponents",
@@ -1894,6 +2048,82 @@ export const seed = {
         3,
         3
       ]
+    },
+    "twuAlreadyBegunEvaluated": {
+      "id": "00000000-0000-4000-a036-000000000101",
+      "opportunity": "opportunities.twuEvaluationAlreadyBegun",
+      "seeded_status": "UNDER_REVIEW_QUESTIONS",
+      "evaluation_of_staffOne": {
+        "status": "DRAFT",
+        "scores": [
+          3,
+          3,
+          3,
+          3
+        ]
+      }
+    },
+    "twuAlreadyBegunUntouched": {
+      "id": "00000000-0000-4000-a036-000000000102",
+      "opportunity": "opportunities.twuEvaluationAlreadyBegun",
+      "seeded_status": "UNDER_REVIEW_QUESTIONS",
+      "evaluation_of_staffOne": "none"
+    },
+    "twuHistoryOne": {
+      "id": "00000000-0000-4000-a037-000000000101",
+      "opportunity": "opportunities.twuConsensusFiveProponentsForHistory",
+      "organization": "organizations.qualified",
+      "agreed_scores": [
+        5,
+        5,
+        5,
+        5
+      ]
+    },
+    "twuHistoryTwo": {
+      "id": "00000000-0000-4000-a037-000000000102",
+      "opportunity": "opportunities.twuConsensusFiveProponentsForHistory",
+      "organization": "organizations.proponentTwo",
+      "agreed_scores": [
+        5,
+        5,
+        4,
+        4
+      ]
+    },
+    "twuHistoryThree": {
+      "id": "00000000-0000-4000-a037-000000000103",
+      "opportunity": "opportunities.twuConsensusFiveProponentsForHistory",
+      "organization": "organizations.proponentThree",
+      "agreed_scores": [
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    "twuHistoryFour": {
+      "id": "00000000-0000-4000-a037-000000000104",
+      "opportunity": "opportunities.twuConsensusFiveProponentsForHistory",
+      "organization": "organizations.proponentFour",
+      "agreed_scores": [
+        4,
+        4,
+        3,
+        3
+      ]
+    },
+    "twuHistoryFive": {
+      "id": "00000000-0000-4000-a037-000000000105",
+      "opportunity": "opportunities.twuConsensusFiveProponentsForHistory",
+      "organization": "organizations.proponentFive",
+      "agreed_scores": [
+        5,
+        5,
+        5,
+        2
+      ],
+      "below_a_minimum": true
     }
   },
   "stored_files": {

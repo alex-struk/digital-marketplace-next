@@ -926,9 +926,19 @@ paths:
         required: true
         content:
           application/json:
-            schema: { type: object }
+            schema:
+              type: object
+              description: >-
+                proposal (the proposal's id), status (DRAFT is the only one accepted) and
+                scores, a list of { score, notes, order }. The evaluator is taken from the
+                session.
       responses:
         "201": { description: Receive the created evaluation. }
+        "400": { description: Refused, answered with the reasons keyed by what was wrong. }
+        "409":
+          description: >-
+            An evaluator who already holds an evaluation of the proponent, answered
+            { "conflict": ["You already have a team question evaluation for this proposal."] }.
 
   /api/proposal/sprint-with-us/{proposalId}/team-questions/evaluations/{id}:
     get:
@@ -1037,9 +1047,19 @@ paths:
         required: true
         content:
           application/json:
-            schema: { type: object }
+            schema:
+              type: object
+              description: >-
+                proposal (the proposal's id), status (DRAFT is the only one accepted) and
+                scores, a list of { score, notes, order }. The evaluator is taken from the
+                session.
       responses:
         "201": { description: Receive the created evaluation. }
+        "400": { description: Refused, answered with the reasons keyed by what was wrong. }
+        "409":
+          description: >-
+            An evaluator who already holds an evaluation of the proponent, answered
+            { "conflict": ["You already have a resource question evaluation for this proposal."] }.
 
   /api/proposal/team-with-us/{proposalId}/resource-questions/evaluations/{id}:
     get:

@@ -367,5 +367,23 @@ BEGIN
   PERFORM pg_temp.seed_swu_opportunity(27, 'Seeded Sprint With Us opportunity past consensus at the code challenge', staff, 'EVAL_CC', panel, admin);
   PERFORM pg_temp.seed_swu_proposal(27, 1, v[1], o[1], staff, 'UNDER_REVIEW_CODE_CHALLENGE', 420000, good, 'SUBMITTED', 'SUBMITTED', panel, admin, NULL, NULL, NULL);
   PERFORM pg_temp.seed_swu_proposal(27, 2, v[2], o[2], staff, 'UNDER_REVIEW_CODE_CHALLENGE', 460000, low, 'SUBMITTED', 'SUBMITTED', panel, admin, NULL, NULL, NULL);
+
+  -- 28. At individual evaluation, the government account an evaluator who has already
+  --     begun an evaluation of the first proponent: a draft scoring 3, 3, 3, 3. The second
+  --     proponent is untouched. Starting another evaluation of the first is the attempt the
+  --     criterion says is refused (R-5.3).
+  PERFORM pg_temp.seed_swu_opportunity(28, 'Seeded Sprint With Us opportunity with an evaluation already begun', staff, 'EVAL_QUESTIONS_INDIVIDUAL', panel, admin);
+  PERFORM pg_temp.seed_swu_proposal(28, 1, v[1], o[1], staff, 'UNDER_REVIEW_QUESTIONS', 420000, low, 'DRAFT', NULL, ARRAY[staff]::uuid[], admin, NULL, NULL, NULL);
+  PERFORM pg_temp.seed_swu_proposal(28, 2, v[2], o[2], staff, 'UNDER_REVIEW_QUESTIONS', 460000, NULL, NULL, NULL, panel, admin, NULL, NULL, NULL);
+
+  -- 29. The same starting point as 13, held apart for R-5.32 alone: finalising moves an
+  --     opportunity on for good, and R-2.29 finalises 13.
+  PERFORM pg_temp.seed_swu_opportunity(29, 'Seeded second Sprint With Us opportunity at consensus with six proponents', staff, 'EVAL_QUESTIONS_CONSENSUS', panel, admin);
+  PERFORM pg_temp.seed_swu_proposal(29, 1, v[1], o[1], staff, 'UNDER_REVIEW_QUESTIONS', 420000, top, 'SUBMITTED', 'SUBMITTED', panel, admin, NULL, NULL, NULL);
+  PERFORM pg_temp.seed_swu_proposal(29, 2, v[2], o[2], staff, 'UNDER_REVIEW_QUESTIONS', 440000, ARRAY[5, 5, 4, 4], 'SUBMITTED', 'SUBMITTED', panel, admin, NULL, NULL, NULL);
+  PERFORM pg_temp.seed_swu_proposal(29, 3, v[3], o[3], staff, 'UNDER_REVIEW_QUESTIONS', 460000, good, 'SUBMITTED', 'SUBMITTED', panel, admin, NULL, NULL, NULL);
+  PERFORM pg_temp.seed_swu_proposal(29, 4, v[4], o[4], staff, 'UNDER_REVIEW_QUESTIONS', 400000, ARRAY[4, 4, 3, 3], 'SUBMITTED', 'SUBMITTED', panel, admin, NULL, NULL, NULL);
+  PERFORM pg_temp.seed_swu_proposal(29, 5, v[5], o[5], staff, 'UNDER_REVIEW_QUESTIONS', 380000, low, 'SUBMITTED', 'SUBMITTED', panel, admin, NULL, NULL, NULL);
+  PERFORM pg_temp.seed_swu_proposal(29, 6, v[6], o[6], staff, 'UNDER_REVIEW_QUESTIONS', 360000, below, 'SUBMITTED', 'SUBMITTED', panel, admin, NULL, NULL, NULL);
 END
 $$;

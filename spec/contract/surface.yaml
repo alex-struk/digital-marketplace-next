@@ -568,6 +568,19 @@ pages:
       code_challenge_tab: { test_id: proposal-tab-code-challenge }
       team_scenario_tab: { test_id: proposal-tab-team-scenario }
       history_tab: { test_id: proposal-tab-history }
+      # The proposal's history, one entry per row of the history tab, newest first. Each
+      # entry is the entry's kind (a status the proposal entered, or an event such as team
+      # question scores being entered), its note as text, who made it and when. Finalising
+      # the question consensus writes one entry per proponent whose note gives the agreed
+      # score of each question in order — on the oracle "Team question scores were
+      # entered. Q1: 5; Q2: 5; Q3: 5; Q4: 5." — for every proponent, including one below
+      # a minimum that is not screened in. That entry and the status a screened-in
+      # proponent enters carry the same moment, so their order relative to each other is
+      # not fixed; find the entry by its kind. The service shows history to an
+      # administrator and to the opportunity's owner; the seeded evaluation opportunities
+      # belong to users.staffOne. Starting point for R-5.32:
+      # seed.opportunities.swuConsensusSixProponentsForHistory.
+      history_entries: { test_id: null }
       wrong_stage_error: { test_id: proposal-wrong-stage-error }
       questions_score: { test_id: proposal-questions-score }
       challenge_score: { test_id: proposal-challenge-score }
@@ -658,6 +671,10 @@ pages:
       resource_questions_tab: { test_id: proposal-tab-resource-questions }
       challenge_tab: { test_id: proposal-tab-challenge }
       history_tab: { test_id: proposal-tab-history }
+      # As on proposal-swu-view. The finalising note reads "Resource question scores were
+      # entered. Q1: n; Q2: n; Q3: n; Q4: n." Starting point for R-5.32:
+      # seed.opportunities.twuConsensusFiveProponentsForHistory.
+      history_entries: { test_id: null }
       wrong_stage_error: { test_id: proposal-wrong-stage-error }
       questions_score: { test_id: proposal-questions-score }
       challenge_score: { test_id: proposal-challenge-score }
@@ -1888,6 +1905,15 @@ pages:
 
   # One panel member's individual evaluation of one proponent, as a request. :userId is
   # the panel member, as on evaluation-individual-edit-swu.
+  #
+  # Starting an evaluation addresses the proponent's collection of evaluations rather than
+  # one panel member's, so create_evaluation_by_request ignores :userId: the service takes
+  # the evaluator from the session. It sends what the create screen sends — the proponent,
+  # the status DRAFT and the four scores and notes. The starting point for a second attempt
+  # is seed.opportunities.swuEvaluationAlreadyBegun (twuEvaluationAlreadyBegun), where
+  # users.staffOne already holds a draft of the first proponent; stored_scores read with
+  # :userId users.staffOne then still answers that draft's 3, 3, 3, 3, which is how a test
+  # sees that nothing else was written.
   - id: evaluation-individual-request-swu
     domain: evaluation
     route: /api/proposal/sprint-with-us/:proposalId/team-questions/evaluations/:userId
@@ -1898,12 +1924,24 @@ pages:
       save_draft_as_entered: { test_id: null }
       # Asks for this one evaluation to be submitted by itself, rather than the whole set.
       submit_this_evaluation_alone: { test_id: null }
+      # Input: the four scores and notes. Starts the signed-in evaluator's evaluation of
+      # the proponent.
+      create_evaluation_by_request: { test_id: null }
     observations:
       stored_scores: { test_id: null }
       stored_notes: { test_id: null }
       evaluation_status: { test_id: null }
       refused_as_unrecognised: { test_id: null }
       refused_at_submission: { test_id: null }
+      # Whether the service accepted create_evaluation_by_request (the evaluation it
+      # answers with), as distinct from refusing it.
+      evaluation_created: { test_id: null }
+      # The message the service answers a refused create_evaluation_by_request with, as
+      # text, absent when the start was accepted. On the oracle an evaluator who already
+      # holds an evaluation of the proponent is answered "You already have a team question
+      # evaluation for this proposal." (Team With Us: "resource question" in place of
+      # "team question"); spec/contract/openapi.yaml gives the answer's form.
+      creation_refusal_message: { test_id: null }
 
   - id: evaluation-individual-request-twu
     domain: evaluation
@@ -1912,12 +1950,15 @@ pages:
     actions:
       save_draft_as_entered: { test_id: null }
       submit_this_evaluation_alone: { test_id: null }
+      create_evaluation_by_request: { test_id: null }
     observations:
       stored_scores: { test_id: null }
       stored_notes: { test_id: null }
       evaluation_status: { test_id: null }
       refused_as_unrecognised: { test_id: null }
       refused_at_submission: { test_id: null }
+      evaluation_created: { test_id: null }
+      creation_refusal_message: { test_id: null }
 
   # One consensus — the chair's agreed scores and notes for one proponent — as a request.
   # :userId is the panel member whose consensus it is, which is the chair: on the seeded

@@ -4165,7 +4165,7 @@ owed:
     id: R-5.3
     version: 1
     domain: evaluation
-    stage: contract
+    stage: derive-tests
     why: an action on evaluation-individual-request-swu and
       evaluation-individual-request-twu that asks the service to create a new
       individual evaluation of a proponent as the signed-in evaluator (the
@@ -4176,12 +4176,25 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-28T22:18:41.945Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: "`create_evaluation_by_request`, `evaluation_created` and
+          `creation_refusal_message` on `evaluation-individual-request-swu` and
+          `-twu`, the 409 conflict answer in openapi.yaml, and the seeded
+          `opportunities.swuEvaluationAlreadyBegun` /
+          `twuEvaluationAlreadyBegun`, where `users.staffOne` already holds a
+          draft of the first proponent."
+        by: contract-v20
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-28T22:30:41.034Z
   - kind: missing-test
     item: R-5.32
     id: R-5.32
     version: 1
     domain: evaluation
-    stage: contract
+    stage: derive-tests
     why: an observation on proposal-swu-view and proposal-twu-view returning the
       proposal's history entries one by one, each with the per-question agreed
       scores it records, so a test can read that finalising recorded the agreed
@@ -4190,3 +4203,14 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-28T22:18:41.945Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: "`history_entries` on `proposal-swu-view` and `proposal-twu-view`, and the
+          seeded `opportunities.swuConsensusSixProponentsForHistory` /
+          `twuConsensusFiveProponentsForHistory`, copies held apart from
+          R-2.29's opportunities whose proposals list their agreed scores."
+        by: contract-v20
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-28T22:30:41.034Z
