@@ -231,3 +231,31 @@ conditions:
         in the test.
       by: agent:reviewer
       at: 2026-09-25T13:00:12.793Z
+  - ref: bind-adapter-old-19#1
+    text: "R-4.4: signIn for the deactivated-vendor persona must not use the session
+      route. On old, /auth/createsessionvendor/:id is test-only and creates a
+      session without the status check that the identity-provider login applies
+      (auth.ts:504 refuses InactiveByAdmin). Driving it reports a failure the
+      criterion does not describe. Sign in through the identity provider, or
+      throw 'unbound: signIn.deactivatedVendor — ...' saying that vendor sign-in
+      on this target goes to github.com and no sandbox account exists there."
+    from: bind-adapter-old-19
+    family: bind-adapter-old
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-09-28T03:32:33.460Z
+  - ref: bind-adapter-old-19#2
+    text: "R-5.1, R-1.55: panelRefusal must not fall back to the general alert
+      ('Unable to Publish Changes ... Please fix the errors in the form') when
+      no alert or field error names the fault being asked about.
+      duplicateMemberError, minimumMembersError and missingChairError must each
+      return only text that matches their own fault, and nothing otherwise. A
+      refusal that gives no reason is not the message naming the rule that the
+      criterion asks for."
+    from: bind-adapter-old-19
+    family: bind-adapter-old
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-09-28T03:32:33.460Z
