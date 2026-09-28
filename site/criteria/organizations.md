@@ -13,7 +13,7 @@
 | R-3.7 | acceptance/organizations/R-3.7.spec.ts |  | pass |
 | R-3.8 | acceptance/organizations/R-3.8.spec.ts |  | pass |
 | R-3.9 | acceptance/organizations/R-3.9.spec.ts |  | fail |
-| R-3.10 | acceptance/organizations/R-3.10.spec.ts |  | fail |
+| R-3.10 | acceptance/organizations/R-3.10.spec.ts |  | fail (ruled: adapter-wrong) |
 | R-3.11 | acceptance/organizations/R-3.11.spec.ts |  | pass |
 | R-3.12 | acceptance/organizations/R-3.12.spec.ts |  | pass |
 | R-3.13 | acceptance/organizations/R-3.13.spec.ts |  | pass |
@@ -28,7 +28,7 @@
 | R-3.22 | acceptance/organizations/R-3.22.spec.ts |  | fail (ruled: defect-in-old) |
 | R-3.23 | acceptance/organizations/R-3.23.spec.ts |  | pass |
 | R-3.24 | acceptance/organizations/R-3.24.spec.ts |  | pass |
-| R-3.25 | acceptance/organizations/R-3.25.spec.ts |  | fail |
+| R-3.25 | acceptance/organizations/R-3.25.spec.ts |  | fail (ruled: adapter-wrong) |
 | R-3.26 | acceptance/organizations/R-3.26.spec.ts |  | pass |
 | R-3.27 | acceptance/organizations/R-3.27.spec.ts |  | pass |
 | R-3.28 | acceptance/organizations/R-3.28.spec.ts |  | pass |
