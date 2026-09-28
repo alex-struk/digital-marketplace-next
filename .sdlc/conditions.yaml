@@ -361,3 +361,16 @@ conditions:
         state a false reason.
       by: agent:reviewer
       at: 2026-09-28T05:17:46.956Z
+  - ref: derive-tests-proposals-stale-4#1
+    text: "tests/acceptance/proposals/R-2.33.spec.ts: remove the assertion that
+      opportunityCwuView.successfulProponent() contains
+      seed.organizations.qualified.legal_name. R-2.33 says the opportunity
+      becomes awarded and nothing about a successful proponent or an
+      organization's name; keep the opportunity-awarded check as its status
+      changing from what it was before the award."
+    from: derive-tests-proposals-stale-4
+    family: derive-tests-proposals-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-28T05:24:31.506Z
