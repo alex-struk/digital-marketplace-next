@@ -1,0 +1,15 @@
+gate: G1
+verdict: return
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  Is this the contract the tests will act through? Return: the successful 42-request burst supports the two-second throttle as a mitigation, but does not establish that jobs cannot overlap or that closures always complete within seconds. Likewise, not awaiting a job does not establish that it runs only after the response. These unsupported timing guarantees appear in the contract tests will consume. Revise the observables and compose commentary to distinguish throttled starts from serialized completion and asynchronous work from guaranteed response ordering; specify a bounded polling procedure whose timeout reports failure rather than assumes closure. Those corrections would support approval. R-6.1 and R-6.24 remain unchanged, with their missing-test obligations explicitly outstanding.
+conditions: []
+cost: 0
+turns: 1
+session: "01a0db68-1791-7a60-8055-640939b2f2eb"
+backend: codex
+model: ""
+cli: "codex-cli 0.157.0"
+isolation: "none"
+at: 2026-09-26T01:50:41.722Z
