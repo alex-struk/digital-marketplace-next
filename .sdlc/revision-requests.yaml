@@ -112,3 +112,18 @@ requests:
     at: 2026-09-25T12:39:27.252Z
     taken: 2026-09-25T12:40:53.365Z
     taken_by: contract-v7
+  - stage: contract
+    why: spec/contract/observables.yaml configurations.notifications_disabled.notes
+      tells a test for R-6.1 to read SDLC_ORACLE_DISABLE_NOTIFICATIONS and to
+      skip on an instance without it. The calibrate-old-11 ruling overturned
+      that behaviour (the skipping test never produced a result), and the R-6.1
+      test on this branch no longer skips. Rewrite the note so it says a test
+      for R-6.1 assumes an instance started with notifications switched off and
+      does not skip itself. Also state how that test is selected to run against
+      the separate instance the note requires (for example by a tag named after
+      the configuration, such as @notifications_disabled) and kept out of the
+      default run, whose shared mail catcher it would clear and fill.
+    from: derive-tests-notifications-stale-7
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-28T22:48:49.779Z
