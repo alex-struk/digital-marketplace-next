@@ -73,6 +73,7 @@ Profile: rebuild
 - [calibrate-triage-old-1](proposals/calibrate-triage-old-1.md)
 - [calibrate-triage-old-13](proposals/calibrate-triage-old-13.md)
 - [calibrate-triage-old-15](proposals/calibrate-triage-old-15.md)
+- [calibrate-triage-old-16](proposals/calibrate-triage-old-16.md)
 - [calibrate-triage-old-2](proposals/calibrate-triage-old-2.md)
 - [calibrate-triage-old-3](proposals/calibrate-triage-old-3.md)
 - [calibrate-triage-old-4](proposals/calibrate-triage-old-4.md)
@@ -240,9 +241,9 @@ Profile: rebuild
 ## Totals
 
 - Journal cost: $548.951324
-- Rulings cost: $301.764889
-- Total cost: $850.716213
-- Agent-held rulings: 196
+- Rulings cost: $302.348141
+- Total cost: $851.299465
+- Agent-held rulings: 197
 - Runner rulings (automatic, no seat held): 1
 - Human rulings: 10
 - Rulings whose seat this page does not recognise: 0
