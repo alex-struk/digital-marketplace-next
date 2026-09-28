@@ -20,6 +20,7 @@
 - 20:34:07 propose bind-adapter-old-20 at G3
 - 20:34:37 rule bind-adapter-old-20 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.282 (Claude Code))
 - 20:35:00 run calibrate: ok, cost 0, turns 0
+- 20:35:14 withdraw calibrate-triage-old-14 at G3 by agent:tech-lead: Its rows are results the adapter produced before bind-adapter-old-20 replaced it, so the adapter-wrong rulings on them have lapsed and a sorting now would judge code that no longer runs; the full calibration after the eight test redos asks again over fresh rows.
 
 # Run record 2026-09-26
 
