@@ -384,3 +384,21 @@ conditions:
         opening comment no longer describes a named successful proponent
       by: agent:reviewer
       at: 2026-09-28T05:25:52.031Z
+  - ref: bind-adapter-old-22#1
+    text: "signIn for the deactivated-vendor persona: this revision removed the
+      unbound refusal and now sends the persona through the session route in
+      every case, and that route mints a session without checking account
+      status. The R-4.4 acceptance test expects this persona's sign-in to be
+      refused (userNotice.signInFailedNotice truthy,
+      userProfileSelf.signInRequired truthy), so on old the adapter would report
+      a deactivated account being let in. Use the session route for this persona
+      only when the adapter can establish that the account is active at that
+      moment (R-4.14 reactivates it before nameThemselves); otherwise throw the
+      unbound error saying the session route cannot show the identity provider's
+      refusal, as before. Correct the comment above signIn to match."
+    from: bind-adapter-old-22
+    family: bind-adapter-old
+    gate: G3
+    stage: bind-adapter
+    by: agent:tech-lead
+    at: 2026-09-28T14:40:47.757Z
