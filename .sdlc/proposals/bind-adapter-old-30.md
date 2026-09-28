@@ -35,3 +35,27 @@ I bound all 16 new date observations in `tests/adapters/old/index.ts` and named 
 I couldn't walk the Team With Us proposal-creation flow end to end: the target has no open Team With Us opportunity, and I didn't create one. The Team With Us terms-dialog behaviour is inferred from the Code With Us dialog, since all three programmes use the same code for it.
 
 Every route in `surface.yaml` that I opened resolved on the target, and nothing was left unbound. I changed only `tests/adapters/old/index.ts` and `tests/adapters/old/bindings.yaml`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+The question is whether this adapter binds every surface action and observation on old, and nothing else, now that bind-adapter has hit its rebind loop limit on R-2.4, R-2.10, R-2.17, R-2.20, R-2.22, R-2.28, R-2.31 and R-5.16. I approve. What decided it is that the escalation's account is about the loop count, not about something the adapter still gets wrong. Each third send asked for a specific behaviour, and the current adapter has each one. On a submitted proposal, deleteProposal returns without error once 'Proposal Status' is not a draft (index.ts:4270-4281). saveChanges now applies the named organization through the Organization chooser before saving, instead of discarding its input (index.ts:4244-4246). chooseProposalOrganization reads back which organization is chosen and clears a pre-selected one the test did not name (index.ts:3693-3712). priceScore and wrongStageError are bound to their own readers. The new diff is small and matches its purpose. It adds 16 date observations across the public and management pages of the three programmes, each with the label seen on the target, and names each one `bound` in bindings.yaml. It changes nothing else, and it supplies the observations the open R-1.9 missing-test condition names. The runner's type check reports no diagnostics under adapters/old/. The two it does report are in adapters/new/, which this proposal does not answer for. The authoring agent could not run the suite, and it inferred the Team With Us terms-dialog behaviour from the Code With Us dialog. calibrate's next run tests both of those, so neither needs a further round here. I would return this if calibration shows that any of the eight escalated criteria still fails on an adapter fault: a thrown refusal, a dialog left open, or a wrong organization chosen. I would also return it if the new date readers resolve to values other than the seeded ones.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `3849ea28a91934d1ea9a78c1934c5c632bb1ed7d`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
