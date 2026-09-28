@@ -51,3 +51,14 @@ I changed nothing in the Compose override. `$SDLC_BIN` couldn't be read in this 
 `tests/generated/seed.ts` is generated from the manifest and belongs to a later stage, so I didn't edit it.
 
 re-address missing-test/R-2.27 to derive-tests: seed.opportunities.cwuLapsedWithSubmissionAndDraft, a lapsed Code With Us opportunity with one submitted proposal (seed.proposals.cwuSubmissionBesideDraft, users.organizationOwner) and one draft (seed.proposals.cwuDraftBesideSubmission, users.proponentTwo); scoring the submission is scoring the last proposal in contention
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+The question is whether the contract now gives R-2.27's last clause, "draft proposals are not counted", something a test can act on. It does, so I approve. The existing seeded opportunities could not exercise that clause. A test cannot build the situation either, because proposals can only be started while an opportunity is open and the form refuses a deadline that has already passed. The fix is one new opportunity, number nine. It is seeded as published with its deadline passed, and it carries one submitted proposal from users.organizationOwner and one draft from users.proponentTwo. Both vendors have personas, so each can open their own proposal. Only the starting condition is seeded. The application's own scheduled step does the closing, and the author confirmed on a freshly started oracle that it did: the opportunity went to EVALUATION, the submission to UNDER_REVIEW, and the draft stayed DRAFT. The seed uses the existing helpers, and opportunity 1 already seeds a DRAFT through the same path, so the new rows add no new mechanism. The opportunity's number matches the file's identifier scheme, the header count is updated to seven of nine, and the other contract files are untouched, so earlier approvals still hold. The page says tests/generated/seed.ts was not edited, yet it appears in the diff. That file is regenerated from the manifest, the 'generated' check passes, and its new entries match the manifest exactly, so the discrepancy is harmless. Two things would change this ruling: the application not counting the draft when scoring the one submission (that would be a calibration question, not a contract one), or evidence that closing the opportunity moves the draft instead of leaving it as DRAFT. The criterion's wording and confidence are unchanged, so no condition line is needed.
+
+**Conditions:**
+none
