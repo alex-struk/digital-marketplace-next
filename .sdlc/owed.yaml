@@ -3801,7 +3801,7 @@ owed:
     id: R-5.21
     version: 1
     domain: evaluation
-    stage: contract
+    stage: derive-tests
     why: a seeded Sprint With Us opportunity at the consensus stage or later with a
       submitted proposal that an evaluator on its panel, reachable by a persona,
       has not evaluated; or a seeded published opportunity before its deadline
@@ -3811,3 +3811,16 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-28T05:43:08.068Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: seed.opportunities.swuOpenWithSubmittedProposal (published, deadline thirty
+          days ahead, users.staffOne an evaluator on its panel with nothing
+          evaluated) and seed.proposals.swuOpenSubmitted, so an evaluator's
+          attempt on evaluation-individual-create-swu can be made outside
+          individual question evaluation; the oracle refuses it (401) on the
+          stage check alone
+        by: contract-v15
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-28T05:51:28.201Z

@@ -336,5 +336,22 @@ BEGIN
     ARRAY[admin, staff]::uuid[], admin);
   PERFORM pg_temp.seed_swu_proposal(24, 1, v[1], o[1], staff2, 'UNDER_REVIEW_QUESTIONS', 420000, NULL, NULL, NULL, ARRAY[admin, staff]::uuid[], admin, NULL, NULL, NULL);
   PERFORM pg_temp.seed_swu_proposal(24, 2, v[2], o[2], staff2, 'UNDER_REVIEW_QUESTIONS', 460000, NULL, NULL, NULL, ARRAY[admin, staff]::uuid[], admin, NULL, NULL, NULL);
+
+  -- 25. Published and still open: its proposal deadline is thirty days away, so scheduled
+  --     closing does not move it. One proposal is already submitted, and the government
+  --     account is an evaluator on its panel with the administrator as chair and evaluator.
+  --     An evaluator trying to record an individual evaluation here is trying at a stage
+  --     other than individual question evaluation (R-5.21). Nothing is evaluated.
+  PERFORM pg_temp.seed_swu_opportunity(25, 'Seeded open Sprint With Us opportunity with a submitted proposal', staff, 'PUBLISHED', panel, admin);
+  UPDATE "swuOpportunityVersions"
+     SET "teaser" = 'A Sprint With Us opportunity still open for proposals.',
+         "proposalDeadline" = now() + INTERVAL '30 days',
+         "assignmentDate" = now() + INTERVAL '40 days'
+   WHERE "id" = pg_temp.sid(25, 2);
+  UPDATE "swuOpportunityPhases"
+     SET "startDate" = now() + INTERVAL '50 days',
+         "completionDate" = now() + INTERVAL '170 days'
+   WHERE "id" = pg_temp.sid(25, 3);
+  PERFORM pg_temp.seed_swu_proposal(25, 1, v[2], o[2], staff, 'SUBMITTED', 460000, NULL, NULL, NULL, panel, admin, NULL, NULL, NULL);
 END
 $$;
