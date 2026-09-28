@@ -34,3 +34,27 @@ It then waits ten seconds and requires the mail catcher's message count to be ze
 The "nothing later tells them whether every message was sent" part is checked only through the page's failure observation, which is the only report the surface offers there. The time limits (five seconds for success, thirty for arrival) are my own choices and have not been checked against a live target.
 
 No surface action or observation was missing for either criterion. What R-6.1 depends on outside the contract is the harness: whatever starts the notifications-off instance must also pass `SDLC_ORACLE_DISABLE_NOTIFICATIONS=1` to the test run. Otherwise R-6.1 will always skip. Nothing asked me to change a read-only path, and I did not touch one.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+Question: do the R-6.1 and R-6.24 tests follow from their criteria and nothing else? Approve. R-6.1 uses the contract's notifications_disabled configuration and skips without it, as observables.yaml tells it to. It takes two actions that ordinarily send mail (publishing an opportunity, the criterion's own example, and announcing changed terms), asserts each reports success, then asserts the catcher holds nothing, so both halves of the then are covered. R-6.24 uses the contract's mail-delivery-delay, under which nothing can arrive for nine seconds, so success read within five seconds with an empty catcher asserts the ordering without a race. The confirmation dialog survives the delay calls because surface.yaml marks those pages origin: mail-catcher. Withdrawn acceptance (from the criterion's summary), eventual arrival (background sending) and no later failure report (the only reading the surface offers) each follow from the criterion. The delay is lifted in a finally, as the contract requires. No selectors, routes or status codes leak. The runner's type check shows no diagnostics under acceptance/notifications; the failure is two diagnostics in adapters/new. Both owed missing tests stay open until a result row shows the tests ran, and R-6.1 will skip until a harness starts a notifications-off instance and exports the variable. A run showing R-6.24's success appearing only after messages reached the catcher, or evidence that the catcher-served controls navigate the browser, would change this ruling.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `8d4a053a9dc9865dafd211f53c1543f46e8422cb`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/notifications/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics

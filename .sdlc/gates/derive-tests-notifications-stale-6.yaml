@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the R-6.1 and R-6.24 tests follow from their criteria and nothing else? Approve. R-6.1 uses the contract's notifications_disabled configuration and skips without it, as observables.yaml tells it to. It takes two actions that ordinarily send mail (publishing an opportunity, the criterion's own example, and announcing changed terms), asserts each reports success, then asserts the catcher holds nothing, so both halves of the then are covered. R-6.24 uses the contract's mail-delivery-delay, under which nothing can arrive for nine seconds, so success read within five seconds with an empty catcher asserts the ordering without a race. The confirmation dialog survives the delay calls because surface.yaml marks those pages origin: mail-catcher. Withdrawn acceptance (from the criterion's summary), eventual arrival (background sending) and no later failure report (the only reading the surface offers) each follow from the criterion. The delay is lifted in a finally, as the contract requires. No selectors, routes or status codes leak. The runner's type check shows no diagnostics under acceptance/notifications; the failure is two diagnostics in adapters/new. Both owed missing tests stay open until a result row shows the tests ran, and R-6.1 will skip until a harness starts a notifications-off instance and exports the variable. A run showing R-6.24's success appearing only after messages reached the catcher, or evidence that the catcher-served controls navigate the browser, would change this ruling.
+conditions: []
+cost: 0.5243146
+turns: 8
+session: "41fa078a-6293-4a97-aeea-95d6bddeaf9f"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T05:58:52.264Z
