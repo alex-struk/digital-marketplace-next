@@ -39,3 +39,27 @@ I brought the "old" adapter up to the current contract. All 8 members it was mis
 **Left behind on the target:** to reach an open Team With Us form I created and published a throwaway opportunity as the administrator, titled "Probe open TWU for adapter binding" (id fd827652-daa5-48e7-b879-bc0ce10a8342), and attached a small probe PDF to it. I did not submit the Team With Us proposal I filled in. The service refused my test evaluation requests, so the seeded evaluations are unchanged. If the target isn't reset between runs, that opportunity will show among open opportunities.
 
 I changed nothing outside `tests/adapters/old/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the old adapter bind every surface action and observation, and nothing else, after bind-adapter hit its rebind limit on R-2.4, R-2.10, R-2.17, R-2.20, R-2.22, R-2.28, R-2.31 and R-5.16? Ruling: approve. The part of runner:bind-adapter's account that decided it is each item's third send. The first two sends were about controls the adapter could not find. By the third send, each criterion was asking for one specific behaviour change, and each of those behaviours is present in tests/adapters/old/index.ts on this branch. I read the code rather than taking the proposal's word for it. delete_proposal (4524-4535) catches a missing Delete and returns without error when Proposal Status is not draft. chooseProposalOrganization (3797-3839) reads back which organization the chooser shows, clears a wrong pre-selected one, and records organizationWithheld instead of letting the proposal go ahead under another organization. proposal-twu-edit save_changes (4493-4496) calls applyProposalEdits before saving, so the organization it is given is applied. addPanelMember (2913-2914) returns early when the panel is not editable, which leaves the lock for panel_locked_after_consensus to report. wrongStageError (807-812) falls back to the stored stage refusal. price_score uses proposalPrice (4732 onward), which falls back to the Price column of the opportunity's Proposals table. The line numbers the calibration findings cite point to an older layout of the file, as the proposal says. The new code in the diff is additions only and stays inside tests/adapters/old: history_entries on both proposal views, and create_evaluation_by_request, evaluation_created and creation_refusal_message on both individual-evaluation request pages. bindings.yaml marks exactly those eight members bound, and those are the members that the open missing-test conditions on R-5.3 and R-5.32 name. The runner's typecheck found no diagnostics under adapters/old; the failing exit comes from 2 diagnostics in adapters/new, which this proposal does not answer for. This escalation is about how many rounds it took, not about the pipeline, so there is nothing to send to the pipeline owner. The adapter itself creates only a draft evaluation over the API, and in the proposal's own trials the service refused it with 409. What would change the ruling: a verify run in which one of these eight criteria fails on old because an adapter member throws or reads the wrong screen, rather than because the old application behaved differently. That would reopen the member in question. Housekeeping, owed by nobody: while working by hand, the agent created and published a probe Team With Us opportunity on the oracle ('Probe open TWU for adapter binding', fd827652-daa5-48e7-b879-bc0ce10a8342). If the oracle is not reset between runs, it will appear among open opportunities.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `aa0f8416df2e3d8e8977c1aa6fcc6b30ebfc3df1`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
