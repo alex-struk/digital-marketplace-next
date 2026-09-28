@@ -259,6 +259,7 @@ pages:
       cancel: bound
     observations:
       field_error: bound
+      field_errors_by_field: bound
       opportunity_summary: bound
       terms_modal: bound
       submit_disabled_until_terms_accepted: bound
@@ -326,6 +327,7 @@ pages:
       budget_exceeded_error: bound
       unqualified_organization_notice: bound
       pending_team_member: bound
+      team_member_choices: bound
 
   proposal-swu-edit:
     actions:
@@ -336,6 +338,7 @@ pages:
       withdraw_proposal: bound
       delete_proposal: bound
     observations:
+      submission_refusal: bound
       proposal_identifier: bound
       opportunity_identifier: bound
       proposal_tab: bound
@@ -393,6 +396,7 @@ pages:
       field_error: bound
       service_area_error: bound
       unqualified_organization_notice: bound
+      team_member_choices: bound
 
   proposal-twu-edit:
     actions:
@@ -403,6 +407,7 @@ pages:
       withdraw_proposal: bound
       delete_proposal: bound
     observations:
+      submission_refusal: bound
       proposal_identifier: bound
       opportunity_identifier: bound
       proposal_tab: bound
@@ -1329,3 +1334,26 @@ pages:
       attachment_accepted: bound
       attachment_refused: bound
       attached_file_identifiers: bound
+
+  proposal-cwu-request:
+    actions:
+      submit_with_organization_proponent: bound
+      submit_with_individual_proponent: bound
+    observations:
+      request_accepted: bound
+      proposal_identifier: bound
+      proposal_status: bound
+      refusal_by_field: bound
+      refusal_messages: bound
+      refusal_status: bound
+
+  proposal-team-request:
+    actions:
+      submit_team_proposal: bound
+    observations:
+      request_accepted: bound
+      proposal_identifier: bound
+      proposal_status: bound
+      refusal_by_field: bound
+      refusal_messages: bound
+      refusal_status: bound
