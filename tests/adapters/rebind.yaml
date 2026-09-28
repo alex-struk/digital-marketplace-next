@@ -333,3 +333,809 @@ rebind:
       session-route entry like every other persona, and keep 'cannot show a
       refusal' only for the refusal-checking reads
     closed: *a3
+  - id: R-7.10
+    target: old
+    why: 'unbound: content-create.enter_title — no field labelled "Title" on
+      http://localhost:3100/content/create'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: &a4
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-28T16:44:48.459Z
+  - id: R-7.16
+    target: old
+    why: 'unbound: content-request.rename_page_by_request — the input names no new
+      address ("to") to rename the page to'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-7.25
+    target: old
+    why: 'unbound: content-request.rename_page_by_request — the input names no new
+      address ("to") to rename the page to'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-7.26
+    target: old
+    why: "unbound: file-embedded-image.upload_body_image — no image file was named"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-5.3
+    target: old
+    why: 'unbound: evaluation-individual-create-swu.save_draft — no control labelled
+      "Save Draft" or "Save" on
+      http://localhost:3102/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/00000000-0000-4000-8000-000000000741/team-questions/evaluations/00000000-0000-4000-8000-000000000102/edit?tab=teamQuestions'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-5.10
+    target: old
+    why: 'unbound: evaluation-consensus-list-swu.finalize_consensus_scores — no
+      control labelled "Finalize Consensus Scores" or "Finalize Scores" or
+      "Finalize" on
+      http://localhost:4300/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=consensus;
+      unbound: evaluation-consensus-list-twu.finalize_consensus_scores — no
+      control labelled "Finalize Consensus Scores" or "Finalize Scores" or
+      "Finalize" on
+      http://localhost:4300/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab=consensus'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-5.12
+    target: old
+    why: 'unbound: evaluation-panel-swu.choose_panel_chair — no evaluator matching
+      "staff.two@example.test" on
+      http://localhost:3101/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluationPanel'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-5.14
+    target: old
+    why: 'unbound: evaluation-consensus-list-swu.finalize_consensus_scores — no
+      control labelled "Finalize Consensus Scores" or "Finalize Scores" or
+      "Finalize" on
+      http://localhost:3102/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=consensus'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-5.16
+    target: old
+    why: 'unbound: evaluation-panel-swu.add_panel_member — the evaluation panel is
+      not editable and offers no "Edit" on
+      http://localhost:3101/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluationPanel'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-5.19
+    target: old
+    why: "unbound: opportunity-swu-view.created_by_name — the public opportunity
+      page names no creator; its header shows only the published and updated
+      dates, and the creator's name appears only on the management page"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-5.23
+    target: old
+    why: "unbound: evaluation-individual-request-swu.save_draft_as_entered — the
+      input carries no scores to send"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-5.30
+    target: old
+    why: 'unbound: evaluation-consensus-list-twu.submit_final_consensus_scores — no
+      control labelled "Submit Final Consensus Scores" or "Submit Consensus
+      Scores" or "Submit Scores" or "Submit" on
+      http://localhost:3102/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab=consensus'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-5.32
+    target: old
+    why: 'unbound: evaluation-consensus-list-swu.finalize_consensus_scores — no
+      control labelled "Finalize Consensus Scores" or "Finalize Scores" or
+      "Finalize" on
+      http://localhost:3100/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=consensus'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-5.35
+    target: old
+    why: 'unbound: evaluation-individual-list-swu.open_proponent_evaluation — no
+      proponent row for "0" on
+      http://localhost:3102/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluation'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-5.36
+    target: old
+    why: 'unbound: evaluation-consensus-list-swu.finalize_consensus_scores — no
+      control labelled "Finalize Consensus Scores" or "Finalize Scores" or
+      "Finalize" on
+      http://localhost:3100/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=consensus;
+      unbound: evaluation-consensus-list-twu.finalize_consensus_scores — no
+      control labelled "Finalize Consensus Scores" or "Finalize Scores" or
+      "Finalize" on
+      http://localhost:3100/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab=consensus'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-8.30
+    target: old
+    why: "unbound: file-image-picker.only_jpeg_and_png_offered — the picker says
+      nothing on the page about which kinds of image it takes; the restriction
+      lives only in the chooser the operating system opens"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-6.20
+    target: old
+    why: "unbound: signIn.first-time-vendor — The oracle has no identity provider.
+      Its three sign-in routes look up an account that already exists by a fixed
+      identity-provider id and refuse when there is none, so a first sign-in —
+      the one that creates an account — cannot happen there."
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-6.23
+    target: old
+    why: "unbound: signIn.self-reactivating-vendor — /auth/createsessionvendor/13
+      reaches this account, but it creates a session without the identity
+      provider and without looking at the account's status, so it is not the
+      sign-in that reactivates a self-deactivated account. The oracle has no
+      identity provider to sign in through, so the ordinary sign-in this persona
+      exists for cannot happen there."
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-6.25
+    target: old
+    why: 'unbound: proposal-cwu-view.enter_score — no field labelled "Score" on
+      http://localhost:3102/opportunities/code-with-us/00000000-0000-4000-a006-000000000001/proposals/00000000-0000-4000-a006-000000000101'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-1.7
+    target: old
+    why: 'unbound: opportunity-cwu-create.save_draft — no field on
+      http://localhost:3102/opportunities/code-with-us/create takes "title"'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-1.25
+    target: old
+    why: 'unbound: proposal-cwu-view.enter_score — no field labelled "Score" on
+      http://localhost:3101/opportunities/code-with-us/00000000-0000-4000-a004-000000000001/proposals/00000000-0000-4000-a004-000000000101;
+      unbound: proposal-swu-view.score_team_scenario — no field labelled "Score"
+      on
+      http://localhost:3101/opportunities/sprint-with-us/00000000-0000-4000-a017-000000000001/proposals/00000000-0000-4000-a017-000000000102?tab=teamScenario;
+      unbound: proposal-twu-view.score_challenge — no field labelled "Score" on
+      http://localhost:3101/opportunities/team-with-us/00000000-0000-4000-a032-000000000001/proposals/00000000-0000-4000-a032-000000000102?tab=challenge'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-1.26
+    target: old
+    why: 'unbound: proposal-cwu-view.award_proposal — no control labelled "Award" or
+      "Award Proposal" on
+      http://localhost:3102/opportunities/code-with-us/00000000-0000-4000-a007-000000000001/proposals/00000000-0000-4000-a007-000000000101;
+      unbound: proposal-swu-view.award_proposal — no control labelled "Award
+      Proposal" or "Award" on
+      http://localhost:3102/opportunities/sprint-with-us/00000000-0000-4000-a019-000000000001/proposals/00000000-0000-4000-a019-000000000101'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-1.29
+    target: old
+    why: "unbound: opportunity-cwu-view.created_by_name — the public opportunity
+      page names no creator; its header shows only the published and updated
+      dates, and the creator's name appears only on the management page"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-1.33
+    target: old
+    why: "unbound: opportunity-cwu-edit.add_note — the History tab lists entries but
+      offers no control for adding a note; unbound:
+      opportunity-swu-edit.add_note — the History tab lists entries but offers
+      no control for adding a note"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-1.49
+    target: old
+    why: 'unbound: proposal-twu-view.score_challenge — no field labelled "Score" on
+      http://localhost:3101/opportunities/team-with-us/00000000-0000-4000-a033-000000000001/proposals/00000000-0000-4000-a033-000000000102?tab=challenge'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-3.6
+    target: old
+    why: "unbound: organization-user-memberships.approve_invitation — the
+      organizations tab offers no approve control beside a pending invitation;
+      it is answered only through the invitation message's link, which needs the
+      invitation's affiliation identifier, and none was supplied"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-3.7
+    target: old
+    why: "unbound: organization-user-memberships-self.approve_invitation — the
+      organizations tab offers no approve control beside a pending invitation;
+      it is answered only through the invitation message's link, which needs the
+      invitation's affiliation identifier, and none was supplied"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-3.9
+    target: old
+    why: "unbound: organization-edit.approve_pending_member — no control labelled
+      \"Approve\" on
+      http://localhost:3100/organizations/00000000-0000-4000-8000-000000000304/\
+      edit?tab=team; unbound: organization-user-memberships.approve_invitation —
+      the organizations tab offers no approve control beside a pending
+      invitation; it is answered only through the invitation message's link,
+      which needs the invitation's affiliation identifier, and none was
+      supplied"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-3.10
+    target: old
+    why: "unbound: organization-user-memberships.approve_invitation — the
+      organizations tab offers no approve control beside a pending invitation;
+      it is answered only through the invitation message's link, which needs the
+      invitation's affiliation identifier, and none was supplied"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-3.11
+    target: old
+    why: 'unbound: organization-edit.remove_team_member — no control labelled
+      "Remove" on
+      http://localhost:3101/organizations/00000000-0000-4000-8000-000000000301/edit?tab=team'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-3.15
+    target: old
+    why: "unbound: organization-user-memberships-self.approve_invitation — the
+      organizations tab offers no approve control beside a pending invitation;
+      it is answered only through the invitation message's link, which needs the
+      invitation's affiliation identifier, and none was supplied"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-3.17
+    target: old
+    why: "unbound: affiliation-invitation-request.invite_with_membership_type — the
+      input names no organization to send"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-3.25
+    target: old
+    why: "unbound: organization-user-memberships.approve_invitation — the
+      organizations tab offers no approve control beside a pending invitation;
+      it is answered only through the invitation message's link, which needs the
+      invitation's affiliation identifier, and none was supplied"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-3.31
+    target: old
+    why: "unbound: organization-user-memberships.approve_invitation — the
+      organizations tab offers no approve control beside a pending invitation;
+      it is answered only through the invitation message's link, which needs the
+      invitation's affiliation identifier, and none was supplied"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-3.32
+    target: old
+    why: "unbound: organization-user-memberships-self.reject_invitation — the
+      organizations tab offers no reject control beside a pending invitation; it
+      is answered only through the invitation message's link, which needs the
+      invitation's affiliation identifier, and none was supplied"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-3.34
+    target: old
+    why: "unbound: organization-user-memberships.approve_invitation — the
+      organizations tab offers no approve control beside a pending invitation;
+      it is answered only through the invitation message's link, which needs the
+      invitation's affiliation identifier, and none was supplied"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-3.35
+    target: old
+    why: "unbound: caught-message.follow_link_in_body — the message's formatted body
+      has no link labelled \"Accept\" (its links: \"Digital Marketplace\",
+      \"Approve\", \"Reject\", \"Unsubscribe\"); unbound:
+      caught-message.follow_link_in_body — the message's formatted body has no
+      link labelled \"Decline\" (its links: \"Digital Marketplace\",
+      \"Approve\", \"Reject\", \"Unsubscribe\")"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.4
+    target: old
+    why: 'unbound: proposal-cwu-edit.delete_proposal — no "Actions" menu on
+      http://localhost:3101/opportunities/code-with-us/f8556c04-0c3d-42b5-8943-36b3db52a347/proposals/5e1984f2-2920-4037-b4ed-9c9290175c8d/edit'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.7
+    target: old
+    why: 'unbound: proposal-swu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3102/opportunities/sprint-with-us/d8f4c693-5190-4d1b-bfea-b551426ef30c/proposals/create;
+      unbound: proposal-swu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3102/opportunities/sprint-with-us/f482e992-6829-47ce-9d44-84f70a4da670/proposals/create'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.9
+    target: old
+    why: 'unbound: proposal-swu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3100/opportunities/sprint-with-us/aaf0a072-f5d6-4f09-9311-e35600d3085d/proposals/create;
+      unbound: proposal-swu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3100/opportunities/sprint-with-us/3138f21a-2bc1-4ee9-b148-dbe57afbb105/proposals/create'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.10
+    target: old
+    why: 'unbound: proposal-twu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3100/opportunities/team-with-us/6d8a6e5b-1381-47be-9293-cb3bafab5a7f/proposals/create;
+      unbound: proposal-twu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3100/opportunities/team-with-us/b5dac2a1-9587-4f52-bfd4-3c3cc4583d8b/proposals/create'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.11
+    target: old
+    why: 'unbound: proposal-swu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3101/opportunities/sprint-with-us/476c4cff-cd81-4f65-9cb2-7adaab9e0e0c/proposals/create'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.16
+    target: old
+    why: 'unbound: proposal-swu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3101/opportunities/sprint-with-us/4bf650bc-9db4-45e1-8869-424ce32fe12d/proposals/create;
+      unbound: proposal-swu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3101/opportunities/sprint-with-us/44b2faf9-1d42-4f29-849b-0fd0bec6d6f7/proposals/create;
+      unbound: proposal-swu-create.set_phase_proposed_cost — no field labelled
+      "Proposed Cost" or "Cost" on
+      http://localhost:3101/opportunities/sprint-with-us/f860ebd6-5318-4963-9466-f008ad5558d4/proposals/create'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.17
+    target: old
+    why: 'unbound: proposal-twu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3100/opportunities/team-with-us/080b7281-1c91-40ba-b701-5b1ba17129cb/proposals/create;
+      unbound: proposal-twu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3100/opportunities/team-with-us/7945c513-0967-4c04-a9f9-4c4d6d2f87f0/proposals/create'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.18
+    target: old
+    why: 'unbound: proposal-swu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3102/opportunities/sprint-with-us/b554b879-6b2a-4cc4-a30e-0146b427cb4a/proposals/create;
+      unbound: proposal-twu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3102/opportunities/team-with-us/fff810ff-43f2-4519-b93e-cddf478bdd53/proposals/create;
+      unbound: proposal-swu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3102/opportunities/sprint-with-us/e1538502-a23f-40e8-b3c7-6cdbafd2f648/proposals/create'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.19
+    target: old
+    why: 'unbound: opportunity-swu-create.add_phase — no field for "Proof of
+      Concept" on the Phases step takes "startDate" or "completionDate" or
+      "maxBudget"; unbound: opportunity-swu-create.add_phase — no field for
+      "Implementation" on the Phases step takes "maxBudget"'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.20
+    target: old
+    why: 'unbound: proposal-twu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:4300/opportunities/team-with-us/24e51923-1308-4a6a-868e-bbb7b674cd12/proposals/create;
+      unbound: proposal-twu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:4300/opportunities/team-with-us/7f508689-1b44-4f89-9cef-bbd057dc6f4a/proposals/create'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.21
+    target: old
+    why: 'unbound: proposal-swu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3101/opportunities/sprint-with-us/1fde4366-c6c0-452c-aee5-fcce2d8a203b/proposals/create;
+      unbound: proposal-swu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3101/opportunities/sprint-with-us/220b10b9-41c1-401a-b21f-7e133d11d6bb/proposals/create'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.22
+    target: old
+    why: 'unbound: proposal-twu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3102/opportunities/team-with-us/7f28d7a1-470f-4c93-9dc9-aff873839f02/proposals/create;
+      unbound: proposal-twu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3102/opportunities/team-with-us/86c168bf-3e37-4745-89a4-77e5a7078c7c/proposals/create'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.23
+    target: old
+    why: 'unbound: proposal-cwu-edit.withdraw_proposal — no "Actions" menu on
+      http://localhost:4300/opportunities/code-with-us/83b4e932-3b61-4bbb-aa4d-5db9477ead41/proposals/4e3fc0c1-9a27-4689-8c9e-381678e85dfa/edit;
+      unbound: proposal-cwu-edit.withdraw_proposal — no "Actions" menu on
+      http://localhost:4300/opportunities/code-with-us/bf61ec88-f62e-4a21-80fc-b94de904a26e/proposals/7165a315-c6f9-4acf-a838-a45bc0b4b647/edit'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.24
+    target: old
+    why: 'unbound: proposal-twu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3100/opportunities/team-with-us/1c6bd090-f352-4c5e-a824-593c07da304c/proposals/create'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.26
+    target: old
+    why: 'unbound: proposal-cwu-view.enter_score — no field labelled "Score" on
+      http://localhost:3101/opportunities/code-with-us/00000000-0000-4000-a002-000000000001/proposals/00000000-0000-4000-a002-000000000101'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.27
+    target: old
+    why: 'unbound: proposal-cwu-view.enter_score — no field labelled "Score" on
+      http://localhost:3101/opportunities/code-with-us/00000000-0000-4000-a003-000000000001/proposals/00000000-0000-4000-a003-000000000102;
+      unbound: proposal-cwu-view.enter_score — no field labelled "Score" on
+      http://localhost:3101/opportunities/code-with-us/00000000-0000-4000-a005-000000000001/proposals/00000000-0000-4000-a005-000000000101;
+      unbound: proposal-cwu-view.enter_score — no field labelled "Score" on
+      http://localhost:3101/opportunities/code-with-us/00000000-0000-4000-a009-000000000001/proposals/00000000-0000-4000-a009-000000000101'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.28
+    target: old
+    why: 'unbound: proposal-swu-view.score_team_scenario — no field labelled "Score"
+      on
+      http://localhost:3102/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/00000000-0000-4000-8000-000000000741?tab=teamScenario;
+      unbound: proposal-twu-view.score_challenge — no field labelled "Score" on
+      http://localhost:3102/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/proposals/00000000-0000-4000-8000-000000000841?tab=challenge'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.30
+    target: old
+    why: 'unbound: proposal-swu-view.score_team_scenario — no field labelled "Score"
+      on
+      http://localhost:3101/opportunities/sprint-with-us/00000000-0000-4000-a015-000000000001/proposals/00000000-0000-4000-a015-000000000102?tab=teamScenario'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.31
+    target: old
+    why: 'unbound: proposal-swu-view.score_team_scenario — no field labelled "Score"
+      on
+      http://localhost:3101/opportunities/sprint-with-us/00000000-0000-4000-a016-000000000001/proposals/00000000-0000-4000-a016-000000000102?tab=teamScenario'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.32
+    target: old
+    why: 'unbound: proposal-swu-view.award_proposal — no control labelled "Award
+      Proposal" or "Award" on
+      http://localhost:3100/opportunities/sprint-with-us/00000000-0000-4000-a018-000000000001/proposals/00000000-0000-4000-a018-000000000101;
+      unbound: proposal-swu-view.award_proposal — no control labelled "Award
+      Proposal" or "Award" on
+      http://localhost:3100/opportunities/sprint-with-us/00000000-0000-4000-a018-000000000001/proposals/00000000-0000-4000-a018-000000000102'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.33
+    target: old
+    why: 'unbound: proposal-cwu-view.enter_score — no field labelled "Score" on
+      http://localhost:3101/opportunities/code-with-us/00000000-0000-4000-a005-000000000001/proposals/00000000-0000-4000-a005-000000000101;
+      unbound: proposal-cwu-view.enter_score — no field labelled "Score" on
+      http://localhost:3101/opportunities/code-with-us/00000000-0000-4000-a004-000000000001/proposals/00000000-0000-4000-a004-000000000101'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.34
+    target: old
+    why: 'unbound: proposal-cwu-view.enter_score — no field labelled "Score" on
+      http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-a003-000000000001/proposals/00000000-0000-4000-a003-000000000101'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.35
+    target: old
+    why: 'unbound: evaluation-consensus-list-swu.finalize_consensus_scores — no
+      control labelled "Finalize Consensus Scores" or "Finalize Scores" or
+      "Finalize" on
+      http://localhost:3100/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=consensus'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.36
+    target: old
+    why: 'unbound: proposal-cwu-edit.withdraw_proposal — no "Actions" menu on
+      http://localhost:3101/opportunities/code-with-us/0f7e35ed-b69f-4d64-b00c-88c2a6fb9388/proposals/039ca7a8-64dc-41ef-a552-a3f7b0a97f89/edit'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-2.37
+    target: old
+    why: 'unbound: proposal-swu-create.choose_organization — no chooser labelled
+      "Organization" on
+      http://localhost:3102/opportunities/sprint-with-us/6dfc4b6a-e658-4848-8b7f-e6b36663254a/proposals/create'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-4.1
+    target: old
+    why: "unbound: signIn.first-time-public-sector-employee — The oracle has no
+      identity provider. Its three sign-in routes look up an account that
+      already exists by a fixed identity-provider id and refuse when there is
+      none, so a first sign-in — the one that creates an account — cannot happen
+      there.; unbound: signIn.first-time-vendor — The oracle has no identity
+      provider. Its three sign-in routes look up an account that already exists
+      by a fixed identity-provider id and refuse when there is none, so a first
+      sign-in — the one that creates an account — cannot happen there."
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-4.2
+    target: old
+    why: "unbound: signIn.first-time-vendor — The oracle has no identity provider.
+      Its three sign-in routes look up an account that already exists by a fixed
+      identity-provider id and refuse when there is none, so a first sign-in —
+      the one that creates an account — cannot happen there.; unbound:
+      signIn.first-time-vendor-without-email — The oracle has no identity
+      provider. Its three sign-in routes look up an account that already exists
+      by a fixed identity-provider id and refuse when there is none, so a first
+      sign-in — the one that creates an account — cannot happen there."
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-4.3
+    target: old
+    why: "unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete never
+      shows the profile form on this target; it redirects to /dashboard when
+      signed in and to /sign-in when signed out, and no sign-in route mints an
+      account with an unfinished profile; unbound:
+      user-sign-up-complete.accept_app_terms — /sign-up/complete never shows the
+      profile form on this target; it redirects to /dashboard when signed in and
+      to /sign-in when signed out, and no sign-in route mints an account with an
+      unfinished profile"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-4.4
+    target: old
+    why: "unbound: signIn.deactivated-vendor — the session route mints a session
+      without checking account status, so it cannot show the identity provider's
+      refusal of this account (status: INACTIVE_ADMIN)"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-4.5
+    target: old
+    why: "unbound: signIn.self-reactivating-vendor — /auth/createsessionvendor/13
+      reaches this account, but it creates a session without the identity
+      provider and without looking at the account's status, so it is not the
+      sign-in that reactivates a self-deactivated account. The oracle has no
+      identity provider to sign in through, so the ordinary sign-in this persona
+      exists for cannot happen there."
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-4.8
+    target: old
+    why: "unbound: user-profile-self-capabilities.capability_checked — whether a
+      capability is held is shown only by the colour and shape of an unlabelled
+      icon; the row carries no text, no checkbox and no state in the
+      accessibility tree"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-4.23
+    target: old
+    why: "unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete never
+      shows the profile form on this target; it redirects to /dashboard when
+      signed in and to /sign-in when signed out, and no sign-in route mints an
+      account with an unfinished profile"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-4.24
+    target: old
+    why: "unbound: user-sign-up-complete.toggle_new_opportunity_notifications —
+      /sign-up/complete never shows the profile form on this target; it
+      redirects to /dashboard when signed in and to /sign-in when signed out,
+      and no sign-in route mints an account with an unfinished profile"
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4
+  - id: R-4.32
+    target: old
+    why: 'unbound: user-list.toggle_export_user_type — no box labelled "public
+      sector employee" on http://localhost:3100/users'
+    found: unbound
+    adapter: 0d225f0361134227efce47eba3fbdd1eebe7aa15
+    by: runner:calibrate
+    at: 2026-09-28T16:44:48.459Z
+    closed: *a4

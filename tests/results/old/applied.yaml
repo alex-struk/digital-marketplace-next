@@ -18,6 +18,7 @@ applied:
   - calibrate-old-8
   - calibrate-triage-old-15
   - calibrate-old-9
+  - calibrate-triage-old-16
 rulings:
   - id: R-8.18
     version: 1
@@ -255,3 +256,31 @@ rulings:
     version: 1
     verb: defect-in-old
     gate: calibrate-old-9
+  - id: R-1.9
+    version: 2
+    verb: product-question
+    gate: calibrate-triage-old-16
+  - id: R-8.10
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-16
+  - id: R-5.13
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-16
+  - id: R-2.14
+    version: 2
+    verb: product-question
+    gate: calibrate-triage-old-16
+  - id: R-6.15
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-16
+  - id: R-6.16
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-16
+  - id: R-4.20
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-16
