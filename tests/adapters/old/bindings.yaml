@@ -78,7 +78,7 @@ pages:
       cancel_opportunity: bound
       delete_opportunity: bound
       add_addendum: bound
-      add_note: "unbound: signed in as the administrator and looked on the seeded published and processing Code With Us opportunities (and earlier as the owner, and on a draft): the History tab is a table (Entry Type | Note | Created) with nothing in its top bar, the Opportunity tab's Actions menu offers only Edit and Cancel, the Addenda tab only Add Addendum, and no screen offers a way to add a note"
+      add_note: "unbound: signed in as the administrator and looked on the seeded published and processing Code With Us opportunities (and earlier as the owner, and on a draft): the History tab is a table (Entry Type | Note | Created) with nothing in its top bar, the Opportunity tab's Actions menu offers only Edit and Cancel, the Addenda tab only Add Addendum, and no screen offers a way to add a note; looked again as the administrator on the seeded published and processing ones: the History tab's top bar is empty and its table has no control. The service's update request takes an addNote change, but no screen sends one"
     observations:
       opportunity_identifier: bound
       created_by_name: bound
@@ -136,7 +136,7 @@ pages:
       cancel_opportunity: bound
       delete_opportunity: bound
       add_addendum: bound
-      add_note: "unbound: signed in as the administrator and looked on the seeded open and processing Sprint With Us opportunities (and earlier on one built for the purpose): the History tab is a table (Entry Type | Note | Created) with nothing in its top bar, the Opportunity tab's Actions menu offers only Edit and Cancel, and no screen offers a way to add a note"
+      add_note: "unbound: signed in as the administrator and looked on the seeded open and processing Sprint With Us opportunities (and earlier on one built for the purpose): the History tab is a table (Entry Type | Note | Created) with nothing in its top bar, the Opportunity tab's Actions menu offers only Edit and Cancel, and no screen offers a way to add a note; looked again as the administrator on a freshly published Sprint With Us opportunity: the History tab's top bar is empty and its table has no control. The service's update request takes an addNote change, but no screen sends one"
       edit_evaluation_panel: bound
       finalize_question_consensuses: bound
       start_team_scenario: bound
@@ -561,7 +561,7 @@ pages:
 
   user-sign-up-complete:
     actions:
-      change_avatar: "unbound: /sign-up/complete never shows the profile form on this target — it redirects to /dashboard when signed in and to /sign-in when signed out, and every account the target's sign-in routes mint already has a finished profile"
+      change_avatar: "unbound: /sign-up/complete never shows the profile form on this target — it redirects to /sign-in when signed out and to /dashboard when signed in; looked again through /auth/createsessionadmin, /auth/createsessiongov and /auth/createsessionvendor/1 to 16 (17 and above fail with /notice/authFailure), and each lands on /dashboard, so no route reaches an account with an unfinished profile; the first-time personas this form is for have no sign-in on this target"
       accept_app_terms: "unbound: /sign-up/complete redirects away instead of showing the profile form, so there is no terms box to tick"
       toggle_new_opportunity_notifications: "unbound: /sign-up/complete redirects away instead of showing the profile form"
       complete_profile: "unbound: /sign-up/complete redirects away instead of showing the profile form"
@@ -640,7 +640,7 @@ pages:
       expand_capability_description: bound
     observations:
       capability_row: bound
-      capability_checked: "unbound: looked again as the organization member on their own Capabilities tab — each capability is a link carrying its name and an unlabelled icon, and whether it is held changes only that icon's colour and shape; the row has no checkbox, no text and no checked state in the accessibility tree, so nothing on the page says which are held"
+      capability_checked: bound
       capability_description: bound
 
   user-profile-notifications:
@@ -698,7 +698,7 @@ pages:
       expand_capability_description: bound
     observations:
       capability_row: bound
-      capability_checked: "unbound: looked again as the organization member on their own Capabilities tab — each capability is a link carrying its name and an unlabelled icon, and whether it is held changes only that icon's colour and shape; the row has no checkbox, no text and no checked state in the accessibility tree, so nothing on the page says which are held"
+      capability_checked: bound
       capability_description: bound
 
   user-profile-self-notifications:

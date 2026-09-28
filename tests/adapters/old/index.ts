@@ -673,7 +673,17 @@ export default function create(
   async function scoreProposal(where: string, tabs: string[], input: unknown): Promise<void> {
     await ready();
     if (tabs.length) await openTab(where, tabs);
-    await fromBarOrActions(where, ["Enter Score", "Edit Score"]);
+    try {
+      await fromBarOrActions(where, ["Enter Score", "Edit Score"]);
+    } catch (error) {
+      // A stage the opportunity has not reached says so on its tab, with nothing in the top
+      // bar ("If this proposal is screened into the Team Scenario, it can be scored once the
+      // opportunity reaches the Team Scenario too." — seen as the administrator on the seeded
+      // closed opportunities, still at question evaluation). That is the page refusing.
+      const said = await wrongStage();
+      if (said) throw new Error(`${where} — refused: the tab says "${said.replace(/\n/g, " ")}" on ${page.url()}`);
+      throw error;
+    }
     await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
     if (!(await dialog().count())) {
       throw new Error(`unbound: ${where} — "Enter Score" opened no dialog on ${page.url()}`);
@@ -689,6 +699,12 @@ export default function create(
     await press(where, ["Submit Score"], dialog().first());
     await dialog().first().waitFor({ state: "hidden", timeout: 15000 }).catch(() => undefined);
     await settle();
+  }
+
+  // What a stage's tab says while the opportunity has not reached that stage, in its prose.
+  async function wrongStage(): Promise<string> {
+    const said = await linesMatching(/can be scored once|will be available once|has not (yet )?reached|not yet/i);
+    return said || messages(/stage|not yet|cannot/i);
   }
 
   // An award is confirmed in "Award ... Opportunity?" with its own "Award Opportunity".
@@ -3141,7 +3157,7 @@ export default function create(
 
   const noteIsNotOffered = (where: string) => async (): Promise<void> => {
     throw new Error(
-      `unbound: ${where}.add_note — signed in as the administrator and looked on the seeded published, open and processing opportunities of both programmes: the History tab is a table (Entry Type | Note | Created) with nothing in its top bar, the Opportunity tab's Actions menu offers only "Edit" and "Cancel", the Addenda tab only "Add Addendum", and no screen offers a way to add a note`,
+      `unbound: ${where}.add_note — signed in as the administrator and looked on the seeded published, open and processing opportunities of both programmes: the History tab is a table (Entry Type | Note | Created) with nothing in its top bar, the Opportunity tab's Actions menu offers only "Edit" and "Cancel", the Addenda tab only "Add Addendum", and no screen offers a way to add a note. Looked again as the administrator on the seeded published Code With Us opportunity, the seeded one in processing and a freshly published Sprint With Us one: the History tab's top bar is empty and its table has no control. The service's update request does take an "addNote" change, but nothing on any screen sends one, so there is no control for this action to press`,
     );
   };
 
@@ -3570,6 +3586,223 @@ export default function create(
     await settle();
   }
 
+  // The people a test names for a proposal's team, in whatever shape it hands them over: one
+  // person or a list, a name, an address, a seed handle or record, or a record carrying them
+  // under "member(s)", "teamMember(s)", "user(s)" or "resource(Name)".
+  function peopleIn(input: unknown): unknown[] {
+    if (input === undefined || input === null) return [];
+    if (Array.isArray(input)) return input.flatMap(peopleIn);
+    if (typeof input === "string") return input ? [input] : [];
+    if (typeof input !== "object") return [];
+    const record = input as Record<string, unknown>;
+    for (const key of [
+      "members", "member", "teamMembers", "teamMember", "users", "user",
+      "people", "person", "resourceName", "memberName",
+    ]) {
+      if (record[key] !== undefined && record[key] !== null) return peopleIn(record[key]);
+    }
+    if (typeof record.id === "string" || typeof record.email === "string") return [record];
+    if (typeof record.name === "string" && record.name) return [record.name];
+    return [];
+  }
+
+  // The team pickers name each person by name alone. A seed user carries an identifier and
+  // an address but, for a vendor, no name, so the name is taken from the membership lists of
+  // the organizations the signed-in vendor belongs to — the lists the pickers are drawn from.
+  async function teamNamesById(): Promise<Map<string, string>> {
+    const names = new Map<string, string>();
+    const mine = await page.request.get(`${baseURL}/api/affiliations`).catch(() => null);
+    if (!mine || mine.status() !== 200) return names;
+    const affiliations: unknown = await mine.json().catch(() => []);
+    for (const affiliation of Array.isArray(affiliations) ? affiliations : []) {
+      const organization = (affiliation as { organization?: { id?: string } }).organization?.id;
+      if (!organization) continue;
+      const members = await page.request
+        .get(`${baseURL}/api/affiliations?organization=${organization}`)
+        .catch(() => null);
+      if (!members || members.status() !== 200) continue;
+      const listed: unknown = await members.json().catch(() => []);
+      for (const member of Array.isArray(listed) ? listed : []) {
+        const user = (member as { user?: { id?: string; name?: string } }).user;
+        if (user?.id && user.name) names.set(user.id, user.name);
+      }
+    }
+    return names;
+  }
+
+  async function teamMemberNames(where: string, input: unknown): Promise<string[]> {
+    const people = peopleIn(input);
+    let byId: Map<string, string> | null = null;
+    const names: string[] = [];
+    for (const person of people) {
+      const record =
+        person && typeof person === "object" ? (person as Record<string, unknown>) : null;
+      if (record && typeof record.name === "string" && record.name) {
+        names.push(record.name);
+        continue;
+      }
+      const id = userIdOf(person);
+      if (!id) {
+        // A plain name, as the picker shows it.
+        if (typeof person === "string" && !/@/.test(person)) names.push(person);
+        else nothing(`${where} — no account could be found for ${JSON.stringify(person)}`);
+        continue;
+      }
+      const seeded = SEED_USERS.find((user) => user.id === id) as (SeedUser & { name?: string }) | undefined;
+      if (seeded?.name) {
+        names.push(seeded.name);
+        continue;
+      }
+      const known = byId ?? (byId = await teamNamesById());
+      const name = known.get(id);
+      // Somebody in none of this vendor's organizations cannot be on its team: the picker
+      // will not offer them, and saying so is the refusal.
+      if (!name) {
+        throw new Error(
+          `${where} — refused: ${JSON.stringify(person)} is not a member of any organization the signed-in vendor belongs to, so no team picker on ${page.url()} offers them`,
+        );
+      }
+      names.push(name);
+    }
+    return names;
+  }
+
+  // A team step shows its phases or resources only once an organization is chosen. When the
+  // test chose none, the one the chooser offers first is taken, so the step can be reached;
+  // a chooser offering none is the vendor having no qualifying organization, and says so.
+  async function ensureProposalOrganization(where: string): Promise<void> {
+    const box = seen(page.getByRole("combobox", { name: labelled("Organization") })).first();
+    await box.waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+    if (!(await box.count()) || !(await chooserIsEmpty(box))) return;
+    await box.click();
+    const options = seen(page.getByRole("option"));
+    await options.first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
+    if (!(await options.count())) {
+      await page.keyboard.press("Escape").catch(() => undefined);
+      throw new Error(
+        `${where} — refused: the "Organization" chooser on ${page.url()} offers no organization, so no team can be put together`,
+      );
+    }
+    await options.first().click();
+    await settle();
+  }
+
+  // Each team question sits folded under "Question N"; its "Question N Response" box shows
+  // once the heading is opened. A question is picked by its number (from 1) or its order
+  // (from 0), and the first is meant when neither is given.
+  async function answerProposalQuestion(where: string, steps: string[], input: unknown): Promise<void> {
+    await ready();
+    let reached = false;
+    for (const step of steps) if (!reached && (await goToStep(step))) reached = true;
+    if (!reached) await advanceTo(where, "Question 1");
+    const numbered = Number.parseInt(field(input, "question", "questionNumber", "number"), 10);
+    const ordered = Number.parseInt(field(input, "order", "index", "position"), 10);
+    const which = Number.isFinite(numbered) && numbered > 0
+      ? numbered
+      : Number.isFinite(ordered) && ordered >= 0
+        ? ordered + 1
+        : 1;
+    const text =
+      field(input, "response", "answer", "text", "body", "value", "content") ||
+      (typeof input === "string" ? input : asText(input));
+    const label = `Question ${which} Response`;
+    const box = (): Locator => seen(page.getByRole("textbox", { name: labelled(label) }));
+    if (!(await box().count())) {
+      const heading = seen(page.getByText(`Question ${which}`, { exact: true }));
+      const count = await heading.count();
+      if (!count) {
+        throw new Error(`unbound: ${where} — reached the questions step but it shows no "Question ${which}" on ${page.url()}`);
+      }
+      await heading.nth(count - 1).click();
+      await box().first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
+    }
+    if (!(await box().count())) {
+      throw new Error(`unbound: ${where} — opened "Question ${which}" but no "${label}" box appeared on ${page.url()}`);
+    }
+    namedLabels.add(squash(label));
+    await box().first().fill(text);
+    await box().first().blur().catch(() => undefined);
+    await settle();
+  }
+
+  // "2. Team" shows one section per phase ("Inception", "Proof of Concept", "Implementation"),
+  // each with its own "Add Team Member(s)". That opens a dialog listing the organization's
+  // confirmed members by name, each picked by pressing it, then "Add Team Member(s)" in the
+  // dialog adds them to the phase's table (seen as the organization owner on a published
+  // Sprint With Us opportunity with only an implementation phase).
+  async function addSwuPhaseMembers(where: string, input: unknown): Promise<void> {
+    await ready();
+    if (!(await goToStep("Team"))) await advanceTo(where, "Organization");
+    await ensureProposalOrganization(where);
+    const phaseGiven = field(input, "phase", "phaseName") || (typeof input === "string" && PHASES.some((p) => squash(p) === squash(phaseNamed(input))) ? input : "");
+    const phase = phaseGiven ? phaseNamed(phaseGiven) : "";
+    const adders = seen(page.getByText("Add Team Member(s)", { exact: true }));
+    await adders.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+    const adderCount = await adders.count();
+    if (!adderCount) {
+      throw new Error(`unbound: ${where} — reached the Team step with an organization chosen, but no "Add Team Member(s)" is on it at ${page.url()}`);
+    }
+    // The phases this opportunity has, in the order the step shows them.
+    const shownPhases: string[] = [];
+    for (const name of PHASES) {
+      if (await seen(page.getByRole("main").getByText(name, { exact: true })).count()) shownPhases.push(name);
+    }
+    let at = 0;
+    if (phase) {
+      at = shownPhases.indexOf(phase);
+      if (at < 0) {
+        throw new Error(
+          `${where} — refused: this opportunity has no "${phase}" phase on ${page.url()} (its phases: ${shownPhases.join(", ") || "none shown"})`,
+        );
+      }
+    }
+    const names = typeof input === "string" && phaseGiven ? [] : await teamMemberNames(where, input);
+    await adders.nth(Math.min(at, adderCount - 1)).click();
+    await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    if (!(await dialog().count())) {
+      throw new Error(`unbound: ${where} — "Add Team Member(s)" opened no dialog on ${page.url()}`);
+    }
+    for (const name of names) {
+      const entry = seen(dialog().first().getByText(name, { exact: true }));
+      if (!(await entry.count())) {
+        const offered = (await dialogText()).replace(/\s*\n\s*/g, " | ");
+        await dismissDialog();
+        throw new Error(`${where} — refused: the member dialog does not offer "${name}" on ${page.url()} (it shows: ${offered})`);
+      }
+      await entry.last().click();
+    }
+    await press(where, ["Add Team Member(s)"], dialog().first());
+    await dialog().first().waitFor({ state: "hidden", timeout: 5000 }).catch(() => undefined);
+    await settle();
+  }
+
+  // Each phase's team table has a "Scrum Master" column holding one unlabelled radio per
+  // member, picked on the member's own row.
+  async function setSwuScrumMaster(where: string, input: unknown): Promise<void> {
+    await ready();
+    if (!(await goToStep("Team"))) await advanceTo(where, "Organization");
+    const names = await teamMemberNames(where, input);
+    const phaseGiven = field(input, "phase", "phaseName");
+    for (const name of names.length ? names : [""]) {
+      const rows = seen(page.getByRole("row").filter({ has: page.getByRole("radio") }));
+      const mine = name ? rows.filter({ hasText: name }) : rows;
+      const count = await mine.count();
+      if (!count) {
+        throw new Error(`unbound: ${where} — no team member row${name ? ` for "${name}"` : ""} with a Scrum Master choice on ${page.url()}`);
+      }
+      let pick = 0;
+      if (phaseGiven && count > 1) {
+        const shownPhases: string[] = [];
+        for (const phase of PHASES) {
+          if (await seen(page.getByRole("main").getByText(phase, { exact: true })).count()) shownPhases.push(phase);
+        }
+        pick = Math.max(0, Math.min(shownPhases.indexOf(phaseNamed(phaseGiven)), count - 1));
+      }
+      await mine.nth(pick).getByRole("radio").first().click();
+      await settle();
+    }
+  }
+
   const proposalSwuCreate: S.ProposalSwuCreatePage = {
     ...proposalCreate(
       "proposal-swu-create",
@@ -3578,26 +3811,8 @@ export default function create(
     ),
     chooseOrganization: (input) =>
       chooseProposalOrganization("proposal-swu-create.choose_organization", "Team", input),
-    addPhaseTeamMember: async (input) => {
-      await advanceTo("proposal-swu-create.add_phase_team_member", "Team Member");
-      await press("proposal-swu-create.add_phase_team_member", [
-        "Add Team Member(s)",
-        "Add Team Member",
-      ]);
-      const name = asText(input);
-      if (name) {
-        await tick("proposal-swu-create.add_phase_team_member", [name], dialog().first());
-        await inDialog("proposal-swu-create.add_phase_team_member", [
-          "Add Team Member(s)",
-          "Add",
-        ]);
-      }
-    },
-    setScrumMaster: (input) =>
-      tick("proposal-swu-create.set_scrum_master", [
-        asText(input) ? `Scrum Master ${asText(input)}` : "Scrum Master",
-        "Scrum Master",
-      ]),
+    addPhaseTeamMember: (input) => addSwuPhaseMembers("proposal-swu-create.add_phase_team_member", input),
+    setScrumMaster: (input) => setSwuScrumMaster("proposal-swu-create.set_scrum_master", input),
     // "3. Pricing" asks one "<Phase> Cost*" per phase ("Implementation Cost*"), beside a
     // read-only "Total Proposed Cost".
     setPhaseProposedCost: async (input) => {
@@ -3622,14 +3837,8 @@ export default function create(
         `unbound: ${where} — reached the Pricing step but no ${label ? `"${label}"` : "phase cost"} field is on it at ${page.url()}`,
       );
     },
-    answerTeamQuestion: async (input) => {
-      await advanceTo("proposal-swu-create.answer_team_question", "Team Questions");
-      await fill(
-        "proposal-swu-create.answer_team_question",
-        ["Response", "Answer", "Question"],
-        asText(input),
-      );
-    },
+    answerTeamQuestion: (input) =>
+      answerProposalQuestion("proposal-swu-create.answer_team_question", ["Team Questions"], input),
     addReference: (input) =>
       fill("proposal-swu-create.add_reference", ["Company Name", "Reference"], asText(input)),
     capabilityGapError: () => messages(/capabilit/i),
@@ -3637,6 +3846,93 @@ export default function create(
     unqualifiedOrganizationNotice: () => linesMatching(/qualif/i),
     pendingTeamMember: () => linesMatching(/pending/i),
   };
+
+  // "2. Team Members" shows, once an organization is chosen, one "Resource N" per resource
+  // the opportunity asks for, each with a "Resource Name*" chooser listing the organization's
+  // confirmed members by name and an "Hourly Rate*" box (seen as the organization owner on a
+  // published Team With Us opportunity with one Full Stack Developer resource). A resource is
+  // picked by its number (from 1), its order (from 0) or its service area, else the first.
+  async function twuResourceIndex(input: unknown): Promise<number> {
+    const numbered = Number.parseInt(field(input, "resource", "resourceNumber", "number"), 10);
+    if (Number.isFinite(numbered) && numbered > 0) return numbered - 1;
+    const ordered = Number.parseInt(field(input, "order", "index", "resourceIndex", "position"), 10);
+    if (Number.isFinite(ordered) && ordered >= 0) return ordered;
+    const area = field(input, "serviceArea", "service_area", "area", "resource");
+    if (area) {
+      const wanted = squash(area);
+      const areas = seen(page.getByText("Service Area", { exact: true }));
+      const count = await areas.count();
+      for (let i = 0; i < count; i++) {
+        const shown = await areas
+          .nth(i)
+          .evaluate((label) => ((label.nextElementSibling as HTMLElement | null)?.innerText ?? "").trim())
+          .catch(() => "");
+        if (squash(shown) === wanted) return i;
+      }
+    }
+    return 0;
+  }
+
+  async function toTwuTeamStep(where: string): Promise<void> {
+    await ready();
+    if (!(await goToStep("Team Members"))) await advanceTo(where, "Organization");
+    await ensureProposalOrganization(where);
+  }
+
+  async function addTwuResourceMember(where: string, input: unknown): Promise<void> {
+    await toTwuTeamStep(where);
+    const choosers = seen(page.getByRole("combobox", { name: labelled("Resource Name") }));
+    await choosers.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+    const count = await choosers.count();
+    if (!count) {
+      throw new Error(`unbound: ${where} — reached "Team Members" with an organization chosen, but no "Resource Name" chooser is on it at ${page.url()}`);
+    }
+    const which = Math.min(await twuResourceIndex(input), count - 1);
+    const names = await teamMemberNames(where, input);
+    const name = names[0] ?? "";
+    const chooser = choosers.nth(which);
+    namedLabels.add(squash("Resource Name"));
+    await chooser.click();
+    const options = seen(page.getByRole("option"));
+    await options.first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
+    const option = name ? seen(page.getByRole("option", { name, exact: true })) : options;
+    if (!(await option.count())) {
+      const offered = (await options.allInnerTexts()).join(" | ");
+      await page.keyboard.press("Escape").catch(() => undefined);
+      await settle();
+      throw new Error(
+        `${where} — refused: the "Resource Name" chooser does not offer ${name ? `"${name}"` : "anybody"} on ${page.url()} (it offers: ${offered || "nobody"})`,
+      );
+    }
+    await option.first().click();
+    await settle();
+    // A rate handed over with the member is entered beside them.
+    const rate = field(input, "hourlyRate", "hourly_rate", "rate");
+    if (rate) await fillTwuRate(where, which, rate);
+  }
+
+  async function fillTwuRate(where: string, which: number, rate: string): Promise<void> {
+    const boxes = seen(page.getByRole("spinbutton", { name: labelled("Hourly Rate") }));
+    const count = await boxes.count();
+    if (!count) {
+      throw new Error(`unbound: ${where} — no "Hourly Rate" box on ${page.url()}`);
+    }
+    const box = boxes.nth(Math.min(which, count - 1));
+    namedLabels.add(squash("Hourly Rate"));
+    await box.fill(rate);
+    await box.blur().catch(() => undefined);
+    await settle();
+  }
+
+  async function setTwuHourlyRate(where: string, input: unknown): Promise<void> {
+    await toTwuTeamStep(where);
+    await seen(page.getByRole("spinbutton", { name: labelled("Hourly Rate") }))
+      .first()
+      .waitFor({ state: "visible", timeout: LATE_CONTROL_MS })
+      .catch(() => undefined);
+    const rate = field(input, "hourlyRate", "hourly_rate", "rate", "value", "amount") || asText(input);
+    await fillTwuRate(where, await twuResourceIndex(input), rate);
+  }
 
   const proposalTwuCreate: S.ProposalTwuCreatePage = {
     ...proposalCreate(
@@ -3646,24 +3942,11 @@ export default function create(
     ),
     chooseOrganization: (input) =>
       chooseProposalOrganization("proposal-twu-create.choose_organization", "Team Members", input),
-    addTeamMemberForResource: async (input) => {
-      await advanceTo("proposal-twu-create.add_team_member_for_resource", "Team Member");
-      await choose(
-        "proposal-twu-create.add_team_member_for_resource",
-        ["Team Member", "Member"],
-        asText(input),
-      );
-    },
-    setHourlyRate: (input) =>
-      fill("proposal-twu-create.set_hourly_rate", ["Hourly Rate", "Rate"], asText(input)),
-    answerResourceQuestion: async (input) => {
-      await advanceTo("proposal-twu-create.answer_resource_question", "Resource Questions");
-      await fill(
-        "proposal-twu-create.answer_resource_question",
-        ["Response", "Answer", "Question"],
-        asText(input),
-      );
-    },
+    addTeamMemberForResource: (input) =>
+      addTwuResourceMember("proposal-twu-create.add_team_member_for_resource", input),
+    setHourlyRate: (input) => setTwuHourlyRate("proposal-twu-create.set_hourly_rate", input),
+    answerResourceQuestion: (input) =>
+      answerProposalQuestion("proposal-twu-create.answer_resource_question", ["Questions", "Resource Questions"], input),
     serviceAreaError: () => messages(/service area/i),
     unqualifiedOrganizationNotice: () => linesMatching(/qualif/i),
   };
@@ -3737,6 +4020,22 @@ export default function create(
     await saved(["Submit Changes"]);
   }
 
+  // A terms dialog, when one opens: every box in it ticked, then its own confirming control
+  // pressed, and the dialog waited out.
+  async function agreeAndConfirm(where: string, names: string[]): Promise<void> {
+    await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    if (!(await dialog().count())) return;
+    const boxes = seen(dialog().first().getByRole("checkbox"));
+    const count = await boxes.count();
+    for (let i = 0; i < count; i++) {
+      if (!(await boxes.nth(i).isChecked())) await boxes.nth(i).click();
+    }
+    await settle();
+    await press(where, names, dialog().first());
+    await dialog().first().waitFor({ state: "hidden", timeout: 15000 }).catch(() => undefined);
+    await settle();
+  }
+
   // A proposal's own management page: a tab, a header of standing facts, and an Actions
   // menu whose contents change with the proposal's state.
   function proposalEdit(where: string, route: string) {
@@ -3746,11 +4045,13 @@ export default function create(
       saveChanges: () => saveProposalChanges(`${where}.save_changes`),
       saveChangesAndSubmit: async () => {
         await press(`${where}.save_changes_and_submit`, ["Submit Proposal"], navBar());
-        await confirmIfAsked(`${where}.save_changes_and_submit`, ["Submit Proposal", "Submit"]);
+        await agreeAndConfirm(`${where}.save_changes_and_submit`, ["Submit Proposal", "Submit"]);
       },
+      // "Submit" raises "Review Terms and Conditions", whose "Submit Proposal" stays disabled
+      // until each of its boxes is ticked.
       submitProposal: async () => {
         await fromBarOrActions(`${where}.submit_proposal`, ["Submit", "Submit Proposal"]);
-        await confirmIfAsked(`${where}.submit_proposal`, ["Submit Proposal", "Submit"]);
+        await agreeAndConfirm(`${where}.submit_proposal`, ["Submit Proposal", "Submit"]);
       },
       // A vendor's own proposal carries "Withdraw" (or "Delete", for a draft) straight in
       // the top bar, beside "Edit"; seen as the competing vendor on the seeded open Sprint With
@@ -3759,9 +4060,25 @@ export default function create(
         await fromBarOrActions(`${where}.withdraw_proposal`, ["Withdraw"]);
         await confirmIfAsked(`${where}.withdraw_proposal`, ["Withdraw Proposal", "Withdraw"]);
       },
+      // A draft offers "Delete" under Actions ("Submit | Edit | Delete"); a submitted proposal
+      // offers only "Edit" and "Withdraw" in the top bar (both seen as the vendor on a Code
+      // With Us proposal of their own). "Delete" missing from a proposal that is not a draft
+      // is the page refusing, and is reported as that.
       deleteProposal: async () => {
-        await fromBarOrActions(`${where}.delete_proposal`, ["Delete"]);
-        await confirmIfAsked(`${where}.delete_proposal`, ["Delete Proposal", "Delete"]);
+        const member = `${where}.delete_proposal`;
+        try {
+          await fromBarOrActions(member, ["Delete"]);
+        } catch (error) {
+          await closeActionsMenu();
+          const status = await valueAfter(["Proposal Status"]);
+          if (status && !/draft/i.test(status)) {
+            throw new Error(
+              `${member} — refused: the proposal's status is "${status}" and its page offers no "Delete" on ${page.url()}; ${(error as Error).message.replace(/^unbound: /, "")}`,
+            );
+          }
+          throw error;
+        }
+        await confirmIfAsked(member, ["Delete Proposal", "Delete"]);
       },
       proposalIdentifier: async () => proposalId(),
       opportunityIdentifier: async () => opportunityId(),
@@ -3794,8 +4111,8 @@ export default function create(
     ),
     scoresheetTab: () => tabContent(["Scoresheet", "Scoring"]),
     anonymousProponentName: () => anonymousProponent(),
-    totalScore: () => valueAfter(["Total Score", "Score"]),
-    rank: () => valueAfter(["Rank"]),
+    totalScore: () => scoresheetTotal(),
+    rank: () => scoresheetRank(),
   };
 
   const proposalTwuEdit: S.ProposalTwuEditPage = {
@@ -3805,13 +4122,49 @@ export default function create(
     ),
     scoresheetTab: () => tabContent(["Scoresheet", "Scoring"]),
     anonymousProponentName: () => anonymousProponent(),
-    totalScore: () => valueAfter(["Total Score", "Score"]),
-    rank: () => valueAfter(["Rank"]),
+    totalScore: () => scoresheetTotal(),
+    rank: () => scoresheetRank(),
   };
 
+  // A vendor's own scores are on the Scoresheet tab, in a one-row table under "TEAM
+  // QUESTIONS | CODE CHALLENGE | TEAM SCENARIO | PRICE | TOTAL SCORE"; the total is read from
+  // that body row. Until the opportunity is awarded the tab says its scoresheet "will be
+  // available once the opportunity has been awarded" and has no table, which reads as nothing.
+  async function scoresheetTotal(): Promise<string> {
+    await ready();
+    if (!(await enterTab(["Scoresheet"]))) return "";
+    await seen(page.getByRole("table")).first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
+    for (const header of ["Total Score", "Total"]) {
+      const shown = await textUnder("", header);
+      if (shown) return shown;
+    }
+    return "";
+  }
+
+  // The rank card reads "1st" over "Ranking", in the header once the proposal is ranked.
+  async function scoresheetRank(): Promise<string> {
+    await ready();
+    const here = await valueBefore(["Ranking"]);
+    if (here) return here;
+    return (await enterTab(["Scoresheet"])) ? valueBefore(["Ranking"]) : "";
+  }
+
   // Where a proponent is shown without its organization it is given a plain numbered
-  // name instead.
+  // name instead. A screen about one proposal names it under "Proponent" and again as the
+  // score sheet's own heading ("Proponent 1" twice), so it is read once: the value under the
+  // label, else the first numbered line.
   async function anonymousProponent(): Promise<string> {
+    await ready();
+    // Whatever stands under the label is given whole, so an organization named beside its
+    // number ("Northern Pines Digital Ltd. (Proponent 1)") is not hidden from the reader.
+    const named = await valueAfter(["Proponent"]);
+    if (/Proponent\s+\d+/.test(named)) return named.trim();
+    const first = (await linesMatching(/^Proponent\s+\d+$/)).split("\n")[0] ?? "";
+    return first || named;
+  }
+
+  // A list of proponents names each of them, one per line.
+  async function anonymousProponents(): Promise<string> {
     const numbered = await linesMatching(/^Proponent\s+\d+$/);
     return numbered || valueAfter(["Proponent"]);
   }
@@ -3864,7 +4217,7 @@ export default function create(
     codeChallengeTab: () => tabContent(["Code Challenge"]),
     teamScenarioTab: () => tabContent(["Team Scenario"]),
     historyTab: () => historyRows(),
-    wrongStageError: () => messages(/stage|not yet|cannot/i),
+    wrongStageError: () => wrongStage(),
     questionsScore: () =>
       stageFigure(["Team Questions"], ["Team Questions Score", "Questions Score", "Team Questions"]),
     challengeScore: () =>
@@ -3872,7 +4225,7 @@ export default function create(
     scenarioScore: () =>
       stageFigure(["Team Scenario"], ["Team Scenario Score", "Scenario Score", "Team Scenario"]),
     priceScore: () => stageFigure([], ["Price Score", "Price"]),
-    totalScore: () => stageFigure([], ["Total Score"]),
+    totalScore: () => proposalTotal(),
   };
 
   const proposalTwuView: S.ProposalTwuViewPage = {
@@ -3903,14 +4256,23 @@ export default function create(
     resourceQuestionsTab: () => tabContent(["Resource Questions", "Resource Questions (Eval)"]),
     challengeTab: () => tabContent(["Interview/Challenge", "Challenge"]),
     historyTab: () => historyRows(),
-    wrongStageError: () => messages(/stage|not yet|cannot/i),
+    wrongStageError: () => wrongStage(),
     questionsScore: () =>
       stageFigure(["Resource Questions"], ["Resource Questions Score", "Questions Score", "Resource Questions"]),
     challengeScore: () =>
       stageFigure(["Interview/Challenge", "Challenge"], ["Challenge Score", "Interview/Challenge Score", "Interview/Challenge"]),
     priceScore: () => stageFigure([], ["Price Score", "Price"]),
-    totalScore: () => stageFigure([], ["Total Score"]),
+    totalScore: () => proposalTotal(),
   };
+
+  // The "Total Score" card sits in the header of the Proposal Details tab alone; a stage's
+  // tab (Team Scenario, Interview/Challenge) carries its own score and not the total, so the
+  // details tab is opened before the figure over "Total Score" is read.
+  async function proposalTotal(): Promise<string> {
+    await ready();
+    await enterTab(["Proposal Details", "Proposal"]);
+    return figureAbove(["Total Score"]);
+  }
 
   // The entries of a proposal's History panel, one per table row, and nothing else: the
   // screen around the panel carries the other tabs' names ("Code Challenge"), and a panel not
@@ -4354,14 +4716,14 @@ export default function create(
     pendingBadge: () => inTab(["Team"], () => linesMatching(/\bPending\b/)),
     teamMemberRow: () => inTab(["Team"], teamRowsText),
     teamCapabilities: () => inTab(["Team"], heldCapabilities),
+    // The requirement's words read the same met or not; its mark says which ("Met: ..." or
+    // "Not met: ...") — success-coloured when met, the body's ink when not.
     swuRequirementTwoMembers: () =>
-      inTab(["SWU Qualification"], () => linesMatching(/two team members/i)),
+      inTab(["SWU Qualification"], () => requirement(/^At least two team members\.?$/i)),
     swuRequirementAllCapabilities: () =>
-      inTab(["SWU Qualification"], () => linesMatching(/all capabilities/i)),
+      inTab(["SWU Qualification"], () => requirement(/^Team members collectively possess all capabilities\.?$/i)),
     swuRequirementTermsAccepted: () =>
-      inTab(["SWU Qualification"], () =>
-        linesMatching(/agreed to the sprint with us|agreed to sprint with us/i),
-      ),
+      inTab(["SWU Qualification"], () => requirement(/^Agreed to Sprint With Us Terms & Conditions\.?$/i)),
     twuRequirementServiceArea: () =>
       inTab(["TWU Qualification"], () => requirement(/one or more Service Areas/i)),
     twuRequirementTermsAccepted: () =>
@@ -4422,8 +4784,13 @@ export default function create(
     await confirmIfAsked(where, confirm);
   }
 
-  // The Team table's Admin column is a box with no words, so each row states it.
+  // The Team table's Admin column is a box with no words, so each row states it. The table
+  // names each member by name alone, and neither it nor the member's own "View Team Member"
+  // dialog shows an address (an owner may not read other users' records either), so each row
+  // also carries the member's address: the organization's membership list pairs the name
+  // with the account, and the seed pairs the account with its address.
   async function teamRowsText(): Promise<string> {
+    const addresses = await teamAddressesByName();
     const lines: string[] = [];
     const tables = seen(page.getByRole("table"));
     const tableCount = await tables.count();
@@ -4432,12 +4799,40 @@ export default function create(
       const rowCount = await rows.count();
       for (let r = 0; r < rowCount; r++) {
         let text = (await rows.nth(r).innerText()).replace(/\s*\t\s*/g, " | ").replace(/\s*\n\s*/g, " ").trim();
+        const cells = rows.nth(r).getByRole("cell");
+        if (await cells.count()) {
+          const shownName = ((await cells.first().innerText()).split("\n")[0] ?? "").trim();
+          const address = addresses.get(shownName);
+          if (address) text += ` | ${address}`;
+        }
         const box = rows.nth(r).getByRole("checkbox");
         if (await box.count()) text += ` | Admin: ${(await box.first().isChecked()) ? "yes" : "no"}`;
         if (text) lines.push(text);
       }
     }
     return lines.join("\n");
+  }
+
+  async function teamAddressesByName(): Promise<Map<string, string>> {
+    const found = new Map<string, string>();
+    let organization = "";
+    try {
+      organization = organizationId();
+    } catch {
+      return found;
+    }
+    const response = await page.request
+      .get(`${baseURL}/api/affiliations?organization=${organization}`)
+      .catch(() => null);
+    if (!response || response.status() !== 200) return found;
+    const listed: unknown = await response.json().catch(() => []);
+    for (const affiliation of Array.isArray(listed) ? listed : []) {
+      const user = (affiliation as { user?: { id?: string; name?: string; email?: string } }).user;
+      if (!user?.name) continue;
+      const address = user.email || (user.id ? seedUserFor(user.id)?.email : "") || "";
+      if (address) found.set(user.name.trim(), address);
+    }
+    return found;
   }
 
   // Every address a test handed over, wherever it put it: a list, "email", or a nested user
@@ -4719,7 +5114,7 @@ export default function create(
   // to the dashboard and a signed-out one to the sign-in page.
   const signUpCompleteUnreachable = (member: string) => async (): Promise<never> => {
     throw new Error(
-      `unbound: user-sign-up-complete.${member} — /sign-up/complete never shows the profile form on this target; it redirects to /dashboard when signed in and to /sign-in when signed out, and no sign-in route mints an account with an unfinished profile`,
+      `unbound: user-sign-up-complete.${member} — /sign-up/complete never shows the profile form on this target; it redirects to /sign-in when signed out and to /dashboard when signed in — looked again signed in through /auth/createsessionadmin, /auth/createsessiongov and every /auth/createsessionvendor/1 to 16 (17 and above fail with /notice/authFailure), and each lands on /dashboard, so no route reaches an account with an unfinished profile; the first-time personas this form is for have no sign-in on this target`,
     );
   };
 
@@ -4784,8 +5179,35 @@ export default function create(
       if (wanted === undefined || (await box.first().isChecked()) !== saysYes(wanted)) await box.first().click();
       await settle();
     },
-    toggleExportField: (input) =>
-      tick("user-list.toggle_export_field", [asText(input) || "Email"], dialog().first()),
+    // The same dialog's "Select Fields to Export" boxes are "First Name", "Last Name", "Email"
+    // and "Organization Name", all ticked to start with. A field named the way the criteria
+    // name it ("email address", "organization", "firstName") is the box it stands for. A
+    // state given ({ checked }) is set; otherwise the box is toggled.
+    toggleExportField: async (input) => {
+      const where = "user-list.toggle_export_field";
+      await ready();
+      if (!(await dialog().count())) await press(where, ["Export Contact List"]);
+      const said = (field(input, "field", "fieldName", "name", "label", "column") || asText(input)).trim();
+      const words = squash(said);
+      const label = !said || /email/.test(words)
+        ? "Email"
+        : /first/.test(words)
+          ? "First Name"
+          : /last|surname|family/.test(words)
+            ? "Last Name"
+            : /org|company/.test(words)
+              ? "Organization Name"
+              : said;
+      const box = seen(dialog().first().getByRole("checkbox", { name: label, exact: true }));
+      if (!(await box.count())) {
+        throw new Error(`unbound: ${where} — the export dialog has no box labelled "${label}" (asked for "${said}") on ${page.url()}`);
+      }
+      const record =
+        input && typeof input === "object" && !Array.isArray(input) ? (input as Record<string, unknown>) : {};
+      const wanted = record.checked ?? record.selected ?? record.on ?? record.include;
+      if (wanted === undefined || (await box.first().isChecked()) !== saysYes(wanted)) await box.first().click();
+      await settle();
+    },
     exportContactList: () => inDialog("user-list.export_contact_list", ["Export"]),
     cancelExport: () => inDialog("user-list.cancel_export", ["Cancel"]),
     openUserProfile: (input) => openNamed("user-list.open_user_profile", input),
@@ -5012,10 +5434,35 @@ export default function create(
         await settle();
       },
       capabilityRow: () => sectionFrom(["Capabilities"]),
+      // Each capability is its name with an unlabelled mark before it, and nothing else says
+      // whether it is held: a held one's mark is drawn success-coloured (a filled tick), one
+      // not held in the same ink as its name (an empty circle) — seen as the organization
+      // member on their own Capabilities tab, where their three seeded capabilities are
+      // marked and the other six are not. The held ones are read from that mark, one per line.
       capabilityChecked: async (): Promise<string> => {
-        throw new Error(
-          `unbound: ${where}.capability_checked — looked again as the organization member on their own Capabilities tab: each capability is a link with its name and an unlabelled icon before it, and whether it is held changes only that icon's colour and shape; the row carries no text, no checkbox and no checked state in the accessibility tree, so nothing on the page says which are held`,
-        );
+        await ready();
+        const held: string[] = [];
+        for (const name of CAPABILITIES) {
+          const words = seen(page.getByRole("main").getByText(name, { exact: true }));
+          const count = await words.count();
+          if (!count) continue;
+          const marked = await words
+            .nth(count - 1)
+            .evaluate((element) => {
+              const ink = getComputedStyle(element).color;
+              let node: Element | null = element;
+              for (let level = 0; level < 3 && node; level++) {
+                for (const child of Array.from(node.children)) {
+                  if (child instanceof SVGElement) return getComputedStyle(child).color !== ink;
+                }
+                node = node.parentElement;
+              }
+              return false;
+            })
+            .catch(() => false);
+          if (marked) held.push(name);
+        }
+        return held.join("\n");
       },
       capabilityDescription: () => sectionFrom(["Capabilities"]),
     };
@@ -5131,7 +5578,18 @@ export default function create(
     const edit = await findControl(navBar(), "Edit");
     if (!edit) {
       const bar = (await navBar().innerText().catch(() => "")).replace(/\s*\n\s*/g, " | ");
-      nothing(`${where} — the evaluation panel tab is read-only and its top bar offers no "Edit" on ${page.url()} (the top bar shows: ${bar})`);
+      // The panel shown with its evaluators and no "Edit" is the panel locked: seen as the
+      // administrator on the seeded opportunities at consensus, where the tab lists both
+      // evaluators and the chair and the top bar carries nothing, while the same tab of the
+      // seeded closed opportunity still at individual evaluation offers "Edit". That is a
+      // refusal the page gives, not a control missing from it.
+      if ((await panelMembers()).some((member) => member.name)) {
+        const status = await valueAfter(["Status"]);
+        throw new Error(
+          `${where} — refused: the evaluation panel is shown read-only and its top bar offers no "Edit" (Status: ${status || "not shown"}) on ${page.url()} (the top bar shows: ${bar})`,
+        );
+      }
+      nothing(`${where} — the evaluation panel tab shows no evaluators and its top bar offers no "Edit" on ${page.url()} (the top bar shows: ${bar})`);
     }
     await edit.click();
     await settle();
@@ -5243,7 +5701,23 @@ export default function create(
       duplicateMemberError: () => panelRefusal(/duplicate|already|more than once|same (person|member)/i),
       nonPublicSectorMemberError: () => messages(/public sector|identifier/i),
       missingChairError: () => panelRefusal(/chair/i),
-      panelLockedAfterConsensus: () => messages(/consensus|locked|cannot/i),
+      // The page names no lock in words: a locked panel is the tab shown with its evaluators,
+      // read-only, and no "Edit" in the top bar. That state is reported, with the status the
+      // header gives, so a panel that can still be edited reads as nothing.
+      panelLockedAfterConsensus: async () => {
+        await ready();
+        const said = await messages(/consensus|locked|cannot/i);
+        if (said) return said;
+        if (await seen(page.getByRole("combobox", { name: "Panel Member", exact: false })).count()) return "";
+        if (!(await panelMembers()).some((member) => member.name)) return "";
+        await seen(navBar().getByText("Edit", { exact: true }))
+          .first()
+          .waitFor({ state: "visible", timeout: LATE_CONTROL_MS })
+          .catch(() => undefined);
+        if (await findControl(navBar(), "Edit")) return "";
+        const status = await valueAfter(["Status"]);
+        return `Evaluation panel locked: shown read-only with no "Edit" (Status: ${status || "not shown"})`;
+      },
     };
   }
 
@@ -5271,36 +5745,63 @@ export default function create(
     "/opportunities/team-with-us/:opportunityId/edit?tab=instructions",
   );
 
+  // Why the last "Submit Scores for Consensus" was refused, for incomplete_evaluation_error.
+  let submitRefusal = "";
+
   function evaluationIndividualList(where: string, route: string) {
     return {
       ...at(route),
       openProponentEvaluation: (input: unknown) =>
         openRow(`${where}.open_proponent_evaluation`, input),
+      // "Submit Scores for Consensus" sits in the top bar and is disabled, with no message
+      // beside it, while any of this evaluator's proponents is unevaluated (seen as the panel's
+      // evaluator on the seeded closed Sprint With Us opportunity, every row "Start
+      // Evaluation"). That disabled control is the refusal: it is reported at once, and kept
+      // for incomplete_evaluation_error, rather than passed over as though it had been pressed.
       submitScoresForConsensus: async () => {
-        // Disabled while any evaluation is incomplete: that refusal is what the test reads.
-        for (const name of ["Submit Scores for Consensus", "Submit for Consensus", "Submit Scores", "Submit"]) {
-          const control = await findControl(page, name);
-          if (!control) continue;
-          if (await isDisabled(control)) return;
-          break;
+        submitRefusal = "";
+        await ready();
+        const names = ["Submit Scores for Consensus", "Submit for Consensus", "Submit Scores"];
+        const deadline = Date.now() + LATE_CONTROL_MS;
+        let control: Locator | null = null;
+        let shownAs = "";
+        while (!control) {
+          for (const name of names) {
+            control = await findControl(navBar(), name);
+            if (control) {
+              shownAs = name;
+              break;
+            }
+          }
+          if (control || Date.now() >= deadline) break;
+          await page.waitForTimeout(250);
         }
-        await press(`${where}.submit_scores_for_consensus`, [
-          "Submit Scores for Consensus",
-          "Submit for Consensus",
-          "Submit Scores",
-          "Submit",
-        ]);
+        if (!control) {
+          const bar = (await navBar().innerText().catch(() => "")).replace(/\s*\n\s*/g, " | ");
+          submitRefusal = `"Submit Scores for Consensus" is not offered (the top bar shows: ${bar})`;
+          throw new Error(`${where}.submit_scores_for_consensus — refused: ${submitRefusal} on ${page.url()}`);
+        }
+        if (await isDisabled(control)) {
+          const rows = (await tableRows(false)).replace(/\n/g, " ; ");
+          submitRefusal = `"${shownAs}" is disabled: evaluations are incomplete${rows ? ` (${rows})` : ""}`;
+          throw new Error(`${where}.submit_scores_for_consensus — refused: ${submitRefusal} on ${page.url()}`);
+        }
+        await press(`${where}.submit_scores_for_consensus`, [shownAs], navBar());
         await confirmIfAsked(`${where}.submit_scores_for_consensus`, [
+          "Submit Scores for Consensus",
           "Submit for Consensus",
           "Submit",
         ]);
       },
       proponentRow: () => tableText(),
-      anonymousProponentName: () => anonymousProponent(),
+      anonymousProponentName: () => anonymousProponents(),
       evaluationStatus: () => tableText(),
       submitDisabledUntilComplete: () =>
         controlState(["Submit Scores for Consensus", "Submit for Consensus", "Submit Scores"]),
-      incompleteEvaluationError: () => messages(/complete|incomplete/i),
+      incompleteEvaluationError: async () =>
+        [...(await everyAlert(/complete|incomplete/i)), await messages(/complete|incomplete/i), submitRefusal]
+          .filter(Boolean)
+          .join("\n"),
       ownEvaluationsOnly: () => tableText(),
     };
   }
@@ -5336,6 +5837,16 @@ export default function create(
     }
     const bar = (await navBar().innerText().catch(() => "")).replace(/\s*\n\s*/g, " | ");
     const said = await linesMatching(/not completed|not yet|no proponents|consensus/i);
+    // The opportunity is at consensus (its header's Status says so) and this reader is not
+    // offered the control: seen signed in as the panel's evaluator who is not its chair, on
+    // the seeded opportunities at consensus, where the chair's top bar carries "Finalize
+    // Consensus Scores" and theirs carries nothing. That is the page refusing this reader.
+    const status = await valueAfter(["Status"]);
+    if (/consensus/i.test(status)) {
+      throw new Error(
+        `${where} — refused: the opportunity is at "${status}" but the top bar of ${page.url()} offers this reader no ${quoted(names)} (it shows: ${bar})`,
+      );
+    }
     throw new Error(
       `unbound: ${where} — no control labelled ${quoted(names)} in the top bar of ${page.url()} (it shows: ${bar})${
         said ? `; the tab says: ${said.replace(/\n/g, " | ")}` : ""
@@ -5343,23 +5854,131 @@ export default function create(
     );
   }
 
+  // "Finalize Consensus Scores" in the "Please Confirm" dialog closes the dialog first and
+  // sends its request after, so neither the dialog closing nor an idle network says it is
+  // done. What does: a notice drawn after the footer, or the control leaving the top bar as the
+  // opportunity moves on. A refusal is its own notice ("Unable to Finalize Consensuses — Your
+  // consensuses for this Sprint With Us opportunity could not be finalized.", seen as the
+  // chair on the seeded opportunity at consensus with nobody screenable), and is reported.
+  const FINALIZE_WAIT_MS = 30000;
+
+  async function confirmFinalize(where: string, names: string[], only?: RegExp): Promise<void> {
+    await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    if (!(await dialog().count())) {
+      throw new Error(`unbound: ${where} — no confirmation dialog is open on ${page.url()}`);
+    }
+    // Where the dialog must be one confirmation and not the other, one whose own button is
+    // not the expected one is left alone and named.
+    if (only && !(await isConfirmation(only))) {
+      const shown = (await dialogText()).replace(/\s*\n\s*/g, " | ");
+      throw new Error(`${where} — the open dialog is not the one it confirms (it shows: ${shown}) on ${page.url()}`);
+    }
+    const before = new Set(await everyAlert());
+    consensusRefusal = "";
+    await press(where, names, dialog().first());
+    const deadline = Date.now() + FINALIZE_WAIT_MS;
+    for (;;) {
+      const fresh = (await everyAlert()).filter((words) => !before.has(words));
+      const failed = fresh.find((words) => /unable|could not|error|failed/i.test(words));
+      if (failed) {
+        consensusRefusal = failed;
+        throw new Error(`${where} — refused: the page shows "${failed.replace(/\s*\n\s*/g, " — ")}" on ${page.url()}`);
+      }
+      if (fresh.length) break;
+      if (!(await dialog().count())) {
+        let stillOffered = false;
+        for (const name of names) if (await findControl(navBar(), name)) stillOffered = true;
+        if (!stillOffered) break;
+      }
+      if (Date.now() >= deadline) {
+        throw new Error(
+          `${where} — pressed ${quoted(names)} and within ${FINALIZE_WAIT_MS / 1000}s the page showed no notice and still offers it in the top bar of ${page.url()}`,
+        );
+      }
+      await page.waitForTimeout(250);
+    }
+    await settle();
+  }
+
+  // The refusal notice the last finalize drew, kept for the error readers: it is drawn after
+  // the footer, where the screen's own messages are not read.
+  let consensusRefusal = "";
+
+  async function consensusError(pattern: RegExp): Promise<string> {
+    const found = [
+      ...(await everyAlert(pattern)),
+      ...(consensusRefusal && matches(pattern, consensusRefusal) ? [consensusRefusal] : []),
+      ...(await messages(pattern)).split("\n"),
+    ].filter(Boolean);
+    return [...new Set(found)].join("\n");
+  }
+
+  const SUBMIT_CONSENSUS = "Submit Final Consensus Scores";
+  const FINALIZE_CONSENSUS = "Finalize Consensus Scores";
+
+  // Whether the open dialog is the confirmation whose own button is this one: the submit and
+  // finalize confirmations are both titled "Please Confirm" and differ only in their button.
+  async function isConfirmation(button: RegExp): Promise<boolean> {
+    if (!(await dialog().count())) return false;
+    const box = dialog().first();
+    if (await seen(box.getByRole("button", { name: button })).count()) return true;
+    if (await seen(box.getByRole("link", { name: button })).count()) return true;
+    return (await seen(box.getByText(button)).count()) > 0;
+  }
+
+  async function submitConsensus(where: string): Promise<void> {
+    await ready();
+    const deadline = Date.now() + LATE_CONTROL_MS;
+    let submit: Locator | null = null;
+    let finalize: Locator | null = null;
+    for (;;) {
+      submit = await findControl(navBar(), SUBMIT_CONSENSUS);
+      finalize = submit ? null : await findControl(navBar(), FINALIZE_CONSENSUS);
+      if (submit || finalize || Date.now() >= deadline) break;
+      await page.waitForTimeout(250);
+    }
+    const bar = (await navBar().innerText().catch(() => "")).replace(/\s*\n\s*/g, " | ");
+    if (submit) {
+      if (await isDisabled(submit)) {
+        consensusRefusal = `"${SUBMIT_CONSENSUS}" is disabled`;
+        throw new Error(`${where} — refused: "${SUBMIT_CONSENSUS}" is disabled in the top bar of ${page.url()}`);
+      }
+      await submit.click();
+      await settle();
+      return;
+    }
+    if (finalize) {
+      // Every consensus that exists is already submitted and the reader is an administrator:
+      // there is nothing left to submit, and the page offers finalising instead.
+      consensusRefusal = `"${SUBMIT_CONSENSUS}" is not offered: the top bar offers "${FINALIZE_CONSENSUS}" instead`;
+      throw new Error(
+        `${where} — refused: the top bar of ${page.url()} offers "${FINALIZE_CONSENSUS}" instead of "${SUBMIT_CONSENSUS}" (no consensus left in draft; it shows: ${bar})`,
+      );
+    }
+    // Neither: the same reading consensusControl gives of a bar with nothing for this reader.
+    await consensusControl(where, [SUBMIT_CONSENSUS]);
+  }
+
   function evaluationConsensusList(where: string, route: string) {
     return {
       ...at(route),
       openProponentConsensus: (input: unknown) =>
         openRow(`${where}.open_proponent_consensus`, input),
-      submitFinalConsensusScores: () =>
-        consensusControl(`${where}.submit_final_consensus_scores`, [
-          "Submit Final Consensus Scores",
-          "Submit Consensus Scores",
-          "Submit Scores",
-        ]),
+      // The top bar carries one of two controls for the chair at consensus: "Submit Final
+      // Consensus Scores" while any consensus is still a draft (or the chair is not an
+      // administrator), and "Finalize Consensus Scores" once every consensus that exists is
+      // submitted and the chair is an administrator. Only the first is this action's; the
+      // second, or nothing, is the page's answer and is reported, never pressed.
+      submitFinalConsensusScores: () => submitConsensus(`${where}.submit_final_consensus_scores`),
+      // "Submit Final Consensus Scores" opens "Please Confirm" ("By submitting this consensus,
+      // you, as the chair, ..."), whose own "Submit Final Consensus Scores" sends it; the
+      // outcome is its notice, "Consensuses Submitted" or "Unable to Submit Consensuses".
       confirmSubmitConsensus: () =>
-        inDialog(`${where}.confirm_submit_consensus`, [
-          "Submit Final Consensus Scores",
-          "Submit Consensus Scores",
-          "Submit",
-        ]),
+        confirmFinalize(
+          `${where}.confirm_submit_consensus`,
+          [SUBMIT_CONSENSUS],
+          new RegExp(`^${SUBMIT_CONSENSUS}$`),
+        ),
       finalizeConsensusScores: () =>
         consensusControl(`${where}.finalize_consensus_scores`, [
           "Finalize Consensus Scores",
@@ -5367,17 +5986,19 @@ export default function create(
           "Finalize",
         ]),
       confirmFinalizeConsensus: () =>
-        inDialog(`${where}.confirm_finalize_consensus`, [
+        confirmFinalize(`${where}.confirm_finalize_consensus`, [
           "Finalize Consensus Scores",
           "Finalize",
         ]),
       cancelModal: () => inDialog(`${where}.cancel_modal`, ["Cancel"]),
       proponentRow: () => tableText(),
       consensusStatus: () => tableText(),
-      submitConfirmationModal: () => dialogText(),
+      // Only the submit confirmation: the finalize one, or any other dialog, reads as nothing.
+      submitConfirmationModal: async () =>
+        (await isConfirmation(new RegExp(`^${SUBMIT_CONSENSUS}$`))) ? dialogText() : "",
       finalizeConfirmationModal: () => dialogText(),
-      notAllConsensusesSubmittedError: () => messages(/consensus|all/i),
-      noScreenableProponentError: () => messages(/screen|proponent/i),
+      notAllConsensusesSubmittedError: () => consensusError(/consensus|all/i),
+      noScreenableProponentError: () => consensusError(/screen|proponent/i),
       emptyForOwnerNotOnPanel: () => contentText(),
     };
   }
@@ -5846,8 +6467,13 @@ export default function create(
     uploadBodyImage: (input) => uploadBodyImage("content-create.upload_body_image", input),
     // "Publish" can take a moment to act on the last value typed, so a press that raises no
     // "Publish Page?" is tried again before it is reported.
+    // A reader who may not manage pages is shown "Not Found" there instead of the form (seen
+    // signed in as public sector staff and as a vendor): no "Publish" to press, and that
+    // refusal is what the test reads next, as with the form's fields.
     publishPage: async () => {
       const where = "content-create.publish_page";
+      await ready();
+      if (await notFoundShown()) return;
       for (let attempt = 0; attempt < 3; attempt++) {
         await press(where, ["Publish"], navBar());
         const opened = await dialog()
@@ -5863,6 +6489,8 @@ export default function create(
     // The save is answered either by leaving for the new page or, refused, by an alert drawn
     // after the footer while the form stays put; whichever comes first ends the wait.
     confirmPublish: async () => {
+      await ready();
+      if (await notFoundShown()) return;
       await inDialog("content-create.confirm_publish", ["Publish Page", "Publish", "Yes"]);
       await Promise.race([
         page.waitForURL((url) => !url.pathname.endsWith("/content/create"), { timeout: 15000 }),
