@@ -3733,12 +3733,10 @@ owed:
     id: R-1.34
     version: 1
     domain: opportunities
-    stage: derive-tests
+    stage: calibrate
     why: the seed states nineteen such accounts only as a total; it must name them
       (or mark each account's new-opportunity notice setting) so a test can
       address them
-    clause: each of the seeded accounts outside the subscriber group that have asked
-      for new-opportunity notices receives the announcement
     from: derive-tests-opportunities-stale-4
     gate: G3
     by: agent:reviewer
@@ -3753,3 +3751,15 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-28T05:09:44.237Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-28T05:17:46.994Z
+    asserted:
+      - clause: each of the seeded accounts outside the subscriber group that have asked
+          for new-opportunity notices receives the announcement
+        by: derive-tests-opportunities-8
+        gate: G3
+        at: 2026-09-28T05:17:46.994Z
+    target: old

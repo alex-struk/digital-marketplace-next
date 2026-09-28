@@ -1,0 +1,19 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether the revised R-1.34, R-1.36 and R-1.37 tests follow only from their criteria and settle the four open conditions from derive-tests-opportunities-stale-4. They do. Each group-notice test now counts a person as told only when a caught message names them as a visible or blind-copied recipient and names the opportunity's title in its subject or body, which is the same check the author-confirmation tests use. The tests reach the application only through the surface and the seed; no selector, route or status code appears. R-1.36 creates its starting state, a watcher and a submitted proposal on the published opportunity, and reads both back through the surface before cancelling. Condition 4 asked for a not-testable entry because the seed gave the nineteen extra announcement recipients only as a total. That is no longer true: tests/seed/manifest.yaml lists all nineteen by handle under new_opportunity_notices.receive_the_announcement, and R-1.34 now asserts all 139 addresses and checks the total against the seed's own figure, so an entry would state a false reason. The runner's typecheck reports no diagnostics under acceptance/opportunities/; its two errors are in adapters/new/, which this proposal does not touch. The not-testable.yaml change only moves the R-1.51 entry, with identical text. One accepted weakness: the author, staffOne, is among the nineteen, and their title-naming confirmation could count as their announcement, since the criterion describes the two messages no more precisely than that. The ruling would change if these files produced typecheck diagnostics or the seed stopped naming the nineteen.
+conditions:
+  - "condition-met derive-tests-opportunities-stale-4#1: in tests/acceptance/opportunities/R-1.34.spec.ts, unreached() counts a subscriber as told only when a caught message names them as a visible or blind-copied recipient and names the opportunity's title in its subject or body."
+  - "condition-met derive-tests-opportunities-stale-4#2: in tests/acceptance/opportunities/R-1.36.spec.ts, unreached() counts the watcher (proponentTwo) and the proponent (vendorOne) as told only when a message caught since the cancellation names them as a visible or blind-copied recipient and names the seeded opportunity's title."
+  - "condition-met derive-tests-opportunities-stale-4#3: in tests/acceptance/opportunities/R-1.37.spec.ts, unreached() counts each active seeded administrator as notified only when a message caught since the submission names them as a visible or blind-copied recipient and names the submitted opportunity's title."
+  - "condition-withdrawn derive-tests-opportunities-stale-4#4: the seed now lists the nineteen accounts outside the subscriber group by handle (tests/seed/manifest.yaml, new_opportunity_notices.receive_the_announcement), and subscriberAddresses() in R-1.34.spec.ts asserts all of them and checks the 139 total, so the clause is asserted and an untestable entry would state a false reason."
+cost: 0.49330799999999997
+turns: 5
+session: "bf4ecc7a-1610-4c83-8f16-a02c72d3caa9"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T05:17:46.929Z

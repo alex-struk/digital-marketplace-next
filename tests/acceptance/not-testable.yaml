@@ -112,16 +112,6 @@ criteria:
       documented manual route lies outside the service by definition. This is a
       property to be accepted by a reader of the rebuilt system's routes, not
       settled by a test."
-  - id: R-1.51
-    version: 1
-    reason: "unobservable: nothing the service does could show that a state it does
-      not define is gone. No action requests a move to a suspended state, no
-      observation returns the states an opportunity may hold or the states the
-      list's state filter offers, and the mapping of a historical record onto a
-      defined state happens before the rebuilt system reads it, which is a
-      property of the migration rather than of anything the running service
-      answers with. No addition to the surface would help; this is a claim a
-      human accepts about the rebuild rather than one a test can settle."
   - id: R-7.11
     version: 1
     reason: "The claim is about the shape of a refused answer — a permission refusal
@@ -180,3 +170,13 @@ criteria:
       the service refuses to remove: content-edit withholds the removal and a
       request made another way is refused, so there is no path through the
       surface to the state the criterion starts from."
+  - id: R-1.51
+    version: 1
+    reason: "unobservable: nothing the service does could show that a state it does
+      not define is gone. No action requests a move to a suspended state, no
+      observation returns the states an opportunity may hold or the states the
+      list's state filter offers, and the mapping of a historical record onto a
+      defined state happens before the rebuilt system reads it, which is a
+      property of the migration rather than of anything the running service
+      answers with. No addition to the surface would help; this is a claim a
+      human accepts about the rebuild rather than one a test can settle."
