@@ -4088,7 +4088,7 @@ owed:
     id: R-2.18
     version: 3
     domain: proposals
-    stage: derive-tests
+    stage: ratify
     why: a request-level page for Sprint With Us and Team With Us proposals that
       submits a proposal whose team members are given by account (seed users,
       including one pending, one deactivated, one outside the organization, and
@@ -4145,6 +4145,18 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-28T21:54:32.150Z
+      - from: derive-tests
+        to: ratify
+        why: a ruling on the criterion's wording, because the approved contract says the
+          Sprint With Us team-member choice lists pending invitees marked
+          pending, which contradicts the criterion's statement that the form
+          offers only active members, and no test can assert this clause until
+          one of the two changes
+        by: agent:reviewer
+        proposal: derive-tests-proposals-stale-9
+        gate: G3
+        at: 2026-09-28T22:03:08.064Z
     target: old
-    clause: the proposal form offers every active member of the organization and
-      does not offer the specific person already named on the proposal
+    clause: the Sprint With Us proposal form offers only the organization's active
+      members, so a person whose invitation to the organization is unanswered is
+      not offered
