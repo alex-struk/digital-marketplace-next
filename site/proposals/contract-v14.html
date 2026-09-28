@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>contract-v14 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">198</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">194</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">169</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>contract-v14</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-09-28 05:33</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.282 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the contract the tests will act through?</h2>
+<p><strong>Recommendation.</strong> The contract now gives R-2.27&#39;s last clause, &quot;draft proposals are not counted&quot;, something to test: one new seeded opportunity.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.282 (Claude Code))</p>
+<p>The contract now gives R-2.27&#39;s last clause, &quot;draft proposals are not counted&quot;, something to test: one new seeded opportunity. I also brought the oracle up from scratch, and the application applied its migrations, loaded the seed and closed the new opportunity itself. The oracle is down again.</p>
+<p><strong>What was owed.</strong> R-2.27 says that once every proposal still in contention on an opportunity has been scored, the application moves the opportunity to processing by itself, and that disqualified, withdrawn and draft proposals don&#39;t count. The existing test covers the disqualified and withdrawn parts. It couldn&#39;t cover the draft part because no seeded opportunity past its deadline had a draft next to a proposal that could be scored. A test can&#39;t create one either: proposals can only be started while an opportunity is open, and the form refuses a deadline that has already passed.</p>
+<p><strong>What I added.</strong> A ninth Code With Us opportunity in <code>tests/seed/009-code-with-us-stages.sql</code>:</p>
+<ul><li>It is seeded as published with its deadline thirty days past.</li><li>One proposal was submitted by <code>users.organizationOwner</code> for <code>organizations.qualified</code>.</li><li>One proposal was left as a draft by <code>users.proponentTwo</code> for <code>organizations.proponentTwo</code>.</li></ul>
+<p>In <code>tests/seed/manifest.yaml</code> these are:</p>
+<ul><li><code>opportunities.cwuLapsedWithSubmissionAndDraft</code> (<code>00000000-0000-4000-a009-000000000001</code>), marked <code>for: [R-2.27]</code></li><li><code>proposals.cwuSubmissionBesideDraft</code> (<code>…a009-000000000101</code>)</li><li><code>proposals.cwuDraftBesideSubmission</code> (<code>…a009-000000000102</code>)</li></ul>
+<p>Only the starting point is seeded; the application produces everything after it. The old code&#39;s processing check (<code>src/back-end/lib/db/proposal/code-with-us.ts:1038</code>) excludes Withdrawn, Disqualified and Draft, and its closing routine only moves submitted proposals to review. So scoring the one submission should move the opportunity to processing. It gets its own opportunity rather than a draft added to the three-proposal one, so the existing R-2.27 test is unaffected and neither test depends on the order they run in. Nothing else in the contract changed. All five surface, persona, API, observables and compose files are exactly as the earlier approved versions left them, so everything recorded there about pages, sign-ins and unreachable states still holds.</p>
+<p><strong>Proving the oracle.</strong> My first <code>oracle up</code> did nothing, because an earlier run had left the oracle running, so the new rows weren&#39;t loaded. I ran <code>oracle down</code>, then <code>oracle up</code> again. It built and started all four copies with no errors, ran the migration service and loaded all fourteen seed files.</p>
+<p>Checks against the running application:</p>
+<ul><li>Signed in as the administrator through <code>/auth/createsessionadmin</code>, reading <code>/api/opportunities/code-with-us/…a009…0001</code> returned the new opportunity by title.</li><li>The application&#39;s own scheduled step then closed it: the opportunity showed <code>EVALUATION</code> and the submission <code>UNDER_REVIEW</code>.</li><li>Signed in as the draft&#39;s owner through <code>/auth/createsessionvendor/11</code>, the draft was still <code>DRAFT</code>.</li></ul>
+<p>I changed nothing in the Compose override. <code>$SDLC_BIN</code> couldn&#39;t be read in this sandbox, so I ran the same CLI from <code>~/GitHub/agentic-sdlc/bin/sdlc.mjs</code>.</p>
+<p><strong>Sign-in and personas.</strong> Unchanged. On the oracle every persona signs in through a session route: <code>/auth/createsessionadmin</code>, <code>/auth/createsessiongov</code>, and <code>/auth/createsessionvendor/N</code> for the vendors. On the rebuilt target they use the sandbox identity provider. The accounts the manifest lists as unreachable by the oracle&#39;s sign-in routes still are.</p>
+<p><strong>For whoever writes the test next.</strong></p>
+<ul><li>Close the opportunity with the scheduled-transition trigger.</li><li>Score <code>cwuSubmissionBesideDraft</code> and watch the opportunity move to processing, with the note &quot;Automatically moved to Processing as all proposals have been evaluated.&quot; in its history.</li><li>As <code>persona.competingVendor</code> (<code>users.proponentTwo</code>), confirm the draft is still a draft.</li><li>The administrator&#39;s proposal list doesn&#39;t show drafts, so read the draft as its owner.</li></ul>
+<p><code>tests/generated/seed.ts</code> is generated from the manifest and belongs to a later stage, so I didn&#39;t edit it.</p>
+<p>re-address missing-test/R-2.27 to derive-tests: seed.opportunities.cwuLapsedWithSubmissionAndDraft, a lapsed Code With Us opportunity with one submitted proposal (seed.proposals.cwuSubmissionBesideDraft, users.organizationOwner) and one draft (seed.proposals.cwuDraftBesideSubmission, users.proponentTwo); scoring the submission is scoring the last proposal in contention</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-09-28 05:33.</p>
+<div class="body"><p>The question is whether the contract now gives R-2.27&#39;s last clause, &quot;draft proposals are not counted&quot;, something a test can act on. It does, so I approve. The existing seeded opportunities could not exercise that clause. A test cannot build the situation either, because proposals can only be started while an opportunity is open and the form refuses a deadline that has already passed. The fix is one new opportunity, number nine. It is seeded as published with its deadline passed, and it carries one submitted proposal from users.organizationOwner and one draft from users.proponentTwo. Both vendors have personas, so each can open their own proposal. Only the starting condition is seeded. The application&#39;s own scheduled step does the closing, and the author confirmed on a freshly started oracle that it did: the opportunity went to EVALUATION, the submission to UNDER_REVIEW, and the draft stayed DRAFT. The seed uses the existing helpers, and opportunity 1 already seeds a DRAFT through the same path, so the new rows add no new mechanism. The opportunity&#39;s number matches the file&#39;s identifier scheme, the header count is updated to seven of nine, and the other contract files are untouched, so earlier approvals still hold. The page says tests/generated/seed.ts was not edited, yet it appears in the diff. That file is regenerated from the manifest, the &#39;generated&#39; check passes, and its new entries match the manifest exactly, so the discrepancy is harmless. Two things would change this ruling: the application not counting the draft when scoring the one submission (that would be a calibration question, not a contract one), or evidence that closing the opportunity moves the draft instead of leaving it as DRAFT. The criterion&#39;s wording and confidence are unchanged, so no condition line is needed.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

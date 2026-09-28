@@ -831,6 +831,20 @@ export const seed = {
       ],
       "note": "Carries no addenda. Its history is the status rows only; no score-entry events were seeded."
     },
+    "cwuLapsedWithSubmissionAndDraft": {
+      "id": "00000000-0000-4000-a009-000000000001",
+      "program": "code-with-us",
+      "title": "Seeded lapsed Code With Us opportunity with a submission and a draft",
+      "seeded_status": "PUBLISHED (lapsed)",
+      "proposals": [
+        "proposals.cwuSubmissionBesideDraft",
+        "proposals.cwuDraftBesideSubmission"
+      ],
+      "for": [
+        "R-2.27"
+      ],
+      "note": "For the clause that draft proposals are not counted. One proposal submitted by users.organizationOwner for organizations.qualified, and one left DRAFT by users.proponentTwo for organizations.proponentTwo. Closing it moves the submission to review and leaves the draft as it is, so scoring the submission is scoring the last proposal in contention. Each vendor can open their own proposal."
+    },
     "swuConsensusOneOutstanding": {
       "id": "00000000-0000-4000-a011-000000000001",
       "version_id": "00000000-0000-4000-a011-000000000002",
@@ -1351,6 +1365,18 @@ export const seed = {
       "vendor": "users.proponentTwo",
       "seeded_status": "NOT_AWARDED",
       "score": 77
+    },
+    "cwuSubmissionBesideDraft": {
+      "id": "00000000-0000-4000-a009-000000000101",
+      "opportunity": "opportunities.cwuLapsedWithSubmissionAndDraft",
+      "vendor": "users.organizationOwner",
+      "seeded_status": "SUBMITTED"
+    },
+    "cwuDraftBesideSubmission": {
+      "id": "00000000-0000-4000-a009-000000000102",
+      "opportunity": "opportunities.cwuLapsedWithSubmissionAndDraft",
+      "vendor": "users.proponentTwo",
+      "seeded_status": "DRAFT"
     },
     "swuOutstandingOne": {
       "id": "00000000-0000-4000-a011-000000000101",

@@ -3768,7 +3768,7 @@ owed:
     id: R-2.27
     version: 1
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: a seeded Code With Us opportunity, published with its deadline passed,
       carrying one DRAFT proposal and at least one SUBMITTED proposal from a
       vendor with a persona (users.organizationOwner or users.proponentTwo),
@@ -3777,3 +3777,16 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-28T05:25:52.069Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: seed.opportunities.cwuLapsedWithSubmissionAndDraft, a lapsed Code With Us
+          opportunity with one submitted proposal
+          (seed.proposals.cwuSubmissionBesideDraft, users.organizationOwner) and
+          one draft (seed.proposals.cwuDraftBesideSubmission,
+          users.proponentTwo); scoring the submission is scoring the last
+          proposal in contention
+        by: contract-v14
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-28T05:33:46.003Z
