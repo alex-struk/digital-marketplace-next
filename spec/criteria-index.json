@@ -1,5 +1,5 @@
 {
-  "generated_from": "f31700e000484947669c48e50cf9c73b4d1e20c7",
+  "generated_from": "7eb305e85acb5a44b285f09b9800da3c65c6a355",
   "criteria": [
     {
       "id": "R-7.1",
@@ -588,7 +588,9 @@
       "origin": "authored",
       "statement": "A page's body is rendered as formatted text only; markup embedded in it is never executed, and the same body renders identically on the page's own address and wherever another screen embeds it.",
       "cites": [],
-      "notes": [],
+      "notes": [
+        "calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it"
+      ],
       "state": "accepted",
       "replaces": "R-7.14",
       "raw": "### R-7.17 · v1 · confirmed · authored",
@@ -609,7 +611,7 @@
       "state": "accepted",
       "replaces": "R-7.15",
       "raw": "### R-7.18 · v1 · confirmed · authored",
-      "line": 240,
+      "line": 241,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -638,7 +640,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.19 · v1 · confirmed · recovered",
-      "line": 246,
+      "line": 247,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -671,7 +673,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.20 · v1 · confirmed · recovered",
-      "line": 257,
+      "line": 258,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -700,7 +702,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.21 · v1 · confirmed · recovered",
-      "line": 269,
+      "line": 270,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -727,7 +729,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-7.22 · v1 · confirmed · recovered",
-      "line": 280,
+      "line": 281,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -756,7 +758,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.23 · v1 · confirmed · recovered",
-      "line": 290,
+      "line": 291,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -785,7 +787,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.24 · v1 · confirmed · recovered",
-      "line": 301,
+      "line": 302,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -822,7 +824,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.25 · v1 · confirmed · recovered",
-      "line": 312,
+      "line": 313,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -856,7 +858,7 @@
       ],
       "state": "obsolete",
       "raw": "### D-content-26 · v1 · inferred · recovered",
-      "line": 325,
+      "line": 326,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -889,7 +891,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.26 · v1 · confirmed · recovered",
-      "line": 338,
+      "line": 339,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -927,7 +929,7 @@
       ],
       "state": "obsolete",
       "raw": "### D-content-27 · v1 · inferred · recovered",
-      "line": 350,
+      "line": 351,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -968,7 +970,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.27 · v1 · confirmed · recovered",
-      "line": 364,
+      "line": 365,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -1002,7 +1004,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.28 · v2 · confirmed · recovered",
-      "line": 378,
+      "line": 379,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -1035,7 +1037,7 @@
       ],
       "state": "accepted",
       "raw": "### R-7.29 · v1 · confirmed · recovered",
-      "line": 391,
+      "line": 392,
       "domain": "content",
       "file": "spec/domains/content.md"
     },
@@ -1084,7 +1086,8 @@
       "when": "they save a panel of one person, or a panel naming the same person twice, or a panel naming two chairs, or a panel naming a vendor",
       "then": "the panel is rejected with a message naming the rule that was broken, and the opportunity keeps the panel it had",
       "notes": [
-        "the minimum of two members is the same for both programs."
+        "the minimum of two members is the same for both programs.",
+        "calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it"
       ],
       "state": "accepted",
       "raw": "### R-5.1 · v1 · confirmed · recovered",
@@ -1127,7 +1130,7 @@
       "state": "accepted",
       "supersededBy": "R-5.9",
       "raw": "### R-5.2 · v1 · confirmed · recovered",
-      "line": 34,
+      "line": 35,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1156,7 +1159,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.3 · v1 · confirmed · recovered",
-      "line": 49,
+      "line": 50,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1199,7 +1202,7 @@
       "state": "accepted",
       "supersededBy": "R-5.10",
       "raw": "### R-5.4 · v1 · confirmed · recovered",
-      "line": 60,
+      "line": 61,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1238,7 +1241,7 @@
       "state": "accepted",
       "supersededBy": "R-5.11",
       "raw": "### R-5.5 · v1 · confirmed · recovered",
-      "line": 76,
+      "line": 77,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1277,7 +1280,7 @@
       "state": "accepted",
       "supersededBy": "R-5.12",
       "raw": "### R-5.6 · v1 · confirmed · recovered",
-      "line": 91,
+      "line": 92,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1312,7 +1315,7 @@
       "state": "accepted",
       "supersededBy": "R-5.13",
       "raw": "### R-5.7 · v1 · confirmed · recovered",
-      "line": 106,
+      "line": 107,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1351,7 +1354,7 @@
       "state": "accepted",
       "supersededBy": "R-5.14",
       "raw": "### R-5.8 · v1 · confirmed · recovered",
-      "line": 120,
+      "line": 121,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1368,7 +1371,7 @@
       "state": "accepted",
       "replaces": "R-5.2",
       "raw": "### R-5.9 · v1 · confirmed · authored",
-      "line": 135,
+      "line": 136,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1383,7 +1386,7 @@
       "state": "accepted",
       "replaces": "R-5.4",
       "raw": "### R-5.10 · v1 · confirmed · authored",
-      "line": 141,
+      "line": 142,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1398,7 +1401,7 @@
       "state": "accepted",
       "replaces": "R-5.5",
       "raw": "### R-5.11 · v1 · confirmed · authored",
-      "line": 146,
+      "line": 147,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1413,7 +1416,7 @@
       "state": "accepted",
       "replaces": "R-5.6",
       "raw": "### R-5.12 · v1 · confirmed · authored",
-      "line": 151,
+      "line": 152,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1428,7 +1431,7 @@
       "state": "accepted",
       "replaces": "R-5.7",
       "raw": "### R-5.13 · v1 · confirmed · authored",
-      "line": 156,
+      "line": 157,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1443,7 +1446,7 @@
       "state": "accepted",
       "replaces": "R-5.8",
       "raw": "### R-5.14 · v1 · confirmed · authored",
-      "line": 161,
+      "line": 162,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1475,7 +1478,7 @@
       "state": "accepted",
       "supersededBy": "R-5.37",
       "raw": "### R-5.15 · v1 · confirmed · recovered",
-      "line": 166,
+      "line": 167,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1512,7 +1515,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.16 · v1 · confirmed · recovered",
-      "line": 180,
+      "line": 181,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1541,7 +1544,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.17 · v1 · confirmed · recovered",
-      "line": 193,
+      "line": 194,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1568,7 +1571,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.18 · v2 · confirmed · recovered",
-      "line": 204,
+      "line": 205,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1607,7 +1610,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.19 · v1 · confirmed · recovered",
-      "line": 214,
+      "line": 215,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1645,7 +1648,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.20 · v1 · confirmed · recovered",
-      "line": 227,
+      "line": 228,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1678,7 +1681,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.21 · v1 · confirmed · recovered",
-      "line": 241,
+      "line": 242,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1717,7 +1720,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.22 · v1 · confirmed · recovered",
-      "line": 253,
+      "line": 254,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1750,7 +1753,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.23 · v1 · confirmed · recovered",
-      "line": 266,
+      "line": 267,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1787,7 +1790,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.24 · v1 · confirmed · recovered",
-      "line": 278,
+      "line": 279,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1826,7 +1829,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.25 · v3 · confirmed · recovered",
-      "line": 291,
+      "line": 292,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1855,7 +1858,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.26 · v1 · confirmed · recovered",
-      "line": 304,
+      "line": 305,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1892,7 +1895,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.27 · v2 · confirmed · recovered",
-      "line": 315,
+      "line": 316,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1929,7 +1932,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.28 · v2 · confirmed · recovered",
-      "line": 328,
+      "line": 329,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1974,7 +1977,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.29 · v1 · confirmed · recovered",
-      "line": 341,
+      "line": 342,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2009,7 +2012,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.30 · v1 · confirmed · recovered",
-      "line": 356,
+      "line": 357,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2036,7 +2039,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.31 · v1 · confirmed · recovered",
-      "line": 368,
+      "line": 369,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2085,7 +2088,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.32 · v1 · confirmed · recovered",
-      "line": 378,
+      "line": 379,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2112,7 +2115,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.33 · v1 · confirmed · recovered",
-      "line": 394,
+      "line": 395,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2149,7 +2152,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.34 · v2 · confirmed · recovered",
-      "line": 404,
+      "line": 405,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2182,7 +2185,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.35 · v1 · confirmed · recovered",
-      "line": 417,
+      "line": 418,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2223,7 +2226,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.36 · v1 · confirmed · recovered",
-      "line": 429,
+      "line": 430,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2234,11 +2237,13 @@
       "origin": "authored",
       "statement": "A panel member who is neither an evaluator nor the chair must be refused by the service when the panel is submitted, with a field-level message identifying the offending member, rather than being allowed through to a database constraint violation.",
       "cites": [],
-      "notes": [],
+      "notes": [
+        "calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it"
+      ],
       "state": "accepted",
       "replaces": "R-5.15",
       "raw": "### R-5.37 · v1 · confirmed · authored",
-      "line": 443,
+      "line": 444,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -3414,7 +3419,8 @@
       "when": "they open any message from the service",
       "then": "they see a readable plain-text rendering carrying the same words and links as the formatted version",
       "notes": [
-        "nothing in the service composes plain-text copy of its own, so the plain-text form can only ever be as good as the automatic rendering of the formatted one."
+        "nothing in the service composes plain-text copy of its own, so the plain-text form can only ever be as good as the automatic rendering of the formatted one.",
+        "calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it"
       ],
       "state": "accepted",
       "raw": "### R-6.5 · v1 · confirmed · recovered",
@@ -3447,7 +3453,7 @@
       ],
       "state": "accepted",
       "raw": "### R-6.6 · v2 · confirmed · recovered",
-      "line": 85,
+      "line": 86,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3484,7 +3490,7 @@
       ],
       "state": "accepted",
       "raw": "### R-6.7 · v1 · confirmed · recovered",
-      "line": 96,
+      "line": 97,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3525,7 +3531,7 @@
       ],
       "state": "accepted",
       "raw": "### R-6.8 · v1 · confirmed · recovered",
-      "line": 109,
+      "line": 110,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3580,7 +3586,7 @@
       "state": "accepted",
       "supersededBy": "R-6.15",
       "raw": "### R-6.9 · v1 · confirmed · recovered",
-      "line": 123,
+      "line": 124,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3623,7 +3629,7 @@
       "state": "accepted",
       "supersededBy": "R-6.16",
       "raw": "### R-6.10 · v1 · confirmed · recovered",
-      "line": 142,
+      "line": 143,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3662,7 +3668,7 @@
       "state": "accepted",
       "supersededBy": "R-6.17",
       "raw": "### R-6.11 · v1 · confirmed · recovered",
-      "line": 158,
+      "line": 159,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3701,7 +3707,7 @@
       "state": "accepted",
       "supersededBy": "R-6.18",
       "raw": "### R-6.12 · v1 · confirmed · recovered",
-      "line": 173,
+      "line": 174,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3738,7 +3744,7 @@
       ],
       "state": "accepted",
       "raw": "### R-6.13 · v1 · confirmed · recovered",
-      "line": 188,
+      "line": 189,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3817,7 +3823,7 @@
       "state": "accepted",
       "supersededBy": "R-6.19",
       "raw": "### R-6.14 · v1 · confirmed · recovered",
-      "line": 201,
+      "line": 202,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3832,7 +3838,7 @@
       "state": "accepted",
       "replaces": "R-6.9",
       "raw": "### R-6.15 · v1 · confirmed · authored",
-      "line": 226,
+      "line": 227,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3847,7 +3853,7 @@
       "state": "accepted",
       "replaces": "R-6.10",
       "raw": "### R-6.16 · v1 · confirmed · authored",
-      "line": 231,
+      "line": 232,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3864,7 +3870,7 @@
       "state": "accepted",
       "replaces": "R-6.11",
       "raw": "### R-6.17 · v1 · confirmed · authored",
-      "line": 236,
+      "line": 237,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3879,7 +3885,7 @@
       "state": "accepted",
       "replaces": "R-6.12",
       "raw": "### R-6.18 · v1 · confirmed · authored",
-      "line": 242,
+      "line": 243,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3896,7 +3902,7 @@
       "state": "accepted",
       "replaces": "R-6.14",
       "raw": "### R-6.19 · v1 · confirmed · authored",
-      "line": 247,
+      "line": 248,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3929,7 +3935,7 @@
       ],
       "state": "accepted",
       "raw": "### R-6.20 · v1 · confirmed · recovered",
-      "line": 253,
+      "line": 254,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3967,7 +3973,7 @@
       ],
       "state": "accepted",
       "raw": "### R-6.21 · v1 · confirmed · recovered",
-      "line": 265,
+      "line": 266,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -3994,7 +4000,7 @@
       "state": "accepted",
       "supersededBy": "R-6.27",
       "raw": "### R-6.22 · v1 · confirmed · recovered",
-      "line": 279,
+      "line": 280,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -4043,7 +4049,7 @@
       ],
       "state": "accepted",
       "raw": "### R-6.23 · v1 · confirmed · recovered",
-      "line": 291,
+      "line": 292,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -4076,7 +4082,7 @@
       ],
       "state": "accepted",
       "raw": "### R-6.24 · v1 · confirmed · recovered",
-      "line": 307,
+      "line": 308,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -4117,7 +4123,7 @@
       ],
       "state": "accepted",
       "raw": "### R-6.25 · v2 · confirmed · recovered",
-      "line": 319,
+      "line": 320,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -4157,7 +4163,7 @@
       "state": "accepted",
       "supersededBy": "R-6.28",
       "raw": "### R-6.26 · v2 · confirmed · recovered",
-      "line": 333,
+      "line": 334,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -4174,7 +4180,7 @@
       "state": "accepted",
       "replaces": "R-6.22",
       "raw": "### R-6.27 · v1 · confirmed · authored",
-      "line": 349,
+      "line": 350,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -4189,7 +4195,7 @@
       "state": "accepted",
       "replaces": "R-6.26",
       "raw": "### R-6.28 · v1 · confirmed · authored",
-      "line": 355,
+      "line": 356,
       "domain": "notifications",
       "file": "spec/domains/notifications.md"
     },
@@ -5890,7 +5896,9 @@
       "origin": "authored",
       "statement": "A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named.",
       "cites": [],
-      "notes": [],
+      "notes": [
+        "calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it"
+      ],
       "state": "accepted",
       "replaces": "R-1.52",
       "raw": "### R-1.55 · v1 · confirmed · authored",
@@ -5909,7 +5917,7 @@
       "state": "accepted",
       "replaces": "R-1.54",
       "raw": "### R-1.56 · v1 · confirmed · authored",
-      "line": 628,
+      "line": 629,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },

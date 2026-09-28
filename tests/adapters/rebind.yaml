@@ -257,6 +257,11 @@ rebind:
       SDLC_MAIL_API (copy 0) instead of this worker's
       SDLC_MAIL_API_<TEST_PARALLEL_INDEX>, so the fault never reached this
       worker's app
+    closed: &a3
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-28T14:43:23.871Z
   - id: R-6.15
     target: old
     why: mailApi reads the unnumbered SDLC_MAIL_API (copy 0's catcher) instead of
@@ -265,6 +270,7 @@ rebind:
       evaluation-consensus-list-twu.submit_final_consensus_scores and
       confirm_submit_consensus lack the label the page renders, 'Submit Final
       Consensus Scores'
+    closed: *a3
   - id: R-5.17
     target: old
     why: mailApi reads the unnumbered SDLC_MAIL_API (copy 0's catcher) while the
@@ -273,12 +279,14 @@ rebind:
       counts another copy's mail (14, 63) and the empty-catcher precondition
       fails before any panel notice is checked; resolve the catcher per worker
       as the fixture's forThisWorker does
+    closed: *a3
   - id: R-1.34
     target: old
     why: mailApi reads the unnumbered SDLC_MAIL_API (copy 0's catcher) while the
       test clears this worker's SDLC_MAIL_API_<TEST_PARALLEL_INDEX>, so the
       empty-catcher check counts another copy's 413/424 messages; resolve the
       catcher per worker as the fixture's forThisWorker does
+    closed: *a3
   - id: R-1.36
     target: old
     why: mailApi reads the unnumbered SDLC_MAIL_API (copy 0's catcher), so
@@ -286,6 +294,7 @@ rebind:
       SDLC_MAIL_API_<TEST_PARALLEL_INDEX> and gets 404, and the empty-catcher
       check counts another copy's 21 messages; resolve the catcher per worker as
       the fixture's forThisWorker does
+    closed: *a3
   - id: R-1.15
     target: old
     why: opportunity-swu-create.publish and opportunity-twu-create.publish throw
@@ -293,6 +302,7 @@ rebind:
       scoring weights should total 100% exactly.'); when the disabled control
       comes with a form message, publish should return quietly so
       scoreWeightError can read the message
+    closed: *a3
   - id: R-2.14
     target: old
     why: submitProposal returns silently when openTermsDialog reports the form
@@ -301,6 +311,7 @@ rebind:
       renders 'Please enter a valid email.' / 'Please enter a valid phone
       number.' under the fields; surface the refusal and read the rendered field
       messages
+    closed: *a3
   - id: R-8.31
     target: old
     why: removeExistingAttachment clicks the remove mark but never saves the
@@ -310,6 +321,7 @@ rebind:
       Changes', while a submitted Code With Us proposal's edit page offers
       'Submit Changes', which opens a terms dialog whose boxes must be ticked
       before its 'Submit Changes' confirm
+    closed: *a3
   - id: R-4.14
     target: old
     why: everyUserRow reads the virtualized user table from its current scroll
@@ -320,3 +332,4 @@ rebind:
       reactivating the account) so they can set their own name; let it use its
       session-route entry like every other persona, and keep 'cannot show a
       refusal' only for the refusal-checking reads
+    closed: *a3

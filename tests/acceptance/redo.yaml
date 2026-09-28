@@ -314,3 +314,33 @@ redo:
       recorded, read the reason once the history can be read or wherever the
       reason is shown, and establish a refusal because the status is unchanged
     closed: *a6
+  - id: R-5.29
+    version: 1
+    why: the test reads whether the evaluator who is not the chair is offered
+      somewhere to record a consensus, but the criterion says that person's
+      attempt is refused, not that nothing is offered; have that evaluator make
+      the attempt and establish afterwards that no consensus of theirs was
+      recorded for the proponent. The criterion promises no message for the
+      chair's second attempt either, and the chair may change the consensus they
+      already agreed, so count the chair's second attempt as refused when
+      exactly one consensus exists for that proponent afterwards, whether or not
+      a notice is shown
+  - id: R-1.27
+    version: 1
+    why: the test takes the word 'awarded' in the status a visitor sees as proof of
+      the award, but the criterion names the award, not a label, and a visitor
+      may be shown a different word for the same state; establish the award from
+      the successful proponent being named. For the reader permitted to see
+      scores, the test looks for the contact details and score only on the
+      opportunity's own page, but the criterion does not say where they are
+      shown; read them wherever that reader is shown the successful proposal,
+      and keep checking that a visitor is shown neither anywhere they can reach
+  - id: R-2.29
+    version: 1
+    why: the criterion names a stage, not the words shown for it; the test required
+      the literal words 'code challenge' or 'challenge' in each proposal's
+      history, but the history can record the move under a shortened label, so
+      carried proposals read as left behind and a missing word proves nothing
+      for the proposals left behind; establish from each proposal's history
+      whether a new stage was entered after finalising, not whether a particular
+      label appears

@@ -30,6 +30,7 @@ An opportunity that uses a panel must name at least two panel members, each a pu
 - then: the panel is rejected with a message naming the rule that was broken, and the opportunity keeps the panel it had
 - state: accepted
 - note: the minimum of two members is the same for both programs.
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-5.2 · v1 · confirmed · recovered
 A panel with no chair at all is accepted by the service, although the browser form refuses to submit one.
@@ -444,3 +445,4 @@ The two programs run the same evaluation from end to end, differing only in what
 A panel member who is neither an evaluator nor the chair must be refused by the service when the panel is submitted, with a field-level message identifying the offending member, rather than being allowed through to a database constraint violation.
 - state: accepted
 - replaces: R-5.15
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it

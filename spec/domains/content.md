@@ -236,6 +236,7 @@ A request refused for lack of permission is reported as a permission refusal, in
 A page's body is rendered as formatted text only; markup embedded in it is never executed, and the same body renders identically on the page's own address and wherever another screen embeds it.
 - state: accepted
 - replaces: R-7.14
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-7.18 · v1 · confirmed · authored
 The service level agreement page is one the service creates for itself, so every screen that links to it — the learn-more index, the program cards, and the Code With Us, Sprint With Us and Team With Us opportunity forms — resolves on a fresh installation.

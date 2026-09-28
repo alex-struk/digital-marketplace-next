@@ -624,6 +624,7 @@ The author of a published opportunity, who is not an administrator, can change i
 A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named.
 - state: accepted
 - replaces: R-1.52
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.56 · v1 · confirmed · authored
 Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike.

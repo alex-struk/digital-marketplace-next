@@ -81,6 +81,7 @@ Every message is sent in both a formatted and a plain-text form, the plain text 
 - then: they see a readable plain-text rendering carrying the same words and links as the formatted version
 - state: accepted
 - note: nothing in the service composes plain-text copy of its own, so the plain-text form can only ever be as good as the automatic rendering of the formatted one.
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-6.6 · v2 · confirmed · recovered
 Every message the service sends ends with an offer labelled Unsubscribe, which opens the reader's own notification settings with the unsubscribe confirmation already asked.
