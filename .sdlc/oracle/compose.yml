@@ -208,6 +208,16 @@ services:
       # script runs the same configuration check before it does anything.
       FILE_STORAGE_DIR: /tmp/dm-storage
       MAILER_FROM: Digital Marketplace <donotreply@example.test>
+      # The reinstall above includes Cypress, a development dependency of the old
+      # repository's own end-to-end tests, whose install step downloads a large browser
+      # binary from outside the package registry and can stall there indefinitely. Neither
+      # the migration nor the application uses it, so the package is installed without its
+      # binary. This changes what is downloaded, not what the migration does.
+      #
+      # The image build runs the same install, and the Dockerfile declares no build
+      # argument an override could pass this through, so a first build still downloads the
+      # binary; it is cached with the image afterwards.
+      CYPRESS_INSTALL_BINARY: "0"
     depends_on:
       - db
     entrypoint: ["sh", "-c"]
