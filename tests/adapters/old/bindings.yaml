@@ -64,6 +64,8 @@ pages:
       created_by_name: bound
       last_changed_by_name: bound
       proposal_deadline: bound
+      assignment_date: bound
+      start_date: bound
       reward: bound
       addenda: bound
       successful_proponent: bound
@@ -91,6 +93,10 @@ pages:
       reporting_views: bound
       reporting_watchers: bound
       reporting_proposals: bound
+      proposal_deadline: bound
+      assignment_date: bound
+      start_date: bound
+      completion_date: bound
 
   opportunity-cwu-complete:
     actions: {}
@@ -120,6 +126,7 @@ pages:
       created_by_name: bound
       last_changed_by_name: bound
       proposal_deadline: bound
+      assignment_date: bound
       total_max_budget: bound
       phases: bound
       scope_section: bound
@@ -156,6 +163,8 @@ pages:
       consensus_tab: bound
       instructions_tab: bound
       evaluation_tab: bound
+      proposal_deadline: bound
+      assignment_date: bound
 
   opportunity-swu-complete:
     actions: {}
@@ -185,6 +194,9 @@ pages:
       created_by_name: bound
       last_changed_by_name: bound
       proposal_deadline: bound
+      assignment_date: bound
+      start_date: bound
+      completion_date: bound
       max_budget: bound
       resources: bound
       terms_section: bound
@@ -219,6 +231,10 @@ pages:
       instructions_tab: bound
       evaluation_tab: bound
       offered_state_changes: bound
+      proposal_deadline: bound
+      assignment_date: bound
+      start_date: bound
+      completion_date: bound
 
   opportunity-twu-complete:
     actions: {}

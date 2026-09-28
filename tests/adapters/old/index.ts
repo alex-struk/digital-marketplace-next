@@ -2995,6 +2995,62 @@ export default function create(
     return valueBefore(labels);
   }
 
+  // The public page's header draws each date above its label ("Jun 14, 2030" over
+  // "Assignment Date"), read as the screen shows it. A withheld record's "Not Found" screen
+  // carries no dates and reads as nothing.
+  async function viewDate(labels: string[]): Promise<string> {
+    await ready();
+    if (await notFoundShown()) return "";
+    return valueBefore(labels);
+  }
+
+  // A Team With Us page also lists its dates under "Key Dates" on the Details tab, one line
+  // each ("Contract Completion Date (Anticipated) Jan 26, 2027") — the only place the
+  // completion date is shown. The header's own figure is read first where there is one.
+  async function keyDate(labels: string[], name: string): Promise<string> {
+    const shown = await viewDate(labels);
+    if (shown) return shown;
+    if (await notFoundShown()) return "";
+    const pattern = new RegExp(`^${escapeRegExp(name)}(?:\\s*\\(Anticipated\\))?\\s+(.+)$`, "i");
+    const listed = async (): Promise<string> => {
+      for (const line of await textLines()) {
+        const found = pattern.exec(line);
+        if (found) return found[1].trim();
+      }
+      return "";
+    };
+    const here = await listed();
+    if (here) return here;
+    // An earlier reader may have left another of the view's tabs open.
+    const details = seen(page.getByRole("listitem").filter({ hasText: /^\s*Details\s*$/ }));
+    if (!(await details.count())) return "";
+    await details.first().click();
+    await settle();
+    return listed();
+  }
+
+  // The management screen's Opportunity tab is the creation wizard, its dates boxes on one of
+  // its steps ("3. Details" for Code With Us, "2. Overview" for the other two), each holding
+  // the day as YYYY-MM-DD. The steps are walked until the box labelled for the date is up.
+  // A reader not offered the tab, or a form with no such box, is shown no such date.
+  async function wizardDate(where: string, labels: string[]): Promise<string> {
+    await ready();
+    if (await notFoundShown()) return "";
+    const pattern = new RegExp(`^\\s*(${labels.map(escapeRegExp).join("|")})\\s*\\*?\\s*$`);
+    const box = (): Locator => seen(page.getByLabel(pattern));
+    if (!(await box().count()) && !(await currentStep())) {
+      if (!(await enterTab(["Opportunity"]))) return "";
+    }
+    if (!(await box().count())) {
+      if (!(await currentStep())) {
+        nothing(`${where} — opened the Opportunity tab but no wizard step or ${quoted(labels)} box is on ${page.url()}`);
+      }
+      await walkSteps(async () => (await box().count()) > 0);
+    }
+    if (!(await box().count())) return "";
+    return (await box().first().inputValue().catch(() => "")).trim();
+  }
+
   const opportunityCwuView: S.OpportunityCwuViewPage = {
     ...opportunityView(
       "opportunity-cwu-view",
@@ -3002,6 +3058,8 @@ export default function create(
       "Code With Us",
     ),
     reward: () => programmeValue("Code With Us", ["Value", "Fixed-Price Award", "Reward"]),
+    assignmentDate: () => viewDate(["Assignment Date"]),
+    startDate: () => viewDate(["Work Start Date", "Proposed Start Date", "Start Date"]),
   };
 
   const opportunitySwuView: Open<S.OpportunitySwuViewPage> = {
@@ -3015,6 +3073,7 @@ export default function create(
     phases: () => sectionFrom(["Phases of Work", "Phases"], ["Addenda", "Attachments"]),
     // The scope page is embedded under the "Scope & Contract" tab.
     scopeSection: () => embeddedSection("opportunity-swu-view.scope_section", "Scope & Contract"),
+    assignmentDate: () => viewDate(["Assignment Date"]),
   };
 
   const opportunityTwuView: Open<S.OpportunityTwuViewPage> = {
@@ -3029,6 +3088,9 @@ export default function create(
     resources: () => sectionFrom(["Service Areas"], ["Required Skills", "Addenda"]),
     // The Team With Us terms are embedded under the "Competition Rules" tab.
     termsSection: () => embeddedSection("opportunity-twu-view.terms_section", "Competition Rules"),
+    assignmentDate: () => keyDate(["Contract Award Date"], "Contract Award Date"),
+    startDate: () => keyDate(["Contract Start Date"], "Contract Start Date"),
+    completionDate: () => keyDate(["Contract Completion Date"], "Contract Completion Date"),
   };
 
   // The management pages share a sidebar of tabs and an Actions menu.
@@ -3185,6 +3247,10 @@ export default function create(
     reportingViews: () => reportFigure(["Total Views", "Views"]),
     reportingWatchers: () => reportFigure(["Watching", "Watchers"]),
     reportingProposals: () => reportFigure(["Proposals"]),
+    proposalDeadline: () => wizardDate("opportunity-cwu-edit.proposal_deadline", ["Proposal Deadline"]),
+    assignmentDate: () => wizardDate("opportunity-cwu-edit.assignment_date", ["Assignment Date"]),
+    startDate: () => wizardDate("opportunity-cwu-edit.start_date", ["Proposed Start Date", "Start Date"]),
+    completionDate: () => wizardDate("opportunity-cwu-edit.completion_date", ["Completion Date"]),
   };
 
   // Each reporting figure sits in a card of its own, the number beside the words naming
@@ -3247,6 +3313,8 @@ export default function create(
       instructionsTab: () => linkedTabContent("Instructions"),
       evaluationTab: () => linkedTabContent("Evaluation"),
     },
+    proposalDeadline: () => wizardDate("opportunity-swu-edit.proposal_deadline", ["Proposal Deadline"]),
+    assignmentDate: () => wizardDate("opportunity-swu-edit.assignment_date", ["Assignment Date"]),
   };
 
   const opportunityTwuEdit: Open<S.OpportunityTwuEditPage> = {
@@ -3276,6 +3344,10 @@ export default function create(
     // Offered only to an evaluator on the opportunity's panel.
     instructionsTab: () => linkedTabContent("Instructions"),
     evaluationTab: () => linkedTabContent("Evaluation"),
+    proposalDeadline: () => wizardDate("opportunity-twu-edit.proposal_deadline", ["Proposal Deadline"]),
+    assignmentDate: () => wizardDate("opportunity-twu-edit.assignment_date", ["Contract Award Date", "Assignment Date"]),
+    startDate: () => wizardDate("opportunity-twu-edit.start_date", ["Contract Start Date", "Start Date"]),
+    completionDate: () => wizardDate("opportunity-twu-edit.completion_date", ["Contract Completion Date", "Completion Date"]),
   };
 
   // The complete report, or nothing where the reader is refused it with the "Not Found" screen.
