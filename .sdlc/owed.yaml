@@ -1279,7 +1279,7 @@ owed:
     id: R-6.1
     version: 1
     domain: notifications
-    stage: contract
+    stage: derive-tests
     why: "blocked: the given is a target started with notifications switched off, a
       setting the service reads once at start-up. The oracle runs with them on,
       and nothing in the surface, the personas or the fixtures selects or
@@ -1289,11 +1289,17 @@ owed:
       catcher read empty with `mail`."
     by: runner
     at: 2026-09-25T07:55:52.736Z
-    kept:
-      by: contract-v11
-      gate: G1
-      approved_by: agent:product-owner
-      at: 2026-09-28T04:08:21.082Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: observables.yaml configurations.notifications_disabled, selected by
+          SDLC_ORACLE_DISABLE_NOTIFICATIONS=1 at oracle start and exported to
+          the test process, against which opportunityCwuCreate.publish and the
+          mail catcher can be read
+        by: contract-v13
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-28T05:09:44.237Z
   - kind: missing-test
     item: R-6.2
     id: R-6.2
@@ -1905,7 +1911,7 @@ owed:
     id: R-6.24
     version: 1
     domain: notifications
-    stage: contract
+    stage: derive-tests
     why: "blocked: what this adds to R-6.23 is ordering — success reported before
       any message is sent. Nothing reports send progress and nothing can hold
       delivery, so checking the catcher at the moment success appears is a race
@@ -1914,11 +1920,18 @@ owed:
       notifyVendorsSuccess can be read while no message has yet arrived."
     by: runner
     at: 2026-09-25T07:55:52.736Z
-    kept:
-      by: contract-v11
-      gate: G1
-      approved_by: agent:product-owner
-      at: 2026-09-28T04:08:21.082Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: observables.yaml email.delivery_delay and the surface page
+          mail-delivery-delay (slow_delivery, restore_delivery_speed,
+          delivery_slowed) hold the catcher's replies back, so
+          notifyVendorsSuccess can be read while
+          caught-message-list.message_count is still zero
+        by: contract-v13
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-28T05:09:44.237Z
   - kind: missing-test
     item: R-6.25
     id: R-6.25
@@ -3720,7 +3733,7 @@ owed:
     id: R-1.34
     version: 1
     domain: opportunities
-    stage: contract
+    stage: derive-tests
     why: the seed states nineteen such accounts only as a total; it must name them
       (or mark each account's new-opportunity notice setting) so a test can
       address them
@@ -3730,8 +3743,13 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-28T03:40:06.033Z
-    kept:
-      by: contract-v11
-      gate: G1
-      approved_by: agent:product-owner
-      at: 2026-09-28T04:08:21.082Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: the seed manifest's new_opportunity_notices.receive_the_announcement names
+          each of the nineteen accounts outside the subscriber group by handle,
+          and do_not_receive names the excluded ones with their reasons
+        by: contract-v13
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-28T05:09:44.237Z

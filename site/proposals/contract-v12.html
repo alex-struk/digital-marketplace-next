@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>contract-v12 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">192</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">188</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">165</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>contract-v12</h1>
+<p class="lede">G1 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-09-28 04:46</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.282 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the contract the tests will act through?</h2>
+<p><strong>Recommendation.</strong> The quieter watch is running; it will report once <code>oracle up</code> exits.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.282 (Claude Code))</p>
+<p>The quieter watch is running; it will report once <code>oracle up</code> exits.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-09-28 04:46.</p>
+<div class="body"><p>The question is whether contract-v12 is the contract the acceptance tests will act through. Ruling: return. The proposal carries no contract. Its recommendation is a status line (&#39;The quieter watch is running; it will report once <code>oracle up</code> exits&#39;) that does not answer the question. The contract run ended after 3 turns without reporting a result, and the branch&#39;s only substantive change is one environment variable (CYPRESS_INSTALL_BINARY=&quot;0&quot;) on the migrate service in .sdlc/oracle/compose.yml. That change came from a deviation logged in .sdlc/runs/2026-09-28.md: <code>oracle up</code> hung in Cypress&#39;s postinstall binary download. The change itself is plausible and low-risk, because Cypress is the old repository&#39;s own end-to-end test dependency and neither the migration nor the application uses it. But the run log says the change was to be proven with <code>oracle up</code>, and nothing on the branch shows that it was: no completed start-up and no application answering at the oracle&#39;s base_url. The checks also report FAIL generated: tests/generated/surface.d.ts and tests/generated/seed.ts do not match the contract. The proposal neither addresses nor explains that failure, so the branch does not even hold a self-consistent contract to ratify. What would change the ruling: (1) the Cypress change arrives with evidence that <code>oracle up</code> completes with it in place and the old application answers at <a href="http://localhost:4300,">http://localhost:4300,</a> either as its own oracle-fix proposal or recorded on the page; and (2) the contract stage then runs to completion, regenerates surface.d.ts and seed.ts so the generated check passes, and states on the page what the contract is and why it is the one the tests should act through. The four owed derive-tests-opportunities-stale-4 instructions concern test assertions, which this proposal does not touch, so they remain open for the next ruling.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

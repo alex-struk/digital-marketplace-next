@@ -414,6 +414,53 @@ export const seed = {
       "membership_status": "ACTIVE"
     }
   },
+  "new_opportunity_notices": {
+    "receive_the_announcement": {
+      "id": "seed-notices-receive-the-announcement",
+      "members": [
+        "users.administratorOne",
+        "users.administratorTwo",
+        "users.staffOne",
+        "users.staffTwo",
+        "users.staffPanelEvaluator",
+        "users.staffPanelChair",
+        "users.vendorOne",
+        "users.organizationOwner",
+        "users.organizationAdmin",
+        "users.organizationMember",
+        "users.fileUploader",
+        "users.invitedVendor",
+        "users.vendorWithTermsReset",
+        "users.proponentTwo",
+        "users.proponentThree",
+        "users.vendorReturning",
+        "users.proponentFour",
+        "users.proponentFive",
+        "users.proponentSix"
+      ]
+    },
+    "do_not_receive": {
+      "id": "seed-notices-do-not-receive",
+      "members": {
+        "users.vendorWithNoticesOff": "setting off",
+        "users.vendorDeactivated": "setting on, but deactivated, so not selected",
+        "users.vendorWithoutEmail": "setting on and not deactivated, so selected and counted into a batch, but it has no address; its place in the blind-copy list is empty and nobody receives anything for it",
+        "users.migrationUser": "setting off"
+      }
+    },
+    "selected": {
+      "id": "seed-notices-selected",
+      "count": 140
+    },
+    "with_an_address": {
+      "id": "seed-notices-with-an-address",
+      "count": 139
+    },
+    "batches": {
+      "id": "seed-notices-batches",
+      "count": 3
+    }
+  },
   "subscribers": {
     "first": {
       "id": "00000000-0000-4000-8001-000000000001",
