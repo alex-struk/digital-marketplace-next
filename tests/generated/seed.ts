@@ -14,7 +14,8 @@ export const seed = {
     "010-sprint-with-us-stages.sql",
     "011-team-with-us-stages.sql",
     "012-files.sql",
-    "013-content-pages.sql"
+    "013-content-pages.sql",
+    "014-proposal-team-candidates.sql"
   ],
   "users": {
     "administratorOne": {
@@ -221,6 +222,41 @@ export const seed = {
       "email": "panel.chair@example.test",
       "account_type": "GOV",
       "note": "On the oracle this persona signs in as users.administratorOne instead."
+    },
+    "teamCandidatePending": {
+      "id": "00000000-0000-4000-8000-000000000217",
+      "idp_id": "seed-team-pending",
+      "name": "Quinn Placeholder",
+      "email": "team.pending@example.test",
+      "account_type": "VENDOR",
+      "capabilities": [
+        "Backend Development"
+      ],
+      "membership": "affiliations.qualifiedPendingCandidate",
+      "note": "Invited to organizations.qualified and has not answered (PENDING)."
+    },
+    "teamCandidateFormer": {
+      "id": "00000000-0000-4000-8000-000000000218",
+      "idp_id": "seed-team-former",
+      "name": "Rowan Placeholder",
+      "email": "team.former@example.test",
+      "account_type": "VENDOR",
+      "capabilities": [
+        "Backend Development"
+      ],
+      "membership": "affiliations.qualifiedFormerMember",
+      "note": "Was a member of organizations.qualified; the membership has ended (INACTIVE), as the application records a member who left or was removed. The account itself is active."
+    },
+    "teamCandidateOutsider": {
+      "id": "00000000-0000-4000-8000-000000000219",
+      "idp_id": "seed-team-outsider",
+      "name": "Sage Placeholder",
+      "email": "team.outsider@example.test",
+      "account_type": "VENDOR",
+      "capabilities": [
+        "Backend Development"
+      ],
+      "note": "A member of no organization."
     }
   },
   "organizations": {
@@ -239,7 +275,13 @@ export const seed = {
         "users.organizationAdmin",
         "users.organizationMember"
       ],
-      "note": "Its three people between them hold all nine capabilities, so it meets the Sprint With Us qualification test as well as the Team With Us one."
+      "pending_members": [
+        "users.teamCandidatePending"
+      ],
+      "former_members": [
+        "users.teamCandidateFormer"
+      ],
+      "note": "Its three active people between them hold all nine capabilities, so it meets the Sprint With Us qualification test as well as the Team With Us one. It also carries one unanswered invitation and one ended membership, which R-2.18's refusals are about; the team screen shows the pending person and not the former one."
     },
     "unqualified": {
       "id": "00000000-0000-4000-8000-000000000302",
@@ -412,6 +454,27 @@ export const seed = {
       "organization": "organizations.proponentSix",
       "membership_type": "OWNER",
       "membership_status": "ACTIVE"
+    },
+    "qualifiedPendingCandidate": {
+      "id": "00000000-0000-4000-8000-000000000413",
+      "user": "users.teamCandidatePending",
+      "organization": "organizations.qualified",
+      "membership_type": "MEMBER",
+      "membership_status": "PENDING"
+    },
+    "qualifiedFormerMember": {
+      "id": "00000000-0000-4000-8000-000000000414",
+      "user": "users.teamCandidateFormer",
+      "organization": "organizations.qualified",
+      "membership_type": "MEMBER",
+      "membership_status": "INACTIVE"
+    }
+  },
+  "unassigned_identifiers": {
+    "organizationNeverCreated": {
+      "id": "00000000-0000-4000-8000-000000000399",
+      "kind": "organization",
+      "note": "Given as a Code With Us proposal's organization proponent through proposal-cwu-request (R-2.14), where the service looks the organization up and finds none."
     }
   },
   "new_opportunity_notices": {
