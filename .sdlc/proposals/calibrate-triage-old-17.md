@@ -539,3 +539,59 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+The question is which of the 24 criteria failing against old were caused by this project's adapter. I approve with one condition per criterion: 9 adapter-wrong and 15 product-question. Each failure was read against the test file, the bindings in tests/adapters/old/index.ts, what the old page actually renders, and, where they exist, the error-context snapshots.
+
+Adapter-wrong, where the harness did not do what the test asked:
+- R-2.23: the adapter never ticks the terms checkboxes that enable 'Submit Proposal'.
+- R-3.25: the adapter returns a requirement's label, not whether it is met.
+- R-3.10: the adapter returns team names only, and the test identifies the member by email.
+- R-2.31: the adapter reads 'Total Score' off whichever tab is showing, not the Proposal tab.
+- R-2.32: the adapter reads the Proposal tab and a 'Rank' label. The vendor's scores are on the Scoresheet tab, under 'Ranking'.
+- R-5.35: the adapter returns every 'Proponent N' line, and the current proponent's name appears twice on the page.
+- R-5.23: the adapter returns silently on a disabled 'Submit Scores for Consensus' button (index.ts:5284), so the refusal it exists to report is swallowed.
+- R-5.32 and R-5.36: the adapter clicks the finalise confirm and moves on without waiting for the outcome. This one is circumstantial, but R-2.35 ran the same finalise sequence on the same seeded opportunity and reached Code Challenge.
+
+Product-question, where the adapter reached the right place and reported what old shows or refuses:
+- The old app refuses silently or with a generic message: R-3.9, R-5.10, R-8.30.
+- The case cannot be constructed in old: R-1.16, R-5.3.
+- Old returns a different reply shape per request: R-7.16.
+- The value is absent from the public view: R-1.27, R-1.29, R-5.19, R-2.30.
+- A Team With Us status write fails, so the opportunity stays at the challenge stage: R-1.25, R-1.49.
+- The history label reads 'Non-compliant', not 'disqualified': R-2.35.
+- The decline link in the email points at the wrong tab: R-3.35.
+- The mailbox is read once, straight after acceptance: R-3.31. This is a test-side race or a delivery question, not a binding.
+
+What would change this ruling: a rerun of R-5.32 or R-5.36 that waits for the finalise outcome and still shows the opportunity in consensus would make those two product questions.
+
+**Conditions:**
+- adapter-wrong R-3.10: organization-edit team_member_row (teamRowsText, index.ts:4426-4441) returns only the names printed in the team table, while the test identifies the member by email; each row must also carry that member's email (from the member dialog or the organization's membership list, which memberName at index.ts:4470 already reads), so both the presence check and the post-leave absence check can hold
+- adapter-wrong R-2.23: proposal-cwu-edit.submit_proposal (index.ts:3751-3754) presses 'Submit Proposal' in the 'Review Terms and Conditions' dialog without ticking its checkboxes, so the button stays disabled; after pressing 'Submit' it must wait for the dialog, tick every checkbox in it (as saveProposalChanges does at index.ts:3729-3734), then press 'Submit Proposal'
+- adapter-wrong R-5.23: evaluation-individual-list-swu.submit_scores_for_consensus (index.ts:5279-5285) returns silently when 'Submit Scores for Consensus' is disabled, swallowing the refusal the test is looking for; a disabled or absent submit control must be reported as a refusal (throw, as submit_proposal does for a disabled control), or incomplete_evaluation_error must report it
+- adapter-wrong R-3.25: organization-edit swu_requirement_two_members / swu_requirement_all_capabilities / swu_requirement_terms_accepted (index.ts:4357-4364) return the requirement's label, which reads the same whether met or unmet; they must read the state from the icon beside each requirement (success-coloured means met, body-coloured means unmet) and return it with the label
+- adapter-wrong R-2.31: proposal-swu-view.total_score (index.ts:3875, stageFigure([], ['Total Score'])) reads whichever tab is currently showing, but the 'Total Score' card appears only on the Proposal tab, and the test has moved to Team Scenario by then; it must open the Proposal tab first, and the same fix applies to proposal-twu-view.total_score (index.ts:3912)
+- adapter-wrong R-2.32: proposal-swu-edit total_score and rank (index.ts:3797-3798) read the default Proposal tab and look for a 'Rank' label after its figure; a vendor's scores are on the Scoresheet tab (a table whose header is one line, so the total must be read from the body row), and the rank card is labelled 'Ranking' with its figure above the label (read it as valueBefore(['Ranking']), as proposal-cwu-view.rank does at index.ts:3834)
+- adapter-wrong R-5.35: evaluation-individual-create-swu.anonymous_proponent_name (index.ts:5507 via anonymousProponent at index.ts:3814-3817) joins every 'Proponent N' line on the page, and the score sheet shows the current proponent's name twice, so it returned 'Proponent 1\nProponent 1'; on the create page it must return the single current proponent's name, keeping the joined list only for the individual list page
+- adapter-wrong R-5.32: evaluation-consensus-list confirm_finalize_consensus (index.ts:5369 via inDialog/press) clicks 'Finalize Consensus Scores' in the dialog and returns at once, because settle() resolves on an already-idle network, so the next navigation races the finalise request; it must wait for the outcome (the success notice, or 'Finalize Consensus Scores' leaving the top bar) and fail if an error notice appears, and waiting only for the dialog to close is not enough because it closes before the request is sent
+- adapter-wrong R-5.36: the same finalise binding as R-5.32 (evaluation-consensus-list confirm_finalize_consensus, index.ts:5369, shared by the Sprint With Us and Team With Us consensus tabs) does not wait for the finalise request to complete before the test reads the status; it must wait for the success notice or for the finalise control to leave the top bar
+- product-question R-5.3
+- product-question R-3.9
+- product-question R-5.10
+- product-question R-1.16
+- product-question R-7.16
+- product-question R-5.19
+- product-question R-1.25
+- product-question R-1.27
+- product-question R-1.29
+- product-question R-2.30
+- product-question R-8.30
+- product-question R-3.31
+- product-question R-2.35
+- product-question R-3.35
+- product-question R-1.49
