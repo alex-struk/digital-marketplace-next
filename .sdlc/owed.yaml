@@ -1279,7 +1279,7 @@ owed:
     id: R-6.1
     version: 1
     domain: notifications
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: the given is a target started with notifications switched off, a
       setting the service reads once at start-up. The oracle runs with them on,
       and nothing in the surface, the personas or the fixtures selects or
@@ -1300,6 +1300,12 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-28T05:09:44.237Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-28T05:58:52.293Z
+    target: old
   - kind: missing-test
     item: R-6.2
     id: R-6.2
@@ -1911,7 +1917,7 @@ owed:
     id: R-6.24
     version: 1
     domain: notifications
-    stage: derive-tests
+    stage: calibrate
     why: "blocked: what this adds to R-6.23 is ordering — success reported before
       any message is sent. Nothing reports send progress and nothing can hold
       delivery, so checking the catcher at the moment success appears is a race
@@ -1932,6 +1938,12 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-28T05:09:44.237Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-28T05:58:52.293Z
+    target: old
   - kind: missing-test
     item: R-6.25
     id: R-6.25

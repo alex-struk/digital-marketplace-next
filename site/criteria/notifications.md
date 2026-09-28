@@ -4,7 +4,7 @@
 
 | id | test | new | old |
 | --- | --- | --- | --- |
-| R-6.1 | not testable: blocked: the given is a target started with notifications switched off, a setting the service reads once at start-up. The oracle runs with them on, and nothing in the surface, the personas or the fixtures selects or reconfigures a target. Unblocked by a second target (or a harness variable the contract names) started with notifications disabled; against it an opportunity can be published through opportunityCwuCreate.publish and the catcher read empty with `mail`. |  | not-testable |
+| R-6.1 | acceptance/notifications/R-6.1.spec.ts |  | not-testable |
 | R-6.2 | acceptance/notifications/R-6.2.spec.ts |  | fail |
 | R-6.3 | acceptance/notifications/R-6.3.spec.ts |  | unbound |
 | R-6.4 | acceptance/notifications/R-6.4.spec.ts |  | unbound |
@@ -27,7 +27,7 @@
 | R-6.21 | acceptance/notifications/R-6.21.spec.ts |  | pass |
 | R-6.22 | — |  | pass |
 | R-6.23 | acceptance/notifications/R-6.23.spec.ts |  | unbound |
-| R-6.24 | not testable: blocked: what this adds to R-6.23 is ordering — success reported before any message is sent. Nothing reports send progress and nothing can hold delivery, so checking the catcher at the moment success appears is a race against the background sending, not a test of it. Needs a way to hold or slow the mail catcher's acceptance of messages, so that notifyVendorsSuccess can be read while no message has yet arrived. |  | not-testable |
+| R-6.24 | acceptance/notifications/R-6.24.spec.ts |  | not-testable |
 | R-6.25 | acceptance/notifications/R-6.25.spec.ts |  | unbound |
 | R-6.26 | — |  | pass (ruled: test-wrong) |
 | R-6.27 | acceptance/notifications/R-6.27.spec.ts |  | fail (ruled: defect-in-old) |

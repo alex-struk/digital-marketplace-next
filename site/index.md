@@ -11,7 +11,7 @@ Profile: rebuild
 | organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 | 31/31 |  | 14 pass · 5 fail · 12 unbound · 0 stale |
 | users | 0 | 32 | 0 | 0 | 0 | 4 | 1 | 36 | 29/30 (n/t 1) |  | 16 pass · 4 fail · 9 unbound · 0 stale |
 | evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 | 30/30 |  | 9 pass · 7 fail · 14 unbound · 0 stale |
-| notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 19/21 (n/t 2) |  | 10 pass · 4 fail · 9 unbound · 0 stale |
+| notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 21/21 |  | 10 pass · 4 fail · 9 unbound · 0 stale |
 | content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 | 25/26 (n/t 1) |  | 16 pass · 5 fail · 4 unbound · 0 stale |
 | files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 23/24 (n/t 1) |  | 16 pass · 7 fail · 1 unbound · 0 stale |
 | **Totals** | 0 | 286 | 0 | 0 | 0 | 9 | 3 | 295 |  |  |  |
@@ -141,6 +141,7 @@ Profile: rebuild
 - [derive-tests-notifications-stale-3](proposals/derive-tests-notifications-stale-3.md)
 - [derive-tests-notifications-stale-4](proposals/derive-tests-notifications-stale-4.md)
 - [derive-tests-notifications-stale-5](proposals/derive-tests-notifications-stale-5.md)
+- [derive-tests-notifications-stale-6](proposals/derive-tests-notifications-stale-6.md)
 - [derive-tests-opportunities](proposals/derive-tests-opportunities.md)
 - [derive-tests-opportunities-2](proposals/derive-tests-opportunities-2.md)
 - [derive-tests-opportunities-3](proposals/derive-tests-opportunities-3.md)
@@ -234,10 +235,10 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $547.721717
-- Rulings cost: $292.304069
-- Total cost: $840.025786
-- Agent-held rulings: 191
+- Journal cost: $548.503969
+- Rulings cost: $292.828383
+- Total cost: $841.332352
+- Agent-held rulings: 192
 - Runner rulings (automatic, no seat held): 1
 - Human rulings: 10
 - Rulings whose seat this page does not recognise: 0
