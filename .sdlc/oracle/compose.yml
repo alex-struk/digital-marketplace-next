@@ -94,10 +94,23 @@ services:
       # Marks every subject as a test message, which is itself a recovered behaviour.
       VITE_SHOW_TEST_INDICATOR: "1"
 
-      # The transitions that look time-driven run as a hook in front of each request,
-      # normally throttled to once a minute. Zero makes one request enough, so a test can
-      # close a lapsed opportunity deliberately rather than by waiting.
-      UPDATE_HOOK_THROTTLE: "0"
+      # The transitions that look time-driven run as a hook in front of each request under
+      # /api and /status, normally throttled to once a minute (the application's default,
+      # 60000). There is one throttle per program, and it limits how often a run STARTS;
+      # it does not wait for the previous run to finish. The hook does not wait for its
+      # work either: the run is started before the request is answered and may finish
+      # before or after the answer. Each run opens a transaction that holds one database
+      # connection and, part-way through, asks the pool for a second one outside that
+      # transaction. The pool holds ten. At zero every request starts three runs, so a
+      # burst of requests against seeded lapsed opportunities fills the pool with
+      # transactions each waiting for a connection another one holds, and every request
+      # then waits out the pool's sixty-second acquire timeout. Two seconds spaces the
+      # starts far enough apart that a burst of requests has completed without that
+      # exhaustion. It is a mitigation, not a guarantee that runs cannot overlap or that a
+      # closure completes within any fixed time; tests reach a closure through the
+      # bounded polling procedure in spec/contract/observables.yaml
+      # (scheduled_transitions), which fails on timeout rather than assuming closure.
+      UPDATE_HOOK_THROTTLE: "2000"
 
       SCHEDULED_DOWNTIME: "0"
       BASIC_AUTH_USERNAME: ""

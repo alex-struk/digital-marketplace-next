@@ -74,6 +74,7 @@ Profile: rebuild
 - [calibrate-triage-old-9](proposals/calibrate-triage-old-9.md)
 - [constitution-v1](proposals/constitution-v1.md)
 - [contract-v1](proposals/contract-v1.md)
+- [contract-v10](proposals/contract-v10.md)
 - [contract-v2](proposals/contract-v2.md)
 - [contract-v3](proposals/contract-v3.md)
 - [contract-v4](proposals/contract-v4.md)
@@ -81,6 +82,7 @@ Profile: rebuild
 - [contract-v6](proposals/contract-v6.md)
 - [contract-v7](proposals/contract-v7.md)
 - [contract-v8](proposals/contract-v8.md)
+- [contract-v9](proposals/contract-v9.md)
 - [derive-tests-content](proposals/derive-tests-content.md)
 - [derive-tests-content-10](proposals/derive-tests-content-10.md)
 - [derive-tests-content-2](proposals/derive-tests-content-2.md)
@@ -215,10 +217,10 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $535.143262
-- Rulings cost: $277.169681
-- Total cost: $812.312943
-- Agent-held rulings: 171
+- Journal cost: $536.306501
+- Rulings cost: $277.551734
+- Total cost: $813.858235
+- Agent-held rulings: 173
 - Runner rulings (automatic, no seat held): 1
 - Human rulings: 10
 - Rulings whose seat this page does not recognise: 0

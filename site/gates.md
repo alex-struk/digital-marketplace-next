@@ -2,7 +2,9 @@
 
 | When | Proposal | Gate | Verdict | By | Made by | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-28T02:27:00.389Z | contract-v10 | G1 | approve | agent:product-owner | persona agent · claude claude-opus-5-5 | $0.3820526 | sample |
 | 2026-09-28T02:08:17.580Z | policy-agents-backend-claude | G-POL | approve | tech-lead | a person |  |  |
+| 2026-09-26T01:50:41.722Z | contract-v9 | G1 | return | agent:product-owner | persona agent · codex | $0 |  |
 | 2026-09-26T00:47:55.660Z | calibrate-triage-old-12 | G3 | withdrawn | agent:tech-lead | persona agent |  |  |
 | 2026-09-25T23:44:00.603Z | calibrate-triage-old-11 | G3 | withdrawn | agent:tech-lead | persona agent |  |  |
 | 2026-09-25T22:00:22.833Z | policy-agents-backend | G-POL | approve | tech-lead | a person |  |  |
