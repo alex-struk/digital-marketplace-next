@@ -7,7 +7,7 @@
 | R-6.1 | not testable: blocked: the given is a target started with notifications switched off, a setting the service reads once at start-up. The oracle runs with them on, and nothing in the surface, the personas or the fixtures selects or reconfigures a target. Unblocked by a second target (or a harness variable the contract names) started with notifications disabled; against it an opportunity can be published through opportunityCwuCreate.publish and the catcher read empty with `mail`. |  | not-testable |
 | R-6.2 | acceptance/notifications/R-6.2.spec.ts |  | fail |
 | R-6.3 | acceptance/notifications/R-6.3.spec.ts |  | unbound |
-| R-6.4 | acceptance/notifications/R-6.4.spec.ts |  | pass |
+| R-6.4 | acceptance/notifications/R-6.4.spec.ts |  | unbound |
 | R-6.5 | acceptance/notifications/R-6.5.spec.ts |  | unbound |
 | R-6.6 | acceptance/notifications/R-6.6.spec.ts |  | pass |
 | R-6.7 | acceptance/notifications/R-6.7.spec.ts |  | pass |
@@ -23,9 +23,9 @@
 | R-6.17 | acceptance/notifications/R-6.17.spec.ts |  | fail (ruled: defect-in-old) |
 | R-6.18 | acceptance/notifications/R-6.18.spec.ts |  | unbound |
 | R-6.19 | acceptance/notifications/R-6.19.spec.ts |  | fail (ruled: defect-in-old) |
-| R-6.20 | acceptance/notifications/R-6.20.spec.ts |  | fail |
-| R-6.21 | acceptance/notifications/R-6.21.spec.ts |  | fail |
-| R-6.22 | — |  | fail |
+| R-6.20 | acceptance/notifications/R-6.20.spec.ts |  | unbound |
+| R-6.21 | acceptance/notifications/R-6.21.spec.ts |  | pass |
+| R-6.22 | — |  | pass |
 | R-6.23 | acceptance/notifications/R-6.23.spec.ts |  | unbound |
 | R-6.24 | not testable: blocked: what this adds to R-6.23 is ordering — success reported before any message is sent. Nothing reports send progress and nothing can hold delivery, so checking the catcher at the moment success appears is a race against the background sending, not a test of it. Needs a way to hold or slow the mail catcher's acceptance of messages, so that notifyVendorsSuccess can be read while no message has yet arrived. |  | not-testable |
 | R-6.25 | acceptance/notifications/R-6.25.spec.ts |  | unbound |

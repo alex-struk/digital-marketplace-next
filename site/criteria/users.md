@@ -7,11 +7,11 @@
 | R-4.1 | acceptance/users/R-4.1.spec.ts |  | unbound |
 | R-4.2 | acceptance/users/R-4.2.spec.ts |  | unbound |
 | R-4.3 | acceptance/users/R-4.3.spec.ts |  | unbound |
-| R-4.4 | acceptance/users/R-4.4.spec.ts |  | unbound |
+| R-4.4 | acceptance/users/R-4.4.spec.ts |  | fail |
 | R-4.5 | acceptance/users/R-4.5.spec.ts |  | unbound |
-| R-4.6 | acceptance/users/R-4.6.spec.ts |  | fail |
+| R-4.6 | acceptance/users/R-4.6.spec.ts |  | pass |
 | R-4.7 | — |  |  |
-| R-4.8 | acceptance/users/R-4.8.spec.ts |  | fail |
+| R-4.8 | acceptance/users/R-4.8.spec.ts |  | unbound |
 | R-4.9 | acceptance/users/R-4.9.spec.ts |  | pass |
 | R-4.10 | — |  |  |
 | R-4.11 | — |  |  |
@@ -20,26 +20,26 @@
 | R-4.14 | acceptance/users/R-4.14.spec.ts |  | fail |
 | R-4.15 | — |  |  |
 | R-4.16 | acceptance/users/R-4.16.spec.ts |  | pass |
-| R-4.17 | acceptance/users/R-4.17.spec.ts |  | fail |
-| R-4.18 | acceptance/users/R-4.18.spec.ts |  | fail |
+| R-4.17 | acceptance/users/R-4.17.spec.ts |  | pass |
+| R-4.18 | acceptance/users/R-4.18.spec.ts |  | pass |
 | R-4.19 | acceptance/users/R-4.19.spec.ts |  | fail (ruled: defect-in-old) |
 | R-4.20 | acceptance/users/R-4.20.spec.ts |  | unbound |
 | R-4.21 | acceptance/users/R-4.21.spec.ts |  | fail |
 | R-4.22 | acceptance/users/R-4.22.spec.ts |  | pass |
-| R-4.23 | acceptance/users/R-4.23.spec.ts |  | fail |
+| R-4.23 | acceptance/users/R-4.23.spec.ts |  | unbound |
 | R-4.24 | acceptance/users/R-4.24.spec.ts |  | unbound |
-| R-4.25 | acceptance/users/R-4.25.spec.ts |  | fail |
-| R-4.26 | acceptance/users/R-4.26.spec.ts |  | fail |
+| R-4.25 | acceptance/users/R-4.25.spec.ts |  | pass |
+| R-4.26 | acceptance/users/R-4.26.spec.ts |  | pass |
 | R-4.27 | acceptance/users/R-4.27.spec.ts |  | pass |
-| R-4.28 | acceptance/users/R-4.28.spec.ts |  | fail |
+| R-4.28 | acceptance/users/R-4.28.spec.ts |  | pass |
 | D-users-29 | — |  |  |
-| R-4.29 | acceptance/users/R-4.29.spec.ts |  | fail |
+| R-4.29 | acceptance/users/R-4.29.spec.ts |  | pass |
 | R-4.30 | acceptance/users/R-4.30.spec.ts |  | pass |
 | R-4.31 | acceptance/users/R-4.31.spec.ts |  | pass |
 | D-users-32 | — |  |  |
 | R-4.32 | acceptance/users/R-4.32.spec.ts |  | unbound |
 | R-4.33 | acceptance/users/R-4.33.spec.ts |  | pass |
-| R-4.34 | acceptance/users/R-4.34.spec.ts |  | fail |
+| R-4.34 | acceptance/users/R-4.34.spec.ts |  | pass |
 
 ### R-4.1 · v1 · confirmed · accepted
 

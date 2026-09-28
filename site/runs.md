@@ -9,6 +9,8 @@
 - 19:25:52 run contract: ok after a fix turn, cost 1.1632392, turns 33, on claude claude-opus-5-5 (2.1.282 (Claude Code))
 - 19:25:52 propose contract-v10 at G1
 - 19:27:00 rule contract-v10 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.282 (Claude Code))
+- 19:30:51 oracle up old: http://localhost:4300 (local port 4300)
+- 20:03:56 run calibrate: ok, cost 0, turns 0
 
 # Run record 2026-09-26
 

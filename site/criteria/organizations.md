@@ -5,31 +5,31 @@
 | id | test | new | old |
 | --- | --- | --- | --- |
 | R-3.1 | acceptance/organizations/R-3.1.spec.ts |  | pass |
-| R-3.2 | acceptance/organizations/R-3.2.spec.ts |  | fail |
-| R-3.3 | acceptance/organizations/R-3.3.spec.ts |  | fail |
+| R-3.2 | acceptance/organizations/R-3.2.spec.ts |  | pass |
+| R-3.3 | acceptance/organizations/R-3.3.spec.ts |  | pass |
 | R-3.4 | — |  |  |
 | R-3.5 | — |  |  |
 | R-3.6 | acceptance/organizations/R-3.6.spec.ts |  | unbound |
 | R-3.7 | acceptance/organizations/R-3.7.spec.ts |  | unbound |
 | R-3.8 | acceptance/organizations/R-3.8.spec.ts |  | pass |
-| R-3.9 | acceptance/organizations/R-3.9.spec.ts |  | fail |
+| R-3.9 | acceptance/organizations/R-3.9.spec.ts |  | unbound |
 | R-3.10 | acceptance/organizations/R-3.10.spec.ts |  | unbound |
 | R-3.11 | acceptance/organizations/R-3.11.spec.ts |  | unbound |
-| R-3.12 | acceptance/organizations/R-3.12.spec.ts |  | fail |
+| R-3.12 | acceptance/organizations/R-3.12.spec.ts |  | pass |
 | R-3.13 | acceptance/organizations/R-3.13.spec.ts |  | fail |
-| R-3.14 | acceptance/organizations/R-3.14.spec.ts |  | fail |
-| R-3.15 | acceptance/organizations/R-3.15.spec.ts |  | fail |
+| R-3.14 | acceptance/organizations/R-3.14.spec.ts |  | pass |
+| R-3.15 | acceptance/organizations/R-3.15.spec.ts |  | unbound |
 | R-3.16 | — |  |  |
 | R-3.17 | acceptance/organizations/R-3.17.spec.ts |  | unbound |
 | R-3.18 | acceptance/organizations/R-3.18.spec.ts |  | fail (ruled: defect-in-old) |
 | R-3.19 | acceptance/organizations/R-3.19.spec.ts |  | fail (ruled: defect-in-old) |
 | R-3.20 | acceptance/organizations/R-3.20.spec.ts |  | fail |
-| R-3.21 | acceptance/organizations/R-3.21.spec.ts |  | fail |
+| R-3.21 | acceptance/organizations/R-3.21.spec.ts |  | pass |
 | R-3.22 | acceptance/organizations/R-3.22.spec.ts |  | fail (ruled: defect-in-old) |
 | R-3.23 | acceptance/organizations/R-3.23.spec.ts |  | pass |
 | R-3.24 | acceptance/organizations/R-3.24.spec.ts |  | pass |
 | R-3.25 | acceptance/organizations/R-3.25.spec.ts |  | unbound |
-| R-3.26 | acceptance/organizations/R-3.26.spec.ts |  | fail |
+| R-3.26 | acceptance/organizations/R-3.26.spec.ts |  | pass |
 | R-3.27 | acceptance/organizations/R-3.27.spec.ts |  | pass |
 | R-3.28 | acceptance/organizations/R-3.28.spec.ts |  | pass |
 | R-3.29 | — |  |  |

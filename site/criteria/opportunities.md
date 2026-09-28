@@ -5,12 +5,12 @@
 | id | test | new | old |
 | --- | --- | --- | --- |
 | R-1.1 | acceptance/opportunities/R-1.1.spec.ts |  | fail (ruled: spec-wrong) |
-| R-1.2 | acceptance/opportunities/R-1.2.spec.ts |  | fail |
+| R-1.2 | acceptance/opportunities/R-1.2.spec.ts |  | pass |
 | R-1.3 | acceptance/opportunities/R-1.3.spec.ts |  | pass |
 | R-1.4 | acceptance/opportunities/R-1.4.spec.ts |  | pass |
 | R-1.5 | acceptance/opportunities/R-1.5.spec.ts |  | pass |
 | R-1.6 | acceptance/opportunities/R-1.6.spec.ts |  | pass |
-| R-1.7 | acceptance/opportunities/R-1.7.spec.ts |  | fail |
+| R-1.7 | acceptance/opportunities/R-1.7.spec.ts |  | unbound |
 | R-1.8 | acceptance/opportunities/R-1.8.spec.ts |  | pass |
 | R-1.9 | acceptance/opportunities/R-1.9.spec.ts |  | pass |
 | R-1.10 | acceptance/opportunities/R-1.10.spec.ts |  | fail |
@@ -33,8 +33,8 @@
 | R-1.27 | acceptance/opportunities/R-1.27.spec.ts |  | fail |
 | R-1.28 | acceptance/opportunities/R-1.28.spec.ts |  | pass |
 | R-1.29 | acceptance/opportunities/R-1.29.spec.ts |  | unbound |
-| R-1.30 | acceptance/opportunities/R-1.30.spec.ts |  | fail |
-| R-1.31 | acceptance/opportunities/R-1.31.spec.ts |  | fail |
+| R-1.30 | acceptance/opportunities/R-1.30.spec.ts |  | pass |
+| R-1.31 | acceptance/opportunities/R-1.31.spec.ts |  | pass |
 | R-1.32 | acceptance/opportunities/R-1.32.spec.ts |  | pass |
 | R-1.33 | acceptance/opportunities/R-1.33.spec.ts |  | unbound |
 | R-1.34 | acceptance/opportunities/R-1.34.spec.ts |  | fail |
