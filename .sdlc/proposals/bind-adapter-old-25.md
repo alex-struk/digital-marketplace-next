@@ -38,3 +38,27 @@ Every observation throws `unbound:` if no consensus has been opened.
 **Route check.** Both new routes resolved on the target. No page's route failed to resolve.
 
 The bindings file names all 12 as bound, spelled as the contract spells them, and nothing outside `tests/adapters/old/` was changed.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+Question: does the old adapter bind every action and observation of evaluation-consensus-request-swu/-twu, and nothing else? Approve. The bindings file names all 12 members as the contract spells them. The code opens the consensus address, sends the edit screen's save shape {tag: edit, value: {scores}}, and returns what the service stored (scores, notes and status by question order, the accepted answer, and a refusal whose status and body are passed back as they are). Counting 401/403/404 as a refusal matches the contract, which defines refused_when_not_permitted as 'a permission or not-found error'. Nothing in the code decides whether a test passes: an observation with nothing to read answers empty or throws unbound. The diff touches only tests/adapters/old/ plus the pipeline's own records, and nothing under tests/acceptance. The authoring agent could not run tsc, but the runner's typecheck on this revision reports no diagnostics under adapters/old/; the only failures are 2 in adapters/new/, which this proposal does not answer for. The R-5.29 clause about who may change a consensus and when is already owed by derive-tests. What would change the ruling: a typecheck diagnostic under adapters/old/, or a calibration showing these bindings answer from the wrong place (for example stored_scores reading the individual evaluation rather than the chair's consensus).
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `63a24137de3782a7790e104ad53b1d6174d0ddef`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
