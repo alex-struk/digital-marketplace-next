@@ -36,3 +36,27 @@ I also removed the second action the v1 test took, the terms-and-conditions broa
 - Rewrite the note under `configurations.notifications_disabled` in `observables.yaml`, which still tells tests to skip, so it matches the ruling.
 
 Neither is a path this stage owns, so I left both alone.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Does the rewritten R-6.1 test follow from the criterion and nothing else? On its own terms, yes. It takes a service with notifications off as its given. For the when, it publishes a Code With Us opportunity, which is the criterion's own example ('such as publishing an opportunity') and the action the contract names, so it stands in for 'every action'. For the then, it checks that the action completed and reported success (no field error, an identifier assigned, the opportunity showing as published) and that no message reached the catcher after a margin. No detail of the implementation leaks in, and the typecheck on the branch found nothing in acceptance/notifications/. I am returning it because the test now contradicts the approved contract, and an approval cannot carry the request that fixes that. spec/contract/observables.yaml configurations.notifications_disabled.notes still tells an R-6.1 test to read SDLC_ORACLE_DISABLE_NOTIFICATIONS and to treat an instance without it as not offering the given, not as a failure. That is the behaviour the calibrate-old-11 ruling rejected. The note also says nothing of how a test that fails rather than skips gets picked out for the separate instance the contract says R-6.1 needs. Approved as it stands, the test would run on the default, shared instance at every calibration. There it clears the catcher and sends a batch of announcements the note says must never share an instance with the rest of the suite, and it fails each time for a known reason. The ruling changes to an approval once the contract states how the notifications-off configuration reaches this test and how the test is selected for it, and a re-derivation (possibly this same test unchanged) agrees with that statement.
+
+**Conditions:**
+- addressed-to contract: spec/contract/observables.yaml configurations.notifications_disabled.notes tells a test for R-6.1 to read SDLC_ORACLE_DISABLE_NOTIFICATIONS and to skip on an instance without it. The calibrate-old-11 ruling overturned that behaviour (the skipping test never produced a result), and the R-6.1 test on this branch no longer skips. Rewrite the note so it says a test for R-6.1 assumes an instance started with notifications switched off and does not skip itself. Also state how that test is selected to run against the separate instance the note requires (for example by a tag named after the configuration, such as @notifications_disabled) and kept out of the default run, whose shared mail catcher it would clear and fill.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `eaacbc5cea3a961c8dc7771ebd5bbbaa4ed03cdd`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/notifications/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
