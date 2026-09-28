@@ -4160,3 +4160,33 @@ owed:
     clause: the Sprint With Us proposal form offers only the organization's active
       members, so a person whose invitation to the organization is unanswered is
       not offered
+  - kind: missing-test
+    item: R-5.3
+    id: R-5.3
+    version: 1
+    domain: evaluation
+    stage: contract
+    why: an action on evaluation-individual-request-swu and
+      evaluation-individual-request-twu that asks the service to create a new
+      individual evaluation of a proponent as the signed-in evaluator (the
+      create request the create screen would send), with an observation
+      returning the refusal message the service answers with when the evaluator
+      already holds one.
+    from: derive-tests-evaluation-stale-10
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-28T22:18:41.945Z
+  - kind: missing-test
+    item: R-5.32
+    id: R-5.32
+    version: 1
+    domain: evaluation
+    stage: contract
+    why: an observation on proposal-swu-view and proposal-twu-view returning the
+      proposal's history entries one by one, each with the per-question agreed
+      scores it records, so a test can read that finalising recorded the agreed
+      score of every question against the proponent.
+    from: derive-tests-evaluation-stale-10
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-28T22:18:41.945Z

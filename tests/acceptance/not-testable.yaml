@@ -163,3 +163,37 @@ criteria:
       property of the migration rather than of anything the running service
       answers with. No addition to the surface would help; this is a claim a
       human accepts about the rebuild rather than one a test can settle."
+  - id: R-5.3
+    version: 1
+    clause: a second attempt is refused with a message saying they already have one
+    reason: "blocked: the only way the surface offers to start an evaluation is the
+      create screen (evaluation-individual-create-swu and -twu), and a screen that
+      returns an evaluator to the evaluation they already hold never asks the
+      service for a second one, so the service's refusal and its wording are
+      never produced. The test asserts that no second evaluation is created, and
+      checks the quoted message only when the screen does report a duplicate
+      refusal; where it does not, the message clause goes unasserted. No action
+      sends the request to create an evaluation to the service directly, the way
+      evaluation-individual-request-swu sends a draft or a lone submission."
+    missing: "an action on evaluation-individual-request-swu and
+      evaluation-individual-request-twu that asks the service to create a new
+      individual evaluation of a proponent as the signed-in evaluator (the create
+      request the create screen would send), with an observation returning the
+      refusal message the service answers with when the evaluator already holds
+      one."
+    owner: contract
+  - id: R-5.32
+    version: 1
+    clause: every proponent's history records the agreed scores question by question
+    reason: "blocked: the test reads the agreed scores being recorded against each
+      proponent from the questions score each proposal carries once finalised,
+      and screening from the entries its history gains, but no observation reads
+      a proposal's history as entries carrying the score recorded for each
+      question. proposal-swu-view and proposal-twu-view offer history_tab as one
+      block of prose, which cannot show that a score was recorded for each
+      question rather than as a single total."
+    missing: "an observation on proposal-swu-view and proposal-twu-view returning
+      the proposal's history entries one by one, each with the per-question
+      agreed scores it records, so a test can read that finalising recorded the
+      agreed score of every question against the proponent."
+    owner: contract
