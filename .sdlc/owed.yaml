@@ -4165,7 +4165,7 @@ owed:
     id: R-5.3
     version: 1
     domain: evaluation
-    stage: derive-tests
+    stage: calibrate
     why: an action on evaluation-individual-request-swu and
       evaluation-individual-request-twu that asks the service to create a new
       individual evaluation of a proponent as the signed-in evaluator (the
@@ -4189,12 +4189,18 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-28T22:30:41.034Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-28T22:46:15.422Z
+    target: old
   - kind: missing-test
     item: R-5.32
     id: R-5.32
     version: 1
     domain: evaluation
-    stage: derive-tests
+    stage: calibrate
     why: an observation on proposal-swu-view and proposal-twu-view returning the
       proposal's history entries one by one, each with the per-question agreed
       scores it records, so a test can read that finalising recorded the agreed
@@ -4214,3 +4220,9 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-28T22:30:41.034Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-28T22:46:15.422Z
+    target: old
