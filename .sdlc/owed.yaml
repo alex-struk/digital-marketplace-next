@@ -4051,7 +4051,7 @@ owed:
     id: R-2.14
     version: 2
     domain: proposals
-    stage: derive-tests
+    stage: calibrate
     why: an observation on proposal-cwu-create returning the refusal reported
       against each named field (field and message together); and a request-level
       page for Code With Us proposals, like the evaluation-*-request pages, that
@@ -4077,12 +4077,18 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-28T20:13:29.349Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v2 exists and has not run
+        by: runner
+        at: 2026-09-28T21:50:41.553Z
+    target: old
   - kind: missing-test
     item: R-2.18
     id: R-2.18
     version: 3
     domain: proposals
-    stage: derive-tests
+    stage: contract
     why: a request-level page for Sprint With Us and Team With Us proposals that
       submits a proposal whose team members are given by account (seed users,
       including one pending, one deactivated, one outside the organization, and
@@ -4110,3 +4116,22 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-28T20:13:29.349Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v3 exists and has not run
+        by: runner
+        at: 2026-09-28T21:50:41.553Z
+      - from: calibrate
+        to: contract
+        why: names for seed.users.organizationOwner, organizationAdmin and
+          organizationMember, so a test can read that each active member is
+          offered by teamMemberChoices on proposal-twu-create and
+          proposal-swu-create, and that the person just named is no longer
+          offered
+        by: agent:reviewer
+        proposal: derive-tests-proposals-stale-8
+        gate: G3
+        at: 2026-09-28T21:50:42.687Z
+    target: old
+    clause: the proposal form offers every active member of the organization and
+      does not offer the specific person already named on the proposal

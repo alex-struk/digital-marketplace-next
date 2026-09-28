@@ -3,34 +3,35 @@
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// Every test makes exactly one proposal attempt, against the seeded Code With Us opportunity
-// that is open until 2030 and carries no proposal, so no test waits on building an
-// opportunity and none makes more than one attempt within its time. Whether a proposal was
-// submitted is read off the proponent's own list of proposals, where the opportunity's title
-// appears only once a proposal against it has been accepted.
+// Every proposal here is put to the service through proposal-cwu-request, which carries the
+// proponent exactly as given: a blank or malformed individual field, or an organization the
+// screen would never offer. Each test makes one attempt against the seeded Code With Us
+// opportunity that is open until 2030, so an accepted request never meets an earlier one.
 //
-// What counts as refused. A form that withholds the submission — the submit control stays
-// unavailable, or the step cannot be completed — has rejected it just as surely as a reply
-// from the service would, so a step that cannot be carried out is read as the refusal and the
-// test goes on to confirm nothing was submitted. Where every step was carried out, the service
-// has answered, so the test also waits for the offending field to be reported. An archived
-// organization that the form does not offer as a choice has been refused in the same way.
-//
-// The clauses no test here reaches — which field a reported error belongs to, an organization
-// that does not exist, and an organization the vendor does not belong to — are recorded in
-// not-testable.yaml.
+// The organization proponent is tried three ways: an active organization the signed-in
+// vendor has no membership of (accepted, since membership is not checked), an organization
+// that has been archived (refused, since it is not active), and an identifier that names no
+// organization at all (refused, since it does not exist). Where the service reports the
+// refusal for a missing organization is its own choice, so only the refusal is asserted.
 
 const statement =
   "A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name.";
 
-const opportunity = seed.opportunities.publishedCodeWithUs;
+const opportunityId = seed.opportunities.publishedCodeWithUs.id;
 const settle = { timeout: 20000 };
+
+const proposalFields = {
+  opportunityId,
+  proposalText: "A proposal offered through a direct request.",
+  additionalComments: "None.",
+};
 
 const completeIndividual = {
   legalName: "Robin Vendor",
   email: "robin.vendor@example.test",
   phone: "250-555-0199",
-  streetAddress: "1200 Government Street",
+  street1: "1200 Government Street",
+  street2: "",
   city: "Victoria",
   region: "British Columbia",
   mailCode: "V8W1V1",
@@ -45,112 +46,88 @@ async function readOrEmpty(read: () => Promise<string>): Promise<string> {
   }
 }
 
-// Carries out one attempt, returning whether every step could be taken. A step the form will
-// not let the proponent take is the form refusing the submission.
-async function attempt(steps: Array<() => Promise<void>>): Promise<boolean> {
-  try {
-    for (const step of steps) await step();
-    return true;
-  } catch {
-    return false;
-  }
+async function submitIndividual(surface: Surface, individual: Record<string, string>): Promise<void> {
+  await surface.proposalCwuRequest.open();
+  await surface.proposalCwuRequest.submitWithIndividualProponent({ ...proposalFields, ...individual });
 }
 
-async function myProposals(surface: Surface): Promise<string> {
-  await surface.proposalVendorDashboard.open();
-  await attempt([() => surface.proposalVendorDashboard.showMyProposals()]);
-  return readOrEmpty(() => surface.proposalVendorDashboard.myProposalsTable());
+async function submitOrganization(surface: Surface, organizationId: string): Promise<void> {
+  await surface.proposalCwuRequest.open();
+  await surface.proposalCwuRequest.submitWithOrganizationProponent({ ...proposalFields, organizationId });
 }
 
-function proposeAsIndividual(surface: Surface, individual: Record<string, string>): Promise<boolean> {
-  return attempt([
-    () => surface.proposalCwuCreate.open({ opportunityId: opportunity.id }),
-    () => surface.proposalCwuCreate.chooseProponentIndividual(individual),
-    () => surface.proposalCwuCreate.acceptProgramTerms(),
-    () => surface.proposalCwuCreate.acceptAppTerms(),
-    () =>
-      surface.proposalCwuCreate.submitProposal({
-        proposalText: "A proposal offered by a named individual.",
-      }),
-  ]);
+async function expectAccepted(surface: Surface, what: string): Promise<void> {
+  await expect
+    .poll(() => readOrEmpty(() => surface.proposalCwuRequest.requestAccepted()), { ...settle, message: what })
+    .toBeTruthy();
+  expect(await readOrEmpty(() => surface.proposalCwuRequest.proposalIdentifier()), what).toBeTruthy();
+  expect(await readOrEmpty(() => surface.proposalCwuRequest.refusalByField()), what).toBeFalsy();
 }
 
-function proposeForOrganization(surface: Surface, organization: unknown): Promise<boolean> {
-  return attempt([
-    () => surface.proposalCwuCreate.open({ opportunityId: opportunity.id }),
-    () => surface.proposalCwuCreate.chooseProponentOrganization({ organization }),
-    () => surface.proposalCwuCreate.acceptProgramTerms(),
-    () => surface.proposalCwuCreate.acceptAppTerms(),
-    () =>
-      surface.proposalCwuCreate.submitProposal({
-        proposalText: "A proposal offered on behalf of an organization.",
-      }),
-  ]);
+async function expectRefused(surface: Surface, what: string): Promise<string> {
+  await expect
+    .poll(() => readOrEmpty(() => surface.proposalCwuRequest.refusalStatus()), { ...settle, message: what })
+    .toBeTruthy();
+  expect(await readOrEmpty(() => surface.proposalCwuRequest.requestAccepted()), what).toBeFalsy();
+  expect(await readOrEmpty(() => surface.proposalCwuRequest.refusalMessages()), what).toBeTruthy();
+  return readOrEmpty(() => surface.proposalCwuRequest.refusalByField());
 }
 
-async function expectRefused(surface: Surface, completed: boolean, what: string): Promise<void> {
-  if (completed) {
-    await expect
-      .poll(() => readOrEmpty(() => surface.proposalCwuCreate.fieldError()), {
-        ...settle,
-        message: `the offending field is reported when ${what}`,
-      })
-      .toBeTruthy();
-  }
-  expect(await myProposals(surface), `a proposal was submitted when ${what}`).not.toContain(
-    opportunity.title,
-  );
-}
-
-const missing: Array<[string, string]> = [
-  ["legalName", "the legal name"],
-  ["email", "the email address"],
-  ["streetAddress", "the street address"],
-  ["city", "the city"],
-  ["region", "the province"],
-  ["mailCode", "the postal code"],
-  ["country", "the country"],
+// Each field, left blank, is refused against that field by name.
+const blank: Array<[string, string, RegExp]> = [
+  ["legalName", "the legal name", /legal\s*name/i],
+  ["email", "the email address", /e-?mail/i],
+  ["street1", "the street address", /street|address/i],
+  ["city", "the city", /city/i],
+  ["region", "the province", /province|region/i],
+  ["mailCode", "the postal code", /postal|mail\s*code/i],
+  ["country", "the country", /country/i],
 ];
 
-for (const [field, named] of missing) {
-  test(`${statement} (an individual with ${named} missing is refused)`, async ({ surface }) => {
+for (const [field, named, reportedAs] of blank) {
+  test(`${statement} (an individual with ${named} missing is refused against that field)`, async ({ surface }) => {
     await surface.signIn(persona.vendor);
-    const completed = await proposeAsIndividual(surface, { ...completeIndividual, [field]: "" });
-    await expectRefused(surface, completed, `${named} is missing`);
+    await submitIndividual(surface, { ...completeIndividual, [field]: "" });
+    const byField = await expectRefused(surface, `${named} is missing`);
+    expect(byField, `the refusal names ${named}`).toMatch(reportedAs);
   });
 }
 
-const malformed: Array<[string, string, string]> = [
-  ["email", "the email address", "not-an-email-address"],
-  ["phone", "the phone number", "not a phone number"],
+// Each field whose form the service checks, malformed, is refused against that field by name.
+const malformed: Array<[string, string, string, RegExp]> = [
+  ["email", "the email address", "not-an-email-address", /e-?mail/i],
+  ["phone", "the phone number", "not a phone number", /phone/i],
 ];
 
-for (const [field, named, value] of malformed) {
-  test(`${statement} (an individual with ${named} malformed is refused)`, async ({ surface }) => {
+for (const [field, named, value, reportedAs] of malformed) {
+  test(`${statement} (an individual with ${named} malformed is refused against that field)`, async ({ surface }) => {
     await surface.signIn(persona.vendor);
-    const completed = await proposeAsIndividual(surface, { ...completeIndividual, [field]: value });
-    await expectRefused(surface, completed, `${named} is malformed`);
+    await submitIndividual(surface, { ...completeIndividual, [field]: value });
+    const byField = await expectRefused(surface, `${named} is malformed`);
+    expect(byField, `the refusal names ${named}`).toMatch(reportedAs);
   });
 }
 
 test(`${statement} (an individual carrying every field is accepted)`, async ({ surface }) => {
   await surface.signIn(persona.vendor);
-  await proposeAsIndividual(surface, completeIndividual);
-  await expect.poll(() => myProposals(surface), settle).toContain(opportunity.title);
+  await submitIndividual(surface, completeIndividual);
+  await expectAccepted(surface, "a complete individual proponent is accepted");
 });
 
-// The organization owner owns both the archived organization and an active one, so the only
-// difference between the two attempts is the organization's status.
-test(`${statement} (an archived organization is refused)`, async ({ surface }) => {
-  await surface.signIn(persona.organizationOwner);
-  await proposeForOrganization(surface, seed.organizations.archived);
-  expect(await myProposals(surface), "a proposal was submitted for an archived organization").not.toContain(
-    opportunity.title,
-  );
+test(`${statement} (an organization that does not exist is refused)`, async ({ surface }) => {
+  await surface.signIn(persona.vendor);
+  await submitOrganization(surface, seed.unassigned_identifiers.organizationNeverCreated.id);
+  await expectRefused(surface, "an identifier naming no organization");
 });
 
-test(`${statement} (an active organization is accepted)`, async ({ surface }) => {
+test(`${statement} (an organization that is not active is refused)`, async ({ surface }) => {
   await surface.signIn(persona.organizationOwner);
-  await proposeForOrganization(surface, seed.organizations.qualified);
-  await expect.poll(() => myProposals(surface), settle).toContain(opportunity.title);
+  await submitOrganization(surface, seed.organizations.archived.id);
+  await expectRefused(surface, "an archived organization, owned by the signed-in vendor");
+});
+
+test(`${statement} (an active organization the vendor does not belong to is accepted)`, async ({ surface }) => {
+  await surface.signIn(persona.vendor);
+  await submitOrganization(surface, seed.organizations.qualified.id);
+  await expectAccepted(surface, "an active organization the vendor has no membership of is accepted");
 });
