@@ -1694,3 +1694,13 @@ rebind:
       (edit?tab=proposals), on the evaluator's scoresheet and on the exported
       proposal, and must be read from one of those
     closed: *a7
+  - id: R-3.9
+    target: old
+    why: 'unbound: organization-user-memberships.approve_invitation — on
+      http://localhost:3100/users/00000000-0000-4000-8000-000000000209?tab=organizations
+      no pending row for "Salt Marsh Labs Ltd." showed "Approve" when pointed at
+      (0 such rows)'
+    found: unbound
+    adapter: c0679fb6b2152557df56ade1fe6babace5ae15ed
+    by: runner:calibrate
+    at: 2026-09-28T23:35:33.556Z

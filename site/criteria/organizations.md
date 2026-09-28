@@ -12,7 +12,7 @@
 | R-3.6 | acceptance/organizations/R-3.6.spec.ts |  | pass |
 | R-3.7 | acceptance/organizations/R-3.7.spec.ts |  | pass |
 | R-3.8 | acceptance/organizations/R-3.8.spec.ts |  | pass |
-| R-3.9 | acceptance/organizations/R-3.9.spec.ts |  | fail (ruled: test-wrong) |
+| R-3.9 | acceptance/organizations/R-3.9.spec.ts |  | unbound |
 | R-3.10 | acceptance/organizations/R-3.10.spec.ts |  | pass |
 | R-3.11 | acceptance/organizations/R-3.11.spec.ts |  | pass |
 | R-3.12 | acceptance/organizations/R-3.12.spec.ts |  | pass |
@@ -34,7 +34,7 @@
 | R-3.28 | acceptance/organizations/R-3.28.spec.ts |  | pass |
 | R-3.29 | — |  |  |
 | R-3.30 | acceptance/organizations/R-3.30.spec.ts |  | pass |
-| R-3.31 | acceptance/organizations/R-3.31.spec.ts |  | fail (ruled: test-wrong) |
+| R-3.31 | acceptance/organizations/R-3.31.spec.ts |  | pass |
 | R-3.32 | acceptance/organizations/R-3.32.spec.ts |  | pass |
 | R-3.33 | acceptance/organizations/R-3.33.spec.ts |  | pass |
 | R-3.34 | acceptance/organizations/R-3.34.spec.ts |  | pass |

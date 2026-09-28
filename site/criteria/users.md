@@ -4,11 +4,11 @@
 
 | id | test | new | old |
 | --- | --- | --- | --- |
-| R-4.1 | acceptance/users/R-4.1.spec.ts |  | unbound |
-| R-4.2 | acceptance/users/R-4.2.spec.ts |  | unbound |
+| R-4.1 | acceptance/users/R-4.1.spec.ts |  | unbound (ruled: persona-unavailable) |
+| R-4.2 | acceptance/users/R-4.2.spec.ts |  | unbound (ruled: persona-unavailable) |
 | R-4.3 | acceptance/users/R-4.3.spec.ts |  | unbound |
 | R-4.4 | acceptance/users/R-4.4.spec.ts |  | unbound |
-| R-4.5 | acceptance/users/R-4.5.spec.ts |  | unbound |
+| R-4.5 | acceptance/users/R-4.5.spec.ts |  | unbound (ruled: persona-unavailable) |
 | R-4.6 | acceptance/users/R-4.6.spec.ts |  | pass |
 | R-4.7 | — |  |  |
 | R-4.8 | acceptance/users/R-4.8.spec.ts |  | pass |

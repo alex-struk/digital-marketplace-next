@@ -23,10 +23,10 @@
 | R-6.17 | acceptance/notifications/R-6.17.spec.ts |  | fail (ruled: defect-in-old) |
 | R-6.18 | acceptance/notifications/R-6.18.spec.ts |  | pass |
 | R-6.19 | acceptance/notifications/R-6.19.spec.ts |  | fail (ruled: defect-in-old) |
-| R-6.20 | acceptance/notifications/R-6.20.spec.ts |  | unbound |
+| R-6.20 | acceptance/notifications/R-6.20.spec.ts |  | unbound (ruled: persona-unavailable) |
 | R-6.21 | acceptance/notifications/R-6.21.spec.ts |  | pass |
 | R-6.22 | — |  | pass |
-| R-6.23 | acceptance/notifications/R-6.23.spec.ts |  | unbound |
+| R-6.23 | acceptance/notifications/R-6.23.spec.ts |  | unbound (ruled: persona-unavailable) |
 | R-6.24 | acceptance/notifications/R-6.24.spec.ts |  | pass |
 | R-6.25 | acceptance/notifications/R-6.25.spec.ts |  | pass |
 | R-6.26 | — |  | pass (ruled: test-wrong) |

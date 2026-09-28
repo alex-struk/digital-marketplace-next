@@ -12,14 +12,14 @@
 | R-1.6 | acceptance/opportunities/R-1.6.spec.ts |  | pass |
 | R-1.7 | acceptance/opportunities/R-1.7.spec.ts |  | pass |
 | R-1.8 | acceptance/opportunities/R-1.8.spec.ts |  | pass |
-| R-1.9 | acceptance/opportunities/R-1.9.spec.ts |  | fail (ruled: test-wrong) |
+| R-1.9 | acceptance/opportunities/R-1.9.spec.ts |  | fail |
 | R-1.10 | acceptance/opportunities/R-1.10.spec.ts |  | pass |
 | R-1.11 | acceptance/opportunities/R-1.11.spec.ts |  | pass |
 | R-1.12 | acceptance/opportunities/R-1.12.spec.ts |  | pass |
 | R-1.13 | acceptance/opportunities/R-1.13.spec.ts |  | pass |
 | R-1.14 | acceptance/opportunities/R-1.14.spec.ts |  | pass |
 | R-1.15 | acceptance/opportunities/R-1.15.spec.ts |  | pass |
-| R-1.16 | acceptance/opportunities/R-1.16.spec.ts |  | fail (ruled: test-wrong) |
+| R-1.16 | acceptance/opportunities/R-1.16.spec.ts |  | fail |
 | R-1.17 | acceptance/opportunities/R-1.17.spec.ts |  | fail (ruled: spec-wrong) |
 | R-1.18 | acceptance/opportunities/R-1.18.spec.ts |  | pass |
 | R-1.19 | acceptance/opportunities/R-1.19.spec.ts |  | pass |
@@ -30,9 +30,9 @@
 | R-1.24 | acceptance/opportunities/R-1.24.spec.ts |  | pass |
 | R-1.25 | acceptance/opportunities/R-1.25.spec.ts |  | fail (ruled: defect-in-old) |
 | R-1.26 | acceptance/opportunities/R-1.26.spec.ts |  | pass |
-| R-1.27 | acceptance/opportunities/R-1.27.spec.ts |  | fail (ruled: test-wrong) |
+| R-1.27 | acceptance/opportunities/R-1.27.spec.ts |  | pass |
 | R-1.28 | acceptance/opportunities/R-1.28.spec.ts |  | pass |
-| R-1.29 | acceptance/opportunities/R-1.29.spec.ts |  | stale (ruled: spec-wrong) |
+| R-1.29 | acceptance/opportunities/R-1.29.spec.ts |  | pass (ruled: spec-wrong) |
 | R-1.30 | acceptance/opportunities/R-1.30.spec.ts |  | pass |
 | R-1.31 | acceptance/opportunities/R-1.31.spec.ts |  | pass |
 | R-1.32 | acceptance/opportunities/R-1.32.spec.ts |  | pass |
