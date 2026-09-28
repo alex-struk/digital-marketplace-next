@@ -33,3 +33,27 @@ I rewrote the comment above signIn to describe this, and added a small helper, `
 **Still open.** As the ruling notes, the R-2.14 hardening from the previous revision has no confirmed cause and should be checked first at the next calibration.
 
 No route in `surface.yaml` was found not to resolve during this revision.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+Question: does the old-target adapter bind every surface action and observation, and nothing else? The reviewer was bypassed only because R-8.31 went to bind-adapter three times, past policy.loops.rebind's limit of 2. Ruling: approve. The return on bind-adapter-old-22 already accepted eight of this branch's nine changes, including the save-after-remove and the Code With Us terms-dialog save that answered the three R-8.31 sends. It returned only the deactivated-vendor sign-in, and that is now fixed in tests/adapters/old/index.ts: signIn opens the session route, reads the account's current status from /api/sessions/current through accountStatus(), keeps the session only when the status is ACTIVE (the R-4.14 case after reactivation), and otherwise signs out and throws the unbound error. The comment above signIn matches. R-4.4 on old is therefore reported as unbound, not as a false finding. The code for each R-8.31 send is on the branch: removeAttachment calls attachmentsOpenToChange first; startEditingProposal tries the top-bar Edit, then the Proposal Details tab, and does nothing on an editable form; removeExistingAttachment saves through saveAttachmentForm. The runner's typecheck reports no errors under adapters/old/. The escalation came from the loop count, not from a pipeline defect, so no further escalation is warranted. What would change the ruling: a calibration run showing R-4.4 or R-4.14 misbinding on old, or the R-8.31 removal still not reaching the service. The R-2.14 hardening has no confirmed cause and should be checked first at the next calibration.
+
+**Conditions:**
+- condition-met bind-adapter-old-22#1: signIn in tests/adapters/old/index.ts now keeps the deactivated-vendor session only when accountStatus() reads ACTIVE from /api/sessions/current; otherwise it signs out and throws 'unbound: signIn.deactivated-vendor — the session route mints a session without checking account status…', and the comment above signIn describes this
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `931ff1e1b712241551ed7f4060a6dabf0134f88f`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
