@@ -106,6 +106,8 @@ export interface Surface {
   evaluationConsensusRequestTwu: EvaluationConsensusRequestTwuPage;
   evaluationPanelRequest: EvaluationPanelRequestPage;
   fileAttachByIdentifier: FileAttachByIdentifierPage;
+  proposalCwuRequest: ProposalCwuRequestPage;
+  proposalTeamRequest: ProposalTeamRequestPage;
 }
 
 export interface HomePage {
@@ -366,6 +368,7 @@ export interface ProposalCwuCreatePage {
   acceptAppTerms(input?: unknown): Promise<void>;
   cancel(input?: unknown): Promise<void>;
   fieldError(): Promise<string>;
+  fieldErrorsByField(): Promise<string>;
   opportunitySummary(): Promise<string>;
   termsModal(): Promise<string>;
   submitDisabledUntilTermsAccepted(): Promise<string>;
@@ -433,6 +436,7 @@ export interface ProposalSwuCreatePage {
   budgetExceededError(): Promise<string>;
   unqualifiedOrganizationNotice(): Promise<string>;
   pendingTeamMember(): Promise<string>;
+  teamMemberChoices(): Promise<string>;
 }
 
 export interface ProposalSwuEditPage {
@@ -443,6 +447,7 @@ export interface ProposalSwuEditPage {
   submitProposal(input?: unknown): Promise<void>;
   withdrawProposal(input?: unknown): Promise<void>;
   deleteProposal(input?: unknown): Promise<void>;
+  submissionRefusal(): Promise<string>;
   proposalIdentifier(): Promise<string>;
   opportunityIdentifier(): Promise<string>;
   proposalTab(): Promise<string>;
@@ -500,6 +505,7 @@ export interface ProposalTwuCreatePage {
   fieldError(): Promise<string>;
   serviceAreaError(): Promise<string>;
   unqualifiedOrganizationNotice(): Promise<string>;
+  teamMemberChoices(): Promise<string>;
 }
 
 export interface ProposalTwuEditPage {
@@ -510,6 +516,7 @@ export interface ProposalTwuEditPage {
   submitProposal(input?: unknown): Promise<void>;
   withdrawProposal(input?: unknown): Promise<void>;
   deleteProposal(input?: unknown): Promise<void>;
+  submissionRefusal(): Promise<string>;
   proposalIdentifier(): Promise<string>;
   opportunityIdentifier(): Promise<string>;
   proposalTab(): Promise<string>;
@@ -1433,4 +1440,27 @@ export interface FileAttachByIdentifierPage {
   attachmentAccepted(): Promise<string>;
   attachmentRefused(): Promise<string>;
   attachedFileIdentifiers(): Promise<string>;
+}
+
+export interface ProposalCwuRequestPage {
+  open(): Promise<void>;
+  submitWithOrganizationProponent(input?: unknown): Promise<void>;
+  submitWithIndividualProponent(input?: unknown): Promise<void>;
+  requestAccepted(): Promise<string>;
+  proposalIdentifier(): Promise<string>;
+  proposalStatus(): Promise<string>;
+  refusalByField(): Promise<string>;
+  refusalMessages(): Promise<string>;
+  refusalStatus(): Promise<string>;
+}
+
+export interface ProposalTeamRequestPage {
+  open(params: { program: string }): Promise<void>;
+  submitTeamProposal(input?: unknown): Promise<void>;
+  requestAccepted(): Promise<string>;
+  proposalIdentifier(): Promise<string>;
+  proposalStatus(): Promise<string>;
+  refusalByField(): Promise<string>;
+  refusalMessages(): Promise<string>;
+  refusalStatus(): Promise<string>;
 }

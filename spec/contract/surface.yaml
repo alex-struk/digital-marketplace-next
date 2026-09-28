@@ -428,6 +428,11 @@ pages:
       cancel: { test_id: proposal-cancel }
     observations:
       field_error: { test_id: field-error }
+      # Every refusal the screen reports against a field, each as the field it names (legal
+      # name, email address, phone, street address, city, province, postal code, country,
+      # proposal text, additional comments) together with its message, so that a test can
+      # tell which fields a refused submission was refused for.
+      field_errors_by_field: { test_id: null }
       opportunity_summary: { test_id: proposal-opportunity-summary }
       terms_modal: { test_id: proposal-terms-dialog }
       submit_disabled_until_terms_accepted: { test_id: proposal-submit-confirm }
@@ -510,6 +515,10 @@ pages:
       budget_exceeded_error: { test_id: proposal-budget-exceeded-error }
       unqualified_organization_notice: { test_id: proposal-unqualified-organization-notice }
       pending_team_member: { test_id: proposal-pending-team-member }
+      # The people the team-member choice offers for a phase once an organization is
+      # chosen, by name, leaving out anybody the choice no longer offers because they are
+      # already named in that phase.
+      team_member_choices: { test_id: null }
 
   - id: proposal-swu-edit
     domain: proposals
@@ -523,6 +532,11 @@ pages:
       withdraw_proposal: { test_id: proposal-withdraw-button }
       delete_proposal: { test_id: proposal-delete-button }
     observations:
+      # What the screen reports after submit_proposal or save_changes_and_submit is refused:
+      # the notice it raises and any message it shows against a field, as text. Absent
+      # when the submission went through. The old application's notice is a general one
+      # that does not repeat the service's reason; proposal-team-request reads the reason.
+      submission_refusal: { test_id: null }
       proposal_identifier: { test_id: proposal-identifier }
       opportunity_identifier: { test_id: opportunity-identifier }
       proposal_tab: { test_id: proposal-tab-proposal }
@@ -592,6 +606,10 @@ pages:
       field_error: { test_id: field-error }
       service_area_error: { test_id: proposal-service-area-error }
       unqualified_organization_notice: { test_id: proposal-unqualified-organization-notice }
+      # The people the team-member choice offers for a resource once an organization is
+      # chosen, by name, leaving out anybody the choice no longer offers because they are
+      # already named on the proposal.
+      team_member_choices: { test_id: null }
 
   - id: proposal-twu-edit
     domain: proposals
@@ -605,6 +623,9 @@ pages:
       withdraw_proposal: { test_id: proposal-withdraw-button }
       delete_proposal: { test_id: proposal-delete-button }
     observations:
+      # As on proposal-swu-edit: what the screen reports when a submission from it is
+      # refused, absent when it went through.
+      submission_refusal: { test_id: null }
       proposal_identifier: { test_id: proposal-identifier }
       opportunity_identifier: { test_id: opportunity-identifier }
       proposal_tab: { test_id: proposal-tab-proposal }
@@ -1978,3 +1999,102 @@ pages:
       attachment_accepted: { test_id: null }
       attachment_refused: { test_id: null }
       attached_file_identifiers: { test_id: null }
+
+  # A Code With Us proposal made and submitted in one request, as the signed-in vendor,
+  # with its proponent given exactly as stated. The screen's organization choice lists only
+  # the vendor's own organizations; this carries any organization identifier to the
+  # service, including seed.unassigned_identifiers.organizationNeverCreated (which names no
+  # organization) and an organization the vendor has no membership of (for persona.vendor,
+  # seed.organizations.qualified). The opportunity is seed.opportunities.publishedCodeWithUs
+  # or one the test publishes (opportunity_identifier on the page it lands on).
+  #
+  # The service refuses a second proposal by the same person on the same opportunity
+  # ("You already have a proposal for this opportunity."), and an accepted request leaves a
+  # proposal behind, so each accepted request in a test needs its own opportunity or its
+  # own vendor. A refused request leaves nothing behind.
+  #
+  # The old service reads an organization proponent before validating anything else, and
+  # when the identifier names no organization it puts a blank individual proponent in its
+  # place; the refusal then comes back against the individual's fields rather than against
+  # "organization". refusal_by_field reports each message where the service puts it.
+  - id: proposal-cwu-request
+    domain: proposals
+    route: /api/proposals/code-with-us
+    title: "A Code With Us proposal, by request"
+    actions:
+      # Input: the opportunity identifier, the organization identifier, proposal text and
+      # additional comments. Sent as a submission, not a draft.
+      submit_with_organization_proponent: { test_id: null }
+      # Input: the opportunity identifier, proposal text, additional comments, and the
+      # individual's legal name, email address, phone, street address, second address
+      # line, city, province, postal code and country, each exactly as given — blank or
+      # malformed included. Sent as a submission, not a draft.
+      submit_with_individual_proponent: { test_id: null }
+    observations:
+      # The service accepted the proposal (a successful answer carrying it).
+      request_accepted: { test_id: null }
+      # The accepted proposal's identifier, for proposal-cwu-edit and proposal-cwu-view.
+      proposal_identifier: { test_id: null }
+      proposal_status: { test_id: null }
+      # Every message in a refusal, each with the field it is reported against — the
+      # proponent's own fields by name (legal name, email address, phone, street address,
+      # city, province, postal code, country), "organization" for an organization
+      # proponent, and the proposal's own fields. Empty when the request was accepted.
+      refusal_by_field: { test_id: null }
+      # The refusal's messages alone, in the order the service gives them.
+      refusal_messages: { test_id: null }
+      refusal_status: { test_id: null }
+
+  # A Sprint With Us or Team With Us proposal made and submitted in one request, as the
+  # signed-in vendor, with its team given by account. :program is sprint-with-us or
+  # team-with-us. The proposal screens offer only the chosen organization's active members
+  # and do not offer a person twice; this carries any seed.users handle to the service,
+  # including users.teamCandidatePending (an unanswered invitation to
+  # organizations.qualified), users.teamCandidateFormer (a membership of it that has
+  # ended), users.teamCandidateOutsider (a member of no organization), and one person named
+  # twice.
+  #
+  # The opportunity is one the test publishes (opportunity_identifier on the page it lands
+  # on), since both programs' seeded opportunities have closed. The organization is a
+  # seed.organizations handle; organizations.qualified is qualified for both programs and
+  # users.organizationOwner and users.organizationAdmin may submit for it. As on
+  # proposal-cwu-request, one person has one proposal per opportunity and an accepted
+  # request leaves it behind.
+  #
+  # A request can fail after validation as well as at it: the old service stores a Sprint
+  # With Us phase's team keyed by person, so a phase naming one person twice passes
+  # validation and is then answered with the service's storage error. refusal_status tells
+  # a validation refusal (400) from a failure to store (503), and refusal_messages carries
+  # whichever message came back.
+  - id: proposal-team-request
+    domain: proposals
+    route: /api/proposals/:program
+    title: "A team proposal, by request"
+    actions:
+      # Input for team-with-us: the opportunity identifier, the organization, the team as a
+      # list of { member: a seed.users handle, resource: the resource's service area as the
+      # opportunity lists it, hourly rate }, and an answer to each resource question by
+      # order. The request finds each resource's identifier by reading the opportunity as
+      # the service answers it.
+      #
+      # Input for sprint-with-us: the opportunity identifier, the organization, and for
+      # each phase the opportunity requires a list of { member: a seed.users handle,
+      # scrum master: yes or no } and a proposed cost; an answer to each team question by
+      # order; and any references. Members are sent in the order given, repeats included.
+      #
+      # Either way, sent as a submission, not a draft.
+      submit_team_proposal: { test_id: null }
+    observations:
+      request_accepted: { test_id: null }
+      proposal_identifier: { test_id: null }
+      proposal_status: { test_id: null }
+      # Every message in a refusal, each with where it is reported: the team (for
+      # team-with-us, by position in the team list, or the team as a whole), the phase and
+      # position (for sprint-with-us), the organization, or the proposal's other fields.
+      # Empty when the request was accepted.
+      refusal_by_field: { test_id: null }
+      # The refusal's messages alone, in the order the service gives them — where "User is
+      # not an active member of the organization." or "Please select unique team members."
+      # is read.
+      refusal_messages: { test_id: null }
+      refusal_status: { test_id: null }

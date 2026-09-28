@@ -4051,7 +4051,7 @@ owed:
     id: R-2.14
     version: 2
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: an observation on proposal-cwu-create returning the refusal reported
       against each named field (field and message together); and a request-level
       page for Code With Us proposals, like the evaluation-*-request pages, that
@@ -4063,12 +4063,26 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-28T19:59:12.490Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: added the `proposal-cwu-request` page (organization proponent by
+          identifier, or individual proponent as given, with `request_accepted`,
+          `refusal_by_field`, `refusal_messages` and `refusal_status`), the
+          `field_errors_by_field` observation on `proposal-cwu-create`, and the
+          seed handle `unassigned_identifiers.organizationNeverCreated`;
+          `seed.organizations.qualified` serves as an organization the vendor
+          persona does not belong to.
+        by: contract-v18
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-28T20:13:29.349Z
   - kind: missing-test
     item: R-2.18
     id: R-2.18
     version: 3
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: a request-level page for Sprint With Us and Team With Us proposals that
       submits a proposal whose team members are given by account (seed users,
       including one pending, one deactivated, one outside the organization, and
@@ -4081,3 +4095,18 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-28T19:59:12.490Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: added the `proposal-team-request` page (team members by seed user handle,
+          repeats allowed, with `refusal_messages`, `refusal_by_field` and
+          `refusal_status`), seed users `teamCandidatePending`,
+          `teamCandidateFormer` and `teamCandidateOutsider` with PENDING and
+          INACTIVE memberships of `organizations.qualified`,
+          `submission_refusal` on `proposal-swu-edit` and `proposal-twu-edit`,
+          and `team_member_choices` on `proposal-swu-create` and
+          `proposal-twu-create`.
+        by: contract-v18
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-28T20:13:29.349Z
