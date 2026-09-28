@@ -1,5 +1,10 @@
 # Run log
 
+# Run record 2026-09-28
+
+- 19:07:06 propose policy-agents-backend-claude at G-POL
+- 19:08:17 rule policy-agents-backend-claude approve at G-POL by tech-lead (human)
+
 # Run record 2026-09-26
 
 - 17:29:38 run calibrate: ok, cost 0, turns 0

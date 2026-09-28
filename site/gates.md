@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Made by | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-28T02:08:17.580Z | policy-agents-backend-claude | G-POL | approve | tech-lead | a person |  |  |
 | 2026-09-26T00:47:55.660Z | calibrate-triage-old-12 | G3 | withdrawn | agent:tech-lead | persona agent |  |  |
 | 2026-09-25T23:44:00.603Z | calibrate-triage-old-11 | G3 | withdrawn | agent:tech-lead | persona agent |  |  |
 | 2026-09-25T22:00:22.833Z | policy-agents-backend | G-POL | approve | tech-lead | a person |  |  |
