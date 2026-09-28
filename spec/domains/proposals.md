@@ -128,6 +128,7 @@ A vendor may read the history of a proposal they authored, or of a proposal belo
 A Team With Us proposal is refused when the hourly rates it names, applied at each resource's target allocation across the opportunity's contract period, come to more than the opportunity's maximum budget; the check runs on both the create and the edit path, as the equivalent Sprint With Us check does.
 - state: accepted
 - replaces: R-2.8
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-2.11 · v1 · confirmed · recovered
 An organization may appear on at most one proposal per opportunity, and a proposal naming an organization that already bid is refused with a pointer to the existing proposal.

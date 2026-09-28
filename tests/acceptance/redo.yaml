@@ -512,3 +512,51 @@ redo:
       the day of the month differs by one; the expected day must be taken in the
       time zone the deadline is displayed in
     closed: *a8
+  - id: R-5.13
+    version: 1
+    why: the test fails while reading a proposal's history, which the criterion does
+      not mention, before it ever attempts to finalise; it should attempt
+      finalisation with a proponent lacking a submitted consensus and observe
+      the refusal.
+  - id: R-1.16
+    version: 1
+    why: the opportunity the test submits is refused over its phase dates before the
+      phase rule is reached; everything except the missing prototype phase must
+      be valid, so that the prototype-phase message is the only fault.
+  - id: R-2.22
+    version: 1
+    why: the proposal the test edits is incomplete in other ways, so the change
+      cannot be saved at all; the proposal must be otherwise complete so that
+      the organization change is the only thing under test, both when refused
+      and when accepted.
+  - id: R-2.21
+    version: 1
+    why: the test depends on filling in parts of the proposal that the criterion
+      does not mention before it reaches the question responses; it should vary
+      only the response to an opportunity question and observe that response's
+      rejection.
+  - id: R-2.17
+    version: 1
+    why: the test observed no outcome at all rather than an acceptance; it must
+      first confirm that the proposal names the organization lacking the service
+      area and is actually submitted, then read the refusal.
+  - id: R-2.28
+    version: 1
+    why: the test depends on a control being offered at a stage where the action is
+      out of place; it should observe the refusal of the out-of-stage action
+      itself, and not treat the action's absence from the screen as a failure.
+  - id: R-2.31
+    version: 1
+    why: the test timed out reading a rank it could not parse as a number; it should
+      read the total and rank for fully evaluated proposals where they are
+      presented, and set up every stage score before reading.
+  - id: R-4.3
+    version: 1
+    why: the test needs a vendor who has not yet completed their profile and signs
+      in as an established vendor instead, so it never reaches the agreement
+      step; it must begin as a first-time vendor persona.
+  - id: R-4.24
+    version: 1
+    why: the test needs a person who has not yet completed their profile and signs
+      in as an established account instead, so it never reaches the
+      profile-completion step; it must begin as a first-time persona.

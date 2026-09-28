@@ -107,6 +107,7 @@ An opportunity saved as a draft is accepted with incomplete content; when its pr
 - when: they save it as a draft with fields still blank
 - then: the draft is stored, no content validation error is raised, and absent dates are set to fourteen days from the day of saving
 - state: accepted
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.10 · v1 · confirmed · recovered
 An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters.
@@ -370,8 +371,8 @@ An addendum of 1 to 5,000 characters may be added to any opportunity that is no 
 - then: the addendum is appended to the opportunity with its author and date, an entry is added to the opportunity's history, and there is no action that removes it
 - state: accepted
 
-### R-1.33 · v1 · confirmed · recovered
-An administrator or an opportunity's author may attach a private note, with files, to a Code With Us or Sprint With Us opportunity's history at any point in its life.
+### R-1.33 · v2 · confirmed · recovered
+The service accepts a private note, with files, on a Code With Us or Sprint With Us opportunity's history from an administrator or the opportunity's author at any point in the opportunity's life, visible only to the author and administrators, but no screen of the application offers a way to add one.
 - cites: src/back-end/lib/resources/opportunity/code-with-us.ts:873
 - cites: src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1721
 - cites: src/shared/lib/resources/opportunity/team-with-us.ts:374
