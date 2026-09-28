@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-triage-old-15 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">204</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">200</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">175</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-triage-old-15</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-28 06:35</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>18 criterion(s) fail against old: which of them did this project&#39;s own adapter cause?</h2>
+<p><strong>Recommendation.</strong> Sort R-5.1, R-6.1, R-6.2, R-6.5, R-2.14, R-4.14, R-1.15, R-6.15, R-5.17, R-7.17, R-1.27, R-2.29, R-5.29, R-8.31, R-1.34, R-1.36, R-5.37, R-1.55 with a triage condition each, so the adapter&#39;s failures are fixed there and only product questions reach the product owner.</p>
+<p>18 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:4300,">http://localhost:4300,</a> and nobody has sorted them yet. Before any reaches the product owner, say which of them this project&#39;s own adapter caused. The adapter is under <code>tests/adapters/old/</code>; read each failure against it and against the test.</p>
+<h4>R-5.1 · v1</h4>
+<p>An opportunity that uses a panel must name at least two panel members, each a public sector employee, each named only once, and at most one of them marked as chair.</p>
+<ul><li>given: a public sector employee setting the evaluation panel of a Sprint With Us or Team With Us opportunity</li><li>when: they save a panel of one person, or a panel naming the same person twice, or a panel naming two chairs, or a panel naming a vendor</li><li>then: the panel is rejected with a message naming the rule that was broken, and the opportunity keeps the panel it had</li><li>test: tests/acceptance/evaluation/R-5.1.spec.ts</li></ul>
+<p><strong>An opportunity that uses a panel must name at least two panel members, each a public sector employee, each named only once, and at most one of them marked as chair. (a panel naming the same person twice is rejected with the rule named, and the opportunity keeps the panel it had)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-6.1 · v1</h4>
+<p>When notifications are switched off for an environment, nothing the service does sends a message, and every action that would have sent one still completes normally.</p>
+<ul><li>given: a service configured with notifications disabled</li><li>when: a person does something that would ordinarily notify somebody, such as publishing an opportunity</li><li>then: the action succeeds and reports success, and no message is sent to anybody</li><li>test: tests/acceptance/notifications/R-6.1.spec.ts</li></ul>
+<pre><code>no result recorded</code></pre>
+<h4>R-6.2 · v1</h4>
+<p>When a message cannot be composed or cannot be delivered, the action that triggered it still succeeds, nobody is told, and no further attempt is made.</p>
+<ul><li>given: a service whose mail server is unreachable</li><li>when: a person publishes an opportunity that would notify everyone who asked for new-opportunity notices</li><li>then: the opportunity is published and the person is told it succeeded, no notice reaches anybody, and nothing in the service records for that person that delivery failed</li><li>test: tests/acceptance/notifications/R-6.2.spec.ts</li></ul>
+<p><strong>When a message cannot be composed or cannot be delivered, the action that triggered it still succeeds, nobody is told, and no further attempt is made.</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: not [32m/deliver|undeliver|bounce|could not be sent|failed to send/[39m
+Received string:      [31m&quot;summary[39m
+[31msummary[39m
+[31mopportunity management[39m
+[31mopportunity[39m
+[31maddenda[39m
+[31mhistory[39m
+[31mopportunity evaluation[39m
+[31mproposals[39m
+[31mneed help?[39m
+[31mread guide[39m
+[31mcode with us: r-6.2 opportunity published while mail cannot be [7mdeliver[27med[39m
+[31mpublished sep 27, 2026[39m
+[31m|[39m
+[31mupdated sep 27, 2026[39m
+[31mstatus[39m
+[31mpublished[39m
+[31mcreated by[39m
+… 11 more line(s)</code></pre>
+<h4>R-6.5 · v1</h4>
+<p>Every message is sent in both a formatted and a plain-text form, the plain text being a rendering of the formatted version rather than separately written copy.</p>
+<ul><li>given: a reader whose mail program shows plain text only</li><li>when: they open any message from the service</li><li>then: they see a readable plain-text rendering carrying the same words and links as the formatted version</li><li>test: tests/acceptance/notifications/R-6.5.spec.ts</li></ul>
+<p><strong>Every message is sent in both a formatted and a plain-text form, the plain text being a rendering of the formatted version rather than separately written copy.</strong> — failed</p>
+<pre><code>Error: words of &quot;[TEST] Our Terms and Conditions Have Been Updated&quot; written in its plain text but nowhere in the formatted
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+[32m- Expected  - 1[39m
+[31m+ Received  + 3[39m
+
+[32m- Array [][39m
+[31m+ Array [[39m
+[31m+   &quot;updatedthe&quot;,[39m
+[31m+ ][39m</code></pre>
+<h4>R-2.14 · v2</h4>
+<p>A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name.</p>
+<ul><li>given: a vendor submitting a Code With Us proposal as an individual</li><li>when: the legal name, email address, street address, city, province, postal code or country is missing, or the email address or phone number is malformed</li><li>then: the submission is rejected and each offending field is named in the response</li><li>test: tests/acceptance/proposals/R-2.14.spec.ts</li></ul>
+<p><strong>A Code With Us proponent is either a named individual carrying a legal name, an email address and a full postal address, each field validated in turn, or an organization identified by id and checked only for existence and active status, since the service does not verify that the vendor belongs to the organization they name. (a named individual)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-4.14 · v1</h4>
+<p>An administrator can browse everyone registered with the service, listed by status, then account kind, then name, showing each person&#39;s status, account kind, name and whether they are an administrator, and can narrow the list by typing part of a name.</p>
+<ul><li>given: an active vendor, a deactivated vendor and a public sector employee registered with the service</li><li>when: an administrator opens the list of users and then types part of one person&#39;s name</li><li>then: all three are listed with the active accounts before the inactive ones, and the list narrows to the people whose names match what was typed</li><li>test: tests/acceptance/users/R-4.14.spec.ts</li></ul>
+<p><strong>an administrator can browse everyone registered with the service, showing each person&#39;s status, account kind, name and whether they are an administrator</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;Aldous Quillfeather&quot;[39m
+Received string:    [31m&quot;Active | Vendor | Subscriber Placeholder 107[39m
+[31mActive | Vendor | Subscriber Placeholder 108[39m
+[31mActive | Vendor | Subscriber Placeholder 109[39m
+[31mActive | Vendor | Subscriber Placeholder 110[39m
+[31mActive | Vendor | Subscriber Placeholder 111[39m
+[31mActive | Vendor | Subscriber Placeholder 112[39m
+[31mActive | Vendor | Subscriber Placeholder 113[39m
+[31mActive | Vendor | Subscriber Placeholder 114[39m
+[31mActive | Vendor | Subscriber Placeholder 115[39m
+[31mActive | Vendor | Subscriber Placeholder 116[39m
+[31mActive | Vendor | Subscriber Placeholder 117[39m
+[31mActive | Vendor | Subscriber Placeholder 118[39m
+[31mActive | Vendor | Subscriber Placeholder 119[39m
+[31mActive | Vendor | Subscriber Placeholder 120[39m
+[31mActive | Vendor | Zinnia Quillfeather[39m
+[31mInactive | Vendor | Ellis Placeholder&quot;[39m</code></pre>
+<p><strong>everyone registered is listed by status, then account kind, then name</strong> — failed</p>
+<pre><code>Error: unbound: signIn.deactivated-vendor — vendor sign-in on this target goes through github.com and no sandbox account exists there; the session route /auth/createsessionvendor/:id creates a session without the account-status check the identity-provider sign-in applies, so it cannot show the refusal</code></pre>
+<h4>R-1.15 · v1</h4>
+<p>A Sprint With Us or Team With Us opportunity is rejected unless its evaluation weights total exactly one hundred per cent.</p>
+<ul><li>given: a member of public sector staff creating or editing a Sprint With Us or Team With Us opportunity that is not a draft</li><li>when: they submit weights that do not total one hundred per cent</li><li>then: the submission is rejected with a message saying the scoring weights must total 100%</li><li>test: tests/acceptance/opportunities/R-1.15.spec.ts</li></ul>
+<p><strong>a Sprint With Us opportunity is rejected unless its evaluation weights total exactly one hundred per cent</strong> — failed</p>
+<pre><code>Error: opportunity-swu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3100/opportunities/sprint-with-us/create; the form marks &quot;7. Scoring&quot; incomplete; the form shows: The scoring weights should total 100% exactly.</code></pre>
+<p><strong>a Team With Us opportunity is rejected unless its evaluation weights total exactly one hundred per cent</strong> — failed</p>
+<pre><code>Error: opportunity-twu-create.publish — &quot;Publish&quot; is disabled on http://localhost:3100/opportunities/team-with-us/create; the form marks &quot;7. Scoring&quot; incomplete; the form shows: The scoring weights should total 100% exactly.</code></pre>
+<h4>R-6.15 · v1</h4>
+<p>A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service&#39;s own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity&#39;s owner exactly as it does to every other multi-recipient notice.</p>
+<ul><li>test: tests/acceptance/notifications/R-6.15.spec.ts</li></ul>
+<p><strong>A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service&#39;s own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity&#39;s owner exactly as it does to every other multi-recipient notice (the notice sent to an evaluation panel)</strong> — failed</p>
+<pre><code>Error: people carried as blind copies on ijB4TgVy5CZXDZLfvHUVHZ
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+Expected: &gt; [32m1[39m
+Received:   [31m0[39m</code></pre>
+<p><strong>A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service&#39;s own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity&#39;s owner exactly as it does to every other multi-recipient notice (the notice sent to an opportunity&#39;s owner)</strong> — failed</p>
+<pre><code>Error: unbound: evaluation-consensus-list-twu.submit_final_consensus_scores — no control labelled &quot;Submit Consensus Scores&quot; or &quot;Submit Scores&quot; or &quot;Submit&quot; on http://localhost:3100/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab=consensus</code></pre>
+<h4>R-5.17 · v1</h4>
+<p>When people are added to an evaluation panel, only the people newly added are notified, and only once the opportunity has left draft.</p>
+<ul><li>given: a published opportunity whose panel already names two people</li><li>when: a third person is added to the panel</li><li>then: only the third person is notified, and the two already on the panel are not</li><li>test: tests/acceptance/evaluation/R-5.17.spec.ts</li></ul>
+<p><strong>When people are added to an evaluation panel, only the people newly added are notified, and only once the opportunity has left draft (a third person added to a published opportunity&#39;s panel is notified, and the two already on it are not)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m0[39m
+Received: [31m14[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>When people are added to an evaluation panel, only the people newly added are notified, and only once the opportunity has left draft (the same change made while the opportunity is still a draft notifies nobody)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m0[39m
+Received: [31m63[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-7.17 · v1</h4>
+<p>A page&#39;s body is rendered as formatted text only; markup embedded in it is never executed, and the same body renders identically on the page&#39;s own address and wherever another screen embeds it.</p>
+<ul><li>test: tests/acceptance/content/R-7.17.spec.ts</li></ul>
+<p><strong>the same body renders identically on the page&#39;s own address and wherever another screen embeds it</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m&quot;Formatting marks make these words bold. Raw markup tries to make these words bold and these words emphasised.&quot;[39m
+Received: [31m&quot;Formatting marks make these words bold. Raw markup tries to make [7m&lt;strong&gt;[27mthese words bold[7m&lt;/strong&gt;[27m and [7m&lt;em&gt;[27mthese words emphasised[7m&lt;/em&gt;[27m.&quot;[39m</code></pre>
+<h4>R-1.27 · v1</h4>
+<p>An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score.</p>
+<ul><li>given: an awarded opportunity</li><li>when: a visitor who may not see proposal scores views it</li><li>then: the successful proponent&#39;s name is shown and their contact details and score are withheld</li><li>test: tests/acceptance/opportunities/R-1.27.spec.ts</li></ul>
+<p><strong>An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score. (Code With Us: a visitor who may not see proposal scores)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/awarded/[39m
+Received string:  [31m&quot;completed&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score. (Code With Us: a reader permitted to see proposal scores)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score. (Sprint With Us: a visitor who may not see proposal scores)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/awarded/[39m
+Received string:  [31m&quot;completed&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score. (Sprint With Us: a reader permitted to see proposal scores)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-2.29 · v1</h4>
+<p>After the questions of a Sprint With Us or Team With Us opportunity have been scored, only proposals meeting every question&#39;s minimum score are ranked by that score and the highest few are carried into the next stage.</p>
+<ul><li>given: a Sprint With Us opportunity with six proposals scored on its questions, one of them below a question&#39;s minimum score</li><li>when: the panel&#39;s agreed scores are finalised</li><li>then: the proposal below the minimum is left behind, the remaining five are ranked by their question score and the top four move to the code challenge, while on a Team With Us opportunity the top three move to the challenge</li><li>test: tests/acceptance/proposals/R-2.29.spec.ts</li></ul>
+<p><strong>After the questions of a Sprint With Us or Team With Us opportunity have been scored, only proposals meeting every question&#39;s minimum score are ranked by that score and the highest few are carried into the next stage. (Sprint With Us)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/code challenge/[39m
+Received string:  [31m&quot;team questions score entered | team question scores were entered. q1: 5; q2: 5; q3: 5; q4: 5. | sep 27, 2026 11:29 pm pdt robin placeholder[39m
+[31munder review (cc) | — | sep 27, 2026 11:29 pm pdt robin placeholder[39m
+[31munder review (tq) | — | aug 29, 2026 11:29 pm pdt system[39m
+[31msubmitted | — | aug 18, 2026 11:29 pm pdt blake placeholder[39m
+[31mdraft | — | aug 8, 2026 11:29 pm pdt blake placeholder&quot;[39m
+
+Call Log:
+- Timeout 30000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>After the questions of a Sprint With Us or Team With Us opportunity have been scored, only proposals meeting every question&#39;s minimum score are ranked by that score and the highest few are carried into the next stage. (Team With Us)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/challenge/[39m
+Received string:  [31m&quot;team questions score entered | resource question scores were entered. q1: 5; q2: 5; q3: 5; q4: 5. | sep 27, 2026 11:30 pm pdt robin placeholder[39m
+[31munder review (c) | — | sep 27, 2026 11:30 pm pdt robin placeholder[39m
+[31munder review (q) | — | aug 29, 2026 11:30 pm pdt system[39m
+[31msubmitted | — | aug 18, 2026 11:30 pm pdt blake placeholder[39m
+[31mdraft | — | aug 8, 2026 11:30 pm pdt blake placeholder&quot;[39m
+
+Call Log:
+- Timeout 30000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-5.29 · v1</h4>
+<p>Only the chair may record and change the consensus, one consensus per proponent, and only while the opportunity is in consensus.</p>
+<ul><li>given: an opportunity in consensus</li><li>when: an evaluator who is not the chair tries to record an agreed score for a proponent, and the chair records a second consensus for a proponent they have already agreed</li><li>then: the evaluator&#39;s attempt is refused, and the chair&#39;s second attempt is refused as a duplicate</li><li>test: tests/acceptance/evaluation/R-5.29.spec.ts</li></ul>
+<p><strong>only the chair may record the consensus, and only one consensus per proponent</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-8.31 · v1</h4>
+<p>Removing an attachment from an opportunity or a proposal, or deleting the opportunity or proposal it hangs on, withdraws every read path the file held through that association, and a file that no record refers to any longer is identifiable as detached so that stored content can be disposed of under the records-retention rule for procurement attachments, which is set outside this domain.</p>
+<ul><li>test: tests/acceptance/files/R-8.31.spec.ts</li></ul>
+<p><strong>removing an attachment from an opportunity withdraws the read path the file held through that opportunity</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>removing an attachment from a proposal withdraws the read path the file held through that proposal</strong> — failed</p>
+<pre><code>Error: unbound: proposal-cwu-edit.save_changes — no control labelled &quot;Save Changes&quot; on http://localhost:3101/opportunities/code-with-us/92099319-5173-49f4-83ba-f6d427b13e11/proposals/ff433f35-bd78-4621-933c-fd6082aca71a/edit</code></pre>
+<h4>R-1.34 · v1</h4>
+<p>Publishing an opportunity notifies everyone who has asked for new-opportunity notifications, and separately confirms the publication to the opportunity&#39;s author.</p>
+<ul><li>given: an opportunity ready to be published and people who have turned notifications on</li><li>when: an administrator publishes it</li><li>then: each of those people receives a notice that a new opportunity has been posted, and the opportunity&#39;s author receives a confirmation</li><li>test: tests/acceptance/opportunities/R-1.34.spec.ts</li></ul>
+<p><strong>Publishing an opportunity notifies everyone who has asked for new-opportunity notifications, and separately confirms the publication to the opportunity&#39;s author. — everyone who has asked for new-opportunity notifications is notified</strong> — failed</p>
+<pre><code>Error: the catcher was emptied
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m0[39m
+Received: [31m413[39m</code></pre>
+<p><strong>Publishing an opportunity notifies everyone who has asked for new-opportunity notifications, and separately confirms the publication to the opportunity&#39;s author. — the opportunity&#39;s author receives a separate confirmation</strong> — failed</p>
+<pre><code>Error: the catcher was emptied
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m0[39m
+Received: [31m424[39m</code></pre>
+<h4>R-1.36 · v1</h4>
+<p>Cancelling an opportunity notifies everyone watching it and everyone who has submitted a proposal to it, and separately notifies its author.</p>
+<ul><li>given: a published opportunity with watchers and submitted proposals</li><li>when: an administrator cancels it</li><li>then: its watchers and proponents are told it has been cancelled, and its author is told separately that the cancellation was actioned</li><li>test: tests/acceptance/opportunities/R-1.36.spec.ts</li></ul>
+<p><strong>Cancelling an opportunity notifies everyone watching it and everyone who has submitted a proposal to it, and separately notifies its author. — everyone watching it and everyone who has submitted a proposal to it is notified</strong> — failed</p>
+<pre><code>Error: unbound: caught-message.open — the mail catcher answered 404 for http://localhost:8025/api/v1/message/2JZYRg4hpnB4doui3vP2rz</code></pre>
+<p><strong>Cancelling an opportunity notifies everyone watching it and everyone who has submitted a proposal to it, and separately notifies its author. — its author is notified separately</strong> — failed</p>
+<pre><code>Error: the catcher was emptied
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m0[39m
+Received: [31m21[39m</code></pre>
+<h4>R-5.37 · v1</h4>
+<p>A panel member who is neither an evaluator nor the chair must be refused by the service when the panel is submitted, with a field-level message identifying the offending member, rather than being allowed through to a database constraint violation.</p>
+<ul><li>test: tests/acceptance/evaluation/R-5.37.spec.ts</li></ul>
+<p><strong>A panel member who is neither an evaluator nor the chair must be refused by the service when the panel is submitted, with a field-level message identifying the offending member, rather than being allowed through to a database constraint violation</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32mtrue[39m
+Received: [31mfalse[39m</code></pre>
+<h4>R-1.55 · v1</h4>
+<p>A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named.</p>
+<ul><li>test: tests/acceptance/opportunities/R-1.55.spec.ts</li></ul>
+<p><strong>A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Sprint With Us: the same person twice)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Sprint With Us: no chair)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Team With Us: the same person twice)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Team With Us: no chair)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<h3>Triage conditions</h3>
+<p>One condition per line, one for every failing criterion the page lists, in exactly one of these forms:</p>
+<ul><li><code>adapter-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion and the test are both fine, and this target&#39;s adapter is what failed: it read the wrong thing off the page, reported a control missing that the page does render, or answered empty where it never reached the page. <code>&lt;why&gt;</code> names what the adapter did wrong, specifically enough for the next binding run to fix it. The criterion is not touched.</li><li><code>product-question &lt;ID&gt;</code> — nothing in the evidence points at the adapter. The failure goes to the product owner, who decides whether the application, the criterion or the test is wrong. No text after the ID.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. A condition may not span more than one line. When the evidence is genuinely unclear, it is a <code>product-question</code>: a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the adapter comes back from the next binding run unchanged and costs a run to find out.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-28 06:42.</p>
+<div class="body"><p>Question: which of the 18 failures against the old target did this project&#39;s adapter cause? Approve with one triage condition per criterion. Nine are adapter-wrong. The clearest is shared: mailApi (tests/adapters/old/index.ts:6083) reads the unnumbered SDLC_MAIL_API while the test fixture reads its own worker&#39;s SDLC_MAIL_API_&lt;n&gt; (tests/fixtures/index.ts:37). Under 4 instances, tests clear their own catcher while the adapter counts, opens and faults copy 0&#39;s. That explains R-5.17, R-1.34, R-1.36, R-6.15 and part of R-6.2. The rest are specific binding faults: a missing button label, reading the whole page instead of the history rows, throwing on a disabled control whose refusal message is on screen, swallowing a refused submit, never saving an attachment removal, the wrong proposal save label, and a virtualized list read from its scrolled position. The other nine are the old app&#39;s own behaviour read correctly (undisplayed or unnamed panel errors, a database error, enforcement without a message, inconsistent markdown escaping, &#39;Completed&#39; and &#39;(CC)&#39; labels, joined plain-text words), so the product owner decides them. R-6.1 skipped because the oracle was never started with notifications disabled. That is a harness configuration gap, not an adapter or product failure; lacking a third form it goes to the product owner, who should know that a copy started with SDLC_ORACLE_DISABLE_NOTIFICATIONS=1 is what exercises it. This ruling would change if a binding run fixed the mail lookup and R-5.17, R-1.34 or R-1.36 still failed on panel or recipient counts; those would then be product questions.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>adapter-wrong R-6.2: the history tab binding (opportunityCwuEdit.historyTab, tabContent([&quot;History&quot;])) returns the whole page, including the opportunity title the test wrote, so &#39;delivered&#39; in the title fails the check; read only the history table rows, as historyRows() does for proposals. The refuse-delivery fault switch also goes through mailApi to the unnumbered SDLC_MAIL_API (copy 0) instead of this worker&#39;s SDLC_MAIL_API_&lt;TEST_PARALLEL_INDEX&gt;, so the fault never reached this worker&#39;s app</li><li>adapter-wrong R-6.15: mailApi reads the unnumbered SDLC_MAIL_API (copy 0&#39;s catcher) instead of this worker&#39;s SDLC_MAIL_API_&lt;TEST_PARALLEL_INDEX&gt;, so the panel notice&#39;s blind copies are looked for in another copy&#39;s mail; and evaluation-consensus-list-twu.submit_final_consensus_scores and confirm_submit_consensus lack the label the page renders, &#39;Submit Final Consensus Scores&#39;</li><li>adapter-wrong R-5.17: mailApi reads the unnumbered SDLC_MAIL_API (copy 0&#39;s catcher) while the test&#39;s mail.clear() empties this worker&#39;s SDLC_MAIL_API_&lt;TEST_PARALLEL_INDEX&gt;, so caughtMessageList.messageCount counts another copy&#39;s mail (14, 63) and the empty-catcher precondition fails before any panel notice is checked; resolve the catcher per worker as the fixture&#39;s forThisWorker does</li><li>adapter-wrong R-1.34: mailApi reads the unnumbered SDLC_MAIL_API (copy 0&#39;s catcher) while the test clears this worker&#39;s SDLC_MAIL_API_&lt;TEST_PARALLEL_INDEX&gt;, so the empty-catcher check counts another copy&#39;s 413/424 messages; resolve the catcher per worker as the fixture&#39;s forThisWorker does</li><li>adapter-wrong R-1.36: mailApi reads the unnumbered SDLC_MAIL_API (copy 0&#39;s catcher), so caught-message.open looks up a message id the test found in this worker&#39;s SDLC_MAIL_API_&lt;TEST_PARALLEL_INDEX&gt; and gets 404, and the empty-catcher check counts another copy&#39;s 21 messages; resolve the catcher per worker as the fixture&#39;s forThisWorker does</li><li>adapter-wrong R-1.15: opportunity-swu-create.publish and opportunity-twu-create.publish throw when Publish is disabled even though the form is showing the refusal (&#39;The scoring weights should total 100% exactly.&#39;); when the disabled control comes with a form message, publish should return quietly so scoreWeightError can read the message</li><li>adapter-wrong R-2.14: submitProposal returns silently when openTermsDialog reports the form refused (Submit disabled with field errors shown), and fieldError/stepMessages then reads an empty string although the page renders &#39;Please enter a valid email.&#39; / &#39;Please enter a valid phone number.&#39; under the fields; surface the refusal and read the rendered field messages</li><li>adapter-wrong R-8.31: removeExistingAttachment clicks the remove mark but never saves the opportunity form, so the removal never reaches the service; save after removing (&#39;Publish Changes&#39; / &#39;Save Changes&#39; / &#39;Submit Changes for Review&#39;). And proposal-cwu-edit.save_changes looks only for &#39;Save Changes&#39;, while a submitted Code With Us proposal&#39;s edit page offers &#39;Submit Changes&#39;, which opens a terms dialog whose boxes must be ticked before its &#39;Submit Changes&#39; confirm</li><li>adapter-wrong R-4.14: everyUserRow reads the virtualized user table from its current scroll position and only scrolls down, so after the test&#39;s first poll leaves the table at the bottom it sees only the tail rows; reset the table body&#39;s scrollTop to 0 before reading. And signIn.deactivated-vendor refuses unconditionally, although the test only signs this persona in (after reactivating the account) so they can set their own name; let it use its session-route entry like every other persona, and keep &#39;cannot show a refusal&#39; only for the refusal-checking reads</li><li>product-question R-5.1</li><li>product-question R-1.55</li><li>product-question R-5.37</li><li>product-question R-5.29</li><li>product-question R-7.17</li><li>product-question R-1.27</li><li>product-question R-2.29</li><li>product-question R-6.5</li><li>product-question R-6.1</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
