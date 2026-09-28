@@ -402,3 +402,12 @@ conditions:
     stage: bind-adapter
     by: agent:tech-lead
     at: 2026-09-28T14:40:47.757Z
+    closed:
+      outcome: met
+      why: "signIn in tests/adapters/old/index.ts now keeps the deactivated-vendor
+        session only when accountStatus() reads ACTIVE from
+        /api/sessions/current; otherwise it signs out and throws 'unbound:
+        signIn.deactivated-vendor — the session route mints a session without
+        checking account status…', and the comment above signIn describes this"
+      by: agent:tech-lead
+      at: 2026-09-28T14:43:09.744Z
