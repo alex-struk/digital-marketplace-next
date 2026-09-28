@@ -362,3 +362,77 @@ redo:
       why: derived again by a derive-tests run on proposals
       by: runner:derive-tests
       at: 2026-09-28T16:13:40.318Z
+  - id: R-5.3
+    version: 1
+    why: a second start that returns the evaluator to the evaluation they already
+      hold has refused a second evaluation; establish afterwards that exactly
+      one evaluation by that evaluator exists for the proponent, and require the
+      quoted message only where a second evaluation is actually requested of the
+      service
+  - id: R-5.13
+    version: 1
+    why: the criterion promises that finalising is refused, not a message, and not
+      the step at which it is stopped; when the final consensus cannot be
+      submitted or finalised while a proponent lacks a submitted consensus,
+      finalising has been refused. Establish that the opportunity remains in
+      consensus and no proponent was screened in or out, and still attempt the
+      finalise wherever the service accepts such a request
+  - id: R-5.19
+    version: 1
+    why: the test fails in its own setup, requiring the creator's name to be shown
+      on the opportunity's public page, which the criterion never promises;
+      establish that the panel member did not create the opportunity from the
+      seeded record or from who created it, then check the dashboard listing and
+      access as the criterion states
+  - id: R-8.30
+    version: 1
+    why: the test reads the refusal right after choosing the file and then abandons
+      the change, but the criterion is about the upload, which happens when the
+      choice is saved; save the change, then read the refusal and establish that
+      the stored picture is unchanged
+  - id: R-1.16
+    version: 1
+    why: the test tries to publish without an implementation phase, but where a
+      person is given no way to leave that phase out, the rule is being kept;
+      establish that the published opportunity carries an implementation phase
+      instead of demanding a refusal message, and keep the
+      inception-without-prototype case as written
+  - id: R-1.27
+    version: 1
+    why: contact details are still read only from the opportunity's public page; for
+      the reader permitted to see scores, read the successful proponent's
+      contact details and score wherever that reader is shown the awarded
+      proposal or the award summary, and keep checking that a visitor is shown
+      neither anywhere they can reach
+  - id: R-3.9
+    version: 1
+    why: the criterion says the owner's attempt is refused, not that a message is
+      shown; an owner who is offered no way to accept has been refused, so
+      establish afterwards that the membership is still pending. The 'not
+      pending' case never makes the membership active first; have the invited
+      person accept, then make a further attempt and establish that the
+      membership is unchanged
+  - id: R-3.31
+    version: 1
+    why: the mailbox is read once, immediately after the acceptance returns, but the
+      messages may be sent just afterwards; wait for both messages to arrive
+      within a bounded time before concluding either is missing
+  - id: R-2.30
+    version: 1
+    why: the test reads the price score from a page where it is not shown, and the
+      criterion does not say where it appears; read it wherever an entitled
+      reader is shown the proposal's individual scores, together with the
+      history entry and the evaluated state
+  - id: R-2.35
+    version: 1
+    why: the criterion names state changes and score entries, not the words used to
+      label them; the test required the word 'disqualif', but the state can be
+      shown under another label; establish that each state change and score
+      entry appears newest first with its author, time and note, matching the
+      disqualification by its note rather than by a label
+  - id: R-2.14
+    version: 2
+    why: ten proposal attempts in one test cannot finish within the time a single
+      test is allowed; give each missing or malformed field its own test, or
+      allow the test the time its attempts need, so that a timeout never stands
+      in for a result

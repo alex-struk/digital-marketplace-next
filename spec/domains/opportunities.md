@@ -292,6 +292,7 @@ An opportunity moves to processing on its own once every proposal still in conte
 - when: the last of those proposals is scored
 - then: the opportunity moves to processing and the change is recorded with a note saying it was moved automatically because all proposals have been evaluated
 - state: accepted
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.26 · v1 · confirmed · recovered
 Awarding a proposal moves its opportunity to awarded and records the winning proponent against it; every other proposal still in contention is marked not awarded.
@@ -326,8 +327,8 @@ Only an administrator may cancel an opportunity, and only once it has been publi
 - state: accepted
 - note: a draft or under-review opportunity cannot be cancelled — it is deleted instead.
 
-### R-1.29 · v1 · confirmed · recovered
-The names of the people who created and last changed an opportunity are shown only to administrators and to those people themselves.
+### R-1.29 · v2 · confirmed · recovered
+The names of the people who created and last changed an opportunity are withheld from anyone who is neither an administrator nor one of those people.
 - cites: src/back-end/lib/db/opportunity/code-with-us.ts:243
 - reconciliation: implemented-only
 - given: a published opportunity
@@ -548,6 +549,7 @@ Creating an opportunity with its state set to published is refused unless the re
 The permitted state changes for a Team With Us opportunity in processing are awarded and cancelled, matching Code With Us and Sprint With Us, so the recorded transitions and the award path agree.
 - state: accepted
 - replaces: R-1.45
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.50 · v1 · confirmed · authored
 There is exactly one path out of a questions consensus stage, and it refuses to advance unless every consensus evaluation has been submitted and at least one proponent has met the minimum score on every question that sets one.

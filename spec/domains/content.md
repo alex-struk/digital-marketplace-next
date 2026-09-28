@@ -231,6 +231,7 @@ The service links from five places to a service level agreement page that it nev
 A request refused for lack of permission is reported as a permission refusal, in the same shape for every page request, whether it reads the list, reads one page, or creates, changes or removes one.
 - state: accepted
 - replaces: R-7.11
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-7.17 · v1 · confirmed · authored
 A page's body is rendered as formatted text only; markup embedded in it is never executed, and the same body renders identically on the page's own address and wherever another screen embeds it.

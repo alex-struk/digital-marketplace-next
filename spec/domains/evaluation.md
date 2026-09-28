@@ -143,6 +143,7 @@ The service must reject an evaluation panel that names no chair, applying the sa
 The refusal shown when no proponent clears every question's minimum score must name the stage that actually follows — the Code Challenge for Sprint With Us and the Challenge for Team With Us.
 - state: accepted
 - replaces: R-5.4
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-5.11 · v1 · confirmed · authored
 An individual evaluation may be read only by an administrator, the opportunity's owner, and the members of that opportunity's evaluation panel, at every stage; passing the question stages does not open it to public sector employees with no connection to the opportunity.

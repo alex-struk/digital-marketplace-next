@@ -416,3 +416,4 @@ An organization's summary of team capabilities counts only members who have acce
 The accept and the decline choice offered in an invitation email both open the invited person's own organizations page with the matching confirmation ready, so a person can decline from the message as readily as they can accept.
 - state: accepted
 - replaces: R-3.29
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it

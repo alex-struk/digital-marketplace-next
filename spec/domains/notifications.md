@@ -228,11 +228,13 @@ The reference page does not show every message the service can send: twelve of t
 A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service's own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity's owner exactly as it does to every other multi-recipient notice.
 - state: accepted
 - replaces: R-6.9
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-6.16 · v1 · confirmed · authored
 A message that the notification preference does not govern must not offer to unsubscribe; it links to the reader's notification settings without implying that any choice there will stop messages of that kind.
 - state: accepted
 - replaces: R-6.10
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-6.17 · v1 · confirmed · authored
 A deactivated account receives no notification of any kind, including notices about opportunities it was watching, while the watch itself is retained so that reactivating the account restores it.

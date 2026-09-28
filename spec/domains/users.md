@@ -275,6 +275,7 @@ The control to reactivate an account is offered only for an account that an admi
 A person whose account an administrator reactivates is told that an administrator has reactivated their Digital Marketplace account and whom to contact with questions; the message telling a person they reactivated the account themselves is sent only when they did so by signing in again.
 - state: accepted
 - replaces: R-4.11
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-4.21 · v1 · confirmed · authored
 The list of everyone registered with the service may be read only by an administrator. The same request made by a public sector employee who is not an administrator, or by anyone else, is refused rather than answered, so the email address and account status of every registered person are never disclosed more widely than the interface offers them.

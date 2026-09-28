@@ -1147,6 +1147,11 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: &a5
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-28T18:12:26.851Z
   - id: R-5.14
     target: old
     why: 'unbound: evaluation-consensus-list-swu.finalize_consensus_scores — no
@@ -1160,6 +1165,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-5.16
     target: old
     why: 'unbound: evaluation-panel-swu.add_panel_member — the evaluation panel tab
@@ -1171,6 +1177,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-5.30
     target: old
     why: 'unbound: evaluation-consensus-list-twu.submit_final_consensus_scores — no
@@ -1185,6 +1192,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-6.20
     target: old
     why: "unbound: signIn.first-time-vendor — The oracle has no identity provider.
@@ -1195,6 +1203,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-6.23
     target: old
     why: "unbound: signIn.self-reactivating-vendor — /auth/createsessionvendor/13
@@ -1207,6 +1216,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-1.33
     target: old
     why: "unbound: opportunity-cwu-edit.add_note — signed in as the administrator
@@ -1225,6 +1235,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-2.4
     target: old
     why: 'unbound: proposal-cwu-edit.delete_proposal — neither the top bar nor an
@@ -1236,6 +1247,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-2.7
     target: old
     why: 'unbound: proposal-swu-create.add_phase_team_member — no box labelled
@@ -1248,6 +1260,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-2.9
     target: old
     why: 'unbound: proposal-swu-create.add_phase_team_member — no box labelled
@@ -1260,6 +1273,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-2.10
     target: old
     why: 'unbound: proposal-twu-create.add_team_member_for_resource — no chooser
@@ -1272,6 +1286,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-2.11
     target: old
     why: 'unbound: proposal-swu-create.add_phase_team_member — no box labelled
@@ -1281,6 +1296,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-2.16
     target: old
     why: 'unbound: proposal-swu-create.add_phase_team_member — no control labelled
@@ -1296,6 +1312,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-2.17
     target: old
     why: 'unbound: proposal-twu-create.add_team_member_for_resource — no chooser
@@ -1308,6 +1325,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-2.18
     target: old
     why: 'unbound: proposal-swu-create.add_phase_team_member — no box labelled
@@ -1323,6 +1341,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-2.20
     target: old
     why: 'unbound: proposal-twu-create.answer_resource_question — no field labelled
@@ -1335,6 +1354,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-2.21
     target: old
     why: 'unbound: proposal-swu-create.add_phase_team_member — no box labelled
@@ -1347,6 +1367,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-2.22
     target: old
     why: 'unbound: proposal-twu-create.add_team_member_for_resource — no chooser
@@ -1359,6 +1380,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-2.24
     target: old
     why: 'unbound: proposal-twu-create.add_team_member_for_resource — no chooser
@@ -1368,6 +1390,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-2.28
     target: old
     why: 'unbound: proposal-swu-view.score_team_scenario — neither the top bar nor
@@ -1385,6 +1408,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-2.37
     target: old
     why: 'unbound: proposal-swu-create.add_phase_team_member — no box labelled
@@ -1394,6 +1418,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-4.1
     target: old
     why: "unbound: signIn.first-time-public-sector-employee — The oracle has no
@@ -1408,6 +1433,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-4.2
     target: old
     why: "unbound: signIn.first-time-vendor — The oracle has no identity provider.
@@ -1422,6 +1448,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-4.3
     target: old
     why: "unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete never
@@ -1436,6 +1463,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-4.5
     target: old
     why: "unbound: signIn.self-reactivating-vendor — /auth/createsessionvendor/13
@@ -1448,6 +1476,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-4.8
     target: old
     why: "unbound: user-profile-self-capabilities.capability_checked — looked again
@@ -1460,6 +1489,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-4.23
     target: old
     why: "unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete never
@@ -1470,6 +1500,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-4.24
     target: old
     why: "unbound: user-sign-up-complete.toggle_new_opportunity_notifications —
@@ -1480,6 +1511,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-4.32
     target: old
     why: 'unbound: user-list.toggle_export_field — no box labelled "email address"
@@ -1488,6 +1520,7 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+    closed: *a5
   - id: R-3.10
     target: old
     why: organization-edit team_member_row (teamRowsText, index.ts:4426-4441)
@@ -1496,6 +1529,11 @@ rebind:
       email (from the member dialog or the organization's membership list, which
       memberName at index.ts:4470 already reads), so both the presence check and
       the post-leave absence check can hold
+    closed: &a6
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-28T18:12:26.917Z
   - id: R-2.23
     target: old
     why: proposal-cwu-edit.submit_proposal (index.ts:3751-3754) presses 'Submit
@@ -1503,6 +1541,7 @@ rebind:
       checkboxes, so the button stays disabled; after pressing 'Submit' it must
       wait for the dialog, tick every checkbox in it (as saveProposalChanges
       does at index.ts:3729-3734), then press 'Submit Proposal'
+    closed: *a6
   - id: R-5.23
     target: old
     why: evaluation-individual-list-swu.submit_scores_for_consensus
@@ -1511,6 +1550,7 @@ rebind:
       absent submit control must be reported as a refusal (throw, as
       submit_proposal does for a disabled control), or
       incomplete_evaluation_error must report it
+    closed: *a6
   - id: R-3.25
     target: old
     why: organization-edit swu_requirement_two_members /
@@ -1519,6 +1559,7 @@ rebind:
       whether met or unmet; they must read the state from the icon beside each
       requirement (success-coloured means met, body-coloured means unmet) and
       return it with the label
+    closed: *a6
   - id: R-2.31
     target: old
     why: proposal-swu-view.total_score (index.ts:3875, stageFigure([], ['Total
@@ -1526,6 +1567,7 @@ rebind:
       card appears only on the Proposal tab, and the test has moved to Team
       Scenario by then; it must open the Proposal tab first, and the same fix
       applies to proposal-twu-view.total_score (index.ts:3912)
+    closed: *a6
   - id: R-2.32
     target: old
     why: proposal-swu-edit total_score and rank (index.ts:3797-3798) read the
@@ -1534,6 +1576,7 @@ rebind:
       line, so the total must be read from the body row), and the rank card is
       labelled 'Ranking' with its figure above the label (read it as
       valueBefore(['Ranking']), as proposal-cwu-view.rank does at index.ts:3834)
+    closed: *a6
   - id: R-5.35
     target: old
     why: evaluation-individual-create-swu.anonymous_proponent_name (index.ts:5507
@@ -1542,6 +1585,7 @@ rebind:
       twice, so it returned 'Proponent 1\nProponent 1'; on the create page it
       must return the single current proponent's name, keeping the joined list
       only for the individual list page
+    closed: *a6
   - id: R-5.32
     target: old
     why: evaluation-consensus-list confirm_finalize_consensus (index.ts:5369 via
@@ -1551,6 +1595,7 @@ rebind:
       outcome (the success notice, or 'Finalize Consensus Scores' leaving the
       top bar) and fail if an error notice appears, and waiting only for the
       dialog to close is not enough because it closes before the request is sent
+    closed: *a6
   - id: R-5.36
     target: old
     why: the same finalise binding as R-5.32 (evaluation-consensus-list
@@ -1558,3 +1603,4 @@ rebind:
       and Team With Us consensus tabs) does not wait for the finalise request to
       complete before the test reads the status; it must wait for the success
       notice or for the finalise control to leave the top bar
+    closed: *a6
