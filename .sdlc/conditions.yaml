@@ -374,3 +374,13 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-28T05:24:31.506Z
+    closed:
+      outcome: met
+      why: the successfulProponent()/seed.organizations.qualified.legal_name assertion
+        is removed from the first test in
+        tests/acceptance/proposals/R-2.33.spec.ts; the opportunity-awarded check
+        is now `expect.poll(() => opportunityStatus(surface, opportunityId),
+        settle).not.toBe(beforeAward)` after awardProposal(), and the file's
+        opening comment no longer describes a named successful proponent
+      by: agent:reviewer
+      at: 2026-09-28T05:25:52.031Z
