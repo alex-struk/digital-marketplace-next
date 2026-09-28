@@ -1,28 +1,25 @@
 // criterion: @R-5.17 v1
-// provenance: blind, spec@05e88fb7765c5d6327f910e43f990e6c321b63fa, derived 2026-09-25
+// provenance: blind, spec@f31700e000484947669c48e50cf9c73b4d1e20c7, derived 2026-09-28
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// Each test builds its own Sprint With Us opportunity as the administrator, and establishes
-// that its panel names exactly two people — users.staffOne and users.staffPanelEvaluator —
-// before the third person, users.staffTwo, is added. Who a panel names is read by person: the
-// three names are read off their own profiles first, so the panel screen's rows can be told
-// apart. The creator may be put on a new panel of their own accord, so any member other than
-// the two is taken off, and the panel read again, before anything is counted.
+// Each test builds its own Sprint With Us opportunity as the administrator, under a title no
+// other record carries, and establishes that its panel names exactly two people —
+// users.staffOne and users.staffPanelEvaluator — before the third, users.staffTwo, is added.
+// Who a panel names is read by person: the names are read off each person's profile first, so
+// the panel screen's rows can be told apart. The creator may be put on a new panel of their own
+// accord, so any member other than the two is taken off and the panel read again.
 //
-// The catcher is emptied just before the third person is added, so every message found
-// afterwards belongs to that change. A message is addressed to one person and every other
-// recipient is a blind copy (spec/contract/observables.yaml, email.notes), so a person is
-// counted as reached when any caught message names them among its visible recipients or its
-// blind copies. Every message is read one at a time through caught-message: the ones
-// caught-message-list lists, and the ones the catcher's search finds visibly addressed to any
-// of the three people or to the service's own address.
+// Other activity on the service reaches the same people in the same window — the announcement
+// of the opportunity's own publication among it — so nothing is counted until the catcher has
+// been emptied and has been read back as empty, and stays empty for a moment, immediately
+// before the third person is added. Reading it back empty also shows the catcher is reachable
+// before any absence is asserted (observables.yaml, email.notes).
 //
-// Emptying the catcher is itself a request to it, so a test that goes on to assert an absence
-// has already shown the catcher was reachable, as observables.yaml asks.
-
-// email.configured_sender_address in spec/contract/observables.yaml.
-const serviceAddress = "donotreply@example.test";
+// A message counts only when it is about this opportunity — its subject or body carries the
+// opportunity's title — and it counts for a person when it names them among its visible
+// recipients or its blind copies, since every recipient but one is a blind copy. The same
+// count is made for the person added and for the two already on the panel.
 
 const settle = { timeout: 15000 };
 const first = seed.users.staffOne;
@@ -31,7 +28,10 @@ const added = seed.users.staffTwo;
 const creator = seed.users.administratorOne;
 const people = [first, second, added, creator];
 
-type Mail = { messagesTo(address: string): Promise<Array<{ ID: string }>> };
+type Mail = {
+  clear(): Promise<void>;
+  messagesTo(address: string): Promise<Array<{ ID: string }>>;
+};
 
 function inDays(days: number): string {
   const date = new Date();
@@ -132,31 +132,65 @@ function identifiersIn(listing: string): string[] {
     .filter(Boolean);
 }
 
-// Every recipient, visible or blind, of every message caught since the catcher was emptied.
-async function everyoneReached(surface: Surface, mail: Mail): Promise<string> {
+async function caughtCount(surface: Surface): Promise<number> {
+  await surface.caughtMessageList.open();
+  const count = Number.parseInt((await readOrEmpty(() => surface.caughtMessageList.messageCount())).trim(), 10);
+  return Number.isNaN(count) ? -1 : count;
+}
+
+// Empties the catcher and reads it back as empty twice, two seconds apart, so that nothing
+// already on its way from earlier activity lands after the count begins. Tries a few times.
+async function emptyCatcher(surface: Surface, mail: Mail): Promise<void> {
+  let last = -1;
+  for (let attempt = 0; attempt < 5; attempt += 1) {
+    await mail.clear();
+    await expect.poll(() => caughtCount(surface), settle).toBe(0);
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+    last = await caughtCount(surface);
+    if (last === 0) return;
+  }
+  throw new Error(`the catcher could not be read back as empty before the third person was added; last count ${last}`);
+}
+
+// For each person, how many caught messages about the opportunity with this title reach them.
+async function aboutOpportunityFor(surface: Surface, mail: Mail, title: string): Promise<Record<string, number>> {
   const ids = new Set<string>();
   await surface.caughtMessageList.open();
   for (const id of identifiersIn(await readOrEmpty(() => surface.caughtMessageList.messageIdentifiers()))) ids.add(id);
-  for (const address of [...people.map((u) => u.email), serviceAddress]) {
-    for (const { ID } of await mail.messagesTo(address)) ids.add(ID);
+  for (const user of [first, second, added]) {
+    for (const { ID } of await mail.messagesTo(user.email)) ids.add(ID);
   }
-  let recipients = "";
+  const counts: Record<string, number> = { [first.id]: 0, [second.id]: 0, [added.id]: 0 };
   for (const messageId of ids) {
     try {
       await surface.caughtMessage.open({ messageId });
     } catch {
       continue;
     }
-    recipients += ` ${await readOrEmpty(() => surface.caughtMessage.visibleRecipients())}`;
-    recipients += ` ${await readOrEmpty(() => surface.caughtMessage.copiedRecipients())}`;
+    const content = [
+      await readOrEmpty(() => surface.caughtMessage.subject()),
+      await readOrEmpty(() => surface.caughtMessage.plainTextBody()),
+      await readOrEmpty(() => surface.caughtMessage.htmlBody()),
+    ].join("\n");
+    if (!content.includes(title)) continue;
+    const recipients = [
+      await readOrEmpty(() => surface.caughtMessage.visibleRecipients()),
+      await readOrEmpty(() => surface.caughtMessage.copiedRecipients()),
+    ]
+      .join(" ")
+      .toLowerCase();
+    for (const user of [first, second, added]) {
+      if (recipients.includes(user.email.toLowerCase())) counts[user.id] += 1;
+    }
   }
-  return recipients.toLowerCase();
+  return counts;
 }
 
 test("When people are added to an evaluation panel, only the people newly added are notified, and only once the opportunity has left draft (a third person added to a published opportunity's panel is notified, and the two already on it are not)", async ({
   surface,
   mail,
 }) => {
+  const title = `R-5.17 published opportunity ${Date.now()} whose panel gains a third person`;
   await surface.signIn(persona.administrator);
   const names = await namesOf(surface);
   for (const user of people) expect(names.get(user.id)).toBeTruthy();
@@ -177,10 +211,7 @@ test("When people are added to an evaluation panel, only the people newly added 
     order: 0,
   });
   await surface.opportunitySwuCreate.setEvaluationPanel({ members: [first, second], chair: second });
-  await surface.opportunitySwuCreate.publish({
-    ...details,
-    title: "R-5.17 published opportunity whose panel gains a third person",
-  });
+  await surface.opportunitySwuCreate.publish({ ...details, title });
   const opportunityId = await landedIdentifier(surface);
   await surface.opportunitySwuView.open({ opportunityId });
   await expect.poll(() => readOrEmpty(() => surface.opportunitySwuView.status()), settle).toBeTruthy();
@@ -188,38 +219,39 @@ test("When people are added to an evaluation panel, only the people newly added 
 
   await panelOfTwo(surface, opportunityId, names);
 
-  await mail.clear();
+  await emptyCatcher(surface, mail);
   await addThirdPerson(surface, opportunityId, names);
 
-  await expect.poll(() => everyoneReached(surface, mail), settle).toContain(added.email.toLowerCase());
+  await expect.poll(async () => (await aboutOpportunityFor(surface, mail, title))[added.id], settle).toBeGreaterThan(0);
 
-  const reached = await everyoneReached(surface, mail);
-  expect(reached).not.toContain(first.email.toLowerCase());
-  expect(reached).not.toContain(second.email.toLowerCase());
+  const counts = await aboutOpportunityFor(surface, mail, title);
+  expect(counts[first.id]).toBe(0);
+  expect(counts[second.id]).toBe(0);
 });
 
 test("When people are added to an evaluation panel, only the people newly added are notified, and only once the opportunity has left draft (the same change made while the opportunity is still a draft notifies nobody)", async ({
   surface,
   mail,
 }) => {
+  const title = `R-5.17 draft opportunity ${Date.now()} whose panel gains a third person`;
   await surface.signIn(persona.administrator);
   const names = await namesOf(surface);
   for (const user of people) expect(names.get(user.id)).toBeTruthy();
 
   await surface.opportunitySwuCreate.open();
-  await surface.opportunitySwuCreate.saveDraft({ title: "R-5.17 draft opportunity whose panel gains a third person" });
+  await surface.opportunitySwuCreate.saveDraft({ title });
   const opportunityId = await landedIdentifier(surface);
 
   await panelOfTwo(surface, opportunityId, names);
 
-  await mail.clear();
+  await emptyCatcher(surface, mail);
   await addThirdPerson(surface, opportunityId, names);
 
   // Messages that follow a request reach the catcher within the same second; allow a margin.
   await new Promise((resolve) => setTimeout(resolve, 5000));
 
-  const reached = await everyoneReached(surface, mail);
-  expect(reached).not.toContain(added.email.toLowerCase());
-  expect(reached).not.toContain(first.email.toLowerCase());
-  expect(reached).not.toContain(second.email.toLowerCase());
+  const counts = await aboutOpportunityFor(surface, mail, title);
+  expect(counts[added.id]).toBe(0);
+  expect(counts[first.id]).toBe(0);
+  expect(counts[second.id]).toBe(0);
 });

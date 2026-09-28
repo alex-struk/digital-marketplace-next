@@ -3796,3 +3796,18 @@ owed:
         by: runner
         at: 2026-09-28T05:38:22.440Z
     target: old
+  - kind: missing-test
+    item: R-5.21
+    id: R-5.21
+    version: 1
+    domain: evaluation
+    stage: contract
+    why: a seeded Sprint With Us opportunity at the consensus stage or later with a
+      submitted proposal that an evaluator on its panel, reachable by a persona,
+      has not evaluated; or a seeded published opportunity before its deadline
+      with a submitted proposal and an evaluator on its panel, which scheduled
+      closing does not move
+    from: derive-tests-evaluation-stale-6
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-28T05:43:08.068Z
