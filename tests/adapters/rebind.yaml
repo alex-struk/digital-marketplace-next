@@ -247,3 +247,76 @@ rebind:
       (index.ts:1381-1389), use the top-bar Edit or the Proposal Details tab
       when they are present, and do nothing when the form is already editable
     closed: *a2
+  - id: R-6.2
+    target: old
+    why: the history tab binding (opportunityCwuEdit.historyTab,
+      tabContent(["History"])) returns the whole page, including the opportunity
+      title the test wrote, so 'delivered' in the title fails the check; read
+      only the history table rows, as historyRows() does for proposals. The
+      refuse-delivery fault switch also goes through mailApi to the unnumbered
+      SDLC_MAIL_API (copy 0) instead of this worker's
+      SDLC_MAIL_API_<TEST_PARALLEL_INDEX>, so the fault never reached this
+      worker's app
+  - id: R-6.15
+    target: old
+    why: mailApi reads the unnumbered SDLC_MAIL_API (copy 0's catcher) instead of
+      this worker's SDLC_MAIL_API_<TEST_PARALLEL_INDEX>, so the panel notice's
+      blind copies are looked for in another copy's mail; and
+      evaluation-consensus-list-twu.submit_final_consensus_scores and
+      confirm_submit_consensus lack the label the page renders, 'Submit Final
+      Consensus Scores'
+  - id: R-5.17
+    target: old
+    why: mailApi reads the unnumbered SDLC_MAIL_API (copy 0's catcher) while the
+      test's mail.clear() empties this worker's
+      SDLC_MAIL_API_<TEST_PARALLEL_INDEX>, so caughtMessageList.messageCount
+      counts another copy's mail (14, 63) and the empty-catcher precondition
+      fails before any panel notice is checked; resolve the catcher per worker
+      as the fixture's forThisWorker does
+  - id: R-1.34
+    target: old
+    why: mailApi reads the unnumbered SDLC_MAIL_API (copy 0's catcher) while the
+      test clears this worker's SDLC_MAIL_API_<TEST_PARALLEL_INDEX>, so the
+      empty-catcher check counts another copy's 413/424 messages; resolve the
+      catcher per worker as the fixture's forThisWorker does
+  - id: R-1.36
+    target: old
+    why: mailApi reads the unnumbered SDLC_MAIL_API (copy 0's catcher), so
+      caught-message.open looks up a message id the test found in this worker's
+      SDLC_MAIL_API_<TEST_PARALLEL_INDEX> and gets 404, and the empty-catcher
+      check counts another copy's 21 messages; resolve the catcher per worker as
+      the fixture's forThisWorker does
+  - id: R-1.15
+    target: old
+    why: opportunity-swu-create.publish and opportunity-twu-create.publish throw
+      when Publish is disabled even though the form is showing the refusal ('The
+      scoring weights should total 100% exactly.'); when the disabled control
+      comes with a form message, publish should return quietly so
+      scoreWeightError can read the message
+  - id: R-2.14
+    target: old
+    why: submitProposal returns silently when openTermsDialog reports the form
+      refused (Submit disabled with field errors shown), and
+      fieldError/stepMessages then reads an empty string although the page
+      renders 'Please enter a valid email.' / 'Please enter a valid phone
+      number.' under the fields; surface the refusal and read the rendered field
+      messages
+  - id: R-8.31
+    target: old
+    why: removeExistingAttachment clicks the remove mark but never saves the
+      opportunity form, so the removal never reaches the service; save after
+      removing ('Publish Changes' / 'Save Changes' / 'Submit Changes for
+      Review'). And proposal-cwu-edit.save_changes looks only for 'Save
+      Changes', while a submitted Code With Us proposal's edit page offers
+      'Submit Changes', which opens a terms dialog whose boxes must be ticked
+      before its 'Submit Changes' confirm
+  - id: R-4.14
+    target: old
+    why: everyUserRow reads the virtualized user table from its current scroll
+      position and only scrolls down, so after the test's first poll leaves the
+      table at the bottom it sees only the tail rows; reset the table body's
+      scrollTop to 0 before reading. And signIn.deactivated-vendor refuses
+      unconditionally, although the test only signs this persona in (after
+      reactivating the account) so they can set their own name; let it use its
+      session-route entry like every other persona, and keep 'cannot show a
+      refusal' only for the refusal-checking reads
