@@ -4014,7 +4014,7 @@ owed:
     id: R-1.9
     version: 2
     domain: opportunities
-    stage: derive-tests
+    stage: calibrate
     why: observations assignment_date, start_date and completion_date on the three
       opportunity view (or edit) screens, returning the date as shown and empty
       when the opportunity has none; and a stated input shape for save_draft on
@@ -4040,3 +4040,9 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-28T19:37:30.754Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v2 exists and has not run
+        by: runner
+        at: 2026-09-28T19:51:51.385Z
+    target: old

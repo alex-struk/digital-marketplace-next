@@ -1,0 +1,17 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether R-1.9.spec.ts follows from R-1.9 v2 and nothing else. It does. Six tests cover the three programs, once with the dates missing and once with all dates set to the contract-named invalid value. They assert that the draft is stored (it gets an identifier and appears in the author's table), that no field error is raised, that the proposal deadline, assignment date and start date are fourteen days from the day of saving in Pacific time, and that the completion date is empty. Every clause of the criterion is asserted, so removing its not-testable entry is correct. Sprint With Us is checked on only two dates, which the contract justifies by assigning its start and completion dates to its phases. Both clauses are still asserted on Code With Us and Team With Us. Reading an entered invalid completion date as one that must come back empty is faithful to 'left empty'. No selectors, routes or storage details leak in. The runner's typecheck reports no errors under acceptance/opportunities; its only two errors are in adapters/new, which this proposal does not touch. The open missing-test/R-1.9 closes when this test first runs at v2, so no condition is needed for it. A type error in this spec, or a contract statement that an entered completion date is kept, would change the ruling.
+reprompt: |2-
+  You ruled approve. "missing-test/R-1.9" is a missing test, and a missing test is closed only by a test that runs: a result row for its criterion at the current version that passed or failed. No ruling can say it was met. Where no test is owed after all, withdraw it with `condition-withdrawn <ref>: <why it is no longer asked for>` and say why.
+conditions: []
+cost: 0.6952686
+turns: 5
+session: "e90166b4-42a3-4db9-9433-f63e074f8efb"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T19:51:51.342Z
