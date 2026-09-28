@@ -1604,3 +1604,80 @@ rebind:
       complete before the test reads the status; it must wait for the success
       notice or for the finalise control to leave the top bar
     closed: *a6
+  - id: R-2.4
+    target: old
+    why: proposal-cwu-edit.delete_proposal (index.ts:4067-4080) throws 'refused'
+      when a submitted proposal's page offers no 'Delete', but the test reads
+      the refusal as the proposal surviving (it reopens the proposal and reads
+      its status); a missing Delete on a non-draft proposal must end the action
+      without deleting and without throwing, so the test reaches its status
+      check
+  - id: R-2.10
+    target: old
+    why: "after acceptProgramTerms/acceptAppTerms the 'Review Terms and Conditions'
+      dialog (both boxes ticked) stays open, and
+      proposal-twu-create.save_draft's click on the top-bar 'Save Draft' is
+      intercepted by that dialog until timeout; the terms actions must close or
+      complete that dialog, or save_draft must deal with it first. The
+      create-path failure in this criterion is not the adapter's: the
+      over-budget proposal showed 'Proposal Submitted'"
+  - id: R-5.16
+    target: old
+    why: evaluation-panel-swu.add_panel_member throws 'refused' when the panel is
+      shown read-only with no 'Edit' at 'Team Questions Consensus', but the test
+      reads the lock from panel_locked_after_consensus after
+      save_evaluation_panel; the read-only panel must be left for
+      panel_locked_after_consensus to report (add_panel_member and
+      save_evaluation_panel return without changing anything), not thrown
+  - id: R-2.17
+    target: old
+    why: proposal-twu-create.choose_organization (chooseProposalOrganization,
+      index.ts:3566-3587) presses Escape and returns when no option matches the
+      named organization, leaving the form's pre-selected 'Northern Pines
+      Digital Ltd.' chosen, and the service-area test then submitted under that
+      organization instead of 'R-2.17 Agile Coach Only Ltd.'; it must read which
+      organization is selected after choosing and, when the named one is not
+      selected, report that rather than let the proposal proceed under another.
+      In the qualified-supplier test, add_team_member_for_resource throws
+      unbound when the chooser offers no organization; that withholding must be
+      left for the test to read on the dashboard, not thrown
+  - id: R-2.20
+    target: old
+    why: "the rate test's click on the step link '4. Review Proposal' is intercepted
+      by the terms dialog left open by acceptProgramTerms/acceptAppTerms (its
+      'Team With Us Terms & Conditions' link intercepts pointer events); the
+      terms actions must leave no dialog open, or the step navigation must close
+      it first. The no-team-member test's failure is not the adapter's: the old
+      application showed 'Proposal Submitted'"
+  - id: R-8.20
+    target: old
+    why: for the Team With Us opportunity,
+      file-attachment-control.existing_attachment_row reported the file, but
+      attachment_address (index.ts:7027) calls dismissDialog() and then finds
+      the '7. Attachments' step of the published opportunity empty with no
+      /api/files/ link; the Team With Us add_attachment must save the addition,
+      confirming any save dialog instead of letting dismissDialog discard it,
+      before the address is read
+  - id: R-2.22
+    target: old
+    why: "proposal-twu-edit.save_changes (index.ts:4045, saveChanges: () =>
+      saveProposalChanges(...)) discards its input, so the organization the test
+      names ('R-2.22 Second Supplier For A Withdrawn Proposal Ltd.') is never
+      chosen and the withdrawn proposal is saved unchanged under 'Northern Pines
+      Digital Ltd.'; it must apply the given organization through the
+      Organization chooser before saving"
+  - id: R-2.28
+    target: old
+    why: proposal-swu-view.score_team_scenario and proposal-twu-view.score_challenge
+      throw 'refused' when the tab says it can be scored once the opportunity
+      reaches that stage, but the test reads that refusal next through
+      wrong_stage_error; the action must return without scoring and
+      wrong_stage_error must return that notice
+  - id: R-2.31
+    target: old
+    why: proposal-swu-view.price_score (index.ts:4227, stageFigure([], ['Price
+      Score','Price'])) looks for a price figure on the proposal view, which in
+      the old application shows only 'Total Score' and 'Ranking'; the price
+      score is shown as the 'Price' column of the opportunity's Proposals table
+      (edit?tab=proposals), on the evaluator's scoresheet and on the exported
+      proposal, and must be read from one of those
