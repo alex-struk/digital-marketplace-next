@@ -25,6 +25,11 @@
 - 21:06:53 run contract: ok after a fix turn, cost 2.883310200000001, turns 62, on claude claude-opus-5-5 (2.1.282 (Claude Code))
 - 21:06:53 propose contract-v11 at G1
 - 21:08:20 rule contract-v11 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.282 (Claude Code))
+- 21:08:46 run bind-adapter: pre-checks failed
+- 21:25:23 run bind-adapter: pre-checks failed
+- 21:25:41 oracle down old
+- 21:42:45 oracle down old
+- 21:42:52 deviation: next named `sdlc run bind-adapter --target old`; ran `sdlc run contract`; reason: oracle up hangs: the migrate one-off's yarn install stalls in Cypress's postinstall binary download (seen twice in a row, 15-minute timeouts, stuck at 'Building fresh packages' running 'node index.js --exec install'). The old application does not need the Cypress binary to migrate or serve, so the migrate service (and any service that installs packages) should set CYPRESS_INSTALL_BINARY=0; prove it with oracle up.
 
 # Run record 2026-09-26
 
