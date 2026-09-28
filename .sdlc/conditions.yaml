@@ -277,3 +277,53 @@ conditions:
         when the page names no such fault
       by: agent:reviewer
       at: 2026-09-28T03:34:38.008Z
+  - ref: derive-tests-opportunities-stale-4#1
+    text: "R-1.34: in the test for everyone who asked for notices, count a
+      subscriber as notified only when a message caught since the publication
+      both names them (visible or blind-copied) and names this opportunity's
+      title in its subject or body. Identify it the same way the author's
+      confirmation is identified. The criterion says each receives 'a notice
+      that a new opportunity has been posted', and at present any message naming
+      them passes."
+    from: derive-tests-opportunities-stale-4
+    family: derive-tests-opportunities-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-28T03:40:06.003Z
+  - ref: derive-tests-opportunities-stale-4#2
+    text: "R-1.36: in the test for watchers and proponents, count the watcher and
+      the proponent as told only when a message caught since the cancellation
+      both names them (visible or blind-copied) and names this opportunity's
+      title in its subject or body. The criterion says they are 'told it has
+      been cancelled', and at present any message naming them passes."
+    from: derive-tests-opportunities-stale-4
+    family: derive-tests-opportunities-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-28T03:40:06.003Z
+  - ref: derive-tests-opportunities-stale-4#3
+    text: "R-1.37: in the test for every administrator, count an administrator as
+      notified only when a message caught since the submission both names them
+      (visible or blind-copied) and names this opportunity's title in its
+      subject or body. The criterion says they are 'notified that an opportunity
+      awaits review', and at present any message naming them passes."
+    from: derive-tests-opportunities-stale-4
+    family: derive-tests-opportunities-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-28T03:40:06.003Z
+  - ref: derive-tests-opportunities-stale-4#4
+    text: "R-1.34: add a tests/acceptance/opportunities/not-testable.yaml entry with
+      `clause` for the accounts outside the subscriber group that are also due
+      the announcement (nineteen, per the seed). The seed gives them only as a
+      total, so the test asserts 120 of 139 and without the entry reads as a
+      test of the whole criterion."
+    from: derive-tests-opportunities-stale-4
+    family: derive-tests-opportunities-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-28T03:40:06.003Z
