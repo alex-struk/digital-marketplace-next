@@ -4014,7 +4014,7 @@ owed:
     id: R-1.9
     version: 2
     domain: opportunities
-    stage: contract
+    stage: derive-tests
     why: observations assignment_date, start_date and completion_date on the three
       opportunity view (or edit) screens, returning the date as shown and empty
       when the opportunity has none; and a stated input shape for save_draft on
@@ -4025,3 +4025,18 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-28T19:26:51.159Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: "`assignment_date` and `start_date` on `opportunity-cwu-view` and
+          `opportunity-twu-view`, `completion_date` on `opportunity-twu-view`,
+          `assignment_date` on `opportunity-swu-view`, and `proposal_deadline`,
+          `assignment_date`, `start_date` and `completion_date` on
+          `opportunity-cwu-edit` and `opportunity-twu-edit` (the first two only
+          on `opportunity-swu-edit`), plus a stated `save_draft` input on the
+          three create screens where an out-of-range date such as `2000-01-01`
+          is the invalid value the form will send"
+        by: contract-v17
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-28T19:37:30.754Z

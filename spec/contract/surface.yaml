@@ -118,6 +118,15 @@ pages:
     route: /opportunities/code-with-us/create
     title: "Create a Code With Us opportunity"
     actions:
+      # Input: any of title, proposal_deadline, assignment_date, start_date and
+      # completion_date, each entered exactly as given and every one optional; a key left
+      # out leaves its field blank. A date is a calendar day written YYYY-MM-DD. "Save
+      # Draft" is offered whatever the form holds, so a date the application treats as
+      # invalid is sent as it is. The date fields take only real calendar days, so an
+      # invalid date here is one earlier than its minimum: a proposal deadline before
+      # today, an assignment date before the proposal deadline, a start date before the
+      # assignment date, a completion date before the start date. A day long past such as
+      # 2000-01-01 is invalid for all four whatever else is entered.
       save_draft: { test_id: opportunity-save-draft }
       submit_for_review: { test_id: opportunity-submit-for-review }
       publish: { test_id: opportunity-publish }
@@ -139,6 +148,10 @@ pages:
       created_by_name: { test_id: opportunity-created-by }
       last_changed_by_name: { test_id: opportunity-last-changed-by }
       proposal_deadline: { test_id: opportunity-proposal-deadline }
+      # The assignment date and the work start date as this screen shows them. It shows no
+      # completion date; that is read on opportunity-cwu-edit.
+      assignment_date: { test_id: null }
+      start_date: { test_id: null }
       reward: { test_id: opportunity-reward }
       addenda: { test_id: opportunity-addenda }
       successful_proponent: { test_id: opportunity-successful-proponent }
@@ -172,6 +185,13 @@ pages:
       reporting_views: { test_id: reporting-views }
       reporting_watchers: { test_id: reporting-watchers }
       reporting_proposals: { test_id: reporting-proposals }
+      # The dates the opportunity holds, as its opportunity tab (?tab=opportunity) shows
+      # them in its form, each a calendar day; empty when the opportunity has none. This is
+      # the one screen where all four, the completion date included, can be read.
+      proposal_deadline: { test_id: null }
+      assignment_date: { test_id: null }
+      start_date: { test_id: null }
+      completion_date: { test_id: null }
 
   - id: opportunity-cwu-complete
     domain: opportunities
@@ -186,6 +206,9 @@ pages:
     route: /opportunities/sprint-with-us/create
     title: "Create a Sprint With Us opportunity"
     actions:
+      # Input: as on opportunity-cwu-create, with title, proposal_deadline and
+      # assignment_date. A Sprint With Us opportunity has no start or completion date of
+      # its own; those belong to its phases, entered through add_phase.
       save_draft: { test_id: opportunity-save-draft }
       submit_for_review: { test_id: opportunity-submit-for-review }
       publish: { test_id: opportunity-publish }
@@ -210,6 +233,9 @@ pages:
       created_by_name: { test_id: opportunity-created-by }
       last_changed_by_name: { test_id: opportunity-last-changed-by }
       proposal_deadline: { test_id: opportunity-proposal-deadline }
+      # The assignment date as this screen shows it. Start and completion dates are each
+      # phase's own and stand in phases.
+      assignment_date: { test_id: null }
       total_max_budget: { test_id: opportunity-total-max-budget }
       phases: { test_id: opportunity-phases }
       # The body of the page at "sprint-with-us-opportunity-scope" (seed.content
@@ -259,6 +285,10 @@ pages:
       # are split into, each present or absent for the signed-in person.
       instructions_tab: { test_id: null }
       evaluation_tab: { test_id: null }
+      # As on opportunity-cwu-edit, for the two dates a Sprint With Us opportunity holds
+      # itself; its start and completion dates are its phases'.
+      proposal_deadline: { test_id: null }
+      assignment_date: { test_id: null }
 
   - id: opportunity-swu-complete
     domain: opportunities
@@ -273,6 +303,8 @@ pages:
     route: /opportunities/team-with-us/create
     title: "Create a Team With Us opportunity"
     actions:
+      # Input: as on opportunity-cwu-create, with title, proposal_deadline,
+      # assignment_date, start_date and completion_date.
       save_draft: { test_id: opportunity-save-draft }
       submit_for_review: { test_id: opportunity-submit-for-review }
       publish: { test_id: opportunity-publish }
@@ -297,6 +329,11 @@ pages:
       created_by_name: { test_id: opportunity-created-by }
       last_changed_by_name: { test_id: opportunity-last-changed-by }
       proposal_deadline: { test_id: opportunity-proposal-deadline }
+      # The contract award (assignment) date, the contract start date and the contract
+      # completion date as this screen shows them; empty when the opportunity has none.
+      assignment_date: { test_id: null }
+      start_date: { test_id: null }
+      completion_date: { test_id: null }
       max_budget: { test_id: opportunity-max-budget }
       resources: { test_id: opportunity-resources }
       # The body of the page at "team-with-us-terms-and-conditions" (seed.content
@@ -344,6 +381,11 @@ pages:
       # criteria's words. A criterion turns on which changes a Team With Us opportunity in
       # processing permits, and "offered here" is how that set reaches a reader.
       offered_state_changes: { test_id: null }
+      # As on opportunity-cwu-edit.
+      proposal_deadline: { test_id: null }
+      assignment_date: { test_id: null }
+      start_date: { test_id: null }
+      completion_date: { test_id: null }
 
   - id: opportunity-twu-complete
     domain: opportunities
