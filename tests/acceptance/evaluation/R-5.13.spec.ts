@@ -1,79 +1,126 @@
 // criterion: @R-5.13 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
+// provenance: blind, spec@c1e09955fdff55e84870c25dfcb8e0fd9981c437, derived 2026-09-28
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// The seeded Sprint With Us opportunity carries three proponents, all of them under review
-// of the questions once it closes. The chair agrees scores for two of them and leaves the
-// third alone, which is the state the criterion is about: a proponent with no submitted
-// consensus who would otherwise be left neither screened in nor screened out.
+// The given is the seeded Sprint With Us opportunity at consensus with one consensus
+// outstanding: every individual evaluation submitted, the chair's consensus submitted for
+// the first two proponents, and nothing begun for the third, which is still under review of
+// the questions. The seed is put back before every test, so both tests start from it.
 //
-// The two agreed sets are five out of five on every question, so both clear the minimum the
-// fourth question carries. That matters: it leaves not_all_consensuses_submitted_error as
-// the only refusal finalising could produce, so a test that passes is reading the rule this
-// criterion is about rather than the one R-5.10 is about.
+// A proponent lacks a submitted consensus in two ways, and each gets its own test: nobody has
+// begun one, or the chair has saved one as a draft and not submitted it.
 //
-// One test, because the criterion states one given, one when and one then, and because the
-// walk that puts the opportunity into consensus can only be made once.
+// The criterion promises that finalising is refused, not a message and not the step at which
+// it is stopped. So the finalise is attempted from every place the contract offers it — the
+// consensus list and the opportunity's own management screen — and a screen that will not
+// offer it, or will not confirm it, is allowed to stop it. What decides each test is what
+// stands afterwards: the opportunity still reads the state it read before, which is
+// consensus, and no proponent was screened in or out, read as no proponent's history having
+// gained any entry across the attempt — the history being where a proposal's move into or out
+// of a stage is recorded.
 
-const opportunityId = seed.opportunities.closedSprintWithUs.id;
-const proposals = [
-  seed.proposals.sprintWithUsOne.id,
-  seed.proposals.sprintWithUsTwo.id,
-  seed.proposals.sprintWithUsThree.id,
-];
+const statement =
+  "Finalising the consensus scores must be refused unless every proponent still under review of the questions has a submitted consensus, so that no proponent is left neither screened in nor screened out.";
+
+const settle = { timeout: 15000 };
+const quietPeriod = 5000;
 const questions = [0, 1, 2, 3];
 
-async function scoreEveryProponent(surface: Surface): Promise<void> {
-  for (const proposalId of proposals) {
-    await surface.evaluationIndividualCreateSwu.open({ opportunityId, proposalId });
-    for (const order of questions) {
-      await surface.evaluationIndividualCreateSwu.enterQuestionScore({ order, score: 5 });
-      await surface.evaluationIndividualCreateSwu.enterQuestionNotes({
-        order,
-        notes: "A complete reading of this answer.",
-      });
-    }
-    await surface.evaluationIndividualCreateSwu.saveDraft();
+const opportunityId = seed.opportunities.swuConsensusOneOutstanding.id;
+const outstanding = seed.proposals.swuOutstandingThree.id;
+const proposals = [seed.proposals.swuOutstandingOne.id, seed.proposals.swuOutstandingTwo.id, outstanding];
+const chair = seed.users.administratorOne.id;
+
+async function readOrEmpty(read: () => Promise<string>): Promise<string> {
+  try {
+    return (await read()) ?? "";
+  } catch {
+    return "";
   }
-  await surface.evaluationIndividualListSwu.open({ opportunityId });
-  await surface.evaluationIndividualListSwu.submitScoresForConsensus();
 }
 
-test("finalising is refused unless every proponent still under review has a submitted consensus", async ({
-  surface,
-}) => {
-  await surface.scheduledTransitionTrigger.open();
-  await surface.scheduledTransitionTrigger.runPendingTransitions();
+async function opportunityStatus(surface: Surface): Promise<string> {
+  await surface.opportunitySwuView.open({ opportunityId });
+  return (await readOrEmpty(() => surface.opportunitySwuView.status())).trim();
+}
 
-  await surface.signIn(persona.publicSectorStaff);
-  await scoreEveryProponent(surface);
-  await surface.signOut();
+// How many entries a proposal's history holds. Counted rather than compared as text, so that a
+// time shown relative to now ("a minute ago") cannot read as a change.
+async function historyLengths(surface: Surface): Promise<Map<string, number>> {
+  const read = new Map<string, number>();
+  for (const proposalId of proposals) {
+    await surface.proposalSwuView.open({ opportunityId, proposalId });
+    const history = await readOrEmpty(() => surface.proposalSwuView.historyTab());
+    read.set(proposalId, history.split(/\r?\n/).filter((line) => line.trim().length > 0).length);
+  }
+  return read;
+}
 
-  await surface.signIn(persona.administrator);
-  await scoreEveryProponent(surface);
-
-  for (const proposalId of [seed.proposals.sprintWithUsOne.id, seed.proposals.sprintWithUsTwo.id]) {
-    await surface.evaluationConsensusCreateSwu.open({ opportunityId, proposalId });
-    for (const order of questions) {
-      await surface.evaluationConsensusCreateSwu.enterQuestionScore({ order, score: 5 });
-      await surface.evaluationConsensusCreateSwu.enterQuestionNotes({
-        order,
-        notes: "The panel agreed on this score for this answer.",
-      });
-    }
-    await surface.evaluationConsensusCreateSwu.saveDraft();
+async function attemptToFinalise(surface: Surface): Promise<void> {
+  await surface.evaluationConsensusListSwu.open({ opportunityId });
+  try {
+    await surface.evaluationConsensusListSwu.finalizeConsensusScores();
+    await surface.evaluationConsensusListSwu.confirmFinalizeConsensus();
+  } catch {
+    // A finalise the screen will not offer or confirm is refused; what stands is read below.
   }
 
-  await surface.evaluationConsensusListSwu.open({ opportunityId });
-  await surface.evaluationConsensusListSwu.submitFinalConsensusScores();
-  await surface.evaluationConsensusListSwu.confirmSubmitConsensus();
+  await surface.opportunitySwuEdit.open({ opportunityId });
+  try {
+    await surface.opportunitySwuEdit.finalizeQuestionConsensuses();
+  } catch {
+    // As above.
+  }
 
-  await surface.evaluationConsensusListSwu.finalizeConsensusScores();
-  await surface.evaluationConsensusListSwu.confirmFinalizeConsensus();
+  await new Promise((resolve) => setTimeout(resolve, quietPeriod));
+}
 
-  expect(await surface.evaluationConsensusListSwu.notAllConsensusesSubmittedError()).toBeTruthy();
+async function checkRefused(surface: Surface): Promise<void> {
+  const statusBefore = await opportunityStatus(surface);
+  expect(statusBefore).toBeTruthy();
+  const historiesBefore = await historyLengths(surface);
+  for (const proposalId of proposals) {
+    expect(historiesBefore.get(proposalId), `proposal ${proposalId} shows no history to compare`).toBeGreaterThan(0);
+  }
 
-  await surface.opportunitySwuView.open({ opportunityId });
-  expect((await surface.opportunitySwuView.status()).toLowerCase()).toContain("consensus");
+  await attemptToFinalise(surface);
+
+  expect(await opportunityStatus(surface), "the opportunity left consensus").toBe(statusBefore);
+  const historiesAfter = await historyLengths(surface);
+  for (const proposalId of proposals) {
+    expect(historiesAfter.get(proposalId), `proposal ${proposalId} was screened in or out`).toBe(
+      historiesBefore.get(proposalId),
+    );
+  }
+}
+
+test(`${statement} (a proponent under review has no consensus at all)`, async ({ surface }) => {
+  await surface.signIn(persona.administrator);
+
+  await surface.evaluationConsensusEditSwu.open({ opportunityId, proposalId: outstanding, userId: chair });
+  expect(await readOrEmpty(() => surface.evaluationConsensusEditSwu.consensusStatus())).toBe("");
+
+  await checkRefused(surface);
+});
+
+test(`${statement} (a proponent under review has a consensus saved as a draft and not submitted)`, async ({
+  surface,
+}) => {
+  await surface.signIn(persona.administrator);
+
+  const create = surface.evaluationConsensusCreateSwu;
+  await create.open({ opportunityId, proposalId: outstanding });
+  for (const order of questions) {
+    await create.enterQuestionScore({ order, score: 4 });
+    await create.enterQuestionNotes({ order, notes: "The panel's agreed score, saved and not yet submitted." });
+  }
+  await create.saveDraft();
+
+  await surface.evaluationConsensusEditSwu.open({ opportunityId, proposalId: outstanding, userId: chair });
+  await expect
+    .poll(() => readOrEmpty(() => surface.evaluationConsensusEditSwu.consensusStatus()), settle)
+    .toBeTruthy();
+
+  await checkRefused(surface);
 });
