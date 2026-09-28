@@ -6251,6 +6251,63 @@ export default function create(
     },
   };
 
+  // The pass-through proxy in front of the catcher's SMTP port (its control API beside the
+  // catcher's, under /hold). Checked on this catcher: reading the toxics answers 200 with a
+  // list; adding "hold" answers 200, and 409 when it is already there; deleting it answers
+  // 204, and 404 when it is already gone. Either answer to each leaves the proxy in the
+  // state asked for, so both are taken as done.
+  let heldToxics: Array<Record<string, unknown>> = [];
+
+  async function hold(where: string, method: "GET" | "POST" | "DELETE"): Promise<void> {
+    const toxics = `${mailApi(where)}/hold/proxies/smtp/toxics`;
+    const target = method === "DELETE" ? `${toxics}/hold` : toxics;
+    const sent =
+      method === "GET"
+        ? page.request.get(target)
+        : method === "DELETE"
+          ? page.request.delete(target)
+          : page.request.post(target, {
+              data: {
+                name: "hold",
+                type: "latency",
+                stream: "downstream",
+                toxicity: 1,
+                attributes: { latency: 3000, jitter: 0 },
+              },
+            });
+    const response = await sent.catch((error: unknown) => {
+      throw new Error(`unbound: ${where} — the mail delay proxy at ${target} could not be reached (${String(error)})`);
+    });
+    const settled =
+      method === "GET"
+        ? [200]
+        : method === "POST"
+          ? [200, 201, 409]
+          : [200, 204, 404];
+    if (!settled.includes(response.status())) {
+      nothing(`${where} — the mail delay proxy answered ${response.status()} for ${method} ${target}`);
+    }
+    if (method === "GET") {
+      const listed = await response.json().catch(() => null);
+      heldToxics = Array.isArray(listed) ? (listed as Array<Record<string, unknown>>) : [];
+    }
+  }
+
+  const mailDeliveryDelay: PageOf<"mailDeliveryDelay"> = {
+    open: () => hold("mail-delivery-delay.open", "GET"),
+    slowDelivery: () => hold("mail-delivery-delay.slow_delivery", "POST"),
+    restoreDeliverySpeed: () => hold("mail-delivery-delay.restore_delivery_speed", "DELETE"),
+    // "slowed <latency>ms" while the delay named "hold" is in force, as the proxy reads it
+    // now; nothing when replies pass at full speed.
+    async deliverySlowed() {
+      await hold("mail-delivery-delay.delivery_slowed", "GET");
+      const toxic = heldToxics.find((each) => each.name === "hold");
+      if (!toxic) return "";
+      const attributes = (toxic.attributes ?? {}) as Record<string, unknown>;
+      return `slowed ${String(attributes.latency ?? "")}ms`;
+    },
+  };
+
   // ================================================================ requests no screen makes
 
   // Each of these is a request to the service's own interface, made from the browser's
@@ -6847,6 +6904,7 @@ export default function create(
     caughtMessage,
     caughtMessageList,
     mailDeliveryFault,
+    mailDeliveryDelay,
     organizationActingForList,
     affiliationInvitationRequest,
     userListRequest,
