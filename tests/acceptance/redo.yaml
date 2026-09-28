@@ -397,6 +397,14 @@ redo:
       establish that the published opportunity carries an implementation phase
       instead of demanding a refusal message, and keep the
       inception-without-prototype case as written
+    closed: &a7
+      outcome: met
+      why: derived again by derive-tests-opportunities-stale-6, in the line of work
+        approved as derive-tests-opportunities-9
+      by: derive-tests-opportunities-9
+      at: 2026-09-28T19:26:51.952Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-1.27
     version: 1
     why: contact details are still read only from the opportunity's public page; for
@@ -404,6 +412,7 @@ redo:
       contact details and score wherever that reader is shown the awarded
       proposal or the award summary, and keep checking that a visitor is shown
       neither anywhere they can reach
+    closed: *a7
   - id: R-3.9
     version: 1
     why: the criterion says the owner's attempt is refused, not that a message is
@@ -478,3 +487,4 @@ redo:
       time zone, but the deadline is shown in Pacific time, so near midnight UTC
       the day of the month differs by one; the expected day must be taken in the
       time zone the deadline is displayed in
+    closed: *a7

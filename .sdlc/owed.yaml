@@ -4009,3 +4009,19 @@ owed:
       file_sha: fb9374b69afbc1b9475e440cdc94ff8b57278050
       by: runner
       at: 2026-09-28T17:32:41.071Z
+  - kind: missing-test
+    item: R-1.9
+    id: R-1.9
+    version: 2
+    domain: opportunities
+    stage: contract
+    why: observations assignment_date, start_date and completion_date on the three
+      opportunity view (or edit) screens, returning the date as shown and empty
+      when the opportunity has none; and a stated input shape for save_draft on
+      the three create screens that accepts a date value the form would
+      otherwise refuse (for example an impossible calendar day), so a draft can
+      be saved with an invalid date
+    from: derive-tests-opportunities-9
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-28T19:26:51.159Z

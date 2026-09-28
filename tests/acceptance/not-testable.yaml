@@ -163,3 +163,24 @@ criteria:
       property of the migration rather than of anything the running service
       answers with. No addition to the surface would help; this is a claim a
       human accepts about the rebuild rather than one a test can settle."
+  - id: R-1.9
+    version: 2
+    clause: when its assignment date or start date is missing or invalid it is set
+      to fourteen days from the day of saving, and its completion date is left
+      empty; and the proposal deadline being set so when it is invalid rather
+      than missing
+    reason: "blocked: of an opportunity's four key dates only the proposal deadline
+      is observable — opportunity-cwu-view, opportunity-swu-view and
+      opportunity-twu-view each name proposal_deadline and nothing for the
+      assignment, start or completion date, and the edit screens name no date at
+      all — so R-1.9.spec.ts asserts the fourteen-day rule for a missing
+      proposal deadline only. Nor does any action name how a date that is
+      present but invalid is handed to save_draft, so the 'invalid' half cannot
+      be set up."
+    missing: observations assignment_date, start_date and completion_date on the
+      three opportunity view (or edit) screens, returning the date as shown and
+      empty when the opportunity has none; and a stated input shape for
+      save_draft on the three create screens that accepts a date value the form
+      would otherwise refuse (for example an impossible calendar day), so a
+      draft can be saved with an invalid date
+    owner: contract

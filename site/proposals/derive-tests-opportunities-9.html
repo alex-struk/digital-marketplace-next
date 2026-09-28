@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-9 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">226</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">222</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">193</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-9</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-28 19:26</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.282 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised opportunities tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I made both changes the reviewer asked for, and both are in <code>tests/acceptance/opportunities/R-1.16.spec.ts</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.282 (Claude Code))</p>
+<p>I made both changes the reviewer asked for, and both are in <code>tests/acceptance/opportunities/R-1.16.spec.ts</code>. I could not run the typecheck: running the compiler needed an approval that nobody was here to give. I read the edited code by hand instead, and every call it makes is declared in <code>tests/generated/surface.d.ts</code>.</p>
+<p><strong>Condition 1: the inception-without-prototype test.</strong> It used to accept any validation error. Now it reads the submission&#39;s field error and requires it to mention both &quot;prototype&quot; and &quot;inception&quot;, ignoring case. It then checks that the opportunity did not end up published, in one of two ways:</p>
+<ul><li>If the submission left the administrator on an edit page with an identifier, the test opens that opportunity&#39;s view page and requires that its status does not say &quot;published&quot;.</li><li>If there is no identifier, the test opens the dashboard and requires that the administrator&#39;s own opportunities table does not list the opportunity&#39;s title.</li></ul>
+<p>I gave the title a variable so the same string is used for both the submission and that check. As the reviewer said, this replaces the earlier instruction to keep this test as written.</p>
+<p><strong>Condition 2: the implementation-phase test.</strong> The old helper returned an empty string whenever any read failed. I replaced it with one that catches a failure only when reading the opportunity identifier. That failure is expected, because someone turned away from the create page never reaches an edit page. The dashboard table is now read with nothing catching errors, so a dashboard that cannot be read fails the test instead of passing on an empty string. The second test uses the same helper, so its dashboard read cannot fail silently either.</p>
+<p>I also updated the file&#39;s opening comment to describe the new checks. The header&#39;s &quot;derived 2026-09-28&quot; date stays as it was: that is today&#39;s date, and the content really did change.</p>
+<p>Nothing else changed. The other three opportunities tests (R-1.29, R-1.27, R-1.9) and every entry in <code>tests/acceptance/not-testable.yaml</code>, including R-1.9&#39;s partial entry, are exactly as I found them. R-1.16 needs no not-testable entry: the field error returns its text, so the rejection message itself can now be asserted. There were no conditions I could not act on, and I needed no surface action or observation beyond what the contract already declares.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-28 19:26.</p>
+<div class="body"><p>The question is whether the revised R-1.16 tests now follow from their criterion and from nothing else, and whether they carry out the two instructions left by derive-tests-opportunities-stale-6. Approved. The inception-without-prototype test now requires the rejection message to name both prototype and inception, and checks that the opportunity did not end up published (its status on the view page when an identifier exists, otherwise its absence from the administrator&#39;s dashboard table). Both follow from the criterion&#39;s &#39;the submission is rejected with a message saying a prototype phase must follow an inception phase&#39;, which settles #1. The implementation-phase test catches a failure only when reading the landed opportunity&#39;s identifier, which is expected because a person turned away from the create page reaches no edit page. The dashboard read is not caught, so an unreadable dashboard fails the test rather than passing on an empty string, which settles #2. No assertion reaches past the criterion or depends on how the application is built. The runner&#39;s typecheck reports no errors under acceptance/opportunities; its failure comes from 2 errors under adapters/new, outside this proposal. The rest of the diff against main (R-1.27, R-1.29, R-1.9 and R-1.9&#39;s not-testable entry) was not the subject of the earlier return, and it reads as following from those criteria: R-1.29 asserts only the withholding its v2 states, and R-1.9&#39;s partial coverage is recorded by a clause-bearing entry that names contract as the owing stage, already shown as open in the checks. The ruling would change on evidence that the Sprint With Us view shows a status like &#39;Unpublished&#39; for a state that is not published, which would fail the second test wrongly, or on typecheck errors appearing under acceptance/opportunities.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met derive-tests-opportunities-stale-6#1: the inception-without-prototype test in tests/acceptance/opportunities/R-1.16.spec.ts now asserts field_error matches both /prototype/i and /inception/i, then asserts the opportunity is not published (view status not /published/i when an identifier was reached, otherwise its title absent from the dashboard&#39;s own-opportunities table)</li><li>condition-met derive-tests-opportunities-stale-6#2: in tests/acceptance/opportunities/R-1.16.spec.ts only the opportunity-identifier read is wrapped (landedOpportunityId); the dashboard open and myOpportunitiesTable read are uncaught, so a dashboard that cannot be read fails the test instead of passing on an empty string</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

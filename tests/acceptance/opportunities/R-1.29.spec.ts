@@ -1,42 +1,35 @@
-// criterion: @R-1.29 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
+// criterion: @R-1.29 v2
+// provenance: blind, spec@c1e09955fdff55e84870c25dfcb8e0fd9981c437, derived 2026-09-28
 import { test, expect, persona, seed } from "../../fixtures";
 
-// The seeded published opportunity was created by a member of public sector staff, so the
-// person who created it and the administrator are two different people and the criterion's
-// three readers are all available on one record.
-//
-// The seed carries no display name for anybody, so the assertion is that the names are
-// there for the two readers entitled to them and absent for everybody else, which is what
-// the criterion's "then" says and all a name that cannot be quoted could support.
+// The seeded published Code With Us opportunity was created by a member of public sector
+// staff, so a visitor who is not signed in and a vendor are both neither an administrator
+// nor one of the people who created or last changed it. The criterion says only what those
+// readers are not shown, so the test asserts nothing about what anybody else is shown.
 
 const opportunityId = seed.opportunities.publishedCodeWithUs.id;
 
-test("the names of the people who created and last changed an opportunity are shown to an administrator", async ({
+async function readOrEmpty(read: () => Promise<string>): Promise<string> {
+  try {
+    return (await read()) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+test("The names of the people who created and last changed an opportunity are withheld from anyone who is neither an administrator nor one of those people.", async ({
   surface,
 }) => {
-  await surface.signIn(persona.administrator);
-  await surface.opportunityCwuView.open({ opportunityId });
-  expect(await surface.opportunityCwuView.createdByName()).toBeTruthy();
-  expect(await surface.opportunityCwuView.lastChangedByName()).toBeTruthy();
-});
+  const view = surface.opportunityCwuView;
 
-test("the names of the people who created and last changed an opportunity are shown to those people themselves", async ({
-  surface,
-}) => {
-  await surface.signIn(persona.publicSectorStaff);
-  await surface.opportunityCwuView.open({ opportunityId });
-  expect(await surface.opportunityCwuView.createdByName()).toBeTruthy();
-  expect(await surface.opportunityCwuView.lastChangedByName()).toBeTruthy();
-});
-
-test("those names are shown to nobody else", async ({ surface }) => {
-  await surface.opportunityCwuView.open({ opportunityId });
-  expect(await surface.opportunityCwuView.createdByName()).toBeFalsy();
-  expect(await surface.opportunityCwuView.lastChangedByName()).toBeFalsy();
+  await view.open({ opportunityId });
+  expect(await readOrEmpty(() => view.opportunityIdentifier())).toBeTruthy();
+  expect(await readOrEmpty(() => view.createdByName())).toBeFalsy();
+  expect(await readOrEmpty(() => view.lastChangedByName())).toBeFalsy();
 
   await surface.signIn(persona.vendor);
-  await surface.opportunityCwuView.open({ opportunityId });
-  expect(await surface.opportunityCwuView.createdByName()).toBeFalsy();
-  expect(await surface.opportunityCwuView.lastChangedByName()).toBeFalsy();
+  await view.open({ opportunityId });
+  expect(await readOrEmpty(() => view.opportunityIdentifier())).toBeTruthy();
+  expect(await readOrEmpty(() => view.createdByName())).toBeFalsy();
+  expect(await readOrEmpty(() => view.lastChangedByName())).toBeFalsy();
 });
