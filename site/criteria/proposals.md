@@ -26,21 +26,21 @@
 | R-2.20 | acceptance/proposals/R-2.20.spec.ts |  | unbound |
 | R-2.21 | acceptance/proposals/R-2.21.spec.ts |  | unbound |
 | R-2.22 | acceptance/proposals/R-2.22.spec.ts |  | unbound |
-| R-2.23 | acceptance/proposals/R-2.23.spec.ts |  | unbound |
+| R-2.23 | acceptance/proposals/R-2.23.spec.ts |  | fail |
 | R-2.24 | acceptance/proposals/R-2.24.spec.ts |  | unbound |
 | R-2.25 | acceptance/proposals/R-2.25.spec.ts |  | pass |
-| R-2.26 | acceptance/proposals/R-2.26.spec.ts |  | unbound |
-| R-2.27 | acceptance/proposals/R-2.27.spec.ts |  | unbound |
+| R-2.26 | acceptance/proposals/R-2.26.spec.ts |  | pass |
+| R-2.27 | acceptance/proposals/R-2.27.spec.ts |  | pass |
 | R-2.28 | acceptance/proposals/R-2.28.spec.ts |  | unbound |
-| R-2.29 | acceptance/proposals/R-2.29.spec.ts |  | fail (ruled: test-wrong) |
-| R-2.30 | acceptance/proposals/R-2.30.spec.ts |  | unbound |
-| R-2.31 | acceptance/proposals/R-2.31.spec.ts |  | unbound |
-| R-2.32 | acceptance/proposals/R-2.32.spec.ts |  | unbound |
-| R-2.33 | acceptance/proposals/R-2.33.spec.ts |  | unbound |
-| R-2.34 | acceptance/proposals/R-2.34.spec.ts |  | unbound |
+| R-2.29 | acceptance/proposals/R-2.29.spec.ts |  | pass |
+| R-2.30 | acceptance/proposals/R-2.30.spec.ts |  | fail |
+| R-2.31 | acceptance/proposals/R-2.31.spec.ts |  | fail |
+| R-2.32 | acceptance/proposals/R-2.32.spec.ts |  | fail |
+| R-2.33 | acceptance/proposals/R-2.33.spec.ts |  | pass |
+| R-2.34 | acceptance/proposals/R-2.34.spec.ts |  | pass |
 | D-proposals-35 | — |  |  |
-| R-2.35 | acceptance/proposals/R-2.35.spec.ts |  | unbound |
-| R-2.36 | acceptance/proposals/R-2.36.spec.ts |  | unbound |
+| R-2.35 | acceptance/proposals/R-2.35.spec.ts |  | fail |
+| R-2.36 | acceptance/proposals/R-2.36.spec.ts |  | pass |
 | D-proposals-37 | — |  |  |
 | R-2.37 | acceptance/proposals/R-2.37.spec.ts |  | unbound |
 | R-2.38 | acceptance/proposals/R-2.38.spec.ts |  | pass |

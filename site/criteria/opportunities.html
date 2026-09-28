@@ -15,7 +15,7 @@
   <span class="profile">rebuild profile</span>
 </div>
 <div class="shell">
-<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">216</span></a></li><li><a href="../proposals.html">Proposals <span class="count">212</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">185</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html" aria-current="page">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">216</span></a></li><li><a href="../proposals.html">Proposals <span class="count">212</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">186</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html" aria-current="page">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
 <main id="main">
 <div class="page-head"><h1>opportunities</h1>
 <p class="lede">57 criteria, 49 with a derived acceptance test, 1 recorded as not testable through the contract surface.</p></div>
@@ -88,7 +88,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">Only signed-in public sector staff and administrators may create an opportunity; a request from a vendor or an anonymous visitor is refused.</p>
-  <dl><dt>given</dt><dd>a visitor who is not signed in, or is signed in as a vendor</dd><dt>when</dt><dd>they attempt to create an opportunity</dd><dt>then</dt><dd>the request is refused and no opportunity is created</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.7.spec.ts</code></dd><dt>against old</dt><dd><span class="chip unbound">unbound</span></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:345</code><br><code>src/back-end/lib/permissions.ts:604</code><br><code>src/back-end/lib/permissions.ts:1099</code><br><code>src/front-end/typescript/lib/pages/opportunity/create.tsx:37</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>a visitor who is not signed in, or is signed in as a vendor</dd><dt>when</dt><dd>they attempt to create an opportunity</dd><dt>then</dt><dd>the request is refused and no opportunity is created</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.7.spec.ts</code></dd><dt>against old</dt><dd><span class="chip pass">pass</span></dd><dt>cites</dt><dd><code>src/back-end/lib/permissions.ts:345</code><br><code>src/back-end/lib/permissions.ts:604</code><br><code>src/back-end/lib/permissions.ts:1099</code><br><code>src/front-end/typescript/lib/pages/opportunity/create.tsx:37</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -178,7 +178,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">A Sprint With Us opportunity must have an implementation phase, and may only have an inception phase if it also has a prototype phase.</p>
-  <dl><dt>given</dt><dd>a member of public sector staff creating or editing a Sprint With Us opportunity that is not a draft</dd><dt>when</dt><dd>they include an inception phase but no prototype phase</dd><dt>then</dt><dd>the submission is rejected with a message saying a prototype phase must follow an inception phase</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.16.spec.ts</code></dd><dt>against old</dt><dd><span class="chip unbound">unbound</span></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:628</code><br><code>src/shared/lib/resources/opportunity/sprint-with-us.ts:206</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>a member of public sector staff creating or editing a Sprint With Us opportunity that is not a draft</dd><dt>when</dt><dd>they include an inception phase but no prototype phase</dd><dt>then</dt><dd>the submission is rejected with a message saying a prototype phase must follow an inception phase</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.16.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>cites</dt><dd><code>src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:628</code><br><code>src/shared/lib/resources/opportunity/sprint-with-us.ts:206</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -268,7 +268,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">An opportunity moves to processing on its own once every proposal still in contention has been scored at its program&#39;s final evaluation stage.</p>
-  <dl><dt>given</dt><dd>an opportunity at its final evaluation stage with at least one proposal still in contention</dd><dt>when</dt><dd>the last of those proposals is scored</dd><dt>then</dt><dd>the opportunity moves to processing and the change is recorded with a note saying it was moved automatically because all proposals have been evaluated</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.25.spec.ts</code></dd><dt>against old</dt><dd><span class="chip unbound">unbound</span></dd><dt>cites</dt><dd><code>src/back-end/lib/db/proposal/code-with-us.ts:1064</code><br><code>src/back-end/lib/db/proposal/sprint-with-us.ts:2136</code><br><code>src/back-end/lib/db/proposal/team-with-us.ts:1789</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>an opportunity at its final evaluation stage with at least one proposal still in contention</dd><dt>when</dt><dd>the last of those proposals is scored</dd><dt>then</dt><dd>the opportunity moves to processing and the change is recorded with a note saying it was moved automatically because all proposals have been evaluated</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.25.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>cites</dt><dd><code>src/back-end/lib/db/proposal/code-with-us.ts:1064</code><br><code>src/back-end/lib/db/proposal/sprint-with-us.ts:2136</code><br><code>src/back-end/lib/db/proposal/team-with-us.ts:1789</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -278,7 +278,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">Awarding a proposal moves its opportunity to awarded and records the winning proponent against it; every other proposal still in contention is marked not awarded.</p>
-  <dl><dt>given</dt><dd>an opportunity in processing with proposals against it</dd><dt>when</dt><dd>an administrator awards one of those proposals</dd><dt>then</dt><dd>the opportunity moves to awarded, the winning proponent is recorded against it, and the remaining proposals are marked not awarded</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.26.spec.ts</code></dd><dt>against old</dt><dd><span class="chip unbound">unbound</span></dd><dt>cites</dt><dd><code>src/back-end/lib/db/proposal/code-with-us.ts:1159</code><br><code>src/back-end/lib/db/proposal/sprint-with-us.ts:1733</code><br><code>src/back-end/lib/db/proposal/team-with-us.ts:1463</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>an opportunity in processing with proposals against it</dd><dt>when</dt><dd>an administrator awards one of those proposals</dd><dt>then</dt><dd>the opportunity moves to awarded, the winning proponent is recorded against it, and the remaining proposals are marked not awarded</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.26.spec.ts</code></dd><dt>against old</dt><dd><span class="chip pass">pass</span></dd><dt>cites</dt><dd><code>src/back-end/lib/db/proposal/code-with-us.ts:1159</code><br><code>src/back-end/lib/db/proposal/sprint-with-us.ts:1733</code><br><code>src/back-end/lib/db/proposal/team-with-us.ts:1463</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -288,7 +288,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score.</p>
-  <dl><dt>given</dt><dd>an awarded opportunity</dd><dt>when</dt><dd>a visitor who may not see proposal scores views it</dd><dt>then</dt><dd>the successful proponent&#39;s name is shown and their contact details and score are withheld</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.27.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span> ruled test-wrong</dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/code-with-us.ts:445</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>an awarded opportunity</dd><dt>when</dt><dd>a visitor who may not see proposal scores views it</dd><dt>then</dt><dd>the successful proponent&#39;s name is shown and their contact details and score are withheld</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.27.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/code-with-us.ts:445</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -308,7 +308,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The names of the people who created and last changed an opportunity are shown only to administrators and to those people themselves.</p>
-  <dl><dt>given</dt><dd>a published opportunity</dd><dt>when</dt><dd>it is viewed by someone who is neither an administrator nor the person who created or last changed it</dd><dt>then</dt><dd>the creating and changing people&#39;s names are absent from what is shown</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.29.spec.ts</code></dd><dt>against old</dt><dd><span class="chip unbound">unbound</span></dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/code-with-us.ts:243</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
+  <dl><dt>given</dt><dd>a published opportunity</dd><dt>when</dt><dd>it is viewed by someone who is neither an administrator nor the person who created or last changed it</dd><dt>then</dt><dd>the creating and changing people&#39;s names are absent from what is shown</dd><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.29.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>cites</dt><dd><code>src/back-end/lib/db/opportunity/code-with-us.ts:243</code></dd><dt>reconciliation</dt><dd>implemented-only</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>
@@ -508,7 +508,7 @@
     <span class="chip muted">v1</span>
   </header>
   <p class="statement">The permitted state changes for a Team With Us opportunity in processing are awarded and cancelled, matching Code With Us and Sprint With Us, so the recorded transitions and the award path agree.</p>
-  <dl><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.49.spec.ts</code></dd><dt>against old</dt><dd><span class="chip unbound">unbound</span></dd><dt>replaces</dt><dd>R-1.45</dd></dl>
+  <dl><dt>test</dt><dd><code>tests/acceptance/opportunities/R-1.49.spec.ts</code></dd><dt>against old</dt><dd><span class="chip fail">fail</span></dd><dt>replaces</dt><dd>R-1.45</dd></dl>
 </article>
 <article class="criterion" data-state="tested">
   <header>

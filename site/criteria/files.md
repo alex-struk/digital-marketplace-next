@@ -13,7 +13,7 @@
 | R-8.7 | acceptance/files/R-8.7.spec.ts |  | pass |
 | R-8.8 | — |  | not-testable |
 | R-8.9 | — |  | not-testable |
-| R-8.10 | acceptance/files/R-8.10.spec.ts |  | fail |
+| R-8.10 | acceptance/files/R-8.10.spec.ts |  | pass |
 | R-8.11 | acceptance/files/R-8.11.spec.ts |  | pass |
 | R-8.12 | acceptance/files/R-8.12.spec.ts |  | pass |
 | R-8.13 | acceptance/files/R-8.13.spec.ts |  | pass |
@@ -33,7 +33,7 @@
 | R-8.27 | acceptance/files/R-8.27.spec.ts |  | pass |
 | R-8.28 | acceptance/files/R-8.28.spec.ts |  | pass |
 | R-8.29 | acceptance/files/R-8.29.spec.ts |  | pass |
-| R-8.30 | acceptance/files/R-8.30.spec.ts |  | unbound |
+| R-8.30 | acceptance/files/R-8.30.spec.ts |  | fail |
 | R-8.31 | acceptance/files/R-8.31.spec.ts |  | pass |
 
 ### R-8.1 · v1 · confirmed · accepted

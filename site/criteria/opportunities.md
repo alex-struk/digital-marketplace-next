@@ -10,7 +10,7 @@
 | R-1.4 | acceptance/opportunities/R-1.4.spec.ts |  | pass |
 | R-1.5 | acceptance/opportunities/R-1.5.spec.ts |  | pass |
 | R-1.6 | acceptance/opportunities/R-1.6.spec.ts |  | pass |
-| R-1.7 | acceptance/opportunities/R-1.7.spec.ts |  | unbound |
+| R-1.7 | acceptance/opportunities/R-1.7.spec.ts |  | pass |
 | R-1.8 | acceptance/opportunities/R-1.8.spec.ts |  | pass |
 | R-1.9 | acceptance/opportunities/R-1.9.spec.ts |  | fail |
 | R-1.10 | acceptance/opportunities/R-1.10.spec.ts |  | pass |
@@ -19,7 +19,7 @@
 | R-1.13 | acceptance/opportunities/R-1.13.spec.ts |  | pass |
 | R-1.14 | acceptance/opportunities/R-1.14.spec.ts |  | pass |
 | R-1.15 | acceptance/opportunities/R-1.15.spec.ts |  | pass |
-| R-1.16 | acceptance/opportunities/R-1.16.spec.ts |  | unbound |
+| R-1.16 | acceptance/opportunities/R-1.16.spec.ts |  | fail |
 | R-1.17 | acceptance/opportunities/R-1.17.spec.ts |  | fail (ruled: spec-wrong) |
 | R-1.18 | acceptance/opportunities/R-1.18.spec.ts |  | pass |
 | R-1.19 | acceptance/opportunities/R-1.19.spec.ts |  | pass |
@@ -28,11 +28,11 @@
 | R-1.22 | acceptance/opportunities/R-1.22.spec.ts |  | pass |
 | R-1.23 | acceptance/opportunities/R-1.23.spec.ts |  | pass |
 | R-1.24 | acceptance/opportunities/R-1.24.spec.ts |  | pass |
-| R-1.25 | acceptance/opportunities/R-1.25.spec.ts |  | unbound |
-| R-1.26 | acceptance/opportunities/R-1.26.spec.ts |  | unbound |
-| R-1.27 | acceptance/opportunities/R-1.27.spec.ts |  | fail (ruled: test-wrong) |
+| R-1.25 | acceptance/opportunities/R-1.25.spec.ts |  | fail |
+| R-1.26 | acceptance/opportunities/R-1.26.spec.ts |  | pass |
+| R-1.27 | acceptance/opportunities/R-1.27.spec.ts |  | fail |
 | R-1.28 | acceptance/opportunities/R-1.28.spec.ts |  | pass |
-| R-1.29 | acceptance/opportunities/R-1.29.spec.ts |  | unbound |
+| R-1.29 | acceptance/opportunities/R-1.29.spec.ts |  | fail |
 | R-1.30 | acceptance/opportunities/R-1.30.spec.ts |  | pass |
 | R-1.31 | acceptance/opportunities/R-1.31.spec.ts |  | pass |
 | R-1.32 | acceptance/opportunities/R-1.32.spec.ts |  | pass |
@@ -52,7 +52,7 @@
 | R-1.46 | — |  |  |
 | R-1.47 | — |  |  |
 | R-1.48 | acceptance/opportunities/R-1.48.spec.ts |  | pass |
-| R-1.49 | acceptance/opportunities/R-1.49.spec.ts |  | unbound |
+| R-1.49 | acceptance/opportunities/R-1.49.spec.ts |  | fail |
 | R-1.50 | acceptance/opportunities/R-1.50.spec.ts |  | pass |
 | D-opportunities-51 | — |  |  |
 | R-1.51 | not testable: unobservable: nothing the service does could show that a state it does not define is gone. No action requests a move to a suspended state, no observation returns the states an opportunity may hold or the states the list's state filter offers, and the mapping of a historical record onto a defined state happens before the rebuilt system reads it, which is a property of the migration rather than of anything the running service answers with. No addition to the surface would help; this is a claim a human accepts about the rebuild rather than one a test can settle. |  | not-testable |

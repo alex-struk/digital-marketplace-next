@@ -28,7 +28,7 @@
 | R-6.22 | — |  | pass |
 | R-6.23 | acceptance/notifications/R-6.23.spec.ts |  | unbound |
 | R-6.24 | acceptance/notifications/R-6.24.spec.ts |  | pass |
-| R-6.25 | acceptance/notifications/R-6.25.spec.ts |  | unbound |
+| R-6.25 | acceptance/notifications/R-6.25.spec.ts |  | pass |
 | R-6.26 | — |  | pass (ruled: test-wrong) |
 | R-6.27 | acceptance/notifications/R-6.27.spec.ts |  | fail (ruled: defect-in-old) |
 | R-6.28 | acceptance/notifications/R-6.28.spec.ts |  | pass |

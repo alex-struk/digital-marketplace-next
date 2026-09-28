@@ -147,6 +147,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-2.26 v1 pass"
+      file_sha: 9a2378df8d253a287e49d620b4654adf50c5342b
+      by: runner
+      at: 2026-09-28T17:32:41.071Z
   - kind: missing-test
     item: R-2.27
     id: R-2.27
@@ -350,6 +356,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-2.30 v1 fail"
+      file_sha: 2e9d0089dac2bd23704796ab3ee1dbcb428b863d
+      by: runner
+      at: 2026-09-28T17:32:41.071Z
   - kind: missing-test
     item: R-2.31
     id: R-2.31
@@ -407,6 +419,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-2.31 v1 fail"
+      file_sha: 2f18342835a96211378352ab4c5672ddd76bb83f
+      by: runner
+      at: 2026-09-28T17:32:41.071Z
   - kind: missing-test
     item: R-2.32
     id: R-2.32
@@ -468,6 +486,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-2.32 v1 fail"
+      file_sha: 63786badf2abda007467b16f473c14b637fda84a
+      by: runner
+      at: 2026-09-28T17:32:41.071Z
   - kind: missing-test
     item: R-2.33
     id: R-2.33
@@ -579,6 +603,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-1.25 v1 fail"
+      file_sha: a18c381c4e081798bbded735a6c0cc55ede3b625
+      by: runner
+      at: 2026-09-28T17:32:41.071Z
   - kind: missing-test
     item: R-1.26
     id: R-1.26
@@ -621,6 +651,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-1.26 v1 pass"
+      file_sha: d8f87b87521de83f1f3f36bb5fc18739e7d9a15a
+      by: runner
+      at: 2026-09-28T17:32:41.071Z
   - kind: missing-test
     item: R-1.27
     id: R-1.27
@@ -915,6 +951,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-1.49 v1 fail"
+      file_sha: 4af893ad6570aae2e689e68b13c9543bca6bfbb1
+      by: runner
+      at: 2026-09-28T17:32:41.071Z
   - kind: missing-test
     item: R-1.50
     id: R-1.50
@@ -2037,6 +2079,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-6.25 v2 pass"
+      file_sha: 69f382b61b8033d4541fc64ce04d448320bf3e4e
+      by: runner
+      at: 2026-09-28T17:32:41.071Z
   - kind: missing-test
     item: R-4.1
     id: R-4.1
@@ -2577,6 +2625,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-7.16 v1 fail"
+      file_sha: c9d8a5f9269cad2d325fdabdb67ae4cacbd5dda3
+      by: runner
+      at: 2026-09-28T17:32:41.071Z
   - kind: missing-test
     item: R-7.17
     id: R-7.17
@@ -3033,6 +3087,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-5.23 v1 fail"
+      file_sha: 2c825263f27844de6a8afaf4b8e6981dc34cd622
+      by: runner
+      at: 2026-09-28T17:32:41.071Z
   - kind: missing-test
     item: R-5.26
     id: R-5.26
@@ -3292,6 +3352,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-3.17 v1 pass"
+      file_sha: 50536cbda313ac1bc6a8c80ee86b4d727637535b
+      by: runner
+      at: 2026-09-28T17:32:41.071Z
   - kind: missing-test
     item: R-3.20
     id: R-3.20
@@ -3508,6 +3574,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-3.35 v1 fail"
+      file_sha: d9b681418cfff400563097378376682b4ed42b6a
+      by: runner
+      at: 2026-09-28T17:32:41.071Z
   - kind: missing-test
     item: R-7.12
     id: R-7.12
@@ -3640,6 +3712,12 @@ owed:
         by: runner
         at: 2026-09-25T13:00:12.833Z
     target: old
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-7.25 v1 pass"
+      file_sha: 1d33d9b8321c4ff48a520d4e77f9d9137e95d8eb
+      by: runner
+      at: 2026-09-28T17:32:41.071Z
   - kind: missing-test
     item: R-7.27
     id: R-7.27
@@ -3844,6 +3922,12 @@ owed:
         by: runner
         at: 2026-09-28T05:38:22.440Z
     target: old
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-2.27 v1 pass"
+      file_sha: 6c24f4db40ddad28ec079100dd830e0d3bd7682c
+      by: runner
+      at: 2026-09-28T17:32:41.071Z
   - kind: missing-test
     item: R-5.21
     id: R-5.21
@@ -3919,3 +4003,9 @@ owed:
         by: runner
         at: 2026-09-28T16:44:41.314Z
     target: old
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-5.29 v1 pass"
+      file_sha: fb9374b69afbc1b9475e440cdc94ff8b57278050
+      by: runner
+      at: 2026-09-28T17:32:41.071Z

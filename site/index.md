@@ -6,14 +6,14 @@ Profile: rebuild
 
 | Domain | proposed | accepted | implemented | verified | monitored | obsolete | open questions | total | tests | new | old |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 49/50 (n/t 1) |  | 35 pass · 7 fail · 7 unbound · 0 stale |
-| proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 | 36/36 |  | 8 pass · 2 fail · 26 unbound · 0 stale |
-| organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 | 31/31 |  | 15 pass · 4 fail · 12 unbound · 0 stale |
+| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 49/50 (n/t 1) |  | 37 pass · 11 fail · 1 unbound · 0 stale |
+| proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 | 36/36 |  | 14 pass · 6 fail · 16 unbound · 0 stale |
+| organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 | 31/31 |  | 22 pass · 9 fail · 0 unbound · 0 stale |
 | users | 0 | 32 | 0 | 0 | 0 | 4 | 1 | 36 | 29/30 (n/t 1) |  | 16 pass · 3 fail · 10 unbound · 0 stale |
-| evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 | 30/30 |  | 13 pass · 6 fail · 11 unbound · 0 stale |
-| notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 21/21 |  | 15 pass · 7 fail · 3 unbound · 0 stale |
-| content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 | 25/26 (n/t 1) |  | 18 pass · 3 fail · 4 unbound · 0 stale |
-| files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 23/24 (n/t 1) |  | 16 pass · 7 fail · 1 unbound · 0 stale |
+| evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 | 30/30 |  | 15 pass · 12 fail · 3 unbound · 0 stale |
+| notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 21/21 |  | 16 pass · 7 fail · 2 unbound · 0 stale |
+| content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 | 25/26 (n/t 1) |  | 20 pass · 4 fail · 1 unbound · 0 stale |
+| files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 23/24 (n/t 1) |  | 17 pass · 7 fail · 0 unbound · 0 stale |
 | **Totals** | 0 | 286 | 0 | 0 | 0 | 9 | 3 | 295 |  |  |  |
 
 ## Pages

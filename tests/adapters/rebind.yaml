@@ -1139,3 +1139,352 @@ rebind:
     by: runner:calibrate
     at: 2026-09-28T16:44:48.459Z
     closed: *a4
+  - id: R-7.10
+    target: old
+    why: 'unbound: content-create.publish_page — no control labelled "Publish" on
+      http://localhost:3100/content/create'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-5.14
+    target: old
+    why: 'unbound: evaluation-consensus-list-swu.finalize_consensus_scores — no
+      control labelled "Finalize Consensus Scores" or "Finalize Scores" or
+      "Finalize" in the top bar of
+      http://localhost:3102/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=consensus
+      (it shows: Digital Marketplace | staff.one@example.test | Dashboard | | |
+      Opportunities | | | Organizations); the tab says: Consensus | Team
+      Questions Consensus | Consensus'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-5.16
+    target: old
+    why: 'unbound: evaluation-panel-swu.add_panel_member — the evaluation panel tab
+      is read-only and its top bar offers no "Edit" on
+      http://localhost:3101/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluationPanel
+      (the top bar shows: Digital Marketplace | staff.one@example.test |
+      Dashboard | | | Opportunities | | | Organizations)'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-5.30
+    target: old
+    why: 'unbound: evaluation-consensus-list-twu.submit_final_consensus_scores — no
+      control labelled "Submit Final Consensus Scores" or "Submit Consensus
+      Scores" or "Submit Scores" in the top bar of
+      http://localhost:4300/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab=consensus
+      (it shows: Digital Marketplace | admin.one@example.test | Dashboard | | |
+      Opportunities | | | Organizations | | | Users | | | Content | Finalize
+      Consensus Scores); the tab says: Consensus | Resource Questions Consensus
+      | Consensus'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-6.20
+    target: old
+    why: "unbound: signIn.first-time-vendor — The oracle has no identity provider.
+      Its three sign-in routes look up an account that already exists by a fixed
+      identity-provider id and refuse when there is none, so a first sign-in —
+      the one that creates an account — cannot happen there."
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-6.23
+    target: old
+    why: "unbound: signIn.self-reactivating-vendor — /auth/createsessionvendor/13
+      reaches this account, but it creates a session without the identity
+      provider and without looking at the account's status, so it is not the
+      sign-in that reactivates a self-deactivated account. The oracle has no
+      identity provider to sign in through, so the ordinary sign-in this persona
+      exists for cannot happen there."
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-1.33
+    target: old
+    why: "unbound: opportunity-cwu-edit.add_note — signed in as the administrator
+      and looked on the seeded published, open and processing opportunities of
+      both programmes: the History tab is a table (Entry Type | Note | Created)
+      with nothing in its top bar, the Opportunity tab's Actions menu offers
+      only \"Edit\" and \"Cancel\", the Addenda tab only \"Add Addendum\", and
+      no screen offers a way to add a note; unbound:
+      opportunity-swu-edit.add_note — signed in as the administrator and looked
+      on the seeded published, open and processing opportunities of both
+      programmes: the History tab is a table (Entry Type | Note | Created) with
+      nothing in its top bar, the Opportunity tab's Actions menu offers only
+      \"Edit\" and \"Cancel\", the Addenda tab only \"Add Addendum\", and no
+      screen offers a way to add a note"
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-2.4
+    target: old
+    why: 'unbound: proposal-cwu-edit.delete_proposal — neither the top bar nor an
+      "Actions" menu offers "Delete" on
+      http://localhost:4300/opportunities/code-with-us/e35b3512-cb44-45cc-83a3-018ece7c028c/proposals/cc7a8dd2-1f4a-4374-8c70-3336fefe3f09/edit;
+      the top bar shows: Digital Marketplace | vendor.one@example.test |
+      Dashboard | | | Opportunities | | | Organizations | Edit | Withdraw'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-2.7
+    target: old
+    why: 'unbound: proposal-swu-create.add_phase_team_member — no box labelled
+      "Implementation" on
+      http://localhost:3101/opportunities/sprint-with-us/386a6b21-8f65-4b89-a9ed-cc4cac556c01/proposals/create;
+      unbound: proposal-swu-create.add_phase_team_member — no box labelled
+      "Implementation" on
+      http://localhost:3101/opportunities/sprint-with-us/d7ed161f-5c7c-421e-8041-d1fddba8da2c/proposals/create'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-2.9
+    target: old
+    why: 'unbound: proposal-swu-create.add_phase_team_member — no box labelled
+      "Implementation" on
+      http://localhost:3102/opportunities/sprint-with-us/ff262ccd-ca68-4c7e-87cc-d3538bdef338/proposals/create;
+      unbound: proposal-swu-create.add_phase_team_member — no box labelled
+      "Implementation" on
+      http://localhost:3102/opportunities/sprint-with-us/48c6a273-dbe1-4ffe-a088-8aefc7dfe68d/proposals/create'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-2.10
+    target: old
+    why: 'unbound: proposal-twu-create.add_team_member_for_resource — no chooser
+      labelled "Team Member" or "Member" on
+      http://localhost:3100/opportunities/team-with-us/997df8ef-a4d1-48ae-b301-cb95528a4c0f/proposals/create;
+      unbound: proposal-twu-create.add_team_member_for_resource — no chooser
+      labelled "Team Member" or "Member" on
+      http://localhost:3100/opportunities/team-with-us/904bb54a-dd9a-4f6f-aaf6-06d6d9eeca76/proposals/create'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-2.11
+    target: old
+    why: 'unbound: proposal-swu-create.add_phase_team_member — no box labelled
+      "Implementation" on
+      http://localhost:3102/opportunities/sprint-with-us/93c76375-8eda-4631-97d8-fd03d1321583/proposals/create'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-2.16
+    target: old
+    why: 'unbound: proposal-swu-create.add_phase_team_member — no control labelled
+      "Add Team Member(s)" or "Add Team Member" on
+      http://localhost:3102/opportunities/sprint-with-us/0ef7a772-f38f-4f22-bcae-1a9845847080/proposals/create;
+      unbound: proposal-swu-create.add_phase_team_member — no control labelled
+      "Add Team Member(s)" or "Add Team Member" on
+      http://localhost:3102/opportunities/sprint-with-us/d1e3db18-4421-4001-8ee3-f091eed5d83a/proposals/create;
+      unbound: proposal-swu-create.answer_team_question — no field labelled
+      "Response" or "Answer" or "Question" on
+      http://localhost:3102/opportunities/sprint-with-us/9f653349-64ac-452d-993d-5c8467af5897/proposals/create'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-2.17
+    target: old
+    why: 'unbound: proposal-twu-create.add_team_member_for_resource — no chooser
+      labelled "Team Member" or "Member" on
+      http://localhost:3100/opportunities/team-with-us/65b46b3e-d374-4883-8db0-dcb2a4847b72/proposals/create;
+      unbound: proposal-twu-create.add_team_member_for_resource — no chooser
+      labelled "Team Member" or "Member" on
+      http://localhost:3100/opportunities/team-with-us/f00a325b-1d67-4af7-8482-2a31cba3e3e8/proposals/create'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-2.18
+    target: old
+    why: 'unbound: proposal-swu-create.add_phase_team_member — no box labelled
+      "Implementation" on
+      http://localhost:3101/opportunities/sprint-with-us/e652a07b-961c-4a90-b21f-d36fa0973763/proposals/create;
+      unbound: proposal-twu-create.add_team_member_for_resource — no chooser
+      labelled "Team Member" or "Member" on
+      http://localhost:3101/opportunities/team-with-us/6f53e368-0ff9-409a-80aa-9249efe193a5/proposals/create;
+      unbound: proposal-swu-create.add_phase_team_member — no box labelled
+      "Implementation" on
+      http://localhost:3101/opportunities/sprint-with-us/ac51cca7-212e-4f41-813e-14c435d9c826/proposals/create'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-2.20
+    target: old
+    why: 'unbound: proposal-twu-create.answer_resource_question — no field labelled
+      "Response" or "Answer" or "Question" on
+      http://localhost:4300/opportunities/team-with-us/e71c0233-0ec7-40d6-b379-1a95f5b8f46f/proposals/create;
+      unbound: proposal-twu-create.answer_resource_question — no field labelled
+      "Response" or "Answer" or "Question" on
+      http://localhost:4300/opportunities/team-with-us/8ccbc547-dc8e-42b0-b2d5-ede39f3a595f/proposals/create'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-2.21
+    target: old
+    why: 'unbound: proposal-swu-create.add_phase_team_member — no box labelled
+      "Implementation" on
+      http://localhost:3102/opportunities/sprint-with-us/686e4ee5-40bf-40bb-b674-313a897748ab/proposals/create;
+      unbound: proposal-swu-create.add_phase_team_member — no box labelled
+      "Implementation" on
+      http://localhost:3102/opportunities/sprint-with-us/23000a7a-e434-4409-9b96-622e3629040a/proposals/create'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-2.22
+    target: old
+    why: 'unbound: proposal-twu-create.add_team_member_for_resource — no chooser
+      labelled "Team Member" or "Member" on
+      http://localhost:3101/opportunities/team-with-us/021ea945-eef4-4308-b507-f9724fcfbfb2/proposals/create;
+      unbound: proposal-twu-create.add_team_member_for_resource — no chooser
+      labelled "Team Member" or "Member" on
+      http://localhost:3101/opportunities/team-with-us/160a1fe1-6984-4a8a-830f-e2f751ed4007/proposals/create'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-2.24
+    target: old
+    why: 'unbound: proposal-twu-create.add_team_member_for_resource — no chooser
+      labelled "Team Member" or "Member" on
+      http://localhost:4300/opportunities/team-with-us/2508d3e8-7bf4-49ba-92e1-eab7745b803b/proposals/create'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-2.28
+    target: old
+    why: 'unbound: proposal-swu-view.score_team_scenario — neither the top bar nor
+      an "Actions" menu offers "Enter Score" or "Edit Score" on
+      http://localhost:3102/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/00000000-0000-4000-8000-000000000741?tab=teamScenario;
+      the top bar shows: Digital Marketplace | admin.one@example.test |
+      Dashboard | | | Opportunities | | | Organizations | | | Users | | |
+      Content; unbound: proposal-twu-view.score_challenge — neither the top bar
+      nor an "Actions" menu offers "Enter Score" or "Edit Score" on
+      http://localhost:3102/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/proposals/00000000-0000-4000-8000-000000000841?tab=challenge;
+      the top bar shows: Digital Marketplace | admin.one@example.test |
+      Dashboard | | | Opportunities | | | Organizations | | | Users | | |
+      Content'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-2.37
+    target: old
+    why: 'unbound: proposal-swu-create.add_phase_team_member — no box labelled
+      "Implementation" on
+      http://localhost:3100/opportunities/sprint-with-us/19c5b55f-237d-459a-b91e-acea54d900ba/proposals/create'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-4.1
+    target: old
+    why: "unbound: signIn.first-time-public-sector-employee — The oracle has no
+      identity provider. Its three sign-in routes look up an account that
+      already exists by a fixed identity-provider id and refuse when there is
+      none, so a first sign-in — the one that creates an account — cannot happen
+      there.; unbound: signIn.first-time-vendor — The oracle has no identity
+      provider. Its three sign-in routes look up an account that already exists
+      by a fixed identity-provider id and refuse when there is none, so a first
+      sign-in — the one that creates an account — cannot happen there."
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-4.2
+    target: old
+    why: "unbound: signIn.first-time-vendor — The oracle has no identity provider.
+      Its three sign-in routes look up an account that already exists by a fixed
+      identity-provider id and refuse when there is none, so a first sign-in —
+      the one that creates an account — cannot happen there.; unbound:
+      signIn.first-time-vendor-without-email — The oracle has no identity
+      provider. Its three sign-in routes look up an account that already exists
+      by a fixed identity-provider id and refuse when there is none, so a first
+      sign-in — the one that creates an account — cannot happen there."
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-4.3
+    target: old
+    why: "unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete never
+      shows the profile form on this target; it redirects to /dashboard when
+      signed in and to /sign-in when signed out, and no sign-in route mints an
+      account with an unfinished profile; unbound:
+      user-sign-up-complete.accept_app_terms — /sign-up/complete never shows the
+      profile form on this target; it redirects to /dashboard when signed in and
+      to /sign-in when signed out, and no sign-in route mints an account with an
+      unfinished profile"
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-4.5
+    target: old
+    why: "unbound: signIn.self-reactivating-vendor — /auth/createsessionvendor/13
+      reaches this account, but it creates a session without the identity
+      provider and without looking at the account's status, so it is not the
+      sign-in that reactivates a self-deactivated account. The oracle has no
+      identity provider to sign in through, so the ordinary sign-in this persona
+      exists for cannot happen there."
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-4.8
+    target: old
+    why: "unbound: user-profile-self-capabilities.capability_checked — looked again
+      as the organization member on their own Capabilities tab: each capability
+      is a link with its name and an unlabelled icon before it, and whether it
+      is held changes only that icon's colour and shape; the row carries no
+      text, no checkbox and no checked state in the accessibility tree, so
+      nothing on the page says which are held"
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-4.23
+    target: old
+    why: "unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete never
+      shows the profile form on this target; it redirects to /dashboard when
+      signed in and to /sign-in when signed out, and no sign-in route mints an
+      account with an unfinished profile"
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-4.24
+    target: old
+    why: "unbound: user-sign-up-complete.toggle_new_opportunity_notifications —
+      /sign-up/complete never shows the profile form on this target; it
+      redirects to /dashboard when signed in and to /sign-in when signed out,
+      and no sign-in route mints an account with an unfinished profile"
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
+  - id: R-4.32
+    target: old
+    why: 'unbound: user-list.toggle_export_field — no box labelled "email address"
+      on http://localhost:3100/users'
+    found: unbound
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+    by: runner:calibrate
+    at: 2026-09-28T17:32:44.806Z
