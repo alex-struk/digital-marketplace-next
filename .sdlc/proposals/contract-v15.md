@@ -46,3 +46,14 @@ I took the second of the two shapes the derive-tests stage offered. The first, a
 **Tool limits.** The shell refused variable expansion, so I ran the CLI by its resolved path `~/GitHub/agentic-sdlc/bin/sdlc.mjs` rather than through `$SDLC_BIN`. A standalone YAML parse of the manifest needed an approval nobody was here to give; the new entries follow the file's existing shapes and were checked by eye.
 
 re-address missing-test/R-5.21 to derive-tests: seed.opportunities.swuOpenWithSubmittedProposal (published, deadline thirty days ahead, users.staffOne an evaluator on its panel with nothing evaluated) and seed.proposals.swuOpenSubmitted, so an evaluator's attempt on evaluation-individual-create-swu can be made outside individual question evaluation; the oracle refuses it (401) on the stage check alone
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+The question is whether the contract now lets a test check R-5.21's stage clause: an evaluator on the panel is refused outside individual question evaluation. Approve. The new opportunity 25 (opportunities.swuOpenWithSubmittedProposal) is published, and its proposal deadline is set to now() + 30 days, so scheduled closing never moves it. It has one proposal (proposals.swuOpenSubmitted) submitted by proponentTwo; the ids v[2] and o[2] match the manifest's users.proponentTwo and organizations.proponentTwo. The panel variable puts users.staffOne on as an evaluator and users.administratorOne as chair, and no evaluation is seeded. This sets up a state the application reaches on its own, not a result it would never produce. I checked the old code: permissions.createSWUTeamQuestionResponseEvaluation (sources/old/src/back-end/lib/permissions.ts:1025) requires a government or admin session, opportunity status EvaluationTeamQuestionsIndividual, and panel-evaluator membership. The government account meets the first and third, so the 401 the oracle returned comes from the stage check alone, as the proposal says. Choosing the published-and-open shape over a synthetic consensus-stage one with an evaluation missing is the right call, because it avoids testing a fixture the old service may never produce. No criterion text changes, and R-5.21 stays confirmed as it stands. Two things would change this ruling: evidence that the refusal comes from something other than the stage check (for example, the proposal failing to load for that account), or a side effect on tests that count published Sprint With Us opportunities or proponentTwo's proposals without filtering. The proposal names that risk itself, so the tests concerned should filter by title or handle.
+
+**Conditions:**
+- contract R-5.21
