@@ -163,3 +163,57 @@ criteria:
       property of the migration rather than of anything the running service
       answers with. No addition to the surface would help; this is a claim a
       human accepts about the rebuild rather than one a test can settle."
+  - id: R-2.14
+    version: 2
+    clause: each offending field is named in the response; an organization checked
+      for existence; the service does not verify that the vendor belongs to the
+      organization they name
+    reason: "blocked: proposal-cwu-create offers one field_error observation that
+      returns an error's text with nothing saying which field it belongs to, so a
+      test can see that a refusal was reported but not that it names the legal
+      name, the email address or whichever field was left out. The two
+      organization clauses are about organizations the form never offers: its
+      organization choice lists only the signed-in vendor's own organizations,
+      so an identifier naming no organization, or an organization the vendor
+      does not belong to, cannot be put to the service through it, and no page
+      submits a Code With Us proposal with a proponent given as stated. R-2.14's
+      test asserts the refusal of every missing or malformed individual field,
+      the acceptance of a complete individual, and the refusal of an archived
+      organization against the acceptance of an active one."
+    missing: an observation on proposal-cwu-create returning the refusal reported
+      against each named field (field and message together); and a
+      request-level page for Code With Us proposals, like the
+      evaluation-*-request pages, that submits a proposal whose organization
+      proponent is given by identifier — one naming no organization, one naming
+      an organization the signed-in vendor is not a member of — and reports
+      whether it was accepted and the refusal's message
+    owner: contract
+  - id: R-2.18
+    version: 3
+    clause: the refusal's wording "User is not an active member of the
+      organization."; a person whose membership is pending or inactive; a Team
+      With Us proposal naming the same person twice refused with "Please select
+      unique team members."; the service applying no such uniqueness check to a
+      Sprint With Us phase; the form offering only the organization's active
+      members and not offering a person already named on the proposal
+    reason: "blocked: the criterion itself says neither refusal is reachable
+      through the proposal form, and the surface offers no other way to put a
+      team to the service — there is no request-level page for proposals, as
+      there is for evaluations. The one refusal reachable through the form is
+      reached by removing a named person from the organization after a draft is
+      saved and submitting the draft from proposal-twu-edit, which is what
+      R-2.18's test does; but proposal-twu-edit names no error, so only the
+      proposal staying unsubmitted can be read, not the wording. A pending or
+      inactive membership cannot be put on a draft at all, since the form does
+      not offer such a person. And no observation returns the people a team
+      choice on proposal-swu-create or proposal-twu-create offers, so what the
+      form offers cannot be read either."
+    missing: a request-level page for Sprint With Us and Team With Us proposals
+      that submits a proposal whose team members are given by account (seed
+      users, including one pending, one deactivated, one outside the
+      organization, and one named twice) and reports whether it was accepted and
+      the refusal's message; an observation on proposal-twu-edit and
+      proposal-swu-edit returning the reason a submission from that screen was
+      refused; and an observation on proposal-swu-create and proposal-twu-create
+      returning the people the team-member choice offers
+    owner: contract
