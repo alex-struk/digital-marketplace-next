@@ -46,3 +46,27 @@ Two cases throw `unbound:` with the address and status in the message: the proxy
 `bindings.yaml` now names the three members as bound under `mail-delivery-delay`, spelled as in the surface.
 
 Every route I opened resolved. I changed nothing outside `tests/adapters/old/`, and nothing asked me to.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+Question: does this adapter bind every surface action and observation of mail-delivery-delay on old, and nothing else? Ruling: approve. The contract page lists slow_delivery, restore_delivery_speed and delivery_slowed, and all three are bound, plus open. Each call matches observables.yaml email.delivery_delay exactly: GET the toxics list, POST the 'hold' latency toxic with the contract's body, DELETE toxics/hold. delivery_slowed reports the delay as in force exactly when the list names a toxic called 'hold', which is the contract's own test for in-force. Accepting 409 on slow and 404 on restore makes each call idempotent, because either answer leaves the proxy in the state asked for; it decides nothing about whether a test passes. The binding copies the existing mailDeliveryFault binding beside it. Nothing under tests/acceptance changed. The runner's typecheck failed, but every diagnostic is in adapters/new/ and none is in adapters/old/. The compose file confirms that /hold is proxied to the toxiproxy control API on the mail port. What would change this: diagnostics in adapters/old/, or delivery_slowed reading anything other than whether 'hold' is listed. The earlier derive-tests conditions for R-1.34, R-1.36 and R-1.37, and the missing test for R-6.24 owed by derive-tests, are not settled by an adapter binding and stay open.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `5912c59e38e3a1213a73f83d2efa8b4facadbc78`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
