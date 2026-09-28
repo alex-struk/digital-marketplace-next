@@ -174,3 +174,20 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+The question is which of the seven criteria failing against old were caused by this project's adapter. Approved, with every one sent on as a product question, because in each case the adapter did what the test asked and reported what the old application actually rendered or returned. R-1.9: the view's deadline binding read the page header ('Closed Oct 11, 2026 at 4:00 PM PDT'), which is the deadline the page states; the date being one day short of fourteen days from saving is the application's behaviour (possibly a timezone boundary), not a misread. R-8.10: an empty truthy check. It is either the stored file's identifier or the disposition, which the binding reads straight from the response header, so an empty value means the answer stated none. Nothing shows the binding failed to reach the answer. R-5.13: the binding found 'Submit Final Consensus Scores' and correctly reported it rendered disabled with no message; whether the old app refusing at that earlier step satisfies the criterion is for the product owner and the test writer. R-2.14: a bare 120s timeout with no step named, which the evidence cannot pin on any binding. R-6.15, R-6.16, R-4.20: the caught messages themselves show three visible recipients, an 'Unsubscribe' link in an invitation, and 'successfully reactivated' wording on an administrator's reactivation. Those are the application's messages, read whole. R-4.20's third test is unbound because the oracle has no identity provider for a real sign-in, which is a limit of the target, not a binding error. What would change this: a rerun trace showing R-2.14 stalled inside one adapter wait (for example a dialog or terms step retried past its budget) would make that one adapter-wrong.
+
+**Conditions:**
+- product-question R-1.9
+- product-question R-8.10
+- product-question R-5.13
+- product-question R-2.14
+- product-question R-6.15
+- product-question R-6.16
+- product-question R-4.20
