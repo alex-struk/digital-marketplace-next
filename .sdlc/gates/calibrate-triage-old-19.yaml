@@ -1,0 +1,38 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is which of the 23 criteria that failed or stayed unbound against the old target this project's own adapter caused. Approve, with one triage condition per criterion. The adapter is at fault in six places. (1) proposal-swu-create.add_reference never opens the Sprint With Us form's 'References' tab. That tab holds three references, 'Reference 1' to 'Reference 3', each with Name, Company, Phone and Email fields. The adapter instead looks for a 'Company Name' field that does not exist and types the whole input as text into one box, which fails R-2.7, R-2.9, R-2.11, R-2.21, R-2.37 and the third R-2.16 test. (2) The fill-in-required-fields step that runs before a disabled Submit picks a 'Resource Name' and types an 'Hourly Rate' the R-2.20 test deliberately left empty. (3) The history reader takes the author cell's innerText, which the page uppercases with CSS, so it never matches the administrator's name (R-2.35). (4) The users list is a scrolling grid whose Admin? cell holds an icon element or nothing, which the adapter could read by its presence in each row (R-4.14). (5) For R-4.23 the adapter saw the redirects the criterion describes and reported them as unbound instead of passing them to the test. (6) Publishing a valid Prototype plus Implementation opportunity for R-2.19 left the page on /create and the adapter read an identifier from that address. R-4.4 is oracle-cannot: in the old source the deactivated-account refusal happens only in the identity provider's sign-in callback, and /auth/createsessionvendor mints a session and redirects to /dashboard with no status check. Everything else carries no evidence against the adapter and goes to the product owner. For R-4.3 and R-4.24 the missing state is a seeded vendor with no acceptedTermsAt. The seed schema carries that column, so this is a seed gap rather than something the oracle cannot reach; it belongs to contract, and the triage format cannot address it there. This ruling would change if a rebinding run fixes the references and fill-in faults and those criteria still fail (they then stay with the product owner), or if the session route is shown to check account status (R-4.4 then becomes adapter-wrong).
+conditions:
+  - "product-question R-1.9"
+  - "product-question R-2.10"
+  - "product-question R-5.13"
+  - "product-question R-1.16"
+  - "adapter-wrong R-2.16: proposal-swu-create.add_reference neither opens the form's 'References' tab nor maps its input: the tab holds three blocks headed 'Reference 1' to 'Reference 3', each with fields labelled Name, Company, Phone and Email, and the input's order, name, company, phone and email must go into those fields instead of the whole object being typed as text into a field labelled 'Company Name' or 'Reference', which does not exist. Also, when chooseOrganization has left the organization withheld, proposal-swu-create.add_phase_team_member throws 'refused' instead of returning with no team added, as the Team With Us binding does, so the test never gets to read the refusal"
+  - "adapter-wrong R-2.20: before a disabled Submit, the fill-in-required-fields step picks a 'Resource Name*' option and types a placeholder 'Hourly Rate*' on the Team With Us proposal form even though the test never named a team member, so a proposal the test submitted with no team member goes through with one and no refusal is shown; team-member choosers and hourly rates must never be filled on the test's behalf"
+  - "adapter-wrong R-2.35: proposal-swu-view.history_tab reads the Created cell with innerText, which returns the author's name uppercased by the page's CSS text-uppercase class ('BLAKE PLACEHOLDER'); read the name's own text (textContent) so it matches the name the user profile shows"
+  - "product-question R-2.17"
+  - "product-question R-2.22"
+  - "product-question R-2.31"
+  - "oracle-cannot R-4.4: a deactivated account is refused only in the identity provider's sign-in callback, which redirects INACTIVE_ADMIN users to /notice/authFailure; this target's only sign-in is /auth/createsessionvendor/:id, which creates a session for any existing account and redirects to /dashboard without checking its status, so the refusal cannot be exercised without the external identity provider"
+  - "adapter-wrong R-2.7: proposal-swu-create.add_reference neither opens the 'References' tab nor maps its input: fill Name, Company, Phone and Email under 'Reference N' (N = order + 1) from the input's name, company, phone and email, instead of looking for a field labelled 'Company Name' or 'Reference', which does not exist"
+  - "adapter-wrong R-2.9: proposal-swu-create.add_reference neither opens the 'References' tab nor maps its input: fill Name, Company, Phone and Email under 'Reference N' (N = order + 1) from the input's name, company, phone and email, instead of looking for a field labelled 'Company Name' or 'Reference', which does not exist"
+  - "adapter-wrong R-2.11: proposal-swu-create.add_reference neither opens the 'References' tab nor maps its input: fill Name, Company, Phone and Email under 'Reference N' (N = order + 1) from the input's name, company, phone and email, instead of looking for a field labelled 'Company Name' or 'Reference', which does not exist"
+  - "adapter-wrong R-4.14: user-list.admin_check reports nothing to read, but the list is a scrolling grid of positioned blocks whose Admin? cell holds a tick icon element when the user is an administrator and nothing otherwise; locate each row by its name cell and read the mark as the presence of that icon in the row's last cell instead of by accessible name or text"
+  - "adapter-wrong R-2.19: publishing a Sprint With Us opportunity whose phases are Prototype (28 to 60 days out) and Implementation (61 to 90 days out) left the page on /opportunities/sprint-with-us/create, and the adapter then read the opportunity identifier from that address; the publish must set the start-phase chooser to Prototype, enter each phase's dates exactly as given without adding dates of its own, and report the page's own refusal when publish does not land on a record"
+  - "product-question R-2.21"
+  - "adapter-wrong R-4.23: user-sign-up-complete.terms_checkbox throws unbound although the adapter itself saw what three of this criterion's clauses ask about, namely that /sign-up/complete redirects to /sign-in when signed out and to /dashboard for the administrator, the public sector employee and every seeded vendor who has agreed; for those personas report that no agreement box is offered, and where the person was sent, instead of throwing"
+  - "product-question R-4.3"
+  - "product-question R-4.24"
+  - "product-question R-2.28"
+  - "product-question R-1.33"
+  - "adapter-wrong R-2.37: proposal-swu-create.add_reference neither opens the 'References' tab nor maps its input: fill Name, Company, Phone and Email under 'Reference N' (N = order + 1) from the input's name, company, phone and email, instead of looking for a field labelled 'Company Name' or 'Reference', which does not exist"
+cost: 1.9463696
+turns: 41
+session: "d28436ae-b562-4837-89fb-6976273e7535"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T23:40:03.858Z
