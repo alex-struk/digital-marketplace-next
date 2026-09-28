@@ -180,27 +180,3 @@ criteria:
       property of the migration rather than of anything the running service
       answers with. No addition to the surface would help; this is a claim a
       human accepts about the rebuild rather than one a test can settle."
-  - id: R-5.21
-    version: 1
-    clause: "only while the opportunity is in individual question evaluation"
-    reason: "blocked: the test reaches the evaluator's attempt only while the
-      opportunity is in individual question evaluation. Showing the same
-      evaluator refused at another stage needs an opportunity outside that stage
-      on whose panel an evaluator has not yet recorded an evaluation of some
-      proponent, and the seed has none. The Sprint With Us opportunities past it
-      (swuConsensusFiveProponents, swuConsensusNobodyScreenable,
-      swuConsensusSixProponents, swuCodeChallengePartlyScored,
-      swuCodeChallengeOfOtherStaff) carry every individual evaluation already
-      submitted, so a refusal there would be a refusal of a duplicate and say
-      nothing about the stage; the only ones before it with submitted proposals
-      (closedSprintWithUs and the two lapsed ones) are moved into individual
-      evaluation by the very request that opening the scoring form makes. To
-      tell whether this is instead unobservable, one would need to know whether
-      the service can hold an opportunity past individual evaluation with an
-      evaluator's evaluation of a proponent missing at all."
-    missing: "a seeded Sprint With Us opportunity at the consensus stage or later
-      with a submitted proposal that an evaluator on its panel, reachable by a
-      persona, has not evaluated; or a seeded published opportunity before its
-      deadline with a submitted proposal and an evaluator on its panel, which
-      scheduled closing does not move"
-    owner: contract

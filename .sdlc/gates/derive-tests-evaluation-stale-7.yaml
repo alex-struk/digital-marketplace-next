@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the new R-5.21 test follow from the criterion and nothing else? Approve. The added test asserts the clause that no test covered, 'only while the opportunity is in individual question evaluation'. It uses seed.opportunities.swuOpenWithSubmittedProposal and seed.proposals.swuOpenSubmitted, both present in tests/seed/manifest.yaml: the opportunity is published with its deadline ahead, and users.staffOne is an evaluator on its panel who has evaluated nothing, so a refusal can only be put down to the stage. The test establishes that the opportunity is not in individual question evaluation, reuses the file's existing refusal check (the form is withheld, or no evaluation by that user exists afterwards), and confirms the attempt did not move the stage. Each assertion follows from the criterion, and nothing about how the application is built appears: the file imports only from ../../fixtures. The runner's typecheck reports no diagnostics under acceptance/evaluation/; its failures are in adapters/new/, which this proposal does not touch. Removing the R-5.21 not-testable entry is correct because the clause is now asserted. The missing-test/R-5.21 record closes when this test runs. Remaining weakness: the stage is read from status wording, since the surface exposes no stage observation. That is an improvement for the contract stage, not a defect in this test. The ruling would change if this test's first run showed the seeded opportunity or the scoring form could not be reached.
+conditions: []
+cost: 0.3748656
+turns: 3
+session: "fe7c8b31-efaf-4305-ae12-3b9d2e39f5d8"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T05:55:59.707Z

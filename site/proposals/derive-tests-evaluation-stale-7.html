@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-evaluation-stale-7 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">202</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">198</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">173</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-evaluation-stale-7</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-28 05:55</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.282 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the evaluation criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I wrote a test for R-5.21&#39;s missing clause and removed its entry from <code>tests/acceptance/not-testable.yaml</code>, so the one criterion owed to this run now has a test.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.282 (Claude Code))</p>
+<p>I wrote a test for R-5.21&#39;s missing clause and removed its entry from <code>tests/acceptance/not-testable.yaml</code>, so the one criterion owed to this run now has a test. I could not type-check or run it: the workspace would not approve <code>tsc</code>, and there is no app to run against.</p>
+<p><strong>The criterion.</strong> R-5.21 (v1) says only an evaluator on the panel may record an individual evaluation, and only while the opportunity is in individual question evaluation. The existing file <code>tests/acceptance/evaluation/R-5.21.spec.ts</code> already had three tests. Two check that a chair who is not an evaluator, and an owner who is not on the panel, are refused. The third checks that an evaluator on the panel can score. The &quot;only while in individual question evaluation&quot; clause was recorded as blocked, because no seeded opportunity outside that stage had an evaluator on its panel with nothing evaluated.</p>
+<p><strong>What changed.</strong> The contract stage has since added <code>seed.opportunities.swuOpenWithSubmittedProposal</code> and <code>seed.proposals.swuOpenSubmitted</code>. The opportunity is published with its deadline thirty days ahead, and <code>users.staffOne</code> (signed in as <code>persona.publicSectorStaff</code>) is an evaluator on its panel with nothing evaluated. I added a fourth test using these records:</p>
+<ul><li><strong>Given:</strong> it signs in as that persona, opens <code>surface.opportunitySwuView</code>, and asserts that <code>status()</code> is not empty and does not read as individual question evaluation.</li><li><strong>When:</strong> it attempts to score the first question through <code>surface.evaluationIndividualCreateSwu</code> (enter a score and notes, then save a draft).</li><li><strong>Then:</strong> the attempt counts as refused if the form fails on any step. If the form goes through, <code>surface.evaluationIndividualRequestSwu</code>, opened for <code>users.staffOne</code>, must show no evaluation status and no stored score.</li><li>Finally it checks the opportunity still does not read as in individual question evaluation, so the refusal cannot be put down to the attempt having moved the stage.</li></ul>
+<p>It reuses the file&#39;s existing helpers and is titled with the criterion&#39;s own words plus a short note of which case it covers, like the other three. The file imports only from <code>../../fixtures</code>; it has no selectors, routes or raw ids.</p>
+<p><strong>Nothing left out.</strong> R-5.21 no longer has any entry in <code>not-testable.yaml</code>, and I found no surface action or observation missing for this criterion.</p>
+<p><strong>One weak point.</strong> The check that the opportunity is not in individual question evaluation matches the wording of the status text, as the existing helper does. The surface has no way to read the stage directly. If the app words the published status in an unexpected way, that check could give a false result, and a stage observation in the contract would make it firmer.</p>
+<p>I changed nothing outside <code>tests/acceptance/</code>, and nothing asked me to.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-28 05:55.</p>
+<div class="body"><p>Question: does the new R-5.21 test follow from the criterion and nothing else? Approve. The added test asserts the clause that no test covered, &#39;only while the opportunity is in individual question evaluation&#39;. It uses seed.opportunities.swuOpenWithSubmittedProposal and seed.proposals.swuOpenSubmitted, both present in tests/seed/manifest.yaml: the opportunity is published with its deadline ahead, and users.staffOne is an evaluator on its panel who has evaluated nothing, so a refusal can only be put down to the stage. The test establishes that the opportunity is not in individual question evaluation, reuses the file&#39;s existing refusal check (the form is withheld, or no evaluation by that user exists afterwards), and confirms the attempt did not move the stage. Each assertion follows from the criterion, and nothing about how the application is built appears: the file imports only from ../../fixtures. The runner&#39;s typecheck reports no diagnostics under acceptance/evaluation/; its failures are in adapters/new/, which this proposal does not touch. Removing the R-5.21 not-testable entry is correct because the clause is now asserted. The missing-test/R-5.21 record closes when this test runs. Remaining weakness: the stage is read from status wording, since the surface exposes no stage observation. That is an improvement for the contract stage, not a defect in this test. The ruling would change if this test&#39;s first run showed the seeded opportunity or the scoring form could not be reached.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
