@@ -1804,6 +1804,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-6.16 v1 fail"
+      file_sha: 0aa1d7f85e8d3531de53c0a07fd883712d6a8629
+      by: runner
+      at: 2026-09-28T15:31:02.814Z
   - kind: missing-test
     item: R-6.18
     id: R-6.18
@@ -1859,6 +1865,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-6.18 v1 pass"
+      file_sha: 26bc7e05183ae73ea52d4fc0bfc71768a935ba35
+      by: runner
+      at: 2026-09-28T15:31:02.814Z
   - kind: missing-test
     item: R-6.20
     id: R-6.20

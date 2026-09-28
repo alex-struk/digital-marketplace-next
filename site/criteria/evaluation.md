@@ -4,7 +4,7 @@
 
 | id | test | new | old |
 | --- | --- | --- | --- |
-| R-5.1 | acceptance/evaluation/R-5.1.spec.ts |  | fail |
+| R-5.1 | acceptance/evaluation/R-5.1.spec.ts |  | fail (ruled: defect-in-old) |
 | R-5.2 | — |  |  |
 | R-5.3 | acceptance/evaluation/R-5.3.spec.ts |  | unbound |
 | R-5.4 | — |  |  |
@@ -16,11 +16,11 @@
 | R-5.10 | acceptance/evaluation/R-5.10.spec.ts |  | unbound |
 | R-5.11 | acceptance/evaluation/R-5.11.spec.ts |  | pass |
 | R-5.12 | acceptance/evaluation/R-5.12.spec.ts |  | unbound |
-| R-5.13 | acceptance/evaluation/R-5.13.spec.ts |  | unbound |
+| R-5.13 | acceptance/evaluation/R-5.13.spec.ts |  | fail |
 | R-5.14 | acceptance/evaluation/R-5.14.spec.ts |  | unbound |
 | R-5.15 | — |  |  |
 | R-5.16 | acceptance/evaluation/R-5.16.spec.ts |  | unbound |
-| R-5.17 | acceptance/evaluation/R-5.17.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-5.17 | acceptance/evaluation/R-5.17.spec.ts |  | pass |
 | R-5.18 | acceptance/evaluation/R-5.18.spec.ts |  | pass (ruled: spec-wrong) |
 | R-5.19 | acceptance/evaluation/R-5.19.spec.ts |  | unbound |
 | R-5.20 | acceptance/evaluation/R-5.20.spec.ts |  | pass (ruled: defect-in-old) |
@@ -32,15 +32,15 @@
 | R-5.26 | acceptance/evaluation/R-5.26.spec.ts |  | pass |
 | R-5.27 | acceptance/evaluation/R-5.27.spec.ts |  | pass |
 | R-5.28 | acceptance/evaluation/R-5.28.spec.ts |  | pass |
-| R-5.29 | acceptance/evaluation/R-5.29.spec.ts |  | fail |
+| R-5.29 | acceptance/evaluation/R-5.29.spec.ts |  | fail (ruled: test-wrong) |
 | R-5.30 | acceptance/evaluation/R-5.30.spec.ts |  | unbound |
-| R-5.31 | acceptance/evaluation/R-5.31.spec.ts |  | unbound |
+| R-5.31 | acceptance/evaluation/R-5.31.spec.ts |  | pass |
 | R-5.32 | acceptance/evaluation/R-5.32.spec.ts |  | unbound |
-| R-5.33 | acceptance/evaluation/R-5.33.spec.ts |  | unbound |
+| R-5.33 | acceptance/evaluation/R-5.33.spec.ts |  | pass |
 | R-5.34 | acceptance/evaluation/R-5.34.spec.ts |  | pass |
 | R-5.35 | acceptance/evaluation/R-5.35.spec.ts |  | unbound |
 | R-5.36 | acceptance/evaluation/R-5.36.spec.ts |  | unbound |
-| R-5.37 | acceptance/evaluation/R-5.37.spec.ts |  | fail |
+| R-5.37 | acceptance/evaluation/R-5.37.spec.ts |  | fail (ruled: defect-in-old) |
 
 ### R-5.1 · v1 · confirmed · accepted
 
@@ -58,6 +58,7 @@ An opportunity that uses a panel must name at least two panel members, each a pu
 - when: they save a panel of one person, or a panel naming the same person twice, or a panel naming two chairs, or a panel naming a vendor
 - then: the panel is rejected with a message naming the rule that was broken, and the opportunity keeps the panel it had
 - note: the minimum of two members is the same for both programs.
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-5.2 · v1 · confirmed · accepted
 
@@ -472,3 +473,4 @@ The two programs run the same evaluation from end to end, differing only in what
 
 A panel member who is neither an evaluator nor the chair must be refused by the service when the panel is submitted, with a field-level message identifying the offending member, rather than being allowed through to a database constraint violation.
 - replaces: R-5.15
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it

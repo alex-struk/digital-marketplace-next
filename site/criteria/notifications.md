@@ -5,23 +5,23 @@
 | id | test | new | old |
 | --- | --- | --- | --- |
 | R-6.1 | acceptance/notifications/R-6.1.spec.ts |  | fail |
-| R-6.2 | acceptance/notifications/R-6.2.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-6.2 | acceptance/notifications/R-6.2.spec.ts |  | pass |
 | R-6.3 | acceptance/notifications/R-6.3.spec.ts |  | pass |
-| R-6.4 | acceptance/notifications/R-6.4.spec.ts |  | unbound |
-| R-6.5 | acceptance/notifications/R-6.5.spec.ts |  | fail |
+| R-6.4 | acceptance/notifications/R-6.4.spec.ts |  | pass |
+| R-6.5 | acceptance/notifications/R-6.5.spec.ts |  | fail (ruled: defect-in-old) |
 | R-6.6 | acceptance/notifications/R-6.6.spec.ts |  | pass |
 | R-6.7 | acceptance/notifications/R-6.7.spec.ts |  | pass |
-| R-6.8 | acceptance/notifications/R-6.8.spec.ts |  | unbound |
+| R-6.8 | acceptance/notifications/R-6.8.spec.ts |  | pass |
 | R-6.9 | — |  | not-testable |
 | R-6.10 | — |  | pass |
 | R-6.11 | — |  | not-testable |
 | R-6.12 | — |  | not-testable |
 | R-6.13 | acceptance/notifications/R-6.13.spec.ts |  | pass |
 | R-6.14 | — |  | pass |
-| R-6.15 | acceptance/notifications/R-6.15.spec.ts |  | fail (ruled: adapter-wrong) |
-| R-6.16 | acceptance/notifications/R-6.16.spec.ts |  | unbound |
+| R-6.15 | acceptance/notifications/R-6.15.spec.ts |  | fail |
+| R-6.16 | acceptance/notifications/R-6.16.spec.ts |  | fail |
 | R-6.17 | acceptance/notifications/R-6.17.spec.ts |  | fail (ruled: defect-in-old) |
-| R-6.18 | acceptance/notifications/R-6.18.spec.ts |  | unbound |
+| R-6.18 | acceptance/notifications/R-6.18.spec.ts |  | pass |
 | R-6.19 | acceptance/notifications/R-6.19.spec.ts |  | fail (ruled: defect-in-old) |
 | R-6.20 | acceptance/notifications/R-6.20.spec.ts |  | unbound |
 | R-6.21 | acceptance/notifications/R-6.21.spec.ts |  | pass |
@@ -92,6 +92,7 @@ Every message is sent in both a formatted and a plain-text form, the plain text 
 - when: they open any message from the service
 - then: they see a readable plain-text rendering carrying the same words and links as the formatted version
 - note: nothing in the service composes plain-text copy of its own, so the plain-text form can only ever be as good as the automatic rendering of the formatted one.
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-6.6 · v2 · confirmed · accepted
 

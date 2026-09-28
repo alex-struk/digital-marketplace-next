@@ -12,13 +12,13 @@
 | R-1.6 | acceptance/opportunities/R-1.6.spec.ts |  | pass |
 | R-1.7 | acceptance/opportunities/R-1.7.spec.ts |  | unbound |
 | R-1.8 | acceptance/opportunities/R-1.8.spec.ts |  | pass |
-| R-1.9 | acceptance/opportunities/R-1.9.spec.ts |  | pass |
+| R-1.9 | acceptance/opportunities/R-1.9.spec.ts |  | fail |
 | R-1.10 | acceptance/opportunities/R-1.10.spec.ts |  | pass |
 | R-1.11 | acceptance/opportunities/R-1.11.spec.ts |  | pass |
 | R-1.12 | acceptance/opportunities/R-1.12.spec.ts |  | pass |
 | R-1.13 | acceptance/opportunities/R-1.13.spec.ts |  | pass |
 | R-1.14 | acceptance/opportunities/R-1.14.spec.ts |  | pass |
-| R-1.15 | acceptance/opportunities/R-1.15.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-1.15 | acceptance/opportunities/R-1.15.spec.ts |  | pass |
 | R-1.16 | acceptance/opportunities/R-1.16.spec.ts |  | unbound |
 | R-1.17 | acceptance/opportunities/R-1.17.spec.ts |  | fail (ruled: spec-wrong) |
 | R-1.18 | acceptance/opportunities/R-1.18.spec.ts |  | pass |
@@ -30,16 +30,16 @@
 | R-1.24 | acceptance/opportunities/R-1.24.spec.ts |  | pass |
 | R-1.25 | acceptance/opportunities/R-1.25.spec.ts |  | unbound |
 | R-1.26 | acceptance/opportunities/R-1.26.spec.ts |  | unbound |
-| R-1.27 | acceptance/opportunities/R-1.27.spec.ts |  | fail |
+| R-1.27 | acceptance/opportunities/R-1.27.spec.ts |  | fail (ruled: test-wrong) |
 | R-1.28 | acceptance/opportunities/R-1.28.spec.ts |  | pass |
 | R-1.29 | acceptance/opportunities/R-1.29.spec.ts |  | unbound |
 | R-1.30 | acceptance/opportunities/R-1.30.spec.ts |  | pass |
 | R-1.31 | acceptance/opportunities/R-1.31.spec.ts |  | pass |
 | R-1.32 | acceptance/opportunities/R-1.32.spec.ts |  | pass |
 | R-1.33 | acceptance/opportunities/R-1.33.spec.ts |  | unbound |
-| R-1.34 | acceptance/opportunities/R-1.34.spec.ts |  | fail (ruled: adapter-wrong) |
-| R-1.35 | acceptance/opportunities/R-1.35.spec.ts |  | unbound |
-| R-1.36 | acceptance/opportunities/R-1.36.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-1.34 | acceptance/opportunities/R-1.34.spec.ts |  | pass |
+| R-1.35 | acceptance/opportunities/R-1.35.spec.ts |  | pass |
+| R-1.36 | acceptance/opportunities/R-1.36.spec.ts |  | pass |
 | R-1.37 | acceptance/opportunities/R-1.37.spec.ts |  | pass |
 | R-1.38 | acceptance/opportunities/R-1.38.spec.ts |  | pass |
 | R-1.39 | acceptance/opportunities/R-1.39.spec.ts |  | pass |
@@ -59,7 +59,7 @@
 | R-1.52 | — |  |  |
 | R-1.53 | acceptance/opportunities/R-1.53.spec.ts |  | pass |
 | R-1.54 | — |  |  |
-| R-1.55 | acceptance/opportunities/R-1.55.spec.ts |  | fail |
+| R-1.55 | acceptance/opportunities/R-1.55.spec.ts |  | fail (ruled: defect-in-old) |
 | R-1.56 | acceptance/opportunities/R-1.56.spec.ts |  | pass |
 
 ### R-1.1 · v3 · confirmed · accepted
@@ -686,6 +686,7 @@ The author of a published opportunity, who is not an administrator, can change i
 
 A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named.
 - replaces: R-1.52
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.56 · v1 · confirmed · accepted
 

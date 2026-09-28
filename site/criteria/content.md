@@ -20,7 +20,7 @@
 | R-7.14 | — |  | not-testable |
 | R-7.15 | — |  | not-testable |
 | R-7.16 | acceptance/content/R-7.16.spec.ts |  | unbound |
-| R-7.17 | acceptance/content/R-7.17.spec.ts |  | fail |
+| R-7.17 | acceptance/content/R-7.17.spec.ts |  | fail (ruled: defect-in-old) |
 | R-7.18 | acceptance/content/R-7.18.spec.ts |  | fail (ruled: defect-in-old) |
 | R-7.19 | acceptance/content/R-7.19.spec.ts |  | pass |
 | R-7.20 | acceptance/content/R-7.20.spec.ts |  | fail (ruled: defect-in-old) |
@@ -245,6 +245,7 @@ A request refused for lack of permission is reported as a permission refusal, in
 
 A page's body is rendered as formatted text only; markup embedded in it is never executed, and the same body renders identically on the page's own address and wherever another screen embeds it.
 - replaces: R-7.14
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-7.18 · v1 · confirmed · accepted
 
