@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does this adapter bind every surface action and observation of mail-delivery-delay on old, and nothing else? Ruling: approve. The contract page lists slow_delivery, restore_delivery_speed and delivery_slowed, and all three are bound, plus open. Each call matches observables.yaml email.delivery_delay exactly: GET the toxics list, POST the 'hold' latency toxic with the contract's body, DELETE toxics/hold. delivery_slowed reports the delay as in force exactly when the list names a toxic called 'hold', which is the contract's own test for in-force. Accepting 409 on slow and 404 on restore makes each call idempotent, because either answer leaves the proxy in the state asked for; it decides nothing about whether a test passes. The binding copies the existing mailDeliveryFault binding beside it. Nothing under tests/acceptance changed. The runner's typecheck failed, but every diagnostic is in adapters/new/ and none is in adapters/old/. The compose file confirms that /hold is proxied to the toxiproxy control API on the mail port. What would change this: diagnostics in adapters/old/, or delivery_slowed reading anything other than whether 'hold' is listed. The earlier derive-tests conditions for R-1.34, R-1.36 and R-1.37, and the missing test for R-6.24 owed by derive-tests, are not settled by an adapter binding and stay open.
+conditions: []
+cost: 0.39334379999999997
+turns: 5
+session: "e1530579-e05d-4f8a-a09f-b2f8f9e0d708"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T05:14:51.264Z

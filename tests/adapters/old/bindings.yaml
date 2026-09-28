@@ -1215,6 +1215,13 @@ pages:
     observations:
       delivery_refused: bound
 
+  mail-delivery-delay:
+    actions:
+      slow_delivery: bound
+      restore_delivery_speed: bound
+    observations:
+      delivery_slowed: bound
+
   organization-acting-for-list:
     actions: {}
     observations:
