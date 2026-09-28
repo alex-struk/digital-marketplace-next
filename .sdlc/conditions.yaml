@@ -719,3 +719,14 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-28T22:09:40.277Z
+    closed:
+      outcome: met
+      why: tests/acceptance/organizations/R-3.9.spec.ts, test 'an invitation that is
+        not pending cannot be accepted', now requires the second
+        organizationUserMembershipsSelf.approveInvitation to be rejected (the
+        accept action is not offered for the now-active membership) and requires
+        acceptConfirmation() to show nothing, before re-checking that the
+        membership is active and still the invited person's; no exact message is
+        assumed
+      by: agent:reviewer
+      at: 2026-09-28T22:11:05.663Z
