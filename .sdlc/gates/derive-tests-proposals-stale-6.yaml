@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether the rewritten R-2.29 test follows from its criterion and nothing else. It does, and I approve it. Each clause is asserted for both programs. The proposal below a minimum outscores two carried proposals, so its being left behind tests the minimum rule and not its rank. The proposal just below the cut tests the ranking. The top four (Sprint With Us) and top three (Team With Us) must share a new history entry, gained on finalising, that no left-behind proposal gains. That establishes entry into the next stage without depending on the wording, which is what the R-2.29 redo item asked for. The test uses only contract surface methods (finalizeConsensusScores, confirmFinalizeConsensus, historyTab) and seeded fixtures whose manifest confirms the scores and the below-minimum flag. No selector, route or status label leaks in. No not-testable entry is needed because every clause is asserted. The runner's typecheck reports no diagnostics under acceptance/proposals; its failures are in adapters/new, which this proposal does not answer for. The applied.yaml removals drop the old calibration rulings on the previous version of this test. The ruling would change if a typecheck error surfaced in this file, or if calibration showed that left-behind proposals gain the same history entry as carried ones, which would mean the test cannot distinguish the two groups.
+conditions: []
+cost: 0.35066919999999996
+turns: 2
+session: "19cfc89d-78e2-4c49-8be6-67beba5f42b5"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T16:14:17.511Z

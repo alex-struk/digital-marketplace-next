@@ -34,3 +34,27 @@ The proposal below the minimum outscores two proposals that are carried. So its 
 **One assumption the contract doesn't state.** The test assumes `historyTab()` returns one history entry per line, so that different proposals' entries can be compared line by line. A status observation on the reviewer's proposal view would be a steadier signal than history text. The contract could add one to both proposal view pages, but the test does not need it.
 
 I changed nothing outside `tests/acceptance/proposals/R-2.29.spec.ts`. The open redo item for R-2.29 in `tests/acceptance/redo.yaml` is left for the runner to close.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+The question is whether the rewritten R-2.29 test follows from its criterion and nothing else. It does, and I approve it. Each clause is asserted for both programs. The proposal below a minimum outscores two carried proposals, so its being left behind tests the minimum rule and not its rank. The proposal just below the cut tests the ranking. The top four (Sprint With Us) and top three (Team With Us) must share a new history entry, gained on finalising, that no left-behind proposal gains. That establishes entry into the next stage without depending on the wording, which is what the R-2.29 redo item asked for. The test uses only contract surface methods (finalizeConsensusScores, confirmFinalizeConsensus, historyTab) and seeded fixtures whose manifest confirms the scores and the below-minimum flag. No selector, route or status label leaks in. No not-testable entry is needed because every clause is asserted. The runner's typecheck reports no diagnostics under acceptance/proposals; its failures are in adapters/new, which this proposal does not answer for. The applied.yaml removals drop the old calibration rulings on the previous version of this test. The ruling would change if a typecheck error surfaced in this file, or if calibration showed that left-behind proposals gain the same history entry as carried ones, which would mean the test cannot distinguish the two groups.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `8be331bb387b824517d52dbfb356368f48086517`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/proposals/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
