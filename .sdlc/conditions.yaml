@@ -499,3 +499,55 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-09-28T18:04:34.081Z
+  - ref: bind-adapter-old-27#1
+    text: "tests/adapters/old/index.ts evaluationConsensusList: bind
+      submitFinalConsensusScores to the top-bar control labelled 'Submit Final
+      Consensus Scores' and nothing else. The target shows it to the chair at
+      consensus in place of 'Finalize Consensus Scores' whenever a consensus is
+      still a draft, or the chair is not an administrator. The run-27 probe
+      looked only as the administrator with no draft consensus present, so it
+      saw only Finalize. Where the top bar shows 'Finalize Consensus Scores'
+      instead, or nothing, report that as the page's refusal or state. Never
+      press Finalize."
+    from: bind-adapter-old-27
+    family: bind-adapter-old
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-09-28T18:07:48.971Z
+  - ref: bind-adapter-old-27#2
+    text: "tests/adapters/old/index.ts evaluationConsensusList: bind
+      confirmSubmitConsensus to the 'Submit Final Consensus Scores' button
+      inside the 'Please Confirm' dialog that the submit control opens. The
+      dialog's body begins 'By submitting this consensus, you, as the chair...'.
+      Wait for the outcome notice ('Consensuses Submitted' or 'Unable to Submit
+      Consensuses'), the same way confirmFinalize waits for its own notice. Do
+      not accept a dialog whose button is 'Finalize Consensus Scores'."
+    from: bind-adapter-old-27
+    family: bind-adapter-old
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-09-28T18:07:48.971Z
+  - ref: bind-adapter-old-27#3
+    text: "tests/adapters/old/index.ts evaluationConsensusList:
+      submitConfirmationModal must read only the submit confirmation (the dialog
+      whose action is 'Submit Final Consensus Scores') and answer empty for the
+      finalize confirmation. Today it returns whatever dialog is open."
+    from: bind-adapter-old-27
+    family: bind-adapter-old
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-09-28T18:07:48.971Z
+  - ref: bind-adapter-old-27#4
+    text: "tests/adapters/old/bindings.yaml evaluation-consensus-list-swu and
+      evaluation-consensus-list-twu: set submit_final_consensus_scores and
+      confirm_submit_consensus back to bound, in line with index.ts once the
+      conditions above are done."
+    from: bind-adapter-old-27
+    family: bind-adapter-old
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-09-28T18:07:48.971Z
