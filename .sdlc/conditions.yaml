@@ -245,6 +245,15 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-09-28T03:32:33.460Z
+    closed:
+      outcome: met
+      why: "signIn in tests/adapters/old/index.ts throws 'unbound:
+        signIn.deactivated-vendor — …' for the deactivated-vendor persona
+        instead of driving the session route, naming github.com vendor sign-in
+        with no sandbox account and the session route's missing account-status
+        check"
+      by: agent:reviewer
+      at: 2026-09-28T03:34:38.005Z
   - ref: bind-adapter-old-19#2
     text: "R-5.1, R-1.55: panelRefusal must not fall back to the general alert
       ('Unable to Publish Changes ... Please fix the errors in the form') when
@@ -259,3 +268,12 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-09-28T03:32:33.460Z
+    closed:
+      outcome: met
+      why: panelRefusal in tests/adapters/old/index.ts returns only alerts and field
+        errors matching the asked fault's own pattern, with no fallback to the
+        general 'Unable to Publish Changes' alert; duplicateMemberError,
+        minimumMembersError and missingChairError each use it and read empty
+        when the page names no such fault
+      by: agent:reviewer
+      at: 2026-09-28T03:34:38.008Z
