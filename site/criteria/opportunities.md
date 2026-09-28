@@ -18,7 +18,7 @@
 | R-1.12 | acceptance/opportunities/R-1.12.spec.ts |  | pass |
 | R-1.13 | acceptance/opportunities/R-1.13.spec.ts |  | pass |
 | R-1.14 | acceptance/opportunities/R-1.14.spec.ts |  | pass |
-| R-1.15 | acceptance/opportunities/R-1.15.spec.ts |  | fail |
+| R-1.15 | acceptance/opportunities/R-1.15.spec.ts |  | fail (ruled: adapter-wrong) |
 | R-1.16 | acceptance/opportunities/R-1.16.spec.ts |  | unbound |
 | R-1.17 | acceptance/opportunities/R-1.17.spec.ts |  | fail (ruled: spec-wrong) |
 | R-1.18 | acceptance/opportunities/R-1.18.spec.ts |  | pass |
@@ -37,9 +37,9 @@
 | R-1.31 | acceptance/opportunities/R-1.31.spec.ts |  | pass |
 | R-1.32 | acceptance/opportunities/R-1.32.spec.ts |  | pass |
 | R-1.33 | acceptance/opportunities/R-1.33.spec.ts |  | unbound |
-| R-1.34 | acceptance/opportunities/R-1.34.spec.ts |  | fail |
+| R-1.34 | acceptance/opportunities/R-1.34.spec.ts |  | fail (ruled: adapter-wrong) |
 | R-1.35 | acceptance/opportunities/R-1.35.spec.ts |  | unbound |
-| R-1.36 | acceptance/opportunities/R-1.36.spec.ts |  | fail |
+| R-1.36 | acceptance/opportunities/R-1.36.spec.ts |  | fail (ruled: adapter-wrong) |
 | R-1.37 | acceptance/opportunities/R-1.37.spec.ts |  | pass |
 | R-1.38 | acceptance/opportunities/R-1.38.spec.ts |  | pass |
 | R-1.39 | acceptance/opportunities/R-1.39.spec.ts |  | pass |

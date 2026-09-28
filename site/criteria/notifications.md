@@ -5,7 +5,7 @@
 | id | test | new | old |
 | --- | --- | --- | --- |
 | R-6.1 | acceptance/notifications/R-6.1.spec.ts |  | fail |
-| R-6.2 | acceptance/notifications/R-6.2.spec.ts |  | fail |
+| R-6.2 | acceptance/notifications/R-6.2.spec.ts |  | fail (ruled: adapter-wrong) |
 | R-6.3 | acceptance/notifications/R-6.3.spec.ts |  | pass |
 | R-6.4 | acceptance/notifications/R-6.4.spec.ts |  | unbound |
 | R-6.5 | acceptance/notifications/R-6.5.spec.ts |  | fail |
@@ -18,7 +18,7 @@
 | R-6.12 | — |  | not-testable |
 | R-6.13 | acceptance/notifications/R-6.13.spec.ts |  | pass |
 | R-6.14 | — |  | pass |
-| R-6.15 | acceptance/notifications/R-6.15.spec.ts |  | fail |
+| R-6.15 | acceptance/notifications/R-6.15.spec.ts |  | fail (ruled: adapter-wrong) |
 | R-6.16 | acceptance/notifications/R-6.16.spec.ts |  | unbound |
 | R-6.17 | acceptance/notifications/R-6.17.spec.ts |  | fail (ruled: defect-in-old) |
 | R-6.18 | acceptance/notifications/R-6.18.spec.ts |  | unbound |

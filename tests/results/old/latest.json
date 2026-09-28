@@ -2,7 +2,7 @@
   "target": "old",
   "base_url": "http://localhost:4300",
   "spec": "f31700e000484947669c48e50cf9c73b4d1e20c7",
-  "at": "2026-09-28T06:34:57.583Z",
+  "at": "2026-09-28T06:42:16.654Z",
   "rows": [
     {
       "id": "R-7.1",
@@ -257,7 +257,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"Formatting marks make these words bold. Raw markup tries to make these words bold and these words emphasised.\"\u001b[39m\nReceived: \u001b[31m\"Formatting marks make these words bold. Raw markup tries to make \u001b[7m<strong>\u001b[27mthese words bold\u001b[7m</strong>\u001b[27m and \u001b[7m<em>\u001b[27mthese words emphasised\u001b[7m</em>\u001b[27m.\"\u001b[39m"
         }
       ],
-      "file_sha": "2689de36626ce6f93749a3624afb2c790c59d6d8"
+      "file_sha": "2689de36626ce6f93749a3624afb2c790c59d6d8",
+      "triage": "product-question"
     },
     {
       "id": "R-7.18",
@@ -516,7 +517,8 @@
           "status": "passed"
         }
       ],
-      "file_sha": "90c0a508bc20bf74c7e5ad29d795148ae2a78650"
+      "file_sha": "90c0a508bc20bf74c7e5ad29d795148ae2a78650",
+      "triage": "product-question"
     },
     {
       "id": "R-5.3",
@@ -681,7 +683,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m63\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate"
         }
       ],
-      "file_sha": "96f37c978bfba9dd62cc32ce4ce6224375266783"
+      "file_sha": "96f37c978bfba9dd62cc32ce4ce6224375266783",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.18",
@@ -914,7 +917,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "file_sha": "35f28c91536a398f7e7c1adf28fc6a2196df3d85"
+      "file_sha": "35f28c91536a398f7e7c1adf28fc6a2196df3d85",
+      "triage": "product-question"
     },
     {
       "id": "R-5.30",
@@ -1059,7 +1063,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m"
         }
       ],
-      "file_sha": "af446ae7f9f0d180d2644b15ee8c188723a3dcbc"
+      "file_sha": "af446ae7f9f0d180d2644b15ee8c188723a3dcbc",
+      "triage": "product-question"
     },
     {
       "id": "R-8.1",
@@ -1594,7 +1599,8 @@
           "error": "Error: unbound: proposal-cwu-edit.save_changes — no control labelled \"Save Changes\" on http://localhost:3101/opportunities/code-with-us/92099319-5173-49f4-83ba-f6d427b13e11/proposals/ff433f35-bd78-4621-933c-fd6082aca71a/edit"
         }
       ],
-      "file_sha": "a72499e5b6e5c7fd4a8c8935e2980ec8f980d6bc"
+      "file_sha": "a72499e5b6e5c7fd4a8c8935e2980ec8f980d6bc",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-6.1",
@@ -1609,7 +1615,8 @@
         }
       ],
       "error": "no result recorded",
-      "file_sha": "5274e6f0b1dfd4f2e68afc7f6293522e8e62c67a"
+      "file_sha": "5274e6f0b1dfd4f2e68afc7f6293522e8e62c67a",
+      "triage": "product-question"
     },
     {
       "id": "R-6.2",
@@ -1624,7 +1631,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: not \u001b[32m/deliver|undeliver|bounce|could not be sent|failed to send/\u001b[39m\nReceived string:      \u001b[31m\"summary\u001b[39m\n\u001b[31msummary\u001b[39m\n\u001b[31mopportunity management\u001b[39m\n\u001b[31mopportunity\u001b[39m\n\u001b[31maddenda\u001b[39m\n\u001b[31mhistory\u001b[39m\n\u001b[31mopportunity evaluation\u001b[39m\n\u001b[31mproposals\u001b[39m\n\u001b[31mneed help?\u001b[39m\n\u001b[31mread guide\u001b[39m\n\u001b[31mcode with us: r-6.2 opportunity published while mail cannot be \u001b[7mdeliver\u001b[27med\u001b[39m\n\u001b[31mpublished sep 27, 2026\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mupdated sep 27, 2026\u001b[39m\n\u001b[31mstatus\u001b[39m\n\u001b[31mpublished\u001b[39m\n\u001b[31mcreated by\u001b[39m\n\u001b[31mrobin placeholder\u001b[39m\n\u001b[31mhistory\u001b[39m\n\u001b[31mentry type\tnote\tcreated\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mpublished\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m—\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31msep 27, 2026\u001b[39m\n\u001b[31m11:06 pm pdt\u001b[39m\n\u001b[31mrobin placeholder\"\u001b[39m"
         }
       ],
-      "file_sha": "45743f1c89227564c8248c167b730400e3e025dd"
+      "file_sha": "45743f1c89227564c8248c167b730400e3e025dd",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-6.3",
@@ -1668,7 +1676,8 @@
           "error": "Error: words of \"[TEST] Our Terms and Conditions Have Been Updated\" written in its plain text but nowhere in the formatted\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 3\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   \"updatedthe\",\u001b[39m\n\u001b[31m+ ]\u001b[39m"
         }
       ],
-      "file_sha": "0b80488201f94a0446679a23a43672088208f6e2"
+      "file_sha": "0b80488201f94a0446679a23a43672088208f6e2",
+      "triage": "product-question"
     },
     {
       "id": "R-6.6",
@@ -1804,7 +1813,8 @@
           "error": "Error: unbound: evaluation-consensus-list-twu.submit_final_consensus_scores — no control labelled \"Submit Consensus Scores\" or \"Submit Scores\" or \"Submit\" on http://localhost:3100/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab=consensus"
         }
       ],
-      "file_sha": "6f0039750ad77cbe645a2b1b5be45cce814cc2a7"
+      "file_sha": "6f0039750ad77cbe645a2b1b5be45cce814cc2a7",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-6.16",
@@ -2326,7 +2336,8 @@
           "error": "Error: opportunity-twu-create.publish — \"Publish\" is disabled on http://localhost:3100/opportunities/team-with-us/create; the form marks \"7. Scoring\" incomplete; the form shows: The scoring weights should total 100% exactly."
         }
       ],
-      "file_sha": "66c28d7572254af0bbcd242fac850a529eaf1446"
+      "file_sha": "66c28d7572254af0bbcd242fac850a529eaf1446",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.16",
@@ -2591,7 +2602,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate"
         }
       ],
-      "file_sha": "2f51f85116408924d12d0efc939645dff0033326"
+      "file_sha": "2f51f85116408924d12d0efc939645dff0033326",
+      "triage": "product-question"
     },
     {
       "id": "R-1.28",
@@ -2740,7 +2752,8 @@
           "error": "Error: the catcher was emptied\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m424\u001b[39m"
         }
       ],
-      "file_sha": "da03866dfe5ec05521978621856b6028ec9957af"
+      "file_sha": "da03866dfe5ec05521978621856b6028ec9957af",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.35",
@@ -2775,7 +2788,8 @@
           "error": "Error: the catcher was emptied\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m0\u001b[39m\nReceived: \u001b[31m21\u001b[39m"
         }
       ],
-      "file_sha": "7c0ae541f80d0b66caeb2e45734d46b42bc0c7a9"
+      "file_sha": "7c0ae541f80d0b66caeb2e45734d46b42bc0c7a9",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.37",
@@ -3124,7 +3138,8 @@
           "status": "passed"
         }
       ],
-      "file_sha": "52cf76ee83d97fd60ffaf017c98ca6f510088b97"
+      "file_sha": "52cf76ee83d97fd60ffaf017c98ca6f510088b97",
+      "triage": "product-question"
     },
     {
       "id": "R-1.56",
@@ -3983,7 +3998,8 @@
           "status": "passed"
         }
       ],
-      "file_sha": "c2426e97377c13e81d44003cac403286f60284dc"
+      "file_sha": "c2426e97377c13e81d44003cac403286f60284dc",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.15",
@@ -4311,7 +4327,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/challenge/\u001b[39m\nReceived string:  \u001b[31m\"team questions score entered | resource question scores were entered. q1: 5; q2: 5; q3: 5; q4: 5. | sep 27, 2026 11:30 pm pdt robin placeholder\u001b[39m\n\u001b[31munder review (c) | — | sep 27, 2026 11:30 pm pdt robin placeholder\u001b[39m\n\u001b[31munder review (q) | — | aug 29, 2026 11:30 pm pdt system\u001b[39m\n\u001b[31msubmitted | — | aug 18, 2026 11:30 pm pdt blake placeholder\u001b[39m\n\u001b[31mdraft | — | aug 8, 2026 11:30 pm pdt blake placeholder\"\u001b[39m\n\nCall Log:\n- Timeout 30000ms exceeded while waiting on the predicate"
         }
       ],
-      "file_sha": "4ec2668f5d20ed62691be39ced1d2529f837c9a1"
+      "file_sha": "4ec2668f5d20ed62691be39ced1d2529f837c9a1",
+      "triage": "product-question"
     },
     {
       "id": "R-2.30",
@@ -4705,7 +4722,8 @@
           "status": "passed"
         }
       ],
-      "file_sha": "312431e4b9300abac886c8a5130a43ead5368569"
+      "file_sha": "312431e4b9300abac886c8a5130a43ead5368569",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-4.16",

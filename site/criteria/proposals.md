@@ -17,7 +17,7 @@
 | R-2.11 | acceptance/proposals/R-2.11.spec.ts |  | unbound |
 | R-2.12 | acceptance/proposals/R-2.12.spec.ts |  | pass |
 | R-2.13 | acceptance/proposals/R-2.13.spec.ts |  | pass |
-| R-2.14 | acceptance/proposals/R-2.14.spec.ts |  | fail |
+| R-2.14 | acceptance/proposals/R-2.14.spec.ts |  | fail (ruled: adapter-wrong) |
 | R-2.15 | acceptance/proposals/R-2.15.spec.ts |  | pass |
 | R-2.16 | acceptance/proposals/R-2.16.spec.ts |  | unbound |
 | R-2.17 | acceptance/proposals/R-2.17.spec.ts |  | unbound |
