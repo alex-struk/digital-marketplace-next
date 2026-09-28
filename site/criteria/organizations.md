@@ -16,7 +16,7 @@
 | R-3.10 | acceptance/organizations/R-3.10.spec.ts |  | unbound |
 | R-3.11 | acceptance/organizations/R-3.11.spec.ts |  | unbound |
 | R-3.12 | acceptance/organizations/R-3.12.spec.ts |  | pass |
-| R-3.13 | acceptance/organizations/R-3.13.spec.ts |  | fail |
+| R-3.13 | acceptance/organizations/R-3.13.spec.ts |  | pass |
 | R-3.14 | acceptance/organizations/R-3.14.spec.ts |  | pass |
 | R-3.15 | acceptance/organizations/R-3.15.spec.ts |  | unbound |
 | R-3.16 | — |  |  |

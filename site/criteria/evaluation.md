@@ -20,11 +20,11 @@
 | R-5.14 | acceptance/evaluation/R-5.14.spec.ts |  | unbound |
 | R-5.15 | — |  |  |
 | R-5.16 | acceptance/evaluation/R-5.16.spec.ts |  | unbound |
-| R-5.17 | acceptance/evaluation/R-5.17.spec.ts |  | fail (ruled: test-wrong) |
+| R-5.17 | acceptance/evaluation/R-5.17.spec.ts |  | fail |
 | R-5.18 | acceptance/evaluation/R-5.18.spec.ts |  | pass (ruled: spec-wrong) |
 | R-5.19 | acceptance/evaluation/R-5.19.spec.ts |  | unbound |
 | R-5.20 | acceptance/evaluation/R-5.20.spec.ts |  | pass (ruled: defect-in-old) |
-| R-5.21 | acceptance/evaluation/R-5.21.spec.ts |  | fail (ruled: test-wrong) |
+| R-5.21 | acceptance/evaluation/R-5.21.spec.ts |  | pass |
 | R-5.22 | acceptance/evaluation/R-5.22.spec.ts |  | pass |
 | R-5.23 | acceptance/evaluation/R-5.23.spec.ts |  | unbound |
 | R-5.24 | acceptance/evaluation/R-5.24.spec.ts |  | pass |

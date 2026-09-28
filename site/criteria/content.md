@@ -15,7 +15,7 @@
 | R-7.9 | acceptance/content/R-7.9.spec.ts |  | pass |
 | R-7.10 | acceptance/content/R-7.10.spec.ts |  | unbound |
 | R-7.11 | — |  | not-testable |
-| R-7.12 | acceptance/content/R-7.12.spec.ts |  | fail |
+| R-7.12 | acceptance/content/R-7.12.spec.ts |  | pass |
 | R-7.13 | acceptance/content/R-7.13.spec.ts |  | pass |
 | R-7.14 | — |  | not-testable |
 | R-7.15 | — |  | not-testable |
@@ -25,7 +25,7 @@
 | R-7.19 | acceptance/content/R-7.19.spec.ts |  | pass |
 | R-7.20 | acceptance/content/R-7.20.spec.ts |  | fail (ruled: defect-in-old) |
 | R-7.21 | acceptance/content/R-7.21.spec.ts |  | pass |
-| R-7.22 | acceptance/content/R-7.22.spec.ts |  | fail |
+| R-7.22 | acceptance/content/R-7.22.spec.ts |  | pass |
 | R-7.23 | acceptance/content/R-7.23.spec.ts |  | pass |
 | R-7.24 | acceptance/content/R-7.24.spec.ts |  | pass |
 | R-7.25 | acceptance/content/R-7.25.spec.ts |  | unbound |
