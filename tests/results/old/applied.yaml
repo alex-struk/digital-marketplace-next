@@ -344,16 +344,6 @@ rulings:
     version: 1
     verb: defect-in-old
     gate: calibrate-old-10
-  - id: R-2.4
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-18
-    adapter: 7dee6fd5bcbf26aa11564454fd353a454b548e7c
-  - id: R-2.10
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-18
-    adapter: 7dee6fd5bcbf26aa11564454fd353a454b548e7c
   - id: R-8.2
     version: 1
     verb: product-question
@@ -374,41 +364,6 @@ rulings:
     version: 1
     verb: product-question
     gate: calibrate-triage-old-18
-  - id: R-5.16
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-18
-    adapter: 7dee6fd5bcbf26aa11564454fd353a454b548e7c
-  - id: R-2.17
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-18
-    adapter: 7dee6fd5bcbf26aa11564454fd353a454b548e7c
-  - id: R-2.20
-    version: 2
-    verb: adapter-wrong
-    gate: calibrate-triage-old-18
-    adapter: 7dee6fd5bcbf26aa11564454fd353a454b548e7c
-  - id: R-8.20
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-18
-    adapter: 7dee6fd5bcbf26aa11564454fd353a454b548e7c
-  - id: R-2.22
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-18
-    adapter: 7dee6fd5bcbf26aa11564454fd353a454b548e7c
-  - id: R-2.28
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-18
-    adapter: 7dee6fd5bcbf26aa11564454fd353a454b548e7c
-  - id: R-2.31
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-18
-    adapter: 7dee6fd5bcbf26aa11564454fd353a454b548e7c
   - id: R-5.14
     version: 1
     verb: defect-in-old
