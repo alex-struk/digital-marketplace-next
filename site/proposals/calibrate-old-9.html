@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-old-9 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">205</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">201</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">176</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-old-9</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-09-28 06:42</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr></tbody></table></div>
+<div class="body"><h2>9 criterion(s) fail against old: which of them is the application&#39;s fault, which the spec&#39;s, and which the test&#39;s?</h2>
+<p><strong>Recommendation.</strong> Rule on R-5.1, R-6.1, R-6.5, R-7.17, R-1.27, R-2.29, R-5.29, R-5.37, R-1.55 with a calibration condition, so the next calibrate run can apply it.</p>
+<p>9 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:4300,">http://localhost:4300,</a> with no ruling yet. The tests are blind: they were written from the criteria alone, by an agent that never saw the application. So a failure means one of exactly three things, and only you can say which: the application is wrong, the criterion is wrong, or the test is wrong.</p>
+<p>Rule on each one below. Until every failure carries a ruling, this question is asked again on every calibration run.</p>
+<h4>R-5.1 · v1</h4>
+<p>An opportunity that uses a panel must name at least two panel members, each a public sector employee, each named only once, and at most one of them marked as chair.</p>
+<ul><li>given: a public sector employee setting the evaluation panel of a Sprint With Us or Team With Us opportunity</li><li>when: they save a panel of one person, or a panel naming the same person twice, or a panel naming two chairs, or a panel naming a vendor</li><li>then: the panel is rejected with a message naming the rule that was broken, and the opportunity keeps the panel it had</li><li>test: tests/acceptance/evaluation/R-5.1.spec.ts</li></ul>
+<p><strong>An opportunity that uses a panel must name at least two panel members, each a public sector employee, each named only once, and at most one of them marked as chair. (a panel naming the same person twice is rejected with the rule named, and the opportunity keeps the panel it had)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-6.1 · v1</h4>
+<p>When notifications are switched off for an environment, nothing the service does sends a message, and every action that would have sent one still completes normally.</p>
+<ul><li>given: a service configured with notifications disabled</li><li>when: a person does something that would ordinarily notify somebody, such as publishing an opportunity</li><li>then: the action succeeds and reports success, and no message is sent to anybody</li><li>test: tests/acceptance/notifications/R-6.1.spec.ts</li></ul>
+<pre><code>no result recorded</code></pre>
+<h4>R-6.5 · v1</h4>
+<p>Every message is sent in both a formatted and a plain-text form, the plain text being a rendering of the formatted version rather than separately written copy.</p>
+<ul><li>given: a reader whose mail program shows plain text only</li><li>when: they open any message from the service</li><li>then: they see a readable plain-text rendering carrying the same words and links as the formatted version</li><li>test: tests/acceptance/notifications/R-6.5.spec.ts</li></ul>
+<p><strong>Every message is sent in both a formatted and a plain-text form, the plain text being a rendering of the formatted version rather than separately written copy.</strong> — failed</p>
+<pre><code>Error: words of &quot;[TEST] Our Terms and Conditions Have Been Updated&quot; written in its plain text but nowhere in the formatted
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoEqual[2m([22m[32mexpected[39m[2m) // deep equality[22m
+
+[32m- Expected  - 1[39m
+[31m+ Received  + 3[39m
+
+[32m- Array [][39m
+[31m+ Array [[39m
+[31m+   &quot;updatedthe&quot;,[39m
+[31m+ ][39m</code></pre>
+<h4>R-7.17 · v1</h4>
+<p>A page&#39;s body is rendered as formatted text only; markup embedded in it is never executed, and the same body renders identically on the page&#39;s own address and wherever another screen embeds it.</p>
+<ul><li>test: tests/acceptance/content/R-7.17.spec.ts</li></ul>
+<p><strong>the same body renders identically on the page&#39;s own address and wherever another screen embeds it</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m&quot;Formatting marks make these words bold. Raw markup tries to make these words bold and these words emphasised.&quot;[39m
+Received: [31m&quot;Formatting marks make these words bold. Raw markup tries to make [7m&lt;strong&gt;[27mthese words bold[7m&lt;/strong&gt;[27m and [7m&lt;em&gt;[27mthese words emphasised[7m&lt;/em&gt;[27m.&quot;[39m</code></pre>
+<h4>R-1.27 · v1</h4>
+<p>An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score.</p>
+<ul><li>given: an awarded opportunity</li><li>when: a visitor who may not see proposal scores views it</li><li>then: the successful proponent&#39;s name is shown and their contact details and score are withheld</li><li>test: tests/acceptance/opportunities/R-1.27.spec.ts</li></ul>
+<p><strong>An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score. (Code With Us: a visitor who may not see proposal scores)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/awarded/[39m
+Received string:  [31m&quot;completed&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score. (Code With Us: a reader permitted to see proposal scores)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score. (Sprint With Us: a visitor who may not see proposal scores)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/awarded/[39m
+Received string:  [31m&quot;completed&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score. (Sprint With Us: a reader permitted to see proposal scores)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-2.29 · v1</h4>
+<p>After the questions of a Sprint With Us or Team With Us opportunity have been scored, only proposals meeting every question&#39;s minimum score are ranked by that score and the highest few are carried into the next stage.</p>
+<ul><li>given: a Sprint With Us opportunity with six proposals scored on its questions, one of them below a question&#39;s minimum score</li><li>when: the panel&#39;s agreed scores are finalised</li><li>then: the proposal below the minimum is left behind, the remaining five are ranked by their question score and the top four move to the code challenge, while on a Team With Us opportunity the top three move to the challenge</li><li>test: tests/acceptance/proposals/R-2.29.spec.ts</li></ul>
+<p><strong>After the questions of a Sprint With Us or Team With Us opportunity have been scored, only proposals meeting every question&#39;s minimum score are ranked by that score and the highest few are carried into the next stage. (Sprint With Us)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/code challenge/[39m
+Received string:  [31m&quot;team questions score entered | team question scores were entered. q1: 5; q2: 5; q3: 5; q4: 5. | sep 27, 2026 11:29 pm pdt robin placeholder[39m
+[31munder review (cc) | — | sep 27, 2026 11:29 pm pdt robin placeholder[39m
+[31munder review (tq) | — | aug 29, 2026 11:29 pm pdt system[39m
+[31msubmitted | — | aug 18, 2026 11:29 pm pdt blake placeholder[39m
+[31mdraft | — | aug 8, 2026 11:29 pm pdt blake placeholder&quot;[39m
+
+Call Log:
+- Timeout 30000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>After the questions of a Sprint With Us or Team With Us opportunity have been scored, only proposals meeting every question&#39;s minimum score are ranked by that score and the highest few are carried into the next stage. (Team With Us)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/challenge/[39m
+Received string:  [31m&quot;team questions score entered | resource question scores were entered. q1: 5; q2: 5; q3: 5; q4: 5. | sep 27, 2026 11:30 pm pdt robin placeholder[39m
+[31munder review (c) | — | sep 27, 2026 11:30 pm pdt robin placeholder[39m
+[31munder review (q) | — | aug 29, 2026 11:30 pm pdt system[39m
+[31msubmitted | — | aug 18, 2026 11:30 pm pdt blake placeholder[39m
+[31mdraft | — | aug 8, 2026 11:30 pm pdt blake placeholder&quot;[39m
+
+Call Log:
+- Timeout 30000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-5.29 · v1</h4>
+<p>Only the chair may record and change the consensus, one consensus per proponent, and only while the opportunity is in consensus.</p>
+<ul><li>given: an opportunity in consensus</li><li>when: an evaluator who is not the chair tries to record an agreed score for a proponent, and the chair records a second consensus for a proponent they have already agreed</li><li>then: the evaluator&#39;s attempt is refused, and the chair&#39;s second attempt is refused as a duplicate</li><li>test: tests/acceptance/evaluation/R-5.29.spec.ts</li></ul>
+<p><strong>only the chair may record the consensus, and only one consensus per proponent</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-5.37 · v1</h4>
+<p>A panel member who is neither an evaluator nor the chair must be refused by the service when the panel is submitted, with a field-level message identifying the offending member, rather than being allowed through to a database constraint violation.</p>
+<ul><li>test: tests/acceptance/evaluation/R-5.37.spec.ts</li></ul>
+<p><strong>A panel member who is neither an evaluator nor the chair must be refused by the service when the panel is submitted, with a field-level message identifying the offending member, rather than being allowed through to a database constraint violation</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32mtrue[39m
+Received: [31mfalse[39m</code></pre>
+<h4>R-1.55 · v1</h4>
+<p>A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named.</p>
+<ul><li>test: tests/acceptance/opportunities/R-1.55.spec.ts</li></ul>
+<p><strong>A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Sprint With Us: the same person twice)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Sprint With Us: no chair)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Team With Us: the same person twice)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>A Sprint With Us or Team With Us opportunity must name an evaluation panel of at least two distinct public sector employees, exactly one of whom is the chair; a submission with fewer than two members, the same person twice, no chair, more than one chair, or anyone who is not a public sector employee is rejected and the reason is named. (Team With Us: no chair)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<h3>Calibration conditions</h3>
+<p>One condition per line, and exactly one of these forms:</p>
+<ul><li><code>defect-in-old &lt;ID&gt;</code> — the old application really does fail this and the criterion is right anyway. The test stands as written and the rebuild has to pass it; the criterion keeps a note saying so. No text after the ID.</li><li><code>spec-wrong &lt;ID&gt;: &lt;corrected statement&gt;</code> — the criterion misdescribes what the old application does. The statement is replaced and its version bumped, which marks the test stale so <code>derive-tests --stale</code> writes it again from the corrected criterion.</li><li><code>test-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion is right and the test is not. The id goes to <code>tests/acceptance/redo.yaml</code> for <code>derive-tests</code> to redo, still blind, and <code>&lt;why&gt;</code> records what the test got wrong without describing how the application is built.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. <code>defect-in-old</code> takes no text; the other two require a colon and text on the same line. A condition may not span more than one line.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-09-28 06:46.</p>
+<div class="body"><p>Question: which of the nine calibration failures against old are the application&#39;s fault, which the spec&#39;s, and which the test&#39;s? Ruling: approve with eight conditions. Each was checked against the old source. Five are defects in old. R-5.1 and R-1.55: the service refuses a panel naming the same person twice with a panel-level message, but the panel form&#39;s error handler (swu-evaluation-panel.tsx setErrors) maps only per-member user and chair errors, so the panel-level reason never reaches the person; the service also has no check at all for a panel with no chair and relies on the form&#39;s separate chair field, and when the no-chair case is forced no reason is named. The criteria are right that a refused panel must say why, so the rebuild owes it. R-5.37: the only guard against a member who is neither evaluator nor chair is the evaluatorOrChair database constraint, with no service-level validation, which is exactly the defect the criterion was written to correct. R-7.17: the content page&#39;s own address renders the body with raw HTML enabled (content/view.tsx:118, escapeHtml={false}) while every embedding escapes it, so the same body renders two ways; the criterion&#39;s consistency requirement is the right contract. R-6.5: the plain text is generated from the HTML (html-to-text in transport.ts), so it is a rendering as the criterion requires, but the conversion runs words together (&#39;updatedthe&#39;), which breaks &#39;the same words&#39;; the rebuild must render cleanly. Three are test faults, where old behaves as the criterion says. R-5.29: the service refuses a consensus from a non-chair (createTWUResourceQuestionResponseConsensus requires the chair) and refuses a second one for the same proposal, but the test reads only whether a form is offered and demands a message the criterion never promises. R-2.29: the carried proposals&#39; histories record the move to the next stage under a shortened label, and the test required the literal words &#39;code challenge&#39;. R-1.27: the old app deliberately shows the public a generic label for an awarded opportunity, and the test used the word &#39;awarded&#39; as its precondition; it also required the score and contact details on the opportunity&#39;s own page, while the criterion does not say where permitted readers see them and old shows them where the proposal is read. R-6.1 is deliberately left unruled. The oracle was never started with notifications disabled, so no result exists and none of the three verbs is true of it; any verb would put a falsehood on the record. It is unblocked by starting an oracle copy with SDLC_ORACLE_DISABLE_NOTIFICATIONS=1 and exporting that setting to the test run, not by a product ruling. What would change this ruling: evidence that old names the panel refusal reasons somewhere the person can see them (R-5.1, R-1.55 would become test-wrong), or evidence that permitted readers never see the successful proponent&#39;s contact details anywhere (R-1.27 would become spec-wrong).</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>defect-in-old R-5.1</li><li>defect-in-old R-1.55</li><li>defect-in-old R-5.37</li><li>defect-in-old R-7.17</li><li>defect-in-old R-6.5</li><li>test-wrong R-5.29: the test reads whether the evaluator who is not the chair is offered somewhere to record a consensus, but the criterion says that person&#39;s attempt is refused, not that nothing is offered; have that evaluator make the attempt and establish afterwards that no consensus of theirs was recorded for the proponent. The criterion promises no message for the chair&#39;s second attempt either, and the chair may change the consensus they already agreed, so count the chair&#39;s second attempt as refused when exactly one consensus exists for that proponent afterwards, whether or not a notice is shown</li><li>test-wrong R-2.29: the criterion names a stage, not the words shown for it; the test required the literal words &#39;code challenge&#39; or &#39;challenge&#39; in each proposal&#39;s history, but the history can record the move under a shortened label, so carried proposals read as left behind and a missing word proves nothing for the proposals left behind; establish from each proposal&#39;s history whether a new stage was entered after finalising, not whether a particular label appears</li><li>test-wrong R-1.27: the test takes the word &#39;awarded&#39; in the status a visitor sees as proof of the award, but the criterion names the award, not a label, and a visitor may be shown a different word for the same state; establish the award from the successful proponent being named. For the reader permitted to see scores, the test looks for the contact details and score only on the opportunity&#39;s own page, but the criterion does not say where they are shown; read them wherever that reader is shown the successful proposal, and keep checking that a visitor is shown neither anywhere they can reach</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
