@@ -6,7 +6,7 @@
 | --- | --- | --- | --- |
 | R-4.1 | acceptance/users/R-4.1.spec.ts |  | unbound (ruled: persona-unavailable) |
 | R-4.2 | acceptance/users/R-4.2.spec.ts |  | unbound (ruled: persona-unavailable) |
-| R-4.3 | acceptance/users/R-4.3.spec.ts |  | unbound |
+| R-4.3 | acceptance/users/R-4.3.spec.ts |  | unbound (ruled: test-wrong) |
 | R-4.4 | acceptance/users/R-4.4.spec.ts |  | unbound (ruled: oracle-cannot) |
 | R-4.5 | acceptance/users/R-4.5.spec.ts |  | unbound (ruled: persona-unavailable) |
 | R-4.6 | acceptance/users/R-4.6.spec.ts |  | pass |
@@ -27,7 +27,7 @@
 | R-4.21 | acceptance/users/R-4.21.spec.ts |  | fail (ruled: defect-in-old) |
 | R-4.22 | acceptance/users/R-4.22.spec.ts |  | pass |
 | R-4.23 | acceptance/users/R-4.23.spec.ts |  | unbound (ruled: adapter-wrong) |
-| R-4.24 | acceptance/users/R-4.24.spec.ts |  | unbound |
+| R-4.24 | acceptance/users/R-4.24.spec.ts |  | unbound (ruled: test-wrong) |
 | R-4.25 | acceptance/users/R-4.25.spec.ts |  | pass |
 | R-4.26 | acceptance/users/R-4.26.spec.ts |  | pass |
 | R-4.27 | acceptance/users/R-4.27.spec.ts |  | pass |

@@ -12,14 +12,14 @@
 | R-1.6 | acceptance/opportunities/R-1.6.spec.ts |  | pass |
 | R-1.7 | acceptance/opportunities/R-1.7.spec.ts |  | pass |
 | R-1.8 | acceptance/opportunities/R-1.8.spec.ts |  | pass |
-| R-1.9 | acceptance/opportunities/R-1.9.spec.ts |  | fail |
+| R-1.9 | acceptance/opportunities/R-1.9.spec.ts |  | fail (ruled: defect-in-old) |
 | R-1.10 | acceptance/opportunities/R-1.10.spec.ts |  | pass |
 | R-1.11 | acceptance/opportunities/R-1.11.spec.ts |  | pass |
 | R-1.12 | acceptance/opportunities/R-1.12.spec.ts |  | pass |
 | R-1.13 | acceptance/opportunities/R-1.13.spec.ts |  | pass |
 | R-1.14 | acceptance/opportunities/R-1.14.spec.ts |  | pass |
 | R-1.15 | acceptance/opportunities/R-1.15.spec.ts |  | pass |
-| R-1.16 | acceptance/opportunities/R-1.16.spec.ts |  | fail |
+| R-1.16 | acceptance/opportunities/R-1.16.spec.ts |  | fail (ruled: test-wrong) |
 | R-1.17 | acceptance/opportunities/R-1.17.spec.ts |  | fail (ruled: spec-wrong) |
 | R-1.18 | acceptance/opportunities/R-1.18.spec.ts |  | pass |
 | R-1.19 | acceptance/opportunities/R-1.19.spec.ts |  | pass |
@@ -36,7 +36,7 @@
 | R-1.30 | acceptance/opportunities/R-1.30.spec.ts |  | pass |
 | R-1.31 | acceptance/opportunities/R-1.31.spec.ts |  | pass |
 | R-1.32 | acceptance/opportunities/R-1.32.spec.ts |  | pass |
-| R-1.33 | acceptance/opportunities/R-1.33.spec.ts |  | unbound |
+| R-1.33 | acceptance/opportunities/R-1.33.spec.ts |  | unbound (ruled: spec-wrong) |
 | R-1.34 | acceptance/opportunities/R-1.34.spec.ts |  | pass |
 | R-1.35 | acceptance/opportunities/R-1.35.spec.ts |  | pass |
 | R-1.36 | acceptance/opportunities/R-1.36.spec.ts |  | pass |
@@ -169,6 +169,7 @@ An opportunity saved as a draft is accepted with incomplete content; when its pr
 - given: a member of public sector staff filling in a new opportunity
 - when: they save it as a draft with fields still blank
 - then: the draft is stored, no content validation error is raised, and absent dates are set to fourteen days from the day of saving
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.10 · v1 · confirmed · accepted
 
@@ -432,9 +433,9 @@ An addendum of 1 to 5,000 characters may be added to any opportunity that is no 
 - when: its author adds an addendum
 - then: the addendum is appended to the opportunity with its author and date, an entry is added to the opportunity's history, and there is no action that removes it
 
-### R-1.33 · v1 · confirmed · accepted
+### R-1.33 · v2 · confirmed · accepted
 
-An administrator or an opportunity's author may attach a private note, with files, to a Code With Us or Sprint With Us opportunity's history at any point in its life.
+The service accepts a private note, with files, on a Code With Us or Sprint With Us opportunity's history from an administrator or the opportunity's author at any point in the opportunity's life, visible only to the author and administrators, but no screen of the application offers a way to add one.
 - cites: src/back-end/lib/resources/opportunity/code-with-us.ts:873
 - cites: src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:1721
 - cites: src/shared/lib/resources/opportunity/team-with-us.ts:374

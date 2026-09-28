@@ -16,7 +16,7 @@
 | R-5.10 | acceptance/evaluation/R-5.10.spec.ts |  | fail (ruled: defect-in-old) |
 | R-5.11 | acceptance/evaluation/R-5.11.spec.ts |  | pass |
 | R-5.12 | acceptance/evaluation/R-5.12.spec.ts |  | pass |
-| R-5.13 | acceptance/evaluation/R-5.13.spec.ts |  | fail |
+| R-5.13 | acceptance/evaluation/R-5.13.spec.ts |  | fail (ruled: test-wrong) |
 | R-5.14 | acceptance/evaluation/R-5.14.spec.ts |  | fail (ruled: defect-in-old) |
 | R-5.15 | — |  |  |
 | R-5.16 | acceptance/evaluation/R-5.16.spec.ts |  | pass |

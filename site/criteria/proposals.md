@@ -13,28 +13,28 @@
 | R-2.7 | acceptance/proposals/R-2.7.spec.ts |  | unbound (ruled: adapter-wrong) |
 | R-2.8 | — |  |  |
 | R-2.9 | acceptance/proposals/R-2.9.spec.ts |  | unbound (ruled: adapter-wrong) |
-| R-2.10 | acceptance/proposals/R-2.10.spec.ts |  | fail |
+| R-2.10 | acceptance/proposals/R-2.10.spec.ts |  | fail (ruled: defect-in-old) |
 | R-2.11 | acceptance/proposals/R-2.11.spec.ts |  | unbound (ruled: adapter-wrong) |
 | R-2.12 | acceptance/proposals/R-2.12.spec.ts |  | pass |
 | R-2.13 | acceptance/proposals/R-2.13.spec.ts |  | pass |
 | R-2.14 | acceptance/proposals/R-2.14.spec.ts |  | pass |
 | R-2.15 | acceptance/proposals/R-2.15.spec.ts |  | pass |
 | R-2.16 | acceptance/proposals/R-2.16.spec.ts |  | fail (ruled: adapter-wrong) |
-| R-2.17 | acceptance/proposals/R-2.17.spec.ts |  | fail |
+| R-2.17 | acceptance/proposals/R-2.17.spec.ts |  | fail (ruled: test-wrong) |
 | R-2.18 | acceptance/proposals/R-2.18.spec.ts |  | pass (ruled: spec-wrong) |
 | R-2.19 | acceptance/proposals/R-2.19.spec.ts |  | unbound (ruled: adapter-wrong) |
 | R-2.20 | acceptance/proposals/R-2.20.spec.ts |  | fail (ruled: adapter-wrong) |
-| R-2.21 | acceptance/proposals/R-2.21.spec.ts |  | unbound |
-| R-2.22 | acceptance/proposals/R-2.22.spec.ts |  | fail |
+| R-2.21 | acceptance/proposals/R-2.21.spec.ts |  | unbound (ruled: test-wrong) |
+| R-2.22 | acceptance/proposals/R-2.22.spec.ts |  | fail (ruled: test-wrong) |
 | R-2.23 | acceptance/proposals/R-2.23.spec.ts |  | pass |
 | R-2.24 | acceptance/proposals/R-2.24.spec.ts |  | pass |
 | R-2.25 | acceptance/proposals/R-2.25.spec.ts |  | pass |
 | R-2.26 | acceptance/proposals/R-2.26.spec.ts |  | pass |
 | R-2.27 | acceptance/proposals/R-2.27.spec.ts |  | pass |
-| R-2.28 | acceptance/proposals/R-2.28.spec.ts |  | unbound |
+| R-2.28 | acceptance/proposals/R-2.28.spec.ts |  | unbound (ruled: test-wrong) |
 | R-2.29 | acceptance/proposals/R-2.29.spec.ts |  | pass |
 | R-2.30 | acceptance/proposals/R-2.30.spec.ts |  | pass |
-| R-2.31 | acceptance/proposals/R-2.31.spec.ts |  | fail |
+| R-2.31 | acceptance/proposals/R-2.31.spec.ts |  | fail (ruled: test-wrong) |
 | R-2.32 | acceptance/proposals/R-2.32.spec.ts |  | pass |
 | R-2.33 | acceptance/proposals/R-2.33.spec.ts |  | pass |
 | R-2.34 | acceptance/proposals/R-2.34.spec.ts |  | pass |
@@ -169,6 +169,7 @@ A vendor may read the history of a proposal they authored, or of a proposal belo
 
 A Team With Us proposal is refused when the hourly rates it names, applied at each resource's target allocation across the opportunity's contract period, come to more than the opportunity's maximum budget; the check runs on both the create and the edit path, as the equivalent Sprint With Us check does.
 - replaces: R-2.8
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-2.11 · v1 · confirmed · accepted
 
