@@ -3,27 +3,43 @@
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// The criterion says neither refusal can be reached through the proposal form, because the
-// form offers only the organization's active members. One of them can still be reached
-// without it: a draft is saved naming a person while they are an active member, the person
-// is then removed from the organization, and the draft is submitted from its own management
-// screen. At that moment the proposal names somebody whose membership is absent, which is
-// the given, and the service is what weighs it.
+// The criterion says neither refusal is reachable through the proposal form, so the team is
+// put to the service through proposal-team-request, which carries any seed user as a team
+// member, repeats included. The organization is the qualified one, qualified for both
+// programs; its administrator signs in and submits for it. Three people stand outside its
+// active membership: one whose invitation is unanswered, one whose membership has ended, and
+// one who belongs to no organization.
 //
-// The proposal is a Team With Us one for the qualified organization, whose qualification for
-// that program rests on its terms and its service areas rather than on its headcount, so
-// removing one member leaves nothing out of place but the named team member. A second draft,
-// on a second opportunity of the same shape, names a person who stays a member; it is
-// submitted the same way, so a refusal of the first cannot be the management screen failing
-// to submit anything at all.
+// Each test publishes its own opportunity, since both programs' seeded ones have closed. The
+// Team With Us opportunity asks for two resources, in the two service areas the organization
+// offers, so a team can name the same person twice by naming them for both. The Sprint With
+// Us opportunity has one phase wanting backend work, which the organization's owner holds.
 //
-// The management screen names no error, so the refusal is read as the proposal keeping the
-// status it had before it was submitted. The wording of the refusal, the Team With Us refusal
-// of the same person named twice, the absence of that check in a Sprint With Us phase, and
-// what the form offers are recorded in not-testable.yaml.
+// A Sprint With Us phase naming one person twice may still fail after validation, when the
+// service stores it; the criterion is only that no uniqueness refusal is given, so that is
+// what the test asserts.
+//
+// What the form offers is read from the team-member choice on each create page. The seed
+// gives the three outsiders' names but not the active members', so the test asserts that
+// none of the three is offered, that somebody is, and that naming a person changes what is
+// offered to leave them out.
+
+const notActiveMember = "User is not an active member of the organization.";
+const notUnique = "Please select unique team members.";
 
 const statement =
-  "Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else";
+  'Every person named on a proposal\'s team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with "User is not an active member of the organization."; a Team With Us proposal is additionally refused by the service when the same person is named twice, with "Please select unique team members.", while the service applies no such uniqueness check to a Sprint With Us phase. The proposal form offers only the organization\'s active members, and does not offer a person already named on the proposal, so neither refusal is reachable through the form.';
+
+const settle = { timeout: 20000 };
+const organization = seed.organizations.qualified;
+const fullStack = "Full Stack Developer";
+const agileCoach = "Agile Coach";
+
+const outsiders: Array<[string, { name: string }]> = [
+  ["a person whose invitation to the organization is unanswered", seed.users.teamCandidatePending],
+  ["a person whose membership of the organization has ended", seed.users.teamCandidateFormer],
+  ["a person who belongs to no organization", seed.users.teamCandidateOutsider],
+];
 
 function inDays(days: number): string {
   const date = new Date();
@@ -31,19 +47,37 @@ function inDays(days: number): string {
   return date.toISOString().slice(0, 10);
 }
 
+async function readOrEmpty(read: () => Promise<string>): Promise<string> {
+  try {
+    return (await read()) ?? "";
+  } catch {
+    return "";
+  }
+}
+
 const panel = {
   members: [seed.users.staffOne, seed.users.staffPanelEvaluator],
   chair: seed.users.staffPanelEvaluator,
 };
 
+const details = {
+  teaser: "A short summary of the work to be done.",
+  location: "Victoria",
+  description: "A full description of the work to be done.",
+  remoteOk: true,
+  remoteDescription: "Remote work is acceptable anywhere in the province.",
+  proposalDeadline: inDays(14),
+  assignmentDate: inDays(21),
+  startDate: inDays(28),
+  completionDate: inDays(90),
+};
+
 async function publishTeamOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunityTwuCreate.open();
-  await surface.opportunityTwuCreate.addResource({
-    serviceArea: "Full Stack Developer",
-    targetAllocation: 100,
-    order: 0,
-  });
+  for (const [order, serviceArea] of [fullStack, agileCoach].entries()) {
+    await surface.opportunityTwuCreate.addResource({ serviceArea, targetAllocation: 100, order });
+  }
   await surface.opportunityTwuCreate.addResourceQuestion({
     question: "Describe how your resource has delivered work of this kind before.",
     guideline: "Answer with one worked example.",
@@ -53,90 +87,213 @@ async function publishTeamOpportunity(surface: Surface, title: string): Promise<
   });
   await surface.opportunityTwuCreate.setEvaluationPanel(panel);
   await surface.opportunityTwuCreate.publish({
-    teaser: "A short summary of the work to be done.",
-    location: "Victoria",
-    description: "A full description of the work to be done.",
-    remoteOk: true,
-    remoteDescription: "Remote work is acceptable anywhere in the province.",
-    proposalDeadline: inDays(14),
-    assignmentDate: inDays(21),
-    startDate: inDays(28),
-    completionDate: inDays(90),
+    ...details,
     maxBudget: 1000000,
     questionsWeight: 40,
     challengeWeight: 40,
     priceWeight: 20,
     title,
   });
+  await expect.poll(() => readOrEmpty(() => surface.opportunityTwuEdit.opportunityIdentifier()), settle).toBeTruthy();
   const opportunityId = await surface.opportunityTwuEdit.opportunityIdentifier();
   await surface.signOut();
   return opportunityId;
 }
 
-async function saveDraftNaming(
+async function publishSprintOpportunity(surface: Surface, title: string): Promise<string> {
+  await surface.signIn(persona.administrator);
+  await surface.opportunitySwuCreate.open();
+  await surface.opportunitySwuCreate.addPhase({
+    phase: "Implementation",
+    startDate: inDays(28),
+    completionDate: inDays(90),
+    maxBudget: 500000,
+    capabilities: ["Backend Development"],
+  });
+  await surface.opportunitySwuCreate.addTeamQuestion({
+    question: "Describe how your team has delivered work of this kind before.",
+    guideline: "Answer with one worked example.",
+    score: 20,
+    wordLimit: 300,
+    order: 0,
+  });
+  await surface.opportunitySwuCreate.setEvaluationPanel(panel);
+  await surface.opportunitySwuCreate.publish({
+    ...details,
+    mandatorySkills: ["Backend Development"],
+    totalMaxBudget: 500000,
+    questionsWeight: 25,
+    codeChallengeWeight: 25,
+    teamScenarioWeight: 25,
+    priceWeight: 25,
+    title,
+  });
+  await expect.poll(() => readOrEmpty(() => surface.opportunitySwuEdit.opportunityIdentifier()), settle).toBeTruthy();
+  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
+  await surface.signOut();
+  return opportunityId;
+}
+
+async function submitTeamWithUs(
   surface: Surface,
   opportunityId: string,
-  member: unknown,
-): Promise<string> {
-  await surface.proposalTwuCreate.open({ opportunityId });
-  await surface.proposalTwuCreate.chooseOrganization({ organization: seed.organizations.qualified });
-  await surface.proposalTwuCreate.addTeamMemberForResource({
-    resource: "Full Stack Developer",
-    member,
+  team: Array<{ member: unknown; resource: string }>,
+): Promise<void> {
+  await surface.proposalTeamRequest.open({ program: "team-with-us" });
+  await surface.proposalTeamRequest.submitTeamProposal({
+    opportunityId,
+    organization,
+    team: team.map((entry) => ({ ...entry, hourlyRate: 100 })),
+    answers: [
+      { order: 0, response: "Our developer built and ran the same kind of service for a Crown corporation." },
+    ],
   });
-  await surface.proposalTwuCreate.setHourlyRate({ resource: "Full Stack Developer", rate: 100 });
-  await surface.proposalTwuCreate.answerResourceQuestion({
-    order: 0,
-    response: "Our developer built and ran the same kind of service for a Crown corporation.",
+}
+
+async function submitSprintWithUs(
+  surface: Surface,
+  opportunityId: string,
+  members: Array<{ member: unknown; scrumMaster: boolean }>,
+): Promise<void> {
+  await surface.proposalTeamRequest.open({ program: "sprint-with-us" });
+  await surface.proposalTeamRequest.submitTeamProposal({
+    opportunityId,
+    organization,
+    phases: [{ phase: "Implementation", members, proposedCost: 400000 }],
+    answers: [{ order: 0, response: "We delivered a scheduling service for a health authority over eighteen months." }],
+    references: [0, 1, 2].map((order) => ({
+      order,
+      name: `Reference ${order + 1}`,
+      company: "Reference Company Ltd.",
+      phone: "250-555-0101",
+      email: `reference.${order + 1}@example.test`,
+    })),
   });
-  await surface.proposalTwuCreate.acceptProgramTerms();
-  await surface.proposalTwuCreate.acceptAppTerms();
-  await surface.proposalTwuCreate.saveDraft();
-  return surface.proposalTwuEdit.proposalIdentifier();
 }
 
-async function statusOf(surface: Surface, opportunityId: string, proposalId: string): Promise<string> {
-  await surface.proposalTwuEdit.open({ opportunityId, proposalId });
-  return surface.proposalTwuEdit.status();
+async function refusalMessages(surface: Surface): Promise<string> {
+  await expect
+    .poll(
+      async () =>
+        (await readOrEmpty(() => surface.proposalTeamRequest.requestAccepted())) ||
+        (await readOrEmpty(() => surface.proposalTeamRequest.refusalStatus())),
+      { ...settle, message: "the service answered the request" },
+    )
+    .toBeTruthy();
+  return readOrEmpty(() => surface.proposalTeamRequest.refusalMessages());
 }
 
-async function submitDraft(surface: Surface, opportunityId: string, proposalId: string): Promise<void> {
-  await surface.proposalTwuEdit.open({ opportunityId, proposalId });
-  try {
-    await surface.proposalTwuEdit.submitProposal();
-  } catch {
-    // A submission the screen will not carry out has been refused; the status says so below.
-  }
+async function expectRefusedWith(surface: Surface, message: string, what: string): Promise<void> {
+  const messages = await refusalMessages(surface);
+  expect(await readOrEmpty(() => surface.proposalTeamRequest.requestAccepted()), what).toBeFalsy();
+  expect(messages, what).toContain(message);
 }
 
-test(`${statement} (a person no longer a member of the organization)`, async ({ surface }) => {
-  test.setTimeout(300000);
-  const departing = await publishTeamOpportunity(
-    surface,
-    "R-2.18 opportunity bid on naming a person who then leaves the organization",
-  );
-  const staying = await publishTeamOpportunity(
-    surface,
-    "R-2.18 opportunity bid on naming a person who stays in the organization",
-  );
-
+test(`${statement} (a Team With Us team of active members is accepted)`, async ({ surface }) => {
+  test.setTimeout(180000);
+  const opportunityId = await publishTeamOpportunity(surface, "R-2.18 opportunity bid on by active members");
   await surface.signIn(persona.organizationAdmin);
-  const departingProposal = await saveDraftNaming(surface, departing, seed.users.organizationMember);
-  const draftStatus = await surface.proposalTwuEdit.status();
-  const stayingProposal = await saveDraftNaming(surface, staying, seed.users.organizationAdmin);
+  await submitTeamWithUs(surface, opportunityId, [
+    { member: seed.users.organizationAdmin, resource: fullStack },
+    { member: seed.users.organizationOwner, resource: agileCoach },
+  ]);
+  const messages = await refusalMessages(surface);
+  expect(messages, "a team of active members was refused").toBe("");
+  expect(await readOrEmpty(() => surface.proposalTeamRequest.requestAccepted())).toBeTruthy();
+});
 
-  await surface.organizationEdit.open({ orgId: seed.organizations.qualified.id });
-  await surface.organizationEdit.removeTeamMember({ member: seed.users.organizationMember });
+for (const [who, person] of outsiders) {
+  test(`${statement} (a Team With Us team naming ${who} is refused)`, async ({ surface }) => {
+    test.setTimeout(180000);
+    const opportunityId = await publishTeamOpportunity(surface, `R-2.18 opportunity bid on naming ${who}`);
+    await surface.signIn(persona.organizationAdmin);
+    await submitTeamWithUs(surface, opportunityId, [
+      { member: seed.users.organizationAdmin, resource: fullStack },
+      { member: person, resource: agileCoach },
+    ]);
+    await expectRefusedWith(surface, notActiveMember, `a team naming ${who}`);
+  });
+}
 
-  await submitDraft(surface, staying, stayingProposal);
-  expect(
-    await statusOf(surface, staying, stayingProposal),
-    "a draft naming only active members is submitted from the management screen",
-  ).not.toBe(draftStatus);
+test(`${statement} (a Sprint With Us phase naming a person outside the organization is refused)`, async ({
+  surface,
+}) => {
+  test.setTimeout(180000);
+  const opportunityId = await publishSprintOpportunity(surface, "R-2.18 opportunity bid on naming an outsider");
+  await surface.signIn(persona.organizationAdmin);
+  await submitSprintWithUs(surface, opportunityId, [
+    { member: seed.users.organizationOwner, scrumMaster: true },
+    { member: seed.users.teamCandidateOutsider, scrumMaster: false },
+  ]);
+  await expectRefusedWith(surface, notActiveMember, "a phase naming a person who belongs to no organization");
+});
 
-  await submitDraft(surface, departing, departingProposal);
-  expect(
-    await statusOf(surface, departing, departingProposal),
-    "the draft naming a person who is no longer a member was submitted",
-  ).toBe(draftStatus);
+test(`${statement} (a Team With Us team naming the same person twice is refused)`, async ({ surface }) => {
+  test.setTimeout(180000);
+  const opportunityId = await publishTeamOpportunity(surface, "R-2.18 opportunity bid on naming one person twice");
+  await surface.signIn(persona.organizationAdmin);
+  await submitTeamWithUs(surface, opportunityId, [
+    { member: seed.users.organizationAdmin, resource: fullStack },
+    { member: seed.users.organizationAdmin, resource: agileCoach },
+  ]);
+  await expectRefusedWith(surface, notUnique, "a team naming the same active member twice");
+});
+
+test(`${statement} (a Sprint With Us phase naming the same person twice meets no uniqueness refusal)`, async ({
+  surface,
+}) => {
+  test.setTimeout(180000);
+  const opportunityId = await publishSprintOpportunity(surface, "R-2.18 opportunity bid on naming one person twice in a phase");
+  await surface.signIn(persona.organizationAdmin);
+  await submitSprintWithUs(surface, opportunityId, [
+    { member: seed.users.organizationOwner, scrumMaster: true },
+    { member: seed.users.organizationOwner, scrumMaster: false },
+  ]);
+  const messages = await refusalMessages(surface);
+  expect(messages, "a Sprint With Us phase was refused for naming a person twice").not.toContain(notUnique);
+});
+
+async function expectOnlyActiveMembersOffered(read: () => Promise<string>, where: string): Promise<string> {
+  await expect.poll(() => readOrEmpty(read), { ...settle, message: `${where} offers somebody` }).toBeTruthy();
+  const offered = await readOrEmpty(read);
+  for (const [who, person] of outsiders) {
+    expect(offered, `${where} offers ${who}`).not.toContain(person.name);
+  }
+  return offered;
+}
+
+test(`${statement} (the Team With Us form offers only active members, and not a person already named)`, async ({
+  surface,
+}) => {
+  test.setTimeout(180000);
+  const opportunityId = await publishTeamOpportunity(surface, "R-2.18 opportunity whose team form is read");
+  await surface.signIn(persona.organizationAdmin);
+  await surface.proposalTwuCreate.open({ opportunityId });
+  await surface.proposalTwuCreate.chooseOrganization({ organization });
+  const read = () => surface.proposalTwuCreate.teamMemberChoices();
+  const before = await expectOnlyActiveMembersOffered(read, "the Team With Us team choice");
+
+  await surface.proposalTwuCreate.addTeamMemberForResource({ resource: fullStack, member: seed.users.organizationAdmin });
+  await expect
+    .poll(() => readOrEmpty(read), { ...settle, message: "the choice still offers the person just named" })
+    .not.toBe(before);
+  await expectOnlyActiveMembersOffered(read, "the Team With Us team choice after naming a member");
+});
+
+test(`${statement} (the Sprint With Us form offers only active members, and not a person already named)`, async ({
+  surface,
+}) => {
+  test.setTimeout(180000);
+  const opportunityId = await publishSprintOpportunity(surface, "R-2.18 opportunity whose phase team form is read");
+  await surface.signIn(persona.organizationAdmin);
+  await surface.proposalSwuCreate.open({ opportunityId });
+  await surface.proposalSwuCreate.chooseOrganization({ organization });
+  const read = () => surface.proposalSwuCreate.teamMemberChoices();
+  const before = await expectOnlyActiveMembersOffered(read, "the Sprint With Us phase team choice");
+
+  await surface.proposalSwuCreate.addPhaseTeamMember({ phase: "Implementation", member: seed.users.organizationOwner });
+  await expect
+    .poll(() => readOrEmpty(read), { ...settle, message: "the choice still offers the person just named" })
+    .not.toBe(before);
+  await expectOnlyActiveMembersOffered(read, "the Sprint With Us phase team choice after naming a member");
 });
