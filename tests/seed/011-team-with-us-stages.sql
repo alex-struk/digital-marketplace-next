@@ -220,5 +220,16 @@ BEGIN
   PERFORM pg_temp.seed_twu_opportunity(33, 'Seeded second Team With Us opportunity at its challenge', staff, 'EVAL_C', panel, admin);
   PERFORM pg_temp.seed_twu_proposal(33, 1, v[1], o[1], staff, 'EVALUATED_CHALLENGE', 110, ARRAY[5, 5, 5, 5], panel, admin, 80, 100);
   PERFORM pg_temp.seed_twu_proposal(33, 2, v[2], o[2], staff, 'UNDER_REVIEW_CHALLENGE', 135, ARRAY[4, 4, 4, 4], panel, admin, NULL, NULL);
+
+  -- 34 and 35. Who may change a consensus, and when (R-5.29), as 26 and 27 in
+  --     010-sprint-with-us-stages.sql: the chair's consensus submitted for both proponents,
+  --     agreed scores 4, 4, 4, 4 and 3, 3, 3, 3. 34 is still at consensus; 35 has moved on
+  --     to the challenge with both proponents screened in.
+  PERFORM pg_temp.seed_twu_opportunity(34, 'Seeded Team With Us opportunity at consensus with every consensus agreed', staff, 'EVAL_QUESTIONS_CONSENSUS', panel, admin);
+  PERFORM pg_temp.seed_twu_proposal(34, 1, v[1], o[1], staff, 'UNDER_REVIEW_QUESTIONS', 120, ARRAY[4, 4, 4, 4], panel, admin, NULL, NULL);
+  PERFORM pg_temp.seed_twu_proposal(34, 2, v[2], o[2], staff, 'UNDER_REVIEW_QUESTIONS', 135, ARRAY[3, 3, 3, 3], panel, admin, NULL, NULL);
+  PERFORM pg_temp.seed_twu_opportunity(35, 'Seeded Team With Us opportunity past consensus at the challenge', staff, 'EVAL_C', panel, admin);
+  PERFORM pg_temp.seed_twu_proposal(35, 1, v[1], o[1], staff, 'UNDER_REVIEW_CHALLENGE', 120, ARRAY[4, 4, 4, 4], panel, admin, NULL, NULL);
+  PERFORM pg_temp.seed_twu_proposal(35, 2, v[2], o[2], staff, 'UNDER_REVIEW_CHALLENGE', 135, ARRAY[3, 3, 3, 3], panel, admin, NULL, NULL);
 END
 $$;

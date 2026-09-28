@@ -353,5 +353,19 @@ BEGIN
          "completionDate" = now() + INTERVAL '170 days'
    WHERE "id" = pg_temp.sid(25, 3);
   PERFORM pg_temp.seed_swu_proposal(25, 1, v[2], o[2], staff, 'SUBMITTED', 460000, NULL, NULL, NULL, panel, admin, NULL, NULL, NULL);
+
+  -- 26 and 27. Who may change a consensus, and when (R-5.29). Both carry the chair's
+  --     consensus, submitted, for both proponents: agreed scores 4, 4, 4, 4 for the first
+  --     and 3, 3, 3, 3 for the second. 26 is still at consensus, so the chair may change
+  --     it there and the government account, an evaluator but not the chair, may not. 27
+  --     has moved on to the code challenge with both proponents screened in, so the chair's
+  --     consensus there is one nobody may change. Held apart from 11 and 14 so that a
+  --     change, accepted or not, touches no record another criterion reads.
+  PERFORM pg_temp.seed_swu_opportunity(26, 'Seeded Sprint With Us opportunity at consensus with every consensus agreed', staff, 'EVAL_QUESTIONS_CONSENSUS', panel, admin);
+  PERFORM pg_temp.seed_swu_proposal(26, 1, v[1], o[1], staff, 'UNDER_REVIEW_QUESTIONS', 420000, good, 'SUBMITTED', 'SUBMITTED', panel, admin, NULL, NULL, NULL);
+  PERFORM pg_temp.seed_swu_proposal(26, 2, v[2], o[2], staff, 'UNDER_REVIEW_QUESTIONS', 460000, low, 'SUBMITTED', 'SUBMITTED', panel, admin, NULL, NULL, NULL);
+  PERFORM pg_temp.seed_swu_opportunity(27, 'Seeded Sprint With Us opportunity past consensus at the code challenge', staff, 'EVAL_CC', panel, admin);
+  PERFORM pg_temp.seed_swu_proposal(27, 1, v[1], o[1], staff, 'UNDER_REVIEW_CODE_CHALLENGE', 420000, good, 'SUBMITTED', 'SUBMITTED', panel, admin, NULL, NULL, NULL);
+  PERFORM pg_temp.seed_swu_proposal(27, 2, v[2], o[2], staff, 'UNDER_REVIEW_CODE_CHALLENGE', 460000, low, 'SUBMITTED', 'SUBMITTED', panel, admin, NULL, NULL, NULL);
 END
 $$;

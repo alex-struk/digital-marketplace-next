@@ -1135,6 +1135,62 @@ export const seed = {
       ],
       "note": "Published, with its proposal deadline still ahead, so scheduled closing does not move it into individual question evaluation. users.staffOne (persona.public-sector-staff) is an evaluator on its panel and has evaluated nothing, so an attempt by them on evaluation-individual-create-swu for proposals.swuOpenSubmitted is an evaluator's attempt made at a stage other than individual question evaluation. The seed is reapplied before every test, so the deadline is always thirty days out."
     },
+    "swuConsensusAllAgreed": {
+      "id": "00000000-0000-4000-a026-000000000001",
+      "version_id": "00000000-0000-4000-a026-000000000002",
+      "program": "sprint-with-us",
+      "title": "Seeded Sprint With Us opportunity at consensus with every consensus agreed",
+      "seeded_status": "EVAL_QUESTIONS_CONSENSUS",
+      "owner": "users.staffOne",
+      "panel": [
+        {
+          "user": "users.staffOne",
+          "chair": false,
+          "evaluator": true
+        },
+        {
+          "user": "users.administratorOne",
+          "chair": true,
+          "evaluator": true
+        }
+      ],
+      "proposals": [
+        "proposals.swuAgreedOne",
+        "proposals.swuAgreedTwo"
+      ],
+      "for": [
+        "R-5.29"
+      ],
+      "note": "Still at consensus. users.administratorOne's consensus is submitted for both proponents, agreed scores 4, 4, 4, 4 for the first and 3, 3, 3, 3 for the second, each question's note reading \"Seeded note on question N.\". The chair may change either here; users.staffOne, an evaluator but not the chair, may not. The consensus is addressed on evaluation-consensus-request-swu with :userId users.administratorOne."
+    },
+    "swuPastConsensus": {
+      "id": "00000000-0000-4000-a027-000000000001",
+      "version_id": "00000000-0000-4000-a027-000000000002",
+      "program": "sprint-with-us",
+      "title": "Seeded Sprint With Us opportunity past consensus at the code challenge",
+      "seeded_status": "EVAL_CC",
+      "owner": "users.staffOne",
+      "panel": [
+        {
+          "user": "users.staffOne",
+          "chair": false,
+          "evaluator": true
+        },
+        {
+          "user": "users.administratorOne",
+          "chair": true,
+          "evaluator": true
+        }
+      ],
+      "proposals": [
+        "proposals.swuPastConsensusOne",
+        "proposals.swuPastConsensusTwo"
+      ],
+      "for": [
+        "R-5.29"
+      ],
+      "note": "Moved on from consensus to the code challenge, both proponents screened in and neither scored. users.administratorOne's consensus stands for both, agreed scores 4, 4, 4, 4 and 3, 3, 3, 3, so the chair changing it now is a change made once the opportunity has moved past consensus."
+    },
     "twuConsensusFiveProponents": {
       "id": "00000000-0000-4000-a031-000000000001",
       "version_id": "00000000-0000-4000-a031-000000000002",
@@ -1182,6 +1238,36 @@ export const seed = {
         "R-1.49"
       ],
       "note": "The same starting point as opportunities.twuChallengeLastToScore, with the same panel, proponents, scores and rates, kept for R-1.49 alone. R-1.49 scores the last proponent and then awards, which changes the opportunity for good, and the seed is loaded once per run. Keeping it apart from the record R-1.25 uses means neither result depends on the order the tests run in."
+    },
+    "twuConsensusAllAgreed": {
+      "id": "00000000-0000-4000-a034-000000000001",
+      "version_id": "00000000-0000-4000-a034-000000000002",
+      "program": "team-with-us",
+      "title": "Seeded Team With Us opportunity at consensus with every consensus agreed",
+      "seeded_status": "EVAL_QUESTIONS_CONSENSUS",
+      "proposals": [
+        "proposals.twuAgreedOne",
+        "proposals.twuAgreedTwo"
+      ],
+      "for": [
+        "R-5.29"
+      ],
+      "note": "As opportunities.swuConsensusAllAgreed, for Team With Us: the same panel, and users.administratorOne's consensus submitted for both proponents, agreed scores 4, 4, 4, 4 and 3, 3, 3, 3. Addressed on evaluation-consensus-request-twu."
+    },
+    "twuPastConsensus": {
+      "id": "00000000-0000-4000-a035-000000000001",
+      "version_id": "00000000-0000-4000-a035-000000000002",
+      "program": "team-with-us",
+      "title": "Seeded Team With Us opportunity past consensus at the challenge",
+      "seeded_status": "EVAL_C",
+      "proposals": [
+        "proposals.twuPastConsensusOne",
+        "proposals.twuPastConsensusTwo"
+      ],
+      "for": [
+        "R-5.29"
+      ],
+      "note": "As opportunities.swuPastConsensus, for Team With Us: moved on to the challenge, both proponents screened in and neither scored, the chair's consensus standing at 4, 4, 4, 4 and 3, 3, 3, 3."
     }
   },
   "resources": {
@@ -1592,6 +1678,54 @@ export const seed = {
       "organization": "organizations.proponentTwo",
       "seeded_status": "SUBMITTED"
     },
+    "swuAgreedOne": {
+      "id": "00000000-0000-4000-a026-000000000101",
+      "opportunity": "opportunities.swuConsensusAllAgreed",
+      "seeded_status": "UNDER_REVIEW_QUESTIONS",
+      "consensus": "SUBMITTED",
+      "agreed_scores": [
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    "swuAgreedTwo": {
+      "id": "00000000-0000-4000-a026-000000000102",
+      "opportunity": "opportunities.swuConsensusAllAgreed",
+      "seeded_status": "UNDER_REVIEW_QUESTIONS",
+      "consensus": "SUBMITTED",
+      "agreed_scores": [
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    "swuPastConsensusOne": {
+      "id": "00000000-0000-4000-a027-000000000101",
+      "opportunity": "opportunities.swuPastConsensus",
+      "seeded_status": "UNDER_REVIEW_CODE_CHALLENGE",
+      "consensus": "SUBMITTED",
+      "agreed_scores": [
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    "swuPastConsensusTwo": {
+      "id": "00000000-0000-4000-a027-000000000102",
+      "opportunity": "opportunities.swuPastConsensus",
+      "seeded_status": "UNDER_REVIEW_CODE_CHALLENGE",
+      "consensus": "SUBMITTED",
+      "agreed_scores": [
+        3,
+        3,
+        3,
+        3
+      ]
+    },
     "twuFiveOne": {
       "id": "00000000-0000-4000-a031-000000000101",
       "opportunity": "opportunities.twuConsensusFiveProponents",
@@ -1646,6 +1780,54 @@ export const seed = {
       "opportunity": "opportunities.twuChallengeLastToScoreForAward",
       "seeded_status": "UNDER_REVIEW_CHALLENGE",
       "hourly_rate": 135
+    },
+    "twuAgreedOne": {
+      "id": "00000000-0000-4000-a034-000000000101",
+      "opportunity": "opportunities.twuConsensusAllAgreed",
+      "seeded_status": "UNDER_REVIEW_QUESTIONS",
+      "consensus": "SUBMITTED",
+      "agreed_scores": [
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    "twuAgreedTwo": {
+      "id": "00000000-0000-4000-a034-000000000102",
+      "opportunity": "opportunities.twuConsensusAllAgreed",
+      "seeded_status": "UNDER_REVIEW_QUESTIONS",
+      "consensus": "SUBMITTED",
+      "agreed_scores": [
+        3,
+        3,
+        3,
+        3
+      ]
+    },
+    "twuPastConsensusOne": {
+      "id": "00000000-0000-4000-a035-000000000101",
+      "opportunity": "opportunities.twuPastConsensus",
+      "seeded_status": "UNDER_REVIEW_CHALLENGE",
+      "consensus": "SUBMITTED",
+      "agreed_scores": [
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    "twuPastConsensusTwo": {
+      "id": "00000000-0000-4000-a035-000000000102",
+      "opportunity": "opportunities.twuPastConsensus",
+      "seeded_status": "UNDER_REVIEW_CHALLENGE",
+      "consensus": "SUBMITTED",
+      "agreed_scores": [
+        3,
+        3,
+        3,
+        3
+      ]
     }
   },
   "stored_files": {

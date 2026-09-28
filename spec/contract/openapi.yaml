@@ -955,7 +955,7 @@ paths:
               allOf:
                 - $ref: "#/components/schemas/TaggedRequestBody"
                 - properties:
-                    tag: { enum: [edit, submit] }
+                    tag: { enum: [edit] }
       responses:
         "200": { description: Receive the updated evaluation. }
 
@@ -1007,7 +1007,7 @@ paths:
               allOf:
                 - $ref: "#/components/schemas/TaggedRequestBody"
                 - properties:
-                    tag: { enum: [edit, submit] }
+                    tag: { enum: [edit] }
       responses:
         "200": { description: Receive the updated consensus. }
 
@@ -1066,7 +1066,7 @@ paths:
               allOf:
                 - $ref: "#/components/schemas/TaggedRequestBody"
                 - properties:
-                    tag: { enum: [edit, submit] }
+                    tag: { enum: [edit] }
       responses:
         "200": { description: Receive the updated evaluation. }
 
@@ -1118,7 +1118,7 @@ paths:
               allOf:
                 - $ref: "#/components/schemas/TaggedRequestBody"
                 - properties:
-                    tag: { enum: [edit, submit] }
+                    tag: { enum: [edit] }
       responses:
         "200": { description: Receive the updated consensus. }
 
