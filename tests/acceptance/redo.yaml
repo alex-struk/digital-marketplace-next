@@ -248,6 +248,11 @@ redo:
       count cannot rise; confirm the catcher was emptied, then find the
       confirmation among the messages to the author by what it is about (this
       opportunity's title), not by a count
+    closed: &a4
+      outcome: met
+      why: derived again by a derive-tests run on opportunities
+      by: runner:derive-tests
+      at: 2026-09-28T03:38:48.997Z
   - id: R-1.36
     version: 1
     why: the test detects the author's notice by the number of messages addressed to
@@ -256,6 +261,7 @@ redo:
       confirm the catcher was emptied, then find the notice among the messages
       to the author by what it is about (this opportunity's title), not by a
       count
+    closed: *a4
   - id: R-1.37
     version: 1
     why: the test detects the author's confirmation by the number of messages
@@ -264,6 +270,7 @@ redo:
       count cannot rise; confirm the catcher was emptied, then find the
       confirmation among the messages to the author by what it is about (this
       opportunity's title), not by a count
+    closed: *a4
   - id: R-2.27
     version: 1
     why: the criterion names a state, not the words shown for it, and the test
