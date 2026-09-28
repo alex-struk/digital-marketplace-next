@@ -41,3 +41,27 @@ Because the cause is unconfirmed, this is the fix to check first in the next cal
 **Deactivated vendor sign-in (R-4.14).** Its unconditional refusal in `signIn` is gone; it now signs in through its session route like every other persona. No observation in this adapter depended on that refusal, so there was nothing else to restrict.
 
 `tests/adapters/old/bindings.yaml` needed no change: every member touched was already listed as bound. Every page route I opened resolved; the only "Not Found" was from my own mistake of using an organization id as an opportunity id. I changed nothing outside `tests/adapters/old/`.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on old, and nothing else? Ruling: return. Eight of the nine fixes are scoped to the findings that asked for them and can stay: the per-worker mail catcher address, the History tab reading only its table rows, the consensus button names and the dialog wait, the quiet stop when the form itself refuses to publish, collecting field errors after a refused proposal submit, saving the form after removing a stored attachment (the three sends that looped on R-8.31), saving a Code With Us proposal through its terms dialog, and scrolling the user table back to the top. The runner's typecheck reports no errors under adapters/old/. The ninth change reaches past its evidence. It deletes the adapter's unbound refusal for the deactivated-vendor persona and sends that persona through the session route every time, and the adapter's own comment says that route does not check account status. The R-4.4 acceptance test signs this persona in and expects a sign-in-failed notice and a sign-in-required page. With this change, R-4.4 on old would show a deactivated account being let in, a false finding about the oracle target. R-4.14 only needed this persona signed in after it has been reactivated. The fault is in the adapter, not in R-4.4's test, so the condition stays with bind-adapter. What would change the ruling: the adapter uses the session route for this persona only when the account is known to be active at that moment, and otherwise keeps the unbound refusal. The R-2.14 change is a hardening with no confirmed cause and should be checked first at the next calibration.
+
+**Conditions:**
+- signIn for the deactivated-vendor persona: this revision removed the unbound refusal and now sends the persona through the session route in every case, and that route mints a session without checking account status. The R-4.4 acceptance test expects this persona's sign-in to be refused (userNotice.signInFailedNotice truthy, userProfileSelf.signInRequired truthy), so on old the adapter would report a deactivated account being let in. Use the session route for this persona only when the adapter can establish that the account is active at that moment (R-4.14 reactivates it before nameThemselves); otherwise throw the unbound error saying the session route cannot show the identity provider's refusal, as before. Correct the comment above signIn to match.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `74b237a0e392afe5621d08fc3796d1c78eb23ca4`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
