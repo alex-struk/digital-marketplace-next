@@ -851,6 +851,26 @@ opportunities:
       stands in each of the four relationships an evaluation's tools are split by. The two
       lapsed ones become "being evaluated" once the application closes them
       (scheduled-transition-trigger); this one and swuCodeChallengeOfOtherStaff already are.
+  swuOpenWithSubmittedProposal:
+    id: 00000000-0000-4000-a025-000000000001
+    version_id: 00000000-0000-4000-a025-000000000002
+    program: sprint-with-us
+    title: Seeded open Sprint With Us opportunity with a submitted proposal
+    seeded_status: PUBLISHED
+    proposal_deadline: thirty days after the seed is applied
+    owner: users.staffOne
+    panel:
+      - { user: users.staffOne, chair: false, evaluator: true }
+      - { user: users.administratorOne, chair: true, evaluator: true }
+    proposals: [proposals.swuOpenSubmitted]
+    for: [R-5.21]
+    note: >-
+      Published, with its proposal deadline still ahead, so scheduled closing does not move
+      it into individual question evaluation. users.staffOne (persona.public-sector-staff)
+      is an evaluator on its panel and has evaluated nothing, so an attempt by them on
+      evaluation-individual-create-swu for proposals.swuOpenSubmitted is an evaluator's
+      attempt made at a stage other than individual question evaluation. The seed is reapplied
+      before every test, so the deadline is always thirty days out.
 
   twuConsensusFiveProponents:
     id: 00000000-0000-4000-a031-000000000001
@@ -1040,6 +1060,7 @@ proposals:
   swuOwnerOffPanelTwo: { id: 00000000-0000-4000-a023-000000000102, opportunity: opportunities.swuLapsedOwnerOffPanel, seeded_status: SUBMITTED }
   swuEvaluatorOnlyOne: { id: 00000000-0000-4000-a024-000000000101, opportunity: opportunities.swuEvaluatorNotOwnerNorChair, seeded_status: UNDER_REVIEW_QUESTIONS }
   swuEvaluatorOnlyTwo: { id: 00000000-0000-4000-a024-000000000102, opportunity: opportunities.swuEvaluatorNotOwnerNorChair, seeded_status: UNDER_REVIEW_QUESTIONS }
+  swuOpenSubmitted: { id: 00000000-0000-4000-a025-000000000101, opportunity: opportunities.swuOpenWithSubmittedProposal, vendor: users.proponentTwo, organization: organizations.proponentTwo, seeded_status: SUBMITTED }
 
   twuFiveOne: { id: 00000000-0000-4000-a031-000000000101, opportunity: opportunities.twuConsensusFiveProponents, organization: organizations.qualified, question_total: 20 }
   twuFiveTwo: { id: 00000000-0000-4000-a031-000000000102, opportunity: opportunities.twuConsensusFiveProponents, organization: organizations.proponentTwo, question_total: 18 }
