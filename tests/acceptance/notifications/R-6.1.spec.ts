@@ -1,21 +1,20 @@
 // criterion: @R-6.1 v1
-// provenance: blind, spec@f31700e000484947669c48e50cf9c73b4d1e20c7, derived 2026-09-28
+// provenance: blind, spec@c1e09955fdff55e84870c25dfcb8e0fd9981c437, derived 2026-09-28
 import { test, expect, persona } from "../../fixtures";
 
-// The given — a service started with notifications switched off — is the oracle configuration
-// observables.yaml names configurations.notifications_disabled. Nothing the service shows says
-// which configuration it runs under, so the harness that starts an instance that way exports
-// SDLC_ORACLE_DISABLE_NOTIFICATIONS=1 to the test process too. Without it the instance does not
-// offer the criterion's given, and the test is skipped rather than failed; every other criterion
-// that expects a message is false on such an instance, so it is never shared with them.
+// The given — a service started with notifications switched off — is the configuration
+// spec/contract/observables.yaml names configurations.notifications_disabled. It is read once at
+// start-up, so no test can put a running service into it; this test is written for, and must be
+// run against, an instance started that way. It does not skip itself on any signal from the
+// environment: run against an instance with notifications on, it fails, because the message it
+// says must not be sent is sent. The tag names the configuration so a runner can pick this test
+// out for the instance started for it.
 //
-// Two actions that send under the default configuration are taken: publishing a Code With Us
-// opportunity (announced to every account that asked for new-opportunity notices — the seed holds
-// many) and announcing changed terms (a message to every active vendor). Each must report success
-// as it would with notifications on; then, after a margin longer than a message takes to reach the
-// catcher under the default, the catcher must hold nothing at all.
-
-const disabled = process.env.SDLC_ORACLE_DISABLE_NOTIFICATIONS === "1";
+// The action is the one observables.yaml names for this configuration: an administrator
+// publishing a Code With Us opportunity, which under the default announces it to every account
+// that asked for new-opportunity notices. It must complete and report success as it would with
+// notifications on; then, after a margin longer than a message takes to reach the catcher under
+// the default, the catcher must hold nothing at all.
 
 const settle = { timeout: 30000 };
 const title = "R-6.1 opportunity published with notifications switched off";
@@ -48,35 +47,28 @@ async function readOrEmpty(read: () => Promise<string>): Promise<string> {
   }
 }
 
-test("When notifications are switched off for an environment, nothing the service does sends a message, and every action that would have sent one still completes normally.", async ({
-  surface,
-  mail,
-}) => {
-  test.skip(!disabled, "this instance was not started with notifications switched off (SDLC_ORACLE_DISABLE_NOTIFICATIONS=1)");
-  test.slow();
-  await mail.clear();
+test(
+  "When notifications are switched off for an environment, nothing the service does sends a message, and every action that would have sent one still completes normally.",
+  { tag: "@notifications_disabled" },
+  async ({ surface, mail }) => {
+    test.slow();
+    await mail.clear();
 
-  await surface.signIn(persona.administrator);
+    await surface.signIn(persona.administrator);
 
-  // Publishing an opportunity completes and reports success.
-  await surface.opportunityCwuCreate.open();
-  await surface.opportunityCwuCreate.publish({ ...complete, title });
-  expect(await readOrEmpty(() => surface.opportunityCwuCreate.fieldError())).toBeFalsy();
-  await expect.poll(() => readOrEmpty(() => surface.opportunityCwuEdit.opportunityIdentifier()), settle).toBeTruthy();
-  const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
-  await surface.opportunityCwuView.open({ opportunityId });
-  expect((await readOrEmpty(() => surface.opportunityCwuView.status())).toLowerCase()).toMatch(/publish/);
+    // The action completes and reports success.
+    await surface.opportunityCwuCreate.open();
+    await surface.opportunityCwuCreate.publish({ ...complete, title });
+    expect(await readOrEmpty(() => surface.opportunityCwuCreate.fieldError())).toBeFalsy();
+    await expect.poll(() => readOrEmpty(() => surface.opportunityCwuEdit.opportunityIdentifier()), settle).toBeTruthy();
+    const opportunityId = await surface.opportunityCwuEdit.opportunityIdentifier();
+    await surface.opportunityCwuView.open({ opportunityId });
+    expect((await readOrEmpty(() => surface.opportunityCwuView.status())).toLowerCase()).toMatch(/publish/);
 
-  // Announcing changed terms completes and reports success.
-  await surface.notificationTermsBroadcast.open();
-  await surface.notificationTermsBroadcast.notifyVendorsOfUpdatedTerms();
-  await surface.notificationTermsBroadcast.confirmNotifyVendors();
-  await expect.poll(() => readOrEmpty(() => surface.notificationTermsBroadcast.notifyVendorsSuccess()), settle).toBeTruthy();
-  expect(await readOrEmpty(() => surface.notificationTermsBroadcast.notifyVendorsFailure())).toBeFalsy();
-
-  // Under the default configuration these messages reach the catcher within seconds; allow a
-  // generous margin, then nothing may have arrived for anybody.
-  await new Promise((resolve) => setTimeout(resolve, 10000));
-  await surface.caughtMessageList.open();
-  expect(Number(await surface.caughtMessageList.messageCount()), "messages sent with notifications switched off").toBe(0);
-});
+    // Under the default these announcements reach the catcher within seconds; allow a generous
+    // margin, then nothing may have arrived for anybody.
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+    await surface.caughtMessageList.open();
+    expect(Number(await surface.caughtMessageList.messageCount()), "messages sent with notifications switched off").toBe(0);
+  },
+);

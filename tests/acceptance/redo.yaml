@@ -505,6 +505,11 @@ redo:
       notifications-off configuration, which the calibration run never supplied;
       the test must run against an instance started with notifications switched
       off
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on notifications
+      by: runner:derive-tests
+      at: 2026-09-28T22:47:55.590Z
   - id: R-1.9
     version: 2
     why: it computes 'fourteen days from the day of saving' in the test runner's own
