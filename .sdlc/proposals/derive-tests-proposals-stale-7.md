@@ -50,3 +50,27 @@ The year stands in for "when" because the history comes back as one piece of tex
 - On `proposal-swu-create` and `proposal-twu-create`, an observation listing the people the team-member choice offers.
 
 Nothing asked me to change anything outside `tests/acceptance`, and I didn't.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+The question is whether the four rewritten tests (R-2.14 v2, R-2.18 v3, R-2.30 v1, R-2.35 v1) follow from their criteria and from nothing else. I approve. The runner typecheck reports no diagnostics under acceptance/proposals; the two it found are in adapters/new, which this proposal does not answer for. The three redo items are answered. R-2.14 now makes one attempt per test, so a timeout can no longer stand in for a result. Each missing field and each malformed field is asserted as refused, and an archived organization is compared with an active one owned by the same persona; the seed manifest confirms organizationOwner owns both, so status is the only difference. The clause saying each offending field is named in the response, the existence check and the vendor-membership check are each recorded in not-testable.yaml with a clause, the reason and owner contract. Each reason names a surface that is actually missing: an observation that ties an error to its field, and a request-level proposal page. R-2.30 no longer reads the price score from a single page. It compares how often a standalone 50 appears, before and after, across every place the administrator is shown scores, and checks that the history gains a price entry and an evaluated entry. That is exactly the criterion's three-part then. R-2.35 finds its two new history entries by what the test itself wrote, the score 63 and the disqualification note, not by label. It asserts author, time, note and newest-first as differences from the history before. Reading 'when' as the current year is coarse, but the test says so and it follows from the criterion. R-2.18 v3 reaches the absent-membership given by removing a named member after the draft is saved. Its control draft, which names someone who stays a member, is the one assertion beyond the criterion's literal text. It is there so that a screen which never submits anything cannot pass the refusal half, and 'must be an active member' implies an active member is not refused on that ground, so I accept it rather than calling it an overreach. The wording, pending and inactive memberships, the Team With Us uniqueness refusal, the Sprint With Us absence of that check, and what the form offers are all recorded in not-testable.yaml with specific missing surfaces owned by contract. The checks already show both as open missing-test conditions owed by contract. My ruling would change to a return if a run showed a stray 50, or the year, appearing for reasons unrelated to the entries being tested, because that would make the before/after counts in R-2.30 or R-2.35 unreliable. It would also change if the contract gains the field-tagged error observation or a request-level proposal page and the tests are not extended to use them.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `1d493ba9ed7c4990296077c240b61c6bf7b248fd`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/proposals/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
