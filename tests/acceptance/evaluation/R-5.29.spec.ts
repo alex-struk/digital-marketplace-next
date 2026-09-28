@@ -30,8 +30,18 @@ import type { Surface } from "../../fixtures";
 //
 // "Only while the opportunity is in consensus" is tested from the side before consensus: the
 // chair attempts a consensus while the seeded closed opportunity is still at individual
-// evaluation, and none is recorded. The side after consensus, and a non-chair changing the
-// chair's consensus, are recorded in not-testable.yaml.
+// evaluation, and none is recorded.
+//
+// Changing a consensus is tested through evaluation-consensus-request-swu and -twu, which
+// read back the agreed scores and notes a consensus holds and send a change no screen offers
+// the person making it. The starting points are the seeded opportunities still at consensus
+// with the chair's consensus submitted for both proponents (swuConsensusAllAgreed,
+// twuConsensusAllAgreed), and those moved past consensus with the chair's consensus standing
+// (swuPastConsensus, twuPastConsensus). A change counts as refused when the service does not
+// report it accepted and the administrator, who may read a consensus at any stage, finds the
+// stored scores and notes exactly as they were before the attempt. Each refusal is measured
+// against a write shown to succeed: the chair changing a consensus on the opportunity still
+// in consensus is accepted, and the change is read back.
 
 const statement =
   "Only the chair may record and change the consensus, one consensus per proponent, and only while the opportunity is in consensus.";
@@ -160,3 +170,101 @@ test(`${statement} (the chair tries to record a consensus before the opportunity
     await consensusStatusOf(surface, { opportunityId: earlyOpportunityId, proposalId, userId: chair }),
   ).toBe("");
 });
+
+type ConsensusRequestPage = Surface["evaluationConsensusRequestSwu"];
+
+const programs = [
+  {
+    name: "Sprint With Us",
+    request: (surface: Surface): ConsensusRequestPage => surface.evaluationConsensusRequestSwu,
+    inConsensus: seed.proposals.swuAgreedOne.id,
+    pastConsensus: seed.proposals.swuPastConsensusOne.id,
+  },
+  {
+    name: "Team With Us",
+    request: (surface: Surface): ConsensusRequestPage => surface.evaluationConsensusRequestTwu,
+    inConsensus: seed.proposals.twuAgreedOne.id,
+    pastConsensus: seed.proposals.twuPastConsensusOne.id,
+  },
+];
+
+const changedConsensus = {
+  questions: questions.map((order) => ({
+    order,
+    score: 1,
+    notes: `A changed agreed note on question ${order + 1}.`,
+  })),
+};
+
+async function storedConsensus(
+  consensusPage: ConsensusRequestPage,
+  proposalId: string,
+): Promise<{ scores: string; notes: string }> {
+  await consensusPage.open({ proposalId, userId: chair });
+  return {
+    scores: await readOrEmpty(() => consensusPage.storedScores()),
+    notes: await readOrEmpty(() => consensusPage.storedNotes()),
+  };
+}
+
+async function attemptChange(consensusPage: ConsensusRequestPage, proposalId: string): Promise<string> {
+  await consensusPage.open({ proposalId, userId: chair });
+  try {
+    await consensusPage.changeConsensusByRequest(changedConsensus);
+  } catch {
+    // A change the service will not take is refused; what stands is read below.
+  }
+  return readOrEmpty(() => consensusPage.requestAccepted());
+}
+
+async function chairChangesInConsensus(consensusPage: ConsensusRequestPage, proposalId: string): Promise<void> {
+  const before = await storedConsensus(consensusPage, proposalId);
+  await consensusPage.open({ proposalId, userId: chair });
+  await consensusPage.changeConsensusByRequest(changedConsensus);
+  expect(await readOrEmpty(() => consensusPage.requestAccepted())).toBeTruthy();
+  await expect
+    .poll(async () => (await storedConsensus(consensusPage, proposalId)).notes, settle)
+    .not.toBe(before.notes);
+  expect((await storedConsensus(consensusPage, proposalId)).notes).toContain("A changed agreed note");
+}
+
+for (const program of programs) {
+  test(`${statement} (${program.name}: an evaluator who is not the chair tries to change the chair's consensus, and is refused, while the chair may change it)`, async ({
+    surface,
+  }) => {
+    const page = program.request(surface);
+
+    await surface.signIn(persona.administrator);
+    const before = await storedConsensus(page, program.inConsensus);
+    expect(before.scores).toBeTruthy();
+    expect(before.notes).toContain("Seeded note on question");
+    await surface.signOut();
+
+    await surface.signIn(persona.publicSectorStaff);
+    expect(await attemptChange(page, program.inConsensus)).toBeFalsy();
+    await surface.signOut();
+
+    await surface.signIn(persona.administrator);
+    await new Promise((resolve) => setTimeout(resolve, quietPeriod));
+    expect(await storedConsensus(page, program.inConsensus)).toEqual(before);
+
+    await chairChangesInConsensus(page, program.inConsensus);
+  });
+
+  test(`${statement} (${program.name}: the chair tries to change a consensus once the opportunity has moved past consensus, and is refused)`, async ({
+    surface,
+  }) => {
+    const page = program.request(surface);
+
+    await surface.signIn(persona.administrator);
+    const before = await storedConsensus(page, program.pastConsensus);
+    expect(before.scores).toBeTruthy();
+
+    expect(await attemptChange(page, program.pastConsensus)).toBeFalsy();
+
+    await new Promise((resolve) => setTimeout(resolve, quietPeriod));
+    expect(await storedConsensus(page, program.pastConsensus)).toEqual(before);
+
+    await chairChangesInConsensus(page, program.inConsensus);
+  });
+}
