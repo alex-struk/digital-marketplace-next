@@ -109,6 +109,25 @@ test("Only a person marked as an evaluator on the panel may record an individual
   await expectRefused(surface, opportunityId, seed.proposals.swuOwnerOffPanelOne.id);
 });
 
+// swuOpenWithSubmittedProposal is published with its deadline thirty days ahead, so nothing moves
+// it into individual question evaluation; users.staffOne is an evaluator on its panel and has
+// evaluated nothing, so a refusal there is a refusal for the stage alone.
+test("Only a person marked as an evaluator on the panel may record an individual evaluation, and only while the opportunity is in individual question evaluation (an evaluator on the panel is refused while the opportunity is not in individual question evaluation)", async ({
+  surface,
+}) => {
+  const opportunityId = seed.opportunities.swuOpenWithSubmittedProposal.id;
+  await surface.signIn(persona.publicSectorStaff);
+  await surface.opportunitySwuView.open({ opportunityId });
+  const status = await readOrEmpty(() => surface.opportunitySwuView.status());
+  expect(status).not.toBe("");
+  expect(inIndividualEvaluation(status)).toBe(false);
+
+  await expectRefused(surface, opportunityId, seed.proposals.swuOpenSubmitted.id);
+
+  await surface.opportunitySwuView.open({ opportunityId });
+  expect(inIndividualEvaluation(await readOrEmpty(() => surface.opportunitySwuView.status()))).toBe(false);
+});
+
 test("Only a person marked as an evaluator on the panel may record an individual evaluation, and only while the opportunity is in individual question evaluation (an evaluator on the panel may score)", async ({
   surface,
 }) => {
