@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-triage-old-18 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">222</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">218</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">189</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-triage-old-18</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-28 18:56</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>17 criterion(s) fail against old: which of them did this project&#39;s own adapter cause?</h2>
+<p><strong>Recommendation.</strong> Sort R-8.2, R-2.4, R-8.5, R-8.7, R-2.10, R-8.12, R-5.14, R-5.16, R-2.17, R-2.18, R-2.20, R-8.20, R-2.22, R-2.28, R-5.30, R-2.31, R-5.32 with a triage condition each, so the adapter&#39;s failures are fixed there and only product questions reach the product owner.</p>
+<p>17 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:4300,">http://localhost:4300,</a> and nobody has sorted them yet. Before any reaches the product owner, say which of them this project&#39;s own adapter caused. The adapter is under <code>tests/adapters/old/</code>; read each failure against it and against the test.</p>
+<h4>R-8.2 · v1</h4>
+<p>An upload carries the file itself, a name to store it under, and a statement of who may read it, all in one submission.</p>
+<ul><li>given: a signed-in person with a document to upload</li><li>when: they submit the document together with a name and a read-access statement</li><li>then: the file is stored and its record — its identifier, its name and the date it was stored — is returned</li><li>test: tests/acceptance/files/R-8.2.spec.ts</li></ul>
+<p><strong>an upload carries the file itself, a name to store it under, and a statement of who may read it, all in one submission</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-2.4 · v1</h4>
+<p>Only a draft proposal can be deleted, and deleting it removes it permanently.</p>
+<ul><li>given: a proposal that has been submitted</li><li>when: its author asks for it to be deleted</li><li>then: the request is refused, whereas deleting a draft succeeds and the proposal can no longer be opened</li><li>test: tests/acceptance/proposals/R-2.4.spec.ts</li></ul>
+<p><strong>a proposal that has been submitted cannot be deleted</strong> — failed</p>
+<pre><code>Error: proposal-cwu-edit.delete_proposal — refused: the proposal&#39;s status is &quot;Submitted&quot; and its page offers no &quot;Delete&quot; on http://localhost:4300/opportunities/code-with-us/a9de2bd7-8393-4137-9a07-ccec64481e9b/proposals/d56b64a2-a2df-48c3-8a5c-2848e4d323ff/edit; proposal-cwu-edit.delete_proposal — neither the top bar nor an &quot;Actions&quot; menu offers &quot;Delete&quot; on http://localhost:4300/opportunities/code-with-us/a9de2bd7-8393-4137-9a07-ccec64481e9b/proposals/d56b64a2-a2df-48c3-8a5c-2848e4d323ff/edit; the top bar shows: Digital Marketplace | vendor.one@example.test | Dashboard | | | Opportunities | | | Organizations | Edit | Withdraw</code></pre>
+<h4>R-8.5 · v1</h4>
+<p>Two uploads of identical content are stored once, while each upload remains its own record with its own name, its own uploader and its own read access.</p>
+<ul><li>given: a file already stored by one person</li><li>when: a second person uploads a file with byte-for-byte identical content under a different name</li><li>then: a second, separate record is created that shares the stored content, and the second person&#39;s read access does not extend to the first record</li><li>test: tests/acceptance/files/R-8.5.spec.ts</li></ul>
+<p><strong>two uploads of identical content are stored once, while each upload remains its own record with its own name, its own uploader and its own read access</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-8.7 · v1</h4>
+<p>A file is readable by anyone if it was marked readable by anyone, by a person it names, by anyone holding an account type it names, by whoever uploaded it, and by any administrator.</p>
+<ul><li>given: a file uploaded by one vendor and marked readable by no one else</li><li>when: a second vendor asks for it, and then an administrator asks for it</li><li>then: the second vendor is refused and the administrator receives it</li><li>test: tests/acceptance/files/R-8.7.spec.ts</li></ul>
+<p><strong>a file marked readable by no one else is readable by whoever uploaded it and by any administrator, and refused to another vendor</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-2.10 · v1</h4>
+<p>A Team With Us proposal is refused when the hourly rates it names, applied at each resource&#39;s target allocation across the opportunity&#39;s contract period, come to more than the opportunity&#39;s maximum budget; the check runs on both the create and the edit path, as the equivalent Sprint With Us check does.</p>
+<ul><li>test: tests/acceptance/proposals/R-2.10.spec.ts</li></ul>
+<p><strong>a Team With Us proposal whose hourly rates come to more than the opportunity&#39;s maximum budget is refused on the create path</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>a Team With Us proposal whose hourly rates come to more than the opportunity&#39;s maximum budget is refused on the edit path</strong> — failed</p>
+<pre><code>TimeoutError: locator.click: Timeout 15000ms exceeded.
+Call log:
+[2m  - waiting for getByRole(&#39;navigation&#39;).first().getByText(&#39;Save Draft&#39;, { exact: true }).visible().first()[22m
+[2m    - locator resolved to &lt;a tabindex=&quot;0&quot; class=&quot;a d-inline-flex align-items-center flex-nowrap text-nowrap ms-3   position-relative btn btn-sm btn-success&quot;&gt;…&lt;/a&gt;[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is visible, enabled and stable[22m
+[2m      - scrolling into view if needed[22m
+[2m      - done scrolling[22m
+[2m      - &lt;div role=&quot;dialog&quot; tabindex=&quot;-1&quot; aria-modal=&quot;true&quot; class=&quot;modal fade&quot;&gt;…&lt;/div&gt; from &lt;div tabindex=&quot;-1&quot;&gt;…&lt;/div&gt; subtree intercepts pointer events[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - &lt;div role=&quot;dialog&quot; tabindex=&quot;-1&quot; aria-modal=&quot;true&quot; class=&quot;modal fade&quot;&gt;…&lt;/div&gt; from &lt;div tabindex=&quot;-1&quot;&gt;…&lt;/div&gt; subtree intercepts pointer events[22m
+[2m  2 × retrying click action[22m
+[2m      - waiting 100ms[22m
+[2m      - waiting for element to be visible, enabled and stable[22m
+… 14 more line(s)</code></pre>
+<h4>R-8.12 · v1</h4>
+<p>A request for a file the requester may not read is answered as not authorized, and so is a request for a file that does not exist — unless the requester is an administrator, who is told it was not found.</p>
+<ul><li>given: an identifier that no stored file carries</li><li>when: a vendor asks for it, and then an administrator asks for it</li><li>then: the vendor is told they are not authorized and the administrator is told it was not found</li><li>test: tests/acceptance/files/R-8.12.spec.ts</li></ul>
+<p><strong>a request for a file the requester may not read is answered as not authorized</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-5.14 · v1</h4>
+<p>The action that finalises consensus scores must be offered to whoever the service accepts it from — the opportunity&#39;s owner as well as an administrator — so that the browser and the service agree on who may finalise.</p>
+<ul><li>test: tests/acceptance/evaluation/R-5.14.spec.ts</li></ul>
+<p><strong>the action that finalises consensus scores is offered to the opportunity&#39;s owner</strong> — failed</p>
+<pre><code>Error: evaluation-consensus-list-swu.finalize_consensus_scores — refused: the opportunity is at &quot;Team Questions Consensus&quot; but the top bar of http://localhost:3101/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=consensus offers this reader no &quot;Finalize Consensus Scores&quot; or &quot;Finalize Scores&quot; or &quot;Finalize&quot; (it shows: Digital Marketplace | staff.one@example.test | Dashboard | | | Opportunities | | | Organizations)</code></pre>
+<h4>R-5.16 · v1</h4>
+<p>The evaluation panel may be set or changed while an opportunity is a draft, under review, published, or in individual question evaluation, and is fixed from the consensus stage onwards.</p>
+<ul><li>given: an opportunity whose questions are being evaluated individually</li><li>when: its owner changes the evaluation panel, and then tries again once the opportunity has moved to consensus</li><li>then: the first change is accepted and the second is refused</li><li>test: tests/acceptance/evaluation/R-5.16.spec.ts</li></ul>
+<p><strong>the evaluation panel is fixed from the consensus stage onwards</strong> — failed</p>
+<pre><code>Error: evaluation-panel-swu.add_panel_member — refused: the evaluation panel is shown read-only and its top bar offers no &quot;Edit&quot; (Status: Team Questions Consensus) on http://localhost:3100/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/edit?tab=evaluationPanel (the top bar shows: Digital Marketplace | staff.one@example.test | Dashboard | | | Opportunities | | | Organizations)</code></pre>
+<h4>R-2.17 · v1</h4>
+<p>A Team With Us proposal may only be submitted on behalf of an organization that is a qualified supplier for that program and that provides every service area the opportunity&#39;s resources call for.</p>
+<ul><li>given: a Team With Us opportunity calling for a service area the vendor&#39;s organization does not provide</li><li>when: the vendor submits a proposal naming that organization</li><li>then: the submission is refused with &quot;The selected organization does not satisfy this opportunity&#39;s service areas.&quot;</li><li>test: tests/acceptance/proposals/R-2.17.spec.ts</li></ul>
+<p><strong>a Team With Us proposal may only be submitted on behalf of an organization that is a qualified supplier for that program</strong> — failed</p>
+<pre><code>Error: proposal-twu-create.add_team_member_for_resource — refused: the &quot;Organization&quot; chooser on http://localhost:3102/opportunities/team-with-us/df87c253-6f17-4f7d-bbc7-05c8465c7172/proposals/create offers no organization, so no team can be put together</code></pre>
+<p><strong>a Team With Us proposal is refused when its organization does not provide every service area the opportunity&#39;s resources call for</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;service areas&quot;[39m
+Received string:    [31m&quot;&quot;[39m</code></pre>
+<h4>R-2.18 · v2</h4>
+<p>Every person named on a proposal&#39;s team must be an active member of the organization the proposal is submitted for, refused with &quot;User is not an active member of the organization.&quot;, and a Team With Us proposal additionally refuses the same person named twice with &quot;Please select unique team members.&quot;, while a Sprint With Us phase applies no such uniqueness check.</p>
+<ul><li>given: a proposal naming a person whose membership of the organization is pending, inactive or absent</li><li>when: the vendor submits it</li><li>then: the submission is refused with &quot;User is not an active member of the organization.&quot;, and naming the same person twice is refused with &quot;Please select unique team members.&quot;</li><li>test: tests/acceptance/proposals/R-2.18.spec.ts</li></ul>
+<p><strong>every person named on a proposal&#39;s team must be an active member of the organization the proposal is submitted for</strong> — failed</p>
+<pre><code>Error: proposal-swu-create.add_phase_team_member — refused: {&quot;id&quot;:&quot;00000000-0000-4000-8000-000000000201&quot;,&quot;persona&quot;:&quot;vendor&quot;,&quot;idp_id&quot;:&quot;test-vendor-1&quot;,&quot;email&quot;:&quot;vendor.one@example.test&quot;,&quot;account_type&quot;:&quot;VENDOR&quot;} is not a member of any organization the signed-in vendor belongs to, so no team picker on http://localhost:3100/opportunities/sprint-with-us/a3dc854d-f8dd-4ab0-89b5-e26b22523e5d/proposals/create offers them</code></pre>
+<p><strong>a Team With Us proposal refuses the same person named twice</strong> — failed</p>
+<pre><code>Error: proposal-twu-create.add_team_member_for_resource — refused: the &quot;Resource Name&quot; chooser does not offer &quot;Charlie Placeholder&quot; on http://localhost:3100/opportunities/team-with-us/819d0baa-c05f-417b-91fb-6372927cf494/proposals/create (it offers: Blake Placeholder | Dana Placeholder)</code></pre>
+<p><strong>a Sprint With Us phase applies no uniqueness check to the people named on it</strong> — failed</p>
+<pre><code>Error: proposal-swu-create.add_phase_team_member — refused: the member dialog does not offer &quot;Charlie Placeholder&quot; on http://localhost:3100/opportunities/sprint-with-us/179d1e96-822b-4b9f-9a86-460b384485a7/proposals/create (it shows: Add Team Member(s) | Select the team member(s) that you want to propose to be part of your team for this opportunity. If you do not see the team member that you want to add, you must send them a request to join your organization. | Blake Placeholder | Dana Placeholder | Add Team Member(s) | Cancel)</code></pre>
+<h4>R-2.20 · v2</h4>
+<p>A Team With Us proposal must name at least one team member, each with an hourly rate of at least one dollar and each against a resource that exists, though the service does not check that the resource belongs to the opportunity being bid on.</p>
+<ul><li>given: a Team With Us opportunity listing one or more resources</li><li>when: a vendor submits a proposal with no team members, with an hourly rate below one dollar, or naming a resource the opportunity does not list</li><li>then: the submission is refused and the member, the rate or the resource is named as the reason</li><li>test: tests/acceptance/proposals/R-2.20.spec.ts</li></ul>
+<p><strong>a Team With Us proposal must name at least one team member</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>each team member on a Team With Us proposal carries an hourly rate of at least one dollar</strong> — failed</p>
+<pre><code>TimeoutError: locator.click: Timeout 15000ms exceeded.
+Call log:
+[2m  - waiting for getByText(/^\d+\.\s+\S/).visible().first()[22m
+[2m    - locator resolved to &lt;a tabindex=&quot;0&quot; class=&quot;a d-inline-flex align-items-center flex-nowrap text-body text-hover-body &quot;&gt;4. Review Proposal&lt;/a&gt;[22m
+[2m  - attempting click action[22m
+[2m    2 × waiting for element to be visible, enabled and stable[22m
+[2m      - element is not stable[22m
+[2m    - retrying click action[22m
+[2m    - waiting 20ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is not stable[22m
+[2m  - retrying click action[22m
+[2m    - waiting 100ms[22m
+[2m    - waiting for element to be visible, enabled and stable[22m
+[2m    - element is visible, enabled and stable[22m
+[2m    - scrolling into view if needed[22m
+[2m    - done scrolling[22m
+[2m    - &lt;a tabindex=&quot;0&quot; target=&quot;_blank&quot; href=&quot;/content/team-with-us-terms-and-conditions&quot; class=&quot;a d-inline-flex align-items-center flex-nowrap &quot;&gt;Team With Us Terms &amp; Conditions&lt;/a&gt; from &lt;div tabindex=&quot;-1&quot;&gt;…&lt;/div&gt; subtree intercepts pointer events[22m
+[2m  - retrying click action[22m
+[2m    - waiting 100ms[22m
+… 33 more line(s)</code></pre>
+<h4>R-8.20 · v1</h4>
+<p>A file attached to an opportunity or a proposal is readable by whoever may read the thing it is attached to, under one rule covering Code With Us, Sprint With Us and Team With Us alike rather than a separate rule per program.</p>
+<ul><li>test: tests/acceptance/files/R-8.20.spec.ts</li></ul>
+<p><strong>a file attached to a Team With Us opportunity is readable by whoever may read the opportunity, under the same rule</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-2.22 · v1</h4>
+<p>Once a proposal has been submitted, the organization it was submitted for cannot be changed until it is withdrawn.</p>
+<ul><li>given: a submitted Sprint With Us or Team With Us proposal</li><li>when: the vendor edits it and names a different organization</li><li>then: the edit is refused with &quot;Organization cannot be changed once the proposal has been submitted&quot;, while the same edit on a draft or withdrawn proposal is accepted</li><li>test: tests/acceptance/proposals/R-2.22.spec.ts</li></ul>
+<p><strong>the organization may be changed once the proposal has been withdrawn</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;R-2.22 Second Supplier For A Withdrawn Proposal Ltd.&quot;[39m
+Received string:    [31m&quot;PROPOSAL MANAGEMENT[39m
+[31mProposal[39m
+[31mVENDOR EVALUATION[39m
+[31mScoresheet[39m
+[31mNEED HELP?[39m
+[31mRead Guide[39m
+[31mTeam With Us: R-2.22 opportunity whose withdrawn proposal changes organization[39m
+[31mSubmitted Sep 28, 2026[39m
+[31m|[39m
+[31mUpdated Sep 28, 2026[39m
+[31mOpportunity Status[39m
+[31mOpen[39m
+[31mProposal Status[39m
+[31mWithdrawn[39m
+[31mOrganization[39m
+[31mNorthern Pines Digital Ltd.[39m
+[31mExport Proposal[39m
+… 12 more line(s)</code></pre>
+<h4>R-2.28 · v1</h4>
+<p>Sprint With Us and Team With Us proposals advance through the evaluation stages one at a time, and an action taken at the wrong stage of the opportunity is refused.</p>
+<ul><li>given: a Sprint With Us opportunity still in its code challenge stage</li><li>when: someone enters a team scenario score for one of its proposals</li><li>then: the request is refused with &quot;The opportunity is not in the correct stage of evaluation to perform that action.&quot;</li><li>test: tests/acceptance/proposals/R-2.28.spec.ts</li></ul>
+<p><strong>a Sprint With Us action taken at the wrong stage of the opportunity is refused</strong> — failed</p>
+<pre><code>Error: proposal-swu-view.score_team_scenario — refused: the tab says &quot;If this proposal is screened into the Team Scenario, it can be scored once the opportunity reaches the Team Scenario too.&quot; on http://localhost:3101/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/00000000-0000-4000-8000-000000000741?tab=teamScenario</code></pre>
+<p><strong>a Team With Us action taken at the wrong stage of the opportunity is refused</strong> — failed</p>
+<pre><code>Error: proposal-twu-view.score_challenge — refused: the tab says &quot;If this proposal is screened into the Challenge, it can be scored once the opportunity has reached the Challenge too.&quot; on http://localhost:3101/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/proposals/00000000-0000-4000-8000-000000000841?tab=challenge</code></pre>
+<h4>R-5.30 · v1</h4>
+<p>The chair may reopen and resubmit a consensus as often as they like until it is finalised, unlike an individual evaluation, which is fixed once submitted.</p>
+<ul><li>given: a consensus the chair has already submitted, on an opportunity still in consensus</li><li>when: the chair changes an agreed score and submits again</li><li>then: the change is accepted and the consensus is recorded as submitted afresh</li><li>test: tests/acceptance/evaluation/R-5.30.spec.ts</li></ul>
+<p><strong>the chair may reopen and resubmit a consensus until it is finalised</strong> — failed</p>
+<pre><code>Error: evaluation-consensus-list-twu.submit_final_consensus_scores — refused: the top bar of http://localhost:3101/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/edit?tab=consensus offers &quot;Finalize Consensus Scores&quot; instead of &quot;Submit Final Consensus Scores&quot; (no consensus left in draft; it shows: Digital Marketplace | admin.one@example.test | Dashboard | | | Opportunities | | | Organizations | | | Users | | | Content | Finalize Consensus Scores)</code></pre>
+<h4>R-2.31 · v1</h4>
+<p>A proposal&#39;s total score is the weighted sum of its stage scores, and proposals are ranked against each other only once they are fully evaluated.</p>
+<ul><li>given: an opportunity whose questions, challenge, scenario and price carry stated weights</li><li>when: a proposal has a score for every one of those stages</li><li>then: its total is those scores combined in the stated proportions, and it takes a rank among the other fully evaluated proposals, highest total first</li><li>test: tests/acceptance/proposals/R-2.31.spec.ts</li></ul>
+<p><strong>A proposal&#39;s total score is the weighted sum of its stage scores, and proposals are ranked against each other only once they are fully evaluated.</strong> — failed</p>
+<pre><code>Error: the higher bid shows no price score
+
+[2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoBeNaN[2m()[22m
+
+Received: [31mNaN[39m</code></pre>
+<h4>R-5.32 · v1</h4>
+<p>Finalising the consensus records the agreed scores against each proponent, screens in the highest-scoring proponents that met every minimum score — at most four for Sprint With Us and at most three for Team With Us — and moves the opportunity to its next stage.</p>
+<ul><li>given: a Sprint With Us opportunity in consensus with six proponents, five of whom met every minimum score</li><li>when: the consensus scores are finalised</li><li>then: every proponent&#39;s history records the agreed scores question by question, the four highest scoring of the five are moved into the code challenge, and the opportunity moves to the code challenge stage</li><li>test: tests/acceptance/evaluation/R-5.32.spec.ts</li></ul>
+<p><strong>finalising records the agreed scores, screens in the proponents that met every minimum, and moves the opportunity on</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;challenge&quot;[39m
+Received string:    [31m&quot;under review&quot;[39m</code></pre>
+<h3>Triage conditions</h3>
+<p>One condition per line, one for every failing criterion the page lists, in exactly one of these forms:</p>
+<ul><li><code>adapter-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion and the test are both fine, and this target&#39;s adapter is what failed: it read the wrong thing off the page, reported a control missing that the page does render, or answered empty where it never reached the page. <code>&lt;why&gt;</code> names what the adapter did wrong, specifically enough for the next binding run to fix it. The criterion is not touched.</li><li><code>product-question &lt;ID&gt;</code> — nothing in the evidence points at the adapter. The failure goes to the product owner, who decides whether the application, the criterion or the test is wrong. No text after the ID.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. A condition may not span more than one line. When the evidence is genuinely unclear, it is a <code>product-question</code>: a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the adapter comes back from the next binding run unchanged and costs a run to find out.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-28 19:06.</p>
+<div class="body"><p>The question was which of the 17 criteria failing against the old target were caused by this project&#39;s own adapter. Ruling: approve, with one triage line per criterion: 10 adapter-wrong and 7 product-question. The evidence is the saved snapshots and results for this run, read against tests/adapters/old/index.ts. Three failures are the adapter throwing &#39;refused&#39; where the page correctly withholds the action and the test reads that refusal next: no Delete on a submitted proposal (R-2.4), a scoring tab that says it can be scored later (R-2.28), and a read-only panel at consensus (R-5.16). Two come from input the binding drops or mis-picks. The proposal-edit saveChanges discards its input, so the organization is never switched (R-2.22). The organization chooser left the pre-selected &#39;Northern Pines Digital Ltd.&#39; in place when the named organization was not matched, and the proposal was submitted under it (R-2.17); in R-2.17&#39;s first test the chooser offering nothing was thrown as unbound rather than left for the test to read. The terms dialog left open by acceptProgramTerms/acceptAppTerms intercepts the next click (R-2.10 edit path, R-2.20 rate test). The price-score reader looks for a label the proposal view never shows; the old application shows price only on the opportunity&#39;s Proposals table, the evaluator&#39;s scoresheet and the export (R-2.31). The Team With Us attachment is gone once the Attachments step is read again (R-8.20). Seven go to the product owner. The file uploads in R-8.2, R-8.7 and R-8.12 were refused, while the identical binding and persona passed R-8.1 and R-8.6 in the same run. R-8.5&#39;s refused upload is by the vendor.one account that earlier runs left inactive. In R-5.14 the owner is not offered Finalize. In R-5.30, after the chair edits an already submitted consensus the page offers Finalize rather than a resubmit. In R-5.32 the opportunity status did move to challenge, and only the vendor&#39;s view of their proposal reads &#39;Under Review&#39;. In R-2.18 the picker omits the named person, and nothing in the evidence explains why. Caveats: in R-2.10 and R-2.20 the other test is not the adapter&#39;s (the old application accepted the over-budget and the memberless proposals), and it will return as a product question once the dialog fault is fixed. The adapter&#39;s storedFileIdentifier collapses a refused upload to &#39;&#39; and discards its status and body, so the upload refusals reach the product owner without the refusal text. What would change this ruling: a fresh run with these adapter defects fixed that still fails a criterion at the same assertion makes that criterion a product question. For R-8.2/8.7/8.12, a captured refusal status and body that show a harness-built request rather than a service decision would make them adapter-wrong.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>adapter-wrong R-2.4: proposal-cwu-edit.delete_proposal (index.ts:4067-4080) throws &#39;refused&#39; when a submitted proposal&#39;s page offers no &#39;Delete&#39;, but the test reads the refusal as the proposal surviving (it reopens the proposal and reads its status); a missing Delete on a non-draft proposal must end the action without deleting and without throwing, so the test reaches its status check</li><li>adapter-wrong R-2.10: after acceptProgramTerms/acceptAppTerms the &#39;Review Terms and Conditions&#39; dialog (both boxes ticked) stays open, and proposal-twu-create.save_draft&#39;s click on the top-bar &#39;Save Draft&#39; is intercepted by that dialog until timeout; the terms actions must close or complete that dialog, or save_draft must deal with it first. The create-path failure in this criterion is not the adapter&#39;s: the over-budget proposal showed &#39;Proposal Submitted&#39;</li><li>product-question R-8.2</li><li>product-question R-8.5</li><li>product-question R-8.7</li><li>product-question R-8.12</li><li>product-question R-5.14</li><li>adapter-wrong R-5.16: evaluation-panel-swu.add_panel_member throws &#39;refused&#39; when the panel is shown read-only with no &#39;Edit&#39; at &#39;Team Questions Consensus&#39;, but the test reads the lock from panel_locked_after_consensus after save_evaluation_panel; the read-only panel must be left for panel_locked_after_consensus to report (add_panel_member and save_evaluation_panel return without changing anything), not thrown</li><li>adapter-wrong R-2.17: proposal-twu-create.choose_organization (chooseProposalOrganization, index.ts:3566-3587) presses Escape and returns when no option matches the named organization, leaving the form&#39;s pre-selected &#39;Northern Pines Digital Ltd.&#39; chosen, and the service-area test then submitted under that organization instead of &#39;R-2.17 Agile Coach Only Ltd.&#39;; it must read which organization is selected after choosing and, when the named one is not selected, report that rather than let the proposal proceed under another. In the qualified-supplier test, add_team_member_for_resource throws unbound when the chooser offers no organization; that withholding must be left for the test to read on the dashboard, not thrown</li><li>product-question R-2.18</li><li>adapter-wrong R-2.20: the rate test&#39;s click on the step link &#39;4. Review Proposal&#39; is intercepted by the terms dialog left open by acceptProgramTerms/acceptAppTerms (its &#39;Team With Us Terms &amp; Conditions&#39; link intercepts pointer events); the terms actions must leave no dialog open, or the step navigation must close it first. The no-team-member test&#39;s failure is not the adapter&#39;s: the old application showed &#39;Proposal Submitted&#39;</li><li>adapter-wrong R-8.20: for the Team With Us opportunity, file-attachment-control.existing_attachment_row reported the file, but attachment_address (index.ts:7027) calls dismissDialog() and then finds the &#39;7. Attachments&#39; step of the published opportunity empty with no /api/files/ link; the Team With Us add_attachment must save the addition, confirming any save dialog instead of letting dismissDialog discard it, before the address is read</li><li>adapter-wrong R-2.22: proposal-twu-edit.save_changes (index.ts:4045, saveChanges: () =&gt; saveProposalChanges(...)) discards its input, so the organization the test names (&#39;R-2.22 Second Supplier For A Withdrawn Proposal Ltd.&#39;) is never chosen and the withdrawn proposal is saved unchanged under &#39;Northern Pines Digital Ltd.&#39;; it must apply the given organization through the Organization chooser before saving</li><li>adapter-wrong R-2.28: proposal-swu-view.score_team_scenario and proposal-twu-view.score_challenge throw &#39;refused&#39; when the tab says it can be scored once the opportunity reaches that stage, but the test reads that refusal next through wrong_stage_error; the action must return without scoring and wrong_stage_error must return that notice</li><li>product-question R-5.30</li><li>adapter-wrong R-2.31: proposal-swu-view.price_score (index.ts:4227, stageFigure([], [&#39;Price Score&#39;,&#39;Price&#39;])) looks for a price figure on the proposal view, which in the old application shows only &#39;Total Score&#39; and &#39;Ranking&#39;; the price score is shown as the &#39;Price&#39; column of the opportunity&#39;s Proposals table (edit?tab=proposals), on the evaluator&#39;s scoresheet and on the exported proposal, and must be read from one of those</li><li>product-question R-5.32</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
