@@ -592,3 +592,26 @@ conditions:
         members as bound on both consensus-list pages
       by: agent:reviewer
       at: 2026-09-28T18:12:20.024Z
+  - ref: derive-tests-opportunities-stale-6#1
+    text: "R-1.16 (inception without prototype): assert that the error shown says a
+      prototype phase must accompany or follow the inception phase (for example,
+      field_error mentions both prototype and inception), not only that some
+      error is present; and assert that the opportunity did not end up
+      published. This supersedes the earlier redo instruction to keep this test
+      as written."
+    from: derive-tests-opportunities-stale-6
+    family: derive-tests-opportunities-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-28T19:24:55.573Z
+  - ref: derive-tests-opportunities-stale-6#2
+    text: "R-1.16 (implementation phase): do not let a failed read count as the rule
+      holding. If neither an opportunity identifier nor the dashboard can be
+      read, the test must fail rather than pass on an empty string."
+    from: derive-tests-opportunities-stale-6
+    family: derive-tests-opportunities-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-28T19:24:55.573Z
