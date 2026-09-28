@@ -1,0 +1,15 @@
+gate: G1
+verdict: approve
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  Is this the contract the tests for R-2.14 and R-2.18 will use? Approved. The proposal screens let a vendor choose only values the service accepts, so R-2.14's per-field refusals and R-2.18's membership and uniqueness refusals cannot be reached through them. The two new request-level pages (proposal-cwu-request, proposal-team-request) follow the pattern of the existing evaluation request pages and send any input straight to the service. Each reports whether the request was accepted, the refusal status, and each refusal message together with the field it names, which is what both criteria's 'then' clauses need. The seed now covers every case in R-2.18's 'given': a pending membership, an ended (INACTIVE) membership, and no membership at all. A well-formed organization identifier that is never inserted covers R-2.14's existence check, and seed.organizations.qualified serves as the organization the vendor does not belong to. I checked the new seed file against the existing ones: its column lists match and its identifiers do not clash. The new accounts have new-opportunity notices off, so existing announcement counts are unaffected. Nothing is removed or renamed; the only changes to existing pages are five added observations. Two behaviours of the old service are recorded as facts in the page comments. First, when the organization proponent does not exist, the service substitutes a blank individual, so the refusal names the individual's fields rather than 'organization'; this was confirmed on the oracle. Second, a Sprint With Us phase naming the same person twice fails when stored (503) rather than at validation; this comes from reading the source and schema only and is stated as such. What would change this ruling: calibration showing that the refusal for an organization that does not exist is not reported against the individual's fields, or that a duplicate in a Sprint With Us phase is not answered with 503. Either would mean the page comments misstate the old service's behaviour and need rewriting before tests rely on them.
+conditions: []
+cost: 0.3869526
+turns: 4
+session: "044cabb7-7705-49aa-a3f3-22e976d2ffa1"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T20:13:28.591Z
