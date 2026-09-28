@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the rewritten R-1.27 test follow from the criterion and nothing else? Approve. The test no longer takes the status label 'awarded' as proof of the award. It establishes the award by the successful proponent being named, which is what the criterion states. The visitor half (the criterion's given/when/then) asserts, for both seeded awarded opportunities, that the winner's name is shown and that contact details and score are withheld on the opportunity and on the winning proposal. A refused proposal page counts as withheld. The permitted-reader half, taken from the statement, asserts that an administrator sees the name and contact details and sees the score on either the opportunity or the proposal page, since the criterion does not say where. Every page, observation and seed handle used exists in surface.d.ts and seed.ts. No selector, route or status wording leaks in. The runner's typecheck reports no diagnostics under acceptance/opportunities; its two diagnostics are in adapters/new, which this proposal does not answer for. The named gaps (contact details readable only on the opportunity page, no contact-detail values in the seed) do not leave any clause unasserted. What would change the ruling: a calibrate run showing the proposal-page score read binding to something other than the score, or a contract change adding a contact-details observation on proposal views, which the test would then need to read.
+conditions: []
+cost: 0.39556379999999997
+turns: 4
+session: "fd33a768-e858-466a-b618-aa6f2f887dd8"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T16:12:12.169Z
