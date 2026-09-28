@@ -2,7 +2,7 @@
   "target": "old",
   "base_url": "http://localhost:4300",
   "spec": "05e88fb7765c5d6327f910e43f990e6c321b63fa",
-  "at": "2026-09-28T03:03:55.284Z",
+  "at": "2026-09-28T03:10:32.268Z",
   "rows": [
     {
       "id": "R-7.1",
@@ -188,7 +188,8 @@
           "error": "Error: about\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeFalsy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"about\u001b[39m\n\u001b[31mPublished Sep 27, 2026 7:30 PM\u001b[39m\n\u001b[31m|\u001b[39m\n\u001b[31mUpdated Sep 27, 2026 7:30 PM·\u001b[39m\n\u001b[31mInitial version\"\u001b[39m"
         }
       ],
-      "file_sha": "6cc2ac5d1f59645976f408e9b5c7f017cc2f5d8f"
+      "file_sha": "6cc2ac5d1f59645976f408e9b5c7f017cc2f5d8f",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-7.13",
@@ -258,7 +259,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7msprint-with-us-opportunity-scope Published Sep 27, 2026 7:31 PM | Updated Sep 27, 2026 7:31 PM \u001b[27mFormatting marks make these words bold. Raw markup tries to make these words bold and these words emphasised.\"\u001b[39m\nReceived: \u001b[31m\"Formatting marks make these words bold. Raw markup tries to make \u001b[7m<strong>\u001b[27mthese words bold\u001b[7m</strong>\u001b[27m and \u001b[7m<em>\u001b[27mthese words emphasised\u001b[7m</em>\u001b[27m.\"\u001b[39m"
         }
       ],
-      "file_sha": "2689de36626ce6f93749a3624afb2c790c59d6d8"
+      "file_sha": "2689de36626ce6f93749a3624afb2c790c59d6d8",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-7.18",
@@ -383,7 +385,8 @@
           "status": "passed"
         }
       ],
-      "file_sha": "dce4cd1003049d39f8a7034dcbda1d9d67f99182"
+      "file_sha": "dce4cd1003049d39f8a7034dcbda1d9d67f99182",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-7.23",
@@ -518,7 +521,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m\"00000000-0000-4000-8000-000000000201\"\u001b[39m\nReceived array: \u001b[31m[\"00000000-0000-4000-8000-000000000102\"]\u001b[39m"
         }
       ],
-      "file_sha": "90c0a508bc20bf74c7e5ad29d795148ae2a78650"
+      "file_sha": "90c0a508bc20bf74c7e5ad29d795148ae2a78650",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.3",
@@ -548,7 +552,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate"
         }
       ],
-      "file_sha": "a077dfe2f532a06d5b82d6f4eaa936c1ced60113"
+      "file_sha": "a077dfe2f532a06d5b82d6f4eaa936c1ced60113",
+      "triage": "product-question"
     },
     {
       "id": "R-5.10",
@@ -682,7 +687,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: not \u001b[32m\"staff.two@example.test\"\u001b[39m\nReceived string:        \u001b[31m\" staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  donotreply@example.test \u001b[7mstaff.two@example.test\u001b[27m staff.one@example.test  admin.one@example.test  admin.two@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  admin.one@example.test\u001b[39m\n\u001b[31mstaff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test  staff.one@example.test \"\u001b[39m"
         }
       ],
-      "file_sha": "05b745b45e74466df0e83dcbca09065492790ba2"
+      "file_sha": "05b745b45e74466df0e83dcbca09065492790ba2",
+      "triage": "product-question"
     },
     {
       "id": "R-5.18",
@@ -773,7 +779,8 @@
           "status": "passed"
         }
       ],
-      "file_sha": "ee390d7e9a68c8e676b7fc2af096482e45ce88d0"
+      "file_sha": "ee390d7e9a68c8e676b7fc2af096482e45ce88d0",
+      "triage": "product-question"
     },
     {
       "id": "R-5.22",
@@ -913,7 +920,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeFalsy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"Back to Opportunity\u001b[39m\n\u001b[31mVENDOR PROPOSAL\u001b[39m\n\u001b[31mProposal Details\u001b[39m\n\u001b[31mVENDOR EVALUATION\u001b[39m\n\u001b[31mResource Questions (Eval)\u001b[39m\n\u001b[31mInterview/Challenge\u001b[39m\n\u001b[31mMANAGEMENT\u001b[39m\n\u001b[31mProposal History\u001b[39m\n\u001b[31mTeam With Us: Vendor Proposal\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mUnder Review (Q)\u001b[39m\n\u001b[31mProponent\u001b[39m\n\u001b[31mProponent 1\u001b[39m\n\u001b[31mProponent 1\u001b[39m\n\u001b[31mQuestion 1·\u001b[39m\n\u001b[31mSeeded resource question one.·\u001b[39m\n\u001b[31mAnswer in your own words.·\u001b[39m\n\u001b[31mThe first proponent's answer to question one.·\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31m4\u001b[39m\n\u001b[31mA complete reading of this answer.\u001b[39m\n\u001b[31mRobin Placeholder\u001b[39m\n\u001b[31m4\u001b[39m\n\u001b[31mA complete reading of this answer.\u001b[39m\n\u001b[31mConsensus\u001b[39m\n\u001b[31mConsensus Score\u001b[39m\n\u001b[31mpoints\u001b[39m\n\u001b[31mQuestion 2·\u001b[39m\n\u001b[31mSeeded resource question two.·\u001b[39m\n\u001b[31mAnswer in your own words.·\u001b[39m\n\u001b[31mThe first proponent's answer to question two.·\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31m4\u001b[39m\n\u001b[31mA complete reading of this answer.\u001b[39m\n\u001b[31mRobin Placeholder\u001b[39m\n\u001b[31m4\u001b[39m\n\u001b[31mA complete reading of this answer.\u001b[39m\n\u001b[31mConsensus\u001b[39m\n\u001b[31mConsensus Score\u001b[39m\n\u001b[31mpoints\u001b[39m\n\u001b[31mQuestion 3·\u001b[39m\n\u001b[31mSeeded resource question three.·\u001b[39m\n\u001b[31mAnswer in your own words.·\u001b[39m\n\u001b[31mThe first proponent's answer to question three.·\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31m4\u001b[39m\n\u001b[31mA complete reading of this answer.\u001b[39m\n\u001b[31mRobin Placeholder\u001b[39m\n\u001b[31m4\u001b[39m\n\u001b[31mA complete reading of this answer.\u001b[39m\n\u001b[31mConsensus\u001b[39m\n\u001b[31mConsensus Score\u001b[39m\n\u001b[31mpoints\u001b[39m\n\u001b[31mQuestion 4·\u001b[39m\n\u001b[31mSeeded resource question four.·\u001b[39m\n\u001b[31mAnswer in your own words.·\u001b[39m\n\u001b[31mThe first proponent's answer to question four.·\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31m4\u001b[39m\n\u001b[31mA complete reading of this answer.\u001b[39m\n\u001b[31mRobin Placeholder\u001b[39m\n\u001b[31m4\u001b[39m\n\u001b[31mA complete reading of this answer.\u001b[39m\n\u001b[31mConsensus\u001b[39m\n\u001b[31mConsensus Score\u001b[39m\n\u001b[31mpoints\u001b[39m\n\u001b[31mNext Proponent\"\u001b[39m"
         }
       ],
-      "file_sha": "35f28c91536a398f7e7c1adf28fc6a2196df3d85"
+      "file_sha": "35f28c91536a398f7e7c1adf28fc6a2196df3d85",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.30",
@@ -1058,7 +1066,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate"
         }
       ],
-      "file_sha": "af446ae7f9f0d180d2644b15ee8c188723a3dcbc"
+      "file_sha": "af446ae7f9f0d180d2644b15ee8c188723a3dcbc",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-8.1",
@@ -1438,7 +1447,8 @@
           "status": "passed"
         }
       ],
-      "file_sha": "1cd3bf318a0e03f83c1b33a1dd4423b791149876"
+      "file_sha": "1cd3bf318a0e03f83c1b33a1dd4423b791149876",
+      "triage": "product-question"
     },
     {
       "id": "R-8.23",
@@ -1497,7 +1507,8 @@
           "status": "passed"
         }
       ],
-      "file_sha": "3dea46f61c56ee6819beaf1453ad2ce0efc6ae60"
+      "file_sha": "3dea46f61c56ee6819beaf1453ad2ce0efc6ae60",
+      "triage": "product-question"
     },
     {
       "id": "R-8.26",
@@ -1591,7 +1602,8 @@
           "error": "Error: unbound: proposal-cwu-edit.start_editing — no \"Actions\" menu on http://localhost:3100/opportunities/code-with-us/9a5161bb-312c-41fc-b424-14ff523c6b98/proposals/d95dadf3-9340-4441-ac2d-fdf6d4e68796/edit"
         }
       ],
-      "file_sha": "a72499e5b6e5c7fd4a8c8935e2980ec8f980d6bc"
+      "file_sha": "a72499e5b6e5c7fd4a8c8935e2980ec8f980d6bc",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-6.1",
@@ -1615,7 +1627,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeFalsy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"Code With Us: R-6.2 opportunity published while mail cannot be delivered\"\u001b[39m"
         }
       ],
-      "file_sha": "45743f1c89227564c8248c167b730400e3e025dd"
+      "file_sha": "45743f1c89227564c8248c167b730400e3e025dd",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-6.3",
@@ -2192,7 +2205,8 @@
           "status": "passed"
         }
       ],
-      "file_sha": "43430986b64a075323f242d8620294061de587f8"
+      "file_sha": "43430986b64a075323f242d8620294061de587f8",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.11",
@@ -2330,7 +2344,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "file_sha": "974d506698b0f8a8af4b1ca3a80d499b2155e076"
+      "file_sha": "974d506698b0f8a8af4b1ca3a80d499b2155e076",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.17",
@@ -2453,7 +2468,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/incomplete/i\u001b[39m\nReceived string:  \u001b[31m\"SUMMARY\u001b[39m\n\u001b[31mSummary\u001b[39m\n\u001b[31mOPPORTUNITY MANAGEMENT\u001b[39m\n\u001b[31mOpportunity\u001b[39m\n\u001b[31mHistory\u001b[39m\n\u001b[31mOPPORTUNITY EVALUATION\u001b[39m\n\u001b[31mProposals\u001b[39m\n\u001b[31mNEED HELP?\u001b[39m\n\u001b[31mRead Guide\u001b[39m\n\u001b[31mCode With Us: R-1.21 saved draft with its location emptied, submitted for review\u001b[39m\n\u001b[31mUpdated Sep 27, 2026\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mCreated By\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31m1. Overview\u001b[39m\n\u001b[31mTitle\u001b[39m\n\u001b[31mTeaser\u001b[39m\n\u001b[31mRemote OK?\u001b[39m\n\u001b[31mYes\u001b[39m\n\u001b[31mNo\u001b[39m\n\u001b[31mRemote Description\u001b[39m\n\u001b[31mLocation\u001b[39m\n\u001b[31mFixed-Price Award\u001b[39m\n\u001b[31m$\u001b[39m\n\u001b[31mCost Recovery\u001b[39m\n\u001b[31m$\u001b[39m\n\u001b[31mRequired Skills\u001b[39m\n\u001b[31mBackend Development\u001b[39m\n\u001b[31mNext\u001b[39m\n\u001b[31mTitle: R-1.21 saved draft with its location emptied, submitted for review\u001b[39m\n\u001b[31mTeaser: A short summary of the work to be done.\u001b[39m\n\u001b[31mRemote Description: Remote work is acceptable anywhere in the province.\u001b[39m\n\u001b[31mLocation: Victoria\u001b[39m\n\u001b[31mFixed-Price Award: 5000\u001b[39m\n\u001b[31mCost Recovery: 1000\u001b[39m\n\u001b[31mSUMMARY\u001b[39m\n\u001b[31mSummary\u001b[39m\n\u001b[31mOPPORTUNITY MANAGEMENT\u001b[39m\n\u001b[31mOpportunity\u001b[39m\n\u001b[31mHistory\u001b[39m\n\u001b[31mOPPORTUNITY EVALUATION\u001b[39m\n\u001b[31mProposals\u001b[39m\n\u001b[31mNEED HELP?\u001b[39m\n\u001b[31mRead Guide\u001b[39m\n\u001b[31mCode With Us: R-1.21 saved draft with its location emptied, submitted for review\u001b[39m\n\u001b[31mUpdated Sep 27, 2026\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mCreated By\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31m2. Description\u001b[39m\n\u001b[31mDescription\u001b[39m\n\u001b[31mPrevious\u001b[39m\n\u001b[31mNext\u001b[39m\n\u001b[31mDescription: A full description of the work to be done.\u001b[39m\n\u001b[31mSUMMARY\u001b[39m\n\u001b[31mSummary\u001b[39m\n\u001b[31mOPPORTUNITY MANAGEMENT\u001b[39m\n\u001b[31mOpportunity\u001b[39m\n\u001b[31mHistory\u001b[39m\n\u001b[31mOPPORTUNITY EVALUATION\u001b[39m\n\u001b[31mProposals\u001b[39m\n\u001b[31mNEED HELP?\u001b[39m\n\u001b[31mRead Guide\u001b[39m\n\u001b[31mCode With Us: R-1.21 saved draft with its location emptied, submitted for review\u001b[39m\n\u001b[31mUpdated Sep 27, 2026\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mCreated By\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31m3. Details\u001b[39m\n\u001b[31mProposal Deadline\u001b[39m\n\u001b[31mAssignment Date\u001b[39m\n\u001b[31mProposed Start Date\u001b[39m\n\u001b[31mCompletion Date\u001b[39m\n\u001b[31mProject Submission Info\u001b[39m\n\u001b[31mAcceptance Criteria\u001b[39m\n\u001b[31mEvaluation Criteria\u001b[39m\n\u001b[31mPrevious\u001b[39m\n\u001b[31mNext\u001b[39m\n\u001b[31mProposal Deadline: 2026-10-09\u001b[39m\n\u001b[31mAssignment Date: 2026-10-16\u001b[39m\n\u001b[31mProposed Start Date: 2026-10-23\u001b[39m\n\u001b[31mCompletion Date: 2026-12-24\u001b[39m\n\u001b[31mAcceptance Criteria: Entered by the acceptance adapter so the form can be saved.\u001b[39m\n\u001b[31mEvaluation Criteria: Entered by the acceptance adapter so the form can be saved.\u001b[39m\n\u001b[31mSUMMARY\u001b[39m\n\u001b[31mSummary\u001b[39m\n\u001b[31mOPPORTUNITY MANAGEMENT\u001b[39m\n\u001b[31mOpportunity\u001b[39m\n\u001b[31mHistory\u001b[39m\n\u001b[31mOPPORTUNITY EVALUATION\u001b[39m\n\u001b[31mProposals\u001b[39m\n\u001b[31mNEED HELP?\u001b[39m\n\u001b[31mRead Guide\u001b[39m\n\u001b[31mCode With Us: R-1.21 saved draft with its location emptied, submitted for review\u001b[39m\n\u001b[31mUpdated Sep 27, 2026\u001b[39m\n\u001b[31mStatus\u001b[39m\n\u001b[31mDraft\u001b[39m\n\u001b[31mCreated By\u001b[39m\n\u001b[31mCasey Placeholder\u001b[39m\n\u001b[31m4. Attachments·\u001b[39m\n\u001b[31mUpload any supporting material for your opportunity here. Attachments must be smaller than 10MB.·\u001b[39m\n\u001b[31mPrevious\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate"
         }
       ],
-      "file_sha": "9d8843efc9e8926f9b02d36d9808973923ae948f"
+      "file_sha": "9d8843efc9e8926f9b02d36d9808973923ae948f",
+      "triage": "product-question"
     },
     {
       "id": "R-1.22",
@@ -2574,7 +2590,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Northern Pines Digital Ltd.\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "file_sha": "2f51f85116408924d12d0efc939645dff0033326"
+      "file_sha": "2f51f85116408924d12d0efc939645dff0033326",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.28",
@@ -2718,7 +2735,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m50\u001b[39m\nReceived:   \u001b[31m50\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate"
         }
       ],
-      "file_sha": "529de3e810c9d5590aae485452d55f9e0fff35cf"
+      "file_sha": "529de3e810c9d5590aae485452d55f9e0fff35cf",
+      "triage": "product-question"
     },
     {
       "id": "R-1.35",
@@ -2733,7 +2751,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/submit/\u001b[39m\nReceived string:  \u001b[31m\"seeded published code with us opportunity\"\u001b[39m\n\nCall Log:\n- Timeout 30000ms exceeded while waiting on the predicate"
         }
       ],
-      "file_sha": "09ede3d9bfece18b62b03c9bcf5420a79f918d62"
+      "file_sha": "09ede3d9bfece18b62b03c9bcf5420a79f918d62",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.36",
@@ -2748,7 +2767,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m50\u001b[39m\nReceived:   \u001b[31m50\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate"
         }
       ],
-      "file_sha": "5379123392d85e9d90f7fd06e382c17772a7766f"
+      "file_sha": "5379123392d85e9d90f7fd06e382c17772a7766f",
+      "triage": "product-question"
     },
     {
       "id": "R-1.37",
@@ -2763,7 +2783,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeGreaterThan\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected: > \u001b[32m50\u001b[39m\nReceived:   \u001b[31m50\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate"
         }
       ],
-      "file_sha": "de04f48779eeebaeb959c81c6808cbb08d4746ec"
+      "file_sha": "de04f48779eeebaeb959c81c6808cbb08d4746ec",
+      "triage": "product-question"
     },
     {
       "id": "R-1.38",
@@ -2830,7 +2851,8 @@
           "status": "passed"
         }
       ],
-      "file_sha": "d909587610283cc0a7c1ec85e6ac669847c23272"
+      "file_sha": "d909587610283cc0a7c1ec85e6ac669847c23272",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.41",
@@ -2850,7 +2872,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate"
         }
       ],
-      "file_sha": "962a2ec24a86f0e58d5a72284ef6fb26b7dd444a"
+      "file_sha": "962a2ec24a86f0e58d5a72284ef6fb26b7dd444a",
+      "triage": "product-question"
     },
     {
       "id": "R-1.42",
@@ -2929,7 +2952,8 @@
           "status": "passed"
         }
       ],
-      "file_sha": "e0649f8e6c8b3a9aaaedcad073b4bd055e07b566"
+      "file_sha": "e0649f8e6c8b3a9aaaedcad073b4bd055e07b566",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.49",
@@ -3043,7 +3067,8 @@
           "status": "passed"
         }
       ],
-      "file_sha": "8d8823bac435b9a815e5b181069ca47ba9edde6a"
+      "file_sha": "8d8823bac435b9a815e5b181069ca47ba9edde6a",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.55",
@@ -3099,7 +3124,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected value: \u001b[32m\"00000000-0000-4000-8000-000000000201\"\u001b[39m\nReceived array: \u001b[31m[\"00000000-0000-4000-8000-000000000101\"]\u001b[39m"
         }
       ],
-      "file_sha": "52cf76ee83d97fd60ffaf017c98ca6f510088b97"
+      "file_sha": "52cf76ee83d97fd60ffaf017c98ca6f510088b97",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.56",
@@ -3352,7 +3378,8 @@
           "status": "passed"
         }
       ],
-      "file_sha": "fedc0cf2e4864c08573357ab19a435c56178fab4"
+      "file_sha": "fedc0cf2e4864c08573357ab19a435c56178fab4",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-3.14",
@@ -3487,7 +3514,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
         }
       ],
-      "file_sha": "cb3af47223e5150a3c541a932721b0e5d3513648"
+      "file_sha": "cb3af47223e5150a3c541a932721b0e5d3513648",
+      "triage": "product-question"
     },
     {
       "id": "R-3.21",
@@ -3959,7 +3987,8 @@
           "status": "passed"
         }
       ],
-      "file_sha": "c2426e97377c13e81d44003cac403286f60284dc"
+      "file_sha": "c2426e97377c13e81d44003cac403286f60284dc",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.15",
@@ -4082,7 +4111,8 @@
           "error": "TimeoutError: locator.click: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByText('Frontend Development', { exact: true }).visible().first()\u001b[22m\n\u001b[2m    - locator resolved to <a tabindex=\"0\" class=\"a d-inline-flex align-items-center flex-nowrap text-body text-hover-body py-1 font-size-small text-nowrap\">…</a>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not stable\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is not visible\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    29 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is not visible\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n"
         }
       ],
-      "file_sha": "9d25da6d6f8dcc2468093c1dde0f8a5e683617a2"
+      "file_sha": "9d25da6d6f8dcc2468093c1dde0f8a5e683617a2",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.20",
@@ -4237,7 +4267,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/disqualif/\u001b[39m\nReceived string:  \u001b[31m\"back to opportunity\u001b[39m\n\u001b[31mvendor proposal\u001b[39m\n\u001b[31mproposal details\u001b[39m\n\u001b[31mmanagement\u001b[39m\n\u001b[31mproposal history\u001b[39m\n\u001b[31mcode with us: vendor proposal\u001b[39m\n\u001b[31mstatus\u001b[39m\n\u001b[31mnon-compliant\u001b[39m\n\u001b[31mproponent\u001b[39m\n\u001b[31mnorthern pines digital ltd.\u001b[39m\n\u001b[31mproponent type\u001b[39m\n\u001b[31morganization\u001b[39m\n\u001b[31msubmitted by\u001b[39m\n\u001b[31mblake placeholder\u001b[39m\n\u001b[31mexport proposal\u001b[39m\n\u001b[31mhistory\u001b[39m\n\u001b[31mentry type\tnote\tcreated·\u001b[39m\n\u001b[31mnon-compliant··\u001b[39m\n\u001b[31mr-2.27 the proponent withdrew their named developer.··\u001b[39m\n\u001b[31msep 27, 2026\u001b[39m\n\u001b[31m7:58 pm pdt\u001b[39m\n\u001b[31mrobin placeholder··\u001b[39m\n\u001b[31munder review··\u001b[39m\n\u001b[31m—··\u001b[39m\n\u001b[31msep 27, 2026\u001b[39m\n\u001b[31m7:58 pm pdt\u001b[39m\n\u001b[31msystem··\u001b[39m\n\u001b[31msubmitted··\u001b[39m\n\u001b[31m—··\u001b[39m\n\u001b[31maug 18, 2026\u001b[39m\n\u001b[31m7:58 pm pdt\u001b[39m\n\u001b[31mblake placeholder··\u001b[39m\n\u001b[31mdraft··\u001b[39m\n\u001b[31m—··\u001b[39m\n\u001b[31maug 8, 2026\u001b[39m\n\u001b[31m7:58 pm pdt\u001b[39m\n\u001b[31mblake placeholder\"\u001b[39m\n\nCall Log:\n- Timeout 30000ms exceeded while waiting on the predicate"
         }
       ],
-      "file_sha": "4f0818ff415339330f963a34c7fd9af556bdcd4e"
+      "file_sha": "4f0818ff415339330f963a34c7fd9af556bdcd4e",
+      "triage": "product-question"
     },
     {
       "id": "R-2.28",
@@ -4277,7 +4308,8 @@
           "error": "Error: the fourth-ranked proponent was carried on\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: not \u001b[32m/challenge/\u001b[39m\nReceived string:      \u001b[31m\"back to opportunity\u001b[39m\n\u001b[31mvendor proposal\u001b[39m\n\u001b[31mproposal details\u001b[39m\n\u001b[31mvendor evaluation\u001b[39m\n\u001b[31mresource questions\u001b[39m\n\u001b[31minterview/\u001b[7mchallenge\u001b[27m\u001b[39m\n\u001b[31mmanagement\u001b[39m\n\u001b[31mproposal history\u001b[39m\n\u001b[31mteam with us: vendor proposal\u001b[39m\n\u001b[31mstatus\u001b[39m\n\u001b[31munder review (q)\u001b[39m\n\u001b[31mproponent\u001b[39m\n\u001b[31mquiet meadow works ltd.  (proponent 4)\u001b[39m\n\u001b[31mqualified supplier\u001b[39m\n\u001b[31msubmitted by\u001b[39m\n\u001b[31mnico placeholder\u001b[39m\n\u001b[31mhistory\u001b[39m\n\u001b[31mentry type\tnote\tcreated\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mteam questions score entered\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31mresource question scores were entered. q1: 4; q2: 4; q3: 3; q4: 3.\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31msep 27, 2026\u001b[39m\n\u001b[31m7:59 pm pdt\u001b[39m\n\u001b[31mrobin placeholder\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31munder review (q)\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m—\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31maug 29, 2026\u001b[39m\n\u001b[31m7:59 pm pdt\u001b[39m\n\u001b[31msystem\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31msubmitted\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m—\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31maug 18, 2026\u001b[39m\n\u001b[31m7:59 pm pdt\u001b[39m\n\u001b[31mnico placeholder\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31m\u001b[39m\n\u001b[31mdraft\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31m—\u001b[39m\n\u001b[31m\t\u001b[39m\n\u001b[31maug 8, 2026\u001b[39m\n\u001b[31m7:59 pm pdt\u001b[39m\n\u001b[31mnico placeholder\"\u001b[39m"
         }
       ],
-      "file_sha": "4ec2668f5d20ed62691be39ced1d2529f837c9a1"
+      "file_sha": "4ec2668f5d20ed62691be39ced1d2529f837c9a1",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.30",
@@ -4342,7 +4374,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/disqualif/\u001b[39m\nReceived string:  \u001b[31m\"back to opportunity\u001b[39m\n\u001b[31mvendor proposal\u001b[39m\n\u001b[31mproposal details\u001b[39m\n\u001b[31mmanagement\u001b[39m\n\u001b[31mproposal history\u001b[39m\n\u001b[31mcode with us: vendor proposal\u001b[39m\n\u001b[31mstatus\u001b[39m\n\u001b[31mnon-compliant\u001b[39m\n\u001b[31mproponent\u001b[39m\n\u001b[31msilver creek software ltd.\u001b[39m\n\u001b[31mproponent type\u001b[39m\n\u001b[31morganization\u001b[39m\n\u001b[31msubmitted by\u001b[39m\n\u001b[31mkai placeholder\u001b[39m\n\u001b[31mexport proposal\u001b[39m\n\u001b[31mhistory\u001b[39m\n\u001b[31mentry type\tnote\tcreated·\u001b[39m\n\u001b[31mnon-compliant··\u001b[39m\n\u001b[31mr-2.33 the proponent could not confirm their availability.··\u001b[39m\n\u001b[31msep 27, 2026\u001b[39m\n\u001b[31m7:59 pm pdt\u001b[39m\n\u001b[31mrobin placeholder··\u001b[39m\n\u001b[31munder review··\u001b[39m\n\u001b[31m—··\u001b[39m\n\u001b[31msep 27, 2026\u001b[39m\n\u001b[31m7:59 pm pdt\u001b[39m\n\u001b[31msystem··\u001b[39m\n\u001b[31msubmitted··\u001b[39m\n\u001b[31m—··\u001b[39m\n\u001b[31maug 18, 2026\u001b[39m\n\u001b[31m7:59 pm pdt\u001b[39m\n\u001b[31mkai placeholder··\u001b[39m\n\u001b[31mdraft··\u001b[39m\n\u001b[31m—··\u001b[39m\n\u001b[31maug 8, 2026\u001b[39m\n\u001b[31m7:59 pm pdt\u001b[39m\n\u001b[31mkai placeholder\"\u001b[39m\n\nCall Log:\n- Timeout 30000ms exceeded while waiting on the predicate"
         }
       ],
-      "file_sha": "1b9e10533f88f3d7d5b28016237792b75d081cb4"
+      "file_sha": "1b9e10533f88f3d7d5b28016237792b75d081cb4",
+      "triage": "product-question"
     },
     {
       "id": "R-2.34",
@@ -4361,7 +4394,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"disqualif\"\u001b[39m\nReceived string:    \u001b[31m\"back to opportunity\u001b[39m\n\u001b[31mvendor proposal\u001b[39m\n\u001b[31mproposal details\u001b[39m\n\u001b[31mvendor evaluation\u001b[39m\n\u001b[31mresource questions\u001b[39m\n\u001b[31minterview/challenge\u001b[39m\n\u001b[31mmanagement\u001b[39m\n\u001b[31mproposal history\u001b[39m\n\u001b[31mteam with us: vendor proposal\u001b[39m\n\u001b[31mstatus\u001b[39m\n\u001b[31mnon-compliant\u001b[39m\n\u001b[31mproponent\u001b[39m\n\u001b[31mproponent 3\u001b[39m\n\u001b[31mthis proposal's history will be available once the opportunity reaches the challenge.\"\u001b[39m"
         }
       ],
-      "file_sha": "be5e1d8d9f17e5c65f0488847a8d93234743caaf"
+      "file_sha": "be5e1d8d9f17e5c65f0488847a8d93234743caaf",
+      "triage": "product-question"
     },
     {
       "id": "R-2.35",
@@ -4516,7 +4550,8 @@
           "error": "TimeoutError: locator.fill: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel(/username/i).first()\u001b[22m\n"
         }
       ],
-      "file_sha": "7360c14b10f22ae5b918e7c9a1b12e8a9ea3d651"
+      "file_sha": "7360c14b10f22ae5b918e7c9a1b12e8a9ea3d651",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-4.5",
@@ -4647,7 +4682,8 @@
           "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Zinnia Quillfeather\"\u001b[39m\nReceived string:    \u001b[31m\"STATUS\tACCOUNT TYPE\tNAME\tADMIN?\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mPublic Sector Employee··\u001b[39m\n\u001b[31mDevon Placeholder····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mPublic Sector Employee··\u001b[39m\n\u001b[31mEmerson Placeholder····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mPublic Sector Employee··\u001b[39m\n\u001b[31mEmery Placeholder····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mPublic Sector Employee··\u001b[39m\n\u001b[31mMarlowe Quillfeather····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mPublic Sector Employee··\u001b[39m\n\u001b[31mMIGRATION_USER····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mPublic Sector Employee··\u001b[39m\n\u001b[31mMorgan Placeholder····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mPublic Sector Employee··\u001b[39m\n\u001b[31mRobin Placeholder····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mVendor··\u001b[39m\n\u001b[31mAldous Quillfeather····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mVendor··\u001b[39m\n\u001b[31mBlake Placeholder····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mVendor··\u001b[39m\n\u001b[31mCharlie Placeholder····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mVendor··\u001b[39m\n\u001b[31mDana Placeholder····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mVendor··\u001b[39m\n\u001b[31mGray Placeholder····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mVendor··\u001b[39m\n\u001b[31mHarper Placeholder····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mVendor··\u001b[39m\n\u001b[31mIndigo Placeholder····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mVendor··\u001b[39m\n\u001b[31mJules Placeholder····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mVendor··\u001b[39m\n\u001b[31mKai Placeholder····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mVendor··\u001b[39m\n\u001b[31mLarkin Placeholder····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mVendor··\u001b[39m\n\u001b[31mMicah Placeholder····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mVendor··\u001b[39m\n\u001b[31mNico Placeholder····\u001b[39m\n\u001b[31mActive··\u001b[39m\n\u001b[31mVendor··\u001b[39m\n\u001b[31mOakley Placeholder\"\u001b[39m\n\nCall Log:\n- Timeout 5000ms exceeded while waiting on the predicate"
         }
       ],
-      "file_sha": "312431e4b9300abac886c8a5130a43ead5368569"
+      "file_sha": "312431e4b9300abac886c8a5130a43ead5368569",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-4.16",
@@ -4769,7 +4805,8 @@
           "status": "passed"
         }
       ],
-      "file_sha": "77dd467a303b8ed79d4d1f3c07d2e5a9bb6c4d32"
+      "file_sha": "77dd467a303b8ed79d4d1f3c07d2e5a9bb6c4d32",
+      "triage": "product-question"
     },
     {
       "id": "R-4.22",

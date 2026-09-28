@@ -4,7 +4,7 @@
 
 | id | test | new | old |
 | --- | --- | --- | --- |
-| R-5.1 | acceptance/evaluation/R-5.1.spec.ts |  | fail |
+| R-5.1 | acceptance/evaluation/R-5.1.spec.ts |  | fail (ruled: adapter-wrong) |
 | R-5.2 | — |  |  |
 | R-5.3 | acceptance/evaluation/R-5.3.spec.ts |  | unbound |
 | R-5.4 | — |  |  |
@@ -32,7 +32,7 @@
 | R-5.26 | acceptance/evaluation/R-5.26.spec.ts |  | pass |
 | R-5.27 | acceptance/evaluation/R-5.27.spec.ts |  | pass |
 | R-5.28 | acceptance/evaluation/R-5.28.spec.ts |  | pass |
-| R-5.29 | acceptance/evaluation/R-5.29.spec.ts |  | fail |
+| R-5.29 | acceptance/evaluation/R-5.29.spec.ts |  | fail (ruled: adapter-wrong) |
 | R-5.30 | acceptance/evaluation/R-5.30.spec.ts |  | unbound |
 | R-5.31 | acceptance/evaluation/R-5.31.spec.ts |  | unbound |
 | R-5.32 | acceptance/evaluation/R-5.32.spec.ts |  | unbound |
@@ -40,7 +40,7 @@
 | R-5.34 | acceptance/evaluation/R-5.34.spec.ts |  | pass |
 | R-5.35 | acceptance/evaluation/R-5.35.spec.ts |  | unbound |
 | R-5.36 | acceptance/evaluation/R-5.36.spec.ts |  | unbound |
-| R-5.37 | acceptance/evaluation/R-5.37.spec.ts |  | fail |
+| R-5.37 | acceptance/evaluation/R-5.37.spec.ts |  | fail (ruled: adapter-wrong) |
 
 ### R-5.1 · v1 · confirmed · accepted
 
