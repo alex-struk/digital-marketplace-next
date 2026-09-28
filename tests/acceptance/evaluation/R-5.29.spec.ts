@@ -1,91 +1,162 @@
 // criterion: @R-5.29 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
+// provenance: blind, spec@7eb305e85acb5a44b285f09b9800da3c65c6a355, derived 2026-09-28
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// The criterion states one given, one when and one then, with two attempts inside the when,
-// so it is one test. It has to be: the walk that puts the seeded Team With Us opportunity
-// into consensus consumes it — every evaluator's scores can be submitted once — so a second
-// test in this file would start from a state the first one left behind rather than from the
-// given.
+// The given — an opportunity in consensus — is the seeded Sprint With Us opportunity with
+// one consensus outstanding: every individual evaluation submitted, the chair's consensus
+// submitted for the first two proponents and not begun for the third. Its panel is the
+// government account as an evaluator who is not the chair, and the administrator as chair.
+// The seed is put back before every test, so each test below starts from that given.
 //
-// Team With Us is used here and Sprint With Us in the criteria about finalising, so that the
-// two seeded opportunities are not both spent on the same part of the walk.
+// Each attempt is made by entering an agreed score and note for every question and saving.
+// A screen that will not let the attempt be made is a refusal too, so the actions are
+// allowed to fail; what decides each test is what stands afterwards, not whether a message
+// was shown.
 //
-// chair_only is read twice, once for the evaluator who is not the chair and once for the
-// chair, so that a page reporting the same thing to everybody would fail rather than pass.
+// The evaluator's attempt is counted as refused when, afterwards, the chair finds no
+// consensus for the outstanding proponent, neither under the evaluator's user id nor under
+// the chair's own, so an attempt stored as the proponent's consensus cannot pass unseen. The
+// same read on the chair's own consensus of a proponent already agreed is made first, so that
+// a screen that shows no consensus to anybody fails the test rather than passing it. Then the
+// chair records that outstanding consensus through the same screen, with no failure allowed,
+// and it is read back: the refusal is measured against a write shown to succeed.
 //
-// The last clause — that a consensus may be recorded only while the opportunity is in
-// consensus — is not asserted. Before consensus the create form has no observation that
-// tells a refusal from an empty form, and after finalising there is nothing left to record.
+// The chair's second attempt is counted as refused when exactly one consensus stands for
+// that proponent afterwards. The chair may change the consensus they already agreed, so the
+// scores it holds and its status are not compared; the consensus list is read before and
+// after, and the proponents named on it must be named the same number of times, with the
+// chair's consensus for that proponent still there.
+//
+// "Only while the opportunity is in consensus" is tested from the side before consensus: the
+// chair attempts a consensus while the seeded closed opportunity is still at individual
+// evaluation, and none is recorded. The side after consensus, and a non-chair changing the
+// chair's consensus, are recorded in not-testable.yaml.
 
-const opportunityId = seed.opportunities.closedTeamWithUs.id;
-const proposals = [
-  seed.proposals.teamWithUsOne.id,
-  seed.proposals.teamWithUsTwo.id,
-  seed.proposals.teamWithUsThree.id,
-];
+const statement =
+  "Only the chair may record and change the consensus, one consensus per proponent, and only while the opportunity is in consensus.";
+
+const settle = { timeout: 15000 };
+const quietPeriod = 5000;
 const questions = [0, 1, 2, 3];
 
-async function scoreEveryProponent(surface: Surface): Promise<void> {
-  for (const proposalId of proposals) {
-    await surface.evaluationIndividualCreateTwu.open({ opportunityId, proposalId });
-    for (const order of questions) {
-      await surface.evaluationIndividualCreateTwu.enterQuestionScore({ order, score: 4 });
-      await surface.evaluationIndividualCreateTwu.enterQuestionNotes({
-        order,
-        notes: "A complete reading of this answer.",
-      });
-    }
-    await surface.evaluationIndividualCreateTwu.saveDraft();
+const opportunityId = seed.opportunities.swuConsensusOneOutstanding.id;
+const agreed = seed.proposals.swuOutstandingOne.id;
+const outstanding = seed.proposals.swuOutstandingThree.id;
+const chair = seed.users.administratorOne.id;
+const evaluator = seed.users.staffOne.id;
+
+async function readOrEmpty(read: () => Promise<string>): Promise<string> {
+  try {
+    return (await read()) ?? "";
+  } catch {
+    return "";
   }
-  await surface.evaluationIndividualListTwu.open({ opportunityId });
-  await surface.evaluationIndividualListTwu.submitScoresForConsensus();
 }
 
-async function agreeConsensus(surface: Surface, proposalId: string): Promise<void> {
-  await surface.evaluationConsensusCreateTwu.open({ opportunityId, proposalId });
+async function recordConsensus(
+  surface: Surface,
+  params: { opportunityId: string; proposalId: string },
+  score: number,
+): Promise<void> {
+  const create = surface.evaluationConsensusCreateSwu;
+  await create.open(params);
   for (const order of questions) {
-    await surface.evaluationConsensusCreateTwu.enterQuestionScore({ order, score: 4 });
-    await surface.evaluationConsensusCreateTwu.enterQuestionNotes({
-      order,
-      notes: "The panel agreed on this score for this answer.",
-    });
+    await create.enterQuestionScore({ order, score });
+    await create.enterQuestionNotes({ order, notes: "The score this person put forward as agreed." });
   }
-  await surface.evaluationConsensusCreateTwu.saveDraft();
+  await create.saveDraft();
 }
 
-test("only the chair may record the consensus, and only one consensus per proponent", async ({
+async function attemptConsensus(
+  surface: Surface,
+  params: { opportunityId: string; proposalId: string },
+  score: number,
+): Promise<void> {
+  try {
+    await recordConsensus(surface, params, score);
+  } catch {
+    // A consensus the screen will not let be recorded is refused; what stands is read below.
+  }
+  await new Promise((resolve) => setTimeout(resolve, quietPeriod));
+}
+
+async function consensusStatusOf(
+  surface: Surface,
+  params: { opportunityId: string; proposalId: string; userId: string },
+): Promise<string> {
+  await surface.evaluationConsensusEditSwu.open(params);
+  return readOrEmpty(() => surface.evaluationConsensusEditSwu.consensusStatus());
+}
+
+function proponentMentions(rows: string): number {
+  return (rows.match(/Proponent \d+/g) ?? []).length;
+}
+
+test(`${statement} (an evaluator who is not the chair tries to record an agreed score, and is refused, while the chair records it)`, async ({
   surface,
 }) => {
+  await surface.signIn(persona.publicSectorStaff);
+  await attemptConsensus(surface, { opportunityId, proposalId: outstanding }, 3);
+  await surface.signOut();
+
+  await surface.signIn(persona.administrator);
+  await surface.evaluationConsensusEditSwu.open({ opportunityId, proposalId: agreed, userId: chair });
+  await expect
+    .poll(() => readOrEmpty(() => surface.evaluationConsensusEditSwu.consensusStatus()), settle)
+    .toBeTruthy();
+
+  expect(
+    await consensusStatusOf(surface, { opportunityId, proposalId: outstanding, userId: evaluator }),
+  ).toBe("");
+  expect(
+    await consensusStatusOf(surface, { opportunityId, proposalId: outstanding, userId: chair }),
+  ).toBe("");
+
+  await recordConsensus(surface, { opportunityId, proposalId: outstanding }, 4);
+
+  await expect
+    .poll(() => consensusStatusOf(surface, { opportunityId, proposalId: outstanding, userId: chair }), settle)
+    .toBeTruthy();
+});
+
+test(`${statement} (the chair records a second consensus for a proponent they have already agreed, and is refused as a duplicate)`, async ({
+  surface,
+}) => {
+  await surface.signIn(persona.administrator);
+
+  await surface.evaluationConsensusListSwu.open({ opportunityId });
+  await expect
+    .poll(() => readOrEmpty(() => surface.evaluationConsensusListSwu.proponentRow()), settle)
+    .toBeTruthy();
+  const before = proponentMentions(await readOrEmpty(() => surface.evaluationConsensusListSwu.proponentRow()));
+  expect(before).toBeGreaterThan(0);
+
+  await attemptConsensus(surface, { opportunityId, proposalId: agreed }, 3);
+
+  expect(await consensusStatusOf(surface, { opportunityId, proposalId: agreed, userId: chair })).toBeTruthy();
+
+  await surface.evaluationConsensusListSwu.open({ opportunityId });
+  await expect
+    .poll(() => readOrEmpty(() => surface.evaluationConsensusListSwu.proponentRow()), settle)
+    .toBeTruthy();
+  const after = proponentMentions(await readOrEmpty(() => surface.evaluationConsensusListSwu.proponentRow()));
+  expect(after).toBe(before);
+});
+
+test(`${statement} (the chair tries to record a consensus before the opportunity is in consensus, and none is recorded)`, async ({
+  surface,
+}) => {
+  const earlyOpportunityId = seed.opportunities.closedSprintWithUs.id;
+  const proposalId = seed.proposals.sprintWithUsOne.id;
+
   await surface.scheduledTransitionTrigger.open();
   await surface.scheduledTransitionTrigger.runPendingTransitions();
 
-  await surface.signIn(persona.publicSectorStaff);
-  await scoreEveryProponent(surface);
-  await surface.signOut();
-
   await surface.signIn(persona.administrator);
-  await scoreEveryProponent(surface);
-  await surface.signOut();
+  await attemptConsensus(surface, { opportunityId: earlyOpportunityId, proposalId }, 4);
 
-  await surface.signIn(persona.publicSectorStaff);
-  await surface.evaluationConsensusCreateTwu.open({
-    opportunityId,
-    proposalId: seed.proposals.teamWithUsOne.id,
-  });
-  expect(await surface.evaluationConsensusCreateTwu.chairOnly()).toBeTruthy();
-  await surface.signOut();
-
-  await surface.signIn(persona.administrator);
-  await surface.evaluationConsensusCreateTwu.open({
-    opportunityId,
-    proposalId: seed.proposals.teamWithUsOne.id,
-  });
-  expect(await surface.evaluationConsensusCreateTwu.chairOnly()).toBeFalsy();
-
-  await agreeConsensus(surface, seed.proposals.teamWithUsOne.id);
-  await agreeConsensus(surface, seed.proposals.teamWithUsOne.id);
-
-  expect(await surface.evaluationConsensusCreateTwu.duplicateConsensusError()).toBeTruthy();
+  expect(
+    await consensusStatusOf(surface, { opportunityId: earlyOpportunityId, proposalId, userId: chair }),
+  ).toBe("");
 });
