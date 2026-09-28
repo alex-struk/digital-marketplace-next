@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-old-12 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">245</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">241</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">209</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-old-12</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-09-28 23:40</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr></tbody></table></div>
+<div class="body"><h2>12 criterion(s) fail against old: which of them is the application&#39;s fault, which the spec&#39;s, and which the test&#39;s?</h2>
+<p><strong>Recommendation.</strong> Rule on R-4.3, R-1.9, R-2.10, R-5.13, R-1.16, R-2.17, R-2.21, R-2.22, R-4.24, R-2.28, R-2.31, R-1.33 with a calibration condition, so the next calibrate run can apply it.</p>
+<p>12 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:4300,">http://localhost:4300,</a> with no ruling yet. The tests are blind: they were written from the criteria alone, by an agent that never saw the application. So a failure means one of exactly three things, and only you can say which: the application is wrong, the criterion is wrong, or the test is wrong.</p>
+<p>Rule on each one below. Until every failure carries a ruling, this question is asked again on every calibration run.</p>
+<h4>R-4.3 · v1</h4>
+<p>A vendor cannot finish signing up until they confirm they have read and agree to the service&#39;s terms and conditions and its privacy policy; a public sector employee is never asked to, and the moment of acceptance is recorded on the vendor&#39;s account.</p>
+<ul><li>given: a vendor on the profile-completion page with the agreement box unticked</li><li>when: they try to complete their profile</li><li>then: the completion control is unavailable until they tick the box, and once they complete it their account records the date and time they agreed</li><li>test: tests/acceptance/users/R-4.3.spec.ts</li></ul>
+<p><strong>a vendor cannot finish signing up until they confirm they have read and agree to the service&#39;s terms and conditions and its privacy policy</strong> — failed</p>
+<pre><code>Error: unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete never shows the profile form on this target; it redirects to /sign-in when signed out and to /dashboard when signed in — looked again signed in through /auth/createsessionadmin, /auth/createsessiongov and every /auth/createsessionvendor/1 to 16 (17 and above fail with /notice/authFailure), and each lands on /dashboard, so no route reaches an account with an unfinished profile; the first-time personas this form is for have no sign-in on this target</code></pre>
+<p><strong>the moment of acceptance is recorded on the vendor&#39;s account</strong> — failed</p>
+<pre><code>Error: unbound: user-sign-up-complete.accept_app_terms — /sign-up/complete never shows the profile form on this target; it redirects to /sign-in when signed out and to /dashboard when signed in — looked again signed in through /auth/createsessionadmin, /auth/createsessiongov and every /auth/createsessionvendor/1 to 16 (17 and above fail with /notice/authFailure), and each lands on /dashboard, so no route reaches an account with an unfinished profile; the first-time personas this form is for have no sign-in on this target</code></pre>
+<p><strong>a public sector employee is never asked to agree to the terms</strong> — failed</p>
+<pre><code>Error: unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete never shows the profile form on this target; it redirects to /sign-in when signed out and to /dashboard when signed in — looked again signed in through /auth/createsessionadmin, /auth/createsessiongov and every /auth/createsessionvendor/1 to 16 (17 and above fail with /notice/authFailure), and each lands on /dashboard, so no route reaches an account with an unfinished profile; the first-time personas this form is for have no sign-in on this target</code></pre>
+<h4>R-1.9 · v2</h4>
+<p>An opportunity saved as a draft is accepted with incomplete content; when its proposal deadline, assignment date or start date is missing or invalid it is set to fourteen days from the day of saving, and its completion date is left empty.</p>
+<ul><li>given: a member of public sector staff filling in a new opportunity</li><li>when: they save it as a draft with fields still blank</li><li>then: the draft is stored, no content validation error is raised, and absent dates are set to fourteen days from the day of saving</li><li>test: tests/acceptance/opportunities/R-1.9.spec.ts</li></ul>
+<p><strong>Code With Us: a draft whose dates are missing is accepted, its proposal deadline, assignment date and start date are set to fourteen days from the day of saving, and its completion date is left empty</strong> — failed</p>
+<pre><code>Error: proposal deadline &quot;2026-10-11&quot; should be 2026-12 (Pacific) or, across midnight, 2026-12
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32mtrue[39m
+Received: [31mfalse[39m</code></pre>
+<p><strong>Sprint With Us: a draft whose dates are missing is accepted, its proposal deadline, assignment date and start date are set to fourteen days from the day of saving, and its completion date is left empty</strong> — failed</p>
+<pre><code>Error: proposal deadline &quot;2026-10-11&quot; should be 2026-12 (Pacific) or, across midnight, 2026-12
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32mtrue[39m
+Received: [31mfalse[39m</code></pre>
+<p><strong>Team With Us: a draft whose dates are missing is accepted, its proposal deadline, assignment date and start date are set to fourteen days from the day of saving, and its completion date is left empty</strong> — failed</p>
+<pre><code>Error: proposal deadline &quot;2026-10-11&quot; should be 2026-12 (Pacific) or, across midnight, 2026-12
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32mtrue[39m
+Received: [31mfalse[39m</code></pre>
+<p><strong>Team With Us: a draft whose dates are invalid is accepted, its proposal deadline, assignment date and start date are set to fourteen days from the day of saving, and its completion date is left empty</strong> — failed</p>
+<pre><code>Error: completion date should be left empty
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBeFalsy[2m()[22m
+
+Received: [31m&quot;2026-10-12&quot;[39m</code></pre>
+<h4>R-2.10 · v1</h4>
+<p>A Team With Us proposal is refused when the hourly rates it names, applied at each resource&#39;s target allocation across the opportunity&#39;s contract period, come to more than the opportunity&#39;s maximum budget; the check runs on both the create and the edit path, as the equivalent Sprint With Us check does.</p>
+<ul><li>test: tests/acceptance/proposals/R-2.10.spec.ts</li></ul>
+<p><strong>a Team With Us proposal whose hourly rates come to more than the opportunity&#39;s maximum budget is refused on the create path</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>a Team With Us proposal whose hourly rates come to more than the opportunity&#39;s maximum budget is refused on the edit path</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;draft&quot;[39m
+Received string:    [31m&quot;submitted&quot;[39m</code></pre>
+<h4>R-5.13 · v1</h4>
+<p>Finalising the consensus scores must be refused unless every proponent still under review of the questions has a submitted consensus, so that no proponent is left neither screened in nor screened out.</p>
+<ul><li>test: tests/acceptance/evaluation/R-5.13.spec.ts</li></ul>
+<p><strong>Finalising the consensus scores must be refused unless every proponent still under review of the questions has a submitted consensus, so that no proponent is left neither screened in nor screened out. (a proponent under review has no consensus at all)</strong> — failed</p>
+<pre><code>Error: proposal 00000000-0000-4000-a011-000000000101 shows no history to compare
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+Expected: &gt; [32m0[39m
+Received:   [31m0[39m</code></pre>
+<p><strong>Finalising the consensus scores must be refused unless every proponent still under review of the questions has a submitted consensus, so that no proponent is left neither screened in nor screened out. (a proponent under review has a consensus saved as a draft and not submitted)</strong> — failed</p>
+<pre><code>Error: proposal 00000000-0000-4000-a011-000000000101 shows no history to compare
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+Expected: &gt; [32m0[39m
+Received:   [31m0[39m</code></pre>
+<h4>R-1.16 · v1</h4>
+<p>A Sprint With Us opportunity must have an implementation phase, and may only have an inception phase if it also has a prototype phase.</p>
+<ul><li>given: a member of public sector staff creating or editing a Sprint With Us opportunity that is not a draft</li><li>when: they include an inception phase but no prototype phase</li><li>then: the submission is rejected with a message saying a prototype phase must follow an inception phase</li><li>test: tests/acceptance/opportunities/R-1.16.spec.ts</li></ul>
+<p><strong>A Sprint With Us opportunity may only have an inception phase if it also has a prototype phase</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/prototype/i[39m
+Received string:  [31m&quot;Please select a date on or after Jan 10, 2027.&quot;[39m</code></pre>
+<h4>R-2.17 · v1</h4>
+<p>A Team With Us proposal may only be submitted on behalf of an organization that is a qualified supplier for that program and that provides every service area the opportunity&#39;s resources call for.</p>
+<ul><li>given: a Team With Us opportunity calling for a service area the vendor&#39;s organization does not provide</li><li>when: the vendor submits a proposal naming that organization</li><li>then: the submission is refused with &quot;The selected organization does not satisfy this opportunity&#39;s service areas.&quot;</li><li>test: tests/acceptance/proposals/R-2.17.spec.ts</li></ul>
+<p><strong>a Team With Us proposal is refused when its organization does not provide every service area the opportunity&#39;s resources call for</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;service areas&quot;[39m
+Received string:    [31m&quot;&quot;[39m</code></pre>
+<h4>R-2.21 · v1</h4>
+<p>A response to an opportunity question is rejected if it is empty or longer than the word limit that question carries, or if it answers a question the opportunity does not ask.</p>
+<ul><li>given: an opportunity question carrying a word limit</li><li>when: a vendor submits a response that is empty, that exceeds the word limit, or that is numbered against no question of the opportunity</li><li>then: the submission is rejected with &quot;No matching opportunity question.&quot; or with the word-limit error against that response</li><li>test: tests/acceptance/proposals/R-2.21.spec.ts</li></ul>
+<p><strong>a response to an opportunity question is rejected if it is empty</strong> — failed</p>
+<pre><code>Error: unbound: proposal-swu-create.add_reference — no field labelled &quot;Company Name&quot; or &quot;Reference&quot; on http://localhost:3102/opportunities/sprint-with-us/3b90b188-9779-4f3d-a0fd-14e830c94690/proposals/create</code></pre>
+<p><strong>a response to an opportunity question is rejected if it is longer than the word limit that question carries</strong> — failed</p>
+<pre><code>Error: unbound: proposal-swu-create.add_reference — no field labelled &quot;Company Name&quot; or &quot;Reference&quot; on http://localhost:3102/opportunities/sprint-with-us/0c0c4ee0-0648-46f4-9daa-4905a0301b19/proposals/create</code></pre>
+<h4>R-2.22 · v1</h4>
+<p>Once a proposal has been submitted, the organization it was submitted for cannot be changed until it is withdrawn.</p>
+<ul><li>given: a submitted Sprint With Us or Team With Us proposal</li><li>when: the vendor edits it and names a different organization</li><li>then: the edit is refused with &quot;Organization cannot be changed once the proposal has been submitted&quot;, while the same edit on a draft or withdrawn proposal is accepted</li><li>test: tests/acceptance/proposals/R-2.22.spec.ts</li></ul>
+<p><strong>once a proposal has been submitted, the organization it was submitted for cannot be changed</strong> — failed</p>
+<pre><code>Error: proposal-twu-edit.save_changes — &quot;Submit Changes&quot; is disabled on http://localhost:3101/opportunities/team-with-us/9d43596e-563d-43b0-8d67-3754915b54d6/proposals/e8f2ac26-0e0b-4041-a854-296861a86477/edit?tab=proposal; the page shows: Please select a resource name</code></pre>
+<p><strong>the organization may be changed once the proposal has been withdrawn</strong> — failed</p>
+<pre><code>Error: proposal-twu-edit.save_changes — &quot;Save Changes&quot; is disabled on http://localhost:3101/opportunities/team-with-us/5a8caf26-dc44-416e-a1d3-6d424a00684b/proposals/efaa345b-96c1-4d02-b88e-731cb17e0667/edit; the page shows: Please select a resource name</code></pre>
+<h4>R-4.24 · v1</h4>
+<p>While completing their profile a person may choose to be told about new opportunities, and the choice is saved with their account.</p>
+<ul><li>given: a vendor completing their profile</li><li>when: they tick the box offering notice of new opportunities and complete the profile</li><li>then: their account records that notifications are on, with the moment the choice was made</li><li>test: tests/acceptance/users/R-4.24.spec.ts</li></ul>
+<p><strong>while completing their profile a person may choose to be told about new opportunities, and the choice is saved with their account</strong> — failed</p>
+<pre><code>Error: unbound: user-sign-up-complete.toggle_new_opportunity_notifications — /sign-up/complete never shows the profile form on this target; it redirects to /sign-in when signed out and to /dashboard when signed in — looked again signed in through /auth/createsessionadmin, /auth/createsessiongov and every /auth/createsessionvendor/1 to 16 (17 and above fail with /notice/authFailure), and each lands on /dashboard, so no route reaches an account with an unfinished profile; the first-time personas this form is for have no sign-in on this target</code></pre>
+<h4>R-2.28 · v1</h4>
+<p>Sprint With Us and Team With Us proposals advance through the evaluation stages one at a time, and an action taken at the wrong stage of the opportunity is refused.</p>
+<ul><li>given: a Sprint With Us opportunity still in its code challenge stage</li><li>when: someone enters a team scenario score for one of its proposals</li><li>then: the request is refused with &quot;The opportunity is not in the correct stage of evaluation to perform that action.&quot;</li><li>test: tests/acceptance/proposals/R-2.28.spec.ts</li></ul>
+<p><strong>a Sprint With Us action taken at the wrong stage of the opportunity is refused</strong> — failed</p>
+<pre><code>Error: unbound: proposal-swu-view.screen_in_to_team_scenario — no control labelled &quot;Screen In&quot; or &quot;Screen In to Team Scenario&quot; on http://localhost:3100/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701/proposals/00000000-0000-4000-8000-000000000741</code></pre>
+<p><strong>a Team With Us action taken at the wrong stage of the opportunity is refused</strong> — failed</p>
+<pre><code>Error: unbound: proposal-twu-view.screen_in_to_challenge — no control labelled &quot;Screen In&quot; or &quot;Screen In to Challenge&quot; on http://localhost:3100/opportunities/team-with-us/00000000-0000-4000-8000-000000000801/proposals/00000000-0000-4000-8000-000000000841</code></pre>
+<h4>R-2.31 · v1</h4>
+<p>A proposal&#39;s total score is the weighted sum of its stage scores, and proposals are ranked against each other only once they are fully evaluated.</p>
+<ul><li>given: an opportunity whose questions, challenge, scenario and price carry stated weights</li><li>when: a proposal has a score for every one of those stages</li><li>then: its total is those scores combined in the stated proportions, and it takes a rank among the other fully evaluated proposals, highest total first</li><li>test: tests/acceptance/proposals/R-2.31.spec.ts</li></ul>
+<p><strong>A proposal&#39;s total score is the weighted sum of its stage scores, and proposals are ranked against each other only once they are fully evaluated.</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m1[39m
+Received: [31mNaN[39m
+
+Call Log:
+- Timeout 30000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-1.33 · v1</h4>
+<p>An administrator or an opportunity&#39;s author may attach a private note, with files, to a Code With Us or Sprint With Us opportunity&#39;s history at any point in its life.</p>
+<ul><li>given: a Code With Us or Sprint With Us opportunity in any state</li><li>when: its author adds a note of up to 1,000 characters with attachments</li><li>then: the note and its attachments appear in the opportunity&#39;s history, which only the author and administrators can see</li><li>test: tests/acceptance/opportunities/R-1.33.spec.ts</li></ul>
+<p><strong>an opportunity&#39;s author may attach a private note to a Code With Us opportunity&#39;s history</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-cwu-edit.add_note — signed in as the administrator and looked on the seeded published, open and processing opportunities of both programmes: the History tab is a table (Entry Type | Note | Created) with nothing in its top bar, the Opportunity tab&#39;s Actions menu offers only &quot;Edit&quot; and &quot;Cancel&quot;, the Addenda tab only &quot;Add Addendum&quot;, and no screen offers a way to add a note. Looked again as the administrator on the seeded published Code With Us opportunity, the seeded one in processing and a freshly published Sprint With Us one: the History tab&#39;s top bar is empty and its table has no control. The service&#39;s update request does take an &quot;addNote&quot; change, but nothing on any screen sends one, so there is no control for this action to press</code></pre>
+<p><strong>an administrator may attach a private note to a Sprint With Us opportunity&#39;s history</strong> — failed</p>
+<pre><code>Error: unbound: opportunity-swu-edit.add_note — signed in as the administrator and looked on the seeded published, open and processing opportunities of both programmes: the History tab is a table (Entry Type | Note | Created) with nothing in its top bar, the Opportunity tab&#39;s Actions menu offers only &quot;Edit&quot; and &quot;Cancel&quot;, the Addenda tab only &quot;Add Addendum&quot;, and no screen offers a way to add a note. Looked again as the administrator on the seeded published Code With Us opportunity, the seeded one in processing and a freshly published Sprint With Us one: the History tab&#39;s top bar is empty and its table has no control. The service&#39;s update request does take an &quot;addNote&quot; change, but nothing on any screen sends one, so there is no control for this action to press</code></pre>
+<h3>Calibration conditions</h3>
+<p>One condition per line, and exactly one of these forms:</p>
+<ul><li><code>defect-in-old &lt;ID&gt;</code> — the old application really does fail this and the criterion is right anyway. The test stands as written and the rebuild has to pass it; the criterion keeps a note saying so. No text after the ID.</li><li><code>spec-wrong &lt;ID&gt;: &lt;corrected statement&gt;</code> — the criterion misdescribes what the old application does. The statement is replaced and its version bumped, which marks the test stale so <code>derive-tests --stale</code> writes it again from the corrected criterion.</li><li><code>test-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion is right and the test is not. The id goes to <code>tests/acceptance/redo.yaml</code> for <code>derive-tests</code> to redo, still blind, and <code>&lt;why&gt;</code> records what the test got wrong without describing how the application is built.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. <code>defect-in-old</code> takes no text; the other two require a colon and text on the same line. A condition may not span more than one line.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-09-28 23:42.</p>
+<div class="body"><p>Question: for each of the 12 criteria that failed against the old application, is the fault in the application, the criterion or the test? Ruling: approve, with one condition per criterion. Two are the old application&#39;s fault. R-2.10: the old Team With Us proposal flow never calls its budget check — validateTWUProposalProposedCost is defined in shared/lib/validation/proposal/team-with-us.ts and has no caller, while Sprint With Us enforces its own — so the criterion stands and the rebuild must enforce it. R-1.9: the old application stores the fourteen-day default at midnight UTC, which a Pacific user sees as the previous day (&#39;Closed Oct 11, 2026 at 4:00 PM PDT&#39; when saved on Sept 28), and on Team With Us it sets an invalid completion date to the default where Code With Us leaves it null (team-with-us/index.ts:388 against code-with-us.ts:272). The criterion describes the right behaviour, so both are recorded as old defects. R-1.33 is spec-wrong: the service accepts an addNote change, but no screen in the old front-end sends one (a search of the front-end for addNote finds nothing), so the criterion is restated as a capability of the service with no screen offering it; whether the rebuild adds a screen is a product decision for later. The other nine are test failures. In every one the old code enforces the rule (the prototype-after-inception check, the service-area refusal on create, edit and submit, the locked organization on submitted proposals, the wrong-stage refusal in both programmes) or the test stopped before reaching it: phase dates refused first, a resource name missing, reference fields unrelated to question responses, a control that is not offered, proposal history or rank not found. R-4.3 and R-4.24 cannot be reached because no sign-in route leads to a vendor with an unfinished profile. Redoing those two tests will not fix that on its own: the seed needs a first-time vendor persona, and if they come back unbound again this should go to the tech lead rather than back to this persona. What would change this ruling: evidence that a date stored at midnight UTC is intended (R-1.9 would become spec-wrong); a call site for validateTWUProposalProposedCost that this search missed (R-2.10 would become test-wrong); or a screen in the old application that adds a note to an opportunity&#39;s history (R-1.33 would become test-wrong).</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>defect-in-old R-2.10</li><li>defect-in-old R-1.9</li><li>spec-wrong R-1.33: The service accepts a private note, with files, on a Code With Us or Sprint With Us opportunity&#39;s history from an administrator or the opportunity&#39;s author at any point in the opportunity&#39;s life, visible only to the author and administrators, but no screen of the application offers a way to add one.</li><li>test-wrong R-4.3: the test needs a vendor who has not yet completed their profile and signs in as an established vendor instead, so it never reaches the agreement step; it must begin as a first-time vendor persona.</li><li>test-wrong R-4.24: the test needs a person who has not yet completed their profile and signs in as an established account instead, so it never reaches the profile-completion step; it must begin as a first-time persona.</li><li>test-wrong R-1.16: the opportunity the test submits is refused over its phase dates before the phase rule is reached; everything except the missing prototype phase must be valid, so that the prototype-phase message is the only fault.</li><li>test-wrong R-2.22: the proposal the test edits is incomplete in other ways, so the change cannot be saved at all; the proposal must be otherwise complete so that the organization change is the only thing under test, both when refused and when accepted.</li><li>test-wrong R-2.21: the test depends on filling in parts of the proposal that the criterion does not mention before it reaches the question responses; it should vary only the response to an opportunity question and observe that response&#39;s rejection.</li><li>test-wrong R-2.17: the test observed no outcome at all rather than an acceptance; it must first confirm that the proposal names the organization lacking the service area and is actually submitted, then read the refusal.</li><li>test-wrong R-2.28: the test depends on a control being offered at a stage where the action is out of place; it should observe the refusal of the out-of-stage action itself, and not treat the action&#39;s absence from the screen as a failure.</li><li>test-wrong R-5.13: the test fails while reading a proposal&#39;s history, which the criterion does not mention, before it ever attempts to finalise; it should attempt finalisation with a proponent lacking a submitted consensus and observe the refusal.</li><li>test-wrong R-2.31: the test timed out reading a rank it could not parse as a number; it should read the total and rank for fully evaluated proposals where they are presented, and set up every stage score before reading.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
