@@ -39,3 +39,28 @@ I rewrote all four criteria in the opportunities domain as tests. Three of them 
 - A single observation on the edit screens for the award summary's contact details and score. `summary_tab` is free text, which is why the R-1.27 test has to match seeded values in it.
 
 Nothing asked me to change any read-only path, and I changed none.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+Question: do these four opportunities tests follow from their criteria and from nothing else? Return. R-1.29 asserts only what its criterion withholds, from two readers who are neither an administrator nor the authors, after confirming the page opened. R-1.27 asserts the winner's name for both readers, contact details and score withheld everywhere a visitor can reach, and each shown somewhere an administrator sees the award, which matches its statement. R-1.9 asserts the stored draft, no validation error and the fourteen-day proposal deadline in Pacific days, and its partial not-testable entry is real: the contract's opportunity view screens name proposal_deadline and no assignment, start or completion date, and nothing gives save_draft a present-but-invalid date. The typecheck failure is in adapters/new only; nothing under acceptance/opportunities was reported. The defect is R-1.16's second test. Its criterion's then-clause says the submission is rejected with a message saying a prototype phase must follow an inception phase, but the test only asserts that some field error is present (R-1.16.spec.ts line 109). Any validation error would pass it, and it does not establish the opportunity was not published. The field_error observation returns text, so the message's content can be asserted; with no not-testable clause entry, the test's first pass would close the criterion with that clause owed by nobody. The earlier redo instruction to keep that test as written does not override the criterion. The first R-1.16 test also swallows read failures in both branches, so an unreadable dashboard passes it; the rewrite should not let a read failure count as the rule holding. This ruling becomes an approval once the inception test asserts that the refusal names a prototype phase having to accompany or follow the inception phase and that the opportunity did not end up published, with the other three tests unchanged.
+
+**Conditions:**
+- R-1.16 (inception without prototype): assert that the error shown says a prototype phase must accompany or follow the inception phase (for example, field_error mentions both prototype and inception), not only that some error is present; and assert that the opportunity did not end up published. This supersedes the earlier redo instruction to keep this test as written.
+- R-1.16 (implementation phase): do not let a failed read count as the rule holding. If neither an opportunity identifier nor the dashboard can be read, the test must fail rather than pass on an empty string.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `4f35343a2e2e81764389a2afd117159fb2ee3cf3`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/opportunities/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
