@@ -2,7 +2,7 @@
   "target": "old",
   "base_url": "http://localhost:4300",
   "spec": "c1e09955fdff55e84870c25dfcb8e0fd9981c437",
-  "at": "2026-09-28T23:35:31.445Z",
+  "at": "2026-09-28T23:40:30.986Z",
   "rows": [
     {
       "id": "R-7.1",
@@ -654,7 +654,8 @@
         }
       ],
       "file_sha": "40ef7f0780767eabcf8d691eebf535792c7e72b4",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "triage": "product-question"
     },
     {
       "id": "R-5.14",
@@ -2358,7 +2359,8 @@
         }
       ],
       "file_sha": "f00a1673daf842881af0e4d5c99746c639c9864b",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "triage": "product-question"
     },
     {
       "id": "R-1.10",
@@ -2536,7 +2538,8 @@
         }
       ],
       "file_sha": "689d329b6951ce9dbacd5de7adfb2919f72e18d0",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "triage": "product-question"
     },
     {
       "id": "R-1.17",
@@ -2910,7 +2913,8 @@
         }
       ],
       "file_sha": "28432981476f0e5a9ccbee62a173a16f903a6919",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "triage": "product-question"
     },
     {
       "id": "R-1.34",
@@ -4096,7 +4100,8 @@
         }
       ],
       "file_sha": "6b7cd4fdc276698b8b3865e7efeeb296378fe66f",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.9",
@@ -4117,7 +4122,8 @@
         }
       ],
       "file_sha": "9352db51ac67548e345390e5525da3cc44d7c7cd",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.10",
@@ -4138,7 +4144,8 @@
         }
       ],
       "file_sha": "39b426f4bf2137f044b561cb84fa899bc1788bad",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "triage": "product-question"
     },
     {
       "id": "R-2.11",
@@ -4154,7 +4161,8 @@
         }
       ],
       "file_sha": "b101af18985eed843d5e15649c231b86c7cc0b69",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.12",
@@ -4304,7 +4312,8 @@
         }
       ],
       "file_sha": "3de5ccebf47af481b48828f711b3a51fae348192",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.17",
@@ -4324,7 +4333,8 @@
         }
       ],
       "file_sha": "cba4b7c656c370f4952becce1febd1d626364290",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "triage": "product-question"
     },
     {
       "id": "R-2.18",
@@ -4408,7 +4418,8 @@
         }
       ],
       "file_sha": "9d25da6d6f8dcc2468093c1dde0f8a5e683617a2",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.20",
@@ -4428,7 +4439,8 @@
         }
       ],
       "file_sha": "017998fedf4937682c4fa5fa1211442152b368bc",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.21",
@@ -4449,7 +4461,8 @@
         }
       ],
       "file_sha": "94c13cf955cd3a8da23cf62aed859713fa273774",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "triage": "product-question"
     },
     {
       "id": "R-2.22",
@@ -4470,7 +4483,8 @@
         }
       ],
       "file_sha": "75f3013e99bb80601e81c9c5232e53ce32d8c3be",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "triage": "product-question"
     },
     {
       "id": "R-2.23",
@@ -4594,7 +4608,8 @@
         }
       ],
       "file_sha": "b0e2a5c21c2c9b58af3cccebddbea65dd5477c6d",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "triage": "product-question"
     },
     {
       "id": "R-2.29",
@@ -4644,7 +4659,8 @@
         }
       ],
       "file_sha": "2f18342835a96211378352ab4c5672ddd76bb83f",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "triage": "product-question"
     },
     {
       "id": "R-2.32",
@@ -4737,7 +4753,8 @@
         }
       ],
       "file_sha": "46be266b170656d7ba5b9cb2bcf7eab96504ced9",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.36",
@@ -4780,7 +4797,8 @@
         }
       ],
       "file_sha": "c611d0eb966ccfa12c6be589493dccdb6e675734",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.38",
@@ -4883,7 +4901,8 @@
         }
       ],
       "file_sha": "f2ea14d7e5b0abe02d825a633db316f98838580c",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "triage": "product-question"
     },
     {
       "id": "R-4.4",
@@ -4899,7 +4918,8 @@
         }
       ],
       "file_sha": "7360c14b10f22ae5b918e7c9a1b12e8a9ea3d651",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "ruled": "oracle-cannot"
     },
     {
       "id": "R-4.5",
@@ -5039,7 +5059,8 @@
         }
       ],
       "file_sha": "312431e4b9300abac886c8a5130a43ead5368569",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-4.16",
@@ -5215,7 +5236,8 @@
         }
       ],
       "file_sha": "a42bc2c80b586452967359755f0367c1a8457768",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-4.24",
@@ -5231,7 +5253,8 @@
         }
       ],
       "file_sha": "08c0ad37717616821c0f6a41ee6dc9dfd096c704",
-      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed"
+      "adapter": "c0679fb6b2152557df56ade1fe6babace5ae15ed",
+      "triage": "product-question"
     },
     {
       "id": "R-4.25",
