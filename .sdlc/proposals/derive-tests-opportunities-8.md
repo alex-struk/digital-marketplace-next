@@ -34,3 +34,30 @@ The condition names `tests/acceptance/opportunities/not-testable.yaml`, which do
 - The headers keep their "derived 2026-09-28" date, which is already today in UTC. No other file under `tests/acceptance/opportunities/` changed, and nothing under `tests/generated/` changed.
 - The contract condition is left to contract.
 - I found no missing surface actions or observations.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+The question is whether the revised R-1.34, R-1.36 and R-1.37 tests follow only from their criteria and settle the four open conditions from derive-tests-opportunities-stale-4. They do. Each group-notice test now counts a person as told only when a caught message names them as a visible or blind-copied recipient and names the opportunity's title in its subject or body, which is the same check the author-confirmation tests use. The tests reach the application only through the surface and the seed; no selector, route or status code appears. R-1.36 creates its starting state, a watcher and a submitted proposal on the published opportunity, and reads both back through the surface before cancelling. Condition 4 asked for a not-testable entry because the seed gave the nineteen extra announcement recipients only as a total. That is no longer true: tests/seed/manifest.yaml lists all nineteen by handle under new_opportunity_notices.receive_the_announcement, and R-1.34 now asserts all 139 addresses and checks the total against the seed's own figure, so an entry would state a false reason. The runner's typecheck reports no diagnostics under acceptance/opportunities/; its two errors are in adapters/new/, which this proposal does not touch. The not-testable.yaml change only moves the R-1.51 entry, with identical text. One accepted weakness: the author, staffOne, is among the nineteen, and their title-naming confirmation could count as their announcement, since the criterion describes the two messages no more precisely than that. The ruling would change if these files produced typecheck diagnostics or the seed stopped naming the nineteen.
+
+**Conditions:**
+- condition-met derive-tests-opportunities-stale-4#1: in tests/acceptance/opportunities/R-1.34.spec.ts, unreached() counts a subscriber as told only when a caught message names them as a visible or blind-copied recipient and names the opportunity's title in its subject or body.
+- condition-met derive-tests-opportunities-stale-4#2: in tests/acceptance/opportunities/R-1.36.spec.ts, unreached() counts the watcher (proponentTwo) and the proponent (vendorOne) as told only when a message caught since the cancellation names them as a visible or blind-copied recipient and names the seeded opportunity's title.
+- condition-met derive-tests-opportunities-stale-4#3: in tests/acceptance/opportunities/R-1.37.spec.ts, unreached() counts each active seeded administrator as notified only when a message caught since the submission names them as a visible or blind-copied recipient and names the submitted opportunity's title.
+- condition-withdrawn derive-tests-opportunities-stale-4#4: the seed now lists the nineteen accounts outside the subscriber group by handle (tests/seed/manifest.yaml, new_opportunity_notices.receive_the_announcement), and subscriberAddresses() in R-1.34.spec.ts asserts all of them and checks the 139 total, so the clause is asserted and an untestable entry would state a false reason.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `9cd5f60c34c150b233d6f8628e092b2fcf50ed72`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/opportunities/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
