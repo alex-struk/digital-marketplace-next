@@ -171,6 +171,8 @@ export interface OpportunityCwuViewPage {
   createdByName(): Promise<string>;
   lastChangedByName(): Promise<string>;
   proposalDeadline(): Promise<string>;
+  assignmentDate(): Promise<string>;
+  startDate(): Promise<string>;
   reward(): Promise<string>;
   addenda(): Promise<string>;
   successfulProponent(): Promise<string>;
@@ -198,6 +200,10 @@ export interface OpportunityCwuEditPage {
   reportingViews(): Promise<string>;
   reportingWatchers(): Promise<string>;
   reportingProposals(): Promise<string>;
+  proposalDeadline(): Promise<string>;
+  assignmentDate(): Promise<string>;
+  startDate(): Promise<string>;
+  completionDate(): Promise<string>;
 }
 
 export interface OpportunityCwuCompletePage {
@@ -227,6 +233,7 @@ export interface OpportunitySwuViewPage {
   createdByName(): Promise<string>;
   lastChangedByName(): Promise<string>;
   proposalDeadline(): Promise<string>;
+  assignmentDate(): Promise<string>;
   totalMaxBudget(): Promise<string>;
   phases(): Promise<string>;
   scopeSection(): Promise<string>;
@@ -263,6 +270,8 @@ export interface OpportunitySwuEditPage {
   consensusTab(): Promise<string>;
   instructionsTab(): Promise<string>;
   evaluationTab(): Promise<string>;
+  proposalDeadline(): Promise<string>;
+  assignmentDate(): Promise<string>;
 }
 
 export interface OpportunitySwuCompletePage {
@@ -292,6 +301,9 @@ export interface OpportunityTwuViewPage {
   createdByName(): Promise<string>;
   lastChangedByName(): Promise<string>;
   proposalDeadline(): Promise<string>;
+  assignmentDate(): Promise<string>;
+  startDate(): Promise<string>;
+  completionDate(): Promise<string>;
   maxBudget(): Promise<string>;
   resources(): Promise<string>;
   termsSection(): Promise<string>;
@@ -326,6 +338,10 @@ export interface OpportunityTwuEditPage {
   instructionsTab(): Promise<string>;
   evaluationTab(): Promise<string>;
   offeredStateChanges(): Promise<string>;
+  proposalDeadline(): Promise<string>;
+  assignmentDate(): Promise<string>;
+  startDate(): Promise<string>;
+  completionDate(): Promise<string>;
 }
 
 export interface OpportunityTwuCompletePage {
