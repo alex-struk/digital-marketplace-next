@@ -170,6 +170,7 @@
 - 14:54:01 run contract: ok, cost 0.9343870000000001, turns 30, on claude claude-opus-5-5 (2.1.284 (Claude Code))
 - 14:54:01 propose contract-v19 at G1
 - 14:54:30 rule contract-v19 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 14:59:44 oracle up old: http://localhost:4300 (local port 4300)
 
 # Run record 2026-09-26
 
