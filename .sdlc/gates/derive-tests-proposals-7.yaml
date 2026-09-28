@@ -1,0 +1,16 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether the revised R-2.18 test now follows from its criterion alone, which turns on the open instruction derive-tests-proposals-stale-9#1. The Sprint With Us form test no longer asserts anything about the pending invitee in either direction: it reads the choice, checks the three active members are offered, the former member and the outsider are not, and the person just named stops being offered. Every other assertion is unchanged. Each remaining assertion follows from R-2.18's text ('The proposal form offers only the organization's active members, and does not offer a person already named on the proposal'; Team With Us refuses duplicates while Sprint With Us applies no uniqueness check), including the Team With Us check that the pending person is not offered. No implementation detail leaks in. The runner's typecheck reports no diagnostics under acceptance/proposals/; the two in adapters/new are outside this proposal. The Sprint With Us pending-invitee clause the test no longer asserts is already owed by ratify as missing-test/R-2.18, because the contract and the criterion disagree, so no further entry is needed. The ruling would change only if ratify rewrote R-2.18 so the Sprint With Us choice lists pending invitees marked pending, which would be a new derive-tests round.
+conditions:
+  - "condition-met derive-tests-proposals-stale-9#1: the Sprint With Us form test in tests/acceptance/proposals/R-2.18.spec.ts no longer asserts that the choice contains seed.users.teamCandidatePending.name nor that surface.proposalSwuCreate.pendingTeamMember() is non-empty, asserts nothing about the pending person in either direction, and every other assertion in the file is unchanged"
+cost: 0.33198400000000006
+turns: 3
+session: "be9b335d-cb12-4852-96cc-28cf1076f0f5"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T22:05:00.544Z
