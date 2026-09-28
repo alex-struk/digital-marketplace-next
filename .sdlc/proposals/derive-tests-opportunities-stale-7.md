@@ -35,3 +35,27 @@ I wrote the one test owed for R-1.9 (v2) in `tests/acceptance/opportunities/R-1.
 The Sprint With Us cases check only the proposal deadline and assignment date. The contract says its start and completion dates belong to its phases, so the criterion's start-date and completion-date clauses are checked on Code With Us and Team With Us, which hold all four dates.
 
 **Needed but not found:** nothing. No criterion in this run is recorded as untestable, and I did not change any file outside `tests/acceptance`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+The question is whether R-1.9.spec.ts follows from R-1.9 v2 and nothing else. It does. Six tests cover the three programs, once with the dates missing and once with all dates set to the contract-named invalid value. They assert that the draft is stored (it gets an identifier and appears in the author's table), that no field error is raised, that the proposal deadline, assignment date and start date are fourteen days from the day of saving in Pacific time, and that the completion date is empty. Every clause of the criterion is asserted, so removing its not-testable entry is correct. Sprint With Us is checked on only two dates, which the contract justifies by assigning its start and completion dates to its phases. Both clauses are still asserted on Code With Us and Team With Us. Reading an entered invalid completion date as one that must come back empty is faithful to 'left empty'. No selectors, routes or storage details leak in. The runner's typecheck reports no errors under acceptance/opportunities; its only two errors are in adapters/new, which this proposal does not touch. The open missing-test/R-1.9 closes when this test first runs at v2, so no condition is needed for it. A type error in this spec, or a contract statement that an entered completion date is kept, would change the ruling.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `224a3b163a257c21046f522e93c67db45f77cebd`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/opportunities/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
