@@ -1,17 +1,29 @@
 // criterion: @R-1.16 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
+// provenance: blind, spec@c1e09955fdff55e84870c25dfcb8e0fd9981c437, derived 2026-09-28
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// Both opportunities are complete but for their phases, so the refusal can only be the
-// phases' doing. The second test offers inception and implementation and withholds
-// prototype, which is the exact arrangement the criterion forbids; an opportunity with all
-// three phases would tell nothing apart.
+// Both opportunities are complete but for their phases, so what happens to them can only
+// be the phases' doing.
+//
+// The first names no implementation phase of its own and is published. The rule is kept
+// if no Sprint With Us opportunity ends up published without one — whether because the
+// service gives the person no way to leave it out, or because it refuses the publication —
+// so the test does not demand a refusal message. If the opportunity was published, its
+// phases must include an implementation phase; if it was not, it must not be among the
+// opportunities at all.
+//
+// The second offers inception and implementation and withholds prototype, the exact
+// arrangement the criterion forbids. It is refused with a message naming both phases, and
+// the opportunity does not end up published.
+//
+// Only the identifier read is allowed to fail: a person turned away from the create page
+// is never taken to an edit page, so there is no identifier to read. The dashboard read
+// that stands in for it is never excused — a dashboard that cannot be read fails the test
+// rather than counting as the rule holding.
 
-function inDays(days: number): string {
-  const date = new Date();
-  date.setDate(date.getDate() + days);
-  return date.toISOString().slice(0, 10);
+function pacificDay(days: number): string {
+  return new Date(Date.now() + days * 86_400_000).toLocaleDateString("en-CA", { timeZone: "America/Vancouver" });
 }
 
 const shared = {
@@ -26,11 +38,21 @@ const shared = {
   codeChallengeWeight: 40,
   teamScenarioWeight: 15,
   priceWeight: 20,
-  proposalDeadline: inDays(14),
-  assignmentDate: inDays(21),
-  startDate: inDays(28),
-  completionDate: inDays(90),
+  proposalDeadline: pacificDay(14),
+  assignmentDate: pacificDay(21),
+  startDate: pacificDay(28),
+  completionDate: pacificDay(90),
 };
+
+// The identifier of the opportunity the person was taken to, or "" when the submission
+// left them without one.
+async function landedOpportunityId(surface: Surface): Promise<string> {
+  try {
+    return (await surface.opportunitySwuEdit.opportunityIdentifier()) ?? "";
+  } catch {
+    return "";
+  }
+}
 
 async function prepare(surface: Surface): Promise<void> {
   await surface.opportunitySwuCreate.open();
@@ -47,44 +69,59 @@ async function prepare(surface: Surface): Promise<void> {
   });
 }
 
-test("a Sprint With Us opportunity must have an implementation phase", async ({ surface }) => {
+test("A Sprint With Us opportunity must have an implementation phase", async ({ surface }) => {
+  const title = "R-1.16 Sprint With Us opportunity naming no implementation phase";
+
   await surface.signIn(persona.administrator);
   await prepare(surface);
   await surface.opportunitySwuCreate.addPhase({
     phase: "Prototype",
-    startDate: inDays(28),
-    completionDate: inDays(60),
+    startDate: pacificDay(28),
+    completionDate: pacificDay(60),
     maxBudget: 250000,
   });
-  await surface.opportunitySwuCreate.publish({
-    ...shared,
-    title: "R-1.16 Sprint With Us opportunity with no implementation phase",
-  });
+  await surface.opportunitySwuCreate.publish({ ...shared, title });
 
-  expect(await surface.opportunitySwuCreate.fieldError()).toBeTruthy();
+  const opportunityId = await landedOpportunityId(surface);
+  if (opportunityId) {
+    await surface.opportunitySwuView.open({ opportunityId });
+    expect(await surface.opportunitySwuView.phases()).toMatch(/implementation/i);
+  } else {
+    await surface.opportunityDashboard.open();
+    expect(await surface.opportunityDashboard.myOpportunitiesTable()).not.toContain(title);
+  }
 });
 
-test("a Sprint With Us opportunity may only have an inception phase if it also has a prototype phase", async ({
+test("A Sprint With Us opportunity may only have an inception phase if it also has a prototype phase", async ({
   surface,
 }) => {
   await surface.signIn(persona.administrator);
   await prepare(surface);
   await surface.opportunitySwuCreate.addPhase({
     phase: "Inception",
-    startDate: inDays(28),
-    completionDate: inDays(45),
+    startDate: pacificDay(28),
+    completionDate: pacificDay(45),
     maxBudget: 100000,
   });
   await surface.opportunitySwuCreate.addPhase({
     phase: "Implementation",
-    startDate: inDays(46),
-    completionDate: inDays(90),
+    startDate: pacificDay(46),
+    completionDate: pacificDay(90),
     maxBudget: 400000,
   });
-  await surface.opportunitySwuCreate.publish({
-    ...shared,
-    title: "R-1.16 Sprint With Us opportunity with inception and no prototype",
-  });
+  const title = "R-1.16 Sprint With Us opportunity with inception and no prototype";
+  await surface.opportunitySwuCreate.publish({ ...shared, title });
 
-  expect(await surface.opportunitySwuCreate.fieldError()).toBeTruthy();
+  const refusal = await surface.opportunitySwuCreate.fieldError();
+  expect(refusal).toMatch(/prototype/i);
+  expect(refusal).toMatch(/inception/i);
+
+  const opportunityId = await landedOpportunityId(surface);
+  if (opportunityId) {
+    await surface.opportunitySwuView.open({ opportunityId });
+    expect(await surface.opportunitySwuView.status()).not.toMatch(/published/i);
+  } else {
+    await surface.opportunityDashboard.open();
+    expect(await surface.opportunityDashboard.myOpportunitiesTable()).not.toContain(title);
+  }
 });
