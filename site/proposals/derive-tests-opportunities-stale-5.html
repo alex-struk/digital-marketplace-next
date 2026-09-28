@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-stale-5 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">210</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">206</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">180</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-stale-5</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-28 16:11</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.282 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the opportunities criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the test for the one criterion in this batch, R-1.27, at <code>tests/acceptance/opportunities/R-1.27.spec.ts</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.282 (Claude Code))</p>
+<p>I rewrote the test for the one criterion in this batch, R-1.27, at <code>tests/acceptance/opportunities/R-1.27.spec.ts</code>. I left <code>not-testable.yaml</code> unchanged. I couldn&#39;t typecheck or run the test: this workspace has no TypeScript or Playwright install and no target. I checked every page, observation and seed handle it uses against <code>surface.d.ts</code> and <code>seed.ts</code> by hand.</p>
+<p><strong>What the ruling found wrong, and what changed:</strong></p>
+<ul><li><strong>How the award is established.</strong> The old test waited for the status to read &quot;awarded&quot;. The new test never reads the status. It opens the opportunity and waits until <code>successfulProponent()</code> names the seeded winner, <code>seed.organizations.qualified.legal_name</code>. Being named is the proof of the award, so a system that shows a different word for that state still passes.</li><li><strong>Where the permitted reader looks.</strong> The reader is signed in as <code>persona.administrator</code>, who can award opportunities. The score may now be shown either on the opportunity (<code>successfulProponentScore()</code>) or on the winning proposal&#39;s own page. On that page the test reads <code>proposalCwuView.score()</code> for Code With Us and <code>proposalSwuView.totalScore()</code> for Sprint With Us, using <code>seed.proposals.cwuAwardedWinner</code> and <code>seed.proposals.swuAwardedWinner</code>. It no longer insists on one place. The contact details come from <code>successfulProponentContactDetails()</code> on the opportunity, because no other observation in the contract reports them.</li><li><strong>What the visitor must not see.</strong> A visitor who isn&#39;t signed in must still see the winner&#39;s name. They must see neither contact details nor score on the opportunity, and no score on the winning proposal&#39;s page either. A proposal page that turns the visitor away counts as showing nothing.</li></ul>
+<p><strong>Tests written:</strong> both halves of the criterion&#39;s statement, run for each seeded awarded opportunity (Code With Us and Sprint With Us), making four <code>test()</code> calls. The criterion&#39;s own given/when/then covers only the visitor half, but its statement also makes the claim about permitted readers, so that half gets its own test. Each test is titled with the criterion&#39;s statement plus the program and the kind of reader.</p>
+<p><strong>Gaps the contract could close:</strong></p>
+<ul><li><strong>Contact details have one observation only.</strong> Contact details are asserted only on the opportunity&#39;s view page. If the application shows them to an administrator somewhere else, such as on the proposal page, this test would fail even though the criterion is met. The contract should add a contact-details observation on <code>proposal-cwu-view</code> and <code>proposal-swu-view</code> if they are shown there. I didn&#39;t write a <code>not-testable.yaml</code> entry for this, because the test does assert the clause through the one place the contract names.</li><li><strong>The seed has no contact-details values.</strong> The contact details exist only in the SQL, not in the generated seed, so the test can only check that some contact details appear, not that they are the winner&#39;s. Adding the winning organization&#39;s contact details to the seed would let the contract&#39;s owner make that check exact.</li><li><strong>No Team With Us awarded opportunity is seeded,</strong> so that program isn&#39;t exercised. The criterion doesn&#39;t name programs, so I didn&#39;t record this as a gap.</li></ul>
+<p>I changed no file outside <code>tests/acceptance</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-28 16:12.</p>
+<div class="body"><p>Question: does the rewritten R-1.27 test follow from the criterion and nothing else? Approve. The test no longer takes the status label &#39;awarded&#39; as proof of the award. It establishes the award by the successful proponent being named, which is what the criterion states. The visitor half (the criterion&#39;s given/when/then) asserts, for both seeded awarded opportunities, that the winner&#39;s name is shown and that contact details and score are withheld on the opportunity and on the winning proposal. A refused proposal page counts as withheld. The permitted-reader half, taken from the statement, asserts that an administrator sees the name and contact details and sees the score on either the opportunity or the proposal page, since the criterion does not say where. Every page, observation and seed handle used exists in surface.d.ts and seed.ts. No selector, route or status wording leaks in. The runner&#39;s typecheck reports no diagnostics under acceptance/opportunities; its two diagnostics are in adapters/new, which this proposal does not answer for. The named gaps (contact details readable only on the opportunity page, no contact-detail values in the seed) do not leave any clause unasserted. What would change the ruling: a calibrate run showing the proposal-page score read binding to something other than the score, or a contract change adding a contact-details observation on proposal views, which the test would then need to read.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
