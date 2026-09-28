@@ -1,0 +1,9 @@
+gate: G3
+verdict: withdrawn
+by: agent:tech-lead
+held_by: agent
+note: Its rows are results the adapter produced before bind-adapter-old-20
+  replaced it, so the adapter-wrong rulings on them have lapsed and a sorting
+  now would judge code that no longer runs; the full calibration after the eight
+  test redos asks again over fresh rows.
+at: 2026-09-28T03:35:14.684Z
