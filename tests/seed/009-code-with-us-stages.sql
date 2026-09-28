@@ -9,7 +9,7 @@
 -- opportunity is given one of its own, named in tests/seed/manifest.yaml for that
 -- criterion.
 --
--- What is seeded is the condition, not the outcome. Six of the eight are PUBLISHED with a
+-- What is seeded is the condition, not the outcome. Seven of the nine are PUBLISHED with a
 -- deadline thirty days ago and carry proposals that are SUBMITTED, WITHDRAWN before the
 -- deadline, or still DRAFT; the application's own hook (in front of /status and every
 -- route under /api, throttled to two seconds on the oracle) closes each one, moving it to
@@ -193,5 +193,12 @@ BEGIN
   PERFORM pg_temp.seed_cwu_opportunity(8, 'Seeded awarded Code With Us opportunity', staff, 'AWARDED');
   PERFORM pg_temp.seed_cwu_proposal(8, 1, v1, o1, staff, 'AWARDED', 91);
   PERFORM pg_temp.seed_cwu_proposal(8, 2, v2, o2, staff, 'NOT_AWARDED', 77);
+
+  -- 9. One submitted proposal beside a draft never submitted, for the clause that drafts
+  --    are not counted (R-2.27). The draft stays DRAFT through the closure, so scoring the
+  --    one submission is scoring the last proposal in contention.
+  PERFORM pg_temp.seed_cwu_opportunity(9, 'Seeded lapsed Code With Us opportunity with a submission and a draft', staff, 'PUBLISHED');
+  PERFORM pg_temp.seed_cwu_proposal(9, 1, v1, o1, staff, 'SUBMITTED', NULL);
+  PERFORM pg_temp.seed_cwu_proposal(9, 2, v2, o2, staff, 'DRAFT', NULL);
 END
 $$;
