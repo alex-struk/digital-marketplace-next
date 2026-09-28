@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-organizations-7 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">239</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">235</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">203</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-organizations-7</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-28 22:10</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised organizations tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I made the one change the returned ruling asked for, in the R-3.9 test.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made the one change the returned ruling asked for, in the R-3.9 test. I couldn&#39;t typecheck it here because both attempts to run the compiler were blocked at the permission prompt.</p>
+<p><strong>Condition 1 (R-3.9, &quot;an invitation that is not pending cannot be accepted&quot;).</strong> Before this change, the test swallowed any error from the second acceptance and then only checked that the membership was still active. That check would pass just the same if the service wrongly accepted a second time. The test now asserts the refusal itself, using the reviewer&#39;s first option: the accept action is not offered once the membership is no longer pending. It records whether the second <code>approveInvitation</code> call went through or was rejected, and asserts that it was rejected. It also checks that <code>acceptConfirmation()</code> shows nothing after the attempt, and it still checks at the end that the membership is active and belongs to the invited person. No exact message is assumed. Because the surface does reach the refusal, I added no <code>not-testable.yaml</code> entry for this clause.</p>
+<p>One caveat about how the refusal is observed. The contract describes <code>acceptConfirmation()</code> as the dialog you land on after following the accept link in an invitation email. So its absence on its own is weak evidence. What actually separates a refusal from a wrong second acceptance is the rejected action. If a later implementation offers the accept action and refuses on the server with an error message, this test would fail even though the criterion holds. If that happens, the right fix is for the contract to add an observation for a refused-acceptance message on the self-memberships page. None exists today.</p>
+<p>The two header lines are unchanged. The &quot;derived&quot; date was already 2026-09-28, today&#39;s date, so there was nothing to rewrite. The owner-attempt test in the same file still uses the <code>attempt</code> helper and is untouched, as are the other two tests. I changed no other file under <code>tests/acceptance/organizations/</code> and no entry in <code>tests/acceptance/not-testable.yaml</code>.</p>
+<p><strong>Not verified.</strong> I read the new code against <code>surface.d.ts</code>, and the calls it makes exist there with the right signatures. But until the runner&#39;s typecheck runs, it is not confirmed that <code>acceptance/organizations/</code> still has no diagnostics.</p>
+<p>There were no conditions I could not act on, and nothing asked me to change a path outside this stage&#39;s boundary.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-28 22:11.</p>
+<div class="body"><p>Question: do the revised organizations tests follow from their criteria and nothing else, and does the R-3.9 revision settle derive-tests-organizations-6#3? Ruling: approve. The test &#39;an invitation that is not pending cannot be accepted&#39; now asserts the refusal itself: the second approveInvitation from the invited person&#39;s own memberships page must be rejected (the accept action is not offered for a membership that is no longer pending), no acceptance confirmation may be shown, and the membership must still be active and still the invited person&#39;s. That is the first option the earlier ruling offered, and it assumes no exact message. The other R-3.9 tests (owner refused, invited person accepts, administrator accepts on their behalf) each follow from a clause of the criterion. R-3.31 asserts that the owner&#39;s message identifies the invited person as having approved or joined, and that the member&#39;s message names the organization and says they joined, which matches the criterion&#39;s &#39;then&#39; without assuming exact wording. No selector, route, status code or table name leaks in; every call goes through the contract surface. The runner&#39;s typecheck reports no diagnostics under acceptance/organizations/; the two it reports are in adapters/new/, which this proposal does not answer for. Residual weakness, accepted: a rejected adapter call cannot tell &#39;not offered&#39; apart from a failure for another reason, and the final active-membership check only partly covers that. If a later build offers the action and refuses it with a message, the fix is a contract observation for that message, not a change to this test. What would change the ruling: a typecheck diagnostic under acceptance/organizations/, or evidence that the self-memberships page offers the accept action for an active membership.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met derive-tests-organizations-6#3: tests/acceptance/organizations/R-3.9.spec.ts, test &#39;an invitation that is not pending cannot be accepted&#39;, now requires the second organizationUserMembershipsSelf.approveInvitation to be rejected (the accept action is not offered for the now-active membership) and requires acceptConfirmation() to show nothing, before re-checking that the membership is active and still the invited person&#39;s; no exact message is assumed</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

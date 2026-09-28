@@ -421,18 +421,27 @@ redo:
       pending' case never makes the membership active first; have the invited
       person accept, then make a further attempt and establish that the
       membership is unchanged
+    closed: &a8
+      outcome: met
+      why: derived again by derive-tests-organizations-stale-5, in the line of work
+        approved as derive-tests-organizations-7
+      by: derive-tests-organizations-7
+      at: 2026-09-28T22:11:06.385Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-3.31
     version: 1
     why: the mailbox is read once, immediately after the acceptance returns, but the
       messages may be sent just afterwards; wait for both messages to arrive
       within a bounded time before concluding either is missing
+    closed: *a8
   - id: R-2.30
     version: 1
     why: the test reads the price score from a page where it is not shown, and the
       criterion does not say where it appears; read it wherever an entitled
       reader is shown the proposal's individual scores, together with the
       history entry and the evaluated state
-    closed: &a8
+    closed: &a9
       outcome: met
       why: derived again by a derive-tests run on proposals
       by: runner:derive-tests
@@ -444,14 +453,14 @@ redo:
       shown under another label; establish that each state change and score
       entry appears newest first with its author, time and note, matching the
       disqualification by its note rather than by a label
-    closed: *a8
+    closed: *a9
   - id: R-2.14
     version: 2
     why: ten proposal attempts in one test cannot finish within the time a single
       test is allowed; give each missing or malformed field its own test, or
       allow the test the time its attempts need, so that a timeout never stands
       in for a result
-    closed: *a8
+    closed: *a9
   - id: R-5.32
     version: 1
     why: it reads whether a proponent was screened into the code challenge from the

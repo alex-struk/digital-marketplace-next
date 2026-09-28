@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-organizations-6 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">239</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">235</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">203</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-organizations-6</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-28 22:08</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised organizations tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I couldn&#39;t type-check it: running <code>tsc</code> here needed an approval that nobody was there to give.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I&#39;ve rewritten the R-3.31 test so it checks what each message says, not just that a message arrived. I couldn&#39;t type-check it: running <code>tsc</code> here needed an approval that nobody was there to give. The new code only uses fields the mailbox reader and the surface already declare.</p>
+<p><strong>Condition 1 (R-3.31).</strong> I changed the one file, <code>tests/acceptance/organizations/R-3.31.spec.ts</code>. After the invited person accepts, the test waits up to 30 seconds and passes only if both of these hold:</p>
+<ul><li><strong>Owner&#39;s message:</strong> it identifies the invited person and contains &quot;approv&quot; or &quot;join&quot;.</li><li><strong>Invited person&#39;s message:</strong> it contains the organization&#39;s seeded name (&quot;Salt Marsh Labs Ltd.&quot;) and &quot;join&quot;.</li></ul>
+<p>Neither check depends on an exact sentence, since the criterion doesn&#39;t give one.</p>
+<p>To identify the invited person, the test needs a name to look for. The seed gives this person an email address but no name. So before accepting, the test reads the name shown on their own profile page (<code>surface.userProfileSelf.nameField()</code>). It accepts either that name or their email address in the owner&#39;s message.</p>
+<p>The mailbox reader only exposes each message&#39;s subject and its opening snippet, not the full text, so the test searches those two. I decided that is enough to assert the content, as the reviewer said, so I added no <code>not-testable.yaml</code> entry. If a real run shows the name or organization only appears later in the message body, the missing piece is a way to read the full text. The contract lists that field, but the mailbox reader in <code>tests/fixtures</code> doesn&#39;t offer it, and that file isn&#39;t this stage&#39;s to change. The header&#39;s derived date is already today, so it didn&#39;t change.</p>
+<p><strong>Condition 2 (R-3.9).</strong> I left the file as it was, as asked.</p>
+<p>No other file in <code>tests/acceptance/organizations/</code> and no entry in <code>tests/acceptance/not-testable.yaml</code> was touched. Nothing asked me to change a path outside this stage&#39;s boundary.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-28 22:09.</p>
+<div class="body"><p>Question: do the revised organizations tests follow from their criteria and from nothing else? Ruling: return. R-3.31 now meets the earlier condition. After clearing the mailbox and having the invited person accept, it waits a bounded time and checks two things: the owner&#39;s message identifies the invited person (by email, or by the name their own profile shows) as having approved or joined, and the invited person&#39;s message names the seeded organization and says they joined. It assumes no exact wording, because the criterion gives none. The runner&#39;s typecheck reports no diagnostics under acceptance/organizations/; the only diagnostics are in adapters/new/, which this proposal does not answer for. R-3.9 was left as the earlier ruling asked, but read against its criterion, the test for &#39;an invitation that is not pending cannot be accepted&#39; cannot fail. It accepts, attempts a second acceptance while swallowing any error, and then asserts only that the membership is still active. A second acceptance the service wrongly allowed would leave that same state, so the clause &#39;refused as not pending&#39; is asserted by nothing, and no not-testable entry names it. The owner-attempt test does not have this flaw, because &#39;still pending afterwards&#39; does separate a refusal from a success. The surface can reach the refusal: the self-memberships page declares acceptConfirmation(), and a refusal also shows as the accept action not being offered. What would change the ruling: that test asserting the second attempt was refused, or a not-testable.yaml entry carrying <code>clause</code> for the refusal and naming the missing observation.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met derive-tests-organizations-stale-5#1: tests/acceptance/organizations/R-3.31.spec.ts now waits up to 30s and asserts that the owner&#39;s message identifies the invited person (email or profile name) together with approv/join, and that the invited person&#39;s message contains the organization&#39;s legal name and &#39;join&#39;; no exact sentence is assumed.</li><li>condition-withdrawn derive-tests-organizations-stale-5#2: the file was kept as asked, but read against R-3.9 its final test does not assert the refusal of a further acceptance, so leaving the file unchanged is no longer asked for; the condition below replaces it.</li><li>R-3.9: in tests/acceptance/organizations/R-3.9.spec.ts, the test &#39;an invitation that is not pending cannot be accepted&#39; asserts only that the membership is still active after the second attempt, which is equally true if the service wrongly accepted it again. Assert the refusal itself through what the surface shows for that attempt: either the accept action is not offered for the now-active membership, or the attempt produces no acceptance confirmation. Do not assume an exact message. If the surface cannot show a refusal, add a tests/acceptance/organizations/not-testable.yaml entry for R-3.9 carrying <code>clause</code> for &#39;a further attempt to accept the now-active membership is refused as not pending&#39; and naming the missing observation.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
