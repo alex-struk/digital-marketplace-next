@@ -4,7 +4,7 @@
 
 | id | test | new | old |
 | --- | --- | --- | --- |
-| R-6.1 | acceptance/notifications/R-6.1.spec.ts |  | fail |
+| R-6.1 | acceptance/notifications/R-6.1.spec.ts |  | fail (ruled: test-wrong) |
 | R-6.2 | acceptance/notifications/R-6.2.spec.ts |  | pass |
 | R-6.3 | acceptance/notifications/R-6.3.spec.ts |  | pass |
 | R-6.4 | acceptance/notifications/R-6.4.spec.ts |  | pass |

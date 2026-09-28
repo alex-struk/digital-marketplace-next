@@ -5,17 +5,17 @@
 | id | test | new | old |
 | --- | --- | --- | --- |
 | R-8.1 | acceptance/files/R-8.1.spec.ts |  | pass |
-| R-8.2 | acceptance/files/R-8.2.spec.ts |  | fail |
+| R-8.2 | acceptance/files/R-8.2.spec.ts |  | fail (ruled: test-wrong) |
 | R-8.3 | — |  | not-testable |
 | R-8.4 | — |  | not-testable |
-| R-8.5 | acceptance/files/R-8.5.spec.ts |  | fail |
+| R-8.5 | acceptance/files/R-8.5.spec.ts |  | fail (ruled: test-wrong) |
 | R-8.6 | acceptance/files/R-8.6.spec.ts |  | pass |
-| R-8.7 | acceptance/files/R-8.7.spec.ts |  | fail |
+| R-8.7 | acceptance/files/R-8.7.spec.ts |  | fail (ruled: test-wrong) |
 | R-8.8 | — |  | not-testable |
 | R-8.9 | — |  | not-testable |
 | R-8.10 | acceptance/files/R-8.10.spec.ts |  | pass |
 | R-8.11 | acceptance/files/R-8.11.spec.ts |  | pass |
-| R-8.12 | acceptance/files/R-8.12.spec.ts |  | fail |
+| R-8.12 | acceptance/files/R-8.12.spec.ts |  | fail (ruled: test-wrong) |
 | R-8.13 | acceptance/files/R-8.13.spec.ts |  | pass |
 | R-8.14 | — |  | pass |
 | R-8.15 | — |  | not-testable |

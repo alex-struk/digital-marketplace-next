@@ -17,7 +17,7 @@
 | R-5.11 | acceptance/evaluation/R-5.11.spec.ts |  | pass |
 | R-5.12 | acceptance/evaluation/R-5.12.spec.ts |  | pass |
 | R-5.13 | acceptance/evaluation/R-5.13.spec.ts |  | fail (ruled: test-wrong) |
-| R-5.14 | acceptance/evaluation/R-5.14.spec.ts |  | fail |
+| R-5.14 | acceptance/evaluation/R-5.14.spec.ts |  | fail (ruled: defect-in-old) |
 | R-5.15 | — |  |  |
 | R-5.16 | acceptance/evaluation/R-5.16.spec.ts |  | fail (ruled: adapter-wrong) |
 | R-5.17 | acceptance/evaluation/R-5.17.spec.ts |  | pass |
@@ -33,9 +33,9 @@
 | R-5.27 | acceptance/evaluation/R-5.27.spec.ts |  | pass |
 | R-5.28 | acceptance/evaluation/R-5.28.spec.ts |  | pass |
 | R-5.29 | acceptance/evaluation/R-5.29.spec.ts |  | pass |
-| R-5.30 | acceptance/evaluation/R-5.30.spec.ts |  | fail |
+| R-5.30 | acceptance/evaluation/R-5.30.spec.ts |  | fail (ruled: spec-wrong) |
 | R-5.31 | acceptance/evaluation/R-5.31.spec.ts |  | pass |
-| R-5.32 | acceptance/evaluation/R-5.32.spec.ts |  | fail |
+| R-5.32 | acceptance/evaluation/R-5.32.spec.ts |  | fail (ruled: test-wrong) |
 | R-5.33 | acceptance/evaluation/R-5.33.spec.ts |  | pass |
 | R-5.34 | acceptance/evaluation/R-5.34.spec.ts |  | pass |
 | R-5.35 | acceptance/evaluation/R-5.35.spec.ts |  | pass |
@@ -192,6 +192,7 @@ Finalising the consensus scores must be refused unless every proponent still und
 
 The action that finalises consensus scores must be offered to whoever the service accepts it from — the opportunity's owner as well as an administrator — so that the browser and the service agree on who may finalise.
 - replaces: R-5.8
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-5.15 · v1 · confirmed · accepted
 
@@ -383,9 +384,9 @@ Only the chair may record and change the consensus, one consensus per proponent,
 - then: the evaluator's attempt is refused, and the chair's second attempt is refused as a duplicate
 - note: a consensus is scored against the same rules as an individual evaluation — one score and one comment per question, within the question's maximum.
 
-### R-5.30 · v1 · confirmed · accepted
+### R-5.30 · v2 · confirmed · accepted
 
-The chair may reopen and resubmit a consensus as often as they like until it is finalised, unlike an individual evaluation, which is fixed once submitted.
+The chair may change the agreed scores of a consensus they have already submitted, as often as they like until it is finalised; each change is saved directly and the consensus stays submitted, with no second submission, unlike an individual evaluation, which is fixed once submitted.
 - cites: src/shared/lib/resources/evaluations/sprint-with-us/team-questions.ts:106
 - cites: src/shared/lib/resources/evaluations/team-with-us/resource-questions.ts:106
 - cites: src/back-end/lib/permissions.ts:1043

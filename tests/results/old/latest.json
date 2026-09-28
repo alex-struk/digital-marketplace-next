@@ -1,8 +1,8 @@
 {
   "target": "old",
   "base_url": "http://localhost:4300",
-  "spec": "845430cf2ba0084f2db7e79a9f3996f9e3d162ad",
-  "at": "2026-09-28T19:06:35.401Z",
+  "spec": "c1e09955fdff55e84870c25dfcb8e0fd9981c437",
+  "at": "2026-09-28T19:09:59.549Z",
   "rows": [
     {
       "id": "R-7.1",
@@ -665,7 +665,7 @@
       ],
       "file_sha": "67cdc8f24bf2c2a7e1a538bf772e3b4e30da3054",
       "adapter": "7dee6fd5bcbf26aa11564454fd353a454b548e7c",
-      "triage": "product-question"
+      "ruled": "defect-in-old"
     },
     {
       "id": "R-5.16",
@@ -1002,7 +1002,7 @@
       ],
       "file_sha": "0fe1471f00ad66df1d848b2625b68c093069e582",
       "adapter": "7dee6fd5bcbf26aa11564454fd353a454b548e7c",
-      "triage": "product-question"
+      "ruled": "spec-wrong"
     },
     {
       "id": "R-5.31",
@@ -1034,7 +1034,7 @@
       ],
       "file_sha": "2087bb844f23aadf9569cb831f491692e5f2e15f",
       "adapter": "7dee6fd5bcbf26aa11564454fd353a454b548e7c",
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-5.33",
@@ -1171,7 +1171,7 @@
       ],
       "file_sha": "2147e373bb7ba893be519d736086ad2fd5802de8",
       "adapter": "7dee6fd5bcbf26aa11564454fd353a454b548e7c",
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-8.3",
@@ -1206,7 +1206,7 @@
       ],
       "file_sha": "2c1f2428028fa23307469c536316efeb91d6f977",
       "adapter": "7dee6fd5bcbf26aa11564454fd353a454b548e7c",
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-8.6",
@@ -1250,7 +1250,7 @@
       ],
       "file_sha": "4829bee4e0eb8802c1dbc666720c953d4ce7769b",
       "adapter": "7dee6fd5bcbf26aa11564454fd353a454b548e7c",
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-8.8",
@@ -1328,7 +1328,7 @@
       ],
       "file_sha": "13552c1f2cd0603d0ef67b09401658c38b4557a0",
       "adapter": "7dee6fd5bcbf26aa11564454fd353a454b548e7c",
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-8.13",
@@ -1722,7 +1722,7 @@
       "error": "no result recorded",
       "file_sha": "5274e6f0b1dfd4f2e68afc7f6293522e8e62c67a",
       "adapter": "7dee6fd5bcbf26aa11564454fd353a454b548e7c",
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-6.2",
@@ -2315,7 +2315,7 @@
       ],
       "file_sha": "1e287c445f66d7182d202c78d28ff4968ea284e3",
       "adapter": "7dee6fd5bcbf26aa11564454fd353a454b548e7c",
-      "triage": "product-question"
+      "ruled": "test-wrong"
     },
     {
       "id": "R-1.10",
@@ -4285,7 +4285,7 @@
       ],
       "file_sha": "caf0d2988df7599634938602064ec7ca76eb4668",
       "adapter": "7dee6fd5bcbf26aa11564454fd353a454b548e7c",
-      "triage": "product-question"
+      "ruled": "spec-wrong"
     },
     {
       "id": "R-2.19",
