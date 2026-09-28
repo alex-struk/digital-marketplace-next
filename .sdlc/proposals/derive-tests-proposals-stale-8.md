@@ -55,3 +55,27 @@ I fixed the one failing check and changed nothing else.
 The check flagged line 25 of `tests/acceptance/proposals/R-2.14.spec.ts` for touching the page object. Nothing there actually reaches the page object: the check matched the text `page.` at the end of the sample proposal text `"A proposal offered through the request page."`. I reworded that string to `"A proposal offered through a direct request."`. The value is only filler for the proposal-text field, so no test's meaning changes, and the file still goes through `surface.proposalCwuRequest` alone. A search of the proposals folder found no other `page.` in `R-2.14.spec.ts`.
 
 One thing to know: `tests/acceptance/proposals/R-2.18.spec.ts` line 22 has a comment that also contains `page.` ("…on each create page. The seed…"). The check did not name that file, so I left it alone as instructed. If the check scans comments too, it may refuse that line on a later run, and rewording the comment would fix it.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the rewritten R-2.14 and R-2.18 tests follow from their criteria and nothing else? Ruling: approve. R-2.14's tests assert every clause through the contract's proposal-cwu-request page: each blank or malformed individual field is refused and named in refusal_by_field; a complete individual is accepted; an identifier naming no organization is refused, asserting only the refusal as the contract directs; an archived organization is refused; and an active organization the vendor does not belong to is accepted. R-2.18's tests quote the criterion verbatim (checked against spec/domains/proposals.md). Through proposal-team-request they assert the exact refusal wording for pending, former and outside people on both programs, the Team With Us refusal of a person named twice, and that a Sprint With Us phase gets no uniqueness refusal, which is all the criterion says about that case. No selector, route or status code leaks in: the guessed input keys come from the contract's prose and openapi. The runner's typecheck reports no errors under acceptance/proposals; its two errors are in adapters/new, outside this proposal. One clause is only partly assertable. The seed carries no names for the organization's active members (tests/generated/seed.ts has a name for teamCandidateOutsider and none for organizationAdmin), so the form-choice tests can check that the three outsiders are not offered and that the choices change after someone is named, but not that each active member is offered or that the person just named is the one withdrawn. That is owed by the contract stage and recorded below. What would change the ruling: a test asserting something the criterion does not state, or the typecheck reporting errors in these two files.
+
+**Conditions:**
+- missing-test R-2.18: the proposal form offers every active member of the organization and does not offer the specific person already named on the proposal — owed by contract: names for seed.users.organizationOwner, organizationAdmin and organizationMember, so a test can read that each active member is offered by teamMemberChoices on proposal-twu-create and proposal-swu-create, and that the person just named is no longer offered
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `cecbf875715d84ce65f53a3771a1f8eab5887b2f`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/proposals/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics

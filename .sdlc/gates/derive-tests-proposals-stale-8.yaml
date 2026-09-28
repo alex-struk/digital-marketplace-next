@@ -1,0 +1,16 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the rewritten R-2.14 and R-2.18 tests follow from their criteria and nothing else? Ruling: approve. R-2.14's tests assert every clause through the contract's proposal-cwu-request page: each blank or malformed individual field is refused and named in refusal_by_field; a complete individual is accepted; an identifier naming no organization is refused, asserting only the refusal as the contract directs; an archived organization is refused; and an active organization the vendor does not belong to is accepted. R-2.18's tests quote the criterion verbatim (checked against spec/domains/proposals.md). Through proposal-team-request they assert the exact refusal wording for pending, former and outside people on both programs, the Team With Us refusal of a person named twice, and that a Sprint With Us phase gets no uniqueness refusal, which is all the criterion says about that case. No selector, route or status code leaks in: the guessed input keys come from the contract's prose and openapi. The runner's typecheck reports no errors under acceptance/proposals; its two errors are in adapters/new, outside this proposal. One clause is only partly assertable. The seed carries no names for the organization's active members (tests/generated/seed.ts has a name for teamCandidateOutsider and none for organizationAdmin), so the form-choice tests can check that the three outsiders are not offered and that the choices change after someone is named, but not that each active member is offered or that the person just named is the one withdrawn. That is owed by the contract stage and recorded below. What would change the ruling: a test asserting something the criterion does not state, or the typecheck reporting errors in these two files.
+conditions:
+  - "missing-test R-2.18: the proposal form offers every active member of the organization and does not offer the specific person already named on the proposal — owed by contract: names for seed.users.organizationOwner, organizationAdmin and organizationMember, so a test can read that each active member is offered by teamMemberChoices on proposal-twu-create and proposal-swu-create, and that the person just named is no longer offered"
+cost: 0.5352517999999999
+turns: 7
+session: "90fc1aeb-0a4e-4bf0-ab94-f004647638ac"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T21:50:41.485Z
