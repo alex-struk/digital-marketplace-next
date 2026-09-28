@@ -65,3 +65,32 @@ These stay unbound, with the reasons earlier revisions recorded, and I did not l
 - **`add_note` on the opportunity edit pages (R-1.33):** no screen offers a way to add a note.
 
 Every page route I opened in this run resolved on the target, and I changed nothing outside `tests/adapters/old/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+The question is whether the "old" adapter binds each surface action and observation to the real control on the target and nothing more. Approved. submit_final_consensus_scores presses only the top-bar "Submit Final Consensus Scores". Where the bar shows "Finalize Consensus Scores" it reports the page's refusal and never presses it; where the bar shows neither it falls back to consensusControl, which is given only the submit label. confirm_submit_consensus first checks that the dialog's own button is exactly "Submit Final Consensus Scores", then waits for the outcome notice and reports a failure notice as a refusal. submitConfirmationModal returns empty for any other dialog. bindings.yaml lists both members as bound on both consensus-list pages, which matches main and index.ts. Nothing under tests/acceptance changed. The runner's typecheck failed with exit code 2, but none of its diagnostics are under adapters/old/; they are under adapters/new/. The rest of the diff is locators and page reading: the team pickers, TWU resources, scoresheet total and rank, export fields, the capability mark read from its icon colour, and the locked panel read from a read-only tab with no Edit. None of it decides whether a test passes. The remaining unbound reasons name what was looked at and what the target lacks. Two things are unverified: the submit control has not been seen working, because no seeded record has a consensus in draft, and the confirm path has not been run against the real submit dialog. The ruling would change if calibration showed either binding pressing Finalize or failing to find the submit dialog's button.
+
+**Conditions:**
+- condition-met bind-adapter-old-26#1: tests/adapters/old/index.ts submitConsensus and confirmSubmitConsensus press only 'Submit Final Consensus Scores'; a top bar or dialog offering 'Finalize Consensus Scores' is reported, never pressed
+- condition-met bind-adapter-old-26#2: tests/adapters/old/bindings.yaml evaluation-consensus-list-swu/-twu list submit_final_consensus_scores and confirm_submit_consensus as bound, matching index.ts
+- condition-met bind-adapter-old-27#1: tests/adapters/old/index.ts submitConsensus binds the top-bar 'Submit Final Consensus Scores' alone; a disabled control, a bar showing Finalize instead, or a bar showing neither is reported as a refusal or unbound
+- condition-met bind-adapter-old-27#2: tests/adapters/old/index.ts confirmSubmitConsensus calls confirmFinalize with the anchored /^Submit Final Consensus Scores$/ dialog check, waits for a fresh notice and reports 'Unable...' as a refusal
+- condition-met bind-adapter-old-27#3: tests/adapters/old/index.ts submitConfirmationModal returns dialogText only when isConfirmation matches the submit button, and otherwise returns empty
+- condition-met bind-adapter-old-27#4: tests/adapters/old/bindings.yaml lines 827-828 and 844-845 list both members as bound on both consensus-list pages
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `525357842df6f9f07189ccaef542dec20321e4e2`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
