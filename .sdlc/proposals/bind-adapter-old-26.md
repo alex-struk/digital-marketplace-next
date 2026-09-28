@@ -60,3 +60,28 @@ In each case the page loaded and showed the refusal, so these now throw a refusa
 - **I left test data on the target:**
   - one published Sprint With Us and one published Team With Us opportunity, both titled "Adapter probe", created through the API as the administrator;
   - a draft Code With Us proposal by the first vendor on the seeded published opportunity.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+Question: does the old adapter bind every surface action and observation on the target and nothing else, staying navigation and locators only? Ruling: return. The runner's typecheck shows no diagnostics under adapters/old/, and most of the revision is sound: the nine corrections, the new SWU/TWU team, resource and question bindings, the refusal conversions for R-2.4, R-2.28, R-5.14, R-5.16, R-5.23 and R-7.10, and the remaining unbound reasons for R-1.33, the sign-up completion page and the persona data. But evaluationConsensusListSwu/Twu.submitFinalConsensusScores and confirmSubmitConsensus are now bound to 'Finalize Consensus Scores' and its confirmation, the same irreversible control the contract names separately as finalizeConsensusScores. In R-5.30 the first submit therefore finalises and moves the opportunity out of consensus, so the resubmission the criterion is about is refused because of the adapter and not the application. In R-5.32, R-5.36, R-5.10, R-5.13, R-5.14 and R-2.35, which run submit, confirm, finalize, confirm, the finalize that follows finds its control gone and reports a false unbound. Aliasing two contract actions onto one state-changing control decides test outcomes, which an adapter must not do. What would change the ruling: the submit pair bound to the application's actual consensus-submission step, or marked unbound with a real reason if the application has none. Separately, the run left 'Adapter probe' opportunities and a draft proposal on the target; that is for the oracle reseed, not this gate.
+
+**Conditions:**
+- tests/adapters/old/index.ts evaluationConsensusList: submitFinalConsensusScores and confirmSubmitConsensus must not press 'Finalize Consensus Scores' or confirm it. That control is finalizeConsensusScores' own, and pressing it at 'submit' finalises the consensus: R-5.30's resubmission is then refused by the adapter's doing, and R-5.32, R-5.36, R-5.10, R-5.13, R-5.14 and R-2.35 then fail finalizeConsensusScores with a false unbound. Bind them to the step on the target that records the chair's consensus as submitted without finalising it, if one exists (for example a per-proponent submission on the consensus sheets). If none exists, mark both members unbound in bindings.yaml and index.ts with a reason naming what was looked at.
+- tests/adapters/old/bindings.yaml: bring the evaluation-consensus-list entries for submit_final_consensus_scores and confirm_submit_consensus into line with whatever index.ts ends up doing for them.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `58d200bc827a4abb10abc79e97f97986542840ce`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
