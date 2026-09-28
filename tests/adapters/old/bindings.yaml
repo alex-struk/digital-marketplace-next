@@ -1277,6 +1277,26 @@ pages:
       refused_as_unrecognised: bound
       refused_at_submission: bound
 
+  evaluation-consensus-request-swu:
+    actions:
+      change_consensus_by_request: bound
+    observations:
+      stored_scores: bound
+      stored_notes: bound
+      consensus_status: bound
+      request_accepted: bound
+      refused_when_not_permitted: bound
+
+  evaluation-consensus-request-twu:
+    actions:
+      change_consensus_by_request: bound
+    observations:
+      stored_scores: bound
+      stored_notes: bound
+      consensus_status: bound
+      request_accepted: bound
+      refused_when_not_permitted: bound
+
   evaluation-panel-request:
     actions:
       submit_panel_with_member_holding_no_role: bound

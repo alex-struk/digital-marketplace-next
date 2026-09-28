@@ -7332,6 +7332,64 @@ export default function create(
     "/api/proposal/team-with-us/:proposalId/resource-questions/evaluations/:userId",
   );
 
+  // The chair's consensus for one proponent, kept under the proposal and the chair. Its
+  // edit screen's save is PUT {tag: "edit", value: {scores: [{order, score, notes}]}},
+  // answered 200 with the consensus as stored. On this target, on the seeded consensus of
+  // opportunities.swuConsensusAllAgreed (and its Team With Us twin), the administrator's
+  // change was answered 200; the same change signed in through /auth/createsessiongov, and
+  // the administrator's change on swuPastConsensus, were both answered 401
+  // {"permissions":["You do not have permission to perform this action."]}, and that
+  // session's read 401 too.
+  function consensusRequest(where: string, route: string) {
+    let opened = "";
+    const stored = async (what: string): Promise<Record<string, unknown>[]> => {
+      if (!opened) nothing(`${where}.${what} — no consensus has been opened`);
+      const found = await peek(opened);
+      const scores =
+        found.status === 200 && found.json && typeof found.json === "object"
+          ? (found.json as Record<string, unknown>).scores
+          : null;
+      return Array.isArray(scores) ? (scores as Record<string, unknown>[]) : [];
+    };
+    return {
+      open: async (params?: Record<string, string>) => {
+        opened = address(route, params);
+        await send(`${where}.open`, "GET", opened);
+      },
+      changeConsensusByRequest: async (input?: unknown) => {
+        const what = `${where}.change_consensus_by_request`;
+        if (!opened) nothing(`${what} — no consensus has been opened`);
+        const scores = scoresFrom(input);
+        if (!scores.length) nothing(`${what} — the input carries no scores to send`);
+        await send(what, "PUT", opened, { tag: "edit", value: { scores } });
+      },
+      // One line per question, in the consensus's order, as "<order>: <score>".
+      storedScores: async () =>
+        (await stored("stored_scores")).map((each) => `${each.order}: ${each.score ?? ""}`).join("\n"),
+      storedNotes: async () =>
+        (await stored("stored_notes")).map((each) => `${each.order}: ${each.notes ?? ""}`).join("\n"),
+      consensusStatus: async () => {
+        if (!opened) nothing(`${where}.consensus_status — no consensus has been opened`);
+        const found = await peek(opened);
+        return found.status === 200 && found.json && typeof found.json === "object"
+          ? String((found.json as Record<string, unknown>).status ?? "")
+          : "";
+      },
+      requestAccepted: async () => accepted(`${where}.request_accepted`),
+      refusedWhenNotPermitted: async () =>
+        refusal((status) => status === 401 || status === 403 || status === 404),
+    };
+  }
+
+  const evaluationConsensusRequestSwu: PageOf<"evaluationConsensusRequestSwu"> = consensusRequest(
+    "evaluation-consensus-request-swu",
+    "/api/proposal/sprint-with-us/:proposalId/team-questions/consensus/:userId",
+  );
+  const evaluationConsensusRequestTwu: PageOf<"evaluationConsensusRequestTwu"> = consensusRequest(
+    "evaluation-consensus-request-twu",
+    "/api/proposal/team-with-us/:proposalId/resource-questions/consensus/:userId",
+  );
+
   // The panel is sent as the opportunity's "editEvaluationPanel" change, every member as
   // {user, chair, evaluator, order}: the members it has now, and the one the test names
   // holding neither role. On this target, as an administrator on the seeded closed Sprint
@@ -7591,6 +7649,8 @@ export default function create(
     contentRequest,
     evaluationIndividualRequestSwu,
     evaluationIndividualRequestTwu,
+    evaluationConsensusRequestSwu,
+    evaluationConsensusRequestTwu,
     evaluationPanelRequest,
     fileAttachByIdentifier,
   };

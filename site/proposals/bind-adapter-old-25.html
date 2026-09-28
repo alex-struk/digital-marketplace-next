@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-25 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">215</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">211</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">184</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-25</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-28 16:40</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.282 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I could not run the TypeScript type-check: <code>tsc</code> needed a permission this session doesn&#39;t have, so the new code has not been compiled or run as an adapter.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.282 (Claude Code))</p>
+<p>I&#39;ve added the 12 new members to the &quot;old&quot; adapter, and all of them are bound, both Team With Us and Sprint With Us. I could not run the TypeScript type-check: <code>tsc</code> needed a permission this session doesn&#39;t have, so the new code has not been compiled or run as an adapter.</p>
+<p><strong>Why these pages are requests, not screens.</strong> The two new pages, <code>evaluation-consensus-request-swu</code> and <code>evaluation-consensus-request-twu</code>, are calls to the service&#39;s own interface rather than screens. The adapter already had a way of sending those from the browser&#39;s signed-in session, used by the individual-evaluation request pages. I added one shared helper next to that code and built both pages from it. The existing bindings were left as they were.</p>
+<p><strong>What the target showed.</strong> I signed in as the administrator and used the seeded records the contract points to.</p>
+<ul><li><strong>Reading a consensus:</strong> it comes back with a status (<code>SUBMITTED</code>) and four scores, each with its question order and note. Reading the chair&#39;s consensus for the first proposal of <code>swuConsensusAllAgreed</code>, <code>twuConsensusAllAgreed</code> and <code>swuPastConsensus</code> gave agreed scores of 4, 4, 4, 4 and the seeded notes, as the seed manifest says.</li><li><strong>How the edit screen saves:</strong> it sends the whole set of scores, each with its order, score and notes. I tested this by writing the seeded values back unchanged to the second proposal of each consensus opportunity. The data was not altered; only the &quot;last updated&quot; time moved.</li><li>As the administrator, the Sprint With Us and Team With Us changes were both accepted, and the answer carried the consensus.</li><li>As the administrator on the opportunity that has moved past consensus, the change was refused with 401 and a &quot;permissions&quot; message.</li><li>Signed in through the government-staff sign-in route, both the change and the read were refused with 401. I did not confirm which seeded person that route signs in as.</li></ul>
+<p><strong>How each member reads.</strong></p>
+<ul><li><strong><code>change_consensus_by_request</code>:</strong> sends every score and note the test gives, in question order. It uses the same input parsing as the individual evaluations. If the input has no scores it throws <code>unbound:</code> rather than sending an empty change. A score given without a note is sent with an empty note.</li><li><strong><code>stored_scores</code> and <code>stored_notes</code>:</strong> re-read the consensus on the side and return one &quot;order: value&quot; line per question. If the signed-in person is refused the read, they return empty.</li><li><strong><code>consensus_status</code>:</strong> re-reads the consensus and returns its status, or empty if the read is refused.</li><li><strong><code>request_accepted</code>:</strong> the latest answer when the service accepted it, otherwise empty.</li><li><strong><code>refused_when_not_permitted</code>:</strong> the latest answer when it is a 401, 403 or 404, otherwise empty.</li></ul>
+<p>Every observation throws <code>unbound:</code> if no consensus has been opened.</p>
+<p><strong>Route check.</strong> Both new routes resolved on the target. No page&#39;s route failed to resolve.</p>
+<p>The bindings file names all 12 as bound, spelled as the contract spells them, and nothing outside <code>tests/adapters/old/</code> was changed.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-28 16:40.</p>
+<div class="body"><p>Question: does the old adapter bind every action and observation of evaluation-consensus-request-swu/-twu, and nothing else? Approve. The bindings file names all 12 members as the contract spells them. The code opens the consensus address, sends the edit screen&#39;s save shape {tag: edit, value: {scores}}, and returns what the service stored (scores, notes and status by question order, the accepted answer, and a refusal whose status and body are passed back as they are). Counting 401/403/404 as a refusal matches the contract, which defines refused_when_not_permitted as &#39;a permission or not-found error&#39;. Nothing in the code decides whether a test passes: an observation with nothing to read answers empty or throws unbound. The diff touches only tests/adapters/old/ plus the pipeline&#39;s own records, and nothing under tests/acceptance. The authoring agent could not run tsc, but the runner&#39;s typecheck on this revision reports no diagnostics under adapters/old/; the only failures are 2 in adapters/new/, which this proposal does not answer for. The R-5.29 clause about who may change a consensus and when is already owed by derive-tests. What would change the ruling: a typecheck diagnostic under adapters/old/, or a calibration showing these bindings answer from the wrong place (for example stored_scores reading the individual evaluation rather than the chair&#39;s consensus).</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
