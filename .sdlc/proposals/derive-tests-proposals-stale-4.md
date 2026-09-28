@@ -51,3 +51,27 @@ The only place a label is still matched is while waiting for a seeded opportunit
 - There is no seeded closed Code With Us opportunity with a draft proposal next to a submitted one (the R-2.27 clause entry above).
 
 I changed nothing outside `tests/acceptance`.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+Do the rewritten R-2.27, R-2.33 and R-2.34 tests follow from their criteria and nothing else? Mostly yes, so this is a return for one fix. They now read state as the proposal's own vendor sees it: disqualification means the status changed and the reason is recorded, refusal means the status did not change, and the opportunity moving on means its status changed and it carries the note the criterion quotes. R-2.34 now asserts the re-check clause. The R-2.27 draft clause is recorded in not-testable.yaml with a real reason, owned by contract: the only seeded lapsed opportunity with a draft carries nothing to score. The personas used match the seeded vendors (competing-vendor is users.proponentTwo). Reusing seeded records is safe because the auto fixture resets to the seed before every test. The typecheck shows no diagnostics under acceptance/proposals. The first R-2.33 test, however, asserts that the opportunity's successful proponent contains seed.organizations.qualified.legal_name. R-2.33 says only that the opportunity becomes awarded; it names no successful-proponent field and no organization name, so this checks a field value the criterion does not state. The seed also gives proposals.cwuForAwardOne a vendor and no organization, so the name may not be shown at all. Removing that one assertion, and leaving the opportunity-awarded check as the status change from before the award, would change this ruling to an approval.
+
+**Conditions:**
+- tests/acceptance/proposals/R-2.33.spec.ts: remove the assertion that opportunityCwuView.successfulProponent() contains seed.organizations.qualified.legal_name. R-2.33 says the opportunity becomes awarded and nothing about a successful proponent or an organization's name; keep the opportunity-awarded check as its status changing from what it was before the award.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `7ec0872c76b08a230736c7905ff7264b2b679919`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/proposals/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
