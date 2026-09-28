@@ -212,8 +212,8 @@ A Team With Us proposal may only be submitted on behalf of an organization that 
 - then: the submission is refused with "The selected organization does not satisfy this opportunity's service areas."
 - state: accepted
 
-### R-2.18 · v2 · confirmed · recovered
-Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, refused with "User is not an active member of the organization.", and a Team With Us proposal additionally refuses the same person named twice with "Please select unique team members.", while a Sprint With Us phase applies no such uniqueness check.
+### R-2.18 · v3 · confirmed · recovered
+Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with "User is not an active member of the organization."; a Team With Us proposal is additionally refused by the service when the same person is named twice, with "Please select unique team members.", while the service applies no such uniqueness check to a Sprint With Us phase. The proposal form offers only the organization's active members, and does not offer a person already named on the proposal, so neither refusal is reachable through the form.
 - cites: src/back-end/lib/validation.ts:964
 - cites: src/back-end/lib/validation.ts:1028
 - cites: src/back-end/lib/validation.ts:360

@@ -1,5 +1,5 @@
 {
-  "generated_from": "845430cf2ba0084f2db7e79a9f3996f9e3d162ad",
+  "generated_from": "c1e09955fdff55e84870c25dfcb8e0fd9981c437",
   "criteria": [
     {
       "id": "R-7.1",
@@ -1446,7 +1446,9 @@
       "origin": "authored",
       "statement": "The action that finalises consensus scores must be offered to whoever the service accepts it from — the opportunity's owner as well as an administrator — so that the browser and the service agree on who may finalise.",
       "cites": [],
-      "notes": [],
+      "notes": [
+        "calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it"
+      ],
       "state": "accepted",
       "replaces": "R-5.8",
       "raw": "### R-5.14 · v1 · confirmed · authored",
@@ -1482,7 +1484,7 @@
       "state": "accepted",
       "supersededBy": "R-5.37",
       "raw": "### R-5.15 · v1 · confirmed · recovered",
-      "line": 168,
+      "line": 169,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1519,7 +1521,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.16 · v1 · confirmed · recovered",
-      "line": 182,
+      "line": 183,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1548,7 +1550,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.17 · v1 · confirmed · recovered",
-      "line": 195,
+      "line": 196,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1575,7 +1577,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.18 · v2 · confirmed · recovered",
-      "line": 206,
+      "line": 207,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1614,7 +1616,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.19 · v1 · confirmed · recovered",
-      "line": 216,
+      "line": 217,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1652,7 +1654,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.20 · v1 · confirmed · recovered",
-      "line": 229,
+      "line": 230,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1685,7 +1687,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.21 · v1 · confirmed · recovered",
-      "line": 243,
+      "line": 244,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1724,7 +1726,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.22 · v1 · confirmed · recovered",
-      "line": 255,
+      "line": 256,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1757,7 +1759,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.23 · v1 · confirmed · recovered",
-      "line": 268,
+      "line": 269,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1794,7 +1796,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.24 · v1 · confirmed · recovered",
-      "line": 280,
+      "line": 281,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1833,7 +1835,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.25 · v3 · confirmed · recovered",
-      "line": 293,
+      "line": 294,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1862,7 +1864,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.26 · v1 · confirmed · recovered",
-      "line": 306,
+      "line": 307,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1899,7 +1901,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.27 · v2 · confirmed · recovered",
-      "line": 317,
+      "line": 318,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1936,7 +1938,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.28 · v2 · confirmed · recovered",
-      "line": 330,
+      "line": 331,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1981,16 +1983,16 @@
       ],
       "state": "accepted",
       "raw": "### R-5.29 · v1 · confirmed · recovered",
-      "line": 343,
+      "line": 344,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
     {
       "id": "R-5.30",
-      "version": 1,
+      "version": 2,
       "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "The chair may reopen and resubmit a consensus as often as they like until it is finalised, unlike an individual evaluation, which is fixed once submitted.",
+      "statement": "The chair may change the agreed scores of a consensus they have already submitted, as often as they like until it is finalised; each change is saved directly and the consensus stays submitted, with no second submission, unlike an individual evaluation, which is fixed once submitted.",
       "cites": [
         {
           "path": "src/shared/lib/resources/evaluations/sprint-with-us/team-questions.ts",
@@ -2015,8 +2017,8 @@
       "then": "the change is accepted and the consensus is recorded as submitted afresh",
       "notes": [],
       "state": "accepted",
-      "raw": "### R-5.30 · v1 · confirmed · recovered",
-      "line": 358,
+      "raw": "### R-5.30 · v2 · confirmed · recovered",
+      "line": 359,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2043,7 +2045,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.31 · v1 · confirmed · recovered",
-      "line": 370,
+      "line": 371,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2092,7 +2094,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.32 · v1 · confirmed · recovered",
-      "line": 380,
+      "line": 381,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2119,7 +2121,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.33 · v1 · confirmed · recovered",
-      "line": 396,
+      "line": 397,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2156,7 +2158,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.34 · v2 · confirmed · recovered",
-      "line": 406,
+      "line": 407,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2189,7 +2191,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.35 · v1 · confirmed · recovered",
-      "line": 419,
+      "line": 420,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2230,7 +2232,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.36 · v1 · confirmed · recovered",
-      "line": 431,
+      "line": 432,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2247,7 +2249,7 @@
       "state": "accepted",
       "replaces": "R-5.15",
       "raw": "### R-5.37 · v1 · confirmed · authored",
-      "line": 445,
+      "line": 446,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -7688,10 +7690,10 @@
     },
     {
       "id": "R-2.18",
-      "version": 2,
+      "version": 3,
       "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, refused with \"User is not an active member of the organization.\", and a Team With Us proposal additionally refuses the same person named twice with \"Please select unique team members.\", while a Sprint With Us phase applies no such uniqueness check.",
+      "statement": "Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with \"User is not an active member of the organization.\"; a Team With Us proposal is additionally refused by the service when the same person is named twice, with \"Please select unique team members.\", while the service applies no such uniqueness check to a Sprint With Us phase. The proposal form offers only the organization's active members, and does not offer a person already named on the proposal, so neither refusal is reachable through the form.",
       "cites": [
         {
           "path": "src/back-end/lib/validation.ts",
@@ -7714,7 +7716,7 @@
         "a team member whose membership is still pending is shown as pending on the proposal rather than being hidden, so a vendor can see why the submission is blocked."
       ],
       "state": "accepted",
-      "raw": "### R-2.18 · v2 · confirmed · recovered",
+      "raw": "### R-2.18 · v3 · confirmed · recovered",
       "line": 215,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"

@@ -436,3 +436,45 @@ redo:
       test is allowed; give each missing or malformed field its own test, or
       allow the test the time its attempts need, so that a timeout never stands
       in for a result
+  - id: R-5.32
+    version: 1
+    why: it reads whether a proponent was screened into the code challenge from the
+      vendor's own view of their proposal, which shows 'Under Review' at every
+      evaluation stage and never names the stage; screening must be read from a
+      view that names the proposal's stage
+  - id: R-8.5
+    version: 1
+    why: the second upload is made by a vendor account that is no longer active, so
+      it is refused before the criterion is reached; the second uploader must be
+      an active account able to upload
+  - id: R-8.2
+    version: 1
+    why: it reads an empty file identifier from an upload the service refused before
+      the criterion's behaviour was reached, while uploads by the same persona
+      were accepted elsewhere in the run; the test must start from an account
+      able to upload and report the refusal it received instead of reading an
+      empty identifier
+  - id: R-8.7
+    version: 1
+    why: its first upload was refused before any read access was tested, while
+      uploads by the same persona were accepted elsewhere in the run; the test
+      must start from an account able to upload and report the refusal it
+      received instead of reading an empty identifier
+  - id: R-8.12
+    version: 1
+    why: its upload of a file the vendor may not read was refused before the
+      vendor's request was made, while uploads by the same persona were accepted
+      elsewhere in the run; the test must start from an account able to upload
+      and report the refusal it received instead of reading an empty identifier
+  - id: R-6.1
+    version: 1
+    why: it recorded no result because it skips itself unless the run supplies a
+      notifications-off configuration, which the calibration run never supplied;
+      the test must run against an instance started with notifications switched
+      off
+  - id: R-1.9
+    version: 2
+    why: it computes 'fourteen days from the day of saving' in the test runner's own
+      time zone, but the deadline is shown in Pacific time, so near midnight UTC
+      the day of the month differs by one; the expected day must be taken in the
+      time zone the deadline is displayed in

@@ -164,6 +164,7 @@ Finalising the consensus scores must be refused unless every proponent still und
 The action that finalises consensus scores must be offered to whoever the service accepts it from — the opportunity's owner as well as an administrator — so that the browser and the service agree on who may finalise.
 - state: accepted
 - replaces: R-5.8
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-5.15 · v1 · confirmed · recovered
 Every panel member must be an evaluator, a chair, or both; a member who is neither is rejected.
@@ -355,8 +356,8 @@ Only the chair may record and change the consensus, one consensus per proponent,
 - state: accepted
 - note: a consensus is scored against the same rules as an individual evaluation — one score and one comment per question, within the question's maximum.
 
-### R-5.30 · v1 · confirmed · recovered
-The chair may reopen and resubmit a consensus as often as they like until it is finalised, unlike an individual evaluation, which is fixed once submitted.
+### R-5.30 · v2 · confirmed · recovered
+The chair may change the agreed scores of a consensus they have already submitted, as often as they like until it is finalised; each change is saved directly and the consensus stays submitted, with no second submission, unlike an individual evaluation, which is fixed once submitted.
 - cites: src/shared/lib/resources/evaluations/sprint-with-us/team-questions.ts:106
 - cites: src/shared/lib/resources/evaluations/team-with-us/resource-questions.ts:106
 - cites: src/back-end/lib/permissions.ts:1043
