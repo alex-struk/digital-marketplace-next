@@ -349,3 +349,8 @@ redo:
       for the proposals left behind; establish from each proposal's history
       whether a new stage was entered after finalising, not whether a particular
       label appears
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on proposals
+      by: runner:derive-tests
+      at: 2026-09-28T16:13:40.318Z
