@@ -1,0 +1,16 @@
+gate: G3
+verdict: escalated
+by: runner:bind-adapter
+held_by: runner
+escalate_to: tech-lead
+rationale: >-
+  bind-adapter was handed owed work sent back to it more times than the
+  project's policy allows, so this proposal is ruled by tech-lead rather than
+  put to G3's holder for another round.
+
+  - R-8.31 on old: sent to bind-adapter 3 times, past the limit of 2 that
+  policy.loops.rebind sets. What each send asked for:
+    1. in the opportunity test removeExistingAttachment calls advanceTo('Add Attachment'), but a published opportunity shows its attachment read-only (a disabled 'R-8.31 removed from an opportunity.pdf' box, with 'Actions' in the top bar) until 'Edit' is chosen from the Actions menu, so it throws unbound; choose 'Edit' from Actions first, as addAttachment does. In the proposal test attachmentAddress returns '' from the proposal's '1. Proponent' step, with an empty dialog open; close it and go to '3. Attachments' before reading the link.
+    2. proposalCwuEdit.startEditing (index.ts:3015) only goes through the Actions menu, which the proposal's /edit page does not have; like addAttachment (index.ts:1381-1389), use the top-bar Edit or the Proposal Details tab when they are present, and do nothing when the form is already editable
+    3. removeExistingAttachment clicks the remove mark but never saves the opportunity form, so the removal never reaches the service; save after removing ('Publish Changes' / 'Save Changes' / 'Submit Changes for Review'). And proposal-cwu-edit.save_changes looks only for 'Save Changes', while a submitted Code With Us proposal's edit page offers 'Submit Changes', which opens a terms dialog whose boxes must be ticked before its 'Submit Changes' confirm
+at: 2026-09-28T14:42:12.889Z
