@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-proposals-7 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">236</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">232</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">202</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-proposals-7</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-28 22:04</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised proposals tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I made the one change the ruling asked for in the proposals domain.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made the one change the ruling asked for in the proposals domain. I did not run the typecheck: the command needed an approval this session could not get. Removing lines can&#39;t create a type error here, though. The helper that call used is still used elsewhere in the file, and nothing else referred to what I took out.</p>
+<p><strong>Condition 1 (the one condition):</strong> In <code>tests/acceptance/proposals/R-2.18.spec.ts</code>, in the Sprint With Us form test, I removed three things:</p>
+<ul><li>the assertion that the team-member choice lists the person whose invitation is unanswered (Quinn Placeholder, <code>seed.users.teamCandidatePending.name</code>);</li><li>the assertion that <code>surface.proposalSwuCreate.pendingTeamMember()</code> returns something;</li><li>the one-line comment that explained those two assertions, which would have been wrong without them.</li></ul>
+<p>The test now says nothing about the pending person in either direction. Every other assertion is unchanged. The shared helper both form tests use checks the active members, the former member and the outside person, but it never mentions the pending person. So nothing in the Sprint With Us test now asserts anything about the pending person, which is what the condition asks for. The Team With Us test still asserts that the pending person is not offered, both before and after someone is named, as the ruling accepted.</p>
+<p>The file&#39;s header was already dated 2026-09-28 (today), and its content did change, so I left the header as it was. No other file in <code>tests/acceptance/proposals/</code> was touched.</p>
+<p><strong>The not-testable file:</strong> Normally, when a test leaves part of a criterion unasserted, I add an entry to <code>tests/acceptance/not-testable.yaml</code> naming that part. Here, the Sprint With Us clause &quot;offers only active members, so a pending invitee is not offered&quot; is now unasserted. I drafted an entry for it with ratify as the owner, but the command that would have added it was refused before it ran, so the file never changed. On reflection I left it that way. The ruling says the clause &quot;is recorded as owed by ratify&quot;, and the matching condition has already been filed where ratify reads it. A second record of the same clause would ask ratify for it twice, which the instructions warn against, and it was not something the conditions named. So <code>not-testable.yaml</code> is exactly as I found it, with no R-2.18 entry. If a later check expects a clause entry for R-2.18 beside the test, this is the gap. Its content would be: the Sprint With Us &quot;only active members&quot; clause, <code>blocked:</code> because the criterion and the contract&#39;s <code>team_member_choices</code> comment disagree, owed by ratify.</p>
+<p><strong>Not done here:</strong> the ratify condition on R-2.18&#39;s wording is not this stage&#39;s, and I left it alone. I also did not touch the typecheck diagnostics the reviewer found in <code>adapters/new</code>, which this proposal does not answer for. No surface action or observation was missing for this change.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-28 22:05.</p>
+<div class="body"><p>The question is whether the revised R-2.18 test now follows from its criterion alone, which turns on the open instruction derive-tests-proposals-stale-9#1. The Sprint With Us form test no longer asserts anything about the pending invitee in either direction: it reads the choice, checks the three active members are offered, the former member and the outsider are not, and the person just named stops being offered. Every other assertion is unchanged. Each remaining assertion follows from R-2.18&#39;s text (&#39;The proposal form offers only the organization&#39;s active members, and does not offer a person already named on the proposal&#39;; Team With Us refuses duplicates while Sprint With Us applies no uniqueness check), including the Team With Us check that the pending person is not offered. No implementation detail leaks in. The runner&#39;s typecheck reports no diagnostics under acceptance/proposals/; the two in adapters/new are outside this proposal. The Sprint With Us pending-invitee clause the test no longer asserts is already owed by ratify as missing-test/R-2.18, because the contract and the criterion disagree, so no further entry is needed. The ruling would change only if ratify rewrote R-2.18 so the Sprint With Us choice lists pending invitees marked pending, which would be a new derive-tests round.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met derive-tests-proposals-stale-9#1: the Sprint With Us form test in tests/acceptance/proposals/R-2.18.spec.ts no longer asserts that the choice contains seed.users.teamCandidatePending.name nor that surface.proposalSwuCreate.pendingTeamMember() is non-empty, asserts nothing about the pending person in either direction, and every other assertion in the file is unchanged</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
