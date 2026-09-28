@@ -363,6 +363,7 @@ pages:
       code_challenge_tab: bound
       team_scenario_tab: bound
       history_tab: bound
+      history_entries: bound
       wrong_stage_error: bound
       questions_score: bound
       challenge_score: bound
@@ -431,6 +432,7 @@ pages:
       resource_questions_tab: bound
       challenge_tab: bound
       history_tab: bound
+      history_entries: bound
       wrong_stage_error: bound
       questions_score: bound
       challenge_score: bound
@@ -1280,23 +1282,29 @@ pages:
     actions:
       save_draft_as_entered: bound
       submit_this_evaluation_alone: bound
+      create_evaluation_by_request: bound
     observations:
       stored_scores: bound
       stored_notes: bound
       evaluation_status: bound
       refused_as_unrecognised: bound
       refused_at_submission: bound
+      evaluation_created: bound
+      creation_refusal_message: bound
 
   evaluation-individual-request-twu:
     actions:
       save_draft_as_entered: bound
       submit_this_evaluation_alone: bound
+      create_evaluation_by_request: bound
     observations:
       stored_scores: bound
       stored_notes: bound
       evaluation_status: bound
       refused_as_unrecognised: bound
       refused_at_submission: bound
+      evaluation_created: bound
+      creation_refusal_message: bound
 
   evaluation-consensus-request-swu:
     actions:

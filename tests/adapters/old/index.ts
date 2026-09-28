@@ -4673,6 +4673,7 @@ export default function create(
     codeChallengeTab: () => tabContent(["Code Challenge"]),
     teamScenarioTab: () => tabContent(["Team Scenario"]),
     historyTab: () => historyRows(),
+    historyEntries: () => historyEntries(),
     wrongStageError: () => wrongStageError(),
     questionsScore: () =>
       stageFigure(["Team Questions"], ["Team Questions Score", "Questions Score", "Team Questions"]),
@@ -4712,6 +4713,7 @@ export default function create(
     resourceQuestionsTab: () => tabContent(["Resource Questions", "Resource Questions (Eval)"]),
     challengeTab: () => tabContent(["Interview/Challenge", "Challenge"]),
     historyTab: () => historyRows(),
+    historyEntries: () => historyEntries(),
     wrongStageError: () => wrongStageError(),
     questionsScore: () =>
       stageFigure(["Resource Questions"], ["Resource Questions Score", "Questions Score", "Resource Questions"]),
@@ -4791,6 +4793,40 @@ export default function create(
     return inTab(["Proposal History", "History"], async () => {
       await seen(page.getByRole("table")).first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
       return tableRows(false);
+    });
+  }
+
+  // The same rows as entries, newest first, one per line as "<kind> | <note> | <who> | <when>".
+  // The History table is "ENTRY TYPE | NOTE | CREATED", its created cell the date and time
+  // over the maker's name in capitals ("SYSTEM", "BLAKE PLACEHOLDER"), and a row with no
+  // note shows "—" (seen as the administrator on the seeded proposals past consensus of both
+  // programmes). Before the opportunity reaches the stage after consensus the panel says the
+  // history "will be available once the opportunity reaches the Code Challenge" and holds no
+  // table: the tab was reached and shows no entries, so that reads as nothing.
+  async function historyEntries(): Promise<string> {
+    return inTab(["Proposal History", "History"], async () => {
+      await seen(page.getByRole("table")).first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
+      const lines: string[] = [];
+      const tables = seen(page.getByRole("table"));
+      const tableCount = await tables.count();
+      for (let t = 0; t < tableCount; t++) {
+        const rows = tables.nth(t).getByRole("row");
+        const rowCount = await rows.count();
+        for (let r = 0; r < rowCount; r++) {
+          const cells = rows.nth(r).getByRole("cell");
+          const cellCount = await cells.count();
+          if (!cellCount) continue;
+          const texts: string[] = [];
+          for (let c = 0; c < cellCount; c++) texts.push((await cells.nth(c).innerText()).trim());
+          const kind = (texts[0] ?? "").replace(/\s*\n\s*/g, " ");
+          const note = (texts[1] ?? "").replace(/\s*\n\s*/g, " ").replace(/^[—–-]$/, "");
+          const created = (texts[2] ?? "").split(/\n+/).map((each) => each.trim()).filter(Boolean);
+          const who = created.length > 1 ? created[created.length - 1] : "";
+          const when = (created.length > 1 ? created.slice(0, -1) : created).join(" ");
+          lines.push([kind, note, who, when].join(" | "));
+        }
+      }
+      return lines.join("\n");
     });
   }
 
@@ -8476,6 +8512,40 @@ export default function create(
         if (!opened) nothing(`${what} — no evaluation has been opened`);
         lastWasSubmission = true;
         await send(what, "PUT", opened, { tag: "submit", value: "" });
+      },
+      // Starts the signed-in evaluator's own sheet: POST to the proponent's collection of
+      // evaluations with what the score sheet's create sends. The evaluator comes from the
+      // session, so the :userId opened is not part of the request. On this target, signed in
+      // as users.staffOne on the seeded proponent already evaluated, the answer was 409
+      // {"conflict":["You already have a team question evaluation for this proposal."]}
+      // ("resource question" for Team With Us).
+      createEvaluationByRequest: async (input?: unknown) => {
+        const what = `${where}.create_evaluation_by_request`;
+        if (!opened) nothing(`${what} — no evaluation has been opened`);
+        const scores = scoresFrom(input);
+        if (!scores.length) nothing(`${what} — the input carries no scores to send`);
+        lastWasSubmission = false;
+        const proposal = opened.match(/\/proposal\/[^/]+\/([^/]+)\//)?.[1] ?? "";
+        await send(what, "POST", opened.replace(/\/[^/]+$/, ""), { proposal, status: "DRAFT", scores });
+      },
+      // The evaluation the service answered a start with, or nothing when it refused.
+      evaluationCreated: async () => {
+        const got = answer(`${where}.evaluation_created`);
+        return got.status < 300 ? got.body : "";
+      },
+      // The reasons a refused start was answered with, as text; nothing when it went through.
+      creationRefusalMessage: async () => {
+        const got = answer(`${where}.creation_refusal_message`);
+        if (got.status < 400) return "";
+        const parsed = parsedAnswer();
+        const texts: string[] = [];
+        const walk = (value: unknown): void => {
+          if (typeof value === "string") texts.push(value);
+          else if (Array.isArray(value)) value.forEach(walk);
+          else if (value && typeof value === "object") Object.values(value as Record<string, unknown>).forEach(walk);
+        };
+        walk(parsed);
+        return texts.length ? texts.join("\n") : got.body;
       },
       // One line per question, in the sheet's order, as "<order>: <score>".
       storedScores: async () =>
