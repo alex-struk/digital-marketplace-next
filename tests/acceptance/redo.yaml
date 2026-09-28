@@ -335,6 +335,11 @@ redo:
       opportunity's own page, but the criterion does not say where they are
       shown; read them wherever that reader is shown the successful proposal,
       and keep checking that a visitor is shown neither anywhere they can reach
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on opportunities
+      by: runner:derive-tests
+      at: 2026-09-28T16:11:34.153Z
   - id: R-2.29
     version: 1
     why: the criterion names a stage, not the words shown for it; the test required
