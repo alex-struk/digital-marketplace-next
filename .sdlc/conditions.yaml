@@ -471,3 +471,31 @@ conditions:
         contract
       by: agent:reviewer
       at: 2026-09-28T16:20:27.189Z
+  - ref: bind-adapter-old-26#1
+    text: "tests/adapters/old/index.ts evaluationConsensusList:
+      submitFinalConsensusScores and confirmSubmitConsensus must not press
+      'Finalize Consensus Scores' or confirm it. That control is
+      finalizeConsensusScores' own, and pressing it at 'submit' finalises the
+      consensus: R-5.30's resubmission is then refused by the adapter's doing,
+      and R-5.32, R-5.36, R-5.10, R-5.13, R-5.14 and R-2.35 then fail
+      finalizeConsensusScores with a false unbound. Bind them to the step on the
+      target that records the chair's consensus as submitted without finalising
+      it, if one exists (for example a per-proponent submission on the consensus
+      sheets). If none exists, mark both members unbound in bindings.yaml and
+      index.ts with a reason naming what was looked at."
+    from: bind-adapter-old-26
+    family: bind-adapter-old
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-09-28T18:04:34.081Z
+  - ref: bind-adapter-old-26#2
+    text: "tests/adapters/old/bindings.yaml: bring the evaluation-consensus-list
+      entries for submit_final_consensus_scores and confirm_submit_consensus
+      into line with whatever index.ts ends up doing for them."
+    from: bind-adapter-old-26
+    family: bind-adapter-old
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-09-28T18:04:34.081Z
