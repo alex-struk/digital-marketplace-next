@@ -1,0 +1,15 @@
+gate: G1
+verdict: approve
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  The question is whether contract-v10 is the contract the acceptance tests will act through. It is, and I approve it. The only change from contract-v9 is how the contract describes scheduled closures, and the old code supports the new description. In sources/old/src/back-end/lib/hooks/code-with-us.ts:17-45, and the same way in sprint-with-us.ts and team-with-us.ts, each program's closing work is wrapped in a lodash throttle that fires on the first and last call in a window, and the hook's before() calls it without waiting and returns null. So the throttle limits how often runs start and does not make one run wait for the previous one to finish. It also puts no limit on how long a run takes, and a closure can finish before or after the response is sent. The notes in observables.yaml, the comment in the oracle's compose.yml and the comment in surface.yaml now say exactly that. Two seconds is described as a mitigation, not a guarantee. Tests reach a closure through a bounded polling procedure that fails when time runs out, does not assume the closure happened, and says its 30-second budget is the test's own figure, not one the application promises. The fix turn's change to the trailing colon on line 222 leaves a valid plain scalar: no continuation line contains a colon followed by a space or a space followed by #. The next stage's YAML check is still the real confirmation, since no parser was run on the file. One wording flaw that does not block approval: 'the work has begun before the triggering request is answered' is true only when the request starts a run immediately. A request that falls inside the throttle window schedules a start for when the window ends, which is after the answer. The same note already says the answer tells a test nothing, and the procedure re-triggers, so no test is misled. The next edit should limit that sentence to the case where the request starts a run immediately. The two obligations still owed, R-6.1 and R-6.24, are reported honestly and not claimed as done. This stage cannot supply R-6.1, which needs a second oracle configuration. R-6.24 needs a ruling on whether 'before any message is sent' can be observed at all. Both should go to the tech lead as harness or withdrawal questions rather than being answered here by guesswork. The tier is STANDARD and only one reading of the intent is plausible, so there is nothing to escalate. What would change the ruling: evidence that the hooks await their database work, or that runs are serialized, would make the new notes wrong, and so would a YAML parse failure in observables.yaml at the next check.
+conditions: []
+cost: 0.3820526
+turns: 6
+session: "7fd45aa8-758f-41cf-96b8-4c28ab27bec9"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T02:27:00.389Z
