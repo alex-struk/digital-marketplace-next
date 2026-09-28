@@ -1,0 +1,15 @@
+gate: G1
+verdict: approve
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  Question: does the contract now give missing-test R-1.9 the observations and input it lacked, so the tests can check every clause of the criterion? Ruling: approve. The change only adds to the contract. It adds assignment_date and start_date to the Code With Us and Team With Us view screens, completion_date to the Team With Us view screen, and assignment_date to the Sprint With Us view screen. It adds proposal_deadline, assignment_date, start_date and completion_date to the Code With Us and Team With Us manage screens, and proposal_deadline and assignment_date to the Sprint With Us one, each empty when the opportunity has none. It states an input shape for save_draft on all three create screens. These are the observations and input the missing-test condition asked for. I checked the old-code citations the new comments rest on. In code-with-us.ts:238-272, every date is checked against a minimum: the previous date in the chain, or today when that date is invalid. A draft then has its proposal deadline, assignment date and start date replaced with today plus fourteen days, and its completion date set to null. So invalid means earlier than the minimum, not an impossible calendar day, and 2000-01-01 is invalid for all four dates whatever else is entered. That is what the save_draft comment says. The Sprint With Us comments are also right: that program has no start or completion date of its own, because those belong to its phases. The contract describes the old application's behaviour and makes no claim about what the criterion should say, which is what this gate is for. One open point, which does not block this proposal: team-with-us/index.ts:388 sets a missing or invalid Team With Us completion date to fourteen days out, not empty. R-1.9 says the completion date is left empty and cites only the Code With Us and Sprint With Us code. A Team With Us test of that clause will fail against the old application. R-1.9 should get a spec follow-up (a spec-wrong or defect-in-old ruling at calibration, or narrowing R-1.9 to name the programs it covers) rather than a change to the contract. The adapter-binding stage must bind the new observations, whose test_id is null, and must check that the adapter's completeRequired step does not fill in blank date fields, since that would defeat the missing-date tests. What would change this ruling: a new observation that does not exist on the old screen it names, or a save_draft input the old form cannot actually send. I found neither. Tier is STANDARD, and the contract has only one reasonable reading, so this does not escalate.
+conditions: []
+cost: 0.37590439999999997
+turns: 5
+session: "37953911-0739-4450-875c-cbf10ef59486"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T19:37:29.998Z
