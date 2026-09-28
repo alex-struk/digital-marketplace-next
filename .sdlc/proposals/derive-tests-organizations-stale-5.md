@@ -30,3 +30,28 @@ In the refusal tests, the attempt is allowed to fail by not being offered at all
 Both files carry the new spec revision in their headers. I changed nothing outside `tests/acceptance/organizations/`, and nothing asked me to touch a read-only path.
 
 **Missing from the contract:** nothing blocked a test. One gap is worth adding, though. There is no observation that says whether a given person's membership in a given organization is pending or active. The tests infer that from the page-level `pendingBadge`, which only works because the seeded organization has exactly one pending invitation.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+R-3.9 follows its criterion clause by clause. The owner's attempt is judged refused from the membership state afterwards, the invited person's acceptance and an administrator's acceptance on their behalf each make the membership active, and a further attempt after activation leaves it unchanged, as the prior ruling asked. No typecheck diagnostic falls under acceptance/organizations. R-3.31 asserts only that some message reaches the owner and the invited person. Its criterion says what each message tells its reader: the owner that the person approved the request, and the person that they have joined the organization's team. That content clause is neither asserted nor named by a not-testable entry, and the mailbox observation exposes enough of each message to assert it without inventing exact wording, so the gap is the writer's to close.
+
+**Conditions:**
+- R-3.31: the test asserts only that a message arrives for the owner and for the invited person, not what each message says. Assert, within the bounded wait, that the owner's message identifies the invited person as having approved the request or joined, and that the invited person's message identifies the organization whose team they have joined (by its name, not by an exact sentence the criterion does not give). If the mailbox observation cannot show either, add a tests/acceptance/organizations/not-testable.yaml entry for R-3.31 carrying `clause` for the message content and naming the observation that is missing.
+- R-3.9: no change is asked for; keep the file as it stands on this branch.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `1b152ebc92bec0bb87d8166fe2b58804930c834d`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/organizations/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
