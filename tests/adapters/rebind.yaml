@@ -1488,3 +1488,73 @@ rebind:
     adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
     by: runner:calibrate
     at: 2026-09-28T17:32:44.806Z
+  - id: R-3.10
+    target: old
+    why: organization-edit team_member_row (teamRowsText, index.ts:4426-4441)
+      returns only the names printed in the team table, while the test
+      identifies the member by email; each row must also carry that member's
+      email (from the member dialog or the organization's membership list, which
+      memberName at index.ts:4470 already reads), so both the presence check and
+      the post-leave absence check can hold
+  - id: R-2.23
+    target: old
+    why: proposal-cwu-edit.submit_proposal (index.ts:3751-3754) presses 'Submit
+      Proposal' in the 'Review Terms and Conditions' dialog without ticking its
+      checkboxes, so the button stays disabled; after pressing 'Submit' it must
+      wait for the dialog, tick every checkbox in it (as saveProposalChanges
+      does at index.ts:3729-3734), then press 'Submit Proposal'
+  - id: R-5.23
+    target: old
+    why: evaluation-individual-list-swu.submit_scores_for_consensus
+      (index.ts:5279-5285) returns silently when 'Submit Scores for Consensus'
+      is disabled, swallowing the refusal the test is looking for; a disabled or
+      absent submit control must be reported as a refusal (throw, as
+      submit_proposal does for a disabled control), or
+      incomplete_evaluation_error must report it
+  - id: R-3.25
+    target: old
+    why: organization-edit swu_requirement_two_members /
+      swu_requirement_all_capabilities / swu_requirement_terms_accepted
+      (index.ts:4357-4364) return the requirement's label, which reads the same
+      whether met or unmet; they must read the state from the icon beside each
+      requirement (success-coloured means met, body-coloured means unmet) and
+      return it with the label
+  - id: R-2.31
+    target: old
+    why: proposal-swu-view.total_score (index.ts:3875, stageFigure([], ['Total
+      Score'])) reads whichever tab is currently showing, but the 'Total Score'
+      card appears only on the Proposal tab, and the test has moved to Team
+      Scenario by then; it must open the Proposal tab first, and the same fix
+      applies to proposal-twu-view.total_score (index.ts:3912)
+  - id: R-2.32
+    target: old
+    why: proposal-swu-edit total_score and rank (index.ts:3797-3798) read the
+      default Proposal tab and look for a 'Rank' label after its figure; a
+      vendor's scores are on the Scoresheet tab (a table whose header is one
+      line, so the total must be read from the body row), and the rank card is
+      labelled 'Ranking' with its figure above the label (read it as
+      valueBefore(['Ranking']), as proposal-cwu-view.rank does at index.ts:3834)
+  - id: R-5.35
+    target: old
+    why: evaluation-individual-create-swu.anonymous_proponent_name (index.ts:5507
+      via anonymousProponent at index.ts:3814-3817) joins every 'Proponent N'
+      line on the page, and the score sheet shows the current proponent's name
+      twice, so it returned 'Proponent 1\nProponent 1'; on the create page it
+      must return the single current proponent's name, keeping the joined list
+      only for the individual list page
+  - id: R-5.32
+    target: old
+    why: evaluation-consensus-list confirm_finalize_consensus (index.ts:5369 via
+      inDialog/press) clicks 'Finalize Consensus Scores' in the dialog and
+      returns at once, because settle() resolves on an already-idle network, so
+      the next navigation races the finalise request; it must wait for the
+      outcome (the success notice, or 'Finalize Consensus Scores' leaving the
+      top bar) and fail if an error notice appears, and waiting only for the
+      dialog to close is not enough because it closes before the request is sent
+  - id: R-5.36
+    target: old
+    why: the same finalise binding as R-5.32 (evaluation-consensus-list
+      confirm_finalize_consensus, index.ts:5369, shared by the Sprint With Us
+      and Team With Us consensus tabs) does not wait for the finalise request to
+      complete before the test reads the status; it must wait for the success
+      notice or for the finalise control to leave the top bar

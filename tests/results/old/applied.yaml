@@ -19,6 +19,7 @@ applied:
   - calibrate-triage-old-15
   - calibrate-old-9
   - calibrate-triage-old-16
+  - calibrate-triage-old-17
 rulings:
   - id: R-8.18
     version: 1
@@ -284,3 +285,108 @@ rulings:
     version: 1
     verb: product-question
     gate: calibrate-triage-old-16
+  - id: R-3.10
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-17
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+  - id: R-2.23
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-17
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+  - id: R-5.23
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-17
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+  - id: R-3.25
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-17
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+  - id: R-2.31
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-17
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+  - id: R-2.32
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-17
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+  - id: R-5.35
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-17
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+  - id: R-5.32
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-17
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+  - id: R-5.36
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-17
+    adapter: 3d441b787b85bc729be984561a4adfa15a7ba077
+  - id: R-5.3
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-17
+  - id: R-3.9
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-17
+  - id: R-5.10
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-17
+  - id: R-1.16
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-17
+  - id: R-7.16
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-17
+  - id: R-5.19
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-17
+  - id: R-1.25
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-17
+  - id: R-1.27
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-17
+  - id: R-1.29
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-17
+  - id: R-2.30
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-17
+  - id: R-8.30
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-17
+  - id: R-3.31
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-17
+  - id: R-2.35
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-17
+  - id: R-3.35
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-17
+  - id: R-1.49
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-17
