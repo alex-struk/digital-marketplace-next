@@ -63,3 +63,28 @@ I've made all 21 corrections in `tests/adapters/old/index.ts`. None of them has 
 **Choices a reviewer may want to question**
 - The duplicate-member reader returning the panel's general refusal alert, because the target never names the reason.
 - The form being started at Implementation when a Sprint With Us input names no phase and gives no dates.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on old, and nothing else? Ruling: return. Most of the diff is navigation, locators and readers that were narrowed, which an adapter should hold. The typecheck lists no errors under adapters/old/; its two are in adapters/new/. Two changes make the adapter decide the outcome instead of reporting it. (1) R-4.4 is about a deactivated person signing in through the identity provider. signIn now sends that persona through the session route. On old that route is /auth/createsessionvendor/:id, which is test-only and creates a session with no status check (sources/old/src/back-end/lib/routers/auth.ts:312-345). The real login handler refuses an account with status InactiveByAdmin (auth.ts:504). So the test would report a failure caused by the harness's shortcut, not by the application. The binding this replaces reported unbound with the true reason, and that is the honest result while the target has no sandbox identity provider for vendors. (2) R-5.1 requires a message naming the rule that was broken. panelRefusal falls back to the general alert 'Unable to Publish Changes ... Please fix the errors in the form', which names no rule, and duplicateMemberError, minimumMembersError and missingChairError all read through it. A test that only checks for some text then counts a message that is missing as one that was shown. What would change this ruling: sign-in for this persona reports unbound when it cannot reach the identity provider, and the panel readers return only text that names their own fault, and nothing when the page names none.
+
+**Conditions:**
+- R-4.4: signIn for the deactivated-vendor persona must not use the session route. On old, /auth/createsessionvendor/:id is test-only and creates a session without the status check that the identity-provider login applies (auth.ts:504 refuses InactiveByAdmin). Driving it reports a failure the criterion does not describe. Sign in through the identity provider, or throw 'unbound: signIn.deactivatedVendor — ...' saying that vendor sign-in on this target goes to github.com and no sandbox account exists there.
+- R-5.1, R-1.55: panelRefusal must not fall back to the general alert ('Unable to Publish Changes ... Please fix the errors in the form') when no alert or field error names the fault being asked about. duplicateMemberError, minimumMembersError and missingChairError must each return only text that matches their own fault, and nothing otherwise. A refusal that gives no reason is not the message naming the rule that the criterion asks for.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `1c2aa6ee11a5ce549684729a095bd4cfe9067549`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
