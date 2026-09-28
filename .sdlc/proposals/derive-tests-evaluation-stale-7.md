@@ -32,3 +32,27 @@ It reuses the file's existing helpers and is titled with the criterion's own wor
 **One weak point.** The check that the opportunity is not in individual question evaluation matches the wording of the status text, as the existing helper does. The surface has no way to read the stage directly. If the app words the published status in an unexpected way, that check could give a false result, and a stage observation in the contract would make it firmer.
 
 I changed nothing outside `tests/acceptance/`, and nothing asked me to.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+Question: does the new R-5.21 test follow from the criterion and nothing else? Approve. The added test asserts the clause that no test covered, 'only while the opportunity is in individual question evaluation'. It uses seed.opportunities.swuOpenWithSubmittedProposal and seed.proposals.swuOpenSubmitted, both present in tests/seed/manifest.yaml: the opportunity is published with its deadline ahead, and users.staffOne is an evaluator on its panel who has evaluated nothing, so a refusal can only be put down to the stage. The test establishes that the opportunity is not in individual question evaluation, reuses the file's existing refusal check (the form is withheld, or no evaluation by that user exists afterwards), and confirms the attempt did not move the stage. Each assertion follows from the criterion, and nothing about how the application is built appears: the file imports only from ../../fixtures. The runner's typecheck reports no diagnostics under acceptance/evaluation/; its failures are in adapters/new/, which this proposal does not touch. Removing the R-5.21 not-testable entry is correct because the clause is now asserted. The missing-test/R-5.21 record closes when this test runs. Remaining weakness: the stage is read from status wording, since the surface exposes no stage observation. That is an improvement for the contract stage, not a defect in this test. The ruling would change if this test's first run showed the seeded opportunity or the scoring form could not be reached.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `bb5d492b332781c06b294f9909179010b3ea8668`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
