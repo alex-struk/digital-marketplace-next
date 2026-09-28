@@ -61,8 +61,8 @@ pages:
       opportunity_identifier: bound
       status: bound
       published_date: bound
-      created_by_name: "unbound: the public opportunity page names no creator; its header shows only the published and updated dates, and the creator's name appears only on the management page"
-      last_changed_by_name: "unbound: the public opportunity page names nobody who changed it; only the updated date is shown"
+      created_by_name: bound
+      last_changed_by_name: bound
       proposal_deadline: bound
       reward: bound
       addenda: bound
@@ -78,7 +78,7 @@ pages:
       cancel_opportunity: bound
       delete_opportunity: bound
       add_addendum: bound
-      add_note: "unbound: the History tab lists entries but offers no control for adding one; checked on a published opportunity as both its owner and an administrator, and on a draft, and no note control appears anywhere on the page"
+      add_note: "unbound: signed in as the administrator and looked on the seeded published and processing Code With Us opportunities (and earlier as the owner, and on a draft): the History tab is a table (Entry Type | Note | Created) with nothing in its top bar, the Opportunity tab's Actions menu offers only Edit and Cancel, the Addenda tab only Add Addendum, and no screen offers a way to add a note"
     observations:
       opportunity_identifier: bound
       created_by_name: bound
@@ -117,8 +117,8 @@ pages:
       opportunity_identifier: bound
       status: bound
       published_date: bound
-      created_by_name: "unbound: the public opportunity page names no creator; its header shows only the published and updated dates, and the creator's name appears only on the management page"
-      last_changed_by_name: "unbound: the public opportunity page names nobody who changed it; only the updated date is shown"
+      created_by_name: bound
+      last_changed_by_name: bound
       proposal_deadline: bound
       total_max_budget: bound
       phases: bound
@@ -136,7 +136,7 @@ pages:
       cancel_opportunity: bound
       delete_opportunity: bound
       add_addendum: bound
-      add_note: "unbound: the History tab offers no control for adding a note; checked on a Sprint With Us opportunity built for the purpose, where the tab shows only the list of entries"
+      add_note: "unbound: signed in as the administrator and looked on the seeded open and processing Sprint With Us opportunities (and earlier on one built for the purpose): the History tab is a table (Entry Type | Note | Created) with nothing in its top bar, the Opportunity tab's Actions menu offers only Edit and Cancel, and no screen offers a way to add a note"
       edit_evaluation_panel: bound
       finalize_question_consensuses: bound
       start_team_scenario: bound
@@ -182,8 +182,8 @@ pages:
       opportunity_identifier: bound
       status: bound
       published_date: bound
-      created_by_name: "unbound: the public opportunity page names no creator; its header shows only the published and updated dates, and the creator's name appears only on the management page"
-      last_changed_by_name: "unbound: the public opportunity page names nobody who changed it; only the updated date is shown"
+      created_by_name: bound
+      last_changed_by_name: bound
       proposal_deadline: bound
       max_budget: bound
       resources: bound
@@ -528,7 +528,7 @@ pages:
     actions:
       approve_invitation: bound
       reject_invitation: bound
-      leave_organization: "unbound: an affiliated organization's row carries only its name; the column beside it is empty in the accessibility tree and no leave control appears anywhere on the tab"
+      leave_organization: bound
       create_organization: bound
       open_organization: bound
     observations:
@@ -640,7 +640,7 @@ pages:
       expand_capability_description: bound
     observations:
       capability_row: bound
-      capability_checked: "unbound: whether a capability is held is shown only by the colour and shape of an unlabelled icon — the row has no checkbox, no text and no state in the accessibility tree, so there is nothing to read"
+      capability_checked: "unbound: looked again as the organization member on their own Capabilities tab — each capability is a link carrying its name and an unlabelled icon, and whether it is held changes only that icon's colour and shape; the row has no checkbox, no text and no checked state in the accessibility tree, so nothing on the page says which are held"
       capability_description: bound
 
   user-profile-notifications:
@@ -698,7 +698,7 @@ pages:
       expand_capability_description: bound
     observations:
       capability_row: bound
-      capability_checked: "unbound: whether a capability is held is shown only by the colour and shape of an unlabelled icon — the row has no checkbox, no text and no state in the accessibility tree, so there is nothing to read"
+      capability_checked: "unbound: looked again as the organization member on their own Capabilities tab — each capability is a link carrying its name and an unlabelled icon, and whether it is held changes only that icon's colour and shape; the row has no checkbox, no text and no checked state in the accessibility tree, so nothing on the page says which are held"
       capability_description: bound
 
   user-profile-self-notifications:
@@ -728,7 +728,7 @@ pages:
     actions:
       approve_invitation: bound
       reject_invitation: bound
-      leave_organization: "unbound: an affiliated organization's row carries only its name; the column beside it is empty in the accessibility tree and no leave control appears anywhere on the tab"
+      leave_organization: bound
       create_organization: bound
       open_organization: bound
     observations:
@@ -1169,7 +1169,7 @@ pages:
       image_address: bound
       current_image: bound
       chosen_image_preview: bound
-      only_jpeg_and_png_offered: "unbound: nothing visible on the page says which kinds of image the picker takes — the restriction lives only in the chooser the operating system opens, which the page does not describe"
+      only_jpeg_and_png_offered: bound
       rejected_image_error: bound
       image_readable_when_signed_out: bound
       stored_image_width: bound
@@ -1181,7 +1181,7 @@ pages:
     observations:
       image_address: bound
       image_inserted_into_text: bound
-      only_jpeg_and_png_offered: "unbound: the formatted-text editor states nothing on the page about the kinds of image it takes"
+      only_jpeg_and_png_offered: bound
       uploading_indicator: bound
       image_rendered_in_published_text: bound
       upload_failure_leaves_text_unchanged: bound

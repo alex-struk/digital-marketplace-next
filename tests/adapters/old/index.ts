@@ -112,6 +112,11 @@ export default function create(
       .catch(() => undefined);
   }
 
+  async function currentHeading(): Promise<string> {
+    const heading = seen(page.getByRole("heading"));
+    return (await heading.count()) ? (await heading.first().innerText().catch(() => "")).trim() : "";
+  }
+
   async function notFoundShown(): Promise<boolean> {
     return (await seen(page.getByRole("heading", { name: "Not Found", exact: true })).count()) > 0;
   }
@@ -182,6 +187,27 @@ export default function create(
       if (labels.includes(lines[i]) && matches(LOOKS_LIKE_A_VALUE, lines[i - 1])) return lines[i - 1];
     }
     return valueBefore(labels);
+  }
+
+  // A figure shown above its label and nothing else: a label with no figure over it (a tab
+  // name, a heading) is no score, and reads as nothing.
+  async function figureAbove(labels: string[]): Promise<string> {
+    const lines = await textLines();
+    for (let i = 1; i < lines.length; i++) {
+      if (labels.includes(lines[i]) && matches(LOOKS_LIKE_A_VALUE, lines[i - 1])) return lines[i - 1];
+    }
+    return "";
+  }
+
+  // A proposal shows each stage's score on that stage's own tab ("66.00%" over "Team Scenario
+  // Score" on Team Scenario) and its total on every tab. The figure is read where the screen
+  // is; when it is not there, the stage's tab is opened and read, and a reader not offered
+  // that tab, or a stage not yet scored, reads as nothing.
+  async function stageFigure(tabs: string[], labels: string[]): Promise<string> {
+    await ready();
+    const here = await figureAbove(labels);
+    if (here || !tabs.length) return here;
+    return (await enterTab(tabs)) ? figureAbove(labels) : "";
   }
 
   async function findBefore(labels: string[]): Promise<string | null> {
@@ -453,22 +479,31 @@ export default function create(
 
   // A disabled control is reported at once, with what the page is showing beside it,
   // rather than clicked until the test runs out of time.
+  // The top bar's controls are drawn once the record they act on has loaded, a moment after
+  // the screen itself, so a control not there yet is looked for again for a few seconds.
+  const LATE_CONTROL_MS = 5000;
+
   async function press(where: string, names: string[], scope: Scope = page): Promise<void> {
-    for (const name of names) {
-      const control = await findControl(scope, name);
-      if (control) {
-        if (await isDisabled(control)) {
-          const shown = await messages().catch(() => "");
-          throw new Error(
-            `${where} — "${name}" is disabled on ${page.url()}; ${
-              shown ? `the page shows: ${shown.replace(/\n/g, " | ")}` : "the page shows no message"
-            }`,
-          );
+    const deadline = Date.now() + LATE_CONTROL_MS;
+    for (;;) {
+      for (const name of names) {
+        const control = await findControl(scope, name);
+        if (control) {
+          if (await isDisabled(control)) {
+            const shown = await messages().catch(() => "");
+            throw new Error(
+              `${where} — "${name}" is disabled on ${page.url()}; ${
+                shown ? `the page shows: ${shown.replace(/\n/g, " | ")}` : "the page shows no message"
+              }`,
+            );
+          }
+          await control.click();
+          await settle();
+          return;
         }
-        await control.click();
-        await settle();
-        return;
       }
+      if (Date.now() >= deadline) break;
+      await page.waitForTimeout(250);
     }
     throw new Error(
       `unbound: ${where} — no control labelled ${quoted(names)} on ${page.url()}`,
@@ -603,6 +638,63 @@ export default function create(
   async function fromActions(where: string, names: string[]): Promise<void> {
     const menu = await openActionsMenu(where);
     await press(where, names, menu);
+  }
+
+  // A record's screen puts its one or two actions straight in the top bar ("Withdraw",
+  // "Award", "Enter Score") and gathers them under "Actions" when there are more ("Award |
+  // Edit Score | Disqualify"). Whichever the screen shows is used, once it has drawn either.
+  async function fromBarOrActions(where: string, names: string[]): Promise<void> {
+    await ready();
+    const deadline = Date.now() + LATE_CONTROL_MS;
+    for (;;) {
+      for (const name of names) {
+        if (await findControl(navBar(), name)) {
+          await press(where, names, navBar());
+          return;
+        }
+      }
+      if (await findControl(navBar(), "Actions")) {
+        await fromActions(where, names);
+        return;
+      }
+      if (Date.now() >= deadline) break;
+      await page.waitForTimeout(250);
+    }
+    const bar = (await navBar().innerText().catch(() => "")).replace(/\s*\n\s*/g, " | ");
+    throw new Error(
+      `unbound: ${where} — neither the top bar nor an "Actions" menu offers ${quoted(names)} on ${page.url()}; the top bar shows: ${bar}`,
+    );
+  }
+
+  // Every score a proposal is given is entered in the "Enter Score" dialog ("Edit Score" once
+  // one is recorded): one number box named for what is scored ("Total Score", "Team Scenario
+  // Score", "Challenge Score"), then "Submit Score". The dialog belongs to the tab of the stage
+  // being scored, which is opened first.
+  async function scoreProposal(where: string, tabs: string[], input: unknown): Promise<void> {
+    await ready();
+    if (tabs.length) await openTab(where, tabs);
+    await fromBarOrActions(where, ["Enter Score", "Edit Score"]);
+    await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    if (!(await dialog().count())) {
+      throw new Error(`unbound: ${where} — "Enter Score" opened no dialog on ${page.url()}`);
+    }
+    const value = field(input, "score", "value", "total", "totalScore") || asText(input);
+    const box = seen(dialog().first().getByRole("spinbutton"));
+    if (!(await box.count())) {
+      throw new Error(`unbound: ${where} — the score dialog holds no number box on ${page.url()}`);
+    }
+    await box.first().fill(value);
+    await box.first().blur().catch(() => undefined);
+    await settle();
+    await press(where, ["Submit Score"], dialog().first());
+    await dialog().first().waitFor({ state: "hidden", timeout: 15000 }).catch(() => undefined);
+    await settle();
+  }
+
+  // An award is confirmed in "Award ... Opportunity?" with its own "Award Opportunity".
+  async function awardProposal(where: string): Promise<void> {
+    await fromBarOrActions(where, ["Award"]);
+    await confirmIfAsked(where, ["Award Opportunity", "Award Proposal", "Award"]);
   }
 
   async function actionsMenuText(): Promise<string> {
@@ -1280,17 +1372,22 @@ export default function create(
     return ATTACHMENT_KEYS.some((key) => (input as Record<string, unknown>)[key] !== undefined);
   }
 
-  async function fill(where: string, labels: string[], value: string): Promise<void> {
-    for (const label of labels) {
-      for (const role of ["textbox", "spinbutton"] as const) {
-        const box = seen(page.getByRole(role, { name: label, exact: false }));
-        if (await box.count()) {
-          await box.first().fill(value);
-          await box.first().blur().catch(() => undefined);
-          await settle();
-          return;
+  async function fill(where: string, labels: string[], value: string, scope: Scope = page): Promise<void> {
+    const deadline = Date.now() + LATE_CONTROL_MS;
+    for (;;) {
+      for (const label of labels) {
+        for (const role of ["textbox", "spinbutton"] as const) {
+          const box = seen(scope.getByRole(role, { name: label, exact: false }));
+          if (await box.count()) {
+            await box.first().fill(value);
+            await box.first().blur().catch(() => undefined);
+            await settle();
+            return;
+          }
         }
       }
+      if (Date.now() >= deadline) break;
+      await page.waitForTimeout(250);
     }
     throw new Error(`unbound: ${where} — no field labelled ${quoted(labels)} on ${page.url()}`);
   }
@@ -1381,16 +1478,52 @@ export default function create(
 
   // The evaluation and consensus lists name each proponent in a plain cell and put the way
   // in ("Edit", "View", "Start") as a link at the end of the same row.
+  // A proponent is named by its place in the list (a number, or { index }, counted from 0),
+  // by its proposal (an identifier, or a seeded proposal record, found in the row link's
+  // address), or by the words its row shows ("Proponent 2").
   async function openRow(where: string, input: unknown): Promise<void> {
-    const name = asText(input);
+    await ready();
     const bodyRows = seen(page.getByRole("row")).filter({ has: page.getByRole("cell") });
-    const rows = name ? bodyRows.filter({ hasText: name }) : bodyRows;
-    if (!(await rows.count())) {
-      nothing(`${where} — no proponent row${name ? ` for "${name}"` : ""} on ${page.url()}`);
+    await bodyRows.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+    const record =
+      input && typeof input === "object" && !Array.isArray(input) ? (input as Record<string, unknown>) : {};
+    const proposal = record.proposal ?? record.proposalId ?? record.id ?? input;
+    const proposalId =
+      typeof proposal === "string" && UUID_ONLY.test(proposal)
+        ? proposal
+        : proposal && typeof proposal === "object" && typeof (proposal as Record<string, unknown>).id === "string"
+          ? String((proposal as Record<string, unknown>).id)
+          : "";
+    const place =
+      typeof input === "number"
+        ? input
+        : typeof input === "string" && /^\d+$/.test(input.trim())
+          ? Number(input.trim())
+          : Number.parseInt(field(input, "index", "position", "row", "order"), 10);
+    const total = await bodyRows.count();
+    let row: Locator | null = null;
+    let named = "";
+    if (proposalId) {
+      named = `proposal ${proposalId}`;
+      for (let i = 0; i < total && !row; i++) {
+        const hrefs = await bodyRows.nth(i).getByRole("link").evaluateAll((links) => links.map((a) => a.getAttribute("href") ?? ""));
+        if (hrefs.some((href) => href.includes(proposalId))) row = bodyRows.nth(i);
+      }
+    } else if (Number.isFinite(place) && place >= 0) {
+      named = `place ${place}`;
+      if (place < total) row = bodyRows.nth(place);
+    } else {
+      const name = asText(input);
+      named = name;
+      const rows = name ? bodyRows.filter({ hasText: name }) : bodyRows;
+      if (await rows.count()) row = rows.first();
     }
-    const link = seen(rows.first().getByRole("link"));
+    if (!row) {
+      nothing(`${where} — no proponent row${named ? ` for ${named}` : ""} among the ${total} rows on ${page.url()}`);
+    }
+    const link = seen(row.getByRole("link"));
     const count = await link.count();
-    if (!count) nothing(`${where} — the row${name ? ` for "${name}"` : ""} offers no link on ${page.url()}`);
+    if (!count) nothing(`${where} — the row${named ? ` for ${named}` : ""} offers no link on ${page.url()}`);
     await link.nth(count - 1).click();
     await settle();
   }
@@ -1456,13 +1589,22 @@ export default function create(
   // A test names a file the way a person would ({ file: "scan0001.pdf", content?, bytes? }),
   // never by where it lives. The harness makes a real file under that name for the chooser.
   function filePaths(input: unknown): string[] {
+    const NAME_KEYS = ["file", "name", "fileName", "file_name", "filename", "attachment", "image", "picture", "upload"];
     const one = (item: unknown): string | null => {
       if (typeof item === "string") return item ? uploadFile({ name: item }) : null;
       if (!item || typeof item !== "object") return null;
       const record = item as Record<string, unknown>;
-      const name = ["file", "name", "fileName", "file_name", "attachment", "image"]
-        .map((key) => record[key])
-        .find((value): value is string => typeof value === "string" && value.length > 0);
+      // A file handed over whole under one of those names ({ image: { name, content } }).
+      for (const key of NAME_KEYS) {
+        const inner = record[key];
+        if (inner && typeof inner === "object" && !Array.isArray(inner) && !(inner instanceof Uint8Array)) {
+          const found = one(inner);
+          if (found) return found;
+        }
+      }
+      const name = NAME_KEYS.map((key) => record[key]).find(
+        (value): value is string => typeof value === "string" && value.length > 0,
+      );
       if (!name) return null;
       const content = record.content ?? record.contents;
       const bytes = record.bytes ?? record.size ?? record.sizeBytes;
@@ -1993,8 +2135,16 @@ export default function create(
     // Dates a Sprint With Us input gives for the whole opportunity when it names no phase and
     // the form holds none: this form keeps dates only on phases, so they have nowhere to go.
     let homelessDates: string[] = [];
+    // A reader who may not create opportunities (a vendor, seen as the vendor persona) is shown
+    // "Not Found" at the form's address: no form to fill and nothing to press. That refusal is
+    // what the test goes on to read, so the action ends there.
+    let withheld = false;
     async function enter(member: string, input: unknown): Promise<void> {
       await ready();
+      withheld = await notFoundShown();
+      if (withheld) return;
+      // The form is drawn a moment after the screen's heading.
+      await seen(page.getByText(STEP)).first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
       homelessDates = [];
       let rest = input;
       if (phased) {
@@ -2049,11 +2199,13 @@ export default function create(
       ...at(route),
       saveDraft: async (input?: unknown) => {
         await enter("save_draft", input);
+        if (withheld) return;
         await press(`${where}.save_draft`, ["Save Draft"], navBar());
         await mustLandOn(`${where}.save_draft`, record());
       },
       submitForReview: async (input?: unknown) => {
         await enter("submit_for_review", input);
+        if (withheld) return;
         if (!(await pressWhenReady("submit_for_review", "Submit for Review"))) return;
         await confirmIfAsked(`${where}.submit_for_review`, [
           "Submit for Review",
@@ -2063,6 +2215,7 @@ export default function create(
       },
       publish: async (input?: unknown) => {
         await enter("publish", input);
+        if (withheld) return;
         if (!(await pressWhenReady("publish", "Publish"))) return;
         await confirmIfAsked(`${where}.publish`, ["Publish Opportunity", "Publish"]);
         await landOn(record());
@@ -2184,7 +2337,7 @@ export default function create(
         .catch(() => null);
       const below = chooser ? chooser.y + chooser.height : 0;
       for (let i = count - 1; i >= 0; i--) {
-        const box = await shown.nth(i).boundingBox();
+        const box = await shown.nth(i).boundingBox({ timeout: 500 }).catch(() => null);
         if (box && box.y > below) return box.y;
       }
       return null;
@@ -2202,7 +2355,7 @@ export default function create(
   async function inBand(locator: Locator, band: { top: number; bottom: number }): Promise<Locator | null> {
     const count = await locator.count();
     for (let i = 0; i < count; i++) {
-      const box = await locator.nth(i).boundingBox();
+      const box = await locator.nth(i).boundingBox({ timeout: 500 }).catch(() => null);
       if (box && box.y > band.top && box.y < band.bottom) return locator.nth(i);
     }
     return null;
@@ -2210,11 +2363,13 @@ export default function create(
 
   // Where something sits on screen, once it has stopped moving: a phase unfolds with an
   // animation, and a control read mid-way is not where it will be clicked.
+  // Each reading is bounded: mid-animation the box can drop out of the visible set for a
+  // moment, and an unbounded reading would wait out the whole action timeout for it.
   async function steadyBox(locator: Locator): Promise<{ x: number; y: number; width: number; height: number } | null> {
-    let before = await locator.boundingBox().catch(() => null);
+    let before = await locator.boundingBox({ timeout: 500 }).catch(() => null);
     for (let tries = 0; tries < 20 && before; tries++) {
       await page.waitForTimeout(100);
-      const now = await locator.boundingBox().catch(() => null);
+      const now = await locator.boundingBox({ timeout: 500 }).catch(() => null);
       if (now && Math.abs(now.y - before.y) < 0.5 && Math.abs(now.height - before.height) < 0.5) return now;
       before = now;
     }
@@ -2252,12 +2407,12 @@ export default function create(
 
   // A chosen capability shows "P/T" and "F/T" on its own row.
   async function markBesideChip(chip: Locator, mark: string): Promise<Locator | null> {
-    const row = await chip.boundingBox();
+    const row = await chip.boundingBox({ timeout: 500 }).catch(() => null);
     if (!row) return null;
     const marks = seen(page.getByText(mark, { exact: true }));
     const count = await marks.count();
     for (let i = 0; i < count; i++) {
-      const box = await marks.nth(i).boundingBox();
+      const box = await marks.nth(i).boundingBox({ timeout: 500 }).catch(() => null);
       if (box && Math.abs(box.y + box.height / 2 - (row.y + row.height / 2)) < row.height) return marks.nth(i);
     }
     return null;
@@ -2391,7 +2546,15 @@ export default function create(
       const label = PHASE_FIELDS[squash(key)];
       if (label) {
         const role = /budget/i.test(label) ? "spinbutton" : "textbox";
-        const box = await inBand(seen(page.getByRole(role, { name: labelled(label) })), band);
+        const boxes = seen(page.getByRole(role, { name: labelled(label) }));
+        // Filling a box scrolls the form and a phase may fold as another opens, so where the
+        // phase sits is measured again, and the phase reopened, before each of its fields.
+        band = (await phaseBand(phase)) ?? band;
+        let box = await inBand(boxes, band);
+        if (!box) {
+          band = (await openPhase(phase)) ?? band;
+          box = await inBand(boxes, band);
+        }
         if (!box) {
           unplaced.push(key);
           continue;
@@ -2690,16 +2853,26 @@ export default function create(
       // The header reads "Published <date>" above the title, beside "Updated <date>".
       publishedDate: () => linesMatching(/^Published\s/),
       // The public page names nobody: its header carries only the published and updated
-      // dates. Who made and last changed an opportunity is shown on its management page.
+      // dates, whoever reads it (looked at again as an administrator on the seeded published
+      // Code With Us and open Sprint With Us opportunities). Who made an opportunity is shown
+      // on its management page. The page is reached and simply carries no creator, so it
+      // reads as nothing; a screen that failed to open is still reported.
       createdByName: async (): Promise<string> => {
-        throw new Error(
-          `unbound: ${where}.created_by_name — the public opportunity page names no creator; its header shows only the published and updated dates, and the creator's name appears only on the management page`,
-        );
+        await ready();
+        if (await notFoundShown()) return "";
+        if (!(await currentHeading())) {
+          nothing(`${where}.created_by_name — the opportunity page did not open at ${page.url()}`);
+        }
+        return valueAfter(["Created By"]);
       },
+      // Likewise nobody who changed it: only the updated date is shown.
       lastChangedByName: async (): Promise<string> => {
-        throw new Error(
-          `unbound: ${where}.last_changed_by_name — the public opportunity page names nobody who changed it; only the updated date is shown`,
-        );
+        await ready();
+        if (await notFoundShown()) return "";
+        if (!(await currentHeading())) {
+          nothing(`${where}.last_changed_by_name — the opportunity page did not open at ${page.url()}`);
+        }
+        return valueAfter(["Updated By", "Last Changed By"]);
       },
       // The badge sits directly under the programme's name in the page header.
       status: () => valueAfter([programme]),
@@ -2968,7 +3141,7 @@ export default function create(
 
   const noteIsNotOffered = (where: string) => async (): Promise<void> => {
     throw new Error(
-      `unbound: ${where}.add_note — the History tab lists entries but offers no control for adding a note`,
+      `unbound: ${where}.add_note — signed in as the administrator and looked on the seeded published, open and processing opportunities of both programmes: the History tab is a table (Entry Type | Note | Created) with nothing in its top bar, the Opportunity tab's Actions menu offers only "Edit" and "Cancel", the Addenda tab only "Add Addendum", and no screen offers a way to add a note`,
     );
   };
 
@@ -3349,6 +3522,54 @@ export default function create(
     },
   };
 
+  // An organization named by its seed handle, its identifier or its record, as the legal name
+  // the chooser shows.
+  function organizationNamed(input: unknown): string {
+    const record =
+      input && typeof input === "object" && !Array.isArray(input) ? (input as Record<string, unknown>) : {};
+    const given = record.organization ?? record.org ?? input;
+    const named = organizationName(given);
+    const byKey = (key: string): string => {
+      const groups = seed.organizations as unknown as Record<string, { id?: string; legal_name?: string }>;
+      const found = groups[key] ?? Object.values(groups).find((each) => each.id === key);
+      return found?.legal_name ?? "";
+    };
+    if (named) return byKey(named) || named;
+    if (given && typeof given === "object") {
+      const id = (given as Record<string, unknown>).id;
+      if (typeof id === "string") return byKey(id);
+    }
+    return asText(input);
+  }
+
+  // The Sprint With Us and Team With Us proposal forms open on "1. Evaluation", which only
+  // shows the scoring table; the "Organization*" chooser is on the team step ("2. Team" and
+  // "2. Team Members"). It offers only the organizations this vendor may act for that qualify
+  // for the programme, and says so beside it. An organization it does not offer is left
+  // unchosen — never replaced by another — which is the refusal a test goes on to read.
+  async function chooseProposalOrganization(where: string, step: string, input: unknown): Promise<void> {
+    await ready();
+    if (!(await goToStep(step))) await advanceTo(where, "Organization");
+    const box = seen(page.getByRole("combobox", { name: labelled("Organization") })).first();
+    await box.waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+    if (!(await box.count())) {
+      throw new Error(`unbound: ${where} — reached the "${step}" step but no "Organization" chooser is on it at ${page.url()}`);
+    }
+    const name = organizationNamed(input);
+    namedLabels.add(squash("Organization"));
+    await box.click();
+    const options = seen(page.getByRole("option"));
+    await options.first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
+    const option = name ? seen(page.getByRole("option", { name, exact: false })) : options;
+    if (!(await option.count())) {
+      await page.keyboard.press("Escape").catch(() => undefined);
+      await settle();
+      return;
+    }
+    await option.first().click();
+    await settle();
+  }
+
   const proposalSwuCreate: S.ProposalSwuCreatePage = {
     ...proposalCreate(
       "proposal-swu-create",
@@ -3356,7 +3577,7 @@ export default function create(
       "Sprint With Us",
     ),
     chooseOrganization: (input) =>
-      choose("proposal-swu-create.choose_organization", ["Organization"], asText(input)),
+      chooseProposalOrganization("proposal-swu-create.choose_organization", "Team", input),
     addPhaseTeamMember: async (input) => {
       await advanceTo("proposal-swu-create.add_phase_team_member", "Team Member");
       await press("proposal-swu-create.add_phase_team_member", [
@@ -3377,12 +3598,30 @@ export default function create(
         asText(input) ? `Scrum Master ${asText(input)}` : "Scrum Master",
         "Scrum Master",
       ]),
-    setPhaseProposedCost: (input) =>
-      fill(
-        "proposal-swu-create.set_phase_proposed_cost",
-        ["Proposed Cost", "Cost"],
-        asText(input),
-      ),
+    // "3. Pricing" asks one "<Phase> Cost*" per phase ("Implementation Cost*"), beside a
+    // read-only "Total Proposed Cost".
+    setPhaseProposedCost: async (input) => {
+      const where = "proposal-swu-create.set_phase_proposed_cost";
+      await ready();
+      if (!(await goToStep("Pricing"))) await advanceTo(where, "Total Proposed Cost");
+      const phase = field(input, "phase", "name");
+      const value = field(input, "cost", "proposedCost", "proposed_cost", "amount", "price", "value") || asText(input);
+      const label = phase ? `${phaseNamed(phase)} Cost` : "";
+      const boxes = seen(page.getByRole("spinbutton", { name: label ? labelled(label) : /Cost\s*\*\s*$/ }));
+      await boxes.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+      const count = await boxes.count();
+      for (let i = 0; i < count; i++) {
+        if (await boxes.nth(i).isDisabled()) continue;
+        namedLabels.add(squash(bareLabel(await accessibleName(boxes.nth(i)))));
+        await boxes.nth(i).fill(value);
+        await boxes.nth(i).blur().catch(() => undefined);
+        await settle();
+        return;
+      }
+      throw new Error(
+        `unbound: ${where} — reached the Pricing step but no ${label ? `"${label}"` : "phase cost"} field is on it at ${page.url()}`,
+      );
+    },
     answerTeamQuestion: async (input) => {
       await advanceTo("proposal-swu-create.answer_team_question", "Team Questions");
       await fill(
@@ -3406,7 +3645,7 @@ export default function create(
       "Team With Us",
     ),
     chooseOrganization: (input) =>
-      choose("proposal-twu-create.choose_organization", ["Organization"], asText(input)),
+      chooseProposalOrganization("proposal-twu-create.choose_organization", "Team Members", input),
     addTeamMemberForResource: async (input) => {
       await advanceTo("proposal-twu-create.add_team_member_for_resource", "Team Member");
       await choose(
@@ -3510,15 +3749,18 @@ export default function create(
         await confirmIfAsked(`${where}.save_changes_and_submit`, ["Submit Proposal", "Submit"]);
       },
       submitProposal: async () => {
-        await fromActions(`${where}.submit_proposal`, ["Submit", "Submit Proposal"]);
+        await fromBarOrActions(`${where}.submit_proposal`, ["Submit", "Submit Proposal"]);
         await confirmIfAsked(`${where}.submit_proposal`, ["Submit Proposal", "Submit"]);
       },
+      // A vendor's own proposal carries "Withdraw" (or "Delete", for a draft) straight in
+      // the top bar, beside "Edit"; seen as the competing vendor on the seeded open Sprint With
+      // Us proposal, confirmed in "Withdraw ... Proposal?" with "Withdraw Proposal".
       withdrawProposal: async () => {
-        await fromActions(`${where}.withdraw_proposal`, ["Withdraw"]);
+        await fromBarOrActions(`${where}.withdraw_proposal`, ["Withdraw"]);
         await confirmIfAsked(`${where}.withdraw_proposal`, ["Withdraw Proposal", "Withdraw"]);
       },
       deleteProposal: async () => {
-        await fromActions(`${where}.delete_proposal`, ["Delete"]);
+        await fromBarOrActions(`${where}.delete_proposal`, ["Delete"]);
         await confirmIfAsked(`${where}.delete_proposal`, ["Delete Proposal", "Delete"]);
       },
       proposalIdentifier: async () => proposalId(),
@@ -3539,8 +3781,9 @@ export default function create(
       const shown = await findAfter(["Submitted On", "Submitted At", "Submitted"]);
       return shown || linesMatching(/submitted/i);
     },
-    score: () => valueAfter(["Score", "Total Score"]),
-    rank: () => valueAfter(["Rank"]),
+    // Figures sit above their labels in the header ("82.00%" over "Total Score").
+    score: () => stageFigure([], ["Total Score", "Score"]),
+    rank: async () => (await ready(), valueBefore(["Ranking", "Rank"])),
     availableActions: () => actionsMenuText(),
   };
 
@@ -3576,29 +3819,27 @@ export default function create(
   const proposalCwuView: S.ProposalCwuViewPage = {
     ...at("/opportunities/code-with-us/:opportunityId/proposals/:proposalId"),
     proposalIdentifier: async () => proposalId(),
-    enterScore: (input) =>
-      fill("proposal-cwu-view.enter_score", ["Score"], asText(input)),
-    awardProposal: async () => {
-      await press("proposal-cwu-view.award_proposal", ["Award", "Award Proposal"]);
-      await confirmIfAsked("proposal-cwu-view.award_proposal", ["Award Proposal", "Award"]);
-    },
+    // "Enter Score" in the top bar while the proposal is under review, "Edit Score" under
+    // Actions once scored; either opens the "Total Score" dialog.
+    enterScore: (input) => scoreProposal("proposal-cwu-view.enter_score", [], input),
+    // Under "Actions" ("Award | Edit Score | Disqualify") once the opportunity is processing.
+    awardProposal: () => awardProposal("proposal-cwu-view.award_proposal"),
     disqualifyProposal: (input) => disqualify("proposal-cwu-view.disqualify_proposal", input),
     proposalTab: () => tabContent(["Proposal Details", "Proposal"]),
     historyTab: () => tabContent(["Proposal History", "History"]),
     proponent: () => valueAfter(["Proponent"]),
-    score: () => valueAfter(["Score", "Total Score"]),
-    rank: () => valueAfter(["Rank"]),
+    // The header draws its figures above their labels: "82.00%" over "Total Score", "1st"
+    // over "Ranking", and "—" over each before a score is entered.
+    score: () => stageFigure([], ["Total Score", "Score"]),
+    rank: async () => (await ready(), valueBefore(["Ranking", "Rank"])),
     exportLink: async () => controlState(["Export Proposal", "Export"]),
   };
 
   const proposalSwuView: S.ProposalSwuViewPage = {
     ...at("/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId"),
     proposalIdentifier: async () => proposalId(),
-    scoreCodeChallenge: async (input) => {
-      await openTab("proposal-swu-view.score_code_challenge", ["Code Challenge"]);
-      await fill("proposal-swu-view.score_code_challenge", ["Score"], asText(input));
-      await press("proposal-swu-view.score_code_challenge", ["Save Score", "Save"], navBar());
-    },
+    scoreCodeChallenge: (input) =>
+      scoreProposal("proposal-swu-view.score_code_challenge", ["Code Challenge"], input),
     screenInToTeamScenario: async () => {
       await press("proposal-swu-view.screen_in_to_team_scenario", [
         "Screen In",
@@ -3613,15 +3854,10 @@ export default function create(
       ]);
       await confirmIfAsked("proposal-swu-view.screen_out_from_team_scenario", ["Screen Out"]);
     },
-    scoreTeamScenario: async (input) => {
-      await openTab("proposal-swu-view.score_team_scenario", ["Team Scenario"]);
-      await fill("proposal-swu-view.score_team_scenario", ["Score"], asText(input));
-      await press("proposal-swu-view.score_team_scenario", ["Save Score", "Save"], navBar());
-    },
-    awardProposal: async () => {
-      await press("proposal-swu-view.award_proposal", ["Award", "Award Proposal"]);
-      await confirmIfAsked("proposal-swu-view.award_proposal", ["Award Proposal", "Award"]);
-    },
+    // On the Team Scenario tab "Enter Score" opens "Team Scenario Score*".
+    scoreTeamScenario: (input) =>
+      scoreProposal("proposal-swu-view.score_team_scenario", ["Team Scenario"], input),
+    awardProposal: () => awardProposal("proposal-swu-view.award_proposal"),
     disqualifyProposal: (input) => disqualify("proposal-swu-view.disqualify_proposal", input),
     proposalTab: () => tabContent(["Proposal Details", "Proposal"]),
     teamQuestionsTab: () => tabContent(["Team Questions", "Team Questions (Eval)"]),
@@ -3629,21 +3865,21 @@ export default function create(
     teamScenarioTab: () => tabContent(["Team Scenario"]),
     historyTab: () => historyRows(),
     wrongStageError: () => messages(/stage|not yet|cannot/i),
-    questionsScore: () => statFor(["Team Questions", "Questions Score"]),
-    challengeScore: () => statFor(["Code Challenge", "Challenge Score"]),
-    scenarioScore: () => statFor(["Team Scenario", "Scenario Score"]),
-    priceScore: () => statFor(["Price", "Price Score"]),
-    totalScore: () => statFor(["Total Score"]),
+    questionsScore: () =>
+      stageFigure(["Team Questions"], ["Team Questions Score", "Questions Score", "Team Questions"]),
+    challengeScore: () =>
+      stageFigure(["Code Challenge"], ["Code Challenge Score", "Challenge Score", "Code Challenge"]),
+    scenarioScore: () =>
+      stageFigure(["Team Scenario"], ["Team Scenario Score", "Scenario Score", "Team Scenario"]),
+    priceScore: () => stageFigure([], ["Price Score", "Price"]),
+    totalScore: () => stageFigure([], ["Total Score"]),
   };
 
   const proposalTwuView: S.ProposalTwuViewPage = {
     ...at("/opportunities/team-with-us/:opportunityId/proposals/:proposalId"),
     proposalIdentifier: async () => proposalId(),
-    scoreResourceQuestions: async (input) => {
-      await openTab("proposal-twu-view.score_resource_questions", ["Resource Questions"]);
-      await fill("proposal-twu-view.score_resource_questions", ["Score"], asText(input));
-      await press("proposal-twu-view.score_resource_questions", ["Save Score", "Save"], navBar());
-    },
+    scoreResourceQuestions: (input) =>
+      scoreProposal("proposal-twu-view.score_resource_questions", ["Resource Questions"], input),
     screenInToChallenge: async () => {
       await press("proposal-twu-view.screen_in_to_challenge", [
         "Screen In",
@@ -3658,28 +3894,22 @@ export default function create(
       ]);
       await confirmIfAsked("proposal-twu-view.screen_out_from_challenge", ["Screen Out"]);
     },
-    scoreChallenge: async (input) => {
-      await openTab("proposal-twu-view.score_challenge", [
-        "Challenge",
-        "Interview/Challenge",
-      ]);
-      await fill("proposal-twu-view.score_challenge", ["Score"], asText(input));
-      await press("proposal-twu-view.score_challenge", ["Save Score", "Save"], navBar());
-    },
-    awardProposal: async () => {
-      await press("proposal-twu-view.award_proposal", ["Award", "Award Proposal"]);
-      await confirmIfAsked("proposal-twu-view.award_proposal", ["Award Proposal", "Award"]);
-    },
+    // On the Interview/Challenge tab "Enter Score" opens "Challenge Score*".
+    scoreChallenge: (input) =>
+      scoreProposal("proposal-twu-view.score_challenge", ["Interview/Challenge", "Challenge"], input),
+    awardProposal: () => awardProposal("proposal-twu-view.award_proposal"),
     disqualifyProposal: (input) => disqualify("proposal-twu-view.disqualify_proposal", input),
     proposalTab: () => tabContent(["Proposal Details", "Proposal"]),
     resourceQuestionsTab: () => tabContent(["Resource Questions", "Resource Questions (Eval)"]),
     challengeTab: () => tabContent(["Interview/Challenge", "Challenge"]),
     historyTab: () => historyRows(),
     wrongStageError: () => messages(/stage|not yet|cannot/i),
-    questionsScore: () => statFor(["Resource Questions", "Questions Score"]),
-    challengeScore: () => statFor(["Interview/Challenge", "Challenge", "Challenge Score"]),
-    priceScore: () => statFor(["Price", "Price Score"]),
-    totalScore: () => statFor(["Total Score"]),
+    questionsScore: () =>
+      stageFigure(["Resource Questions"], ["Resource Questions Score", "Questions Score", "Resource Questions"]),
+    challengeScore: () =>
+      stageFigure(["Interview/Challenge", "Challenge"], ["Challenge Score", "Interview/Challenge Score", "Interview/Challenge"]),
+    priceScore: () => stageFigure([], ["Price Score", "Price"]),
+    totalScore: () => stageFigure([], ["Total Score"]),
   };
 
   // The entries of a proposal's History panel, one per table row, and nothing else: the
@@ -4009,24 +4239,14 @@ export default function create(
         await settle();
       }
     },
-    approvePendingMember: async (input) => {
-      await openTab("organization-edit.approve_pending_member", ["Team"]);
-      const name = await memberName(input);
-      const scope = name
-        ? seen(page.getByRole("row").filter({ hasText: name })).first()
-        : page;
-      await press("organization-edit.approve_pending_member", ["Approve"], scope);
-      await confirmIfAsked("organization-edit.approve_pending_member", ["Approve"]);
-    },
-    removeTeamMember: async (input) => {
-      await openTab("organization-edit.remove_team_member", ["Team"]);
-      const name = await memberName(input);
-      const scope = name
-        ? seen(page.getByRole("row").filter({ hasText: name })).first()
-        : page;
-      await press("organization-edit.remove_team_member", ["Remove"], scope);
-      await confirmIfAsked("organization-edit.remove_team_member", ["Remove", "Remove Member"]);
-    },
+    // The Team tab draws each row's "Approve" (a pending member, offered to an administrator)
+    // and "Remove" only while the pointer is over that row; the owner is offered no
+    // "Approve" and nobody is offered "Remove" on the owner's own row. A row that shows no
+    // such control when pointed at is this reader being refused, and nothing is pressed.
+    approvePendingMember: (input) =>
+      rowAction("organization-edit.approve_pending_member", "Approve", ["Approve Request", "Approve"], input, true),
+    removeTeamMember: (input) =>
+      rowAction("organization-edit.remove_team_member", "Remove", ["Remove Team Member", "Remove"], input, false),
     toggleMemberAdminStatus: (input) =>
       toggleMemberAdmin("organization-edit.toggle_member_admin_status", input),
     // Granting admin raises "Please Confirm", whose box must be ticked before "Share Admin
@@ -4177,6 +4397,31 @@ export default function create(
     },
   };
 
+  async function rowAction(
+    where: string,
+    label: string,
+    confirm: string[],
+    input: unknown,
+    pendingOnly: boolean,
+  ): Promise<void> {
+    await openTab(where, ["Team"]);
+    const name = await memberName(input);
+    const body = seen(page.getByRole("row")).filter({ has: page.getByRole("cell") });
+    await body.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+    let rows = name ? body.filter({ hasText: name }) : body;
+    if (!name && pendingOnly) rows = rows.filter({ hasText: /Pending/ });
+    if (!(await rows.count())) {
+      nothing(`${where} — the Team tab on ${page.url()} lists no ${name ? `member named "${name}"` : pendingOnly ? "pending member" : "member"}`);
+    }
+    await rows.first().hover();
+    const control = seen(rows.first().getByText(label, { exact: true }));
+    await control.first().waitFor({ state: "visible", timeout: 2000 }).catch(() => undefined);
+    if (!(await control.count())) return;
+    await control.last().click();
+    await settle();
+    await confirmIfAsked(where, confirm);
+  }
+
   // The Team table's Admin column is a box with no words, so each row states it.
   async function teamRowsText(): Promise<string> {
     const lines: string[] = [];
@@ -4320,21 +4565,53 @@ export default function create(
           .filter({ hasText: answer === "approve" ? "Approve Request?" : "Reject Request?" }),
       );
 
+    // A pending invitation's row under "Affiliated Organizations" shows "Approve" and "Reject"
+    // only while the pointer is over it (seen as the invited vendor on Salt Marsh Labs Ltd.);
+    // either raises "Approve Request?" / "Reject Request?". The row is the organization the
+    // input names, else the first one marked Pending.
     const answerInvitation =
       (member: string, answer: "approve" | "reject") =>
       async (input?: unknown): Promise<void> => {
+        const label = answer === "approve" ? "Approve" : "Reject";
         if (!(await confirmation(answer).count())) {
+          await ready();
+          // The invitation message's "Reject" link leads to the profile's first tab (its address
+          // says "tab=organization"), where no confirmation opens; the answer is then given
+          // from the Organizations tab, as a person landing there would.
+          if (!(await seen(page.getByRole("heading", { name: "Affiliated Organizations" })).count())) {
+            await enterTab(["Organizations"]);
+          }
+          const seededOrganization = (id: string): boolean =>
+            Object.values(seed.organizations as unknown as Record<string, { id?: string }>).some((each) => each.id === id);
           const affiliation =
-            field(input, "invitationAffiliationId", "affiliationId", "affiliation", "id") ||
-            (typeof input === "string" ? input : "");
-          if (!affiliation) {
+            field(input, "invitationAffiliationId", "affiliationId", "affiliation") ||
+            (typeof input === "string" && UUID_ONLY.test(input) && !seededOrganization(input) ? input : "");
+          const name = affiliation ? "" : organizationNamed(input);
+          // The row's hidden "Approve" and "Reject" run straight on from its "Pending" badge in
+          // the row's text ("Ltd.PendingApproveReject"), so the badge is not a word of its own.
+          const pending = seen(page.getByRole("row").filter({ hasText: /Pending/ }));
+          await pending.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+          const rows = name && !UUID_ONLY.test(name) ? pending.filter({ hasText: name }) : pending;
+          let offered = false;
+          if (!affiliation && (await rows.count())) {
+            await rows.first().hover();
+            const control = seen(rows.first().getByText(label, { exact: true }));
+            await control.first().waitFor({ state: "visible", timeout: 2000 }).catch(() => undefined);
+            if (await control.count()) {
+              await control.last().click();
+              await settle();
+              offered = true;
+            }
+          }
+          if (!offered && affiliation) {
+            await go(
+              `/users/me?tab=organizations&invitationAffiliationId=${encodeURIComponent(affiliation)}&invitationResponse=${answer}`,
+            );
+          } else if (!offered) {
             throw new Error(
-              `unbound: ${where}.${member} — the organizations tab offers no ${answer} control beside a pending invitation; it is answered only through the invitation message's link, which needs the invitation's affiliation identifier, and none was supplied`,
+              `unbound: ${where}.${member} — on ${page.url()} no ${name ? `pending row for "${name}"` : "row marked Pending"} showed "${label}" when pointed at (${await rows.count()} such rows)`,
             );
           }
-          await go(
-            `/users/me?tab=organizations&invitationAffiliationId=${encodeURIComponent(affiliation)}&invitationResponse=${answer}`,
-          );
         }
         if (!(await confirmation(answer).count())) {
           throw new Error(
@@ -4352,10 +4629,31 @@ export default function create(
       ...at(route),
       approveInvitation: answerInvitation("approve_invitation", "approve"),
       rejectInvitation: answerInvitation("reject_invitation", "reject"),
-      leaveOrganization: async (): Promise<void> => {
-        throw new Error(
-          `unbound: ${where}.leave_organization — an affiliated organization's row carries only its name; the column beside it is empty and no leave control appears anywhere on the tab`,
-        );
+      // An active affiliation's row shows "Leave" only while pointed at (seen as the
+      // organization admin on Northern Pines Digital Ltd.), confirmed in "Leave Organization?"
+      // with "Leave Organization". A row showing none — an owned organization — is refused.
+      leaveOrganization: async (input?: unknown): Promise<void> => {
+        const member = `${where}.leave_organization`;
+        await ready();
+        if (!(await seen(page.getByRole("heading", { name: "Affiliated Organizations" })).count())) {
+          await enterTab(["Organizations"]);
+        }
+        const name = organizationNamed(input);
+        const body = seen(page.getByRole("row")).filter({ has: page.getByRole("cell") });
+        await body.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+        const rows = name ? body.filter({ hasText: name }) : body;
+        const count = await rows.count();
+        for (let i = 0; i < count; i++) {
+          await rows.nth(i).hover();
+          const control = seen(rows.nth(i).getByText("Leave", { exact: true }));
+          await control.first().waitFor({ state: "visible", timeout: 1000 }).catch(() => undefined);
+          if (!(await control.count())) continue;
+          await control.last().click();
+          await settle();
+          await confirmIfAsked(member, ["Leave Organization", "Leave"]);
+          return;
+        }
+        if (!count) nothing(`${member} — the Organizations tab on ${page.url()} lists no ${name ? `organization named "${name}"` : "organization"}`);
       },
       createOrganization: () =>
         press(`${where}.create_organization`, ["Create Organization"], navBar()),
@@ -4462,12 +4760,30 @@ export default function create(
     searchByName: (input) => fill("user-list.search_by_name", ["Search by name"], asText(input)),
     openExportContactList: () =>
       press("user-list.open_export_contact_list", ["Export Contact List"]),
-    toggleExportUserType: (input) =>
-      tick(
-        "user-list.toggle_export_user_type",
-        [asText(input) || "Government Users"],
-        dialog().first(),
-      ),
+    // "Export Contact List" opens a dialog whose user types are "Government Users" and "Vendor
+    // Users", both ticked to start with. A type named the way the criteria name accounts
+    // ("public sector employee", "GOV", "vendor") is that box. A state given ({ checked })
+    // is set; otherwise the box is toggled.
+    toggleExportUserType: async (input) => {
+      const where = "user-list.toggle_export_user_type";
+      await ready();
+      if (!(await dialog().count())) await press(where, ["Export Contact List"]);
+      const said = (field(input, "userType", "user_type", "type", "kind", "name", "label") || asText(input)).trim();
+      const label = /vendor/i.test(said)
+        ? "Vendor Users"
+        : /gov|public sector|staff|admin/i.test(said) || !said
+          ? "Government Users"
+          : said;
+      const box = seen(dialog().first().getByRole("checkbox", { name: label, exact: false }));
+      if (!(await box.count())) {
+        throw new Error(`unbound: ${where} — the export dialog has no box labelled "${label}" (asked for "${said}") on ${page.url()}`);
+      }
+      const record =
+        input && typeof input === "object" && !Array.isArray(input) ? (input as Record<string, unknown>) : {};
+      const wanted = record.checked ?? record.selected ?? record.on ?? record.include;
+      if (wanted === undefined || (await box.first().isChecked()) !== saysYes(wanted)) await box.first().click();
+      await settle();
+    },
     toggleExportField: (input) =>
       tick("user-list.toggle_export_field", [asText(input) || "Email"], dialog().first()),
     exportContactList: () => inDialog("user-list.export_contact_list", ["Export"]),
@@ -4698,7 +5014,7 @@ export default function create(
       capabilityRow: () => sectionFrom(["Capabilities"]),
       capabilityChecked: async (): Promise<string> => {
         throw new Error(
-          `unbound: ${where}.capability_checked — whether a capability is held is shown only by the colour and shape of an unlabelled icon; the row carries no text, no checkbox and no state in the accessibility tree`,
+          `unbound: ${where}.capability_checked — looked again as the organization member on their own Capabilities tab: each capability is a link with its name and an unlabelled icon before it, and whether it is held changes only that icon's colour and shape; the row carries no text, no checkbox and no checked state in the accessibility tree, so nothing on the page says which are held`,
         );
       },
       capabilityDescription: () => sectionFrom(["Capabilities"]),
@@ -4801,13 +5117,22 @@ export default function create(
   // who is picked, and a "Panel Chair" box. It is read-only until "Edit" in the top bar is
   // pressed, which is what an owner or administrator does before changing it.
   async function editingPanel(where: string): Promise<void> {
+    await ready();
     if (await seen(page.getByRole("combobox", { name: "Panel Member", exact: false })).count()) return;
     // On the creation wizard the panel is a step of its own.
     if (await goToStep("Evaluation Panel")) {
       if (await panelSlots().count()) return;
     }
+    // "Edit" is drawn in the top bar once the opportunity has loaded, a moment after the tab.
+    await seen(navBar().getByText("Edit", { exact: true }))
+      .first()
+      .waitFor({ state: "visible", timeout: LATE_CONTROL_MS })
+      .catch(() => undefined);
     const edit = await findControl(navBar(), "Edit");
-    if (!edit) nothing(`${where} — the evaluation panel is not editable and offers no "Edit" on ${page.url()}`);
+    if (!edit) {
+      const bar = (await navBar().innerText().catch(() => "")).replace(/\s*\n\s*/g, " | ");
+      nothing(`${where} — the evaluation panel tab is read-only and its top bar offers no "Edit" on ${page.url()} (the top bar shows: ${bar})`);
+    }
     await edit.click();
     await settle();
     // Editing may reopen the opportunity's wizard, where the panel is its own step.
@@ -4849,11 +5174,23 @@ export default function create(
     return boxes.nth(Math.min(indexOf(input), count - 1));
   }
 
-  async function makeChair(where: string, input: unknown): Promise<void> {
+  // Below the evaluators the panel has a "Panel Chair" section with its own "Chair*" chooser,
+  // offering every public sector person, evaluator or not (seen as an administrator on the
+  // seeded closed Sprint With Us opportunity, after "Edit"). Who chairs is chosen there.
+  function chairChooser(): Locator {
+    return seen(page.getByRole("combobox", { name: labelled("Chair") }));
+  }
+
+  async function makeChair(where: string, input: unknown, byChooser = false): Promise<void> {
     await editingPanel(where);
     // A panel composed with nobody in the chair.
     if (namesNoChair(input)) {
       await clearChair(where);
+      return;
+    }
+    const key = personKey(input);
+    if (byChooser && key && (await chairChooser().count())) {
+      await pickPanelMember(where, chairChooser().first(), key);
       return;
     }
     const box = await chairBox(where, input);
@@ -4884,7 +5221,7 @@ export default function create(
       ...at(route),
       addPanelMember: (input: unknown) => addPanelMember(`${where}.add_panel_member`, input),
       removePanelMember: (input: unknown) => removePanelMember(`${where}.remove_panel_member`, input),
-      choosePanelChair: (input: unknown) => makeChair(`${where}.choose_panel_chair`, input),
+      choosePanelChair: (input: unknown) => makeChair(`${where}.choose_panel_chair`, input, true),
       markMemberAsChair: (input: unknown) => makeChair(`${where}.mark_member_as_chair`, input),
       saveEvaluationPanel: () =>
         press(`${where}.save_evaluation_panel`, ["Save Changes", "Save"], navBar()),
@@ -4892,12 +5229,16 @@ export default function create(
         (await panelMembers())
           .map((member) => `${member.name}${member.chair ? " (Panel Chair)" : ""}`)
           .join("\n"),
-      // Who chairs, by the name the chooser shows; nobody ticked reads as nobody.
-      chairField: async () =>
-        (await panelMembers())
+      // Who chairs, as the "Chair" field under "Panel Chair" names them, else by the ticked
+      // "Panel Chair" boxes; nobody named reads as nobody.
+      chairField: async () => {
+        const named = await findAfter(["Chair", "Chair*"]);
+        if (named && !matches(/^(Panel Chair|Chair\*?|Select\b.*)$/i, named) && !/^Home\|?$/.test(named)) return named;
+        return (await panelMembers())
           .filter((member) => member.chair)
           .map((member) => member.name)
-          .join("\n"),
+          .join("\n");
+      },
       minimumMembersError: () => panelRefusal(/two|minimum|at least/i),
       duplicateMemberError: () => panelRefusal(/duplicate|already|more than once|same (person|member)/i),
       nonPublicSectorMemberError: () => messages(/public sector|identifier/i),
@@ -4975,17 +5316,43 @@ export default function create(
       "/opportunities/team-with-us/:opportunityId/edit?tab=evaluation",
     );
 
+  // The consensus tab's controls sit in the top bar and appear only once the evaluation has
+  // reached consensus: "Finalize Consensus Scores" there (seen as the chair on the seeded Sprint
+  // With Us opportunities at consensus). Before that the tab says "Evaluators have not
+  // completed their evaluations yet." and the bar carries nothing, which is named when a control
+  // is missing so an earlier step that never landed is not mistaken for a missing control.
+  async function consensusControl(where: string, names: string[]): Promise<void> {
+    await ready();
+    const deadline = Date.now() + LATE_CONTROL_MS;
+    for (;;) {
+      for (const name of names) {
+        if (await findControl(navBar(), name)) {
+          await press(where, [name], navBar());
+          return;
+        }
+      }
+      if (Date.now() >= deadline) break;
+      await page.waitForTimeout(250);
+    }
+    const bar = (await navBar().innerText().catch(() => "")).replace(/\s*\n\s*/g, " | ");
+    const said = await linesMatching(/not completed|not yet|no proponents|consensus/i);
+    throw new Error(
+      `unbound: ${where} — no control labelled ${quoted(names)} in the top bar of ${page.url()} (it shows: ${bar})${
+        said ? `; the tab says: ${said.replace(/\n/g, " | ")}` : ""
+      }`,
+    );
+  }
+
   function evaluationConsensusList(where: string, route: string) {
     return {
       ...at(route),
       openProponentConsensus: (input: unknown) =>
         openRow(`${where}.open_proponent_consensus`, input),
       submitFinalConsensusScores: () =>
-        press(`${where}.submit_final_consensus_scores`, [
+        consensusControl(`${where}.submit_final_consensus_scores`, [
           "Submit Final Consensus Scores",
           "Submit Consensus Scores",
           "Submit Scores",
-          "Submit",
         ]),
       confirmSubmitConsensus: () =>
         inDialog(`${where}.confirm_submit_consensus`, [
@@ -4994,7 +5361,7 @@ export default function create(
           "Submit",
         ]),
       finalizeConsensusScores: () =>
-        press(`${where}.finalize_consensus_scores`, [
+        consensusControl(`${where}.finalize_consensus_scores`, [
           "Finalize Consensus Scores",
           "Finalize Scores",
           "Finalize",
@@ -5093,13 +5460,44 @@ export default function create(
     };
   }
 
+  // A sheet's first "Save Draft" moves it to its own address (".../evaluations/<member>/edit"),
+  // where it is shown read-only under "Edit" until opened again, and saved with "Save Changes"
+  // (seen as the panel's evaluator on the seeded closed Sprint With Us opportunity). Saving the
+  // draft again is whichever of those the sheet is showing.
+  async function saveSheetDraft(where: string): Promise<void> {
+    await ready();
+    const deadline = Date.now() + LATE_CONTROL_MS;
+    for (;;) {
+      for (const name of ["Save Draft", "Save Changes"]) {
+        if (await findControl(navBar(), name)) {
+          await press(where, [name], navBar());
+          await confirmIfAsked(where, [name, "Save"]);
+          return;
+        }
+      }
+      const edit = await findControl(navBar(), "Edit");
+      if (edit && !(await isDisabled(edit))) {
+        await edit.click();
+        await settle();
+        await press(where, ["Save Changes"], navBar());
+        await confirmIfAsked(where, ["Save Changes", "Save"]);
+        return;
+      }
+      if (Date.now() >= deadline) break;
+      await page.waitForTimeout(250);
+    }
+    const bar = (await navBar().innerText().catch(() => "")).replace(/\s*\n\s*/g, " | ");
+    throw new Error(
+      `unbound: ${where} — the score sheet's top bar offers neither "Save Draft", "Save Changes" nor "Edit" on ${page.url()} (it shows: ${bar})`,
+    );
+  }
+
   const evaluationIndividualCreateSwu: Open<S.EvaluationIndividualCreateSwuPage> = {
     ...scoreSheet(
       "evaluation-individual-create-swu",
       "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/evaluations/create",
     ),
-    saveDraft: () =>
-      press("evaluation-individual-create-swu.save_draft", ["Save Draft", "Save"], navBar()),
+    saveDraft: () => saveSheetDraft("evaluation-individual-create-swu.save_draft"),
     saveAndGoToPreviousProponent: () =>
       press("evaluation-individual-create-swu.save_and_go_to_previous_proponent", [
         "Save & Go to Previous Proponent",
@@ -5165,8 +5563,7 @@ export default function create(
       "evaluation-consensus-create-swu",
       "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/team-questions/consensus/create",
     ),
-    saveDraft: () =>
-      press("evaluation-consensus-create-swu.save_draft", ["Save Draft", "Save"], navBar()),
+    saveDraft: () => saveSheetDraft("evaluation-consensus-create-swu.save_draft"),
     anonymousProponentName: () => anonymousProponent(),
     panelMemberScore: () => contentText(),
     panelMemberNotes: () => contentText(),
@@ -5192,8 +5589,7 @@ export default function create(
       "evaluation-individual-create-twu",
       "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/evaluations/create",
     ),
-    saveDraft: () =>
-      press("evaluation-individual-create-twu.save_draft", ["Save Draft", "Save"], navBar()),
+    saveDraft: () => saveSheetDraft("evaluation-individual-create-twu.save_draft"),
     saveAndGoToPreviousProponent: () =>
       press("evaluation-individual-create-twu.save_and_go_to_previous_proponent", [
         "Save & Go to Previous Proponent",
@@ -5223,8 +5619,7 @@ export default function create(
       "evaluation-consensus-create-twu",
       "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/consensus/create",
     ),
-    saveDraft: () =>
-      press("evaluation-consensus-create-twu.save_draft", ["Save Draft", "Save"], navBar()),
+    saveDraft: () => saveSheetDraft("evaluation-consensus-create-twu.save_draft"),
     anonymousProponentName: () => anonymousProponent(),
     panelMemberScore: () => contentText(),
     panelMemberNotes: () => contentText(),
@@ -5432,14 +5827,22 @@ export default function create(
     },
   };
 
+  // A reader who may not manage pages is shown "Not Found" at /content/create: there is no
+  // form to type into, and that refusal is what the test reads next.
+  async function contentField(where: string, labels: string[], value: string): Promise<void> {
+    await ready();
+    if (await notFoundShown()) return;
+    await fill(where, labels, value);
+  }
+
   const contentCreate: S.ContentCreatePage = {
     ...at("/content/create"),
     enterTitle: (input) =>
-      fill("content-create.enter_title", ["Title"], field(input, "title") || asText(input)),
+      contentField("content-create.enter_title", ["Title"], field(input, "title") || asText(input)),
     enterSlug: (input) =>
-      fill("content-create.enter_slug", ["Slug"], field(input, "slug") || asText(input)),
+      contentField("content-create.enter_slug", ["Slug"], field(input, "slug") || asText(input)),
     enterBody: (input) =>
-      fill("content-create.enter_body", ["Body"], field(input, "body", "content") || asText(input)),
+      contentField("content-create.enter_body", ["Body"], field(input, "body", "content") || asText(input)),
     uploadBodyImage: (input) => uploadBodyImage("content-create.upload_body_image", input),
     // "Publish" can take a moment to act on the last value typed, so a press that raises no
     // "Publish Page?" is tried again before it is reported.
@@ -5500,17 +5903,52 @@ export default function create(
     refusedForNonAdministrator: () => contentText(),
   };
 
+  // An image the test does not name is still an image put into the text: the harness's own
+  // small PNG, under a plain name.
   async function uploadBodyImage(where: string, input: unknown): Promise<void> {
-    const files = filePaths(input);
-    if (!files.length) throw new Error(`unbound: ${where} — no image file was named`);
+    // The page editor carries no heading to wait for; the body box is what it draws.
+    await settle();
+    await seen(page.getByRole("textbox", { name: labelled("Body") }))
+      .first()
+      .waitFor({ state: "visible", timeout: LATE_CONTROL_MS })
+      .catch(() => undefined);
+    let files = filePaths(input);
+    if (!files.length) {
+      const record =
+        input && typeof input === "object" && !Array.isArray(input) ? (input as Record<string, unknown>) : {};
+      const kind = field(record, "type", "extension", "format", "mimeType").toLowerCase();
+      const ending = /jpe?g/.test(kind) ? "jpg" : /gif/.test(kind) ? "gif" : /pdf/.test(kind) ? "pdf" : "png";
+      const content = record.content ?? record.contents;
+      const bytes = record.bytes ?? record.size ?? record.sizeBytes;
+      files = [
+        uploadFile({
+          name: `body-image.${ending}`,
+          content: typeof content === "string" || content instanceof Uint8Array ? content : undefined,
+          bytes: typeof bytes === "number" ? bytes : undefined,
+        }),
+      ];
+    }
     // "Choose File" is the file input itself, drawn beneath the body box, which takes any
     // click aimed at it; the file is handed to the input directly.
     const control = page.getByRole("button", { name: "Choose File", exact: true });
+    // A saved page shows its body read-only until "Edit" is pressed; its "Choose File" stays
+    // pressable meanwhile, but an image chosen then goes nowhere (seen on "about-us").
+    const body = seen(page.getByRole("textbox", { name: labelled("Body") }));
+    const readOnly = (await body.count()) > 0 && (await body.first().isDisabled());
+    if (!(await control.count()) || readOnly) {
+      const edit = await findControl(navBar(), "Edit");
+      if (edit && !(await isDisabled(edit))) {
+        await edit.click();
+        await settle();
+      }
+      await control.first().waitFor({ state: "attached", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+    }
     if (!(await control.count())) {
       throw new Error(
         `unbound: ${where} — the formatted-text editor offers no "Choose File" image control on ${page.url()}`,
       );
     }
+    const before = (await body.count()) ? await body.first().inputValue().catch(() => "") : "";
     const taken = await control
       .first()
       .setInputFiles(files)
@@ -5522,6 +5960,13 @@ export default function create(
       await (await chooser).setFiles(files);
     }
     await settle();
+    // The image is stored first and only then written into the text as "![name](FILE_ID:…)";
+    // a refused one leaves the text as it was and says so in an alert. Either ends the wait.
+    for (let waited = 0; waited < 10000 && (await body.count()); waited += 250) {
+      if ((await body.first().inputValue().catch(() => before)) !== before) break;
+      if (await seen(page.getByRole("alert")).count()) break;
+      await page.waitForTimeout(250);
+    }
   }
 
   // The name shown under "Published By" or "Updated By" links to that person's profile;
@@ -6140,6 +6585,32 @@ export default function create(
     );
   }
 
+  // The page states no rule in words, but its "Choose File" control tells the chooser it opens
+  // which kinds to offer: ".jpg,.jpeg,.png" on the profile picture (after "Edit Profile") and
+  // on the formatted-text editor of /content/create. That list is what the person is offered,
+  // one kind per line; a control that limits nothing reads as nothing.
+  async function imageKindsOffered(where: string, edit: string): Promise<string> {
+    await settle();
+    const control = page.getByRole("button", { name: "Choose File", exact: true });
+    if (!(await control.count())) {
+      const opener = await findControl(navBar(), edit);
+      if (opener && !(await isDisabled(opener))) {
+        await opener.click();
+        await settle();
+      }
+      await control.first().waitFor({ state: "attached", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+    }
+    if (!(await control.count())) {
+      nothing(`${where} — no "Choose File" image control on ${page.url()}, after pressing "${edit}" where offered`);
+    }
+    const accepted = (await control.first().getAttribute("accept").catch(() => null)) ?? "";
+    return accepted
+      .split(",")
+      .map((kind) => kind.trim())
+      .filter(Boolean)
+      .join("\n");
+  }
+
   const fileImagePicker: S.FileImagePickerPage = {
     ...at("/users/me"),
     chooseImage: (input) => chooseImage("file-image-picker.choose_image", input),
@@ -6158,11 +6629,7 @@ export default function create(
     },
     chosenImagePreview: async () =>
       (await pictures()).find((source) => /^(blob|data):/.test(source)) ?? "",
-    onlyJpegAndPngOffered: async () => {
-      throw new Error(
-        "unbound: file-image-picker.only_jpeg_and_png_offered — the picker says nothing on the page about which kinds of image it takes; the restriction lives only in the chooser the operating system opens",
-      );
-    },
+    onlyJpegAndPngOffered: () => imageKindsOffered("file-image-picker.only_jpeg_and_png_offered", "Edit Profile"),
     rejectedImageError: () => messages(/image|file|type/i),
     imageReadableWhenSignedOut: async () => {
       const images = seen(page.getByRole("img"));
@@ -6196,11 +6663,7 @@ export default function create(
       return storedImageAddress();
     },
     imageInsertedIntoText: () => fieldValue(["Body"]),
-    onlyJpegAndPngOffered: async () => {
-      throw new Error(
-        "unbound: file-embedded-image.only_jpeg_and_png_offered — the editor states nothing on the page about the kinds of image it takes",
-      );
-    },
+    onlyJpegAndPngOffered: () => imageKindsOffered("file-embedded-image.only_jpeg_and_png_offered", "Edit"),
     uploadingIndicator: () => linesMatching(/uploading/i),
     imageRenderedInPublishedText: async () => {
       const images = seen(page.getByRole("img"));
@@ -6309,10 +6772,25 @@ export default function create(
       const wanted = (field(input, "label", "link", "name", "text") || asText(input)).trim();
       if (!wanted) nothing(`${where} — no link label was given`);
       const links = bodyLinks(message(where).HTML ?? "");
+      // An invitation's message labels its two answers "Approve" and "Reject"; a criterion
+      // that says accept or decline means those same two links.
+      const SAME_ANSWER: Record<string, string[]> = {
+        accept: ["approve"],
+        approve: ["accept"],
+        decline: ["reject"],
+        reject: ["decline"],
+      };
+      const find = (words: string): { label: string; href: string } | undefined =>
+        links.find((each) => each.label.toLowerCase() === words) ??
+        links.find((each) => each.label.toLowerCase().includes(words));
       const lower = wanted.toLowerCase();
       const link =
-        links.find((each) => each.label.toLowerCase() === lower) ??
-        links.find((each) => each.label.toLowerCase().includes(lower));
+        find(lower) ??
+        Object.entries(SAME_ANSWER)
+          .filter(([word]) => new RegExp(`\\b${word}`).test(lower))
+          .flatMap(([, others]) => others)
+          .map(find)
+          .find((each) => each !== undefined);
       if (!link) {
         nothing(
           `${where} — the message's formatted body has no link labelled "${wanted}" (its links: ${
@@ -6603,8 +7081,20 @@ export default function create(
     },
     async inviteWithMembershipType(input) {
       const where = "affiliation-invitation-request.invite_with_membership_type";
-      const organization = field(input, "organization", "organizationId", "org", "orgId");
-      const invitee = field(input, "email", "userEmail", "invitee", "address", "user");
+      // The organization may come as a seed handle, an identifier or the seeded record itself,
+      // and the person as an address, a handle or a seeded user record.
+      const record =
+        input && typeof input === "object" && !Array.isArray(input) ? (input as Record<string, unknown>) : {};
+      const orgGiven = record.organization ?? record.organizationId ?? record.org ?? record.orgId;
+      const organization =
+        typeof orgGiven === "string"
+          ? orgGiven
+          : orgGiven && typeof orgGiven === "object" && typeof (orgGiven as Record<string, unknown>).id === "string"
+            ? String((orgGiven as Record<string, unknown>).id)
+            : "";
+      const whoGiven = record.email ?? record.userEmail ?? record.invitee ?? record.address ?? record.user ?? record.member;
+      const invitee =
+        typeof whoGiven === "string" ? whoGiven : whoGiven && typeof whoGiven === "object" ? personKey(whoGiven) : "";
       const membershipType = field(input, "membershipType", "membership_type", "type", "role");
       for (const [key, value] of [["organization", organization], ["email", invitee], ["membershipType", membershipType]]) {
         if (!value) nothing(`${where} — the input names no ${key} to send`);
@@ -6707,10 +7197,18 @@ export default function create(
     changePageByRequest: (input) => changePage("content-request.change_page_by_request", input),
     renamePageByRequest: async (input) => {
       const where = "content-request.rename_page_by_request";
-      const to = field(input, "to", "newSlug", "new_slug", "renameTo", "rename_to");
-      if (!to) nothing(`${where} — the input names no new address ("to") to rename the page to`);
+      // The new address comes as "to" (or a like name), or as a "slug" that differs from the
+      // page opened — the address the page is to have — or as the input itself.
+      const given = field(input, "slug", "address");
+      const to =
+        field(input, "to", "newSlug", "new_slug", "renameTo", "rename_to", "newAddress", "new_address") ||
+        (given && given !== openedSlug && (openedSlug || field(input, "from", "oldSlug", "old_slug")) ? given : "") ||
+        (typeof input === "string" ? input : "");
+      if (!to) {
+        nothing(`${where} — the input names no new address for the page opened ("${openedSlug}"): no "to", and no "slug" other than the page's own`);
+      }
       // The page being renamed is the one opened, unless the input names it as "from".
-      const from = field(input, "from", "oldSlug", "old_slug") || openedSlug || field(input, "slug");
+      const from = field(input, "from", "oldSlug", "old_slug") || openedSlug || given;
       await changePage(where, { ...pageFields(input), slug: from }, to);
     },
     removePageByRequest: async (input) => {
@@ -6739,10 +7237,30 @@ export default function create(
   // one changes it (PUT {tag: "edit", value: {scores}}). Asked to submit one sheet by
   // itself (PUT {tag: "submit"}), this target answers 400 {"evaluation":{"tag":"parseFailure"}}
   // whatever the value — tried with none, "", null, {}, [], true, 1 and a note.
+  // The scores a test hands over, in whichever shape: a list of them, a list under "scores",
+  // "questions", "answers" or "evaluations", a map from question to score, one question's
+  // { score, notes } on its own, or scores and notes as two lists side by side.
   function scoresFrom(input: unknown): { order: number; score: unknown; notes: unknown }[] {
     const record = input && typeof input === "object" && !Array.isArray(input) ? (input as Record<string, unknown>) : {};
-    const listed = Array.isArray(input) ? input : Array.isArray(record.scores) ? record.scores : null;
+    const listKeys = ["scores", "questions", "answers", "evaluations", "entries", "items"];
+    let listed: unknown[] | null = Array.isArray(input) ? input : null;
+    for (const key of listKeys) if (!listed && Array.isArray(record[key])) listed = record[key] as unknown[];
+    if (!listed) {
+      for (const key of listKeys) {
+        const map = record[key];
+        if (map && typeof map === "object" && !Array.isArray(map)) {
+          listed = Object.entries(map as Record<string, unknown>)
+            .sort(([a], [b]) => Number(a) - Number(b))
+            .map(([, value]) => value);
+          break;
+        }
+      }
+    }
     const notes = Array.isArray(record.notes) ? record.notes : null;
+    if (!listed && (record.score !== undefined || record.notes !== undefined || record.note !== undefined)) {
+      listed = [record];
+    }
+    if (!listed && notes) listed = notes.map(() => "");
     if (!listed) return [];
     return listed.map((each, i) => {
       if (each && typeof each === "object") {
