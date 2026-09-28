@@ -432,6 +432,11 @@ redo:
       criterion does not say where it appears; read it wherever an entitled
       reader is shown the proposal's individual scores, together with the
       history entry and the evaluated state
+    closed: &a8
+      outcome: met
+      why: derived again by a derive-tests run on proposals
+      by: runner:derive-tests
+      at: 2026-09-28T19:58:14.941Z
   - id: R-2.35
     version: 1
     why: the criterion names state changes and score entries, not the words used to
@@ -439,12 +444,14 @@ redo:
       shown under another label; establish that each state change and score
       entry appears newest first with its author, time and note, matching the
       disqualification by its note rather than by a label
+    closed: *a8
   - id: R-2.14
     version: 2
     why: ten proposal attempts in one test cannot finish within the time a single
       test is allowed; give each missing or malformed field its own test, or
       allow the test the time its attempts need, so that a timeout never stands
       in for a result
+    closed: *a8
   - id: R-5.32
     version: 1
     why: it reads whether a proponent was screened into the code challenge from the

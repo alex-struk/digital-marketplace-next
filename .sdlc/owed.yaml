@@ -4046,3 +4046,38 @@ owed:
         by: runner
         at: 2026-09-28T19:51:51.385Z
     target: old
+  - kind: missing-test
+    item: R-2.14
+    id: R-2.14
+    version: 2
+    domain: proposals
+    stage: contract
+    why: an observation on proposal-cwu-create returning the refusal reported
+      against each named field (field and message together); and a request-level
+      page for Code With Us proposals, like the evaluation-*-request pages, that
+      submits a proposal whose organization proponent is given by identifier —
+      one naming no organization, one naming an organization the signed-in
+      vendor is not a member of — and reports whether it was accepted and the
+      refusal's message
+    from: derive-tests-proposals-stale-7
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-28T19:59:12.490Z
+  - kind: missing-test
+    item: R-2.18
+    id: R-2.18
+    version: 3
+    domain: proposals
+    stage: contract
+    why: a request-level page for Sprint With Us and Team With Us proposals that
+      submits a proposal whose team members are given by account (seed users,
+      including one pending, one deactivated, one outside the organization, and
+      one named twice) and reports whether it was accepted and the refusal's
+      message; an observation on proposal-twu-edit and proposal-swu-edit
+      returning the reason a submission from that screen was refused; and an
+      observation on proposal-swu-create and proposal-twu-create returning the
+      people the team-member choice offers
+    from: derive-tests-proposals-stale-7
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-28T19:59:12.490Z
