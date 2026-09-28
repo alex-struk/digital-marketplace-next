@@ -426,6 +426,14 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-28T16:18:53.498Z
+    closed:
+      outcome: met
+      why: tests/acceptance/evaluation/R-5.29.spec.ts evaluator test — after the
+        evaluator's attempt, the chair calls recordConsensus (no catch) for
+        swuOutstandingThree, then expect.poll(consensusStatusOf(chair,
+        outstanding)).toBeTruthy()
+      by: agent:reviewer
+      at: 2026-09-28T16:20:27.177Z
   - ref: derive-tests-evaluation-stale-8#2
     text: "tests/acceptance/evaluation/R-5.29.spec.ts: in the evaluator test, before
       the chair records, assert that the outstanding proponent has no consensus
@@ -438,6 +446,13 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-28T16:18:53.498Z
+    closed:
+      outcome: met
+      why: tests/acceptance/evaluation/R-5.29.spec.ts evaluator test — before the
+        chair records, consensusStatusOf for the outstanding proponent is
+        asserted to be empty under both the evaluator's and the chair's user ids
+      by: agent:reviewer
+      at: 2026-09-28T16:20:27.184Z
   - ref: derive-tests-evaluation-stale-8#3
     text: "tests/acceptance/evaluation/R-5.29.spec.ts: note — the duplicate test's
       Proponent-name count is weak if proponentRow returns one row; the missing
@@ -449,3 +464,10 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-28T16:18:53.498Z
+    closed:
+      outcome: withdrawn
+      why: it was a note that asked for no change; the missing proponent_row
+        definition is carried by the R-5.29 not-testable.yaml entry owned by
+        contract
+      by: agent:reviewer
+      at: 2026-09-28T16:20:27.189Z
