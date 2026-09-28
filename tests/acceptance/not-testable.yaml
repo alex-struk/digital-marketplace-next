@@ -61,15 +61,6 @@ criteria:
       download to follow, and no observation returns the file's identifier for
       it to be asked for directly, so whether it remains stored and readable
       cannot be read either way.
-  - id: R-6.1
-    version: 1
-    reason: "blocked: the given is a target started with notifications switched off,
-      a setting the service reads once at start-up. The oracle runs with them
-      on, and nothing in the surface, the personas or the fixtures selects or
-      reconfigures a target. Unblocked by a second target (or a harness variable
-      the contract names) started with notifications disabled; against it an
-      opportunity can be published through opportunityCwuCreate.publish and the
-      catcher read empty with `mail`."
   - id: R-6.9
     version: 1
     reason: The claim is about the visible address line of a panel notice listing
@@ -91,14 +82,6 @@ criteria:
       message among the fifty on the page, so a containment assertion over the
       page as a whole would be satisfied by any message that happens to name a
       program.
-  - id: R-6.24
-    version: 1
-    reason: "blocked: what this adds to R-6.23 is ordering — success reported before
-      any message is sent. Nothing reports send progress and nothing can hold
-      delivery, so checking the catcher at the moment success appears is a race
-      against the background sending, not a test of it. Needs a way to hold or
-      slow the mail catcher's acceptance of messages, so that
-      notifyVendorsSuccess can be read while no message has yet arrived."
   - id: R-4.13
     version: 1
     reason: "unobservable: the outcome is that the service offers no way to create
