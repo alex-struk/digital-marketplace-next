@@ -546,6 +546,22 @@ export default function create(
     await settle();
   }
 
+  // A save's own confirmation left open is confirmed rather than put away, so what was
+  // being saved is kept.
+  async function confirmOpenSave(where: string): Promise<void> {
+    if (!(await dialog().count())) return;
+    const saves = ["Publish Changes", "Save Changes", "Submit Changes for Review"];
+    for (const name of saves) {
+      const control = await findControl(dialog().first(), name);
+      if (!control || (await isDisabled(control))) continue;
+      await control.click();
+      await dialog().first().waitFor({ state: "hidden", timeout: 15000 }).catch(() => undefined);
+      await settle();
+      await saved(saves);
+      return;
+    }
+  }
+
   async function inDialog(where: string, names: string[]): Promise<void> {
     await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
     if (!(await dialog().count())) {
@@ -679,9 +695,9 @@ export default function create(
       // A stage the opportunity has not reached says so on its tab, with nothing in the top
       // bar ("If this proposal is screened into the Team Scenario, it can be scored once the
       // opportunity reaches the Team Scenario too." — seen as the administrator on the seeded
-      // closed opportunities, still at question evaluation). That is the page refusing.
-      const said = await wrongStage();
-      if (said) throw new Error(`${where} — refused: the tab says "${said.replace(/\n/g, " ")}" on ${page.url()}`);
+      // closed opportunities, still at question evaluation). That is the page refusing: nothing
+      // is scored, and the notice is left on the tab for wrong_stage_error to read.
+      if (await wrongStage()) return;
       throw error;
     }
     await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
@@ -808,6 +824,8 @@ export default function create(
     const current = await currentStep();
     if (!current) return false;
     if (matches(pattern, (await current.innerText()).trim())) return true;
+    // A dialog still open over the form (the terms dialog) would take the click.
+    await dismissDialog();
     await current.click();
     const choice = seen(page.getByText(pattern));
     const count = await choice.count();
@@ -2799,7 +2817,7 @@ export default function create(
 
   // A member joins the first slot still empty, or a new one "Add an evaluator" makes.
   async function addPanelMember(where: string, input: unknown): Promise<void> {
-    await editingPanel(where);
+    if (!(await editingPanel(where))) return;
     const picks = panelPicks(input);
     if (!picks.length) {
       throw new Error(`unbound: ${where} — no panel member was named in ${JSON.stringify(input)}`);
@@ -2828,7 +2846,7 @@ export default function create(
   // words drawn as one control with no button role, under the slot's "Panel Chair" box. A
   // panel of two shows none, and that absence is the refusal.
   async function removePanelMember(where: string, input: unknown): Promise<void> {
-    await editingPanel(where);
+    if (!(await editingPanel(where))) return;
     const members = await panelMembers();
     const key = personKey(input);
     const at = key
@@ -3388,6 +3406,17 @@ export default function create(
     return true;
   }
 
+  // The terms dialog put away with its own "Cancel", and waited out, so nothing is left over
+  // the form. Whatever was agreed to is remembered and ticked again when it next opens.
+  async function closeTerms(where: string): Promise<void> {
+    if (!(await dialog().count())) return;
+    if (await findControl(dialog().first(), "Cancel")) {
+      await press(where, ["Cancel"], dialog().first());
+      await dialog().first().waitFor({ state: "hidden", timeout: 5000 }).catch(() => undefined);
+    }
+    await dismissDialog();
+  }
+
   function proposalCreate(where: string, route: string, programme: string) {
     // The form sits behind the terms dialog once that is open, so values still to be
     // entered close it first; the submit that follows opens it again, with the terms
@@ -3408,6 +3437,8 @@ export default function create(
       addAttachment: (input: unknown) => addAttachment(`${where}.add_attachment`, input),
       saveDraft: async (input?: unknown) => {
         await enter("save_draft", input);
+        // The terms dialog, if still open, sits over the top bar's "Save Draft".
+        await closeTerms(`${where}.save_draft`);
         await press(`${where}.save_draft`, ["Save Draft"], navBar());
         await landOn(record());
       },
@@ -3419,13 +3450,16 @@ export default function create(
         acceptedTerms.clear();
       },
       // The agreement is remembered even when the dialog cannot open yet, so the submit that
-      // follows ticks it once the dialog is up.
+      // follows ticks it once the dialog is up. The box is ticked in the dialog to see that it
+      // is there, and the dialog is then closed so the form behind it — its steps and its
+      // "Save Draft" — can be reached again; the submit reopens it and ticks it once more.
       acceptProgramTerms: async (input?: unknown) => {
         await enter("accept_program_terms", input);
         const label = `agree to the ${programme} Terms & Conditions`;
         acceptedTerms.add(label);
         if (!(await openTermsDialog(`${where}.accept_program_terms`))) return;
         await ensureTicked(`${where}.accept_program_terms`, [label], dialog().first());
+        await closeTerms(`${where}.accept_program_terms`);
       },
       acceptAppTerms: async (input?: unknown) => {
         await enter("accept_app_terms", input);
@@ -3433,6 +3467,7 @@ export default function create(
         acceptedTerms.add(label);
         if (!(await openTermsDialog(`${where}.accept_app_terms`))) return;
         await ensureTicked(`${where}.accept_app_terms`, [label], dialog().first());
+        await closeTerms(`${where}.accept_app_terms`);
       },
       // What the form shows now, from every step, with what it showed when it last refused
       // the submit: a field's message is drawn only once the field has been left.
@@ -3577,13 +3612,54 @@ export default function create(
     const options = seen(page.getByRole("option"));
     await options.first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
     const option = name ? seen(page.getByRole("option", { name, exact: false })) : options;
-    if (!(await option.count())) {
+    if (await option.count()) {
+      await option.first().click();
+    } else {
       await page.keyboard.press("Escape").catch(() => undefined);
-      await settle();
+    }
+    await settle();
+    // What the chooser shows once the choice is made is read back. The form may have come
+    // with another of the vendor's organizations already picked ("Northern Pines Digital
+    // Ltd."), and a named organization the chooser does not offer leaves that one in place:
+    // the proposal must not go on under it, so the choice is cleared (Backspace, as the
+    // chooser allows), leaving the form with no organization — the refusal the test reads.
+    const shown = await chosenOrganization(box);
+    if (!name || (shown && squash(shown).includes(squash(name)))) {
+      organizationWithheld = false;
       return;
     }
-    await option.first().click();
+    organizationWithheld = true;
+    if (!shown) return;
+    await box.click();
+    await page.keyboard.press("Backspace").catch(() => undefined);
+    await page.keyboard.press("Escape").catch(() => undefined);
     await settle();
+    const left = await chosenOrganization(box);
+    if (left) {
+      throw new Error(
+        `${where} — refused: the "Organization" chooser on ${page.url()} does not offer "${name}", and "${left}" stays chosen in its place (Backspace did not clear it)`,
+      );
+    }
+  }
+
+  // Set when the organization a test named could not be chosen, so no later step picks
+  // another one for it.
+  let organizationWithheld = false;
+
+  // The organization a chooser shows as picked, or "" while it shows its placeholder.
+  async function chosenOrganization(box: Locator): Promise<string> {
+    if (await chooserIsEmpty(box)) return "";
+    return box
+      .evaluate((element) => {
+        let node: HTMLElement | null = element as HTMLElement;
+        for (let i = 0; i < 8 && node; i++) {
+          node = node.parentElement;
+          const words = (node?.innerText ?? "").trim();
+          if (words) return words;
+        }
+        return "";
+      })
+      .catch(() => "");
   }
 
   // The people a test names for a proposal's team, in whatever shape it hands them over: one
@@ -3669,22 +3745,26 @@ export default function create(
 
   // A team step shows its phases or resources only once an organization is chosen. When the
   // test chose none, the one the chooser offers first is taken, so the step can be reached;
-  // a chooser offering none is the vendor having no qualifying organization, and says so.
-  async function ensureProposalOrganization(where: string): Promise<void> {
+  // a chooser offering none is the vendor having no qualifying organization. An organization
+  // the test named and the chooser would not take is never replaced by another. Resolves
+  // whether an organization is chosen.
+  async function ensureProposalOrganization(where: string): Promise<boolean> {
     const box = seen(page.getByRole("combobox", { name: labelled("Organization") })).first();
     await box.waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
-    if (!(await box.count()) || !(await chooserIsEmpty(box))) return;
+    if (!(await box.count())) return true;
+    if (!(await chooserIsEmpty(box))) return true;
+    if (organizationWithheld) return false;
     await box.click();
     const options = seen(page.getByRole("option"));
     await options.first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
     if (!(await options.count())) {
       await page.keyboard.press("Escape").catch(() => undefined);
-      throw new Error(
-        `${where} — refused: the "Organization" chooser on ${page.url()} offers no organization, so no team can be put together`,
-      );
+      await settle();
+      return false;
     }
     await options.first().click();
     await settle();
+    return true;
   }
 
   // Each team question sits folded under "Question N"; its "Question N Response" box shows
@@ -3733,7 +3813,11 @@ export default function create(
   async function addSwuPhaseMembers(where: string, input: unknown): Promise<void> {
     await ready();
     if (!(await goToStep("Team"))) await advanceTo(where, "Organization");
-    await ensureProposalOrganization(where);
+    if (!(await ensureProposalOrganization(where))) {
+      throw new Error(
+        `${where} — refused: the "Organization" chooser on ${page.url()} has no organization chosen and offers none the test may use, so no team can be put together`,
+      );
+    }
     const phaseGiven = field(input, "phase", "phaseName") || (typeof input === "string" && PHASES.some((p) => squash(p) === squash(phaseNamed(input))) ? input : "");
     const phase = phaseGiven ? phaseNamed(phaseGiven) : "";
     const adders = seen(page.getByText("Add Team Member(s)", { exact: true }));
@@ -3873,14 +3957,17 @@ export default function create(
     return 0;
   }
 
-  async function toTwuTeamStep(where: string): Promise<void> {
+  // Resolves whether an organization is chosen on "2. Team Members". None chosen — the
+  // chooser offering the vendor none, or the named one refused — leaves no resource to fill,
+  // and that withholding is left for the test to read rather than thrown.
+  async function toTwuTeamStep(where: string): Promise<boolean> {
     await ready();
     if (!(await goToStep("Team Members"))) await advanceTo(where, "Organization");
-    await ensureProposalOrganization(where);
+    return ensureProposalOrganization(where);
   }
 
   async function addTwuResourceMember(where: string, input: unknown): Promise<void> {
-    await toTwuTeamStep(where);
+    if (!(await toTwuTeamStep(where))) return;
     const choosers = seen(page.getByRole("combobox", { name: labelled("Resource Name") }));
     await choosers.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
     const count = await choosers.count();
@@ -3925,7 +4012,7 @@ export default function create(
   }
 
   async function setTwuHourlyRate(where: string, input: unknown): Promise<void> {
-    await toTwuTeamStep(where);
+    if (!(await toTwuTeamStep(where))) return;
     await seen(page.getByRole("spinbutton", { name: labelled("Hourly Rate") }))
       .first()
       .waitFor({ state: "visible", timeout: LATE_CONTROL_MS })
@@ -4036,13 +4123,56 @@ export default function create(
     await settle();
   }
 
+  const ORGANIZATION_KEYS = [
+    "organization", "org", "organizationId", "organization_id",
+    "organizationName", "organization_name", "legal_name", "legalName",
+  ];
+
+  // What a test hands a save of a proposal is entered first: the organization through the
+  // form's "Organization*" chooser (on "2. Team Members", "2. Team", or — for Code With Us —
+  // the "Proponent" step once "Organization" is chosen there), every other value by its label.
+  async function applyProposalEdits(where: string, teamStep: string, input: unknown): Promise<void> {
+    const record =
+      input && typeof input === "object" && !Array.isArray(input) ? (input as Record<string, unknown>) : null;
+    let organization: unknown;
+    if (typeof input === "string" && input) organization = input;
+    if (record) {
+      const id = record.organizationId ?? record.organization_id;
+      organization =
+        record.organization ?? record.org ??
+        (typeof id === "string" ? { id } : undefined) ??
+        (record.organizationName ?? record.organization_name ?? record.legal_name ?? record.legalName);
+    }
+    const rest = entriesOf(input, [...ORGANIZATION_KEYS, ...ATTACHMENT_KEYS]);
+    if (organization === undefined && !rest.length && !hasFiles(input)) return;
+    await startEditingProposal(where);
+    if (organization !== undefined) {
+      if (teamStep) {
+        await chooseProposalOrganization(where, teamStep, { organization });
+      } else {
+        await goToStep("Proponent");
+        await chooseRadio(where, "Organization");
+        await chooseProposalOrganization(where, "Proponent", { organization });
+      }
+    }
+    if (rest.length) {
+      await fillForm(where, Object.fromEntries(rest.map((entry) => [entry.key, entry.value])), {
+        skip: [...ORGANIZATION_KEYS, ...ATTACHMENT_KEYS],
+      });
+    }
+    if (hasFiles(input)) await addAttachment(where, input);
+  }
+
   // A proposal's own management page: a tab, a header of standing facts, and an Actions
   // menu whose contents change with the proposal's state.
-  function proposalEdit(where: string, route: string) {
+  function proposalEdit(where: string, route: string, teamStep: string) {
     return {
       ...at(route),
       startEditing: () => startEditingProposal(`${where}.start_editing`),
-      saveChanges: () => saveProposalChanges(`${where}.save_changes`),
+      saveChanges: async (input?: unknown) => {
+        await applyProposalEdits(`${where}.save_changes`, teamStep, input);
+        await saveProposalChanges(`${where}.save_changes`);
+      },
       saveChangesAndSubmit: async () => {
         await press(`${where}.save_changes_and_submit`, ["Submit Proposal"], navBar());
         await agreeAndConfirm(`${where}.save_changes_and_submit`, ["Submit Proposal", "Submit"]);
@@ -4063,7 +4193,8 @@ export default function create(
       // A draft offers "Delete" under Actions ("Submit | Edit | Delete"); a submitted proposal
       // offers only "Edit" and "Withdraw" in the top bar (both seen as the vendor on a Code
       // With Us proposal of their own). "Delete" missing from a proposal that is not a draft
-      // is the page refusing, and is reported as that.
+      // is the page refusing: nothing is deleted and the action ends there, for the test to
+      // read the proposal still standing.
       deleteProposal: async () => {
         const member = `${where}.delete_proposal`;
         try {
@@ -4071,11 +4202,7 @@ export default function create(
         } catch (error) {
           await closeActionsMenu();
           const status = await valueAfter(["Proposal Status"]);
-          if (status && !/draft/i.test(status)) {
-            throw new Error(
-              `${member} — refused: the proposal's status is "${status}" and its page offers no "Delete" on ${page.url()}; ${(error as Error).message.replace(/^unbound: /, "")}`,
-            );
-          }
+          if (status && !/draft/i.test(status)) return;
           throw error;
         }
         await confirmIfAsked(member, ["Delete Proposal", "Delete"]);
@@ -4091,6 +4218,7 @@ export default function create(
     ...proposalEdit(
       "proposal-cwu-edit",
       "/opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit",
+      "",
     ),
     addAttachment: (input) => addAttachment("proposal-cwu-edit.add_attachment", input),
     removeAttachment: (input) => removeAttachment("proposal-cwu-edit.remove_attachment", input),
@@ -4108,6 +4236,7 @@ export default function create(
     ...proposalEdit(
       "proposal-swu-edit",
       "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit",
+      "Team",
     ),
     scoresheetTab: () => tabContent(["Scoresheet", "Scoring"]),
     anonymousProponentName: () => anonymousProponent(),
@@ -4119,6 +4248,7 @@ export default function create(
     ...proposalEdit(
       "proposal-twu-edit",
       "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit",
+      "Team Members",
     ),
     scoresheetTab: () => tabContent(["Scoresheet", "Scoring"]),
     anonymousProponentName: () => anonymousProponent(),
@@ -4224,7 +4354,7 @@ export default function create(
       stageFigure(["Code Challenge"], ["Code Challenge Score", "Challenge Score", "Code Challenge"]),
     scenarioScore: () =>
       stageFigure(["Team Scenario"], ["Team Scenario Score", "Scenario Score", "Team Scenario"]),
-    priceScore: () => stageFigure([], ["Price Score", "Price"]),
+    priceScore: () => proposalPrice("sprint-with-us"),
     totalScore: () => proposalTotal(),
   };
 
@@ -4261,9 +4391,51 @@ export default function create(
       stageFigure(["Resource Questions"], ["Resource Questions Score", "Questions Score", "Resource Questions"]),
     challengeScore: () =>
       stageFigure(["Interview/Challenge", "Challenge"], ["Challenge Score", "Interview/Challenge Score", "Interview/Challenge"]),
-    priceScore: () => stageFigure([], ["Price Score", "Price"]),
+    priceScore: () => proposalPrice("team-with-us"),
     totalScore: () => proposalTotal(),
   };
+
+  // A proposal's own screen shows only "Total Score" and "Ranking"; its price score is the
+  // "PRICE" column of the opportunity's Proposals table ("PROPONENT | STATUS | TQ | CC | TS |
+  // PRICE | TOTAL" on edit?tab=proposals, seen as the administrator on the seeded Sprint With
+  // Us opportunity in processing), in the row whose proponent links to this proposal. The
+  // table is read and the proposal's screen opened again. A reader not shown that table, or a
+  // row showing "—", has no price score shown to it.
+  async function proposalPrice(programme: string): Promise<string> {
+    await ready();
+    const here = await figureAbove(["Price Score", "Price"]);
+    if (here) return here;
+    const back = page.url();
+    const proposal = proposalId();
+    await page.goto(`${baseURL}/opportunities/${programme}/${opportunityId()}/edit?tab=proposals`);
+    await ready();
+    const tables = seen(page.getByRole("table"));
+    await tables.first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    let found = "";
+    const tableCount = await tables.count();
+    for (let t = 0; t < tableCount && !found; t++) {
+      const table = tables.nth(t);
+      const headers = (await table.getByRole("columnheader").allInnerTexts()).map((h) => h.trim().toLowerCase());
+      const column = headers.findIndex((h) => h === "price" || h === "price score");
+      if (column < 0) continue;
+      const rows = table.getByRole("row");
+      const rowCount = await rows.count();
+      for (let r = 0; r < rowCount && !found; r++) {
+        const links = rows.nth(r).getByRole("link");
+        const linkCount = await links.count();
+        let ours = false;
+        for (let l = 0; l < linkCount && !ours; l++) {
+          ours = ((await links.nth(l).getAttribute("href")) ?? "").includes(proposal);
+        }
+        if (!ours) continue;
+        const cells = rows.nth(r).getByRole("cell");
+        if ((await cells.count()) > column) found = (await cells.nth(column).innerText()).trim();
+      }
+    }
+    await page.goto(back);
+    await ready();
+    return found === "—" ? "" : found;
+  }
 
   // The "Total Score" card sits in the header of the Proposal Details tab alone; a stage's
   // tab (Team Scenario, Interview/Challenge) carries its own score and not the total, so the
@@ -5563,12 +5735,13 @@ export default function create(
   // The panel tab shows each evaluator as "Evaluator N", a "Panel Member*" chooser showing
   // who is picked, and a "Panel Chair" box. It is read-only until "Edit" in the top bar is
   // pressed, which is what an owner or administrator does before changing it.
-  async function editingPanel(where: string): Promise<void> {
+  // Resolves true once the panel is open to change, and false when the page shows it locked.
+  async function editingPanel(where: string): Promise<boolean> {
     await ready();
-    if (await seen(page.getByRole("combobox", { name: "Panel Member", exact: false })).count()) return;
+    if (await seen(page.getByRole("combobox", { name: "Panel Member", exact: false })).count()) return true;
     // On the creation wizard the panel is a step of its own.
     if (await goToStep("Evaluation Panel")) {
-      if (await panelSlots().count()) return;
+      if (await panelSlots().count()) return true;
     }
     // "Edit" is drawn in the top bar once the opportunity has loaded, a moment after the tab.
     await seen(navBar().getByText("Edit", { exact: true }))
@@ -5582,20 +5755,24 @@ export default function create(
       // administrator on the seeded opportunities at consensus, where the tab lists both
       // evaluators and the chair and the top bar carries nothing, while the same tab of the
       // seeded closed opportunity still at individual evaluation offers "Edit". That is a
-      // refusal the page gives, not a control missing from it.
+      // refusal the page gives, left in place for panel_locked_after_consensus to report:
+      // nothing is changed and nothing is thrown.
       if ((await panelMembers()).some((member) => member.name)) {
-        const status = await valueAfter(["Status"]);
-        throw new Error(
-          `${where} — refused: the evaluation panel is shown read-only and its top bar offers no "Edit" (Status: ${status || "not shown"}) on ${page.url()} (the top bar shows: ${bar})`,
-        );
+        panelLeftLocked = true;
+        return false;
       }
       nothing(`${where} — the evaluation panel tab shows no evaluators and its top bar offers no "Edit" on ${page.url()} (the top bar shows: ${bar})`);
     }
     await edit.click();
     await settle();
+    panelLeftLocked = false;
     // Editing may reopen the opportunity's wizard, where the panel is its own step.
     await goToStep("Evaluation Panel");
+    return true;
   }
+
+  // Set when a change to the panel found it locked, so the save that follows changes nothing.
+  let panelLeftLocked = false;
 
   // The evaluators in order, each with who is picked and whether they chair. A page that
   // shows no evaluators — as it does to a vendor or to staff with no part in the
@@ -5640,7 +5817,7 @@ export default function create(
   }
 
   async function makeChair(where: string, input: unknown, byChooser = false): Promise<void> {
-    await editingPanel(where);
+    if (!(await editingPanel(where))) return;
     // A panel composed with nobody in the chair.
     if (namesNoChair(input)) {
       await clearChair(where);
@@ -5681,8 +5858,19 @@ export default function create(
       removePanelMember: (input: unknown) => removePanelMember(`${where}.remove_panel_member`, input),
       choosePanelChair: (input: unknown) => makeChair(`${where}.choose_panel_chair`, input, true),
       markMemberAsChair: (input: unknown) => makeChair(`${where}.mark_member_as_chair`, input),
-      saveEvaluationPanel: () =>
-        press(`${where}.save_evaluation_panel`, ["Save Changes", "Save"], navBar()),
+      // A panel the change before found locked is left as the page shows it: there is nothing
+      // to save, and the lock is panel_locked_after_consensus's to report.
+      saveEvaluationPanel: async () => {
+        await ready();
+        if (
+          panelLeftLocked &&
+          !(await findControl(navBar(), "Save Changes")) &&
+          !(await findControl(navBar(), "Save"))
+        ) {
+          return;
+        }
+        await press(`${where}.save_evaluation_panel`, ["Save Changes", "Save"], navBar());
+      },
       panelMemberRow: async () =>
         (await panelMembers())
           .map((member) => `${member.name}${member.chair ? " (Panel Chair)" : ""}`)
@@ -7027,7 +7215,9 @@ export default function create(
     async attachmentAddress() {
       // Wherever the last action left the form — a proposal just submitted sits on its
       // first step, sometimes with an emptied dialog still open — the links are on the
-      // Attachments step.
+      // Attachments step. A save's confirmation left open ("Publish Changes to Team With Us
+      // Opportunity?") is confirmed, since dismissing it would discard the addition.
+      await confirmOpenSave("file-attachment-control.attachment_address");
       await dismissDialog();
       await attachmentsStep();
       const stored = async (): Promise<string[]> => {
@@ -7074,7 +7264,19 @@ export default function create(
     // The upload is made through the page's own file chooser, so its refusal is whatever
     // message the step shows afterwards, whole.
     uploadRefusedForSize: () => messages(),
-    addAttachment: (input) => addAttachment("file-attachment-control.add_attachment", input),
+    // On a published Team With Us opportunity an attachment is added in "Edit" and only
+    // stored once "Publish Changes" is pressed and "Publish Changes to Team With Us
+    // Opportunity?" confirmed (seen as the administrator on a published Team With Us
+    // opportunity: the step then links the file at /api/files/). The addition is saved there,
+    // so what the test reads next is the stored attachment.
+    addAttachment: async (input) => {
+      const where = "file-attachment-control.add_attachment";
+      await addAttachment(where, input);
+      if (!/^\/opportunities\/team-with-us\//.test(new URL(page.url()).pathname)) return;
+      if (!(await findControl(navBar(), "Publish Changes"))) return;
+      await saveAttachmentForm(where);
+      await attachmentsStep();
+    },
     renameNewAttachment: (input) =>
       renameAttachment("file-attachment-control.rename_new_attachment", input),
     removeNewAttachment: (input) =>

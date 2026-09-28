@@ -128,6 +128,10 @@
 - 12:09:56 rule calibrate-old-11 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.282 (Claude Code))
 - 12:09:59 deviation: next named `sdlc run bind-adapter --target old`; ran `sdlc run calibrate --target old`; reason: Apply the product owner's rulings just made so their test redos join this round.
 - 12:10:05 run calibrate: ok, cost 0, turns 0
+- 12:19:20 run bind-adapter: ok, cost 3.5705152, turns 101, on claude claude-opus-5-5 (2.1.282 (Claude Code))
+- 12:19:20 propose bind-adapter-old-29 at G3
+- 12:19:20 rule bind-adapter-old-29 escalated at G3 to tech-lead by runner:bind-adapter
+- 12:20:08 rule bind-adapter-old-29 approve at G3 by agent:tech-lead (agent) on claude claude-opus-5-5 (2.1.282 (Claude Code))
 
 # Run record 2026-09-26
 
