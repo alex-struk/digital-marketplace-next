@@ -18,8 +18,10 @@ import type { Persona, Surface } from "../../fixtures";
 // The criterion also says withdrawn proposals are not counted. The seeded opportunity kept
 // for an award has two submitted proposals and one withdrawn before the deadline, so the
 // second test scores the two in contention there and reads the same move. That draft
-// proposals are not counted is recorded in not-testable.yaml: no seeded lapsed opportunity
-// carries a draft beside a proposal that can be scored.
+// proposals are not counted is the third test: the seeded lapsed opportunity carrying one
+// submitted proposal beside one left in draft is closed, the submission — the only proposal
+// in contention — is scored, and the opportunity moves to processing though the draft was
+// never evaluated.
 
 const statement =
   "When every proposal still in contention on an opportunity has been evaluated, the opportunity moves to processing on its own.";
@@ -149,6 +151,20 @@ test(`${statement} (a withdrawn proposal is not counted)`, async ({ surface }) =
   expect(await opportunityStatus(surface, opportunityId)).toBe(inEvaluation);
 
   await score(surface, opportunityId, last, 75);
+  await expect.poll(() => opportunityStatus(surface, opportunityId), settle).not.toBe(inEvaluation);
+
+  await surface.opportunityCwuEdit.open({ opportunityId });
+  expect(await surface.opportunityCwuEdit.historyTab()).toContain(note);
+});
+
+test(`${statement} (a draft proposal is not counted)`, async ({ surface }) => {
+  const opportunityId = seed.opportunities.cwuLapsedWithSubmissionAndDraft.id;
+  const submission = seed.proposals.cwuSubmissionBesideDraft.id;
+
+  await surface.signIn(persona.administrator);
+  const inEvaluation = await closeLapsed(surface, opportunityId);
+
+  await score(surface, opportunityId, submission, 90);
   await expect.poll(() => opportunityStatus(surface, opportunityId), settle).not.toBe(inEvaluation);
 
   await surface.opportunityCwuEdit.open({ opportunityId });
