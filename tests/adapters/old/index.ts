@@ -129,6 +129,8 @@ export default function create(
     leavePhaseChoice = false;
     termsRefused = false;
     refusalShown = [];
+    refusalFieldsShown = [];
+    organizationWithheld = false;
     await page.goto(address(route, params), { waitUntil: "domcontentloaded" });
     await settle();
   }
@@ -297,38 +299,86 @@ export default function create(
       const fields = seen(page.getByRole(role));
       const count = await fields.count();
       for (let i = 0; i < count; i++) {
-        const said = await fields
-          .nth(i)
-          .evaluate((box) => {
-            const isField = (node: Element): boolean =>
-              (node instanceof HTMLInputElement && node.type !== "hidden") ||
-              node instanceof HTMLTextAreaElement ||
-              node instanceof HTMLSelectElement;
-            const fieldsIn = (node: Element): number =>
-              (isField(node) ? 1 : 0) + Array.from(node.children).reduce((sum, child) => sum + fieldsIn(child), 0);
-            const words: string[] = [];
-            let node: Element = box;
-            for (let level = 0; level < 5; level++) {
-              for (let next = node.nextElementSibling; next; next = next.nextElementSibling) {
-                if (fieldsIn(next)) continue;
-                const text = ((next as HTMLElement).innerText ?? "").trim();
-                if (text) words.push(...text.split("\n"));
-              }
-              const parent: Element | null = node.parentElement;
-              if (!parent || fieldsIn(parent) > 1) break;
-              node = parent;
-            }
-            return words;
-          })
-          .catch(() => [] as string[]);
-        for (const line of said.map((words) => words.trim())) {
-          if (!line || !matches(MESSAGE, line)) continue;
+        for (const line of await saidAfterField(fields.nth(i))) {
+          if (!matches(MESSAGE, line)) continue;
           if (pattern && !matches(pattern, line)) continue;
           if (!found.includes(line)) found.push(line);
         }
       }
     }
     return found;
+  }
+
+  // Each message the screen draws against a field, as "<field>: <message>", the field named
+  // by its label. The Code With Us proponent step labels its two address lines both "Street
+  // Address", the first required ("Street Address*") and the second not; they are told apart
+  // by that order.
+  async function fieldErrorsByLabel(): Promise<string[]> {
+    const found: string[] = [];
+    let streets = 0;
+    for (const role of ["textbox", "spinbutton", "combobox"] as const) {
+      const fields = seen(page.getByRole(role));
+      const count = await fields.count();
+      for (let i = 0; i < count; i++) {
+        const label = bareLabel(await accessibleName(fields.nth(i)));
+        const street = /^street address/i.test(label) ? streets++ : -1;
+        const said = (await saidAfterField(fields.nth(i))).filter((line) => matches(MESSAGE, line));
+        if (!said.length) continue;
+        const name = street > 0 ? "second address line" : proposalFieldName(label);
+        for (const line of said) {
+          const entry = `${name}: ${line}`;
+          if (!found.includes(entry)) found.push(entry);
+        }
+      }
+    }
+    return found;
+  }
+
+  // A proposal form's field label as the contract names that field.
+  function proposalFieldName(label: string): string {
+    const named: [RegExp, string][] = [
+      [/^legal name/i, "legal name"],
+      [/^email/i, "email address"],
+      [/^phone/i, "phone"],
+      [/^street address/i, "street address"],
+      [/^city/i, "city"],
+      [/^(province|state)/i, "province"],
+      [/^(postal|zip)/i, "postal code"],
+      [/^country/i, "country"],
+      [/^additional comments?/i, "additional comments"],
+      [/^proposal/i, "proposal text"],
+      [/^organization/i, "organization"],
+    ];
+    for (const [pattern, name] of named) if (pattern.test(label)) return name;
+    return label.toLowerCase();
+  }
+
+  // The words a form draws directly after one field, up to where another field begins.
+  async function saidAfterField(control: Locator): Promise<string[]> {
+    const said = await control
+      .evaluate((box) => {
+        const isField = (node: Element): boolean =>
+          (node instanceof HTMLInputElement && node.type !== "hidden") ||
+          node instanceof HTMLTextAreaElement ||
+          node instanceof HTMLSelectElement;
+        const fieldsIn = (node: Element): number =>
+          (isField(node) ? 1 : 0) + Array.from(node.children).reduce((sum, child) => sum + fieldsIn(child), 0);
+        const words: string[] = [];
+        let node: Element = box;
+        for (let level = 0; level < 5; level++) {
+          for (let next = node.nextElementSibling; next; next = next.nextElementSibling) {
+            if (fieldsIn(next)) continue;
+            const text = ((next as HTMLElement).innerText ?? "").trim();
+            if (text) words.push(...text.split("\n"));
+          }
+          const parent: Element | null = node.parentElement;
+          if (!parent || fieldsIn(parent) > 1) break;
+          node = parent;
+        }
+        return words;
+      })
+      .catch(() => [] as string[]);
+    return said.map((words) => words.trim()).filter(Boolean);
   }
 
   // Every alert the screen is showing, whole and wherever it is drawn — the outcome notices
@@ -530,20 +580,49 @@ export default function create(
     return (await dialog().count()) ? (await dialog().first().innerText()).trim() : "";
   }
 
-  // A dialog left open by an earlier action is put away without choosing anything in it.
+  // A dialog slides in over a moment after it is raised, and a control in it pressed while it
+  // is still arriving is ignored: the dialog simply stays open. So once one is up, the page is
+  // given that moment before anything in it is pressed.
+  const DIALOG_ARRIVAL_MS = 400;
+
+  async function dialogUp(timeout = 5000): Promise<boolean> {
+    await dialog().first().waitFor({ state: "visible", timeout }).catch(() => undefined);
+    if (!(await dialog().count())) return false;
+    await page.waitForTimeout(DIALOG_ARRIVAL_MS);
+    return true;
+  }
+
+  // A dialog left open by an earlier action is put away without choosing anything in it. A
+  // close pressed while it was still arriving is ignored, so it is tried more than once.
   async function dismissDialog(): Promise<void> {
-    if (!(await dialog().count())) return;
-    await page.keyboard.press("Escape").catch(() => undefined);
-    await dialog().first().waitFor({ state: "hidden", timeout: 2000 }).catch(() => undefined);
-    for (const name of ["Cancel", "Close", "×"]) {
-      if (!(await dialog().count())) break;
-      const control = await findControl(dialog().first(), name);
-      if (control) {
-        await control.click().catch(() => undefined);
-        await dialog().first().waitFor({ state: "hidden", timeout: 5000 }).catch(() => undefined);
+    for (let attempt = 0; attempt < 3 && (await dialog().count()); attempt++) {
+      await page.waitForTimeout(DIALOG_ARRIVAL_MS);
+      await page.keyboard.press("Escape").catch(() => undefined);
+      await dialog().first().waitFor({ state: "hidden", timeout: 1500 }).catch(() => undefined);
+      for (const name of ["Cancel", "Close", "×"]) {
+        if (!(await dialog().count())) break;
+        const control = await findControl(dialog().first(), name);
+        if (control) {
+          await control.click().catch(() => undefined);
+          await dialog().first().waitFor({ state: "hidden", timeout: 3000 }).catch(() => undefined);
+        }
       }
     }
     await settle();
+  }
+
+  // A dialog that must be gone before the form behind it is touched again — a click on the
+  // form while it is up lands on the dialog instead and waits out the test. When it will not
+  // close, that is said at once, naming it.
+  async function mustDismissDialog(where: string): Promise<void> {
+    if (!(await dialog().count())) return;
+    await dismissDialog();
+    if (await dialog().count()) {
+      const title = ((await dialogText()).split("\n")[0] ?? "").trim();
+      throw new Error(
+        `${where} — the "${title}" dialog stayed open over the form after Escape and its own "Cancel" were pressed on ${page.url()}`,
+      );
+    }
   }
 
   // A save's own confirmation left open is confirmed rather than put away, so what was
@@ -563,8 +642,7 @@ export default function create(
   }
 
   async function inDialog(where: string, names: string[]): Promise<void> {
-    await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
-    if (!(await dialog().count())) {
+    if (!(await dialogUp())) {
       throw new Error(`unbound: ${where} — no dialog is open on ${page.url()}`);
     }
     await press(where, names, dialog().first());
@@ -573,8 +651,7 @@ export default function create(
   // Many actions raise a confirmation first; step through it when one appears, and wait for
   // it to close so the next thing pressed is not swallowed by it.
   async function confirmIfAsked(where: string, names: string[]): Promise<void> {
-    await dialog().first().waitFor({ state: "visible", timeout: 2000 }).catch(() => undefined);
-    if (!(await dialog().count())) return;
+    if (!(await dialogUp(2000))) return;
     await press(where, names, dialog().first());
     await dialog().first().waitFor({ state: "hidden", timeout: 15000 }).catch(() => undefined);
     await settle();
@@ -582,8 +659,7 @@ export default function create(
 
   // A confirmation the action cannot finish without ("Save Changes?", "Publish Addendum?").
   async function confirmDialog(where: string, names: string[]): Promise<void> {
-    await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
-    if (!(await dialog().count())) {
+    if (!(await dialogUp())) {
       throw new Error(`${where} — no confirmation opened on ${page.url()}`);
     }
     await press(where, names, dialog().first());
@@ -696,10 +772,16 @@ export default function create(
       // bar ("If this proposal is screened into the Team Scenario, it can be scored once the
       // opportunity reaches the Team Scenario too." — seen as the administrator on the seeded
       // closed opportunities, still at question evaluation). That is the page refusing: nothing
-      // is scored, and the notice is left on the tab for wrong_stage_error to read.
-      if (await wrongStage()) return;
+      // is scored, and the notice is left on the tab for wrong_stage_error to read — and kept,
+      // in case the reader has moved off the tab by the time it is asked.
+      const notice = await wrongStage();
+      if (notice) {
+        stageRefusal = { proposal: new URL(page.url()).pathname, notice };
+        return;
+      }
       throw error;
     }
+    stageRefusal = null;
     await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
     if (!(await dialog().count())) {
       throw new Error(`unbound: ${where} — "Enter Score" opened no dialog on ${page.url()}`);
@@ -715,6 +797,18 @@ export default function create(
     await press(where, ["Submit Score"], dialog().first());
     await dialog().first().waitFor({ state: "hidden", timeout: 15000 }).catch(() => undefined);
     await settle();
+  }
+
+  // The notice the last refused score met, with the proposal it was on.
+  let stageRefusal: { proposal: string; notice: string } | null = null;
+
+  // wrong_stage_error: what the screen says now, else what the score just refused on this
+  // same proposal was told.
+  async function wrongStageError(): Promise<string> {
+    await ready();
+    const shown = await wrongStage();
+    if (shown) return shown;
+    return stageRefusal && stageRefusal.proposal === new URL(page.url()).pathname ? stageRefusal.notice : "";
   }
 
   // What a stage's tab says while the opportunity has not reached that stage, in its prose.
@@ -825,7 +919,7 @@ export default function create(
     if (!current) return false;
     if (matches(pattern, (await current.innerText()).trim())) return true;
     // A dialog still open over the form (the terms dialog) would take the click.
-    await dismissDialog();
+    await mustDismissDialog(`going to the step matching ${pattern}`);
     await current.click();
     const choice = seen(page.getByText(pattern));
     const count = await choice.count();
@@ -3407,6 +3501,8 @@ export default function create(
   // form draws a field's message only once the field has been left, so each field is
   // entered and left in turn first — its value untouched — when no step shows one yet.
   let refusalShown: string[] = [];
+  // The same refusal field by field ("email address: Please enter a valid email.").
+  let refusalFieldsShown: string[] = [];
 
   async function touchFieldsHere(): Promise<void> {
     for (const role of ["textbox", "spinbutton"] as const) {
@@ -3424,6 +3520,7 @@ export default function create(
 
   async function surfaceRefusal(): Promise<void> {
     const found: string[] = [];
+    const byField: string[] = [];
     const gather = async (): Promise<void> => {
       for (const line of [
         ...(await messages()).split("\n"),
@@ -3431,6 +3528,7 @@ export default function create(
       ]) {
         if (line && !found.includes(line)) found.push(line);
       }
+      for (const entry of await fieldErrorsByLabel()) if (!byField.includes(entry)) byField.push(entry);
     };
     if (await currentStep()) {
       await walkSteps(gather);
@@ -3448,6 +3546,7 @@ export default function create(
       }
     }
     refusalShown = found;
+    refusalFieldsShown = byField;
     // The form is left on the first step showing the refusal, for the reader.
     await toStepShowingMessages();
   }
@@ -3466,8 +3565,7 @@ export default function create(
       return false;
     }
     await press(where, ["Submit", "Submit Proposal"], navBar());
-    await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
-    if (!(await dialog().count())) {
+    if (!(await dialogUp())) {
       throw new Error(`unbound: ${where} — submitting raised no terms dialog on ${page.url()}`);
     }
     for (const label of acceptedTerms) {
@@ -3479,14 +3577,19 @@ export default function create(
   }
 
   // The terms dialog put away with its own "Cancel", and waited out, so nothing is left over
-  // the form. Whatever was agreed to is remembered and ticked again when it next opens.
+  // the form — its steps, its "Save Draft" — for the next action to click into. Whatever was
+  // agreed to is remembered and ticked again when it next opens. A "Cancel" pressed while the
+  // dialog was still arriving leaves it open, so the close is checked and tried again, and a
+  // dialog that will not go is reported here rather than as a later click timing out.
   async function closeTerms(where: string): Promise<void> {
-    if (!(await dialog().count())) return;
-    if (await findControl(dialog().first(), "Cancel")) {
-      await press(where, ["Cancel"], dialog().first());
-      await dialog().first().waitFor({ state: "hidden", timeout: 5000 }).catch(() => undefined);
+    for (let attempt = 0; attempt < 3 && (await dialog().count()); attempt++) {
+      await page.waitForTimeout(DIALOG_ARRIVAL_MS);
+      const cancel = await findControl(dialog().first(), "Cancel");
+      if (!cancel) break;
+      await cancel.click().catch(() => undefined);
+      await dialog().first().waitFor({ state: "hidden", timeout: 3000 }).catch(() => undefined);
     }
-    await dismissDialog();
+    await mustDismissDialog(where);
   }
 
   function proposalCreate(where: string, route: string, programme: string) {
@@ -3498,7 +3601,8 @@ export default function create(
       // New values may be what the form was waiting for, so it is asked again.
       termsRefused = false;
       refusalShown = [];
-      if (await dialog().count()) await inDialog(`${where}.${member}`, ["Cancel"]);
+      refusalFieldsShown = [];
+      await closeTerms(`${where}.${member}`);
       await ready();
       await fillForm(`${where}.${member}`, input, { skip: ATTACHMENT_KEYS });
       if (hasFiles(input)) await addAttachment(`${where}.${member}`, input);
@@ -3587,7 +3691,7 @@ export default function create(
     return "";
   }
 
-  const proposalCwuCreate: S.ProposalCwuCreatePage = {
+  const proposalCwuCreate: Open<S.ProposalCwuCreatePage> = {
     ...proposalCreate(
       "proposal-cwu-create",
       "/opportunities/code-with-us/:opportunityId/proposals/create",
@@ -3630,6 +3734,26 @@ export default function create(
       await settle();
     },
     cancel: () => press("proposal-cwu-create.cancel", ["Cancel"], navBar()),
+    // Every message the form draws against a field, on every step, as "<field>: <message>",
+    // with what it drew when it last refused the submit (a field's message is drawn only once
+    // the field has been left). Seen on the Proponent step as an individual: "email address:
+    // Please enter a valid email." A form showing none reads as nothing.
+    fieldErrorsByField: async () => {
+      await ready();
+      if (await dialog().count()) await closeTerms("proposal-cwu-create.field_errors_by_field");
+      const found: string[] = [];
+      const gather = async (): Promise<void> => {
+        for (const entry of await fieldErrorsByLabel()) if (!found.includes(entry)) found.push(entry);
+      };
+      if (await currentStep()) {
+        await walkSteps(gather);
+        await toStepShowingMessages();
+      } else {
+        await gather();
+      }
+      for (const entry of refusalFieldsShown) if (!found.includes(entry)) found.push(entry);
+      return found.join("\n");
+    },
     opportunitySummary: () => headerText(),
     async termsModal() {
       if (!(await openTermsDialog("proposal-cwu-create.terms_modal"))) {
@@ -3913,9 +4037,9 @@ export default function create(
       }
     }
     const names = typeof input === "string" && phaseGiven ? [] : await teamMemberNames(where, input);
-    await adders.nth(Math.min(at, adderCount - 1)).click();
-    await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
-    if (!(await dialog().count())) {
+    lastSwuPhaseAt = Math.min(at, adderCount - 1);
+    await adders.nth(lastSwuPhaseAt).click();
+    if (!(await dialogUp())) {
       throw new Error(`unbound: ${where} — "Add Team Member(s)" opened no dialog on ${page.url()}`);
     }
     for (const name of names) {
@@ -3959,7 +4083,86 @@ export default function create(
     }
   }
 
-  const proposalSwuCreate: S.ProposalSwuCreatePage = {
+  // The phase a team member was last added to, whose choice team_member_choices reads.
+  let lastSwuPhaseAt = 0;
+
+  // Whether the form's "Organization*" chooser has an organization picked; a form showing no
+  // such chooser is taken as having one.
+  async function organizationChosen(): Promise<boolean> {
+    const box = seen(page.getByRole("combobox", { name: labelled("Organization") })).first();
+    await box.waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+    if (!(await box.count())) return true;
+    return !(await chooserIsEmpty(box));
+  }
+
+  // The people a phase's "Add Team Member(s)" dialog offers, one per line, by name alone. The
+  // dialog lists the chosen organization's members under its note and leaves out whoever is
+  // already on that phase; a member still to answer their invitation carries "Pending" on
+  // the line below their name (seen as an organization member of Northern Pines on a
+  // published Sprint With Us opportunity: "Blake Placeholder | Charlie Placeholder | Dana
+  // Placeholder | Quinn Placeholder | Pending", then without Blake once Blake was added). The
+  // dialog is put away without adding anybody. With no organization chosen the step offers
+  // no choice at all, which reads as nothing.
+  async function swuMemberChoices(where: string): Promise<string> {
+    await ready();
+    if (!(await goToStep("Team"))) await advanceTo(where, "Organization");
+    if (!(await organizationChosen())) return "";
+    const adders = seen(page.getByText("Add Team Member(s)", { exact: true }));
+    await adders.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+    const count = await adders.count();
+    if (!count) {
+      nothing(`${where} — reached the Team step with an organization chosen, but no "Add Team Member(s)" is on it at ${page.url()}`);
+    }
+    await adders.nth(Math.min(lastSwuPhaseAt, count - 1)).click();
+    if (!(await dialogUp())) nothing(`${where} — "Add Team Member(s)" opened no dialog on ${page.url()}`);
+    const box = dialog().first();
+    const standing = new Set<string>(["Add Team Member(s)", "Cancel"]);
+    for (const block of [
+      ...(await box.getByRole("paragraph").allInnerTexts()),
+      ...(await box.getByRole("heading").allInnerTexts()),
+    ]) {
+      for (const line of block.split("\n")) standing.add(line.trim());
+    }
+    const names: string[] = [];
+    for (const line of (await box.innerText()).split("\n").map((each) => each.trim())) {
+      if (!line || standing.has(line) || /^pending$/i.test(line)) continue;
+      names.push(line);
+    }
+    await closeTerms(where);
+    return names.join("\n");
+  }
+
+  // The resource a team member was last named for, whose choice team_member_choices reads
+  // when every resource already has somebody.
+  let lastTwuResourceAt = 0;
+
+  // The people a "Resource Name*" chooser offers, one per line: the first chooser still empty,
+  // else the one last filled. It lists the chosen organization's confirmed members (seen as
+  // the owner of Northern Pines: "Blake Placeholder | Charlie Placeholder | Dana Placeholder",
+  // the pending invitee not among them). The list is closed without picking anybody.
+  async function twuMemberChoices(where: string): Promise<string> {
+    await ready();
+    if (!(await goToStep("Team Members"))) await advanceTo(where, "Organization");
+    if (!(await organizationChosen())) return "";
+    const choosers = seen(page.getByRole("combobox", { name: labelled("Resource Name") }));
+    await choosers.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+    const count = await choosers.count();
+    if (!count) {
+      nothing(`${where} — reached "Team Members" with an organization chosen, but no "Resource Name" chooser is on it at ${page.url()}`);
+    }
+    let which = -1;
+    for (let i = 0; i < count && which < 0; i++) if (await chooserIsEmpty(choosers.nth(i))) which = i;
+    if (which < 0) which = Math.min(lastTwuResourceAt, count - 1);
+    await choosers.nth(which).click();
+    const options = seen(page.getByRole("option"));
+    await options.first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
+    const offered = (await options.allInnerTexts()).map((each) => each.trim()).filter(Boolean);
+    await page.keyboard.press("Escape").catch(() => undefined);
+    await settle();
+    return offered.join("\n");
+  }
+
+  const proposalSwuCreate: Open<S.ProposalSwuCreatePage> = {
     ...proposalCreate(
       "proposal-swu-create",
       "/opportunities/sprint-with-us/:opportunityId/proposals/create",
@@ -4001,6 +4204,7 @@ export default function create(
     budgetExceededError: () => messages(/budget|exceed/i),
     unqualifiedOrganizationNotice: () => linesMatching(/qualif/i),
     pendingTeamMember: () => linesMatching(/pending/i),
+    teamMemberChoices: () => swuMemberChoices("proposal-swu-create.team_member_choices"),
   };
 
   // "2. Team Members" shows, once an organization is chosen, one "Resource N" per resource
@@ -4047,6 +4251,7 @@ export default function create(
       throw new Error(`unbound: ${where} — reached "Team Members" with an organization chosen, but no "Resource Name" chooser is on it at ${page.url()}`);
     }
     const which = Math.min(await twuResourceIndex(input), count - 1);
+    lastTwuResourceAt = which;
     const names = await teamMemberNames(where, input);
     const name = names[0] ?? "";
     const chooser = choosers.nth(which);
@@ -4093,7 +4298,7 @@ export default function create(
     await fillTwuRate(where, await twuResourceIndex(input), rate);
   }
 
-  const proposalTwuCreate: S.ProposalTwuCreatePage = {
+  const proposalTwuCreate: Open<S.ProposalTwuCreatePage> = {
     ...proposalCreate(
       "proposal-twu-create",
       "/opportunities/team-with-us/:opportunityId/proposals/create",
@@ -4108,6 +4313,7 @@ export default function create(
       answerProposalQuestion("proposal-twu-create.answer_resource_question", ["Questions", "Resource Questions"], input),
     serviceAreaError: () => messages(/service area/i),
     unqualifiedOrganizationNotice: () => linesMatching(/qualif/i),
+    teamMemberChoices: () => twuMemberChoices("proposal-twu-create.team_member_choices"),
   };
 
   // A proposal's form is put into editing from whichever control its screen offers: "Edit" in
@@ -4182,8 +4388,7 @@ export default function create(
   // A terms dialog, when one opens: every box in it ticked, then its own confirming control
   // pressed, and the dialog waited out.
   async function agreeAndConfirm(where: string, names: string[]): Promise<void> {
-    await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
-    if (!(await dialog().count())) return;
+    if (!(await dialogUp())) return;
     const boxes = seen(dialog().first().getByRole("checkbox"));
     const count = await boxes.count();
     for (let i = 0; i < count; i++) {
@@ -4235,6 +4440,50 @@ export default function create(
     if (hasFiles(input)) await addAttachment(where, input);
   }
 
+  // What the screen said when a proposal was last submitted from its management page, and on
+  // which proposal. A refused submission raises the notice "Unable to Submit Proposal — Your
+  // Team With Us proposal could not be submitted. Please fix any errors in the form and try
+  // again." (seen as the owner of Northern Pines submitting a draft Team With Us proposal
+  // naming a member whose invitation is still pending); it does not repeat the service's
+  // reason. The notice fades, so it is taken as soon as it shows.
+  let submission: { proposal: string; notice: string[] } | null = null;
+
+  const REFUSED_SUBMISSION = /unable|could not|cannot|can't|not be submitted|fail|error|invalid|please fix/i;
+
+  async function noteSubmission(): Promise<void> {
+    const proposal = new URL(page.url()).pathname;
+    const notice: string[] = [];
+    const deadline = Date.now() + 5000;
+    for (;;) {
+      const alerts = await everyAlert();
+      for (const words of alerts) {
+        const line = words.replace(/\s*\n\s*/g, " — ");
+        if (matches(REFUSED_SUBMISSION, words) && !notice.includes(line)) notice.push(line);
+      }
+      // Any notice at all — the refusal, or "Proposal Submitted" — is the outcome.
+      if (alerts.length || Date.now() >= deadline) break;
+      await page.waitForTimeout(250);
+    }
+    submission = { proposal, notice };
+  }
+
+  // The refusal's notice, then any message the form shows against a field on any of its
+  // steps. A submission that went through, or a proposal not submitted from this screen,
+  // shows neither and reads as nothing.
+  async function submissionRefusal(): Promise<string> {
+    await ready();
+    const found: string[] = [];
+    const proposal = new URL(page.url()).pathname;
+    if (submission && submission.proposal === proposal) found.push(...submission.notice);
+    for (const words of await everyAlert(REFUSED_SUBMISSION)) {
+      const line = words.replace(/\s*\n\s*/g, " — ");
+      if (!found.includes(line)) found.push(line);
+    }
+    if (!found.length) return "";
+    for (const line of (await stepMessages()).split("\n")) if (line && !found.includes(line)) found.push(line);
+    return found.join("\n");
+  }
+
   // A proposal's own management page: a tab, a header of standing facts, and an Actions
   // menu whose contents change with the proposal's state.
   function proposalEdit(where: string, route: string, teamStep: string) {
@@ -4246,15 +4495,20 @@ export default function create(
         await saveProposalChanges(`${where}.save_changes`);
       },
       saveChangesAndSubmit: async () => {
+        submission = null;
         await press(`${where}.save_changes_and_submit`, ["Submit Proposal"], navBar());
         await agreeAndConfirm(`${where}.save_changes_and_submit`, ["Submit Proposal", "Submit"]);
+        await noteSubmission();
       },
       // "Submit" raises "Review Terms and Conditions", whose "Submit Proposal" stays disabled
       // until each of its boxes is ticked.
       submitProposal: async () => {
+        submission = null;
         await fromBarOrActions(`${where}.submit_proposal`, ["Submit", "Submit Proposal"]);
         await agreeAndConfirm(`${where}.submit_proposal`, ["Submit Proposal", "Submit"]);
+        await noteSubmission();
       },
+      submissionRefusal: () => submissionRefusal(),
       // A vendor's own proposal carries "Withdraw" (or "Delete", for a draft) straight in
       // the top bar, beside "Edit"; seen as the competing vendor on the seeded open Sprint With
       // Us proposal, confirmed in "Withdraw ... Proposal?" with "Withdraw Proposal".
@@ -4419,7 +4673,7 @@ export default function create(
     codeChallengeTab: () => tabContent(["Code Challenge"]),
     teamScenarioTab: () => tabContent(["Team Scenario"]),
     historyTab: () => historyRows(),
-    wrongStageError: () => wrongStage(),
+    wrongStageError: () => wrongStageError(),
     questionsScore: () =>
       stageFigure(["Team Questions"], ["Team Questions Score", "Questions Score", "Team Questions"]),
     challengeScore: () =>
@@ -4458,7 +4712,7 @@ export default function create(
     resourceQuestionsTab: () => tabContent(["Resource Questions", "Resource Questions (Eval)"]),
     challengeTab: () => tabContent(["Interview/Challenge", "Challenge"]),
     historyTab: () => historyRows(),
-    wrongStageError: () => wrongStage(),
+    wrongStageError: () => wrongStageError(),
     questionsScore: () =>
       stageFigure(["Resource Questions"], ["Resource Questions Score", "Questions Score", "Resource Questions"]),
     challengeScore: () =>
@@ -4484,12 +4738,14 @@ export default function create(
     const tables = seen(page.getByRole("table"));
     await tables.first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
     let found = "";
+    let priced = false;
     const tableCount = await tables.count();
     for (let t = 0; t < tableCount && !found; t++) {
       const table = tables.nth(t);
       const headers = (await table.getByRole("columnheader").allInnerTexts()).map((h) => h.trim().toLowerCase());
       const column = headers.findIndex((h) => h === "price" || h === "price score");
       if (column < 0) continue;
+      priced = true;
       const rows = table.getByRole("row");
       const rowCount = await rows.count();
       for (let r = 0; r < rowCount && !found; r++) {
@@ -4504,9 +4760,18 @@ export default function create(
         if ((await cells.count()) > column) found = (await cells.nth(column).innerText()).trim();
       }
     }
+    // A reader not shown the Proposals table (the vendor gets "Not Found" there) is shown the
+    // price on the exported proposal instead, under "Scores": "Price" over its figure, or "-"
+    // while it is withheld (seen as the owner of Northern Pines on its own proposal to the
+    // seeded Sprint With Us opportunity in processing).
+    if (!priced) {
+      await page.goto(`${baseURL}/opportunities/${programme}/${opportunityId()}/proposals/${proposal}/export`);
+      await ready();
+      if (!(await notFoundShown())) found = await valueAfter(["Price", "Price Score"]);
+    }
     await page.goto(back);
     await ready();
-    return found === "—" ? "" : found;
+    return /^[—–-]$/.test(found) ? "" : found;
   }
 
   // The "Total Score" card sits in the header of the Proposal Details tab alone; a stage's
@@ -8448,6 +8713,396 @@ export default function create(
     },
   };
 
+  // ---------------------------------------------------------------- proposals by request
+
+  // A value an input carries under any of several names, however the test spells them
+  // ("proposalText", "proposal_text", "Proposal text"), looked for at the top of the input and
+  // then inside a group it names ({ individual: { city } }, { proponent: { ... } }).
+  function given(input: unknown, names: string[], within: string[] = []): unknown {
+    if (!input || typeof input !== "object" || Array.isArray(input)) return undefined;
+    const record = input as Record<string, unknown>;
+    const wanted = names.map(squash);
+    for (const [key, value] of Object.entries(record)) {
+      if (wanted.includes(squash(key)) && value !== undefined) return value;
+    }
+    for (const group of within) {
+      for (const [key, value] of Object.entries(record)) {
+        if (squash(key) !== squash(group) || !value || typeof value !== "object" || Array.isArray(value)) continue;
+        const inner = given(value, names);
+        if (inner !== undefined) return inner;
+      }
+    }
+    return undefined;
+  }
+
+  // Text exactly as given: a value left out is sent blank, never made up.
+  function givenText(input: unknown, names: string[], within: string[] = []): string {
+    const value = given(input, names, within);
+    if (value === undefined || value === null) return "";
+    // A group under one of the names ({ address: { street, city } }) holds the value inside it.
+    if (typeof value === "object" && !Array.isArray(value)) return givenText(value, names);
+    return Array.isArray(value) ? asText(value) : String(value);
+  }
+
+  // A seeded record named by its handle ("qualified", "organizations.qualified"), by its
+  // identifier, or handed over whole ({ id }), as its identifier.
+  function seededId(value: unknown, ...groups: string[]): string {
+    if (value === undefined || value === null) return "";
+    if (typeof value === "object" && !Array.isArray(value)) {
+      const record = value as Record<string, unknown>;
+      if (typeof record.id === "string" && record.id) return record.id;
+      return "";
+    }
+    const named = String(value).trim();
+    const table = seed as unknown as Record<string, Record<string, { id?: unknown }> | undefined>;
+    for (const group of groups) {
+      const handle = named.startsWith(`${group}.`) ? named.slice(group.length + 1) : named;
+      const found = table[group]?.[handle];
+      if (found && typeof found === "object" && found.id !== undefined) return String(found.id);
+    }
+    return named;
+  }
+
+  function opportunityGiven(where: string, input: unknown): string {
+    const id = seededId(
+      given(input, ["opportunity", "opportunityId", "opportunityIdentifier", "opportunity_id"]),
+      "opportunities",
+    );
+    if (!id) throw new Error(`${where} — the input names no opportunity (${JSON.stringify(input)})`);
+    return id;
+  }
+
+  // The organization under its own name, else inside a proponent group, else the proponent
+  // itself given as an organization.
+  function organizationGiven(input: unknown): string {
+    const names = ["organization", "organizationId", "organizationIdentifier", "organization_id", "org"];
+    return seededId(
+      given(input, names, ["proponent"]) ?? given(input, ["proponent"]),
+      "organizations",
+      "unassigned_identifiers",
+    );
+  }
+
+  // A person named by seed handle ("users.teamCandidatePending"), persona, address or
+  // identifier, or handed over whole, as their identifier; a name the seed does not know is
+  // sent as given, for the service to answer.
+  function memberId(value: unknown): string {
+    if (typeof value === "string") {
+      const handle = value.replace(/^users\./, "");
+      return userIdFor(handle) || value;
+    }
+    return userIdOf(value);
+  }
+
+  // The service's refusal, one entry per message with where it is reported, in the order the
+  // service gives them. A refusal body is a record of fields, each holding its messages, or a
+  // record or list of further fields: a proponent's own fields sit under "proponent" as its
+  // "value", a team member's under their position in "team", a phase's under its name.
+  type Refused = { where: string; message: string };
+
+  const REQUEST_FIELD_NAMES: Record<string, string> = {
+    legalname: "legal name",
+    email: "email address",
+    phone: "phone",
+    street1: "street address",
+    street2: "second address line",
+    city: "city",
+    region: "province",
+    mailcode: "postal code",
+    country: "country",
+    proposaltext: "proposal text",
+    additionalcomment: "additional comments",
+    organization: "organization",
+    opportunity: "opportunity",
+    inceptionphase: "inception phase",
+    prototypephase: "prototype phase",
+    implementationphase: "implementation phase",
+    teamquestionresponses: "team question responses",
+    resourcequestionresponses: "resource question responses",
+    hourlyrate: "hourly rate",
+    scrummaster: "scrum master",
+    proposedcost: "proposed cost",
+  };
+
+  function fieldNameOf(key: string): string {
+    return REQUEST_FIELD_NAMES[squash(key)] ?? key.replace(/([a-z0-9])([A-Z])/g, "$1 $2").toLowerCase();
+  }
+
+  function refusedEntries(body: unknown, path: string[] = [], out: Refused[] = []): Refused[] {
+    if (typeof body === "string") {
+      out.push({ where: path.join(" "), message: body });
+      return out;
+    }
+    if (Array.isArray(body)) {
+      const allText = body.every((each) => typeof each === "string");
+      body.forEach((each, i) => refusedEntries(each, allText ? path : [...path, `#${i + 1}`], out));
+      return out;
+    }
+    if (!body || typeof body !== "object") return out;
+    const record = body as Record<string, unknown>;
+    // A proponent given as { tag, value }: an organization's messages are the organization's,
+    // an individual's are reported against each of the individual's own fields.
+    if (typeof record.tag === "string" && "value" in record) {
+      if (record.tag === "organization") return refusedEntries(record.value, ["organization"], out);
+      return refusedEntries(record.value, [], out);
+    }
+    for (const [key, value] of Object.entries(record)) {
+      if (key === "proposalId" || (typeof value !== "object" && !Array.isArray(value))) continue;
+      const named = key === "errors" || key === "proponent" ? path : [...path, fieldNameOf(key)];
+      refusedEntries(value, named, out);
+    }
+    return out;
+  }
+
+  function lastRefusal(what: string): Refused[] | null {
+    const got = answer(what);
+    if (got.status < 400) return null;
+    let body: unknown;
+    try {
+      body = JSON.parse(got.body);
+    } catch {
+      return got.body.trim() ? [{ where: "", message: got.body.trim() }] : [];
+    }
+    return refusedEntries(body);
+  }
+
+  // The readers every proposal request shares: the proposal the service answered with, or the
+  // refusal it gave. Asked before any request was made there is nothing to read.
+  // The service answers a proposal it made with 201; a refusal carries no proposal.
+  function createdField(what: string, key: string): string {
+    const got = answer(what);
+    if (got.status >= 300) return "";
+    const value = answered()[key];
+    return value === undefined || value === null ? "" : String(value);
+  }
+
+  function proposalRequestReaders(where: string) {
+    return {
+      requestAccepted: async () => accepted(`${where}.request_accepted`),
+      proposalIdentifier: async () => createdField(`${where}.proposal_identifier`, "id"),
+      proposalStatus: async () => createdField(`${where}.proposal_status`, "status"),
+      refusalByField: async () =>
+        (lastRefusal(`${where}.refusal_by_field`) ?? [])
+          .map((entry) => (entry.where ? `${entry.where}: ${entry.message}` : entry.message))
+          .join("\n"),
+      refusalMessages: async () =>
+        (lastRefusal(`${where}.refusal_messages`) ?? []).map((entry) => entry.message).join("\n"),
+      refusalStatus: async () => {
+        const got = answer(`${where}.refusal_status`);
+        return got.status >= 400 ? String(got.status) : "";
+      },
+    };
+  }
+
+  // A Code With Us proposal sent straight to the service as the signed-in vendor, the way its
+  // form sends one: { opportunity, proposalText, additionalComment, proponent: { tag, value },
+  // attachments, status }. As a vendor on the seeded published opportunity, an organization the
+  // vendor has no membership of was taken (201), and an organization identifier naming nothing
+  // came back as a blank individual's refusal (400, "Legal Name must be between 1 and 100
+  // characters long." and the rest, under proponent.value).
+  const CWU_REQUEST = "proposal-cwu-request";
+
+  async function sendCwuProposal(where: string, input: unknown, proponent: unknown): Promise<void> {
+    await send(where, "POST", `${baseURL}/api/proposals/code-with-us`, {
+      opportunity: opportunityGiven(where, input),
+      proposalText: givenText(input, ["proposalText", "proposal", "text"]),
+      additionalComment: givenText(input, ["additionalComments", "additionalComment", "comments", "comment"]),
+      proponent,
+      attachments: [],
+      status: "SUBMITTED",
+    });
+  }
+
+  const proposalCwuRequest: PageOf<"proposalCwuRequest"> = {
+    // The request needs no screen; opening it only says which address it goes to.
+    open: async () => undefined,
+    async submitWithOrganizationProponent(input) {
+      const where = `${CWU_REQUEST}.submit_with_organization_proponent`;
+      const organization = organizationGiven(input);
+      if (!organization) throw new Error(`${where} — the input names no organization (${JSON.stringify(input)})`);
+      await sendCwuProposal(where, input, { tag: "organization", value: organization });
+    },
+    async submitWithIndividualProponent(input) {
+      const where = `${CWU_REQUEST}.submit_with_individual_proponent`;
+      const within = ["individual", "proponent", "details", "contact", "address"];
+      const text = (...names: string[]): string => givenText(input, names, within);
+      await sendCwuProposal(where, input, {
+        tag: "individual",
+        value: {
+          legalName: text("legalName", "legal_name", "name"),
+          email: text("email", "emailAddress", "email_address"),
+          phone: text("phone", "phoneNumber", "phone_number"),
+          street1: text("streetAddress", "street1", "street", "address", "addressLine1", "streetAddress1", "street_address"),
+          street2: text("secondAddressLine", "street2", "addressLine2", "streetAddress2", "second_address_line"),
+          city: text("city"),
+          region: text("province", "region", "state", "provinceState"),
+          mailCode: text("postalCode", "mailCode", "postal_code", "zip", "zipCode", "postal"),
+          country: text("country"),
+        },
+      });
+    },
+    ...proposalRequestReaders(CWU_REQUEST),
+  };
+
+  // A Sprint With Us or Team With Us proposal sent straight to the service, the way their forms
+  // send one. Team With Us: { opportunity, organization, team: [{ member, resource,
+  // hourlyRate }], resourceQuestionResponses: [{ order, response }], attachments, status }.
+  // Sprint With Us: { opportunity, organization, inceptionPhase?, prototypePhase?,
+  // implementationPhase: { members: [{ member, scrumMaster }], proposedCost },
+  // teamQuestionResponses, references, attachments, status }. Checked as the owner of Northern
+  // Pines on a published opportunity of each programme: a pending, a former and an outside
+  // member each came back 400 "User is not an active member of the organization." against
+  // their place in the team; a Team With Us member named twice came back "Please select
+  // unique team members."; a Sprint With Us phase naming one person twice came back 503
+  // {"database":["Database error."]}.
+  const TEAM_REQUEST = "proposal-team-request";
+  let requestProgram = "";
+
+  function listGiven(input: unknown, names: string[]): unknown[] {
+    const value = given(input, names);
+    if (value === undefined || value === null) return [];
+    return Array.isArray(value) ? value : [value];
+  }
+
+  // Answers by order: a list of answers, or of { order, response }. A question the input does
+  // not answer is answered here, so the request is refused, if at all, for what the test gave.
+  function answersFor(input: unknown, questions: unknown): { order: number; response: string }[] {
+    const asked = Array.isArray(questions) ? questions.length : 0;
+    const answers = listGiven(input, [
+      "answers", "responses", "questionAnswers", "resourceQuestionResponses", "teamQuestionResponses",
+      "resourceQuestions", "teamQuestions", "answer",
+    ]).map((each, i) => {
+      if (each && typeof each === "object") {
+        const record = each as Record<string, unknown>;
+        const order = Number(record.order ?? record.index ?? i);
+        return { order: Number.isFinite(order) ? order : i, response: givenText(record, ["response", "answer", "text"]) };
+      }
+      return { order: i, response: asText(each) };
+    });
+    for (let order = 0; order < asked; order++) {
+      if (!answers.some((each) => each.order === order)) {
+        answers.push({ order, response: "Answered by the acceptance adapter so the proposal is complete." });
+      }
+    }
+    return answers.sort((a, b) => a.order - b.order);
+  }
+
+  async function teamProposalBody(where: string, program: string, input: unknown): Promise<Record<string, unknown>> {
+    const opportunity = opportunityGiven(where, input);
+    const organization = organizationGiven(input);
+    const read = await peek(`${baseURL}/api/opportunities/${program}/${opportunity}`);
+    const record =
+      read.status === 200 && read.json && typeof read.json === "object" ? (read.json as Record<string, unknown>) : {};
+    const body: Record<string, unknown> = { opportunity, organization, attachments: [], status: "SUBMITTED" };
+    if (program === "team-with-us") {
+      const resources = (Array.isArray(record.resources) ? record.resources : []) as Record<string, unknown>[];
+      if (!resources.length) {
+        throw new Error(`${where} — the opportunity ${opportunity} answered ${read.status} with no resources to name a team for`);
+      }
+      // Each resource by its service area as the opportunity lists it ("FULL_STACK_DEVELOPER" or
+      // "Full Stack Developer"), by its position, or the first when none is given.
+      const resourceFor = (value: unknown): string => {
+        if (value === undefined || value === null || value === "") return String(resources[0].id);
+        const wanted = squash(String(value));
+        const byArea = resources.find((each) => squash(String(each.serviceArea ?? "")) === wanted);
+        if (byArea) return String(byArea.id);
+        const byId = resources.find((each) => String(each.id) === String(value));
+        if (byId) return String(byId.id);
+        const position = Number(value);
+        if (Number.isInteger(position) && position >= 0 && position < resources.length) return String(resources[position].id);
+        return String(value);
+      };
+      body.team = listGiven(input, ["team", "members", "teamMembers", "resources"]).map((each) => {
+        const member = each && typeof each === "object" && !Array.isArray(each) ? (each as Record<string, unknown>) : { member: each };
+        const rate = given(member, ["hourlyRate", "hourly_rate", "rate"]);
+        return {
+          member: memberId(given(member, ["member", "user", "person", "teamMember"]) ?? member),
+          resource: resourceFor(given(member, ["resource", "serviceArea", "service_area", "area"])),
+          hourlyRate: rate === undefined || rate === null || rate === "" ? 100 : Number(rate),
+        };
+      });
+      body.resourceQuestionResponses = answersFor(input, record.resourceQuestions);
+      return body;
+    }
+    // Sprint With Us: each phase the input names, else the members it gives as the
+    // implementation's, the one phase every opportunity has.
+    const phaseKeys: [string, RegExp][] = [
+      ["inceptionPhase", /inception/i],
+      ["prototypePhase", /prototype|proof/i],
+      ["implementationPhase", /implementation/i],
+    ];
+    const phases = new Map<string, unknown>();
+    const grouped = given(input, ["phases", "team"]);
+    const source: [string, unknown][] = Array.isArray(grouped)
+      ? grouped.map((each, i): [string, unknown] => [givenText(each, ["phase", "name"]) || String(i), each])
+      : grouped && typeof grouped === "object"
+        ? Object.entries(grouped as Record<string, unknown>)
+        : Object.entries((input ?? {}) as Record<string, unknown>);
+    for (const [key, value] of source) {
+      const phase = phaseKeys.find(([, pattern]) => pattern.test(key));
+      if (phase) phases.set(phase[0], value);
+    }
+    if (!phases.size) {
+      const members = given(input, ["members", "teamMembers"]) ?? (Array.isArray(grouped) ? grouped : undefined);
+      if (members !== undefined) phases.set("implementationPhase", { members, proposedCost: given(input, ["proposedCost", "cost"]) });
+    }
+    for (const [key, value] of phases) {
+      const phase = Array.isArray(value) ? { members: value } : ((value ?? {}) as Record<string, unknown>);
+      const listed = listGiven(phase, ["members", "team", "teamMembers"]);
+      const members = listed.map((each) => {
+        const member = each && typeof each === "object" && !Array.isArray(each) ? (each as Record<string, unknown>) : { member: each };
+        const scrum = given(member, ["scrumMaster", "scrum_master", "isScrumMaster"]);
+        return {
+          member: memberId(given(member, ["member", "user", "person", "teamMember"]) ?? member),
+          scrumMaster: scrum === undefined ? undefined : saysYes(scrum),
+        };
+      });
+      // Nobody marked either way: the first named leads, as the form asks one person to.
+      if (members.length && members.every((each) => each.scrumMaster === undefined)) members[0].scrumMaster = true;
+      const cost = given(phase, ["proposedCost", "proposed_cost", "cost", "price"]);
+      body[key] = {
+        members: members.map((each) => ({ member: each.member, scrumMaster: each.scrumMaster === true })),
+        proposedCost: cost === undefined || cost === null || cost === "" ? 1000 : Number(cost),
+      };
+    }
+    body.teamQuestionResponses = answersFor(input, record.teamQuestions);
+    // References the input leaves out are given here, as the form requires them; those it
+    // gives are sent as given.
+    const givenReferences = listGiven(input, ["references"]);
+    const references: unknown[] = givenReferences.length
+      ? givenReferences
+      : [1, 2, 3].map((n) => ({
+          name: `Reference ${n} (acceptance adapter)`,
+          company: "Placeholder Ministry",
+          phone: "250-555-0100",
+          email: `reference.${n}@example.test`,
+        }));
+    body.references = references.map((each, order) => ({
+      name: givenText(each, ["name"]),
+      company: givenText(each, ["company", "organization"]),
+      phone: givenText(each, ["phone", "phoneNumber"]),
+      email: givenText(each, ["email", "emailAddress"]),
+      order,
+    }));
+    return body;
+  }
+
+  const proposalTeamRequest: PageOf<"proposalTeamRequest"> = {
+    open: async (params?: { program?: string }) => {
+      requestProgram = String(params?.program ?? "");
+    },
+    async submitTeamProposal(input) {
+      const where = `${TEAM_REQUEST}.submit_team_proposal`;
+      const program = givenText(input, ["program", "programme"]) || requestProgram;
+      if (program !== "sprint-with-us" && program !== "team-with-us") {
+        throw new Error(`${where} — no programme was opened or given ("sprint-with-us" or "team-with-us"; given: "${program}")`);
+      }
+      const body = await teamProposalBody(where, program, input);
+      await send(where, "POST", `${baseURL}/api/proposals/${program}`, body);
+    },
+    ...proposalRequestReaders(TEAM_REQUEST),
+  };
+
   // Bound first and returned after, so a page only the newer surface declares is not refused
   // as an unknown property when this compiles against an older one.
   const surface = {
@@ -8555,6 +9210,8 @@ export default function create(
     evaluationConsensusRequestTwu,
     evaluationPanelRequest,
     fileAttachByIdentifier,
+    proposalCwuRequest,
+    proposalTeamRequest,
   };
   return surface;
 }
