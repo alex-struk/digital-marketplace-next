@@ -54,3 +54,16 @@ re-address missing-test/R-6.1 to derive-tests: observables.yaml configurations.n
 re-address missing-test/R-6.24 to derive-tests: observables.yaml email.delivery_delay and the surface page mail-delivery-delay (slow_delivery, restore_delivery_speed, delivery_slowed) hold the catcher's replies back, so notifyVendorsSuccess can be read while caught-message-list.message_count is still zero
 
 **Not done or not recovered in this run.** I did not run `sdlc checks` (it needed approval). The four owed `derive-tests-opportunities-stale-4` instructions are about test assertions, which the contract does not touch, so they stay open for the next ruling. Everything that earlier contract runs recorded as unrecoverable is unchanged.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+Question: is contract-v13 the contract the tests will act through? Ruling: approve. Contract-v12 was returned because the Cypress fix was unproven and the generated test files did not match the contract; this run settles both. The journal shows the oracle starting with CYPRESS_INSTALL_BINARY=0 on the migrate service: every yarn install completed without stalling, all 78 migrations ran, four copies started, and a signed-in read of /api/users/00000000-0000-4000-8000-000000000201 returned the seeded users.vendorOne record, which shows the seed loaded and the application reads it, not merely that a page was served. The setting changes only what is downloaded; authentication, the migration and the mail path are untouched, and the comment states the first-build caveat plainly. tests/generated/seed.ts and surface.d.ts now carry the new_opportunity_notices handles and MailDeliveryDelayPage, consistent with the contract approved as v11, and the generated check passes. The contract content is unchanged from v11, so R-1.34, R-6.1 and R-6.24 are recorded as looked at and left as they stand. The four derive-tests-opportunities-stale-4 instructions are about test assertions, which this proposal does not touch; they stay open for the next derive-tests ruling. #4 is likely moot now that the seed names the nineteen accounts individually, but withdrawing it belongs to that ruling. What would change this: a failing sdlc checks run on this branch, or evidence that the oracle does not start from this compose file.
+
+**Conditions:**
+- contract R-1.34
+- contract R-6.1
+- contract R-6.24

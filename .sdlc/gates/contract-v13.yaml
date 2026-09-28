@@ -1,0 +1,20 @@
+gate: G1
+verdict: approve
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  Question: is contract-v13 the contract the tests will act through? Ruling: approve. Contract-v12 was returned because the Cypress fix was unproven and the generated test files did not match the contract; this run settles both. The journal shows the oracle starting with CYPRESS_INSTALL_BINARY=0 on the migrate service: every yarn install completed without stalling, all 78 migrations ran, four copies started, and a signed-in read of /api/users/00000000-0000-4000-8000-000000000201 returned the seeded users.vendorOne record, which shows the seed loaded and the application reads it, not merely that a page was served. The setting changes only what is downloaded; authentication, the migration and the mail path are untouched, and the comment states the first-build caveat plainly. tests/generated/seed.ts and surface.d.ts now carry the new_opportunity_notices handles and MailDeliveryDelayPage, consistent with the contract approved as v11, and the generated check passes. The contract content is unchanged from v11, so R-1.34, R-6.1 and R-6.24 are recorded as looked at and left as they stand. The four derive-tests-opportunities-stale-4 instructions are about test assertions, which this proposal does not touch; they stay open for the next derive-tests ruling. #4 is likely moot now that the seed names the nineteen accounts individually, but withdrawing it belongs to that ruling. What would change this: a failing sdlc checks run on this branch, or evidence that the oracle does not start from this compose file.
+reprompt: |2-
+  The first reply ruled approve. 1 condition line(s) did not match the ratification grammar: "condition-withdrawn derive-tests-opportunities-stale-4#4: the seed manifest now names the nineteen accounts outside the subscriber group by handle (new_opportunity_notices.receive_the_announcement, carried into tests/generated/seed.ts on this branch), so the clause is addressable and owes a real test rather than a not-testable entry; that obligation remains open as missing-test/R-1.34". Asked again in the ratification grammar.
+conditions:
+  - "contract R-1.34"
+  - "contract R-6.1"
+  - "contract R-6.24"
+cost: 0.8388868
+turns: 4
+session: "63619f90-7dce-4afb-a742-c4b2f5cdfdfd"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T05:09:43.918Z
