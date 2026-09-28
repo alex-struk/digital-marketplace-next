@@ -4088,7 +4088,7 @@ owed:
     id: R-2.18
     version: 3
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: a request-level page for Sprint With Us and Team With Us proposals that
       submits a proposal whose team members are given by account (seed users,
       including one pending, one deactivated, one outside the organization, and
@@ -4132,6 +4132,19 @@ owed:
         proposal: derive-tests-proposals-stale-8
         gate: G3
         at: 2026-09-28T21:50:42.687Z
+      - from: contract
+        to: derive-tests
+        why: 'tests/seed/manifest.yaml now gives the names of users.organizationOwner
+          ("Blake Placeholder"), users.organizationAdmin ("Charlie Placeholder")
+          and users.organizationMember ("Dana Placeholder"), which is the text
+          `team_member_choices` returns on proposal-twu-create and
+          proposal-swu-create. Both observations now say what else the list
+          holds: on Sprint With Us it also lists users.teamCandidatePending,
+          marked pending.'
+        by: contract-v19
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-28T21:54:32.150Z
     target: old
     clause: the proposal form offers every active member of the organization and
       does not offer the specific person already named on the proposal

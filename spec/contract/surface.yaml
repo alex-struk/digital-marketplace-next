@@ -517,7 +517,11 @@ pages:
       pending_team_member: { test_id: proposal-pending-team-member }
       # The people the team-member choice offers for a phase once an organization is
       # chosen, by name, leaving out anybody the choice no longer offers because they are
-      # already named in that phase.
+      # already named in that phase. Each name is the person's account name, as the
+      # manifest gives it (users.organizationOwner is "Blake Placeholder"). The choice
+      # also lists people whose invitation to the organization is still unanswered,
+      # marked pending (pending_team_member), so for organizations.qualified it holds
+      # users.teamCandidatePending beside the three active members.
       team_member_choices: { test_id: null }
 
   - id: proposal-swu-edit
@@ -608,7 +612,9 @@ pages:
       unqualified_organization_notice: { test_id: proposal-unqualified-organization-notice }
       # The people the team-member choice offers for a resource once an organization is
       # chosen, by name, leaving out anybody the choice no longer offers because they are
-      # already named on the proposal.
+      # already named on the proposal. Each name is the person's account name, as the
+      # manifest gives it (users.organizationOwner is "Blake Placeholder"). Only people
+      # whose membership is active are offered.
       team_member_choices: { test_id: null }
 
   - id: proposal-twu-edit

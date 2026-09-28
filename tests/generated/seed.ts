@@ -45,6 +45,7 @@ export const seed = {
       "id": "00000000-0000-4000-8000-000000000202",
       "persona": "organization-owner",
       "idp_id": "test-vendor-2",
+      "name": "Blake Placeholder",
       "email": "org.owner@example.test",
       "account_type": "VENDOR",
       "capabilities": [
@@ -57,6 +58,7 @@ export const seed = {
       "id": "00000000-0000-4000-8000-000000000203",
       "persona": "organization-admin",
       "idp_id": "test-vendor-3",
+      "name": "Charlie Placeholder",
       "email": "org.admin@example.test",
       "account_type": "VENDOR",
       "capabilities": [
@@ -69,6 +71,7 @@ export const seed = {
       "id": "00000000-0000-4000-8000-000000000204",
       "persona": "organization-member",
       "idp_id": "test-vendor-4",
+      "name": "Dana Placeholder",
       "email": "org.member@example.test",
       "account_type": "VENDOR",
       "capabilities": [
