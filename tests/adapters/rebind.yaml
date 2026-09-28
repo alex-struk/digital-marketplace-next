@@ -64,3 +64,160 @@ rebind:
       Proponent' step, with an empty dialog open; close it and go to '3.
       Attachments' before reading the link.
     closed: *a1
+  - id: R-5.1
+    target: old
+    why: "pickPanelMember (index.ts:2275) returns quietly when the chooser does not
+      offer a vendor, so addPanelMember({member: vendorOne}) reads as a success
+      and the test finds the vendor missing from the panel; it must throw so the
+      refusal is seen. duplicateMemberError reads
+      messages(/duplicate|already/i), which only reads inside main, skips
+      paragraph and list-item text and needs a MESSAGE vocabulary word; read the
+      panel's alerts (alertMessages) and field errors so the duplicate-member
+      message is found"
+  - id: R-5.37
+    target: old
+    why: submitPanelWithMemberHoldingNoRole (index.ts:~6116) looks for the member
+      with field(input, 'member') and asText(input), and neither accepts a
+      nested user object, so it throws before sending anything and
+      memberWithoutRoleError reads the earlier 200 from open; get the member's
+      id or email from input.member (personKey or userIdFor) and send the panel
+  - id: R-1.55
+    target: old
+    why: the vendor case has the same quiet return at index.ts:2275, so the vendor
+      reads as added and the test never sees a refusal; throw instead. For the
+      no-chair case, makeChair (index.ts:4265-4269) can only tick a Panel Chair
+      box, so a panel with no chair can never be composed; with a null member it
+      must untick every chair box. duplicateMemberError and missingChairError
+      use messages(), which misses alerts outside main and wording without a
+      MESSAGE word; read alerts and field errors
+  - id: R-5.29
+    target: old
+    why: chairOnly is bound to contentText() (index.ts:4547, 4605), which returns
+      the whole proposal page for every reader and so can never read falsy;
+      return empty when the consensus form is offered to the reader, and
+      non-empty only when the page refuses them (Not Found or a notice that only
+      the chair may record)
+  - id: R-4.4
+    target: old
+    why: the identity-provider sign-in (index.ts:1632-1670) is forced for the
+      deactivated persona although this target's identity is session-route, and
+      after pressing Sign In Using GitHub it fills getByLabel(/username/i) on
+      any page that is not github.com; sign the deactivated persona in through
+      the session route, or throw unbound whenever the destination is not a
+      known identity-provider form
+  - id: R-4.14
+    target: old
+    why: userRow (index.ts:3950) reads only the first page of the paginated user
+      list (20 rows, ending before the seeded names later in the alphabet); read
+      every page. signInThroughIdentityProvider goes to /sign-in without signing
+      out first, so while the administrator is still signed in it lands on
+      /dashboard and reports the sign-in control missing; sign out first
+  - id: R-3.13
+    target: old
+    why: "changeOwner (index.ts:3544-3551) gets the new owner with asText(input),
+      which returns an empty string for {newOwner: <user object>}, so nobody is
+      chosen and no transfer is made; read input.newOwner and choose that person
+      by name or email, then confirm Change Owner"
+  - id: R-7.12
+    target: old
+    why: notFoundForUnknownAddress (index.ts:4999) returns contentText() even when
+      the page exists, so the about page's own text reads as a Not Found screen;
+      return text only when notFoundShown() is true, as userProfile.notFoundPage
+      does
+  - id: R-7.17
+    target: old
+    why: pageBody (index.ts:4959) includes the page's heading and its
+      Published/Updated line, while embeddedSection (index.ts:2425-2437) returns
+      only the body, so the two readings can never be equal; make pageBody skip
+      the heading and the dated line the way bodyElementNames does, so that only
+      the bodies are compared
+  - id: R-7.22
+    target: old
+    why: the content create screen's duplicateSlugError, publishedSuccess and
+      fieldError read contentText() (index.ts:4843, 4858-4859), which drops
+      alerts rendered after the footer; read them with alertLines, as
+      deletedSuccess does. confirmPublish waits up to 15s for the address to
+      leave /content/create, and a refused creation never leaves, so read the
+      notice as soon as the submit is answered
+  - id: R-1.40
+    target: old
+    why: fullReport (index.ts:2727) returns contentText() without checking for the
+      Not Found screen, so the refusal a non-administrator gets reads as a
+      report; return empty when notFoundShown() is true
+  - id: R-1.10
+    target: old
+    why: publish (index.ts:1856-1859, 1880) returns quietly when the Publish control
+      is disabled, so the test treats the submission as made and waits for a
+      field error; it must throw when Publish is disabled. fieldError
+      (index.ts:1885 via messages) also misses the teaser's validation text
+      because it needs a MESSAGE word and skips paragraph lines; read the
+      field's own error
+  - id: R-1.16
+    target: old
+    why: publish turns the opportunity's startDate/completionDate into an
+      Implementation phase (phaseDatesOf, index.ts:2011-2014 and 1849), so the
+      case without an implementation phase gets one; do not add phases the input
+      does not name. publish also returns quietly when Publish is disabled
+      (index.ts:1880) instead of throwing, and it stops at step 8 Attachments
+      with the form incomplete
+  - id: R-1.48
+    target: old
+    why: submitForReview (index.ts:1870) returns quietly when Submit for Review is
+      disabled. The Sprint With Us form is left incomplete because neither
+      addPhase (index.ts:2092) nor completeRequired (index.ts:1014-1056) ticks a
+      phase's required capabilities; complete the form fully, or throw naming
+      the step that is still invalid
+  - id: R-1.53
+    target: old
+    why: the same defect as R-1.48. The Sprint With Us draft cannot be submitted for
+      review because its phase capabilities are never ticked, and
+      submitForReview (index.ts:1870) returns quietly on the disabled control,
+      so the under-review cases never reach under review
+  - id: R-1.35
+    target: old
+    why: myProposalsTable (index.ts:3232) returns the tab's page text, where each
+      table row spans several lines, so the title line never carries its
+      Submitted status; return one line per table row, with the cells joined
+  - id: R-6.2
+    target: old
+    why: fieldError (index.ts:1885 -> 627, MESSAGE at 241) read the record's page
+      heading as an error, because the opportunity title contains 'cannot ' and
+      headings are not excluded; exclude headings and titles, and read only
+      alerts and field-level errors
+  - id: R-2.14
+    target: old
+    why: each refused individual-proponent attempt walks the whole proposal wizard
+      about six times (openTermsDialog from acceptProgramTerms, acceptAppTerms
+      and submitProposal; completeRequired(true) plus toStepShowingMessages,
+      index.ts:2766-2830), with a settle wait of up to 10s on each step, so the
+      nine attempts run past the 120s budget; once an attempt is known to be
+      refused, skip the later walks until the form is reopened
+  - id: R-2.19
+    target: old
+    why: addPhase clicks a capability chip (index.ts:2115) chosen from bounding
+      boxes between the phase headings (index.ts:2096), after an unfold click
+      (index.ts:2061-2067) that may close the section again, so the chip is
+      animating or hidden when clicked; look for the chip inside the expanded
+      phase's own container, wait until the section is open and stable, and find
+      the chip again before clicking
+  - id: R-2.29
+    target: old
+    why: historyTab for the Sprint With Us and Team With Us proposal views
+      (index.ts:3139, 3186) returns the whole page through tabContent ->
+      contentText, which includes the tab labels Code Challenge and
+      Interview/Challenge, so /challenge/ always matches; read only the History
+      panel's table rows
+  - id: R-1.27
+    target: old
+    why: successfulProponent (index.ts:2389-2391) needs an exact 'Successful
+      Proponent' or 'Awarded To' line and never reads the award banner sentence
+      ('awarded to <name>') that awardBanner (index.ts:2412-2421) already finds,
+      so the reader who may see scores gets empty; take the proponent's name
+      from that banner. The visitor-case status is read verbatim and is not an
+      adapter defect
+  - id: R-8.31
+    target: old
+    why: proposalCwuEdit.startEditing (index.ts:3015) only goes through the Actions
+      menu, which the proposal's /edit page does not have; like addAttachment
+      (index.ts:1381-1389), use the top-bar Edit or the Proposal Details tab
+      when they are present, and do nothing when the form is already editable
