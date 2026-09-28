@@ -1,7 +1,7 @@
 -- Team With Us opportunities standing at later stages of evaluation.
 --
 -- The same reasoning as 010-sprint-with-us-stages.sql, for the other program with an
--- evaluation panel. Three are seeded: one at the questions consensus with five proponents,
+-- evaluation panel. Among them: one at the questions consensus with five proponents,
 -- because a criterion describes the Team With Us cut at the end of the questions as
 -- carrying the top three forward, and two at the challenge with the last score still to
 -- enter, because criteria turn on what follows that score and one of them changes the
@@ -231,5 +231,23 @@ BEGIN
   PERFORM pg_temp.seed_twu_opportunity(35, 'Seeded Team With Us opportunity past consensus at the challenge', staff, 'EVAL_C', panel, admin);
   PERFORM pg_temp.seed_twu_proposal(35, 1, v[1], o[1], staff, 'UNDER_REVIEW_CHALLENGE', 120, ARRAY[4, 4, 4, 4], panel, admin, NULL, NULL);
   PERFORM pg_temp.seed_twu_proposal(35, 2, v[2], o[2], staff, 'UNDER_REVIEW_CHALLENGE', 135, ARRAY[3, 3, 3, 3], panel, admin, NULL, NULL);
+
+  -- 36. At individual evaluation, the government account an evaluator who has already
+  --     begun an evaluation of the first proponent: a draft scoring 3, 3, 3, 3. The second
+  --     proponent is untouched (R-5.3), as 28 in 010-sprint-with-us-stages.sql.
+  PERFORM pg_temp.seed_twu_opportunity(36, 'Seeded Team With Us opportunity with an evaluation already begun', staff, 'EVAL_QUESTIONS_INDIVIDUAL', panel, admin);
+  PERFORM pg_temp.seed_twu_proposal(36, 1, v[1], o[1], staff, 'UNDER_REVIEW_QUESTIONS', 120, NULL, panel, admin, NULL, NULL);
+  PERFORM pg_temp.seed_twu_proposal(36, 2, v[2], o[2], staff, 'UNDER_REVIEW_QUESTIONS', 135, NULL, panel, admin, NULL, NULL);
+  PERFORM pg_temp.put_evaluation('twuResourceQuestionResponseEvaluator', pg_temp.sid(36, 101),
+    staff, ARRAY[3, 3, 3, 3], 'DRAFT', now() - INTERVAL '27 days');
+
+  -- 37. The same starting point as 31, held apart for R-5.32 alone: finalising moves an
+  --     opportunity on for good, and R-2.29 finalises 31.
+  PERFORM pg_temp.seed_twu_opportunity(37, 'Seeded second Team With Us opportunity at consensus with five proponents', staff, 'EVAL_QUESTIONS_CONSENSUS', panel, admin);
+  PERFORM pg_temp.seed_twu_proposal(37, 1, v[1], o[1], staff, 'UNDER_REVIEW_QUESTIONS', 120, ARRAY[5, 5, 5, 5], panel, admin, NULL, NULL);
+  PERFORM pg_temp.seed_twu_proposal(37, 2, v[2], o[2], staff, 'UNDER_REVIEW_QUESTIONS', 135, ARRAY[5, 5, 4, 4], panel, admin, NULL, NULL);
+  PERFORM pg_temp.seed_twu_proposal(37, 3, v[3], o[3], staff, 'UNDER_REVIEW_QUESTIONS', 110, ARRAY[4, 4, 4, 4], panel, admin, NULL, NULL);
+  PERFORM pg_temp.seed_twu_proposal(37, 4, v[4], o[4], staff, 'UNDER_REVIEW_QUESTIONS', 125, ARRAY[4, 4, 3, 3], panel, admin, NULL, NULL);
+  PERFORM pg_temp.seed_twu_proposal(37, 5, v[5], o[5], staff, 'UNDER_REVIEW_QUESTIONS', 100, ARRAY[5, 5, 5, 2], panel, admin, NULL, NULL);
 END
 $$;

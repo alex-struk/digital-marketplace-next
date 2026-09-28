@@ -472,6 +472,7 @@ export interface ProposalSwuViewPage {
   codeChallengeTab(): Promise<string>;
   teamScenarioTab(): Promise<string>;
   historyTab(): Promise<string>;
+  historyEntries(): Promise<string>;
   wrongStageError(): Promise<string>;
   questionsScore(): Promise<string>;
   challengeScore(): Promise<string>;
@@ -540,6 +541,7 @@ export interface ProposalTwuViewPage {
   resourceQuestionsTab(): Promise<string>;
   challengeTab(): Promise<string>;
   historyTab(): Promise<string>;
+  historyEntries(): Promise<string>;
   wrongStageError(): Promise<string>;
   questionsScore(): Promise<string>;
   challengeScore(): Promise<string>;
@@ -1387,22 +1389,28 @@ export interface EvaluationIndividualRequestSwuPage {
   open(params: { proposalId: string; userId: string }): Promise<void>;
   saveDraftAsEntered(input?: unknown): Promise<void>;
   submitThisEvaluationAlone(input?: unknown): Promise<void>;
+  createEvaluationByRequest(input?: unknown): Promise<void>;
   storedScores(): Promise<string>;
   storedNotes(): Promise<string>;
   evaluationStatus(): Promise<string>;
   refusedAsUnrecognised(): Promise<string>;
   refusedAtSubmission(): Promise<string>;
+  evaluationCreated(): Promise<string>;
+  creationRefusalMessage(): Promise<string>;
 }
 
 export interface EvaluationIndividualRequestTwuPage {
   open(params: { proposalId: string; userId: string }): Promise<void>;
   saveDraftAsEntered(input?: unknown): Promise<void>;
   submitThisEvaluationAlone(input?: unknown): Promise<void>;
+  createEvaluationByRequest(input?: unknown): Promise<void>;
   storedScores(): Promise<string>;
   storedNotes(): Promise<string>;
   evaluationStatus(): Promise<string>;
   refusedAsUnrecognised(): Promise<string>;
   refusedAtSubmission(): Promise<string>;
+  evaluationCreated(): Promise<string>;
+  creationRefusalMessage(): Promise<string>;
 }
 
 export interface EvaluationConsensusRequestSwuPage {
