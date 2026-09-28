@@ -489,6 +489,13 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-09-28T18:04:34.081Z
+    closed:
+      outcome: met
+      why: tests/adapters/old/index.ts submitConsensus and confirmSubmitConsensus
+        press only 'Submit Final Consensus Scores'; a top bar or dialog offering
+        'Finalize Consensus Scores' is reported, never pressed
+      by: agent:reviewer
+      at: 2026-09-28T18:12:19.987Z
   - ref: bind-adapter-old-26#2
     text: "tests/adapters/old/bindings.yaml: bring the evaluation-consensus-list
       entries for submit_final_consensus_scores and confirm_submit_consensus
@@ -499,6 +506,13 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-09-28T18:04:34.081Z
+    closed:
+      outcome: met
+      why: tests/adapters/old/bindings.yaml evaluation-consensus-list-swu/-twu list
+        submit_final_consensus_scores and confirm_submit_consensus as bound,
+        matching index.ts
+      by: agent:reviewer
+      at: 2026-09-28T18:12:19.996Z
   - ref: bind-adapter-old-27#1
     text: "tests/adapters/old/index.ts evaluationConsensusList: bind
       submitFinalConsensusScores to the top-bar control labelled 'Submit Final
@@ -515,6 +529,13 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-09-28T18:07:48.971Z
+    closed:
+      outcome: met
+      why: tests/adapters/old/index.ts submitConsensus binds the top-bar 'Submit Final
+        Consensus Scores' alone; a disabled control, a bar showing Finalize
+        instead, or a bar showing neither is reported as a refusal or unbound
+      by: agent:reviewer
+      at: 2026-09-28T18:12:20.005Z
   - ref: bind-adapter-old-27#2
     text: "tests/adapters/old/index.ts evaluationConsensusList: bind
       confirmSubmitConsensus to the 'Submit Final Consensus Scores' button
@@ -529,6 +550,13 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-09-28T18:07:48.971Z
+    closed:
+      outcome: met
+      why: tests/adapters/old/index.ts confirmSubmitConsensus calls confirmFinalize
+        with the anchored /^Submit Final Consensus Scores$/ dialog check, waits
+        for a fresh notice and reports 'Unable...' as a refusal
+      by: agent:reviewer
+      at: 2026-09-28T18:12:20.010Z
   - ref: bind-adapter-old-27#3
     text: "tests/adapters/old/index.ts evaluationConsensusList:
       submitConfirmationModal must read only the submit confirmation (the dialog
@@ -540,6 +568,13 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-09-28T18:07:48.971Z
+    closed:
+      outcome: met
+      why: tests/adapters/old/index.ts submitConfirmationModal returns dialogText only
+        when isConfirmation matches the submit button, and otherwise returns
+        empty
+      by: agent:reviewer
+      at: 2026-09-28T18:12:20.018Z
   - ref: bind-adapter-old-27#4
     text: "tests/adapters/old/bindings.yaml evaluation-consensus-list-swu and
       evaluation-consensus-list-twu: set submit_final_consensus_scores and
@@ -551,3 +586,9 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-09-28T18:07:48.971Z
+    closed:
+      outcome: met
+      why: tests/adapters/old/bindings.yaml lines 827-828 and 844-845 list both
+        members as bound on both consensus-list pages
+      by: agent:reviewer
+      at: 2026-09-28T18:12:20.024Z
