@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-23 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">207</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">203</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">177</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-23</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-28 14:42</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.282 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I made the one correction the ruling asked for, in <code>tests/adapters/old/index.ts</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.282 (Claude Code))</p>
+<p>I made the one correction the ruling asked for, in <code>tests/adapters/old/index.ts</code>. Nothing else in the adapter or in <code>bindings.yaml</code> changed, and I did not re-walk the target.</p>
+<p><strong>What changed.</strong> The previous revision sent the deactivated-vendor persona through its session route every time. That route creates a session without checking whether the account is active, so the R-4.4 test on old would have shown a deactivated account being let in. signIn now does this for that persona:</p>
+<ul><li>It opens the session route as before.</li><li>It then asks the target for the signed-in account&#39;s current status. Checking the target in the browser, <code>/api/sessions/current</code> returns the signed-in user with a <code>status</code> field; for this seeded account it currently reads <code>INACTIVE_ADMIN</code>.</li><li>If the status is <code>ACTIVE</code>, the session is kept. That is the R-4.14 case, where an administrator reactivates the account before the vendor signs in to set their own name.</li><li>In every other case, including an unknown status, it signs straight back out and throws <code>unbound: signIn.deactivated-vendor — …</code>. The reason says the session route mints a session without checking account status, so it cannot show the identity provider&#39;s refusal. R-4.4 will therefore be reported unbound on old, not as a false finding.</li></ul>
+<p>I rewrote the comment above signIn to describe this, and added a small helper, <code>accountStatus()</code>, that reads the status. The status is read from the target at the moment of sign-in, not remembered inside the adapter. That way it holds however the reactivation happened, even through a different page object. During the check I signed the browser session back out; I changed no data on the target.</p>
+<p><strong>Bindings file.</strong> It needed no change: signIn is not a surface action or observation, so it is not listed there.</p>
+<p><strong>What I could not do.</strong> The typecheck needed approval I did not have, so it did not run. I reviewed the new code by reading it: it uses only the <code>page.request</code> interface the adapter already uses elsewhere.</p>
+<p><strong>Still open.</strong> As the ruling notes, the R-2.14 hardening from the previous revision has no confirmed cause and should be checked first at the next calibration.</p>
+<p>No route in <code>surface.yaml</code> was found not to resolve during this revision.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:tech-lead (persona agent · claude claude-opus-5-5) on 2026-09-28 14:43.</p>
+<div class="body"><p>Question: does the old-target adapter bind every surface action and observation, and nothing else? The reviewer was bypassed only because R-8.31 went to bind-adapter three times, past policy.loops.rebind&#39;s limit of 2. Ruling: approve. The return on bind-adapter-old-22 already accepted eight of this branch&#39;s nine changes, including the save-after-remove and the Code With Us terms-dialog save that answered the three R-8.31 sends. It returned only the deactivated-vendor sign-in, and that is now fixed in tests/adapters/old/index.ts: signIn opens the session route, reads the account&#39;s current status from /api/sessions/current through accountStatus(), keeps the session only when the status is ACTIVE (the R-4.14 case after reactivation), and otherwise signs out and throws the unbound error. The comment above signIn matches. R-4.4 on old is therefore reported as unbound, not as a false finding. The code for each R-8.31 send is on the branch: removeAttachment calls attachmentsOpenToChange first; startEditingProposal tries the top-bar Edit, then the Proposal Details tab, and does nothing on an editable form; removeExistingAttachment saves through saveAttachmentForm. The runner&#39;s typecheck reports no errors under adapters/old/. The escalation came from the loop count, not from a pipeline defect, so no further escalation is warranted. What would change the ruling: a calibration run showing R-4.4 or R-4.14 misbinding on old, or the R-8.31 removal still not reaching the service. The R-2.14 hardening has no confirmed cause and should be checked first at the next calibration.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met bind-adapter-old-22#1: signIn in tests/adapters/old/index.ts now keeps the deactivated-vendor session only when accountStatus() reads ACTIVE from /api/sessions/current; otherwise it signs out and throws &#39;unbound: signIn.deactivated-vendor — the session route mints a session without checking account status…&#39;, and the comment above signIn describes this</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
