@@ -123,6 +123,7 @@ export default function create(
     acceptedTerms.clear();
     leavePhaseChoice = false;
     termsRefused = false;
+    refusalShown = [];
     await page.goto(address(route, params), { waitUntil: "domcontentloaded" });
     await settle();
   }
@@ -511,6 +512,7 @@ export default function create(
   }
 
   async function inDialog(where: string, names: string[]): Promise<void> {
+    await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
     if (!(await dialog().count())) {
       throw new Error(`unbound: ${where} — no dialog is open on ${page.url()}`);
     }
@@ -1635,6 +1637,28 @@ export default function create(
     await press(where, ["Remove", "Remove Attachment"]);
   }
 
+  // Saves the opportunity or proposal form an attachment was changed on, through the control
+  // its top bar offers: "Publish Changes" on a published opportunity, "Save Changes" on a
+  // draft, "Submit Changes for Review" for an author awaiting review, and on a submitted
+  // proposal "Submit Changes" with its terms dialog.
+  async function saveAttachmentForm(where: string): Promise<void> {
+    const saves = ["Publish Changes", "Save Changes", "Submit Changes for Review"];
+    for (const name of saves) {
+      if (!(await findControl(navBar(), name))) continue;
+      await press(where, [name], navBar());
+      await confirmIfAsked(where, [name, ...saves]);
+      await saved(saves);
+      return;
+    }
+    if (await findControl(navBar(), "Submit Changes")) {
+      await saveProposalChanges(where);
+      return;
+    }
+    throw new Error(
+      `unbound: ${where} — removed the attachment, then found no ${quoted([...saves, "Submit Changes"])} in the top bar of ${page.url()} to save the removal with`,
+    );
+  }
+
   // ---------------------------------------------------------------- identifiers
 
   // A record's own screen carries its identifier in the address it lands on.
@@ -1760,18 +1784,12 @@ export default function create(
       await settle();
       return;
     }
-    // The deactivated vendor exists to be refused by the identity provider's sign-in. On this
-    // target the session route mints a session without looking at the account's status, and
-    // vendor sign-in otherwise goes to github.com, where no sandbox account exists — so there
-    // is no sign-in here that can show the refusal, and saying so is the honest answer.
-    if (who.id === "deactivated-vendor") {
-      throw new Error(
-        `unbound: signIn.${who.id} — vendor sign-in on this target goes through github.com and no sandbox account exists there; ` +
-          "the session route /auth/createsessionvendor/:id creates a session without the account-status check the identity-provider sign-in applies, so it cannot show the refusal",
-      );
-    }
-    // Every other persona signs in through the session route. Whoever was signed in before
-    // is signed out first, so the session that follows is this persona's alone.
+    // Every persona signs in through its session route — the deactivated vendor included:
+    // that route mints a session without looking at the account's status, so it cannot
+    // show the identity provider's refusal, but a test that reactivates the account and
+    // then signs this persona in (to set their own name) is served by it like any other.
+    // Whoever was signed in before is signed out first, so the session that follows is
+    // this persona's alone.
     const entry = table["session-route"];
     if (!entry || entry.unavailable !== undefined || !entry.route) {
       throw new Error(
@@ -1989,6 +2007,10 @@ export default function create(
       if (await isDisabled(control)) {
         const steps = await incompleteSteps();
         const shown = await stepFormErrors();
+        // Disabled with the form's own refusal on show ("The scoring weights should total
+        // 100% exactly.") is the answer the test goes on to read, not a missing value: the
+        // action ends there, with nothing pressed, and the readers find the message.
+        if (shown.trim() && !homelessDates.length) return false;
         const dates = homelessDates.length
           ? `; the input gave ${quoted(homelessDates)} but named no phase and the form holds none, and this form takes dates only on a phase`
           : "";
@@ -2852,7 +2874,13 @@ export default function create(
       // The tab is the creation wizard shown one step at a time, so every step is read.
       opportunityTab: () => inTab(["Opportunity"], everyStepText),
       addendaTab: () => tabContent(["Addenda"]),
-      historyTab: () => tabContent(["History"]),
+      // The History tab's table rows alone (entry type, note, when and by whom): the screen
+      // around it carries the opportunity's own title, which is no history entry.
+      historyTab: () =>
+        inTab(["History"], async () => {
+          await seen(page.getByRole("table")).first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
+          return tableRows(false);
+        }),
       // Before an opportunity closes the tab withholds every proposal, showing only a notice
       // that they will be displayed later; that withholding reads as nothing.
       proposalsTab: () =>
@@ -3075,6 +3103,56 @@ export default function create(
   // Submit usable, and each walk costs seconds on every step. Opening a form afresh forgets it.
   let termsRefused = false;
 
+  // What the form said when it last refused a submit ("Please enter a valid email.",
+  // "Please enter a valid phone number."), gathered from every step at that moment. The
+  // form draws a field's message only once the field has been left, so each field is
+  // entered and left in turn first — its value untouched — when no step shows one yet.
+  let refusalShown: string[] = [];
+
+  async function touchFieldsHere(): Promise<void> {
+    for (const role of ["textbox", "spinbutton"] as const) {
+      const boxes = seen(page.getByRole(role));
+      const count = await boxes.count();
+      for (let i = 0; i < count; i++) {
+        const box = boxes.nth(i);
+        if (await box.isDisabled().catch(() => true)) continue;
+        await box.focus().catch(() => undefined);
+        await box.blur().catch(() => undefined);
+      }
+    }
+    await settle();
+  }
+
+  async function surfaceRefusal(): Promise<void> {
+    const found: string[] = [];
+    const gather = async (): Promise<void> => {
+      for (const line of [
+        ...(await messages()).split("\n"),
+        ...(await formErrors()).split("\n"),
+      ]) {
+        if (line && !found.includes(line)) found.push(line);
+      }
+    };
+    if (await currentStep()) {
+      await walkSteps(gather);
+      if (!found.length) {
+        await walkSteps(async () => {
+          await touchFieldsHere();
+          await gather();
+        });
+      }
+    } else {
+      await gather();
+      if (!found.length) {
+        await touchFieldsHere();
+        await gather();
+      }
+    }
+    refusalShown = found;
+    // The form is left on the first step showing the refusal, for the reader.
+    await toStepShowingMessages();
+  }
+
   async function openTermsDialog(where: string): Promise<boolean> {
     if (await dialog().count()) return true;
     let submit = await findControl(navBar(), "Submit");
@@ -3084,7 +3162,7 @@ export default function create(
       submit = await findControl(navBar(), "Submit");
     }
     if (submit && (await isDisabled(submit))) {
-      await toStepShowingMessages();
+      await surfaceRefusal();
       termsRefused = true;
       return false;
     }
@@ -3109,6 +3187,7 @@ export default function create(
       if (!entriesOf(input, ATTACHMENT_KEYS).length && !hasFiles(input)) return;
       // New values may be what the form was waiting for, so it is asked again.
       termsRefused = false;
+      refusalShown = [];
       if (await dialog().count()) await inDialog(`${where}.${member}`, ["Cancel"]);
       await ready();
       await fillForm(`${where}.${member}`, input, { skip: ATTACHMENT_KEYS });
@@ -3146,7 +3225,14 @@ export default function create(
         if (!(await openTermsDialog(`${where}.accept_app_terms`))) return;
         await ensureTicked(`${where}.accept_app_terms`, [label], dialog().first());
       },
-      fieldError: async () => ((await dialog().count()) ? messages() : stepMessages()),
+      // What the form shows now, from every step, with what it showed when it last refused
+      // the submit: a field's message is drawn only once the field has been left.
+      fieldError: async () => {
+        if (await dialog().count()) return messages();
+        const found = (await stepMessages()).split("\n").filter(Boolean);
+        for (const line of refusalShown) if (!found.includes(line)) found.push(line);
+        return found.join("\n");
+      },
     };
   }
 
@@ -3366,13 +3452,39 @@ export default function create(
     );
   }
 
+  // A draft proposal saves through "Save Changes". A submitted one offers "Submit Changes"
+  // instead, which raises the terms dialog: its boxes are ticked, then its own "Submit
+  // Changes" confirms.
+  async function saveProposalChanges(where: string): Promise<void> {
+    if (await findControl(navBar(), "Save Changes")) {
+      await press(where, ["Save Changes"], navBar());
+      await confirmIfAsked(where, ["Save Changes"]);
+      return;
+    }
+    await press(where, ["Submit Changes"], navBar());
+    await dialog().first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    if (!(await dialog().count())) {
+      await saved(["Submit Changes"]);
+      return;
+    }
+    const boxes = seen(dialog().first().getByRole("checkbox"));
+    const count = await boxes.count();
+    for (let i = 0; i < count; i++) {
+      if (!(await boxes.nth(i).isChecked())) await boxes.nth(i).click();
+    }
+    await settle();
+    await press(where, ["Submit Changes", "Submit"], dialog().first());
+    await dialog().first().waitFor({ state: "hidden", timeout: 15000 }).catch(() => undefined);
+    await saved(["Submit Changes"]);
+  }
+
   // A proposal's own management page: a tab, a header of standing facts, and an Actions
   // menu whose contents change with the proposal's state.
   function proposalEdit(where: string, route: string) {
     return {
       ...at(route),
       startEditing: () => startEditingProposal(`${where}.start_editing`),
-      saveChanges: () => press(`${where}.save_changes`, ["Save Changes"], navBar()),
+      saveChanges: () => saveProposalChanges(`${where}.save_changes`),
       saveChangesAndSubmit: async () => {
         await press(`${where}.save_changes_and_submit`, ["Submit Proposal"], navBar());
         await confirmIfAsked(`${where}.save_changes_and_submit`, ["Submit Proposal", "Submit"]);
@@ -4391,6 +4503,25 @@ export default function create(
       }
       return added;
     };
+    // An earlier read leaves the body scrolled wherever it stopped — at the bottom, after a
+    // whole pass — and only the rows in view are drawn, so the body and whatever scrolls
+    // around it are put back at the top before the pass begins.
+    await table
+      .evaluate((node) => {
+        const scrollers: Element[] = [];
+        const within = (each: Element): void => {
+          scrollers.push(each);
+          for (const child of Array.from(each.children)) within(child);
+        };
+        within(node);
+        for (let up = node.parentElement; up; up = up.parentElement) scrollers.push(up);
+        for (const each of scrollers) {
+          if (each.scrollTop > 0) each.scrollTop = 0;
+        }
+        window.scrollTo(0, 0);
+      })
+      .catch(() => undefined);
+    await page.waitForTimeout(300);
     const box = await table.boundingBox();
     if (box) await page.mouse.move(box.x + box.width / 2, box.y + Math.min(Math.max(box.height - 20, 10), 300));
     let quiet = 0;
@@ -4831,12 +4962,14 @@ export default function create(
         openRow(`${where}.open_proponent_consensus`, input),
       submitFinalConsensusScores: () =>
         press(`${where}.submit_final_consensus_scores`, [
+          "Submit Final Consensus Scores",
           "Submit Consensus Scores",
           "Submit Scores",
           "Submit",
         ]),
       confirmSubmitConsensus: () =>
         inDialog(`${where}.confirm_submit_consensus`, [
+          "Submit Final Consensus Scores",
           "Submit Consensus Scores",
           "Submit",
         ]),
@@ -5853,8 +5986,13 @@ export default function create(
       renameAttachment("file-attachment-control.rename_new_attachment", input),
     removeNewAttachment: (input) =>
       removeAttachment("file-attachment-control.remove_new_attachment", input),
-    removeExistingAttachment: (input) =>
-      removeAttachment("file-attachment-control.remove_existing_attachment", input),
+    // An attachment already stored leaves the record only once the form is saved: the
+    // removal is followed by whichever save the top bar offers for this record's state.
+    removeExistingAttachment: async (input) => {
+      const where = "file-attachment-control.remove_existing_attachment";
+      await removeAttachment(where, input);
+      await saveAttachmentForm(where);
+    },
     downloadAttachment: async (input) => {
       const boxes = attachmentNameBoxes();
       const count = await boxes.count();
@@ -6079,8 +6217,12 @@ export default function create(
     Text?: string;
   };
 
+  // Each Playwright worker owns its own copy of the target and its own catcher, named
+  // SDLC_MAIL_API_<worker number>; the unnumbered name is the fallback for a single copy,
+  // exactly as the harness's own mail fixture resolves it.
   function mailApi(where: string): string {
-    const api = (process.env.SDLC_MAIL_API ?? "").replace(/\/+$/, "");
+    const copy = process.env.TEST_PARALLEL_INDEX ?? "0";
+    const api = (process.env[`SDLC_MAIL_API_${copy}`] ?? process.env.SDLC_MAIL_API ?? "").replace(/\/+$/, "");
     return api || nothing(`${where} — SDLC_MAIL_API is not set, so there is no mail catcher to read`);
   }
 
