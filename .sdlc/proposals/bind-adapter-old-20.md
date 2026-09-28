@@ -32,3 +32,28 @@ I made both changes the ruling asked for in `tests/adapters/old/index.ts`. I cou
 I did not re-check every other item line by line. Following the instruction not to redo accepted work, I left those areas unchanged and did not walk the target again.
 
 `bindings.yaml` did not need changing. Sign-in is not a page member, and the three panel readers are still bound, now reporting only their own fault. No page route was found to be unresolvable in this revision, and I wrote nothing outside `tests/adapters/old/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+Question: does bind-adapter-old-20 bind every surface action and observation on old, and nothing else, and does it carry out the two instructions bind-adapter-old-19 left owed? Ruling: approve. Reason: both owed instructions are done in tests/adapters/old/index.ts. First, signIn no longer sends the deactivated-vendor persona through /auth/createsessionvendor/:id. It throws `unbound: signIn.deactivated-vendor — …` and gives both real reasons the refusal cannot be shown on this target: vendor sign-in goes to github.com, where no sandbox account exists, and the session route skips the account-status check. The id matches spec/contract/personas.yaml, and the calibration-read `unbound:` prefix is the same as the one the ruling asked for. Second, panelRefusal now returns only alerts and field errors whose own words match the fault asked about. None of the patterns for duplicateMemberError, minimumMembersError or missingChairError matches the general 'Unable to Publish Changes … Please fix the errors in the form and try again' alert, so a refusal that gives no reason reads as empty rather than as the message R-5.1 and R-1.55 require. The other changes are navigation, locators and narrowed readers. Some throw to report a refusal: a disabled Publish or Submit, a vendor the panel chooser does not offer, an owner the Change Owner dialog does not offer. None of them decides whether a test passes. Nothing under tests/acceptance changed and bindings.yaml did not need to. The runner's typecheck reports no diagnostics under adapters/old/; its only failures are two in adapters/new/, which this proposal does not answer for. What would change the ruling: a typecheck diagnostic in adapters/old, or a calibration showing a panel reader still returning the general alert.
+
+**Conditions:**
+- condition-met bind-adapter-old-19#1: signIn in tests/adapters/old/index.ts throws 'unbound: signIn.deactivated-vendor — …' for the deactivated-vendor persona instead of driving the session route, naming github.com vendor sign-in with no sandbox account and the session route's missing account-status check
+- condition-met bind-adapter-old-19#2: panelRefusal in tests/adapters/old/index.ts returns only alerts and field errors matching the asked fault's own pattern, with no fallback to the general 'Unable to Publish Changes' alert; duplicateMemberError, minimumMembersError and missingChairError each use it and read empty when the page names no such fault
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `d46ee50cd3098dc28feef1cc562f2db4585882b6`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
