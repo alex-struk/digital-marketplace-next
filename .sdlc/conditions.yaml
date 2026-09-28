@@ -634,3 +634,19 @@ conditions:
         empty string
       by: agent:reviewer
       at: 2026-09-28T19:26:51.095Z
+  - ref: derive-tests-proposals-stale-9#1
+    text: In tests/acceptance/proposals/R-2.18.spec.ts, in the Sprint With Us form
+      test, remove the assertion that the team-member choice contains
+      seed.users.teamCandidatePending.name and the assertion that
+      surface.proposalSwuCreate.pendingTeamMember() is non-empty. R-2.18 states
+      the form offers only the organization's active members; its note is about
+      a pending person already named on the proposal being shown as pending, not
+      about the choice listing them. Assert nothing about the pending person on
+      the Sprint With Us choice in either direction, and keep every other
+      assertion in the file as it is.
+    from: derive-tests-proposals-stale-9
+    family: derive-tests-proposals-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-28T22:03:08.002Z
