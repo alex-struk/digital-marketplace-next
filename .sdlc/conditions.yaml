@@ -660,3 +660,28 @@ conditions:
         assertion in the file is unchanged
       by: agent:reviewer
       at: 2026-09-28T22:05:00.576Z
+  - ref: derive-tests-organizations-stale-5#1
+    text: "R-3.31: the test asserts only that a message arrives for the owner and
+      for the invited person, not what each message says. Assert, within the
+      bounded wait, that the owner's message identifies the invited person as
+      having approved the request or joined, and that the invited person's
+      message identifies the organization whose team they have joined (by its
+      name, not by an exact sentence the criterion does not give). If the
+      mailbox observation cannot show either, add a
+      tests/acceptance/organizations/not-testable.yaml entry for R-3.31 carrying
+      `clause` for the message content and naming the observation that is
+      missing."
+    from: derive-tests-organizations-stale-5
+    family: derive-tests-organizations-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-28T22:07:27.168Z
+  - ref: derive-tests-organizations-stale-5#2
+    text: "R-3.9: no change is asked for; keep the file as it stands on this branch."
+    from: derive-tests-organizations-stale-5
+    family: derive-tests-organizations-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-28T22:07:27.168Z
