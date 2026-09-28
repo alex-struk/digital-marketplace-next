@@ -58,3 +58,27 @@ I rebound most of the members this list named in `tests/adapters/old/` and check
 - The invitation email's Reject link points to `tab=organization` (singular) and lands on the profile tab without a confirmation. That's the application's behaviour; `reject_invitation` now answers from the Organizations tab.
 
 I changed nothing outside `tests/adapters/old/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+The question is whether this adapter binds every surface action and observation on old, and nothing else. Approved. The diff touches only tests/adapters/old/ and nothing under tests/acceptance. The changes are navigation and locators: the score dialogs, the top bar or Actions menu, row controls that appear only on hover, the choosers on the proposal steps, the panel's Chair chooser, the Edit then Save Changes path on a saved score sheet, and bounded position reads. None of them decides whether a test passes. The runner's typecheck exited 2, but it reported no diagnostics under adapters/old/; the two it reported are in adapters/new/, which this proposal does not answer for. The new silent refusal paths are safe: a row offering no Approve, Remove or Leave, and a vendor shown 'Not Found' on a create form. The refusal tests that use them (R-3.9, R-3.11) also require a visible error, so a click the adapter skipped still fails and goes to the product owner at calibration rather than passing falsely. The remaining unbound reasons are specific and real: add_note, capability_checked, the profile-completion form and the personas the persona table marks unavailable. created_by_name and last_changed_by_name now read empty on a public page that shows neither name, which honestly turns an unbound into a failure calibration will route to the product owner. Reading the file types the Choose File control offers the browser's picker is a fair observation of what the person is offered. The receipt says plainly that the suite was not run, so calibration is the first real test. The last calibration review blamed no failure on the adapter, so nothing is owed. What would change this: a calibration run showing a refusal test passing only because the adapter skipped the click, or any typecheck diagnostic under adapters/old/.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `c3125659d9d11f4c630dc2c203865fe529b71075`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics

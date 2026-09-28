@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether this adapter binds every surface action and observation on old, and nothing else. Approved. The diff touches only tests/adapters/old/ and nothing under tests/acceptance. The changes are navigation and locators: the score dialogs, the top bar or Actions menu, row controls that appear only on hover, the choosers on the proposal steps, the panel's Chair chooser, the Edit then Save Changes path on a saved score sheet, and bounded position reads. None of them decides whether a test passes. The runner's typecheck exited 2, but it reported no diagnostics under adapters/old/; the two it reported are in adapters/new/, which this proposal does not answer for. The new silent refusal paths are safe: a row offering no Approve, Remove or Leave, and a vendor shown 'Not Found' on a create form. The refusal tests that use them (R-3.9, R-3.11) also require a visible error, so a click the adapter skipped still fails and goes to the product owner at calibration rather than passing falsely. The remaining unbound reasons are specific and real: add_note, capability_checked, the profile-completion form and the personas the persona table marks unavailable. created_by_name and last_changed_by_name now read empty on a public page that shows neither name, which honestly turns an unbound into a failure calibration will route to the product owner. Reading the file types the Choose File control offers the browser's picker is a fair observation of what the person is offered. The receipt says plainly that the suite was not run, so calibration is the first real test. The last calibration review blamed no failure on the adapter, so nothing is owed. What would change this: a calibration run showing a refusal test passing only because the adapter skipped the click, or any typecheck diagnostic under adapters/old/.
+conditions: []
+cost: 0.6415358
+turns: 4
+session: "a391cf75-4f99-4f67-a285-ad3d492a0faf"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T16:09:42.926Z
