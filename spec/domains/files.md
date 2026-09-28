@@ -279,6 +279,7 @@ A profile picture or organization logo is accepted only if its content can be re
 A file may be attached to an opportunity or a proposal only by someone who is permitted to read that file.
 - state: accepted
 - replaces: R-8.15
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-8.23 · v2 · confirmed · recovered
 An upload whose name is longer than 255 characters is refused as a bad request, and the person is told the file name must be between 1 and 255 characters long; an upload carrying no usable name at all never reaches this check and instead fails as the service fault described by R-8.4.
@@ -317,6 +318,7 @@ A file is also readable through what it is attached to: an attachment on a Code 
 - then: the vendor is refused the first time and receives the file the second time
 - state: accepted
 - note: this is what makes a Code With Us attachment behave correctly without any read access recorded against the file itself — the attachment is checked against the state of the thing it hangs on, every time it is asked for, so the file becomes readable exactly when its opportunity does.
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-8.26 · v1 · confirmed · recovered
 A file is never removed, and deleting the opportunity or proposal it was attached to removes only the attachment, leaving the file and its content stored and still readable by whoever could read them.

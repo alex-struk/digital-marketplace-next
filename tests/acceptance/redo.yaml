@@ -225,3 +225,66 @@ redo:
       why: derived again by a derive-tests run on content
       by: runner:derive-tests
       at: 2026-09-25T14:07:15.074Z
+  - id: R-5.17
+    version: 1
+    why: the test counted every message the catcher received after it was emptied,
+      but other activity on the service in the same window reaches the same
+      people, and nothing confirmed the catcher was actually empty before the
+      third person was added; confirm the catcher is empty first, then count
+      only messages about this opportunity, identified by its title, for the
+      person added and for the two already on the panel alike
+  - id: R-5.21
+    version: 1
+    why: the test required a refusal notice, but the criterion says only that the
+      attempt is refused; confirm the opportunity reads as in individual
+      question evaluation first, then treat a scoring form not offered to that
+      person, or an attempt after which no evaluation by that person exists, as
+      the refusal, and keep the evaluator's recorded score as the contrast
+  - id: R-1.34
+    version: 1
+    why: the test detects the author's confirmation by the number of messages
+      addressed to the author rising, but the catcher's search returns at most
+      fifty messages and the author's mailbox already held that many, so the
+      count cannot rise; confirm the catcher was emptied, then find the
+      confirmation among the messages to the author by what it is about (this
+      opportunity's title), not by a count
+  - id: R-1.36
+    version: 1
+    why: the test detects the author's notice by the number of messages addressed to
+      the author rising, but the catcher's search returns at most fifty messages
+      and the author's mailbox already held that many, so the count cannot rise;
+      confirm the catcher was emptied, then find the notice among the messages
+      to the author by what it is about (this opportunity's title), not by a
+      count
+  - id: R-1.37
+    version: 1
+    why: the test detects the author's confirmation by the number of messages
+      addressed to the author rising, but the catcher's search returns at most
+      fifty messages and the author's mailbox already held that many, so the
+      count cannot rise; confirm the catcher was emptied, then find the
+      confirmation among the messages to the author by what it is about (this
+      opportunity's title), not by a count
+  - id: R-2.27
+    version: 1
+    why: the criterion names a state, not the words shown for it, and the test
+      required the word 'disqualified' to appear on the proposal, which the
+      criterion never promised; establish that the proposal was taken out of
+      contention because its status changed from what it was and the given
+      reason is recorded against it, not because a particular label appears
+  - id: R-2.33
+    version: 1
+    why: the criterion names a state, not the words shown for it, and the test
+      required the word 'disqualified' to appear on the proposal, which the
+      criterion never promised; establish the disqualified proposal's state
+      because its status changed from what it was and the given reason is
+      recorded against it, then check that its status and the withdrawn
+      proposal's are unchanged by the award
+  - id: R-2.34
+    version: 1
+    why: the criterion names a state, not the words shown for it; the test required
+      the word 'disqualified' to appear, and in the refusal cases it took that
+      word's absence as proof, which proves nothing; it also read the history at
+      a stage when the proposal's history is not yet shown to the reader.
+      Establish disqualification because the status changed and the reason is
+      recorded, read the reason once the history can be read or wherever the
+      reason is shown, and establish a refusal because the status is unchanged

@@ -247,6 +247,7 @@ Submitting a draft opportunity for review is refused unless the opportunity is c
 - then: the request is refused with a message saying the opportunity is incomplete and asking the author to complete and save the form
 - state: accepted
 - note: Code With Us checks only title, teaser, remote-work fields, location and description at this point, while Sprint With Us additionally checks budget, skills, weights and every phase — so a Code With Us opportunity can reach "under review" with a missing reward or missing skills and be caught only at publication.
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.22 · v1 · confirmed · recovered
 Only an administrator may publish an opportunity.
@@ -460,6 +461,7 @@ Advancing a Sprint With Us or Team With Us opportunity out of the consensus stag
 - when: its author asks to move it on while a consensus is unsubmitted, or while no proponent has cleared every question's minimum score
 - then: the request is refused and the reason is named
 - state: accepted
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.42 · v1 · confirmed · recovered
 Advancing a Sprint With Us opportunity to the team scenario stage is refused unless every proponent in the code challenge has been scored or disqualified and at least one remains screened in.

@@ -136,6 +136,7 @@ Only an administrator is offered the action that finalises consensus scores, alt
 The service must reject an evaluation panel that names no chair, applying the same rule the browser form already applies, so that no opportunity can enter consensus with nobody able to record the agreed score.
 - state: accepted
 - replaces: R-5.2
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-5.10 · v1 · confirmed · authored
 The refusal shown when no proponent clears every question's minimum score must name the stage that actually follows — the Code Challenge for Sprint With Us and the Challenge for Team With Us.

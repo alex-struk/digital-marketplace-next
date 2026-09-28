@@ -234,6 +234,7 @@ A change to an organization's contact phone number made while editing its profil
 Asking for the organizations one may act on behalf of is refused as not permitted for anyone who is not a signed-in vendor, rather than answered with an empty list.
 - state: accepted
 - replaces: R-3.16
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-3.21 · v2 · confirmed · recovered
 In the organization list, the owner's name, the team size and both qualification marks are shown only to a service administrator and, for a given organization, to the vendors who own or administer it; every other viewer sees that organization's legal name, logo, active state and service areas alone, and the owner and qualification columns are not offered at all to a visitor who is not signed in or to public sector staff.

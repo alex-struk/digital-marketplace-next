@@ -74,6 +74,11 @@ rebind:
       paragraph and list-item text and needs a MESSAGE vocabulary word; read the
       panel's alerts (alertMessages) and field errors so the duplicate-member
       message is found"
+    closed: &a2
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-28T03:34:59.109Z
   - id: R-5.37
     target: old
     why: submitPanelWithMemberHoldingNoRole (index.ts:~6116) looks for the member
@@ -81,6 +86,7 @@ rebind:
       nested user object, so it throws before sending anything and
       memberWithoutRoleError reads the earlier 200 from open; get the member's
       id or email from input.member (personKey or userIdFor) and send the panel
+    closed: *a2
   - id: R-1.55
     target: old
     why: the vendor case has the same quiet return at index.ts:2275, so the vendor
@@ -90,6 +96,7 @@ rebind:
       must untick every chair box. duplicateMemberError and missingChairError
       use messages(), which misses alerts outside main and wording without a
       MESSAGE word; read alerts and field errors
+    closed: *a2
   - id: R-5.29
     target: old
     why: chairOnly is bound to contentText() (index.ts:4547, 4605), which returns
@@ -97,6 +104,7 @@ rebind:
       return empty when the consensus form is offered to the reader, and
       non-empty only when the page refuses them (Not Found or a notice that only
       the chair may record)
+    closed: *a2
   - id: R-4.4
     target: old
     why: the identity-provider sign-in (index.ts:1632-1670) is forced for the
@@ -105,6 +113,7 @@ rebind:
       any page that is not github.com; sign the deactivated persona in through
       the session route, or throw unbound whenever the destination is not a
       known identity-provider form
+    closed: *a2
   - id: R-4.14
     target: old
     why: userRow (index.ts:3950) reads only the first page of the paginated user
@@ -112,18 +121,21 @@ rebind:
       every page. signInThroughIdentityProvider goes to /sign-in without signing
       out first, so while the administrator is still signed in it lands on
       /dashboard and reports the sign-in control missing; sign out first
+    closed: *a2
   - id: R-3.13
     target: old
     why: "changeOwner (index.ts:3544-3551) gets the new owner with asText(input),
       which returns an empty string for {newOwner: <user object>}, so nobody is
       chosen and no transfer is made; read input.newOwner and choose that person
       by name or email, then confirm Change Owner"
+    closed: *a2
   - id: R-7.12
     target: old
     why: notFoundForUnknownAddress (index.ts:4999) returns contentText() even when
       the page exists, so the about page's own text reads as a Not Found screen;
       return text only when notFoundShown() is true, as userProfile.notFoundPage
       does
+    closed: *a2
   - id: R-7.17
     target: old
     why: pageBody (index.ts:4959) includes the page's heading and its
@@ -131,6 +143,7 @@ rebind:
       only the body, so the two readings can never be equal; make pageBody skip
       the heading and the dated line the way bodyElementNames does, so that only
       the bodies are compared
+    closed: *a2
   - id: R-7.22
     target: old
     why: the content create screen's duplicateSlugError, publishedSuccess and
@@ -139,11 +152,13 @@ rebind:
       deletedSuccess does. confirmPublish waits up to 15s for the address to
       leave /content/create, and a refused creation never leaves, so read the
       notice as soon as the submit is answered
+    closed: *a2
   - id: R-1.40
     target: old
     why: fullReport (index.ts:2727) returns contentText() without checking for the
       Not Found screen, so the refusal a non-administrator gets reads as a
       report; return empty when notFoundShown() is true
+    closed: *a2
   - id: R-1.10
     target: old
     why: publish (index.ts:1856-1859, 1880) returns quietly when the Publish control
@@ -152,6 +167,7 @@ rebind:
       (index.ts:1885 via messages) also misses the teaser's validation text
       because it needs a MESSAGE word and skips paragraph lines; read the
       field's own error
+    closed: *a2
   - id: R-1.16
     target: old
     why: publish turns the opportunity's startDate/completionDate into an
@@ -160,6 +176,7 @@ rebind:
       does not name. publish also returns quietly when Publish is disabled
       (index.ts:1880) instead of throwing, and it stops at step 8 Attachments
       with the form incomplete
+    closed: *a2
   - id: R-1.48
     target: old
     why: submitForReview (index.ts:1870) returns quietly when Submit for Review is
@@ -167,23 +184,27 @@ rebind:
       addPhase (index.ts:2092) nor completeRequired (index.ts:1014-1056) ticks a
       phase's required capabilities; complete the form fully, or throw naming
       the step that is still invalid
+    closed: *a2
   - id: R-1.53
     target: old
     why: the same defect as R-1.48. The Sprint With Us draft cannot be submitted for
       review because its phase capabilities are never ticked, and
       submitForReview (index.ts:1870) returns quietly on the disabled control,
       so the under-review cases never reach under review
+    closed: *a2
   - id: R-1.35
     target: old
     why: myProposalsTable (index.ts:3232) returns the tab's page text, where each
       table row spans several lines, so the title line never carries its
       Submitted status; return one line per table row, with the cells joined
+    closed: *a2
   - id: R-6.2
     target: old
     why: fieldError (index.ts:1885 -> 627, MESSAGE at 241) read the record's page
       heading as an error, because the opportunity title contains 'cannot ' and
       headings are not excluded; exclude headings and titles, and read only
       alerts and field-level errors
+    closed: *a2
   - id: R-2.14
     target: old
     why: each refused individual-proponent attempt walks the whole proposal wizard
@@ -192,6 +213,7 @@ rebind:
       index.ts:2766-2830), with a settle wait of up to 10s on each step, so the
       nine attempts run past the 120s budget; once an attempt is known to be
       refused, skip the later walks until the form is reopened
+    closed: *a2
   - id: R-2.19
     target: old
     why: addPhase clicks a capability chip (index.ts:2115) chosen from bounding
@@ -200,6 +222,7 @@ rebind:
       animating or hidden when clicked; look for the chip inside the expanded
       phase's own container, wait until the section is open and stable, and find
       the chip again before clicking
+    closed: *a2
   - id: R-2.29
     target: old
     why: historyTab for the Sprint With Us and Team With Us proposal views
@@ -207,6 +230,7 @@ rebind:
       contentText, which includes the tab labels Code Challenge and
       Interview/Challenge, so /challenge/ always matches; read only the History
       panel's table rows
+    closed: *a2
   - id: R-1.27
     target: old
     why: successfulProponent (index.ts:2389-2391) needs an exact 'Successful
@@ -215,9 +239,11 @@ rebind:
       so the reader who may see scores gets empty; take the proponent's name
       from that banner. The visitor-case status is read verbatim and is not an
       adapter defect
+    closed: *a2
   - id: R-8.31
     target: old
     why: proposalCwuEdit.startEditing (index.ts:3015) only goes through the Actions
       menu, which the proposal's /edit page does not have; like addAttachment
       (index.ts:1381-1389), use the top-bar Edit or the Proposal Details tab
       when they are present, and do nothing when the form is already editable
+    closed: *a2
