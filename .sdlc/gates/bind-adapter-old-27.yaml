@@ -1,0 +1,19 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Does this adapter bind every surface action and observation on old, and nothing else? Returned. Now marked unbound, submit_final_consensus_scores and confirm_submit_consensus no longer press Finalize, which bind-adapter-old-26#1 asked for. But the unbound reason ('no consensus-submission step apart from finalising') is not real. The target's consensus tab puts one conditional control in its top bar: 'Finalize Consensus Scores' only when every existing consensus record is submitted and the viewer is an administrator, and otherwise 'Submit Final Consensus Scores' for the chair, whose 'Please Confirm' dialog carries its own 'Submit Final Consensus Scores' button. This holds on both Sprint With Us and Team With Us. The probe looked only as the administrator in a state with no draft consensus (one submitted, one not begun and so with no record), which is exactly when the submit control gives way to Finalize. The typecheck reports no diagnostics under adapters/old/, and the other changes stay within navigation and locators. The ruling would change to approve once both members are bound to the submit control and its dialog, never falling back to the Finalize control or its confirmation.
+conditions:
+  - "tests/adapters/old/index.ts evaluationConsensusList: bind submitFinalConsensusScores to the top-bar control labelled 'Submit Final Consensus Scores' and nothing else. The target shows it to the chair at consensus in place of 'Finalize Consensus Scores' whenever a consensus is still a draft, or the chair is not an administrator. The run-27 probe looked only as the administrator with no draft consensus present, so it saw only Finalize. Where the top bar shows 'Finalize Consensus Scores' instead, or nothing, report that as the page's refusal or state. Never press Finalize."
+  - "tests/adapters/old/index.ts evaluationConsensusList: bind confirmSubmitConsensus to the 'Submit Final Consensus Scores' button inside the 'Please Confirm' dialog that the submit control opens. The dialog's body begins 'By submitting this consensus, you, as the chair...'. Wait for the outcome notice ('Consensuses Submitted' or 'Unable to Submit Consensuses'), the same way confirmFinalize waits for its own notice. Do not accept a dialog whose button is 'Finalize Consensus Scores'."
+  - "tests/adapters/old/index.ts evaluationConsensusList: submitConfirmationModal must read only the submit confirmation (the dialog whose action is 'Submit Final Consensus Scores') and answer empty for the finalize confirmation. Today it returns whatever dialog is open."
+  - "tests/adapters/old/bindings.yaml evaluation-consensus-list-swu and evaluation-consensus-list-twu: set submit_final_consensus_scores and confirm_submit_consensus back to bound, in line with index.ts once the conditions above are done."
+cost: 0.7606728
+turns: 8
+session: "76dbf7be-0947-43c9-ad82-56df54ef343a"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T18:07:48.956Z
