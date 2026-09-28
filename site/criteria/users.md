@@ -7,7 +7,7 @@
 | R-4.1 | acceptance/users/R-4.1.spec.ts |  | unbound |
 | R-4.2 | acceptance/users/R-4.2.spec.ts |  | unbound |
 | R-4.3 | acceptance/users/R-4.3.spec.ts |  | unbound |
-| R-4.4 | acceptance/users/R-4.4.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-4.4 | acceptance/users/R-4.4.spec.ts |  | fail |
 | R-4.5 | acceptance/users/R-4.5.spec.ts |  | unbound |
 | R-4.6 | acceptance/users/R-4.6.spec.ts |  | pass |
 | R-4.7 | — |  |  |
@@ -17,14 +17,14 @@
 | R-4.11 | — |  |  |
 | R-4.12 | acceptance/users/R-4.12.spec.ts |  | pass |
 | R-4.13 | not testable: unobservable: the outcome is that the service offers no way to create an administrator where none exists, and that only a change to the stored data outside the service can. That is the absence of an action anywhere in the service, and no observation reports an absence of that kind — a test could only show that the particular controls it knows of do not do it, never that no other route exists. The given could be seeded (a seed with no administrator account), but that would not help: the claim a test would then have to settle is still the non-existence of a route, and the documented manual route lies outside the service by definition. This is a property to be accepted by a reader of the rebuilt system's routes, not settled by a test. |  | not-testable |
-| R-4.14 | acceptance/users/R-4.14.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-4.14 | acceptance/users/R-4.14.spec.ts |  | fail |
 | R-4.15 | — |  |  |
 | R-4.16 | acceptance/users/R-4.16.spec.ts |  | pass |
 | R-4.17 | acceptance/users/R-4.17.spec.ts |  | pass |
 | R-4.18 | acceptance/users/R-4.18.spec.ts |  | pass |
 | R-4.19 | acceptance/users/R-4.19.spec.ts |  | fail (ruled: defect-in-old) |
 | R-4.20 | acceptance/users/R-4.20.spec.ts |  | unbound |
-| R-4.21 | acceptance/users/R-4.21.spec.ts |  | fail |
+| R-4.21 | acceptance/users/R-4.21.spec.ts |  | fail (ruled: defect-in-old) |
 | R-4.22 | acceptance/users/R-4.22.spec.ts |  | pass |
 | R-4.23 | acceptance/users/R-4.23.spec.ts |  | unbound |
 | R-4.24 | acceptance/users/R-4.24.spec.ts |  | unbound |
@@ -313,6 +313,7 @@ A person whose account an administrator reactivates is told that an administrato
 
 The list of everyone registered with the service may be read only by an administrator. The same request made by a public sector employee who is not an administrator, or by anyone else, is refused rather than answered, so the email address and account status of every registered person are never disclosed more widely than the interface offers them.
 - replaces: R-4.15
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-4.22 · v1 · confirmed · accepted
 

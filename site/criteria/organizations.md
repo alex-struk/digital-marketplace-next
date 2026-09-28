@@ -16,14 +16,14 @@
 | R-3.10 | acceptance/organizations/R-3.10.spec.ts |  | unbound |
 | R-3.11 | acceptance/organizations/R-3.11.spec.ts |  | unbound |
 | R-3.12 | acceptance/organizations/R-3.12.spec.ts |  | pass |
-| R-3.13 | acceptance/organizations/R-3.13.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-3.13 | acceptance/organizations/R-3.13.spec.ts |  | fail |
 | R-3.14 | acceptance/organizations/R-3.14.spec.ts |  | pass |
 | R-3.15 | acceptance/organizations/R-3.15.spec.ts |  | unbound |
 | R-3.16 | — |  |  |
 | R-3.17 | acceptance/organizations/R-3.17.spec.ts |  | unbound |
 | R-3.18 | acceptance/organizations/R-3.18.spec.ts |  | fail (ruled: defect-in-old) |
 | R-3.19 | acceptance/organizations/R-3.19.spec.ts |  | fail (ruled: defect-in-old) |
-| R-3.20 | acceptance/organizations/R-3.20.spec.ts |  | fail |
+| R-3.20 | acceptance/organizations/R-3.20.spec.ts |  | fail (ruled: defect-in-old) |
 | R-3.21 | acceptance/organizations/R-3.21.spec.ts |  | pass |
 | R-3.22 | acceptance/organizations/R-3.22.spec.ts |  | fail (ruled: defect-in-old) |
 | R-3.23 | acceptance/organizations/R-3.23.spec.ts |  | pass |
@@ -268,6 +268,7 @@ A change to an organization's contact phone number made while editing its profil
 
 Asking for the organizations one may act on behalf of is refused as not permitted for anyone who is not a signed-in vendor, rather than answered with an empty list.
 - replaces: R-3.16
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-3.21 · v2 · confirmed · accepted
 

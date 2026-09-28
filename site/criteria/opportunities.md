@@ -13,53 +13,53 @@
 | R-1.7 | acceptance/opportunities/R-1.7.spec.ts |  | unbound |
 | R-1.8 | acceptance/opportunities/R-1.8.spec.ts |  | pass |
 | R-1.9 | acceptance/opportunities/R-1.9.spec.ts |  | pass |
-| R-1.10 | acceptance/opportunities/R-1.10.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-1.10 | acceptance/opportunities/R-1.10.spec.ts |  | fail |
 | R-1.11 | acceptance/opportunities/R-1.11.spec.ts |  | pass |
 | R-1.12 | acceptance/opportunities/R-1.12.spec.ts |  | pass |
 | R-1.13 | acceptance/opportunities/R-1.13.spec.ts |  | pass |
 | R-1.14 | acceptance/opportunities/R-1.14.spec.ts |  | pass |
 | R-1.15 | acceptance/opportunities/R-1.15.spec.ts |  | pass |
-| R-1.16 | acceptance/opportunities/R-1.16.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-1.16 | acceptance/opportunities/R-1.16.spec.ts |  | fail |
 | R-1.17 | acceptance/opportunities/R-1.17.spec.ts |  | fail (ruled: spec-wrong) |
 | R-1.18 | acceptance/opportunities/R-1.18.spec.ts |  | pass |
 | R-1.19 | acceptance/opportunities/R-1.19.spec.ts |  | pass |
 | R-1.20 | acceptance/opportunities/R-1.20.spec.ts |  | pass |
-| R-1.21 | acceptance/opportunities/R-1.21.spec.ts |  | fail |
+| R-1.21 | acceptance/opportunities/R-1.21.spec.ts |  | fail (ruled: defect-in-old) |
 | R-1.22 | acceptance/opportunities/R-1.22.spec.ts |  | pass |
 | R-1.23 | acceptance/opportunities/R-1.23.spec.ts |  | pass |
 | R-1.24 | acceptance/opportunities/R-1.24.spec.ts |  | pass |
 | R-1.25 | acceptance/opportunities/R-1.25.spec.ts |  | unbound |
 | R-1.26 | acceptance/opportunities/R-1.26.spec.ts |  | unbound |
-| R-1.27 | acceptance/opportunities/R-1.27.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-1.27 | acceptance/opportunities/R-1.27.spec.ts |  | fail |
 | R-1.28 | acceptance/opportunities/R-1.28.spec.ts |  | pass |
 | R-1.29 | acceptance/opportunities/R-1.29.spec.ts |  | unbound |
 | R-1.30 | acceptance/opportunities/R-1.30.spec.ts |  | pass |
 | R-1.31 | acceptance/opportunities/R-1.31.spec.ts |  | pass |
 | R-1.32 | acceptance/opportunities/R-1.32.spec.ts |  | pass |
 | R-1.33 | acceptance/opportunities/R-1.33.spec.ts |  | unbound |
-| R-1.34 | acceptance/opportunities/R-1.34.spec.ts |  | fail |
-| R-1.35 | acceptance/opportunities/R-1.35.spec.ts |  | fail (ruled: adapter-wrong) |
-| R-1.36 | acceptance/opportunities/R-1.36.spec.ts |  | fail |
-| R-1.37 | acceptance/opportunities/R-1.37.spec.ts |  | fail |
+| R-1.34 | acceptance/opportunities/R-1.34.spec.ts |  | fail (ruled: test-wrong) |
+| R-1.35 | acceptance/opportunities/R-1.35.spec.ts |  | fail |
+| R-1.36 | acceptance/opportunities/R-1.36.spec.ts |  | fail (ruled: test-wrong) |
+| R-1.37 | acceptance/opportunities/R-1.37.spec.ts |  | fail (ruled: test-wrong) |
 | R-1.38 | acceptance/opportunities/R-1.38.spec.ts |  | pass |
 | R-1.39 | acceptance/opportunities/R-1.39.spec.ts |  | pass |
-| R-1.40 | acceptance/opportunities/R-1.40.spec.ts |  | fail (ruled: adapter-wrong) |
-| R-1.41 | acceptance/opportunities/R-1.41.spec.ts |  | fail |
+| R-1.40 | acceptance/opportunities/R-1.40.spec.ts |  | fail |
+| R-1.41 | acceptance/opportunities/R-1.41.spec.ts |  | fail (ruled: defect-in-old) |
 | R-1.42 | acceptance/opportunities/R-1.42.spec.ts |  | pass |
 | R-1.43 | acceptance/opportunities/R-1.43.spec.ts |  | pass |
 | R-1.44 | — |  |  |
 | R-1.45 | — |  |  |
 | R-1.46 | — |  |  |
 | R-1.47 | — |  |  |
-| R-1.48 | acceptance/opportunities/R-1.48.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-1.48 | acceptance/opportunities/R-1.48.spec.ts |  | fail |
 | R-1.49 | acceptance/opportunities/R-1.49.spec.ts |  | unbound |
 | R-1.50 | acceptance/opportunities/R-1.50.spec.ts |  | pass |
 | D-opportunities-51 | — |  |  |
 | R-1.51 | not testable: unobservable: nothing the service does could show that a state it does not define is gone. No action requests a move to a suspended state, no observation returns the states an opportunity may hold or the states the list's state filter offers, and the mapping of a historical record onto a defined state happens before the rebuilt system reads it, which is a property of the migration rather than of anything the running service answers with. No addition to the surface would help; this is a claim a human accepts about the rebuild rather than one a test can settle. |  | not-testable |
 | R-1.52 | — |  |  |
-| R-1.53 | acceptance/opportunities/R-1.53.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-1.53 | acceptance/opportunities/R-1.53.spec.ts |  | fail |
 | R-1.54 | — |  |  |
-| R-1.55 | acceptance/opportunities/R-1.55.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-1.55 | acceptance/opportunities/R-1.55.spec.ts |  | fail |
 | R-1.56 | acceptance/opportunities/R-1.56.spec.ts |  | pass |
 
 ### R-1.1 · v3 · confirmed · accepted
@@ -309,6 +309,7 @@ Submitting a draft opportunity for review is refused unless the opportunity is c
 - when: its author submits it for review
 - then: the request is refused with a message saying the opportunity is incomplete and asking the author to complete and save the form
 - note: Code With Us checks only title, teaser, remote-work fields, location and description at this point, while Sprint With Us additionally checks budget, skills, weights and every phase — so a Code With Us opportunity can reach "under review" with a missing reward or missing skills and be caught only at publication.
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.22 · v1 · confirmed · accepted
 
@@ -522,6 +523,7 @@ Advancing a Sprint With Us or Team With Us opportunity out of the consensus stag
 - given: a Sprint With Us or Team With Us opportunity at the questions consensus stage
 - when: its author asks to move it on while a consensus is unsubmitted, or while no proponent has cleared every question's minimum score
 - then: the request is refused and the reason is named
+- note: calibrate 2026-09-28: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.42 · v1 · confirmed · accepted
 
