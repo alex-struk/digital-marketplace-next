@@ -13,7 +13,7 @@
 -- What is seeded is the condition, not the outcome. The opportunity is PUBLISHED and its
 -- deadline is thirty days ago; the proposals are SUBMITTED. Nothing here is in an
 -- evaluation state. The application's own hook — which runs in front of the resource
--- routes under /api and in front of /status, and which the oracle throttles to zero —
+-- routes under /api and in front of /status, and which the oracle throttles to two seconds —
 -- moves the opportunity to EVAL_QUESTIONS_INDIVIDUAL, moves each submitted proposal to
 -- UNDER_REVIEW_QUESTIONS, and gives each proposal its anonymous name. The anonymous names
 -- are deliberately left empty here: they are the application's work, and a test that
