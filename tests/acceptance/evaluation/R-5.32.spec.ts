@@ -4,7 +4,8 @@ import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
 // Each program has a seeded opportunity standing at consensus with every agreed score
-// submitted, so finalising is all that is left to do:
+// submitted, so finalising is all that is left to do. These are the copies held apart for
+// this criterion, so no other criterion has finalised them first:
 //
 //   - Sprint With Us, six proponents whose agreed question totals are 20, 18, 16, 14 and 12,
 //     and 17 for the sixth, which falls below the fourth question's minimum — five met every
@@ -14,21 +15,20 @@ import type { Surface } from "../../fixtures";
 //
 // The chair, who is the administrator, finalises from the consensus list.
 //
-// Screening is read from each proposal's own history, which is where a proposal's move into
-// a stage is recorded, and never from the vendor's own view of their proposal, which does not
-// name the stage. Each proposal's history is read before and after finalising and what
-// finalising added is compared across proposals, without depending on the words used for the
-// stage: the proposals that should be screened in must all have gained a common entry that
-// no proposal left behind gained, and no proposal left behind may carry it. The proponent
+// Screening is read from each proposal's own history entries, which is where a proposal's
+// move into a stage is recorded, and never from the vendor's own view of their proposal,
+// which does not name the stage. Each proposal's history is read before and after finalising
+// and what finalising added is compared across proposals, without depending on the words used
+// for the stage: the proposals that should be screened in must all have gained a common entry
+// that no proposal left behind gained, and no proposal left behind may carry it. The proponent
 // below the minimum outscores ones that are screened in, so its being left behind is the
 // minimum at work; the lowest one that met every minimum being left behind is the ceiling at
 // work.
 //
-// The agreed scores being recorded against each proponent is read as the questions score each
-// proposal carries once finalised, and those scores must stand in the order of the agreed
-// totals. That the history records them question by question is not asserted: no observation
-// reads a proposal's history entry by entry with its scores. The entry for this criterion in
-// not-testable.yaml keeps that clause owed.
+// The agreed scores being recorded against each proponent is read two ways: every proposal,
+// those left behind included, gains a history entry giving the agreed score of each question
+// in order — exactly the seeded agreed scores — and the questions score each proposal carries
+// once finalised stands in the order of the agreed totals.
 //
 // The move to the next stage is read as the opportunity's status changing, and naming the
 // challenge — the code challenge for Sprint With Us and the challenge for Team With Us.
@@ -46,8 +46,8 @@ async function readOrEmpty(read: () => Promise<string>): Promise<string> {
   }
 }
 
-// A history as a list of entries, with times and dates reduced to their shape so that the same
-// kind of entry recorded against different proposals reads the same.
+// The history entries as a list, with times, dates and scores reduced to their shape so that
+// the same kind of entry recorded against different proposals reads the same.
 function entries(history: string): string[] {
   return history
     .split(/\r?\n/)
@@ -68,6 +68,16 @@ function added(before: string[], after: string[]): string[] {
   return fresh;
 }
 
+// The per-question scores one history entry records, in question order, or null where it
+// records none.
+function questionScores(entry: string): number[] | null {
+  const found = [...entry.matchAll(/q\s*(\d+)\s*:\s*(\d+(?:\.\d+)?)/gi)];
+  if (found.length === 0) return null;
+  const byQuestion = new Map<number, number>();
+  for (const [, question, score] of found) byQuestion.set(Number(question), Number(score));
+  return [...byQuestion.keys()].sort((a, b) => a - b).map((question) => byQuestion.get(question)!);
+}
+
 function firstNumber(text: string): number {
   const match = text.replace(/,/g, "").match(/-?\d+(\.\d+)?/);
   return match ? Number(match[0]) : Number.NaN;
@@ -81,40 +91,51 @@ interface Program {
   byAgreedTotal: string[];
   screenedIn: string[];
   leftBehind: { proposalId: string; why: string }[];
+  agreedScores: Map<string, readonly number[]>;
   readHistory: (surface: Surface, proposalId: string) => Promise<string>;
   readQuestionsScore: (surface: Surface, proposalId: string) => Promise<string>;
   readOpportunityStatus: (surface: Surface) => Promise<string>;
   finalise: (surface: Surface) => Promise<void>;
 }
 
-const swu = seed.opportunities.swuConsensusSixProponents.id;
-const twu = seed.opportunities.twuConsensusFiveProponents.id;
+const swu = seed.opportunities.swuConsensusSixProponentsForHistory.id;
+const twu = seed.opportunities.twuConsensusFiveProponentsForHistory.id;
 
 const programs: Program[] = [
   {
     name: "Sprint With Us",
     opportunityId: swu,
     byAgreedTotal: [
-      seed.proposals.swuSixOne.id,
-      seed.proposals.swuSixTwo.id,
-      seed.proposals.swuSixSix.id,
-      seed.proposals.swuSixThree.id,
-      seed.proposals.swuSixFour.id,
-      seed.proposals.swuSixFive.id,
+      seed.proposals.swuHistoryOne.id,
+      seed.proposals.swuHistoryTwo.id,
+      seed.proposals.swuHistorySix.id,
+      seed.proposals.swuHistoryThree.id,
+      seed.proposals.swuHistoryFour.id,
+      seed.proposals.swuHistoryFive.id,
     ],
     screenedIn: [
-      seed.proposals.swuSixOne.id,
-      seed.proposals.swuSixTwo.id,
-      seed.proposals.swuSixThree.id,
-      seed.proposals.swuSixFour.id,
+      seed.proposals.swuHistoryOne.id,
+      seed.proposals.swuHistoryTwo.id,
+      seed.proposals.swuHistoryThree.id,
+      seed.proposals.swuHistoryFour.id,
     ],
     leftBehind: [
-      { proposalId: seed.proposals.swuSixFive.id, why: "a fifth proponent was screened in" },
-      { proposalId: seed.proposals.swuSixSix.id, why: "the proponent below a minimum was screened in" },
+      { proposalId: seed.proposals.swuHistoryFive.id, why: "a fifth proponent was screened in" },
+      { proposalId: seed.proposals.swuHistorySix.id, why: "the proponent below a minimum was screened in" },
     ],
+    agreedScores: new Map<string, readonly number[]>(
+      [
+        seed.proposals.swuHistoryOne,
+        seed.proposals.swuHistoryTwo,
+        seed.proposals.swuHistoryThree,
+        seed.proposals.swuHistoryFour,
+        seed.proposals.swuHistoryFive,
+        seed.proposals.swuHistorySix,
+      ].map((proposal): [string, readonly number[]] => [proposal.id, proposal.agreed_scores]),
+    ),
     readHistory: async (surface, proposalId) => {
       await surface.proposalSwuView.open({ opportunityId: swu, proposalId });
-      return readOrEmpty(() => surface.proposalSwuView.historyTab());
+      return readOrEmpty(() => surface.proposalSwuView.historyEntries());
     },
     readQuestionsScore: async (surface, proposalId) => {
       await surface.proposalSwuView.open({ opportunityId: swu, proposalId });
@@ -134,20 +155,29 @@ const programs: Program[] = [
     name: "Team With Us",
     opportunityId: twu,
     byAgreedTotal: [
-      seed.proposals.twuFiveOne.id,
-      seed.proposals.twuFiveTwo.id,
-      seed.proposals.twuFiveFive.id,
-      seed.proposals.twuFiveThree.id,
-      seed.proposals.twuFiveFour.id,
+      seed.proposals.twuHistoryOne.id,
+      seed.proposals.twuHistoryTwo.id,
+      seed.proposals.twuHistoryFive.id,
+      seed.proposals.twuHistoryThree.id,
+      seed.proposals.twuHistoryFour.id,
     ],
-    screenedIn: [seed.proposals.twuFiveOne.id, seed.proposals.twuFiveTwo.id, seed.proposals.twuFiveThree.id],
+    screenedIn: [seed.proposals.twuHistoryOne.id, seed.proposals.twuHistoryTwo.id, seed.proposals.twuHistoryThree.id],
     leftBehind: [
-      { proposalId: seed.proposals.twuFiveFour.id, why: "a fourth proponent was screened in" },
-      { proposalId: seed.proposals.twuFiveFive.id, why: "the proponent below a minimum was screened in" },
+      { proposalId: seed.proposals.twuHistoryFour.id, why: "a fourth proponent was screened in" },
+      { proposalId: seed.proposals.twuHistoryFive.id, why: "the proponent below a minimum was screened in" },
     ],
+    agreedScores: new Map<string, readonly number[]>(
+      [
+        seed.proposals.twuHistoryOne,
+        seed.proposals.twuHistoryTwo,
+        seed.proposals.twuHistoryThree,
+        seed.proposals.twuHistoryFour,
+        seed.proposals.twuHistoryFive,
+      ].map((proposal): [string, readonly number[]] => [proposal.id, proposal.agreed_scores]),
+    ),
     readHistory: async (surface, proposalId) => {
       await surface.proposalTwuView.open({ opportunityId: twu, proposalId });
-      return readOrEmpty(() => surface.proposalTwuView.historyTab());
+      return readOrEmpty(() => surface.proposalTwuView.historyEntries());
     },
     readQuestionsScore: async (surface, proposalId) => {
       await surface.proposalTwuView.open({ opportunityId: twu, proposalId });
@@ -171,13 +201,22 @@ for (const program of programs) {
     const everyone = [...screenedIn, ...leftBehind.map((p) => p.proposalId)];
     const history = (proposalId: string): Promise<string[]> =>
       program.readHistory(surface, proposalId).then(entries);
+    const recordedScores = async (proposalId: string): Promise<number[][]> =>
+      (await program.readHistory(surface, proposalId))
+        .split(/\r?\n/)
+        .map(questionScores)
+        .filter((scores): scores is number[] => scores !== null);
 
     await surface.signIn(persona.administrator);
 
     const statusBefore = (await program.readOpportunityStatus(surface)).trim();
     expect(statusBefore).toBeTruthy();
     const before = new Map<string, string[]>();
-    for (const proposalId of everyone) before.set(proposalId, await history(proposalId));
+    for (const proposalId of everyone) {
+      before.set(proposalId, await history(proposalId));
+      // Nothing has recorded the agreed scores yet.
+      expect(await recordedScores(proposalId)).not.toContainEqual([...program.agreedScores.get(proposalId)!]);
+    }
 
     await program.finalise(surface);
 
@@ -186,6 +225,16 @@ for (const program of programs) {
       .poll(async () => (await program.readOpportunityStatus(surface)).trim(), settle)
       .not.toBe(statusBefore);
     expect((await program.readOpportunityStatus(surface)).toLowerCase()).toContain("challenge");
+
+    // The agreed score of every question is recorded against each proponent, in its history.
+    for (const proposalId of everyone) {
+      await expect
+        .poll(() => recordedScores(proposalId), {
+          ...settle,
+          message: `proposal ${proposalId} has no history entry recording its agreed scores`,
+        })
+        .toContainEqual([...program.agreedScores.get(proposalId)!]);
+    }
 
     // The highest-scoring proponents that met every minimum are screened in, and no others.
     const gained = new Map<string, string[]>();
@@ -215,7 +264,7 @@ for (const program of programs) {
       expect(intoNextStage.filter((line) => gained.get(proposalId)!.includes(line)), why).toEqual([]);
     }
 
-    // The agreed scores are recorded against each proponent, in the order of the agreed totals.
+    // The agreed scores stand against each proponent in the order of the agreed totals.
     const scores: number[] = [];
     for (const proposalId of program.byAgreedTotal) {
       const shown = await program.readQuestionsScore(surface, proposalId);
