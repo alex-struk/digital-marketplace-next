@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the added R-5.29 tests follow from the criterion and nothing else? Approve. The criterion says only the chair may record and change the consensus, one per proponent, and only while the opportunity is in consensus. The three existing tests cover recording by a non-chair, the chair's duplicate, and recording before consensus. The four new tests, two per program, cover the two clauses the not-testable entry held open. A non-chair evaluator's change to the chair's consensus is not reported accepted and leaves the stored scores and notes unchanged. The chair's change once the opportunity is past consensus is refused the same way. Each is measured against the chair's accepted change on the in-consensus opportunity, which the criterion's 'only the chair may change' implies. Every step uses contract actions and observations (change_consensus_by_request, stored_scores, stored_notes, request_accepted) and the seeded starting points in the seed manifest (swuConsensusAllAgreed/twuConsensusAllAgreed, swuPastConsensus/twuPastConsensus). Nothing implementation-shaped leaks in, and the check on the seeded note text is a precondition guard, not an extra claim. Every clause of the criterion is now asserted, so removing the not-testable entry is right. The runner's typecheck reports no diagnostics under acceptance/evaluation; its failures are in adapters/new, which this proposal does not answer for. The seeded chair also being an administrator does not weaken the past-consensus test, because the criterion refuses that change whoever makes it. This would change to a return if typecheck diagnostics appeared under acceptance/evaluation, or if the seed no longer made staffOne a non-chair evaluator or were not reset between tests.
+conditions: []
+cost: 0.44143859999999996
+turns: 4
+session: "393fabc8-5cff-4cf4-bdbe-1dda9e6f7810"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T16:44:41.254Z

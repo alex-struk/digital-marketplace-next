@@ -163,23 +163,3 @@ criteria:
       property of the migration rather than of anything the running service
       answers with. No addition to the surface would help; this is a claim a
       human accepts about the rebuild rather than one a test can settle."
-  - id: R-5.29
-    version: 1
-    clause: Only the chair may ... change the consensus (an evaluator who is not the
-      chair changing the chair's agreed scores), and only while the opportunity
-      is in consensus (the chair changing a consensus once the opportunity has
-      moved past consensus)
-    reason: "blocked: no observation returns the agreed scores or notes a consensus
-      holds. evaluation-consensus-edit-swu and -twu offer consensus_status,
-      editable_after_submitted and the panel members' own scores and notes, none
-      of which is the consensus itself, so a change that was refused cannot be
-      told from one that was accepted. Once an opportunity is past consensus
-      every proponent already carries a consensus, so the only attempt left to
-      make there is a change, which is unreadable for the same reason."
-    missing: an observation on evaluation-consensus-edit-swu and
-      evaluation-consensus-edit-twu returning the agreed score and note stored
-      for each question (for example agreed_scores and agreed_notes), or a
-      consensus-by-request page beside evaluation-individual-request-swu/-twu
-      with stored_scores and stored_notes, readable by the chair or an
-      administrator at any stage
-    owner: contract

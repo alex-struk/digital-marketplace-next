@@ -3889,7 +3889,7 @@ owed:
     id: R-5.29
     version: 1
     domain: evaluation
-    stage: derive-tests
+    stage: calibrate
     why: an observation on evaluation-consensus-edit-swu and
       evaluation-consensus-edit-twu returning the agreed score and note stored
       for each question (for example agreed_scores and agreed_notes), or a
@@ -3913,3 +3913,9 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-28T16:32:20.421Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-28T16:44:41.314Z
+    target: old
