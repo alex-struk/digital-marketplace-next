@@ -1,0 +1,52 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: which of the 37 calibration failures against old did this project's own adapter cause? Ruling: approve, with one triage line per failing criterion. Reason: each failure was read against its test and against tests/adapters/old/index.ts. Twenty-two point at the binding, each for a specific defect named in its condition. Examples: index.ts:2275 returns quietly when a vendor is not offered, so a refused vendor reads as added. Several reads bind to contentText() and return the whole page where the test asks for one part: fullReport, notFoundForUnknownAddress, chairOnly, historyTab. messages() drops alerts outside main and any wording missing from the MESSAGE vocabulary. Disabled Publish and Submit for Review controls return without error. changeOwner reads an empty name from an object input. The sign-in for a deactivated account takes the identity-provider path and fills a username field on whatever page it lands on. Fifteen are product questions because the adapter asked the right thing and the app answered it. The service did not refuse where refusal was expected (R-4.21, R-3.20, R-8.22, R-8.25, R-5.9). The legacy app says Non-compliant, not disqualified (R-2.27, R-2.33, R-2.34). R-1.21's alert says 'could not be updated', not 'incomplete'. R-5.21 and R-1.41 reached the right screen and no refusal message was found. R-1.34, R-1.36 and R-1.37 fail at a cap of 50 in tests/fixtures/mail.ts:18, where the Mailpit search is called without a limit. R-5.17 counts mail left over from earlier tests because mail.clear() is never checked. Both are in the shared fixture, not the adapter, and the product owner should route them to the test's author. What would change this: if the next binding run fixes the named adapter defects and the same criteria still fail for the same reason, they become product questions.
+conditions:
+  - "adapter-wrong R-5.1: pickPanelMember (index.ts:2275) returns quietly when the chooser does not offer a vendor, so addPanelMember({member: vendorOne}) reads as a success and the test finds the vendor missing from the panel; it must throw so the refusal is seen. duplicateMemberError reads messages(/duplicate|already/i), which only reads inside main, skips paragraph and list-item text and needs a MESSAGE vocabulary word; read the panel's alerts (alertMessages) and field errors so the duplicate-member message is found"
+  - "adapter-wrong R-5.37: submitPanelWithMemberHoldingNoRole (index.ts:~6116) looks for the member with field(input, 'member') and asText(input), and neither accepts a nested user object, so it throws before sending anything and memberWithoutRoleError reads the earlier 200 from open; get the member's id or email from input.member (personKey or userIdFor) and send the panel"
+  - "adapter-wrong R-1.55: the vendor case has the same quiet return at index.ts:2275, so the vendor reads as added and the test never sees a refusal; throw instead. For the no-chair case, makeChair (index.ts:4265-4269) can only tick a Panel Chair box, so a panel with no chair can never be composed; with a null member it must untick every chair box. duplicateMemberError and missingChairError use messages(), which misses alerts outside main and wording without a MESSAGE word; read alerts and field errors"
+  - "adapter-wrong R-5.29: chairOnly is bound to contentText() (index.ts:4547, 4605), which returns the whole proposal page for every reader and so can never read falsy; return empty when the consensus form is offered to the reader, and non-empty only when the page refuses them (Not Found or a notice that only the chair may record)"
+  - "adapter-wrong R-4.4: the identity-provider sign-in (index.ts:1632-1670) is forced for the deactivated persona although this target's identity is session-route, and after pressing Sign In Using GitHub it fills getByLabel(/username/i) on any page that is not github.com; sign the deactivated persona in through the session route, or throw unbound whenever the destination is not a known identity-provider form"
+  - "adapter-wrong R-4.14: userRow (index.ts:3950) reads only the first page of the paginated user list (20 rows, ending before the seeded names later in the alphabet); read every page. signInThroughIdentityProvider goes to /sign-in without signing out first, so while the administrator is still signed in it lands on /dashboard and reports the sign-in control missing; sign out first"
+  - "adapter-wrong R-3.13: changeOwner (index.ts:3544-3551) gets the new owner with asText(input), which returns an empty string for {newOwner: <user object>}, so nobody is chosen and no transfer is made; read input.newOwner and choose that person by name or email, then confirm Change Owner"
+  - "adapter-wrong R-7.12: notFoundForUnknownAddress (index.ts:4999) returns contentText() even when the page exists, so the about page's own text reads as a Not Found screen; return text only when notFoundShown() is true, as userProfile.notFoundPage does"
+  - "adapter-wrong R-7.17: pageBody (index.ts:4959) includes the page's heading and its Published/Updated line, while embeddedSection (index.ts:2425-2437) returns only the body, so the two readings can never be equal; make pageBody skip the heading and the dated line the way bodyElementNames does, so that only the bodies are compared"
+  - "adapter-wrong R-7.22: the content create screen's duplicateSlugError, publishedSuccess and fieldError read contentText() (index.ts:4843, 4858-4859), which drops alerts rendered after the footer; read them with alertLines, as deletedSuccess does. confirmPublish waits up to 15s for the address to leave /content/create, and a refused creation never leaves, so read the notice as soon as the submit is answered"
+  - "adapter-wrong R-1.40: fullReport (index.ts:2727) returns contentText() without checking for the Not Found screen, so the refusal a non-administrator gets reads as a report; return empty when notFoundShown() is true"
+  - "adapter-wrong R-1.10: publish (index.ts:1856-1859, 1880) returns quietly when the Publish control is disabled, so the test treats the submission as made and waits for a field error; it must throw when Publish is disabled. fieldError (index.ts:1885 via messages) also misses the teaser's validation text because it needs a MESSAGE word and skips paragraph lines; read the field's own error"
+  - "adapter-wrong R-1.16: publish turns the opportunity's startDate/completionDate into an Implementation phase (phaseDatesOf, index.ts:2011-2014 and 1849), so the case without an implementation phase gets one; do not add phases the input does not name. publish also returns quietly when Publish is disabled (index.ts:1880) instead of throwing, and it stops at step 8 Attachments with the form incomplete"
+  - "adapter-wrong R-1.48: submitForReview (index.ts:1870) returns quietly when Submit for Review is disabled. The Sprint With Us form is left incomplete because neither addPhase (index.ts:2092) nor completeRequired (index.ts:1014-1056) ticks a phase's required capabilities; complete the form fully, or throw naming the step that is still invalid"
+  - "adapter-wrong R-1.53: the same defect as R-1.48. The Sprint With Us draft cannot be submitted for review because its phase capabilities are never ticked, and submitForReview (index.ts:1870) returns quietly on the disabled control, so the under-review cases never reach under review"
+  - "adapter-wrong R-1.35: myProposalsTable (index.ts:3232) returns the tab's page text, where each table row spans several lines, so the title line never carries its Submitted status; return one line per table row, with the cells joined"
+  - "adapter-wrong R-6.2: fieldError (index.ts:1885 -> 627, MESSAGE at 241) read the record's page heading as an error, because the opportunity title contains 'cannot ' and headings are not excluded; exclude headings and titles, and read only alerts and field-level errors"
+  - "adapter-wrong R-2.14: each refused individual-proponent attempt walks the whole proposal wizard about six times (openTermsDialog from acceptProgramTerms, acceptAppTerms and submitProposal; completeRequired(true) plus toStepShowingMessages, index.ts:2766-2830), with a settle wait of up to 10s on each step, so the nine attempts run past the 120s budget; once an attempt is known to be refused, skip the later walks until the form is reopened"
+  - "adapter-wrong R-2.19: addPhase clicks a capability chip (index.ts:2115) chosen from bounding boxes between the phase headings (index.ts:2096), after an unfold click (index.ts:2061-2067) that may close the section again, so the chip is animating or hidden when clicked; look for the chip inside the expanded phase's own container, wait until the section is open and stable, and find the chip again before clicking"
+  - "adapter-wrong R-2.29: historyTab for the Sprint With Us and Team With Us proposal views (index.ts:3139, 3186) returns the whole page through tabContent -> contentText, which includes the tab labels Code Challenge and Interview/Challenge, so /challenge/ always matches; read only the History panel's table rows"
+  - "adapter-wrong R-1.27: successfulProponent (index.ts:2389-2391) needs an exact 'Successful Proponent' or 'Awarded To' line and never reads the award banner sentence ('awarded to <name>') that awardBanner (index.ts:2412-2421) already finds, so the reader who may see scores gets empty; take the proponent's name from that banner. The visitor-case status is read verbatim and is not an adapter defect"
+  - "adapter-wrong R-8.31: proposalCwuEdit.startEditing (index.ts:3015) only goes through the Actions menu, which the proposal's /edit page does not have; like addAttachment (index.ts:1381-1389), use the top-bar Edit or the Proposal Details tab when they are present, and do nothing when the form is already editable"
+  - "product-question R-5.9"
+  - "product-question R-5.21"
+  - "product-question R-5.17"
+  - "product-question R-1.41"
+  - "product-question R-4.21"
+  - "product-question R-3.20"
+  - "product-question R-1.21"
+  - "product-question R-1.34"
+  - "product-question R-1.36"
+  - "product-question R-1.37"
+  - "product-question R-8.22"
+  - "product-question R-8.25"
+  - "product-question R-2.27"
+  - "product-question R-2.33"
+  - "product-question R-2.34"
+cost: 4.7655992
+turns: 12
+session: "51e11cec-2907-4279-9d77-9cfe89e51060"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T03:09:47.907Z
