@@ -34,3 +34,27 @@ I fixed all nine findings in `tests/adapters/old/index.ts`. None of them is prov
 
 **Not verified**
 - **Clearing a pre-selected organization:** the vendor I checked had no qualifying organization, so nothing was pre-selected. I could not watch Backspace clear the Organization chooser itself. I rely on that working because Backspace clears the panel's Chair chooser on this app. If it does not clear, the adapter throws a refusal naming the organization left chosen, rather than continuing silently.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+The question is whether tests/adapters/old/index.ts now binds every surface action and observation on old for the nine criteria sent back past the rebind limit, and nothing else. I approve. Each edit carries out the third send from runner:bind-adapter's account, which is what decided this ruling. R-2.4: delete_proposal on a non-draft proposal with no Delete now returns instead of throwing, so the test reaches its status check. R-5.16: add, remove, chair and save on a locked panel now return and leave the lock for panel_locked_after_consensus. R-2.28: the scoring actions return when the tab shows the wrong-stage notice, and the notice stays on screen for wrong_stage_error. R-2.10 and R-2.20: the terms actions now close the 'Review Terms and Conditions' dialog, and save_draft and step navigation clear any dialog left open first. R-2.17: choose_organization reads back which organization is chosen, clears a pre-selected one it was not asked for, and throws a refusal if that one cannot be cleared. add_team_member_for_resource and set_hourly_rate now return when no organization is chosen, leaving that for the test to read, instead of throwing. R-2.22: save_changes applies the named organization before saving. R-2.31: price_score reads the PRICE column of the opportunity's Proposals table, as send 3 asked. Nothing outside the adapter moves, and bindings.yaml is unchanged. The runner's typecheck exits 2, but it lists no diagnostics under adapters/old/; both errors are in adapters/new/, which this proposal does not answer for. The new per-test state is safe because tests/fixtures/index.ts creates the adapter fresh for each test after resetting the target to its seed, which also wipes the probe Team With Us opportunity the agent created. Two points are noted and do not block. First, Backspace clearing the Organization chooser was never observed on old; if it fails, the adapter throws a refusal naming the organization left chosen, so the failure would be visible rather than silent. Second, attachment_address can now confirm a save dialog left open, which gives an observation a side effect. It is scoped to a publish the test's own add_attachment started, and add_attachment now completes that save itself, so the fallback should rarely fire. Calibration against old decides whether these hold. Any of these would change the ruling: calibration shows the chooser is not cleared, the proposal proceeding under 'Northern Pines Digital Ltd.' again, or attachment_address publishing changes the test never asked for.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `c80173efdb3ea8e2a42bc0740ee883342d6848f5`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
