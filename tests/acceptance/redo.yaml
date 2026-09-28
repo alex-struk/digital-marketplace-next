@@ -281,6 +281,14 @@ redo:
       criterion never promised; establish that the proposal was taken out of
       contention because its status changed from what it was and the given
       reason is recorded against it, not because a particular label appears
+    closed: &a5
+      outcome: met
+      why: derived again by derive-tests-proposals-stale-4, in the line of work
+        approved as derive-tests-proposals-6
+      by: derive-tests-proposals-6
+      at: 2026-09-28T05:25:52.462Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-2.33
     version: 1
     why: the criterion names a state, not the words shown for it, and the test
@@ -289,6 +297,7 @@ redo:
       because its status changed from what it was and the given reason is
       recorded against it, then check that its status and the withdrawn
       proposal's are unchanged by the award
+    closed: *a5
   - id: R-2.34
     version: 1
     why: the criterion names a state, not the words shown for it; the test required
@@ -298,3 +307,4 @@ redo:
       Establish disqualification because the status changed and the reason is
       recorded, read the reason once the history can be read or wherever the
       reason is shown, and establish a refusal because the status is unchanged
+    closed: *a5

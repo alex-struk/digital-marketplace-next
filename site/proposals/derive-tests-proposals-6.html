@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-proposals-6 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">197</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">193</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">168</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-proposals-6</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-28 05:25</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.282 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised proposals tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I made the one change the returned ruling asked for in <code>tests/acceptance/proposals/R-2.33.spec.ts</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.282 (Claude Code))</p>
+<p>I made the one change the returned ruling asked for in <code>tests/acceptance/proposals/R-2.33.spec.ts</code>. I couldn&#39;t re-run the typecheck afterwards, because running the TypeScript compiler here needs an approval nobody was present to give.</p>
+<p><strong>Condition 1 (R-2.33):</strong> In the first test I removed the assertion that <code>opportunityCwuView.successfulProponent()</code> contains <code>seed.organizations.qualified.legal_name</code>. The test now checks that the opportunity was awarded in one way only: after <code>awardProposal()</code>, the opportunity&#39;s status must change from what it read just before the award. That is the check the ruling asked to keep, and it was already there. I also reworded the file&#39;s opening comment, which described the award as naming the organization as the successful proponent. It now says only that the opportunity&#39;s status changes from what it was before the award. Nothing else in the file changed:</p>
+<ul><li>the awarded proposal&#39;s status still has to change;</li><li>the disqualified and withdrawn proposals still have to read the same after the award as before it;</li><li>the second test is untouched.</li></ul>
+<p><code>seed</code> is still imported, because both tests use it to name the opportunities and proposals, so the edit leaves no unused import.</p>
+<p><strong>Things to check:</strong></p>
+<ul><li><strong>Unverified typecheck:</strong> the removed lines were a single self-contained statement, so I don&#39;t expect the change to break compilation. It is still unconfirmed, so the next stage should re-run the typecheck.</li><li><strong>Header date:</strong> I left the header lines as they were. The &quot;derived&quot; date reads 2026-09-28, one day after today&#39;s date in this session. No new header was supplied, so I did not change the date to an earlier day on my own; it should be looked at when the file is ruled on.</li></ul>
+<p>No other file in <code>tests/acceptance/proposals/</code> changed, and <code>tests/acceptance/not-testable.yaml</code> is untouched: this condition needed no new entry, and the existing R-2.27 draft-clause entry stays as it was. No surface action or observation was missing for this fix, so there is nothing new for the contract stage to add. I acted on the only condition, and nothing asked me to change a path outside this stage&#39;s boundary.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-28 05:25.</p>
+<div class="body"><p>Question: do the revised proposals tests now follow from their criteria and from nothing else? Ruling: approve. The only instruction the earlier ruling left owed (derive-tests-proposals-stale-4#1) is carried out. R-2.33.spec.ts no longer calls opportunityCwuView.successfulProponent() or reads any organization&#39;s name. The opportunity counts as awarded because its status, read after awardProposal(), differs from the status read just before it. That matches the criterion&#39;s &#39;the opportunity becomes awarded&#39; without adding a proponent or a name it never mentions. The rest of R-2.33 still follows its criterion: the awarded proposal&#39;s status as its own vendor reads it changes; the disqualified proposal&#39;s vendor-read status and the withdrawn proposal&#39;s history read the same after the award as before it; the second test covers &#39;marks every other proposal still in contention as not awarded&#39; by requiring the unchosen proposal&#39;s status to change to something different from the chosen one&#39;s. R-2.27 and R-2.34 carry the approach the earlier ruling accepted. A state change is read as a status differing from before, never as a particular word appearing. The R-2.27 draft clause has a not-testable entry naming its clause. Its reason is real: no seeded lapsed opportunity carries a draft beside a proposal that can be scored, and a test cannot create an opportunity with a deadline already passed. It is owned by contract, and the ledger already carries it as missing-test/R-2.27. The runner&#39;s typecheck reports no diagnostics under acceptance/proposals/. The non-zero exit comes from two diagnostics in adapters/new/, outside this proposal. The 2026-09-28 &#39;derived&#39; date matches the proposal&#39;s opened timestamp (2026-09-28T05:25Z) and is not a defect. This ruling would change if the typecheck reported errors in the proposals specs, or if a test were shown to rely on an observation its criterion does not name.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met derive-tests-proposals-stale-4#1: the successfulProponent()/seed.organizations.qualified.legal_name assertion is removed from the first test in tests/acceptance/proposals/R-2.33.spec.ts; the opportunity-awarded check is now <code>expect.poll(() =&gt; opportunityStatus(surface, opportunityId), settle).not.toBe(beforeAward)</code> after awardProposal(), and the file&#39;s opening comment no longer describes a named successful proponent</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

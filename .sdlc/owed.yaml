@@ -3763,3 +3763,17 @@ owed:
         gate: G3
         at: 2026-09-28T05:17:46.994Z
     target: old
+  - kind: missing-test
+    item: R-2.27
+    id: R-2.27
+    version: 1
+    domain: proposals
+    stage: contract
+    why: a seeded Code With Us opportunity, published with its deadline passed,
+      carrying one DRAFT proposal and at least one SUBMITTED proposal from a
+      vendor with a persona (users.organizationOwner or users.proponentTwo),
+      named in tests/seed/manifest.yaml for R-2.27
+    from: derive-tests-proposals-6
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-28T05:25:52.069Z

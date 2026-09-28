@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-proposals-stale-4 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">197</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">193</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">168</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-proposals-stale-4</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-28 05:23</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.282 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the proposals criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the three tests the ruling sent back.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.282 (Claude Code))</p>
+<p>I rewrote the three tests the ruling sent back. All three criteria (R-2.27, R-2.33 and R-2.34) now have a test file in <code>tests/acceptance/proposals/</code>, and none of them depends on a particular word being shown. I have not run or type-checked them: this workspace has no TypeScript toolchain and no target to run against. I searched the three files by hand for selectors, locator calls, test ids, routes and URLs and found none.</p>
+<p><strong>How state is read now.</strong> A proposal&#39;s status is read the way its own vendor sees it, on the proposal&#39;s management screen (<code>proposalCwuEdit.status()</code>, or <code>proposalTwuEdit.status()</code> for Team With Us).</p>
+<ul><li><strong>Disqualified</strong> means that status is different from what it was before, and the reason appears on the proposal&#39;s history or proposal tab. The administrator reads the reason on a Code With Us proposal only, where the history should be readable during evaluation.</li><li><strong>Refused</strong> means that status is exactly what it was before. The refusal tests also accept a form that won&#39;t send the request at all, since that leaves the proposal unchanged too.</li><li><strong>Opportunity moved on</strong> means its status is different from what it was before the action.</li></ul>
+<p>The only place a label is still matched is while waiting for a seeded opportunity to close, which only sets up the starting point and follows the closing procedure in <code>observables.yaml</code>.</p>
+<p><strong>R-2.27.</strong></p>
+<ul><li><strong>First test:</strong> after the closure, one proposal is disqualified. That is shown by its vendor-read status changing and the reason being recorded. Scoring the second proposal leaves the opportunity&#39;s status as it was. Scoring the third changes it, and the opportunity&#39;s history carries the note the criterion quotes.</li><li><strong>Second test:</strong> the same move on the opportunity seeded with a withdrawn proposal. Scoring the two still in contention is enough to move it, so the withdrawn one isn&#39;t counted.</li><li><strong>Not tested:</strong> that draft proposals are not counted. No seeded closed opportunity has a draft next to a proposal that can be scored, and a test can&#39;t build one, because an opportunity a test publishes never closes. I added a clause entry to <code>not-testable.yaml</code>: blocked, owned by <code>contract</code>, asking for such a seeded opportunity.</li></ul>
+<p><strong>R-2.33.</strong></p>
+<ul><li><strong>First test:</strong> builds the stated starting point: one proposal disqualified (shown as above), then the other scored until the opportunity moves on.</li><li><strong>After the award:</strong> the awarded proposal&#39;s status changes, and so does the opportunity&#39;s. The opportunity names <code>seed.organizations.qualified.legal_name</code> as its successful proponent. The disqualified proposal&#39;s vendor-read status is the same as before the award.</li><li><strong>Withdrawn proposal:</strong> its vendor (the seeded user <code>users.proponentThree</code>) has no persona, so this is the one place I read the administrator&#39;s history instead. It must be non-empty and identical before and after the award.</li><li><strong>Second test:</strong> covers the statement&#39;s &quot;marks every other proposal still in contention as not awarded&quot;, on the opportunity whose two proposals both come from vendors a test can sign in as. The proposal not chosen changes status, and ends on a different status from the chosen one.</li></ul>
+<p><strong>R-2.34.</strong> Seven tests:</p>
+<ul><li><strong>Refused:</strong> no reason; a reason of 5,001 characters.</li><li><strong>Accepted:</strong> a reason with the proposal becoming disqualified and the reason kept; a 1-character reason; a 5,000-character reason.</li><li><strong>Another stage:</strong> a Team With Us proposal under question review. This one checks the status change only and doesn&#39;t read the history, which is what the ruling objected to.</li><li><strong>Re-check:</strong> the &quot;then&quot; clause that the opportunity is re-checked. With two proposals scored, disqualifying the third moves the opportunity on.</li></ul>
+<p><strong>Assumptions to know about:</strong></p>
+<ul><li>The tests reuse seeded records named for other criteria, such as the scoring and final-stage opportunities. This relies on the fixture resetting to the seed before every test. The manifest says in one place that the seed is loaded once per run, which conflicts with that fixture, so it is worth confirming.</li><li>The award test waits for the opportunity to leave evaluation before awarding. This assumes, as the seed&#39;s own notes say, that scoring the last proposal in contention is what makes the award possible.</li></ul>
+<p><strong>Missing from the contract:</strong></p>
+<ul><li><code>proposal-cwu-view</code> (and the Team With Us and Sprint With Us equivalents) has no <code>status</code> observation. So an administrator can&#39;t read a proposal&#39;s state, and the state of a proposal whose vendor has no persona can only be inferred from its history.</li><li>There is no persona for <code>users.proponentThree</code>.</li><li>There is no seeded closed Code With Us opportunity with a draft proposal next to a submitted one (the R-2.27 clause entry above).</li></ul>
+<p>I changed nothing outside <code>tests/acceptance</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-28 05:24.</p>
+<div class="body"><p>Do the rewritten R-2.27, R-2.33 and R-2.34 tests follow from their criteria and nothing else? Mostly yes, so this is a return for one fix. They now read state as the proposal&#39;s own vendor sees it: disqualification means the status changed and the reason is recorded, refusal means the status did not change, and the opportunity moving on means its status changed and it carries the note the criterion quotes. R-2.34 now asserts the re-check clause. The R-2.27 draft clause is recorded in not-testable.yaml with a real reason, owned by contract: the only seeded lapsed opportunity with a draft carries nothing to score. The personas used match the seeded vendors (competing-vendor is users.proponentTwo). Reusing seeded records is safe because the auto fixture resets to the seed before every test. The typecheck shows no diagnostics under acceptance/proposals. The first R-2.33 test, however, asserts that the opportunity&#39;s successful proponent contains seed.organizations.qualified.legal_name. R-2.33 says only that the opportunity becomes awarded; it names no successful-proponent field and no organization name, so this checks a field value the criterion does not state. The seed also gives proposals.cwuForAwardOne a vendor and no organization, so the name may not be shown at all. Removing that one assertion, and leaving the opportunity-awarded check as the status change from before the award, would change this ruling to an approval.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>tests/acceptance/proposals/R-2.33.spec.ts: remove the assertion that opportunityCwuView.successfulProponent() contains seed.organizations.qualified.legal_name. R-2.33 says the opportunity becomes awarded and nothing about a successful proponent or an organization&#39;s name; keep the opportunity-awarded check as its status changing from what it was before the award.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

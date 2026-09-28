@@ -180,3 +180,20 @@ criteria:
       property of the migration rather than of anything the running service
       answers with. No addition to the surface would help; this is a claim a
       human accepts about the rebuild rather than one a test can settle."
+  - id: R-2.27
+    version: 1
+    clause: draft proposals are not counted
+    reason: "blocked: the clause needs a Code With Us opportunity that has closed
+      while carrying both a draft proposal and at least one submitted proposal a
+      test can score. The only seeded lapsed opportunity with a draft
+      (opportunities.cwuLapsedWithDraft) carries the draft alone, so there is
+      nothing to score and no move to processing to read; and a test cannot
+      build one, because a proposal can be started only while an opportunity is
+      open and no form accepts a deadline that has already passed, so an
+      opportunity a test publishes never closes. R-2.27.spec.ts asserts the
+      disqualified and withdrawn halves of the same clause."
+    missing: a seeded Code With Us opportunity, published with its deadline passed,
+      carrying one DRAFT proposal and at least one SUBMITTED proposal from a
+      vendor with a persona (users.organizationOwner or users.proponentTwo),
+      named in tests/seed/manifest.yaml for R-2.27
+    owner: contract
