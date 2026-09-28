@@ -49,3 +49,27 @@ I've added the 20 missing members and gone through all nine findings. But the wo
 Every route in surface.yaml resolved on the target.
 
 I changed nothing outside `tests/adapters/old/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether the old adapter binds every surface action and observation and nothing else, now that the rebind loop limit sent it here after the reviewer's third-round asks. Each of those asks is answered on the branch. delete_proposal returns without throwing when a non-draft proposal offers no Delete (index.ts:4524). chooseProposalOrganization reads back the chosen organization and, when the named one is not offered, clears the pre-selected one and records organizationWithheld rather than proceeding under another (index.ts:3817-3838). total_score opens the Proposal tab first, and price_score falls back to the Price column of the opportunity's Proposals table (index.ts:4730-4784). The refused score's stage notice is kept for wrong_stage_error. Dialogs are given time to finish arriving, closing is retried, and a dialog that stays open is reported by name, which answers the R-2.10/R-2.20 interception. The runner's typecheck shows no diagnostics under adapters/old/; the failed exit comes from two diagnostics in adapters/new/, outside this proposal. The two request-driven pages bind pages the contract added for the R-2.14 and R-2.18 clauses, so nothing beyond the surface is bound. The work has not been executed, but calibration is where it runs, so that alone is not grounds to return; the probe records left on localhost:4300 are target state, not adapter code, and bind-adapter cannot answer them. A calibration run showing these members still failing against the old application would change the ruling.
+
+**Conditions:**
+- The target at localhost:4300 carries probe records from this run (vendor one's submitted proposal on the seeded published Code With Us opportunity, and the 'Adapter probe TWU' and 'Adapter probe SWU' opportunities with their proposals); reseed it before calibration, or R-2.4/R-2.14 runs involving vendor one will be refused as a duplicate proposal.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `dc2e64e1a2e541a440c6f67bf8149d86b598db25`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
