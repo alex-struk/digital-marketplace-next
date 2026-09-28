@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Made by | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-28T03:14:51.570Z | calibrate-old-8 | G1 | approve | agent:product-owner | persona agent · claude claude-opus-5-5 | $2.0296728000000006 | sample |
 | 2026-09-28T03:09:47.907Z | calibrate-triage-old-13 | G3 | approve | agent:reviewer | persona agent · claude claude-opus-5-5 | $4.7655992 | sample |
 | 2026-09-28T02:27:00.389Z | contract-v10 | G1 | approve | agent:product-owner | persona agent · claude claude-opus-5-5 | $0.3820526 | sample |
 | 2026-09-28T02:08:17.580Z | policy-agents-backend-claude | G-POL | approve | tech-lead | a person |  |  |
