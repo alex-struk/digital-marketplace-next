@@ -1,0 +1,18 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Do these tests follow from R-5.29 and nothing else? They assert nothing the criterion does not say, the duplicate-notice demand is gone, the not-testable entry's reason is real (evaluation-consensus-edit-swu/-twu expose no agreed score or note, so a refused change is indistinguishable from an accepted one), and the typecheck reports no diagnostics under acceptance/evaluation/. Returned because the criterion's clause that the chair may record the consensus while the opportunity is in consensus is neither asserted nor named in not-testable.yaml, though the surface reaches it; and because every attempt swallows its own failure and the only guard read is of seeded state, all three refusal tests pass against an application whose consensus-create screen does nothing or cannot be driven, so none of them demonstrates a refusal. Test 1 also reads for the evaluator's attempt only under the evaluator's user id, so an accepted attempt stored as the proponent's consensus under the chair would go unseen. Adding a positive control where the chair records the outstanding proponent's consensus and reads it back, and checking the outstanding proponent under the chair's id before that, would change the ruling.
+conditions:
+  - "tests/acceptance/evaluation/R-5.29.spec.ts: the clause 'only the chair may record ... while the opportunity is in consensus' has its permitted half unasserted — in the evaluator test, after the evaluator's attempt, have the chair record a consensus for the outstanding (third) proponent through evaluationConsensusCreateSwu without swallowing failure, and assert consensusStatusOf(chair, outstanding) is non-empty afterwards, so the refusals in this file are measured against a write that is shown to succeed"
+  - "tests/acceptance/evaluation/R-5.29.spec.ts: in the evaluator test, before the chair records, assert that the outstanding proponent has no consensus under the chair's user id as well as under the evaluator's (the seed leaves it not begun), so an evaluator attempt that was accepted and stored as the proponent's consensus cannot pass unseen"
+  - "tests/acceptance/evaluation/R-5.29.spec.ts: note — the duplicate test's Proponent-name count is weak if proponentRow returns one row; the missing definition of proponent_row is already carried by the not-testable entry's contract addition and needs no change here"
+cost: 0.47018060000000006
+turns: 5
+session: "4af83149-751b-415b-a64e-1c23a9e00619"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T16:18:53.483Z
