@@ -46,3 +46,27 @@ I could not tell whether the service can reach the first of those states at all;
 - **A catcher observation that finds messages about a named opportunity.** Today every caught message has to be opened one at a time to check for the title.
 
 Nothing outside `tests/acceptance` was changed.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+The question is whether the rewritten R-5.17 and R-5.21 tests and the new not-testable entry follow from their criteria and nothing else. Approved. R-5.17's published-case test asserts its given/when/then exactly (a panel of two is established, a third is added, the added person is reached, the two already on it are not). Its draft-case test covers the clause 'only once the opportunity has left draft', which sits outside the given/when/then. Both faults the earlier return named are fixed: the catcher is emptied and read back as empty before counting, which also shows it is reachable before any absence is asserted, and only messages about this opportunity, identified by its title as that ruling asked, are counted. R-5.21 first establishes the given through the bounded closing procedure in observables.yaml. It no longer requires a refusal notice the criterion never promised: a refusal is a form that withholds a step, or no evaluation by that person existing afterwards, and the evaluator's stored score is the contrast. The weakness that a refused read cannot be told from an absent evaluation is a limit of the surface, is acknowledged, and adds no assertion. The clause 'only while the opportunity is in individual question evaluation' carries a clause-scoped not-testable entry owned by contract, with a real reason that names the seeded records that are missing, and it already shows as an owed missing test. No selectors, routes, status codes or storage names leak in, and nothing outside tests/acceptance changed beyond pipeline bookkeeping. The runner's typecheck reports no diagnostics under acceptance/evaluation/; its failure is two diagnostics in adapters/new/, which this proposal does not touch. This would change if a typecheck error appeared in either evaluation spec, or if evidence showed a panel-addition notice does not carry the opportunity's title, which would make the title filter an assertion the criterion does not make.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `d2c6965f770f58b16360c38fcbf00664b41e7396`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
