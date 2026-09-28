@@ -650,3 +650,13 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-28T22:03:08.002Z
+    closed:
+      outcome: met
+      why: the Sprint With Us form test in tests/acceptance/proposals/R-2.18.spec.ts
+        no longer asserts that the choice contains
+        seed.users.teamCandidatePending.name nor that
+        surface.proposalSwuCreate.pendingTeamMember() is non-empty, asserts
+        nothing about the pending person in either direction, and every other
+        assertion in the file is unchanged
+      by: agent:reviewer
+      at: 2026-09-28T22:05:00.576Z
