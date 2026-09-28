@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-triage-old-17 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">217</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">213</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">186</span></a></li><li><a href="../runs.html">Run log <span class="count">16</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-triage-old-17</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-28 17:32</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>24 criterion(s) fail against old: which of them did this project&#39;s own adapter cause?</h2>
+<p><strong>Recommendation.</strong> Sort R-5.3, R-3.9, R-3.10, R-5.10, R-1.16, R-7.16, R-5.19, R-2.23, R-5.23, R-1.25, R-3.25, R-1.27, R-1.29, R-2.30, R-8.30, R-2.31, R-3.31, R-2.32, R-5.32, R-2.35, R-3.35, R-5.35, R-5.36, R-1.49 with a triage condition each, so the adapter&#39;s failures are fixed there and only product questions reach the product owner.</p>
+<p>24 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:4300,">http://localhost:4300,</a> and nobody has sorted them yet. Before any reaches the product owner, say which of them this project&#39;s own adapter caused. The adapter is under <code>tests/adapters/old/</code>; read each failure against it and against the test.</p>
+<h4>R-5.3 · v1</h4>
+<p>An evaluator holds at most one evaluation per proponent, and a second attempt is refused with a message saying they already have one.</p>
+<ul><li>given: an evaluator who has already started an evaluation of one proponent</li><li>when: they start a second evaluation of the same proponent</li><li>then: the request is refused with &quot;You already have a team question evaluation for this proposal.&quot; and no second evaluation is created</li><li>test: tests/acceptance/evaluation/R-5.3.spec.ts</li></ul>
+<p><strong>an evaluator holds at most one evaluation per proponent, and a second attempt is refused</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-3.9 · v1</h4>
+<p>A pending invitation becomes an active membership only when the invited person accepts it, or when an administrator accepts it on their behalf; nobody else can accept it and an invitation that is not pending cannot be accepted.</p>
+<ul><li>given: a person with a pending invitation to an organization</li><li>when: the organization&#39;s owner tries to accept it on their behalf, and then the invited person accepts it themselves</li><li>then: the owner&#39;s attempt is refused, the invited person&#39;s acceptance makes the membership active, and a further attempt to accept the now-active membership is refused as not pending</li><li>test: tests/acceptance/organizations/R-3.9.spec.ts</li></ul>
+<p><strong>the organization owner&#39;s attempt to accept a pending invitation on the invited person&#39;s behalf is refused</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>a further attempt to accept the now-active membership is refused as not pending</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-3.10 · v1</h4>
+<p>A membership can be ended by the member themselves, by the organization&#39;s owner or administrators, or by a service administrator; the membership becomes inactive rather than being erased, and the person stops counting towards the organization&#39;s team.</p>
+<ul><li>given: an organization with an owner and one further active member</li><li>when: that member chooses to leave the organization</li><li>then: they no longer appear on the organization&#39;s team list, the organization&#39;s team size falls to one, and the organization is no longer listed among their affiliated organizations</li><li>test: tests/acceptance/organizations/R-3.10.spec.ts</li></ul>
+<p><strong>when an active member chooses to leave, the membership becomes inactive and the person stops counting towards the organization&#39;s team</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;org.member@example.test&quot;[39m
+Received string:    [31m&quot;TEAM MEMBER | CAPABILITIES | ADMIN |[39m
+[31mBlake Placeholder Owner | 3 | | Admin: yes[39m
+[31mDana Placeholder | 3 | | Admin: no&quot;[39m</code></pre>
+<h4>R-5.10 · v1</h4>
+<p>The refusal shown when no proponent clears every question&#39;s minimum score must name the stage that actually follows — the Code Challenge for Sprint With Us and the Challenge for Team With Us.</p>
+<ul><li>test: tests/acceptance/evaluation/R-5.10.spec.ts</li></ul>
+<p><strong>the refusal on a Sprint With Us opportunity names the Code Challenge</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;code challenge&quot;[39m
+Received string:    [31m&quot;&quot;[39m</code></pre>
+<p><strong>the refusal on a Team With Us opportunity names the Challenge</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;challenge&quot;[39m
+Received string:    [31m&quot;&quot;[39m</code></pre>
+<h4>R-1.16 · v1</h4>
+<p>A Sprint With Us opportunity must have an implementation phase, and may only have an inception phase if it also has a prototype phase.</p>
+<ul><li>given: a member of public sector staff creating or editing a Sprint With Us opportunity that is not a draft</li><li>when: they include an inception phase but no prototype phase</li><li>then: the submission is rejected with a message saying a prototype phase must follow an inception phase</li><li>test: tests/acceptance/opportunities/R-1.16.spec.ts</li></ul>
+<p><strong>a Sprint With Us opportunity must have an implementation phase</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-7.16 · v1</h4>
+<p>A request refused for lack of permission is reported as a permission refusal, in the same shape for every page request, whether it reads the list, reads one page, or creates, changes or removes one.</p>
+<ul><li>test: tests/acceptance/content/R-7.16.spec.ts</li></ul>
+<p><strong>a request refused for lack of permission is reported as a permission refusal, in the same shape for every page request, whether it reads the list, creates, changes or removes one</strong> — failed</p>
+<pre><code>Error: create
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m&quot;[\&quot;string\&quot;]&quot;[39m
+Received: [31m&quot;[7m{\&quot;permissions\&quot;:[27m[\&quot;string\&quot;][7m}[27m&quot;[39m</code></pre>
+<h4>R-5.19 · v1</h4>
+<p>A panel member may open an opportunity they sit on the panel for even before it is public, and it is listed for them under a separate heading for work they are evaluating.</p>
+<ul><li>given: a draft opportunity whose panel names a public sector employee who did not create it</li><li>when: that person opens their dashboard and then the opportunity</li><li>then: the opportunity is listed under &quot;Evaluations&quot; and they can open it, whereas another public sector employee cannot see it at all</li><li>test: tests/acceptance/evaluation/R-5.19.spec.ts</li></ul>
+<p><strong>A panel member may open an opportunity they sit on the panel for even before it is public</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>A panel member&#39;s opportunity is listed for them under a separate heading for work they are evaluating</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>A draft opportunity is not seen at all by a public sector employee who neither created it nor sits on its panel</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-2.23 · v1</h4>
+<p>A vendor may withdraw a submitted proposal at any time, and may put a withdrawn proposal back in only while the opportunity is still accepting proposals.</p>
+<ul><li>given: a submitted proposal on an opportunity whose deadline has passed</li><li>when: the vendor withdraws it, and then tries to submit it again</li><li>then: the withdrawal is accepted and the re-submission is refused, whereas before the deadline both are accepted</li><li>test: tests/acceptance/proposals/R-2.23.spec.ts</li></ul>
+<p><strong>a vendor may put a withdrawn proposal back in while the opportunity is still accepting proposals</strong> — failed</p>
+<pre><code>Error: proposal-cwu-edit.submit_proposal — &quot;Submit Proposal&quot; is disabled on http://localhost:4300/opportunities/code-with-us/bf4a836a-d0a7-4b04-b995-6a5b66866ec4/proposals/5d8d27fb-fe04-45b3-868b-b9f1df4caf1d/edit; the page shows no message</code></pre>
+<h4>R-5.23 · v1</h4>
+<p>Scores and comments are checked when an evaluation is submitted, not when it is saved as a draft.</p>
+<ul><li>given: an evaluator part-way through scoring a proponent</li><li>when: they save a draft in which one score is above the question&#39;s maximum and one comment is empty</li><li>then: the draft is saved as entered, and the evaluation is refused only later, when they try to submit</li><li>test: tests/acceptance/evaluation/R-5.23.spec.ts</li></ul>
+<p><strong>Scores and comments are checked when an evaluation is submitted, not when it is saved as a draft</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32mtrue[39m
+Received: [31mfalse[39m</code></pre>
+<h4>R-1.25 · v1</h4>
+<p>An opportunity moves to processing on its own once every proposal still in contention has been scored at its program&#39;s final evaluation stage.</p>
+<ul><li>given: an opportunity at its final evaluation stage with at least one proposal still in contention</li><li>when: the last of those proposals is scored</li><li>then: the opportunity moves to processing and the change is recorded with a note saying it was moved automatically because all proposals have been evaluated</li><li>test: tests/acceptance/opportunities/R-1.25.spec.ts</li></ul>
+<p><strong>An opportunity moves to processing on its own once every proposal still in contention has been scored at its program&#39;s final evaluation stage. (Team With Us)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/processing/[39m
+Received string:  [31m&quot;evaluation challenge&quot;[39m
+
+Call Log:
+- Timeout 30000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-3.25 · v1</h4>
+<p>An organization is qualified for Sprint With Us once it has at least two active team members, those members between them hold every capability the service recognises, and its Sprint With Us terms have been accepted.</p>
+<ul><li>given: an organization with an owner and one further active member who between them hold every capability, and whose Sprint With Us terms have not yet been accepted</li><li>when: the owner opens the organization&#39;s Sprint With Us qualification page</li><li>then: the team-size and capability requirements are shown as met, the terms requirement as unmet, and the organization is marked as not qualified</li><li>test: tests/acceptance/organizations/R-3.25.spec.ts</li></ul>
+<p><strong>with the team-size and capability requirements met and the terms requirement unmet, the organization is marked as not qualified</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: not [32m&quot;At least two team members.&quot;[39m</code></pre>
+<h4>R-1.27 · v1</h4>
+<p>An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score.</p>
+<ul><li>given: an awarded opportunity</li><li>when: a visitor who may not see proposal scores views it</li><li>then: the successful proponent&#39;s name is shown and their contact details and score are withheld</li><li>test: tests/acceptance/opportunities/R-1.27.spec.ts</li></ul>
+<p><strong>An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score. (Code With Us: a reader permitted to see proposal scores)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>An awarded opportunity shows its successful proponent&#39;s name to everyone, and shows the proponent&#39;s contact details and score only to those permitted to see the proposal&#39;s score. (Sprint With Us: a reader permitted to see proposal scores)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-1.29 · v1</h4>
+<p>The names of the people who created and last changed an opportunity are shown only to administrators and to those people themselves.</p>
+<ul><li>given: a published opportunity</li><li>when: it is viewed by someone who is neither an administrator nor the person who created or last changed it</li><li>then: the creating and changing people&#39;s names are absent from what is shown</li><li>test: tests/acceptance/opportunities/R-1.29.spec.ts</li></ul>
+<p><strong>the names of the people who created and last changed an opportunity are shown to an administrator</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>the names of the people who created and last changed an opportunity are shown to those people themselves</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-2.30 · v1</h4>
+<p>A proposal&#39;s price score is its share of the lowest bid among the proposals still in contention, expressed as a percentage, and it is calculated when the last human-entered score is recorded.</p>
+<ul><li>given: two Sprint With Us proposals still in contention, bidding 100,000 and 200,000</li><li>when: a team scenario score is entered for the higher bid</li><li>then: that proposal is given a price score of 50, its history records the calculated price score, and it becomes fully evaluated</li><li>test: tests/acceptance/proposals/R-2.30.spec.ts</li></ul>
+<p><strong>A proposal&#39;s price score is its share of the lowest bid among the proposals still in contention, expressed as a percentage, and it is calculated when the last human-entered score is recorded.</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/(^|[^\d.])50(\.0+)?(?![\d])/[39m
+Received string:  [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 30000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-8.30 · v1</h4>
+<p>A profile picture or an organization logo whose name does not end in .jpg, .jpeg or .png is refused.</p>
+<ul><li>given: a signed-in person choosing a new profile picture</li><li>when: they upload a file named &quot;portrait.gif&quot;</li><li>then: the upload is refused for having an ending that is not allowed, and no file is stored</li><li>test: tests/acceptance/files/R-8.30.spec.ts</li></ul>
+<p><strong>a profile picture or an organization logo whose name does not end in .jpg, .jpeg or .png is refused</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-2.31 · v1</h4>
+<p>A proposal&#39;s total score is the weighted sum of its stage scores, and proposals are ranked against each other only once they are fully evaluated.</p>
+<ul><li>given: an opportunity whose questions, challenge, scenario and price carry stated weights</li><li>when: a proposal has a score for every one of those stages</li><li>then: its total is those scores combined in the stated proportions, and it takes a rank among the other fully evaluated proposals, highest total first</li><li>test: tests/acceptance/proposals/R-2.31.spec.ts</li></ul>
+<p><strong>A proposal&#39;s total score is the weighted sum of its stage scores, and proposals are ranked against each other only once they are fully evaluated.</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mnot[2m.[22mtoBeNaN[2m()[22m
+
+Received: [31mNaN[39m
+
+Call Log:
+- Timeout 30000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-3.31 · v1</h4>
+<p>When a person accepts an invitation, the organization&#39;s owner is told they have joined and the new member is told they may now be put forward on the organization&#39;s proposals.</p>
+<ul><li>given: a person with a pending invitation to an organization</li><li>when: they accept it</li><li>then: the organization&#39;s owner receives a message saying the person approved the request, and the person receives a message saying they have joined the organization&#39;s team</li><li>test: tests/acceptance/organizations/R-3.31.spec.ts</li></ul>
+<p><strong>when a person accepts an invitation the organization&#39;s owner is told they approved the request and the new member is told they have joined the team</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+Expected: &gt; [32m0[39m
+Received:   [31m0[39m</code></pre>
+<h4>R-2.32 · v1</h4>
+<p>A vendor sees the scores and rank of their own proposal only after the opportunity has been awarded or their proposal has been passed over.</p>
+<ul><li>given: a vendor&#39;s proposal that has been scored but whose opportunity has not been awarded</li><li>when: the vendor opens their proposal</li><li>then: no score and no rank are shown, and both appear once the proposal becomes awarded or not awarded</li><li>test: tests/acceptance/proposals/R-2.32.spec.ts</li></ul>
+<p><strong>A vendor sees the scores and rank of their own proposal only after the opportunity has been awarded or their proposal has been passed over. (their proposal awarded)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/\d/[39m
+Received string:  [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 30000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>A vendor sees the scores and rank of their own proposal only after the opportunity has been awarded or their proposal has been passed over. (their proposal passed over)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/\d/[39m
+Received string:  [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 30000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-5.32 · v1</h4>
+<p>Finalising the consensus records the agreed scores against each proponent, screens in the highest-scoring proponents that met every minimum score — at most four for Sprint With Us and at most three for Team With Us — and moves the opportunity to its next stage.</p>
+<ul><li>given: a Sprint With Us opportunity in consensus with six proponents, five of whom met every minimum score</li><li>when: the consensus scores are finalised</li><li>then: every proponent&#39;s history records the agreed scores question by question, the four highest scoring of the five are moved into the code challenge, and the opportunity moves to the code challenge stage</li><li>test: tests/acceptance/evaluation/R-5.32.spec.ts</li></ul>
+<p><strong>finalising records the agreed scores, screens in the proponents that met every minimum, and moves the opportunity on</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;challenge&quot;[39m
+Received string:    [31m&quot;team questions consensus&quot;[39m</code></pre>
+<h4>R-2.35 · v1</h4>
+<p>Every change of state and every score entered against a proposal is recorded in its history with who did it, when, and any note given.</p>
+<ul><li>given: a proposal that has been submitted, reviewed and scored</li><li>when: someone entitled to see its history opens it</li><li>then: the history lists each state change and each score entry, newest first, each with its author, its time and its note</li><li>test: tests/acceptance/proposals/R-2.35.spec.ts</li></ul>
+<p><strong>every change of state and every score entered against a proposal is recorded in its history with who did it, when, and any note given</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;disqualif&quot;[39m
+Received string:    [31m&quot;non-compliant | r-2.35 the proponent&#39;s named team is no longer available. | sep 28, 2026 10:27 am pdt robin placeholder[39m
+[31mevaluated (cc) | — | sep 28, 2026 10:27 am pdt robin placeholder[39m
+[31mcode challenge score entered | a code challenge score of \&quot;80\&quot; was entered. | sep 28, 2026 10:27 am pdt robin placeholder[39m
+[31munder review (cc) | — | sep 28, 2026 10:27 am pdt robin placeholder[39m
+[31mteam questions score entered | team question scores were entered. q1: 5; q2: 5; q3: 5; q4: 5. | sep 28, 2026 10:27 am pdt robin placeholder[39m
+[31munder review (tq) | — | sep 28, 2026 10:26 am pdt system[39m
+[31msubmitted | — | aug 19, 2026 10:26 am pdt blake placeholder[39m
+[31mdraft | — | aug 9, 2026 10:26 am pdt blake placeholder&quot;[39m</code></pre>
+<h4>R-3.35 · v1</h4>
+<p>The accept and the decline choice offered in an invitation email both open the invited person&#39;s own organizations page with the matching confirmation ready, so a person can decline from the message as readily as they can accept.</p>
+<ul><li>test: tests/acceptance/organizations/R-3.35.spec.ts</li></ul>
+<p><strong>the decline choice offered in an invitation email opens the invited person&#39;s own organizations page with the decline confirmation ready</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 5000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-5.35 · v1</h4>
+<p>An evaluator works through the proponents one after another in anonymous-proponent order, saving as they move between them.</p>
+<ul><li>given: an evaluator scoring the second of three proponents</li><li>when: they move to the next proponent</li><li>then: their scores and comments for the second proponent are saved and the third proponent&#39;s questions are shown</li><li>test: tests/acceptance/evaluation/R-5.35.spec.ts</li></ul>
+<p><strong>an evaluator works through the proponents in anonymous-proponent order</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;Proponent 1[39m
+[32mProponent 1&quot;[39m
+Received string:    [31m&quot;Proponent 1[39m
+[31mProponent 2[39m
+[31mProponent 3&quot;[39m</code></pre>
+<h4>R-5.36 · v1</h4>
+<p>The two programs run the same evaluation from end to end, differing only in what the questions are called, how many proponents are carried forward, and what the stage that follows is named.</p>
+<ul><li>given: one Sprint With Us and one Team With Us opportunity, each closing with proponents to evaluate</li><li>when: each is taken through individual evaluation, consensus and finalising</li><li>then: both follow published, individual question evaluation, consensus, and then their own next stage — the code challenge for Sprint With Us and the challenge for Team With Us — and neither can skip a stage or go back</li><li>test: tests/acceptance/evaluation/R-5.36.spec.ts</li></ul>
+<p><strong>a Sprint With Us opportunity runs from individual evaluation through consensus to the Code Challenge</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;code challenge&quot;[39m
+Received string:    [31m&quot;team questions consensus&quot;[39m</code></pre>
+<p><strong>a Team With Us opportunity runs the same course and ends at the Challenge</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoContain[2m([22m[32mexpected[39m[2m) // indexOf[22m
+
+Expected substring: [32m&quot;challenge&quot;[39m
+Received string:    [31m&quot;resource questions consensus&quot;[39m</code></pre>
+<h4>R-1.49 · v1</h4>
+<p>The permitted state changes for a Team With Us opportunity in processing are awarded and cancelled, matching Code With Us and Sprint With Us, so the recorded transitions and the award path agree.</p>
+<ul><li>test: tests/acceptance/opportunities/R-1.49.spec.ts</li></ul>
+<p><strong>The permitted state changes for a Team With Us opportunity in processing are awarded and cancelled, matching Code With Us and Sprint With Us, so the recorded transitions and the award path agree.</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/processing/[39m
+Received string:  [31m&quot;evaluation challenge&quot;[39m
+
+Call Log:
+- Timeout 30000ms exceeded while waiting on the predicate</code></pre>
+<h3>Triage conditions</h3>
+<p>One condition per line, one for every failing criterion the page lists, in exactly one of these forms:</p>
+<ul><li><code>adapter-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion and the test are both fine, and this target&#39;s adapter is what failed: it read the wrong thing off the page, reported a control missing that the page does render, or answered empty where it never reached the page. <code>&lt;why&gt;</code> names what the adapter did wrong, specifically enough for the next binding run to fix it. The criterion is not touched.</li><li><code>product-question &lt;ID&gt;</code> — nothing in the evidence points at the adapter. The failure goes to the product owner, who decides whether the application, the criterion or the test is wrong. No text after the ID.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. A condition may not span more than one line. When the evidence is genuinely unclear, it is a <code>product-question</code>: a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the adapter comes back from the next binding run unchanged and costs a run to find out.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-28 17:38.</p>
+<div class="body"><p>The question is which of the 24 criteria failing against old were caused by this project&#39;s adapter. I approve with one condition per criterion: 9 adapter-wrong and 15 product-question. Each failure was read against the test file, the bindings in tests/adapters/old/index.ts, what the old page actually renders, and, where they exist, the error-context snapshots.</p>
+<p>Adapter-wrong, where the harness did not do what the test asked:</p>
+<ul><li>R-2.23: the adapter never ticks the terms checkboxes that enable &#39;Submit Proposal&#39;.</li><li>R-3.25: the adapter returns a requirement&#39;s label, not whether it is met.</li><li>R-3.10: the adapter returns team names only, and the test identifies the member by email.</li><li>R-2.31: the adapter reads &#39;Total Score&#39; off whichever tab is showing, not the Proposal tab.</li><li>R-2.32: the adapter reads the Proposal tab and a &#39;Rank&#39; label. The vendor&#39;s scores are on the Scoresheet tab, under &#39;Ranking&#39;.</li><li>R-5.35: the adapter returns every &#39;Proponent N&#39; line, and the current proponent&#39;s name appears twice on the page.</li><li>R-5.23: the adapter returns silently on a disabled &#39;Submit Scores for Consensus&#39; button (index.ts:5284), so the refusal it exists to report is swallowed.</li><li>R-5.32 and R-5.36: the adapter clicks the finalise confirm and moves on without waiting for the outcome. This one is circumstantial, but R-2.35 ran the same finalise sequence on the same seeded opportunity and reached Code Challenge.</li></ul>
+<p>Product-question, where the adapter reached the right place and reported what old shows or refuses:</p>
+<ul><li>The old app refuses silently or with a generic message: R-3.9, R-5.10, R-8.30.</li><li>The case cannot be constructed in old: R-1.16, R-5.3.</li><li>Old returns a different reply shape per request: R-7.16.</li><li>The value is absent from the public view: R-1.27, R-1.29, R-5.19, R-2.30.</li><li>A Team With Us status write fails, so the opportunity stays at the challenge stage: R-1.25, R-1.49.</li><li>The history label reads &#39;Non-compliant&#39;, not &#39;disqualified&#39;: R-2.35.</li><li>The decline link in the email points at the wrong tab: R-3.35.</li><li>The mailbox is read once, straight after acceptance: R-3.31. This is a test-side race or a delivery question, not a binding.</li></ul>
+<p>What would change this ruling: a rerun of R-5.32 or R-5.36 that waits for the finalise outcome and still shows the opportunity in consensus would make those two product questions.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>adapter-wrong R-3.10: organization-edit team_member_row (teamRowsText, index.ts:4426-4441) returns only the names printed in the team table, while the test identifies the member by email; each row must also carry that member&#39;s email (from the member dialog or the organization&#39;s membership list, which memberName at index.ts:4470 already reads), so both the presence check and the post-leave absence check can hold</li><li>adapter-wrong R-2.23: proposal-cwu-edit.submit_proposal (index.ts:3751-3754) presses &#39;Submit Proposal&#39; in the &#39;Review Terms and Conditions&#39; dialog without ticking its checkboxes, so the button stays disabled; after pressing &#39;Submit&#39; it must wait for the dialog, tick every checkbox in it (as saveProposalChanges does at index.ts:3729-3734), then press &#39;Submit Proposal&#39;</li><li>adapter-wrong R-5.23: evaluation-individual-list-swu.submit_scores_for_consensus (index.ts:5279-5285) returns silently when &#39;Submit Scores for Consensus&#39; is disabled, swallowing the refusal the test is looking for; a disabled or absent submit control must be reported as a refusal (throw, as submit_proposal does for a disabled control), or incomplete_evaluation_error must report it</li><li>adapter-wrong R-3.25: organization-edit swu_requirement_two_members / swu_requirement_all_capabilities / swu_requirement_terms_accepted (index.ts:4357-4364) return the requirement&#39;s label, which reads the same whether met or unmet; they must read the state from the icon beside each requirement (success-coloured means met, body-coloured means unmet) and return it with the label</li><li>adapter-wrong R-2.31: proposal-swu-view.total_score (index.ts:3875, stageFigure([], [&#39;Total Score&#39;])) reads whichever tab is currently showing, but the &#39;Total Score&#39; card appears only on the Proposal tab, and the test has moved to Team Scenario by then; it must open the Proposal tab first, and the same fix applies to proposal-twu-view.total_score (index.ts:3912)</li><li>adapter-wrong R-2.32: proposal-swu-edit total_score and rank (index.ts:3797-3798) read the default Proposal tab and look for a &#39;Rank&#39; label after its figure; a vendor&#39;s scores are on the Scoresheet tab (a table whose header is one line, so the total must be read from the body row), and the rank card is labelled &#39;Ranking&#39; with its figure above the label (read it as valueBefore([&#39;Ranking&#39;]), as proposal-cwu-view.rank does at index.ts:3834)</li><li>adapter-wrong R-5.35: evaluation-individual-create-swu.anonymous_proponent_name (index.ts:5507 via anonymousProponent at index.ts:3814-3817) joins every &#39;Proponent N&#39; line on the page, and the score sheet shows the current proponent&#39;s name twice, so it returned &#39;Proponent 1\nProponent 1&#39;; on the create page it must return the single current proponent&#39;s name, keeping the joined list only for the individual list page</li><li>adapter-wrong R-5.32: evaluation-consensus-list confirm_finalize_consensus (index.ts:5369 via inDialog/press) clicks &#39;Finalize Consensus Scores&#39; in the dialog and returns at once, because settle() resolves on an already-idle network, so the next navigation races the finalise request; it must wait for the outcome (the success notice, or &#39;Finalize Consensus Scores&#39; leaving the top bar) and fail if an error notice appears, and waiting only for the dialog to close is not enough because it closes before the request is sent</li><li>adapter-wrong R-5.36: the same finalise binding as R-5.32 (evaluation-consensus-list confirm_finalize_consensus, index.ts:5369, shared by the Sprint With Us and Team With Us consensus tabs) does not wait for the finalise request to complete before the test reads the status; it must wait for the success notice or for the finalise control to leave the top bar</li><li>product-question R-5.3</li><li>product-question R-3.9</li><li>product-question R-5.10</li><li>product-question R-1.16</li><li>product-question R-7.16</li><li>product-question R-5.19</li><li>product-question R-1.25</li><li>product-question R-1.27</li><li>product-question R-1.29</li><li>product-question R-2.30</li><li>product-question R-8.30</li><li>product-question R-3.31</li><li>product-question R-2.35</li><li>product-question R-3.35</li><li>product-question R-1.49</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
