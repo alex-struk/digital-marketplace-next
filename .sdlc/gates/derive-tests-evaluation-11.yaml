@@ -1,0 +1,18 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether the revised R-5.29 tests follow from their criterion and from nothing else. Approved. In the evaluator test, the chair now records the outstanding proponent's consensus through recordConsensus, which lets any failure end the test, then polls the chair's consensus for that proponent and requires it to be non-empty. So the refusals in the file are measured against a write shown to succeed, which settles #1. Before the chair records, the outstanding proponent is checked for no consensus under both the evaluator's and the chair's user ids, which settles #2. #3 was a note with no change asked; the missing proponent_row definition is carried by the R-5.29 not-testable entry, owned by contract. Every assertion traces to a clause of the criterion: the evaluator is refused while the chair may record, a second consensus is refused as a duplicate, and nothing is recorded before consensus. The not-testable entry gives a real reason and names both clauses no test reaches: a non-chair changing the chair's consensus, and a change after consensus. The runner's typecheck reported no diagnostics under acceptance/evaluation/; the two it reported are in adapters/new/, outside this proposal. The ruling would change if an evaluation-scoped typecheck error or a seed mismatch with the stated given surfaced. The before-consensus test reads an empty status as a refusal with no success check on that opportunity, a weakness I accept because the first test shows the same consensus screen recording and reading back successfully.
+conditions:
+  - "condition-met derive-tests-evaluation-stale-8#1: tests/acceptance/evaluation/R-5.29.spec.ts evaluator test — after the evaluator's attempt, the chair calls recordConsensus (no catch) for swuOutstandingThree, then expect.poll(consensusStatusOf(chair, outstanding)).toBeTruthy()"
+  - "condition-met derive-tests-evaluation-stale-8#2: tests/acceptance/evaluation/R-5.29.spec.ts evaluator test — before the chair records, consensusStatusOf for the outstanding proponent is asserted to be empty under both the evaluator's and the chair's user ids"
+  - "condition-withdrawn derive-tests-evaluation-stale-8#3: it was a note that asked for no change; the missing proponent_row definition is carried by the R-5.29 not-testable.yaml entry owned by contract"
+cost: 0.33017060000000004
+turns: 1
+session: "ad4a81aa-b8f8-428c-9b35-3f9666670ef8"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.282 (Claude Code)"
+isolation: "none"
+at: 2026-09-28T16:20:27.154Z

@@ -325,6 +325,14 @@ redo:
       already agreed, so count the chair's second attempt as refused when
       exactly one consensus exists for that proponent afterwards, whether or not
       a notice is shown
+    closed:
+      outcome: met
+      why: derived again by derive-tests-evaluation-stale-8, in the line of work
+        approved as derive-tests-evaluation-11
+      by: derive-tests-evaluation-11
+      at: 2026-09-28T16:20:27.989Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-1.27
     version: 1
     why: the test takes the word 'awarded' in the status a visitor sees as proof of

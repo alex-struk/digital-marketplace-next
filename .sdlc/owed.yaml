@@ -3884,3 +3884,19 @@ owed:
       file_sha: 699db2e3c602095fb46a5da1c6d09a45c912b72f
       by: runner
       at: 2026-09-28T06:34:57.588Z
+  - kind: missing-test
+    item: R-5.29
+    id: R-5.29
+    version: 1
+    domain: evaluation
+    stage: contract
+    why: an observation on evaluation-consensus-edit-swu and
+      evaluation-consensus-edit-twu returning the agreed score and note stored
+      for each question (for example agreed_scores and agreed_notes), or a
+      consensus-by-request page beside evaluation-individual-request-swu/-twu
+      with stored_scores and stored_notes, readable by the chair or an
+      administrator at any stage
+    from: derive-tests-evaluation-11
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-28T16:20:27.248Z
