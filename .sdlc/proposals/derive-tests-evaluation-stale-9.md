@@ -39,3 +39,27 @@ Nothing else was missing from the surface for this criterion, so I have no furth
 ## Fix turn
 
 I fixed the failed check in `tests/acceptance/evaluation/R-5.29.spec.ts`. Lines 203–224 were flagged for touching the page object because three helper functions (`storedConsensus`, `attemptChange` and `chairChangesInConsensus`) named their parameter `page`. That parameter was always the surface's consensus-by-request page for the Sprint With Us (SWU) or Team With Us (TWU) program, never Playwright's page object, but calls like `page.open(...)` and `page.storedNotes()` looked like it to the check. I renamed the parameter to `consensusPage` in those three helpers and changed nothing else. A search now finds no `page.` anywhere in the file. The test bodies still name a local variable `page` and pass it to these helpers without calling anything on it, so none of those lines contains `page.` and none was flagged. I left them as they were. I did not rerun the separation check myself, so it still has to confirm the fix. The criterion's coverage, and the removal of its entry from `not-testable.yaml`, are the same as in the earlier journal.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+Question: do the added R-5.29 tests follow from the criterion and nothing else? Approve. The criterion says only the chair may record and change the consensus, one per proponent, and only while the opportunity is in consensus. The three existing tests cover recording by a non-chair, the chair's duplicate, and recording before consensus. The four new tests, two per program, cover the two clauses the not-testable entry held open. A non-chair evaluator's change to the chair's consensus is not reported accepted and leaves the stored scores and notes unchanged. The chair's change once the opportunity is past consensus is refused the same way. Each is measured against the chair's accepted change on the in-consensus opportunity, which the criterion's 'only the chair may change' implies. Every step uses contract actions and observations (change_consensus_by_request, stored_scores, stored_notes, request_accepted) and the seeded starting points in the seed manifest (swuConsensusAllAgreed/twuConsensusAllAgreed, swuPastConsensus/twuPastConsensus). Nothing implementation-shaped leaks in, and the check on the seeded note text is a precondition guard, not an extra claim. Every clause of the criterion is now asserted, so removing the not-testable entry is right. The runner's typecheck reports no diagnostics under acceptance/evaluation; its failures are in adapters/new, which this proposal does not answer for. The seeded chair also being an administrator does not weaken the past-consensus test, because the criterion refuses that change whoever makes it. This would change to a return if typecheck diagnostics appeared under acceptance/evaluation, or if the seed no longer made staffOne a non-chair evaluator or were not reset between tests.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `826473c6e54dc5b76c7ca1f8e47ca52742b8a3c8`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
