@@ -44,3 +44,29 @@ Neither can be checked because no observation returns the scores and notes store
 - A definition of what `proponent_row` on the consensus list returns, or a direct observation such as a consensus count per proponent. Test 2 currently has to count name mentions instead.
 
 **Left alone.** `tests/acceptance/redo.yaml` still has the R-5.29 item open. I did not close it, because that is not this stage's to rule on.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.282 (Claude Code))
+
+Do these tests follow from R-5.29 and nothing else? They assert nothing the criterion does not say, the duplicate-notice demand is gone, the not-testable entry's reason is real (evaluation-consensus-edit-swu/-twu expose no agreed score or note, so a refused change is indistinguishable from an accepted one), and the typecheck reports no diagnostics under acceptance/evaluation/. Returned because the criterion's clause that the chair may record the consensus while the opportunity is in consensus is neither asserted nor named in not-testable.yaml, though the surface reaches it; and because every attempt swallows its own failure and the only guard read is of seeded state, all three refusal tests pass against an application whose consensus-create screen does nothing or cannot be driven, so none of them demonstrates a refusal. Test 1 also reads for the evaluator's attempt only under the evaluator's user id, so an accepted attempt stored as the proponent's consensus under the chair would go unseen. Adding a positive control where the chair records the outstanding proponent's consensus and reads it back, and checking the outstanding proponent under the chair's id before that, would change the ruling.
+
+**Conditions:**
+- tests/acceptance/evaluation/R-5.29.spec.ts: the clause 'only the chair may record ... while the opportunity is in consensus' has its permitted half unasserted — in the evaluator test, after the evaluator's attempt, have the chair record a consensus for the outstanding (third) proponent through evaluationConsensusCreateSwu without swallowing failure, and assert consensusStatusOf(chair, outstanding) is non-empty afterwards, so the refusals in this file are measured against a write that is shown to succeed
+- tests/acceptance/evaluation/R-5.29.spec.ts: in the evaluator test, before the chair records, assert that the outstanding proponent has no consensus under the chair's user id as well as under the evaluator's (the seed leaves it not begun), so an evaluator attempt that was accepted and stored as the proponent's consensus cannot pass unseen
+- tests/acceptance/evaluation/R-5.29.spec.ts: note — the duplicate test's Proponent-name count is weak if proponentRow returns one row; the missing definition of proponent_row is already carried by the not-testable entry's contract addition and needs no change here
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `e736f84d649044391d71769ebf61ec9fe5592653`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
