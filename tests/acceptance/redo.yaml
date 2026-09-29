@@ -746,3 +746,15 @@ redo:
       at: 2026-09-29T18:58:00.310Z
       gate: G3
       approved_by: agent:reviewer
+  - id: R-1.39
+    version: 1
+    why: the by-program case relies on a closed Sprint With Us opportunity that
+      exists before the test starts and that other tests share, instead of
+      opportunities it puts in place and can vouch for itself, and its failure
+      message does not say whether the opportunity was missing before any
+      program was chosen or disappeared after Sprint With Us was chosen. Compare
+      opportunities in two programs whose presence the case establishes itself.
+      Confirm each one is listed before choosing a program. Then, after each
+      program is chosen, check separately that the matching opportunity remains
+      and that the other one is gone, and have each check's message name the
+      program chosen and which half failed.
