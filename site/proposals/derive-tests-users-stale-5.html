@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-users-stale-5 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">249</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">245</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">214</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-users-stale-5</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 00:15</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the users criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote both criteria (R-4.3 and R-4.24) as tests.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rewrote both criteria (R-4.3 and R-4.24) as tests. Neither needed a whole-criterion <code>not-testable.yaml</code> entry. Nothing was run: there is no application in this workspace. I also didn&#39;t type-check the files or parse the YAML, because those commands needed an approval that isn&#39;t available in this session.</p>
+<p><strong>R-4.3</strong> (<code>tests/acceptance/users/R-4.3.spec.ts</code>): The ruling said the old test signed in as an established vendor and never reached the agreement step. It also first had an administrator announce changed terms to withdraw that vendor&#39;s acceptance. The new test drops both. Each vendor test now signs in as <code>persona.firstTimeVendor</code>. That is an identity the sandbox identity provider has and the seed does not, so the account is created at that sign-in and has never agreed to anything. The file has three tests, one for each outcome the criterion states:</p>
+<ul><li><strong>Cannot finish before agreeing:</strong> the agreement box is present on the profile-completion page, and what <code>completeDisabledUntilTermsAccepted()</code> reports changes once <code>acceptAppTerms()</code> is ticked. The contract doesn&#39;t say what value that observation returns, so the test checks only that it changes.</li><li><strong>Acceptance time is recorded:</strong> after ticking and completing, the vendor&#39;s own legal page shows an <code>acceptedOnNotice()</code> that contains a digit.</li><li><strong>Public sector employee is never asked:</strong> <code>persona.firstTimePublicSectorEmployee</code> opens the profile-completion page and no agreement box can be read.</li></ul>
+<p>I left out a check the old test made, that the &quot;terms updated&quot; warning is absent, because the criterion doesn&#39;t ask for it.</p>
+<p><strong>R-4.24</strong> (<code>tests/acceptance/users/R-4.24.spec.ts</code>): Same fix. The person is now <code>persona.firstTimeVendor</code> completing their profile for the first time, instead of an existing account put back on the page by an administrator&#39;s announcement. They tick the new-opportunity notices box, agree to the terms and complete their profile. Their own notification settings then have to show a value that is non-empty and different from what <code>persona.vendorWithNoticesOff</code> shows. That seeded account has notices off, which gives a baseline to compare against, since the contract doesn&#39;t say what the checkbox observation returns for &quot;on&quot;. The old test&#39;s final step, turning the setting back off, is gone: each test resets to the seed first, and the criterion never asks for it.</p>
+<p><strong>Clause entry (R-4.24):</strong> I added one entry beside the test in <code>tests/acceptance/not-testable.yaml</code>, marked <code>blocked:</code> with owner <code>contract</code>. It covers the clause &quot;their account records that notifications are on, with the moment the choice was made&quot;. The test checks that the choice is saved but cannot check when it was made. <code>userProfileSelfNotifications</code> offers only <code>newOpportunitiesCheckbox</code>, <code>notificationEmailAddress</code> and <code>unsubscribeModal</code>, and no other page reports that date and time.</p>
+<p><strong>Missing from the surface:</strong> an observation on <code>user-profile-self-notifications</code> (or <code>user-profile-notifications</code>, for an administrator viewing another account) that reports the date and time new-opportunity notices were turned on.</p>
+<p><strong>Worth knowing:</strong> Both rewritten tests depend on <code>firstTimeVendor</code>, and <code>firstTimePublicSectorEmployee</code> is used too. Neither can sign in on the current application under test, because it has no identity provider. Both work only on the rebuilt target&#39;s sandbox identity provider, as the persona entries themselves say.</p>
+<p>I changed nothing outside <code>tests/acceptance</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 00:16.</p>
+<div class="body"><p>Question: do the rewritten R-4.3 and R-4.24 tests follow from the users criteria and from nothing else? Ruling: approve. The prior return (test signed in as an established account and never reached the profile-completion step) is answered: every test now begins as persona.firstTimeVendor or persona.firstTimePublicSectorEmployee, both defined in spec/contract/personas.yaml with sandbox-idp identities. R-4.3&#39;s three tests map one-to-one onto its outcomes: the completion control&#39;s availability changes once the agreement box is ticked (the contract does not state the observation&#39;s value, so a change is what can be asserted); after completing, the vendor&#39;s own legal section carries an accepted-on notice containing a date (R-4.33 names that section as where the moment of agreement is stated); a first-time public sector employee is not offered the agreement box. The dropped terms-updated-warning assertion was not asked for by the criterion. R-4.24 asserts the choice made during profile completion is saved, held against a seeded notices-off account, and its unasserted clause (the moment the choice was made) carries a not-testable.yaml clause entry owed by contract whose reason is real: user-profile-self-notifications in spec/contract/surface.yaml declares only new_opportunities_checkbox, notification_email_address and unsubscribe_modal, and the checks already show missing-test/R-4.24 open against contract. No selector, route, status code or table leaks in. The runner typecheck reports no diagnostics under acceptance/users; its failure is in adapters/new, outside this proposal. What would change the ruling: evidence from a run that the public-sector test passes without reaching the page, since readOrEmpty turns any failed read into an absent checkbox, or a contract change stating the completion control&#39;s observed values, which would call for the direction to be asserted rather than only the change.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
