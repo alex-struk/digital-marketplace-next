@@ -48,3 +48,25 @@ I've revised the "new" adapter and bindings on all three conditions, but I could
 I fixed the one failed check. `tests/adapters/new/bindings.yaml` failed to parse because many members shared a reason through YAML anchors and aliases (`&name` / `*name`), and the parser refused the file once the alias count passed its limit. I expanded all 35 anchors so each member now carries its full reason in its own quoted string, and deleted the anchor markers. I also updated the header comment that described the anchor scheme.
 
 No reason's wording changed, and no member was added, removed, renamed, or switched between bound and unbound. `index.ts` was not touched. After the change, a search found no anchors or aliases left, and every member line is either `bound` or one complete quoted `"unbound: …"` string. I could not load the file with a real YAML parser to confirm it now parses, because running a script here needs an approval I didn't have.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the new adapter bind every surface action and observation on the target, and nothing else? Ruling: approve. It settles all three open conditions. teamProposalBody (index.ts:1906-1971) sends a rate, cost, scrum master, reference or answer only where the input carries one; the only lookup left maps a service-area name the test gave to that resource's id. notFoundShown now recognises 'Not Found' too. Every stale 'not a page on this target' reason was replaced after a re-walk: public screens are now bound, and screens that need a session are unbound with what the target answered a signed-out visitor plus the single sign-on redirect_uri failure. The adapter stays an adapter: its only Playwright import is types, there is no expect(), and readers return text for the test to judge. Nothing under tests/acceptance changed. The runner-owned typecheck passed with no diagnostics. The YAML anchors that broke parsing are gone (no anchor or alias found) and no check now fails. That parse was not confirmed with a real parser in this session; a parse failure in the first run would change the ruling.
+
+**Conditions:**
+- condition-met bind-adapter-new-2#1: teamProposalBody in tests/adapters/new/index.ts (lines 1906-1971) sets hourlyRate, proposedCost, scrumMaster and references only from what the input gives, and answersFor sends only the answers given; there are no defaults or placeholders.
+- condition-met bind-adapter-new-2#2: notFoundShown in tests/adapters/new/index.ts matches /^(page )?not found$/i, so it recognises both 'Not Found' and 'Page not found'.
+- condition-met bind-adapter-new-2#3: tests/adapters/new/bindings.yaml and index.ts no longer carry any 'not a page on this target' reason. Public screens are bound, and screens that need a session name what they answered signed out plus the sign-on redirect_uri failure. datedLine reads the 'Published … | Updated …' line, and siteFooter finds the footer by 'Owned and operated by the B.C. Government.'
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `05a73e289552c0597cb2376e73b39b6baaa02254`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
