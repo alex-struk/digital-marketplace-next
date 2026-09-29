@@ -1,61 +1,57 @@
 // criterion: @R-4.23 v2
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-14
+// provenance: blind, spec@0518dccea59a1ad5bce1f3b3ed4a00d0c8c61c73, derived 2026-09-29
 import { test, expect, persona } from "../../fixtures";
-import type { Surface } from "../../fixtures";
 
-// A vendor who has not yet agreed to the terms is produced by an administrator announcing
-// that the terms have changed, which withdraws every vendor's standing acceptance; a vendor
-// who has agreed before is that same vendor after they agree again. Both states are made
-// here rather than assumed of the seed, because tests in other domains change the terms a
-// vendor stands under as well.
-async function announceChangedTerms(surface: Surface): Promise<void> {
-  await surface.signIn(persona.administrator);
-  await surface.notificationTermsBroadcast.open();
-  await surface.notificationTermsBroadcast.notifyVendorsOfUpdatedTerms();
-  await surface.notificationTermsBroadcast.confirmNotifyVendors();
-  await surface.signOut();
-}
+// Every starting state is the seed's own, put back before each test. The vendor who has
+// not yet agreed is seed.users.vendorCompletingProfile, whose account has never agreed to
+// the terms. The vendor who has agreed before is seed.users.vendorWithTermsReset, who agreed
+// once and whose agreement no longer covers the current terms: that is the case the
+// criterion sends to the dashboard although the vendor stands unagreed today, so it tells
+// "has agreed before" apart from "agrees now".
+//
+// Being offered the page is read as its terms checkbox being shown; being sent elsewhere as
+// that checkbox being absent and the destination's own screen being there instead. What a
+// vendor's dashboard lists depends on their proposals, so it is read as showing either its
+// table or its empty message.
 
 test("the profile-completion page is offered to a vendor who has not yet agreed to the terms", async ({
   surface,
 }) => {
-  await announceChangedTerms(surface);
-
-  await surface.signIn(persona.vendorWithTermsReset);
+  await surface.signIn(persona.vendorCompletingProfile);
   await surface.userSignUpComplete.open();
 
   expect(await surface.userSignUpComplete.termsCheckbox()).toBeTruthy();
-  expect(await surface.userSignUpComplete.nameField()).toBeTruthy();
 });
 
-// A vendor's dashboard lists their own proposals, and whether it carries a table or the
-// empty message depends on what other tests have left behind, so where the vendor is sent is
-// read as the completion screen not being offered to them.
-test("a vendor who has agreed before is sent to their dashboard instead", async ({ surface }) => {
-  await announceChangedTerms(surface);
-
+test("a vendor who has agreed before is sent to their dashboard instead of the profile-completion page", async ({
+  surface,
+}) => {
   await surface.signIn(persona.vendorWithTermsReset);
-  await surface.userProfileSelfLegal.open();
-  await surface.userProfileSelfLegal.acceptUpdatedTerms();
-  await surface.userProfileSelfLegal.confirmAcceptUpdatedTerms();
-
   await surface.userSignUpComplete.open();
+
   expect(await surface.userSignUpComplete.termsCheckbox()).toBeFalsy();
-  expect(await surface.userSignUpComplete.completeDisabledUntilTermsAccepted()).toBeFalsy();
+  const dashboard =
+    (await surface.proposalVendorDashboard.myProposalsTable()) ||
+    (await surface.proposalVendorDashboard.emptyMyProposalsMessage());
+  expect(dashboard).toBeTruthy();
 });
 
-test("any signed-in person who is not a vendor is sent to their dashboard instead", async ({ surface }) => {
+test("any signed-in person who is not a vendor is sent to their dashboard instead of the profile-completion page", async ({
+  surface,
+}) => {
   await surface.signIn(persona.publicSectorStaff);
   await surface.userSignUpComplete.open();
 
   expect(await surface.userSignUpComplete.termsCheckbox()).toBeFalsy();
-  expect(await surface.opportunityDashboard.myOpportunitiesTable()).toBeTruthy();
+  const dashboard =
+    (await surface.opportunityDashboard.myOpportunitiesTable()) ||
+    (await surface.opportunityDashboard.emptyMyOpportunitiesMessage());
+  expect(dashboard).toBeTruthy();
 });
 
-test("a visitor who is not signed in is sent to sign in", async ({ surface }) => {
-  await surface.signIn(persona.vendor);
-  await surface.signOut();
-
+test("a visitor who is not signed in is sent to sign in instead of the profile-completion page", async ({
+  surface,
+}) => {
   await surface.userSignUpComplete.open();
 
   expect(await surface.userSignUpComplete.termsCheckbox()).toBeFalsy();

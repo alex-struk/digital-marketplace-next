@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-users-stale-7 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">281</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">277</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">244</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-users-stale-7</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 07:09</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the users criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the tests for R-4.23 and R-4.24 in <code>tests/acceptance/users/</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rewrote the tests for R-4.23 and R-4.24 in <code>tests/acceptance/users/</code>. Both carry the new headers (spec@0518dcc…, derived 2026-09-29). Neither criterion needed a <code>not-testable.yaml</code> entry, and I didn&#39;t change that file. I couldn&#39;t type-check or run the tests because the workspace has no installed dependencies. I did check every page, action and observation name against <code>tests/generated/surface.d.ts</code>.</p>
+<p><strong>R-4.23 (v2), four tests, one per clause.</strong> The ruling said the first case needs a vendor who has never agreed to the terms, taken from the seed rather than made by announcing changed terms. That persona now exists: <code>vendorCompletingProfile</code> (seed <code>users.vendorCompletingProfile</code>, marked as never having agreed). The first test signs in as that vendor and expects the terms checkbox on the profile-completion page. No test announces changed terms any more.</p>
+<ul><li><strong>Vendor who has agreed before:</strong> I used the seeded <code>vendorWithTermsReset</code>. The seed marks this vendor as having agreed once but not to the current terms. That is the case the ruling said the second clause sends to the dashboard, and it is the one that separates &quot;has agreed before&quot; from &quot;agrees now&quot;.</li><li><strong>Signed-in person who is not a vendor:</strong> public sector staff.</li><li><strong>Visitor not signed in:</strong> the test opens the page without signing in at all. The old version signed in and then out, which the criterion doesn&#39;t need.</li></ul>
+<p>&quot;Sent to their dashboard&quot; is read as the terms checkbox being absent plus the dashboard&#39;s own table or its empty message being present. Accepting either one means the test doesn&#39;t depend on what the dashboard happens to list. &quot;Sent to sign in&quot; is read as the sign-in page&#39;s vendor card being present.</p>
+<p><strong>R-4.24 (v1), one test.</strong> The ruling said the old test never reached the profile-completion form. The new test signs in as <code>vendorCompletingProfile</code> and first checks that the account has no notices date yet. It then opens the completion form and confirms it is showing (terms checkbox present) before doing anything on it, so a run that never reaches the form fails at that point. It ticks the new-opportunity notices box, agrees to the terms (only because completing the profile requires it), and completes the profile. Finally it reads the account record through <code>userAccountSelfRequest</code> and expects a valid date for when notices were turned on, within a window around the completion that allows five minutes for clock differences.</p>
+<p><strong>Notes for the next contract stage:</strong></p>
+<ul><li>The comment on <code>user-sign-up-complete</code> in <code>spec/contract/surface.yaml</code> still says every account a sign-in route creates on the oracle already has a finished profile. <code>vendorCompletingProfile</code>, reachable at <code>/auth/createsessionvendor/17</code>, now contradicts that. The contract stage should correct the comment; it isn&#39;t this stage&#39;s file to change.</li><li>The surface has no observation that names the dashboard itself, whoever is looking at it. The redirect is therefore inferred from a dashboard table or empty message. An observation for &quot;the dashboard is shown&quot;, on both <code>opportunity-dashboard</code> and <code>proposal-vendor-dashboard</code>, would make those assertions direct.</li></ul></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 07:10.</p>
+<div class="body"><p>Question: do the rewritten R-4.23 and R-4.24 tests follow from their criteria and from nothing else? Approve. R-4.23 has one test per clause. The never-agreed vendor comes from the seed (vendorCompletingProfile) and is offered the terms checkbox. The vendor who agreed before (vendorWithTermsReset, whose persona can &#39;agree to the current terms again&#39;) and public sector staff each get no checkbox plus their own dashboard&#39;s table or empty message; accepting either keeps the check independent of what the dashboard happens to list. A visitor who never signs in is shown the sign-in page. R-4.24 checks the account starts with no notices date and that the completion form is showing, then ticks the notices box and completes the profile (agreeing to the terms only because completion requires it), and reads back a valid date within a clock-drift window of the completion. That date covers both &#39;notifications are on&#39; and &#39;the moment the choice was made&#39;. No selectors, routes, status codes or table names appear. Every persona and observation used exists in the generated surface and seed. The runner&#39;s typecheck reports nothing under acceptance/users/. The ruling would change if a calibration run showed that the dashboard table-or-empty-message check cannot tell the dashboard apart from some other screen, or that vendorWithTermsReset is not in fact a vendor who agreed before.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

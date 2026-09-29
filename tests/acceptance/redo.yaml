@@ -663,9 +663,15 @@ redo:
       dashboard; the first case needs a vendor who has never agreed to the
       terms, and that persona has to be supplied by the seed and fixtures rather
       than derived from an established vendor
+    closed: &a15
+      outcome: met
+      why: derived again by a derive-tests run on users
+      by: runner:derive-tests
+      at: 2026-09-29T07:09:29.847Z
   - id: R-4.24
     version: 1
     why: the test never reaches the profile-completion form because every persona it
       can sign in as has already completed their profile; it needs a vendor who
       has never completed their profile, supplied by the seed and fixtures, and
       must tick the new-opportunity notice while completing it
+    closed: *a15
