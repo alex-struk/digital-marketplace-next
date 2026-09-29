@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-organizations-stale-8 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">280</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">276</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">243</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-organizations-stale-8</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 07:07</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the organizations criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I wrote a test for the one criterion I was given, R-3.9 v2.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I wrote a test for the one criterion I was given, R-3.9 v2. Nothing was not testable, so I made no change to <code>tests/acceptance/not-testable.yaml</code>. I did not type-check or run the file: the typecheck command needed approval that nobody was there to give, and this workspace has no adapter to run it against.</p>
+<p><strong>What changed from v1.</strong> A test file for R-3.9 v1 was already there, and I rewrote it in place as <code>tests/acceptance/organizations/R-3.9.spec.ts</code> with the v2 headers. The v1 file had a test in which a service administrator accepts the invitation on the invited person&#39;s behalf and the membership becomes active. v2 says the invitation becomes active &quot;only when the invited person accepts it,&quot; so keeping that test would contradict the criterion, and I removed it. I did not add a test that an administrator is refused either. The criterion&#39;s given/when/then names only the owner, and I did not want to assume the service&#39;s current behaviour toward administrators on the criterion&#39;s behalf.</p>
+<p><strong>The three tests</strong>, one per outcome in the criterion&#39;s &quot;then&quot;, all starting from the seeded pending invitation (<code>seed.affiliations.pendingInvitation</code>, from <code>seed.users.invitedVendor</code> to <code>seed.organizations.withPendingInvitation</code>):</p>
+<ul><li><strong>The owner cannot accept on the invited person&#39;s behalf.</strong> Signed in as <code>persona.organizationOwner</code>, the test sends the acceptance through <code>affiliationApprovalRequest.acceptMembershipByRequest()</code> and checks that it is refused and not accepted. It then signs in as the invited person and checks that the invitation still shows as pending on the &quot;My Organizations&quot; page (<code>organizationUserMembershipsSelf</code>).</li><li><strong>The invitation becomes active when the invited person accepts it.</strong> The invited person approves it on their own &quot;My Organizations&quot; page, and the test checks that the organization is listed with no pending badge.</li><li><strong>An invitation that is not pending cannot be accepted.</strong> The invited person accepts by request (the answer reports <code>ACTIVE</code>), then tries again. The test checks that the second attempt is refused with a message matching &quot;not pending&quot; and that the membership stays active.</li></ul>
+<p><strong>Gaps in the surface.</strong> All three outcomes are fully covered, so no partial-coverage entry was needed and I found no missing action or observation. One thing the contract could add: a page or observation showing a membership&#39;s status directly. For now, &quot;active&quot; in the second test is read as the organization being listed without a pending badge, which is weaker than reading the status itself.</p>
+<p>I touched nothing outside <code>tests/acceptance/organizations/R-3.9.spec.ts</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 07:07.</p>
+<div class="body"><p>Question: do the R-3.9 tests follow from R-3.9 v2 and nothing else? Approve. Each of the criterion&#39;s three outcomes has its own test, starting from the seeded pending invitation: (1) the owner&#39;s attempt to accept on the invited person&#39;s behalf is refused and nothing is accepted, and the invited person still sees the invitation as pending; (2) the invited person&#39;s own acceptance leaves the organization listed with no pending badge; (3) a second acceptance of the now-active membership is refused with a message matching &#39;not pending&#39; and the membership stays active. The v1 test in which an administrator accepts on the invited person&#39;s behalf contradicts v2&#39;s &#39;only when the invited person accepts it&#39; and was rightly removed. The writer also rightly added no administrator-refusal test, which the criterion&#39;s given/when/then does not ask for. The one literal that looks like an implementation leak, membershipStatus() === &#39;ACTIVE&#39;, is the value the contract surface itself documents for that observation (spec/contract/surface.yaml:1975), so it is contract vocabulary, not evidence the writer read the implementation. The runner&#39;s typecheck reports no diagnostics under acceptance/organizations; its failures are in adapters/new/, which this proposal does not answer for. The applied.yaml change drops a triage ruling on R-3.9 v1, which no longer applies now that the criterion is at v2. No not-testable entry is needed, because every clause is asserted. The open missing-test/R-3.9 owed by calibrate stays open until the v2 test runs. What would change this: a typecheck diagnostic in R-3.9.spec.ts, or a contract that no longer gives ACTIVE as the membership status value.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
