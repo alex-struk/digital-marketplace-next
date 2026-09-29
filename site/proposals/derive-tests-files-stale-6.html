@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-files-stale-6 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">303</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">298</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">264</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-files-stale-6</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 15:07</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the files criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the test for the one criterion in this batch, R-8.12.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rewrote the test for the one criterion in this batch, R-8.12. It is now <code>tests/acceptance/files/R-8.12.spec.ts</code> and carries the new spec header. I could not type-check it: the compiler command needed an approval nobody was here to give. I did check by eye that every page, observation, persona and seed handle it uses exists in the generated contract. Nothing was added to <code>not-testable.yaml</code>.</p>
+<p><strong>What was wrong.</strong> The earlier version got its unreadable file by uploading one as the file-uploader. Before that, it signed in as an administrator and made sure the uploader&#39;s and the vendor&#39;s accounts were active. The criterion asks for none of those steps, and the upload that followed was refused, so the test failed in its own setup and never made the request the criterion is about.</p>
+<p><strong>How the new version gets its file.</strong> The seed already holds a stored file that only its uploader may read: <code>seed.stored_files.privateOfFileUploader</code>. The vendor asks for that one. There is no upload and no administrator step, so setup cannot fail at storing a file, which is what the ruling asked for. For &quot;a file that does not exist&quot; the test uses an id taken from the seed, not an invented value: the published Code With Us opportunity&#39;s id, which is well-formed and is not a file&#39;s.</p>
+<p><strong>The three tests.</strong> There is one per outcome, each titled with the criterion&#39;s own words:</p>
+<ul><li><strong>Vendor asks for the seeded private file:</strong> the download page reports &quot;not authorized&quot; (<code>refusedWhenNotPermitted</code>).</li><li><strong>Vendor asks for the id no file carries:</strong> the page reports the refusal for an unknown file (<code>refusedForUnknownFile</code>). The contract has since added that observation, so the test uses it instead of the general &quot;not permitted&quot; one.</li><li><strong>Administrator asks for the same missing id:</strong> the page reports &quot;not found&quot; (<code>notFoundForAdministrator</code>). The old version also asserted that the administrator was <em>not</em> refused. The criterion doesn&#39;t say that, so I dropped it.</li></ul>
+<p><strong>Not found in the surface:</strong> nothing this criterion needed was missing. The contract already had a seeded file the vendor may not read, a download page opened by file id, and a separate observation for each of the three answers. I changed nothing outside <code>tests/acceptance</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 15:08.</p>
+<div class="body"><p>The question is whether the rewritten R-8.12 tests follow from the criterion and from nothing else. Approved. Each clause has its own test. A vendor asking for a file they may not read (the seeded file only its uploader may read, which has no read-access rows) is refused. A vendor asking for an identifier no file carries (a seeded opportunity id) is refused. An administrator asking for that same identifier is told it was not found. The unknown-file observation the second test now uses is bound in the contract to the same refusal as the not-permitted observation, so it still checks the criterion&#39;s &#39;not authorized&#39; answer. The dropped &#39;administrator is not refused&#39; assertion was never in the criterion, so dropping it is correct. The administrator step, the account reactivation and the upload that made the earlier version fail in its own setup are gone, which is what the redo asked for. The runner&#39;s typecheck reports no errors under acceptance/files/; the two it does report are in adapters/new/, which this proposal does not answer for. This would become a return if the contract separated the unknown-file refusal from the not-authorized refusal, or if the seeded private file turned out to be readable by the vendor.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

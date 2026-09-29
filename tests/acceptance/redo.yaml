@@ -724,3 +724,8 @@ redo:
       suite. Reach a stored file the vendor may not read without depending on
       those steps, and report a setup that could not store the file as a setup
       failure rather than as the criterion failing."
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on files
+      by: runner:derive-tests
+      at: 2026-09-29T15:07:36.569Z
