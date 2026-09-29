@@ -209,6 +209,9 @@
 - 10:14:36 run bind-adapter: ok, cost 0.4579968, turns 20, on claude claude-opus-5-5 (2.1.284 (Claude Code))
 - 10:14:36 propose bind-adapter-old-44 at G3
 - 10:15:11 rule bind-adapter-old-44 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 11:02:32 oracle up old in configuration notifications_disabled: local port 3103
+- 11:03:11 oracle down old in configuration notifications_disabled
+- 11:03:17 run calibrate: ok, cost 0, turns 0
 
 # Run record 2026-09-28
 

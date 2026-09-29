@@ -42,7 +42,7 @@
 | R-1.36 | acceptance/opportunities/R-1.36.spec.ts |  | pass |
 | R-1.37 | acceptance/opportunities/R-1.37.spec.ts |  | pass |
 | R-1.38 | acceptance/opportunities/R-1.38.spec.ts |  | pass |
-| R-1.39 | acceptance/opportunities/R-1.39.spec.ts |  | fail |
+| R-1.39 | acceptance/opportunities/R-1.39.spec.ts |  | pass (ruled: test-wrong) |
 | R-1.40 | acceptance/opportunities/R-1.40.spec.ts |  | pass |
 | R-1.41 | acceptance/opportunities/R-1.41.spec.ts |  | fail (ruled: defect-in-old) |
 | R-1.42 | acceptance/opportunities/R-1.42.spec.ts |  | pass |
