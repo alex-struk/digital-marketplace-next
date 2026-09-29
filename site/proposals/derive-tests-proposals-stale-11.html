@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-proposals-stale-11 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">259</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">255</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">223</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-proposals-stale-11</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 02:15</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the proposals criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote all three criteria.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rewrote all three criteria. Each now has a test file, and each also has a <code>not-testable.yaml</code> entry for the one clause its test can&#39;t reach, so none of them counts as fully tested yet. I could not run the type check or parse the YAML: both commands needed approval this session doesn&#39;t have. I checked by reading instead. The new files use only surface methods, seed handles and personas that exist in <code>tests/generated</code>. A search found no selectors, routes, URLs or <code>page.</code> calls in them.</p>
+<p><strong>R-2.16 (v1): rewritten per the ruling.</strong> The earlier test claimed the criterion&#39;s starting state could not be built. It can, because members can leave an organization (<code>leave_organization</code>). The first test now does exactly what the criterion describes:</p>
+<ul><li>The organization owner registers a new organization, two colleagues join, and it accepts the Sprint With Us terms. It now qualifies.</li><li>A complete draft is saved for it. The team is the owner, an active member of that organization who holds the capability the phase asks for.</li><li>One colleague leaves, taking three capabilities with them. The owner then submits the draft.</li><li>The test asserts only that the draft did not become submitted.</li></ul>
+<p>The second test covers a proposal naming no organization. The form holding back the submission counts as the refusal, so the test asserts only that no proposal was submitted. It no longer reads a message from the form.</p>
+<p>The quoted service message (&quot;An organization must be specified before submitting.&quot;) is recorded as an open clause (blocked, owner <code>contract</code>). Nothing in the surface sends the service a submission with the organization left out: the form won&#39;t send it, the edit screen shows only a general notice, and the direct-request page is described as always carrying an organization.</p>
+<p><strong>R-2.22 (v1): rewritten per the ruling.</strong> Every organization change now names the team again from the new organization&#39;s members, so the proposal is complete after the change and only the organization rule is under test. That team is the owner, an active member of both organizations. There are six tests: submitted, withdrawn and draft, each for both programs. The submitted proposal must still name its original organization; the withdrawn and draft ones must take the change. I added the Sprint With Us draft case for symmetry.</p>
+<p>The quoted refusal message stays an open clause. I updated the existing entry to add what the new test needed and didn&#39;t find:</p>
+<ul><li>The edit screens have no action for choosing an organization or team members.</li><li><code>save_changes</code> has no described input. The test passes it <code>{ organization, team }</code> or <code>{ organization, phases }</code>, copying the direct-request page&#39;s input shape. That is my guess, not something the contract states.</li></ul>
+<p><strong>R-2.28 (now v2): rewritten because the criterion changed.</strong> Two tests, both starting from seeded records:</p>
+<ul><li><strong>Sprint With Us:</strong> an opportunity still at its code challenge. The proposal page must say the proposal can be scored once the opportunity reaches the team scenario, and no team scenario score may be recorded.</li><li><strong>Team With Us:</strong> an opportunity still at question consensus. The same checks, for the challenge score.</li></ul>
+<p>I don&#39;t know the exact wording of the page&#39;s note, so the test looks for &quot;can be scored once&quot; in the stage tab plus <code>wrong_stage_error</code>. That observation has no description, and I&#39;m assuming it may carry the note. The criterion&#39;s other two clauses are an open entry (blocked, owner <code>contract</code>): no observation says whether the score control is offered, and no surface sends a stage score straight to the service.</p>
+<p><strong>Surface additions needed</strong>, so the contract stage can close these clauses:</p>
+<ol><li>Whether each score action is offered, on <code>proposal-swu-view</code> and <code>proposal-twu-view</code>.</li><li>A request page that sends a Sprint With Us team scenario score or a Team With Us challenge score straight to the service, with accepted, refusal-message and refusal-status observations.</li><li>On <code>proposal-swu-edit</code> and <code>proposal-twu-edit</code>: actions for choosing the organization and team members (or a described <code>save_changes</code> input), plus an observation of the service&#39;s message when <code>save_changes</code> is refused.</li><li><code>proposal-team-request</code> (sprint-with-us) described as accepting a submission with no organization.</li></ol>
+<p>Nothing asked me to change any read-only path, and I changed none.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 02:16.</p>
+<div class="body"><p>Question: do the rewritten tests for R-2.16, R-2.22 and R-2.28 follow from their criteria and nothing else? Approve. R-2.16 now builds the criterion&#39;s given as stated (a draft saved while its organization qualifies, then a member leaves so it stops qualifying) and asserts only that the draft is not submitted; the no-organization test asserts only that nothing was submitted, and the quoted service message is a clause-scoped not-testable entry owed by contract with a real reason (no surface sends the service a Sprint With Us submission lacking an organization). R-2.22 renames the team from the new organization&#39;s members so only the organization rule is under test, covers submitted/withdrawn/draft on both programs, and records the unasserted refusal message and the undescribed save_changes input as a clause entry owed by contract. R-2.28 v2 asserts what the criterion states, that the page says the proposal &#39;can be scored once&#39; the opportunity reaches the stage and that no out-of-stage score is taken, and records the not-offered control and the direct-service refusal message as a clause entry owed by contract. Every surface method used exists in tests/generated, no selectors, routes or status codes leak in, and the runner&#39;s typecheck reports no diagnostics under acceptance/proposals (its failures are in adapters/new, which this proposal does not answer for). The tests that assert only an absence (the R-2.16 refusals and the R-2.22 submitted cases) could pass for an unrelated reason, but each assertion is exactly what its criterion states, so this is not grounds to return. What would change the ruling: a typecheck diagnostic in these specs, or a test asserting something its criterion does not state.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

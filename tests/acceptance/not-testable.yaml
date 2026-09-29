@@ -174,17 +174,56 @@ criteria:
     reason: "blocked: R-2.22.spec.ts asserts the refusal by reading that a submitted
       proposal still names the organization it was submitted for after the
       change was asked for, on both programs, and that a draft or withdrawn one
-      takes the change. What it cannot read is the reason. proposal-twu-edit and
-      proposal-swu-edit report a refusal only through submission_refusal, which
-      covers submit_proposal and save_changes_and_submit, not save_changes; and
-      neither screen declares an action that names an organization, so the
-      change itself is carried to the service only by what save_changes is
-      handed, which the contract does not describe."
-    missing: on proposal-twu-edit and proposal-swu-edit, a choose_organization
-      action for the edit form (as proposal-twu-create and proposal-swu-create
-      have), and an observation reporting the message the service gives when
-      save_changes is refused, holding the service's own wording rather than a
-      general notice
+      takes the change, each time naming the team again from the new
+      organization's members so the proposal stays complete. What it cannot
+      read is the reason. proposal-twu-edit and proposal-swu-edit report a
+      refusal only through submission_refusal, which covers submit_proposal and
+      save_changes_and_submit, not save_changes; and neither screen declares an
+      action that names an organization or a team member, so the change and
+      the team named again are carried to the service only by what
+      save_changes is handed, which the contract does not describe (the test
+      hands it the organization and the team in proposal-team-request's shape)."
+    missing: on proposal-twu-edit and proposal-swu-edit, choose_organization and
+      team-member actions for the edit form (as proposal-twu-create and
+      proposal-swu-create have), or a description of save_changes' input that
+      names the organization and the team; and an observation reporting the
+      message the service gives when save_changes is refused, holding the
+      service's own wording rather than a general notice
+    owner: contract
+  - id: R-2.16
+    version: 1
+    clause: a proposal naming no organization at all is refused with "An
+      organization must be specified before submitting."
+    reason: "blocked: R-2.16.spec.ts asserts that a proposal naming no organization
+      is not submitted, and that a draft whose organization stops qualifying is
+      not submitted. The quoted message is the service's, and nothing sends the
+      service a Sprint With Us submission without an organization: the form
+      withholds it, proposal-swu-edit's submission_refusal is a general notice
+      that does not repeat the service's reason, and proposal-team-request's
+      input is described with an organization in it."
+    missing: proposal-team-request (sprint-with-us) described as accepting a
+      submission with the organization left out, so that refusal_messages reads
+      the service's answer to it
+    owner: contract
+  - id: R-2.28
+    version: 2
+    clause: a proposal's page does not offer a score for a stage the opportunity has
+      not yet reached; and the service refuses such a score sent to it directly
+      with "The opportunity is not in the correct stage of evaluation to perform
+      that action."
+    reason: "blocked: R-2.28.spec.ts asserts that the page of a proposal whose
+      opportunity has not reached a stage says the proposal can be scored once it
+      does, and that no score for that stage is taken, on both programs. No
+      observation on proposal-swu-view or proposal-twu-view reports whether
+      score_team_scenario or score_challenge is offered, and no surface sends a
+      proposal's code challenge, team scenario or challenge score to the service
+      directly, so neither the absence of the control nor the service's
+      message can be read."
+    missing: an observation on proposal-swu-view and proposal-twu-view reporting
+      which score actions the page offers; and a request surface (like
+      proposal-team-request) that sends a Sprint With Us team scenario score or
+      a Team With Us challenge score for a proposal straight to the service,
+      with request_accepted, refusal_messages and refusal_status observations
     owner: contract
   - id: R-2.31
     version: 1

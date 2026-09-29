@@ -4406,3 +4406,16 @@ owed:
       gate: G1
       approved_by: agent:product-owner
       at: 2026-09-29T00:25:17.778Z
+  - kind: missing-test
+    item: R-2.16
+    id: R-2.16
+    version: 1
+    domain: proposals
+    stage: contract
+    why: proposal-team-request (sprint-with-us) described as accepting a submission
+      with the organization left out, so that refusal_messages reads the
+      service's answer to it
+    from: derive-tests-proposals-stale-11
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-29T02:16:17.982Z
