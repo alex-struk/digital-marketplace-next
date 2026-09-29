@@ -810,3 +810,43 @@ conditions:
         tests/acceptance/organizations/R-3.24.spec.ts
       by: agent:reviewer
       at: 2026-09-29T12:20:43.646Z
+  - ref: bind-adapter-new-2#1
+    text: "tests/adapters/new/index.ts: remove every value the adapter supplies that
+      the test did not give. That means answersFor's placeholder answers,
+      teamProposalBody's default hourlyRate (100) and proposedCost (1000), the
+      three placeholder references, and making the first-named member scrum
+      master. Send exactly what the input carries and leave anything missing
+      blank or absent, so a request is accepted or refused for what the test
+      gave."
+    from: bind-adapter-new-2
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-09-29T18:23:18.413Z
+  - ref: bind-adapter-new-2#2
+    text: "tests/adapters/new/index.ts: update notFoundShown to recognise the
+      target's current 'Not Found' screen as well as 'Page not found', so
+      members that use it (for example content-view.follow_body_link) read what
+      the page shows now."
+    from: bind-adapter-new-2
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-09-29T18:23:18.413Z
+  - ref: bind-adapter-new-2#3
+    text: "tests/adapters/new/bindings.yaml and index.ts: re-walk the members bound
+      or unbound before this revision against the target as it now stands.
+      Replace every 'not a page on this target' reason that is no longer true,
+      either with a binding or with an unbound reason naming what was tried now
+      (for example that the screen needs a signed-in person and sign-in fails at
+      the single sign-on hand-off). Fix the bound members the proposal reports
+      as no longer matching the page: the published page's dates now on one
+      'Published … | Updated …' line, and the footer with no contentinfo role."
+    from: bind-adapter-new-2
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-09-29T18:23:18.413Z
