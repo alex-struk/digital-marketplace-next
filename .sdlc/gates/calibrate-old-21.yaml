@@ -1,0 +1,16 @@
+gate: G1
+verdict: approve
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  The question is whether R-1.39's by-program failure against the old target, a timeout waiting for the seeded closed Sprint With Us opportunity to be listed, is the application's fault, the spec's, or the test's. Ruling: approve, with test-wrong. The old list page offers a program chooser with Code With Us, Sprint With Us and Team With Us (list.tsx:224-228). Its filter drops only opportunities whose program differs from the one chosen (list.tsx:323-325), and it applies that filter the same way to the Unpublished, Open and Closed groups (list.tsx:389-410). So choosing Sprint With Us keeps a closed Sprint With Us opportunity. The code allows no other reading, which rules out defect-in-old. The criterion describes this behaviour accurately, which rules out spec-wrong. The reviewer's triage (calibrate-triage-old-30) already showed that the adapter can read this seeded title from the Closed group, because R-1.38 reads it there and passed in the same run. What is left is how the case is built. It is the only R-1.39 case that relies on an opportunity it did not put in place itself: one shared with every other test running at the same time, which sits in a group the page keeps folded by default. And its failure message does not say which step failed, so a missing opportunity before filtering looks the same as a list that did not narrow after Sprint With Us was chosen. My last ruling on this criterion (calibrate-old-20) found the same weakness in the by-state case. What would change this ruling: suppose a rewritten case confirms both opportunities are listed before filtering, and the Sprint With Us one then disappears once Sprint With Us is chosen. The fault is then in how the adapter reads the list after filtering, and it goes to the reviewer as adapter-wrong. A correctly read list that still leaves out a matching Sprint With Us opportunity would make this defect-in-old.
+conditions:
+  - "test-wrong R-1.39: the by-program case relies on a closed Sprint With Us opportunity that exists before the test starts and that other tests share, instead of opportunities it puts in place and can vouch for itself, and its failure message does not say whether the opportunity was missing before any program was chosen or disappeared after Sprint With Us was chosen. Compare opportunities in two programs whose presence the case establishes itself. Confirm each one is listed before choosing a program. Then, after each program is chosen, check separately that the matching opportunity remains and that the other one is gone, and have each check's message name the program chosen and which half failed."
+cost: 0.5661080000000001
+turns: 14
+session: "1f582479-8764-4dc0-b7e2-9e05cb9e2a43"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-29T23:30:34.407Z
