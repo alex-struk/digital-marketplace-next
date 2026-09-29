@@ -167,85 +167,31 @@ criteria:
       clause, which only a request no screen sends could show, needs restating
       in ratify in terms something observes, or withdrawing.
     owner: contract
-  - id: R-2.22
-    version: 1
-    clause: the edit is refused with "Organization cannot be changed once the
-      proposal has been submitted"
-    reason: "blocked: R-2.22.spec.ts asserts the refusal by reading that a submitted
-      proposal still names the organization it was submitted for after the
-      change was asked for, on both programs, and that a draft or withdrawn one
-      takes the change, each time naming the team again from the new
-      organization's members so the proposal stays complete. What it cannot
-      read is the reason. proposal-twu-edit and proposal-swu-edit report a
-      refusal only through submission_refusal, which covers submit_proposal and
-      save_changes_and_submit, not save_changes; and neither screen declares an
-      action that names an organization or a team member, so the change and
-      the team named again are carried to the service only by what
-      save_changes is handed, which the contract does not describe (the test
-      hands it the organization and the team in proposal-team-request's shape)."
-    missing: on proposal-twu-edit and proposal-swu-edit, choose_organization and
-      team-member actions for the edit form (as proposal-twu-create and
-      proposal-swu-create have), or a description of save_changes' input that
-      names the organization and the team; and an observation reporting the
-      message the service gives when save_changes is refused, holding the
-      service's own wording rather than a general notice
-    owner: contract
-  - id: R-2.16
-    version: 1
-    clause: a proposal naming no organization at all is refused with "An
-      organization must be specified before submitting."
-    reason: "blocked: R-2.16.spec.ts asserts that a proposal naming no organization
-      is not submitted, and that a draft whose organization stops qualifying is
-      not submitted. The quoted message is the service's, and nothing sends the
-      service a Sprint With Us submission without an organization: the form
-      withholds it, proposal-swu-edit's submission_refusal is a general notice
-      that does not repeat the service's reason, and proposal-team-request's
-      input is described with an organization in it."
-    missing: proposal-team-request (sprint-with-us) described as accepting a
-      submission with the organization left out, so that refusal_messages reads
-      the service's answer to it
-    owner: contract
   - id: R-2.28
     version: 2
     clause: a proposal's page does not offer a score for a stage the opportunity has
-      not yet reached; and the service refuses such a score sent to it directly
-      with "The opportunity is not in the correct stage of evaluation to perform
-      that action."
-    reason: "blocked: R-2.28.spec.ts asserts that the page of a proposal whose
-      opportunity has not reached a stage says the proposal can be scored once it
-      does, and that no score for that stage is taken, on both programs. No
-      observation on proposal-swu-view or proposal-twu-view reports whether
-      score_team_scenario or score_challenge is offered, and no surface sends a
-      proposal's code challenge, team scenario or challenge score to the service
-      directly, so neither the absence of the control nor the service's
-      message can be read."
+      not yet reached (both programs); and, for Team With Us, the service refuses
+      such a score sent to it directly with "The opportunity is not in the
+      correct stage of evaluation to perform that action."
+    reason: "blocked: R-2.28.spec.ts asserts, on both programs, that the page of a
+      proposal whose opportunity has not reached a stage says the proposal can be
+      scored once it does and takes no score for that stage, and, for Sprint With
+      Us, that a team scenario score sent through proposal-evaluation-request for
+      seed.proposals.swuScreenedIntoScenarioEarly is refused with the stage
+      message. No observation on proposal-swu-view or proposal-twu-view reports
+      whether score_team_scenario or score_challenge is offered, so the control's
+      absence cannot be read. And no Team With Us proposal is seeded that has
+      been carried into the challenge while its opportunity still stands short
+      of it; the contract says the service refuses a proposal not yet in the
+      stage with its general permission message instead, so
+      score_challenge_by_request on any seeded Team With Us proposal cannot
+      produce the stage message."
     missing: an observation on proposal-swu-view and proposal-twu-view reporting
-      which score actions the page offers; and a request surface (like
-      proposal-team-request) that sends a Sprint With Us team scenario score or
-      a Team With Us challenge score for a proposal straight to the service,
-      with request_accepted, refusal_messages and refusal_status observations
-    owner: contract
-  - id: R-2.31
-    version: 1
-    clause: proposals are ranked against each other only once they are fully evaluated
-    reason: "blocked: the only rank the surface presents for a Sprint With Us or
-      Team With Us proposal is rank on proposal-swu-edit and proposal-twu-edit,
-      shown to the vendor who holds the proposal and only once the opportunity
-      is awarded or the proposal passed over (R-2.32). A proposal that is not
-      fully evaluated on a seeded awarded opportunity belongs to a vendor with
-      no persona (users.proponentThree, on swuProcessingA and swuProcessingB),
-      and on an opportunity still being evaluated no vendor is shown a rank at
-      all, so the absence of a rank there says nothing about this criterion.
-      R-2.31.spec.ts asserts the weighted total and that fully evaluated
-      proposals rank highest total first; that the others hold no rank is left
-      unread."
-    missing: a rank observation on proposal-swu-view and proposal-twu-view (or on
-      the opportunity management screens' proposals tab, one row per proposal)
-      readable by the administrator while the opportunity is still being
-      evaluated, so that a proposal lacking a stage score can be read to hold no
-      rank beside one that holds every score; or a seeded awarded opportunity
-      where a proposal left behind before the last stage is held by a vendor a
-      persona reaches
+      which score actions the page offers; and a seeded Team With Us proposal
+      screened into the challenge on an opportunity still at question
+      consensus (the Team With Us counterpart of
+      seed.proposals.swuScreenedIntoScenarioEarly), named as the starting point
+      for score_challenge_by_request
     owner: contract
   - id: R-4.24
     version: 1

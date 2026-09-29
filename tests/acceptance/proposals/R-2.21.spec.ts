@@ -1,5 +1,5 @@
 // criterion: @R-2.21 v1
-// provenance: blind, spec@ccc1cba3290f5ea17351e4f2ca49bd80fefc2ef6, derived 2026-09-29
+// provenance: blind, spec@8272c1b989e3bad64c78ae540830a62747dadf42, derived 2026-09-29
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -14,6 +14,10 @@ import type { Surface } from "../../fixtures";
 // A response "numbered against no question" is an answer given for question order 1 when the
 // opportunity asks only question 0. It is sent beside a proper answer to question 0, so the
 // only answer the service can object to is the one that answers nothing it asked.
+//
+// The service locates each refusal against the answer it concerns (refusal_by_field): an
+// empty or over-long answer is refused against its wording with the question's own word
+// limit, one numbered against no question against its numbering.
 
 const statement =
   "A response to an opportunity question is rejected if it is empty or longer than the word limit that question carries, or if it answers a question the opportunity does not ask.";
@@ -22,6 +26,7 @@ const noMatchingQuestion = "No matching opportunity question.";
 
 const settle = { timeout: 30000 };
 const wordLimit = 30;
+const outsideWordLimit = `Response must be between 1 and ${wordLimit} words long.`;
 const withinLimit = "Our developer built and ran the same kind of service for a Crown corporation.";
 const overLimit = Array.from({ length: wordLimit * 3 }, () => "delivery").join(" ");
 
@@ -104,11 +109,13 @@ async function submitWithAnswers(
     .toBeTruthy();
 }
 
-async function expectRejected(surface: Surface, what: string): Promise<string> {
+async function expectRejectedWith(surface: Surface, message: string, what: string): Promise<void> {
   expect(await readOrEmpty(() => surface.proposalTeamRequest.requestAccepted()), what).toBeFalsy();
-  const messages = await readOrEmpty(() => surface.proposalTeamRequest.refusalMessages());
-  expect(messages, what).toBeTruthy();
-  return messages;
+  expect(await readOrEmpty(() => surface.proposalTeamRequest.refusalMessages()), what).toContain(message);
+  expect(
+    await readOrEmpty(() => surface.proposalTeamRequest.refusalByField()),
+    "the refusal is not reported against the response it concerns",
+  ).toContain(message);
 }
 
 test(`${statement} (an empty response is rejected)`, async ({ surface }) => {
@@ -116,7 +123,7 @@ test(`${statement} (an empty response is rejected)`, async ({ surface }) => {
   await submitWithAnswers(surface, "R-2.21 opportunity whose question is answered with nothing", [
     { order: 0, response: "" },
   ]);
-  await expectRejected(surface, "an empty response was accepted");
+  await expectRejectedWith(surface, outsideWordLimit, "an empty response was accepted");
 });
 
 test(`${statement} (a response longer than the question's word limit is rejected)`, async ({ surface }) => {
@@ -124,10 +131,11 @@ test(`${statement} (a response longer than the question's word limit is rejected
   await submitWithAnswers(surface, "R-2.21 opportunity whose question is answered past its word limit", [
     { order: 0, response: overLimit },
   ]);
-  const messages = await expectRejected(surface, "a response over the word limit was accepted");
-  expect(messages, "a response to a question the opportunity asks was reported as matching no question").not.toContain(
-    noMatchingQuestion,
-  );
+  await expectRejectedWith(surface, outsideWordLimit, "a response over the word limit was accepted");
+  expect(
+    await readOrEmpty(() => surface.proposalTeamRequest.refusalMessages()),
+    "a response to a question the opportunity asks was reported as matching no question",
+  ).not.toContain(noMatchingQuestion);
 });
 
 test(`${statement} (a response to a question the opportunity does not ask is rejected)`, async ({ surface }) => {
@@ -136,6 +144,9 @@ test(`${statement} (a response to a question the opportunity does not ask is rej
     { order: 0, response: withinLimit },
     { order: 1, response: withinLimit },
   ]);
-  const messages = await expectRejected(surface, "a response to a question the opportunity does not ask was accepted");
-  expect(messages).toContain(noMatchingQuestion);
+  await expectRejectedWith(surface, noMatchingQuestion, "a response to a question the opportunity does not ask was accepted");
+  expect(
+    await readOrEmpty(() => surface.proposalTeamRequest.refusalMessages()),
+    "the answer within its question's word limit was refused over its wording",
+  ).not.toContain(outsideWordLimit);
 });

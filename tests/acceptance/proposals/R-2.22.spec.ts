@@ -23,19 +23,18 @@ import type { Surface } from "../../fixtures";
 // After. A team belongs to the organization it was chosen from, so changing the organization
 // names the team again from the new organization's members — the owner, in the same place
 // on the proposal — and every other part of the proposal is left as it was. The change is
-// asked for from the proposal's management screen: start editing, name the other
-// organization and its team, save. Whether it took is read from the proposal itself, which
-// names its organization. A change the screen does not offer to make on a submitted
-// proposal is still a refusal, so what is asserted there is only that the proposal still
-// names the organization it was submitted for.
-//
-// The message the criterion quotes is not asserted: no observation on either management
-// screen reports why a save was refused. See this criterion's entry in not-testable.yaml.
+// asked for from the proposal's management screen: start editing, choose the other
+// organization, name the team again from it, save. The screen leaves the choice open on a
+// submitted proposal, so the refusal is the service's: the form shows the service's own
+// message against the organization, and the proposal still names the organization it was
+// submitted for. On a draft or a withdrawn proposal the save goes through and the proposal
+// names the new organization.
 
 const statement =
   "Once a proposal has been submitted, the organization it was submitted for cannot be changed until it is withdrawn.";
 
 const settle = { timeout: 30000 };
+const cannotBeChanged = "Organization cannot be changed once the proposal has been submitted";
 const submittedFor = seed.organizations.qualified;
 const fullStack = "Full Stack Developer";
 const answer = "Our team built and ran the same kind of service for a Crown corporation.";
@@ -56,10 +55,6 @@ async function readOrEmpty(read: () => Promise<string>): Promise<string> {
   } catch {
     return "";
   }
-}
-
-async function attempt(action: () => Promise<void>): Promise<void> {
-  await action().catch(() => undefined);
 }
 
 const panel = {
@@ -291,20 +286,31 @@ function managementScreen(surface: Surface, program: Program) {
   return program === "team-with-us" ? surface.proposalTwuEdit : surface.proposalSwuEdit;
 }
 
-// Names the other organization and, from its members, the team again; nothing else changes.
+// Chooses the other organization and, from its members, names the team again; nothing else
+// changes.
 async function changeOrganization(surface: Surface, program: Program, where: Where, organization: Organization): Promise<void> {
-  const edit = managementScreen(surface, program);
-  await edit.open(where);
-  await edit.startEditing();
-  await edit.saveChanges(
-    program === "team-with-us" ? { organization, team: teamWithUsTeam } : { organization, phases: sprintWithUsPhases },
-  );
+  if (program === "team-with-us") {
+    const edit = surface.proposalTwuEdit;
+    await edit.open(where);
+    await edit.startEditing();
+    await edit.chooseOrganization({ organization });
+    await edit.addTeamMemberForResource({ resource: fullStack, member: seed.users.organizationOwner });
+    await edit.saveChanges();
+  } else {
+    const edit = surface.proposalSwuEdit;
+    await edit.open(where);
+    await edit.startEditing();
+    await edit.chooseOrganization({ organization });
+    await edit.addPhaseTeamMember({ phase: "Implementation", member: seed.users.organizationOwner });
+    await edit.setScrumMaster({ phase: "Implementation", member: seed.users.organizationOwner });
+    await edit.saveChanges();
+  }
 }
 
 async function namedOrganization(surface: Surface, program: Program, where: Where): Promise<string> {
   const edit = managementScreen(surface, program);
   await edit.open(where);
-  return readOrEmpty(() => edit.proposalTab());
+  return readOrEmpty(() => edit.organization());
 }
 
 async function withdraw(surface: Surface, program: Program, where: Where): Promise<void> {
@@ -314,7 +320,17 @@ async function withdraw(surface: Surface, program: Program, where: Where): Promi
   await expect.poll(() => readOrEmpty(() => edit.status()), settle).toMatch(/withdrawn/i);
 }
 
-async function expectStillSubmittedFor(surface: Surface, program: Program, where: Where, other: Organization): Promise<void> {
+async function expectRefusedAndStillSubmittedFor(
+  surface: Surface,
+  program: Program,
+  where: Where,
+  other: Organization,
+): Promise<void> {
+  const edit = managementScreen(surface, program);
+  await expect
+    .poll(() => readOrEmpty(() => edit.fieldError()), { ...settle, message: "the change was not refused with the service's reason" })
+    .toContain(cannotBeChanged);
+
   await expect.poll(() => namedOrganization(surface, program, where), settle).toContain(submittedFor.legal_name);
   expect(
     await namedOrganization(surface, program, where),
@@ -328,15 +344,15 @@ async function expectNowFor(surface: Surface, program: Program, where: Where, ot
     .toContain(other.legalName);
 }
 
-test(`${statement} (a submitted Team With Us proposal keeps the organization it was submitted for)`, async ({ surface }) => {
+test(`${statement} (changing a submitted Team With Us proposal's organization is refused, and it keeps the organization it was submitted for)`, async ({ surface }) => {
   test.setTimeout(300000);
   const other = await secondTeamWithUsSupplier(surface, "R-2.22 Second Supplier For A Submitted Proposal Ltd.");
   const opportunityId = await publishTeamOpportunity(surface, "R-2.22 opportunity whose submitted proposal is moved");
   const where = { opportunityId, proposalId: await submitTeamWithUs(surface, opportunityId) };
 
-  await attempt(() => changeOrganization(surface, "team-with-us", where, other));
+  await changeOrganization(surface, "team-with-us", where, other);
 
-  await expectStillSubmittedFor(surface, "team-with-us", where, other);
+  await expectRefusedAndStillSubmittedFor(surface, "team-with-us", where, other);
 });
 
 test(`${statement} (a withdrawn Team With Us proposal may be moved to another organization)`, async ({ surface }) => {
@@ -362,15 +378,15 @@ test(`${statement} (a draft Team With Us proposal may be moved to another organi
   await expectNowFor(surface, "team-with-us", where, other);
 });
 
-test(`${statement} (a submitted Sprint With Us proposal keeps the organization it was submitted for)`, async ({ surface }) => {
+test(`${statement} (changing a submitted Sprint With Us proposal's organization is refused, and it keeps the organization it was submitted for)`, async ({ surface }) => {
   test.setTimeout(360000);
   const other = await secondSprintWithUsSupplier(surface, "R-2.22 Second Sprint Supplier For A Submitted Proposal Ltd.");
   const opportunityId = await publishSprintOpportunity(surface, "R-2.22 opportunity whose submitted sprint proposal is moved");
   const where = { opportunityId, proposalId: await submitSprintWithUs(surface, opportunityId) };
 
-  await attempt(() => changeOrganization(surface, "sprint-with-us", where, other));
+  await changeOrganization(surface, "sprint-with-us", where, other);
 
-  await expectStillSubmittedFor(surface, "sprint-with-us", where, other);
+  await expectRefusedAndStillSubmittedFor(surface, "sprint-with-us", where, other);
 });
 
 test(`${statement} (a withdrawn Sprint With Us proposal may be moved to another organization)`, async ({ surface }) => {

@@ -14,11 +14,12 @@ import type { Surface } from "../../fixtures";
 // organization, taking three of the capabilities with it, and the vendor submits the draft.
 // What is read is that the draft did not become submitted.
 //
-// The second test is the proposal naming no organization at all. With no organization
-// chosen the form has no team to offer, and the form withholding the submission is itself
-// the refusal, so what is read is that no proposal was submitted. The message the criterion
-// quotes is the service's, and no surface sends it a Sprint With Us submission without an
-// organization; see this criterion's entry in not-testable.yaml.
+// The second test is the proposal naming no organization at all. The form never sends one,
+// so it is put to the service through proposal-team-request as a submission with the
+// organization left out and every other part filled in — the owner of the seed's qualified
+// organization as team member and scrum master, a cost within the phase's budget, the
+// question answered, three references. What is read is the service's answer: not accepted,
+// with "An organization must be specified before submitting."
 
 const settle = { timeout: 30000 };
 
@@ -175,20 +176,46 @@ test("A Sprint With Us proposal may only be submitted on behalf of an organizati
   ).not.toMatch(/submitted/i);
 });
 
-test("A Sprint With Us proposal naming no organization at all is refused.", async ({ surface }) => {
-  const title = "R-2.16 opportunity bid on with no organization named";
-  const opportunityId = await publishSprintOpportunity(surface, title);
+test("A Sprint With Us proposal may only be submitted on behalf of an organization that is a qualified supplier for that program: a submission naming no organization is refused.", async ({
+  surface,
+}) => {
+  test.setTimeout(180000);
+  const opportunityId = await publishSprintOpportunity(surface, "R-2.16 opportunity bid on with no organization named");
 
   await surface.signIn(persona.organizationOwner);
-  await surface.proposalSwuCreate.open({ opportunityId });
-  await surface.proposalSwuCreate.setPhaseProposedCost({ phase: "Implementation", cost: 400000 });
-  await answerReferencesAndTerms(surface);
-  await attempt(() => surface.proposalSwuCreate.submitProposal());
+  await surface.proposalTeamRequest.open({ program: "sprint-with-us" });
+  await surface.proposalTeamRequest.submitTeamProposal({
+    opportunityId,
+    phases: [
+      {
+        phase: "Implementation",
+        members: [{ member: seed.users.organizationOwner, scrumMaster: true }],
+        proposedCost: 400000,
+      },
+    ],
+    answers: [{ order: 0, response: "We delivered a scheduling service for a health authority over eighteen months." }],
+    references: [0, 1, 2].map((order) => ({
+      order,
+      name: `Reference ${order + 1}`,
+      company: "Reference Company Ltd.",
+      phone: "250-555-0101",
+      email: `reference.${order + 1}@example.test`,
+    })),
+  });
+  await expect
+    .poll(
+      async () =>
+        (await readOrEmpty(() => surface.proposalTeamRequest.requestAccepted())) ||
+        (await readOrEmpty(() => surface.proposalTeamRequest.refusalStatus())),
+      { ...settle, message: "the service answered the submission" },
+    )
+    .toBeTruthy();
 
-  await surface.proposalVendorDashboard.open();
-  await attempt(() => surface.proposalVendorDashboard.showMyProposals());
   expect(
-    await readOrEmpty(() => surface.proposalVendorDashboard.myProposalsTable()),
-    "a proposal naming no organization was submitted",
-  ).not.toContain(title);
+    await readOrEmpty(() => surface.proposalTeamRequest.requestAccepted()),
+    "a proposal naming no organization was accepted",
+  ).toBeFalsy();
+  expect(await readOrEmpty(() => surface.proposalTeamRequest.refusalMessages())).toContain(
+    "An organization must be specified before submitting.",
+  );
 });

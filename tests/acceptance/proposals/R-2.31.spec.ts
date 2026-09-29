@@ -1,5 +1,5 @@
 // criterion: @R-2.31 v1
-// provenance: blind, spec@ccc1cba3290f5ea17351e4f2ca49bd80fefc2ef6, derived 2026-09-29
+// provenance: blind, spec@8272c1b989e3bad64c78ae540830a62747dadf42, derived 2026-09-29
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Persona, Surface } from "../../fixtures";
 
@@ -23,8 +23,14 @@ import type { Persona, Surface } from "../../fixtures";
 // proposal's total and rank there, and the proposal with the higher total must rank first and
 // the other second.
 //
-// That a proposal not yet fully evaluated holds no rank is not asserted; see this criterion's
-// entry in not-testable.yaml.
+// Only once fully evaluated. While an opportunity is still being evaluated the administrator
+// reads each proposal's rank on its own view. On seed.opportunities.swuTeamScenarioLastToScoreB
+// the lower bid holds every stage score and the higher bid lacks its team scenario score: the
+// lower bid holds a rank and the higher bid none, until its team scenario score is entered,
+// after which it holds one too. On seed.opportunities.twuChallengeLastToScore one proposal is
+// scored on the challenge and the other not: the first holds a rank, the second none. The Team
+// With Us score is not entered, because the seed notes that entering the last one there is
+// where the old application's move to processing is refused.
 
 const statement =
   "A proposal's total score is the weighted sum of its stage scores, and proposals are ranked against each other only once they are fully evaluated.";
@@ -130,4 +136,55 @@ test(`${statement} (fully evaluated proposals are ranked against each other, hig
   const [higher, lower] = awarded.total > other.total ? [awarded, other] : [other, awarded];
   expect(higher.rank, "the proposal with the higher total is not ranked first").toBe(1);
   expect(lower.rank, "the proposal with the lower total is not ranked second").toBe(2);
+});
+
+async function swuRank(surface: Surface, proposalId: string): Promise<string> {
+  const view = surface.proposalSwuView;
+  await view.open({ opportunityId: seed.opportunities.swuTeamScenarioLastToScoreB.id, proposalId });
+  return (await readOrEmpty(() => view.rank())).trim();
+}
+
+async function twuRank(surface: Surface, proposalId: string): Promise<string> {
+  const view = surface.proposalTwuView;
+  await view.open({ opportunityId: seed.opportunities.twuChallengeLastToScore.id, proposalId });
+  return (await readOrEmpty(() => view.rank())).trim();
+}
+
+test(`${statement} (a Sprint With Us proposal still waiting for its team scenario score holds no rank until it is scored)`, async ({
+  surface,
+}) => {
+  test.setTimeout(180000);
+  const scored = seed.proposals.swuScenarioBLowerBid.id;
+  const waiting = seed.proposals.swuScenarioBHigherBid.id;
+  await surface.signIn(persona.administrator);
+
+  await expect
+    .poll(() => swuRank(surface, scored), { ...settle, message: "the fully evaluated proposal holds no rank" })
+    .toMatch(/\d/);
+  expect(await swuRank(surface, waiting), "a proposal without its team scenario score was ranked").not.toMatch(/\d/);
+
+  await surface.proposalSwuView.open({ opportunityId: seed.opportunities.swuTeamScenarioLastToScoreB.id, proposalId: waiting });
+  await surface.proposalSwuView.scoreTeamScenario({ score: 60 });
+
+  await expect
+    .poll(() => swuRank(surface, waiting), { ...settle, message: "the proposal holds no rank once fully evaluated" })
+    .toMatch(/\d/);
+});
+
+test(`${statement} (a Team With Us proposal not yet scored on the challenge holds no rank beside one that is)`, async ({
+  surface,
+}) => {
+  test.setTimeout(120000);
+  await surface.signIn(persona.administrator);
+
+  await expect
+    .poll(() => twuRank(surface, seed.proposals.twuChallengeScored.id), {
+      ...settle,
+      message: "the fully evaluated proposal holds no rank",
+    })
+    .toMatch(/\d/);
+  expect(
+    await twuRank(surface, seed.proposals.twuChallengeLast.id),
+    "a proposal without its challenge score was ranked",
+  ).not.toMatch(/\d/);
 });
