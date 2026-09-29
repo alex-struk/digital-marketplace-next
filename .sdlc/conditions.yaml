@@ -730,3 +730,18 @@ conditions:
         assumed
       by: agent:reviewer
       at: 2026-09-28T22:11:05.663Z
+  - ref: derive-tests-notifications-stale-8#1
+    text: "tests/acceptance/notifications/R-6.2.spec.ts: remove the final assertion
+      that no message reached the same person more than once, which checks every
+      caught message including the organization invitation. R-6.2 says nothing
+      about mail unrelated to the triggering action, and any notice about the
+      published opportunity is already caught by the check before it. Keep only
+      the assertion that no message about the published opportunity arrives
+      after delivery is restored, and drop the per-message recipient collection
+      if nothing else uses it."
+    from: derive-tests-notifications-stale-8
+    family: derive-tests-notifications-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-29T07:13:21.467Z
