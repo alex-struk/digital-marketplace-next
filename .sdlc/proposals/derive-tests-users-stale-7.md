@@ -29,3 +29,27 @@ I rewrote the tests for R-4.23 and R-4.24 in `tests/acceptance/users/`. Both car
 **Notes for the next contract stage:**
 - The comment on `user-sign-up-complete` in `spec/contract/surface.yaml` still says every account a sign-in route creates on the oracle already has a finished profile. `vendorCompletingProfile`, reachable at `/auth/createsessionvendor/17`, now contradicts that. The contract stage should correct the comment; it isn't this stage's file to change.
 - The surface has no observation that names the dashboard itself, whoever is looking at it. The redirect is therefore inferred from a dashboard table or empty message. An observation for "the dashboard is shown", on both `opportunity-dashboard` and `proposal-vendor-dashboard`, would make those assertions direct.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the rewritten R-4.23 and R-4.24 tests follow from their criteria and from nothing else? Approve. R-4.23 has one test per clause. The never-agreed vendor comes from the seed (vendorCompletingProfile) and is offered the terms checkbox. The vendor who agreed before (vendorWithTermsReset, whose persona can 'agree to the current terms again') and public sector staff each get no checkbox plus their own dashboard's table or empty message; accepting either keeps the check independent of what the dashboard happens to list. A visitor who never signs in is shown the sign-in page. R-4.24 checks the account starts with no notices date and that the completion form is showing, then ticks the notices box and completes the profile (agreeing to the terms only because completion requires it), and reads back a valid date within a clock-drift window of the completion. That date covers both 'notifications are on' and 'the moment the choice was made'. No selectors, routes, status codes or table names appear. Every persona and observation used exists in the generated surface and seed. The runner's typecheck reports nothing under acceptance/users/. The ruling would change if a calibration run showed that the dashboard table-or-empty-message check cannot tell the dashboard apart from some other screen, or that vendorWithTermsReset is not in fact a vendor who agreed before.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `84fdc4847ff7846d3eb0c781e958f8165f1ccf69`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/users/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
