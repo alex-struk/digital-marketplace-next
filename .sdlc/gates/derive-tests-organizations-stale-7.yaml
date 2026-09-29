@@ -1,0 +1,17 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the R-3.9 tests follow from the organizations criterion and from nothing else? Ruling: approve. Each of R-3.9's three outcomes is asserted, and nothing beyond them. The owner's attempt, sent through affiliation-approval-request on seed.affiliations.pendingInvitation, is checked as refused: refusal messages are present, the request is not accepted, and the invited person still sees the invitation pending. The invited person's own acceptance and an administrator's acceptance on a person's behalf each leave the organization listed without a pending badge. For the clause that was owed, the same invited person accepts, the membership reads ACTIVE, and a second attempt is not accepted, with a refusal matching 'not pending' while the membership stays active. Because the same permitted person makes both attempts, the refusal can only be about status, not permission. Every value asserted (ACTIVE, 'Membership is not pending.') comes from the contract's own note on affiliation-approval-request, not from implementation. The runner's typecheck shows no diagnostics under acceptance/organizations; its two diagnostics are under adapters/new, which this proposal does not answer for. No not-testable entry is needed, since every clause is asserted. missing-test/R-3.9 is not closed by this ruling. It closes when this spec runs at R-3.9 v1, so no condition is attached for it. What would change the ruling: a runner-reported TypeScript error in R-3.9.spec.ts, or a contract change so that membership_status no longer answers ACTIVE for an accepted request.
+reprompt: |2-
+  You ruled approve. "missing-test/R-3.9" is a missing test, and a missing test is closed only by a test that runs: a result row for its criterion at the current version that passed or failed. No ruling can say it was met. Where no test is owed after all, withdraw it with `condition-withdrawn <ref>: <why it is no longer asked for>` and say why.
+conditions: []
+cost: 0.6678415999999999
+turns: 5
+session: "c2877d86-eb74-41e5-8e4d-e9a85936e6c2"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-29T02:57:12.671Z

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-organizations-stale-7 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">265</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">261</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">229</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-organizations-stale-7</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 02:56</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the organizations criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the test for R-3.9, so all 1 of the 1 criteria I was given now has a test.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rewrote the test for R-3.9, so all 1 of the 1 criteria I was given now has a test. I couldn&#39;t run the TypeScript compiler here because the command wasn&#39;t approved, so the file hasn&#39;t been type-checked. I checked by hand that the personas, seed handles and page methods it uses are in <code>tests/generated/*</code>.</p>
+<p><strong>R-3.9</strong> now lives in <code>tests/acceptance/organizations/R-3.9.spec.ts</code>. It was sent back because the not-pending refusal couldn&#39;t be read. The contract has since added <code>affiliation-approval-request</code>, with the action <code>accept_membership_by_request</code> and the observations <code>request_accepted</code>, <code>membership_status</code>, <code>refusal_messages</code> and <code>refusal_status</code>. It&#39;s opened by a membership&#39;s identifier, and I used <code>seed.affiliations.pendingInvitation.id</code> for that. The file has four tests, one for each given/when/then:</p>
+<ul><li><strong>The owner&#39;s attempt is refused.</strong> The organization&#39;s owner signs in and sends the acceptance for the invited vendor&#39;s pending invitation. The test checks that the service gives refusal messages and does not report the request as accepted. It then signs in as the invited person and checks the invitation still shows as pending in their own list of affiliations.</li><li><strong>The invited person accepts.</strong> This is done through the accept action on their own affiliations page, the same as before. Afterwards the organization is listed and has no pending badge.</li><li><strong>An administrator accepts on the person&#39;s behalf.</strong> This uses a different seeded invitation, <code>seed.users.teamCandidatePending</code>&#39;s invitation to <code>seed.organizations.qualified</code>, through the page that shows a given person&#39;s affiliations. It is unchanged.</li><li><strong>An invitation that isn&#39;t pending can&#39;t be accepted.</strong> The invited person accepts through the new page, and the test checks the status reads <code>ACTIVE</code>. The same person tries again. The test checks this second attempt is not accepted, that the refusal message matches &quot;not pending&quot; (the contract quotes the service&#39;s wording as &quot;Membership is not pending.&quot;), and that the membership is still active. The same person makes both attempts so the refusal can only be about the status, not about permission. The earlier version could only infer this refusal; this one reads it.</li></ul>
+<p>The target is reset to its seed before every test, so no test depends on what another did.</p>
+<p><strong><code>not-testable.yaml</code>:</strong> the handback said R-3.9 had an entry there, but it doesn&#39;t. The only R-3.9 records in the workspace are two already-closed items in <code>redo.yaml</code>. I had nothing to remove, and there&#39;s no entry sitting beside the test.</p>
+<p><strong>Not testable:</strong> none.</p>
+<p><strong>Missing from the surface:</strong> nothing for this criterion. One ambiguity for whoever maintains the contract: the note on <code>affiliation-approval-request</code> says <code>:affiliationId</code> is &quot;a seed.affiliations handle&quot;, but the generated type asks for a plain string. I passed the membership&#39;s <code>.id</code>, the same way other pages take <code>seed.organizations.&lt;handle&gt;.id</code>. The note would be clearer if it said the identifier is what&#39;s passed.</p>
+<p>Nothing asked me to change any of the paths that are here only to be read.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 02:57.</p>
+<div class="body"><p>Question: do the R-3.9 tests follow from the organizations criterion and from nothing else? Ruling: approve. Each of R-3.9&#39;s three outcomes is asserted, and nothing beyond them. The owner&#39;s attempt, sent through affiliation-approval-request on seed.affiliations.pendingInvitation, is checked as refused: refusal messages are present, the request is not accepted, and the invited person still sees the invitation pending. The invited person&#39;s own acceptance and an administrator&#39;s acceptance on a person&#39;s behalf each leave the organization listed without a pending badge. For the clause that was owed, the same invited person accepts, the membership reads ACTIVE, and a second attempt is not accepted, with a refusal matching &#39;not pending&#39; while the membership stays active. Because the same permitted person makes both attempts, the refusal can only be about status, not permission. Every value asserted (ACTIVE, &#39;Membership is not pending.&#39;) comes from the contract&#39;s own note on affiliation-approval-request, not from implementation. The runner&#39;s typecheck shows no diagnostics under acceptance/organizations; its two diagnostics are under adapters/new, which this proposal does not answer for. No not-testable entry is needed, since every clause is asserted. missing-test/R-3.9 is not closed by this ruling. It closes when this spec runs at R-3.9 v1, so no condition is attached for it. What would change the ruling: a runner-reported TypeScript error in R-3.9.spec.ts, or a contract change so that membership_status no longer answers ACTIVE for an accepted request.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

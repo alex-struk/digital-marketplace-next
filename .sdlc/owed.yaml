@@ -4520,13 +4520,11 @@ owed:
     id: R-3.9
     version: 1
     domain: organizations
-    stage: derive-tests
+    stage: calibrate
     why: an observation on organization-user-memberships-self (and
       organization-user-memberships) reporting the service's reason when an
       acceptance is refused, so a test can read that the refusal was because the
       membership is not pending
-    clause: a further attempt to accept the now-active membership is refused as not
-      pending
     from: derive-tests-organizations-stale-6
     gate: G3
     by: agent:reviewer
@@ -4542,3 +4540,15 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-29T02:36:38.260Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-29T02:57:12.704Z
+    asserted:
+      - clause: a further attempt to accept the now-active membership is refused as not
+          pending
+        by: derive-tests-organizations-stale-7
+        gate: G3
+        at: 2026-09-29T02:57:12.704Z
+    target: old

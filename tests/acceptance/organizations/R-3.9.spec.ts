@@ -1,61 +1,59 @@
 // criterion: @R-3.9 v1
 // provenance: blind, spec@8272c1b989e3bad64c78ae540830a62747dadf42, derived 2026-09-29
 import { test, expect, persona, seed } from "../../fixtures";
+import type { Surface } from "../../fixtures";
 
-// Every scenario that accepts an invitation starts from an invitation of its own that is
-// still pending when it starts, so no scenario depends on what a sibling did first:
-// - the invited person accepts seed.users.invitedVendor's invitation to
-//   seed.organizations.withPendingInvitation;
-// - the administrator accepts seed.users.teamCandidatePending's invitation to
-//   seed.organizations.qualified, on that person's behalf;
-// - the owner's refused attempt is made on invitedVendor's invitation and accepts nothing;
-// - the not-pending scenario uses seed.users.organizationMember's membership of
-//   seed.organizations.qualified, which the seed already makes active.
+// The target is put back to its seed before every test, so each scenario starts from the
+// invitations the seed leaves pending:
+// - seed.affiliations.pendingInvitation is seed.users.invitedVendor's unanswered invitation to
+//   seed.organizations.withPendingInvitation, whose owner is seed.users.organizationOwner;
+// - seed.users.teamCandidatePending's invitation to seed.organizations.qualified is the one an
+//   administrator accepts on the invited person's behalf.
 
-// An attempt somebody is not offered a way to make ends by not going through; what shows
-// the refusal is the membership's state afterwards.
-async function attempt(action: () => Promise<void>): Promise<void> {
-  try {
-    await action();
-  } catch {
-    // Refused by not being offered.
-  }
-}
+const invitation = seed.affiliations.pendingInvitation;
+const invitedTo = seed.organizations.withPendingInvitation;
 
-// A pending badge that is not on the page reads as absent.
+// An observation that is not on the page reads as absent.
 function orAbsent(read: () => Promise<string>): () => Promise<string> {
   return () => read().catch(() => "");
+}
+
+async function acceptByRequest(surface: Surface): Promise<void> {
+  await surface.affiliationApprovalRequest.open({ affiliationId: invitation.id });
+  await surface.affiliationApprovalRequest.acceptMembershipByRequest();
+}
+
+async function expectStillPendingForInvitedPerson(surface: Surface): Promise<void> {
+  await surface.signIn(persona.invitedVendor);
+  await surface.organizationUserMembershipsSelf.open();
+  await expect
+    .poll(() => surface.organizationUserMembershipsSelf.affiliatedOrganizationsTable())
+    .toContain(invitedTo.legal_name);
+  await expect.poll(orAbsent(() => surface.organizationUserMembershipsSelf.pendingBadge())).toBeTruthy();
 }
 
 test("nobody else can accept a pending invitation: the organization's owner's attempt to accept it on the invited person's behalf is refused", async ({
   surface,
 }) => {
-  const organization = seed.organizations.withPendingInvitation;
-
   await surface.signIn(persona.organizationOwner);
-  await surface.organizationEdit.open({ orgId: organization.id });
-  await attempt(() => surface.organizationEdit.approvePendingMember({ member: seed.users.invitedVendor }));
+  await acceptByRequest(surface);
 
-  // The invitation is still pending afterwards, as the invited person sees it.
-  await surface.signIn(persona.invitedVendor);
-  await surface.organizationUserMembershipsSelf.open();
-  await expect
-    .poll(() => surface.organizationUserMembershipsSelf.affiliatedOrganizationsTable())
-    .toContain(organization.legal_name);
-  await expect.poll(orAbsent(() => surface.organizationUserMembershipsSelf.pendingBadge())).toBeTruthy();
+  expect(await orAbsent(() => surface.affiliationApprovalRequest.refusalMessages())()).toBeTruthy();
+  expect(await orAbsent(() => surface.affiliationApprovalRequest.requestAccepted())()).toBeFalsy();
+
+  // Nothing was accepted: the invited person still sees the invitation as pending.
+  await expectStillPendingForInvitedPerson(surface);
 });
 
 test("a pending invitation becomes an active membership when the invited person accepts it", async ({ surface }) => {
-  const organization = seed.organizations.withPendingInvitation;
-
   await surface.signIn(persona.invitedVendor);
   await surface.organizationUserMembershipsSelf.open();
-  await surface.organizationUserMembershipsSelf.approveInvitation({ organization: organization.legal_name });
+  await surface.organizationUserMembershipsSelf.approveInvitation({ organization: invitedTo.legal_name });
 
   await surface.organizationUserMembershipsSelf.open();
   await expect
     .poll(() => surface.organizationUserMembershipsSelf.affiliatedOrganizationsTable())
-    .toContain(organization.legal_name);
+    .toContain(invitedTo.legal_name);
   await expect.poll(orAbsent(() => surface.organizationUserMembershipsSelf.pendingBadge())).toBeFalsy();
 });
 
@@ -76,30 +74,24 @@ test("a pending invitation becomes an active membership when an administrator ac
   await expect.poll(orAbsent(() => surface.organizationUserMemberships.pendingBadge())).toBeFalsy();
 });
 
-test("an invitation that is not pending cannot be accepted", async ({ surface }) => {
-  const organization = seed.organizations.qualified;
+test("an invitation that is not pending cannot be accepted: a further attempt to accept the now-active membership is refused as not pending", async ({
+  surface,
+}) => {
+  // The invited person, who is permitted to accept, accepts; the membership becomes active.
+  await surface.signIn(persona.invitedVendor);
+  await acceptByRequest(surface);
+  expect(await surface.affiliationApprovalRequest.requestAccepted()).toBeTruthy();
+  expect(await surface.affiliationApprovalRequest.membershipStatus()).toBe("ACTIVE");
 
-  // The member's membership of the organization is already active.
-  await surface.signIn(persona.organizationMember);
+  // The same person tries again: refused, and the reason is that it is not pending.
+  await acceptByRequest(surface);
+  expect(await orAbsent(() => surface.affiliationApprovalRequest.requestAccepted())()).toBeFalsy();
+  expect(await surface.affiliationApprovalRequest.refusalMessages()).toMatch(/not pending/i);
+
+  // The membership is unchanged: still the invited person's, still active.
   await surface.organizationUserMembershipsSelf.open();
   await expect
     .poll(() => surface.organizationUserMembershipsSelf.affiliatedOrganizationsTable())
-    .toContain(organization.legal_name);
-
-  // An attempt to accept it does not go through, and no acceptance is confirmed.
-  const outcome = await surface.organizationUserMembershipsSelf
-    .approveInvitation({ organization: organization.legal_name })
-    .then(
-      () => "accepted",
-      () => "refused",
-    );
-  expect(outcome).toBe("refused");
-  expect(await surface.organizationUserMembershipsSelf.acceptConfirmation().catch(() => "")).toBeFalsy();
-
-  // The membership is unchanged: still the member's, still not pending.
-  await surface.organizationUserMembershipsSelf.open();
-  await expect
-    .poll(() => surface.organizationUserMembershipsSelf.affiliatedOrganizationsTable())
-    .toContain(organization.legal_name);
+    .toContain(invitedTo.legal_name);
   await expect.poll(orAbsent(() => surface.organizationUserMembershipsSelf.pendingBadge())).toBeFalsy();
 });
