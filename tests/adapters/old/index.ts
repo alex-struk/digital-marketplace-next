@@ -432,7 +432,29 @@ export default function create(
 
   // Every visible table, one line per row with its cells joined by " | ": a row whose cells
   // wrap over several lines still reads as one line, its title beside its status.
-  async function tableRows(withHeader = true): Promise<string> {
+  // A cell's words as written, one text run per line: a name the page draws in capitals
+  // ("text-uppercase") reads in the case the person's profile shows it.
+  async function cellText(cell: Locator): Promise<string> {
+    return cell.evaluate((element) => {
+      const runs: string[] = [];
+      const walk = (node: Node): void => {
+        for (const child of Array.from(node.childNodes)) {
+          if (child.nodeType === Node.TEXT_NODE) {
+            const words = (child.textContent ?? "").trim();
+            if (words) runs.push(words);
+          } else if (child.nodeType === Node.ELEMENT_NODE) {
+            const style = getComputedStyle(child as Element);
+            if (style.display === "none" || style.visibility === "hidden") continue;
+            walk(child);
+          }
+        }
+      };
+      walk(element);
+      return runs.join("\n");
+    });
+  }
+
+  async function tableRows(withHeader = true, asWritten = false): Promise<string> {
     const lines: string[] = [];
     const tables = seen(page.getByRole("table"));
     const tableCount = await tables.count();
@@ -445,7 +467,8 @@ export default function create(
         const parts: string[] = [];
         if (cellCount) {
           for (let c = 0; c < cellCount; c++) {
-            parts.push((await cells.nth(c).innerText()).replace(/\s*\n\s*/g, " ").trim());
+            const words = asWritten ? await cellText(cells.nth(c)) : await cells.nth(c).innerText();
+            parts.push(words.replace(/\s*\n\s*/g, " ").trim());
           }
         } else if (withHeader) {
           const heads = await rows.nth(r).getByRole("columnheader").allInnerTexts();
@@ -1293,6 +1316,7 @@ export default function create(
   // disabled whatever the value under test holds. A field the test named, even as empty,
   // is never touched; nor is one that already holds a value.
   const REQUIRED = /\*\s*$/;
+  const TEAM_FIELD = /^(resource name|hourly rate|team members?)$/i;
   const DAY = 86400000;
   const isoDay = (time: number): string => new Date(time).toISOString().slice(0, 10);
   const bareLabel = (name: string): string => name.replace(/\*\s*$/, "").trim();
@@ -1382,6 +1406,9 @@ export default function create(
         if (await box.isDisabled().catch(() => true)) continue;
         const name = await accessibleName(box);
         if (namedLabels.has(squash(bareLabel(name)))) continue;
+        // Who is on a proposal's team, and at what rate, is what a criterion about the team
+        // turns on: a team-member chooser or an hourly rate is never filled on the test's behalf.
+        if (TEAM_FIELD.test(bareLabel(name))) continue;
         if (role === "combobox") {
           // An input that gave dates for the whole opportunity but named no phase is about the
           // phases themselves, so none is chosen for it. Otherwise the form is started at
@@ -2346,7 +2373,10 @@ export default function create(
         if (withheld) return;
         if (!(await pressWhenReady("publish", "Publish"))) return;
         await confirmIfAsked(`${where}.publish`, ["Publish Opportunity", "Publish"]);
-        await landOn(record());
+        // A publish pressed and confirmed that stays on the form is the page refusing it:
+        // what the page says is reported, rather than a later reader taking "create" from
+        // the form's address for the record's identifier.
+        await mustLandOn(`${where}.publish`, record());
       },
       // Alerts and each field's own error, from every step in turn; a heading or a title
       // that happens to hold a word like "cannot" is never read as an error.
@@ -2507,11 +2537,10 @@ export default function create(
   // A phase unfolded and at rest, its band read again afterwards. Its name toggles it, so it
   // is pressed only while its "Phase Start Date" is not showing, and only once per try.
   async function openPhase(phase: string): Promise<{ top: number; bottom: number } | null> {
-    const startBoxes = seen(page.getByRole("textbox", { name: labelled("Phase Start Date") }));
     for (let tries = 0; tries < 3; tries++) {
       const band = await phaseBand(phase);
       if (!band) return null;
-      const shown = await inBand(startBoxes, band);
+      const shown = await phaseBox(phase, "Phase Start Date", "textbox");
       if (shown) {
         await steadyBox(shown);
         return (await phaseBand(phase)) ?? band;
@@ -2521,9 +2550,55 @@ export default function create(
       if (!count) return null;
       await names.nth(count - 1).click();
       await settle();
-      await startBoxes.last().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
+      for (let wait = 0; wait < 15 && !(await phaseBox(phase, "Phase Start Date", "textbox")); wait++) {
+        await page.waitForTimeout(200);
+      }
     }
     return null;
+  }
+
+  // Which of the form's boxes carrying this label belongs to this phase, counted among the
+  // boxes on show: the phase's name heads a section holding its own "Phase Start Date",
+  // "Phase Completion Date" and "Maximum Phase Budget", and no other phase's name. A folded
+  // phase shows none of its boxes, which reads as -1 (seen as the administrator on a new
+  // Sprint With Us form starting at Proof of Concept, with each phase folded and unfolded).
+  async function phaseBoxIndex(phase: string, label: string): Promise<number> {
+    const others = PHASES.filter((each) => each !== phase);
+    return page
+      .evaluate(
+        ([phase, label, others]) => {
+          const bare = (words: string): string => words.replace(/\*\s*$/, "").trim().toLowerCase();
+          const shown = (element: Element): boolean =>
+            !!((element as HTMLElement).offsetWidth || (element as HTMLElement).offsetHeight || element.getClientRects().length);
+          const boxes = Array.from(document.getElementsByTagName("input")).filter(
+            (box) => shown(box) && box.labels?.[0] && bare(box.labels[0].textContent ?? "") === bare(label as string),
+          );
+          const leaves = Array.from(document.body.getElementsByTagName("*")).filter(
+            (element) => element.children.length === 0 && shown(element),
+          );
+          const named = leaves.filter((element) => (element.textContent ?? "").trim() === phase);
+          const heading = named[named.length - 1];
+          if (!heading) return -1;
+          const rivals = leaves.filter((element) => (others as string[]).includes((element.textContent ?? "").trim()));
+          let section: Element | null = heading.parentElement;
+          while (section && !boxes.some((box) => section!.contains(box))) {
+            if (rivals.some((rival) => section!.contains(rival))) return -1;
+            section = section.parentElement;
+          }
+          if (!section || rivals.some((rival) => section!.contains(rival))) return -1;
+          const mine = boxes.filter((box) => section!.contains(box));
+          return mine.length === 1 ? boxes.indexOf(mine[0]) : -1;
+        },
+        [phase, label, others] as [string, string, string[]],
+      )
+      .catch(() => -1);
+  }
+
+  async function phaseBox(phase: string, label: string, role: "textbox" | "spinbutton"): Promise<Locator | null> {
+    const at = await phaseBoxIndex(phase, label);
+    if (at < 0) return null;
+    const boxes = seen(page.getByRole(role, { name: labelled(label) }));
+    return at < (await boxes.count()) ? boxes.nth(at) : null;
   }
 
   // The capability chip of this name inside the phase's band, found afresh each time.
@@ -2674,14 +2749,12 @@ export default function create(
       const label = PHASE_FIELDS[squash(key)];
       if (label) {
         const role = /budget/i.test(label) ? "spinbutton" : "textbox";
-        const boxes = seen(page.getByRole(role, { name: labelled(label) }));
-        // Filling a box scrolls the form and a phase may fold as another opens, so where the
-        // phase sits is measured again, and the phase reopened, before each of its fields.
-        band = (await phaseBand(phase)) ?? band;
-        let box = await inBand(boxes, band);
+        // The box is found inside the phase's own section, never by where it sits on screen,
+        // so one phase's dates never land in another's; a phase that folded is reopened.
+        let box = await phaseBox(phase, label, role);
         if (!box) {
           band = (await openPhase(phase)) ?? band;
-          box = await inBand(boxes, band);
+          box = await phaseBox(phase, label, role);
         }
         if (!box) {
           unplaced.push(key);
@@ -2692,8 +2765,10 @@ export default function create(
         if (day && role === "textbox") text = day[0];
         await box.fill(text);
         await box.blur().catch(() => undefined);
-        // Not recorded as a label the test named: every phase carries the same labels, and
-        // the other phases' fields still need their own values.
+        // Once the test gives a phase its dates, the phases' dates are the test's alone: none
+        // is ever made up for another phase. A budget is not recorded so: every phase carries
+        // the same label, and the other phases' budgets still need a value.
+        if (role === "textbox") namedLabels.add(squash(label));
         continue;
       }
       if (/capabilit/i.test(key)) {
@@ -4009,11 +4084,10 @@ export default function create(
   async function addSwuPhaseMembers(where: string, input: unknown): Promise<void> {
     await ready();
     if (!(await goToStep("Team"))) await advanceTo(where, "Organization");
-    if (!(await ensureProposalOrganization(where))) {
-      throw new Error(
-        `${where} — refused: the "Organization" chooser on ${page.url()} has no organization chosen and offers none the test may use, so no team can be put together`,
-      );
-    }
+    // No organization chosen — the chooser offering the vendor none, or the named one
+    // refused — leaves no team to put together, and that withholding is left for the test
+    // to read rather than thrown.
+    if (!(await ensureProposalOrganization(where))) return;
     const phaseGiven = field(input, "phase", "phaseName") || (typeof input === "string" && PHASES.some((p) => squash(p) === squash(phaseNamed(input))) ? input : "");
     const phase = phaseGiven ? phaseNamed(phaseGiven) : "";
     const adders = seen(page.getByText("Add Team Member(s)", { exact: true }));
@@ -4054,6 +4128,59 @@ export default function create(
     await press(where, ["Add Team Member(s)"], dialog().first());
     await dialog().first().waitFor({ state: "hidden", timeout: 5000 }).catch(() => undefined);
     await settle();
+  }
+
+  // "5. References" holds three blocks headed "Reference 1" to "Reference 3", each with
+  // "Name*", "Company*", "Phone Number*" and "Email*" boxes, in that order down the step
+  // (seen as the owner of Northern Pines on the seeded open Sprint With Us opportunity). A
+  // reference goes under "Reference N", N being its order plus one — or, in a list handed
+  // over without orders, its place in the list — and each of its values into its own box.
+  async function addSwuReferences(where: string, input: unknown): Promise<void> {
+    await ready();
+    if (!(await goToStep("References"))) await advanceTo(where, "Reference 1");
+    const given = Array.isArray(input) ? input : [input];
+    const BOXES: Array<[string, string[]]> = [
+      ["Name", ["name", "fullName", "full_name", "referenceName"]],
+      ["Company", ["company", "companyName", "company_name", "organization"]],
+      ["Phone Number", ["phone", "phoneNumber", "phone_number", "telephone"]],
+      ["Email", ["email", "emailAddress", "email_address"]],
+    ];
+    const known = new Set(["order", "index", "position", "number", ...BOXES.flatMap(([, keys]) => keys)]);
+    for (const [place, reference] of given.entries()) {
+      if (!reference || typeof reference !== "object") {
+        throw new Error(`unbound: ${where} — a reference is handed over as ${JSON.stringify(reference)}, not as its name, company, phone and email`);
+      }
+      for (const key of Object.keys(reference as Record<string, unknown>)) {
+        if (!known.has(key)) {
+          throw new Error(`unbound: ${where} — no box on "Reference N" for the input's "${key}" (it holds Name, Company, Phone Number and Email) on ${page.url()}`);
+        }
+      }
+      const numbered = Number.parseInt(field(reference, "number"), 10);
+      const ordered = Number.parseInt(field(reference, "order", "index", "position"), 10);
+      const at = Number.isFinite(numbered) && numbered > 0
+        ? numbered - 1
+        : Number.isFinite(ordered) && ordered >= 0
+          ? ordered
+          : place;
+      if (!(await seen(page.getByRole("heading", { name: `Reference ${at + 1}`, exact: true })).count())) {
+        throw new Error(`${where} — refused: the References step shows no "Reference ${at + 1}" block on ${page.url()}`);
+      }
+      for (const [label, keys] of BOXES) {
+        const record = reference as Record<string, unknown>;
+        if (!keys.some((key) => record[key] !== undefined && record[key] !== null)) continue;
+        const value = field(reference, ...keys);
+        const box = seen(page.getByRole("main").getByRole("textbox", { name: labelled(label) })).nth(at);
+        if (!(await box.count())) {
+          throw new Error(`unbound: ${where} — reached "5. References" but "Reference ${at + 1}" has no "${label}" box on ${page.url()}`);
+        }
+        // A value given as empty is left empty, never filled in on the test's behalf; a
+        // value given leaves the other references' boxes of that label still to be completed.
+        if (!value) namedLabels.add(squash(label));
+        await box.fill(value);
+        await box.blur().catch(() => undefined);
+      }
+      await settle();
+    }
   }
 
   // Each phase's team table has a "Scrum Master" column holding one unlabelled radio per
@@ -4198,8 +4325,7 @@ export default function create(
     },
     answerTeamQuestion: (input) =>
       answerProposalQuestion("proposal-swu-create.answer_team_question", ["Team Questions"], input),
-    addReference: (input) =>
-      fill("proposal-swu-create.add_reference", ["Company Name", "Reference"], asText(input)),
+    addReference: (input) => addSwuReferences("proposal-swu-create.add_reference", input),
     capabilityGapError: () => messages(/capabilit/i),
     budgetExceededError: () => messages(/budget|exceed/i),
     unqualifiedOrganizationNotice: () => linesMatching(/qualif/i),
@@ -4792,13 +4918,13 @@ export default function create(
   async function historyRows(): Promise<string> {
     return inTab(["Proposal History", "History"], async () => {
       await seen(page.getByRole("table")).first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
-      return tableRows(false);
+      return tableRows(false, true);
     });
   }
 
   // The same rows as entries, newest first, one per line as "<kind> | <note> | <who> | <when>".
   // The History table is "ENTRY TYPE | NOTE | CREATED", its created cell the date and time
-  // over the maker's name in capitals ("SYSTEM", "BLAKE PLACEHOLDER"), and a row with no
+  // over the maker's name, drawn in capitals but read as written ("System", "Blake Placeholder"), and a row with no
   // note shows "—" (seen as the administrator on the seeded proposals past consensus of both
   // programmes). Before the opportunity reaches the stage after consensus the panel says the
   // history "will be available once the opportunity reaches the Code Challenge" and holds no
@@ -4817,7 +4943,7 @@ export default function create(
           const cellCount = await cells.count();
           if (!cellCount) continue;
           const texts: string[] = [];
-          for (let c = 0; c < cellCount; c++) texts.push((await cells.nth(c).innerText()).trim());
+          for (let c = 0; c < cellCount; c++) texts.push((await cellText(cells.nth(c))).trim());
           const kind = (texts[0] ?? "").replace(/\s*\n\s*/g, " ");
           const note = (texts[1] ?? "").replace(/\s*\n\s*/g, " ").replace(/^[—–-]$/, "");
           const created = (texts[2] ?? "").split(/\n+/).map((each) => each.trim()).filter(Boolean);
@@ -5505,6 +5631,27 @@ export default function create(
           .filter({ hasText: answer === "approve" ? "Approve Request?" : "Reject Request?" }),
       );
 
+    // The seeded invitation still awaiting an answer to the organization named (any, when none
+    // is), preferring one held by the person whose profile is open.
+    const seededInvitation = (name: string): string => {
+      type Held = { id?: string; user?: string; organization?: string; membership_status?: string };
+      const groups = seed as unknown as Record<string, Record<string, Record<string, unknown>>>;
+      const handle = (ref: unknown): Record<string, unknown> | undefined => {
+        const [group, key] = String(ref ?? "").split(".");
+        return group && key ? groups[group]?.[key] : undefined;
+      };
+      const profile = new RegExp(`^/users/(${UUID})`).exec(new URL(page.url()).pathname)?.[1] ?? "";
+      const held = Object.values((groups.affiliations ?? {}) as unknown as Record<string, Held>).filter(
+        (each) =>
+          each.membership_status === "PENDING" &&
+          (!name || UUID_ONLY.test(name)
+            ? !name || handle(each.organization)?.id === name
+            : squash(String(handle(each.organization)?.legal_name ?? "")) === squash(name)),
+      );
+      const mine = held.find((each) => profile && handle(each.user)?.id === profile);
+      return (mine ?? held[0])?.id ?? "";
+    };
+
     // A pending invitation's row under "Affiliated Organizations" shows "Approve" and "Reject"
     // only while the pointer is over it (seen as the invited vendor on Salt Marsh Labs Ltd.);
     // either raises "Approve Request?" / "Reject Request?". The row is the organization the
@@ -5530,8 +5677,10 @@ export default function create(
           // The row's hidden "Approve" and "Reject" run straight on from its "Pending" badge in
           // the row's text ("Ltd.PendingApproveReject"), so the badge is not a word of its own.
           const pending = seen(page.getByRole("row").filter({ hasText: /Pending/ }));
-          await pending.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+          // The tab draws its table a while after the profile, on a target in development mode.
+          await pending.first().waitFor({ state: "visible", timeout: 15000 }).catch(() => undefined);
           const rows = name && !UUID_ONLY.test(name) ? pending.filter({ hasText: name }) : pending;
+          const shownRows = await rows.count();
           let offered = false;
           if (!affiliation && (await rows.count())) {
             await rows.first().hover();
@@ -5543,14 +5692,25 @@ export default function create(
               offered = true;
             }
           }
-          if (!offered && affiliation) {
+          // No row to point at: the invitation is answered from its own address, the one its
+          // message's buttons lead to — the affiliation the input gives, else the seeded
+          // pending invitation to the organization it names (seen as the invited vendor:
+          // "?tab=organizations&invitationAffiliationId=…&invitationResponse=approve" opens
+          // "Approve Request?" over the Organizations tab).
+          const viaAddress = offered ? "" : affiliation || seededInvitation(name);
+          const looked = `looked on ${page.url()} for ${name ? `a pending row for "${name}"` : "a row marked Pending"} showing "${label}" when pointed at (${shownRows} such rows)`;
+          if (viaAddress) {
             await go(
-              `/users/me?tab=organizations&invitationAffiliationId=${encodeURIComponent(affiliation)}&invitationResponse=${answer}`,
+              `/users/me?tab=organizations&invitationAffiliationId=${encodeURIComponent(viaAddress)}&invitationResponse=${answer}`,
             );
+            await confirmation(answer).first().waitFor({ state: "visible", timeout: 15000 }).catch(() => undefined);
+            if (!(await confirmation(answer).count())) {
+              throw new Error(
+                `unbound: ${where}.${member} — ${looked}, then opened the invitation's own address for affiliation ${viaAddress} and no "${label} Request?" confirmation opened on ${page.url()}; the signed-in person has no unanswered invitation there`,
+              );
+            }
           } else if (!offered) {
-            throw new Error(
-              `unbound: ${where}.${member} — on ${page.url()} no ${name ? `pending row for "${name}"` : "row marked Pending"} showed "${label}" when pointed at (${await rows.count()} such rows)`,
-            );
+            throw new Error(`unbound: ${where}.${member} — ${looked}, and the seed holds no pending invitation to answer from its own address`);
           }
         }
         if (!(await confirmation(answer).count())) {
@@ -5675,7 +5835,21 @@ export default function create(
     nameField: signUpCompleteUnreachable("name_field"),
     emailField: signUpCompleteUnreachable("email_field"),
     jobTitleField: signUpCompleteUnreachable("job_title_field"),
-    termsCheckbox: signUpCompleteUnreachable("terms_checkbox"),
+    // Whoever this target can sign in has already agreed, so the screen offers them no
+    // agreement box and sends them on: signed out to /sign-in, the administrator, the public
+    // sector employee and every seeded vendor to /dashboard (each seen in turn). That is read
+    // as where the person was sent. Were the form ever shown, its box is read as ticked or not.
+    termsCheckbox: async () => {
+      await ready();
+      await page
+        .waitForURL((url) => url.pathname !== "/sign-up/complete", { timeout: 5000 })
+        .catch(() => undefined);
+      const path = new URL(page.url()).pathname;
+      if (path !== "/sign-up/complete") return `redirected to ${path}`;
+      const box = seen(page.getByRole("checkbox", { name: /terms|agree/i }));
+      if (!(await box.count())) return "";
+      return (await box.first().isChecked()) ? "checked" : "unchecked";
+    },
     completeDisabledUntilTermsAccepted: signUpCompleteUnreachable(
       "complete_disabled_until_terms_accepted",
     ),
@@ -5759,11 +5933,7 @@ export default function create(
     userRow: () => everyUserRow(),
     statusBadge: () => linesMatching(/^(Active|Inactive)$/),
     accountType: () => linesMatching(/^(Vendor|Public Sector Employee|Admin)$/),
-    adminCheck: async () => {
-      throw new Error(
-        "unbound: user-list.admin_check — the Admin? column shows an unlabelled tick with no accessible name or text, and the list's rows are drawn as one flattened block, so there is nothing on the page to read the mark from",
-      );
-    },
+    adminCheck: () => adminTicks(),
     exportModal: () => dialogText(),
     // Something to read only while Export cannot be pressed; once it can, nothing.
     exportDisabledUntilSelection: async () => {
@@ -5834,6 +6004,69 @@ export default function create(
       await page.waitForTimeout(200);
     }
     return rows.join("\n");
+  }
+
+  // The names whose "Admin?" mark is a tick, one per line. The list is a scrolling grid of
+  // positioned blocks, each row "Status | Account Type | Name | Admin?", and the Admin? cell
+  // holds an unlabelled icon with no text: a dark, square tick for an administrator, a pale,
+  // narrow cross for everybody else (seen as the administrator: of the 146 rows only Robin
+  // Placeholder and Morgan Placeholder, both shown as "Public Sector Employee", carry the
+  // tick). Each row is found from its name link, and the mark read from the shape of the icon
+  // in the row's last cell. The body is scrolled as everyUserRow does, the rows in view read
+  // at each turn. A list with nobody ticked reads as nothing.
+  async function adminTicks(): Promise<string> {
+    await ready();
+    const table = seen(page.getByRole("table")).first();
+    if (!(await table.count())) {
+      nothing(`user-list.admin_check — no user list is on ${page.url()}`);
+    }
+    await table.getByRole("link").first().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+    const marks = new Map<string, boolean>();
+    const gather = async (): Promise<number> => {
+      const read = await table.getByRole("link").evaluateAll((links) =>
+        links.map((link) => {
+          let row: Element | null = link.parentElement;
+          while (row && row.children.length < 4) row = row.parentElement;
+          const last = row ? row.children[row.children.length - 1] ?? null : null;
+          let icon: Element | null = null;
+          const find = (node: Element): void => {
+            for (const child of Array.from(node.children)) {
+              if (icon) return;
+              if (child.localName === "svg") icon = child;
+              else find(child);
+            }
+          };
+          if (last && !last.contains(link)) find(last);
+          const box = (icon as Element | null)?.getAttribute("viewBox")?.trim().split(/\s+/).map(Number) ?? [];
+          // A tick is drawn square; the cross beside the others is drawn narrower than tall.
+          const ticked = box.length === 4 && box[2] > 0 && box[2] === box[3];
+          return [(link.textContent ?? "").trim(), ticked] as [string, boolean];
+        }),
+      );
+      let added = 0;
+      for (const [name, ticked] of read) {
+        if (!name || marks.has(name)) continue;
+        marks.set(name, ticked);
+        added++;
+      }
+      return added;
+    };
+    await table
+      .evaluate((node) => {
+        for (let up: Element | null = node; up; up = up.parentElement) if (up.scrollTop > 0) up.scrollTop = 0;
+        window.scrollTo(0, 0);
+      })
+      .catch(() => undefined);
+    await page.waitForTimeout(300);
+    const box = await table.boundingBox();
+    if (box) await page.mouse.move(box.x + box.width / 2, box.y + Math.min(Math.max(box.height - 20, 10), 300));
+    let quiet = 0;
+    for (let turn = 0; turn < 200 && quiet < 4; turn++) {
+      quiet = (await gather()) ? 0 : quiet + 1;
+      await page.mouse.wheel(0, 400);
+      await page.waitForTimeout(200);
+    }
+    return [...marks].filter(([, ticked]) => ticked).map(([name]) => name).join("\n");
   }
 
   // The profile screen, reached under a person's identifier or as the signed-in "me".
