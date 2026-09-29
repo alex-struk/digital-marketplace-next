@@ -683,3 +683,12 @@ redo:
       has never completed their profile, supplied by the seed and fixtures, and
       must tick the new-opportunity notice while completing it
     closed: *a15
+  - id: R-3.24
+    version: 1
+    why: the test reads the owner's mailbox once, immediately after the archive
+      action returns, with no allowance for delivery time, so a notice that
+      arrives a moment later is counted as never sent; it should wait for the
+      message to arrive within a settling window (as the other mail tests do)
+      before asserting that at least one message mentions archiving, and the
+      negative case should likewise wait out the same window before asserting
+      nothing arrived
