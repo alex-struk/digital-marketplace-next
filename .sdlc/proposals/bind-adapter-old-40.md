@@ -39,3 +39,27 @@ The old position-based code is still used on the opportunity-creation phases ste
 Afterwards I cancelled that opportunity, since the administrator isn't allowed to delete it. It is still on the target at id `799340d3-9e63-46a7-894a-72b1af5db511`. Someone may want to remove it or reset the target if other stages count opportunities.
 
 `bindings.yaml` needed no change: every member involved was already, and correctly, listed as `bound`. Every page route this work touched opened on the target. I changed nothing outside `tests/adapters/old/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the old adapter bind every surface action and observation that R-2.7, R-2.11, R-2.19 and R-2.37 need on the Sprint With Us proposal flow, and nothing else? The runner escalated this because the rebind loop limit was passed, so I read its account first. That account decided the ruling. Over the numbered sends, each failure was further along the flow than the one before: no organization chooser, then no Implementation box, then the References tab, then the Submit Proposal dialog, then the empty closing dialog on the way to export, then the Team phase folding, then the Team-to-Pricing move. The last sends, R-2.7 sends 4-5, R-2.11 send 5, R-2.19 sends 6-7 and R-2.37 send 6, all describe the same two problems. First, the adapter found a phase's section by screen position (phaseBand/inBand), so it misread an open one-phase 'Implementation', and once an earlier phase opened on a two-phase opportunity the positions shifted. Second, the adapter never left '2. Team' once the member was on the phase with Scrum Master ticked. So the loop limit went past because the work kept making progress, not because a stage cannot produce what G3 asks for. That is not a reason to escalate to the pipeline owner. The diff does what those sends asked for, and no more. probePhaseSection finds a phase's section as the nearest ancestor of the phase-name leaf that holds a visible 'Phase Dates' before it takes in another phase's name, and does not use position. teamPhaseOpen, teamPhaseAdder, onSwuPhase and the Scrum Master row lookup all use it, so a phase name is pressed only while its own section shows no Phase Dates. add_phase_team_member ticks Scrum Master when the input sets scrumMaster: true, including when the member is already on the phase, and does not click a radio that is already ticked. After that it presses nothing more on the Team step. set_phase_proposed_cost moves forward with the form's own 'Next' until a phase cost box shows. It uses the step menu only from a step past 3, and a disabled or unpressable Next fails at once, naming the step, instead of running into the timeout. The change is limited to tests/adapters/old/index.ts. bindings.yaml does not change, and no gate, criterion or test is touched. The position-based helper stays on the opportunity-creation phases step and the evaluator panel, which none of these findings named. Leaving it there keeps the change within its evidence. The runner's typecheck exited 2, but it reported no errors under adapters/old/. The only errors were 2 in adapters/new/, which this proposal does not answer for. The author checked the new logic by hand against the live target on a one-phase and a two-phase opportunity. The Playwright suite was not run. It runs at verify, and verify is where these four criteria are confirmed or not. Note for whoever owns the target: the author created a two-phase opportunity through the API to check the adapter, then cancelled it because the administrator cannot delete it. It is still on the target at 799340d3-9e63-46a7-894a-72b1af5db511, and a reset will clear it if another stage counts opportunities. What would change this ruling: if verify fails again at '2. Team' or the Team-to-Pricing move, the problem is not position any more. It would point to the Team step's page structure, and would need archaeology evidence of that structure rather than another rebind, so the next ruling on it should address the request to archaeology.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `40be4714979fd24d0b936387a6934e4902df23b5`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
