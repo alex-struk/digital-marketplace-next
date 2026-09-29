@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-44 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">307</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">302</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">268</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-44</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 17:14</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I fixed the R-8.12 finding: when a vendor asks for a file that doesn&#39;t exist, the adapter now hands that refusal to the test instead of reading it as &quot;&quot;.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I fixed the R-8.12 finding: when a vendor asks for a file that doesn&#39;t exist, the adapter now hands that refusal to the test instead of reading it as &quot;&quot;. I could not type-check the change, because both attempts to run the TypeScript compiler were refused approval. Nothing else was run: no test and no calibration pass.</p>
+<p><strong>What the target does.</strong> I checked the running target at <a href="http://localhost:4300">http://localhost:4300</a> through the browser, using the session routes, with a made-up all-zeros file identifier:</p>
+<ul><li><strong>Vendor 1:</strong> gets 401 <code>[&quot;You do not have permission to perform this action.&quot;]</code>, both on <code>/api/files/:fileId?type=blob</code> (the download) and on <code>/api/files/:fileId</code> (the description).</li><li><strong>Administrator:</strong> gets 404 <code>[&quot;File not found.&quot;]</code> on both addresses.</li></ul>
+<p>So a vendor is refused as not authorized, and only an administrator is told the file is missing. This matches the finding.</p>
+<p><strong>The fix.</strong> <code>refusedForUnknownFile</code> used to report only a 404, which is why the vendor&#39;s 401 read as &quot;&quot;. It now hands over a 401 or 403 refusal whole, status and body, as the other refusal readers in the adapter do. <code>notFoundForAdministrator</code> is the only reader that still looks for a 404.</p>
+<p><strong>Both pages changed.</strong> I made the same change on the file-description page as well as the file-download page. Both implement this observation the same way, and I confirmed the target answers identically on both routes.</p>
+<p><strong>Bindings file unchanged.</strong> <code>bindings.yaml</code> already lists <code>refused_for_unknown_file</code> and <code>not_found_for_administrator</code> as bound on both pages, which is still true.</p>
+<p>Every route involved resolved on the target. I changed nothing outside <code>tests/adapters/old/</code>, and no value from the environment went into any file.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 17:15.</p>
+<div class="body"><p>Question: does the old adapter bind every surface action and observation, and nothing else, now that the R-8.12 finding has been addressed? Ruling: approve. R-8.12 says a vendor asking for a nonexistent file is answered as not authorized and only an administrator is told it was not found. The author probed the target and found a vendor gets 401 &#39;You do not have permission to perform this action.&#39; and an administrator gets 404 &#39;File not found.&#39; on both the download and description routes. Previously refusedForUnknownFile accepted only 404, so it read the vendor&#39;s 401 as empty. It now accepts 401/403 on both pages, while notFoundForAdministrator keeps 404. The binding remains a locator: it hands the status and body over through the same refusal() helper as the other refusal readers, and the test decides whether that passes. Only tests/adapters/old/index.ts changed. Nothing under tests/acceptance was touched, and bindings.yaml still lists both observations as bound. The runner&#39;s typecheck exited 2, but all of its diagnostics are under adapters/new/ and none under adapters/old/, the part this proposal answers for. What would change the ruling: a calibration run in which the vendor case of R-8.12 still reads empty, or an administrator&#39;s 404 being accepted by refusedForUnknownFile, would point back at this binding as adapter-wrong.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
