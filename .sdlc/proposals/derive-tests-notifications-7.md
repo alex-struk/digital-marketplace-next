@@ -39,3 +39,27 @@ The header keeps its derived date of 2026-09-29, which is today, the date this c
 **Not verified:** I couldn't run the TypeScript compiler, because the session didn't approve the shell commands. Instead I searched the file for leftover uses of the removed names and found none. Every helper still in the file is still used. The runner's own compiler check should confirm the file has no errors before this is ruled on.
 
 The test needed no new surface actions or observations.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether the revised R-6.2 test follows from its criterion and nothing else. Approve. The owed condition is carried out: the final check that no one received a message twice is gone, and so are the per-message recipient collection and the copied-recipient read that served it (a search of the branch file finds neither). The remaining assertions map one to one onto R-6.2's then-clauses. The opportunity shows as published and the form shows no error, so the action succeeded and the person is told it succeeded. The catcher stays empty while the fault is held, so no notice reaches anybody. The history shows no failed delivery, so nothing records a failure for that person. No notice about the opportunity arrives after delivery is restored, so no further attempt is made. The sending address the test compares against comes from the contract's observables, not the implementation. The composition clause is not asserted; it carries a not-testable entry with a real reason (no seeded state or fault makes composition fail) and is already owed by contract as missing-test/R-6.2. The runner's typecheck shows no diagnostics under acceptance/notifications/; its two errors are in adapters/new/, which this proposal does not touch. Two things would change the ruling: a compiler error in this file, or evidence that the invitation is addressed to the service address, which would make the resend check match it and fail wrongly.
+
+**Conditions:**
+- condition-met derive-tests-notifications-stale-8#1: tests/acceptance/notifications/R-6.2.spec.ts no longer has the check that no one received a message twice, the per-message recipients field or the copied-recipient read; its final assertion only filters caught messages that are about the published opportunity (aboutOpportunity) and expects none after delivery is restored
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `9ce05471c5d22e2a91f6f23072712c8ee00ae42a`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/notifications/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
