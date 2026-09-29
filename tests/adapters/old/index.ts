@@ -8562,7 +8562,10 @@ export default function create(
     storedContentIdentifier: async () =>
       answeredField("file-description.stored_content_identifier", "fileBlob"),
     refusedWhenNotPermitted: async () => refusal((status) => status === 401 || status === 403),
-    refusedForUnknownFile: async () => refusal((status) => status === 404),
+    // Somebody short of an administrator asking after an unknown file is refused as not
+    // authorized (401 "You do not have permission…"), not told it is missing; only an
+    // administrator is answered 404 "File not found.".
+    refusedForUnknownFile: async () => refusal((status) => status === 401 || status === 403),
     notFoundForAdministrator: async () => refusal((status) => status === 404),
   };
 
@@ -8611,7 +8614,8 @@ export default function create(
       return got.status === 200 ? got.body : "";
     },
     refusedWhenNotPermitted: async () => refusal((status) => status === 401 || status === 403),
-    refusedForUnknownFile: async () => refusal((status) => status === 404),
+    // As on the description: unknown to a vendor reads as not authorized, 404 is for administrators.
+    refusedForUnknownFile: async () => refusal((status) => status === 401 || status === 403),
     notFoundForAdministrator: async () => refusal((status) => status === 404),
   };
 
