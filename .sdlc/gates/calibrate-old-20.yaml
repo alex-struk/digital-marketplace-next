@@ -1,0 +1,16 @@
+gate: G1
+verdict: approve
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  The question is whether R-1.39's by-state failure against the old target is the application's fault, the spec's, or the test's. Ruling: approve, with test-wrong. The old list page offers government users and administrators a status chooser with Draft, Under Review, Published, Evaluation and Awarded (list.tsx:60-66, 662-675). Its filter removes every opportunity whose status does not match the chosen one (list.tsx:329-333, 346-387), and it applies the same filter to the Unpublished, Open and Closed groups alike (list.tsx:389-409). Drafts are always placed in the Unpublished group (list.tsx:165-189). No other reading of that code is possible, so the old application does narrow by state and defect-in-old would wrongly make a working behaviour the rebuild's obligation. The criterion's statement matches the code, so spec-wrong does not apply either. The failure is a bare predicate timeout that names no assertion. The reviewer's triage (calibrate-triage-old-29) left two causes open: the draft was never stored, or the list does not narrow. The source rules out the second, so the fault lies in the test's setup or reading. The test never establishes that the draft it saves is present and readable before it filters, and it folds the check that something remains and the check that something is gone into one wait, so a missing draft looks like a list that does not narrow. What would change this ruling: suppose a rewritten test shows the draft present before filtering, and the draft-only view still never shows it. Then the fault is in the adapter's reading of the list, and it goes to the reviewer as adapter-wrong, not back to this seat. A run where the draft is visibly present and the list demonstrably fails to narrow on a chosen status would make this defect-in-old.
+conditions:
+  - "test-wrong R-1.39: the by-state case never checks that the draft it saves actually appears in the list before a state is chosen, so a draft that was not stored or could not be read looks the same as a list that does not narrow. Before filtering, confirm that both the saved draft and the published opportunity can be seen. Then check that the wanted opportunity remains, and separately that the other one is gone, after each state is chosen, so a failure says which half did not hold."
+cost: 0.7549969999999999
+turns: 17
+session: "2b3bf3d8-35f0-45c6-954f-4aadbdc86310"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-29T17:13:14.889Z
