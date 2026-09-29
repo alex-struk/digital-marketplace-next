@@ -655,6 +655,11 @@ redo:
       settled before restoring, or by showing no notice about the published
       opportunity arrives more than once, rather than requiring the catcher to
       hold nothing but the invitation
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on notifications
+      by: runner:derive-tests
+      at: 2026-09-29T07:12:37.978Z
   - id: R-4.23
     version: 2
     why: the first case makes its vendor 'not yet agreed' by announcing changed
