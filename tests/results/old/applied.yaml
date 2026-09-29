@@ -461,11 +461,3 @@ rulings:
     version: 3
     verb: spec-wrong
     gate: calibrate-old-15
-  - id: R-1.39
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-29
-  - id: R-1.39
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-20

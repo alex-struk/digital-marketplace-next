@@ -1,13 +1,14 @@
 // criterion: @R-1.39 v1
-// provenance: blind, spec@2d9a83e439479b419845aa46aa7d9d819b38de24, derived 2026-09-15
+// provenance: blind, spec@258c8b6542d73fd923b7fbc7b8c8d9d82627255b, derived 2026-09-29
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// Each test publishes what it needs to be narrowed down to, then asks for it under a
-// condition it meets and under one it does not. The list narrows a moment after a condition
-// is chosen, so after each choice it is read again until what should remain is there and
-// what should be gone is gone at the same reading; a list that had not narrowed yet, or never
-// narrowed at all, would never satisfy both.
+// Each test puts in place two opportunities that one condition tells apart, confirms that
+// the list shows both before anything is chosen, and then chooses a condition. After each
+// choice it checks, separately, that the opportunity meeting the condition is still listed
+// and that the other one is no longer listed, so a failure says which half did not hold.
+// The list may narrow a moment after a condition is chosen, so each half is read again
+// until it holds or the wait runs out.
 //
 // A group with nothing left in it may not be readable at all, and that is read as empty.
 
@@ -34,6 +35,8 @@ const complete = {
   completionDate: pacificDay(150),
 };
 
+type Group = "unpublishedGroup" | "openGroup" | "closedGroup";
+
 async function readable(read: () => Promise<string>): Promise<string> {
   try {
     return await read();
@@ -42,37 +45,51 @@ async function readable(read: () => Promise<string>): Promise<string> {
   }
 }
 
+// Everything the list shows, across all of its groups.
+async function listed(surface: Surface, groups: Group[]): Promise<string> {
+  const texts: string[] = [];
+  for (const group of groups) texts.push(await readable(() => surface.opportunityList[group]()));
+  return texts.join("\n");
+}
+
+async function shows(surface: Surface, groups: Group[], title: string): Promise<void> {
+  await expect
+    .poll(async () => (await listed(surface, groups)).includes(title), { ...settle, message: `"${title}" is listed` })
+    .toBe(true);
+}
+
+async function hides(surface: Surface, groups: Group[], title: string): Promise<void> {
+  await expect
+    .poll(async () => (await listed(surface, groups)).includes(title), { ...settle, message: `"${title}" is no longer listed` })
+    .toBe(false);
+}
+
 async function publish(surface: Surface, fields: Record<string, unknown>): Promise<void> {
   await surface.opportunityCwuCreate.open();
   await surface.opportunityCwuCreate.publish({ ...complete, ...fields });
 }
 
-async function settlesTo(check: () => Promise<boolean>): Promise<void> {
-  await expect.poll(check, settle).toBe(true);
-}
+const everyGroup: Group[] = ["unpublishedGroup", "openGroup", "closedGroup"];
 
 test(`${statement} (by program)`, async ({ surface }) => {
-  const title = "R-1.39 published opportunity narrowed by program";
-  const sprint = seed.opportunities.closedSprintWithUs.title;
+  const codeWithUs = "R-1.39 published Code With Us opportunity narrowed by program";
+  const sprintWithUs = seed.opportunities.closedSprintWithUs.title;
 
   await surface.signIn(persona.administrator);
-  await publish(surface, { title });
+  await publish(surface, { title: codeWithUs });
 
   await surface.opportunityList.open();
+  await shows(surface, everyGroup, codeWithUs);
+  await shows(surface, everyGroup, sprintWithUs);
+
   await surface.opportunityList.filterByProgram({ program: "Code With Us" });
-  await settlesTo(async () => {
-    const open = await readable(() => surface.opportunityList.openGroup());
-    const closed = await readable(() => surface.opportunityList.closedGroup());
-    return open.includes(title) && !closed.includes(sprint);
-  });
+  await shows(surface, everyGroup, codeWithUs);
+  await hides(surface, everyGroup, sprintWithUs);
 
   await surface.opportunityList.open();
   await surface.opportunityList.filterByProgram({ program: "Sprint With Us" });
-  await settlesTo(async () => {
-    const open = await readable(() => surface.opportunityList.openGroup());
-    const closed = await readable(() => surface.opportunityList.closedGroup());
-    return closed.includes(sprint) && !open.includes(title);
-  });
+  await shows(surface, everyGroup, sprintWithUs);
+  await hides(surface, everyGroup, codeWithUs);
 });
 
 test(`${statement} (by state)`, async ({ surface }) => {
@@ -85,20 +102,17 @@ test(`${statement} (by state)`, async ({ surface }) => {
   await surface.opportunityCwuCreate.saveDraft({ title: draft });
 
   await surface.opportunityList.open();
+  await shows(surface, everyGroup, published);
+  await shows(surface, everyGroup, draft);
+
   await surface.opportunityList.filterByStatus({ status: "Published" });
-  await settlesTo(async () => {
-    const open = await readable(() => surface.opportunityList.openGroup());
-    const unpublished = await readable(() => surface.opportunityList.unpublishedGroup());
-    return open.includes(published) && !unpublished.includes(draft);
-  });
+  await shows(surface, everyGroup, published);
+  await hides(surface, everyGroup, draft);
 
   await surface.opportunityList.open();
   await surface.opportunityList.filterByStatus({ status: "Draft" });
-  await settlesTo(async () => {
-    const open = await readable(() => surface.opportunityList.openGroup());
-    const unpublished = await readable(() => surface.opportunityList.unpublishedGroup());
-    return unpublished.includes(draft) && !open.includes(published);
-  });
+  await shows(surface, everyGroup, draft);
+  await hides(surface, everyGroup, published);
 });
 
 test(`${statement} (to remote-friendly opportunities only)`, async ({ surface }) => {
@@ -110,32 +124,54 @@ test(`${statement} (to remote-friendly opportunities only)`, async ({ surface })
   await publish(surface, { title: onSite, remoteOk: false, remoteDescription: "" });
 
   await surface.opportunityList.open();
+  await shows(surface, everyGroup, remote);
+  await shows(surface, everyGroup, onSite);
+
   await surface.opportunityList.filterRemoteOnly({ remoteOnly: true });
-  await settlesTo(async () => {
-    const open = await readable(() => surface.opportunityList.openGroup());
-    return open.includes(remote) && !open.includes(onSite);
-  });
+  await shows(surface, everyGroup, remote);
+  await hides(surface, everyGroup, onSite);
 });
 
 test(`${statement} (by free text matched against title and location)`, async ({ surface }) => {
-  const title = "R-1.39 published opportunity about kittiwakes";
-  const elsewhere = "R-1.39 published opportunity in another town";
+  const byTitle = "R-1.39 published opportunity about kittiwakes";
+  const byLocation = "R-1.39 published opportunity in another town";
 
   await surface.signIn(persona.administrator);
-  await publish(surface, { title });
-  await publish(surface, { title: elsewhere, location: "Kamloops" });
+  await publish(surface, { title: byTitle });
+  await publish(surface, { title: byLocation, location: "Kamloops" });
 
   await surface.opportunityList.open();
+  await shows(surface, everyGroup, byTitle);
+  await shows(surface, everyGroup, byLocation);
+
   await surface.opportunityList.search({ text: "kittiwakes" });
-  await settlesTo(async () => {
-    const open = await readable(() => surface.opportunityList.openGroup());
-    return open.includes(title) && !open.includes(elsewhere);
-  });
+  await shows(surface, everyGroup, byTitle);
+  await hides(surface, everyGroup, byLocation);
 
   await surface.opportunityList.open();
   await surface.opportunityList.search({ text: "Kamloops" });
-  await settlesTo(async () => {
-    const open = await readable(() => surface.opportunityList.openGroup());
-    return open.includes(elsewhere) && !open.includes(title);
-  });
+  await shows(surface, everyGroup, byLocation);
+  await hides(surface, everyGroup, byTitle);
+});
+
+test(`${statement} (only opportunities matching every chosen condition remain visible)`, async ({ surface }) => {
+  const both = "R-1.39 remote opportunity about puffins";
+  const wordOnly = "R-1.39 on-site opportunity about puffins";
+  const remoteOnly = "R-1.39 remote opportunity about gannets";
+
+  await surface.signIn(persona.administrator);
+  await publish(surface, { title: both });
+  await publish(surface, { title: wordOnly, remoteOk: false, remoteDescription: "" });
+  await publish(surface, { title: remoteOnly });
+
+  await surface.opportunityList.open();
+  await shows(surface, everyGroup, both);
+  await shows(surface, everyGroup, wordOnly);
+  await shows(surface, everyGroup, remoteOnly);
+
+  await surface.opportunityList.filterRemoteOnly({ remoteOnly: true });
+  await surface.opportunityList.search({ text: "puffins" });
+  await shows(surface, everyGroup, both);
+  await hides(surface, everyGroup, wordOnly);
+  await hides(surface, everyGroup, remoteOnly);
 });

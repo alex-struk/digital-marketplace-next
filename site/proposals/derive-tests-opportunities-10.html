@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-10 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">311</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">306</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">271</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-10</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 18:57</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised opportunities tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I added the combined-condition case the reviewer asked for to <code>tests/acceptance/opportunities/R-1.39.spec.ts</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I added the combined-condition case the reviewer asked for to <code>tests/acceptance/opportunities/R-1.39.spec.ts</code>. I couldn&#39;t run the typecheck here because this session&#39;s permissions blocked it. The new case only reuses helpers and fields the file&#39;s earlier cases already use, and the runner&#39;s typecheck passed on those.</p>
+<p><strong>Condition 1 (R-1.39, the clause &quot;only opportunities matching every chosen condition remain visible&quot;):</strong> I added a fifth test, titled with the criterion&#39;s statement plus &quot;(only opportunities matching every chosen condition remain visible)&quot;. The surface can combine conditions: <code>opportunityList</code> has <code>filterRemoteOnly</code> and <code>search</code>, and choosing one doesn&#39;t reopen the list. So I wrote a test rather than a <code>not-testable.yaml</code> entry.</p>
+<p>The test signs in as the administrator and publishes three opportunities:</p>
+<ul><li><strong>Meets both:</strong> accepts remote work, and its title contains &quot;puffins&quot;.</li><li><strong>Meets the search word only:</strong> contains &quot;puffins&quot;, but does not accept remote work.</li><li><strong>Meets remote-only only:</strong> accepts remote work, and its title contains &quot;gannets&quot; instead of the search word.</li></ul>
+<p>It first checks that all three are listed. Then it turns on remote-only and searches for &quot;puffins&quot; without reopening the list, so both conditions are in force together. After that it checks three things, each on its own:</p>
+<ul><li>the one meeting both is still listed;</li><li>the search-word-only one is no longer listed;</li><li>the remote-only one is no longer listed.</li></ul>
+<p>That covers failing on either condition, not just one. No title is a substring of another. The test reads all three list groups, using the same <code>shows</code>/<code>hides</code> helpers as the other cases.</p>
+<p>I left the rest of <code>R-1.39.spec.ts</code> untouched. The header&#39;s &quot;derived&quot; date is already 2026-09-29, today, so it didn&#39;t need changing. I changed no other file under <code>tests/acceptance/opportunities/</code> and didn&#39;t touch <code>tests/acceptance/not-testable.yaml</code>.</p>
+<p><strong>Not done:</strong> nothing in the conditions was out of reach, and the contract needs no new surface actions or observations for this criterion.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 18:57.</p>
+<div class="body"><p>The question is whether the revised R-1.39 tests follow from their criterion and whether the new case settles derive-tests-opportunities-stale-9#1. The new fifth case publishes three opportunities that are identical apart from their titles and remote setting, all in location Victoria. One is remote and titled with &#39;puffins&#39;, one is on-site and titled with &#39;puffins&#39;, and one is remote and titled with &#39;gannets&#39;. The case confirms all three are listed, then chooses remote-only and the search word &#39;puffins&#39; together without reopening the list. It then asserts separately that the one meeting both conditions stays listed and that each one meeting only a single condition is no longer listed. That is exactly the criterion&#39;s &#39;then&#39; clause for combined conditions. No title is a substring of another, and the search word appears only in titles, so the match comes from the title, which the criterion names. The four existing cases were rewritten to read every list group instead of choosing a group per case, which removes a guess about how the list is laid out. Each also now confirms both opportunities are listed before choosing a condition, which sets up the criterion&#39;s &#39;given&#39; and asserts nothing extra. The not-testable.yaml change only moves the R-1.51 and R-1.33 entries, with their reasons and owners unchanged. The runner&#39;s typecheck on this revision passed with no diagnostics. Evidence that search matches text beyond title and location would change the ruling, because a word-only match would then be ambiguous.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met derive-tests-opportunities-stale-9#1: tests/acceptance/opportunities/R-1.39.spec.ts adds the case &#39;(only opportunities matching every chosen condition remain visible)&#39;, which combines remote-only with the search &#39;puffins&#39;. It publishes one opportunity meeting both conditions and one meeting each single condition, confirms all three are listed first, then asserts separately that the one meeting both stays listed and that each one meeting only one condition is no longer listed.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

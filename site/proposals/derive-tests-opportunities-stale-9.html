@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-stale-9 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">311</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">306</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">271</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-stale-9</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 18:55</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the opportunities criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the R-1.39 test.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rewrote the R-1.39 test. One criterion was in scope and it now has a test; nothing went into <code>not-testable.yaml</code>. The file is <code>tests/acceptance/opportunities/R-1.39.spec.ts</code>, with the header for spec@258c8b6 derived 2026-09-29. I could not type-check it, because the compile command needed an approval nobody was here to give. It has not been run either, so both remain for a later stage.</p>
+<p><strong>What was wrong and how the new test avoids it.</strong> The ruling said the by-state case never confirmed that the saved draft was in the list before filtering. It also said the case checked &quot;still there&quot; and &quot;gone&quot; together, so a failure didn&#39;t say which half broke. The new test fixes both, and I applied the same pattern to all four ways of narrowing the list, not only by state. Each case:</p>
+<ol><li>Sets up two opportunities that one filter separates.</li><li>Opens the list and waits until both can be seen, before choosing anything.</li><li>Chooses the filter.</li><li>Makes two separate checks, each with its own message: the opportunity that matches is still listed, and the other one is no longer listed.</li></ol>
+<p>The list may take a moment to narrow, so each check re-reads it until it holds or times out. Each check reads all three groups of the list together (unpublished, open and closed), because the criterion is about what the list contains, not about which group an item sits in. That way an item that only moved to another group can&#39;t pass as gone. A group that can&#39;t be read is treated as empty, since a group with nothing left in it may not appear at all.</p>
+<p><strong>The four tests, one per way of narrowing, each titled with the criterion&#39;s statement:</strong></p>
+<ul><li><strong>Program:</strong> a Code With Us opportunity published during the test, against <code>seed.opportunities.closedSprintWithUs</code>, filtered both ways.</li><li><strong>State:</strong> a published opportunity against a saved draft, filtered to Published and then to Draft.</li><li><strong>Remote only:</strong> an opportunity that accepts remote work against one that doesn&#39;t.</li><li><strong>Free text:</strong> one search matches a title word, and a second matches another opportunity&#39;s location. This covers both halves of &quot;title and location&quot;.</li></ul>
+<p>Everything goes through <code>surface.opportunityList</code>, <code>surface.opportunityCwuCreate</code>, <code>persona.administrator</code> and the seed. The test asserts nothing beyond the criterion.</p>
+<p><strong>What the contract should add.</strong> The actions I needed all exist. The contract doesn&#39;t document what input the four filter actions take (<code>filterByProgram</code>, <code>filterByStatus</code>, <code>filterRemoteOnly</code>, <code>search</code>). I kept the shapes from the previously approved derivation (<code>{ program }</code>, <code>{ status }</code>, <code>{ remoteOnly }</code>, <code>{ text }</code>), but these are an assumption. The seed has no draft opportunity, so the test creates its own draft with <code>saveDraft</code>. A seeded draft would make the by-state case depend less on that step. Both are for the <code>contract</code> stage.</p>
+<p>I changed no file outside <code>tests/acceptance</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 18:56.</p>
+<div class="body"><p>Question: do the rewritten R-1.39 tests follow from the criterion and nothing else? Ruling: return. The rewrite meets the outstanding redo request in full: every case confirms both opportunities are listed before a condition is chosen, then asserts retention and exclusion as separate polled checks with their own messages. It reads all three list groups so an item that only moved group cannot pass as gone, and all four ways of narrowing are covered, with free text exercised against both title and location. Every assertion follows from the criterion, nothing implementation-shaped leaks in, the titles are free of substring collisions, and the runner&#39;s typecheck passed. But the criterion&#39;s then-clause is &#39;only opportunities matching every chosen condition remain visible&#39;, and no test ever chooses more than one condition, so the conjunction is asserted by nothing and there is no not-testable entry for it. The surface plainly reaches it: all four filter actions exist and each case already chains open, filter and read. So this is a clause the writer could assert and did not, and a passing run would otherwise close the criterion&#39;s missing test with that clause owed by nobody. What would change the ruling: a case that chooses two conditions together (e.g. a program and a search word) and shows that an opportunity meeting only one of them is no longer listed while one meeting both remains; or, if the writer finds the surface genuinely cannot combine conditions, a not-testable.yaml entry carrying that clause and naming what is missing.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-1.39: the clause &#39;only opportunities matching every chosen condition remain visible&#39; is asserted by no test, because each case chooses a single condition. Add a case that chooses two conditions together (for example a program and a search word, or remote-only and a search word). Set up one opportunity meeting both and one meeting only one of them, confirm both are listed first, then assert separately that the one meeting both is still listed and the one meeting only one is no longer listed. If the surface cannot combine conditions, record a not-testable.yaml entry with <code>clause</code> naming this clause and what is missing from the surface.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
