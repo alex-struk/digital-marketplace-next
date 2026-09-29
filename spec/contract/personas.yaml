@@ -391,6 +391,24 @@ personas:
           so a first sign-in — the one that creates an account — cannot happen there.
       sandbox-idp: { username: first-time-vendor }
 
+  # A vendor whose account exists and who has not yet completed their profile: they have
+  # never agreed to the terms, so every screen they open sends them to /sign-up/complete,
+  # and they have made no choice about new-opportunity notices. Unlike first-time-vendor
+  # the account is seeded (tests/seed users.vendorCompletingProfile), so the oracle reaches
+  # it by an ordinary session route and the completing of the profile — the choice of
+  # notices included — can be made and read back there.
+  - id: vendor-completing-profile
+    domain: users
+    can:
+      [
+        complete their profile,
+        choose to be told about new opportunities while doing so,
+        agree to the terms of use
+      ]
+    sign_in:
+      session-route: { route: /auth/createsessionvendor/17 }
+      sandbox-idp: { username: test-vendor-17 }
+
   # A code-hosting identity that shares no email address, signing in for the first time.
   - id: first-time-vendor-without-email
     domain: users
