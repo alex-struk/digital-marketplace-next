@@ -398,19 +398,7 @@ rulings:
     version: 1
     verb: product-question
     gate: calibrate-triage-old-20
-  - id: R-2.16
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-20
   - id: R-8.20
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-20
-  - id: R-2.22
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-20
-  - id: R-2.28
     version: 1
     verb: product-question
     gate: calibrate-triage-old-20
@@ -441,12 +429,4 @@ rulings:
   - id: R-2.28
     version: 2
     verb: spec-wrong
-    gate: calibrate-old-13
-  - id: R-2.16
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-13
-  - id: R-2.22
-    version: 1
-    verb: test-wrong
     gate: calibrate-old-13

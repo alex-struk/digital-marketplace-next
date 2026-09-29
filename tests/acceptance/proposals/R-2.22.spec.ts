@@ -1,33 +1,36 @@
 // criterion: @R-2.22 v1
-// provenance: blind, spec@ccc1cba3290f5ea17351e4f2ca49bd80fefc2ef6, derived 2026-09-29
+// provenance: blind, spec@8272c1b989e3bad64c78ae540830a62747dadf42, derived 2026-09-29
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// The organization change must be the only thing under test, so the proposal it is made on is
-// complete in every other respect, and so is the organization it is moved to.
+// The organization rule must be the only thing under test, so the proposal is complete both
+// before and after the organization is changed.
 //
-// The proposal. A submitted proposal is put to the service whole through proposal-team-request
-// (sent as a submission), by users.organizationOwner for the seed's qualified organization, with
-// that owner as the one team member and every question answered; the service's own answer says
-// it was accepted and submitted before anything is changed. The draft is made on the Team With
-// Us form with every part of it filled in and then saved as a draft.
+// Before. A submitted proposal is put to the service whole through proposal-team-request
+// (sent as a submission), by users.organizationOwner for the seed's qualified organization,
+// with that owner as the team and every question answered; the service's own answer says it
+// was accepted and submitted before anything is changed. A draft is made on the proposal
+// form with every part of it filled in, naming the same organization and team, and saved.
 //
-// The organization it is moved to. It has to be one the same proposal could stand for: a
-// qualified supplier for the program, providing what the opportunity calls for, with the team
-// member an active member of it. The seed holds no second such organization for the same
-// vendor, so the test builds one that users.organizationOwner owns: for Team With Us, approved
-// by an administrator for the Full Stack Developer service area the opportunity calls for, its
-// program terms accepted; for Sprint With Us, joined by the qualified organization's other two
-// people so that its three people hold every capability, its program terms accepted.
+// The organization it is moved to is one the same proposal could stand for: a qualified
+// supplier for the program, providing what the opportunity calls for, owned by
+// users.organizationOwner so that the owner is one of its active members. For Team With Us it
+// is approved by an administrator for the Full Stack Developer service area the opportunity
+// calls for, its terms accepted; for Sprint With Us it is joined by users.organizationAdmin
+// and users.organizationMember so that its three people hold every capability, its terms
+// accepted.
 //
-// The change is asked for from the proposal's management screen: start editing, name the other
-// organization, save. Whether it took is read from the proposal itself, which names its
-// organization. A refused change the screen does not even offer to make is still a refusal, so
-// a save that cannot be made is not a failure of the refused case; what is asserted there is
-// that the proposal still names the organization it was submitted for.
+// After. A team belongs to the organization it was chosen from, so changing the organization
+// names the team again from the new organization's members — the owner, in the same place
+// on the proposal — and every other part of the proposal is left as it was. The change is
+// asked for from the proposal's management screen: start editing, name the other
+// organization and its team, save. Whether it took is read from the proposal itself, which
+// names its organization. A change the screen does not offer to make on a submitted
+// proposal is still a refusal, so what is asserted there is only that the proposal still
+// names the organization it was submitted for.
 //
-// The message the criterion quotes is not asserted: no observation on either management screen
-// reports why a save was refused. See this criterion's entry in not-testable.yaml.
+// The message the criterion quotes is not asserted: no observation on either management
+// screen reports why a save was refused. See this criterion's entry in not-testable.yaml.
 
 const statement =
   "Once a proposal has been submitted, the organization it was submitted for cannot be changed until it is withdrawn.";
@@ -36,6 +39,10 @@ const settle = { timeout: 30000 };
 const submittedFor = seed.organizations.qualified;
 const fullStack = "Full Stack Developer";
 const answer = "Our team built and ran the same kind of service for a Crown corporation.";
+
+type Program = "team-with-us" | "sprint-with-us";
+type Organization = { id: string; legal_name: string; legalName: string };
+type Where = { opportunityId: string; proposalId: string };
 
 function inDays(days: number): string {
   const date = new Date();
@@ -72,7 +79,24 @@ const details = {
   completionDate: inDays(90),
 };
 
-type Organization = { id: string; legal_name: string; legalName: string };
+const references = [0, 1, 2].map((order) => ({
+  order,
+  name: `Reference ${order + 1}`,
+  company: "Reference Company Ltd.",
+  phone: "250-555-0101",
+  email: `reference.${order + 1}@example.test`,
+}));
+
+// The team each program's proposal names, from whichever organization it is for: the owner,
+// who is an active member of both organizations these tests use.
+const teamWithUsTeam = [{ member: seed.users.organizationOwner, resource: fullStack, hourlyRate: 100 }];
+const sprintWithUsPhases = [
+  {
+    phase: "Implementation",
+    members: [{ member: seed.users.organizationOwner, scrumMaster: true }],
+    proposedCost: 400000,
+  },
+];
 
 async function publishTeamOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
@@ -210,7 +234,7 @@ async function submitTeamWithUs(surface: Surface, opportunityId: string): Promis
   await surface.proposalTeamRequest.submitTeamProposal({
     opportunityId,
     organization: submittedFor,
-    team: [{ member: seed.users.organizationOwner, resource: fullStack, hourlyRate: 100 }],
+    team: teamWithUsTeam,
     answers: [{ order: 0, response: answer }],
   });
   return submittedThroughTheService(surface);
@@ -222,86 +246,93 @@ async function submitSprintWithUs(surface: Surface, opportunityId: string): Prom
   await surface.proposalTeamRequest.submitTeamProposal({
     opportunityId,
     organization: submittedFor,
-    phases: [
-      {
-        phase: "Implementation",
-        members: [{ member: seed.users.organizationOwner, scrumMaster: true }],
-        proposedCost: 400000,
-      },
-    ],
+    phases: sprintWithUsPhases,
     answers: [{ order: 0, response: answer }],
-    references: [0, 1, 2].map((order) => ({
-      order,
-      name: `Reference ${order + 1}`,
-      company: "Reference Company Ltd.",
-      phone: "250-555-0101",
-      email: `reference.${order + 1}@example.test`,
-    })),
+    references,
   });
   return submittedThroughTheService(surface);
 }
 
-type ManagementScreen = Surface["proposalTwuEdit"] | Surface["proposalSwuEdit"];
+async function draftTeamWithUs(surface: Surface, opportunityId: string): Promise<Where> {
+  await surface.signIn(persona.organizationOwner);
+  await surface.proposalTwuCreate.open({ opportunityId });
+  await surface.proposalTwuCreate.chooseOrganization({ organization: submittedFor });
+  await surface.proposalTwuCreate.addTeamMemberForResource({ resource: fullStack, member: seed.users.organizationOwner });
+  await surface.proposalTwuCreate.setHourlyRate({ resource: fullStack, rate: 100 });
+  await surface.proposalTwuCreate.answerResourceQuestion({ order: 0, response: answer });
+  await surface.proposalTwuCreate.acceptProgramTerms();
+  await surface.proposalTwuCreate.acceptAppTerms();
+  await surface.proposalTwuCreate.saveDraft();
+  await expect.poll(() => readOrEmpty(() => surface.proposalTwuEdit.proposalIdentifier()), settle).toBeTruthy();
+  const where = { opportunityId, proposalId: await surface.proposalTwuEdit.proposalIdentifier() };
+  await expect.poll(() => readOrEmpty(() => surface.proposalTwuEdit.status()), settle).toMatch(/draft/i);
+  return where;
+}
 
-function managementScreen(surface: Surface, program: "team-with-us" | "sprint-with-us"): ManagementScreen {
+async function draftSprintWithUs(surface: Surface, opportunityId: string): Promise<Where> {
+  await surface.signIn(persona.organizationOwner);
+  await surface.proposalSwuCreate.open({ opportunityId });
+  await surface.proposalSwuCreate.chooseOrganization({ organization: submittedFor });
+  await surface.proposalSwuCreate.addPhaseTeamMember({ phase: "Implementation", member: seed.users.organizationOwner });
+  await surface.proposalSwuCreate.setScrumMaster({ phase: "Implementation", member: seed.users.organizationOwner });
+  await surface.proposalSwuCreate.setPhaseProposedCost({ phase: "Implementation", cost: 400000 });
+  await surface.proposalSwuCreate.answerTeamQuestion({ order: 0, response: answer });
+  for (const reference of references) await surface.proposalSwuCreate.addReference(reference);
+  await surface.proposalSwuCreate.acceptProgramTerms();
+  await surface.proposalSwuCreate.acceptAppTerms();
+  await surface.proposalSwuCreate.saveDraft();
+  await expect.poll(() => readOrEmpty(() => surface.proposalSwuEdit.proposalIdentifier()), settle).toBeTruthy();
+  const where = { opportunityId, proposalId: await surface.proposalSwuEdit.proposalIdentifier() };
+  await expect.poll(() => readOrEmpty(() => surface.proposalSwuEdit.status()), settle).toMatch(/draft/i);
+  return where;
+}
+
+function managementScreen(surface: Surface, program: Program) {
   return program === "team-with-us" ? surface.proposalTwuEdit : surface.proposalSwuEdit;
 }
 
-async function changeOrganization(
-  surface: Surface,
-  program: "team-with-us" | "sprint-with-us",
-  where: { opportunityId: string; proposalId: string },
-  organization: Organization,
-): Promise<void> {
+// Names the other organization and, from its members, the team again; nothing else changes.
+async function changeOrganization(surface: Surface, program: Program, where: Where, organization: Organization): Promise<void> {
   const edit = managementScreen(surface, program);
   await edit.open(where);
   await edit.startEditing();
-  await edit.saveChanges({ organization });
+  await edit.saveChanges(
+    program === "team-with-us" ? { organization, team: teamWithUsTeam } : { organization, phases: sprintWithUsPhases },
+  );
 }
 
-async function namedOrganization(
-  surface: Surface,
-  program: "team-with-us" | "sprint-with-us",
-  where: { opportunityId: string; proposalId: string },
-): Promise<string> {
+async function namedOrganization(surface: Surface, program: Program, where: Where): Promise<string> {
   const edit = managementScreen(surface, program);
   await edit.open(where);
   return readOrEmpty(() => edit.proposalTab());
 }
 
-async function expectStillSubmittedFor(
-  surface: Surface,
-  program: "team-with-us" | "sprint-with-us",
-  where: { opportunityId: string; proposalId: string },
-  other: Organization,
-): Promise<void> {
-  await expect
-    .poll(() => namedOrganization(surface, program, where), settle)
-    .toContain(submittedFor.legal_name);
-  expect(await namedOrganization(surface, program, where), "the organization of a submitted proposal was changed").not.toContain(
-    other.legalName,
-  );
+async function withdraw(surface: Surface, program: Program, where: Where): Promise<void> {
+  const edit = managementScreen(surface, program);
+  await edit.open(where);
+  await edit.withdrawProposal();
+  await expect.poll(() => readOrEmpty(() => edit.status()), settle).toMatch(/withdrawn/i);
 }
 
-async function expectNowFor(
-  surface: Surface,
-  program: "team-with-us" | "sprint-with-us",
-  where: { opportunityId: string; proposalId: string },
-  other: Organization,
-): Promise<void> {
+async function expectStillSubmittedFor(surface: Surface, program: Program, where: Where, other: Organization): Promise<void> {
+  await expect.poll(() => namedOrganization(surface, program, where), settle).toContain(submittedFor.legal_name);
+  expect(
+    await namedOrganization(surface, program, where),
+    "the organization of a submitted proposal was changed",
+  ).not.toContain(other.legalName);
+}
+
+async function expectNowFor(surface: Surface, program: Program, where: Where, other: Organization): Promise<void> {
   await expect
     .poll(() => namedOrganization(surface, program, where), { ...settle, message: "the organization was not changed" })
     .toContain(other.legalName);
 }
 
-test(`${statement} (a submitted Team With Us proposal keeps the organization it was submitted for)`, async ({
-  surface,
-}) => {
+test(`${statement} (a submitted Team With Us proposal keeps the organization it was submitted for)`, async ({ surface }) => {
   test.setTimeout(300000);
   const other = await secondTeamWithUsSupplier(surface, "R-2.22 Second Supplier For A Submitted Proposal Ltd.");
   const opportunityId = await publishTeamOpportunity(surface, "R-2.22 opportunity whose submitted proposal is moved");
-  const proposalId = await submitTeamWithUs(surface, opportunityId);
-  const where = { opportunityId, proposalId };
+  const where = { opportunityId, proposalId: await submitTeamWithUs(surface, opportunityId) };
 
   await attempt(() => changeOrganization(surface, "team-with-us", where, other));
 
@@ -312,12 +343,8 @@ test(`${statement} (a withdrawn Team With Us proposal may be moved to another or
   test.setTimeout(300000);
   const other = await secondTeamWithUsSupplier(surface, "R-2.22 Second Supplier For A Withdrawn Proposal Ltd.");
   const opportunityId = await publishTeamOpportunity(surface, "R-2.22 opportunity whose withdrawn proposal is moved");
-  const proposalId = await submitTeamWithUs(surface, opportunityId);
-  const where = { opportunityId, proposalId };
-
-  await surface.proposalTwuEdit.open(where);
-  await surface.proposalTwuEdit.withdrawProposal();
-  await expect.poll(() => readOrEmpty(() => surface.proposalTwuEdit.status()), settle).toMatch(/withdrawn/i);
+  const where = { opportunityId, proposalId: await submitTeamWithUs(surface, opportunityId) };
+  await withdraw(surface, "team-with-us", where);
 
   await changeOrganization(surface, "team-with-us", where, other);
 
@@ -328,31 +355,18 @@ test(`${statement} (a draft Team With Us proposal may be moved to another organi
   test.setTimeout(300000);
   const other = await secondTeamWithUsSupplier(surface, "R-2.22 Second Supplier For A Draft Proposal Ltd.");
   const opportunityId = await publishTeamOpportunity(surface, "R-2.22 opportunity whose draft proposal is moved");
-
-  await surface.signIn(persona.organizationOwner);
-  await surface.proposalTwuCreate.open({ opportunityId });
-  await surface.proposalTwuCreate.chooseOrganization({ organization: submittedFor });
-  await surface.proposalTwuCreate.addTeamMemberForResource({ resource: fullStack, member: seed.users.organizationOwner });
-  await surface.proposalTwuCreate.setHourlyRate({ resource: fullStack, rate: 100 });
-  await surface.proposalTwuCreate.answerResourceQuestion({ order: 0, response: answer });
-  await surface.proposalTwuCreate.saveDraft();
-  await expect.poll(() => readOrEmpty(() => surface.proposalTwuEdit.proposalIdentifier()), settle).toBeTruthy();
-  const where = { opportunityId, proposalId: await surface.proposalTwuEdit.proposalIdentifier() };
-  await expect.poll(() => readOrEmpty(() => surface.proposalTwuEdit.status()), settle).toMatch(/draft/i);
+  const where = await draftTeamWithUs(surface, opportunityId);
 
   await changeOrganization(surface, "team-with-us", where, other);
 
   await expectNowFor(surface, "team-with-us", where, other);
 });
 
-test(`${statement} (a submitted Sprint With Us proposal keeps the organization it was submitted for)`, async ({
-  surface,
-}) => {
+test(`${statement} (a submitted Sprint With Us proposal keeps the organization it was submitted for)`, async ({ surface }) => {
   test.setTimeout(360000);
   const other = await secondSprintWithUsSupplier(surface, "R-2.22 Second Sprint Supplier For A Submitted Proposal Ltd.");
   const opportunityId = await publishSprintOpportunity(surface, "R-2.22 opportunity whose submitted sprint proposal is moved");
-  const proposalId = await submitSprintWithUs(surface, opportunityId);
-  const where = { opportunityId, proposalId };
+  const where = { opportunityId, proposalId: await submitSprintWithUs(surface, opportunityId) };
 
   await attempt(() => changeOrganization(surface, "sprint-with-us", where, other));
 
@@ -363,12 +377,19 @@ test(`${statement} (a withdrawn Sprint With Us proposal may be moved to another 
   test.setTimeout(360000);
   const other = await secondSprintWithUsSupplier(surface, "R-2.22 Second Sprint Supplier For A Withdrawn Proposal Ltd.");
   const opportunityId = await publishSprintOpportunity(surface, "R-2.22 opportunity whose withdrawn sprint proposal is moved");
-  const proposalId = await submitSprintWithUs(surface, opportunityId);
-  const where = { opportunityId, proposalId };
+  const where = { opportunityId, proposalId: await submitSprintWithUs(surface, opportunityId) };
+  await withdraw(surface, "sprint-with-us", where);
 
-  await surface.proposalSwuEdit.open(where);
-  await surface.proposalSwuEdit.withdrawProposal();
-  await expect.poll(() => readOrEmpty(() => surface.proposalSwuEdit.status()), settle).toMatch(/withdrawn/i);
+  await changeOrganization(surface, "sprint-with-us", where, other);
+
+  await expectNowFor(surface, "sprint-with-us", where, other);
+});
+
+test(`${statement} (a draft Sprint With Us proposal may be moved to another organization)`, async ({ surface }) => {
+  test.setTimeout(360000);
+  const other = await secondSprintWithUsSupplier(surface, "R-2.22 Second Sprint Supplier For A Draft Proposal Ltd.");
+  const opportunityId = await publishSprintOpportunity(surface, "R-2.22 opportunity whose draft sprint proposal is moved");
+  const where = await draftSprintWithUs(surface, opportunityId);
 
   await changeOrganization(surface, "sprint-with-us", where, other);
 

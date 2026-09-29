@@ -1,28 +1,29 @@
-// criterion: @R-2.28 v1
-// provenance: blind, spec@ccc1cba3290f5ea17351e4f2ca49bd80fefc2ef6, derived 2026-09-29
+// criterion: @R-2.28 v2
+// provenance: blind, spec@8272c1b989e3bad64c78ae540830a62747dadf42, derived 2026-09-29
 import { test, expect, persona, seed } from "../../fixtures";
 
-// Each test takes an action that belongs to a stage the opportunity has not reached yet,
-// against a proposal that is in contention at the stage the opportunity is at: a team
-// scenario score on a Sprint With Us opportunity still at its code challenge, and a challenge
-// score on a Team With Us opportunity still at its question consensus. An opportunity that
-// advances one stage at a time cannot take either.
+// Each test opens the page of a proposal whose opportunity has not yet reached the stage a
+// score belongs to — a team scenario score on a Sprint With Us opportunity still at its code
+// challenge, and a challenge score on a Team With Us opportunity still at question
+// consensus — and reads what the page says in place of the score: that the proposal can be
+// scored once the opportunity reaches that stage. A score taken at that stage is refused, so
+// the proposal holds none afterwards.
 //
 // Sprint With Us: seed.opportunities.swuPastConsensus stands at the code challenge with both
-// proponents screened in and neither scored on anything past the questions. Team With Us:
+// proponents screened in and neither scored past the questions. Team With Us:
 // seed.opportunities.twuConsensusAllAgreed stands at question consensus. The administrator
-// acts, because the administrator may take each of these actions at the stage it belongs to,
-// so who is asking cannot account for a refusal.
+// reads and acts, because the administrator may score each stage once it is reached, so who
+// is asking cannot account for the refusal.
 //
-// What is asserted is the refusal of the action itself: the score is not recorded, and where
-// the screen reports why, it reports the wrong stage in the criterion's words. A screen that
-// does not offer the action at this stage is not a failure: an action that cannot be taken
-// has been refused, and the proposal is read afterwards all the same.
+// The criterion also says the page does not offer the score and that the service refuses one
+// sent to it directly with its own message. No observation reports whether a score is
+// offered, and no surface sends a proposal's stage score to the service directly; see this
+// criterion's entry in not-testable.yaml.
 
 const statement =
-  "Sprint With Us and Team With Us proposals advance through the evaluation stages one at a time, and an action taken at the wrong stage of the opportunity is refused.";
+  "Sprint With Us and Team With Us proposals advance through the evaluation stages one at a time, and an action taken at the wrong stage of the opportunity is refused";
 
-const wrongStage = "The opportunity is not in the correct stage of evaluation to perform that action.";
+const scoredOnceReached = /can be scored once/i;
 
 async function readOrEmpty(read: () => Promise<string>): Promise<string> {
   try {
@@ -36,11 +37,7 @@ async function attempt(action: () => Promise<void>): Promise<void> {
   await action().catch(() => undefined);
 }
 
-async function expectWrongStageIfReported(report: string): Promise<void> {
-  if (report) expect(report).toContain(wrongStage);
-}
-
-test(`${statement} (a team scenario score entered while a Sprint With Us opportunity is at its code challenge is refused)`, async ({
+test(`${statement}: a Sprint With Us proposal's page at the code challenge says it can be scored on the team scenario once the opportunity reaches that stage, and takes no team scenario score`, async ({
   surface,
 }) => {
   const where = {
@@ -51,18 +48,20 @@ test(`${statement} (a team scenario score entered while a Sprint With Us opportu
   await surface.signIn(persona.administrator);
 
   await view.open(where);
-  expect(await readOrEmpty(() => view.scenarioScore()), "the proposal already holds a team scenario score").not.toMatch(/\d/);
+  const said = `${await readOrEmpty(() => view.teamScenarioTab())}\n${await readOrEmpty(() => view.wrongStageError())}`;
+  expect(said, "the page does not say the proposal can be scored once the team scenario is reached").toMatch(
+    scoredOnceReached,
+  );
 
   await attempt(() => view.scoreTeamScenario({ score: 80 }));
-  await expectWrongStageIfReported(await readOrEmpty(() => view.wrongStageError()));
 
   await view.open(where);
-  expect(await readOrEmpty(() => view.scenarioScore()), "a team scenario score was recorded at the code challenge").not.toMatch(
+  expect(await readOrEmpty(() => view.scenarioScore()), "a team scenario score was taken at the code challenge").not.toMatch(
     /\d/,
   );
 });
 
-test(`${statement} (a challenge score entered while a Team With Us opportunity is at question consensus is refused)`, async ({
+test(`${statement}: a Team With Us proposal's page at question consensus says it can be scored on the challenge once the opportunity reaches that stage, and takes no challenge score`, async ({
   surface,
 }) => {
   const where = {
@@ -73,11 +72,11 @@ test(`${statement} (a challenge score entered while a Team With Us opportunity i
   await surface.signIn(persona.administrator);
 
   await view.open(where);
-  expect(await readOrEmpty(() => view.challengeScore()), "the proposal already holds a challenge score").not.toMatch(/\d/);
+  const said = `${await readOrEmpty(() => view.challengeTab())}\n${await readOrEmpty(() => view.wrongStageError())}`;
+  expect(said, "the page does not say the proposal can be scored once the challenge is reached").toMatch(scoredOnceReached);
 
   await attempt(() => view.scoreChallenge({ score: 80 }));
-  await expectWrongStageIfReported(await readOrEmpty(() => view.wrongStageError()));
 
   await view.open(where);
-  expect(await readOrEmpty(() => view.challengeScore()), "a challenge score was recorded at question consensus").not.toMatch(/\d/);
+  expect(await readOrEmpty(() => view.challengeScore()), "a challenge score was taken at question consensus").not.toMatch(/\d/);
 });

@@ -623,9 +623,15 @@ redo:
       field message after a submission the form did not send; the form
       withholding the submission is itself the refusal, and the quoted message
       should be expected only where the service is what refuses
+    closed: &a14
+      outcome: met
+      why: derived again by a derive-tests run on proposals
+      by: runner:derive-tests
+      at: 2026-09-29T02:15:26.296Z
   - id: R-2.22
     version: 1
     why: when the organization is changed, the team must be named again from the new
       organization's members, and the test did not do this, so the edit could
       not be saved for an unrelated reason; the proposal must be complete after
       the change so that only the organization rule is under test
+    closed: *a14

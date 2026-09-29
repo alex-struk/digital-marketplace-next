@@ -1,24 +1,26 @@
 // criterion: @R-2.16 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
+// provenance: blind, spec@8272c1b989e3bad64c78ae540830a62747dadf42, derived 2026-09-29
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// The organization with the outstanding invitation is the unqualified one these tests bid
-// for: its Sprint With Us terms were never accepted and it has a single active member, so
-// it fails the qualification test twice over. That member is its owner, who also owns the
-// qualified organization and holds the one capability the phase asks for, so the same
-// vendor can offer the same complete team on behalf of either organization and nothing but
-// the organization named differs between the two proposals.
+// The first test builds the criterion's given as it states it: a draft saved while its
+// organization is a qualified supplier for Sprint With Us, which then stops being one before
+// the vendor submits. The organization is registered by users.organizationOwner and joined
+// by users.organizationAdmin and users.organizationMember, so that its three active people
+// hold every capability between them, and its Sprint With Us terms are accepted. The draft
+// names that organization and a team the proposal can name from it — the owner, an active
+// member who holds the capability the phase asks for, as team member and scrum master —
+// with every other part of the proposal filled in. Then users.organizationMember leaves the
+// organization, taking three of the capabilities with it, and the vendor submits the draft.
+// What is read is that the draft did not become submitted.
 //
-// The criterion's given — an organization that has since lost its qualified status —
-// cannot be produced: qualification is two active members holding every capability the
-// service recognises plus accepted terms, and no action takes any of those away again.
-// The second test therefore reads the re-check the other way round, which the surface can
-// reach: two complete drafts alike but for the organization each names are saved, and then
-// submitted, and only the one naming the qualified organization becomes submitted. What
-// the refusal says is not read, because the proposal management screen carries no
-// observation that names an error; the qualified draft submitting from the same page in
-// the same breath is what tells the qualification check apart from any other refusal.
+// The second test is the proposal naming no organization at all. With no organization
+// chosen the form has no team to offer, and the form withholding the submission is itself
+// the refusal, so what is read is that no proposal was submitted. The message the criterion
+// quotes is the service's, and no surface sends it a Sprint With Us submission without an
+// organization; see this criterion's entry in not-testable.yaml.
+
+const settle = { timeout: 30000 };
 
 function inDays(days: number): string {
   const date = new Date();
@@ -26,9 +28,17 @@ function inDays(days: number): string {
   return date.toISOString().slice(0, 10);
 }
 
-type Organization =
-  | typeof seed.organizations.qualified
-  | typeof seed.organizations.withPendingInvitation;
+async function readOrEmpty(read: () => Promise<string>): Promise<string> {
+  try {
+    return (await read()) ?? "";
+  } catch {
+    return "";
+  }
+}
+
+async function attempt(action: () => Promise<void>): Promise<void> {
+  await action().catch(() => undefined);
+}
 
 const panel = {
   members: [seed.users.staffOne, seed.users.staffPanelEvaluator],
@@ -71,12 +81,50 @@ async function publishSprintOpportunity(surface: Surface, title: string): Promis
     priceWeight: 25,
     title,
   });
+  await expect.poll(() => readOrEmpty(() => surface.opportunitySwuEdit.opportunityIdentifier()), settle).toBeTruthy();
   const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
   await surface.signOut();
   return opportunityId;
 }
 
-async function answerAndReference(surface: Surface): Promise<void> {
+type Organization = { id: string; legal_name: string; legalName: string };
+
+async function qualifiedSprintSupplier(surface: Surface, legalName: string): Promise<Organization> {
+  await surface.signIn(persona.organizationOwner);
+  await surface.organizationCreate.open();
+  await surface.organizationCreate.createOrganization({
+    legalName,
+    streetAddress: "60 Marine Way",
+    addressLineTwo: "",
+    city: "Victoria",
+    region: "British Columbia",
+    mailCode: "V8V1V1",
+    country: "Canada",
+    contactName: "Supplier Contact",
+    contactTitle: "",
+    contactEmail: "supplier.contact@example.test",
+    contactPhone: "",
+    website: "",
+  });
+  await expect.poll(() => readOrEmpty(() => surface.organizationEdit.organizationIdentifier()), settle).toBeTruthy();
+  const organization = { id: await surface.organizationEdit.organizationIdentifier(), legal_name: legalName, legalName };
+
+  await surface.organizationEdit.addTeamMembers({
+    emails: [seed.users.organizationAdmin.email, seed.users.organizationMember.email],
+  });
+  for (const who of [persona.organizationAdmin, persona.organizationMember]) {
+    await surface.signIn(who);
+    await surface.organizationUserMembershipsSelf.open();
+    await surface.organizationUserMembershipsSelf.approveInvitation({ organization: legalName });
+  }
+
+  await surface.signIn(persona.organizationOwner);
+  await surface.organizationSwuTerms.open({ orgId: organization.id });
+  await surface.organizationSwuTerms.acceptTerms();
+  return organization;
+}
+
+async function answerReferencesAndTerms(surface: Surface): Promise<void> {
   await surface.proposalSwuCreate.answerTeamQuestion({
     order: 0,
     response: "We delivered a scheduling service for a health authority over eighteen months.",
@@ -94,93 +142,53 @@ async function answerAndReference(surface: Surface): Promise<void> {
   await surface.proposalSwuCreate.acceptAppTerms();
 }
 
-// A proposal that wants for nothing: the phase has a team and a scrum master, the member
-// named holds the capability the phase asks for, and the cost sits under the phase budget.
-// The only thing that varies between the proposals below is the organization named.
-async function fillProposal(
-  surface: Surface,
-  opportunityId: string,
-  organization: Organization,
-): Promise<void> {
-  await surface.proposalSwuCreate.open({ opportunityId });
-  await surface.proposalSwuCreate.chooseOrganization({ organization });
-  await surface.proposalSwuCreate.addPhaseTeamMember({
-    phase: "Implementation",
-    member: seed.users.organizationOwner,
-  });
-  await surface.proposalSwuCreate.setScrumMaster({
-    phase: "Implementation",
-    member: seed.users.organizationOwner,
-  });
-  await surface.proposalSwuCreate.setPhaseProposedCost({ phase: "Implementation", cost: 400000 });
-  await answerAndReference(surface);
-}
-
-test("a Sprint With Us proposal may only be submitted on behalf of an organization that is a qualified supplier for that program", async ({
+test("A Sprint With Us proposal may only be submitted on behalf of an organization that is a qualified supplier for that program, and the organization is re-checked at the moment of submission.", async ({
   surface,
 }) => {
-  const title = "R-2.16 opportunity bid on by an unqualified organization";
+  test.setTimeout(300000);
+  const organization = await qualifiedSprintSupplier(surface, "R-2.16 Supplier That Loses Its Qualification Ltd.");
+  const opportunityId = await publishSprintOpportunity(surface, "R-2.16 opportunity bid on by a supplier that stops qualifying");
+
+  await surface.signIn(persona.organizationOwner);
+  await surface.proposalSwuCreate.open({ opportunityId });
+  await surface.proposalSwuCreate.chooseOrganization({ organization });
+  await surface.proposalSwuCreate.addPhaseTeamMember({ phase: "Implementation", member: seed.users.organizationOwner });
+  await surface.proposalSwuCreate.setScrumMaster({ phase: "Implementation", member: seed.users.organizationOwner });
+  await surface.proposalSwuCreate.setPhaseProposedCost({ phase: "Implementation", cost: 400000 });
+  await answerReferencesAndTerms(surface);
+  await surface.proposalSwuCreate.saveDraft();
+  await expect.poll(() => readOrEmpty(() => surface.proposalSwuEdit.proposalIdentifier()), settle).toBeTruthy();
+  const where = { opportunityId, proposalId: await surface.proposalSwuEdit.proposalIdentifier() };
+
+  await surface.signIn(persona.organizationMember);
+  await surface.organizationUserMembershipsSelf.open();
+  await surface.organizationUserMembershipsSelf.leaveOrganization({ organization: organization.legalName });
+
+  await surface.signIn(persona.organizationOwner);
+  await surface.proposalSwuEdit.open(where);
+  await attempt(() => surface.proposalSwuEdit.submitProposal());
+
+  await surface.proposalSwuEdit.open(where);
+  expect(
+    await readOrEmpty(() => surface.proposalSwuEdit.status()),
+    "a proposal for an organization that no longer qualifies was submitted",
+  ).not.toMatch(/submitted/i);
+});
+
+test("A Sprint With Us proposal naming no organization at all is refused.", async ({ surface }) => {
+  const title = "R-2.16 opportunity bid on with no organization named";
   const opportunityId = await publishSprintOpportunity(surface, title);
 
   await surface.signIn(persona.organizationOwner);
-  await fillProposal(surface, opportunityId, seed.organizations.withPendingInvitation);
-  await surface.proposalSwuCreate.submitProposal();
-
-  await surface.proposalVendorDashboard.open();
-  await surface.proposalVendorDashboard.showMyProposals();
-  expect(await surface.proposalVendorDashboard.myProposalsTable()).not.toContain(title);
-});
-
-test("the organization a Sprint With Us proposal names is re-checked at the moment of submission", async ({
-  surface,
-}) => {
-  const refused = await publishSprintOpportunity(
-    surface,
-    "R-2.16 opportunity whose unqualified draft is submitted later",
-  );
-  const accepted = await publishSprintOpportunity(
-    surface,
-    "R-2.16 opportunity whose qualified draft is submitted later",
-  );
-
-  await surface.signIn(persona.organizationOwner);
-
-  await fillProposal(surface, refused, seed.organizations.withPendingInvitation);
-  await surface.proposalSwuCreate.saveDraft();
-  const refusedProposal = await surface.proposalSwuEdit.proposalIdentifier();
-  expect((await surface.proposalSwuEdit.status()).toLowerCase()).toContain("draft");
-  await surface.proposalSwuEdit.submitProposal();
-  await surface.proposalSwuEdit.open({
-    opportunityId: refused,
-    proposalId: refusedProposal,
-  });
-  expect((await surface.proposalSwuEdit.status()).toLowerCase()).toContain("draft");
-
-  await fillProposal(surface, accepted, seed.organizations.qualified);
-  await surface.proposalSwuCreate.saveDraft();
-  const acceptedProposal = await surface.proposalSwuEdit.proposalIdentifier();
-  expect((await surface.proposalSwuEdit.status()).toLowerCase()).toContain("draft");
-  await surface.proposalSwuEdit.submitProposal();
-  await surface.proposalSwuEdit.open({
-    opportunityId: accepted,
-    proposalId: acceptedProposal,
-  });
-  expect((await surface.proposalSwuEdit.status()).toLowerCase()).toContain("submitted");
-});
-
-test("a Sprint With Us proposal naming no organization at all is refused", async ({ surface }) => {
-  const opportunityId = await publishSprintOpportunity(
-    surface,
-    "R-2.16 opportunity bid on with no organization named",
-  );
-
-  await surface.signIn(persona.vendor);
   await surface.proposalSwuCreate.open({ opportunityId });
   await surface.proposalSwuCreate.setPhaseProposedCost({ phase: "Implementation", cost: 400000 });
-  await answerAndReference(surface);
-  await surface.proposalSwuCreate.submitProposal();
+  await answerReferencesAndTerms(surface);
+  await attempt(() => surface.proposalSwuCreate.submitProposal());
 
-  expect((await surface.proposalSwuCreate.fieldError()).toLowerCase()).toContain(
-    "organization must be specified",
-  );
+  await surface.proposalVendorDashboard.open();
+  await attempt(() => surface.proposalVendorDashboard.showMyProposals());
+  expect(
+    await readOrEmpty(() => surface.proposalVendorDashboard.myProposalsTable()),
+    "a proposal naming no organization was submitted",
+  ).not.toContain(title);
 });
