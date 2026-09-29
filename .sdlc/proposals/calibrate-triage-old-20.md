@@ -372,3 +372,27 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is which of the 14 failing or unbound criteria against the old target the adapter under tests/adapters/old/ caused, and which go to the product owner. Ruling: approve, with one triage condition for each criterion. Each failure was read against its test and the adapter code. Five come from the adapter. R-2.19: the adapter copies publish's opportunity-level start and completion dates onto the form's starting phase (Prototype), overwriting the dates addPhase already gave it. The phases then overlap and the form refuses to publish. R-1.16: publish throws when Publish is disabled with the Phases step marked incomplete, which is the very refusal the test is written to read. R-2.37: anonymousProponentName falls back to whatever stands under the 'Proponent' label, which is the organization's name. R-4.23: termsCheckbox returns a non-empty 'redirected to …' where no checkbox exists. R-4.14: a column reader answered empty on the same /users table from which userRow had just read the named rows. The other nine show the adapter reading the page faithfully: the site sends messages or finalises consensus when the test expects otherwise, the site's own wording differs, a blob read is not permitted, a form stays incomplete after the organization change the test made, the history observation sits on a screen the contract gives only to staff, or a shared seeded invitation is consumed by a sibling test. Those are for the product owner to answer. If the next binding run brings any adapter-wrong row back with the reader demonstrably reading the right element, it goes to the product owner. If calibration evidence showed R-6.1 was run against an instance with notifications on, that would be a calibration setup issue to fix, not a product ruling.
+
+**Conditions:**
+- adapter-wrong R-2.19: opportunity-swu-create.publish splits the input's opportunity-level startDate/completionDate off as phase dates and calls addPhase on the form's starting phase (Prototype), overwriting the 28-to-60-day dates the test's own addPhase gave it with 28-to-90. Prototype then overlaps Implementation (starting day 61), the Phases step becomes invalid, and publish returns quietly on /opportunities/sprint-with-us/create. It must not write opportunity-level dates onto a phase the test has already given dates to.
+- adapter-wrong R-1.16: opportunity-swu-create.publish throws when 'Publish' is disabled with '5. Phases' marked incomplete and no message shown. That disabled Publish is the form refusing the phases it was given, which the test reads afterwards (dashboard, or fieldError). publish must end quietly there, as it already does when the form shows a message, and fieldError must report what the Phases step marks incomplete.
+- adapter-wrong R-2.37: proposal-swu-export-one.anonymous_proponent_name returns the text under the 'Proponent' label when no 'Proponent N' appears, so the vendor's own copy reads 'Northern Pines Digital Ltd.' as an anonymous name. It must answer empty unless the copy shows an anonymised 'Proponent N' name.
+- adapter-wrong R-4.23: user-sign-up-complete.terms_checkbox returns the non-empty 'redirected to /dashboard' or 'redirected to /sign-in' when the page sends the visitor elsewhere, so the tests' 'no terms checkbox offered' assertion reads a checkbox as present. It must answer empty when no terms checkbox is on the page. complete_disabled_until_terms_accepted must likewise answer empty after such a redirect rather than throw unbound.
+- adapter-wrong R-4.14: on /users, after user_row had read rows for the named accounts from the table (rows split on their Active/Inactive badge), one of user-list.status_badge, account_type or admin_check answered empty. status_badge and account_type scan page text lines against fixed labels, and admin_check looks for an svg in each row's last cell. Each must read its column from the same table rows user_row reads and answer non-empty for a rendered list.
+- product-question R-6.1
+- product-question R-2.9
+- product-question R-8.11
+- product-question R-5.13
+- product-question R-2.16
+- product-question R-8.20
+- product-question R-2.22
+- product-question R-2.28
+- product-question R-3.9
