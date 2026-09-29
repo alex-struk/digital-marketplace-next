@@ -148,6 +148,8 @@
 - 02:06:37 rule bind-adapter-old-41 escalated at G3 to tech-lead by runner:bind-adapter
 - 02:07:09 rule bind-adapter-old-41 approve at G3 by agent:tech-lead (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 - 02:47:46 run calibrate: ok, cost 0, turns 0
+- 02:47:47 propose calibrate-triage-old-27 at G3
+- 02:49:04 rule calibrate-triage-old-27 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-28
 
