@@ -15,7 +15,8 @@ export const seed = {
     "011-team-with-us-stages.sql",
     "012-files.sql",
     "013-content-pages.sql",
-    "014-proposal-team-candidates.sql"
+    "014-proposal-team-candidates.sql",
+    "015-profile-completion.sql"
   ],
   "users": {
     "administratorOne": {
@@ -186,6 +187,17 @@ export const seed = {
       "account_type": "VENDOR",
       "owns": "organizations.proponentSix",
       "note": "No persona of its own; reachable at /auth/createsessionvendor/16."
+    },
+    "vendorCompletingProfile": {
+      "id": "00000000-0000-4000-8000-000000000220",
+      "persona": "vendor-completing-profile",
+      "idp_id": "test-vendor-17",
+      "name": "Tatum Placeholder",
+      "email": "vendor.completing@example.test",
+      "account_type": "VENDOR",
+      "accepted_terms": "never",
+      "new_opportunity_notices": "none chosen",
+      "note": "Has an account and has not completed the profile (015-profile-completion.sql), so every screen this person opens goes to /sign-up/complete. For R-4.24: ticking the notices box there and completing the profile is what records the moment notices were turned on, read on user-account-self-request."
     },
     "migrationUser": {
       "id": "00000000-0000-4000-8000-000000000100",
@@ -509,6 +521,7 @@ export const seed = {
       "id": "seed-notices-do-not-receive",
       "members": {
         "users.vendorWithNoticesOff": "setting off",
+        "users.vendorCompletingProfile": "no choice made yet, which leaves the setting off",
         "users.vendorDeactivated": "setting on, but deactivated, so not selected",
         "users.vendorWithoutEmail": "setting on and not deactivated, so selected and counted into a batch, but it has no address; its place in the blind-copy list is empty and nobody receives anything for it",
         "users.migrationUser": "setting off"
@@ -1257,6 +1270,22 @@ export const seed = {
       ],
       "note": "Moved on from consensus to the code challenge, both proponents screened in and neither scored. users.administratorOne's consensus stands for both, agreed scores 4, 4, 4, 4 and 3, 3, 3, 3, so the chair changing it now is a change made once the opportunity has moved past consensus."
     },
+    "swuCodeChallengeWithScenarioScreenedIn": {
+      "id": "00000000-0000-4000-a030-000000000001",
+      "version_id": "00000000-0000-4000-a030-000000000002",
+      "program": "sprint-with-us",
+      "title": "Seeded Sprint With Us opportunity at the code challenge with a proponent screened into the team scenario",
+      "seeded_status": "EVAL_CC",
+      "owner": "users.staffOne",
+      "proposals": [
+        "proposals.swuScreenedIntoScenarioEarly",
+        "proposals.swuScreenedIntoCodeChallenge"
+      ],
+      "for": [
+        "R-2.28"
+      ],
+      "note": "Still at the code challenge. The first proponent is scored on it (80) and already screened into the team scenario, which the service allows only while the opportunity is at the code challenge; the second is screened in to the code challenge and not scored. A team scenario score for the first, sent through proposal-evaluation-request as the administrator, is a score for a stage the opportunity has not reached and is answered with the service's stage message. The same score for the second is answered with the general permission message instead, because that proposal has not itself reached the team scenario."
+    },
     "twuConsensusFiveProponents": {
       "id": "00000000-0000-4000-a031-000000000001",
       "version_id": "00000000-0000-4000-a031-000000000002",
@@ -1933,6 +1962,21 @@ export const seed = {
         3,
         3
       ]
+    },
+    "swuScreenedIntoScenarioEarly": {
+      "id": "00000000-0000-4000-a030-000000000101",
+      "opportunity": "opportunities.swuCodeChallengeWithScenarioScreenedIn",
+      "vendor": "users.organizationOwner",
+      "organization": "organizations.qualified",
+      "seeded_status": "UNDER_REVIEW_TEAM_SCENARIO",
+      "challenge_score": 80
+    },
+    "swuScreenedIntoCodeChallenge": {
+      "id": "00000000-0000-4000-a030-000000000102",
+      "opportunity": "opportunities.swuCodeChallengeWithScenarioScreenedIn",
+      "vendor": "users.proponentTwo",
+      "organization": "organizations.proponentTwo",
+      "seeded_status": "UNDER_REVIEW_CODE_CHALLENGE"
     },
     "swuHistorySix": {
       "id": "00000000-0000-4000-a029-000000000106",

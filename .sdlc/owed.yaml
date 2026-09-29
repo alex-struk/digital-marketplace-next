@@ -4287,7 +4287,7 @@ owed:
     id: R-2.22
     version: 1
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: on proposal-twu-edit and proposal-swu-edit, a choose_organization action
       for the edit form (as proposal-twu-create and proposal-swu-create have),
       and an observation reporting the message the service gives when
@@ -4297,17 +4297,24 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-29T00:12:58.686Z
-    kept:
-      by: contract-v21
-      gate: G1
-      approved_by: agent:product-owner
-      at: 2026-09-29T00:25:17.778Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: proposal-swu-edit and proposal-twu-edit now declare choose_organization,
+          add_phase_team_member/set_scrum_master (swu) and
+          add_team_member_for_resource (twu), and field_error, which holds the
+          service's "Organization cannot be changed once the proposal has been
+          submitted" against organization, plus an organization observation
+        by: contract-v22
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-29T02:36:38.260Z
   - kind: missing-test
     item: R-2.31
     id: R-2.31
     version: 1
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: a rank observation on proposal-swu-view and proposal-twu-view (or on the
       opportunity management screens' proposals tab, one row per proposal)
       readable by the administrator while the opportunity is still being
@@ -4319,17 +4326,23 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-29T00:12:58.686Z
-    kept:
-      by: contract-v21
-      gate: G1
-      approved_by: agent:product-owner
-      at: 2026-09-29T00:25:17.778Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: rank observation on proposal-swu-view and proposal-twu-view, readable by
+          the administrator during evaluation; starting point
+          seed.opportunities.swuTeamScenarioLastToScoreB
+          (twuChallengeLastToScore for Team With Us)
+        by: contract-v22
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-29T02:36:38.260Z
   - kind: missing-test
     item: R-2.21
     id: R-2.21
     version: 1
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: an observation on proposal-team-request reporting a refusal against the
       specific opportunity-question response it concerns (refusal_by_field today
       locates messages only by team, phase, organization or 'other fields'), so
@@ -4340,17 +4353,22 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-29T00:12:59.396Z
-    kept:
-      by: contract-v21
-      gate: G1
-      approved_by: agent:product-owner
-      at: 2026-09-29T00:25:17.778Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: proposal-team-request.refusal_by_field now locates each message against the
+          opportunity-question answer it concerns, by question order, with
+          wording versus numbering distinguished
+        by: contract-v22
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-29T02:36:38.260Z
   - kind: missing-test
     item: R-2.28
     id: R-2.28
     version: 1
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: a way to put an out-of-stage evaluation score (a team scenario score on a
       Sprint With Us opportunity at its code challenge) to the service when
       proposal-swu-view does not offer score_team_scenario at that stage, such
@@ -4363,17 +4381,24 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-29T00:12:59.396Z
-    kept:
-      by: contract-v21
-      gate: G1
-      approved_by: agent:product-owner
-      at: 2026-09-29T00:25:17.778Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: new proposal-evaluation-request (score_team_scenario_by_request,
+          refusal_messages, refusal_status) and
+          seed.proposals.swuScreenedIntoScenarioEarly on
+          seed.opportunities.swuCodeChallengeWithScenarioScreenedIn, which
+          yields the stage message as the administrator
+        by: contract-v22
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-29T02:36:38.260Z
   - kind: missing-test
     item: R-4.24
     id: R-4.24
     version: 1
     domain: users
-    stage: contract
+    stage: derive-tests
     why: an observation on user-profile-self-notifications (or
       user-profile-notifications, for an administrator reading another account)
       that reports the date and time the person's new-opportunity notices were
@@ -4382,17 +4407,23 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-29T00:16:04.744Z
-    kept:
-      by: contract-v21
-      gate: G1
-      approved_by: agent:product-owner
-      at: 2026-09-29T00:25:17.778Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: new persona vendor-completing-profile (seed users.vendorCompletingProfile,
+          reaches /sign-up/complete on the oracle) and
+          user-account-self-request.new_opportunity_notices_since
+          (user-account-request for an administrator reading another account)
+        by: contract-v22
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-29T02:36:38.260Z
   - kind: missing-test
     item: R-8.30
     id: R-8.30
     version: 1
     domain: files
-    stage: contract
+    stage: derive-tests
     why: a change_logo action on organization-edit, with observations on
       organization-edit (or file-image-picker routed to
       /organizations/:orgId/edit) reporting the organization's current logo and
@@ -4401,17 +4432,21 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-29T00:23:18.489Z
-    kept:
-      by: contract-v21
-      gate: G1
-      approved_by: agent:product-owner
-      at: 2026-09-29T00:25:17.778Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: organization-edit now declares change_logo, current_logo and
+          logo_refused_error
+        by: contract-v22
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-29T02:36:38.260Z
   - kind: missing-test
     item: R-2.16
     id: R-2.16
     version: 1
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: proposal-team-request (sprint-with-us) described as accepting a submission
       with the organization left out, so that refusal_messages reads the
       service's answer to it
@@ -4419,12 +4454,22 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-29T02:16:17.982Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: proposal-team-request (sprint-with-us) now accepts a submission with the
+          organization left out, and refusal_messages reads "An organization
+          must be specified before submitting."
+        by: contract-v22
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-29T02:36:38.260Z
   - kind: missing-test
     item: R-3.9
     id: R-3.9
     version: 1
     domain: organizations
-    stage: contract
+    stage: derive-tests
     why: an observation on organization-user-memberships-self (and
       organization-user-memberships) reporting the service's reason when an
       acceptance is refused, so a test can read that the refusal was because the
@@ -4435,3 +4480,14 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-29T02:18:46.710Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: new affiliation-approval-request (accept_membership_by_request,
+          refusal_messages, refusal_status, membership_status), addressed by
+          seed.affiliations.pendingInvitation or by membership_identifier, now
+          on affiliation-invitation-request
+        by: contract-v22
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-29T02:36:38.260Z

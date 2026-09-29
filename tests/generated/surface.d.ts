@@ -98,6 +98,7 @@ export interface Surface {
   mailDeliveryDelay: MailDeliveryDelayPage;
   organizationActingForList: OrganizationActingForListPage;
   affiliationInvitationRequest: AffiliationInvitationRequestPage;
+  affiliationApprovalRequest: AffiliationApprovalRequestPage;
   userListRequest: UserListRequestPage;
   contentRequest: ContentRequestPage;
   evaluationIndividualRequestSwu: EvaluationIndividualRequestSwuPage;
@@ -108,6 +109,9 @@ export interface Surface {
   fileAttachByIdentifier: FileAttachByIdentifierPage;
   proposalCwuRequest: ProposalCwuRequestPage;
   proposalTeamRequest: ProposalTeamRequestPage;
+  proposalEvaluationRequest: ProposalEvaluationRequestPage;
+  userAccountSelfRequest: UserAccountSelfRequestPage;
+  userAccountRequest: UserAccountRequestPage;
 }
 
 export interface HomePage {
@@ -442,12 +446,17 @@ export interface ProposalSwuCreatePage {
 export interface ProposalSwuEditPage {
   open(params: { opportunityId: string; proposalId: string }): Promise<void>;
   startEditing(input?: unknown): Promise<void>;
+  chooseOrganization(input?: unknown): Promise<void>;
+  addPhaseTeamMember(input?: unknown): Promise<void>;
+  setScrumMaster(input?: unknown): Promise<void>;
   saveChanges(input?: unknown): Promise<void>;
   saveChangesAndSubmit(input?: unknown): Promise<void>;
   submitProposal(input?: unknown): Promise<void>;
   withdrawProposal(input?: unknown): Promise<void>;
   deleteProposal(input?: unknown): Promise<void>;
   submissionRefusal(): Promise<string>;
+  fieldError(): Promise<string>;
+  organization(): Promise<string>;
   proposalIdentifier(): Promise<string>;
   opportunityIdentifier(): Promise<string>;
   proposalTab(): Promise<string>;
@@ -479,6 +488,7 @@ export interface ProposalSwuViewPage {
   scenarioScore(): Promise<string>;
   priceScore(): Promise<string>;
   totalScore(): Promise<string>;
+  rank(): Promise<string>;
 }
 
 export interface ProposalSwuExportOnePage {
@@ -512,12 +522,16 @@ export interface ProposalTwuCreatePage {
 export interface ProposalTwuEditPage {
   open(params: { opportunityId: string; proposalId: string }): Promise<void>;
   startEditing(input?: unknown): Promise<void>;
+  chooseOrganization(input?: unknown): Promise<void>;
+  addTeamMemberForResource(input?: unknown): Promise<void>;
   saveChanges(input?: unknown): Promise<void>;
   saveChangesAndSubmit(input?: unknown): Promise<void>;
   submitProposal(input?: unknown): Promise<void>;
   withdrawProposal(input?: unknown): Promise<void>;
   deleteProposal(input?: unknown): Promise<void>;
   submissionRefusal(): Promise<string>;
+  fieldError(): Promise<string>;
+  organization(): Promise<string>;
   proposalIdentifier(): Promise<string>;
   opportunityIdentifier(): Promise<string>;
   proposalTab(): Promise<string>;
@@ -547,6 +561,7 @@ export interface ProposalTwuViewPage {
   challengeScore(): Promise<string>;
   priceScore(): Promise<string>;
   totalScore(): Promise<string>;
+  rank(): Promise<string>;
 }
 
 export interface ProposalTwuExportOnePage {
@@ -614,6 +629,9 @@ export interface OrganizationEditPage {
   saveServiceAreas(input?: unknown): Promise<void>;
   viewSwuTerms(input?: unknown): Promise<void>;
   viewTwuTerms(input?: unknown): Promise<void>;
+  changeLogo(input?: unknown): Promise<void>;
+  currentLogo(): Promise<string>;
+  logoRefusedError(): Promise<string>;
   organizationIdentifier(): Promise<string>;
   organizationTab(): Promise<string>;
   teamTab(): Promise<string>;
@@ -1363,6 +1381,16 @@ export interface AffiliationInvitationRequestPage {
   inviteWithMembershipType(input?: unknown): Promise<void>;
   invitationCreated(): Promise<string>;
   invalidMembershipTypeError(): Promise<string>;
+  membershipIdentifier(): Promise<string>;
+}
+
+export interface AffiliationApprovalRequestPage {
+  open(params: { affiliationId: string }): Promise<void>;
+  acceptMembershipByRequest(input?: unknown): Promise<void>;
+  requestAccepted(): Promise<string>;
+  membershipStatus(): Promise<string>;
+  refusalMessages(): Promise<string>;
+  refusalStatus(): Promise<string>;
 }
 
 export interface UserListRequestPage {
@@ -1470,5 +1498,29 @@ export interface ProposalTeamRequestPage {
   proposalStatus(): Promise<string>;
   refusalByField(): Promise<string>;
   refusalMessages(): Promise<string>;
+  refusalStatus(): Promise<string>;
+}
+
+export interface ProposalEvaluationRequestPage {
+  open(params: { program: string; proposalId: string }): Promise<void>;
+  scoreTeamScenarioByRequest(input?: unknown): Promise<void>;
+  scoreCodeChallengeByRequest(input?: unknown): Promise<void>;
+  scoreChallengeByRequest(input?: unknown): Promise<void>;
+  requestAccepted(): Promise<string>;
+  proposalStatus(): Promise<string>;
+  refusalMessages(): Promise<string>;
+  refusalStatus(): Promise<string>;
+}
+
+export interface UserAccountSelfRequestPage {
+  open(): Promise<void>;
+  userIdentifier(): Promise<string>;
+  newOpportunityNoticesSince(): Promise<string>;
+}
+
+export interface UserAccountRequestPage {
+  open(params: { userId: string }): Promise<void>;
+  newOpportunityNoticesSince(): Promise<string>;
+  refusedWhenNotPermitted(): Promise<string>;
   refusalStatus(): Promise<string>;
 }

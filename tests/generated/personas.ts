@@ -372,6 +372,22 @@ export const persona = {
       }
     }
   },
+  "vendorCompletingProfile": {
+    "id": "vendor-completing-profile",
+    "can": [
+      "complete their profile",
+      "choose to be told about new opportunities while doing so",
+      "agree to the terms of use"
+    ],
+    "signIn": {
+      "session-route": {
+        "route": "/auth/createsessionvendor/17"
+      },
+      "sandbox-idp": {
+        "username": "test-vendor-17"
+      }
+    }
+  },
   "firstTimeVendorWithoutEmail": {
     "id": "first-time-vendor-without-email",
     "can": [

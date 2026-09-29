@@ -385,5 +385,15 @@ BEGIN
   PERFORM pg_temp.seed_swu_proposal(29, 4, v[4], o[4], staff, 'UNDER_REVIEW_QUESTIONS', 400000, ARRAY[4, 4, 3, 3], 'SUBMITTED', 'SUBMITTED', panel, admin, NULL, NULL, NULL);
   PERFORM pg_temp.seed_swu_proposal(29, 5, v[5], o[5], staff, 'UNDER_REVIEW_QUESTIONS', 380000, low, 'SUBMITTED', 'SUBMITTED', panel, admin, NULL, NULL, NULL);
   PERFORM pg_temp.seed_swu_proposal(29, 6, v[6], o[6], staff, 'UNDER_REVIEW_QUESTIONS', 360000, below, 'SUBMITTED', 'SUBMITTED', panel, admin, NULL, NULL, NULL);
+
+  -- 30. At the code challenge, the first proponent scored on it (80) and already screened
+  --     into the team scenario, which the service allows only while the opportunity is
+  --     still at the code challenge; the second screened in to the code challenge and not
+  --     yet scored. Entering a team scenario score for the first is a score for a stage
+  --     the opportunity has not reached, sent for a proposal that has itself reached it,
+  --     so the service's refusal is the one about the opportunity's stage (R-2.28).
+  PERFORM pg_temp.seed_swu_opportunity(30, 'Seeded Sprint With Us opportunity at the code challenge with a proponent screened into the team scenario', staff, 'EVAL_CC', panel, admin);
+  PERFORM pg_temp.seed_swu_proposal(30, 1, v[1], o[1], staff, 'UNDER_REVIEW_TEAM_SCENARIO', 420000, top, 'SUBMITTED', 'SUBMITTED', panel, admin, 80, NULL, NULL);
+  PERFORM pg_temp.seed_swu_proposal(30, 2, v[2], o[2], staff, 'UNDER_REVIEW_CODE_CHALLENGE', 460000, good, 'SUBMITTED', 'SUBMITTED', panel, admin, NULL, NULL, NULL);
 END
 $$;
