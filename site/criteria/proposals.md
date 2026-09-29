@@ -22,7 +22,7 @@
 | R-2.16 | acceptance/proposals/R-2.16.spec.ts |  | pass |
 | R-2.17 | acceptance/proposals/R-2.17.spec.ts |  | pass |
 | R-2.18 | acceptance/proposals/R-2.18.spec.ts |  | pass (ruled: spec-wrong) |
-| R-2.19 | acceptance/proposals/R-2.19.spec.ts |  | fail |
+| R-2.19 | acceptance/proposals/R-2.19.spec.ts |  | stale (ruled: spec-wrong) |
 | R-2.20 | acceptance/proposals/R-2.20.spec.ts |  | pass |
 | R-2.21 | acceptance/proposals/R-2.21.spec.ts |  | pass |
 | R-2.22 | acceptance/proposals/R-2.22.spec.ts |  | pass |
@@ -267,9 +267,9 @@ Every person named on a proposal's team must be an active member of the organiza
 - then: the submission is refused with "User is not an active member of the organization.", and naming the same person twice is refused with "Please select unique team members."
 - note: a team member whose membership is still pending is shown as pending on the proposal rather than being hidden, so a vendor can see why the submission is blocked.
 
-### R-2.19 · v2 · confirmed · accepted
+### R-2.19 · v3 · confirmed · accepted
 
-A Sprint With Us proposal must offer a team for every phase the opportunity requires and no phase it does not, name no more than one scrum master in each phase, cover every capability the opportunity requires across its phases, and stay within each phase's budget and the opportunity's total budget.
+A Sprint With Us proposal can be submitted only when it gives a team to every phase the opportunity has and to no other phase, the proposal form offering a team section for exactly the opportunity's phases; each phase has exactly one scrum master, chosen as a single choice among that phase's members; each phase has at least one confirmed member, and those members together hold every capability that phase requires; each phase's proposed cost is no more than that phase's maximum budget, and the total proposed cost is no more than the opportunity's total maximum budget. A proposal missing a phase team or a phase capability, or with a cost over budget, is not submitted, and the form shows which phase is incomplete or which cost is over its budget.
 - cites: src/back-end/lib/validation.ts:1064
 - cites: src/back-end/lib/validation.ts:1051
 - cites: src/back-end/lib/validation.ts:1117

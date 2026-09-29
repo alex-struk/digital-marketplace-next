@@ -14,7 +14,7 @@
 | R-3.8 | acceptance/organizations/R-3.8.spec.ts |  | pass |
 | R-3.9 | acceptance/organizations/R-3.9.spec.ts |  | pass (ruled: spec-wrong) |
 | R-3.10 | acceptance/organizations/R-3.10.spec.ts |  | pass |
-| R-3.11 | acceptance/organizations/R-3.11.spec.ts |  | fail |
+| R-3.11 | acceptance/organizations/R-3.11.spec.ts |  | fail (ruled: defect-in-old) |
 | R-3.12 | acceptance/organizations/R-3.12.spec.ts |  | pass |
 | R-3.13 | acceptance/organizations/R-3.13.spec.ts |  | pass |
 | R-3.14 | acceptance/organizations/R-3.14.spec.ts |  | pass |
@@ -27,7 +27,7 @@
 | R-3.21 | acceptance/organizations/R-3.21.spec.ts |  | pass |
 | R-3.22 | acceptance/organizations/R-3.22.spec.ts |  | fail (ruled: defect-in-old) |
 | R-3.23 | acceptance/organizations/R-3.23.spec.ts |  | pass |
-| R-3.24 | acceptance/organizations/R-3.24.spec.ts |  | pass |
+| R-3.24 | acceptance/organizations/R-3.24.spec.ts |  | fail |
 | R-3.25 | acceptance/organizations/R-3.25.spec.ts |  | pass |
 | R-3.26 | acceptance/organizations/R-3.26.spec.ts |  | pass |
 | R-3.27 | acceptance/organizations/R-3.27.spec.ts |  | pass |
@@ -181,6 +181,7 @@ An organization's last remaining owner cannot be removed from it.
 - given: an organization with exactly one owner and two other active members
 - when: an administrator tries to end the owner's membership
 - then: the request is refused with a message saying this is the sole owner for the organization, and the membership remains
+- note: calibrate 2026-09-29: the old target fails this; kept, the rebuild must pass it
 
 ### R-3.12 · v1 · confirmed · accepted
 
