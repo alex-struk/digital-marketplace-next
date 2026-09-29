@@ -1,0 +1,18 @@
+gate: G3
+verdict: escalated
+by: runner:bind-adapter
+held_by: runner
+escalate_to: tech-lead
+rationale: >-
+  bind-adapter was handed owed work sent back to it more times than the
+  project's policy allows, so this proposal is ruled by tech-lead rather than
+  put to G3's holder for another round.
+
+  - R-4.14 on old: sent to bind-adapter 5 times, past the limit of 2 that
+  policy.loops.rebind sets. What each send asked for:
+    1. userRow (index.ts:3950) reads only the first page of the paginated user list (20 rows, ending before the seeded names later in the alphabet); read every page. signInThroughIdentityProvider goes to /sign-in without signing out first, so while the administrator is still signed in it lands on /dashboard and reports the sign-in control missing; sign out first
+    2. everyUserRow reads the virtualized user table from its current scroll position and only scrolls down, so after the test's first poll leaves the table at the bottom it sees only the tail rows; reset the table body's scrollTop to 0 before reading. And signIn.deactivated-vendor refuses unconditionally, although the test only signs this persona in (after reactivating the account) so they can set their own name; let it use its session-route entry like every other persona, and keep 'cannot show a refusal' only for the refusal-checking reads
+    3. user-list.admin_check reports nothing to read, but the list is a scrolling grid of positioned blocks whose Admin? cell holds a tick icon element when the user is an administrator and nothing otherwise; locate each row by its name cell and read the mark as the presence of that icon in the row's last cell instead of by accessible name or text
+    4. on /users, after user_row had read rows for the named accounts from the table (rows split on their Active/Inactive badge), one of user-list.status_badge, account_type or admin_check answered empty. status_badge and account_type scan page text lines against fixed labels, and admin_check looks for an svg in each row's last cell. Each must read its column from the same table rows user_row reads and answer non-empty for a rendered list.
+    5. user-list.user_row (and status_badge, account_type and admin_check, which share userTableRows) takes longer than 5 s per call, because each read resets the scroll, waits up to 10 s for a badge, then wheel-scrolls the whole ~143-row list 400 px at a time with 200 ms pauses until four quiet turns. Inside the test's expect.poll (default 5 s) no call ever returns, so every test times out with no value read. Make one read of the list finish well within 5 s, for example by scrolling the list's scroll container directly in larger steps or reading the rows in one evaluate pass without per-turn waits, while still covering every row.
+at: 2026-09-29T16:15:59.373Z
