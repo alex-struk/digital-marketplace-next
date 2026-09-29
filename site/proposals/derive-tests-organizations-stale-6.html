@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-organizations-stale-6 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">260</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">256</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">224</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-organizations-stale-6</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 02:18</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the organizations criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the test for R-3.9, the one criterion in this run.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rewrote the test for R-3.9, the one criterion in this run. It has four tests in <code>tests/acceptance/organizations/R-3.9.spec.ts</code>, one for each outcome the criterion states. I added nothing to <code>not-testable.yaml</code>. I could not type-check the file, because <code>tests/node_modules</code> is not installed in this workspace.</p>
+<p><strong>What went wrong before, and the fix.</strong> In the old test, every scenario used the same seeded invitation: the one for <code>seed.users.invitedVendor</code> to <code>seed.organizations.withPendingInvitation</code>. The tests in a file run in order. So by the time the administrator&#39;s scenario ran, the invited person&#39;s scenario had already accepted that invitation and it was no longer pending. Now each scenario starts from its own membership, in a state it knows:</p>
+<ul><li><strong>Invited person accepts:</strong> the invited person signs in and accepts their pending invitation to <code>withPendingInvitation</code> on their own organizations page. The test then reads that the organization is listed and no longer marked pending.</li><li><strong>Administrator accepts on their behalf:</strong> this uses the seed&#39;s other pending invitation, <code>seed.users.teamCandidatePending</code> to <code>seed.organizations.qualified</code>, which no other scenario touches. The administrator opens that person&#39;s memberships page by <code>seed.users.teamCandidatePending.id</code> and accepts. The test reads the organization as listed and not pending.</li><li><strong>Owner&#39;s attempt is refused:</strong> the owner tries <code>organizationEdit.approvePendingMember</code> on the invited person&#39;s invitation. The test then reads, as the invited person, that it is still pending. This scenario accepts nothing, so it cannot use up an invitation a later scenario needs. It is also listed first.</li><li><strong>A membership that is not pending cannot be accepted:</strong> this no longer accepts an invitation first and then tries again. It uses a membership the seed already makes active: <code>persona.organizationMember</code> in <code>seed.organizations.qualified</code>. The attempt to accept must not go through and no acceptance confirmation may appear. Afterwards the membership is still listed and still not pending.</li></ul>
+<p><strong>What the tests assert.</strong> They check only the states the criterion names (pending, active, refused) and use no screen or step it does not ask for. For &quot;nobody else can accept it&quot;, the test tries only the organization&#39;s owner, because that is the person the criterion&#39;s own &quot;when&quot; names.</p>
+<p><strong>One weak spot.</strong> For the owner and for the not-pending membership, the only sign of refusal the surface offers is that the approve control is not there. The membership&#39;s state afterwards is what actually shows the refusal. Neither <code>organization-edit</code> nor either organization-memberships page has an observation giving the service&#39;s reason for refusing an acceptance, such as &quot;not pending&quot; or &quot;not permitted&quot;. If the contract adds one, these two tests could assert the refusal directly instead of inferring it from the missing control and the unchanged state. Nothing was missing that stopped a test being written.</p>
+<p>I did not change anything outside <code>tests/acceptance</code>, and nothing asked me to.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 02:18.</p>
+<div class="body"><p>Question: do the rewritten R-3.9 tests follow from the organizations criterion and nothing else? Approve. The four tests match the criterion&#39;s four outcomes: the invited person&#39;s acceptance makes the membership active; an administrator&#39;s acceptance on the invited person&#39;s behalf makes it active; the owner&#39;s attempt (the actor the criterion&#39;s own &#39;when&#39; names) is refused, shown by the invitation still being pending afterwards; and a membership that is not pending cannot be accepted, with no acceptance confirmed and the membership unchanged. The assertions check only the states the criterion names and use no screen or step it does not ask for. The seed provides both starting points the rewrite relies on (seed.organizations.qualified has organizationMember active and teamCandidatePending pending), and the fixtures reset the target to the seed before every test, so the fault this run was reopened for (one scenario using up another&#39;s invitation) cannot recur. The runner&#39;s typecheck found no errors under acceptance/organizations/; its two errors are in adapters/new/, which this proposal does not answer for. One clause is not asserted: the criterion says the further attempt is refused &#39;as not pending&#39;, and no organization-edit or organization-memberships observation reports the service&#39;s reason for refusing an acceptance, so the writer could not assert it. It is recorded as owed by contract. Would change: a test asserting something the criterion does not state, or a reason-for-refusal observation existing on the surface and going unused.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>missing-test R-3.9: a further attempt to accept the now-active membership is refused as not pending — owed by contract: an observation on organization-user-memberships-self (and organization-user-memberships) reporting the service&#39;s reason when an acceptance is refused, so a test can read that the refusal was because the membership is not pending</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

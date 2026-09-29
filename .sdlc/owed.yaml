@@ -4419,3 +4419,19 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-29T02:16:17.982Z
+  - kind: missing-test
+    item: R-3.9
+    id: R-3.9
+    version: 1
+    domain: organizations
+    stage: contract
+    why: an observation on organization-user-memberships-self (and
+      organization-user-memberships) reporting the service's reason when an
+      acceptance is refused, so a test can read that the refusal was because the
+      membership is not pending
+    clause: a further attempt to accept the now-active membership is refused as not
+      pending
+    from: derive-tests-organizations-stale-6
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-29T02:18:46.710Z
