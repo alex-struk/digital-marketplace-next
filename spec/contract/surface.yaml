@@ -532,6 +532,40 @@ pages:
       # (non-pending) members; save_draft still saves the proposal with that person on
       # it, because the service checks membership only when a proposal is submitted.
       team_member_choices: { test_id: null }
+      # Phases below are named Inception, Prototype and Implementation, as the criteria
+      # name them. The oracle's screen labels the Prototype phase "Proof of Concept", on its
+      # team section and on its cost field ("Proof of Concept Cost"); the binding reads that
+      # label as Prototype.
+      #
+      # The phases the form offers a team section for, by phase name, in the order the form
+      # shows them. The form offers a section for each phase the opportunity has and no
+      # other: an opportunity with a Prototype and an Implementation phase and no Inception
+      # phase gives [Prototype, Implementation]. Implementation is always among them, since
+      # every Sprint With Us opportunity has it.
+      phase_team_sections: { test_id: null }
+      # Each offered phase, by phase name, with whether the form counts its team section as
+      # meeting the phase's requirements, and the phase's required capabilities that the
+      # team named in it does not yet hold (by capability name, empty when all are held).
+      # A section is incomplete while it names nobody, names a person whose membership is
+      # still pending, or leaves a required capability unheld; the oracle marks an
+      # incomplete section with a warning icon in place of its usual one, and its
+      # capability list shows each held capability checked. While any section is
+      # incomplete, submit_proposal stays unavailable. The form does not count the scrum
+      # master: a phase whose members include no scrum master reads complete here, and the
+      # service refuses it when submitted. The scrum master is a single choice per phase
+      # on this form, so two cannot be chosen here.
+      phase_requirements: { test_id: null }
+      # Each message the form shows against a cost field, with the field it stands
+      # against: a phase by phase name (that phase's proposed cost), or total (the total
+      # proposed cost, which the form adds up from the phase costs and does not take as
+      # input). Shown once set_phase_proposed_cost has entered the cost, before any
+      # submission. A phase cost over the phase's maximum budget reads "Please enter a
+      # Proposed Cost less than or equal to N." with N the phase's maximum budget written
+      # with thousands separators and no dollar sign ("200,000"); a total over the
+      # opportunity's total maximum budget reads "The proposed cost exceeds the maximum
+      # budget for this opportunity." against total. Empty when every cost is within its
+      # budget. While any is shown, submit_proposal stays unavailable.
+      cost_errors: { test_id: null }
 
   - id: proposal-swu-edit
     domain: proposals
@@ -2243,9 +2277,14 @@ pages:
       # the service answers it.
       #
       # Input for sprint-with-us: the opportunity identifier, the organization, and for
-      # each phase the opportunity requires a list of { member: a seed.users handle,
-      # scrum master: yes or no } and a proposed cost; an answer to each team question by
-      # order; and any references. Members are sent in the order given, repeats included.
+      # each phase given — Inception, Prototype or Implementation — a list of { member: a
+      # seed.users handle, scrum master: yes or no } and a proposed cost; an answer to each
+      # team question by order; and any references. Members are sent in the order given,
+      # repeats included. The phases sent are exactly the ones given, whatever the
+      # opportunity has: a phase the opportunity lacks is sent as a team like any other,
+      # and a phase left out is sent as absent. The service refuses the first against
+      # that phase with "This opportunity does not require this phase." and the second
+      # with "This opportunity requires this phase."
       #
       # The organization may be left out, and the request then names none. The Sprint With
       # Us service answers a submission naming no organization with "An organization must
@@ -2262,6 +2301,16 @@ pages:
       # team-with-us, by position in the team list, or the team as a whole), the phase and
       # position (for sprint-with-us), the organization, one answer to an opportunity
       # question, or the proposal's other fields. Empty when the request was accepted.
+      #
+      # For sprint-with-us a message about a phase names the phase (Inception, Prototype,
+      # Implementation) and which part of it: the phase itself (required or not
+      # required), its members ("Please select at least one team member.", "You may only
+      # specify a single scrum master."), or its proposed cost ("Please enter a Proposed
+      # Cost less than or equal to N."). A total proposed cost over the opportunity's total
+      # maximum budget is reported against the total cost. Capabilities are not reported
+      # by phase: the service compares every capability the members of all phases hold
+      # with every capability any phase requires, and reports a shortfall against the team
+      # as a whole. proposal-swu-create's phase_requirements checks each phase on its own.
       #
       # An answer is located by the question order it was sent against, and by whether the
       # message concerns its wording or its numbering. The service checks each answer on

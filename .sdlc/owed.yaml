@@ -4687,7 +4687,7 @@ owed:
     id: R-2.19
     version: 3
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: on proposal-swu-create, an observation listing the phases the form offers a
       team section for, by phase name; and error observations that report, with
       each message, what it stands against — the phase (Inception, Prototype,
@@ -4700,3 +4700,17 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-29T11:19:05.793Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: proposal-swu-create now has phase_team_sections (the phases the form offers
+          a team section for), phase_requirements (per-phase complete or
+          incomplete, and the capabilities not yet held) and cost_errors
+          (messages located by phase cost or total); proposal-team-request now
+          sends a phase the opportunity lacks as given, and its refusal_by_field
+          locates Sprint With Us messages by phase part and total cost, with
+          capability shortfalls against the team as a whole.
+        by: contract-v26
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-29T11:22:48.638Z
