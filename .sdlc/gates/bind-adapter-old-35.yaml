@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does this adapter bind every surface action and observation on old, and nothing else? Ruling: approve. The 32 added bindings in tests/adapters/old/index.ts and bindings.yaml are navigation, locators and one request per member, with no assertions or pass/fail logic. Mapping a ranking dash to empty, keeping the logo refusal message when current_logo closes the form, reading refused_when_not_permitted as empty unless the answer is 401 or 403, and reporting a program mismatch as unbound only shape the observation. No member is reported unbound, so there is no unbound reason to judge. The diff touches only tests/adapters/old plus the pipeline's own .sdlc records: nothing under tests/acceptance and no protected path. The receipt says the code was not compiled or run and names the success paths not seen live (accepting a pending invitation, an accepted stage score, a refused organization change on edit), so nothing is asserted without a check behind it. The runner's independent typecheck reports zero diagnostics under adapters/old/; the failing exit comes from adapters/new/, which this proposal does not answer for. The clauses these bindings enable (R-2.22, R-2.28, R-2.31, R-3.9, R-4.24, R-8.30) are already recorded as owed by derive-tests, so no new condition is needed. This would change if the first calibrate run showed these bindings driving the wrong control or reading the wrong text; that is handled at calibrate triage as adapter-wrong.
+conditions: []
+cost: 0.3530864
+turns: 1
+session: "e01650c5-ef00-4b17-9db8-b89efb562fa6"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-29T02:49:22.319Z

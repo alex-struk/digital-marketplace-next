@@ -50,3 +50,27 @@ I did not see a refused organization change on screen. None of the seeded open p
 - Signing out through `/sign-out` takes a moment to clear the session; an immediate read still showed the old user. Adapter code that already existed pauses after going to `/sign-out`, but one of my own checks read the session too soon and still saw the old user. I did not change sign-out.
 
 I changed nothing outside `tests/adapters/old/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on old, and nothing else? Ruling: approve. The 32 added bindings in tests/adapters/old/index.ts and bindings.yaml are navigation, locators and one request per member, with no assertions or pass/fail logic. Mapping a ranking dash to empty, keeping the logo refusal message when current_logo closes the form, reading refused_when_not_permitted as empty unless the answer is 401 or 403, and reporting a program mismatch as unbound only shape the observation. No member is reported unbound, so there is no unbound reason to judge. The diff touches only tests/adapters/old plus the pipeline's own .sdlc records: nothing under tests/acceptance and no protected path. The receipt says the code was not compiled or run and names the success paths not seen live (accepting a pending invitation, an accepted stage score, a refused organization change on edit), so nothing is asserted without a check behind it. The runner's independent typecheck reports zero diagnostics under adapters/old/; the failing exit comes from adapters/new/, which this proposal does not answer for. The clauses these bindings enable (R-2.22, R-2.28, R-2.31, R-3.9, R-4.24, R-8.30) are already recorded as owed by derive-tests, so no new condition is needed. This would change if the first calibrate run showed these bindings driving the wrong control or reading the wrong text; that is handled at calibrate triage as adapter-wrong.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `562d95794745b86b04f98df12344dc9b889c665c`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
