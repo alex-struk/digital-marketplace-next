@@ -593,7 +593,7 @@ pages:
       name_field: "unbound: /sign-up/complete redirects away instead of showing the profile form"
       email_field: "unbound: /sign-up/complete redirects away instead of showing the profile form"
       job_title_field: "unbound: /sign-up/complete redirects away instead of showing the profile form"
-      terms_checkbox: "unbound: /sign-up/complete redirects away instead of showing the profile form"
+      terms_checkbox: bound
       complete_disabled_until_terms_accepted: "unbound: /sign-up/complete redirects away instead of showing the profile form"
       field_error: "unbound: /sign-up/complete redirects away instead of showing the profile form"
 
@@ -623,7 +623,7 @@ pages:
       user_row: bound
       status_badge: bound
       account_type: bound
-      admin_check: "unbound: the Admin? column marks an administrator with an unlabelled icon that carries no text and no accessible name, and the list's rows are drawn as one flattened block rather than real rows, so there is no way to read the mark for a named person"
+      admin_check: bound
       export_modal: bound
       export_disabled_until_selection: bound
 
