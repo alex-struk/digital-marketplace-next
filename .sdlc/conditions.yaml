@@ -874,3 +874,19 @@ conditions:
         Government.'
       by: agent:reviewer
       at: 2026-09-29T18:53:12.875Z
+  - ref: derive-tests-opportunities-stale-9#1
+    text: "R-1.39: the clause 'only opportunities matching every chosen condition
+      remain visible' is asserted by no test, because each case chooses a single
+      condition. Add a case that chooses two conditions together (for example a
+      program and a search word, or remote-only and a search word). Set up one
+      opportunity meeting both and one meeting only one of them, confirm both
+      are listed first, then assert separately that the one meeting both is
+      still listed and the one meeting only one is no longer listed. If the
+      surface cannot combine conditions, record a not-testable.yaml entry with
+      `clause` naming this clause and what is missing from the surface."
+    from: derive-tests-opportunities-stale-9
+    family: derive-tests-opportunities-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-29T18:56:10.838Z
