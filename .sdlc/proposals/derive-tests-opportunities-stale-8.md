@@ -40,3 +40,27 @@ The file keeps two tests:
 The entry also says that the clause "the service accepts" could only ever be shown by a request that no screen sends. Ratify would have to restate that clause in terms something on a page shows, or withdraw it.
 
 I changed nothing under `spec/`, `tests/seed/` or `tests/fixtures/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The rewritten R-1.16 tests assert only what the criterion states. The first checks that no Sprint With Us opportunity ends up published without an implementation phase. The second checks that an inception-without-prototype submission is rejected, that the message names prototype and inception, and that the opportunity is not published. The date, capability and budget changes are setup that makes the phase arrangement the only fault, as the redo asked, and no implementation detail leaks in. The runner's typecheck reports no diagnostics under acceptance/opportunities. Deleting R-1.33's v1 test is correct: it added its note through add_note, which v2 says no screen offers. Its not-testable entry names real gaps in the surface: add_note is still declared, no seeded opportunity carries a note with a file, and no observation reports whether a note control is offered. The entry is owed by contract. The clause that the service accepts a note can only be shown by a request no screen sends, so it is recorded here as owed by ratify. This would change on a typecheck diagnostic in the opportunities tests, or on the spec making editing a separately tested clause of R-1.16.
+
+**Conditions:**
+- missing-test R-1.33: the service accepts a private note with files from the opportunity's author or an administrator at any point in its life — owed by ratify: a restatement of the acceptance clause in terms something on a page observes, or a ruling withdrawing it, since only a request no screen sends could show it
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `2de294edea31be2291d6ffecb7aef690d2b32ad0`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/opportunities/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
