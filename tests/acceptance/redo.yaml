@@ -569,8 +569,14 @@ redo:
     why: the test needs a vendor who has not yet completed their profile and signs
       in as an established vendor instead, so it never reaches the agreement
       step; it must begin as a first-time vendor persona.
+    closed: &a12
+      outcome: met
+      why: derived again by a derive-tests run on users
+      by: runner:derive-tests
+      at: 2026-09-29T00:15:06.852Z
   - id: R-4.24
     version: 1
     why: the test needs a person who has not yet completed their profile and signs
       in as an established account instead, so it never reaches the
       profile-completion step; it must begin as a first-time persona.
+    closed: *a12

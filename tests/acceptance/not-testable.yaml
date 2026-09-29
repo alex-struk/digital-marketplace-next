@@ -230,3 +230,18 @@ criteria:
       opportunity where a proposal left behind before the last stage is held by
       a vendor a persona reaches"
     owner: contract
+  - id: R-4.24
+    version: 1
+    clause: their account records that notifications are on, with the moment the
+      choice was made
+    reason: "blocked: R-4.24.spec.ts asserts that the choice made while completing
+      the profile is saved, reading it back from the person's own notification
+      settings. What it cannot read is when the choice was made:
+      user-profile-self-notifications declares only new_opportunities_checkbox,
+      notification_email_address and unsubscribe_modal, and no other page
+      reports the date and time new-opportunity notices were turned on."
+    missing: "an observation on user-profile-self-notifications (or
+      user-profile-notifications, for an administrator reading another account)
+      that reports the date and time the person's new-opportunity notices were
+      turned on"
+    owner: contract
