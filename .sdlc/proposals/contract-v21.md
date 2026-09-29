@@ -42,3 +42,14 @@ The contract only states this selection rule. Nothing in `tests/playwright.confi
 - **R-8.30:** a `change_logo` action on `organization-edit`, with observations for the current logo and a logo refused for its file ending.
 
 A contract run without the "change only what it names" restriction should take these up.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether this revision of the contract is the one the tests act through. It makes exactly the change the derive-tests-notifications-stale-7 revision request asked for. The note under configurations.notifications_disabled no longer tells the R-6.1 test to skip on a missing environment variable, the behaviour the calibrate-old-11 ruling overturned. It now says the test assumes an instance started with notifications off, never skips itself, and fails if run with notifications on. It also states the selection rule: a `tag: "@notifications_disabled"` field, a run limited to that tag against a dedicated SDLC_ORACLE_DISABLE_NOTIFICATIONS=1 instance, and a --grep-invert on the default run, because the test clears the shared mail catcher. I read the edited entry on the branch (observables.yaml lines 167-194). The new key sits at the same indentation as its neighbours and the notes remain a plain list. The R-6.1 test currently on the branch still skips, which is expected, because its rewrite is in the separate derive-tests proposal that carries the same tag. Nothing else in the contract changed, and no criterion's statement or confidence is touched. Two items remain open and do not block this ruling. First, the runner does not yet split runs by tag, so the default run will include the tagged test and fail until the harness owner adds the grep and grep-invert split; the stage disclosed this honestly. Second, the six owed contract observations (R-2.22, R-2.31, R-2.21, R-2.28, R-4.24, R-8.30) remain owed, because this revision was correctly limited to the named change. What would change the ruling: the note still permitting a self-skip, the tag disagreeing with the one on the R-6.1 test, or the entry failing to parse.
+
+**Conditions:**
+none
