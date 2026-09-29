@@ -59,3 +59,14 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether this project's adapter for the old target caused R-6.2 to fail, where 4 messages were in the mail catcher while delivery was supposed to be refused. Ruling: approve, with R-6.2 sent to the product owner. Nothing in the evidence points at the binding. mail-delivery-fault.refuse_delivery sets the catcher's own Sender fault to probability 100 with error code 451, and Mailpit answered 200. The test read delivery_refused back as in force both before publishing and 20 seconds after, so the fault was on. The adapter picks its catcher from TEST_PARALLEL_INDEX and SDLC_MAIL_API_<n>, the same way the harness mail fixture does (tests/fixtures/index.ts:34), so the count comes from the same per-worker catcher the test cleared. message_count returns Mailpit's own total without changing it. The 4 messages are really in the catcher: either the old application delivered past a refusing server, or they were in flight before the fault went on. For the product owner: the mid-test check counts every message in the catcher, not only notices about the published opportunity, so mail still arriving from an earlier test would fail it the same way. What would change this: evidence that the application's SMTP path skips the catcher's fault injection, so that the fault the adapter switched on never reached the server the application sends to. That would make it adapter-wrong.
+
+**Conditions:**
+- product-question R-6.2
