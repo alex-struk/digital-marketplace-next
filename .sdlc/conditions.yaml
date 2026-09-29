@@ -766,6 +766,13 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-29T12:19:16.230Z
+    closed:
+      outcome: met
+      why: the administrator case opens the archiving message via
+        surface.caughtMessage and asserts /admin/i on its subject plus
+        plain-text body, in tests/acceptance/organizations/R-3.24.spec.ts
+      by: agent:reviewer
+      at: 2026-09-29T12:20:43.630Z
   - ref: derive-tests-organizations-stale-9#2
     text: "R-3.24 administrator case: the criterion's 'then' requires the message to
       tell the owner they can no longer use the organization. Assert this on the
@@ -777,6 +784,13 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-29T12:19:16.230Z
+    closed:
+      outcome: met
+      why: the same message text is asserted to contain a no-longer/cannot/unable
+        phrase followed within the sentence by use/access/available, in
+        tests/acceptance/organizations/R-3.24.spec.ts
+      by: agent:reviewer
+      at: 2026-09-29T12:20:43.638Z
   - ref: derive-tests-organizations-stale-9#3
     text: Keep the settling-window polling in both cases and the seeded
       organizations (unqualified for the administrator case,
@@ -788,3 +802,11 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-29T12:19:16.230Z
+    closed:
+      outcome: met
+      why: both cases keep the 30-second settling window, and the seeded organizations
+        stay seed.organizations.unqualified (administrator case) and
+        seed.organizations.withPendingInvitation (owner case), in
+        tests/acceptance/organizations/R-3.24.spec.ts
+      by: agent:reviewer
+      at: 2026-09-29T12:20:43.646Z
