@@ -1,77 +1,69 @@
 // criterion: @R-8.30 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-14
-import { test, expect, persona } from "../../fixtures";
+// provenance: blind, spec@ccc1cba3290f5ea17351e4f2ca49bd80fefc2ef6, derived 2026-09-29
+import { test, expect, persona, seed } from "../../fixtures";
+import type { Surface } from "../../fixtures";
 
-// The criterion's own example: a file named "portrait.gif" chosen as a profile picture. Its
-// content is a real PNG, built here, so the name is the only thing wrong with it and a refusal
-// can only have come from the ending. "No file is stored" is read as the picture being
-// unchanged once the edit is abandoned.
+// The criterion's own example: a signed-in person choosing a file named "portrait.gif" as a new
+// profile picture. Its content is a real PNG, so the name is the only thing wrong with it and a
+// refusal can only have come from the ending.
+//
+// The upload the criterion is about happens when the changed profile is saved, so the change
+// is saved before anything is read. A screen that will not let the save go through has refused
+// it as surely as a service that turns it down, so a save the screen declines is not treated as
+// a failure of the test. The refusal is then read, and "no file is stored" is read as the
+// profile picture, opened afresh, being the one it was before.
+//
+// The person's account is established as active first, so the refusal can only be about the
+// file.
 
-// A greyscale PNG of the given size, uncompressed inside a valid zlib stream.
-function png(width: number, height: number): Buffer {
-  const table = Array.from({ length: 256 }, (_, n) => {
-    let c = n;
-    for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1;
-    return c >>> 0;
-  });
-  const crc = (bytes: Buffer): number => {
-    let c = 0xffffffff;
-    for (const byte of bytes) c = table[(c ^ byte) & 0xff] ^ (c >>> 8);
-    return (c ^ 0xffffffff) >>> 0;
-  };
-  const chunk = (type: string, data: Buffer): Buffer => {
-    const typed = Buffer.concat([Buffer.from(type, "latin1"), data]);
-    const length = Buffer.alloc(4);
-    length.writeUInt32BE(data.length);
-    const sum = Buffer.alloc(4);
-    sum.writeUInt32BE(crc(typed));
-    return Buffer.concat([length, typed, sum]);
-  };
-  const header = Buffer.alloc(13);
-  header.writeUInt32BE(width, 0);
-  header.writeUInt32BE(height, 4);
-  header[8] = 8;
-  const rows = Buffer.alloc((width + 1) * height, 0x80);
-  for (let y = 0; y < height; y++) rows[y * (width + 1)] = 0;
-  const stream: Buffer[] = [Buffer.from([0x78, 0x01])];
-  for (let at = 0; at < rows.length; at += 0xffff) {
-    const block = rows.subarray(at, at + 0xffff);
-    const head = Buffer.alloc(5);
-    head[0] = at + 0xffff >= rows.length ? 1 : 0;
-    head.writeUInt16LE(block.length, 1);
-    head.writeUInt16LE(~block.length & 0xffff, 3);
-    stream.push(head, block);
+// A 1x1 PNG.
+const PNG = Buffer.from(
+  "89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000a49444154789c636000000002000148afa4710000000049454e44ae426082",
+  "hex",
+);
+
+async function readOrEmpty(read: () => Promise<string>): Promise<string> {
+  try {
+    return (await read()) ?? "";
+  } catch {
+    return "";
   }
-  let a = 1;
-  let b = 0;
-  for (const byte of rows) {
-    a = (a + byte) % 65521;
-    b = (b + a) % 65521;
+}
+
+// The signed-in administrator is active by being signed in at all, so their own status badge
+// is what "active" reads as.
+async function establishActive(surface: Surface, userId: string): Promise<void> {
+  await surface.signIn(persona.administrator);
+  await surface.userProfile.open({ userId: seed.users.administratorOne.id });
+  const active = await surface.userProfile.statusBadge();
+  await surface.userProfile.open({ userId });
+  if ((await surface.userProfile.statusBadge()) !== active) {
+    await surface.userProfile.reactivateAccount();
+    await surface.userProfile.confirmActivationChange();
+    await surface.userProfile.open({ userId });
   }
-  const adler = Buffer.alloc(4);
-  adler.writeUInt32BE(((b << 16) | a) >>> 0);
-  stream.push(adler);
-  return Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    chunk("IHDR", header),
-    chunk("IDAT", Buffer.concat(stream)),
-    chunk("IEND", Buffer.alloc(0)),
-  ]);
+  expect(await surface.userProfile.statusBadge()).toBe(active);
 }
 
 test("a profile picture or an organization logo whose name does not end in .jpg, .jpeg or .png is refused", async ({
   surface,
 }) => {
+  await establishActive(surface, seed.users.fileUploader.id);
   await surface.signIn(persona.fileUploader);
+
   await surface.userProfileSelf.open();
-  const before = await surface.fileImagePicker.currentImage();
+  const before = await readOrEmpty(() => surface.fileImagePicker.currentImage());
 
   await surface.userProfileSelf.editProfile();
-  expect(await surface.fileImagePicker.onlyJpegAndPngOffered()).toBeTruthy();
+  await surface.fileImagePicker.chooseImage({ file: "portrait.gif", content: PNG });
+  try {
+    await surface.userProfileSelf.saveChanges();
+  } catch {
+    // A save the screen will not make is refused; the refusal and the picture are read below.
+  }
 
-  await surface.fileImagePicker.chooseImage({ file: "portrait.gif", content: png(40, 40) });
-  expect(await surface.fileImagePicker.rejectedImageError()).toBeTruthy();
+  await expect.poll(() => readOrEmpty(() => surface.fileImagePicker.rejectedImageError())).toBeTruthy();
 
-  await surface.userProfileSelf.cancelEditing();
-  expect(await surface.fileImagePicker.currentImage()).toBe(before);
+  await surface.userProfileSelf.open();
+  expect(await readOrEmpty(() => surface.fileImagePicker.currentImage())).toBe(before);
 });
