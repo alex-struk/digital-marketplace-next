@@ -1090,6 +1090,13 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-25T08:16:31.008Z
+    closed:
+      outcome: withdrawn
+      why: that an undefined state is gone is a property of the migration of
+        historical records, not of anything the service answers; the build stage
+        covers it with its own migration test
+      by: tech-lead
+      at: 2026-09-29T04:06:04.244Z
   - kind: missing-test
     item: R-8.3
     id: R-8.3
@@ -1220,6 +1227,12 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-25T08:16:31.008Z
+    closed:
+      outcome: withdrawn
+      why: a working copy on the service's own disk is an implementation detail no
+        user observes; the build stage covers it with its own test
+      by: tech-lead
+      at: 2026-09-29T04:06:04.385Z
   - kind: missing-test
     item: R-8.22
     id: R-8.22
@@ -2345,6 +2358,12 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-25T08:16:31.008Z
+    closed:
+      outcome: withdrawn
+      why: the absence of a route to create a first administrator cannot be observed
+        by an acceptance test; the build stage covers it with its own test
+      by: tech-lead
+      at: 2026-09-29T04:06:04.522Z
   - kind: missing-test
     item: R-4.20
     id: R-4.20
@@ -2843,6 +2862,13 @@ owed:
     clause: only two publishes interleaving inside a single read-then-write window
       collide on the version key, and there the second is refused with a service
       error rather than silently winning
+    closed:
+      outcome: withdrawn
+      why: two publishes colliding inside one read-then-write window is a property of
+        the service's storage; the build stage covers it with its own
+        concurrency test
+      by: tech-lead
+      at: 2026-09-29T04:06:04.634Z
   - kind: missing-test
     item: R-7.29
     id: R-7.29
@@ -4282,6 +4308,12 @@ owed:
         proposal: derive-tests-opportunities-stale-8
         gate: G3
         at: 2026-09-29T00:03:52.418Z
+    closed:
+      outcome: withdrawn
+      why: only a request no screen sends could show the acceptance clause, so no
+        acceptance test is owed; the build stage covers it with its own test
+      by: tech-lead
+      at: 2026-09-29T04:06:04.747Z
   - kind: missing-test
     item: R-2.22
     id: R-2.22
