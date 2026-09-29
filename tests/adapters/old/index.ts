@@ -556,9 +556,16 @@ export default function create(
   // the screen itself, so a control not there yet is looked for again for a few seconds.
   const LATE_CONTROL_MS = 5000;
 
+  // A click that cannot land (the control sliding in with its dialog, or covered for a moment
+  // by one on its way out) is tried again with the control found afresh, a bounded number of
+  // times, and then reported, rather than left waiting out the test.
+  const CLICK_MS = 8000;
+
   async function press(where: string, names: string[], scope: Scope = page): Promise<void> {
     const deadline = Date.now() + LATE_CONTROL_MS;
+    let missed = 0;
     for (;;) {
+      let retry = false;
       for (const name of names) {
         const control = await findControl(scope, name);
         if (control) {
@@ -570,11 +577,23 @@ export default function create(
               }`,
             );
           }
-          await control.click();
-          await settle();
-          return;
+          const clicked = await control
+            .click({ timeout: CLICK_MS })
+            .then(() => true)
+            .catch(() => false);
+          if (clicked) {
+            await settle();
+            return;
+          }
+          if (++missed >= 3) {
+            throw new Error(`${where} — "${name}" was found but would not take a click on ${page.url()}`);
+          }
+          await page.waitForTimeout(400);
+          retry = true;
+          break;
         }
       }
+      if (retry) continue;
       if (Date.now() >= deadline) break;
       await page.waitForTimeout(250);
     }
@@ -595,8 +614,11 @@ export default function create(
     return "absent";
   }
 
+  // A dialog on its way out is emptied before it leaves the tree (its heading left with no
+  // text, seen after "Submit Proposal" on a Sprint With Us proposal), and for that moment it
+  // can sit in front of a newly raised one. A dialog showing no words is taken as gone.
   function dialog(): Locator {
-    return seen(page.getByRole("dialog"));
+    return seen(page.getByRole("dialog")).filter({ hasText: /\S/ });
   }
 
   async function dialogText(): Promise<string> {
@@ -987,6 +1009,8 @@ export default function create(
     await mustDismissDialog(`going to the step matching ${pattern}`);
     await current.click();
     const choice = seen(page.getByText(pattern));
+    // The menu of steps drops open over a moment after the step's name is pressed.
+    await choice.first().waitFor({ state: "visible", timeout: 2000 }).catch(() => undefined);
     const count = await choice.count();
     if (!count) {
       await page.keyboard.press("Escape").catch(() => undefined);
@@ -3714,6 +3738,53 @@ export default function create(
     return true;
   }
 
+  // "Review Terms and Conditions" offers "Submit Proposal" as pressable text — neither a
+  // button nor a link by role — below its two acknowledgement boxes (seen as the owner of
+  // Northern Pines on the seeded open Sprint With Us opportunity). It is found by its words
+  // inside the open dialog, and the dialog is waited out: once pressed it is emptied and then
+  // leaves, while the page moves to the stored proposal.
+  async function confirmTerms(where: string): Promise<void> {
+    if (!(await dialogUp())) {
+      throw new Error(`unbound: ${where} — submitting raised no terms dialog on ${page.url()}`);
+    }
+    for (let attempt = 0; attempt < 3 && (await dialog().count()); attempt++) {
+      const box = dialog().first();
+      let control: Locator | null = null;
+      for (const name of ["Submit Proposal", "Submit"]) {
+        const words = seen(box.getByText(name, { exact: true }));
+        const count = await words.count();
+        if (count) {
+          control = words.nth(count - 1);
+          break;
+        }
+      }
+      if (!control) control = await findControl(box, "Submit Proposal");
+      if (!control) {
+        const shown = (await dialogText()).replace(/\s*\n\s*/g, " | ");
+        throw new Error(`unbound: ${where} — the open terms dialog offers no "Submit Proposal" on ${page.url()} (it shows: ${shown})`);
+      }
+      if (await isDisabled(control)) {
+        const unticked: string[] = [];
+        const boxes = seen(box.getByRole("checkbox"));
+        for (let i = 0; i < (await boxes.count()); i++) {
+          if (!(await boxes.nth(i).isChecked())) unticked.push(await accessibleName(boxes.nth(i)));
+        }
+        throw new Error(
+          `${where} — "Submit Proposal" in the terms dialog is disabled on ${page.url()}${
+            unticked.length ? `; not ticked: ${unticked.join(" | ")}` : ""
+          }`,
+        );
+      }
+      await control.click({ timeout: CLICK_MS }).catch(() => undefined);
+      await dialog().first().waitFor({ state: "hidden", timeout: 15000 }).catch(() => undefined);
+    }
+    if (await dialog().count()) {
+      const title = ((await dialogText()).split("\n")[0] ?? "").trim();
+      throw new Error(`${where} — pressed "Submit Proposal" but the "${title}" dialog stayed open on ${page.url()}`);
+    }
+    await settle();
+  }
+
   // The terms dialog put away with its own "Cancel", and waited out, so nothing is left over
   // the form — its steps, its "Save Draft" — for the next action to click into. Whatever was
   // agreed to is remembered and ticked again when it next opens. A "Cancel" pressed while the
@@ -3759,7 +3830,7 @@ export default function create(
       submitProposal: async (input?: unknown) => {
         await enter("submit_proposal", input);
         if (!(await openTermsDialog(`${where}.submit_proposal`))) return;
-        await inDialog(`${where}.submit_proposal`, ["Submit Proposal", "Submit"]);
+        await confirmTerms(`${where}.submit_proposal`);
         await landOn(record());
         acceptedTerms.clear();
       },
@@ -4241,6 +4312,28 @@ export default function create(
   // opportunity with Proof of Concept and Implementation: both names alone, each unfolding to
   // its own adder). The name toggles its section, so it is pressed only while that phase's
   // adder is not showing. Resolves the phases shown.
+  //
+  // Whether a section is open is read from what shows below its name — its "Phase Dates" or
+  // its "Add Team Member(s)" — never from the adder alone: a one-phase opportunity's
+  // "Implementation" is open from the start, and pressing its name there folds it shut. A
+  // folded name is pressed once, and its section waited for until it is open and at rest,
+  // before the next phase is looked at.
+  async function teamPhaseOpen(phase: string): Promise<boolean> {
+    const band = await phaseBand(phase);
+    if (!band) return false;
+    if (await inBand(seen(page.getByRole("main").getByText("Phase Dates", { exact: true })), band)) return true;
+    return (await inBand(teamAdders(), band)) !== null;
+  }
+
+  async function waitTeamPhaseOpen(phase: string, ms: number): Promise<boolean> {
+    const until = Date.now() + ms;
+    for (;;) {
+      if (await teamPhaseOpen(phase)) return true;
+      if (Date.now() >= until) return false;
+      await page.waitForTimeout(200);
+    }
+  }
+
   async function openTeamPhases(): Promise<string[]> {
     // The sections appear a moment after the organization is chosen.
     await seen(page.getByRole("main").getByText(new RegExp(`^(${PHASES.join("|")})$`)))
@@ -4250,16 +4343,22 @@ export default function create(
       .catch(() => undefined);
     const shown = await teamPhasesShown();
     for (const phase of shown) {
-      for (let tries = 0; tries < 3 && !(await teamPhaseAdder(phase)); tries++) {
+      // An open section's contents are drawn with its name, a moment behind it at most.
+      if (!(await waitTeamPhaseOpen(phase, 1000))) {
         const names = seen(page.getByRole("main").getByText(phase, { exact: true }));
         const count = await names.count();
-        if (!count) break;
+        if (!count) continue;
         await names.nth(count - 1).click();
         await settle();
-        for (let wait = 0; wait < 15 && !(await teamPhaseAdder(phase)); wait++) await page.waitForTimeout(200);
+        await waitTeamPhaseOpen(phase, 5000);
       }
+      const band = await phaseBand(phase);
+      const dates = band
+        ? await inBand(seen(page.getByRole("main").getByText("Phase Dates", { exact: true })), band)
+        : null;
       const adder = await teamPhaseAdder(phase);
       if (adder) await steadyBox(adder);
+      else if (dates) await steadyBox(dates);
     }
     return shown;
   }
@@ -4278,7 +4377,7 @@ export default function create(
     const adder = target ? await teamPhaseAdder(target) : (await teamAdders().count()) ? teamAdders().first() : null;
     if (!adder) {
       throw new Error(
-        `unbound: ${where} — reached the Team step with an organization chosen and pressed each phase's name to unfold it (${shownPhases.join(", ") || "no phase name shown"}), but no "Add Team Member(s)" showed inside ${target ? `"${target}"` : "any of them"} at ${page.url()}`,
+        `unbound: ${where} — reached the Team step with an organization chosen and pressed the name of each phase showing no "Phase Dates" below it, once, to unfold it (${shownPhases.join(", ") || "no phase name shown"}), but no "Add Team Member(s)" showed inside ${target ? `"${target}"` : "any of them"} at ${page.url()}`,
       );
     }
     return { adder, phase: target };
@@ -4512,11 +4611,28 @@ export default function create(
     setPhaseProposedCost: async (input) => {
       const where = "proposal-swu-create.set_phase_proposed_cost";
       await ready();
-      if (!(await goToStep("Pricing"))) await advanceTo(where, "Total Proposed Cost");
       const phase = field(input, "phase", "name");
       const value = field(input, "cost", "proposedCost", "proposed_cost", "amount", "price", "value") || asText(input);
       const label = phase ? `${phaseNamed(phase)} Cost` : "";
       const boxes = seen(page.getByRole("spinbutton", { name: label ? labelled(label) : /Cost\s*\*\s*$/ }));
+      // The step list shows only the step the form is on; when its menu does not take the
+      // form to "3. Pricing", the form's own "Next" is pressed until a phase cost shows.
+      if (!(await goToStep("Pricing")) || !(await boxes.count())) {
+        await mustDismissDialog(where);
+        for (let step = 0; step < 8 && !(await boxes.count()); step++) {
+          const next = await findControl(page.getByRole("main"), "Next");
+          if (!next) break;
+          if (await isDisabled(next)) {
+            const on = await currentStep();
+            const stepName = on ? (await on.innerText()).trim() : "the current step";
+            throw new Error(`${where} — "Next" is disabled on "${stepName}" at ${page.url()}`);
+          }
+          await next.click({ timeout: CLICK_MS });
+          await settle();
+          await boxes.first().waitFor({ state: "visible", timeout: 1500 }).catch(() => undefined);
+        }
+        if (!(await boxes.count())) await advanceTo(where, "Total Proposed Cost");
+      }
       await boxes.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
       const count = await boxes.count();
       for (let i = 0; i < count; i++) {
