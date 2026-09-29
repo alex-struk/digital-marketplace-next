@@ -188,3 +188,22 @@ criteria:
       message among the fifty on the page, so a containment assertion over the
       page as a whole would be satisfied by any message that happens to name a
       program.
+  - id: R-6.2
+    version: 1
+    clause: When a message cannot be composed
+    reason: "blocked: the test reaches the delivery half of the criterion through
+      mail-delivery-fault, but nothing in the contract sets up a message the
+      service cannot compose — no seeded record whose content makes a message
+      fail to render, and no fault any surface can inject into composition — so
+      no test can assert that the triggering action still succeeds, that nobody
+      is told and that nothing is tried again when composition, rather than
+      delivery, is what fails. Whether such a starting state can exist depends
+      on what makes composition fail in the service, which the contract stage
+      can see and this stage cannot."
+    missing: a starting state in which a message the service would send cannot be
+      composed — for example a seeded record, with a handle in the manifest,
+      whose content makes one named notice fail to render when an action a
+      surface already offers triggers it — together with the name of that
+      action; or, if no such state can be produced, a restatement from ratify of
+      the composition clause in terms something observes
+    owner: contract
