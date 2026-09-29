@@ -1430,6 +1430,22 @@ export const seed = {
       "for": [
         "R-5.32"
       ]
+    },
+    "twuConsensusWithChallengeScreenedIn": {
+      "id": "00000000-0000-4000-a038-000000000001",
+      "version_id": "00000000-0000-4000-a038-000000000002",
+      "program": "team-with-us",
+      "title": "Seeded Team With Us opportunity at consensus with a proponent already in the challenge",
+      "seeded_status": "EVAL_QUESTIONS_CONSENSUS",
+      "owner": "users.staffOne",
+      "proposals": [
+        "proposals.twuScreenedIntoChallengeEarly",
+        "proposals.twuStillAtQuestions"
+      ],
+      "for": [
+        "R-2.28"
+      ],
+      "note": "The Team With Us counterpart of opportunities.swuCodeChallengeWithScenarioScreenedIn. Still at the questions consensus. The first proponent is already carried into the challenge and not scored; the second is still at the questions. A challenge score for the first, sent through proposal-evaluation-request as the administrator, is a score for a stage the opportunity has not reached and is answered with the service's stage message. The same score for the second is answered with the general permission message, because that proposal has not itself reached the challenge. On proposal-twu-view neither proposal's challenge tab offers score_challenge. The old application's screens no longer produce this combination (finalising the consensus moves the opportunity to the challenge in the same step as it carries proponents in), so it is seeded directly; the schema holds it and the service's stage check refuses it."
     }
   },
   "resources": {
@@ -1977,6 +1993,32 @@ export const seed = {
       "vendor": "users.proponentTwo",
       "organization": "organizations.proponentTwo",
       "seeded_status": "UNDER_REVIEW_CODE_CHALLENGE"
+    },
+    "twuScreenedIntoChallengeEarly": {
+      "id": "00000000-0000-4000-a038-000000000101",
+      "opportunity": "opportunities.twuConsensusWithChallengeScreenedIn",
+      "vendor": "users.organizationOwner",
+      "organization": "organizations.qualified",
+      "seeded_status": "UNDER_REVIEW_CHALLENGE",
+      "agreed_scores": [
+        4,
+        4,
+        4,
+        4
+      ]
+    },
+    "twuStillAtQuestions": {
+      "id": "00000000-0000-4000-a038-000000000102",
+      "opportunity": "opportunities.twuConsensusWithChallengeScreenedIn",
+      "vendor": "users.proponentTwo",
+      "organization": "organizations.proponentTwo",
+      "seeded_status": "UNDER_REVIEW_QUESTIONS",
+      "agreed_scores": [
+        3,
+        3,
+        3,
+        3
+      ]
     },
     "swuHistorySix": {
       "id": "00000000-0000-4000-a029-000000000106",

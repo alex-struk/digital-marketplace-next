@@ -617,6 +617,18 @@ pages:
       # swuScenarioBHigherBid is not until its scenario score is entered, and the third
       # proposal was left behind at the questions.
       rank: { test_id: null }
+      # The score actions the page offers the signed-in person for this proposal, as a list
+      # of this page's own action names — score_code_challenge, score_team_scenario — read
+      # across the stage tabs; empty when it offers none. A stage's score is offered on its
+      # tab (entering or editing it) only once the opportunity has reached that stage and
+      # the proposal is in it; before then the tab says the proposal "can be scored once" the
+      # opportunity has reached the stage, and offers no score. A proposal carried past a
+      # stage is no longer offered that stage's score. On
+      # seed.opportunities.swuCodeChallengeWithScenarioScreenedIn, as the administrator,
+      # seed.proposals.swuScreenedIntoScenarioEarly offers none (it is in the team scenario,
+      # which the opportunity has not reached) and seed.proposals.swuScreenedIntoCodeChallenge
+      # offers score_code_challenge.
+      offered_score_actions: { test_id: null }
 
   - id: proposal-swu-export-one
     domain: proposals
@@ -725,6 +737,11 @@ pages:
       # challenge. seed.opportunities.twuChallengeLastToScore holds one proposal scored on
       # the challenge and one not.
       rank: { test_id: null }
+      # As on proposal-swu-view, from this page's score_challenge. On
+      # seed.proposals.twuScreenedIntoChallengeEarly, as the administrator, the list is empty:
+      # the proposal is in the challenge but the opportunity is still at the questions
+      # consensus. On seed.proposals.twuChallengeLast it holds score_challenge.
+      offered_score_actions: { test_id: null }
 
   - id: proposal-twu-export-one
     domain: proposals
@@ -2259,7 +2276,10 @@ pages:
   # of evaluation. Starting point for R-2.28:
   # seed.proposals.swuScreenedIntoScenarioEarly, screened into the team scenario on
   # seed.opportunities.swuCodeChallengeWithScenarioScreenedIn, which is still at the code
-  # challenge.
+  # challenge; and, for score_challenge_by_request, seed.proposals.twuScreenedIntoChallengeEarly,
+  # carried into the challenge on seed.opportunities.twuConsensusWithChallengeScreenedIn,
+  # which is still at the questions consensus (seed.proposals.twuStillAtQuestions on the same
+  # opportunity draws the general permission message instead).
   - id: proposal-evaluation-request
     domain: proposals
     route: /api/proposals/:program/:proposalId
