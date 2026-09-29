@@ -85,6 +85,8 @@
 - 20:19:25 propose derive-tests-proposals-stale-13 at G3
 - 20:20:32 rule derive-tests-proposals-stale-13 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 - 21:03:42 run calibrate: ok, cost 0, turns 0
+- 21:03:43 propose calibrate-triage-old-22 at G3
+- 21:05:28 rule calibrate-triage-old-22 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-28
 
