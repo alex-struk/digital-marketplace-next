@@ -4687,7 +4687,7 @@ owed:
     id: R-2.19
     version: 3
     domain: proposals
-    stage: derive-tests
+    stage: calibrate
     why: on proposal-swu-create, an observation listing the phases the form offers a
       team section for, by phase name; and error observations that report, with
       each message, what it stands against — the phase (Inception, Prototype,
@@ -4714,3 +4714,9 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-29T11:22:48.638Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v3 exists and has not run
+        by: runner
+        at: 2026-09-29T11:33:33.921Z
+    target: old

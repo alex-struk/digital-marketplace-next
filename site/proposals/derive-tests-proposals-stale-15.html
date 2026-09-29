@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-proposals-stale-15 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">295</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">291</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">257</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-proposals-stale-15</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 11:32</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the proposals criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> R-2.19 (v3) now has a full test file, and its entry is gone from <code>tests/acceptance/not-testable.yaml</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>R-2.19 (v3) now has a full test file, and its entry is gone from <code>tests/acceptance/not-testable.yaml</code>. That was the only criterion in this run, and nothing was left untestable. I couldn&#39;t run the type check: running <code>tsc</code> needed an approval this unattended session couldn&#39;t get. Nothing has been run against a target either, so the file is unchecked by compiler or runner.</p>
+<p><strong>What changed.</strong> The contract came back with the observations the earlier entry asked for:</p>
+<ul><li>on the create form, <code>phase_team_sections</code>, <code>phase_requirements</code> and <code>cost_errors</code>;</li><li>on the team request, a statement that it sends a phase the opportunity lacks exactly as given, and a <code>refusal_by_field</code> that says which phase a message is about.</li></ul>
+<p>I rewrote <code>tests/acceptance/proposals/R-2.19.spec.ts</code> to use them. It is now twelve tests, all titled with the criterion&#39;s statement plus the case they cover. They all use one opportunity with a Prototype phase needing Frontend Development and an Implementation phase needing Backend Development, each with its own budget, and no Inception phase.</p>
+<p>New or tightened assertions:</p>
+<ul><li><strong>Form sections:</strong> the form offers team sections for exactly Prototype and then Implementation.</li><li><strong>Extra phase:</strong> a team sent by request for Inception is refused with &quot;does not require this phase&quot; against Inception.</li><li><strong>Missing phase:</strong> a request that leaves out Prototype is refused with &quot;requires this phase&quot; against Prototype.</li><li><strong>Empty phase team:</strong> the form shows Prototype incomplete and Implementation complete, and no proposal is created.</li><li><strong>Capabilities in the wrong phases:</strong> the form shows both phases incomplete. Prototype names Frontend Development as missing and Implementation names Backend Development.</li><li><strong>Phase cost over budget:</strong> the Prototype cost carries &quot;less than or equal to 200,000&quot;, and nothing is shown against Implementation or the total.</li><li><strong>Total cost over budget:</strong> the total carries &quot;exceeds the maximum budget for this opportunity&quot;, and nothing is shown against either phase.</li><li><strong>Two scrum masters:</strong> the refusal is now checked to say &quot;single scrum master&quot; against Implementation.</li><li><strong>Complete proposal:</strong> the form shows both phases complete and no cost errors before it submits.</li></ul>
+<p>The single-choice scrum master, no-scrum-master and unconfirmed-member tests are the same as before.</p>
+<p><strong>Two design choices:</strong></p>
+<ul><li>The contract says the form&#39;s submit control stays unavailable while any phase or cost is at fault. So refusal tests fill the form, read what it shows, try to submit (tolerating the control being unavailable), and then check that no proposal identifier appeared.</li><li>The contract doesn&#39;t say whether these list observations come back as JSON or as text. The test reads either: a JSON array or object, or one entry per line. It decides &quot;incomplete&quot; from the words &quot;incomplete&quot; or &quot;not complete&quot;, or from a complete flag set to false. If an adapter reports completeness some other way, those checks will fail even though the form behaves correctly.</li></ul>
+<p><strong>Still missing from the surface:</strong> nothing blocks this criterion. The contract gives no exact wording, and no guarantee of a phase in the refusal, for a phase with no scrum master or with an unconfirmed member. Those two tests therefore only assert that the service refused, not where it located the refusal. If the contract later states those messages, the tests can be tightened.</p>
+<p>I changed nothing outside <code>tests/acceptance</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 11:33.</p>
+<div class="body"><p>Question: do the rewritten R-2.19 tests follow from the criterion and from nothing else? Ruling: approve. The file now covers every clause of R-2.19. The clause previously recorded as untestable (the form offers a team section for exactly the opportunity&#39;s phases, and shows which phase is incomplete or which cost is over its budget) is asserted through the observations the contract added: phase_team_sections, phase_requirements and cost_errors. The two cases the form cannot send, a team for a phase the opportunity lacks and a missing phase, go to the service through proposal-team-request. The contract now says that request sends phases exactly as given, and refusal_by_field shows which phase each refusal names. Every quoted message comes from spec/contract/surface.yaml, not from the application: &#39;does not require this phase&#39;, &#39;requires this phase&#39;, &#39;single scrum master&#39;, &#39;less than or equal to 200,000&#39; and &#39;exceeds the maximum budget for this opportunity&#39;. The G3 ruling on derive-tests-proposals-stale-12 accepted contract wording on the same basis. Naming the capability each phase lacks is part of what the contract says phase_requirements reports, and it is how the form shows why that phase is incomplete. No selector, route, table or status code leaks into the tests. Deleting the not-testable entry is correct because nothing is left untestable. The runner&#39;s typecheck reports no errors under acceptance/proposals/; its only two errors are under adapters/new/, which this proposal does not answer for. The owed test missing-test/R-2.19 closes when its test first runs, and this ruling does not close it. One risk sits with the adapter, not the test: the test decides &#39;incomplete&#39; by matching words or a false flag, so an adapter that reports completeness some other way would fail a form that behaves correctly. What would change the ruling: a typecheck error under acceptance/proposals/, or a contract that stops stating these messages or observations.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
