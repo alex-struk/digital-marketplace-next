@@ -240,7 +240,12 @@ pages:
       phases: { test_id: opportunity-phases }
       # The body of the page at "sprint-with-us-opportunity-scope" (seed.content
       # .servicePageSprintWithUsOpportunityScope) as this screen embeds it, rendered. Empty
-      # when that page cannot be read.
+      # when that page cannot be read. That page is one the service needs: no screen and
+      # no request removes it or changes its address, its body cannot be saved empty, and
+      # reading it needs no sign-in. It can therefore be unreadable only if its database
+      # row is absent, which the application never produces. The seed does not remove it,
+      # because every Sprint With Us opportunity reads the same page at the same address,
+      # so removing it would empty this section for every test.
       scope_section: { test_id: null }
       addenda: { test_id: opportunity-addenda }
       successful_proponent: { test_id: opportunity-successful-proponent }
@@ -521,7 +526,11 @@ pages:
       # manifest gives it (users.organizationOwner is "Blake Placeholder"). The choice
       # also lists people whose invitation to the organization is still unanswered,
       # marked pending (pending_team_member), so for organizations.qualified it holds
-      # users.teamCandidatePending beside the three active members.
+      # users.teamCandidatePending beside the three active members. A person whose
+      # membership is inactive is not offered. While any phase names a pending person,
+      # submit_proposal stays unavailable and the phase says its team must be confirmed
+      # (non-pending) members; save_draft still saves the proposal with that person on
+      # it, because the service checks membership only when a proposal is submitted.
       team_member_choices: { test_id: null }
 
   - id: proposal-swu-edit
@@ -1234,6 +1243,10 @@ pages:
     title: "Instructions"
     actions: {}
     observations:
+      # The body of the page at "sprint-with-us-evaluation-instructions", rendered. Empty
+      # when that page cannot be read. As with scope_section on opportunity-swu-view, the
+      # page is one the service needs and cannot be removed, renamed or emptied, so it
+      # is unreadable only if its database row is absent.
       instructions_body: { test_id: evaluation-instructions-body }
       visible_to_evaluators_only: { test_id: opportunity-tab-instructions }
 
@@ -1243,6 +1256,9 @@ pages:
     title: "Instructions"
     actions: {}
     observations:
+      # The body of the page at "team-with-us-evaluation-instructions", rendered. Empty
+      # when that page cannot be read, which, as on evaluation-instructions-swu, happens
+      # only if its database row is absent.
       instructions_body: { test_id: evaluation-instructions-body }
       visible_to_evaluators_only: { test_id: opportunity-tab-instructions }
 

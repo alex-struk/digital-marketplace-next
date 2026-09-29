@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>contract-v24 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">273</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">269</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">236</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>contract-v24</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-09-29 04:11</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the contract the tests will act through?</h2>
+<p><strong>Recommendation.</strong> This run was about two criteria the tech lead sent to the product owner.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>This run was about two criteria the tech lead sent to the product owner. In both, the old application agrees with the approved contract, and it&#39;s the criterion&#39;s wording that is wrong. The contract stays as it is; I added the supporting facts to it. I checked both findings against the running old application, and the oracle started without any change to the override.</p>
+<h3>R-7.29 (an embedded page &quot;removed&quot;): no user or request can produce the state it starts from</h3>
+<p>On the Sprint With Us opportunity screen and the evaluation-instructions tabs, the page body shown inline comes from one of the service&#39;s own pages. The scope page, the two evaluation-instructions pages, the terms pages and the proposal-evaluation pages are all created by migrations with <code>fixed: true</code>.</p>
+<ul><li><strong>Delete and rename are refused.</strong> As administrator on the oracle, a delete returned 400 <code>&quot;You cannot delete fixed content.&quot;</code>, and changing the page&#39;s address returned 400 <code>&quot;You cannot change the slug of fixed content.&quot;</code> (<code>src/back-end/lib/resources/content.ts:258</code> and <code>:360</code>).</li><li><strong>The body can&#39;t be emptied.</strong> A body must be at least one character long.</li><li><strong>Anyone can read the page.</strong> The read has no permission check; an anonymous read returned 200.</li><li><strong>The screen does behave as the criterion says.</strong> If the read fails, the scope section is left as an empty string and the rest of the screen renders (<code>opportunity/sprint-with-us/view.tsx:202</code>, <code>edit/tab/instructions.tsx:63</code>).</li></ul>
+<p>So the empty-section path only runs if the page&#39;s database row is missing, or the database fails at that moment. The application never produces either.</p>
+<p>The seed can&#39;t set it up either. The seed is loaded once for every test, and every Sprint With Us opportunity reads the same page at the same address. Removing it would blank the scope section for every other test and contradict R-7.25&#39;s own test.</p>
+<p><strong>Recommendation:</strong> reword R-7.29&#39;s given as a defensive guarantee (&quot;should the page ever fail to load&quot;), and record it as a behaviour no test can check against the old application. The alternative is to retire it. I don&#39;t recommend weakening R-7.25 to make it reachable.</p>
+<h3>R-2.18 (proposal form &quot;offers only active members&quot;): true for Team With Us, false for Sprint With Us</h3>
+<p><strong>Sprint With Us:</strong> the &quot;Add Team Member(s)&quot; dialog is built from the organization&#39;s member list, which returns everyone who isn&#39;t inactive (<code>db/affiliation.ts:210</code>). Pending invitees show with a Pending badge (<code>phase.tsx:607</code>). On the oracle, that list for the seeded organization held three active members plus the pending &quot;Quinn Placeholder&quot;; the inactive &quot;Rowan Placeholder&quot; wasn&#39;t there.</p>
+<p>With a pending person on a phase:</p>
+<ul><li><strong>Submit is disabled.</strong> The phase counts as invalid (<code>phase.tsx:319–333</code>, <code>create.tsx:486</code>), and it tells the vendor the team &quot;must only consist of confirmed (non-pending) members&quot;.</li><li><strong>Save Draft still works.</strong> The service skips the membership check on drafts (<code>resources/proposal/sprint-with-us/index.ts:351</code>).</li><li><strong>Resubmitting a withdrawn proposal isn&#39;t guarded by that check.</strong> Its Submit button (<code>edit/tab/proposal.tsx:1132</code>) is enabled whether or not the form is valid.</li></ul>
+<p><strong>Team With Us:</strong> the choice filters to active members only (<code>team-with-us/lib/components/team.tsx:74</code>), so the criterion is right for it.</p>
+<p><strong>Recommendation:</strong> correct R-2.18&#39;s wording (an edit condition). The Team With Us form offers only active members. The Sprint With Us form also offers pending invitees, marked pending, and won&#39;t submit while one is named. The contract&#39;s version is correct and should stand.</p>
+<h3>What changed in the contract</h3>
+<p>The only file touched is <code>spec/contract/surface.yaml</code>; I deleted nothing, and no personas, seed, OpenAPI description, observables or override changed:</p>
+<ul><li><code>scope_section</code> on <code>opportunity-swu-view</code> now says why &quot;cannot be read&quot; happens only when the database row is absent, and why the seed doesn&#39;t create that state.</li><li><code>instructions_body</code> on both evaluation-instructions pages now says the same.</li><li><code>team_member_choices</code> on <code>proposal-swu-create</code> now says inactive members aren&#39;t offered, and that a pending member blocks submitting but not saving a draft.</li></ul>
+<h3>Owed items</h3>
+<p>Both items are now routed to ratify, and none sits with this stage, so I wrote no hand-on lines. Every other item assigned to this stage was already closed.</p>
+<h3>For the next test writer</h3>
+<ul><li><strong>Pages:</strong> unchanged from the last approved contract, which covers all eight domains.</li><li><strong>Sign-in:</strong> on the oracle, every persona signs in through a session route: <code>/auth/createsessionadmin</code>, <code>/auth/createsessiongov</code>, or <code>/auth/createsessionvendor/:n</code> for the matching seeded <code>test-vendor-&lt;n&gt;</code> account. On the rebuilt target they use the sandbox identity provider with the same usernames. The anonymous visitor is <code>sign_in: null</code>. Personas needing a third distinct public-sector session are marked unavailable on the oracle, as before.</li><li><strong>Seed:</strong> <code>tests/seed/</code> 000–015 and <code>manifest.yaml</code>, unchanged. It holds the installation row, one account per sign-in identity plus team candidates (active, pending, inactive, outsider), organizations, pages including all the fixed ones, and opportunities, proposals and evaluations at each stage for the three programs.</li></ul>
+<h3>Oracle</h3>
+<p><code>oracle up</code> started four copies. The migrations ran, the seed loaded, and the seeded organization&#39;s members, and the seeded scope page by its id, were readable through the application&#39;s own API. <code>oracle down</code> ran afterwards and no oracle containers remain.</p>
+<p>The session refused <code>$SDLC_BIN</code>, so I ran the same CLI from its checkout at <code>~/GitHub/agentic-sdlc/bin/sdlc.mjs</code>, as earlier runs did.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-09-29 04:11.</p>
+<div class="body"><p>The question is whether surface.yaml is the contract the tests will act through, now that notes have been added explaining the two criteria the tech lead sent to the product owner. I approve. The only change is comments in spec/contract/surface.yaml: no action, test id, seed row, persona or override changes, so no test acts any differently. I checked the notes against the old source. content.ts refuses &#39;You cannot change the slug of fixed content.&#39; (line 264; the proposal says :258) and &#39;You cannot delete fixed content.&#39; (line 361; the proposal says :360). affiliation.ts:210 excludes only inactive members from the organization&#39;s member list, so Sprint With Us offers pending invitees. phase.tsx:458 says a Sprint With Us team &#39;must only consist of confirmed (non-pending) members&#39;. team-with-us team.tsx:74 filters to active members. So the notes describe what the old application does, and they give the reasons the next test writer needs: why the R-7.29 empty-section state cannot be seeded without breaking R-7.25, and why a pending member blocks submitting a Sprint With Us proposal but not saving a draft. These notes say the criteria&#39;s wording is wrong, but deciding the wording belongs to ratify, which already holds both items: R-7.29 as a defensive guarantee or retirement, and R-2.18 as an edit that splits Team With Us from Sprint With Us. So this contract ruling carries no criterion conditions and settles neither question early. I would return it if a comment contradicted a cited line, or if the contract had been changed to make R-7.29 reachable by removing or rewording the seeded fixed page, which would break R-7.25. Tier is STANDARD and there is only one plausible reading, so no escalation is needed.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
