@@ -67,3 +67,14 @@ Both items are now routed to ratify, and none sits with this stage, so I wrote n
 `oracle up` started four copies. The migrations ran, the seed loaded, and the seeded organization's members, and the seeded scope page by its id, were readable through the application's own API. `oracle down` ran afterwards and no oracle containers remain.
 
 The session refused `$SDLC_BIN`, so I ran the same CLI from its checkout at `~/GitHub/agentic-sdlc/bin/sdlc.mjs`, as earlier runs did.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether surface.yaml is the contract the tests will act through, now that notes have been added explaining the two criteria the tech lead sent to the product owner. I approve. The only change is comments in spec/contract/surface.yaml: no action, test id, seed row, persona or override changes, so no test acts any differently. I checked the notes against the old source. content.ts refuses 'You cannot change the slug of fixed content.' (line 264; the proposal says :258) and 'You cannot delete fixed content.' (line 361; the proposal says :360). affiliation.ts:210 excludes only inactive members from the organization's member list, so Sprint With Us offers pending invitees. phase.tsx:458 says a Sprint With Us team 'must only consist of confirmed (non-pending) members'. team-with-us team.tsx:74 filters to active members. So the notes describe what the old application does, and they give the reasons the next test writer needs: why the R-7.29 empty-section state cannot be seeded without breaking R-7.25, and why a pending member blocks submitting a Sprint With Us proposal but not saving a draft. These notes say the criteria's wording is wrong, but deciding the wording belongs to ratify, which already holds both items: R-7.29 as a defensive guarantee or retirement, and R-2.18 as an edit that splits Team With Us from Sprint With Us. So this contract ruling carries no criterion conditions and settles neither question early. I would return it if a comment contradicted a cited line, or if the contract had been changed to make R-7.29 reachable by removing or rewording the seeded fixed page, which would break R-7.25. Tier is STANDARD and there is only one plausible reading, so no escalation is needed.
+
+**Conditions:**
+none
