@@ -120,3 +120,16 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: which of R-2.22, R-3.9 and R-4.24 did this project's old-target adapter cause, and which go to the product owner. Ruling: approve, with one triage condition per criterion. R-2.22 is adapter-wrong. On Sprint With Us, after the organization is changed the owner is still on the phase: they belong to both organizations and the old dialog lists only people not yet added. addSwuPhaseMembers reads the owner's absence from the dialog as a refusal. The draft variant fails identically, which rules out the rule under test. On Team With Us the save control is disabled because the form fails its client-side validation, which the old app applies only to non-draft proposals; that is why the draft passed. The adapter reported 'no message' without walking the form's steps for the invalid field and without confirming the re-chosen member and rate held. R-3.9 is a product-question. The old Organizations tab lists the signed-in viewer's own affiliations, not the profiled user's, so there is no screen on which an administrator approves another person's invitation. None of the oracle-cannot causes (external identity provider, emailed link, native dialog) applies. R-4.24 is a product-question. Every session route lands on an account with a completed profile, so the form never shows. The remedy is a seeded vendor with an unfinished profile, which does not require changing oracle code, so oracle-cannot does not fit either. What would change the ruling: if the rebind of R-2.22 still leaves the Team With Us save disabled and names a real invalid field, that becomes a product-question on the next calibration; if an old screen does let an administrator act on another user's pending affiliation, R-3.9 becomes adapter-wrong.
+
+**Conditions:**
+- adapter-wrong R-2.22: on proposal-swu-edit.add_phase_team_member after the organization is changed, the named member is already on the phase (they belong to both organizations, and the old dialog lists only people not yet added), so treat a member already shown on the phase as added instead of throwing 'the member dialog does not offer'; on proposal-twu-edit.save_changes, after choosing the other organization confirm the Resource Name member and Hourly Rate are still filled for each resource, and when Save/Submit Changes is disabled walk every form step and report the invalid fields rather than 'the page shows no message'
+- product-question R-3.9
+- product-question R-4.24
