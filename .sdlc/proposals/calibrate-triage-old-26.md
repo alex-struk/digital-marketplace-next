@@ -86,3 +86,14 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: of R-2.19's five failing tests against old, which did this project's adapter cause? Ruling: approve with product-question R-2.19. After the bind-adapter-old-40 fix to how the adapter finds each phase's section and moves from Team to Pricing, every test now completes the whole proposal form, so each failure reflects the application's behaviour and not the binding's. I read the page snapshots under tests/test-results/proposals-R-2.19-* against tests/adapters/old/index.ts. (1) The phase-without-a-team, capability-not-covered and over-phase-budget tests: the app withholds the submission. 'Submit' is rendered without a pointer cursor, meaning disabled, and the form stays on '6. Review Proposal'. openTermsDialog (index.ts:3716) then runs surfaceRefusal, which walks every step, touches the fields, gathers messages and finds none, so fieldError, capabilityGapError and budgetExceededError honestly answer empty. The only related text is the review step's 'You have not yet assigned team members for this phase.' Whether a disabled Submit with no stated reason meets 'refused, naming the phase, the team or the cost' is a product question. (2) The two-scrum-masters test: the old form's Scrum Master is single-choice per phase, so ticking Dana unticked Blake, and the proposal was accepted ('Proposal Status: Submitted') with one scrum master per phase. The adapter clicked what the test asked. (3) The Inception test: the form shows only the opportunity's own phases (Proof of Concept, Implementation), and add_phase_team_member reported that accurately instead of inventing a control. The product owner should also note two things. Cases (2) and (3) are cases the old app makes impossible rather than refuses, so they should decide whether that meets the criterion or whether the tests ask for more than it does. The Team step also states 'Select at least two members for each phase', and every test offers one member per phase, which may confound the three withheld submissions. Nothing in the evidence points at the binding. Tier STANDARD, no unaccepted residual risk, so nothing escalates. What would change this: a snapshot of the Pricing or Team step showing an error message that surfaceRefusal's message filter missed would make it adapter-wrong.
+
+**Conditions:**
+- product-question R-2.19
