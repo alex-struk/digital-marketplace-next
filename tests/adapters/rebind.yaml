@@ -1851,3 +1851,14 @@ rebind:
       its column from the same table rows user_row reads and answer non-empty
       for a rendered list.
     closed: *a9
+  - id: R-2.19
+    target: old
+    why: proposal-swu-create.add_phase_team_member reached the Team step with an
+      organization chosen and looked only for an exactly-matching visible "Add
+      Team Member(s)" text node, then threw unbound. It never expanded each
+      phase's collapsible section (Inception / Prototype / Implementation)
+      before looking, and never looked for the adder by role or partial label (a
+      link or button containing 'Add Team Member') within each phase's block.
+      Expand every phase section first, find the adder within the phase being
+      asked about, and only report it unbound once every phase section is open
+      and it is still absent.
