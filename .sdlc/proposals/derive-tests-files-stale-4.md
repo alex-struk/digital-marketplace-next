@@ -33,3 +33,27 @@ A refusal observation that returns nothing, or throws, counts as "not refused". 
 **What I couldn't check.** I couldn't type-check or run the test: running `npx tsc` in this session needed an approval nobody was here to give. Instead I checked by hand that every surface member, persona key, seed handle and fixture export the file uses exists in `tests/generated` and `tests/fixtures`.
 
 Nothing asked for a change outside `tests/acceptance`, and I made none.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the rewritten R-8.11 tests follow from the files criteria and from nothing else? Approve. The first test signs in the seeded file's uploader, who may read the file. It asserts only what the criterion's then-clause states: the identifier and name match the seeded file, a stored date is present, and the content appears in none of them. The second test reads 'under the same permission rules as the content itself' as a per-person comparison across the uploader, an unnamed vendor and an administrator. It asserts only that the description is refused exactly when the content is. It no longer reads the file's bytes or asserts who is permitted, which the earlier return had objected to. No selector, route, table or status code leaks in: everything goes through contract surface members and seed handles. Every clause of R-8.11 is asserted, so no not-testable entry is needed. The runner's typecheck reports no diagnostics under acceptance/files/; its only diagnostics are in adapters/new/, outside this proposal. The diff touches only tests/acceptance, redo.yaml and applied.yaml bookkeeping, and no protected path. One residual weakness: a refusal observation that answers empty or throws counts as not refused, so if neither binds, the comparison passes vacuously. That concerns the binding and does not overreach the criterion. The ruling would change if verify showed both refusal observations unbound for R-8.11, or if a run showed the description reporting a value the criterion does not name.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `4e3a1fba100896f650d491c29f5d9c74f9449b6a`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/files/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
