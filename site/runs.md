@@ -184,6 +184,9 @@
 - 07:09:19 run calibrate: ok, cost 0, turns 0
 - 07:09:20 propose calibrate-old-19 at G1
 - 07:10:35 rule calibrate-old-19 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 08:03:39 oracle up old in configuration notifications_disabled: local port 3103
+- 08:04:35 oracle down old in configuration notifications_disabled
+- 08:04:43 run calibrate: ok, cost 0, turns 0
 
 # Run record 2026-09-28
 
