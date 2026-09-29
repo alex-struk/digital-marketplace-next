@@ -34,3 +34,27 @@ The refusal is lifted in a `finally` block whether the test passes or fails.
 **The part still owed.** The existing `not-testable.yaml` entry for R-6.2 stays as it is. It covers the clause "When a message cannot be composed", is marked `blocked:`, and is owed by the contract stage. Nothing in the contract sets up a message the service cannot compose: no seeded record whose content makes a message fail to render, and no way to inject a fault into composition. That starting state is the one thing I needed and could not find. The delivery half needed nothing new beyond the surface's existing mail-delivery-fault page and the caught-message pages.
 
 I didn't touch any path outside `tests/acceptance`, and nothing asked me to.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the rewritten R-6.2 tests follow from the notifications criterion and nothing else? Approve. Both catcher checks now count only notices that carry the published opportunity's title. Before, the check made while delivery was refused required the catcher to be empty, which failed on unrelated mail from earlier activity. The test also no longer counts a message as a notice just because the service's own address is a visible recipient, a rule that could catch unrelated service mail. Each remaining assertion follows from a clause of the criterion. The publish succeeds and the person is told so: the form shows no error and the opportunity reads as published. Nobody is told: no notice about the opportunity reaches the catcher while delivery is refused, and its history records no failed delivery. No further attempt is made: no notice about it arrives after delivery is restored and an invitation shows the catcher accepts mail again. The test uses only declared surface pages and seed handles and shows nothing of how the application is built. The clause 'when a message cannot be composed' stays covered by the existing not-testable.yaml entry and the open missing-test condition, which are unchanged. The runner's typecheck reports no diagnostics under acceptance/notifications; its two diagnostics are in adapters/new, which this proposal does not answer for. The changes to tests/results/old/applied.yaml are the runner's usual clearing of rulings for a re-derived criterion, not the writer's. The ruling would change to a return if a new-opportunity notice could reach someone without the opportunity's title in its subject or body, because the title match would then miss a real notice.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `4e11aebb1cec5f61a5d9ed72e3644fdea4647264`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/notifications/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
