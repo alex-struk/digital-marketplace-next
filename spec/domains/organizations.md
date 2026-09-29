@@ -147,6 +147,7 @@ An organization's last remaining owner cannot be removed from it.
 - when: an administrator tries to end the owner's membership
 - then: the request is refused with a message saying this is the sole owner for the organization, and the membership remains
 - state: accepted
+- note: calibrate 2026-09-29: the old target fails this; kept, the rebuild must pass it
 
 ### R-3.12 · v1 · confirmed · recovered
 An organization's owner, its administrators and a service administrator may grant or withdraw administrator rights over the organization to an active member, but nobody may change their own rights and the owner's own membership cannot be changed this way.

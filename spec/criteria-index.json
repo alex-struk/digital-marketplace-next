@@ -1,5 +1,5 @@
 {
-  "generated_from": "0518dccea59a1ad5bce1f3b3ed4a00d0c8c61c73",
+  "generated_from": "258c8b6542d73fd923b7fbc7b8c8d9d82627255b",
   "criteria": [
     {
       "id": "R-7.1",
@@ -6333,7 +6333,9 @@
       "given": "an organization with exactly one owner and two other active members",
       "when": "an administrator tries to end the owner's membership",
       "then": "the request is refused with a message saying this is the sole owner for the organization, and the membership remains",
-      "notes": [],
+      "notes": [
+        "calibrate 2026-09-29: the old target fails this; kept, the rebuild must pass it"
+      ],
       "state": "accepted",
       "raw": "### R-3.11 · v1 · confirmed · recovered",
       "line": 141,
@@ -6373,7 +6375,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.12 · v1 · confirmed · recovered",
-      "line": 151,
+      "line": 152,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6406,7 +6408,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.13 · v1 · confirmed · recovered",
-      "line": 164,
+      "line": 165,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6433,7 +6435,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.14 · v1 · confirmed · recovered",
-      "line": 176,
+      "line": 177,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6460,7 +6462,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.15 · v1 · confirmed · recovered",
-      "line": 186,
+      "line": 187,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6491,7 +6493,7 @@
       "state": "accepted",
       "supersededBy": "R-3.20",
       "raw": "### R-3.16 · v1 · confirmed · recovered",
-      "line": 196,
+      "line": 197,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6524,7 +6526,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.17 · v1 · confirmed · recovered",
-      "line": 209,
+      "line": 210,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6541,7 +6543,7 @@
       "state": "accepted",
       "replaces": "R-3.4",
       "raw": "### R-3.18 · v1 · confirmed · authored",
-      "line": 221,
+      "line": 222,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6558,7 +6560,7 @@
       "state": "accepted",
       "replaces": "R-3.5",
       "raw": "### R-3.19 · v1 · confirmed · authored",
-      "line": 227,
+      "line": 228,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6575,7 +6577,7 @@
       "state": "accepted",
       "replaces": "R-3.16",
       "raw": "### R-3.20 · v1 · confirmed · authored",
-      "line": 233,
+      "line": 234,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6612,7 +6614,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.21 · v2 · confirmed · recovered",
-      "line": 239,
+      "line": 240,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6662,7 +6664,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.22 · v2 · confirmed · recovered",
-      "line": 252,
+      "line": 253,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6693,7 +6695,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.23 · v1 · confirmed · recovered",
-      "line": 269,
+      "line": 270,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6724,7 +6726,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.24 · v1 · confirmed · recovered",
-      "line": 280,
+      "line": 281,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6761,7 +6763,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.25 · v1 · confirmed · recovered",
-      "line": 291,
+      "line": 292,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6797,7 +6799,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.26 · v1 · confirmed · recovered",
-      "line": 304,
+      "line": 305,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6838,7 +6840,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.27 · v1 · confirmed · recovered",
-      "line": 317,
+      "line": 318,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6869,7 +6871,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.28 · v1 · confirmed · recovered",
-      "line": 331,
+      "line": 332,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6907,7 +6909,7 @@
       "state": "accepted",
       "supersededBy": "R-3.35",
       "raw": "### R-3.29 · v1 · confirmed · recovered",
-      "line": 342,
+      "line": 343,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6934,7 +6936,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.30 · v1 · confirmed · recovered",
-      "line": 356,
+      "line": 357,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -6969,7 +6971,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.31 · v1 · confirmed · recovered",
-      "line": 366,
+      "line": 367,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -7006,7 +7008,7 @@
       ],
       "state": "accepted",
       "raw": "### R-3.32 · v1 · confirmed · recovered",
-      "line": 378,
+      "line": 379,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -7049,7 +7051,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.33 · v1 · confirmed · recovered",
-      "line": 391,
+      "line": 392,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -7076,7 +7078,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-3.34 · v1 · confirmed · recovered",
-      "line": 405,
+      "line": 406,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -7093,7 +7095,7 @@
       "state": "accepted",
       "replaces": "R-3.29",
       "raw": "### R-3.35 · v1 · confirmed · authored",
-      "line": 415,
+      "line": 416,
       "domain": "organizations",
       "file": "spec/domains/organizations.md"
     },
@@ -7735,10 +7737,10 @@
     },
     {
       "id": "R-2.19",
-      "version": 2,
+      "version": 3,
       "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "A Sprint With Us proposal must offer a team for every phase the opportunity requires and no phase it does not, name no more than one scrum master in each phase, cover every capability the opportunity requires across its phases, and stay within each phase's budget and the opportunity's total budget.",
+      "statement": "A Sprint With Us proposal can be submitted only when it gives a team to every phase the opportunity has and to no other phase, the proposal form offering a team section for exactly the opportunity's phases; each phase has exactly one scrum master, chosen as a single choice among that phase's members; each phase has at least one confirmed member, and those members together hold every capability that phase requires; each phase's proposed cost is no more than that phase's maximum budget, and the total proposed cost is no more than the opportunity's total maximum budget. A proposal missing a phase team or a phase capability, or with a cost over budget, is not submitted, and the form shows which phase is incomplete or which cost is over its budget.",
       "cites": [
         {
           "path": "src/back-end/lib/validation.ts",
@@ -7767,7 +7769,7 @@
       "then": "each of those submissions is refused, naming the phase, the team or the cost as the reason",
       "notes": [],
       "state": "accepted",
-      "raw": "### R-2.19 · v2 · confirmed · recovered",
+      "raw": "### R-2.19 · v3 · confirmed · recovered",
       "line": 229,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
