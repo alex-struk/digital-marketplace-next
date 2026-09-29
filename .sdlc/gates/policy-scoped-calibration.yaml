@@ -1,0 +1,9 @@
+gate: G-POL
+verdict: approve
+by: tech-lead
+held_by: human
+note: ""
+conditions:
+  - "condition-withdrawn missing-test/R-7.29: its given (an embedded page removed) cannot arise, because under R-7.25 the service refuses to remove or rename the pages it embeds (confirmed in the old source at contract-v24); no test is owed"
+  - "condition-withdrawn missing-test/R-6.2: no stored value can make a notice fail to compose on the old application, so no acceptance test can reach the clause; the build stage covers message composition failure with its own test"
+at: 2026-09-29T23:16:09.011Z
