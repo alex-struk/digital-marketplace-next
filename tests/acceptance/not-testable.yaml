@@ -207,29 +207,3 @@ criteria:
       action; or, if no such state can be produced, a restatement from ratify of
       the composition clause in terms something observes
     owner: contract
-  - id: R-2.19
-    version: 3
-    clause: "to no other phase, the proposal form offering a team section for
-      exactly the opportunity's phases; and the form shows which phase is
-      incomplete or which cost is over its budget"
-    reason: "blocked: proposal-swu-create names no observation of the phase team
-      sections the form offers, so a test cannot read that it offers the
-      opportunity's phases and no other, and proposal-team-request's input is
-      documented only for the phases the opportunity requires, so a team for a
-      phase the opportunity lacks cannot be put to the service either. The
-      create screen's field_error, capability_gap_error and
-      budget_exceeded_error are each a text with no location, so a test can
-      read that the form refused the proposal but not which phase's section or
-      which cost — a phase's or the total — the message stands against. The
-      refusals themselves, the scrum master rules, the confirmed-member and
-      per-phase capability rules and both budget ceilings are asserted by
-      R-2.19.spec.ts."
-    missing: "on proposal-swu-create, an observation listing the phases the form
-      offers a team section for, by phase name; and error observations that
-      report, with each message, what it stands against — the phase (Inception,
-      Prototype, Implementation) whose team, scrum master, capabilities or cost
-      is at fault, or the total cost — as proposal-swu-edit's field_error
-      already describes for save_changes. Optionally, a statement on
-      proposal-team-request of what it sends for a phase the opportunity does
-      not have, so the service's refusal of an extra phase can be asserted."
-    owner: contract

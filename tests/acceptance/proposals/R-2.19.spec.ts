@@ -4,16 +4,23 @@ import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
 // One opportunity shape serves the whole file: a prototype phase wanting frontend work and an
-// implementation phase wanting backend work, each with its own maximum budget. The qualified
-// organization's administrator holds the frontend capability and its owner the backend one,
-// so a proposal naming the administrator in the prototype phase and the owner in the
-// implementation phase is complete, and each refusal test spoils exactly one thing about it.
+// implementation phase wanting backend work, each with its own maximum budget, and no
+// inception phase. The qualified organization's administrator holds the frontend capability
+// and its owner the backend one, so a proposal naming the administrator in the prototype
+// phase and the owner in the implementation phase is complete, and each refusal test spoils
+// exactly one thing about it.
 //
-// Most tests go through the proposal form, which is what the criterion's last sentence is
-// about. The scrum master and confirmed-member rules are put to the service through
-// proposal-team-request as well, because the form's single choice and its hiding of the
-// submit control for a pending person keep a vendor from ever sending those proposals, and
-// the criterion still says the service does not submit them.
+// The form is read through what it shows against each phase and cost: phase_team_sections
+// for the sections it offers, phase_requirements for which phase is incomplete and which
+// capabilities it still lacks, and cost_errors for which cost — a phase's or the total — is
+// over its budget. While any of those shows a fault the form keeps its submit control
+// unavailable, so a refusal test tries to submit anyway and then reads that no proposal came
+// of it.
+//
+// What the form cannot be made to send — a team for a phase it offers no section for, two
+// scrum masters in one phase, a phase with none, a person whose membership is unconfirmed —
+// is put to the service through proposal-team-request, whose refusal_by_field says which
+// phase a message stands against.
 //
 // The capability test puts each capability in the wrong phase: between them the two phases
 // hold both, but neither phase holds its own, which is what "every capability that phase
@@ -23,19 +30,17 @@ import type { Surface } from "../../fixtures";
 // total, and each phase's cost inside its own budget. Nothing the specification states
 // refuses such an opportunity; if publishing it were refused, the poll for its identifier
 // fails in setup and says so.
-//
-// Not asserted here, and recorded in not-testable.yaml: that the form offers a team section
-// for exactly the opportunity's phases, and which phase or which cost the form's message
-// stands against — the create screen's error observations are text without a location.
 
 const statement =
   "A Sprint With Us proposal can be submitted only when it gives a team to every phase the opportunity has and to no other phase, the proposal form offering a team section for exactly the opportunity's phases; each phase has exactly one scrum master, chosen as a single choice among that phase's members; each phase has at least one confirmed member, and those members together hold every capability that phase requires; each phase's proposed cost is no more than that phase's maximum budget, and the total proposed cost is no more than the opportunity's total maximum budget. A proposal missing a phase team or a phase capability, or with a cost over budget, is not submitted, and the form shows which phase is incomplete or which cost is over its budget.";
 
 const settle = { timeout: 20000 };
 const organization = seed.organizations.qualified;
+const PHASES = ["Inception", "Prototype", "Implementation"] as const;
 
 type Person = { name: string };
 type PhaseTeam = { members: Person[]; scrumMaster?: Person; cost: number };
+type Phases = { Prototype: PhaseTeam; Implementation: PhaseTeam };
 
 function inDays(days: number): string {
   const date = new Date();
@@ -49,6 +54,37 @@ async function readOrEmpty(read: () => Promise<string>): Promise<string> {
   } catch {
     return "";
   }
+}
+
+// A listing observation, one entry per phase or per message, whether the adapter gives it as
+// JSON or as lines of text.
+function entriesOf(listing: string): string[] {
+  try {
+    const parsed = JSON.parse(listing);
+    if (Array.isArray(parsed)) return parsed.map((e) => (typeof e === "string" ? e : JSON.stringify(e)));
+    if (parsed && typeof parsed === "object") {
+      return Object.entries(parsed).map(([key, value]) => `${key}: ${JSON.stringify(value)}`);
+    }
+  } catch {
+    // Not JSON; read as lines below.
+  }
+  return listing
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
+}
+
+function entryFor(listing: string, against: RegExp): string {
+  return entriesOf(listing).find((entry) => against.test(entry)) ?? "";
+}
+
+// The phase names a listing mentions, in the order it mentions them.
+function phaseNamesIn(listing: string): string[] {
+  return [...listing.matchAll(new RegExp(`\\b(${PHASES.join("|")})\\b`, "g"))].map((m) => m[1]);
+}
+
+function readsIncomplete(entry: string): boolean {
+  return /\bincomplete\b|not complete|"?complete"?\s*[:=]\s*(false|no)\b/i.test(entry);
 }
 
 const panel = {
@@ -127,12 +163,8 @@ async function publishSprintOpportunity(
   return opportunityId;
 }
 
-// Fills the proposal form as the organization's administrator and submits it.
-async function submitThroughForm(
-  surface: Surface,
-  opportunityId: string,
-  phases: { Prototype: PhaseTeam; Implementation: PhaseTeam },
-): Promise<void> {
+// Opens the proposal form as the organization's administrator and fills it, without submitting.
+async function fillForm(surface: Surface, opportunityId: string, phases: Phases): Promise<void> {
   await surface.signIn(persona.organizationAdmin);
   await surface.proposalSwuCreate.open({ opportunityId });
   await surface.proposalSwuCreate.chooseOrganization({ organization });
@@ -151,7 +183,16 @@ async function submitThroughForm(
   }
   await surface.proposalSwuCreate.acceptProgramTerms();
   await surface.proposalSwuCreate.acceptAppTerms();
-  await surface.proposalSwuCreate.submitProposal();
+}
+
+// The form keeps its submit control unavailable while it shows a fault; trying it anyway is
+// what a vendor can do, and what follows is read from whether a proposal came of it.
+async function trySubmit(surface: Surface): Promise<void> {
+  try {
+    await surface.proposalSwuCreate.submitProposal();
+  } catch {
+    // Unavailable: nothing was sent.
+  }
 }
 
 async function expectSubmitted(surface: Surface, what: string): Promise<void> {
@@ -164,18 +205,29 @@ async function expectSubmitted(surface: Surface, what: string): Promise<void> {
   expect(await readOrEmpty(() => surface.proposalSwuEdit.status()), what).toMatch(/submitted/i);
 }
 
-async function expectRefusedOnForm(
-  surface: Surface,
-  read: () => Promise<string>,
-  what: string,
-): Promise<void> {
-  await expect
-    .poll(() => readOrEmpty(read), { ...settle, message: `the form shows why ${what} was refused` })
-    .toBeTruthy();
+async function expectNotSubmitted(surface: Surface, what: string): Promise<void> {
   expect(
     await readOrEmpty(() => surface.proposalSwuEdit.proposalIdentifier()),
     `${what} was submitted`,
   ).toBeFalsy();
+}
+
+// Waits until the form shows, against the phase named, that its section is incomplete.
+async function expectPhaseIncomplete(surface: Surface, phase: string, what: string): Promise<string> {
+  const against = new RegExp(`\\b${phase}\\b`);
+  await expect
+    .poll(
+      async () => readsIncomplete(entryFor(await readOrEmpty(() => surface.proposalSwuCreate.phaseRequirements()), against)),
+      { ...settle, message: `the form shows the ${phase} phase incomplete for ${what}` },
+    )
+    .toBe(true);
+  return entryFor(await readOrEmpty(() => surface.proposalSwuCreate.phaseRequirements()), against);
+}
+
+async function expectPhaseComplete(surface: Surface, phase: string, what: string): Promise<void> {
+  const entry = entryFor(await readOrEmpty(() => surface.proposalSwuCreate.phaseRequirements()), new RegExp(`\\b${phase}\\b`));
+  expect(entry, `the form lists the ${phase} phase's requirements for ${what}`).toBeTruthy();
+  expect(readsIncomplete(entry), `the form shows the ${phase} phase incomplete for ${what}`).toBe(false);
 }
 
 async function submitByRequest(
@@ -207,7 +259,17 @@ async function expectRefusedByService(surface: Surface, what: string): Promise<v
   expect(await readOrEmpty(() => surface.proposalTeamRequest.refusalMessages()), what).toBeTruthy();
 }
 
-const complete = () => ({
+// The refusal's message standing against the phase named, holding the wording given.
+async function expectRefusedAgainstPhase(surface: Surface, phase: string, wording: RegExp, what: string): Promise<void> {
+  const byField = await readOrEmpty(() => surface.proposalTeamRequest.refusalByField());
+  const located = entriesOf(byField).filter((entry) => new RegExp(`\\b${phase}\\b`).test(entry));
+  expect(
+    located.some((entry) => wording.test(entry)),
+    `${what}: the refusal says ${wording} against the ${phase} phase (refusal was ${byField})`,
+  ).toBe(true);
+}
+
+const complete = (): Phases => ({
   Prototype: {
     members: [seed.users.organizationAdmin],
     scrumMaster: seed.users.organizationAdmin,
@@ -220,25 +282,78 @@ const complete = () => ({
   },
 });
 
+const completeByRequest = () => [
+  { phase: "Prototype", members: [{ member: seed.users.organizationAdmin, scrumMaster: true }], proposedCost: 150000 },
+  { phase: "Implementation", members: [{ member: seed.users.organizationOwner, scrumMaster: true }], proposedCost: 250000 },
+];
+
 test(`${statement} (a proposal meeting every rule is submitted)`, async ({ surface }) => {
   test.setTimeout(180000);
   const opportunityId = await publishSprintOpportunity(surface, "R-2.19 opportunity bid on with a complete proposal");
-  await submitThroughForm(surface, opportunityId, complete());
+  await fillForm(surface, opportunityId, complete());
+  await expectPhaseComplete(surface, "Prototype", "a complete proposal");
+  await expectPhaseComplete(surface, "Implementation", "a complete proposal");
+  expect(entriesOf(await readOrEmpty(() => surface.proposalSwuCreate.costErrors())), "cost errors on a complete proposal").toEqual([]);
+  await surface.proposalSwuCreate.submitProposal();
   await expectSubmitted(surface, "a proposal meeting every rule");
 });
 
-test(`${statement} (a proposal missing a phase team is not submitted)`, async ({ surface }) => {
+test(`${statement} (the proposal form offers a team section for exactly the opportunity's phases)`, async ({ surface }) => {
+  test.setTimeout(180000);
+  const opportunityId = await publishSprintOpportunity(surface, "R-2.19 opportunity whose form offers its own phases");
+  await surface.signIn(persona.organizationAdmin);
+  await surface.proposalSwuCreate.open({ opportunityId });
+  await surface.proposalSwuCreate.chooseOrganization({ organization });
+  await expect
+    .poll(async () => phaseNamesIn(await readOrEmpty(() => surface.proposalSwuCreate.phaseTeamSections())), {
+      ...settle,
+      message: "the form offers a team section for the prototype and implementation phases and no other",
+    })
+    .toEqual(["Prototype", "Implementation"]);
+});
+
+test(`${statement} (a team for a phase the opportunity does not have is not submitted)`, async ({ surface }) => {
+  test.setTimeout(180000);
+  const opportunityId = await publishSprintOpportunity(surface, "R-2.19 opportunity bid on with an extra inception team");
+  await submitByRequest(surface, opportunityId, [
+    { phase: "Inception", members: [{ member: seed.users.organizationMember, scrumMaster: true }], proposedCost: 50000 },
+    ...completeByRequest(),
+  ]);
+  await expectRefusedByService(surface, "a proposal giving a team to a phase the opportunity does not have");
+  await expectRefusedAgainstPhase(
+    surface,
+    "Inception",
+    /does not require this phase/i,
+    "a proposal giving a team to a phase the opportunity does not have",
+  );
+});
+
+test(`${statement} (a proposal leaving out a phase the opportunity has is not submitted)`, async ({ surface }) => {
+  test.setTimeout(180000);
+  const opportunityId = await publishSprintOpportunity(surface, "R-2.19 opportunity bid on without its prototype phase");
+  await submitByRequest(surface, opportunityId, completeByRequest().filter((p) => p.phase !== "Prototype"));
+  await expectRefusedByService(surface, "a proposal leaving out the prototype phase");
+  await expectRefusedAgainstPhase(
+    surface,
+    "Prototype",
+    /requires this phase/i,
+    "a proposal leaving out the prototype phase",
+  );
+});
+
+test(`${statement} (a proposal missing a phase team is not submitted, and the form shows which phase is incomplete)`, async ({
+  surface,
+}) => {
   test.setTimeout(180000);
   const opportunityId = await publishSprintOpportunity(surface, "R-2.19 opportunity bid on with a phase left without a team");
-  await submitThroughForm(surface, opportunityId, {
+  await fillForm(surface, opportunityId, {
     ...complete(),
     Prototype: { members: [], cost: 150000 },
   });
-  await expectRefusedOnForm(
-    surface,
-    () => surface.proposalSwuCreate.fieldError(),
-    "a proposal whose prototype phase has no team",
-  );
+  await expectPhaseIncomplete(surface, "Prototype", "a proposal whose prototype phase has no team");
+  await expectPhaseComplete(surface, "Implementation", "a proposal whose prototype phase has no team");
+  await trySubmit(surface);
+  await expectNotSubmitted(surface, "a proposal whose prototype phase has no team");
 });
 
 test(`${statement} (the scrum master is a single choice among the phase's members)`, async ({ surface }) => {
@@ -282,6 +397,12 @@ test(`${statement} (a phase with two scrum masters is not submitted)`, async ({ 
     },
   ]);
   await expectRefusedByService(surface, "a phase naming two scrum masters");
+  await expectRefusedAgainstPhase(
+    surface,
+    "Implementation",
+    /single scrum master/i,
+    "a phase naming two scrum masters",
+  );
 });
 
 test(`${statement} (a phase with no scrum master is not submitted)`, async ({ surface }) => {
@@ -319,10 +440,13 @@ test(`${statement} (a phase whose only holder of a required capability is not a 
   await expectRefusedByService(surface, "a phase relying on a person who is not a confirmed member");
 });
 
-test(`${statement} (a proposal missing a phase capability is not submitted)`, async ({ surface }) => {
+test(`${statement} (a proposal missing a phase capability is not submitted, and the form shows which phase is incomplete)`, async ({
+  surface,
+}) => {
   test.setTimeout(180000);
   const opportunityId = await publishSprintOpportunity(surface, "R-2.19 opportunity bid on with capabilities in the wrong phases");
-  await submitThroughForm(surface, opportunityId, {
+  const what = "a proposal whose phases each lack the capability they require";
+  await fillForm(surface, opportunityId, {
     Prototype: {
       members: [seed.users.organizationOwner],
       scrumMaster: seed.users.organizationOwner,
@@ -334,28 +458,38 @@ test(`${statement} (a proposal missing a phase capability is not submitted)`, as
       cost: 250000,
     },
   });
-  await expectRefusedOnForm(
-    surface,
-    () => surface.proposalSwuCreate.capabilityGapError(),
-    "a proposal whose phases each lack the capability they require",
-  );
+  const prototype = await expectPhaseIncomplete(surface, "Prototype", what);
+  expect(prototype, "the prototype phase names the capability it lacks").toMatch(/Frontend Development/);
+  const implementation = await expectPhaseIncomplete(surface, "Implementation", what);
+  expect(implementation, "the implementation phase names the capability it lacks").toMatch(/Backend Development/);
+  await trySubmit(surface);
+  await expectNotSubmitted(surface, what);
 });
 
-test(`${statement} (a proposal with a phase cost over that phase's budget is not submitted)`, async ({ surface }) => {
+test(`${statement} (a proposal with a phase cost over that phase's budget is not submitted, and the form shows which cost is over its budget)`, async ({
+  surface,
+}) => {
   test.setTimeout(180000);
   const opportunityId = await publishSprintOpportunity(surface, "R-2.19 opportunity bid on above one phase's budget");
-  await submitThroughForm(surface, opportunityId, {
+  const what = "a proposal whose prototype cost exceeds the prototype budget";
+  await fillForm(surface, opportunityId, {
     Prototype: { ...complete().Prototype, cost: 250000 },
     Implementation: { ...complete().Implementation, cost: 200000 },
   });
-  await expectRefusedOnForm(
-    surface,
-    () => surface.proposalSwuCreate.budgetExceededError(),
-    "a proposal whose prototype cost exceeds the prototype budget",
-  );
+  await expect
+    .poll(async () => entryFor(await readOrEmpty(() => surface.proposalSwuCreate.costErrors()), /\bPrototype\b/), {
+      ...settle,
+      message: `the form shows the prototype cost over its budget for ${what}`,
+    })
+    .toMatch(/less than or equal to 200,000/);
+  const errors = await readOrEmpty(() => surface.proposalSwuCreate.costErrors());
+  expect(entryFor(errors, /\bImplementation\b/), "the implementation cost is within its budget").toBe("");
+  expect(entryFor(errors, /\btotal\b/i), "the total cost is within its budget").toBe("");
+  await trySubmit(surface);
+  await expectNotSubmitted(surface, what);
 });
 
-test(`${statement} (a proposal with a total cost over the opportunity's total budget is not submitted)`, async ({
+test(`${statement} (a proposal with a total cost over the opportunity's total budget is not submitted, and the form shows which cost is over its budget)`, async ({
   surface,
 }) => {
   test.setTimeout(180000);
@@ -364,13 +498,20 @@ test(`${statement} (a proposal with a total cost over the opportunity's total bu
     "R-2.19 opportunity bid on above its total budget",
     400000,
   );
-  await submitThroughForm(surface, opportunityId, {
+  const what = "a proposal whose total cost exceeds the opportunity's total budget";
+  await fillForm(surface, opportunityId, {
     Prototype: { ...complete().Prototype, cost: 190000 },
     Implementation: { ...complete().Implementation, cost: 290000 },
   });
-  await expectRefusedOnForm(
-    surface,
-    () => surface.proposalSwuCreate.budgetExceededError(),
-    "a proposal whose total cost exceeds the opportunity's total budget",
-  );
+  await expect
+    .poll(async () => entryFor(await readOrEmpty(() => surface.proposalSwuCreate.costErrors()), /\btotal\b/i), {
+      ...settle,
+      message: `the form shows the total cost over the opportunity's budget for ${what}`,
+    })
+    .toMatch(/exceeds the maximum budget for this opportunity/i);
+  const errors = await readOrEmpty(() => surface.proposalSwuCreate.costErrors());
+  expect(entryFor(errors, /\bPrototype\b/), "the prototype cost is within its budget").toBe("");
+  expect(entryFor(errors, /\bImplementation\b/), "the implementation cost is within its budget").toBe("");
+  await trySubmit(surface);
+  await expectNotSubmitted(surface, what);
 });
