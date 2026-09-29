@@ -27,3 +27,27 @@ I rewrote the test for the one criterion in this batch, R-8.12. It is now `tests
 - **Administrator asks for the same missing id:** the page reports "not found" (`notFoundForAdministrator`). The old version also asserted that the administrator was *not* refused. The criterion doesn't say that, so I dropped it.
 
 **Not found in the surface:** nothing this criterion needed was missing. The contract already had a seeded file the vendor may not read, a download page opened by file id, and a separate observation for each of the three answers. I changed nothing outside `tests/acceptance`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether the rewritten R-8.12 tests follow from the criterion and from nothing else. Approved. Each clause has its own test. A vendor asking for a file they may not read (the seeded file only its uploader may read, which has no read-access rows) is refused. A vendor asking for an identifier no file carries (a seeded opportunity id) is refused. An administrator asking for that same identifier is told it was not found. The unknown-file observation the second test now uses is bound in the contract to the same refusal as the not-permitted observation, so it still checks the criterion's 'not authorized' answer. The dropped 'administrator is not refused' assertion was never in the criterion, so dropping it is correct. The administrator step, the account reactivation and the upload that made the earlier version fail in its own setup are gone, which is what the redo asked for. The runner's typecheck reports no errors under acceptance/files/; the two it does report are in adapters/new/, which this proposal does not answer for. This would become a return if the contract separated the unknown-file refusal from the not-authorized refusal, or if the seeded private file turned out to be readable by the vendor.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `11c2e913d20e37a68f277c4aef6bf6d26a2fdeec`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/files/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
