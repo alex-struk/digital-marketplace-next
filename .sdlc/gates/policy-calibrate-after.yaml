@@ -1,0 +1,12 @@
+gate: G-POL
+verdict: approve
+by: tech-lead
+held_by: human
+note: ""
+conditions:
+  - "condition-withdrawn missing-test/R-1.51: that an undefined state is gone is a property of the migration of historical records, not of anything the service answers; the build stage covers it with its own migration test"
+  - "condition-withdrawn missing-test/R-8.16: a working copy on the service's own disk is an implementation detail no user observes; the build stage covers it with its own test"
+  - "condition-withdrawn missing-test/R-4.13: the absence of a route to create a first administrator cannot be observed by an acceptance test; the build stage covers it with its own test"
+  - "condition-withdrawn missing-test/R-7.28: two publishes colliding inside one read-then-write window is a property of the service's storage; the build stage covers it with its own concurrency test"
+  - "condition-withdrawn missing-test/R-1.33: only a request no screen sends could show the acceptance clause, so no acceptance test is owed; the build stage covers it with its own test"
+at: 2026-09-29T04:06:04.228Z
