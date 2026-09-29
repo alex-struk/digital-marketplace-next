@@ -31,3 +31,27 @@ I rewrote the R-5.13 test (v1) in `tests/acceptance/evaluation/R-5.13.spec.ts`. 
 - **Weakness:** because the check is "status unchanged", a finalise button that does nothing at all would also pass. Nothing in the criterion gives a control case to rule that out.
 
 **Missing surface:** none. The contract had everything this test needed. I changed nothing outside `tests/acceptance`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether the rewritten R-5.13 test follows from R-5.13 alone. It does. It starts from the seeded Sprint With Us opportunity at consensus, where the third proponent is still under review with no consensus begun and the other two have submitted consensuses, which is the case the criterion describes. It attempts the finalise from the consensus list and accepts a screen that won't offer or confirm it as a refusal, because the criterion promises a refusal and no particular message. Its only assertion is that the opportunity's status is unchanged after a quiet period, and since finalising the consensus scores is what moves the opportunity out of the consensus stage, that is a direct observation of the refusal. The history counting, the draft-consensus setup and the second attempt from the management screen, which the earlier ruling objected to, are gone. The 'so that' clause gives the reason for the rule and is not a separate outcome, so it needs no assertion or not-testable entry. Nothing about the implementation leaks into the test. The runner's typecheck reports no errors under acceptance/evaluation/; its two errors are in adapters/new/, which this proposal does not touch. The edits to tests/results/old/applied.yaml and the closed entry in tests/acceptance/redo.yaml are the runner's own bookkeeping for the re-derivation. One weakness remains: a finalise that silently does nothing would also pass, but the criterion gives no positive case to rule that out. The ruling would change if the spec produced typecheck errors, or if its first run showed it cannot bind to the consensus list or read the opportunity's status, which would mean the test reaches past its criterion.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `1efb672cd7ba67d895a967846a3a220d9da91a51`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
