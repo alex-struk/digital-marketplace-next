@@ -4740,7 +4740,142 @@ export default function create(
     unqualifiedOrganizationNotice: () => linesMatching(/qualif/i),
     pendingTeamMember: () => linesMatching(/pending/i),
     teamMemberChoices: () => swuMemberChoices("proposal-swu-create.team_member_choices"),
+    phaseTeamSections: () => swuPhaseTeamSections("proposal-swu-create.phase_team_sections"),
+    phaseRequirements: () => swuPhaseRequirements("proposal-swu-create.phase_requirements"),
+    costErrors: () => swuCostErrors("proposal-swu-create.cost_errors"),
   };
+
+  // The contract names the phases Inception, Prototype and Implementation; the form calls
+  // the middle one "Proof of Concept".
+  const contractPhase = (shown: string): string => (shown === "Proof of Concept" ? "Prototype" : shown);
+
+  // "2. Team" shows its phase sections only once an organization is chosen, so reaching them
+  // takes one: the test's own when it chose one, else the first the chooser offers (as the
+  // team actions do). A vendor offered no organization reaches the step and is shown no
+  // section, which reads as nothing.
+  async function toSwuTeamSections(where: string): Promise<boolean> {
+    await ready();
+    if (!(await goToStep("Team"))) await advanceTo(where, "Organization");
+    return ensureProposalOrganization(where);
+  }
+
+  // One line per phase the Team step offers a section for, in the form's order (seen as
+  // the owner of Northern Pines: "Implementation" alone on the seeded open opportunity,
+  // "Proof of Concept" then "Implementation" on one with both).
+  async function swuPhaseTeamSections(where: string): Promise<string> {
+    if (!(await toSwuTeamSections(where))) return "";
+    await seen(page.getByRole("main").getByText(new RegExp(`^(${PHASES.join("|")})$`)))
+      .first()
+      .waitFor({ state: "visible", timeout: LATE_CONTROL_MS })
+      .catch(() => undefined);
+    return (await teamPhasesShown()).map(contractPhase).join("\n");
+  }
+
+  // What one phase's open section shows about meeting its requirements. The icon beside the
+  // phase's name is drawn in the name's own colour while the section is complete and turns
+  // to an orange warning while it is not (seen as the owner of Northern Pines: nobody named,
+  // or a "Pending" member named, gives the warning; Blake alone, holding both capabilities,
+  // gives the plain icon). Under "Required Capabilities" each capability sits beside an icon:
+  // a grey hollow circle in the label's own grey while the team does not hold it, a green
+  // check beside darker words once it does. So a mark drawn in a colour other than its words
+  // is the one that says something: the warning on a phase, the check on a capability.
+  function probePhaseRequirements(
+    _main: Element,
+    [phase, others]: [string, string[]],
+  ): { warned: boolean; capabilities: Array<{ name: string; held: boolean }> } | null {
+    const shown = (node: Element): boolean => {
+      const box = node as HTMLElement;
+      if (!(box.offsetWidth || box.offsetHeight || node.getClientRects().length)) return false;
+      const style = window.getComputedStyle(box);
+      return style.visibility !== "hidden" && style.display !== "none";
+    };
+    const main = document.getElementsByTagName("main")[0] ?? document.body;
+    const leaves = Array.from(main.getElementsByTagName("*")).filter(
+      (node) => node.children.length === 0 && shown(node),
+    );
+    const said = (node: Element): string => (node.textContent ?? "").trim();
+    const colour = (node: Element): string => window.getComputedStyle(node).color;
+    const markBeside = (node: Element): Element | null =>
+      Array.from(node.parentElement?.children ?? []).find(
+        (each) => each !== node && each.tagName.toLowerCase() === "svg",
+      ) ?? null;
+    const names = leaves.filter((node) => said(node) === phase);
+    const rivals = leaves.filter((node) => others.includes(said(node)));
+    const dates = leaves.filter((node) => said(node) === "Phase Dates");
+    for (let i = names.length - 1; i >= 0; i--) {
+      let section: Element | null = names[i].parentElement;
+      while (section && section !== main && !rivals.some((rival) => section!.contains(rival))) {
+        if (dates.some((each) => section!.contains(each))) {
+          const mark = markBeside(names[i]);
+          const warned = mark !== null && colour(mark) !== colour(names[i]);
+          const inside = leaves.filter((node) => section!.contains(node));
+          const heading = inside.findIndex((node) => said(node) === "Required Capabilities");
+          const capabilities: Array<{ name: string; held: boolean }> = [];
+          if (heading >= 0) {
+            for (const node of inside.slice(heading + 1)) {
+              const icon = markBeside(node);
+              if (!icon || !said(node)) continue;
+              capabilities.push({ name: said(node), held: colour(icon) !== colour(node) });
+            }
+          }
+          return { warned, capabilities };
+        }
+        section = section.parentElement;
+      }
+    }
+    return null;
+  }
+
+  // One line per offered phase: "<phase> | complete" or "<phase> | incomplete", then the
+  // phase's required capabilities the named team does not hold, comma-separated (nothing
+  // after the last bar when every one is held) — e.g. "Implementation | incomplete |
+  // Backend Development, Delivery Management" with nobody named.
+  async function swuPhaseRequirements(where: string): Promise<string> {
+    if (!(await toSwuTeamSections(where))) return "";
+    const lines: string[] = [];
+    for (const phase of await openTeamPhases()) {
+      const read = await page
+        .getByRole("main")
+        .first()
+        .evaluate(probePhaseRequirements, [phase, PHASES.filter((each) => each !== phase)] as [string, string[]])
+        .catch(() => null);
+      if (!read) {
+        nothing(`${where} — reached the Team step with an organization chosen and unfolded "${phase}", but no open section with its "Phase Dates" showed under that name on ${page.url()}`);
+      }
+      const missing = read.capabilities.filter((each) => !each.held).map((each) => each.name);
+      lines.push(`${contractPhase(phase)} | ${read.warned ? "incomplete" : "complete"} | ${missing.join(", ")}`);
+    }
+    return lines.join("\n");
+  }
+
+  // "3. Pricing" asks "<Phase> Cost*" per phase beside a read-only "Total Proposed Cost",
+  // and writes a message directly under a box whose amount is over its budget: "Please enter
+  // a Proposed Cost less than or equal to 500,000." under the phase's, "The proposed cost
+  // exceeds the maximum budget for this opportunity." under the total (seen as the owner of
+  // Northern Pines entering 99999999 as the Implementation cost). One line per message, as
+  // "<phase>: <message>" or "total: <message>".
+  async function swuCostErrors(where: string): Promise<string> {
+    await ready();
+    const boxes = seen(page.getByRole("spinbutton", { name: /Cost\s*\*?\s*$/ }));
+    if (!(await boxes.count())) await goToStep("Pricing");
+    if (!(await boxes.count())) await advanceTo(where, "Total Proposed Cost");
+    await boxes.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+    const count = await boxes.count();
+    if (!count) nothing(`${where} — reached the Pricing step but no cost box is on it at ${page.url()}`);
+    const found: string[] = [];
+    for (let i = 0; i < count; i++) {
+      const label = bareLabel(await accessibleName(boxes.nth(i)));
+      const against = /^total/i.test(label)
+        ? "total"
+        : contractPhase(phaseNamed(label.replace(/\s*Cost\s*$/i, "").trim()));
+      for (const line of await saidAfterField(boxes.nth(i))) {
+        if (!matches(MESSAGE, line)) continue;
+        const entry = `${against}: ${line}`;
+        if (!found.includes(entry)) found.push(entry);
+      }
+    }
+    return found.join("\n");
+  }
 
   // "2. Team Members" shows, once an organization is chosen, one "Resource N" per resource
   // the opportunity asks for, each with a "Resource Name*" chooser listing the organization's

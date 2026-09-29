@@ -328,6 +328,9 @@ pages:
       unqualified_organization_notice: bound
       pending_team_member: bound
       team_member_choices: bound
+      phase_team_sections: bound
+      phase_requirements: bound
+      cost_errors: bound
 
   proposal-swu-edit:
     actions:
