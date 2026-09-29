@@ -890,3 +890,14 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-29T18:56:10.838Z
+    closed:
+      outcome: met
+      why: tests/acceptance/opportunities/R-1.39.spec.ts adds the case '(only
+        opportunities matching every chosen condition remain visible)', which
+        combines remote-only with the search 'puffins'. It publishes one
+        opportunity meeting both conditions and one meeting each single
+        condition, confirms all three are listed first, then asserts separately
+        that the one meeting both stays listed and that each one meeting only
+        one condition is no longer listed.
+      by: agent:reviewer
+      at: 2026-09-29T18:57:59.278Z
