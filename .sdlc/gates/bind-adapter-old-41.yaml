@@ -1,0 +1,16 @@
+gate: G3
+verdict: escalated
+by: runner:bind-adapter
+held_by: runner
+escalate_to: tech-lead
+rationale: >-
+  bind-adapter was handed owed work sent back to it more times than the
+  project's policy allows, so this proposal is ruled by tech-lead rather than
+  put to G3's holder for another round.
+
+  - R-4.24 on old: sent to bind-adapter 3 times, past the limit of 2 that
+  policy.loops.rebind sets. What each send asked for:
+    1. unbound: user-sign-up-complete.toggle_new_opportunity_notifications — /sign-up/complete never shows the profile form on this target; it redirects to /dashboard when signed in and to /sign-in when signed out, and no sign-in route mints an account with an unfinished profile
+    2. unbound: user-sign-up-complete.toggle_new_opportunity_notifications — /sign-up/complete never shows the profile form on this target; it redirects to /dashboard when signed in and to /sign-in when signed out, and no sign-in route mints an account with an unfinished profile
+    3. the adapter never signed in as the seeded persona vendorCompletingProfile (tests/seed/015-profile-completion.sql, idpId test-vendor-17, acceptedTermsAt NULL, reached at /auth/createsessionvendor/17 per tests/generated/personas.ts) against an oracle loaded with the full tests/seed/ including 015; its authFailure on /17 came from a database missing that row, so bind signIn for vendorCompletingProfile to that route on a freshly seeded oracle, confirm /sign-up/complete then shows the profile form, and bind toggle_new_opportunity_notifications, accept_app_terms, complete_profile and terms_checkbox there instead of recording them unbound
+at: 2026-09-29T09:06:37.840Z
