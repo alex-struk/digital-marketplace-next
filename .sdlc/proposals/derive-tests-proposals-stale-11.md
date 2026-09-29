@@ -46,3 +46,27 @@ I don't know the exact wording of the page's note, so the test looks for "can be
 4. `proposal-team-request` (sprint-with-us) described as accepting a submission with no organization.
 
 Nothing asked me to change any read-only path, and I changed none.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the rewritten tests for R-2.16, R-2.22 and R-2.28 follow from their criteria and nothing else? Approve. R-2.16 now builds the criterion's given as stated (a draft saved while its organization qualifies, then a member leaves so it stops qualifying) and asserts only that the draft is not submitted; the no-organization test asserts only that nothing was submitted, and the quoted service message is a clause-scoped not-testable entry owed by contract with a real reason (no surface sends the service a Sprint With Us submission lacking an organization). R-2.22 renames the team from the new organization's members so only the organization rule is under test, covers submitted/withdrawn/draft on both programs, and records the unasserted refusal message and the undescribed save_changes input as a clause entry owed by contract. R-2.28 v2 asserts what the criterion states, that the page says the proposal 'can be scored once' the opportunity reaches the stage and that no out-of-stage score is taken, and records the not-offered control and the direct-service refusal message as a clause entry owed by contract. Every surface method used exists in tests/generated, no selectors, routes or status codes leak in, and the runner's typecheck reports no diagnostics under acceptance/proposals (its failures are in adapters/new, which this proposal does not answer for). The tests that assert only an absence (the R-2.16 refusals and the R-2.22 submitted cases) could pass for an unrelated reason, but each assertion is exactly what its criterion states, so this is not grounds to return. What would change the ruling: a typecheck diagnostic in these specs, or a test asserting something its criterion does not state.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `76130326cc9ec9de8bcd7a59f4468cacd195acad`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/proposals/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
