@@ -223,6 +223,9 @@
 - 12:48:40 run calibrate: ok, cost 0, turns 0
 - 12:48:42 propose calibrate-triage-old-30 at G3
 - 12:50:46 rule calibrate-triage-old-30 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 13:36:48 oracle down old in configuration notifications_disabled
+- 16:16:08 propose policy-scoped-calibration at G-POL
+- 16:16:09 rule policy-scoped-calibration approve at G-POL by tech-lead (human)
 
 # Run record 2026-09-28
 

@@ -311,6 +311,7 @@ Profile: rebuild
 - [policy-agents-backend](proposals/policy-agents-backend.md)
 - [policy-agents-backend-claude](proposals/policy-agents-backend-claude.md)
 - [policy-calibrate-after](proposals/policy-calibrate-after.md)
+- [policy-scoped-calibration](proposals/policy-scoped-calibration.md)
 - [policy-v3](proposals/policy-v3.md)
 - [policy-v4](proposals/policy-v4.md)
 - [policy-v5](proposals/policy-v5.md)
@@ -348,7 +349,7 @@ Profile: rebuild
 - Total cost: $1053.394888
 - Agent-held rulings: 300
 - Runner rulings (automatic, no seat held): 1
-- Human rulings: 11
+- Human rulings: 12
 - Rulings whose seat this page does not recognise: 0
 - Open escalations: 0
 - Stalled proposals: 0
