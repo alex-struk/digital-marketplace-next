@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Made by | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-29T04:06:04.228Z | policy-calibrate-after | G-POL | approve | tech-lead | a person |  |  |
 | 2026-09-29T04:05:28.990Z | calibrate-triage-old-22 | G3 | approve | agent:reviewer | persona agent · claude claude-opus-5-5 | $0.8823554 |  |
 | 2026-09-29T03:20:32.083Z | derive-tests-proposals-stale-13 | G3 | approve | agent:reviewer | persona agent · claude claude-opus-5-5 | $0.7055068 |  |
 | 2026-09-29T03:18:02.191Z | bind-adapter-old-36 | G3 | approve | agent:reviewer | persona agent · claude claude-opus-5-5 | $0.3961066 |  |

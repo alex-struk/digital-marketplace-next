@@ -40,6 +40,8 @@ policy:
   budgets: { archaeology: 120, contract: 200, derive-tests: 300, bind-adapter: 999, rule: 80, build: 400, review: 200 }
   agents:
     backend: claude
+  next:
+    calibrate_after: 8
 skills:
   packs:
     - { repo: mattpocock/skills, ref: 3cca18b368ae95cdbdebbff572ccafa662551015, skills: [grilling, domain-modeling, prototype, tdd, code-review] }
