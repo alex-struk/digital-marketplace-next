@@ -1,8 +1,10 @@
 // criterion: @R-8.30 v1
-// provenance: blind, spec@ccc1cba3290f5ea17351e4f2ca49bd80fefc2ef6, derived 2026-09-29
+// provenance: blind, spec@8272c1b989e3bad64c78ae540830a62747dadf42, derived 2026-09-29
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
+// The criterion names two places the same refusal holds, so each gets its own test.
+//
 // The criterion's own example: a signed-in person choosing a file named "portrait.gif" as a new
 // profile picture. Its content is a real PNG, so the name is the only thing wrong with it and a
 // refusal can only have come from the ending.
@@ -45,7 +47,7 @@ async function establishActive(surface: Surface, userId: string): Promise<void> 
   expect(await surface.userProfile.statusBadge()).toBe(active);
 }
 
-test("a profile picture or an organization logo whose name does not end in .jpg, .jpeg or .png is refused", async ({
+test("a profile picture whose name does not end in .jpg, .jpeg or .png is refused", async ({
   surface,
 }) => {
   await establishActive(surface, seed.users.fileUploader.id);
@@ -66,4 +68,29 @@ test("a profile picture or an organization logo whose name does not end in .jpg,
 
   await surface.userProfileSelf.open();
   expect(await readOrEmpty(() => surface.fileImagePicker.currentImage())).toBe(before);
+});
+
+// The logo half, read the same way: the owner of a seeded organization offers "logo.gif", whose
+// content is again a real PNG, as its new logo on the organization's edit page and saves. The
+// refusal is read against the logo, and "no file is stored" is read as the organization's logo,
+// with the page opened afresh, being the one it held before.
+test("an organization logo whose name does not end in .jpg, .jpeg or .png is refused", async ({ surface }) => {
+  const organization = seed.organizations.qualified;
+  await surface.signIn(persona.organizationOwner);
+
+  await surface.organizationEdit.open({ orgId: organization.id });
+  const before = await readOrEmpty(() => surface.organizationEdit.currentLogo());
+
+  await surface.organizationEdit.editOrganization();
+  await surface.organizationEdit.changeLogo({ file: "logo.gif", content: PNG });
+  try {
+    await surface.organizationEdit.saveChanges();
+  } catch {
+    // A save the screen will not make is refused; the refusal and the logo are read below.
+  }
+
+  await expect.poll(() => readOrEmpty(() => surface.organizationEdit.logoRefusedError())).toBeTruthy();
+
+  await surface.organizationEdit.open({ orgId: organization.id });
+  expect(await readOrEmpty(() => surface.organizationEdit.currentLogo())).toBe(before);
 });
