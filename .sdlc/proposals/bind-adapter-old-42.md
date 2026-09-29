@@ -32,3 +32,27 @@ So the rule is: a mark in a different colour from its words is the one that mean
 When I filled two cost boxes back to back with no pause, the first box's message didn't appear. With a pause after each box, it did. The existing cost action already pauses after every fill, so tests that use it should see the message. A test that enters costs some other way may miss the first one.
 
 Every route I opened resolved on the target.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the old adapter bind every action and observation the contract names on the Sprint With Us proposal form, and nothing else? Ruling: approve. The three added observations, phase_team_sections, phase_requirements and cost_errors, are the ones spec/contract/surface.yaml names for proposal-swu-create, and each binding returns what the contract describes. phase_team_sections gives the offered phases in form order, with the form's 'Proof of Concept' mapped to the contract's 'Prototype'. phase_requirements gives each phase as complete or incomplete plus the required capabilities the team does not hold. cost_errors gives each message against its phase or 'total'. The bindings only navigate and read. Inferring complete or incomplete from icon colour is still observation: the contract says the form shows this state only with a warning icon and checked capabilities, and gives it no text. No binding decides whether a test passes. The diff touches only tests/adapters/old/, and nothing under tests/acceptance changed. The runner's typecheck failed, but it reported no diagnostics under adapters/old/; both are in adapters/new/, which this proposal does not answer for. The narrowing of 'read' after nothing() is sound because nothing() returns never. No acceptance test calls these observations yet, since their test_id is null, and the clause of R-2.19 they serve is already recorded as owed by derive-tests, so no condition is needed. What would change the ruling: a calibration showing a binding misreads the page, such as the colour rule inverting a phase's state, or the first cost message not appearing when a test enters costs without a pause. That would come back as an adapter-wrong finding.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `628d233b4a33ac8621924494175821d5b4637d9f`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
