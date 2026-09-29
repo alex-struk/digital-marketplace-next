@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-old-16 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">291</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">287</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">253</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-old-16</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-09-29 11:13</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr></tbody></table></div>
+<div class="body"><h2>2 criterion(s) fail against old: which of them is the application&#39;s fault, which the spec&#39;s, and which the test&#39;s?</h2>
+<p><strong>Recommendation.</strong> Rule on R-6.1, R-3.24 with a calibration condition, so the next calibrate run can apply it.</p>
+<p>2 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:4300,">http://localhost:4300,</a> with no ruling yet. The tests are blind: they were written from the criteria alone, by an agent that never saw the application. So a failure means one of exactly three things, and only you can say which: the application is wrong, the criterion is wrong, or the test is wrong.</p>
+<p>Rule on each one below. Until every failure carries a ruling, this question is asked again on every calibration run.</p>
+<h4>R-6.1 · v1</h4>
+<p>When notifications are switched off for an environment, nothing the service does sends a message, and every action that would have sent one still completes normally.</p>
+<ul><li>given: a service configured with notifications disabled</li><li>when: a person does something that would ordinarily notify somebody, such as publishing an opportunity</li><li>then: the action succeeds and reports success, and no message is sent to anybody</li><li>test: tests/acceptance/notifications/R-6.1.spec.ts</li></ul>
+<p><strong>When notifications are switched off for an environment, nothing the service does sends a message, and every action that would have sent one still completes normally.</strong> — failed</p>
+<pre><code>Error: messages sent with notifications switched off
+
+[2mexpect([22m[31mreceived[39m[2m).[22mtoBe[2m([22m[32mexpected[39m[2m) // Object.is equality[22m
+
+Expected: [32m0[39m
+Received: [31m11[39m</code></pre>
+<h4>R-3.24 · v1</h4>
+<p>When an administrator archives an organization they do not own, its owner is told by email that the organization has been archived.</p>
+<ul><li>given: an active organization owned by a vendor</li><li>when: an administrator archives it</li><li>then: the owner receives a message telling them their organization has been archived by an administrator and that they can no longer use it, and no such message is sent when the owner archives their own organization</li><li>test: tests/acceptance/organizations/R-3.24.spec.ts</li></ul>
+<p><strong>when an administrator archives an organization they do not own, its owner receives a message telling them it has been archived</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+Expected: &gt; [32m0[39m
+Received:   [31m0[39m</code></pre>
+<h3>Calibration conditions</h3>
+<p>One condition per line, and exactly one of these forms:</p>
+<ul><li><code>defect-in-old &lt;ID&gt;</code> — the old application really does fail this and the criterion is right anyway. The test stands as written and the rebuild has to pass it; the criterion keeps a note saying so. No text after the ID.</li><li><code>spec-wrong &lt;ID&gt;: &lt;corrected statement&gt;</code> — the criterion misdescribes what the old application does. The statement is replaced and its version bumped, which marks the test stale so <code>derive-tests --stale</code> writes it again from the corrected criterion.</li><li><code>test-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion is right and the test is not. The id goes to <code>tests/acceptance/redo.yaml</code> for <code>derive-tests</code> to redo, still blind, and <code>&lt;why&gt;</code> records what the test got wrong without describing how the application is built.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. <code>defect-in-old</code> takes no text; the other two require a colon and text on the same line. A condition may not span more than one line.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-09-29 11:15.</p>
+<div class="body"><p>Question: which of R-6.1 and R-3.24, failing against old, are the application&#39;s fault, the spec&#39;s, or the test&#39;s? Ruling: approve with one condition, test-wrong R-3.24. R-6.1 is left unruled because none of the three forms is true of it. R-3.24: the old application does send the notice. The archive route notifies the owner whenever the person archiving is not the owner (sources/old/src/back-end/lib/resources/organization.ts:691-699), with the subject &#39;Your Organization Has Been Archived&#39; (lib/mailer/notifications/organization.tsx:32). The same test file passed against the same old commit in 16 earlier results under tests/results/old/, several of them on 2026-09-29. A one-off miss on unchanged code is a timing failure in the test, not a product fact. The test reads the owner&#39;s mailbox exactly once, the instant the archive action returns (mail.messagesTo does a single lookup with no wait), so a message that arrives moments later is recorded as never sent. R-6.1: the old application honours the switch, because makeSend returns before sending anything when DISABLE_NOTIFICATIONS is set (sources/old/src/back-end/lib/mailer/transport.ts:54). The criterion is accurate and the test is correct as written for its tagged configuration (@notifications_disabled). Its 11 caught messages show it again ran against the default instance with notifications on, contrary to spec/contract/observables.yaml configurations.notifications_disabled, which says the default run must exclude it (--grep-invert). This is a harness fault that must be fixed in the calibrate stage. It needs a separate oracle instance started with SDLC_ORACLE_DISABLE_NOTIFICATIONS=1 that runs only the tagged test, and the default run must leave the test out. That second half matters beyond R-6.1: the test clears the shared mail catcher, so running it on the shared instance with four parallel workers can delete other tests&#39; messages, and is a plausible contributor to R-3.24&#39;s lost message. What would change this ruling: if R-3.24 still fails after its test polls with a settling window on a catcher no other test clears, the next ruling on it is defect-in-old. If R-6.1 fails when run against a genuinely notifications-off instance, it becomes defect-in-old, and the transport.ts:54 reading would need re-examining.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>test-wrong R-3.24: the test reads the owner&#39;s mailbox once, immediately after the archive action returns, with no allowance for delivery time, so a notice that arrives a moment later is counted as never sent; it should wait for the message to arrive within a settling window (as the other mail tests do) before asserting that at least one message mentions archiving, and the negative case should likewise wait out the same window before asserting nothing arrived</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
