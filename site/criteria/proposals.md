@@ -22,7 +22,7 @@
 | R-2.16 | acceptance/proposals/R-2.16.spec.ts |  | fail |
 | R-2.17 | acceptance/proposals/R-2.17.spec.ts |  | pass |
 | R-2.18 | acceptance/proposals/R-2.18.spec.ts |  | pass (ruled: spec-wrong) |
-| R-2.19 | acceptance/proposals/R-2.19.spec.ts |  | unbound |
+| R-2.19 | acceptance/proposals/R-2.19.spec.ts |  | unbound (ruled: adapter-wrong) |
 | R-2.20 | acceptance/proposals/R-2.20.spec.ts |  | pass |
 | R-2.21 | acceptance/proposals/R-2.21.spec.ts |  | pass |
 | R-2.22 | acceptance/proposals/R-2.22.spec.ts |  | fail |
@@ -42,7 +42,7 @@
 | R-2.35 | acceptance/proposals/R-2.35.spec.ts |  | pass |
 | R-2.36 | acceptance/proposals/R-2.36.spec.ts |  | pass |
 | D-proposals-37 | — |  |  |
-| R-2.37 | acceptance/proposals/R-2.37.spec.ts |  | fail |
+| R-2.37 | acceptance/proposals/R-2.37.spec.ts |  | fail (ruled: adapter-wrong) |
 | R-2.38 | acceptance/proposals/R-2.38.spec.ts |  | pass |
 
 ### R-2.1 · v1 · confirmed · accepted

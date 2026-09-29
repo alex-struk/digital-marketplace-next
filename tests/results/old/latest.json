@@ -2,7 +2,7 @@
   "target": "old",
   "base_url": "http://localhost:4300",
   "spec": "ccc1cba3290f5ea17351e4f2ca49bd80fefc2ef6",
-  "at": "2026-09-29T01:10:50.576Z",
+  "at": "2026-09-29T01:14:42.654Z",
   "rows": [
     {
       "id": "R-7.1",
@@ -649,7 +649,8 @@
         }
       ],
       "file_sha": "6b6f64e5d7789d8a22316b367f68ad1a83d399e1",
-      "adapter": "4735525912578403c108e89ebeaeb171da580ca0"
+      "adapter": "4735525912578403c108e89ebeaeb171da580ca0",
+      "triage": "product-question"
     },
     {
       "id": "R-5.14",
@@ -1310,7 +1311,8 @@
         }
       ],
       "file_sha": "31a3f2a4bcdcb116cd63eaf68a5ec341457e7a92",
-      "adapter": "4735525912578403c108e89ebeaeb171da580ca0"
+      "adapter": "4735525912578403c108e89ebeaeb171da580ca0",
+      "triage": "product-question"
     },
     {
       "id": "R-8.12",
@@ -1492,7 +1494,8 @@
         }
       ],
       "file_sha": "64abbdb48dc67ca1c7ece3b50f0614649157963d",
-      "adapter": "4735525912578403c108e89ebeaeb171da580ca0"
+      "adapter": "4735525912578403c108e89ebeaeb171da580ca0",
+      "triage": "product-question"
     },
     {
       "id": "R-8.21",
@@ -1723,7 +1726,8 @@
         }
       ],
       "file_sha": "bb9eb9ed63138a7459136875f5fc0960113da847",
-      "adapter": "4735525912578403c108e89ebeaeb171da580ca0"
+      "adapter": "4735525912578403c108e89ebeaeb171da580ca0",
+      "triage": "product-question"
     },
     {
       "id": "R-6.2",
@@ -2528,7 +2532,8 @@
         }
       ],
       "file_sha": "9f3faa97216d5a7139345fe527f80af432f72ca0",
-      "adapter": "4735525912578403c108e89ebeaeb171da580ca0"
+      "adapter": "4735525912578403c108e89ebeaeb171da580ca0",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.17",
@@ -3486,7 +3491,8 @@
         }
       ],
       "file_sha": "825199049587ff6fc86b92100dc362ae546bf014",
-      "adapter": "4735525912578403c108e89ebeaeb171da580ca0"
+      "adapter": "4735525912578403c108e89ebeaeb171da580ca0",
+      "triage": "product-question"
     },
     {
       "id": "R-3.10",
@@ -4096,7 +4102,8 @@
         }
       ],
       "file_sha": "9352db51ac67548e345390e5525da3cc44d7c7cd",
-      "adapter": "4735525912578403c108e89ebeaeb171da580ca0"
+      "adapter": "4735525912578403c108e89ebeaeb171da580ca0",
+      "triage": "product-question"
     },
     {
       "id": "R-2.10",
@@ -4283,7 +4290,8 @@
         }
       ],
       "file_sha": "3de5ccebf47af481b48828f711b3a51fae348192",
-      "adapter": "4735525912578403c108e89ebeaeb171da580ca0"
+      "adapter": "4735525912578403c108e89ebeaeb171da580ca0",
+      "triage": "product-question"
     },
     {
       "id": "R-2.17",
@@ -4386,7 +4394,8 @@
         }
       ],
       "file_sha": "9d25da6d6f8dcc2468093c1dde0f8a5e683617a2",
-      "adapter": "4735525912578403c108e89ebeaeb171da580ca0"
+      "adapter": "4735525912578403c108e89ebeaeb171da580ca0",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.20",
@@ -4460,7 +4469,8 @@
         }
       ],
       "file_sha": "7a72943f85cf853aa9acf8336e11d0a24cbb9380",
-      "adapter": "4735525912578403c108e89ebeaeb171da580ca0"
+      "adapter": "4735525912578403c108e89ebeaeb171da580ca0",
+      "triage": "product-question"
     },
     {
       "id": "R-2.23",
@@ -4584,7 +4594,8 @@
         }
       ],
       "file_sha": "e9095406b38b212625ac2d7dfa8ad129065d5850",
-      "adapter": "4735525912578403c108e89ebeaeb171da580ca0"
+      "adapter": "4735525912578403c108e89ebeaeb171da580ca0",
+      "triage": "product-question"
     },
     {
       "id": "R-2.29",
@@ -4772,7 +4783,8 @@
         }
       ],
       "file_sha": "c611d0eb966ccfa12c6be589493dccdb6e675734",
-      "adapter": "4735525912578403c108e89ebeaeb171da580ca0"
+      "adapter": "4735525912578403c108e89ebeaeb171da580ca0",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.38",
@@ -5040,7 +5052,8 @@
         }
       ],
       "file_sha": "312431e4b9300abac886c8a5130a43ead5368569",
-      "adapter": "4735525912578403c108e89ebeaeb171da580ca0"
+      "adapter": "4735525912578403c108e89ebeaeb171da580ca0",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-4.16",
@@ -5216,7 +5229,8 @@
         }
       ],
       "file_sha": "a42bc2c80b586452967359755f0367c1a8457768",
-      "adapter": "4735525912578403c108e89ebeaeb171da580ca0"
+      "adapter": "4735525912578403c108e89ebeaeb171da580ca0",
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-4.24",
