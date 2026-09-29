@@ -441,6 +441,9 @@ export interface ProposalSwuCreatePage {
   unqualifiedOrganizationNotice(): Promise<string>;
   pendingTeamMember(): Promise<string>;
   teamMemberChoices(): Promise<string>;
+  phaseTeamSections(): Promise<string>;
+  phaseRequirements(): Promise<string>;
+  costErrors(): Promise<string>;
 }
 
 export interface ProposalSwuEditPage {
