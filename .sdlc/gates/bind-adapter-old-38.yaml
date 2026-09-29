@@ -1,17 +1,15 @@
 gate: G3
-verdict: escalated
-by: runner:bind-adapter
-held_by: runner
-escalate_to: tech-lead
-rationale: >-
-  bind-adapter was handed owed work sent back to it more times than the
-  project's policy allows, so this proposal is ruled by tech-lead rather than
-  put to G3's holder for another round.
-
-  - R-2.22 on old: sent to bind-adapter 4 times, past the limit of 2 that
-  policy.loops.rebind sets. What each send asked for:
-    1. unbound: proposal-twu-create.choose_organization — no chooser labelled "Organization" on http://localhost:3102/opportunities/team-with-us/7f28d7a1-470f-4c93-9dc9-aff873839f02/proposals/create; unbound: proposal-twu-create.choose_organization — no chooser labelled "Organization" on http://localhost:3102/opportunities/team-with-us/86c168bf-3e37-4745-89a4-77e5a7078c7c/proposals/create
-    2. unbound: proposal-twu-create.add_team_member_for_resource — no chooser labelled "Team Member" or "Member" on http://localhost:3101/opportunities/team-with-us/021ea945-eef4-4308-b507-f9724fcfbfb2/proposals/create; unbound: proposal-twu-create.add_team_member_for_resource — no chooser labelled "Team Member" or "Member" on http://localhost:3101/opportunities/team-with-us/160a1fe1-6984-4a8a-830f-e2f751ed4007/proposals/create
-    3. proposal-twu-edit.save_changes (index.ts:4045, saveChanges: () => saveProposalChanges(...)) discards its input, so the organization the test names ('R-2.22 Second Supplier For A Withdrawn Proposal Ltd.') is never chosen and the withdrawn proposal is saved unchanged under 'Northern Pines Digital Ltd.'; it must apply the given organization through the Organization chooser before saving
-    4. on proposal-swu-edit.add_phase_team_member after the organization is changed, the named member is already on the phase (they belong to both organizations, and the old dialog lists only people not yet added), so treat a member already shown on the phase as added instead of throwing 'the member dialog does not offer'; on proposal-twu-edit.save_changes, after choosing the other organization confirm the Resource Name member and Hourly Rate are still filled for each resource, and when Save/Submit Changes is disabled walk every form step and report the invalid fields rather than 'the page shows no message'
-at: 2026-09-29T05:18:04.967Z
+verdict: approve
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  Question: does the old-site adapter, after four rounds on R-2.22, now bind the two actions the fourth send named, and nothing else? Approved. The escalation came from the rebind loop limit, not from a defect, and the diff answers the fourth send clause by clause, which is the part of runner:bind-adapter's account that decided this. proposal-swu-edit.add_phase_team_member now counts a person already in the phase's team table as added and refuses only when the person is in neither the dialog nor the table. proposal-twu-edit.save_changes remembers each resource's member and rate before an organization change and puts them back only when the new organization's list offers that member, so the service still decides the change R-2.22 is about. A disabled Save Changes or Submit Changes now walks every step and names each empty required field. The change the author added on its own keeps the old meaning: saved() (index.ts:1514) only waited up to 30 seconds for the control to disappear, and the new loop does the same wait but stops early when a REFUSED_SUBMISSION notice appears. The runner's typecheck of revision 3b574404 found no diagnostics under adapters/old/; its failures are only in adapters/new/. The diff stays inside tests/adapters/old/, the tier is STANDARD, and no platform article or gate is touched. Not yet proven: nobody has run the adapter, and calibration is where it is exercised. onSwuPhase is broad with a single phase (any table row with the name counts), but R-2.22 does not depend on that. This would change if calibration shows the restore step choosing a member the test did not name, or hiding the service's refusal; the proposal would then return to bind-adapter with that run as evidence.
+conditions: []
+cost: 0.3441756
+turns: 3
+session: "0796882e-fd5b-4a3c-a497-ce5a2c85ffb9"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-29T05:18:47.916Z

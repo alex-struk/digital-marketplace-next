@@ -37,3 +37,27 @@ The adapter now does four things here:
 The probe opportunity, the probe proposal and the Salt Marsh Labs qualification are still on the target. The seed notes say it is reapplied before every test, so they should not carry into a calibration run.
 
 No page route failed to resolve during this work, and I touched nothing outside `tests/adapters/old/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the old-site adapter, after four rounds on R-2.22, now bind the two actions the fourth send named, and nothing else? Approved. The escalation came from the rebind loop limit, not from a defect, and the diff answers the fourth send clause by clause, which is the part of runner:bind-adapter's account that decided this. proposal-swu-edit.add_phase_team_member now counts a person already in the phase's team table as added and refuses only when the person is in neither the dialog nor the table. proposal-twu-edit.save_changes remembers each resource's member and rate before an organization change and puts them back only when the new organization's list offers that member, so the service still decides the change R-2.22 is about. A disabled Save Changes or Submit Changes now walks every step and names each empty required field. The change the author added on its own keeps the old meaning: saved() (index.ts:1514) only waited up to 30 seconds for the control to disappear, and the new loop does the same wait but stops early when a REFUSED_SUBMISSION notice appears. The runner's typecheck of revision 3b574404 found no diagnostics under adapters/old/; its failures are only in adapters/new/. The diff stays inside tests/adapters/old/, the tier is STANDARD, and no platform article or gate is touched. Not yet proven: nobody has run the adapter, and calibration is where it is exercised. onSwuPhase is broad with a single phase (any table row with the name counts), but R-2.22 does not depend on that. This would change if calibration shows the restore step choosing a member the test did not name, or hiding the service's refusal; the proposal would then return to bind-adapter with that run as evidence.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `3b574404e0394aff86670788571e4e1d0292db0b`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
