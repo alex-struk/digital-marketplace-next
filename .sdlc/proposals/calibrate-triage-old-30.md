@@ -86,3 +86,16 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: which of R-5.32, R-5.36 and R-1.39, failing against the old target, did this project's adapter cause? Ruling: approve, with all three sent to the product owner. R-1.39 (by program) timed out waiting for the seeded closed Sprint With Us opportunity to be listed. The old app folds its Closed Opportunities group by default, so the group reader was checked first. It is cleared: R-1.38 passed in the same calibration and reads that same seeded title out of the closed group through the same opportunityGroup reader. The program filter binding chooses 'Sprint With Us', which is one of the old app's three filter labels. The error does not say which check failed, so nothing isolates the binding. R-5.32 (Team With Us) and R-5.36 (Sprint With Us) each hit the 120s test timeout with no step named and no trace saved. In each criterion the other program's test passed, and the bindings those passing tests use (consensus finalise for each program, the shared proposal-history reader) are identical to or mirror the ones on the failing path. A bare timeout is not evidence against the adapter. What would change this: a trace or step-level error showing the adapter stuck on a control the page renders, or reading the wrong element, which would make that row adapter-wrong.
+
+**Conditions:**
+- product-question R-5.32
+- product-question R-5.36
+- product-question R-1.39
