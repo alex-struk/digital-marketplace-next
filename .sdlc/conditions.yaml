@@ -824,6 +824,14 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-09-29T18:23:18.413Z
+    closed:
+      outcome: met
+      why: teamProposalBody in tests/adapters/new/index.ts (lines 1906-1971) sets
+        hourlyRate, proposedCost, scrumMaster and references only from what the
+        input gives, and answersFor sends only the answers given; there are no
+        defaults or placeholders.
+      by: agent:reviewer
+      at: 2026-09-29T18:53:12.857Z
   - ref: bind-adapter-new-2#2
     text: "tests/adapters/new/index.ts: update notFoundShown to recognise the
       target's current 'Not Found' screen as well as 'Page not found', so
@@ -835,6 +843,12 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-09-29T18:23:18.413Z
+    closed:
+      outcome: met
+      why: notFoundShown in tests/adapters/new/index.ts matches /^(page )?not
+        found$/i, so it recognises both 'Not Found' and 'Page not found'.
+      by: agent:reviewer
+      at: 2026-09-29T18:53:12.866Z
   - ref: bind-adapter-new-2#3
     text: "tests/adapters/new/bindings.yaml and index.ts: re-walk the members bound
       or unbound before this revision against the target as it now stands.
@@ -850,3 +864,13 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-09-29T18:23:18.413Z
+    closed:
+      outcome: met
+      why: tests/adapters/new/bindings.yaml and index.ts no longer carry any 'not a
+        page on this target' reason. Public screens are bound, and screens that
+        need a session name what they answered signed out plus the sign-on
+        redirect_uri failure. datedLine reads the 'Published … | Updated …'
+        line, and siteFooter finds the footer by 'Owned and operated by the B.C.
+        Government.'
+      by: agent:reviewer
+      at: 2026-09-29T18:53:12.875Z
