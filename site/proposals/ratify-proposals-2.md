@@ -1,0 +1,22 @@
+| Field | Value |
+| --- | --- |
+| gate | G1 |
+| opened | 2026-09-29T23:16:15.298Z |
+| holder | agent:product-owner |
+
+# Should R-2.18's last sentence be corrected to what the old application does: the Sprint With Us form also lists pending members, marked pending, and a proposal naming one saves as a draft but is refused on submission?
+
+**Recommendation.** Yes, with an edit condition. The tech lead has decided the wording is wrong. contract-v24's ruling confirmed it against the old source: affiliation.ts:210 excludes only inactive members from the organization's member list, so Sprint With Us offers pending invitees; phase.tsx:458 requires a Sprint With Us team to consist only of confirmed members before submission; team-with-us team.tsx:74 filters to active members. The criterion's own note already says a pending member is shown as pending. Replace the sentence 'The proposal form offers only the organization's active members, and does not offer a person already named on the proposal, so neither refusal is reachable through the form.' with: 'The Team With Us proposal form offers only the organization's active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal.' Keep the rest of the statement, the given/when/then and the note unchanged.
+
+
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether R-2.18's last sentence should be replaced, because in the old application only the Team With Us form limits team choices to active members. Ruling: approve, with an edit condition. Each clause of the replacement matches the old source. First, the organization's member list excludes only inactive members (back-end/lib/db/affiliation.ts:210), and the Sprint With Us phase component shows pending members with a Pending badge (proposal/sprint-with-us/lib/components/phase.tsx:411, :607), so the Sprint With Us form lists pending invitees marked as pending. Second, the server skips member validation entirely while a Sprint With Us proposal is a draft (back-end/lib/resources/proposal/sprint-with-us/index.ts:352, :739), and the front end keeps Save enabled for drafts ('No validation required, always possible to save a draft', edit/tab/proposal.tsx:1010-1012), so a proposal naming a pending member can be saved as a draft. Third, it is refused on submission: the phase validity check requires every member to be confirmed (phase.tsx:319-335), which disables Submit (edit/tab/proposal.tsx:998, :1053), and validateMember on the server (back-end/lib/validation.ts:981-984) rejects any member whose status is not active with 'User is not an active member of the organization.' Fourth, the Team With Us form skips anyone who is not active (team-with-us/lib/components/team.tsx:74). The rest of the criterion, its given/when/then and its note (which already says a pending member is shown as pending) are correct and stay unchanged. The open missing-test condition on the form clause is deliberately left open: the edit bumps the version, the test becomes stale, and the condition clears when derive-tests rewrites the test from the corrected wording and it runs. What would change this ruling: evidence that the old service refuses a pending member when a Sprint With Us draft is saved, which would make the 'saved as a draft' clause false.
+
+**Conditions:**
+- edit R-2.18: Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with "User is not an active member of the organization."; a Team With Us proposal is additionally refused by the service when the same person is named twice, with "Please select unique team members.", while the service applies no such uniqueness check to a Sprint With Us phase. The Team With Us proposal form offers only the organization's active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal.

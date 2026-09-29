@@ -327,6 +327,7 @@ Profile: rebuild
 - [ratify-opportunities-2](proposals/ratify-opportunities-2.md)
 - [ratify-organizations-1](proposals/ratify-organizations-1.md)
 - [ratify-proposals-1](proposals/ratify-proposals-1.md)
+- [ratify-proposals-2](proposals/ratify-proposals-2.md)
 - [ratify-users-1](proposals/ratify-users-1.md)
 - [ratify-users-2](proposals/ratify-users-2.md)
 - [spec-readme-v1](proposals/spec-readme-v1.md)
@@ -345,9 +346,9 @@ Profile: rebuild
 ## Totals
 
 - Journal cost: $681.01757
-- Rulings cost: $372.377318
-- Total cost: $1053.394888
-- Agent-held rulings: 300
+- Rulings cost: $373.099516
+- Total cost: $1054.117086
+- Agent-held rulings: 301
 - Runner rulings (automatic, no seat held): 1
 - Human rulings: 12
 - Rulings whose seat this page does not recognise: 0
