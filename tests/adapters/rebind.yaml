@@ -1930,3 +1930,47 @@ rebind:
       Treat a dialog with no text as gone, or wait for it to detach, and let
       proposal-swu-export-one.open go to the export address.
     closed: *a10
+  - id: R-2.7
+    target: old
+    why: on proposal-swu-create '2. Team' for a one-phase opportunity,
+      add_phase_team_member threw 'no Add Team Member(s) inside Implementation'
+      (draft test), and the submission test timed out on the same untouched
+      form, while the page shows 'Phase Dates' and 'Add Team Member(s)' directly
+      below 'Implementation'. The screen-coordinate band (phaseBand/inBand)
+      misreads the open section. Find a phase's section as the element that
+      contains that phase's name text together with its 'Phase Dates' and 'Add
+      Team Member(s)', and look for the adder there, not by vertical position.
+      Once the member is added and Scrum Master ticked, press the form's 'Next',
+      which is plain pressable text rather than a button, until 'Implementation
+      Cost*' shows.
+  - id: R-2.11
+    target: old
+    why: on proposal-swu-create for a one-phase opportunity, after Charlie
+      Placeholder was added to Implementation with the Scrum Master radio
+      ticked, the adapter's last press was the phase's 'Add Team Member(s)'
+      again and it never left '2. Team' for '3. Pricing' before the 120s
+      timeout. Stop working the Team step once the named member is in the
+      phase's table with Scrum Master ticked, and move forward with the form's
+      'Next', which is plain pressable text rather than a button, until the
+      phase cost box shows.
+  - id: R-2.19
+    target: old
+    why: on proposal-swu-create's '2. Team' for a two-phase opportunity (Proof of
+      Concept and Implementation), the adapter pressed 'Proof of Concept', which
+      opened with its 'Add Team Member(s)' visible, and never pressed
+      'Implementation', which stayed folded as a bare name. All five tests timed
+      out there. Decide whether each phase is open from its own container, which
+      holds only the name when folded and the name plus 'Phase Dates' when open,
+      not from screen bands that the opening of an earlier phase shifts. Press
+      each folded name once and wait for its container to show 'Phase Dates'
+      before moving on.
+  - id: R-2.37
+    target: old
+    why: "on proposal-swu-create for a one-phase opportunity, after Charlie
+      Placeholder was added to Implementation with the Scrum Master radio
+      ticked, the adapter's last press was 'Add Team Member(s)' and it stayed on
+      '2. Team' until the timeout ('locator.count: Target page ... has been
+      closed'), never reaching '3. Pricing', submission or the export page. Stop
+      working the Team step once the member is on the phase with Scrum Master
+      ticked, and advance with the form's 'Next', which is plain pressable text
+      rather than a button, until the phase cost box shows."
