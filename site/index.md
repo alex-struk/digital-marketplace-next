@@ -31,6 +31,8 @@ Profile: rebuild
 - [archaeology-proposals](proposals/archaeology-proposals.md)
 - [archaeology-users](proposals/archaeology-users.md)
 - [bind-adapter-new](proposals/bind-adapter-new.md)
+- [bind-adapter-new-2](proposals/bind-adapter-new-2.md)
+- [bind-adapter-new-3](proposals/bind-adapter-new-3.md)
 - [bind-adapter-old](proposals/bind-adapter-old.md)
 - [bind-adapter-old-10](proposals/bind-adapter-old-10.md)
 - [bind-adapter-old-11](proposals/bind-adapter-old-11.md)
@@ -338,10 +340,10 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $668.023416
-- Rulings cost: $369.114282
-- Total cost: $1037.137698
-- Agent-held rulings: 295
+- Journal cost: $680.696763
+- Rulings cost: $370.713823
+- Total cost: $1051.410586
+- Agent-held rulings: 297
 - Runner rulings (automatic, no seat held): 1
 - Human rulings: 11
 - Rulings whose seat this page does not recognise: 0
