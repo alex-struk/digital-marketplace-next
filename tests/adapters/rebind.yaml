@@ -1704,6 +1704,11 @@ rebind:
     adapter: c0679fb6b2152557df56ade1fe6babace5ae15ed
     by: runner:calibrate
     at: 2026-09-28T23:35:33.556Z
+    closed:
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-29T00:26:21.041Z
   - id: R-2.16
     target: old
     why: "proposal-swu-create.add_reference neither opens the form's 'References'
@@ -1716,6 +1721,11 @@ rebind:
       proposal-swu-create.add_phase_team_member throws 'refused' instead of
       returning with no team added, as the Team With Us binding does, so the
       test never gets to read the refusal"
+    closed: &a8
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-29T00:26:21.092Z
   - id: R-2.20
     target: old
     why: before a disabled Submit, the fill-in-required-fields step picks a
@@ -1724,12 +1734,14 @@ rebind:
       proposal the test submitted with no team member goes through with one and
       no refusal is shown; team-member choosers and hourly rates must never be
       filled on the test's behalf
+    closed: *a8
   - id: R-2.35
     target: old
     why: proposal-swu-view.history_tab reads the Created cell with innerText, which
       returns the author's name uppercased by the page's CSS text-uppercase
       class ('BLAKE PLACEHOLDER'); read the name's own text (textContent) so it
       matches the name the user profile shows
+    closed: *a8
   - id: R-2.7
     target: old
     why: "proposal-swu-create.add_reference neither opens the 'References' tab nor
@@ -1737,6 +1749,7 @@ rebind:
       = order + 1) from the input's name, company, phone and email, instead of
       looking for a field labelled 'Company Name' or 'Reference', which does not
       exist"
+    closed: *a8
   - id: R-2.9
     target: old
     why: "proposal-swu-create.add_reference neither opens the 'References' tab nor
@@ -1744,6 +1757,7 @@ rebind:
       = order + 1) from the input's name, company, phone and email, instead of
       looking for a field labelled 'Company Name' or 'Reference', which does not
       exist"
+    closed: *a8
   - id: R-2.11
     target: old
     why: "proposal-swu-create.add_reference neither opens the 'References' tab nor
@@ -1751,6 +1765,7 @@ rebind:
       = order + 1) from the input's name, company, phone and email, instead of
       looking for a field labelled 'Company Name' or 'Reference', which does not
       exist"
+    closed: *a8
   - id: R-4.14
     target: old
     why: user-list.admin_check reports nothing to read, but the list is a scrolling
@@ -1758,6 +1773,7 @@ rebind:
       the user is an administrator and nothing otherwise; locate each row by its
       name cell and read the mark as the presence of that icon in the row's last
       cell instead of by accessible name or text
+    closed: *a8
   - id: R-2.19
     target: old
     why: publishing a Sprint With Us opportunity whose phases are Prototype (28 to
@@ -1767,6 +1783,7 @@ rebind:
       start-phase chooser to Prototype, enter each phase's dates exactly as
       given without adding dates of its own, and report the page's own refusal
       when publish does not land on a record
+    closed: *a8
   - id: R-4.23
     target: old
     why: user-sign-up-complete.terms_checkbox throws unbound although the adapter
@@ -1775,6 +1792,7 @@ rebind:
       for the administrator, the public sector employee and every seeded vendor
       who has agreed; for those personas report that no agreement box is
       offered, and where the person was sent, instead of throwing
+    closed: *a8
   - id: R-2.37
     target: old
     why: "proposal-swu-create.add_reference neither opens the 'References' tab nor
@@ -1782,3 +1800,4 @@ rebind:
       = order + 1) from the input's name, company, phone and email, instead of
       looking for a field labelled 'Company Name' or 'Reference', which does not
       exist"
+    closed: *a8
