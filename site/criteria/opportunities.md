@@ -19,7 +19,7 @@
 | R-1.13 | acceptance/opportunities/R-1.13.spec.ts |  | pass |
 | R-1.14 | acceptance/opportunities/R-1.14.spec.ts |  | pass |
 | R-1.15 | acceptance/opportunities/R-1.15.spec.ts |  | pass |
-| R-1.16 | acceptance/opportunities/R-1.16.spec.ts |  | fail |
+| R-1.16 | acceptance/opportunities/R-1.16.spec.ts |  | fail (ruled: defect-in-old) |
 | R-1.17 | acceptance/opportunities/R-1.17.spec.ts |  | fail (ruled: spec-wrong) |
 | R-1.18 | acceptance/opportunities/R-1.18.spec.ts |  | pass |
 | R-1.19 | acceptance/opportunities/R-1.19.spec.ts |  | pass |
@@ -251,6 +251,7 @@ A Sprint With Us opportunity must have an implementation phase, and may only hav
 - given: a member of public sector staff creating or editing a Sprint With Us opportunity that is not a draft
 - when: they include an inception phase but no prototype phase
 - then: the submission is rejected with a message saying a prototype phase must follow an inception phase
+- note: calibrate 2026-09-29: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.17 · v2 · confirmed · accepted
 

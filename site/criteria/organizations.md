@@ -12,9 +12,9 @@
 | R-3.6 | acceptance/organizations/R-3.6.spec.ts |  | pass |
 | R-3.7 | acceptance/organizations/R-3.7.spec.ts |  | pass |
 | R-3.8 | acceptance/organizations/R-3.8.spec.ts |  | pass |
-| R-3.9 | acceptance/organizations/R-3.9.spec.ts |  | unbound |
+| R-3.9 | acceptance/organizations/R-3.9.spec.ts |  | stale (ruled: spec-wrong) |
 | R-3.10 | acceptance/organizations/R-3.10.spec.ts |  | pass |
-| R-3.11 | acceptance/organizations/R-3.11.spec.ts |  | pass |
+| R-3.11 | acceptance/organizations/R-3.11.spec.ts |  | fail |
 | R-3.12 | acceptance/organizations/R-3.12.spec.ts |  | pass |
 | R-3.13 | acceptance/organizations/R-3.13.spec.ts |  | pass |
 | R-3.14 | acceptance/organizations/R-3.14.spec.ts |  | pass |
@@ -27,7 +27,7 @@
 | R-3.21 | acceptance/organizations/R-3.21.spec.ts |  | pass |
 | R-3.22 | acceptance/organizations/R-3.22.spec.ts |  | fail (ruled: defect-in-old) |
 | R-3.23 | acceptance/organizations/R-3.23.spec.ts |  | pass |
-| R-3.24 | acceptance/organizations/R-3.24.spec.ts |  | pass |
+| R-3.24 | acceptance/organizations/R-3.24.spec.ts |  | fail |
 | R-3.25 | acceptance/organizations/R-3.25.spec.ts |  | pass |
 | R-3.26 | acceptance/organizations/R-3.26.spec.ts |  | pass |
 | R-3.27 | acceptance/organizations/R-3.27.spec.ts |  | pass |
@@ -145,9 +145,9 @@ A person may only be invited to an organization if they hold an active vendor ac
 - then: the repeat invitation is refused as the person already being a member of the organization, and the invitation to public sector staff is refused because only vendors may be invited
 - note: a person whose membership was previously ended can be invited again, because ended memberships are not counted when checking for an existing one; this was read from the shape of the duplicate check rather than observed.
 
-### R-3.9 · v1 · confirmed · accepted
+### R-3.9 · v2 · confirmed · accepted
 
-A pending invitation becomes an active membership only when the invited person accepts it, or when an administrator accepts it on their behalf; nobody else can accept it and an invitation that is not pending cannot be accepted.
+A pending invitation becomes an active membership only when the invited person accepts it; the organization's owner cannot accept it on their behalf, and an invitation that is not pending cannot be accepted.
 - cites: src/back-end/lib/permissions.ts:284
 - cites: src/back-end/lib/resources/affiliation.ts:347
 - cites: src/back-end/lib/db/affiliation.ts:246

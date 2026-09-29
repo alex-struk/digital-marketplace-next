@@ -26,8 +26,8 @@
 | R-4.20 | acceptance/users/R-4.20.spec.ts |  | fail (ruled: defect-in-old) |
 | R-4.21 | acceptance/users/R-4.21.spec.ts |  | fail (ruled: defect-in-old) |
 | R-4.22 | acceptance/users/R-4.22.spec.ts |  | pass |
-| R-4.23 | acceptance/users/R-4.23.spec.ts |  | fail |
-| R-4.24 | acceptance/users/R-4.24.spec.ts |  | unbound |
+| R-4.23 | acceptance/users/R-4.23.spec.ts |  | fail (ruled: test-wrong) |
+| R-4.24 | acceptance/users/R-4.24.spec.ts |  | unbound (ruled: test-wrong) |
 | R-4.25 | acceptance/users/R-4.25.spec.ts |  | pass |
 | R-4.26 | acceptance/users/R-4.26.spec.ts |  | pass |
 | R-4.27 | acceptance/users/R-4.27.spec.ts |  | pass |
