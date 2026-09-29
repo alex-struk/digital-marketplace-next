@@ -40,3 +40,27 @@ I rewrote the test for R-6.2 (notifications) as the ruling asked. It is the only
 - an observation of how many delivery attempts the catcher has refused.
 
 I made no changes outside `tests/acceptance`, and nothing asked me to.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the R-6.2 tests follow from the criterion and from nothing else? Ruling: return. The rewrite fixes the problem the previous ruling raised. Delivery stays refused for a fixed hold after the publish is answered, and the test checks the fault is still on and the catcher is empty before restoring. After the restore it fails on any message about the published opportunity. The published status, the form with no error and the history with no failed delivery answer the remaining 'then' clauses. The composition clause is recorded in not-testable.yaml as blocked, owned by contract, and that reason is real. The runner's compiler check reports no errors in acceptance/notifications. But the test's last block fails when any caught message reached one person twice. Any message about the opportunity already fails the check before it, so this block only ever judges unrelated mail, such as the organization invitation used to show delivery is working again. It asserts something R-6.2 does not say: a duplicated invitation would fail this criterion. It also contradicts the proposal's own statement that unrelated mail does not fail the test. Removing that block, and the 'recipients' field kept only to serve it, would change the ruling to approve.
+
+**Conditions:**
+- tests/acceptance/notifications/R-6.2.spec.ts: remove the final assertion that no message reached the same person more than once, which checks every caught message including the organization invitation. R-6.2 says nothing about mail unrelated to the triggering action, and any notice about the published opportunity is already caught by the check before it. Keep only the assertion that no message about the published opportunity arrives after delivery is restored, and drop the per-message recipient collection if nothing else uses it.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `da71f2ad813a92a8f08d058d2030b4e3298d5dc4`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/notifications/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
