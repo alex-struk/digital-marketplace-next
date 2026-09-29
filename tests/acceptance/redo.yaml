@@ -738,3 +738,8 @@ redo:
       can be seen. Then check that the wanted opportunity remains, and
       separately that the other one is gone, after each state is chosen, so a
       failure says which half did not hold.
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on opportunities
+      by: runner:derive-tests
+      at: 2026-09-29T18:55:04.070Z
