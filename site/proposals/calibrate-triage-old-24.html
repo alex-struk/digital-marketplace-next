@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-triage-old-24 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">279</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">275</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">242</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-triage-old-24</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 07:03</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>6 criterion(s) fail against old: which of them did this project&#39;s own adapter cause?</h2>
+<p><strong>Recommendation.</strong> Sort R-2.7, R-2.11, R-3.11, R-2.19, R-3.24, R-2.37 with a triage condition each, so the adapter&#39;s failures are fixed there and only product questions reach the product owner.</p>
+<p>6 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:4300,">http://localhost:4300,</a> and nobody has sorted them yet. Before any reaches the product owner, say which of them this project&#39;s own adapter caused. The adapter is under <code>tests/adapters/old/</code>; read each one against it and against the test.</p>
+<h4>R-2.7 · v2</h4>
+<p>A proposal may be created only as a draft or as a submission, in all three programs; any other state is refused.</p>
+<ul><li>given: the published description of the proposal interface</li><li>when: it is compared with what the service accepts</li><li>then: three disagreements appear, and in each the running service is the stricter of the two</li><li>test: tests/acceptance/proposals/R-2.7.spec.ts</li></ul>
+<p><strong>a proposal may be created as a draft, in all three programs</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>a proposal may be created as a submission, in all three programs</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-2.11 · v1</h4>
+<p>An organization may appear on at most one proposal per opportunity, and a proposal naming an organization that already bid is refused with a pointer to the existing proposal.</p>
+<ul><li>given: an opportunity that already carries a proposal naming a given organization</li><li>when: a different vendor who administers that same organization names it on a new proposal, or an existing proposal is edited to name it</li><li>then: the request is refused with &quot;Please select a different organization.&quot; and the identifier of the existing proposal is returned alongside the refusal</li><li>test: tests/acceptance/proposals/R-2.11.spec.ts</li></ul>
+<p><strong>an organization may appear on at most one proposal per opportunity, and a proposal naming an organization that already bid is refused</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-3.11 · v1</h4>
+<p>An organization&#39;s last remaining owner cannot be removed from it.</p>
+<ul><li>given: an organization with exactly one owner and two other active members</li><li>when: an administrator tries to end the owner&#39;s membership</li><li>then: the request is refused with a message saying this is the sole owner for the organization, and the membership remains</li><li>test: tests/acceptance/organizations/R-3.11.spec.ts</li></ul>
+<p><strong>when an administrator tries to end the sole owner&#39;s membership the request is refused and the membership remains</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-2.19 · v2</h4>
+<p>A Sprint With Us proposal must offer a team for every phase the opportunity requires and no phase it does not, name no more than one scrum master in each phase, cover every capability the opportunity requires across its phases, and stay within each phase&#39;s budget and the opportunity&#39;s total budget.</p>
+<ul><li>given: a Sprint With Us opportunity with an inception phase and a set of required capabilities</li><li>when: a vendor submits a proposal that omits the inception phase, names two scrum masters, leaves a required capability uncovered, or proposes a total cost above the opportunity&#39;s maximum budget</li><li>then: each of those submissions is refused, naming the phase, the team or the cost as the reason</li><li>test: tests/acceptance/proposals/R-2.19.spec.ts</li></ul>
+<p><strong>a Sprint With Us proposal must offer a team for every phase the opportunity requires</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>a Sprint With Us proposal must offer no phase the opportunity does not require</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>a Sprint With Us proposal may name no more than one scrum master in each phase</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>a Sprint With Us proposal must cover every capability the opportunity requires across its phases</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<p><strong>a Sprint With Us proposal must stay within each phase&#39;s budget</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h4>R-3.24 · v1</h4>
+<p>When an administrator archives an organization they do not own, its owner is told by email that the organization has been archived.</p>
+<ul><li>given: an active organization owned by a vendor</li><li>when: an administrator archives it</li><li>then: the owner receives a message telling them their organization has been archived by an administrator and that they can no longer use it, and no such message is sent when the owner archives their own organization</li><li>test: tests/acceptance/organizations/R-3.24.spec.ts</li></ul>
+<p><strong>when an administrator archives an organization they do not own, its owner receives a message telling them it has been archived</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeGreaterThan[2m([22m[32mexpected[39m[2m)[22m
+
+Expected: &gt; [32m0[39m
+Received:   [31m0[39m</code></pre>
+<h4>R-2.37 · v1</h4>
+<p>Anyone entitled to read a proposal can take away a printable copy of it, and staff reading a Sprint With Us or Team With Us copy see the anonymous proponent name until the proposal reaches the challenge stage.</p>
+<ul><li>given: a Sprint With Us proposal under review on its team questions</li><li>when: the opportunity&#39;s author opens its printable copy, and then the vendor who wrote it opens the same copy</li><li>then: the staff copy names the proponent only as &quot;Proponent 1&quot; while the vendor&#39;s own copy names the organization, and once the proposal reaches the code challenge the staff copy names the organization too</li><li>test: tests/acceptance/proposals/R-2.37.spec.ts</li></ul>
+<p><strong>the vendor&#39;s own copy of a Sprint With Us proposal names the organization</strong> — timedOut</p>
+<pre><code>[31mTest timeout of 120000ms exceeded.[39m</code></pre>
+<h3>Triage conditions</h3>
+<p>One condition per line, one for every criterion the page lists, in exactly one of these forms:</p>
+<ul><li><code>adapter-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion and the test are both fine, and this target&#39;s adapter is what failed: it read the wrong thing off the page, reported a control missing that the page does render, or answered empty where it never reached the page. <code>&lt;why&gt;</code> names what the adapter did wrong, specifically enough for the next binding run to fix it. The criterion is not touched. On an unbound row it sends the binding back to <code>bind-adapter</code> however often it has been sent.</li><li><code>product-question &lt;ID&gt;</code> — nothing in the evidence points at the adapter. The failure goes to the product owner, who decides whether the application, the criterion or the test is wrong. No text after the ID. On an unbound row, use it when the criterion itself looks suspect.</li><li><code>oracle-cannot &lt;ID&gt;: &lt;why&gt;</code> — only for a row listed as unbound, on the oracle&#39;s target: the oracle genuinely cannot be driven into, or observed in, the state the test needs without changing its code — the state sits behind an external identity provider, is reachable only through a link the application emails, or is enforced only by a browser-native dialog. <code>&lt;why&gt;</code> names that state and why the oracle cannot reach it. It closes the row, changes no criterion, and stands until the criterion&#39;s version changes. It is never a way to skip binding work: where the application offers the control under another label, behind a step or as another persona, the answer is <code>adapter-wrong</code>.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. A condition may not span more than one line. When the evidence is genuinely unclear, it is a <code>product-question</code>: a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the adapter comes back from the next binding run unchanged and costs a run to find out.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 07:06.</p>
+<div class="body"><p>Question: which of R-2.7, R-2.11, R-3.11, R-2.19, R-3.24 and R-2.37, failing against old, did this project&#39;s adapter cause? Ruling: approve with one triage condition each, four adapter-wrong and two product-question. The evidence is this run&#39;s snapshots under tests/test-results, read against tests/adapters/old/index.ts. All four proposal criteria stall on proposal-swu-create&#39;s &#39;2. Team&#39; step, in the phase-section handling (phaseBand/inBand/teamPhaseOpen at index.ts:2571-2607 and 4291-4384). That handling decides which controls belong to a phase by comparing screen coordinates. The page itself puts each phase&#39;s name and its section body together in one container, and a folded phase&#39;s container holds only its name. R-2.7 (draft) threw &#39;no Add Team Member(s) inside Implementation&#39; while the snapshot shows &#39;Phase Dates&#39; and &#39;Add Team Member(s)&#39; directly under &#39;Implementation&#39;. R-2.7 (submission) timed out on the same untouched form. R-2.19 (all five tests): &#39;Proof of Concept&#39; was open and was the last thing pressed, while &#39;Implementation&#39; stayed folded as a bare name and was never pressed. R-2.11 and R-2.37: Charlie Placeholder was on Implementation with the Scrum Master radio ticked, but the adapter&#39;s last press was &#39;Add Team Member(s)&#39; and it never reached &#39;3. Pricing&#39;. R-2.37 ended with &#39;locator.count: Target page ... has been closed&#39;, meaning a loop was still running at timeout. R-3.11 is a product-question: the old app offers no &#39;Remove&#39; on the owner&#39;s row, the adapter correctly pressed nothing, and fieldError read the page honestly as empty. Whether withholding the control satisfies &#39;refused with a message saying this is the sole owner&#39; is the product owner&#39;s call. R-3.24 is a product-question: the archive completed (the organization is gone from the admin&#39;s list), and the mail check is the shared fixture, not the adapter. Tier is STANDARD and no residual risk is marked unaccepted, so nothing escalates. What would change this: after a rebind that finds phase controls inside the phase&#39;s own container, any of the four proposal criteria still failing at its assertion becomes a product-question. For R-3.24, evidence that the email arrives only after a delay would make it a test-fixture issue rather than a product one.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>adapter-wrong R-2.7: on proposal-swu-create &#39;2. Team&#39; for a one-phase opportunity, add_phase_team_member threw &#39;no Add Team Member(s) inside Implementation&#39; (draft test), and the submission test timed out on the same untouched form, while the page shows &#39;Phase Dates&#39; and &#39;Add Team Member(s)&#39; directly below &#39;Implementation&#39;. The screen-coordinate band (phaseBand/inBand) misreads the open section. Find a phase&#39;s section as the element that contains that phase&#39;s name text together with its &#39;Phase Dates&#39; and &#39;Add Team Member(s)&#39;, and look for the adder there, not by vertical position. Once the member is added and Scrum Master ticked, press the form&#39;s &#39;Next&#39;, which is plain pressable text rather than a button, until &#39;Implementation Cost*&#39; shows.</li><li>product-question R-2.11</li><li>adapter-wrong R-2.11: on proposal-swu-create for a one-phase opportunity, after Charlie Placeholder was added to Implementation with the Scrum Master radio ticked, the adapter&#39;s last press was the phase&#39;s &#39;Add Team Member(s)&#39; again and it never left &#39;2. Team&#39; for &#39;3. Pricing&#39; before the 120s timeout. Stop working the Team step once the named member is in the phase&#39;s table with Scrum Master ticked, and move forward with the form&#39;s &#39;Next&#39;, which is plain pressable text rather than a button, until the phase cost box shows.</li><li>product-question R-3.11</li><li>adapter-wrong R-2.19: on proposal-swu-create&#39;s &#39;2. Team&#39; for a two-phase opportunity (Proof of Concept and Implementation), the adapter pressed &#39;Proof of Concept&#39;, which opened with its &#39;Add Team Member(s)&#39; visible, and never pressed &#39;Implementation&#39;, which stayed folded as a bare name. All five tests timed out there. Decide whether each phase is open from its own container, which holds only the name when folded and the name plus &#39;Phase Dates&#39; when open, not from screen bands that the opening of an earlier phase shifts. Press each folded name once and wait for its container to show &#39;Phase Dates&#39; before moving on.</li><li>product-question R-3.24</li><li>adapter-wrong R-2.37: on proposal-swu-create for a one-phase opportunity, after Charlie Placeholder was added to Implementation with the Scrum Master radio ticked, the adapter&#39;s last press was &#39;Add Team Member(s)&#39; and it stayed on &#39;2. Team&#39; until the timeout (&#39;locator.count: Target page ... has been closed&#39;), never reaching &#39;3. Pricing&#39;, submission or the export page. Stop working the Team step once the member is on the phase with Scrum Master ticked, and advance with the form&#39;s &#39;Next&#39;, which is plain pressable text rather than a button, until the phase cost box shows.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
