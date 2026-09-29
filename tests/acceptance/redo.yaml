@@ -758,3 +758,8 @@ redo:
       program is chosen, check separately that the matching opportunity remains
       and that the other one is gone, and have each check's message name the
       program chosen and which half failed.
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on opportunities
+      by: runner:derive-tests
+      at: 2026-09-29T23:44:07.083Z

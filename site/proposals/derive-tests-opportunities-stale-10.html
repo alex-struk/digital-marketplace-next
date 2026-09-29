@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-stale-10 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">316</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">311</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">275</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-stale-10</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 23:44</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the opportunities criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the one criterion in scope, R-1.39 (v1), in <code>tests/acceptance/opportunities/R-1.39.spec.ts</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rewrote the one criterion in scope, R-1.39 (v1), in <code>tests/acceptance/opportunities/R-1.39.spec.ts</code>. It has a test file again, nothing was recorded as not testable, and <code>not-testable.yaml</code> is unchanged. I could not type-check or run the file: the compiler call needs approval this session doesn&#39;t have, and there is no application here to run against.</p>
+<p><strong>What the ruling asked for.</strong> The old by-program case leaned on a closed Sprint With Us opportunity from the seed, which other tests share. It also could not tell a failure before any program was chosen from one after Sprint With Us was chosen. The new case signs in as the administrator and saves two drafts of its own: one through <code>opportunityCwuCreate.saveDraft</code> and one through <code>opportunitySwuCreate.saveDraft</code>, each with a title unique to this test. It opens the list and confirms both are there before any program is chosen. It then chooses Code With Us and checks two things separately: that the Code With Us draft is still listed, and that the Sprint With Us draft is gone. It reopens the list, confirms both drafts again, and repeats the two checks after choosing Sprint With Us. Every check&#39;s failure message names the moment it was made and which half failed, for example: <code>After program &quot;Sprint With Us&quot; is chosen, the Code With Us opportunity: &quot;…&quot; should no longer be listed, and still is</code>. The test no longer imports <code>seed</code>, since nothing in it depends on shared seeded data.</p>
+<p><strong>The other four tests.</strong> I kept the cases for state, remote-only, free text and the combined condition, and gave them the same treatment. Each creates its own opportunities and confirms they are listed before anything is chosen. Where a test applies a second condition, it re-confirms the list after reopening it. Each check&#39;s message names the condition chosen and whether the matching or the non-matching opportunity failed. Nothing asserts beyond the criterion&#39;s given/when/then. The combined case tests only its &quot;then&quot;: that only opportunities matching every chosen condition stay visible.</p>
+<p><strong>Missing from the surface.</strong> No actions or observations were missing for this criterion. One gap is worth the contract&#39;s attention: the list has no per-row observation. The tests can only read the whole text of <code>unpublishedGroup</code>, <code>openGroup</code> and <code>closedGroup</code> and look for a title in it. An empty group may not be readable at all, so the tests treat an unreadable group as empty. A per-row or per-title observation on <code>opportunityList</code> would make these checks more precise.</p>
+<p>I made no changes outside <code>tests/acceptance</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 23:44.</p>
+<div class="body"><p>Do the rewritten R-1.39 tests follow from the opportunities criterion and from nothing else? Yes. They also meet the open redo request. The by-program case now saves its own Code With Us draft and Sprint With Us draft, confirms both are listed before any program is chosen, and after each program is chosen checks separately that the matching one stays and the other goes, with messages that name the program and the failing half. It no longer depends on the shared seeded opportunity. Every case asserts only the criterion&#39;s &#39;then&#39;, that only opportunities matching every chosen condition remain visible, for program, state, remote-only, free text against title and against location, and the combined conditions. The before-anything-is-chosen checks are preconditions the test sets up for itself, not added claims. Nothing about the implementation leaks in: only contract surface actions and observations are used, and the runner&#39;s typecheck passed on this revision. Using two programs rather than three matches what the redo asked for and is enough to show the list narrowing; the three programs in the criterion&#39;s &#39;given&#39; describe the setting and are not a clause needing its own assertion. not-testable.yaml is unchanged and no clause is left unasserted. This ruling would change if a test were shown to assert anything beyond narrowing to matching opportunities, or if calibration showed that treating an unreadable empty group as empty hides a real failure, which would go to the contract stage rather than back to this writer.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

@@ -1,12 +1,14 @@
 // criterion: @R-1.39 v1
 // provenance: blind, spec@258c8b6542d73fd923b7fbc7b8c8d9d82627255b, derived 2026-09-29
-import { test, expect, persona, seed } from "../../fixtures";
+import { test, expect, persona } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// Each test puts in place two opportunities that one condition tells apart, confirms that
-// the list shows both before anything is chosen, and then chooses a condition. After each
-// choice it checks, separately, that the opportunity meeting the condition is still listed
-// and that the other one is no longer listed, so a failure says which half did not hold.
+// Each test puts in place, itself, the opportunities that one condition tells apart,
+// confirms that the list shows every one of them before anything is chosen, and then
+// chooses a condition. After each choice it checks, separately, that the opportunity
+// meeting the condition is still listed and that the other one is no longer listed.
+// Every check's message names the moment it was made — before anything was chosen, or
+// after which condition — and which half failed.
 // The list may narrow a moment after a condition is chosen, so each half is read again
 // until it holds or the wait runs out.
 //
@@ -37,6 +39,8 @@ const complete = {
 
 type Group = "unpublishedGroup" | "openGroup" | "closedGroup";
 
+const everyGroup: Group[] = ["unpublishedGroup", "openGroup", "closedGroup"];
+
 async function readable(read: () => Promise<string>): Promise<string> {
   try {
     return await read();
@@ -46,21 +50,29 @@ async function readable(read: () => Promise<string>): Promise<string> {
 }
 
 // Everything the list shows, across all of its groups.
-async function listed(surface: Surface, groups: Group[]): Promise<string> {
+async function listed(surface: Surface): Promise<string> {
   const texts: string[] = [];
-  for (const group of groups) texts.push(await readable(() => surface.opportunityList[group]()));
+  for (const group of everyGroup) texts.push(await readable(() => surface.opportunityList[group]()));
   return texts.join("\n");
 }
 
-async function shows(surface: Surface, groups: Group[], title: string): Promise<void> {
+// `when` names the moment of the check, so a failure says whether the opportunity was
+// missing before anything was chosen or only after a particular condition was chosen.
+async function shows(surface: Surface, title: string, when: string): Promise<void> {
   await expect
-    .poll(async () => (await listed(surface, groups)).includes(title), { ...settle, message: `"${title}" is listed` })
+    .poll(async () => (await listed(surface)).includes(title), {
+      ...settle,
+      message: `${when}: "${title}" should be listed, and is not`,
+    })
     .toBe(true);
 }
 
-async function hides(surface: Surface, groups: Group[], title: string): Promise<void> {
+async function hides(surface: Surface, title: string, when: string): Promise<void> {
   await expect
-    .poll(async () => (await listed(surface, groups)).includes(title), { ...settle, message: `"${title}" is no longer listed` })
+    .poll(async () => (await listed(surface)).includes(title), {
+      ...settle,
+      message: `${when}: "${title}" should no longer be listed, and still is`,
+    })
     .toBe(false);
 }
 
@@ -69,32 +81,40 @@ async function publish(surface: Surface, fields: Record<string, unknown>): Promi
   await surface.opportunityCwuCreate.publish({ ...complete, ...fields });
 }
 
-const everyGroup: Group[] = ["unpublishedGroup", "openGroup", "closedGroup"];
+const beforeAnything = "Before anything is chosen";
 
 test(`${statement} (by program)`, async ({ surface }) => {
-  const codeWithUs = "R-1.39 published Code With Us opportunity narrowed by program";
-  const sprintWithUs = seed.opportunities.closedSprintWithUs.title;
+  const codeWithUs = "R-1.39 draft Code With Us opportunity narrowed by program";
+  const sprintWithUs = "R-1.39 draft Sprint With Us opportunity narrowed by program";
+  const beforeProgram = "Before any program is chosen";
 
   await surface.signIn(persona.administrator);
-  await publish(surface, { title: codeWithUs });
+  await surface.opportunityCwuCreate.open();
+  await surface.opportunityCwuCreate.saveDraft({ title: codeWithUs });
+  await surface.opportunitySwuCreate.open();
+  await surface.opportunitySwuCreate.saveDraft({ title: sprintWithUs });
 
   await surface.opportunityList.open();
-  await shows(surface, everyGroup, codeWithUs);
-  await shows(surface, everyGroup, sprintWithUs);
+  await shows(surface, codeWithUs, beforeProgram);
+  await shows(surface, sprintWithUs, beforeProgram);
 
   await surface.opportunityList.filterByProgram({ program: "Code With Us" });
-  await shows(surface, everyGroup, codeWithUs);
-  await hides(surface, everyGroup, sprintWithUs);
+  await shows(surface, codeWithUs, 'After program "Code With Us" is chosen, the Code With Us opportunity');
+  await hides(surface, sprintWithUs, 'After program "Code With Us" is chosen, the Sprint With Us opportunity');
 
   await surface.opportunityList.open();
+  await shows(surface, codeWithUs, beforeProgram);
+  await shows(surface, sprintWithUs, beforeProgram);
+
   await surface.opportunityList.filterByProgram({ program: "Sprint With Us" });
-  await shows(surface, everyGroup, sprintWithUs);
-  await hides(surface, everyGroup, codeWithUs);
+  await shows(surface, sprintWithUs, 'After program "Sprint With Us" is chosen, the Sprint With Us opportunity');
+  await hides(surface, codeWithUs, 'After program "Sprint With Us" is chosen, the Code With Us opportunity');
 });
 
 test(`${statement} (by state)`, async ({ surface }) => {
   const published = "R-1.39 published opportunity narrowed by state";
   const draft = "R-1.39 draft opportunity narrowed by state";
+  const beforeState = "Before any state is chosen";
 
   await surface.signIn(persona.administrator);
   await publish(surface, { title: published });
@@ -102,17 +122,20 @@ test(`${statement} (by state)`, async ({ surface }) => {
   await surface.opportunityCwuCreate.saveDraft({ title: draft });
 
   await surface.opportunityList.open();
-  await shows(surface, everyGroup, published);
-  await shows(surface, everyGroup, draft);
+  await shows(surface, published, beforeState);
+  await shows(surface, draft, beforeState);
 
   await surface.opportunityList.filterByStatus({ status: "Published" });
-  await shows(surface, everyGroup, published);
-  await hides(surface, everyGroup, draft);
+  await shows(surface, published, 'After state "Published" is chosen, the published opportunity');
+  await hides(surface, draft, 'After state "Published" is chosen, the draft opportunity');
 
   await surface.opportunityList.open();
+  await shows(surface, published, beforeState);
+  await shows(surface, draft, beforeState);
+
   await surface.opportunityList.filterByStatus({ status: "Draft" });
-  await shows(surface, everyGroup, draft);
-  await hides(surface, everyGroup, published);
+  await shows(surface, draft, 'After state "Draft" is chosen, the draft opportunity');
+  await hides(surface, published, 'After state "Draft" is chosen, the published opportunity');
 });
 
 test(`${statement} (to remote-friendly opportunities only)`, async ({ surface }) => {
@@ -124,40 +147,45 @@ test(`${statement} (to remote-friendly opportunities only)`, async ({ surface })
   await publish(surface, { title: onSite, remoteOk: false, remoteDescription: "" });
 
   await surface.opportunityList.open();
-  await shows(surface, everyGroup, remote);
-  await shows(surface, everyGroup, onSite);
+  await shows(surface, remote, "Before remote-only is ticked");
+  await shows(surface, onSite, "Before remote-only is ticked");
 
   await surface.opportunityList.filterRemoteOnly({ remoteOnly: true });
-  await shows(surface, everyGroup, remote);
-  await hides(surface, everyGroup, onSite);
+  await shows(surface, remote, "After remote-only is ticked, the remote-friendly opportunity");
+  await hides(surface, onSite, "After remote-only is ticked, the on-site opportunity");
 });
 
 test(`${statement} (by free text matched against title and location)`, async ({ surface }) => {
   const byTitle = "R-1.39 published opportunity about kittiwakes";
   const byLocation = "R-1.39 published opportunity in another town";
+  const beforeText = "Before any text is searched for";
 
   await surface.signIn(persona.administrator);
   await publish(surface, { title: byTitle });
   await publish(surface, { title: byLocation, location: "Kamloops" });
 
   await surface.opportunityList.open();
-  await shows(surface, everyGroup, byTitle);
-  await shows(surface, everyGroup, byLocation);
+  await shows(surface, byTitle, beforeText);
+  await shows(surface, byLocation, beforeText);
 
   await surface.opportunityList.search({ text: "kittiwakes" });
-  await shows(surface, everyGroup, byTitle);
-  await hides(surface, everyGroup, byLocation);
+  await shows(surface, byTitle, 'After "kittiwakes" is searched for, the opportunity with it in its title');
+  await hides(surface, byLocation, 'After "kittiwakes" is searched for, the opportunity without it');
 
   await surface.opportunityList.open();
+  await shows(surface, byTitle, beforeText);
+  await shows(surface, byLocation, beforeText);
+
   await surface.opportunityList.search({ text: "Kamloops" });
-  await shows(surface, everyGroup, byLocation);
-  await hides(surface, everyGroup, byTitle);
+  await shows(surface, byLocation, 'After "Kamloops" is searched for, the opportunity with it as its location');
+  await hides(surface, byTitle, 'After "Kamloops" is searched for, the opportunity without it');
 });
 
 test(`${statement} (only opportunities matching every chosen condition remain visible)`, async ({ surface }) => {
   const both = "R-1.39 remote opportunity about puffins";
   const wordOnly = "R-1.39 on-site opportunity about puffins";
   const remoteOnly = "R-1.39 remote opportunity about gannets";
+  const afterBoth = 'After remote-only is ticked and "puffins" is searched for';
 
   await surface.signIn(persona.administrator);
   await publish(surface, { title: both });
@@ -165,13 +193,13 @@ test(`${statement} (only opportunities matching every chosen condition remain vi
   await publish(surface, { title: remoteOnly });
 
   await surface.opportunityList.open();
-  await shows(surface, everyGroup, both);
-  await shows(surface, everyGroup, wordOnly);
-  await shows(surface, everyGroup, remoteOnly);
+  await shows(surface, both, beforeAnything);
+  await shows(surface, wordOnly, beforeAnything);
+  await shows(surface, remoteOnly, beforeAnything);
 
   await surface.opportunityList.filterRemoteOnly({ remoteOnly: true });
   await surface.opportunityList.search({ text: "puffins" });
-  await shows(surface, everyGroup, both);
-  await hides(surface, everyGroup, wordOnly);
-  await hides(surface, everyGroup, remoteOnly);
+  await shows(surface, both, `${afterBoth}, the remote opportunity about puffins`);
+  await hides(surface, wordOnly, `${afterBoth}, the on-site opportunity about puffins`);
+  await hides(surface, remoteOnly, `${afterBoth}, the remote opportunity about gannets`);
 });
