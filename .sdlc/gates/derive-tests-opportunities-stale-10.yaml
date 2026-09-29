@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Do the rewritten R-1.39 tests follow from the opportunities criterion and from nothing else? Yes. They also meet the open redo request. The by-program case now saves its own Code With Us draft and Sprint With Us draft, confirms both are listed before any program is chosen, and after each program is chosen checks separately that the matching one stays and the other goes, with messages that name the program and the failing half. It no longer depends on the shared seeded opportunity. Every case asserts only the criterion's 'then', that only opportunities matching every chosen condition remain visible, for program, state, remote-only, free text against title and against location, and the combined conditions. The before-anything-is-chosen checks are preconditions the test sets up for itself, not added claims. Nothing about the implementation leaks in: only contract surface actions and observations are used, and the runner's typecheck passed on this revision. Using two programs rather than three matches what the redo asked for and is enough to show the list narrowing; the three programs in the criterion's 'given' describe the setting and are not a clause needing its own assertion. not-testable.yaml is unchanged and no clause is left unasserted. This ruling would change if a test were shown to assert anything beyond narrowing to matching opportunities, or if calibration showed that treating an unreadable empty group as empty hides a real failure, which would go to the contract stage rather than back to this writer.
+conditions: []
+cost: 0.358679
+turns: 3
+session: "f330ace6-7fa8-4220-9efb-bd5f415c8883"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-29T23:44:48.215Z
