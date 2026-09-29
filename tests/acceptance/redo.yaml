@@ -397,6 +397,11 @@ redo:
       the change, but the criterion is about the upload, which happens when the
       choice is saved; save the change, then read the refusal and establish that
       the stored picture is unchanged
+    closed: &a11
+      outcome: met
+      why: derived again by a derive-tests run on files
+      by: runner:derive-tests
+      at: 2026-09-29T00:22:20.552Z
   - id: R-1.16
     version: 1
     why: the test tries to publish without an implementation phase, but where a
@@ -480,6 +485,7 @@ redo:
     why: the second upload is made by a vendor account that is no longer active, so
       it is refused before the criterion is reached; the second uploader must be
       an active account able to upload
+    closed: *a11
   - id: R-8.2
     version: 1
     why: it reads an empty file identifier from an upload the service refused before
@@ -487,18 +493,21 @@ redo:
       were accepted elsewhere in the run; the test must start from an account
       able to upload and report the refusal it received instead of reading an
       empty identifier
+    closed: *a11
   - id: R-8.7
     version: 1
     why: its first upload was refused before any read access was tested, while
       uploads by the same persona were accepted elsewhere in the run; the test
       must start from an account able to upload and report the refusal it
       received instead of reading an empty identifier
+    closed: *a11
   - id: R-8.12
     version: 1
     why: its upload of a file the vendor may not read was refused before the
       vendor's request was made, while uploads by the same persona were accepted
       elsewhere in the run; the test must start from an account able to upload
       and report the refusal it received instead of reading an empty identifier
+    closed: *a11
   - id: R-6.1
     version: 1
     why: it recorded no result because it skips itself unless the run supplies a
@@ -539,7 +548,7 @@ redo:
       cannot be saved at all; the proposal must be otherwise complete so that
       the organization change is the only thing under test, both when refused
       and when accepted.
-    closed: &a11
+    closed: &a12
       outcome: met
       why: derived again by a derive-tests run on proposals
       by: runner:derive-tests
@@ -550,31 +559,31 @@ redo:
       does not mention before it reaches the question responses; it should vary
       only the response to an opportunity question and observe that response's
       rejection.
-    closed: *a11
+    closed: *a12
   - id: R-2.17
     version: 1
     why: the test observed no outcome at all rather than an acceptance; it must
       first confirm that the proposal names the organization lacking the service
       area and is actually submitted, then read the refusal.
-    closed: *a11
+    closed: *a12
   - id: R-2.28
     version: 1
     why: the test depends on a control being offered at a stage where the action is
       out of place; it should observe the refusal of the out-of-stage action
       itself, and not treat the action's absence from the screen as a failure.
-    closed: *a11
+    closed: *a12
   - id: R-2.31
     version: 1
     why: the test timed out reading a rank it could not parse as a number; it should
       read the total and rank for fully evaluated proposals where they are
       presented, and set up every stage score before reading.
-    closed: *a11
+    closed: *a12
   - id: R-4.3
     version: 1
     why: the test needs a vendor who has not yet completed their profile and signs
       in as an established vendor instead, so it never reaches the agreement
       step; it must begin as a first-time vendor persona.
-    closed: &a12
+    closed: &a13
       outcome: met
       why: derived again by a derive-tests run on users
       by: runner:derive-tests
@@ -584,4 +593,4 @@ redo:
     why: the test needs a person who has not yet completed their profile and signs
       in as an established account instead, so it never reaches the
       profile-completion step; it must begin as a first-time persona.
-    closed: *a12
+    closed: *a13

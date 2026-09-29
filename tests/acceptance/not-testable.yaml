@@ -245,3 +245,20 @@ criteria:
       that reports the date and time the person's new-opportunity notices were
       turned on"
     owner: contract
+  - id: R-8.30
+    version: 1
+    clause: an organization logo whose name does not end in .jpg, .jpeg or .png
+      is refused
+    reason: "blocked: R-8.30.spec.ts asserts the refusal for a profile picture,
+      saved through user-profile-self and read through file-image-picker. The
+      logo half has no route to it: organization-edit declares no action that
+      chooses a logo and no observation of the logo an organization holds;
+      organization-create declares change_logo but no observation of a logo
+      being refused; and file-image-picker is routed to /users/me only, so its
+      rejected_image_error and current_image cannot be read on an
+      organization's page."
+    missing: "a change_logo action on organization-edit, with observations on
+      organization-edit (or file-image-picker routed to
+      /organizations/:orgId/edit) reporting the organization's current logo and
+      a logo refused for its file ending"
+    owner: contract
