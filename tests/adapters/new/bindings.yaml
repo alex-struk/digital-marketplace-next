@@ -6,6 +6,15 @@
 # screens and the file addresses under /api — is answered by the client's own "Page not
 # found" screen or by a 404 from the service, and there is no sign-in anywhere, so no
 # signed-in state exists in which any of them might appear.
+#
+# That was the target when the entries above were written, and they are kept as they were.
+# When this file was brought up to the current contract the same address served the whole
+# marketplace: the public opportunity pages render, the service answers its interface under
+# /api, and screens that need a session answer a signed-out visitor with a "Not Found"
+# screen (or a redirect to /sign-in). Nobody can sign in still: "Sign In Using GitHub" and
+# "Sign In Using IDIR" on /sign-in both hand off to an external single sign-on service that
+# answers "Login Error: Invalid parameter: redirect_uri". The entries added for the current
+# contract are marked where they appear and describe the target as it now stands.
 target: new
 pages:
   home:
@@ -75,6 +84,12 @@ pages:
       reward: "unbound: /opportunities/code-with-us/:opportunityId is not a page on this target; opened with the seeded published opportunity's identifier it shows the service's own Page not found screen"
       addenda: "unbound: /opportunities/code-with-us/:opportunityId is not a page on this target; opened with the seeded published opportunity's identifier it shows the service's own Page not found screen"
       successful_proponent: "unbound: /opportunities/code-with-us/:opportunityId is not a page on this target; opened with the seeded published opportunity's identifier it shows the service's own Page not found screen"
+      # Added for the current contract, against the target as it now stands: the page renders
+      # for anybody (read on the seeded awarded and published Code With Us opportunities).
+      assignment_date: bound
+      start_date: bound
+      successful_proponent_contact_details: bound
+      successful_proponent_score: bound
 
   opportunity-cwu-edit:
     actions:
@@ -97,6 +112,10 @@ pages:
       reporting_views: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
       reporting_watchers: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
       reporting_proposals: "unbound: /opportunities/code-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      proposal_deadline: "unbound: the management screen and its ?tab=opportunity form are offered only to a signed-in person, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded awarded opportunity's identifier it shows the Not Found screen"
+      assignment_date: "unbound: the management screen and its ?tab=opportunity form are offered only to a signed-in person, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded awarded opportunity's identifier it shows the Not Found screen"
+      start_date: "unbound: the management screen and its ?tab=opportunity form are offered only to a signed-in person, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded awarded opportunity's identifier it shows the Not Found screen"
+      completion_date: "unbound: the management screen and its ?tab=opportunity form are offered only to a signed-in person, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded awarded opportunity's identifier it shows the Not Found screen"
 
   opportunity-cwu-complete:
     actions: {}
@@ -130,6 +149,12 @@ pages:
       phases: "unbound: /opportunities/sprint-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
       addenda: "unbound: /opportunities/sprint-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
       successful_proponent: "unbound: /opportunities/sprint-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      # Added for the current contract (read on the seeded awarded Sprint With Us opportunity;
+      # the scope section is the page's "Scope & Contract" tab).
+      assignment_date: bound
+      scope_section: bound
+      successful_proponent_contact_details: bound
+      successful_proponent_score: bound
 
   opportunity-swu-edit:
     actions:
@@ -157,6 +182,10 @@ pages:
       team_scenario_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
       evaluation_panel_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
       consensus_tab: "unbound: /opportunities/sprint-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      instructions_tab: "unbound: the management screen's evaluator-only tabs are offered only to a signed-in panel member, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded closed Sprint With Us opportunity it shows the Not Found screen"
+      evaluation_tab: "unbound: the management screen's evaluator-only tabs are offered only to a signed-in panel member, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded closed Sprint With Us opportunity it shows the Not Found screen"
+      proposal_deadline: "unbound: the management screen and its ?tab=opportunity form are offered only to a signed-in person, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded closed Sprint With Us opportunity it shows the Not Found screen"
+      assignment_date: "unbound: the management screen and its ?tab=opportunity form are offered only to a signed-in person, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded closed Sprint With Us opportunity it shows the Not Found screen"
 
   opportunity-swu-complete:
     actions: {}
@@ -190,6 +219,15 @@ pages:
       resources: "unbound: /opportunities/team-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
       addenda: "unbound: /opportunities/team-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
       successful_proponent: "unbound: /opportunities/team-with-us/:opportunityId is not a page on this target; it shows the service's own Page not found screen"
+      # Added for the current contract (read on the seeded closed Team With Us opportunity; the
+      # completion date is read from its "Key Dates" section, the terms from its "Competition
+      # Rules" tab).
+      assignment_date: bound
+      start_date: bound
+      completion_date: bound
+      terms_section: bound
+      successful_proponent_contact_details: bound
+      successful_proponent_score: bound
 
   opportunity-twu-edit:
     actions:
@@ -214,6 +252,13 @@ pages:
       challenge_tab: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
       evaluation_panel_tab: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
       consensus_tab: "unbound: /opportunities/team-with-us/:opportunityId/edit is not a page on this target; it shows the service's own Page not found screen"
+      instructions_tab: "unbound: the management screen's evaluator-only tabs are offered only to a signed-in panel member, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded closed Team With Us opportunity it shows the Not Found screen"
+      evaluation_tab: "unbound: the management screen's evaluator-only tabs are offered only to a signed-in panel member, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded closed Team With Us opportunity it shows the Not Found screen"
+      offered_state_changes: "unbound: the changes of state are offered on the management screen, only to a signed-in person, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded closed Team With Us opportunity it shows the Not Found screen"
+      proposal_deadline: "unbound: the management screen and its ?tab=opportunity form are offered only to a signed-in person, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded closed Team With Us opportunity it shows the Not Found screen"
+      assignment_date: "unbound: the management screen and its ?tab=opportunity form are offered only to a signed-in person, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded closed Team With Us opportunity it shows the Not Found screen"
+      start_date: "unbound: the management screen and its ?tab=opportunity form are offered only to a signed-in person, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded closed Team With Us opportunity it shows the Not Found screen"
+      completion_date: "unbound: the management screen and its ?tab=opportunity form are offered only to a signed-in person, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded closed Team With Us opportunity it shows the Not Found screen"
 
   opportunity-twu-complete:
     actions: {}
@@ -241,6 +286,7 @@ pages:
       opportunity_summary: "unbound: /opportunities/code-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
       terms_modal: "unbound: /opportunities/code-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
       submit_disabled_until_terms_accepted: "unbound: /opportunities/code-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      field_errors_by_field: "unbound: the proposal form is offered only to a signed-in vendor, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded published Code With Us opportunity it shows the Not Found screen"
 
   proposal-cwu-edit:
     actions:
@@ -305,6 +351,10 @@ pages:
       budget_exceeded_error: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
       unqualified_organization_notice: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
       pending_team_member: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      team_member_choices: "unbound: the proposal form is offered only to a signed-in vendor, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded closed Sprint With Us opportunity it shows the Not Found screen"
+      phase_team_sections: "unbound: the proposal form is offered only to a signed-in vendor, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded closed Sprint With Us opportunity it shows the Not Found screen"
+      phase_requirements: "unbound: the proposal form is offered only to a signed-in vendor, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded closed Sprint With Us opportunity it shows the Not Found screen"
+      cost_errors: "unbound: the proposal form is offered only to a signed-in vendor, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded closed Sprint With Us opportunity it shows the Not Found screen"
 
   proposal-swu-edit:
     actions:
@@ -314,6 +364,9 @@ pages:
       submit_proposal: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
       withdraw_proposal: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
       delete_proposal: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      choose_organization: "unbound: a proposal's edit screen is offered only to its signed-in vendor, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded Sprint With Us proposals it shows the Not Found screen"
+      add_phase_team_member: "unbound: a proposal's edit screen is offered only to its signed-in vendor, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded Sprint With Us proposals it shows the Not Found screen"
+      set_scrum_master: "unbound: a proposal's edit screen is offered only to its signed-in vendor, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded Sprint With Us proposals it shows the Not Found screen"
     observations:
       proposal_identifier: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
       opportunity_identifier: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
@@ -323,6 +376,9 @@ pages:
       anonymous_proponent_name: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
       total_score: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
       rank: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      submission_refusal: "unbound: a proposal's edit screen is offered only to its signed-in vendor, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded Sprint With Us proposals it shows the Not Found screen"
+      field_error: "unbound: a proposal's edit screen is offered only to its signed-in vendor, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded Sprint With Us proposals it shows the Not Found screen"
+      organization: "unbound: a proposal's edit screen is offered only to its signed-in vendor, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded Sprint With Us proposals it shows the Not Found screen"
 
   proposal-swu-view:
     actions:
@@ -345,6 +401,9 @@ pages:
       scenario_score: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
       price_score: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
       total_score: "unbound: /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      history_entries: "unbound: a proposal's evaluation screen is offered only to a signed-in evaluator or administrator, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded Sprint With Us proposals it shows the Not Found screen"
+      rank: "unbound: a proposal's evaluation screen is offered only to a signed-in evaluator or administrator, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded Sprint With Us proposals it shows the Not Found screen"
+      offered_score_actions: "unbound: a proposal's evaluation screen is offered only to a signed-in evaluator or administrator, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded Sprint With Us proposals it shows the Not Found screen"
 
   proposal-swu-export-one:
     actions: {}
@@ -372,6 +431,7 @@ pages:
       field_error: "unbound: /opportunities/team-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
       service_area_error: "unbound: /opportunities/team-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
       unqualified_organization_notice: "unbound: /opportunities/team-with-us/:opportunityId/proposals/create is not a page on this target; it shows the service's own Page not found screen"
+      team_member_choices: "unbound: the proposal form is offered only to a signed-in vendor, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded closed Team With Us opportunity it shows the Not Found screen"
 
   proposal-twu-edit:
     actions:
@@ -381,6 +441,8 @@ pages:
       submit_proposal: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
       withdraw_proposal: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
       delete_proposal: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      choose_organization: "unbound: a proposal's edit screen is offered only to its signed-in vendor, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded Team With Us proposals it shows the Not Found screen"
+      add_team_member_for_resource: "unbound: a proposal's edit screen is offered only to its signed-in vendor, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded Team With Us proposals it shows the Not Found screen"
     observations:
       proposal_identifier: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
       opportunity_identifier: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
@@ -390,6 +452,9 @@ pages:
       anonymous_proponent_name: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
       total_score: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
       rank: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit is not a page on this target; it shows the service's own Page not found screen"
+      submission_refusal: "unbound: a proposal's edit screen is offered only to its signed-in vendor, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded Team With Us proposals it shows the Not Found screen"
+      field_error: "unbound: a proposal's edit screen is offered only to its signed-in vendor, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded Team With Us proposals it shows the Not Found screen"
+      organization: "unbound: a proposal's edit screen is offered only to its signed-in vendor, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded Team With Us proposals it shows the Not Found screen"
 
   proposal-twu-view:
     actions:
@@ -410,6 +475,9 @@ pages:
       challenge_score: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
       price_score: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
       total_score: "unbound: /opportunities/team-with-us/:opportunityId/proposals/:proposalId is not a page on this target; it shows the service's own Page not found screen"
+      history_entries: "unbound: a proposal's evaluation screen is offered only to a signed-in evaluator or administrator, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded Team With Us proposals it shows the Not Found screen"
+      rank: "unbound: a proposal's evaluation screen is offered only to a signed-in evaluator or administrator, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded Team With Us proposals it shows the Not Found screen"
+      offered_score_actions: "unbound: a proposal's evaluation screen is offered only to a signed-in evaluator or administrator, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with the seeded Team With Us proposals it shows the Not Found screen"
 
   proposal-twu-export-one:
     actions: {}
@@ -476,6 +544,7 @@ pages:
       save_service_areas: "unbound: /organizations/:orgId/edit is not a page on this target; opened with a seeded organization's identifier it shows the service's own Page not found screen"
       view_swu_terms: "unbound: /organizations/:orgId/edit is not a page on this target; opened with a seeded organization's identifier it shows the service's own Page not found screen"
       view_twu_terms: "unbound: /organizations/:orgId/edit is not a page on this target; opened with a seeded organization's identifier it shows the service's own Page not found screen"
+      change_logo: "unbound: an organization's edit screen is offered only to a signed-in member who may change it, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with a seeded organization's identifier it redirects to /sign-in"
     observations:
       organization_identifier: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
       organization_tab: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
@@ -499,6 +568,8 @@ pages:
       changelog_entry: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
       field_error: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
       invalid_membership_type_error: "unbound: /organizations/:orgId/edit is not a page on this target; it shows the service's own Page not found screen"
+      current_logo: "unbound: an organization's edit screen is offered only to a signed-in member who may change it, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with a seeded organization's identifier it redirects to /sign-in"
+      logo_refused_error: "unbound: an organization's edit screen is offered only to a signed-in member who may change it, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out with a seeded organization's identifier it redirects to /sign-in"
 
   organization-swu-terms:
     actions:
@@ -860,6 +931,9 @@ pages:
       score_out_of_range_error: "unbound: the Sprint With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
       empty_notes_error: "unbound: the Sprint With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
       duplicate_evaluation_error: "unbound: the Sprint With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      # Added for the current contract: opened for real, the screen answers somebody who may
+      # not evaluate with the "Not Found" screen, which this reads (empty when the form is shown).
+      refused_when_not_permitted: bound
 
   evaluation-individual-edit-swu:
     actions:
@@ -872,6 +946,7 @@ pages:
       read_only_after_submitted: "unbound: the Sprint With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
       score_out_of_range_error: "unbound: the Sprint With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
       empty_notes_error: "unbound: the Sprint With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      refused_when_not_permitted: bound
 
   evaluation-consensus-create-swu:
     actions:
@@ -911,6 +986,7 @@ pages:
       score_out_of_range_error: "unbound: the Team With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
       empty_notes_error: "unbound: the Team With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
       duplicate_evaluation_error: "unbound: the Team With Us individual evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      refused_when_not_permitted: bound
 
   evaluation-individual-edit-twu:
     actions:
@@ -923,6 +999,7 @@ pages:
       read_only_after_submitted: "unbound: the Team With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
       score_out_of_range_error: "unbound: the Team With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
       empty_notes_error: "unbound: the Team With Us evaluation screen is not a page on this target; it shows the service's own Page not found screen"
+      refused_when_not_permitted: bound
 
   evaluation-consensus-create-twu:
     actions:
@@ -1024,6 +1101,7 @@ pages:
       page_updated_date: "unbound: /content is not a page on this target; it shows the service's own Page not found screen"
       ordered_by_title: "unbound: /content is not a page on this target; it shows the service's own Page not found screen"
       refused_for_non_administrator: "unbound: /content is not a page on this target; everybody is shown the same Page not found screen, so a refusal cannot be told from an address that does not exist"
+      page_count: "unbound: the content management list is offered only to a signed-in administrator, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out, /content shows the Not Found screen, so its list was never seen"
 
   content-create:
     actions:
@@ -1072,6 +1150,8 @@ pages:
       refused_for_non_administrator: "unbound: /content/:slug/edit is not a page on this target; everybody is shown the same Page not found screen, so a refusal cannot be told from an address that does not exist"
       body_being_edited: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
       version_history: "unbound: /content/:slug/edit is not a page on this target; it shows the service's own Page not found screen"
+      published_by_link: "unbound: a page's management screen is offered only to a signed-in administrator, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out, /content/about/edit shows the Not Found screen"
+      updated_by_link: "unbound: a page's management screen is offered only to a signed-in administrator, and nobody can sign in on this target (Sign In Using GitHub and Sign In Using IDIR both hand off to an external single sign-on service that answers 'Login Error: Invalid parameter: redirect_uri' and shows no form); opened signed out, /content/about/edit shows the Not Found screen"
 
   content-view:
     actions:
@@ -1084,6 +1164,10 @@ pages:
       updated_date: bound
       readable_when_signed_out: bound
       not_found_for_unknown_address: bound
+      # Added for the current contract (read on the seeded script-probe page, whose body is
+      # p, script, img, em and which raised no dialog).
+      body_element_names: bound
+      body_script_ran: bound
 
   file-upload:
     actions:
@@ -1168,3 +1252,206 @@ pages:
       uploading_indicator: "unbound: the formatted-text editor sits on the content and opportunity forms, and none of those is a page on this target"
       image_rendered_in_published_text: "unbound: the formatted-text editor sits on the content and opportunity forms, and none of those is a page on this target"
       upload_failure_leaves_text_unchanged: "unbound: the formatted-text editor sits on the content and opportunity forms, and none of those is a page on this target"
+
+  # ---------------------------------------------------------------- added for the current contract
+  #
+  # The mail catcher's pages are bound against Mailpit's own interface (message list and
+  # message by identifier, /api/v1/chaos for the sender fault, /hold/proxies/smtp/toxics for
+  # the delay), all read on the catcher that receives this target's mail.
+  caught-message:
+    actions:
+      follow_link_in_body: bound
+    observations:
+      visible_recipients: bound
+      copied_recipients: bound
+      sender: bound
+      reply_to: bound
+      subject: bound
+      html_body: bound
+      plain_text_body: bound
+      logo_address: bound
+      links_in_body: bound
+
+  caught-message-list:
+    actions: {}
+    observations:
+      message_identifiers: bound
+      message_subjects: bound
+      message_visible_recipients: bound
+      message_count: bound
+
+  mail-delivery-fault:
+    actions:
+      refuse_delivery: bound
+      restore_delivery: bound
+    observations:
+      delivery_refused: bound
+
+  mail-delivery-delay:
+    actions:
+      slow_delivery: bound
+      restore_delivery_speed: bound
+    observations:
+      delivery_slowed: bound
+
+  # The request pages below are bound to the service's own interface, which this target
+  # answers as spec/contract/openapi.yaml describes: every address was asked signed out and
+  # answered as the contract says a signed-out request is (the page reads, the refusals
+  # 401 {"permissions":[...]} or ["You do not have permission to perform this action."],
+  # /api/sessions/current "null", /api/ownedOrganizations []). What each answers somebody
+  # signed in could not be observed, because nobody can sign in on this target; a criterion
+  # that needs a signed-in persona reports unbound at signIn before it reaches these.
+  organization-acting-for-list:
+    actions: {}
+    observations:
+      organizations_offered: bound
+      refused_when_not_permitted: bound
+
+  affiliation-invitation-request:
+    actions:
+      invite_with_membership_type: bound
+    observations:
+      invitation_created: bound
+      invalid_membership_type_error: bound
+      membership_identifier: bound
+
+  affiliation-approval-request:
+    actions:
+      accept_membership_by_request: bound
+    observations:
+      request_accepted: bound
+      membership_status: bound
+      refusal_messages: bound
+      refusal_status: bound
+
+  user-list-request:
+    actions: {}
+    observations:
+      accounts_answered: bound
+      refused_when_not_permitted: bound
+      refusal_status: bound
+
+  content-request:
+    actions:
+      read_page_list_by_request: bound
+      read_page_by_request: bound
+      create_page_by_request: bound
+      change_page_by_request: bound
+      rename_page_by_request: bound
+      remove_page_by_request: bound
+    observations:
+      request_accepted: bound
+      refusal_status: bound
+      refusal_shape: bound
+
+  evaluation-individual-request-swu:
+    actions:
+      save_draft_as_entered: bound
+      submit_this_evaluation_alone: bound
+      create_evaluation_by_request: bound
+    observations:
+      stored_scores: bound
+      stored_notes: bound
+      evaluation_status: bound
+      refused_as_unrecognised: bound
+      refused_at_submission: bound
+      evaluation_created: bound
+      creation_refusal_message: bound
+
+  evaluation-individual-request-twu:
+    actions:
+      save_draft_as_entered: bound
+      submit_this_evaluation_alone: bound
+      create_evaluation_by_request: bound
+    observations:
+      stored_scores: bound
+      stored_notes: bound
+      evaluation_status: bound
+      refused_as_unrecognised: bound
+      refused_at_submission: bound
+      evaluation_created: bound
+      creation_refusal_message: bound
+
+  evaluation-consensus-request-swu:
+    actions:
+      change_consensus_by_request: bound
+    observations:
+      stored_scores: bound
+      stored_notes: bound
+      consensus_status: bound
+      request_accepted: bound
+      refused_when_not_permitted: bound
+
+  evaluation-consensus-request-twu:
+    actions:
+      change_consensus_by_request: bound
+    observations:
+      stored_scores: bound
+      stored_notes: bound
+      consensus_status: bound
+      request_accepted: bound
+      refused_when_not_permitted: bound
+
+  evaluation-panel-request:
+    actions:
+      submit_panel_with_member_holding_no_role: bound
+      submit_panel_with_no_chair: bound
+    observations:
+      member_without_role_error: bound
+      missing_chair_error: bound
+      panel_as_stored: bound
+
+  file-attach-by-identifier:
+    actions:
+      attach_stored_file: bound
+    observations:
+      attachment_accepted: bound
+      attachment_refused: bound
+      attached_file_identifiers: bound
+
+  proposal-cwu-request:
+    actions:
+      submit_with_organization_proponent: bound
+      submit_with_individual_proponent: bound
+    observations:
+      request_accepted: bound
+      proposal_identifier: bound
+      proposal_status: bound
+      refusal_by_field: bound
+      refusal_messages: bound
+      refusal_status: bound
+
+  proposal-team-request:
+    actions:
+      submit_team_proposal: bound
+    observations:
+      request_accepted: bound
+      proposal_identifier: bound
+      proposal_status: bound
+      refusal_by_field: bound
+      refusal_messages: bound
+      refusal_status: bound
+
+  proposal-evaluation-request:
+    actions:
+      score_team_scenario_by_request: bound
+      score_code_challenge_by_request: bound
+      score_challenge_by_request: bound
+    observations:
+      request_accepted: bound
+      proposal_status: bound
+      refusal_messages: bound
+      refusal_status: bound
+
+  user-account-self-request:
+    actions: {}
+    observations:
+      user_identifier: bound
+      new_opportunity_notices_since: bound
+
+  user-account-request:
+    actions: {}
+    observations:
+      new_opportunity_notices_since: bound
+      refused_when_not_permitted: bound
+      refusal_status: bound

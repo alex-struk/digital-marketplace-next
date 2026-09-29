@@ -1,0 +1,43 @@
+---
+stage: "bind-adapter"
+title: "bind adapter"
+at: "2026-09-29T18:22:21.212Z"
+cost: 9.981200000000005
+turns: 176
+session: "62add1bb-fd5a-46f5-8e71-0b296dadd2b4"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+---
+
+I've brought the adapter up to the current contract: all 175 missing members are now in `index.ts` and `bindings.yaml`. The binding file matches the contract exactly (108 pages, 984 members, nothing missing, doubled or extra). Of the 175, 111 are bound and 64 are unbound, with reasons. I could not run the type checker in this session (commands to run `tsc` were refused), so the new TypeScript was checked by hand. The page-reading logic was checked by running the same steps against the live target.
+
+**The target has changed, and that matters most.** The existing adapter was written when `localhost:4300` served only four pages and everything else showed "Page not found". The same address now serves the whole marketplace:
+- Public opportunity pages render for anybody.
+- The service answers its interface under `/api` as `spec/contract/openapi.yaml` describes. For example, `/api/files/:id` now answers 401, where the old bindings say 404.
+- Screens that need a session show a "Not Found" screen to a signed-out visitor, or for organization screens, redirect to `/sign-in`.
+
+What has not changed is that nobody can sign in. `/sign-in` offers "Sign In Using GitHub" and "Sign In Using IDIR". Both hand off to an external single sign-on service that shows no form and answers "Login Error: Invalid parameter: redirect_uri". I rewrote `signIn` to take that route and report what the provider said, so it throws `unbound` with the real reason. It still reads the password only from `SDLC_SANDBOX_PASSWORD`.
+
+As instructed, I did not re-walk the members bound earlier. Many of their reasons ("not a page on this target") are now false, and some members recorded as bound no longer match the page. The published page's dates now sit on one "Published … | Updated …" line; the footer has no contentinfo role; the not-found check looks for "Page not found" but the target now shows "Not Found". **The whole adapter needs a fresh walk** before its earlier entries can be trusted.
+
+**Bound, checked on the live target:**
+- **Opportunity views:** the three view pages now really open, and the old members keep their old reasons. The new dates, the Sprint With Us scope section ("Scope & Contract" tab) and the Team With Us terms section ("Competition Rules" tab) read correctly on the seeded opportunities.
+- **Winner's contact details and score:** these read the award notice. Signed out, it shows only "This opportunity was awarded to …", so they correctly return empty. What a permitted reader would see could not be observed.
+- **Published pages:** `body_element_names` returns `p, script, img, em` for the seeded script-probe page. `body_script_ran` listens for dialogs from the moment the page is opened; none were raised.
+- **Evaluation screens:** the four `refused_when_not_permitted` members open the screen for real and read the "Not Found" refusal.
+- **Mail catcher:** message, message list, delivery fault and delivery delay are bound to Mailpit's own interface. I read its answers on the catcher that receives this target's mail.
+
+**Bound, but only half-verified:** the 20 request-level pages. Every address answered a signed-out request exactly as the contract says it should. What they answer a signed-in person could not be seen, so the request bodies follow the service interface and the contract's own descriptions. To learn those shapes I also read how the other target's adapter makes the same requests, and wrote this adapter's code independently. In practice, any criterion that needs a signed-in persona will stop at `signIn` as `unbound` before reaching them.
+
+**Unbound, because they need a signed-in person:**
+- the management-screen dates, evaluator-only tabs and offered changes of state on the three opportunity edit pages;
+- the new members on the proposal create, edit and view pages;
+- the organization logo members;
+- the content list's `page_count`;
+- the content edit page's `published_by_link` and `updated_by_link`.
+
+Each reason says what was tried: which seeded record was opened signed out, and that it showed "Not Found" or redirected to `/sign-in`.
+
+**Routes:** every `surface.yaml` route I opened resolved on the target; none was missing. I changed only files under `tests/adapters/new/`.
