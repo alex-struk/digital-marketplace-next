@@ -43,3 +43,27 @@ The surface actions and observations I needed but did not find:
 - A statement of what `proposal-team-request` sends for a phase the opportunity does not have. Its input is documented only for the phases the opportunity requires, so a team for an extra phase cannot be sent to the service either.
 
 I changed nothing outside `tests/acceptance`, and nothing asked me to.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether R-2.19.spec.ts asserts R-2.19 v3 and nothing beyond it. Approve. Each of the nine tests asserts only submission or refusal, which is what the criterion states: a complete proposal is submitted; a missing phase team, a missing per-phase capability (both capabilities present across the proposal but each in the wrong phase), a phase cost over its phase budget and a total over the opportunity's total budget are each refused on the form; two scrum masters, no scrum master and reliance on an unconfirmed (pending) holder of a required capability are refused by the service, which is right because the form's single choice keeps a vendor from sending those; and replacing a scrum master shows the single choice. The seed agrees with the test's premises (manifest: organizationAdmin holds Frontend Development, organizationOwner holds Backend Development, organizationMember holds neither, teamCandidatePending is a pending member holding Backend Development). Nothing about how the app is built leaks into the assertions; they use contract observations only. The two unasserted clauses, that the form offers team sections for exactly the opportunity's phases and that the form says which phase or cost is at fault, carry a clause entry in not-testable.yaml owned by contract. Its reason is genuine: proposal-swu-create in spec/contract/surface.yaml offers no observation of phase sections, and field_error, capability_gap_error and budget_exceeded_error are text with no location. The checks already show that clause as missing-test owed by contract. The runner's typecheck reports no diagnostics under acceptance/proposals; the 2 failures are in adapters/new, which this proposal does not answer for. Remaining risk: the total-budget test depends on publishing an opportunity whose phase budgets exceed its total, and it fails loudly in setup if that is refused. A type error in this file, or evidence that the unasserted clauses are reachable with the current surface, would change the ruling to a return.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `dfa537a8c453bee06a48a0d8de7982c0bb1546a3`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/proposals/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
