@@ -1,17 +1,32 @@
 // criterion: @R-2.17 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
+// provenance: blind, spec@ccc1cba3290f5ea17351e4f2ca49bd80fefc2ef6, derived 2026-09-29
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// The seeded qualified organization provides both of the service areas the seed names, so
-// no opportunity built out of those names can call for one it lacks. The second test
-// therefore builds an organization that is a qualified Team With Us supplier — approved for
-// one service area, its program terms accepted — and has it bid on an opportunity calling
-// for the other, which is the criterion's given with nothing else varying.
+// The proposal goes to the service through proposal-team-request, sent as a submission, so
+// that what comes back is the service's own answer to that submission, not whatever the form
+// lets through. Each test waits for that answer before reading anything, and reads the refusal
+// out of it.
 //
-// Only an administrator may approve an organization for a service area, so the two halves
-// of qualifying that organization are done by two different people. The organization is
-// reached afterwards by the identifier its own screen gave back when it was registered.
+// Service areas: the given is an organization that is a qualified Team With Us supplier and
+// does not provide a service area the opportunity calls for. The seed's organizations.proponentTwo
+// is exactly that: its Team With Us terms are accepted and the only service area it provides is
+// Full Stack Developer. Its owner, users.proponentTwo (persona.competingVendor), is its one
+// active member, so naming them on the team is sound. The opportunity each test publishes calls
+// for one resource, an Agile Coach, which that organization does not provide.
+//
+// Qualified supplier: the organization must provide the service area and not be qualified, so
+// that the qualification is the only thing wrong. The seed holds no such organization, so the
+// test builds one: its owner registers it, an administrator approves it for Full Stack
+// Developer, and nobody accepts its Team With Us terms. The opportunity calls for a Full Stack
+// Developer.
+
+const statement =
+  "A Team With Us proposal may only be submitted on behalf of an organization that is a qualified supplier for that program and that provides every service area the opportunity's resources call for.";
+
+const serviceAreaRefusal = "The selected organization does not satisfy this opportunity's service areas.";
+
+const settle = { timeout: 30000 };
 
 function inDays(days: number): string {
   const date = new Date();
@@ -19,36 +34,23 @@ function inDays(days: number): string {
   return date.toISOString().slice(0, 10);
 }
 
-const providedServiceArea = seed.organizations.qualified.service_areas[1];
-
-const agileCoachOnly = {
-  legalName: "R-2.17 Agile Coach Only Ltd.",
-  streetAddress: "40 Marine Way",
-  addressLineTwo: "",
-  city: "Victoria",
-  region: "British Columbia",
-  mailCode: "V8V1V1",
-  country: "Canada",
-  contactName: "Service Area Test Contact",
-  contactTitle: "",
-  contactEmail: "agile.coach.only@example.test",
-  contactPhone: "",
-  website: "",
-};
+async function readOrEmpty(read: () => Promise<string>): Promise<string> {
+  try {
+    return (await read()) ?? "";
+  } catch {
+    return "";
+  }
+}
 
 const panel = {
   members: [seed.users.staffOne, seed.users.staffPanelEvaluator],
   chair: seed.users.staffPanelEvaluator,
 };
 
-async function publishTeamOpportunity(surface: Surface, title: string): Promise<string> {
+async function publishTeamOpportunity(surface: Surface, title: string, serviceArea: string): Promise<string> {
   await surface.signIn(persona.administrator);
   await surface.opportunityTwuCreate.open();
-  await surface.opportunityTwuCreate.addResource({
-    serviceArea: "Full Stack Developer",
-    targetAllocation: 100,
-    order: 0,
-  });
+  await surface.opportunityTwuCreate.addResource({ serviceArea, targetAllocation: 100, order: 0 });
   await surface.opportunityTwuCreate.addResourceQuestion({
     question: "Describe how your resource has delivered work of this kind before.",
     guideline: "Answer with one worked example.",
@@ -73,84 +75,117 @@ async function publishTeamOpportunity(surface: Surface, title: string): Promise<
     priceWeight: 20,
     title,
   });
+  await expect
+    .poll(() => readOrEmpty(() => surface.opportunityTwuEdit.opportunityIdentifier()), settle)
+    .toBeTruthy();
   const opportunityId = await surface.opportunityTwuEdit.opportunityIdentifier();
   await surface.signOut();
   return opportunityId;
 }
 
-test("a Team With Us proposal may only be submitted on behalf of an organization that is a qualified supplier for that program", async ({
+async function submit(
+  surface: Surface,
+  opportunityId: string,
+  organization: unknown,
+  member: unknown,
+  resource: string,
+): Promise<void> {
+  await surface.proposalTeamRequest.open({ program: "team-with-us" });
+  await surface.proposalTeamRequest.submitTeamProposal({
+    opportunityId,
+    organization,
+    team: [{ member, resource, hourlyRate: 100 }],
+    answers: [
+      { order: 0, response: "Our resource built and ran the same kind of service for a Crown corporation." },
+    ],
+  });
+}
+
+// The service answered the submission, one way or the other.
+async function answered(surface: Surface): Promise<void> {
+  await expect
+    .poll(
+      async () =>
+        (await readOrEmpty(() => surface.proposalTeamRequest.requestAccepted())) ||
+        (await readOrEmpty(() => surface.proposalTeamRequest.refusalStatus())),
+      { ...settle, message: "the service answered the submission" },
+    )
+    .toBeTruthy();
+}
+
+test(`${statement} (an organization that does not provide a service area the opportunity calls for is refused)`, async ({
   surface,
 }) => {
-  const title = "R-2.17 opportunity bid on by an unqualified organization";
-  const opportunityId = await publishTeamOpportunity(surface, title);
-
-  await surface.signIn(persona.vendor);
-  await surface.proposalTwuCreate.open({ opportunityId });
-  await surface.proposalTwuCreate.chooseOrganization({
-    organization: seed.organizations.unqualified,
-  });
-  await surface.proposalTwuCreate.addTeamMemberForResource({
-    resource: "Full Stack Developer",
-    member: seed.users.vendorOne,
-  });
-  await surface.proposalTwuCreate.setHourlyRate({ resource: "Full Stack Developer", rate: 100 });
-  await surface.proposalTwuCreate.answerResourceQuestion({
-    order: 0,
-    response: "Our developer built and ran the same kind of service for a Crown corporation.",
-  });
-  await surface.proposalTwuCreate.acceptProgramTerms();
-  await surface.proposalTwuCreate.acceptAppTerms();
-  await surface.proposalTwuCreate.submitProposal();
-
-  await surface.proposalVendorDashboard.open();
-  await surface.proposalVendorDashboard.showMyProposals();
-  expect(await surface.proposalVendorDashboard.myProposalsTable()).not.toContain(title);
-});
-
-test("a Team With Us proposal is refused when its organization does not provide every service area the opportunity's resources call for", async ({
-  surface,
-}) => {
+  test.setTimeout(180000);
   const opportunityId = await publishTeamOpportunity(
     surface,
-    "R-2.17 opportunity calling for a service area the organization lacks",
+    "R-2.17 opportunity calling for a service area its bidder does not provide",
+    "Agile Coach",
   );
+
+  await surface.signIn(persona.competingVendor);
+  await submit(surface, opportunityId, seed.organizations.proponentTwo, seed.users.proponentTwo, "Agile Coach");
+  await answered(surface);
+
+  expect(
+    await readOrEmpty(() => surface.proposalTeamRequest.requestAccepted()),
+    "a submission naming an organization without the opportunity's service area was accepted",
+  ).toBeFalsy();
+  expect(await readOrEmpty(() => surface.proposalTeamRequest.refusalMessages())).toContain(serviceAreaRefusal);
+});
+
+test(`${statement} (an organization that is not a qualified Team With Us supplier is refused)`, async ({ surface }) => {
+  test.setTimeout(240000);
+  const legalName = "R-2.17 Full Stack Provider Without Accepted Terms Ltd.";
 
   await surface.signIn(persona.organizationOwner);
   await surface.organizationCreate.open();
-  await surface.organizationCreate.createOrganization(agileCoachOnly);
+  await surface.organizationCreate.createOrganization({
+    legalName,
+    streetAddress: "40 Marine Way",
+    addressLineTwo: "",
+    city: "Victoria",
+    region: "British Columbia",
+    mailCode: "V8V1V1",
+    country: "Canada",
+    contactName: "Qualification Test Contact",
+    contactTitle: "",
+    contactEmail: "unqualified.provider@example.test",
+    contactPhone: "",
+    website: "",
+  });
+  await expect
+    .poll(() => readOrEmpty(() => surface.organizationEdit.organizationIdentifier()), settle)
+    .toBeTruthy();
   const orgId = await surface.organizationEdit.organizationIdentifier();
-  await surface.signOut();
 
   await surface.signIn(persona.administrator);
   await surface.organizationEdit.open({ orgId });
   await surface.organizationEdit.editServiceAreas();
-  await surface.organizationEdit.saveServiceAreas({ serviceAreas: [providedServiceArea] });
+  await surface.organizationEdit.saveServiceAreas({
+    serviceAreas: [seed.organizations.qualified.service_areas[0]],
+  });
   await surface.signOut();
 
-  await surface.signIn(persona.organizationOwner);
-  await surface.organizationTwuTerms.open({ orgId });
-  await surface.organizationTwuTerms.acceptTerms();
-  await surface.organizationEdit.open({ orgId });
-  expect(await surface.organizationEdit.twuQualifiedBadge()).toBeTruthy();
-
-  await surface.proposalTwuCreate.open({ opportunityId });
-  await surface.proposalTwuCreate.chooseOrganization({
-    organization: { legalName: agileCoachOnly.legalName },
-  });
-  await surface.proposalTwuCreate.addTeamMemberForResource({
-    resource: "Full Stack Developer",
-    member: seed.users.organizationOwner,
-  });
-  await surface.proposalTwuCreate.setHourlyRate({ resource: "Full Stack Developer", rate: 100 });
-  await surface.proposalTwuCreate.answerResourceQuestion({
-    order: 0,
-    response: "Our coach has run this kind of engagement for two ministries.",
-  });
-  await surface.proposalTwuCreate.acceptProgramTerms();
-  await surface.proposalTwuCreate.acceptAppTerms();
-  await surface.proposalTwuCreate.submitProposal();
-
-  expect((await surface.proposalTwuCreate.serviceAreaError()).toLowerCase()).toContain(
-    "service areas",
+  const opportunityId = await publishTeamOpportunity(
+    surface,
+    "R-2.17 opportunity bid on by an organization that is not a qualified supplier",
+    "Full Stack Developer",
   );
+
+  await surface.signIn(persona.organizationOwner);
+  await submit(
+    surface,
+    opportunityId,
+    { id: orgId, legal_name: legalName, legalName },
+    seed.users.organizationOwner,
+    "Full Stack Developer",
+  );
+  await answered(surface);
+
+  expect(
+    await readOrEmpty(() => surface.proposalTeamRequest.requestAccepted()),
+    "a submission naming an organization that is not a qualified supplier was accepted",
+  ).toBeFalsy();
+  expect(await readOrEmpty(() => surface.proposalTeamRequest.refusalMessages())).toBeTruthy();
 });

@@ -1,15 +1,29 @@
 // criterion: @R-2.21 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
+// provenance: blind, spec@ccc1cba3290f5ea17351e4f2ca49bd80fefc2ef6, derived 2026-09-29
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// The opportunity carries one question with a word limit of thirty, small enough that the
-// over-limit answer is plainly over it however words are counted.
+// Every test publishes the same Team With Us opportunity: one Full Stack Developer resource
+// and one resource question with a word limit of thirty. Then it submits the same proposal
+// through proposal-team-request: the seed's qualified organization, which provides that
+// service area and has accepted the program's terms, with its administrator as the one team
+// member. The only thing that changes from one test to the next is the answer to the
+// opportunity's question. Nothing on the proposal form has to be filled in first; the request
+// carries the whole proposal.
 //
-// The third case the criterion names — a response numbered against a question the
-// opportunity does not ask — is not asserted. answer_team_question answers one of the
-// questions the opportunity carries, and the opportunity here carries exactly one, so a
-// response against a question that is not there cannot be put into the request.
+// A response "numbered against no question" is an answer given for question order 1 when the
+// opportunity asks only question 0. It is sent beside a proper answer to question 0, so the
+// only answer the service can object to is the one that answers nothing it asked.
+
+const statement =
+  "A response to an opportunity question is rejected if it is empty or longer than the word limit that question carries, or if it answers a question the opportunity does not ask.";
+
+const noMatchingQuestion = "No matching opportunity question.";
+
+const settle = { timeout: 30000 };
+const wordLimit = 30;
+const withinLimit = "Our developer built and ran the same kind of service for a Crown corporation.";
+const overLimit = Array.from({ length: wordLimit * 3 }, () => "delivery").join(" ");
 
 function inDays(days: number): string {
   const date = new Date();
@@ -17,32 +31,32 @@ function inDays(days: number): string {
   return date.toISOString().slice(0, 10);
 }
 
+async function readOrEmpty(read: () => Promise<string>): Promise<string> {
+  try {
+    return (await read()) ?? "";
+  } catch {
+    return "";
+  }
+}
+
 const panel = {
   members: [seed.users.staffOne, seed.users.staffPanelEvaluator],
   chair: seed.users.staffPanelEvaluator,
 };
 
-const overTheLimit = "delivery ".repeat(60).trim();
-
-async function publishSprintOpportunity(surface: Surface, title: string): Promise<string> {
+async function publishTeamOpportunity(surface: Surface, title: string): Promise<string> {
   await surface.signIn(persona.administrator);
-  await surface.opportunitySwuCreate.open();
-  await surface.opportunitySwuCreate.addPhase({
-    phase: "Implementation",
-    startDate: inDays(28),
-    completionDate: inDays(90),
-    maxBudget: 500000,
-    capabilities: ["Frontend Development"],
-  });
-  await surface.opportunitySwuCreate.addTeamQuestion({
-    question: "Describe how your team has delivered work of this kind before.",
+  await surface.opportunityTwuCreate.open();
+  await surface.opportunityTwuCreate.addResource({ serviceArea: "Full Stack Developer", targetAllocation: 100, order: 0 });
+  await surface.opportunityTwuCreate.addResourceQuestion({
+    question: "Describe how your resource has delivered work of this kind before.",
     guideline: "Answer with one worked example.",
     score: 20,
-    wordLimit: 30,
+    wordLimit,
     order: 0,
   });
-  await surface.opportunitySwuCreate.setEvaluationPanel(panel);
-  await surface.opportunitySwuCreate.publish({
+  await surface.opportunityTwuCreate.setEvaluationPanel(panel);
+  await surface.opportunityTwuCreate.publish({
     teaser: "A short summary of the work to be done.",
     location: "Victoria",
     description: "A full description of the work to be done.",
@@ -52,73 +66,76 @@ async function publishSprintOpportunity(surface: Surface, title: string): Promis
     assignmentDate: inDays(21),
     startDate: inDays(28),
     completionDate: inDays(90),
-    mandatorySkills: ["Frontend Development"],
-    totalMaxBudget: 500000,
-    questionsWeight: 25,
-    codeChallengeWeight: 25,
-    teamScenarioWeight: 25,
-    priceWeight: 25,
+    maxBudget: 1000000,
+    questionsWeight: 40,
+    challengeWeight: 40,
+    priceWeight: 20,
     title,
   });
-  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
+  await expect
+    .poll(() => readOrEmpty(() => surface.opportunityTwuEdit.opportunityIdentifier()), settle)
+    .toBeTruthy();
+  const opportunityId = await surface.opportunityTwuEdit.opportunityIdentifier();
   await surface.signOut();
   return opportunityId;
 }
 
-async function fillProposalExceptTheAnswer(
+async function submitWithAnswers(
   surface: Surface,
-  opportunityId: string,
+  title: string,
+  answers: Array<{ order: number; response: string }>,
 ): Promise<void> {
-  await surface.proposalSwuCreate.open({ opportunityId });
-  await surface.proposalSwuCreate.chooseOrganization({ organization: seed.organizations.qualified });
-  await surface.proposalSwuCreate.addPhaseTeamMember({
-    phase: "Implementation",
-    member: seed.users.organizationAdmin,
+  const opportunityId = await publishTeamOpportunity(surface, title);
+  await surface.signIn(persona.organizationAdmin);
+  await surface.proposalTeamRequest.open({ program: "team-with-us" });
+  await surface.proposalTeamRequest.submitTeamProposal({
+    opportunityId,
+    organization: seed.organizations.qualified,
+    team: [{ member: seed.users.organizationAdmin, resource: "Full Stack Developer", hourlyRate: 100 }],
+    answers,
   });
-  await surface.proposalSwuCreate.setScrumMaster({
-    phase: "Implementation",
-    member: seed.users.organizationAdmin,
-  });
-  await surface.proposalSwuCreate.setPhaseProposedCost({ phase: "Implementation", cost: 400000 });
-  for (const order of [0, 1, 2]) {
-    await surface.proposalSwuCreate.addReference({
-      order,
-      name: `Reference ${order + 1}`,
-      company: "Reference Company Ltd.",
-      phone: "250-555-0101",
-      email: `reference.${order + 1}@example.test`,
-    });
-  }
-  await surface.proposalSwuCreate.acceptProgramTerms();
-  await surface.proposalSwuCreate.acceptAppTerms();
+  await expect
+    .poll(
+      async () =>
+        (await readOrEmpty(() => surface.proposalTeamRequest.requestAccepted())) ||
+        (await readOrEmpty(() => surface.proposalTeamRequest.refusalStatus())),
+      { ...settle, message: "the service answered the submission" },
+    )
+    .toBeTruthy();
 }
 
-test("a response to an opportunity question is rejected if it is empty", async ({ surface }) => {
-  const opportunityId = await publishSprintOpportunity(
-    surface,
-    "R-2.21 opportunity whose question is answered with nothing",
-  );
+async function expectRejected(surface: Surface, what: string): Promise<string> {
+  expect(await readOrEmpty(() => surface.proposalTeamRequest.requestAccepted()), what).toBeFalsy();
+  const messages = await readOrEmpty(() => surface.proposalTeamRequest.refusalMessages());
+  expect(messages, what).toBeTruthy();
+  return messages;
+}
 
-  await surface.signIn(persona.organizationAdmin);
-  await fillProposalExceptTheAnswer(surface, opportunityId);
-  await surface.proposalSwuCreate.answerTeamQuestion({ order: 0, response: "" });
-  await surface.proposalSwuCreate.submitProposal();
-
-  expect(await surface.proposalSwuCreate.fieldError()).toBeTruthy();
+test(`${statement} (an empty response is rejected)`, async ({ surface }) => {
+  test.setTimeout(180000);
+  await submitWithAnswers(surface, "R-2.21 opportunity whose question is answered with nothing", [
+    { order: 0, response: "" },
+  ]);
+  await expectRejected(surface, "an empty response was accepted");
 });
 
-test("a response to an opportunity question is rejected if it is longer than the word limit that question carries", async ({
-  surface,
-}) => {
-  const opportunityId = await publishSprintOpportunity(
-    surface,
-    "R-2.21 opportunity whose question is answered past its word limit",
+test(`${statement} (a response longer than the question's word limit is rejected)`, async ({ surface }) => {
+  test.setTimeout(180000);
+  await submitWithAnswers(surface, "R-2.21 opportunity whose question is answered past its word limit", [
+    { order: 0, response: overLimit },
+  ]);
+  const messages = await expectRejected(surface, "a response over the word limit was accepted");
+  expect(messages, "a response to a question the opportunity asks was reported as matching no question").not.toContain(
+    noMatchingQuestion,
   );
+});
 
-  await surface.signIn(persona.organizationAdmin);
-  await fillProposalExceptTheAnswer(surface, opportunityId);
-  await surface.proposalSwuCreate.answerTeamQuestion({ order: 0, response: overTheLimit });
-  await surface.proposalSwuCreate.submitProposal();
-
-  expect(await surface.proposalSwuCreate.fieldError()).toBeTruthy();
+test(`${statement} (a response to a question the opportunity does not ask is rejected)`, async ({ surface }) => {
+  test.setTimeout(180000);
+  await submitWithAnswers(surface, "R-2.21 opportunity answered on a question it does not ask", [
+    { order: 0, response: withinLimit },
+    { order: 1, response: withinLimit },
+  ]);
+  const messages = await expectRejected(surface, "a response to a question the opportunity does not ask was accepted");
+  expect(messages).toContain(noMatchingQuestion);
 });

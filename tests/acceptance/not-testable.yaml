@@ -188,3 +188,45 @@ criteria:
       clause, which only a request no screen sends could show, needs restating
       in ratify in terms something observes, or withdrawing."
     owner: contract
+  - id: R-2.22
+    version: 1
+    clause: the edit is refused with "Organization cannot be changed once the
+      proposal has been submitted"
+    reason: "blocked: R-2.22.spec.ts asserts the refusal by reading that a
+      submitted proposal still names the organization it was submitted for after
+      the change was asked for, on both programs, and that a draft or withdrawn
+      one takes the change. What it cannot read is the reason. proposal-twu-edit
+      and proposal-swu-edit report a refusal only through submission_refusal,
+      which covers submit_proposal and save_changes_and_submit, not save_changes;
+      and neither screen declares an action that names an organization, so the
+      change itself is carried to the service only by what save_changes is
+      handed, which the contract does not describe."
+    missing: "on proposal-twu-edit and proposal-swu-edit, a choose_organization
+      action for the edit form (as proposal-twu-create and proposal-swu-create
+      have), and an observation reporting the message the service gives when
+      save_changes is refused, holding the service's own wording rather than a
+      general notice"
+    owner: contract
+  - id: R-2.31
+    version: 1
+    clause: proposals are ranked against each other only once they are fully
+      evaluated
+    reason: "blocked: the only rank the surface presents for a Sprint With Us or
+      Team With Us proposal is rank on proposal-swu-edit and proposal-twu-edit,
+      shown to the vendor who holds the proposal and only once the opportunity
+      is awarded or the proposal passed over (R-2.32). A proposal that is not
+      fully evaluated on a seeded awarded opportunity belongs to a vendor with no
+      persona (users.proponentThree, on swuProcessingA and swuProcessingB), and
+      on an opportunity still being evaluated no vendor is shown a rank at all,
+      so the absence of a rank there says nothing about this criterion.
+      R-2.31.spec.ts asserts the weighted total and that fully evaluated
+      proposals rank highest total first; that the others hold no rank is left
+      unread."
+    missing: "a rank observation on proposal-swu-view and proposal-twu-view (or
+      on the opportunity management screens' proposals tab, one row per
+      proposal) readable by the administrator while the opportunity is still
+      being evaluated, so that a proposal lacking a stage score can be read to
+      hold no rank beside one that holds every score; or a seeded awarded
+      opportunity where a proposal left behind before the last stage is held by
+      a vendor a persona reaches"
+    owner: contract

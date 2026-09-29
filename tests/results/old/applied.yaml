@@ -425,18 +425,6 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-19
     adapter: c0679fb6b2152557df56ade1fe6babace5ae15ed
-  - id: R-2.17
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-19
-  - id: R-2.22
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-19
-  - id: R-2.31
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-19
   - id: R-4.4
     version: 1
     verb: oracle-cannot
@@ -472,10 +460,6 @@ rulings:
     verb: adapter-wrong
     gate: calibrate-triage-old-19
     adapter: c0679fb6b2152557df56ade1fe6babace5ae15ed
-  - id: R-2.21
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-19
   - id: R-4.23
     version: 2
     verb: adapter-wrong
@@ -486,10 +470,6 @@ rulings:
     verb: product-question
     gate: calibrate-triage-old-19
   - id: R-4.24
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-19
-  - id: R-2.28
     version: 1
     verb: product-question
     gate: calibrate-triage-old-19
@@ -513,26 +493,6 @@ rulings:
   - id: R-2.10
     version: 1
     verb: defect-in-old
-    gate: calibrate-old-12
-  - id: R-2.22
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-12
-  - id: R-2.21
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-12
-  - id: R-2.17
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-12
-  - id: R-2.28
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-12
-  - id: R-2.31
-    version: 1
-    verb: test-wrong
     gate: calibrate-old-12
   - id: R-4.3
     version: 1
