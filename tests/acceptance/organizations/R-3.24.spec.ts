@@ -1,60 +1,69 @@
 // criterion: @R-3.24 v1
-// provenance: blind, spec@40605384759bd10724c1411fdc448dfd99c70aee, derived 2026-09-07
+// provenance: blind, spec@258c8b6542d73fd923b7fbc7b8c8d9d82627255b, derived 2026-09-29
 import { test, expect, persona, seed } from "../../fixtures";
 
-const base = {
-  streetAddress: "7 Marine Way",
-  addressLineTwo: "",
-  city: "Victoria",
-  region: "British Columbia",
-  mailCode: "V8V1V1",
-  country: "Canada",
-  contactName: "Archive Notice Contact",
-  contactTitle: "",
-  contactEmail: seed.users.organizationOwner.email,
-  contactPhone: "",
-  website: "",
-};
+// Mail is delivered some time after the archive action returns, so neither case reads the
+// mailbox once: the positive case polls until an archiving message arrives within the
+// settling window, and the negative case watches the mailbox for that whole window before
+// concluding that nothing arrived.
+const settleMs = 30000;
 
-const archivedByAdministrator = { ...base, legalName: "Gorse Hill Archived By Administrator Ltd." };
-const archivedByOwner = { ...base, legalName: "Gorse Hill Archived By Its Owner Ltd." };
+type CaughtSummary = { Subject: string; Snippet: string; ID: string };
+type Mailbox = { messagesTo(address: string): Promise<Array<CaughtSummary>> };
 
-test("when an administrator archives an organization they do not own, its owner receives a message telling them it has been archived", async ({
+async function archivingMessages(mail: Mailbox, address: string): Promise<Array<CaughtSummary>> {
+  const messages = await mail.messagesTo(address);
+  return messages.filter((message) => /archiv/i.test(`${message.Subject} ${message.Snippet}`));
+}
+
+async function archivingMessagesTo(mail: Mailbox, address: string): Promise<number> {
+  return (await archivingMessages(mail, address)).length;
+}
+
+test("When an administrator archives an organization they do not own, its owner is told by email that the organization has been archived.", async ({
   surface,
   mail,
 }) => {
-  await surface.signIn(persona.organizationOwner);
-  await surface.organizationCreate.open();
-  await surface.organizationCreate.createOrganization(archivedByAdministrator);
-
-  await mail.clear();
+  // The given: an active organization owned by a vendor (not by the administrator).
+  const organization = seed.organizations.unqualified;
+  const owner = seed.users.vendorOne;
 
   await surface.signIn(persona.administrator);
-  await surface.organizationList.open();
-  await surface.organizationList.openOrganization({ legalName: archivedByAdministrator.legalName });
+  await surface.organizationEdit.open({ orgId: organization.id });
+  await mail.clear();
   await surface.organizationEdit.archiveOrganization();
 
-  const messages = await mail.messagesTo(seed.users.organizationOwner.email);
-  expect(messages.length).toBeGreaterThan(0);
-  const text = messages.map((message) => `${message.Subject} ${message.Snippet}`).join(" ");
+  await expect
+    .poll(() => archivingMessagesTo(mail, owner.email), { timeout: settleMs })
+    .toBeGreaterThan(0);
+
+  // The message itself must say an administrator archived the organization and that the
+  // owner can no longer use it; wording is matched loosely so exact phrasing is not fixed.
+  const [message] = await archivingMessages(mail, owner.email);
+  await surface.caughtMessage.open({ messageId: message.ID });
+  const text = `${await surface.caughtMessage.subject()}\n${await surface.caughtMessage.plainTextBody()}`;
   expect(text).toMatch(/archiv/i);
+  expect(text).toMatch(/admin/i);
+  expect(text).toMatch(/(no longer|not be able|cannot|can't|can not|unable)[^.]*\b(use|access|available)/i);
 });
 
-test("no such message is sent when the owner archives their own organization", async ({ surface, mail }) => {
+test("No such message is sent when the owner archives their own organization.", async ({ surface, mail }) => {
+  const organization = seed.organizations.withPendingInvitation;
+  const owner = seed.users.organizationOwner;
+
   await surface.signIn(persona.organizationOwner);
-  await surface.organizationCreate.open();
-  await surface.organizationCreate.createOrganization(archivedByOwner);
-
-  // The first test in this file proved the catcher is reachable and that an archiving
-  // message does arrive when one is sent, so an empty result here is the application's
-  // decision rather than a dead mail catcher.
+  await surface.organizationEdit.open({ orgId: organization.id });
   await mail.clear();
-
-  await surface.organizationList.open();
-  await surface.organizationList.openOrganization({ legalName: archivedByOwner.legalName });
   await surface.organizationEdit.archiveOrganization();
 
-  const messages = await mail.messagesTo(seed.users.organizationOwner.email);
-  const text = messages.map((message) => `${message.Subject} ${message.Snippet}`).join(" ");
-  expect(text).not.toMatch(/archiv/i);
+  // Wait out the same settling window the positive case allows, checking throughout, so a
+  // notice that would arrive late is still caught.
+  const deadline = Date.now() + settleMs;
+  let seen = 0;
+  while (Date.now() < deadline) {
+    seen = await archivingMessagesTo(mail, owner.email);
+    if (seen > 0) break;
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+  }
+  expect(seen).toBe(0);
 });
