@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  Question: does the old adapter bind every Sprint With Us proposal-form action and observation, and nothing else? Ruling: approve. The runner escalated because R-2.7, R-2.11, R-2.19 and R-2.37 went back to bind-adapter 4 to 6 times, past the limit of 2 in policy.loops.rebind. The part of its account that decided this ruling is what each send asked for: each one got further into the same form (organization chooser, then team box, then references, then terms dialog, then the leftover empty dialog). That is a form hiding its problems in layers, not a stage that cannot produce what G3 asks for, so there is nothing to escalate to the pipeline's owner. The tier is STANDARD and no platform article is touched. The diff answers each most recent send and stays inside tests/adapters/old/index.ts. Phase sections count as open when 'Phase Dates' or 'Add Team Member(s)' shows below the name, and only a folded name is pressed, once (R-2.7 send 4, R-2.19 send 6). set_phase_proposed_cost presses the form's own 'Next' until a phase cost field shows (R-2.7 send 4). 'Submit Proposal' is found by its text inside the open terms dialog, and press() tries a click for at most 8 seconds and three times, where before it waited without limit at line 578 (R-2.11 send 4). A dialog with no text is treated as gone (R-2.37 send 5, which asked for exactly that). The two changes that reach beyond the form, the time limit in press() and the no-text rule in dialog(), were both asked for directly by the failures. bindings.yaml is unchanged. The runner's typecheck shows no errors under adapters/old/; its two errors are under adapters/new/, which this proposal does not answer for. Nothing was run, so the next calibration run is the first real test. The author also left a submitted proposal on the shared target at port 4300. Calibration runs on separately seeded instances (ports 3100-3102), but if it ever reads the shared target, it must be re-seeded first, because R-2.11 turns on whether an organization has already bid. What would change this ruling: calibration failing again on any of these four criteria at the same point.
+conditions: []
+cost: 0.3672504
+turns: 1
+session: "0ce44c19-a0b5-45a3-9040-b5ee3fcc06d4"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-29T06:14:55.128Z
