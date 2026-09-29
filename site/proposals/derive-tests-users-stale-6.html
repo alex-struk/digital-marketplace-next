@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-users-stale-6 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">266</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">262</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">230</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-users-stale-6</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 02:58</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the users criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I wrote a test for R-4.24, the one criterion in scope, and the criterion is now fully covered.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I wrote a test for R-4.24, the one criterion in scope, and the criterion is now fully covered. Nothing in it remains untestable. I could not compile or run the test: this environment would not let me run the TypeScript checker without approval. Every surface member it calls is copied from <code>tests/generated/surface.d.ts</code>, but no compiler has checked it.</p>
+<p><strong>What changed.</strong> The earlier test covered only the first half of the criterion. It showed that the choice was saved, using a first-time vendor persona that has no sign-in route on the reference system. It could not show &quot;with the moment the choice was made&quot;, so an entry in <code>not-testable.yaml</code> kept that clause owed to the contract. The contract has now supplied the two missing pieces:</p>
+<ul><li>a seeded persona, <code>vendor-completing-profile</code> (<code>seed.users.vendorCompletingProfile</code>), whose account exists but whose profile is unfinished and who has made no choice about notices;</li><li>an observation, <code>user-account-self-request.new_opportunity_notices_since</code>, which reads the person&#39;s own account record. It gives the moment notices were turned on as an ISO 8601 instant, or nothing when they are off.</li></ul>
+<p><strong>The rewritten test</strong> (<code>tests/acceptance/users/R-4.24.spec.ts</code>) has one test, because the criterion states one given/when/then. It:</p>
+<ol><li>signs in as <code>persona.vendorCompletingProfile</code>;</li><li>confirms the account record shows no recorded moment yet;</li><li>on the profile-completion page, ticks the new-opportunities box, agrees to the terms and completes the profile;</li><li>reads the account record again and asserts it now holds a valid instant, which counts as notifications being on.</li></ol>
+<p>The service&#39;s clock sets that instant, not the test runner&#39;s. So the test only requires it to fall within the completion window, give or take five minutes for clock differences.</p>
+<p>Because the test now asserts the whole criterion, I removed the R-4.24 clause entry from <code>tests/acceptance/not-testable.yaml</code>. A criterion must have either a test or an entry, never both. An earlier redo item in <code>redo.yaml</code> asked the test to start from someone who had not completed their profile; it was already closed, and this test now does exactly that.</p>
+<p><strong>Still missing from the surface for this criterion:</strong> nothing. The administrator&#39;s view of another person&#39;s record (<code>user-account-request</code>) is available too, but this test only needs the person&#39;s own record.</p>
+<p>I changed nothing outside <code>tests/acceptance</code>, and nothing asked me to.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 02:59.</p>
+<div class="body"><p>The question is whether the rewritten R-4.24 test follows from the users criterion and from nothing else. It does. It signs in as the seeded vendor still completing their profile (the given), ticks the new-opportunity notices box and completes the profile (the when), and reads the person&#39;s own account record back through user-account-self-request.new_opportunity_notices_since. The contract defines that observation as the moment notices were turned on, or empty when they are off. The test asserts it holds a valid instant within the completion window, which covers both &#39;notifications are on&#39; and &#39;with the moment the choice was made&#39;. The empty read beforehand checks the given&#39;s starting state, and the five-minute tolerance only allows for the service&#39;s clock differing from the runner&#39;s, so it adds no claim the criterion does not make. No selector, route, status code or storage detail leaks in. Removing the R-4.24 clause entry from not-testable.yaml is correct now that a test asserts that clause. The runner&#39;s typecheck exit 2 comes only from two diagnostics under adapters/new/, and it reports none under acceptance/users/, so nothing here answers for it. missing-test/R-4.24 stays open until this test runs, which is how it closes, so this ruling neither marks it met nor withdraws it. Diagnostics under acceptance/users/, or a contract definition of the observation that differs from the one the proposal quotes, would change this ruling.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

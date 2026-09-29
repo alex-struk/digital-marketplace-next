@@ -4443,7 +4443,7 @@ owed:
     id: R-4.24
     version: 1
     domain: users
-    stage: derive-tests
+    stage: calibrate
     why: an observation on user-profile-self-notifications (or
       user-profile-notifications, for an administrator reading another account)
       that reports the date and time the person's new-opportunity notices were
@@ -4463,6 +4463,12 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-29T02:36:38.260Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-29T02:59:11.606Z
+    target: old
   - kind: missing-test
     item: R-8.30
     id: R-8.30
