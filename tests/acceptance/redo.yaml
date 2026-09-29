@@ -615,6 +615,11 @@ redo:
       pending invitation with sibling scenarios that accept it themselves, so by
       the time the administrator looks it is no longer pending; each acceptance
       scenario needs its own invitation that is still pending when it starts
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on organizations
+      by: runner:derive-tests
+      at: 2026-09-29T02:18:01.671Z
   - id: R-2.16
     version: 1
     why: two scenarios never reach the submission because the team member they name
