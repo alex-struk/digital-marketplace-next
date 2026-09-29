@@ -840,6 +840,48 @@ export default function create(
     return said || messages(/stage|not yet|cannot/i);
   }
 
+  // offered_score_actions: each stage's tab carries its score in the top bar ("Enter Score",
+  // "Edit Score" once one is recorded), or inside "Actions" beside other controls. A stage the
+  // opportunity has not reached says it "can be scored once" it has, and a stage the proposal
+  // has been carried past shows only its other controls ("Screen Out"). Resource Questions on
+  // Team With Us is scored through the consensus and never offers one here. The names are the
+  // page's own action names, one per line, empty when none is offered.
+  // Each tab is loaded from its own address: switched to in place, the top bar keeps the
+  // previous tab's "Enter Score" for a moment, which would read as this tab's.
+  const SCORE_SHOWN_MS = 2500;
+  async function offeredScoreActions(stages: { action: string; tabs: string[] }[]): Promise<string> {
+    await ready();
+    const offered: string[] = [];
+    for (const stage of stages) {
+      let tab: Locator | null = null;
+      for (const label of stage.tabs) {
+        tab = await findTab(label);
+        if (tab) break;
+      }
+      if (!tab) continue;
+      const href = await tab.getAttribute("href");
+      if (href) await page.goto(new URL(href, page.url()).toString());
+      else await tab.click();
+      await ready();
+      const deadline = Date.now() + SCORE_SHOWN_MS;
+      for (;;) {
+        if ((await findControl(navBar(), "Enter Score")) || (await findControl(navBar(), "Edit Score"))) {
+          offered.push(stage.action);
+          break;
+        }
+        if (await findControl(navBar(), "Actions")) {
+          const menu = await actionsMenuText();
+          await closeActionsMenu();
+          if (/\b(Enter|Edit) Score\b/.test(menu)) offered.push(stage.action);
+          break;
+        }
+        if (Date.now() >= deadline || (await wrongStage())) break;
+        await page.waitForTimeout(250);
+      }
+    }
+    return offered.join("\n");
+  }
+
   // An award is confirmed in "Award ... Opportunity?" with its own "Award Opportunity".
   async function awardProposal(where: string): Promise<void> {
     await fromBarOrActions(where, ["Award"]);
@@ -4904,6 +4946,11 @@ export default function create(
     priceScore: () => proposalPrice("sprint-with-us"),
     totalScore: () => proposalTotal(),
     rank: () => viewRank(),
+    offeredScoreActions: () =>
+      offeredScoreActions([
+        { action: "score_code_challenge", tabs: ["Code Challenge"] },
+        { action: "score_team_scenario", tabs: ["Team Scenario"] },
+      ]),
   };
 
   const proposalTwuView: S.ProposalTwuViewPage = {
@@ -4943,6 +4990,11 @@ export default function create(
     priceScore: () => proposalPrice("team-with-us"),
     totalScore: () => proposalTotal(),
     rank: () => viewRank(),
+    offeredScoreActions: () =>
+      offeredScoreActions([
+        { action: "score_resource_questions", tabs: ["Resource Questions", "Resource Questions (Eval)"] },
+        { action: "score_challenge", tabs: ["Interview/Challenge", "Challenge"] },
+      ]),
   };
 
   // A proposal's own screen shows only "Total Score" and "Ranking"; its price score is the

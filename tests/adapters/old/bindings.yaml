@@ -376,6 +376,7 @@ pages:
       price_score: bound
       total_score: bound
       rank: bound
+      offered_score_actions: bound
 
   proposal-swu-export-one:
     actions: {}
@@ -449,6 +450,7 @@ pages:
       price_score: bound
       total_score: bound
       rank: bound
+      offered_score_actions: bound
 
   proposal-twu-export-one:
     actions: {}
