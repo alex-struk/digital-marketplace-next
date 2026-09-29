@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-old-19 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">301</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">296</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">262</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-old-19</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-09-29 14:09</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr></tbody></table></div>
+<div class="body"><h2>1 criterion(s) fail against old: which of them is the application&#39;s fault, which the spec&#39;s, and which the test&#39;s?</h2>
+<p><strong>Recommendation.</strong> Rule on R-8.12 with a calibration condition, so the next calibrate run can apply it.</p>
+<p>1 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:4300,">http://localhost:4300,</a> with no ruling yet. The tests are blind: they were written from the criteria alone, by an agent that never saw the application. So a failure means one of exactly three things, and only you can say which: the application is wrong, the criterion is wrong, or the test is wrong.</p>
+<p>Rule on each one below. Until every failure carries a ruling, this question is asked again on every calibration run.</p>
+<h4>R-8.12 · v1</h4>
+<p>A request for a file the requester may not read is answered as not authorized, and so is a request for a file that does not exist — unless the requester is an administrator, who is told it was not found.</p>
+<ul><li>given: an identifier that no stored file carries</li><li>when: a vendor asks for it, and then an administrator asks for it</li><li>then: the vendor is told they are not authorized and the administrator is told it was not found</li><li>test: tests/acceptance/files/R-8.12.spec.ts</li></ul>
+<p><strong>a request for a file the requester may not read is answered as not authorized</strong> — failed</p>
+<pre><code>Error: the upload of &quot;not-shared.txt&quot; was not stored: refused for its read-access statement: 503 {&quot;database&quot;:[&quot;Database error.&quot;]}; refused for the length of its name: 503 {&quot;database&quot;:[&quot;Database error.&quot;]}; refused for its size: 503 {&quot;database&quot;:[&quot;Database error.&quot;]}; answered with a fault of the service: 503 {&quot;database&quot;:[&quot;Database error.&quot;]}</code></pre>
+<h3>Calibration conditions</h3>
+<p>One condition per line, and exactly one of these forms:</p>
+<ul><li><code>defect-in-old &lt;ID&gt;</code> — the old application really does fail this and the criterion is right anyway. The test stands as written and the rebuild has to pass it; the criterion keeps a note saying so. No text after the ID.</li><li><code>spec-wrong &lt;ID&gt;: &lt;corrected statement&gt;</code> — the criterion misdescribes what the old application does. The statement is replaced and its version bumped, which marks the test stale so <code>derive-tests --stale</code> writes it again from the corrected criterion.</li><li><code>test-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion is right and the test is not. The id goes to <code>tests/acceptance/redo.yaml</code> for <code>derive-tests</code> to redo, still blind, and <code>&lt;why&gt;</code> records what the test got wrong without describing how the application is built.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. <code>defect-in-old</code> takes no text; the other two require a colon and text on the same line. A condition may not span more than one line.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-09-29 14:10.</p>
+<div class="body"><p>The question is whether R-8.12&#39;s failure against old is the application&#39;s fault, the spec&#39;s, or the test&#39;s. Ruling: approve, with R-8.12 marked test-wrong. The failure happened during the test&#39;s own setup, before the behaviour the criterion describes was exercised: the upload of the file the vendor may not read was answered 503 Database error, so the vendor&#39;s request was never made and the not-authorized answer was never observed. The failure says nothing about the criterion, so defect-in-old would wrongly turn a refused upload into a rebuild obligation, and spec-wrong has nothing to correct. The same upload, by the same persona with the same empty read-access list, is stored in R-8.6 and R-8.10 in this run. R-8.12 differs from them in first signing in as an administrator and re-establishing both accounts as active, which the criterion does not ask for. R-8.5, which has the same opening step, had its upload refused in an earlier run. The confidence of R-8.12 is untouched. What would change this ruling: if the same upload is refused with no preliminary account handling, the 503 is a real fault of the old application, and it belongs in a new criterion about uploads rather than in R-8.12.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>test-wrong R-8.12: the test failed in its own setup and never made the request the criterion is about: the file it needed was never stored, because it runs preliminary account-status steps as an administrator that the criterion does not require, and the service refused the upload that followed, while the same upload by the same persona without those steps is stored elsewhere in the suite. Reach a stored file the vendor may not read without depending on those steps, and report a setup that could not store the file as a setup failure rather than as the criterion failing.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
