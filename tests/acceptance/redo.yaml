@@ -692,3 +692,8 @@ redo:
       before asserting that at least one message mentions archiving, and the
       negative case should likewise wait out the same window before asserting
       nothing arrived
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on organizations
+      by: runner:derive-tests
+      at: 2026-09-29T12:18:43.358Z
