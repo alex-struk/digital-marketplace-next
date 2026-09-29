@@ -1,18 +1,15 @@
 gate: G3
-verdict: escalated
-by: runner:bind-adapter
-held_by: runner
-escalate_to: tech-lead
-rationale: >-
-  bind-adapter was handed owed work sent back to it more times than the
-  project's policy allows, so this proposal is ruled by tech-lead rather than
-  put to G3's holder for another round.
-
-  - R-2.19 on old: sent to bind-adapter 5 times, past the limit of 2 that
-  policy.loops.rebind sets. What each send asked for:
-    1. addPhase clicks a capability chip (index.ts:2115) chosen from bounding boxes between the phase headings (index.ts:2096), after an unfold click (index.ts:2061-2067) that may close the section again, so the chip is animating or hidden when clicked; look for the chip inside the expanded phase's own container, wait until the section is open and stable, and find the chip again before clicking
-    2. unbound: opportunity-swu-create.add_phase — no field for "Proof of Concept" on the Phases step takes "startDate" or "completionDate" or "maxBudget"; unbound: opportunity-swu-create.add_phase — no field for "Implementation" on the Phases step takes "maxBudget"
-    3. publishing a Sprint With Us opportunity whose phases are Prototype (28 to 60 days out) and Implementation (61 to 90 days out) left the page on /opportunities/sprint-with-us/create, and the adapter then read the opportunity identifier from that address; the publish must set the start-phase chooser to Prototype, enter each phase's dates exactly as given without adding dates of its own, and report the page's own refusal when publish does not land on a record
-    4. opportunity-swu-create.publish splits the input's opportunity-level startDate/completionDate off as phase dates and calls addPhase on the form's starting phase (Prototype), overwriting the 28-to-60-day dates the test's own addPhase gave it with 28-to-90. Prototype then overlaps Implementation (starting day 61), the Phases step becomes invalid, and publish returns quietly on /opportunities/sprint-with-us/create. It must not write opportunity-level dates onto a phase the test has already given dates to.
-    5. proposal-swu-create.add_phase_team_member reached the Team step with an organization chosen and looked only for an exactly-matching visible "Add Team Member(s)" text node, then threw unbound. It never expanded each phase's collapsible section (Inception / Prototype / Implementation) before looking, and never looked for the adder by role or partial label (a link or button containing 'Add Team Member') within each phase's block. Expand every phase section first, find the adder within the phase being asked about, and only report it unbound once every phase section is open and it is still absent.
-at: 2026-09-29T04:21:08.751Z
+verdict: approve
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  Question: does the rewritten proposal-swu-create.add_phase_team_member (with the scrum-master and team-member-choice reads) bind the Team step on old for opportunities with more than one phase, and nothing beyond it? Ruling: approve. The escalation was triggered only by R-2.19 being sent to bind-adapter 5 times against a rebind limit of 2. The five sends were successive, distinct layers of one long flow (capability chip, phase fields, publish landing, phase dates, and now the Team step's adder), each uncovered only once the previous one was fixed. That is progress, not a pipeline defect, so there is nothing here to stop the run for. The diff answers send 5 exactly: it opens every folded phase section (pressing a phase name only while its adder is hidden, because the name toggles the section), looks for the adder by partial text within the named phase's part of the page (the author confirmed on a published Proof of Concept + Implementation opportunity that the adder has no button or link role), and reports unbound only after every section is open. The scrum-master and member-choice reads had the same blind spot and get the same treatment, and the last-phase record is now kept by name instead of by index. The phaseBand change (below = -Infinity when no starting-phase chooser exists) only affects pages without that chooser. The opportunity Phases step, its other caller, requires the chooser (addPhase throws without it), so that path is unchanged. bindings.yaml is untouched, and nothing outside tests/adapters/old/ moves. The author could not syntax-check the file, but the runner's typecheck reports zero diagnostics under adapters/old/; its exit code 2 comes from two diagnostics in adapters/new/, which this proposal does not answer for. STANDARD tier, no platform article touched. What would change the ruling: a verify run in which add_phase_team_member still throws unbound on a multi-phase opportunity, or a regression in opportunity-swu-create.add_phase traceable to the phaseBand change. Either comes back as an ordinary return. The throwaway 'Probe multi-phase SWU for team step' opportunity left published on the old target at localhost:4300 should be removed by whoever manages the target; it is not this stage's work.
+conditions: []
+cost: 0.37656080000000003
+turns: 4
+session: "6abd5611-76d5-4479-b924-2839eec5c2c0"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-29T04:21:50.661Z

@@ -37,3 +37,27 @@ That opportunity is still published on the target at http://localhost:4300. Whoe
 The same fix reaches `proposal-swu-edit.add_phase_team_member`, which goes through the same code once editing has started.
 
 `bindings.yaml` needed no change: every member involved was already `bound`. No route in the surface failed to resolve this run. I didn't touch anything outside `tests/adapters/old/`, including the `tests/adapters/rebind.yaml` file next to it.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the rewritten proposal-swu-create.add_phase_team_member (with the scrum-master and team-member-choice reads) bind the Team step on old for opportunities with more than one phase, and nothing beyond it? Ruling: approve. The escalation was triggered only by R-2.19 being sent to bind-adapter 5 times against a rebind limit of 2. The five sends were successive, distinct layers of one long flow (capability chip, phase fields, publish landing, phase dates, and now the Team step's adder), each uncovered only once the previous one was fixed. That is progress, not a pipeline defect, so there is nothing here to stop the run for. The diff answers send 5 exactly: it opens every folded phase section (pressing a phase name only while its adder is hidden, because the name toggles the section), looks for the adder by partial text within the named phase's part of the page (the author confirmed on a published Proof of Concept + Implementation opportunity that the adder has no button or link role), and reports unbound only after every section is open. The scrum-master and member-choice reads had the same blind spot and get the same treatment, and the last-phase record is now kept by name instead of by index. The phaseBand change (below = -Infinity when no starting-phase chooser exists) only affects pages without that chooser. The opportunity Phases step, its other caller, requires the chooser (addPhase throws without it), so that path is unchanged. bindings.yaml is untouched, and nothing outside tests/adapters/old/ moves. The author could not syntax-check the file, but the runner's typecheck reports zero diagnostics under adapters/old/; its exit code 2 comes from two diagnostics in adapters/new/, which this proposal does not answer for. STANDARD tier, no platform article touched. What would change the ruling: a verify run in which add_phase_team_member still throws unbound on a multi-phase opportunity, or a regression in opportunity-swu-create.add_phase traceable to the phaseBand change. Either comes back as an ordinary return. The throwaway 'Probe multi-phase SWU for team step' opportunity left published on the old target at localhost:4300 should be removed by whoever manages the target; it is not this stage's work.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `fe012faf47377282d68003bad4f2535974e9e922`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
