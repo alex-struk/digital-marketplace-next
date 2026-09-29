@@ -34,3 +34,23 @@ That covers failing on either condition, not just one. No title is a substring o
 I left the rest of `R-1.39.spec.ts` untouched. The header's "derived" date is already 2026-09-29, today, so it didn't need changing. I changed no other file under `tests/acceptance/opportunities/` and didn't touch `tests/acceptance/not-testable.yaml`.
 
 **Not done:** nothing in the conditions was out of reach, and the contract needs no new surface actions or observations for this criterion.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether the revised R-1.39 tests follow from their criterion and whether the new case settles derive-tests-opportunities-stale-9#1. The new fifth case publishes three opportunities that are identical apart from their titles and remote setting, all in location Victoria. One is remote and titled with 'puffins', one is on-site and titled with 'puffins', and one is remote and titled with 'gannets'. The case confirms all three are listed, then chooses remote-only and the search word 'puffins' together without reopening the list. It then asserts separately that the one meeting both conditions stays listed and that each one meeting only a single condition is no longer listed. That is exactly the criterion's 'then' clause for combined conditions. No title is a substring of another, and the search word appears only in titles, so the match comes from the title, which the criterion names. The four existing cases were rewritten to read every list group instead of choosing a group per case, which removes a guess about how the list is laid out. Each also now confirms both opportunities are listed before choosing a condition, which sets up the criterion's 'given' and asserts nothing extra. The not-testable.yaml change only moves the R-1.51 and R-1.33 entries, with their reasons and owners unchanged. The runner's typecheck on this revision passed with no diagnostics. Evidence that search matches text beyond title and location would change the ruling, because a word-only match would then be ambiguous.
+
+**Conditions:**
+- condition-met derive-tests-opportunities-stale-9#1: tests/acceptance/opportunities/R-1.39.spec.ts adds the case '(only opportunities matching every chosen condition remain visible)', which combines remote-only with the search 'puffins'. It publishes one opportunity meeting both conditions and one meeting each single condition, confirms all three are listed first, then asserts separately that the one meeting both stays listed and that each one meeting only one condition is no longer listed.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `e58877bc84f23fc81c91e1da4d18b3d7dbf8cb35`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/opportunities/`, which this proposal answers for.
+
+    No diagnostics.

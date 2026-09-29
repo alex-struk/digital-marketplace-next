@@ -1,0 +1,16 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether the revised R-1.39 tests follow from their criterion and whether the new case settles derive-tests-opportunities-stale-9#1. The new fifth case publishes three opportunities that are identical apart from their titles and remote setting, all in location Victoria. One is remote and titled with 'puffins', one is on-site and titled with 'puffins', and one is remote and titled with 'gannets'. The case confirms all three are listed, then chooses remote-only and the search word 'puffins' together without reopening the list. It then asserts separately that the one meeting both conditions stays listed and that each one meeting only a single condition is no longer listed. That is exactly the criterion's 'then' clause for combined conditions. No title is a substring of another, and the search word appears only in titles, so the match comes from the title, which the criterion names. The four existing cases were rewritten to read every list group instead of choosing a group per case, which removes a guess about how the list is laid out. Each also now confirms both opportunities are listed before choosing a condition, which sets up the criterion's 'given' and asserts nothing extra. The not-testable.yaml change only moves the R-1.51 and R-1.33 entries, with their reasons and owners unchanged. The runner's typecheck on this revision passed with no diagnostics. Evidence that search matches text beyond title and location would change the ruling, because a word-only match would then be ambiguous.
+conditions:
+  - "condition-met derive-tests-opportunities-stale-9#1: tests/acceptance/opportunities/R-1.39.spec.ts adds the case '(only opportunities matching every chosen condition remain visible)', which combines remote-only with the search 'puffins'. It publishes one opportunity meeting both conditions and one meeting each single condition, confirms all three are listed first, then asserts separately that the one meeting both stays listed and that each one meeting only one condition is no longer listed."
+cost: 0.3429428
+turns: 3
+session: "395823f1-db2e-49b5-b920-47752dca5c93"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-29T18:57:59.256Z
