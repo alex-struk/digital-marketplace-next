@@ -40,3 +40,27 @@ In `bindings.yaml`, `user-list.admin_check` and `user-sign-up-complete.terms_che
 **Left behind on the target:** reproducing R-2.19 by hand, I published one Sprint With Us opportunity titled "Adapter repro SWU phases" on localhost:4300. It is still there. I opened the approval confirmation for the seeded invitation but cancelled it, so the invitation is still pending.
 
 Every route I opened in `surface.yaml` resolved. I changed nothing outside `tests/adapters/old/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the old adapter bind every surface action and observation, and nothing else? It was escalated only because eight criteria passed the rebind loop limit. The escalation's own send history decided it: for each criterion every send asked for something different and narrower (Organization chooser, then team-member controls, then the References step, the terms redirect and the admin tick), so the adapter was getting through one layer of the form at a time rather than repeating a failed fix, and nothing points at the pipeline itself. Each latest request is met in the diff. addSwuReferences fills Name, Company, Phone Number and Email under 'Reference N' on step 5. addSwuPhaseMembers returns instead of throwing when no organization is chosen. The required-field filler never touches Resource Name, Hourly Rate or Team Member fields. Phase dates are found inside each phase's own section, none are made up once the test gives dates, and a publish that stays on the form reports the page's refusal. terms_checkbox reports 'redirected to <path>'. admin_check scrolls the whole list from the top and reads the tick in each row's last cell. approve_invitation falls back to the invitation's own address, a real route on the target. The proposal said it was never typechecked, but the runner's typecheck of this checkout shows no diagnostics under adapters/old/; the only diagnostics are the two under adapters/new/. The tier is STANDARD, no platform article or gate is touched, and nothing outside tests/adapters/old/ changes. Accepted knowingly: admin_check tells a tick from a cross by whether the icon is drawn square, which is fragile but was checked against the live list; and the agent left a published opportunity titled 'Adapter repro SWU phases' on localhost:4300, which could skew a listing test until the target is reseeded. What would change this: calibration failing one of these tests for a reason that sits in the adapter (the square-icon rule misreading an administrator, the seeded-invitation fallback answering as the wrong person, or the leftover opportunity breaking a listing test). That would go back to bind-adapter as a new finding, not as a continuation of this loop.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `eaae0db58a0a1d469205f71cae8ab4f716440046`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
