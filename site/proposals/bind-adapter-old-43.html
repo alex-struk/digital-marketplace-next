@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-43 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">305</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">300</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">266</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-43</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 16:15</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the user-list reader in <code>tests/adapters/old/index.ts</code> so that one read of the list now takes well under a second instead of never finishing inside the test&#39;s 5-second poll.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rewrote the user-list reader in <code>tests/adapters/old/index.ts</code> so that one read of the list now takes well under a second instead of never finishing inside the test&#39;s 5-second poll. I couldn&#39;t typecheck or run the adapter through Playwright because this session needed approval for those commands. I did time the new logic in the browser against the running target, and it read every row in about 0.6 s.</p>
+<p><strong>What was wrong.</strong> Calibration&#39;s finding for R-4.14 was about the one function that reads the list, <code>userTableRows</code>. Four observations on <code>user-list</code> use it: <code>user_row</code>, <code>status_badge</code>, <code>account_type</code> and <code>admin_check</code>. Each call did three slow things:</p>
+<ul><li>waited up to 10 s for a status badge to appear;</li><li>scrolled the list with the mouse wheel 400 px at a time, pausing 200 ms after each turn;</li><li>kept going until four turns in a row found nothing new.</li></ul>
+<p>With about 147 rows, one read took longer than 5 s, so no call ever returned inside the test&#39;s poll.</p>
+<p><strong>What I found on the running target.</strong> I signed in as an administrator through the session route and opened <code>/users</code>. Only the table body scrolls: it is about 550 px tall and holds about 7,350 px of rows. The page only draws the rows currently in view, as the old comment said.</p>
+<p><strong>The fix.</strong> The whole read now happens in one pass inside the page:</p>
+<ul><li>It finds the part of the table that scrolls, returns it to the top, then moves it down 80% of its height at a time.</li><li>After each move it waits two animation frames for the new rows to be drawn, then collects them.</li><li>It stops when it reaches the bottom, when a move doesn&#39;t scroll any further, or after 3.5 s as a safety limit.</li><li>The wait for the first badge is now 3 s instead of 10 s, so reading a legitimately empty list still returns within the poll.</li></ul>
+<p>How rows are recognised and read is unchanged: status, account type, name, and the administrator tick read from the shape of the icon. So are the de-duplication and the output of the four observations.</p>
+<p><strong>Checks.</strong> On the target, the new pass read 147 rows in about 0.6 s, taking 16 steps. A deliberately slower scroll (150 px steps, 120 ms pauses) found the same 147 rows, so the larger steps don&#39;t skip any.</p>
+<p><code>bindings.yaml</code> didn&#39;t need changing: all four observations were already <code>bound</code>, and nothing else in the adapter was touched. Every route I opened resolved on the target. I changed nothing outside <code>tests/adapters/old/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:tech-lead (persona agent · claude claude-opus-5-5) on 2026-09-29 16:16.</p>
+<div class="body"><p>Question: does the rewritten userTableRows bind the four user-list observations for R-4.14 so that one read finishes within the test&#39;s 5 s poll, and touch nothing else? This reaches tech-lead because the loop limit was exceeded (5 sends against policy.loops.rebind of 2), not because the pipeline cannot produce what G3 asks for. The tier is STANDARD and no platform article is involved, so it is ruled here. Ruling: approve. The diff does exactly what send 5 asked for. The mouse-wheel loop (400 px steps, 200 ms pauses, four quiet turns) is replaced by one in-page evaluate pass. It finds the scrolling body, resets it to the top (keeping send 2&#39;s fix), steps down 80% of the body&#39;s height with a two-frame wait after each step, and stops at the bottom, on a step that does not move, or at a 3.5 s safety limit. The badge wait drops from 10 s to 3 s, so an empty list still answers inside the poll. Row recognition, reading the admin icon (send 3&#39;s fix), de-duplication and the output of all four observations (send 4&#39;s fix) are unchanged. bindings.yaml is untouched and nothing outside tests/adapters/old/ moves. The runner&#39;s typecheck reports no diagnostics under adapters/old/; the failing exit code comes from adapters/new/, which this proposal does not answer for. The author measured 147 rows read in about 0.6 s on the running target, and a slower scroll found the same 147 rows, so the larger steps do not skip any. Residual risks: the adapter was not run end to end through Playwright, and the 3.5 s limit and the no-scroller path both return a partial list without saying so. At 0.6 s measured, neither justifies another round. What would change this ruling: the next test run of R-4.14 timing out again or showing missing rows, which would send it back to bind-adapter to fix the safety limit or the scroll detection.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
