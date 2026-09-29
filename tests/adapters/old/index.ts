@@ -4300,10 +4300,74 @@ export default function create(
   // link by role, so it is found by its words.
   const teamAdders = (): Locator => seen(page.getByRole("main").getByText(/Add Team Member/i));
 
-  // The "Add Team Member(s)" inside one phase's section: below its name, above the next's.
+  // A phase's section on "2. Team" is the box that holds the phase's name and, while open,
+  // its own "Phase Dates", team table and "Add Team Member(s)"; folded, the same box holds
+  // the name alone, its contents still in the page but hidden (seen as the owner of Northern
+  // Pines on a one-phase opportunity: "Implementation" open with "Phase Dates" below it,
+  // pressed once to fold it, the dates then hidden). It is found from the name up — the
+  // nearest box around the name that shows a "Phase Dates" before it takes in any other
+  // phase's name — never from where things sit on screen, which an earlier phase unfolding
+  // above shifts. Asked of an element, the probe says whether that element sits inside the
+  // phase's open section; asked of the form itself, whether the section is open at all.
+  function probePhaseSection(
+    element: Element,
+    [mode, phase, others]: [string, string, string[]],
+  ): boolean {
+    const shown = (node: Element): boolean => {
+      const box = node as HTMLElement;
+      if (!(box.offsetWidth || box.offsetHeight || node.getClientRects().length)) return false;
+      const style = window.getComputedStyle(box);
+      return style.visibility !== "hidden" && style.display !== "none";
+    };
+    const main = document.getElementsByTagName("main")[0] ?? document.body;
+    const leaves = Array.from(main.getElementsByTagName("*")).filter(
+      (node) => node.children.length === 0 && shown(node),
+    );
+    const said = (node: Element): string => (node.textContent ?? "").trim();
+    const names = leaves.filter((node) => said(node) === phase);
+    const rivals = leaves.filter((node) => others.includes(said(node)));
+    const dates = leaves.filter((node) => said(node) === "Phase Dates");
+    for (let i = names.length - 1; i >= 0; i--) {
+      let section: Element | null = names[i].parentElement;
+      while (section && section !== main && !rivals.some((rival) => section!.contains(rival))) {
+        if (dates.some((each) => section!.contains(each))) {
+          return mode === "open" ? true : section.contains(element);
+        }
+        section = section.parentElement;
+      }
+    }
+    return false;
+  }
+
+  function phaseProbeArgs(mode: "open" | "holds", phase: string): [string, string, string[]] {
+    return [mode, phase, PHASES.filter((each) => each !== phase)];
+  }
+
+  // Whether the phase's section is open: its name shows with its own "Phase Dates" around it.
+  async function teamPhaseOpen(phase: string): Promise<boolean> {
+    return page
+      .getByRole("main")
+      .first()
+      .evaluate(probePhaseSection, phaseProbeArgs("open", phase))
+      .catch(() => false);
+  }
+
+  // The first of these elements that sits inside the phase's open section.
+  async function inPhaseSection(locator: Locator, phase: string): Promise<Locator | null> {
+    const count = await locator.count();
+    for (let i = 0; i < count; i++) {
+      const holds = await locator
+        .nth(i)
+        .evaluate(probePhaseSection, phaseProbeArgs("holds", phase))
+        .catch(() => false);
+      if (holds) return locator.nth(i);
+    }
+    return null;
+  }
+
+  // The "Add Team Member(s)" inside one phase's open section.
   async function teamPhaseAdder(phase: string): Promise<Locator | null> {
-    const band = await phaseBand(phase);
-    return band ? inBand(teamAdders(), band) : null;
+    return inPhaseSection(teamAdders(), phase);
   }
 
   // An opportunity with one phase shows that phase's section open. One with more shows each
@@ -4311,19 +4375,10 @@ export default function create(
   // Member(s)" until the name is pressed (seen as the owner of Northern Pines on a published
   // opportunity with Proof of Concept and Implementation: both names alone, each unfolding to
   // its own adder). The name toggles its section, so it is pressed only while that phase's
-  // adder is not showing. Resolves the phases shown.
-  //
-  // Whether a section is open is read from what shows below its name — its "Phase Dates" or
-  // its "Add Team Member(s)" — never from the adder alone: a one-phase opportunity's
-  // "Implementation" is open from the start, and pressing its name there folds it shut. A
-  // folded name is pressed once, and its section waited for until it is open and at rest,
-  // before the next phase is looked at.
-  async function teamPhaseOpen(phase: string): Promise<boolean> {
-    const band = await phaseBand(phase);
-    if (!band) return false;
-    if (await inBand(seen(page.getByRole("main").getByText("Phase Dates", { exact: true })), band)) return true;
-    return (await inBand(teamAdders(), band)) !== null;
-  }
+  // own section shows no "Phase Dates": a one-phase opportunity's "Implementation" is open
+  // from the start, and pressing its name there folds it shut. A folded name is pressed once,
+  // and its section waited for until it is open and at rest, before the next phase is
+  // looked at.
 
   async function waitTeamPhaseOpen(phase: string, ms: number): Promise<boolean> {
     const until = Date.now() + ms;
@@ -4352,13 +4407,10 @@ export default function create(
         await settle();
         await waitTeamPhaseOpen(phase, 5000);
       }
-      const band = await phaseBand(phase);
-      const dates = band
-        ? await inBand(seen(page.getByRole("main").getByText("Phase Dates", { exact: true })), band)
-        : null;
-      const adder = await teamPhaseAdder(phase);
-      if (adder) await steadyBox(adder);
-      else if (dates) await steadyBox(dates);
+      const settled =
+        (await teamPhaseAdder(phase)) ??
+        (await inPhaseSection(seen(page.getByRole("main").getByText("Phase Dates", { exact: true })), phase));
+      if (settled) await steadyBox(settled);
     }
     return shown;
   }
@@ -4407,7 +4459,10 @@ export default function create(
     // already added, and the dialog is not asked for them.
     const wanted: string[] = [];
     for (const name of names) if (!(await onSwuPhase(found.phase, name))) wanted.push(name);
-    if (names.length && !wanted.length) return;
+    if (names.length && !wanted.length) {
+      await tickSwuScrumMasterIfGiven(where, found.phase, names, input);
+      return;
+    }
     await found.adder.click();
     if (!(await dialogUp())) {
       throw new Error(`unbound: ${where} — "Add Team Member(s)" opened no dialog on ${page.url()}`);
@@ -4424,6 +4479,38 @@ export default function create(
     await press(where, ["Add Team Member(s)"], dialog().first());
     await dialog().first().waitFor({ state: "hidden", timeout: 5000 }).catch(() => undefined);
     await settle();
+    await tickSwuScrumMasterIfGiven(where, found.phase, names, input);
+  }
+
+  // A member handed over as the phase's scrum master ({ member, scrumMaster: true }) has the
+  // "Scrum Master" radio on their own row of the phase's table ticked once they are on it.
+  // Nothing else is pressed on the Team step afterwards: the member on the phase with the
+  // radio ticked is the whole of what the action asked.
+  async function tickSwuScrumMasterIfGiven(where: string, phase: string, names: string[], input: unknown): Promise<void> {
+    const flag = input && typeof input === "object" && !Array.isArray(input)
+      ? given(input, ["scrumMaster", "scrum_master", "isScrumMaster"])
+      : undefined;
+    if (flag === undefined || flag === null || !saysYes(flag) || !names.length) return;
+    await tickSwuScrumMaster(where, phase, names[0]);
+  }
+
+  async function tickSwuScrumMaster(where: string, phase: string, name: string): Promise<void> {
+    const rows = seen(page.getByRole("row").filter({ has: page.getByRole("radio") }));
+    const mine = name ? rows.filter({ hasText: name }) : rows;
+    await mine.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+    const count = await mine.count();
+    if (!count) {
+      throw new Error(`unbound: ${where} — every phase on the Team step unfolded, but no team member row${name ? ` for "${name}"` : ""} with a Scrum Master choice on ${page.url()}`);
+    }
+    const row = phase && count > 1 ? await inPhaseSection(mine, phase) : mine.first();
+    if (!row) {
+      throw new Error(`unbound: ${where} — no team member row${name ? ` for "${name}"` : ""} with a Scrum Master choice inside the unfolded "${phase}" section on ${page.url()}`);
+    }
+    const radio = row.getByRole("radio").first();
+    if (!(await radio.isChecked().catch(() => false))) {
+      await radio.click({ timeout: CLICK_MS });
+      await settle();
+    }
   }
 
   // Whether a phase's team table already has a row for the person: each member sits on a row
@@ -4434,8 +4521,7 @@ export default function create(
     const rows = seen(page.getByRole("row").filter({ has: page.getByText(name, { exact: true }) }));
     if (!(await rows.count())) return false;
     if (!phase || (await teamPhasesShown()).length < 2) return true;
-    const band = await phaseBand(phase);
-    return band ? (await inBand(rows, band)) !== null : false;
+    return (await inPhaseSection(rows, phase)) !== null;
   }
 
   // "5. References" holds three blocks headed "Reference 1" to "Reference 3", each with
@@ -4501,22 +4587,7 @@ export default function create(
     // A phase's team table shows only while its section is unfolded.
     await openTeamPhases();
     for (const name of names.length ? names : [""]) {
-      const rows = seen(page.getByRole("row").filter({ has: page.getByRole("radio") }));
-      const mine = name ? rows.filter({ hasText: name }) : rows;
-      const count = await mine.count();
-      if (!count) {
-        throw new Error(`unbound: ${where} — every phase on the Team step unfolded, but no team member row${name ? ` for "${name}"` : ""} with a Scrum Master choice on ${page.url()}`);
-      }
-      let row: Locator | null = mine.first();
-      if (phaseGiven && count > 1) {
-        const band = await phaseBand(phaseNamed(phaseGiven));
-        row = band ? await inBand(mine, band) : null;
-        if (!row) {
-          throw new Error(`unbound: ${where} — no team member row${name ? ` for "${name}"` : ""} with a Scrum Master choice inside the unfolded "${phaseNamed(phaseGiven)}" section on ${page.url()}`);
-        }
-      }
-      await row.getByRole("radio").first().click();
-      await settle();
+      await tickSwuScrumMaster(where, phaseGiven ? phaseNamed(phaseGiven) : "", name);
     }
   }
 
@@ -4615,22 +4686,36 @@ export default function create(
       const value = field(input, "cost", "proposedCost", "proposed_cost", "amount", "price", "value") || asText(input);
       const label = phase ? `${phaseNamed(phase)} Cost` : "";
       const boxes = seen(page.getByRole("spinbutton", { name: label ? labelled(label) : /Cost\s*\*\s*$/ }));
-      // The step list shows only the step the form is on; when its menu does not take the
-      // form to "3. Pricing", the form's own "Next" is pressed until a phase cost shows.
-      if (!(await goToStep("Pricing")) || !(await boxes.count())) {
+      // From "2. Team" — the member on the phase and Scrum Master ticked — the form moves on
+      // with its own "Next", plain pressable text at the foot of the form rather than a
+      // button, pressed until a phase cost box shows (seen as the owner of Northern Pines on
+      // a one-phase opportunity: one press from "2. Team" lands on "3. Pricing" with
+      // "Implementation Cost*"). The step menu is the way there only from a step past it.
+      await settle();
+      const startedOn = await currentStep();
+      const startedAt = Number.parseInt(
+        (startedOn ? await startedOn.innerText().catch(() => "") : "").trim(),
+        10,
+      );
+      if (!(await boxes.count()) && Number.isFinite(startedAt) && startedAt > 3) await goToStep("Pricing");
+      if (!(await boxes.count())) {
         await mustDismissDialog(where);
         for (let step = 0; step < 8 && !(await boxes.count()); step++) {
           const next = await findControl(page.getByRole("main"), "Next");
           if (!next) break;
+          const on = await currentStep();
+          const stepName = on ? (await on.innerText().catch(() => "")).trim() : "the current step";
           if (await isDisabled(next)) {
-            const on = await currentStep();
-            const stepName = on ? (await on.innerText()).trim() : "the current step";
             throw new Error(`${where} — "Next" is disabled on "${stepName}" at ${page.url()}`);
           }
-          await next.click({ timeout: CLICK_MS });
+          const clicked = await next.click({ timeout: CLICK_MS }).then(() => true).catch(() => false);
+          if (!clicked) {
+            throw new Error(`${where} — the form's "Next" on "${stepName}" would not take a press at ${page.url()}`);
+          }
           await settle();
-          await boxes.first().waitFor({ state: "visible", timeout: 1500 }).catch(() => undefined);
+          await boxes.first().waitFor({ state: "visible", timeout: 2500 }).catch(() => undefined);
         }
+        if (!(await boxes.count())) await goToStep("Pricing");
         if (!(await boxes.count())) await advanceTo(where, "Total Proposed Cost");
       }
       await boxes.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
