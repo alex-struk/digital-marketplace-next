@@ -1,0 +1,18 @@
+gate: G3
+verdict: escalated
+by: runner:bind-adapter
+held_by: runner
+escalate_to: tech-lead
+rationale: >-
+  bind-adapter was handed owed work sent back to it more times than the
+  project's policy allows, so this proposal is ruled by tech-lead rather than
+  put to G3's holder for another round.
+
+  - R-2.19 on old: sent to bind-adapter 5 times, past the limit of 2 that
+  policy.loops.rebind sets. What each send asked for:
+    1. addPhase clicks a capability chip (index.ts:2115) chosen from bounding boxes between the phase headings (index.ts:2096), after an unfold click (index.ts:2061-2067) that may close the section again, so the chip is animating or hidden when clicked; look for the chip inside the expanded phase's own container, wait until the section is open and stable, and find the chip again before clicking
+    2. unbound: opportunity-swu-create.add_phase — no field for "Proof of Concept" on the Phases step takes "startDate" or "completionDate" or "maxBudget"; unbound: opportunity-swu-create.add_phase — no field for "Implementation" on the Phases step takes "maxBudget"
+    3. publishing a Sprint With Us opportunity whose phases are Prototype (28 to 60 days out) and Implementation (61 to 90 days out) left the page on /opportunities/sprint-with-us/create, and the adapter then read the opportunity identifier from that address; the publish must set the start-phase chooser to Prototype, enter each phase's dates exactly as given without adding dates of its own, and report the page's own refusal when publish does not land on a record
+    4. opportunity-swu-create.publish splits the input's opportunity-level startDate/completionDate off as phase dates and calls addPhase on the form's starting phase (Prototype), overwriting the 28-to-60-day dates the test's own addPhase gave it with 28-to-90. Prototype then overlaps Implementation (starting day 61), the Phases step becomes invalid, and publish returns quietly on /opportunities/sprint-with-us/create. It must not write opportunity-level dates onto a phase the test has already given dates to.
+    5. proposal-swu-create.add_phase_team_member reached the Team step with an organization chosen and looked only for an exactly-matching visible "Add Team Member(s)" text node, then threw unbound. It never expanded each phase's collapsible section (Inception / Prototype / Implementation) before looking, and never looked for the adder by role or partial label (a link or button containing 'Add Team Member') within each phase's block. Expand every phase section first, find the adder within the phase being asked about, and only report it unbound once every phase section is open and it is still absent.
+at: 2026-09-29T04:21:08.751Z
