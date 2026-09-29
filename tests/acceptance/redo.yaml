@@ -655,6 +655,14 @@ redo:
       settled before restoring, or by showing no notice about the published
       opportunity arrives more than once, rather than requiring the catcher to
       hold nothing but the invitation
+    closed:
+      outcome: met
+      why: derived again by derive-tests-notifications-stale-8, in the line of work
+        approved as derive-tests-notifications-7
+      by: derive-tests-notifications-7
+      at: 2026-09-29T07:14:48.986Z
+      gate: G3
+      approved_by: agent:reviewer
   - id: R-4.23
     version: 2
     why: the first case makes its vendor 'not yet agreed' by announcing changed

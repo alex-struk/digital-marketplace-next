@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-notifications-stale-8 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">283</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">279</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">245</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-notifications-stale-8</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 07:12</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the notifications criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the test for R-6.2 (notifications) as the ruling asked.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rewrote the test for R-6.2 (notifications) as the ruling asked. It is the only criterion in this run, so one criterion has a test. I also added one entry to <code>not-testable.yaml</code> for the part of it the contract cannot reach. Nothing was run or type-checked: <code>tests/</code> has no <code>node_modules</code>, so the file has not been checked by the compiler, and I could not run a YAML check on the new entry either.</p>
+<p><strong>What the ruling found.</strong> The old test restored mail delivery without first showing that the announcements had already been tried and refused. It then treated anything else in the mail catcher as a repeat. A notice still waiting for its first try when delivery came back would arrive once, and that is not a repeat.</p>
+<p><strong>How the new test answers it</strong> (<code>tests/acceptance/notifications/R-6.2.spec.ts</code>), in order:</p>
+<ol><li><strong>Refuse and publish.</strong> The catcher starts refusing all mail. An administrator publishes a Code With Us opportunity, which should announce it to everyone who asked for new-opportunity notices.</li><li><strong>Hold before restoring.</strong> The refusal stays on for 20 seconds after the publish is answered. The test then checks the refusal is still on and that the catcher holds nothing, which is the &quot;no notice reaches anybody&quot; part. The service opens a fresh connection for each message and a refusal ends it straight away, so every announcement should have been tried and refused inside that window.</li><li><strong>Restore, in a <code>finally</code></strong>, so the refusal is lifted whether the test passes or fails.</li><li><strong>Check the publish.</strong> The opportunity reads as published, the form showed no error, and its history records no failed delivery.</li><li><strong>Show mail works again.</strong> An organization owner invites a vendor to their organization. The test waits for that invitation to arrive, then waits 10 more seconds.</li><li><strong>Final checks.</strong> Every caught message is read in full: - None may be about the published opportunity. Because all of them had already been refused, one arriving now was sent again. - No one may receive the same message twice. - The test does not require the catcher to hold only the invitation. Unrelated mail does not fail it.</li></ol>
+<p><strong>One limit.</strong> No surface reports how many deliveries the catcher refused, so &quot;every announcement has been tried&quot; rests on the fixed 20-second hold, not on anything the test can observe. An observation on <code>mail-delivery-fault</code> giving the number of refused attempts would let the test wait for that count to stop changing instead of waiting a fixed time.</p>
+<p><strong>The part without a test.</strong> The new entry names the clause &quot;When a message cannot be composed&quot;. It is marked <code>blocked:</code> and owned by <code>contract</code>. No seeded record and no fault-injecting surface creates a message the service cannot compose, so only the delivery half can be tested. To reach it, the contract would need to supply a seeded record, with a handle, that makes one named notice fail to render, plus the existing action that triggers that notice. If no such state can exist, ratify should restate the clause in terms something can observe.</p>
+<p><strong>Surface pieces the contract lacks:</strong></p>
+<ul><li>a starting state in which a message cannot be composed;</li><li>an observation of how many delivery attempts the catcher has refused.</li></ul>
+<p>I made no changes outside <code>tests/acceptance</code>, and nothing asked me to.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 07:13.</p>
+<div class="body"><p>Question: do the R-6.2 tests follow from the criterion and from nothing else? Ruling: return. The rewrite fixes the problem the previous ruling raised. Delivery stays refused for a fixed hold after the publish is answered, and the test checks the fault is still on and the catcher is empty before restoring. After the restore it fails on any message about the published opportunity. The published status, the form with no error and the history with no failed delivery answer the remaining &#39;then&#39; clauses. The composition clause is recorded in not-testable.yaml as blocked, owned by contract, and that reason is real. The runner&#39;s compiler check reports no errors in acceptance/notifications. But the test&#39;s last block fails when any caught message reached one person twice. Any message about the opportunity already fails the check before it, so this block only ever judges unrelated mail, such as the organization invitation used to show delivery is working again. It asserts something R-6.2 does not say: a duplicated invitation would fail this criterion. It also contradicts the proposal&#39;s own statement that unrelated mail does not fail the test. Removing that block, and the &#39;recipients&#39; field kept only to serve it, would change the ruling to approve.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>tests/acceptance/notifications/R-6.2.spec.ts: remove the final assertion that no message reached the same person more than once, which checks every caught message including the organization invitation. R-6.2 says nothing about mail unrelated to the triggering action, and any notice about the published opportunity is already caught by the check before it. Keep only the assertion that no message about the published opportunity arrives after delivery is restored, and drop the per-message recipient collection if nothing else uses it.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

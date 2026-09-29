@@ -4647,3 +4647,19 @@ owed:
         gate: G3
         at: 2026-09-29T02:57:12.704Z
     target: old
+  - kind: missing-test
+    item: R-6.2
+    id: R-6.2
+    version: 1
+    domain: notifications
+    stage: contract
+    why: a starting state in which a message the service would send cannot be
+      composed — for example a seeded record, with a handle in the manifest,
+      whose content makes one named notice fail to render when an action a
+      surface already offers triggers it — together with the name of that
+      action; or, if no such state can be produced, a restatement from ratify of
+      the composition clause in terms something observes
+    from: derive-tests-notifications-7
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-29T07:14:48.266Z
