@@ -195,6 +195,8 @@
 - 09:11:23 oracle up old in configuration notifications_disabled: local port 3103
 - 09:12:17 oracle down old in configuration notifications_disabled
 - 09:12:25 run calibrate: ok, cost 0, turns 0
+- 09:12:29 propose calibrate-triage-old-29 at G3
+- 09:13:28 rule calibrate-triage-old-29 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-28
 
