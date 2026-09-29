@@ -602,3 +602,30 @@ redo:
       in as an established account instead, so it never reaches the
       profile-completion step; it must begin as a first-time persona.
     closed: *a13
+  - id: R-8.11
+    version: 1
+    why: it ends by reading the file's content as an administrator, whom the rules
+      permit, and fails on an empty read; the criterion is only that a
+      description is refused or given exactly when the content is, so the test
+      should compare whether each request is refused or permitted, for the same
+      people, rather than read the content bytes
+  - id: R-3.9
+    version: 1
+    why: the scenario where an administrator accepts the invitation shares one
+      pending invitation with sibling scenarios that accept it themselves, so by
+      the time the administrator looks it is no longer pending; each acceptance
+      scenario needs its own invitation that is still pending when it starts
+  - id: R-2.16
+    version: 1
+    why: two scenarios never reach the submission because the team member they name
+      cannot be chosen for the role; the team must be made of people the
+      organization's proposal can name. The no-organization scenario reads a
+      field message after a submission the form did not send; the form
+      withholding the submission is itself the refusal, and the quoted message
+      should be expected only where the service is what refuses
+  - id: R-2.22
+    version: 1
+    why: when the organization is changed, the team must be named again from the new
+      organization's members, and the test did not do this, so the edit could
+      not be saved for an unrelated reason; the proposal must be complete after
+      the change so that only the organization rule is under test

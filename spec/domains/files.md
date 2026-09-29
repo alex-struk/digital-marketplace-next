@@ -268,6 +268,7 @@ An attachment on an opportunity is uploaded with no read access recorded against
 A file attached to an opportunity or a proposal is readable by whoever may read the thing it is attached to, under one rule covering Code With Us, Sprint With Us and Team With Us alike rather than a separate rule per program.
 - state: accepted
 - replaces: R-8.9
+- note: calibrate 2026-09-29: the old target fails this; kept, the rebuild must pass it
 
 ### R-8.21 · v1 · confirmed · authored
 A profile picture or organization logo is accepted only if its content can be read as a JPEG or a PNG, and a file whose content is neither is refused whatever its name says; an image that reads successfully but cannot be resized is stored at its original size rather than refused.

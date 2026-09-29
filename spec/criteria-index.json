@@ -1,5 +1,5 @@
 {
-  "generated_from": "ccc1cba3290f5ea17351e4f2ca49bd80fefc2ef6",
+  "generated_from": "8272c1b989e3bad64c78ae540830a62747dadf42",
   "criteria": [
     {
       "id": "R-7.1",
@@ -1431,7 +1431,9 @@
       "origin": "authored",
       "statement": "Finalising the consensus scores must be refused unless every proponent still under review of the questions has a submitted consensus, so that no proponent is left neither screened in nor screened out.",
       "cites": [],
-      "notes": [],
+      "notes": [
+        "calibrate 2026-09-29: the old target fails this; kept, the rebuild must pass it"
+      ],
       "state": "accepted",
       "replaces": "R-5.7",
       "raw": "### R-5.13 · v1 · confirmed · authored",
@@ -1452,7 +1454,7 @@
       "state": "accepted",
       "replaces": "R-5.8",
       "raw": "### R-5.14 · v1 · confirmed · authored",
-      "line": 163,
+      "line": 164,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1484,7 +1486,7 @@
       "state": "accepted",
       "supersededBy": "R-5.37",
       "raw": "### R-5.15 · v1 · confirmed · recovered",
-      "line": 169,
+      "line": 170,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1521,7 +1523,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.16 · v1 · confirmed · recovered",
-      "line": 183,
+      "line": 184,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1550,7 +1552,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.17 · v1 · confirmed · recovered",
-      "line": 196,
+      "line": 197,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1577,7 +1579,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.18 · v2 · confirmed · recovered",
-      "line": 207,
+      "line": 208,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1616,7 +1618,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.19 · v1 · confirmed · recovered",
-      "line": 217,
+      "line": 218,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1654,7 +1656,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.20 · v1 · confirmed · recovered",
-      "line": 230,
+      "line": 231,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1687,7 +1689,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.21 · v1 · confirmed · recovered",
-      "line": 244,
+      "line": 245,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1726,7 +1728,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.22 · v1 · confirmed · recovered",
-      "line": 256,
+      "line": 257,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1759,7 +1761,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.23 · v1 · confirmed · recovered",
-      "line": 269,
+      "line": 270,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1796,7 +1798,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.24 · v1 · confirmed · recovered",
-      "line": 281,
+      "line": 282,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1835,7 +1837,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.25 · v3 · confirmed · recovered",
-      "line": 294,
+      "line": 295,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1864,7 +1866,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.26 · v1 · confirmed · recovered",
-      "line": 307,
+      "line": 308,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1901,7 +1903,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.27 · v2 · confirmed · recovered",
-      "line": 318,
+      "line": 319,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1938,7 +1940,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.28 · v2 · confirmed · recovered",
-      "line": 331,
+      "line": 332,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -1983,7 +1985,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.29 · v1 · confirmed · recovered",
-      "line": 344,
+      "line": 345,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2018,7 +2020,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.30 · v2 · confirmed · recovered",
-      "line": 359,
+      "line": 360,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2045,7 +2047,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.31 · v1 · confirmed · recovered",
-      "line": 371,
+      "line": 372,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2094,7 +2096,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.32 · v1 · confirmed · recovered",
-      "line": 381,
+      "line": 382,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2121,7 +2123,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-5.33 · v1 · confirmed · recovered",
-      "line": 397,
+      "line": 398,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2158,7 +2160,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.34 · v2 · confirmed · recovered",
-      "line": 407,
+      "line": 408,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2191,7 +2193,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.35 · v1 · confirmed · recovered",
-      "line": 420,
+      "line": 421,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2232,7 +2234,7 @@
       ],
       "state": "accepted",
       "raw": "### R-5.36 · v1 · confirmed · recovered",
-      "line": 432,
+      "line": 433,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2249,7 +2251,7 @@
       "state": "accepted",
       "replaces": "R-5.15",
       "raw": "### R-5.37 · v1 · confirmed · authored",
-      "line": 446,
+      "line": 447,
       "domain": "evaluation",
       "file": "spec/domains/evaluation.md"
     },
@@ -2915,7 +2917,9 @@
       "origin": "authored",
       "statement": "A file attached to an opportunity or a proposal is readable by whoever may read the thing it is attached to, under one rule covering Code With Us, Sprint With Us and Team With Us alike rather than a separate rule per program.",
       "cites": [],
-      "notes": [],
+      "notes": [
+        "calibrate 2026-09-29: the old target fails this; kept, the rebuild must pass it"
+      ],
       "state": "accepted",
       "replaces": "R-8.9",
       "raw": "### R-8.20 · v1 · confirmed · authored",
@@ -2936,7 +2940,7 @@
       "state": "accepted",
       "replaces": "R-8.14",
       "raw": "### R-8.21 · v1 · confirmed · authored",
-      "line": 272,
+      "line": 273,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2953,7 +2957,7 @@
       "state": "accepted",
       "replaces": "R-8.15",
       "raw": "### R-8.22 · v1 · confirmed · authored",
-      "line": 278,
+      "line": 279,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -2986,7 +2990,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.23 · v2 · confirmed · recovered",
-      "line": 284,
+      "line": 285,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3019,7 +3023,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.24 · v2 · confirmed · recovered",
-      "line": 296,
+      "line": 297,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3061,7 +3065,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.25 · v1 · confirmed · recovered",
-      "line": 308,
+      "line": 309,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3097,7 +3101,7 @@
       "state": "accepted",
       "supersededBy": "R-8.31",
       "raw": "### R-8.26 · v1 · confirmed · recovered",
-      "line": 323,
+      "line": 324,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3134,7 +3138,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.27 · v1 · confirmed · recovered",
-      "line": 338,
+      "line": 339,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3163,7 +3167,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.28 · v1 · confirmed · recovered",
-      "line": 351,
+      "line": 352,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3204,7 +3208,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.29 · v1 · confirmed · recovered",
-      "line": 362,
+      "line": 363,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3249,7 +3253,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.30 · v1 · confirmed · recovered",
-      "line": 376,
+      "line": 377,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3264,7 +3268,7 @@
       "state": "accepted",
       "replaces": "R-8.26",
       "raw": "### R-8.31 · v1 · confirmed · authored",
-      "line": 391,
+      "line": 392,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -7426,7 +7430,9 @@
       "origin": "authored",
       "statement": "A vendor may read the history of a proposal they authored, or of a proposal belonging to an organization they own or administer, in all three programs.",
       "cites": [],
-      "notes": [],
+      "notes": [
+        "calibrate 2026-09-29: the old target fails this; kept, the rebuild must pass it"
+      ],
       "state": "accepted",
       "replaces": "R-2.6",
       "raw": "### R-2.9 · v1 · confirmed · authored",
@@ -7447,7 +7453,7 @@
       "state": "accepted",
       "replaces": "R-2.8",
       "raw": "### R-2.10 · v1 · confirmed · authored",
-      "line": 127,
+      "line": 128,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7482,7 +7488,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.11 · v1 · confirmed · recovered",
-      "line": 133,
+      "line": 134,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7517,7 +7523,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.12 · v1 · confirmed · recovered",
-      "line": 145,
+      "line": 146,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7548,7 +7554,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.13 · v1 · confirmed · recovered",
-      "line": 157,
+      "line": 158,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7579,7 +7585,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.14 · v2 · confirmed · recovered",
-      "line": 168,
+      "line": 169,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7618,7 +7624,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.15 · v2 · confirmed · recovered",
-      "line": 179,
+      "line": 180,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7653,7 +7659,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.16 · v1 · confirmed · recovered",
-      "line": 192,
+      "line": 193,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7688,7 +7694,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.17 · v1 · confirmed · recovered",
-      "line": 204,
+      "line": 205,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7721,7 +7727,7 @@
       ],
       "state": "accepted",
       "raw": "### R-2.18 · v3 · confirmed · recovered",
-      "line": 216,
+      "line": 217,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7760,7 +7766,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.19 · v2 · confirmed · recovered",
-      "line": 228,
+      "line": 229,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7791,7 +7797,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.20 · v2 · confirmed · recovered",
-      "line": 241,
+      "line": 242,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7822,7 +7828,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.21 · v1 · confirmed · recovered",
-      "line": 252,
+      "line": 253,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7849,7 +7855,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.22 · v1 · confirmed · recovered",
-      "line": 263,
+      "line": 264,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7884,7 +7890,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.23 · v1 · confirmed · recovered",
-      "line": 273,
+      "line": 274,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7923,7 +7929,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.24 · v1 · confirmed · recovered",
-      "line": 285,
+      "line": 286,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7964,7 +7970,7 @@
       ],
       "state": "accepted",
       "raw": "### R-2.25 · v1 · confirmed · recovered",
-      "line": 298,
+      "line": 299,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7999,7 +8005,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.26 · v1 · confirmed · recovered",
-      "line": 312,
+      "line": 313,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8030,16 +8036,16 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.27 · v1 · confirmed · recovered",
-      "line": 324,
+      "line": 325,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
     {
       "id": "R-2.28",
-      "version": 1,
+      "version": 2,
       "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "Sprint With Us and Team With Us proposals advance through the evaluation stages one at a time, and an action taken at the wrong stage of the opportunity is refused.",
+      "statement": "Sprint With Us and Team With Us proposals advance through the evaluation stages one at a time, and an action taken at the wrong stage of the opportunity is refused: a proposal's page does not offer a score for a stage the opportunity has not yet reached, and says instead that the proposal can be scored once the opportunity reaches that stage, and the service refuses such a score sent to it directly with \"The opportunity is not in the correct stage of evaluation to perform that action.\"",
       "cites": [
         {
           "path": "src/back-end/lib/resources/proposal/sprint-with-us/index.ts",
@@ -8068,8 +8074,8 @@
       "then": "the request is refused with \"The opportunity is not in the correct stage of evaluation to perform that action.\"",
       "notes": [],
       "state": "accepted",
-      "raw": "### R-2.28 · v1 · confirmed · recovered",
-      "line": 335,
+      "raw": "### R-2.28 · v2 · confirmed · recovered",
+      "line": 336,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8108,7 +8114,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.29 · v1 · confirmed · recovered",
-      "line": 348,
+      "line": 349,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8145,7 +8151,7 @@
       ],
       "state": "accepted",
       "raw": "### R-2.30 · v1 · confirmed · recovered",
-      "line": 361,
+      "line": 362,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8184,7 +8190,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.31 · v1 · confirmed · recovered",
-      "line": 374,
+      "line": 375,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8219,7 +8225,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.32 · v1 · confirmed · recovered",
-      "line": 387,
+      "line": 388,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8260,7 +8266,7 @@
       ],
       "state": "accepted",
       "raw": "### R-2.33 · v1 · confirmed · recovered",
-      "line": 399,
+      "line": 400,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8295,7 +8301,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.34 · v1 · confirmed · recovered",
-      "line": 413,
+      "line": 414,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8337,7 +8343,7 @@
       ],
       "state": "obsolete",
       "raw": "### D-proposals-35 · v1 · open · recovered",
-      "line": 425,
+      "line": 426,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8372,7 +8378,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.35 · v1 · confirmed · recovered",
-      "line": 440,
+      "line": 441,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8411,7 +8417,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.36 · v1 · confirmed · recovered",
-      "line": 452,
+      "line": 453,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8445,7 +8451,7 @@
       ],
       "state": "obsolete",
       "raw": "### D-proposals-37 · v1 · inferred · recovered",
-      "line": 465,
+      "line": 466,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8480,7 +8486,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.37 · v1 · confirmed · recovered",
-      "line": 478,
+      "line": 479,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8515,7 +8521,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.38 · v1 · confirmed · recovered",
-      "line": 490,
+      "line": 491,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },

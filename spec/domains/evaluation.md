@@ -159,6 +159,7 @@ When the consensus list is withheld from the opportunity's owner because they ar
 Finalising the consensus scores must be refused unless every proponent still under review of the questions has a submitted consensus, so that no proponent is left neither screened in nor screened out.
 - state: accepted
 - replaces: R-5.7
+- note: calibrate 2026-09-29: the old target fails this; kept, the rebuild must pass it
 
 ### R-5.14 · v1 · confirmed · authored
 The action that finalises consensus scores must be offered to whoever the service accepts it from — the opportunity's owner as well as an administrator — so that the browser and the service agree on who may finalise.

@@ -1811,6 +1811,11 @@ rebind:
       publish returns quietly on /opportunities/sprint-with-us/create. It must
       not write opportunity-level dates onto a phase the test has already given
       dates to.
+    closed: &a9
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-29T01:24:16.000Z
   - id: R-1.16
     target: old
     why: opportunity-swu-create.publish throws when 'Publish' is disabled with '5.
@@ -1819,12 +1824,14 @@ rebind:
       (dashboard, or fieldError). publish must end quietly there, as it already
       does when the form shows a message, and fieldError must report what the
       Phases step marks incomplete.
+    closed: *a9
   - id: R-2.37
     target: old
     why: proposal-swu-export-one.anonymous_proponent_name returns the text under the
       'Proponent' label when no 'Proponent N' appears, so the vendor's own copy
       reads 'Northern Pines Digital Ltd.' as an anonymous name. It must answer
       empty unless the copy shows an anonymised 'Proponent N' name.
+    closed: *a9
   - id: R-4.23
     target: old
     why: user-sign-up-complete.terms_checkbox returns the non-empty 'redirected to
@@ -1833,6 +1840,7 @@ rebind:
       checkbox as present. It must answer empty when no terms checkbox is on the
       page. complete_disabled_until_terms_accepted must likewise answer empty
       after such a redirect rather than throw unbound.
+    closed: *a9
   - id: R-4.14
     target: old
     why: on /users, after user_row had read rows for the named accounts from the
@@ -1842,3 +1850,4 @@ rebind:
       and admin_check looks for an svg in each row's last cell. Each must read
       its column from the same table rows user_row reads and answer non-empty
       for a rendered list.
+    closed: *a9

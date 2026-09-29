@@ -123,6 +123,7 @@ A Team With Us proposal is accepted however high its proposed cost, even when th
 A vendor may read the history of a proposal they authored, or of a proposal belonging to an organization they own or administer, in all three programs.
 - state: accepted
 - replaces: R-2.6
+- note: calibrate 2026-09-29: the old target fails this; kept, the rebuild must pass it
 
 ### R-2.10 · v1 · confirmed · authored
 A Team With Us proposal is refused when the hourly rates it names, applied at each resource's target allocation across the opportunity's contract period, come to more than the opportunity's maximum budget; the check runs on both the create and the edit path, as the equivalent Sprint With Us check does.
@@ -332,8 +333,8 @@ When every proposal still in contention on an opportunity has been evaluated, th
 - then: the opportunity moves to processing with the note "Automatically moved to Processing as all proposals have been evaluated.", and disqualified, withdrawn and draft proposals are not counted
 - state: accepted
 
-### R-2.28 · v1 · confirmed · recovered
-Sprint With Us and Team With Us proposals advance through the evaluation stages one at a time, and an action taken at the wrong stage of the opportunity is refused.
+### R-2.28 · v2 · confirmed · recovered
+Sprint With Us and Team With Us proposals advance through the evaluation stages one at a time, and an action taken at the wrong stage of the opportunity is refused: a proposal's page does not offer a score for a stage the opportunity has not yet reached, and says instead that the proposal can be scored once the opportunity reaches that stage, and the service refuses such a score sent to it directly with "The opportunity is not in the correct stage of evaluation to perform that action."
 - cites: src/back-end/lib/resources/proposal/sprint-with-us/index.ts:1100
 - cites: src/back-end/lib/resources/proposal/sprint-with-us/index.ts:1140
 - cites: src/back-end/lib/resources/proposal/sprint-with-us/index.ts:1228
