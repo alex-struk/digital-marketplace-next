@@ -1862,3 +1862,19 @@ rebind:
       Expand every phase section first, find the adder within the phase being
       asked about, and only report it unbound once every phase section is open
       and it is still absent.
+    closed:
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-29T04:21:55.870Z
+  - id: R-2.22
+    target: old
+    why: on proposal-swu-edit.add_phase_team_member after the organization is
+      changed, the named member is already on the phase (they belong to both
+      organizations, and the old dialog lists only people not yet added), so
+      treat a member already shown on the phase as added instead of throwing
+      'the member dialog does not offer'; on proposal-twu-edit.save_changes,
+      after choosing the other organization confirm the Resource Name member and
+      Hourly Rate are still filled for each resource, and when Save/Submit
+      Changes is disabled walk every form step and report the invalid fields
+      rather than 'the page shows no message'
