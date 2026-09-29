@@ -2022,3 +2022,8 @@ rebind:
       ""; the vendor-facing reader must hand over a not-authorized refusal
       (401/403) as the criterion describes, leaving the 404 filter to
       notFoundForAdministrator only
+    closed:
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-29T17:15:17.633Z

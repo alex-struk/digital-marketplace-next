@@ -729,3 +729,12 @@ redo:
       why: derived again by a derive-tests run on files
       by: runner:derive-tests
       at: 2026-09-29T15:07:36.569Z
+  - id: R-1.39
+    version: 1
+    why: the by-state case never checks that the draft it saves actually appears in
+      the list before a state is chosen, so a draft that was not stored or could
+      not be read looks the same as a list that does not narrow. Before
+      filtering, confirm that both the saved draft and the published opportunity
+      can be seen. Then check that the wanted opportunity remains, and
+      separately that the other one is gone, after each state is chosen, so a
+      failure says which half did not hold.
