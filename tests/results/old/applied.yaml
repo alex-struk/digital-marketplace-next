@@ -39,6 +39,7 @@ applied:
   - calibrate-old-16
   - calibrate-old-17
   - calibrate-old-19
+  - calibrate-triage-old-28
 rulings:
   - id: R-8.18
     version: 1
@@ -458,3 +459,8 @@ rulings:
     version: 3
     verb: spec-wrong
     gate: calibrate-old-15
+  - id: R-4.14
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-28
+    adapter: 49fe978a3b3f83cd58aadd577225a0d7a5ffa044

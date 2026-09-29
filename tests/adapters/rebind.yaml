@@ -1999,3 +1999,14 @@ rebind:
       why: tests/adapters/old has changed since this was found
       by: runner:calibrate
       at: 2026-09-29T09:07:15.045Z
+  - id: R-4.14
+    target: old
+    why: user-list.user_row (and status_badge, account_type and admin_check, which
+      share userTableRows) takes longer than 5 s per call, because each read
+      resets the scroll, waits up to 10 s for a badge, then wheel-scrolls the
+      whole ~143-row list 400 px at a time with 200 ms pauses until four quiet
+      turns. Inside the test's expect.poll (default 5 s) no call ever returns,
+      so every test times out with no value read. Make one read of the list
+      finish well within 5 s, for example by scrolling the list's scroll
+      container directly in larger steps or reading the rows in one evaluate
+      pass without per-turn waits, while still covering every row.
