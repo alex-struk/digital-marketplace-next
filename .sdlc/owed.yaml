@@ -4297,6 +4297,11 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-29T00:12:58.686Z
+    kept:
+      by: contract-v21
+      gate: G1
+      approved_by: agent:product-owner
+      at: 2026-09-29T00:25:17.778Z
   - kind: missing-test
     item: R-2.31
     id: R-2.31
@@ -4314,6 +4319,11 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-29T00:12:58.686Z
+    kept:
+      by: contract-v21
+      gate: G1
+      approved_by: agent:product-owner
+      at: 2026-09-29T00:25:17.778Z
   - kind: missing-test
     item: R-2.21
     id: R-2.21
@@ -4330,6 +4340,11 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-29T00:12:59.396Z
+    kept:
+      by: contract-v21
+      gate: G1
+      approved_by: agent:product-owner
+      at: 2026-09-29T00:25:17.778Z
   - kind: missing-test
     item: R-2.28
     id: R-2.28
@@ -4348,6 +4363,11 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-29T00:12:59.396Z
+    kept:
+      by: contract-v21
+      gate: G1
+      approved_by: agent:product-owner
+      at: 2026-09-29T00:25:17.778Z
   - kind: missing-test
     item: R-4.24
     id: R-4.24
@@ -4362,6 +4382,11 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-29T00:16:04.744Z
+    kept:
+      by: contract-v21
+      gate: G1
+      approved_by: agent:product-owner
+      at: 2026-09-29T00:25:17.778Z
   - kind: missing-test
     item: R-8.30
     id: R-8.30
@@ -4376,3 +4401,8 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-29T00:23:18.489Z
+    kept:
+      by: contract-v21
+      gate: G1
+      approved_by: agent:product-owner
+      at: 2026-09-29T00:25:17.778Z

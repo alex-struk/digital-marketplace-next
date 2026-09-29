@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>contract-v21 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">252</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">248</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">217</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>contract-v21</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-09-29 00:24</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the contract the tests will act through?</h2>
+<p><strong>Recommendation.</strong> I made the one change this revision asked for: the R-6.1 note in <code>spec/contract/observables.yaml</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made the one change this revision asked for: the R-6.1 note in <code>spec/contract/observables.yaml</code>. I did not try to start the oracle. The shell would not run the command that starts it.</p>
+<p><strong>The change.</strong> The notes under <code>configurations.notifications_disabled</code> used to tell a test for R-6.1 to read <code>SDLC_ORACLE_DISABLE_NOTIFICATIONS</code> and to skip when it was missing. A later calibration ruling found that behaviour useless, because the skipping test never produced a result, and it was overturned. The note now says a test for R-6.1 assumes it is running against an instance started with notifications switched off, and never skips itself. If it runs against an instance with notifications on, it fails, because the message it says must not be sent does get sent.</p>
+<p>To say how that test is picked out, I added one field to the same entry: <code>tag: &quot;@notifications_disabled&quot;</code>. A new note explains how the tag is used:</p>
+<ul><li>The tagged test runs only against a separate instance started with <code>SDLC_ORACLE_DISABLE_NOTIFICATIONS=1</code>, in a run limited to that tag (<code>--grep @notifications_disabled</code>).</li><li>The default run leaves it out (<code>--grep-invert @notifications_disabled</code>). The test clears the mail catcher and then acts, so on the shared catcher it would remove and add messages that other tests are reading.</li></ul>
+<p>The tag matches the one on the R-6.1 test in the <code>derive-tests-notifications-stale-7</code> proposal branch, which carries <code>{ tag: &quot;@notifications_disabled&quot; }</code> and no longer skips. The note that such an instance serves R-6.1 alone and is never shared is unchanged.</p>
+<p>The contract only states this selection rule. Nothing in <code>tests/playwright.config.ts</code> or the runner splits the runs by tag yet. Until the harness does, the default run will include the R-6.1 test and it will fail against the notifications-on oracle. That runner change belongs to whoever owns the harness, not to this stage.</p>
+<p><strong>Unchanged from the last approved contract:</strong> the pages in <code>surface.yaml</code>, how each persona signs in (<code>personas.yaml</code>), the seed files <code>000</code>–<code>014</code> with their manifest, <code>openapi.yaml</code>, and the Compose override. Everything described in earlier contract journals still holds.</p>
+<p><strong>What I could not do.</strong></p>
+<ul><li><strong>Starting the oracle.</strong> Both <code>node $SDLC_BIN oracle up</code> and <code>printenv SDLC_BIN</code> were refused by this session&#39;s permission settings. The override itself did not change, but it was not re-proven this run, and no <code>oracle down</code> was needed because nothing started.</li><li><strong>Checking the YAML parses.</strong> The Python parse check was also refused. I checked the edit by reading the diff: the new <code>tag:</code> key sits at the same indentation as its neighbours and the notes stay a plain list.</li></ul>
+<p><strong>Missing tests.</strong> None of the six owed items were supplied, because this revision is limited to the change the ruling names. They stay owed by this stage, and I wrote no re-address lines. What each still needs, as the test writer recorded it:</p>
+<ul><li><strong>R-2.22:</strong> a <code>choose_organization</code> action on the proposal edit pages, plus an observation reporting the service&#39;s own refusal wording.</li><li><strong>R-2.31:</strong> a rank observation readable while an opportunity is still being evaluated, or a seeded awarded opportunity with a proposal left behind before the last stage.</li><li><strong>R-2.21:</strong> a refusal observation that locates the error on the specific question response it concerns.</li><li><strong>R-2.28:</strong> a way to send an evaluation score to the service at the wrong stage, such as a request surface for scoring.</li><li><strong>R-4.24:</strong> an observation of the date and time new-opportunity notices were turned on.</li><li><strong>R-8.30:</strong> a <code>change_logo</code> action on <code>organization-edit</code>, with observations for the current logo and a logo refused for its file ending.</li></ul>
+<p>A contract run without the &quot;change only what it names&quot; restriction should take these up.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-09-29 00:25.</p>
+<div class="body"><p>The question is whether this revision of the contract is the one the tests act through. It makes exactly the change the derive-tests-notifications-stale-7 revision request asked for. The note under configurations.notifications_disabled no longer tells the R-6.1 test to skip on a missing environment variable, the behaviour the calibrate-old-11 ruling overturned. It now says the test assumes an instance started with notifications off, never skips itself, and fails if run with notifications on. It also states the selection rule: a <code>tag: &quot;@notifications_disabled&quot;</code> field, a run limited to that tag against a dedicated SDLC_ORACLE_DISABLE_NOTIFICATIONS=1 instance, and a --grep-invert on the default run, because the test clears the shared mail catcher. I read the edited entry on the branch (observables.yaml lines 167-194). The new key sits at the same indentation as its neighbours and the notes remain a plain list. The R-6.1 test currently on the branch still skips, which is expected, because its rewrite is in the separate derive-tests proposal that carries the same tag. Nothing else in the contract changed, and no criterion&#39;s statement or confidence is touched. Two items remain open and do not block this ruling. First, the runner does not yet split runs by tag, so the default run will include the tagged test and fail until the harness owner adds the grep and grep-invert split; the stage disclosed this honestly. Second, the six owed contract observations (R-2.22, R-2.31, R-2.21, R-2.28, R-4.24, R-8.30) remain owed, because this revision was correctly limited to the named change. What would change the ruling: the note still permitting a self-skip, the tag disagreeing with the one on the R-6.1 test, or the entry failing to parse.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

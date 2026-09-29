@@ -174,12 +174,22 @@ configurations:
         no message reaches the catcher for an action that sends one under the default —
         publishing an opportunity (opportunity-cwu-create.publish) — while the action
         itself reports success
+    tag: "@notifications_disabled"
     notes:
-      - Nothing the service shows tells a test which configuration it is running against.
-        The harness that starts an oracle this way must say so to the tests it runs
-        against it, by exporting the same variable to the test process; a test for R-6.1
-        reads that variable and treats an instance without it as not offering the
-        criterion's given, rather than as a failure.
+      - A test for R-6.1 assumes the instance it runs against was started with
+        notifications switched off, and does not skip itself on any signal from the
+        environment. Nothing the service shows tells a test which configuration it is
+        running against, so the test does not try to find out; run against an instance
+        with notifications on, it fails, because the message it says must not be sent is
+        sent.
+      - Such a test carries the tag above, named after the configuration
+        ("@notifications_disabled"), and that tag is how it is selected. It runs only
+        against a separate instance started with SDLC_ORACLE_DISABLE_NOTIFICATIONS=1, in a
+        run limited to that tag (Playwright's --grep @notifications_disabled). The default
+        run, against the instance with notifications on, leaves every test with that tag
+        out (--grep-invert @notifications_disabled), because the test clears the mail
+        catcher and then acts, and doing so on the shared catcher would remove and add
+        messages other tests are reading.
       - Every other criterion that expects a message is false on such an instance, so it
         is started for R-6.1 alone and never shared with the rest of the suite.
 
