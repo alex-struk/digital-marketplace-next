@@ -518,6 +518,11 @@ redo:
       not mention, before it ever attempts to finalise; it should attempt
       finalisation with a proponent lacking a submitted consensus and observe
       the refusal.
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on evaluation
+      by: runner:derive-tests
+      at: 2026-09-29T00:17:30.410Z
   - id: R-1.16
     version: 1
     why: the opportunity the test submits is refused over its phase dates before the

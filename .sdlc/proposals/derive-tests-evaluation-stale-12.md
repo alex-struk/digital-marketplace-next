@@ -1,0 +1,57 @@
+---
+gate: G3
+question: "Do these tests follow from the evaluation criteria and from nothing else?"
+recommendation: "I rewrote the R-5.13 test (v1) in `tests/acceptance/evaluation/R-5.13.spec.ts`."
+opened: 2026-09-29T00:17:30.452Z
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+---
+
+# Do these tests follow from the evaluation criteria and from nothing else?
+
+**Recommendation.** I rewrote the R-5.13 test (v1) in `tests/acceptance/evaluation/R-5.13.spec.ts`.
+
+**Worked by:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+I rewrote the R-5.13 test (v1) in `tests/acceptance/evaluation/R-5.13.spec.ts`. That was the only criterion in this run, so one criterion got a test and none went to `not-testable.yaml`. I couldn't run the type check: the command needed approval and no one was there to give it. The test uses only calls that already type-check in the existing R-1.41 test, so I don't expect errors, but it hasn't been compiled or run.
+
+**What was wrong with the old test.** The ruling said the old test failed while reading a proposal's history before it ever tried to finalise. That was true. The old test counted history entries on all three proposals as a stand-in for "no proponent was screened in or out". It also had a second case where the chair saved a draft consensus before the attempt. Neither step is part of the criterion, so I dropped both, along with the attempt from the opportunity's management screen.
+
+**What the new test does.** It has one test, titled with the criterion's own words, because the criterion states one outcome:
+
+- **Starting state:** the seeded opportunity `seed.opportunities.swuConsensusOneOutstanding`. It is at consensus, the chair's consensus is submitted for the first two proponents, and nothing has been started for the third, who is still under review.
+- **Attempt:** it signs in as `persona.administrator`, reads the opportunity's status, then tries to finalise from `evaluationConsensusListSwu` using `finalizeConsensusScores()` followed by `confirmFinalizeConsensus()`. If the screen won't offer or confirm the finalise, that counts as a refusal, not a test failure.
+- **Check:** after a five-second pause, `opportunitySwuView.status()` must read the same as before the attempt.
+
+**Choices worth knowing about:**
+- **No error-message check.** The criterion says only "refused", not that a message appears. Requiring `notAllConsensusesSubmittedError()` would fail an app that refuses by simply not offering the finalise.
+- **No per-proposal check.** The "so that no proponent is left neither screened in nor screened out" clause is the reason for the rule, not a separate outcome. The only per-proposal observation is the history the ruling objected to, so I didn't add a `not-testable.yaml` entry for that clause.
+- **Weakness:** because the check is "status unchanged", a finalise button that does nothing at all would also pass. Nothing in the criterion gives a control case to rule that out.
+
+**Missing surface:** none. The contract had everything this test needed. I changed nothing outside `tests/acceptance`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether the rewritten R-5.13 test follows from R-5.13 alone. It does. It starts from the seeded Sprint With Us opportunity at consensus, where the third proponent is still under review with no consensus begun and the other two have submitted consensuses, which is the case the criterion describes. It attempts the finalise from the consensus list and accepts a screen that won't offer or confirm it as a refusal, because the criterion promises a refusal and no particular message. Its only assertion is that the opportunity's status is unchanged after a quiet period, and since finalising the consensus scores is what moves the opportunity out of the consensus stage, that is a direct observation of the refusal. The history counting, the draft-consensus setup and the second attempt from the management screen, which the earlier ruling objected to, are gone. The 'so that' clause gives the reason for the rule and is not a separate outcome, so it needs no assertion or not-testable entry. Nothing about the implementation leaks into the test. The runner's typecheck reports no errors under acceptance/evaluation/; its two errors are in adapters/new/, which this proposal does not touch. The edits to tests/results/old/applied.yaml and the closed entry in tests/acceptance/redo.yaml are the runner's own bookkeeping for the re-derivation. One weakness remains: a finalise that silently does nothing would also pass, but the criterion gives no positive case to rule that out. The ruling would change if the spec produced typecheck errors, or if its first run showed it cannot bind to the consensus list or read the opportunity's status, which would mean the test reaches past its criterion.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `1efb672cd7ba67d895a967846a3a220d9da91a51`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/evaluation/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics

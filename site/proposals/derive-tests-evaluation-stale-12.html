@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-evaluation-stale-12 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">250</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">246</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">215</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-evaluation-stale-12</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 00:17</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the evaluation criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the R-5.13 test (v1) in <code>tests/acceptance/evaluation/R-5.13.spec.ts</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rewrote the R-5.13 test (v1) in <code>tests/acceptance/evaluation/R-5.13.spec.ts</code>. That was the only criterion in this run, so one criterion got a test and none went to <code>not-testable.yaml</code>. I couldn&#39;t run the type check: the command needed approval and no one was there to give it. The test uses only calls that already type-check in the existing R-1.41 test, so I don&#39;t expect errors, but it hasn&#39;t been compiled or run.</p>
+<p><strong>What was wrong with the old test.</strong> The ruling said the old test failed while reading a proposal&#39;s history before it ever tried to finalise. That was true. The old test counted history entries on all three proposals as a stand-in for &quot;no proponent was screened in or out&quot;. It also had a second case where the chair saved a draft consensus before the attempt. Neither step is part of the criterion, so I dropped both, along with the attempt from the opportunity&#39;s management screen.</p>
+<p><strong>What the new test does.</strong> It has one test, titled with the criterion&#39;s own words, because the criterion states one outcome:</p>
+<ul><li><strong>Starting state:</strong> the seeded opportunity <code>seed.opportunities.swuConsensusOneOutstanding</code>. It is at consensus, the chair&#39;s consensus is submitted for the first two proponents, and nothing has been started for the third, who is still under review.</li><li><strong>Attempt:</strong> it signs in as <code>persona.administrator</code>, reads the opportunity&#39;s status, then tries to finalise from <code>evaluationConsensusListSwu</code> using <code>finalizeConsensusScores()</code> followed by <code>confirmFinalizeConsensus()</code>. If the screen won&#39;t offer or confirm the finalise, that counts as a refusal, not a test failure.</li><li><strong>Check:</strong> after a five-second pause, <code>opportunitySwuView.status()</code> must read the same as before the attempt.</li></ul>
+<p><strong>Choices worth knowing about:</strong></p>
+<ul><li><strong>No error-message check.</strong> The criterion says only &quot;refused&quot;, not that a message appears. Requiring <code>notAllConsensusesSubmittedError()</code> would fail an app that refuses by simply not offering the finalise.</li><li><strong>No per-proposal check.</strong> The &quot;so that no proponent is left neither screened in nor screened out&quot; clause is the reason for the rule, not a separate outcome. The only per-proposal observation is the history the ruling objected to, so I didn&#39;t add a <code>not-testable.yaml</code> entry for that clause.</li><li><strong>Weakness:</strong> because the check is &quot;status unchanged&quot;, a finalise button that does nothing at all would also pass. Nothing in the criterion gives a control case to rule that out.</li></ul>
+<p><strong>Missing surface:</strong> none. The contract had everything this test needed. I changed nothing outside <code>tests/acceptance</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 00:18.</p>
+<div class="body"><p>The question is whether the rewritten R-5.13 test follows from R-5.13 alone. It does. It starts from the seeded Sprint With Us opportunity at consensus, where the third proponent is still under review with no consensus begun and the other two have submitted consensuses, which is the case the criterion describes. It attempts the finalise from the consensus list and accepts a screen that won&#39;t offer or confirm it as a refusal, because the criterion promises a refusal and no particular message. Its only assertion is that the opportunity&#39;s status is unchanged after a quiet period, and since finalising the consensus scores is what moves the opportunity out of the consensus stage, that is a direct observation of the refusal. The history counting, the draft-consensus setup and the second attempt from the management screen, which the earlier ruling objected to, are gone. The &#39;so that&#39; clause gives the reason for the rule and is not a separate outcome, so it needs no assertion or not-testable entry. Nothing about the implementation leaks into the test. The runner&#39;s typecheck reports no errors under acceptance/evaluation/; its two errors are in adapters/new/, which this proposal does not touch. The edits to tests/results/old/applied.yaml and the closed entry in tests/acceptance/redo.yaml are the runner&#39;s own bookkeeping for the re-derivation. One weakness remains: a finalise that silently does nothing would also pass, but the criterion gives no positive case to rule that out. The ruling would change if the spec produced typecheck errors, or if its first run showed it cannot bind to the consensus list or read the opportunity&#39;s status, which would mean the test reaches past its criterion.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
