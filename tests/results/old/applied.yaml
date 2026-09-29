@@ -471,11 +471,3 @@ rulings:
     version: 1
     verb: product-question
     gate: calibrate-triage-old-30
-  - id: R-1.39
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-30
-  - id: R-1.39
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-21
