@@ -40,3 +40,27 @@ I've written tests for all five criteria. Four of them (R-2.16, R-2.21, R-2.22, 
 **One guess to check:** the contract describes `score_team_scenario_by_request`'s input only as "a score out of 100". I passed `{ score: 80 }`, matching how the existing tests call `score_team_scenario` on the proposal page. If the adapter expects a bare number, that call needs changing.
 
 I didn't touch anything outside `tests/acceptance/` (the five spec files and `not-testable.yaml`), and nothing asked me to.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the tests for R-2.16, R-2.21, R-2.22, R-2.28 and R-2.31 follow from those criteria and from nothing else? Ruling: approve. Each test asserts what its criterion says, through the contract. R-2.16 sends a Sprint With Us submission with no organization through proposal-team-request and reads the quoted refusal. R-2.21 reads the empty, over-limit and unmatched-question refusals, each against its response, in refusal_by_field. The word-limit wording comes from the contract (spec/contract/surface.yaml), not from the implementation. R-2.22 drives the edit screen's own controls and reads the quoted message in field_error. It also checks that the submitted proposal keeps its organization, and that the same change on a draft or withdrawn proposal is accepted. R-2.28 adds the Sprint With Us direct-score refusal with the quoted stage message. R-2.31 reads the administrator's rank observation to show that a proposal lacking a stage score holds no rank beside one that holds every score. It also shows that the Sprint With Us proposal takes a rank once its last score is entered. Nothing about how the application is built leaks into the tests: no selector, route, table or status code. The runner's typecheck failed, but it reports no errors under acceptance/proposals/, only two under adapters/new/, which this proposal does not answer for. R-2.28's remaining not-testable entry is real. It names a missing observation of which score actions the page offers, and a missing Team With Us seed state; neither is a writer's omission. Those clauses stay owed by the contract stage, below. The owed tests for R-2.16, R-2.21, R-2.22, R-2.28 and R-2.31 close when their tests run; this ruling does not close them. What would change the ruling: a failing typecheck under acceptance/proposals/, or evidence that the Sprint With Us team scenario score input is not the one the contract describes.
+
+**Conditions:**
+- missing-test R-2.28: a proposal's page does not offer a score for a stage the opportunity has not yet reached (both programs); and, for Team With Us, the service refuses such a score sent to it directly with "The opportunity is not in the correct stage of evaluation to perform that action." — owed by contract: an observation on proposal-swu-view and proposal-twu-view reporting which score actions the page offers, and a seeded Team With Us proposal screened into the challenge on an opportunity still at question consensus, named as the starting point for score_challenge_by_request
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `5ac7c568e23dcaf72f2f06b0a6552eb2c9f11787`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/proposals/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics

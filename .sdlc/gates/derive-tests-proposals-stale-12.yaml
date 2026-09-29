@@ -1,0 +1,18 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the tests for R-2.16, R-2.21, R-2.22, R-2.28 and R-2.31 follow from those criteria and from nothing else? Ruling: approve. Each test asserts what its criterion says, through the contract. R-2.16 sends a Sprint With Us submission with no organization through proposal-team-request and reads the quoted refusal. R-2.21 reads the empty, over-limit and unmatched-question refusals, each against its response, in refusal_by_field. The word-limit wording comes from the contract (spec/contract/surface.yaml), not from the implementation. R-2.22 drives the edit screen's own controls and reads the quoted message in field_error. It also checks that the submitted proposal keeps its organization, and that the same change on a draft or withdrawn proposal is accepted. R-2.28 adds the Sprint With Us direct-score refusal with the quoted stage message. R-2.31 reads the administrator's rank observation to show that a proposal lacking a stage score holds no rank beside one that holds every score. It also shows that the Sprint With Us proposal takes a rank once its last score is entered. Nothing about how the application is built leaks into the tests: no selector, route, table or status code. The runner's typecheck failed, but it reports no errors under acceptance/proposals/, only two under adapters/new/, which this proposal does not answer for. R-2.28's remaining not-testable entry is real. It names a missing observation of which score actions the page offers, and a missing Team With Us seed state; neither is a writer's omission. Those clauses stay owed by the contract stage, below. The owed tests for R-2.16, R-2.21, R-2.22, R-2.28 and R-2.31 close when their tests run; this ruling does not close them. What would change the ruling: a failing typecheck under acceptance/proposals/, or evidence that the Sprint With Us team scenario score input is not the one the contract describes.
+reprompt: |2-
+  You ruled approve. "missing-test/R-2.22" is a missing test, and a missing test is closed only by a test that runs: a result row for its criterion at the current version that passed or failed. No ruling can say it was met. Where no test is owed after all, withdraw it with `condition-withdrawn <ref>: <why it is no longer asked for>` and say why.
+conditions:
+  - "missing-test R-2.28: a proposal's page does not offer a score for a stage the opportunity has not yet reached (both programs); and, for Team With Us, the service refuses such a score sent to it directly with \"The opportunity is not in the correct stage of evaluation to perform that action.\" — owed by contract: an observation on proposal-swu-view and proposal-twu-view reporting which score actions the page offers, and a seeded Team With Us proposal screened into the challenge on an opportunity still at question consensus, named as the starting point for score_challenge_by_request"
+cost: 0.9167494
+turns: 5
+session: "b39ae2d1-e61b-4f16-8343-041e18e15ab8"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-29T02:55:08.563Z
