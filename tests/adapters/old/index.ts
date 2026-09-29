@@ -4702,12 +4702,75 @@ export default function create(
     availableActions: () => actionsMenuText(),
   };
 
+  // Once "Edit" is pressed, a proposal's management page carries the same wizard as its create
+  // screen ("1. Evaluation", "2. Team", "3. Pricing", ... on Sprint With Us; seen as the owner
+  // of Silver Creek on the seeded open Sprint With Us proposal, whose "2. Team" shows
+  // "Organization*" and each phase's "Add Team Member(s)" exactly as the create screen does).
+  // The create screen's controls are therefore driven here once the form is open.
+  function editingControl(where: string, run: (member: string) => Promise<void>) {
+    return async (): Promise<void> => {
+      await startEditingProposal(where);
+      await run(where);
+    };
+  }
+
+  // The messages the open form shows against its fields after a refused save, from every
+  // step, each as "<field>: <message>" ("organization: Organization cannot be changed once the
+  // proposal has been submitted"). A form that closed — the save went through — has no
+  // fields left to carry any, and reads as nothing. A message the form draws where no field
+  // can be told as its own is given on its own.
+  async function proposalEditFieldErrors(): Promise<string> {
+    await ready();
+    if (!(await currentStep())) return "";
+    const found: string[] = [];
+    await walkSteps(async () => {
+      for (const entry of await fieldErrorsByLabel()) if (!found.includes(entry)) found.push(entry);
+      for (const line of (await messages()).split("\n")) {
+        if (!line || matches(/qualif/i, line)) continue;
+        if (found.some((entry) => entry.endsWith(`: ${line}`) || entry === line)) continue;
+        found.push(line);
+      }
+    });
+    return found.join("\n");
+  }
+
+  // The header of the Proposal tab names the organization under "Organization", as a link to
+  // it ("Organization | Silver Creek Software Ltd."); another tab is left for that one first.
+  async function proposalOrganization(): Promise<string> {
+    await ready();
+    const here = await findAfter(["Organization"]);
+    if (here !== null) return here;
+    return (await enterTab(["Proposal", "Proposal Details"])) ? valueAfter(["Organization"]) : "";
+  }
+
+  // A proposal's own screen draws its place above "Ranking" in the header of the Proposal
+  // Details tab: "1st" once fully evaluated, "—" while it holds none (seen as the administrator
+  // on both proposals of the seeded Sprint With Us opportunity at the team scenario, and of
+  // the seeded Team With Us opportunity at the challenge). The dash reads as nothing.
+  async function viewRank(): Promise<string> {
+    await ready();
+    let shown = await findBefore(["Ranking"]);
+    if (shown === null && (await enterTab(["Proposal Details", "Proposal"]))) shown = await findBefore(["Ranking"]);
+    const value = (shown ?? "").trim();
+    return /^[—–-]$/.test(value) ? "" : value;
+  }
+
   const proposalSwuEdit: S.ProposalSwuEditPage = {
     ...proposalEdit(
       "proposal-swu-edit",
       "/opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/edit",
       "Team",
     ),
+    chooseOrganization: (input) =>
+      editingControl("proposal-swu-edit.choose_organization", (where) =>
+        chooseProposalOrganization(where, "Team", input),
+      )(),
+    addPhaseTeamMember: (input) =>
+      editingControl("proposal-swu-edit.add_phase_team_member", (where) => addSwuPhaseMembers(where, input))(),
+    setScrumMaster: (input) =>
+      editingControl("proposal-swu-edit.set_scrum_master", (where) => setSwuScrumMaster(where, input))(),
+    fieldError: () => proposalEditFieldErrors(),
+    organization: () => proposalOrganization(),
     scoresheetTab: () => tabContent(["Scoresheet", "Scoring"]),
     anonymousProponentName: () => anonymousProponent(),
     totalScore: () => scoresheetTotal(),
@@ -4720,6 +4783,16 @@ export default function create(
       "/opportunities/team-with-us/:opportunityId/proposals/:proposalId/edit",
       "Team Members",
     ),
+    chooseOrganization: (input) =>
+      editingControl("proposal-twu-edit.choose_organization", (where) =>
+        chooseProposalOrganization(where, "Team Members", input),
+      )(),
+    addTeamMemberForResource: (input) =>
+      editingControl("proposal-twu-edit.add_team_member_for_resource", (where) =>
+        addTwuResourceMember(where, input),
+      )(),
+    fieldError: () => proposalEditFieldErrors(),
+    organization: () => proposalOrganization(),
     scoresheetTab: () => tabContent(["Scoresheet", "Scoring"]),
     anonymousProponentName: () => anonymousProponent(),
     totalScore: () => scoresheetTotal(),
@@ -4830,6 +4903,7 @@ export default function create(
       stageFigure(["Team Scenario"], ["Team Scenario Score", "Scenario Score", "Team Scenario"]),
     priceScore: () => proposalPrice("sprint-with-us"),
     totalScore: () => proposalTotal(),
+    rank: () => viewRank(),
   };
 
   const proposalTwuView: S.ProposalTwuViewPage = {
@@ -4868,6 +4942,7 @@ export default function create(
       stageFigure(["Interview/Challenge", "Challenge"], ["Challenge Score", "Interview/Challenge Score", "Interview/Challenge"]),
     priceScore: () => proposalPrice("team-with-us"),
     totalScore: () => proposalTotal(),
+    rank: () => viewRank(),
   };
 
   // A proposal's own screen shows only "Total Score" and "Ranking"; its price score is the
@@ -5217,6 +5292,10 @@ export default function create(
     return `${met ? "Met" : "Not met"}: ${line}`;
   }
 
+  // What the organization form said about its logo when a save was last made from it, and on
+  // which organization's page.
+  let logoRefusal: { at: string; message: string } | null = null;
+
   const organizationEdit: S.OrganizationEditPage = {
     ...at("/organizations/:orgId/edit"),
     editOrganization: async (input) => {
@@ -5237,7 +5316,50 @@ export default function create(
       await press(where, ["Save Changes"], navBar());
       // "Save Changes?" must be confirmed before anything is stored.
       await confirmDialog(where, ["Save Changes"]);
-      await saved(["Save Changes"]);
+      // A save that went through closes the form; a refused one leaves it open under
+      // "Unable to Update Organization", which is the outcome as much as the closing is.
+      const closing = seen(navBar().getByText("Save Changes", { exact: true })).first();
+      for (let wait = 0; wait < 120; wait++) {
+        if (!(await closing.count())) break;
+        if ((await everyAlert(/unable|could not/i)).length) break;
+        await page.waitForTimeout(250);
+      }
+      await ready();
+      // The logo's refusal is drawn under "Choose Image" only while the form stays open, so
+      // it is taken now, before current_logo closes the form to read what is stored.
+      logoRefusal = { at: new URL(page.url()).pathname, message: await messages(/logo|image/i) };
+    },
+    // Input: a file by name and content. "Choose Image" (under "Profile Picture (Optional)",
+    // offered once "Edit Organization" has opened the form) raises the chooser; it lists
+    // .jpg, .jpeg and .png, but the file handed to it is offered whatever its ending.
+    changeLogo: async (input) => {
+      const where = "organization-edit.change_logo";
+      await ready();
+      if (!(await findControl(navBar(), "Save Changes"))) {
+        if (!(await findControl(navBar(), "Edit Organization"))) await enterTab(["Organization"]);
+        await press(where, ["Edit Organization"], navBar());
+      }
+      await chooseImage(where, pictureOf(input) ?? input);
+    },
+    // The stored logo's address, as the closed form shows it; the placeholder
+    // ("/images/default_organization_logo.svg") is no stored logo and reads as nothing. A form
+    // left open after a refused save shows its unsaved preview, so it is cancelled first.
+    currentLogo: async () => {
+      await ready();
+      if (await findControl(navBar(), "Save Changes")) {
+        await press("organization-edit.current_logo", ["Cancel"], navBar());
+        await settle();
+      }
+      if (!(await findControl(navBar(), "Edit Organization"))) await enterTab(["Organization"]);
+      return storedImageAddress();
+    },
+    // "Please select a different logo image." under "Choose Image" (seen as the owner of
+    // Northern Pines offering a .txt file and saving). Empty when the logo was accepted.
+    logoRefusedError: async () => {
+      await ready();
+      const shown = await messages(/logo|image/i);
+      if (shown) return shown;
+      return logoRefusal && logoRefusal.at === new URL(page.url()).pathname ? logoRefusal.message : "";
     },
     cancelEditing: () => press("organization-edit.cancel_editing", ["Cancel"], navBar()),
     archiveOrganization: async () => {
@@ -8558,6 +8680,46 @@ export default function create(
     // ({"membershipType":["Invalid membership type provided."]}).
     invalidMembershipTypeError: async () =>
       refusal((status) => status >= 400, /membershipType|membership type/i),
+    // The created membership's "id", from the service's 201 answer; a refused invitation
+    // created none and reads as nothing.
+    membershipIdentifier: async () =>
+      createdField("affiliation-invitation-request.membership_identifier", "id"),
+  };
+
+  // Accepting a membership is PUT /api/affiliations/:id with { tag: "approve" }, the tag the
+  // service registers for it. Checked here: an active membership (affiliations.qualifiedMember)
+  // came back 400 {"affiliation":["Membership is not pending."]}; the organization's owner
+  // accepting somebody else's invitation (affiliations.pendingInvitation) and a signed-out
+  // request both came back 401 {"permissions":["You do not have permission to perform this
+  // action."]}.
+  const APPROVAL_REQUEST = "affiliation-approval-request";
+  let approvalAffiliation = "";
+
+  const affiliationApprovalRequest: PageOf<"affiliationApprovalRequest"> = {
+    open: async (params?: { affiliationId?: string }) => {
+      approvalAffiliation = seededId(params?.affiliationId, "affiliations");
+    },
+    async acceptMembershipByRequest(input?: unknown) {
+      const where = `${APPROVAL_REQUEST}.accept_membership_by_request`;
+      const named = seededId(
+        given(input, ["affiliation", "affiliationId", "membership", "membershipId", "membershipIdentifier", "id"]),
+        "affiliations",
+      );
+      const affiliation = named || approvalAffiliation;
+      if (!affiliation) nothing(`${where} — no membership was opened or named to accept`);
+      await send(where, "PUT", `${baseURL}/api/affiliations/${encodeURIComponent(affiliation)}`, {
+        tag: "approve",
+        value: null,
+      });
+    },
+    requestAccepted: async () => accepted(`${APPROVAL_REQUEST}.request_accepted`),
+    membershipStatus: async () => createdField(`${APPROVAL_REQUEST}.membership_status`, "membershipStatus"),
+    refusalMessages: async () =>
+      (lastRefusal(`${APPROVAL_REQUEST}.refusal_messages`) ?? []).map((entry) => entry.message).join("\n"),
+    refusalStatus: async () => {
+      const got = answer(`${APPROVAL_REQUEST}.refusal_status`);
+      return got.status >= 400 ? String(got.status) : "";
+    },
   };
 
   const userListRequest: PageOf<"userListRequest"> = {
@@ -9418,6 +9580,140 @@ export default function create(
     ...proposalRequestReaders(TEAM_REQUEST),
   };
 
+  // A stage score sent as PUT /api/proposals/:program/:id with the tag the service registers
+  // for it — scoreCodeChallenge and scoreTeamScenario on Sprint With Us, scoreChallenge on
+  // Team With Us — and the score as its value. Checked as the administrator: the team scenario
+  // score on seed.proposals.swuScreenedIntoScenarioEarly came back 401 {"permissions":["The
+  // opportunity is not in the correct stage of evaluation to perform that action."]}; the same
+  // score on a proposal not carried into the team scenario, and a challenge score on a Team
+  // With Us proposal still at the questions, came back 401 with the general permission
+  // message; a tag the service does not know came back 400 parseFailure.
+  const EVALUATION_REQUEST = "proposal-evaluation-request";
+  let evaluationTarget = { program: "", proposal: "" };
+
+  function scoreGiven(input: unknown): number {
+    const value =
+      typeof input === "number" || typeof input === "string"
+        ? input
+        : given(input, ["score", "value", "points", "mark"]);
+    const score = Number(value);
+    if (value === undefined || value === null || value === "" || !Number.isFinite(score)) {
+      throw new Error(`unbound: ${EVALUATION_REQUEST} — the input names no score to send (${JSON.stringify(input)})`);
+    }
+    return score;
+  }
+
+  async function sendStageScore(member: string, program: string, tag: string, input: unknown): Promise<void> {
+    const where = `${EVALUATION_REQUEST}.${member}`;
+    const opened = givenText(input, ["program", "programme"]) || evaluationTarget.program || program;
+    if (opened !== program) {
+      throw new Error(`unbound: ${where} — this score belongs to ${program}, but the request was opened for "${opened}"`);
+    }
+    const proposal =
+      seededId(given(input, ["proposal", "proposalId", "proposalIdentifier"]), "proposals") || evaluationTarget.proposal;
+    if (!proposal) nothing(`${where} — no proposal was opened or named to score`);
+    await send(where, "PUT", `${baseURL}/api/proposals/${program}/${encodeURIComponent(proposal)}`, {
+      tag,
+      value: scoreGiven(input),
+    });
+  }
+
+  const proposalEvaluationRequest: PageOf<"proposalEvaluationRequest"> = {
+    open: async (params?: { program?: string; proposalId?: string }) => {
+      evaluationTarget = {
+        program: String(params?.program ?? ""),
+        proposal: seededId(params?.proposalId, "proposals"),
+      };
+    },
+    scoreTeamScenarioByRequest: (input?: unknown) =>
+      sendStageScore("score_team_scenario_by_request", "sprint-with-us", "scoreTeamScenario", input),
+    scoreCodeChallengeByRequest: (input?: unknown) =>
+      sendStageScore("score_code_challenge_by_request", "sprint-with-us", "scoreCodeChallenge", input),
+    scoreChallengeByRequest: (input?: unknown) =>
+      sendStageScore("score_challenge_by_request", "team-with-us", "scoreChallenge", input),
+    requestAccepted: async () => accepted(`${EVALUATION_REQUEST}.request_accepted`),
+    proposalStatus: async () => createdField(`${EVALUATION_REQUEST}.proposal_status`, "status"),
+    refusalMessages: async () =>
+      (lastRefusal(`${EVALUATION_REQUEST}.refusal_messages`) ?? []).map((entry) => entry.message).join("\n"),
+    refusalStatus: async () => {
+      const got = answer(`${EVALUATION_REQUEST}.refusal_status`);
+      return got.status >= 400 ? String(got.status) : "";
+    },
+  };
+
+  // An account record, asked afresh each time it is read so it shows what the service holds
+  // now, and kept apart from the answers the other request surfaces read. GET
+  // /api/sessions/current answers { ..., user: { id, notificationsOn, ... } } for somebody
+  // signed in and "null" for nobody; GET /api/users/:id answers the account itself to the
+  // person and to an administrator, and 401 ["You do not have permission to perform this
+  // action."] to anybody else, signed out included (all seen on this target).
+  async function accountAnswer(where: string, target: string): Promise<{ status: number; body: string; json: unknown }> {
+    const response = await page.request.get(target).catch((error: unknown) => {
+      throw new Error(`unbound: ${where} — GET ${target} could not be made (${String(error)})`);
+    });
+    const body = await response.text().catch(() => "");
+    let json: unknown = null;
+    try {
+      json = JSON.parse(body);
+    } catch {
+      json = null;
+    }
+    return { status: response.status(), body, json };
+  }
+
+  function accountField(json: unknown, key: string): string {
+    if (!json || typeof json !== "object" || Array.isArray(json)) return "";
+    const value = (json as Record<string, unknown>)[key];
+    return value === undefined || value === null ? "" : String(value);
+  }
+
+  const SELF_REQUEST = "user-account-self-request";
+
+  async function ownAccount(what: string): Promise<unknown> {
+    const got = await accountAnswer(`${SELF_REQUEST}.${what}`, `${baseURL}/api/sessions/current`);
+    if (got.status !== 200 || !got.json || typeof got.json !== "object") return null;
+    return (got.json as Record<string, unknown>).user ?? null;
+  }
+
+  const userAccountSelfRequest: PageOf<"userAccountSelfRequest"> = {
+    open: async () => {
+      await ownAccount("open");
+    },
+    userIdentifier: async () => accountField(await ownAccount("user_identifier"), "id"),
+    // "notificationsOn" holds the moment notices were turned on, and null while they are off.
+    newOpportunityNoticesSince: async () =>
+      accountField(await ownAccount("new_opportunity_notices_since"), "notificationsOn"),
+  };
+
+  const ACCOUNT_REQUEST = "user-account-request";
+  let accountAsked = "";
+
+  async function namedAccount(what: string): Promise<{ status: number; body: string; json: unknown }> {
+    if (!accountAsked) nothing(`${ACCOUNT_REQUEST}.${what} — no account was opened to ask for`);
+    return accountAnswer(`${ACCOUNT_REQUEST}.${what}`, `${baseURL}/api/users/${encodeURIComponent(accountAsked)}`);
+  }
+
+  const userAccountRequest: PageOf<"userAccountRequest"> = {
+    open: async (params?: { userId?: string }) => {
+      const named = String(params?.userId ?? "").replace(/^users\./, "");
+      accountAsked = named ? userIdFor(named) || named : "";
+      if (!accountAsked) nothing(`${ACCOUNT_REQUEST}.open — no account was named`);
+      await namedAccount("open");
+    },
+    newOpportunityNoticesSince: async () => {
+      const got = await namedAccount("new_opportunity_notices_since");
+      return got.status === 200 ? accountField(got.json, "notificationsOn") : "";
+    },
+    refusedWhenNotPermitted: async () => {
+      const got = await namedAccount("refused_when_not_permitted");
+      return got.status === 401 || got.status === 403 ? `${got.status} ${got.body}` : "";
+    },
+    refusalStatus: async () => {
+      const got = await namedAccount("refusal_status");
+      return got.status >= 400 ? String(got.status) : "";
+    },
+  };
+
   // Bound first and returned after, so a page only the newer surface declares is not refused
   // as an unknown property when this compiles against an older one.
   const surface = {
@@ -9517,6 +9813,7 @@ export default function create(
     mailDeliveryDelay,
     organizationActingForList,
     affiliationInvitationRequest,
+    affiliationApprovalRequest,
     userListRequest,
     contentRequest,
     evaluationIndividualRequestSwu,
@@ -9527,6 +9824,9 @@ export default function create(
     fileAttachByIdentifier,
     proposalCwuRequest,
     proposalTeamRequest,
+    proposalEvaluationRequest,
+    userAccountSelfRequest,
+    userAccountRequest,
   };
   return surface;
 }
