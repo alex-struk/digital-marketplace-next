@@ -6387,14 +6387,25 @@ export default function create(
     publicSectorCard: () => sectionFrom(["Public Sector Employee"]),
   };
 
-  // Every account this target's sign-in routes can mint already has a completed
-  // profile, so /sign-up/complete never renders its form: it sends a signed-in visitor
-  // to the dashboard and a signed-out one to the sign-in page.
-  const signUpCompleteUnreachable = (member: string) => async (): Promise<never> => {
-    throw new Error(
-      `unbound: user-sign-up-complete.${member} — /sign-up/complete never shows the profile form on this target; it redirects to /sign-in when signed out and to /dashboard when signed in — looked again signed in through /auth/createsessionadmin, /auth/createsessiongov and every /auth/createsessionvendor/1 to 16 (17 and above fail with /notice/authFailure), and each lands on /dashboard, so no route reaches an account with an unfinished profile; the first-time personas this form is for have no sign-in on this target`,
-    );
-  };
+  // /sign-up/complete shows its form only to an account that has not yet agreed to the terms
+  // (the seeded vendorCompletingProfile, reached at /auth/createsessionvendor/17, is sent
+  // there from every screen). Anyone who has agreed is sent on: signed out to /sign-in,
+  // everyone else to /dashboard. The form is "You're almost done!": a "Choose Image" picture,
+  // the identity provider's username as a disabled box ("GitHub" or "IDIR"), "Name*",
+  // "Email Address*" (and "Job Title" for public sector staff), the terms box, the
+  // "Notify me about new opportunities." box, and "Complete Profile", held back until the
+  // terms box is ticked.
+  const SIGN_UP_TERMS = /terms|agree/i;
+  const SIGN_UP_NOTICES = "Notify me about new opportunities";
+  const SIGN_UP_TERMS_KEYS = [
+    "acceptTerms", "accept_terms", "acceptAppTerms", "accept_app_terms", "terms", "acceptedTerms",
+    "agree", "agreed",
+  ];
+  const SIGN_UP_NOTICE_KEYS = [
+    "notifications", "notificationsOn", "notifyNewOpportunities", "newOpportunities",
+    "new_opportunities", "toggleNewOpportunityNotifications", "toggle_new_opportunity_notifications",
+    "notify", "optIn",
+  ];
 
   // Whether /sign-up/complete sent the visitor somewhere else rather than showing its form.
   async function signUpCompleteLeft(): Promise<boolean> {
@@ -6405,26 +6416,130 @@ export default function create(
     return new URL(page.url()).pathname !== "/sign-up/complete";
   }
 
+  // The form must be on screen for an action or a field to be read at all; a visitor sent on
+  // never reached it.
+  async function onSignUpForm(member: string): Promise<void> {
+    if (await signUpCompleteLeft()) {
+      throw new Error(
+        `unbound: user-sign-up-complete.${member} — /sign-up/complete sent this visitor on to ${page.url()} instead of showing the profile form; it is shown only to an account that has not yet agreed to the terms (vendorCompletingProfile, /auth/createsessionvendor/17)`,
+      );
+    }
+    await seen(page.getByRole("checkbox", { name: SIGN_UP_TERMS }))
+      .first()
+      .waitFor({ state: "visible", timeout: 10000 })
+      .catch(() => undefined);
+  }
+
+  // A state the test gave for a box ({ checked: false }, false, "no"), or undefined when it
+  // gave none.
+  function boxState(input: unknown, keys: string[] = []): boolean | undefined {
+    if (typeof input === "boolean") return input;
+    if (typeof input === "string" && isYesNo(input)) return saysYes(input);
+    if (input && typeof input === "object" && !Array.isArray(input)) {
+      const record = input as Record<string, unknown>;
+      for (const key of [...keys, "checked", "value", "on", "enabled", "state"]) {
+        const found = record[key];
+        if (typeof found === "boolean") return found;
+        if (typeof found === "string" && isYesNo(found)) return saysYes(found);
+      }
+    }
+    return undefined;
+  }
+
+  async function setSignUpBox(where: string, name: string | RegExp, wanted: boolean | undefined): Promise<void> {
+    const box = seen(page.getByRole("checkbox", { name }));
+    if (!(await box.count())) {
+      throw new Error(`unbound: ${where} — the profile form on ${page.url()} shows no box labelled "${String(name)}"`);
+    }
+    const target = wanted ?? !(await box.first().isChecked());
+    if ((await box.first().isChecked()) !== target) await box.first().click();
+    await settle();
+  }
+
   const userSignUpComplete: S.UserSignUpCompletePage = {
     ...at("/sign-up/complete"),
-    changeAvatar: signUpCompleteUnreachable("change_avatar"),
-    acceptAppTerms: signUpCompleteUnreachable("accept_app_terms"),
-    toggleNewOpportunityNotifications: signUpCompleteUnreachable(
-      "toggle_new_opportunity_notifications",
-    ),
-    completeProfile: signUpCompleteUnreachable("complete_profile"),
-    idpUsernameReadonly: signUpCompleteUnreachable("idp_username_readonly"),
-    nameField: signUpCompleteUnreachable("name_field"),
-    emailField: signUpCompleteUnreachable("email_field"),
-    jobTitleField: signUpCompleteUnreachable("job_title_field"),
-    // Whoever this target can sign in has already agreed, so the screen offers them no
-    // agreement box and sends them on: signed out to /sign-in, the administrator, the public
-    // sector employee and every seeded vendor to /dashboard (each seen in turn). A screen that
-    // sends the visitor on offers no terms box, and reads as nothing. Were the form ever shown,
-    // its box is read as ticked or not.
+    changeAvatar: async (input?: unknown) => {
+      await onSignUpForm("change_avatar");
+      await chooseImage("user-sign-up-complete.change_avatar", pictureOf(input) ?? input);
+    },
+    // Ticks the terms box, or leaves it as the test says ({ checked: false }).
+    acceptAppTerms: async (input?: unknown) => {
+      await onSignUpForm("accept_app_terms");
+      await setSignUpBox(
+        "user-sign-up-complete.accept_app_terms",
+        SIGN_UP_TERMS,
+        boxState(input, SIGN_UP_TERMS_KEYS) ?? true,
+      );
+    },
+    // Turns the notices box over, or sets it to the state the test gave.
+    toggleNewOpportunityNotifications: async (input?: unknown) => {
+      await onSignUpForm("toggle_new_opportunity_notifications");
+      await setSignUpBox(
+        "user-sign-up-complete.toggle_new_opportunity_notifications",
+        SIGN_UP_NOTICES,
+        boxState(input, SIGN_UP_NOTICE_KEYS),
+      );
+    },
+    // Every value the test gave is entered first — the fields by label, the picture through
+    // "Choose Image", the terms and notices boxes by what the test said of them — and then
+    // "Complete Profile" is pressed. Held back (terms not ticked, a field refused) it is
+    // reported at once with what the page shows; pressed, the application takes the visitor
+    // off /sign-up/complete.
+    completeProfile: async (input?: unknown) => {
+      const where = "user-sign-up-complete.complete_profile";
+      await onSignUpForm("complete_profile");
+      const record =
+        input && typeof input === "object" && !Array.isArray(input) ? (input as Record<string, unknown>) : {};
+      const has = (keys: string[]) => keys.some((key) => record[key] !== undefined);
+      if (has(SIGN_UP_TERMS_KEYS)) {
+        await setSignUpBox(where, SIGN_UP_TERMS, boxState(input, SIGN_UP_TERMS_KEYS) ?? true);
+      }
+      if (has(SIGN_UP_NOTICE_KEYS)) {
+        await setSignUpBox(where, SIGN_UP_NOTICES, boxState(input, SIGN_UP_NOTICE_KEYS) ?? true);
+      }
+      await fillForm(where, input, { skip: [...LOGO_KEYS, ...SIGN_UP_TERMS_KEYS, ...SIGN_UP_NOTICE_KEYS] });
+      const picture = pictureOf(input);
+      if (picture !== undefined) await chooseImage(where, picture);
+      await press(where, ["Complete Profile"]);
+      const left = await page
+        .waitForURL((url) => url.pathname !== "/sign-up/complete", { timeout: 20000 })
+        .then(() => true)
+        .catch(() => false);
+      if (!left) {
+        const shown = [await alertMessages(), await messages().catch(() => "")].filter(Boolean).join(" | ");
+        throw new Error(
+          `${where} — "Complete Profile" was pressed but the page stayed on ${page.url()}; ${
+            shown ? `the page shows: ${shown.replace(/\n/g, " ")}` : "the page shows no message"
+          }`,
+        );
+      }
+      await ready();
+    },
+    idpUsernameReadonly: async () => {
+      await onSignUpForm("idp_username_readonly");
+      return fieldValue(["GitHub", "IDIR"]);
+    },
+    nameField: async () => {
+      await onSignUpForm("name_field");
+      return fieldValue(["Name"]);
+    },
+    emailField: async () => {
+      await onSignUpForm("email_field");
+      return fieldValue(["Email Address"]);
+    },
+    // A vendor's form carries no job title; on it this reads as nothing.
+    jobTitleField: async () => {
+      await onSignUpForm("job_title_field");
+      const box = seen(page.getByRole("textbox", { name: "Job Title", exact: false }));
+      return (await box.count()) ? (await box.first().inputValue()).trim() : "";
+    },
+    // Whoever has already agreed is offered no agreement box and sent on (signed out to
+    // /sign-in, everyone else to /dashboard): that reads as nothing. On the form, the box is
+    // read as ticked or not.
     termsCheckbox: async () => {
       if (await signUpCompleteLeft()) return "";
-      const box = seen(page.getByRole("checkbox", { name: /terms|agree/i }));
+      const box = seen(page.getByRole("checkbox", { name: SIGN_UP_TERMS }));
+      await box.first().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
       if (!(await box.count())) return "";
       return (await box.first().isChecked()) ? "checked" : "unchecked";
     },
@@ -6432,12 +6547,18 @@ export default function create(
     // form, "disabled" while its terms box is unticked and its completing control disabled.
     completeDisabledUntilTermsAccepted: async () => {
       if (await signUpCompleteLeft()) return "";
-      const box = seen(page.getByRole("checkbox", { name: /terms|agree/i }));
+      const box = seen(page.getByRole("checkbox", { name: SIGN_UP_TERMS }));
+      await box.first().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
       if (!(await box.count()) || (await box.first().isChecked())) return "";
       const control = await findControl(page, "Complete Profile");
       return control && (await isDisabled(control)) ? "disabled" : "";
     },
-    fieldError: signUpCompleteUnreachable("field_error"),
+    // The messages drawn under the fields ("Name must be between 1 and 100 characters
+    // long.", "Please enter a valid email."); none drawn reads as nothing.
+    fieldError: async () => {
+      await onSignUpForm("field_error");
+      return (await fieldErrors()).join("\n");
+    },
   };
 
   const userSignOut: S.UserSignOutPage = {

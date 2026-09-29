@@ -600,18 +600,18 @@ pages:
 
   user-sign-up-complete:
     actions:
-      change_avatar: "unbound: /sign-up/complete never shows the profile form on this target — it redirects to /sign-in when signed out and to /dashboard when signed in; looked again through /auth/createsessionadmin, /auth/createsessiongov and /auth/createsessionvendor/1 to 16 (17 and above fail with /notice/authFailure), and each lands on /dashboard, so no route reaches an account with an unfinished profile; the first-time personas this form is for have no sign-in on this target"
-      accept_app_terms: "unbound: /sign-up/complete redirects away instead of showing the profile form, so there is no terms box to tick"
-      toggle_new_opportunity_notifications: "unbound: /sign-up/complete redirects away instead of showing the profile form"
-      complete_profile: "unbound: /sign-up/complete redirects away instead of showing the profile form"
+      change_avatar: bound
+      accept_app_terms: bound
+      toggle_new_opportunity_notifications: bound
+      complete_profile: bound
     observations:
-      idp_username_readonly: "unbound: /sign-up/complete redirects away instead of showing the profile form"
-      name_field: "unbound: /sign-up/complete redirects away instead of showing the profile form"
-      email_field: "unbound: /sign-up/complete redirects away instead of showing the profile form"
-      job_title_field: "unbound: /sign-up/complete redirects away instead of showing the profile form"
+      idp_username_readonly: bound
+      name_field: bound
+      email_field: bound
+      job_title_field: bound
       terms_checkbox: bound
       complete_disabled_until_terms_accepted: bound
-      field_error: "unbound: /sign-up/complete redirects away instead of showing the profile form"
+      field_error: bound
 
   user-sign-out:
     actions: {}
