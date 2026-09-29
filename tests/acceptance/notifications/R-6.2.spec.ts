@@ -1,5 +1,5 @@
 // criterion: @R-6.2 v1
-// provenance: blind, spec@0518dccea59a1ad5bce1f3b3ed4a00d0c8c61c73, derived 2026-09-29
+// provenance: blind, spec@258c8b6542d73fd923b7fbc7b8c8d9d82627255b, derived 2026-09-29
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -13,21 +13,23 @@ import type { Surface } from "../../fixtures";
 // published off its own view, with no error on the form, and its history is read for any record
 // of a failed delivery.
 //
+// Every check on the catcher counts only messages about the opportunity this test publishes,
+// told by its title. A message from earlier activity may still land after the catcher is
+// cleared and before the refusal takes effect, and the criterion says nothing about it.
+//
 // "No further attempt": the catcher keeps nothing of a refused message, so a notice about the
 // opportunity that turns up after delivery is restored was sent again — but only if every
 // notice had already been tried and refused before the restore. A notice still waiting for its
 // first attempt when delivery comes back would arrive once, as its first and only delivery, and
 // that is not a repeat. So the fault is held long after the publish has been answered — far
-// longer than the service takes to be refused on each of its fresh connections — and nothing
-// may have reached the catcher by then. Only then is delivery restored. The catcher is shown to
-// be accepting again by an invitation to join an organization, which does send, and after a
-// further margin no message about the published opportunity may be in the catcher.
+// longer than the service takes to be refused on each of its fresh connections — and no notice
+// about the opportunity may have reached the catcher by then. Only then is delivery restored.
+// The catcher is shown to be accepting again by an invitation to join an organization, which
+// does send, and after a further margin no message about the published opportunity may be in
+// the catcher.
 //
 // A message that cannot be composed has no given the contract can set up; that clause is
 // recorded in tests/acceptance/not-testable.yaml.
-
-// email.configured_sender_address in spec/contract/observables.yaml.
-const serviceAddress = "donotreply@example.test";
 
 const settle = { timeout: 30000 };
 // How long the fault is held after the publish is answered, so that every announcement batch
@@ -67,10 +69,6 @@ async function readOrEmpty(read: () => Promise<string>): Promise<string> {
   }
 }
 
-function addressesIn(text: string): string[] {
-  return [...new Set(text.toLowerCase().match(/[a-z0-9._%+-]+@[a-z0-9-]+(?:\.[a-z0-9-]+)+/g) ?? [])];
-}
-
 function identifiersIn(listing: string): string[] {
   try {
     const parsed = JSON.parse(listing);
@@ -84,34 +82,22 @@ function identifiersIn(listing: string): string[] {
     .filter(Boolean);
 }
 
-async function caughtCount(surface: Surface): Promise<number> {
-  await surface.caughtMessageList.open();
-  return Number((await readOrEmpty(() => surface.caughtMessageList.messageCount())).trim() || "0");
-}
-
-type Caught = { id: string; subject: string; aboutOpportunity: boolean };
-
-// Every message in the catcher, read whole.
-async function caughtMessages(surface: Surface): Promise<Caught[]> {
+// The subjects of every message in the catcher that is about the published opportunity.
+async function noticesAboutOpportunity(surface: Surface): Promise<string[]> {
   await surface.caughtMessageList.open();
   const ids = identifiersIn(await readOrEmpty(() => surface.caughtMessageList.messageIdentifiers()));
-  const caught: Caught[] = [];
+  const subjects: string[] = [];
   for (const id of ids) {
     await surface.caughtMessage.open({ messageId: id });
     const subject = await readOrEmpty(() => surface.caughtMessage.subject());
-    const visible = addressesIn(await readOrEmpty(() => surface.caughtMessage.visibleRecipients()));
     const text = [
       subject,
       await readOrEmpty(() => surface.caughtMessage.plainTextBody()),
       await readOrEmpty(() => surface.caughtMessage.htmlBody()),
     ].join(" ");
-    caught.push({
-      id,
-      subject,
-      aboutOpportunity: text.includes(title) || visible.includes(serviceAddress),
-    });
+    if (text.includes(title)) subjects.push(subject);
   }
-  return caught;
+  return subjects;
 }
 
 test("When a message cannot be composed or cannot be delivered, the action that triggered it still succeeds, nobody is told, and no further attempt is made.", async ({
@@ -144,7 +130,10 @@ test("When a message cannot be composed or cannot be delivered, the action that 
     expect((await readOrEmpty(() => surface.mailDeliveryFault.deliveryRefused())).trim(), "the fault is still in force").not.toMatch(
       /^(false|no|0|off)?$/i,
     );
-    expect(await caughtCount(surface), "a notice reached somebody while delivery was refused").toBe(0);
+    expect(
+      await noticesAboutOpportunity(surface),
+      "a notice about the published opportunity reached somebody while delivery was refused",
+    ).toEqual([]);
   } finally {
     await surface.mailDeliveryFault.open();
     await surface.mailDeliveryFault.restoreDelivery();
@@ -166,13 +155,10 @@ test("When a message cannot be composed or cannot be delivered, the action that 
   await expect.poll(async () => (await mail.messagesTo(invited.email)).length, settle).toBeGreaterThan(0);
   await new Promise((resolve) => setTimeout(resolve, resendMargin));
 
-  const caught = await caughtMessages(surface);
-
   // Every announcement had been refused before delivery came back, so one arriving now was sent
   // again.
-  const resent = caught.filter((message) => message.aboutOpportunity);
   expect(
-    resent.map((message) => message.subject),
+    await noticesAboutOpportunity(surface),
     "a notice about the published opportunity, already refused, was sent again after delivery was restored",
   ).toEqual([]);
 });

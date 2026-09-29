@@ -709,3 +709,8 @@ redo:
       publishes, so the check made while delivery is refused should count only
       messages about that opportunity (identified by its title), as the test's
       later check after delivery is restored already does
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on notifications
+      by: runner:derive-tests
+      at: 2026-09-29T13:06:20.039Z

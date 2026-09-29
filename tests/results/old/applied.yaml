@@ -453,10 +453,6 @@ rulings:
     version: 1
     verb: product-question
     gate: calibrate-triage-old-24
-  - id: R-6.2
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-27
   - id: R-3.11
     version: 1
     verb: defect-in-old
@@ -465,7 +461,3 @@ rulings:
     version: 3
     verb: spec-wrong
     gate: calibrate-old-15
-  - id: R-6.2
-    version: 1
-    verb: test-wrong
-    gate: calibrate-old-17
