@@ -455,10 +455,6 @@ rulings:
     version: 1
     verb: product-question
     gate: calibrate-triage-old-24
-  - id: R-2.19
-    version: 2
-    verb: product-question
-    gate: calibrate-triage-old-26
   - id: R-6.2
     version: 1
     verb: product-question
