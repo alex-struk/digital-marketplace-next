@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-files-stale-5 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">267</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">263</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">231</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-files-stale-5</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 03:00</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the files criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> R-8.30 now tests both halves of its criterion, so nothing about it remains in <code>tests/acceptance/not-testable.yaml</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>R-8.30 now tests both halves of its criterion, so nothing about it remains in <code>tests/acceptance/not-testable.yaml</code>. I couldn&#39;t compile or run the test: both requests to run the TypeScript compiler were refused permission.</p>
+<p><strong>What I did.</strong> Of the one criterion handed back, one now has a test and none remain untestable. Before this run, <code>tests/acceptance/files/R-8.30.spec.ts</code> only covered the profile picture. It sat beside an entry saying the organization-logo clause was blocked. The contract has since given <code>organization-edit</code> a <code>change_logo</code> action and two observations, <code>current_logo</code> and <code>logo_refused_error</code>. Its comments say the logo is offered after <code>edit_organization</code> and stored on <code>save_changes</code>. With those, the logo clause can be reached.</p>
+<p><strong>The test file</strong> now holds two <code>test()</code>s. The criterion has one worked example, but its statement covers two places, and one test per place fails with a title that says which half broke. The profile-picture test is unchanged except that its title now names only the profile picture.</p>
+<p>The new logo test works like this:</p>
+<ul><li>It signs in as <code>persona.organizationOwner</code> and opens the edit page for <code>seed.organizations.qualified</code>, which the seed says that person owns.</li><li>It reads the current logo, opens the form, offers <code>{ file: &quot;logo.gif&quot;, content: PNG }</code> and saves. The content is a real 1×1 PNG, so the file&#39;s name is the only reason it could be refused.</li><li>A save that the screen itself refuses to make also counts as a refusal.</li><li>It then expects <code>logoRefusedError()</code> to report something. It reopens the page and expects <code>currentLogo()</code> to equal the value read before, which is how it checks that no file was stored.</li></ul>
+<p>A refused logo changes nothing, so the test leaves the shared seeded organization as it found it. I also updated the provenance header to <code>spec@8272c1b989e3bad64c78ae540830a62747dadf42</code>.</p>
+<p><strong>The not-testable entry.</strong> I deleted R-8.30&#39;s entry, the whole block for the logo clause. No other entry changed.</p>
+<p><strong>Missing from the surface:</strong> nothing for this criterion.</p>
+<p>I wrote only under <code>tests/acceptance/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 03:01.</p>
+<div class="body"><p>Question: do the R-8.30 tests follow from the files criterion and from nothing else? Ruling: approve. R-8.30 says a profile picture or an organization logo whose name does not end in .jpg, .jpeg or .png is refused, and no file is stored. The branch now has one test for each half. The profile-picture test is unchanged apart from its narrower title. The new logo test signs in as persona.organizationOwner, who the seed manifest says owns organizations.qualified. It reads current_logo, opens the form with edit_organization, offers &#39;logo.gif&#39; whose content is a real PNG, so the ending is the only thing that could cause a refusal, and saves. It then asserts that logo_refused_error reports something, which is the refusal, and that current_logo read on a freshly opened page equals the value read before, which is &#39;no file is stored&#39;. Every call it makes is declared on organization-edit in spec/contract/surface.yaml: the change_logo action and the current_logo and logo_refused_error observations, with comments saying the logo is offered after edit_organization and stored on save_changes. The test asserts nothing the criterion does not state. It checks no message text, no status code and no selector; it uses only the contract&#39;s own action and observation names. Catching a save the screen will not make is consistent with &#39;refused&#39;. Deleting the not-testable entry for the logo clause is right, because the reason it gave (no action or observation on organization-edit) is no longer true, and no clause of R-8.30 is now left unasserted. The runner&#39;s typecheck exited with code 2, but none of its diagnostics are under acceptance/files/. Both are in adapters/new/, which this proposal does not answer for. The open missing-test/R-8.30 condition is closed by the new test&#39;s first run at v1, not by this ruling. What would change the ruling: a typecheck diagnostic under acceptance/files/, or evidence that organizations.qualified is not owned by persona.organizationOwner.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

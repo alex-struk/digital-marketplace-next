@@ -4474,7 +4474,7 @@ owed:
     id: R-8.30
     version: 1
     domain: files
-    stage: derive-tests
+    stage: calibrate
     why: a change_logo action on organization-edit, with observations on
       organization-edit (or file-image-picker routed to
       /organizations/:orgId/edit) reporting the organization's current logo and
@@ -4492,6 +4492,12 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-29T02:36:38.260Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-09-29T03:01:05.827Z
+    target: old
   - kind: missing-test
     item: R-2.16
     id: R-2.16
