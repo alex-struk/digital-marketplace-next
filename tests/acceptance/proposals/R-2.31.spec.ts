@@ -1,32 +1,36 @@
 // criterion: @R-2.31 v1
-// provenance: blind, spec@05e88fb7765c5d6327f910e43f990e6c321b63fa, derived 2026-09-25
+// provenance: blind, spec@ccc1cba3290f5ea17351e4f2ca49bd80fefc2ef6, derived 2026-09-29
 import { test, expect, persona, seed } from "../../fixtures";
-import type { Surface } from "../../fixtures";
+import type { Persona, Surface } from "../../fixtures";
 
-// The given is the seeded Sprint With Us opportunity at the team scenario kept for this
-// criterion. Its stated weights are the ones the seed gives every Sprint With Us opportunity:
-// questions 25, code challenge 40, team scenario 15 and price 20. Two proposals are in
-// contention: the lower bid already carries a score for every stage, and the higher bid lacks
-// only its scenario score. The administrator enters that score, which is the "when" for the
-// higher bid.
+// The stated weights are the ones the seed gives every seeded Sprint With Us opportunity
+// (tests/seed/010-sprint-with-us-stages.sql): questions 25, code challenge 40, team scenario
+// 15 and price 20.
 //
-// The total is checked for each of the two by reading its four stage scores off its own view
-// and combining them in the stated proportions, then comparing that with the total the view
-// shows, allowing for each score being shown rounded to two decimal places.
+// The total. seed.opportunities.swuTeamScenarioLastToScoreB is at the team scenario with two
+// proposals in contention: the lower bid already holds a score for every stage, the higher bid
+// holds every score but its team scenario one. The administrator enters that score first, so
+// every stage score of both proposals exists before anything is read; the price score is the
+// application's own, worked out when that last score is entered. Then each proposal's four
+// stage scores and its total are read off its own view, where the administrator is shown them,
+// and the total is compared with the stage scores combined in the stated proportions, allowing
+// for each figure being shown rounded to two places.
 //
-// The rank is read before and after. Before, the higher bid is not fully evaluated and holds
-// no rank. After, both are fully evaluated, and the lower bid, whose total is the higher, is
-// ranked first and the other second. Rank is offered only on the screen that manages a
-// proposal, so it is read there, by the administrator.
+// The rank. A rank is presented on a proposal's management screen, to the vendor who holds it,
+// once the opportunity is awarded (R-2.32). seed.opportunities.swuAwarded carries two proposals
+// with a score for every stage: the awarded one, held by users.organizationOwner, and the one
+// not awarded, held by users.proponentTwo (persona.competingVendor). Each vendor reads their own
+// proposal's total and rank there, and the proposal with the higher total must rank first and
+// the other second.
+//
+// That a proposal not yet fully evaluated holds no rank is not asserted; see this criterion's
+// entry in not-testable.yaml.
 
 const statement =
   "A proposal's total score is the weighted sum of its stage scores, and proposals are ranked against each other only once they are fully evaluated.";
 
 const settle = { timeout: 30000 };
 const weights = { questions: 25, challenge: 40, scenario: 15, price: 20 };
-const opportunityId = seed.opportunities.swuTeamScenarioLastToScoreB.id;
-const lowerBid = seed.proposals.swuScenarioBLowerBid.id;
-const higherBid = seed.proposals.swuScenarioBHigherBid.id;
 
 async function readOrEmpty(read: () => Promise<string>): Promise<string> {
   try {
@@ -41,9 +45,11 @@ function numberIn(text: string): number {
   return match ? Number(match[0]) : NaN;
 }
 
-async function scores(surface: Surface, proposalId: string) {
-  await surface.proposalSwuView.open({ opportunityId, proposalId });
+type StageScores = { questions: number; challenge: number; scenario: number; price: number; total: number };
+
+async function stageScores(surface: Surface, opportunityId: string, proposalId: string): Promise<StageScores> {
   const view = surface.proposalSwuView;
+  await view.open({ opportunityId, proposalId });
   return {
     questions: numberIn(await readOrEmpty(() => view.questionsScore())),
     challenge: numberIn(await readOrEmpty(() => view.challengeScore())),
@@ -53,12 +59,7 @@ async function scores(surface: Surface, proposalId: string) {
   };
 }
 
-async function rank(surface: Surface, proposalId: string): Promise<string> {
-  await surface.proposalSwuEdit.open({ opportunityId, proposalId });
-  return readOrEmpty(() => surface.proposalSwuEdit.rank());
-}
-
-function weighted(s: { questions: number; challenge: number; scenario: number; price: number }): number {
+function weighted(s: StageScores): number {
   return (
     (s.questions * weights.questions +
       s.challenge * weights.challenge +
@@ -68,31 +69,65 @@ function weighted(s: { questions: number; challenge: number; scenario: number; p
   );
 }
 
-test(statement, async ({ surface }) => {
+test(`${statement} (a proposal with a score for every stage totals those scores in the stated proportions)`, async ({
+  surface,
+}) => {
+  test.setTimeout(180000);
+  const opportunityId = seed.opportunities.swuTeamScenarioLastToScoreB.id;
+  const proposals: Array<[string, string]> = [
+    ["the lower bid", seed.proposals.swuScenarioBLowerBid.id],
+    ["the higher bid", seed.proposals.swuScenarioBHigherBid.id],
+  ];
+
   await surface.signIn(persona.administrator);
-
-  expect(await rank(surface, higherBid), "ranked before it was fully evaluated").not.toMatch(/\d/);
-
-  await surface.proposalSwuView.open({ opportunityId, proposalId: higherBid });
+  await surface.proposalSwuView.open({ opportunityId, proposalId: seed.proposals.swuScenarioBHigherBid.id });
   await surface.proposalSwuView.scoreTeamScenario({ score: 60 });
 
-  await expect
-    .poll(async () => (await scores(surface, higherBid)).total, settle)
-    .not.toBeNaN();
+  for (const [name, proposalId] of proposals) {
+    await expect
+      .poll(async () => {
+        const s = await stageScores(surface, opportunityId, proposalId);
+        return [s.questions, s.challenge, s.scenario, s.price, s.total].every((n) => !Number.isNaN(n));
+      }, { ...settle, message: `${name} does not show a score for every stage and a total` })
+      .toBe(true);
 
-  const higher = await scores(surface, higherBid);
-  const lower = await scores(surface, lowerBid);
-  for (const [name, s] of [
-    ["the higher bid", higher],
-    ["the lower bid", lower],
-  ] as const) {
-    for (const stage of ["questions", "challenge", "scenario", "price"] as const) {
-      expect(s[stage], `${name} shows no ${stage} score`).not.toBeNaN();
-    }
-    expect(Math.abs(s.total - weighted(s)), `${name}'s total is not its weighted sum`).toBeLessThan(0.05);
+    const s = await stageScores(surface, opportunityId, proposalId);
+    expect(Math.abs(s.total - weighted(s)), `${name}'s total ${s.total} is not the weighted sum of its stage scores`).toBeLessThan(
+      0.05,
+    );
   }
+});
 
-  expect(lower.total).toBeGreaterThan(higher.total);
-  await expect.poll(async () => numberIn(await rank(surface, lowerBid)), settle).toBe(1);
-  expect(numberIn(await rank(surface, higherBid))).toBe(2);
+async function ownTotalAndRank(
+  surface: Surface,
+  vendor: Persona,
+  proposalId: string,
+): Promise<{ total: number; rank: number }> {
+  const opportunityId = seed.opportunities.swuAwarded.id;
+  const edit = surface.proposalSwuEdit;
+  await surface.signIn(vendor);
+  await expect
+    .poll(async () => {
+      await edit.open({ opportunityId, proposalId });
+      return numberIn(await readOrEmpty(() => edit.rank()));
+    }, { ...settle, message: "the vendor is shown no rank for their fully evaluated proposal" })
+    .not.toBeNaN();
+  return {
+    total: numberIn(await readOrEmpty(() => edit.totalScore())),
+    rank: numberIn(await readOrEmpty(() => edit.rank())),
+  };
+}
+
+test(`${statement} (fully evaluated proposals are ranked against each other, highest total first)`, async ({ surface }) => {
+  test.setTimeout(180000);
+  const awarded = await ownTotalAndRank(surface, persona.organizationOwner, seed.proposals.swuAwardedWinner.id);
+  const other = await ownTotalAndRank(surface, persona.competingVendor, seed.proposals.swuAwardedOther.id);
+
+  expect(awarded.total, "the awarded proposal shows no total").not.toBeNaN();
+  expect(other.total, "the other proposal shows no total").not.toBeNaN();
+  expect(awarded.total, "the two fully evaluated proposals have the same total").not.toBe(other.total);
+
+  const [higher, lower] = awarded.total > other.total ? [awarded, other] : [other, awarded];
+  expect(higher.rank, "the proposal with the higher total is not ranked first").toBe(1);
+  expect(lower.rank, "the proposal with the lower total is not ranked second").toBe(2);
 });

@@ -4282,3 +4282,69 @@ owed:
         proposal: derive-tests-opportunities-stale-8
         gate: G3
         at: 2026-09-29T00:03:52.418Z
+  - kind: missing-test
+    item: R-2.22
+    id: R-2.22
+    version: 1
+    domain: proposals
+    stage: contract
+    why: on proposal-twu-edit and proposal-swu-edit, a choose_organization action
+      for the edit form (as proposal-twu-create and proposal-swu-create have),
+      and an observation reporting the message the service gives when
+      save_changes is refused, holding the service's own wording rather than a
+      general notice
+    from: derive-tests-proposals-stale-10
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-29T00:12:58.686Z
+  - kind: missing-test
+    item: R-2.31
+    id: R-2.31
+    version: 1
+    domain: proposals
+    stage: contract
+    why: a rank observation on proposal-swu-view and proposal-twu-view (or on the
+      opportunity management screens' proposals tab, one row per proposal)
+      readable by the administrator while the opportunity is still being
+      evaluated, so that a proposal lacking a stage score can be read to hold no
+      rank beside one that holds every score; or a seeded awarded opportunity
+      where a proposal left behind before the last stage is held by a vendor a
+      persona reaches
+    from: derive-tests-proposals-stale-10
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-29T00:12:58.686Z
+  - kind: missing-test
+    item: R-2.21
+    id: R-2.21
+    version: 1
+    domain: proposals
+    stage: contract
+    why: an observation on proposal-team-request reporting a refusal against the
+      specific opportunity-question response it concerns (refusal_by_field today
+      locates messages only by team, phase, organization or 'other fields'), so
+      the over-limit refusal can be read as the word-limit error for that
+      response
+    clause: the submission is rejected with the word-limit error against that response
+    from: derive-tests-proposals-stale-10
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-29T00:12:59.396Z
+  - kind: missing-test
+    item: R-2.28
+    id: R-2.28
+    version: 1
+    domain: proposals
+    stage: contract
+    why: a way to put an out-of-stage evaluation score (a team scenario score on a
+      Sprint With Us opportunity at its code challenge) to the service when
+      proposal-swu-view does not offer score_team_scenario at that stage, such
+      as a request surface for scoring, so that wrong_stage_error or a refusal
+      message is always produced and read rather than read only when the control
+      happens to be shown
+    clause: the request is refused with "The opportunity is not in the correct stage
+      of evaluation to perform that action."
+    from: derive-tests-proposals-stale-10
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-29T00:12:59.396Z
