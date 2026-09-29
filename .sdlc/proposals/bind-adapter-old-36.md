@@ -36,3 +36,27 @@ I load each tab from its address rather than clicking it for a reason. My first 
 None of these proposals put the score inside an "Actions" menu, so that branch of the reader hasn't run against the target.
 
 I changed nothing outside `tests/adapters/old/`, and none of the existing bindings were touched.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does bind-adapter-old-36 bind offered_score_actions on proposal-swu-view and proposal-twu-view, and nothing else? Approved. The binding is navigation and locators only: for each stage it opens that stage's tab by its own address, looks for 'Enter Score' or 'Edit Score' in the top bar or inside the 'Actions' menu, and returns the page's own action names, one per line. It decides nothing about whether a test passes. It matches the surface contract's definition of the observation (a stage's score is offered only on its tab, only once the opportunity has reached that stage and the proposal is in it) and the seeded cases the contract names, which the author checked against the running target. Only tests/adapters/old/ changed, nothing under tests/acceptance, and no unbound entries were added. The runner's typecheck exited 2, but it reports no diagnostics under adapters/old/; the two it reports are in adapters/new/, which this proposal does not answer for. Known weaknesses that do not warrant a return: an empty answer rests on a 2.5-second wait (cut short when the tab says it cannot be scored yet), so a very slow page could read as offering nothing; the reader leaves the browser on the last stage tab it opened; and the 'Actions' menu branch has not run against the target. Calibration exercises all three. The ruling would change if typecheck diagnostics appeared under adapters/old/, or if a calibration failure were traced to this reader.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `31011684c132a913756e30e1f0f3dc37bec5d4d1`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
