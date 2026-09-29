@@ -4652,7 +4652,7 @@ owed:
     id: R-6.2
     version: 1
     domain: notifications
-    stage: contract
+    stage: ratify
     why: a starting state in which a message the service would send cannot be
       composed — for example a seeded record, with a handle in the manifest,
       whose content makes one named notice fail to render when an action a
@@ -4663,3 +4663,16 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-29T07:14:48.266Z
+    readdressed:
+      - from: contract
+        to: ratify
+        why: on the old target no stored value can make a notice fail to compose. All
+          database reads sit outside makeSend's catch behind getValidValue null
+          fallbacks, and the builders inside it are pure renderers of records
+          the application has already validated (transport.ts:52–67,
+          notifications/*). Seen from outside the application, a composition
+          failure looks exactly like "no message was sent". The clause needs
+          restating in terms something can observe, or folding into the delivery
+          half, which is already tested through mail-delivery-fault.
+        by: contract-v25
+        at: 2026-09-29T07:22:08.661Z
