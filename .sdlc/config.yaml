@@ -42,6 +42,9 @@ policy:
     backend: claude
   next:
     calibrate_after: 8
+  calibrate:
+    scope: changed
+    full_every: 4
 skills:
   packs:
     - { repo: mattpocock/skills, ref: 3cca18b368ae95cdbdebbff572ccafa662551015, skills: [grilling, domain-modeling, prototype, tdd, code-review] }
