@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the rewritten R-4.3 and R-4.24 tests follow from the users criteria and from nothing else? Ruling: approve. The prior return (test signed in as an established account and never reached the profile-completion step) is answered: every test now begins as persona.firstTimeVendor or persona.firstTimePublicSectorEmployee, both defined in spec/contract/personas.yaml with sandbox-idp identities. R-4.3's three tests map one-to-one onto its outcomes: the completion control's availability changes once the agreement box is ticked (the contract does not state the observation's value, so a change is what can be asserted); after completing, the vendor's own legal section carries an accepted-on notice containing a date (R-4.33 names that section as where the moment of agreement is stated); a first-time public sector employee is not offered the agreement box. The dropped terms-updated-warning assertion was not asked for by the criterion. R-4.24 asserts the choice made during profile completion is saved, held against a seeded notices-off account, and its unasserted clause (the moment the choice was made) carries a not-testable.yaml clause entry owed by contract whose reason is real: user-profile-self-notifications in spec/contract/surface.yaml declares only new_opportunities_checkbox, notification_email_address and unsubscribe_modal, and the checks already show missing-test/R-4.24 open against contract. No selector, route, status code or table leaks in. The runner typecheck reports no diagnostics under acceptance/users; its failure is in adapters/new, outside this proposal. What would change the ruling: evidence from a run that the public-sector test passes without reaching the page, since readOrEmpty turns any failed read into an absent checkbox, or a contract change stating the completion control's observed values, which would call for the direction to be asserted rather than only the change.
+conditions: []
+cost: 0.43271119999999996
+turns: 4
+session: "6ef2c12b-3741-4a69-8eb7-c251e809725c"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-29T00:16:04.711Z

@@ -33,3 +33,27 @@ I left out a check the old test made, that the "terms updated" warning is absent
 **Worth knowing:** Both rewritten tests depend on `firstTimeVendor`, and `firstTimePublicSectorEmployee` is used too. Neither can sign in on the current application under test, because it has no identity provider. Both work only on the rebuilt target's sandbox identity provider, as the persona entries themselves say.
 
 I changed nothing outside `tests/acceptance`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the rewritten R-4.3 and R-4.24 tests follow from the users criteria and from nothing else? Ruling: approve. The prior return (test signed in as an established account and never reached the profile-completion step) is answered: every test now begins as persona.firstTimeVendor or persona.firstTimePublicSectorEmployee, both defined in spec/contract/personas.yaml with sandbox-idp identities. R-4.3's three tests map one-to-one onto its outcomes: the completion control's availability changes once the agreement box is ticked (the contract does not state the observation's value, so a change is what can be asserted); after completing, the vendor's own legal section carries an accepted-on notice containing a date (R-4.33 names that section as where the moment of agreement is stated); a first-time public sector employee is not offered the agreement box. The dropped terms-updated-warning assertion was not asked for by the criterion. R-4.24 asserts the choice made during profile completion is saved, held against a seeded notices-off account, and its unasserted clause (the moment the choice was made) carries a not-testable.yaml clause entry owed by contract whose reason is real: user-profile-self-notifications in spec/contract/surface.yaml declares only new_opportunities_checkbox, notification_email_address and unsubscribe_modal, and the checks already show missing-test/R-4.24 open against contract. No selector, route, status code or table leaks in. The runner typecheck reports no diagnostics under acceptance/users; its failure is in adapters/new, outside this proposal. What would change the ruling: evidence from a run that the public-sector test passes without reaching the page, since readOrEmpty turns any failed read into an absent checkbox, or a contract change stating the completion control's observed values, which would call for the direction to be asserted rather than only the change.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `14adda2b09f88ede8755b0f69de4d66393c6ea73`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/users/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
