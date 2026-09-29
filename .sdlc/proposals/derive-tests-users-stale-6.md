@@ -34,3 +34,27 @@ Because the test now asserts the whole criterion, I removed the R-4.24 clause en
 **Still missing from the surface for this criterion:** nothing. The administrator's view of another person's record (`user-account-request`) is available too, but this test only needs the person's own record.
 
 I changed nothing outside `tests/acceptance`, and nothing asked me to.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether the rewritten R-4.24 test follows from the users criterion and from nothing else. It does. It signs in as the seeded vendor still completing their profile (the given), ticks the new-opportunity notices box and completes the profile (the when), and reads the person's own account record back through user-account-self-request.new_opportunity_notices_since. The contract defines that observation as the moment notices were turned on, or empty when they are off. The test asserts it holds a valid instant within the completion window, which covers both 'notifications are on' and 'with the moment the choice was made'. The empty read beforehand checks the given's starting state, and the five-minute tolerance only allows for the service's clock differing from the runner's, so it adds no claim the criterion does not make. No selector, route, status code or storage detail leaks in. Removing the R-4.24 clause entry from not-testable.yaml is correct now that a test asserts that clause. The runner's typecheck exit 2 comes only from two diagnostics under adapters/new/, and it reports none under acceptance/users/, so nothing here answers for it. missing-test/R-4.24 stays open until this test runs, which is how it closes, so this ruling neither marks it met nor withdraws it. Diagnostics under acceptance/users/, or a contract definition of the observation that differs from the one the proposal quotes, would change this ruling.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `81edc735929af466dfa9ce34c2eab3065e82c22c`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/users/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
