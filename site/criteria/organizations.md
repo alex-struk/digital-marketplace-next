@@ -12,7 +12,7 @@
 | R-3.6 | acceptance/organizations/R-3.6.spec.ts |  | pass |
 | R-3.7 | acceptance/organizations/R-3.7.spec.ts |  | pass |
 | R-3.8 | acceptance/organizations/R-3.8.spec.ts |  | pass |
-| R-3.9 | acceptance/organizations/R-3.9.spec.ts |  | stale (ruled: spec-wrong) |
+| R-3.9 | acceptance/organizations/R-3.9.spec.ts |  | pass (ruled: spec-wrong) |
 | R-3.10 | acceptance/organizations/R-3.10.spec.ts |  | pass |
 | R-3.11 | acceptance/organizations/R-3.11.spec.ts |  | fail |
 | R-3.12 | acceptance/organizations/R-3.12.spec.ts |  | pass |

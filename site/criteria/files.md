@@ -8,7 +8,7 @@
 | R-8.2 | acceptance/files/R-8.2.spec.ts |  | pass |
 | R-8.3 | — |  | not-testable |
 | R-8.4 | — |  | not-testable |
-| R-8.5 | acceptance/files/R-8.5.spec.ts |  | fail |
+| R-8.5 | acceptance/files/R-8.5.spec.ts |  | pass |
 | R-8.6 | acceptance/files/R-8.6.spec.ts |  | pass |
 | R-8.7 | acceptance/files/R-8.7.spec.ts |  | pass |
 | R-8.8 | — |  | not-testable |
