@@ -35,11 +35,11 @@
 | R-5.29 | acceptance/evaluation/R-5.29.spec.ts |  | pass (carried from 2026-09-29-19) |
 | R-5.30 | acceptance/evaluation/R-5.30.spec.ts |  | pass (ruled: spec-wrong; carried from 2026-09-29-19) |
 | R-5.31 | acceptance/evaluation/R-5.31.spec.ts |  | pass (carried from 2026-09-29-19) |
-| R-5.32 | acceptance/evaluation/R-5.32.spec.ts |  | pass |
+| R-5.32 | acceptance/evaluation/R-5.32.spec.ts |  | pass (carried from 2026-09-29-20) |
 | R-5.33 | acceptance/evaluation/R-5.33.spec.ts |  | pass (carried from 2026-09-29-19) |
 | R-5.34 | acceptance/evaluation/R-5.34.spec.ts |  | pass (carried from 2026-09-29-19) |
 | R-5.35 | acceptance/evaluation/R-5.35.spec.ts |  | pass (carried from 2026-09-29-19) |
-| R-5.36 | acceptance/evaluation/R-5.36.spec.ts |  | pass |
+| R-5.36 | acceptance/evaluation/R-5.36.spec.ts |  | pass (carried from 2026-09-29-20) |
 | R-5.37 | acceptance/evaluation/R-5.37.spec.ts |  | fail (ruled: defect-in-old; carried from 2026-09-29-19) |
 
 ### R-5.1 · v1 · confirmed · accepted
