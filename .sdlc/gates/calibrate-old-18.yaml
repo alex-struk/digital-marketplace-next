@@ -1,0 +1,10 @@
+gate: G1
+verdict: withdrawn
+by: agent:tech-lead
+held_by: agent
+note: It asked about R-6.1 from a calibration that ran the
+  notifications-disabled test against the default oracle, where notifications
+  are on; the calibrate stage now runs a contract configuration's tests against
+  a copy of the oracle started in it (0071), so the next calibration measures
+  R-6.1 as the contract describes.
+at: 2026-09-29T13:24:50.776Z
