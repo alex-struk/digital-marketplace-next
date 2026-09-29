@@ -22,7 +22,7 @@
 | R-2.16 | acceptance/proposals/R-2.16.spec.ts |  | pass |
 | R-2.17 | acceptance/proposals/R-2.17.spec.ts |  | pass |
 | R-2.18 | acceptance/proposals/R-2.18.spec.ts |  | pass (ruled: spec-wrong) |
-| R-2.19 | acceptance/proposals/R-2.19.spec.ts |  | stale (ruled: spec-wrong) |
+| R-2.19 | acceptance/proposals/R-2.19.spec.ts |  | fail (ruled: spec-wrong) |
 | R-2.20 | acceptance/proposals/R-2.20.spec.ts |  | pass |
 | R-2.21 | acceptance/proposals/R-2.21.spec.ts |  | pass |
 | R-2.22 | acceptance/proposals/R-2.22.spec.ts |  | pass |
