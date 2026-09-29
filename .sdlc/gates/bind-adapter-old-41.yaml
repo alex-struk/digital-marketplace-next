@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  Question: does the rebound user-sign-up-complete page bind every surface action and observation on old, and nothing else, after R-4.24 exceeded policy.loops.rebind? Ruling: approve. The runner's account decided it: the third send correctly traced the earlier authFailure on /auth/createsessionvendor/17 to a database missing tests/seed/015-profile-completion.sql and asked for vendorCompletingProfile to be signed in there, the form confirmed, and toggle_new_opportunity_notifications, accept_app_terms, complete_profile and terms_checkbox bound. The proposal does exactly that: it observed 'You're almost done!' with the terms box gating 'Complete Profile', bound all eleven members of user-sign-up-complete, and changed nothing outside that page in tests/adapters/old/. Every member throws unbound naming the landing URL when the visitor is sent on. The runner's typecheck reports zero diagnostics under adapters/old/; the non-zero exit comes from adapters/new/, which this proposal does not answer for. The loop overrun came from wrong evidence (a partly seeded oracle), not from a stage unable to produce what G3 asks, so there is no pipeline reason to escalate. The tier is STANDARD and no platform article is touched. Left open: pressing 'Complete Profile' and persisting the notices opt-in were not exercised live, because doing so would consume vendor 17's unfinished profile. That run is already owed by calibrate as missing-test/R-4.24 on a freshly seeded target. What would change this ruling: calibrate running R-4.24 on a fresh seed and finding that completeProfile does not leave /sign-up/complete, or that the notices box is set to the wrong state.
+conditions: []
+cost: 0.29597039999999997
+turns: 1
+session: "5effabc6-827e-428c-95dd-dd06fe95c777"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-29T09:07:09.174Z

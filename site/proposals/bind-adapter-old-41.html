@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-41 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">288</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">284</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">250</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-41</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 09:06</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I fixed the R-4.24 finding: the profile-completion page (<code>user-sign-up-complete</code>) is now bound in full, all eleven of its members.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I fixed the R-4.24 finding: the profile-completion page (<code>user-sign-up-complete</code>) is now bound in full, all eleven of its members. I could not type-check the change, because running <code>tsc</code> needed an approval this session could not give. Neither did I run &quot;Complete Profile&quot; end to end.</p>
+<p><strong>What was wrong.</strong> The earlier run said <code>/sign-up/complete</code> never shows its form and that <code>/auth/createsessionvendor/17</code> fails with an auth-failure notice. The reviewer was right that this came from a database missing seed file <code>015-profile-completion.sql</code>. On the target as it runs now, <code>/auth/createsessionvendor/17</code> signs in the seeded vendorCompletingProfile persona and lands straight on <code>/sign-up/complete</code>. The adapter&#39;s existing <code>signIn</code> already goes through that route for any persona, so it needed no change.</p>
+<p><strong>What the page shows.</strong> A form headed &quot;You&#39;re almost done!&quot; with:</p>
+<ul><li>a &quot;Choose Image&quot; picture control, which I confirmed opens a file chooser;</li><li>a disabled &quot;GitHub&quot; box holding the sign-in username, test-vendor-17;</li><li>&quot;Name*&quot; and &quot;Email Address*&quot;, filled in from the seed;</li><li>a terms box (&quot;I acknowledge that I have read and agree to the Terms and Conditions and Privacy Policy&quot;);</li><li>a &quot;Notify me about new opportunities.&quot; box;</li><li>&quot;Complete Profile&quot;, which stays disabled until the terms box is ticked. I watched it switch on when I ticked the box and off again when I unticked it.</li></ul>
+<p>Clearing the name shows &quot;Name must be between 1 and 100 characters long.&quot; and a bad address shows &quot;Please enter a valid email.&quot;</p>
+<p><strong>What I bound.</strong></p>
+<ul><li><strong><code>change_avatar</code></strong> uses the same picture chooser as the profile page.</li><li><strong><code>accept_app_terms</code></strong> ticks the terms box, or sets whatever state the test gives.</li><li><strong><code>toggle_new_opportunity_notifications</code></strong> flips the notices box, or sets a given state.</li><li><strong><code>complete_profile</code></strong> enters every value the test gave before pressing: fields by label, the picture, and the terms and notices boxes if they are named. If a key has no field it throws <code>unbound:</code> naming the key. If the button is disabled it reports that at once instead of waiting. After pressing, it expects the page to leave <code>/sign-up/complete</code>, and if it doesn&#39;t it reports what the page says.</li><li><strong>The username, name and email readers</strong> read those boxes.</li><li><strong><code>job_title_field</code></strong> returns empty: the vendor&#39;s form really has no Job Title field, and I assume only public sector staff get one.</li><li><strong><code>field_error</code></strong> returns the messages shown under the fields.</li><li><strong><code>terms_checkbox</code> and <code>complete_disabled_until_terms_accepted</code></strong> keep their earlier behaviour: an account that has already accepted the terms gets sent on, and for it they return empty.</li><li><strong>Every other reader and action</strong> throws <code>unbound:</code> when the visitor is sent on, naming where they landed. In that case the form was never reached.</li></ul>
+<p>In <code>bindings.yaml</code>, all eleven members of <code>user-sign-up-complete</code> are now <code>bound</code>. Nothing else in the adapter or the bindings changed.</p>
+<p><strong>What I did not do.</strong> I did not press &quot;Complete Profile&quot; on the live target. Doing so would record vendor 17 as having accepted the terms, and later stages would then find no profile form. So the redirect after completing, and the recording of the notices opt-in, are untested here and should be exercised on a freshly seeded target. I left the persona&#39;s form unchanged and signed the browser out. Every page route resolved; I changed nothing outside <code>tests/adapters/old/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:tech-lead (persona agent · claude claude-opus-5-5) on 2026-09-29 09:07.</p>
+<div class="body"><p>Question: does the rebound user-sign-up-complete page bind every surface action and observation on old, and nothing else, after R-4.24 exceeded policy.loops.rebind? Ruling: approve. The runner&#39;s account decided it: the third send correctly traced the earlier authFailure on /auth/createsessionvendor/17 to a database missing tests/seed/015-profile-completion.sql and asked for vendorCompletingProfile to be signed in there, the form confirmed, and toggle_new_opportunity_notifications, accept_app_terms, complete_profile and terms_checkbox bound. The proposal does exactly that: it observed &#39;You&#39;re almost done!&#39; with the terms box gating &#39;Complete Profile&#39;, bound all eleven members of user-sign-up-complete, and changed nothing outside that page in tests/adapters/old/. Every member throws unbound naming the landing URL when the visitor is sent on. The runner&#39;s typecheck reports zero diagnostics under adapters/old/; the non-zero exit comes from adapters/new/, which this proposal does not answer for. The loop overrun came from wrong evidence (a partly seeded oracle), not from a stage unable to produce what G3 asks, so there is no pipeline reason to escalate. The tier is STANDARD and no platform article is touched. Left open: pressing &#39;Complete Profile&#39; and persisting the notices opt-in were not exercised live, because doing so would consume vendor 17&#39;s unfinished profile. That run is already owed by calibrate as missing-test/R-4.24 on a freshly seeded target. What would change this ruling: calibrate running R-4.24 on a fresh seed and finding that completeProfile does not leave /sign-up/complete, or that the notices box is set to the wrong state.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
