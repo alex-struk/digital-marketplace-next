@@ -4540,6 +4540,12 @@ owed:
         by: runner
         at: 2026-09-29T02:59:11.606Z
     target: old
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-4.24 v1 pass"
+      file_sha: d89858c17b18c4cdd32f25f306f94646d9e0b54c
+      by: runner
+      at: 2026-09-29T09:47:43.940Z
   - kind: missing-test
     item: R-8.30
     id: R-8.30
