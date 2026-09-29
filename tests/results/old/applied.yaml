@@ -410,10 +410,6 @@ rulings:
     version: 1
     verb: product-question
     gate: calibrate-triage-old-19
-  - id: R-1.16
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-19
   - id: R-2.16
     version: 1
     verb: adapter-wrong
@@ -497,10 +493,6 @@ rulings:
     version: 1
     verb: product-question
     gate: calibrate-triage-old-19
-  - id: R-1.33
-    version: 1
-    verb: product-question
-    gate: calibrate-triage-old-19
   - id: R-2.37
     version: 1
     verb: adapter-wrong
@@ -517,10 +509,6 @@ rulings:
   - id: R-1.33
     version: 2
     verb: spec-wrong
-    gate: calibrate-old-12
-  - id: R-1.16
-    version: 1
-    verb: test-wrong
     gate: calibrate-old-12
   - id: R-2.10
     version: 1

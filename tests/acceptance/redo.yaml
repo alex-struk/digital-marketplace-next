@@ -523,6 +523,11 @@ redo:
     why: the opportunity the test submits is refused over its phase dates before the
       phase rule is reached; everything except the missing prototype phase must
       be valid, so that the prototype-phase message is the only fault.
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on opportunities
+      by: runner:derive-tests
+      at: 2026-09-29T00:03:14.930Z
   - id: R-2.22
     version: 1
     why: the proposal the test edits is incomplete in other ways, so the change
