@@ -201,6 +201,9 @@
 - 09:15:59 propose bind-adapter-old-43 at G3
 - 09:15:59 rule bind-adapter-old-43 escalated at G3 to tech-lead by runner:bind-adapter
 - 09:16:50 rule bind-adapter-old-43 approve at G3 by agent:tech-lead (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 10:10:51 oracle up old in configuration notifications_disabled: local port 3103
+- 10:11:34 oracle down old in configuration notifications_disabled
+- 10:11:38 run calibrate: ok, cost 0, turns 0
 
 # Run record 2026-09-28
 
