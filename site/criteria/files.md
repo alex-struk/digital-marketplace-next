@@ -13,9 +13,9 @@
 | R-8.7 | acceptance/files/R-8.7.spec.ts |  | pass |
 | R-8.8 | — |  | not-testable |
 | R-8.9 | — |  | not-testable |
-| R-8.10 | acceptance/files/R-8.10.spec.ts |  | pass |
-| R-8.11 | acceptance/files/R-8.11.spec.ts |  | fail |
-| R-8.12 | acceptance/files/R-8.12.spec.ts |  | pass |
+| R-8.10 | acceptance/files/R-8.10.spec.ts |  | fail |
+| R-8.11 | acceptance/files/R-8.11.spec.ts |  | pass (ruled: test-wrong) |
+| R-8.12 | acceptance/files/R-8.12.spec.ts |  | fail |
 | R-8.13 | acceptance/files/R-8.13.spec.ts |  | pass |
 | R-8.14 | — |  | pass |
 | R-8.15 | — |  | not-testable |
@@ -23,7 +23,7 @@
 | R-8.17 | acceptance/files/R-8.17.spec.ts |  | fail (ruled: defect-in-old) |
 | R-8.18 | acceptance/files/R-8.18.spec.ts |  | fail (ruled: defect-in-old) |
 | R-8.19 | acceptance/files/R-8.19.spec.ts |  | fail (ruled: defect-in-old) |
-| R-8.20 | acceptance/files/R-8.20.spec.ts |  | fail |
+| R-8.20 | acceptance/files/R-8.20.spec.ts |  | pass (ruled: defect-in-old) |
 | R-8.21 | acceptance/files/R-8.21.spec.ts |  | fail (ruled: defect-in-old) |
 | R-8.22 | acceptance/files/R-8.22.spec.ts |  | fail (ruled: defect-in-old) |
 | R-8.23 | acceptance/files/R-8.23.spec.ts |  | pass |
@@ -278,6 +278,7 @@ An attachment on an opportunity is uploaded with no read access recorded against
 
 A file attached to an opportunity or a proposal is readable by whoever may read the thing it is attached to, under one rule covering Code With Us, Sprint With Us and Team With Us alike rather than a separate rule per program.
 - replaces: R-8.9
+- note: calibrate 2026-09-29: the old target fails this; kept, the rebuild must pass it
 
 ### R-8.21 · v1 · confirmed · accepted
 

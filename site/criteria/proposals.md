@@ -12,26 +12,26 @@
 | R-2.6 | — |  |  |
 | R-2.7 | acceptance/proposals/R-2.7.spec.ts |  | pass |
 | R-2.8 | — |  |  |
-| R-2.9 | acceptance/proposals/R-2.9.spec.ts |  | fail |
+| R-2.9 | acceptance/proposals/R-2.9.spec.ts |  | fail (ruled: defect-in-old) |
 | R-2.10 | acceptance/proposals/R-2.10.spec.ts |  | fail (ruled: defect-in-old) |
 | R-2.11 | acceptance/proposals/R-2.11.spec.ts |  | pass |
 | R-2.12 | acceptance/proposals/R-2.12.spec.ts |  | pass |
 | R-2.13 | acceptance/proposals/R-2.13.spec.ts |  | pass |
 | R-2.14 | acceptance/proposals/R-2.14.spec.ts |  | pass |
 | R-2.15 | acceptance/proposals/R-2.15.spec.ts |  | pass |
-| R-2.16 | acceptance/proposals/R-2.16.spec.ts |  | fail |
+| R-2.16 | acceptance/proposals/R-2.16.spec.ts |  | fail (ruled: test-wrong) |
 | R-2.17 | acceptance/proposals/R-2.17.spec.ts |  | pass |
 | R-2.18 | acceptance/proposals/R-2.18.spec.ts |  | pass (ruled: spec-wrong) |
-| R-2.19 | acceptance/proposals/R-2.19.spec.ts |  | unbound (ruled: adapter-wrong) |
+| R-2.19 | acceptance/proposals/R-2.19.spec.ts |  | unbound |
 | R-2.20 | acceptance/proposals/R-2.20.spec.ts |  | pass |
 | R-2.21 | acceptance/proposals/R-2.21.spec.ts |  | pass |
-| R-2.22 | acceptance/proposals/R-2.22.spec.ts |  | fail |
+| R-2.22 | acceptance/proposals/R-2.22.spec.ts |  | fail (ruled: test-wrong) |
 | R-2.23 | acceptance/proposals/R-2.23.spec.ts |  | pass |
 | R-2.24 | acceptance/proposals/R-2.24.spec.ts |  | pass |
 | R-2.25 | acceptance/proposals/R-2.25.spec.ts |  | pass |
 | R-2.26 | acceptance/proposals/R-2.26.spec.ts |  | pass |
 | R-2.27 | acceptance/proposals/R-2.27.spec.ts |  | pass |
-| R-2.28 | acceptance/proposals/R-2.28.spec.ts |  | fail |
+| R-2.28 | acceptance/proposals/R-2.28.spec.ts |  | stale (ruled: spec-wrong) |
 | R-2.29 | acceptance/proposals/R-2.29.spec.ts |  | pass |
 | R-2.30 | acceptance/proposals/R-2.30.spec.ts |  | pass |
 | R-2.31 | acceptance/proposals/R-2.31.spec.ts |  | pass |
@@ -42,7 +42,7 @@
 | R-2.35 | acceptance/proposals/R-2.35.spec.ts |  | pass |
 | R-2.36 | acceptance/proposals/R-2.36.spec.ts |  | pass |
 | D-proposals-37 | — |  |  |
-| R-2.37 | acceptance/proposals/R-2.37.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-2.37 | acceptance/proposals/R-2.37.spec.ts |  | pass |
 | R-2.38 | acceptance/proposals/R-2.38.spec.ts |  | pass |
 
 ### R-2.1 · v1 · confirmed · accepted
@@ -164,6 +164,7 @@ A Team With Us proposal is accepted however high its proposed cost, even when th
 
 A vendor may read the history of a proposal they authored, or of a proposal belonging to an organization they own or administer, in all three programs.
 - replaces: R-2.6
+- note: calibrate 2026-09-29: the old target fails this; kept, the rebuild must pass it
 
 ### R-2.10 · v1 · confirmed · accepted
 
@@ -373,9 +374,9 @@ When every proposal still in contention on an opportunity has been evaluated, th
 - when: the last of the two is scored
 - then: the opportunity moves to processing with the note "Automatically moved to Processing as all proposals have been evaluated.", and disqualified, withdrawn and draft proposals are not counted
 
-### R-2.28 · v1 · confirmed · accepted
+### R-2.28 · v2 · confirmed · accepted
 
-Sprint With Us and Team With Us proposals advance through the evaluation stages one at a time, and an action taken at the wrong stage of the opportunity is refused.
+Sprint With Us and Team With Us proposals advance through the evaluation stages one at a time, and an action taken at the wrong stage of the opportunity is refused: a proposal's page does not offer a score for a stage the opportunity has not yet reached, and says instead that the proposal can be scored once the opportunity reaches that stage, and the service refuses such a score sent to it directly with "The opportunity is not in the correct stage of evaluation to perform that action."
 - cites: src/back-end/lib/resources/proposal/sprint-with-us/index.ts:1100
 - cites: src/back-end/lib/resources/proposal/sprint-with-us/index.ts:1140
 - cites: src/back-end/lib/resources/proposal/sprint-with-us/index.ts:1228
