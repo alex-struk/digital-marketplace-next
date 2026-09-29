@@ -4391,7 +4391,7 @@ owed:
     id: R-2.28
     version: 2
     domain: proposals
-    stage: contract
+    stage: derive-tests
     why: a way to put an out-of-stage evaluation score (a team scenario score on a
       Sprint With Us opportunity at its code challenge) to the service when
       proposal-swu-view does not offer score_team_scenario at that stage, such
@@ -4438,6 +4438,17 @@ owed:
         proposal: derive-tests-proposals-stale-12
         gate: G3
         at: 2026-09-29T02:55:09.233Z
+      - from: contract
+        to: derive-tests
+        why: offered_score_actions observation on proposal-swu-view and
+          proposal-twu-view, and seed.proposals.twuScreenedIntoChallengeEarly
+          (control seed.proposals.twuStillAtQuestions) on
+          seed.opportunities.twuConsensusWithChallengeScreenedIn as the starting
+          point for score_challenge_by_request on proposal-evaluation-request
+        by: contract-v23
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-29T03:10:27.530Z
   - kind: missing-test
     item: R-4.24
     id: R-4.24

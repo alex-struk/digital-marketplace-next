@@ -249,5 +249,22 @@ BEGIN
   PERFORM pg_temp.seed_twu_proposal(37, 3, v[3], o[3], staff, 'UNDER_REVIEW_QUESTIONS', 110, ARRAY[4, 4, 4, 4], panel, admin, NULL, NULL);
   PERFORM pg_temp.seed_twu_proposal(37, 4, v[4], o[4], staff, 'UNDER_REVIEW_QUESTIONS', 125, ARRAY[4, 4, 3, 3], panel, admin, NULL, NULL);
   PERFORM pg_temp.seed_twu_proposal(37, 5, v[5], o[5], staff, 'UNDER_REVIEW_QUESTIONS', 100, ARRAY[5, 5, 5, 2], panel, admin, NULL, NULL);
+
+  -- 38. The Team With Us counterpart of 30 in 010-sprint-with-us-stages.sql (R-2.28): the
+  --     opportunity still at the questions consensus, the first proponent already carried
+  --     into the challenge, the second still at the questions. A challenge score for the
+  --     first is a score for a stage the opportunity has not reached; the service checks
+  --     the proposal before the opportunity, so only the first draws the stage message and
+  --     the second draws the general permission message.
+  --
+  --     The old application's screens no longer arrive here on their own. Finalising the
+  --     consensus carries proponents in and moves the opportunity to the challenge in one
+  --     transaction, and the service's separate screen-in action (allowed only before the
+  --     consensus) starts from EVALUATED_QUESTIONS, a status the Team With Us evaluation
+  --     migration (20250506164908) removed from the proposal status constraint. The
+  --     combination is one the schema holds and the service's stage check exists to refuse.
+  PERFORM pg_temp.seed_twu_opportunity(38, 'Seeded Team With Us opportunity at consensus with a proponent already in the challenge', staff, 'EVAL_QUESTIONS_CONSENSUS', panel, admin);
+  PERFORM pg_temp.seed_twu_proposal(38, 1, v[1], o[1], staff, 'UNDER_REVIEW_CHALLENGE', 120, ARRAY[4, 4, 4, 4], panel, admin, NULL, NULL);
+  PERFORM pg_temp.seed_twu_proposal(38, 2, v[2], o[2], staff, 'UNDER_REVIEW_QUESTIONS', 135, ARRAY[3, 3, 3, 3], panel, admin, NULL, NULL);
 END
 $$;

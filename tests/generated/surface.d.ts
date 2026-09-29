@@ -489,6 +489,7 @@ export interface ProposalSwuViewPage {
   priceScore(): Promise<string>;
   totalScore(): Promise<string>;
   rank(): Promise<string>;
+  offeredScoreActions(): Promise<string>;
 }
 
 export interface ProposalSwuExportOnePage {
@@ -562,6 +563,7 @@ export interface ProposalTwuViewPage {
   priceScore(): Promise<string>;
   totalScore(): Promise<string>;
   rank(): Promise<string>;
+  offeredScoreActions(): Promise<string>;
 }
 
 export interface ProposalTwuExportOnePage {
