@@ -754,3 +754,37 @@ conditions:
         none after delivery is restored
       by: agent:reviewer
       at: 2026-09-29T07:14:48.216Z
+  - ref: derive-tests-organizations-stale-9#1
+    text: "R-3.24 administrator case: the criterion's 'then' requires the owner's
+      message to say the organization was archived by an administrator. Open the
+      archiving message with surface.caughtMessage and assert its subject or
+      plain-text body says an administrator did it, matching loosely enough that
+      exact phrasing is not fixed."
+    from: derive-tests-organizations-stale-9
+    family: derive-tests-organizations-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-29T12:19:16.230Z
+  - ref: derive-tests-organizations-stale-9#2
+    text: "R-3.24 administrator case: the criterion's 'then' requires the message to
+      tell the owner they can no longer use the organization. Assert this on the
+      same message body through surface.caughtMessage, which the surface already
+      provides."
+    from: derive-tests-organizations-stale-9
+    family: derive-tests-organizations-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-29T12:19:16.230Z
+  - ref: derive-tests-organizations-stale-9#3
+    text: Keep the settling-window polling in both cases and the seeded
+      organizations (unqualified for the administrator case,
+      withPendingInvitation for the owner case) as they are. They correctly
+      answer the earlier ruling.
+    from: derive-tests-organizations-stale-9
+    family: derive-tests-organizations-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-29T12:19:16.230Z
