@@ -55,6 +55,10 @@
 - 19:36:05 run contract: ok, cost 7.1298836, turns 149, on claude claude-opus-5-5 (2.1.284 (Claude Code))
 - 19:36:05 propose contract-v22 at G1
 - 19:36:37 rule contract-v22 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 19:39:37 oracle up old: http://localhost:4300 (local port 4300)
+- 19:48:50 run bind-adapter: ok, cost 4.395077600000001, turns 90, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 19:48:50 propose bind-adapter-old-35 at G3
+- 19:49:22 rule bind-adapter-old-35 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-28
 

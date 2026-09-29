@@ -332,6 +332,9 @@ pages:
   proposal-swu-edit:
     actions:
       start_editing: bound
+      choose_organization: bound
+      add_phase_team_member: bound
+      set_scrum_master: bound
       save_changes: bound
       save_changes_and_submit: bound
       submit_proposal: bound
@@ -339,6 +342,8 @@ pages:
       delete_proposal: bound
     observations:
       submission_refusal: bound
+      field_error: bound
+      organization: bound
       proposal_identifier: bound
       opportunity_identifier: bound
       proposal_tab: bound
@@ -370,6 +375,7 @@ pages:
       scenario_score: bound
       price_score: bound
       total_score: bound
+      rank: bound
 
   proposal-swu-export-one:
     actions: {}
@@ -402,6 +408,8 @@ pages:
   proposal-twu-edit:
     actions:
       start_editing: bound
+      choose_organization: bound
+      add_team_member_for_resource: bound
       save_changes: bound
       save_changes_and_submit: bound
       submit_proposal: bound
@@ -409,6 +417,8 @@ pages:
       delete_proposal: bound
     observations:
       submission_refusal: bound
+      field_error: bound
+      organization: bound
       proposal_identifier: bound
       opportunity_identifier: bound
       proposal_tab: bound
@@ -438,6 +448,7 @@ pages:
       challenge_score: bound
       price_score: bound
       total_score: bound
+      rank: bound
 
   proposal-twu-export-one:
     actions: {}
@@ -507,7 +518,10 @@ pages:
       save_service_areas: bound
       view_swu_terms: bound
       view_twu_terms: bound
+      change_logo: bound
     observations:
+      current_logo: bound
+      logo_refused_error: bound
       organization_identifier: bound
       organization_tab: bound
       team_tab: bound
@@ -1257,6 +1271,16 @@ pages:
     observations:
       invitation_created: bound
       invalid_membership_type_error: bound
+      membership_identifier: bound
+
+  affiliation-approval-request:
+    actions:
+      accept_membership_by_request: bound
+    observations:
+      request_accepted: bound
+      membership_status: bound
+      refusal_messages: bound
+      refusal_status: bound
 
   user-list-request:
     actions: {}
@@ -1364,4 +1388,28 @@ pages:
       proposal_status: bound
       refusal_by_field: bound
       refusal_messages: bound
+      refusal_status: bound
+
+  proposal-evaluation-request:
+    actions:
+      score_team_scenario_by_request: bound
+      score_code_challenge_by_request: bound
+      score_challenge_by_request: bound
+    observations:
+      request_accepted: bound
+      proposal_status: bound
+      refusal_messages: bound
+      refusal_status: bound
+
+  user-account-self-request:
+    actions: {}
+    observations:
+      user_identifier: bound
+      new_opportunity_notices_since: bound
+
+  user-account-request:
+    actions: {}
+    observations:
+      new_opportunity_notices_since: bound
+      refused_when_not_permitted: bound
       refusal_status: bound
