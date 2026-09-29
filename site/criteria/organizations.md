@@ -27,7 +27,7 @@
 | R-3.21 | acceptance/organizations/R-3.21.spec.ts |  | pass |
 | R-3.22 | acceptance/organizations/R-3.22.spec.ts |  | fail (ruled: defect-in-old) |
 | R-3.23 | acceptance/organizations/R-3.23.spec.ts |  | pass |
-| R-3.24 | acceptance/organizations/R-3.24.spec.ts |  | fail |
+| R-3.24 | acceptance/organizations/R-3.24.spec.ts |  | pass |
 | R-3.25 | acceptance/organizations/R-3.25.spec.ts |  | pass |
 | R-3.26 | acceptance/organizations/R-3.26.spec.ts |  | pass |
 | R-3.27 | acceptance/organizations/R-3.27.spec.ts |  | pass |
