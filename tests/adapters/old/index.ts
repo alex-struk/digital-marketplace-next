@@ -2294,6 +2294,8 @@ export default function create(
     // "Not Found" at the form's address: no form to fill and nothing to press. That refusal is
     // what the test goes on to read, so the action ends there.
     let withheld = false;
+    // The steps the form still marked incomplete when it held its saving control disabled.
+    let refusedSteps: string[] = [];
     async function enter(member: string, input: unknown): Promise<void> {
       await ready();
       withheld = await notFoundShown();
@@ -2301,11 +2303,16 @@ export default function create(
       // The form is drawn a moment after the screen's heading.
       await seen(page.getByText(STEP)).first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
       homelessDates = [];
+      refusedSteps = [];
       let rest = input;
       if (phased) {
         const split = phaseDatesOf(input);
         rest = split.rest;
-        if (split.phase) {
+        // Once the test has given a phase its own dates (add_phase), those dates are the
+        // test's: the whole opportunity's start and completion are never written over them.
+        const phaseDated =
+          namedLabels.has(squash("Phase Start Date")) || namedLabels.has(squash("Phase Completion Date"));
+        if (split.phase && !phaseDated) {
           const named = field(split.phase, "phase");
           // The phase the dates belong to: the one the input names, else the phase the form
           // already starts with. None is ever added on the input's behalf.
@@ -2336,6 +2343,13 @@ export default function create(
         // 100% exactly.") is the answer the test goes on to read, not a missing value: the
         // action ends there, with nothing pressed, and the readers find the message.
         if (shown.trim() && !homelessDates.length) return false;
+        // Disabled with steps marked incomplete once every value given is in is the form
+        // refusing those values (phases whose dates overlap, say) without a word: the action
+        // ends there too, and fieldError() reports the steps it marks incomplete.
+        if (steps.length && !homelessDates.length) {
+          refusedSteps = steps;
+          return false;
+        }
         const dates = homelessDates.length
           ? `; the input gave ${quoted(homelessDates)} but named no phase and the form holds none, and this form takes dates only on a phase`
           : "";
@@ -2380,7 +2394,11 @@ export default function create(
       },
       // Alerts and each field's own error, from every step in turn; a heading or a title
       // that happens to hold a word like "cannot" is never read as an error.
-      fieldError: () => stepFormErrors(),
+      fieldError: async () => {
+        const shown = await stepFormErrors();
+        const steps = refusedSteps.map((step) => `${step} is incomplete`);
+        return [shown, ...steps].filter(Boolean).join("\n");
+      },
     };
   }
 
@@ -4741,14 +4759,17 @@ export default function create(
     // number ("Northern Pines Digital Ltd. (Proponent 1)") is not hidden from the reader.
     const named = await valueAfter(["Proponent"]);
     if (/Proponent\s+\d+/.test(named)) return named.trim();
-    const first = (await linesMatching(/^Proponent\s+\d+$/)).split("\n")[0] ?? "";
-    return first || named;
+    // An organization's own name under the label (the vendor's copy of its proposal) is no
+    // anonymised name: with no "Proponent N" on the screen there is none to report.
+    return (await linesMatching(/^Proponent\s+\d+$/)).split("\n")[0] ?? "";
   }
 
-  // A list of proponents names each of them, one per line.
+  // A list of proponents names each of them, one per line; only anonymised names count.
   async function anonymousProponents(): Promise<string> {
     const numbered = await linesMatching(/^Proponent\s+\d+$/);
-    return numbered || valueAfter(["Proponent"]);
+    if (numbered) return numbered;
+    const named = await valueAfter(["Proponent"]);
+    return /Proponent\s+\d+/.test(named) ? named.trim() : "";
   }
 
   const proposalCwuView: S.ProposalCwuViewPage = {
@@ -5823,6 +5844,15 @@ export default function create(
     );
   };
 
+  // Whether /sign-up/complete sent the visitor somewhere else rather than showing its form.
+  async function signUpCompleteLeft(): Promise<boolean> {
+    await ready();
+    await page
+      .waitForURL((url) => url.pathname !== "/sign-up/complete", { timeout: 5000 })
+      .catch(() => undefined);
+    return new URL(page.url()).pathname !== "/sign-up/complete";
+  }
+
   const userSignUpComplete: S.UserSignUpCompletePage = {
     ...at("/sign-up/complete"),
     changeAvatar: signUpCompleteUnreachable("change_avatar"),
@@ -5837,22 +5867,24 @@ export default function create(
     jobTitleField: signUpCompleteUnreachable("job_title_field"),
     // Whoever this target can sign in has already agreed, so the screen offers them no
     // agreement box and sends them on: signed out to /sign-in, the administrator, the public
-    // sector employee and every seeded vendor to /dashboard (each seen in turn). That is read
-    // as where the person was sent. Were the form ever shown, its box is read as ticked or not.
+    // sector employee and every seeded vendor to /dashboard (each seen in turn). A screen that
+    // sends the visitor on offers no terms box, and reads as nothing. Were the form ever shown,
+    // its box is read as ticked or not.
     termsCheckbox: async () => {
-      await ready();
-      await page
-        .waitForURL((url) => url.pathname !== "/sign-up/complete", { timeout: 5000 })
-        .catch(() => undefined);
-      const path = new URL(page.url()).pathname;
-      if (path !== "/sign-up/complete") return `redirected to ${path}`;
+      if (await signUpCompleteLeft()) return "";
       const box = seen(page.getByRole("checkbox", { name: /terms|agree/i }));
       if (!(await box.count())) return "";
       return (await box.first().isChecked()) ? "checked" : "unchecked";
     },
-    completeDisabledUntilTermsAccepted: signUpCompleteUnreachable(
-      "complete_disabled_until_terms_accepted",
-    ),
+    // Sent on elsewhere, there is no box and no Complete control to hold back: nothing. On the
+    // form, "disabled" while its terms box is unticked and its completing control disabled.
+    completeDisabledUntilTermsAccepted: async () => {
+      if (await signUpCompleteLeft()) return "";
+      const box = seen(page.getByRole("checkbox", { name: /terms|agree/i }));
+      if (!(await box.count()) || (await box.first().isChecked())) return "";
+      const control = await findControl(page, "Complete Profile");
+      return control && (await isDisabled(control)) ? "disabled" : "";
+    },
     fieldError: signUpCompleteUnreachable("field_error"),
   };
 
@@ -5931,8 +5963,8 @@ export default function create(
     cancelExport: () => inDialog("user-list.cancel_export", ["Cancel"]),
     openUserProfile: (input) => openNamed("user-list.open_user_profile", input),
     userRow: () => everyUserRow(),
-    statusBadge: () => linesMatching(/^(Active|Inactive)$/),
-    accountType: () => linesMatching(/^(Vendor|Public Sector Employee|Admin)$/),
+    statusBadge: () => userColumn(0),
+    accountType: () => userColumn(1),
     adminCheck: () => adminTicks(),
     exportModal: () => dialogText(),
     // Something to read only while Export cannot be pressed; once it can, nothing.
@@ -5947,32 +5979,59 @@ export default function create(
 
   // The user list draws only the rows in view — about twenty of the 143 seeded accounts — and
   // draws the rest as its body is scrolled, with no pager. So the body is scrolled with the
-  // mouse wheel, a screen at a time, gathering each row as "Status | Account Type | Name",
-  // until a few turns bring nothing new.
-  async function everyUserRow(): Promise<string> {
+  // mouse wheel, a screen at a time, gathering each row until a few turns bring nothing new.
+  // Every row begins with its status badge ("Active" or "Inactive"); the row is the block
+  // around that badge holding the four columns "Status | Account Type | Name | Admin?". The
+  // Admin? cell holds an unlabelled icon with no text: a square tick for an administrator, a
+  // narrower cross for everybody else, read as "Yes" and "No". Every reader of the list reads
+  // its column from these same rows.
+  async function userTableRows(): Promise<string[][]> {
     await ready();
     const table = seen(page.getByRole("table")).first();
-    if (!(await table.count())) return "";
-    await table.getByText(/\S/).first().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
-    const rows: string[] = [];
+    if (!(await table.count())) return [];
+    await table.getByText(/^(Active|Inactive)$/i).first().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+    const rows: string[][] = [];
+    const keys = new Set<string>();
     const gather = async (): Promise<number> => {
-      const lines = (await table.innerText())
-        .split("\n")
-        .map((line) => line.trim())
-        .filter(Boolean);
-      // Every row begins with its status badge, so a row runs from one badge to the next.
-      const drawn: string[][] = [];
-      for (const line of lines) {
-        if (matches(/^(Active|Inactive)$/i, line)) drawn.push([line]);
-        else if (drawn.length) drawn[drawn.length - 1].push(line);
-      }
+      const drawn = await table
+        .evaluate((node) => {
+          const found: string[][] = [];
+          const rowsSeen = new Set<Element>();
+          const walk = (each: Element): void => {
+            const own = (each.textContent ?? "").trim();
+            if (!each.children.length && /^(active|inactive)$/i.test(own)) {
+              let row: Element | null = each.parentElement;
+              while (row && row !== node && row.children.length < 4) row = row.parentElement;
+              if (row && row !== node && !rowsSeen.has(row)) {
+                rowsSeen.add(row);
+                const cells = Array.from(row.children);
+                const text = cells.map((cell) => ((cell as HTMLElement).innerText ?? "").trim());
+                const last = cells[cells.length - 1];
+                const icon = last ? last.getElementsByTagName("svg")[0] ?? null : null;
+                const box = icon?.getAttribute("viewBox")?.trim().split(/\s+/).map(Number) ?? [];
+                // A tick is drawn square; the cross beside the others is drawn narrower than tall.
+                const mark = icon
+                  ? box.length === 4 && box[2] > 0 && box[2] === box[3]
+                    ? "Yes"
+                    : "No"
+                  : text[text.length - 1] ?? "";
+                found.push([...text.slice(0, 3), mark]);
+              }
+              return;
+            }
+            for (const child of Array.from(each.children)) walk(child);
+          };
+          walk(node);
+          return found;
+        })
+        .catch(() => [] as string[][]);
       let added = 0;
       for (const cells of drawn) {
-        const row = cells.join(" | ");
-        if (!rows.includes(row)) {
-          rows.push(row);
-          added++;
-        }
+        const key = cells.join(" | ");
+        if (keys.has(key)) continue;
+        keys.add(key);
+        rows.push(cells);
+        added++;
       }
       return added;
     };
@@ -6003,71 +6062,24 @@ export default function create(
       await page.mouse.wheel(0, 400);
       await page.waitForTimeout(200);
     }
-    return rows.join("\n");
+    return rows;
   }
 
-  // The names whose "Admin?" mark is a tick, one per line. The list is a scrolling grid of
-  // positioned blocks, each row "Status | Account Type | Name | Admin?", and the Admin? cell
-  // holds an unlabelled icon with no text: a dark, square tick for an administrator, a pale,
-  // narrow cross for everybody else (seen as the administrator: of the 146 rows only Robin
-  // Placeholder and Morgan Placeholder, both shown as "Public Sector Employee", carry the
-  // tick). Each row is found from its name link, and the mark read from the shape of the icon
-  // in the row's last cell. The body is scrolled as everyUserRow does, the rows in view read
-  // at each turn. A list with nobody ticked reads as nothing.
-  async function adminTicks(): Promise<string> {
-    await ready();
-    const table = seen(page.getByRole("table")).first();
-    if (!(await table.count())) {
-      nothing(`user-list.admin_check — no user list is on ${page.url()}`);
-    }
-    await table.getByRole("link").first().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
-    const marks = new Map<string, boolean>();
-    const gather = async (): Promise<number> => {
-      const read = await table.getByRole("link").evaluateAll((links) =>
-        links.map((link) => {
-          let row: Element | null = link.parentElement;
-          while (row && row.children.length < 4) row = row.parentElement;
-          const last = row ? row.children[row.children.length - 1] ?? null : null;
-          let icon: Element | null = null;
-          const find = (node: Element): void => {
-            for (const child of Array.from(node.children)) {
-              if (icon) return;
-              if (child.localName === "svg") icon = child;
-              else find(child);
-            }
-          };
-          if (last && !last.contains(link)) find(last);
-          const box = (icon as Element | null)?.getAttribute("viewBox")?.trim().split(/\s+/).map(Number) ?? [];
-          // A tick is drawn square; the cross beside the others is drawn narrower than tall.
-          const ticked = box.length === 4 && box[2] > 0 && box[2] === box[3];
-          return [(link.textContent ?? "").trim(), ticked] as [string, boolean];
-        }),
-      );
-      let added = 0;
-      for (const [name, ticked] of read) {
-        if (!name || marks.has(name)) continue;
-        marks.set(name, ticked);
-        added++;
-      }
-      return added;
-    };
-    await table
-      .evaluate((node) => {
-        for (let up: Element | null = node; up; up = up.parentElement) if (up.scrollTop > 0) up.scrollTop = 0;
-        window.scrollTo(0, 0);
-      })
-      .catch(() => undefined);
-    await page.waitForTimeout(300);
-    const box = await table.boundingBox();
-    if (box) await page.mouse.move(box.x + box.width / 2, box.y + Math.min(Math.max(box.height - 20, 10), 300));
-    let quiet = 0;
-    for (let turn = 0; turn < 200 && quiet < 4; turn++) {
-      quiet = (await gather()) ? 0 : quiet + 1;
-      await page.mouse.wheel(0, 400);
-      await page.waitForTimeout(200);
-    }
-    return [...marks].filter(([, ticked]) => ticked).map(([name]) => name).join("\n");
+  // Each row as "Status | Account Type | Name", one per line.
+  async function everyUserRow(): Promise<string> {
+    return (await userTableRows()).map((cells) => cells.slice(0, 3).filter(Boolean).join(" | ")).join("\n");
   }
+
+  // One column of those same rows, one line per row.
+  async function userColumn(column: number): Promise<string> {
+    return (await userTableRows()).map((cells) => cells[column] ?? "").join("\n");
+  }
+
+  // The Admin? column, each row's mark beside the name it belongs to: "Robin Placeholder: Yes".
+  async function adminTicks(): Promise<string> {
+    return (await userTableRows()).map((cells) => `${cells[2]}: ${cells[3]}`).join("\n");
+  }
+
 
   // The profile screen, reached under a person's identifier or as the signed-in "me".
   function profile(where: string, route: string) {
