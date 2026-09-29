@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-old-20 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">306</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">301</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">267</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-old-20</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-09-29 17:11</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr></tbody></table></div>
+<div class="body"><h2>1 criterion(s) fail against old: which of them is the application&#39;s fault, which the spec&#39;s, and which the test&#39;s?</h2>
+<p><strong>Recommendation.</strong> Rule on R-1.39 with a calibration condition, so the next calibrate run can apply it.</p>
+<p>1 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:4300,">http://localhost:4300,</a> with no ruling yet. The tests are blind: they were written from the criteria alone, by an agent that never saw the application. So a failure means one of exactly three things, and only you can say which: the application is wrong, the criterion is wrong, or the test is wrong.</p>
+<p>Rule on each one below. Until every failure carries a ruling, this question is asked again on every calibration run.</p>
+<h4>R-1.39 · v1</h4>
+<p>The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location.</p>
+<ul><li>given: a list of opportunities across all three programs</li><li>when: someone selects a program, selects a state, ticks remote-only, or types words into the search box</li><li>then: only opportunities matching every chosen condition remain visible</li><li>test: tests/acceptance/opportunities/R-1.39.spec.ts</li></ul>
+<p><strong>The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location. (by state)</strong> — failed</p>
+<pre><code>Error: Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<h3>Calibration conditions</h3>
+<p>One condition per line, and exactly one of these forms:</p>
+<ul><li><code>defect-in-old &lt;ID&gt;</code> — the old application really does fail this and the criterion is right anyway. The test stands as written and the rebuild has to pass it; the criterion keeps a note saying so. No text after the ID.</li><li><code>spec-wrong &lt;ID&gt;: &lt;corrected statement&gt;</code> — the criterion misdescribes what the old application does. The statement is replaced and its version bumped, which marks the test stale so <code>derive-tests --stale</code> writes it again from the corrected criterion.</li><li><code>test-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion is right and the test is not. The id goes to <code>tests/acceptance/redo.yaml</code> for <code>derive-tests</code> to redo, still blind, and <code>&lt;why&gt;</code> records what the test got wrong without describing how the application is built.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. <code>defect-in-old</code> takes no text; the other two require a colon and text on the same line. A condition may not span more than one line.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-09-29 17:13.</p>
+<div class="body"><p>The question is whether R-1.39&#39;s by-state failure against the old target is the application&#39;s fault, the spec&#39;s, or the test&#39;s. Ruling: approve, with test-wrong. The old list page offers government users and administrators a status chooser with Draft, Under Review, Published, Evaluation and Awarded (list.tsx:60-66, 662-675). Its filter removes every opportunity whose status does not match the chosen one (list.tsx:329-333, 346-387), and it applies the same filter to the Unpublished, Open and Closed groups alike (list.tsx:389-409). Drafts are always placed in the Unpublished group (list.tsx:165-189). No other reading of that code is possible, so the old application does narrow by state and defect-in-old would wrongly make a working behaviour the rebuild&#39;s obligation. The criterion&#39;s statement matches the code, so spec-wrong does not apply either. The failure is a bare predicate timeout that names no assertion. The reviewer&#39;s triage (calibrate-triage-old-29) left two causes open: the draft was never stored, or the list does not narrow. The source rules out the second, so the fault lies in the test&#39;s setup or reading. The test never establishes that the draft it saves is present and readable before it filters, and it folds the check that something remains and the check that something is gone into one wait, so a missing draft looks like a list that does not narrow. What would change this ruling: suppose a rewritten test shows the draft present before filtering, and the draft-only view still never shows it. Then the fault is in the adapter&#39;s reading of the list, and it goes to the reviewer as adapter-wrong, not back to this seat. A run where the draft is visibly present and the list demonstrably fails to narrow on a chosen status would make this defect-in-old.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>test-wrong R-1.39: the by-state case never checks that the draft it saves actually appears in the list before a state is chosen, so a draft that was not stored or could not be read looks the same as a list that does not narrow. Before filtering, confirm that both the saved draft and the published opportunity can be seen. Then check that the wanted opportunity remains, and separately that the other one is gone, after each state is chosen, so a failure says which half did not hold.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
