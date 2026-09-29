@@ -1895,6 +1895,11 @@ rebind:
       the Scrum Master radio ticked, set_phase_proposed_cost never reached '3.
       Pricing': the step list shows only the current step, so move forward with
       the form's 'Next' until 'Implementation Cost*' shows."
+    closed: &a10
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-29T06:15:00.120Z
   - id: R-2.11
     target: old
     why: on proposal-swu-create, with all three references filled on '5.
@@ -1904,6 +1909,7 @@ rebind:
       out without pressing it. Find and press 'Submit Proposal' inside the open
       dialog by its text, not by button role, before looking on the page behind
       it.
+    closed: *a10
   - id: R-2.19
     target: old
     why: proposal-swu-create's openTeamPhases re-presses a phase name whose section
@@ -1913,6 +1919,7 @@ rebind:
       Decide whether a section is open from whether 'Phase Dates' or its 'Add
       Team Member(s)' shows below its name, press only a folded name, once, and
       wait for its section to open before moving to the next phase.
+    closed: *a10
   - id: R-2.37
     target: old
     why: after 'Submit Proposal' the service stored the proposal as Submitted and
@@ -1922,3 +1929,4 @@ rebind:
       /opportunities/sprint-with-us/:opportunityId/proposals/:proposalId/export.
       Treat a dialog with no text as gone, or wait for it to detach, and let
       proposal-swu-export-one.open go to the export address.
+    closed: *a10

@@ -189,6 +189,7 @@ A Sprint With Us opportunity must have an implementation phase, and may only hav
 - when: they include an inception phase but no prototype phase
 - then: the submission is rejected with a message saying a prototype phase must follow an inception phase
 - state: accepted
+- note: calibrate 2026-09-29: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.17 · v2 · confirmed · recovered
 Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position is set by its place in the opportunity's list of questions, which holds at most 100, and is never entered by the person; a question outside these limits is refused.

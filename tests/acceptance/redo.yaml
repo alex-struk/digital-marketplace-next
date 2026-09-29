@@ -645,3 +645,27 @@ redo:
       not be saved for an unrelated reason; the proposal must be complete after
       the change so that only the organization rule is under test
     closed: *a14
+  - id: R-6.2
+    version: 1
+    why: the test restores delivery without first showing that the action's notices
+      have all been refused, then counts everything in the catcher as a further
+      attempt; a notice arriving once after delivery is restored is its first
+      and only delivery, not a repeat. The test must tell a repeat from a single
+      late delivery, for example by waiting until the refused deliveries have
+      settled before restoring, or by showing no notice about the published
+      opportunity arrives more than once, rather than requiring the catcher to
+      hold nothing but the invitation
+  - id: R-4.23
+    version: 2
+    why: the first case makes its vendor 'not yet agreed' by announcing changed
+      terms, but a vendor whose agreement was withdrawn by a change of terms has
+      still agreed before, which the criterion's own second clause sends to the
+      dashboard; the first case needs a vendor who has never agreed to the
+      terms, and that persona has to be supplied by the seed and fixtures rather
+      than derived from an established vendor
+  - id: R-4.24
+    version: 1
+    why: the test never reaches the profile-completion form because every persona it
+      can sign in as has already completed their profile; it needs a vendor who
+      has never completed their profile, supplied by the seed and fixtures, and
+      must tick the new-opportunity notice while completing it

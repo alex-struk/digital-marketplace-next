@@ -111,8 +111,8 @@ A person may only be invited to an organization if they hold an active vendor ac
 - state: accepted
 - note: a person whose membership was previously ended can be invited again, because ended memberships are not counted when checking for an existing one; this was read from the shape of the duplicate check rather than observed.
 
-### R-3.9 · v1 · confirmed · recovered
-A pending invitation becomes an active membership only when the invited person accepts it, or when an administrator accepts it on their behalf; nobody else can accept it and an invitation that is not pending cannot be accepted.
+### R-3.9 · v2 · confirmed · recovered
+A pending invitation becomes an active membership only when the invited person accepts it; the organization's owner cannot accept it on their behalf, and an invitation that is not pending cannot be accepted.
 - cites: src/back-end/lib/permissions.ts:284
 - cites: src/back-end/lib/resources/affiliation.ts:347
 - cites: src/back-end/lib/db/affiliation.ts:246
