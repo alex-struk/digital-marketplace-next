@@ -170,12 +170,14 @@ Profile: rebuild
 - [derive-tests-notifications-3](proposals/derive-tests-notifications-3.md)
 - [derive-tests-notifications-4](proposals/derive-tests-notifications-4.md)
 - [derive-tests-notifications-5](proposals/derive-tests-notifications-5.md)
+- [derive-tests-notifications-6](proposals/derive-tests-notifications-6.md)
 - [derive-tests-notifications-stale-1](proposals/derive-tests-notifications-stale-1.md)
 - [derive-tests-notifications-stale-2](proposals/derive-tests-notifications-stale-2.md)
 - [derive-tests-notifications-stale-3](proposals/derive-tests-notifications-stale-3.md)
 - [derive-tests-notifications-stale-4](proposals/derive-tests-notifications-stale-4.md)
 - [derive-tests-notifications-stale-5](proposals/derive-tests-notifications-stale-5.md)
 - [derive-tests-notifications-stale-6](proposals/derive-tests-notifications-stale-6.md)
+- [derive-tests-notifications-stale-7](proposals/derive-tests-notifications-stale-7.md)
 - [derive-tests-opportunities](proposals/derive-tests-opportunities.md)
 - [derive-tests-opportunities-2](proposals/derive-tests-opportunities-2.md)
 - [derive-tests-opportunities-3](proposals/derive-tests-opportunities-3.md)
@@ -284,10 +286,10 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $620.597909
-- Rulings cost: $338.578536
-- Total cost: $959.176445
-- Agent-held rulings: 241
+- Journal cost: $620.781987
+- Rulings cost: $339.303055
+- Total cost: $960.085042
+- Agent-held rulings: 243
 - Runner rulings (automatic, no seat held): 1
 - Human rulings: 10
 - Rulings whose seat this page does not recognise: 0

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-notifications-6 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">254</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">250</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">218</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-notifications-6</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 00:25</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised notifications tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I made no changes.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made no changes. <code>tests/acceptance/notifications/</code>, <code>tests/acceptance/not-testable.yaml</code> and <code>tests/generated</code> are all exactly as I found them, including the &quot;derived&quot; date in the R-6.1 header.</p>
+<p><strong>Why nothing changed.</strong> The ruling recorded no conditions of its own. Its rationale gave one reason for returning the proposal: the R-6.1 test contradicted the contract. At the time, the <code>configurations.notifications_disabled.notes</code> entry in <code>spec/contract/observables.yaml</code> told an R-6.1 test to read <code>SDLC_ORACLE_DISABLE_NOTIFICATIONS</code> and to skip when that setting was missing. It also didn&#39;t say how the test would be picked out to run against its own instance. The rationale said the ruling becomes an approval once the contract states both of those things and a re-derivation agrees, &quot;possibly this same test unchanged&quot;.</p>
+<p><strong>The contract now says both.</strong> The workspace&#39;s <code>observables.yaml</code> has been rewritten:</p>
+<ul><li>An R-6.1 test assumes an instance started with notifications switched off. It doesn&#39;t skip itself on any signal from the environment, and it fails on an instance where notifications are on.</li><li>The test carries the tag <code>@notifications_disabled</code>. It runs only against a separate instance started with <code>SDLC_ORACLE_DISABLE_NOTIFICATIONS=1</code>, selected with <code>--grep @notifications_disabled</code>. The default run leaves it out with <code>--grep-invert @notifications_disabled</code>, so it never clears or fills the shared mail catcher.</li></ul>
+<p><strong>The test already matches.</strong> I checked <code>R-6.1.spec.ts</code> against that note. It has no skip and doesn&#39;t look at the environment. It carries <code>{ tag: &quot;@notifications_disabled&quot; }</code>, which is exactly the tag the contract names. Its comments say what the note says. It still uses the action the contract names for this configuration: an administrator publishes a Code With Us opportunity through <code>opportunityCwuCreate.publish</code>. It checks that the publish succeeded (no field error, an identifier assigned, the opportunity showing as published). It then waits a margin and checks that <code>caughtMessageList.messageCount()</code> is zero. Since the test already agrees with the rewritten contract, rewriting it would only have churned the header date. This re-derivation is that agreement, with the file left as it was.</p>
+<p><strong>The condition addressed to the contract stage.</strong> That was the rewrite of the notes above, and I did not touch it, as instructed. The contract file in this workspace already reads the way that condition asks, though I can&#39;t tell from here whether that comes from the contract stage&#39;s own delivery.</p>
+<p>No criterion in this domain changed status, and I found no new surface action or observation missing for R-6.1. The remaining open items in <code>not-testable.yaml</code> (R-6.11 and R-6.12, among others) are unchanged.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 00:26.</p>
+<div class="body"><p>The question was whether the revised notifications tests now follow from their criteria and from nothing else. They do, so the proposal is approved. The earlier return turned on one conflict: the R-6.1 test skipped itself unless the SDLC_ORACLE_DISABLE_NOTIFICATIONS environment variable was set, and the contract gave no way to pick that test out for its own instance. The contract&#39;s notifications_disabled entry in spec/contract/observables.yaml now says both things. A test for R-6.1 assumes an instance started with notifications off and does not skip on any signal from the environment. It carries the tag @notifications_disabled, runs only with --grep against that separate instance, and is left out of the default run with --grep-invert. R-6.1.spec.ts on this branch matches: it has no skip, reads nothing from the environment, and carries that exact tag. Every assertion follows from the criterion. The action the criterion gives as its example (an administrator publishing a Code With Us opportunity, the action the contract names for this configuration) completes and reports success: no field error, an identifier assigned, and the opportunity shown as published. Then, after a margin, the mail catcher holds zero messages, which is the criterion&#39;s &#39;no message is sent to anybody&#39;. Nothing reaches past the surface and the fixtures. The typecheck exit code is from 2 diagnostics under adapters/new/, which this proposal does not answer for; nothing under acceptance/notifications/ failed. The not-testable.yaml changes only reorder and rewrap entries: the R-6.9, R-6.11 and R-6.12 reasons are word-for-word the same and still name real gaps in the mail fixture (it searches by visible recipient, gives back an untyped To field, and exposes no message body). This would change to a return if the test read the environment again, dropped the tag, or asserted something R-6.1 does not state, such as a specific message wording or a status value beyond published.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

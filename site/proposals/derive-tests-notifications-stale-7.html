@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-notifications-stale-7 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">254</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">250</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">218</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-notifications-stale-7</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-28 22:47</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the notifications criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the test for R-6.1 at <code>tests/acceptance/notifications/R-6.1.spec.ts</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rewrote the test for R-6.1 at <code>tests/acceptance/notifications/R-6.1.spec.ts</code>. That was the one criterion in scope, so one criterion has a test and none needed a <code>not-testable.yaml</code> entry. I could not typecheck or run the test: this session was not allowed to run <code>tsc</code>.</p>
+<p><strong>What the ruling found.</strong> The v1 test skipped itself unless the test run set <code>SDLC_ORACLE_DISABLE_NOTIFICATIONS=1</code>. The calibration run never set it, so the test never produced a result. That skip was not a guess by the earlier writer. The contract&#39;s own <code>configurations.notifications_disabled</code> note in <code>spec/contract/observables.yaml</code> tells a test for R-6.1 to read that variable and to treat an instance without it as &quot;not offering the criterion&#39;s given, rather than as a failure&quot;. The ruling contradicts that note. I followed the ruling.</p>
+<p><strong>What the new test does.</strong> It no longer reads any environment signal or skips itself. It assumes it is running against an instance started with notifications off, and says so in its header comment:</p>
+<ul><li>Against a default instance it will fail, because messages arrive in the catcher. That failure is truthful: the given is not met.</li><li>It carries a Playwright tag, <code>@notifications_disabled</code>, named after the contract&#39;s configuration. A runner can use it to pick this test out for the separate instance the contract says is started for R-6.1 alone, or leave it out of a default run.</li></ul>
+<p>The test is one <code>test()</code>, because the criterion states one given/when/then. It is titled with the criterion&#39;s own words:</p>
+<ol><li>It clears the mail catcher and signs in as <code>persona.administrator</code>.</li><li>It publishes a Code With Us opportunity through <code>surface.opportunityCwuCreate.publish()</code>. The contract names this as the action that shows the configuration is in force.</li><li>It checks the action completed normally: <code>fieldError()</code> is empty, <code>opportunityCwuEdit.opportunityIdentifier()</code> returns an identifier, and <code>opportunityCwuView.status()</code> shows the opportunity as published.</li><li>It waits ten seconds, which is longer than a message takes to arrive with notifications on, then asserts <code>caughtMessageList.messageCount()</code> is 0.</li></ol>
+<p>I also removed the second action the v1 test took, the terms-and-conditions broadcast, to keep the test to what the criterion and the contract&#39;s example ask for. The criterion&#39;s &quot;every action&quot; is covered by that one representative action, as its own given/when/then does (&quot;such as publishing an opportunity&quot;). I did not add a clause entry for the other actions, because the surface does reach them; they just aren&#39;t exercised.</p>
+<p><strong>What the contract should change.</strong> No surface actions or observations were missing. But the harness has no way to start an instance with notifications off and point this test at it. That needs the runner, or whoever next writes the contract, to do two things:</p>
+<ul><li>Start that instance and select this test for it, for example by the <code>@notifications_disabled</code> tag.</li><li>Rewrite the note under <code>configurations.notifications_disabled</code> in <code>observables.yaml</code>, which still tells tests to skip, so it matches the ruling.</li></ul>
+<p>Neither is a path this stage owns, so I left both alone.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-28 22:48.</p>
+<div class="body"><p>Does the rewritten R-6.1 test follow from the criterion and nothing else? On its own terms, yes. It takes a service with notifications off as its given. For the when, it publishes a Code With Us opportunity, which is the criterion&#39;s own example (&#39;such as publishing an opportunity&#39;) and the action the contract names, so it stands in for &#39;every action&#39;. For the then, it checks that the action completed and reported success (no field error, an identifier assigned, the opportunity showing as published) and that no message reached the catcher after a margin. No detail of the implementation leaks in, and the typecheck on the branch found nothing in acceptance/notifications/. I am returning it because the test now contradicts the approved contract, and an approval cannot carry the request that fixes that. spec/contract/observables.yaml configurations.notifications_disabled.notes still tells an R-6.1 test to read SDLC_ORACLE_DISABLE_NOTIFICATIONS and to treat an instance without it as not offering the given, not as a failure. That is the behaviour the calibrate-old-11 ruling rejected. The note also says nothing of how a test that fails rather than skips gets picked out for the separate instance the contract says R-6.1 needs. Approved as it stands, the test would run on the default, shared instance at every calibration. There it clears the catcher and sends a batch of announcements the note says must never share an instance with the rest of the suite, and it fails each time for a known reason. The ruling changes to an approval once the contract states how the notifications-off configuration reaches this test and how the test is selected for it, and a re-derivation (possibly this same test unchanged) agrees with that statement.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>addressed-to contract: spec/contract/observables.yaml configurations.notifications_disabled.notes tells a test for R-6.1 to read SDLC_ORACLE_DISABLE_NOTIFICATIONS and to skip on an instance without it. The calibrate-old-11 ruling overturned that behaviour (the skipping test never produced a result), and the R-6.1 test on this branch no longer skips. Rewrite the note so it says a test for R-6.1 assumes an instance started with notifications switched off and does not skip itself. Also state how that test is selected to run against the separate instance the note requires (for example by a tag named after the configuration, such as @notifications_disabled) and kept out of the default run, whose shared mail catcher it would clear and fill.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
