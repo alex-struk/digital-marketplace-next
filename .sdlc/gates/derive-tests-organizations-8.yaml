@@ -1,0 +1,18 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the revised R-3.24 test follow from its criterion and nothing else? Approve. The administrator case now opens the archiving message through surface.caughtMessage and asserts that its subject and plain-text body say the organization was archived, that an administrator did it, and that the owner can no longer use or access it, with wording matched loosely. That is every part of the criterion's 'then'. The owner case watches the full settling window and asserts that no archiving message reaches the owner, which is the 'no such message' clause. No assertion goes beyond the criterion. The message ID used comes from the mail fixture's declared contract (tests/fixtures/mail.ts), not from the application. The runner typecheck reports no diagnostics under acceptance/organizations; its failures are in adapters/new, which this proposal does not answer for. Polling and seeded records are unchanged. What would change this: type errors in the organizations suite, or a clause of the 'then' left unasserted.
+conditions:
+  - "condition-met derive-tests-organizations-stale-9#1: the administrator case opens the archiving message via surface.caughtMessage and asserts /admin/i on its subject plus plain-text body, in tests/acceptance/organizations/R-3.24.spec.ts"
+  - "condition-met derive-tests-organizations-stale-9#2: the same message text is asserted to contain a no-longer/cannot/unable phrase followed within the sentence by use/access/available, in tests/acceptance/organizations/R-3.24.spec.ts"
+  - "condition-met derive-tests-organizations-stale-9#3: both cases keep the 30-second settling window, and the seeded organizations stay seed.organizations.unqualified (administrator case) and seed.organizations.withPendingInvitation (owner case), in tests/acceptance/organizations/R-3.24.spec.ts"
+cost: 0.29888800000000004
+turns: 2
+session: "98c249eb-a6bd-48a2-8fba-df498e5ad543"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-29T12:20:43.610Z
