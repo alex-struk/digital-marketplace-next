@@ -32,3 +32,27 @@ The action still throws when the disabled control comes from dates the adapter i
 `admin_check` now returns every row as "Name: Yes" or "Name: No", from the tick or cross icon in the Admin? column. Before, it listed only the ticked names, which is empty for a list of non-administrators. On the target the first twenty rows read correctly: Morgan Placeholder and Robin Placeholder show "Yes", everyone else "No". A test expecting the old ticked-names-only answer would now see the non-administrators' names too.
 
 Every route I opened this run resolved on the target. I changed nothing outside `tests/adapters/old/`, and no password or environment value is written in the adapter, the bindings file or this entry.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this revision of tests/adapters/old bind every surface action and observation on old, and nothing else, now that R-2.19, R-1.16, R-2.37, R-4.23 and R-4.14 have each gone back to bind-adapter past the rebind limit of 2? Ruling: approve. The escalation account gives how many rounds there were, not a reason the pipeline cannot do this work. Read in order, each finding's sends got narrower (a control not found, then input mapped wrongly, then the exact reader's output), so the work is converging rather than looping. This diff answers each finding's latest send closely. R-2.19: publish no longer writes opportunity-level dates once Phase Start or Completion Date has been filled; namedLabels is cleared only when go() opens a new screen (index.ts:127), so the dates the test's add_phase entered are still recorded at publish. R-1.16: when Publish is disabled with steps marked incomplete and no message shown, publish ends quietly and fieldError reports those steps. R-2.37: both proponent readers return empty unless an anonymised 'Proponent N' is on the screen. R-4.23: both readers return empty after a redirect, and complete_disabled_until_terms_accepted moves to bound because a reader that returns empty is bound. R-4.14: status_badge, account_type and admin_check read from the same table rows as user_row, and admin_check is non-empty for any rendered list. Nothing outside tests/adapters/old changes. The runner's typecheck lists no diagnostics under adapters/old; its only failures are two in adapters/new. The fixes have not yet run against the target, which is calibrate's job. Risks for calibration to watch: publish ending quietly on 'disabled with steps incomplete' could hide a value the adapter itself entered wrongly, and a test expecting admin_check's old ticked-names-only output will now also see non-administrators. What would change this: a calibration run showing either risk, or a send that reverses what an earlier send asked for, which would make this a pipeline escalation.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `e9285ab4dacc72e14252b19589a41e1f89388267`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics

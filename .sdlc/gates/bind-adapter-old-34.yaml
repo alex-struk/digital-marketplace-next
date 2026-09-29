@@ -1,40 +1,15 @@
 gate: G3
-verdict: escalated
-by: runner:bind-adapter
-held_by: runner
-escalate_to: tech-lead
-rationale: >-
-  bind-adapter was handed owed work sent back to it more times than the
-  project's policy allows, so this proposal is ruled by tech-lead rather than
-  put to G3's holder for another round.
-
-  - R-2.19 on old: sent to bind-adapter 4 times, past the limit of 2 that
-  policy.loops.rebind sets. What each send asked for:
-    1. addPhase clicks a capability chip (index.ts:2115) chosen from bounding boxes between the phase headings (index.ts:2096), after an unfold click (index.ts:2061-2067) that may close the section again, so the chip is animating or hidden when clicked; look for the chip inside the expanded phase's own container, wait until the section is open and stable, and find the chip again before clicking
-    2. unbound: opportunity-swu-create.add_phase — no field for "Proof of Concept" on the Phases step takes "startDate" or "completionDate" or "maxBudget"; unbound: opportunity-swu-create.add_phase — no field for "Implementation" on the Phases step takes "maxBudget"
-    3. publishing a Sprint With Us opportunity whose phases are Prototype (28 to 60 days out) and Implementation (61 to 90 days out) left the page on /opportunities/sprint-with-us/create, and the adapter then read the opportunity identifier from that address; the publish must set the start-phase chooser to Prototype, enter each phase's dates exactly as given without adding dates of its own, and report the page's own refusal when publish does not land on a record
-    4. opportunity-swu-create.publish splits the input's opportunity-level startDate/completionDate off as phase dates and calls addPhase on the form's starting phase (Prototype), overwriting the 28-to-60-day dates the test's own addPhase gave it with 28-to-90. Prototype then overlaps Implementation (starting day 61), the Phases step becomes invalid, and publish returns quietly on /opportunities/sprint-with-us/create. It must not write opportunity-level dates onto a phase the test has already given dates to.
-  - R-1.16 on old: sent to bind-adapter 3 times, past the limit of 2 that
-  policy.loops.rebind sets. What each send asked for:
-    1. in the implementation-phase test opportunitySwuCreate.addPhase throws unbound for 'Prototype' because phaseNamed only matches the chooser's own labels 'Inception', 'Proof of Concept' and 'Implementation'; the form calls the phase between inception and implementation 'Proof of Concept', so map 'Prototype' to 'Proof of Concept'. The inception test is not shown to be a binding fault: 'Publish' stays disabled and no step shows a message.
-    2. publish turns the opportunity's startDate/completionDate into an Implementation phase (phaseDatesOf, index.ts:2011-2014 and 1849), so the case without an implementation phase gets one; do not add phases the input does not name. publish also returns quietly when Publish is disabled (index.ts:1880) instead of throwing, and it stops at step 8 Attachments with the form incomplete
-    3. opportunity-swu-create.publish throws when 'Publish' is disabled with '5. Phases' marked incomplete and no message shown. That disabled Publish is the form refusing the phases it was given, which the test reads afterwards (dashboard, or fieldError). publish must end quietly there, as it already does when the form shows a message, and fieldError must report what the Phases step marks incomplete.
-  - R-2.37 on old: sent to bind-adapter 4 times, past the limit of 2 that
-  policy.loops.rebind sets. What each send asked for:
-    1. unbound: proposal-swu-create.choose_organization — no chooser labelled "Organization" on http://localhost:3102/opportunities/sprint-with-us/6dfc4b6a-e658-4848-8b7f-e6b36663254a/proposals/create
-    2. unbound: proposal-swu-create.add_phase_team_member — no box labelled "Implementation" on http://localhost:3100/opportunities/sprint-with-us/19c5b55f-237d-459a-b91e-acea54d900ba/proposals/create
-    3. proposal-swu-create.add_reference neither opens the 'References' tab nor maps its input: fill Name, Company, Phone and Email under 'Reference N' (N = order + 1) from the input's name, company, phone and email, instead of looking for a field labelled 'Company Name' or 'Reference', which does not exist
-    4. proposal-swu-export-one.anonymous_proponent_name returns the text under the 'Proponent' label when no 'Proponent N' appears, so the vendor's own copy reads 'Northern Pines Digital Ltd.' as an anonymous name. It must answer empty unless the copy shows an anonymised 'Proponent N' name.
-  - R-4.23 on old: sent to bind-adapter 4 times, past the limit of 2 that
-  policy.loops.rebind sets. What each send asked for:
-    1. unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete never shows the profile form on this target; it redirects to /dashboard when signed in and to /sign-in when signed out, and no sign-in route mints an account with an unfinished profile
-    2. unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete never shows the profile form on this target; it redirects to /dashboard when signed in and to /sign-in when signed out, and no sign-in route mints an account with an unfinished profile
-    3. user-sign-up-complete.terms_checkbox throws unbound although the adapter itself saw what three of this criterion's clauses ask about, namely that /sign-up/complete redirects to /sign-in when signed out and to /dashboard for the administrator, the public sector employee and every seeded vendor who has agreed; for those personas report that no agreement box is offered, and where the person was sent, instead of throwing
-    4. user-sign-up-complete.terms_checkbox returns the non-empty 'redirected to /dashboard' or 'redirected to /sign-in' when the page sends the visitor elsewhere, so the tests' 'no terms checkbox offered' assertion reads a checkbox as present. It must answer empty when no terms checkbox is on the page. complete_disabled_until_terms_accepted must likewise answer empty after such a redirect rather than throw unbound.
-  - R-4.14 on old: sent to bind-adapter 4 times, past the limit of 2 that
-  policy.loops.rebind sets. What each send asked for:
-    1. userRow (index.ts:3950) reads only the first page of the paginated user list (20 rows, ending before the seeded names later in the alphabet); read every page. signInThroughIdentityProvider goes to /sign-in without signing out first, so while the administrator is still signed in it lands on /dashboard and reports the sign-in control missing; sign out first
-    2. everyUserRow reads the virtualized user table from its current scroll position and only scrolls down, so after the test's first poll leaves the table at the bottom it sees only the tail rows; reset the table body's scrollTop to 0 before reading. And signIn.deactivated-vendor refuses unconditionally, although the test only signs this persona in (after reactivating the account) so they can set their own name; let it use its session-route entry like every other persona, and keep 'cannot show a refusal' only for the refusal-checking reads
-    3. user-list.admin_check reports nothing to read, but the list is a scrolling grid of positioned blocks whose Admin? cell holds a tick icon element when the user is an administrator and nothing otherwise; locate each row by its name cell and read the mark as the presence of that icon in the row's last cell instead of by accessible name or text
-    4. on /users, after user_row had read rows for the named accounts from the table (rows split on their Active/Inactive badge), one of user-list.status_badge, account_type or admin_check answered empty. status_badge and account_type scan page text lines against fixed labels, and admin_check looks for an svg in each row's last cell. Each must read its column from the same table rows user_row reads and answer non-empty for a rendered list.
-at: 2026-09-29T01:23:24.186Z
+verdict: approve
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  Question: does this revision of tests/adapters/old bind every surface action and observation on old, and nothing else, now that R-2.19, R-1.16, R-2.37, R-4.23 and R-4.14 have each gone back to bind-adapter past the rebind limit of 2? Ruling: approve. The escalation account gives how many rounds there were, not a reason the pipeline cannot do this work. Read in order, each finding's sends got narrower (a control not found, then input mapped wrongly, then the exact reader's output), so the work is converging rather than looping. This diff answers each finding's latest send closely. R-2.19: publish no longer writes opportunity-level dates once Phase Start or Completion Date has been filled; namedLabels is cleared only when go() opens a new screen (index.ts:127), so the dates the test's add_phase entered are still recorded at publish. R-1.16: when Publish is disabled with steps marked incomplete and no message shown, publish ends quietly and fieldError reports those steps. R-2.37: both proponent readers return empty unless an anonymised 'Proponent N' is on the screen. R-4.23: both readers return empty after a redirect, and complete_disabled_until_terms_accepted moves to bound because a reader that returns empty is bound. R-4.14: status_badge, account_type and admin_check read from the same table rows as user_row, and admin_check is non-empty for any rendered list. Nothing outside tests/adapters/old changes. The runner's typecheck lists no diagnostics under adapters/old; its only failures are two in adapters/new. The fixes have not yet run against the target, which is calibrate's job. Risks for calibration to watch: publish ending quietly on 'disabled with steps incomplete' could hide a value the adapter itself entered wrongly, and a test expecting admin_check's old ticked-names-only output will now also see non-administrators. What would change this: a calibration run showing either risk, or a send that reverses what an earlier send asked for, which would make this a pipeline escalation.
+conditions: []
+cost: 0.4278716
+turns: 3
+session: "4b9c68ae-0e37-45ca-a313-fd687b737cc4"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-29T01:24:07.316Z
