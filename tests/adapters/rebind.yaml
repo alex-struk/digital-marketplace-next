@@ -1994,3 +1994,8 @@ rebind:
       profile form, and bind toggle_new_opportunity_notifications,
       accept_app_terms, complete_profile and terms_checkbox there instead of
       recording them unbound
+    closed:
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-29T09:07:15.045Z
