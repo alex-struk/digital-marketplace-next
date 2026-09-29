@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-triage-old-26 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">287</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">283</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">249</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-triage-old-26</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 09:00</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>1 criterion(s) fail against old: which of them did this project&#39;s own adapter cause?</h2>
+<p><strong>Recommendation.</strong> Sort R-2.19 with a triage condition each, so the adapter&#39;s failures are fixed there and only product questions reach the product owner.</p>
+<p>1 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:4300,">http://localhost:4300,</a> and nobody has sorted them yet. Before any reaches the product owner, say which of them this project&#39;s own adapter caused. The adapter is under <code>tests/adapters/old/</code>; read each one against it and against the test.</p>
+<h4>R-2.19 · v2</h4>
+<p>A Sprint With Us proposal must offer a team for every phase the opportunity requires and no phase it does not, name no more than one scrum master in each phase, cover every capability the opportunity requires across its phases, and stay within each phase&#39;s budget and the opportunity&#39;s total budget.</p>
+<ul><li>given: a Sprint With Us opportunity with an inception phase and a set of required capabilities</li><li>when: a vendor submits a proposal that omits the inception phase, names two scrum masters, leaves a required capability uncovered, or proposes a total cost above the opportunity&#39;s maximum budget</li><li>then: each of those submissions is refused, naming the phase, the team or the cost as the reason</li><li>test: tests/acceptance/proposals/R-2.19.spec.ts</li></ul>
+<p><strong>a Sprint With Us proposal must offer a team for every phase the opportunity requires</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>a Sprint With Us proposal must offer no phase the opportunity does not require</strong> — failed</p>
+<pre><code>Error: proposal-swu-create.add_phase_team_member — refused: this opportunity has no &quot;Inception&quot; phase on http://localhost:3100/opportunities/sprint-with-us/102860b9-fb86-4216-ba3c-afb9f4b936f7/proposals/create (its phases: Proof of Concept, Implementation)</code></pre>
+<p><strong>a Sprint With Us proposal may name no more than one scrum master in each phase</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>a Sprint With Us proposal must cover every capability the opportunity requires across its phases</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<p><strong>a Sprint With Us proposal must stay within each phase&#39;s budget</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h3>Triage conditions</h3>
+<p>One condition per line, one for every criterion the page lists, in exactly one of these forms:</p>
+<ul><li><code>adapter-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion and the test are both fine, and this target&#39;s adapter is what failed: it read the wrong thing off the page, reported a control missing that the page does render, or answered empty where it never reached the page. <code>&lt;why&gt;</code> names what the adapter did wrong, specifically enough for the next binding run to fix it. The criterion is not touched. On an unbound row it sends the binding back to <code>bind-adapter</code> however often it has been sent.</li><li><code>product-question &lt;ID&gt;</code> — nothing in the evidence points at the adapter. The failure goes to the product owner, who decides whether the application, the criterion or the test is wrong. No text after the ID. On an unbound row, use it when the criterion itself looks suspect.</li><li><code>oracle-cannot &lt;ID&gt;: &lt;why&gt;</code> — only for a row listed as unbound, on the oracle&#39;s target: the oracle genuinely cannot be driven into, or observed in, the state the test needs without changing its code — the state sits behind an external identity provider, is reachable only through a link the application emails, or is enforced only by a browser-native dialog. <code>&lt;why&gt;</code> names that state and why the oracle cannot reach it. It closes the row, changes no criterion, and stands until the criterion&#39;s version changes. It is never a way to skip binding work: where the application offers the control under another label, behind a step or as another persona, the answer is <code>adapter-wrong</code>.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. A condition may not span more than one line. When the evidence is genuinely unclear, it is a <code>product-question</code>: a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the adapter comes back from the next binding run unchanged and costs a run to find out.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 09:02.</p>
+<div class="body"><p>Question: of R-2.19&#39;s five failing tests against old, which did this project&#39;s adapter cause? Ruling: approve with product-question R-2.19. After the bind-adapter-old-40 fix to how the adapter finds each phase&#39;s section and moves from Team to Pricing, every test now completes the whole proposal form, so each failure reflects the application&#39;s behaviour and not the binding&#39;s. I read the page snapshots under tests/test-results/proposals-R-2.19-* against tests/adapters/old/index.ts. (1) The phase-without-a-team, capability-not-covered and over-phase-budget tests: the app withholds the submission. &#39;Submit&#39; is rendered without a pointer cursor, meaning disabled, and the form stays on &#39;6. Review Proposal&#39;. openTermsDialog (index.ts:3716) then runs surfaceRefusal, which walks every step, touches the fields, gathers messages and finds none, so fieldError, capabilityGapError and budgetExceededError honestly answer empty. The only related text is the review step&#39;s &#39;You have not yet assigned team members for this phase.&#39; Whether a disabled Submit with no stated reason meets &#39;refused, naming the phase, the team or the cost&#39; is a product question. (2) The two-scrum-masters test: the old form&#39;s Scrum Master is single-choice per phase, so ticking Dana unticked Blake, and the proposal was accepted (&#39;Proposal Status: Submitted&#39;) with one scrum master per phase. The adapter clicked what the test asked. (3) The Inception test: the form shows only the opportunity&#39;s own phases (Proof of Concept, Implementation), and add_phase_team_member reported that accurately instead of inventing a control. The product owner should also note two things. Cases (2) and (3) are cases the old app makes impossible rather than refuses, so they should decide whether that meets the criterion or whether the tests ask for more than it does. The Team step also states &#39;Select at least two members for each phase&#39;, and every test offers one member per phase, which may confound the three withheld submissions. Nothing in the evidence points at the binding. Tier STANDARD, no unaccepted residual risk, so nothing escalates. What would change this: a snapshot of the Pricing or Team step showing an error message that surfaceRefusal&#39;s message filter missed would make it adapter-wrong.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>product-question R-2.19</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
