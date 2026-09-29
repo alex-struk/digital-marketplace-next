@@ -36,3 +36,29 @@ I rewrote the test for R-3.24. It is the only criterion in this run, so one of o
 I also added no partial-coverage entry for them, because the surface could reach them: the full message body can be read through `surface.caughtMessage` (`htmlBody` / `plainTextBody`). If the ruler wants those details asserted, the test can be extended with what the surface already has.
 
 **Missing surface actions or observations:** none. Everything this criterion needed was there: `organizationEdit.open` / `archiveOrganization`, the seeded organizations and users, and `mail.messagesTo` / `mail.clear`. I changed nothing outside `tests/acceptance/`, and nothing asked me to.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether the rewritten R-3.24 test follows from its criterion and nothing else. The rewrite fixes the timing defect the earlier ruling raised: the administrator case polls the owner's mailbox for the 30-second settling window, the owner-archives case watches the whole window before asserting nothing arrived, and both use seeded active organizations, with the administrator case using one owned by another user (vendorOne). The typecheck reports no diagnostics under acceptance/organizations/. The test still asserts only part of its criterion. The criterion's 'then' says the owner's message tells them the organization was archived by an administrator and that they can no longer use it, and the test checks only that some message's subject or snippet matches /archiv/. The writer states the surface reaches the full message body through surface.caughtMessage (subject, plainTextBody), and sibling suites already read bodies that way (users/R-4.5, R-4.2). These are clauses the writer could assert and did not, with no not-testable.yaml clause entry beside the test, so a passing run would read as verifying the whole criterion. The earlier ruling's 'at least one message mentions archiving' addressed timing and does not narrow the criterion. The ruling would change to approve once the administrator case opens the archiving message via surface.caughtMessage and asserts, tolerantly of wording, that it says an administrator archived the organization and that the owner can no longer use it, keeping the polling and seeded-record structure as they are.
+
+**Conditions:**
+- R-3.24 administrator case: the criterion's 'then' requires the owner's message to say the organization was archived by an administrator. Open the archiving message with surface.caughtMessage and assert its subject or plain-text body says an administrator did it, matching loosely enough that exact phrasing is not fixed.
+- R-3.24 administrator case: the criterion's 'then' requires the message to tell the owner they can no longer use the organization. Assert this on the same message body through surface.caughtMessage, which the surface already provides.
+- Keep the settling-window polling in both cases and the seeded organizations (unqualified for the administrator case, withPendingInvitation for the owner case) as they are. They correctly answer the earlier ruling.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `1ae26ac564de0b2dc616f23f27f02d8fe6519c0b`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/organizations/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics
