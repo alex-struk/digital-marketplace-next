@@ -745,3 +745,12 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-29T07:13:21.467Z
+    closed:
+      outcome: met
+      why: tests/acceptance/notifications/R-6.2.spec.ts no longer has the check that
+        no one received a message twice, the per-message recipients field or the
+        copied-recipient read; its final assertion only filters caught messages
+        that are about the published opportunity (aboutOpportunity) and expects
+        none after delivery is restored
+      by: agent:reviewer
+      at: 2026-09-29T07:14:48.216Z
