@@ -1943,6 +1943,11 @@ rebind:
       Once the member is added and Scrum Master ticked, press the form's 'Next',
       which is plain pressable text rather than a button, until 'Implementation
       Cost*' shows.
+    closed: &a11
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-29T08:19:26.781Z
   - id: R-2.11
     target: old
     why: on proposal-swu-create for a one-phase opportunity, after Charlie
@@ -1953,6 +1958,7 @@ rebind:
       phase's table with Scrum Master ticked, and move forward with the form's
       'Next', which is plain pressable text rather than a button, until the
       phase cost box shows.
+    closed: *a11
   - id: R-2.19
     target: old
     why: on proposal-swu-create's '2. Team' for a two-phase opportunity (Proof of
@@ -1964,6 +1970,7 @@ rebind:
       not from screen bands that the opening of an earlier phase shifts. Press
       each folded name once and wait for its container to show 'Phase Dates'
       before moving on.
+    closed: *a11
   - id: R-2.37
     target: old
     why: "on proposal-swu-create for a one-phase opportunity, after Charlie
@@ -1974,3 +1981,16 @@ rebind:
       working the Team step once the member is on the phase with Scrum Master
       ticked, and advance with the form's 'Next', which is plain pressable text
       rather than a button, until the phase cost box shows."
+    closed: *a11
+  - id: R-4.24
+    target: old
+    why: the adapter never signed in as the seeded persona vendorCompletingProfile
+      (tests/seed/015-profile-completion.sql, idpId test-vendor-17,
+      acceptedTermsAt NULL, reached at /auth/createsessionvendor/17 per
+      tests/generated/personas.ts) against an oracle loaded with the full
+      tests/seed/ including 015; its authFailure on /17 came from a database
+      missing that row, so bind signIn for vendorCompletingProfile to that route
+      on a freshly seeded oracle, confirm /sign-up/complete then shows the
+      profile form, and bind toggle_new_opportunity_notifications,
+      accept_app_terms, complete_profile and terms_checkbox there instead of
+      recording them unbound
