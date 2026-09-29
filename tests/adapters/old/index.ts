@@ -6786,9 +6786,10 @@ export default function create(
   };
 
   // The user list draws only the rows in view — about twenty of the 143 seeded accounts — and
-  // draws the rest as its body is scrolled, with no pager. So the body is scrolled with the
-  // mouse wheel, a screen at a time, gathering each row until a few turns bring nothing new.
-  // Every row begins with its status badge ("Active" or "Inactive"); the row is the block
+  // draws the rest as its body is scrolled, with no pager. So the body — the one part of the
+  // table that scrolls — is stepped from top to bottom most of a screen at a time inside the
+  // page itself, gathering the rows drawn after each step; one whole read takes well under a
+  // second, so a test polling the list gets an answer on every call. Every row begins with its status badge ("Active" or "Inactive"); the row is the block
   // around that badge holding the four columns "Status | Account Type | Name | Admin?". The
   // Admin? cell holds an unlabelled icon with no text: a square tick for an administrator, a
   // narrower cross for everybody else, read as "Yes" and "No". Every reader of the list reads
@@ -6797,13 +6798,17 @@ export default function create(
     await ready();
     const table = seen(page.getByRole("table")).first();
     if (!(await table.count())) return [];
-    await table.getByText(/^(Active|Inactive)$/i).first().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
-    const rows: string[][] = [];
-    const keys = new Set<string>();
-    const gather = async (): Promise<number> => {
-      const drawn = await table
-        .evaluate((node) => {
-          const found: string[][] = [];
+    await table.getByText(/^(Active|Inactive)$/i).first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
+    // One pass in the page: put the body back at the top (an earlier read leaves it at the
+    // bottom), then step it down, letting the list draw after each step, until it can go no
+    // further. Rows are kept in the order they are first seen, each once.
+    return table
+      .evaluate(async (node) => {
+        const drawn = (): Promise<void> =>
+          new Promise((done) => requestAnimationFrame(() => requestAnimationFrame(() => setTimeout(done, 0))));
+        const rows: string[][] = [];
+        const keys = new Set<string>();
+        const gather = (): void => {
           const rowsSeen = new Set<Element>();
           const walk = (each: Element): void => {
             const own = (each.textContent ?? "").trim();
@@ -6823,54 +6828,46 @@ export default function create(
                     ? "Yes"
                     : "No"
                   : text[text.length - 1] ?? "";
-                found.push([...text.slice(0, 3), mark]);
+                const read = [...text.slice(0, 3), mark];
+                const key = read.join(" | ");
+                if (!keys.has(key)) {
+                  keys.add(key);
+                  rows.push(read);
+                }
               }
               return;
             }
             for (const child of Array.from(each.children)) walk(child);
           };
           walk(node);
-          return found;
-        })
-        .catch(() => [] as string[][]);
-      let added = 0;
-      for (const cells of drawn) {
-        const key = cells.join(" | ");
-        if (keys.has(key)) continue;
-        keys.add(key);
-        rows.push(cells);
-        added++;
-      }
-      return added;
-    };
-    // An earlier read leaves the body scrolled wherever it stopped — at the bottom, after a
-    // whole pass — and only the rows in view are drawn, so the body and whatever scrolls
-    // around it are put back at the top before the pass begins.
-    await table
-      .evaluate((node) => {
-        const scrollers: Element[] = [];
-        const within = (each: Element): void => {
-          scrollers.push(each);
-          for (const child of Array.from(each.children)) within(child);
         };
-        within(node);
-        for (let up = node.parentElement; up; up = up.parentElement) scrollers.push(up);
-        for (const each of scrollers) {
-          if (each.scrollTop > 0) each.scrollTop = 0;
-        }
+        const body =
+          [node, ...Array.from(node.querySelectorAll("*"))].find(
+            (each) => each.scrollHeight > each.clientHeight + 5 && /auto|scroll/.test(getComputedStyle(each).overflowY),
+          ) ?? null;
         window.scrollTo(0, 0);
+        if (!body) {
+          gather();
+          return rows;
+        }
+        body.scrollTop = 0;
+        await drawn();
+        gather();
+        const step = Math.max(Math.floor(body.clientHeight * 0.8), 40);
+        const started = Date.now();
+        for (let turn = 0; turn < 1000 && Date.now() - started < 3500; turn++) {
+          if (body.scrollTop + body.clientHeight >= body.scrollHeight - 1) break;
+          const before = body.scrollTop;
+          body.scrollTop = before + step;
+          await drawn();
+          gather();
+          if (body.scrollTop <= before) break;
+        }
+        await drawn();
+        gather();
+        return rows;
       })
-      .catch(() => undefined);
-    await page.waitForTimeout(300);
-    const box = await table.boundingBox();
-    if (box) await page.mouse.move(box.x + box.width / 2, box.y + Math.min(Math.max(box.height - 20, 10), 300));
-    let quiet = 0;
-    for (let turn = 0; turn < 200 && quiet < 4; turn++) {
-      quiet = (await gather()) ? 0 : quiet + 1;
-      await page.mouse.wheel(0, 400);
-      await page.waitForTimeout(200);
-    }
-    return rows;
+      .catch(() => [] as string[][]);
   }
 
   // Each row as "Status | Account Type | Name", one per line.
