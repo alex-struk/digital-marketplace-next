@@ -50,3 +50,14 @@ The ID is the criterion's own id exactly as `spec/criteria-index.json` spells it
 takes no text; the other two require a colon and text on the same line. A condition may not span
 more than one line.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether R-8.12's failure against old is the application's fault, the spec's, or the test's. Ruling: approve, with R-8.12 marked test-wrong. The failure happened during the test's own setup, before the behaviour the criterion describes was exercised: the upload of the file the vendor may not read was answered 503 Database error, so the vendor's request was never made and the not-authorized answer was never observed. The failure says nothing about the criterion, so defect-in-old would wrongly turn a refused upload into a rebuild obligation, and spec-wrong has nothing to correct. The same upload, by the same persona with the same empty read-access list, is stored in R-8.6 and R-8.10 in this run. R-8.12 differs from them in first signing in as an administrator and re-establishing both accounts as active, which the criterion does not ask for. R-8.5, which has the same opening step, had its upload refused in an earlier run. The confidence of R-8.12 is untouched. What would change this ruling: if the same upload is refused with no preliminary account handling, the 503 is a real fault of the old application, and it belongs in a new criterion about uploads rather than in R-8.12.
+
+**Conditions:**
+- test-wrong R-8.12: the test failed in its own setup and never made the request the criterion is about: the file it needed was never stored, because it runs preliminary account-status steps as an administrator that the criterion does not require, and the service refused the upload that followed, while the same upload by the same persona without those steps is stored elsewhere in the suite. Reach a stored file the vendor may not read without depending on those steps, and report a setup that could not store the file as a setup failure rather than as the criterion failing.
