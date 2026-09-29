@@ -700,3 +700,12 @@ redo:
       at: 2026-09-29T12:20:44.433Z
       gate: G3
       approved_by: agent:reviewer
+  - id: R-6.2
+    version: 1
+    why: while delivery is refused the test asserts that the mail catcher holds no
+      messages at all, which fails on any message from earlier activity that
+      arrives after the catcher is cleared and before the refusal takes effect;
+      the criterion is only about notices for the opportunity the test
+      publishes, so the check made while delivery is refused should count only
+      messages about that opportunity (identified by its title), as the test's
+      later check after delivery is restored already does
