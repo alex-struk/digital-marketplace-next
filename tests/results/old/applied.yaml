@@ -34,6 +34,7 @@ applied:
   - calibrate-triage-old-24
   - calibrate-triage-old-25
   - calibrate-triage-old-26
+  - calibrate-triage-old-27
 rulings:
   - id: R-8.18
     version: 1
@@ -457,3 +458,7 @@ rulings:
     version: 2
     verb: product-question
     gate: calibrate-triage-old-26
+  - id: R-6.2
+    version: 1
+    verb: product-question
+    gate: calibrate-triage-old-27
