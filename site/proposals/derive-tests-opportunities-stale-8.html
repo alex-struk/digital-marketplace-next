@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-stale-8 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">247</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">243</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">212</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-stale-8</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 00:03</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the opportunities criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> <strong>Journal: derive-tests, opportunities domain (spec@ccc1cba3)</strong></p>
+<p>I was given two criteria.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p><strong>Journal: derive-tests, opportunities domain (spec@ccc1cba3)</strong></p>
+<p>I was given two criteria. One now has a test file and the other has an entry in <code>not-testable.yaml</code>. I could not run a YAML parse or a TypeScript check because the commands needed approval, so neither file has been validated or run.</p>
+<p><strong>R-1.16 v1, rewritten test.</strong> The ruling said the old test&#39;s opportunity was refused over its phase dates before the phase rule was ever checked. I rewrote the test from the criterion so that every part of the opportunity except the phase arrangement is valid:</p>
+<ul><li><strong>Dates:</strong> each phase starts well after the assignment date (day 21). In the inception-without-prototype case, inception runs from day 30 to day 45 and implementation from day 60 to day 120. That leaves a wide gap, where the old test had implementation start the day after inception ended.</li><li><strong>Capabilities:</strong> every phase now names a required capability. The old test&#39;s phases named none. Other tests in the workspace that publish Sprint With Us opportunities successfully always name one, and the spec says Sprint With Us checks &quot;every phase&quot;.</li><li><strong>Budget:</strong> the phase budgets sum to $500,000 against a total of $1,000,000, where the old ones used up the total exactly.</li></ul>
+<p>The spec does not set out the phase-date rules, so I built these dates to stay clear of every reasonable ordering rule rather than to match a known one. If the service measures implementation&#39;s earliest start from the missing prototype phase in a way that always fails, no valid set of dates can avoid it. That would be a question for contract or ratify, not something a test can fix.</p>
+<p>The file keeps two tests:</p>
+<ul><li><strong>Missing implementation phase:</strong> this does not demand a refusal message. If the opportunity was published, its phases must include implementation; if not, it must be absent from the dashboard.</li><li><strong>Inception without prototype:</strong> the refusal message must mention both &quot;prototype&quot; and &quot;inception&quot;, and the opportunity must not end up published.</li></ul>
+<p><strong>R-1.33 v2, not testable (blocked, owner: contract).</strong> Version 2 says the service accepts a private note but that no screen offers a way to add one. The earlier v1 test added its note through <code>add_note</code>, which contradicts what v2 says. The surface still declares <code>add_note</code> on both <code>opportunity-cwu-edit</code> and <code>opportunity-swu-edit</code>, and nothing else in the surface reaches the criterion. I deleted <code>R-1.33.spec.ts</code> and wrote one entry for the whole criterion. What would make it testable:</p>
+<ul><li><strong>Remove <code>add_note</code></strong> from both edit pages.</li><li><strong>Seed two opportunities,</strong> one Code With Us and one Sprint With Us, each with a private note and an attached file in its history: one written by the opportunity&#39;s author, one by an administrator. They need handles in the manifest&#39;s <code>opportunities</code> group so <code>history_tab</code> can be read as the author, as an administrator and as another staff member.</li><li><strong>Add an observation</strong> on both edit pages saying whether any control for adding a note is offered.</li></ul>
+<p>The entry also says that the clause &quot;the service accepts&quot; could only ever be shown by a request that no screen sends. Ratify would have to restate that clause in terms something on a page shows, or withdraw it.</p>
+<p>I changed nothing under <code>spec/</code>, <code>tests/seed/</code> or <code>tests/fixtures/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 00:03.</p>
+<div class="body"><p>The rewritten R-1.16 tests assert only what the criterion states. The first checks that no Sprint With Us opportunity ends up published without an implementation phase. The second checks that an inception-without-prototype submission is rejected, that the message names prototype and inception, and that the opportunity is not published. The date, capability and budget changes are setup that makes the phase arrangement the only fault, as the redo asked, and no implementation detail leaks in. The runner&#39;s typecheck reports no diagnostics under acceptance/opportunities. Deleting R-1.33&#39;s v1 test is correct: it added its note through add_note, which v2 says no screen offers. Its not-testable entry names real gaps in the surface: add_note is still declared, no seeded opportunity carries a note with a file, and no observation reports whether a note control is offered. The entry is owed by contract. The clause that the service accepts a note can only be shown by a request no screen sends, so it is recorded here as owed by ratify. This would change on a typecheck diagnostic in the opportunities tests, or on the spec making editing a separately tested clause of R-1.16.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>missing-test R-1.33: the service accepts a private note with files from the opportunity&#39;s author or an administrator at any point in its life — owed by ratify: a restatement of the acceptance clause in terms something on a page observes, or a ruling withdrawing it, since only a request no screen sends could show it</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

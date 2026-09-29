@@ -4250,3 +4250,35 @@ owed:
       file_sha: 235998c6475568e04cc5387c5fae93ff27dc3e3f
       by: runner
       at: 2026-09-28T23:35:31.456Z
+  - kind: missing-test
+    item: R-1.33
+    id: R-1.33
+    version: 2
+    domain: opportunities
+    stage: ratify
+    why: remove add_note from opportunity-cwu-edit and opportunity-swu-edit; seed
+      one Code With Us and one Sprint With Us opportunity each carrying a
+      private note with an attached file in its history, one written by the
+      opportunity's author (a public sector staff persona) and one by an
+      administrator, with handles in the manifest's opportunities group, so
+      history_tab can be read as the author, as an administrator and as another
+      staff member; add an observation on both edit screens reporting whether
+      any control for adding a note to the history is offered. The acceptance
+      clause, which only a request no screen sends could show, needs restating
+      in ratify in terms something observes, or withdrawing.
+    from: derive-tests-opportunities-stale-8
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-29T00:03:51.733Z
+    clause: the service accepts a private note with files from the opportunity's
+      author or an administrator at any point in its life
+    readdressed:
+      - from: contract
+        to: ratify
+        why: a restatement of the acceptance clause in terms something on a page
+          observes, or a ruling withdrawing it, since only a request no screen
+          sends could show it
+        by: agent:reviewer
+        proposal: derive-tests-opportunities-stale-8
+        gate: G3
+        at: 2026-09-29T00:03:52.418Z
