@@ -2010,3 +2010,15 @@ rebind:
       finish well within 5 s, for example by scrolling the list's scroll
       container directly in larger steps or reading the rows in one evaluate
       pass without per-turn waits, while still covering every row.
+    closed:
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-29T16:17:05.192Z
+  - id: R-8.12
+    target: old
+    why: fileDownload.refusedForUnknownFile only reports a refusal whose status is
+      404, so a vendor refused as not authorized for an unknown file reads as
+      ""; the vendor-facing reader must hand over a not-authorized refusal
+      (401/403) as the criterion describes, leaving the 404 filter to
+      notFoundForAdministrator only
