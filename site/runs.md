@@ -169,6 +169,8 @@
 - 04:32:41 propose derive-tests-proposals-stale-15 at G3
 - 04:33:33 rule derive-tests-proposals-stale-15 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 - 05:15:56 run calibrate: ok, cost 0, turns 0
+- 05:15:57 propose calibrate-old-17 at G1
+- 05:17:26 rule calibrate-old-17 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-28
 
