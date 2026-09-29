@@ -13,6 +13,7 @@ no calibration ruling open.
 
 | file | at | pass | fail | unbound | stale | not-testable | attested |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-29-14.json | 2026-09-29T14:09:16.829Z | 195 | 45 | 8 | 0 | 17 | 0 |
 | 2026-09-29-13.json | 2026-09-29T13:03:13.715Z | 194 | 46 | 8 | 0 | 17 | 0 |
 | 2026-09-29-12.json | 2026-09-29T12:15:54.601Z | 192 | 48 | 8 | 0 | 17 | 0 |
 | 2026-09-29-11.json | 2026-09-29T11:13:09.629Z | 194 | 45 | 8 | 1 | 17 | 0 |
@@ -43,5 +44,5 @@ no calibration ruling open.
 | 2026-09-14.json | 2026-09-14T10:59:25.166Z | 30 | 173 | 0 | 0 | 62 | 0 |
 | 2026-09-11.json | 2026-09-11T04:52:21.727Z | 13 | 154 | 0 | 0 | 98 | 0 |
 
-Open calibration proposal: calibrate-old-18.
+no calibration ruling open.
 
