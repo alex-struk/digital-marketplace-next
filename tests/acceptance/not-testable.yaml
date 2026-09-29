@@ -167,32 +167,6 @@ criteria:
       clause, which only a request no screen sends could show, needs restating
       in ratify in terms something observes, or withdrawing.
     owner: contract
-  - id: R-2.28
-    version: 2
-    clause: a proposal's page does not offer a score for a stage the opportunity has
-      not yet reached (both programs); and, for Team With Us, the service refuses
-      such a score sent to it directly with "The opportunity is not in the
-      correct stage of evaluation to perform that action."
-    reason: "blocked: R-2.28.spec.ts asserts, on both programs, that the page of a
-      proposal whose opportunity has not reached a stage says the proposal can be
-      scored once it does and takes no score for that stage, and, for Sprint With
-      Us, that a team scenario score sent through proposal-evaluation-request for
-      seed.proposals.swuScreenedIntoScenarioEarly is refused with the stage
-      message. No observation on proposal-swu-view or proposal-twu-view reports
-      whether score_team_scenario or score_challenge is offered, so the control's
-      absence cannot be read. And no Team With Us proposal is seeded that has
-      been carried into the challenge while its opportunity still stands short
-      of it; the contract says the service refuses a proposal not yet in the
-      stage with its general permission message instead, so
-      score_challenge_by_request on any seeded Team With Us proposal cannot
-      produce the stage message."
-    missing: an observation on proposal-swu-view and proposal-twu-view reporting
-      which score actions the page offers; and a seeded Team With Us proposal
-      screened into the challenge on an opportunity still at question
-      consensus (the Team With Us counterpart of
-      seed.proposals.swuScreenedIntoScenarioEarly), named as the starting point
-      for score_challenge_by_request
-    owner: contract
   - id: R-6.9
     version: 1
     reason: The claim is about the visible address line of a panel notice listing
