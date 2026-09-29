@@ -3942,6 +3942,7 @@ export default function create(
     }
     const name = organizationNamed(input);
     namedLabels.add(squash("Organization"));
+    if (step === "Team Members") await rememberTwuResources();
     await box.click();
     const options = seen(page.getByRole("option"));
     await options.first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
@@ -3974,6 +3975,82 @@ export default function create(
         `${where} — refused: the "Organization" chooser on ${page.url()} does not offer "${name}", and "${left}" stays chosen in its place (Backspace did not clear it)`,
       );
     }
+  }
+
+  // Choosing another organization on "2. Team Members" empties every resource's "Resource
+  // Name*" and "Hourly Rate*" (seen as the owner of Northern Pines and Salt Marsh Labs on a
+  // submitted Team With Us proposal: Blake Placeholder and $100 both gone, "Submit Changes"
+  // disabled). What each resource held before is kept here, so a save that changes the
+  // organization can put it back and let the service rule on the change itself.
+  let twuResourcesBefore: Array<{ name: string; rate: string }> = [];
+
+  async function rememberTwuResources(): Promise<void> {
+    const choosers = seen(page.getByRole("combobox", { name: labelled("Resource Name") }));
+    const rates = seen(page.getByRole("spinbutton", { name: labelled("Hourly Rate") }));
+    const count = await choosers.count();
+    const held: Array<{ name: string; rate: string }> = [];
+    for (let i = 0; i < count; i++) {
+      const name = (await chosenOrganization(choosers.nth(i))).trim();
+      const rate = i < (await rates.count()) ? (await rates.nth(i).inputValue().catch(() => "")).trim() : "";
+      held.push({ name, rate });
+    }
+    // An emptied form is never taken over what was remembered before it was emptied.
+    if (held.some((each) => each.name || each.rate)) twuResourcesBefore = held;
+  }
+
+  // Each resource left without a member or a rate gets back what it held before the
+  // organization changed: the member when the chooser now offers them, the rate as it was.
+  async function restoreTwuResources(where: string): Promise<void> {
+    if (!twuResourcesBefore.length || !(await goToStep("Team Members"))) return;
+    const choosers = seen(page.getByRole("combobox", { name: labelled("Resource Name") }));
+    await choosers.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+    const count = await choosers.count();
+    for (let i = 0; i < count && i < twuResourcesBefore.length; i++) {
+      const { name, rate } = twuResourcesBefore[i];
+      const chooser = choosers.nth(i);
+      if (name && (await chooserIsEmpty(chooser))) {
+        await chooser.click();
+        const option = seen(page.getByRole("option", { name, exact: true }));
+        await seen(page.getByRole("option")).first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
+        if (await option.count()) await option.first().click();
+        else await page.keyboard.press("Escape").catch(() => undefined);
+        await settle();
+      }
+      const box = seen(page.getByRole("spinbutton", { name: labelled("Hourly Rate") })).nth(i);
+      if (rate && (await box.count()) && !(await box.inputValue().catch(() => "")).trim()) {
+        await fillTwuRate(where, i, rate);
+      }
+    }
+  }
+
+  // Every required field (its label ending in "*") left empty, step by step, with any message
+  // a step shows. The old form draws no message against an empty required field — "Resource
+  // Name*" reads only "Please select a resource name" — so emptiness is read from the fields.
+  async function emptyRequiredFields(): Promise<string[]> {
+    const found: string[] = [];
+    const visit = async (): Promise<void> => {
+      const step = (await (await currentStep())?.innerText().catch(() => ""))?.trim() || "form";
+      for (const role of ["textbox", "spinbutton", "combobox"] as const) {
+        const fields = seen(page.getByRole("main").getByRole(role));
+        const count = await fields.count();
+        for (let i = 0; i < count; i++) {
+          const box = fields.nth(i);
+          const name = (await accessibleName(box)).trim();
+          if (!/\*\s*$/.test(name) || (await box.isDisabled().catch(() => false))) continue;
+          const empty = role === "combobox"
+            ? await chooserIsEmpty(box)
+            : !(await box.inputValue().catch(() => "")).trim();
+          if (empty) found.push(`${step}: "${bareLabel(name)}" is empty`);
+        }
+      }
+      for (const line of (await messages()).split("\n")) {
+        const entry = `${step}: ${line}`;
+        if (line && !found.includes(entry)) found.push(entry);
+      }
+    };
+    if (await currentStep()) await walkSteps(visit);
+    else await visit();
+    return found;
   }
 
   // Set when the organization a test named could not be chosen, so no later step picks
@@ -4225,22 +4302,41 @@ export default function create(
     const found = await phaseAdderFor(where, phase);
     const names = typeof input === "string" && phaseGiven ? [] : await teamMemberNames(where, input);
     lastSwuPhase = found.phase;
+    // The dialog lists only people not yet on the phase. Somebody already in its team table —
+    // as a person belonging to both organizations stays after the organization is changed on
+    // a submitted proposal (seen as the owner of Northern Pines and Salt Marsh Labs) — is
+    // already added, and the dialog is not asked for them.
+    const wanted: string[] = [];
+    for (const name of names) if (!(await onSwuPhase(found.phase, name))) wanted.push(name);
+    if (names.length && !wanted.length) return;
     await found.adder.click();
     if (!(await dialogUp())) {
       throw new Error(`unbound: ${where} — "Add Team Member(s)" opened no dialog on ${page.url()}`);
     }
-    for (const name of names) {
+    for (const name of wanted) {
       const entry = seen(dialog().first().getByText(name, { exact: true }));
       if (!(await entry.count())) {
         const offered = (await dialogText()).replace(/\s*\n\s*/g, " | ");
         await dismissDialog();
-        throw new Error(`${where} — refused: the member dialog does not offer "${name}" on ${page.url()} (it shows: ${offered})`);
+        throw new Error(`${where} — refused: the member dialog does not offer "${name}", and "${name}" is not in the "${found.phase || "phase"}" team table either, on ${page.url()} (the dialog shows: ${offered})`);
       }
       await entry.last().click();
     }
     await press(where, ["Add Team Member(s)"], dialog().first());
     await dialog().first().waitFor({ state: "hidden", timeout: 5000 }).catch(() => undefined);
     await settle();
+  }
+
+  // Whether a phase's team table already has a row for the person: each member sits on a row
+  // of their own under "TEAM MEMBER", beside a "Remove" (seen as the owner of Northern Pines
+  // adding Blake and Charlie to Implementation). With several phases the row must sit in the
+  // phase's own section.
+  async function onSwuPhase(phase: string, name: string): Promise<boolean> {
+    const rows = seen(page.getByRole("row").filter({ has: page.getByText(name, { exact: true }) }));
+    if (!(await rows.count())) return false;
+    if (!phase || (await teamPhasesShown()).length < 2) return true;
+    const band = await phaseBand(phase);
+    return band ? (await inBand(rows, band)) !== null : false;
   }
 
   // "5. References" holds three blocks headed "Reference 1" to "Reference 3", each with
@@ -4494,6 +4590,13 @@ export default function create(
     const name = names[0] ?? "";
     const chooser = choosers.nth(which);
     namedLabels.add(squash("Resource Name"));
+    const rate = field(input, "hourlyRate", "hourly_rate", "rate");
+    // A chooser already showing the person has them named; its list would leave them out.
+    const already = name ? await chosenOrganization(chooser) : "";
+    if (already && squash(already).includes(squash(name))) {
+      if (rate) await fillTwuRate(where, which, rate);
+      return;
+    }
     await chooser.click();
     const options = seen(page.getByRole("option"));
     await options.first().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
@@ -4509,7 +4612,6 @@ export default function create(
     await option.first().click();
     await settle();
     // A rate handed over with the member is entered beside them.
-    const rate = field(input, "hourlyRate", "hourly_rate", "rate");
     if (rate) await fillTwuRate(where, which, rate);
   }
 
@@ -4601,6 +4703,19 @@ export default function create(
   // instead, which raises the terms dialog: its boxes are ticked, then its own "Submit
   // Changes" confirms.
   async function saveProposalChanges(where: string): Promise<void> {
+    // A disabled "Save Changes" or "Submit Changes" is the form holding something invalid.
+    // It draws no message for an empty required field, so every step is walked and each
+    // empty required field named.
+    for (const name of ["Save Changes", "Submit Changes"]) {
+      const control = await findControl(navBar(), name);
+      if (!control || !(await isDisabled(control))) continue;
+      const found = await emptyRequiredFields();
+      throw new Error(
+        `${where} — "${name}" is disabled on ${page.url()}; walked every step of the form: ${
+          found.length ? found.join(" | ") : "no required field is empty and no step shows a message"
+        }`,
+      );
+    }
     if (await findControl(navBar(), "Save Changes")) {
       await press(where, ["Save Changes"], navBar());
       await confirmIfAsked(where, ["Save Changes"]);
@@ -4620,7 +4735,16 @@ export default function create(
     await settle();
     await press(where, ["Submit Changes", "Submit"], dialog().first());
     await dialog().first().waitFor({ state: "hidden", timeout: 15000 }).catch(() => undefined);
-    await saved(["Submit Changes"]);
+    // A refused change leaves the form open under "Unable to Submit Proposal Changes" (seen
+    // after changing the organization of a submitted Team With Us proposal), with the
+    // service's reason against the field; that notice ends the wait as the form closing does.
+    const deadline = Date.now() + 30000;
+    while (Date.now() < deadline) {
+      if (!(await findControl(navBar(), "Submit Changes"))) break;
+      if ((await everyAlert(REFUSED_SUBMISSION)).length) break;
+      await page.waitForTimeout(250);
+    }
+    await ready();
   }
 
   // A terms dialog, when one opens: every box in it ticked, then its own confirming control
@@ -4730,6 +4854,7 @@ export default function create(
       startEditing: () => startEditingProposal(`${where}.start_editing`),
       saveChanges: async (input?: unknown) => {
         await applyProposalEdits(`${where}.save_changes`, teamStep, input);
+        if (teamStep === "Team Members") await restoreTwuResources(`${where}.save_changes`);
         await saveProposalChanges(`${where}.save_changes`);
       },
       saveChangesAndSubmit: async () => {
