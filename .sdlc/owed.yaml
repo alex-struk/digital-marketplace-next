@@ -2893,6 +2893,13 @@ owed:
           decide whether to recast the given or retire the criterion
         by: contract-v8
         at: 2026-09-25T13:33:01.981Z
+    closed:
+      outcome: withdrawn
+      why: its given (an embedded page removed) cannot arise, because under R-7.25 the
+        service refuses to remove or rename the pages it embeds (confirmed in
+        the old source at contract-v24); no test is owed
+      by: tech-lead
+      at: 2026-09-29T23:16:09.041Z
   - kind: missing-test
     item: R-5.11
     id: R-5.11
@@ -4682,6 +4689,13 @@ owed:
           half, which is already tested through mail-delivery-fault.
         by: contract-v25
         at: 2026-09-29T07:22:08.661Z
+    closed:
+      outcome: withdrawn
+      why: no stored value can make a notice fail to compose on the old application,
+        so no acceptance test can reach the clause; the build stage covers
+        message composition failure with its own test
+      by: tech-lead
+      at: 2026-09-29T23:16:09.212Z
   - kind: missing-test
     item: R-2.19
     id: R-2.19
