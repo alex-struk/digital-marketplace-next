@@ -609,6 +609,11 @@ redo:
       description is refused or given exactly when the content is, so the test
       should compare whether each request is refused or permitted, for the same
       people, rather than read the content bytes
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on files
+      by: runner:derive-tests
+      at: 2026-09-29T02:19:49.609Z
   - id: R-3.9
     version: 1
     why: the scenario where an administrator accepts the invitation shares one
