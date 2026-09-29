@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-proposals-stale-14 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">292</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">288</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">254</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-proposals-stale-14</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 11:18</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the proposals criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I wrote one test file for the single criterion I was given, R-2.19 v3.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I wrote one test file for the single criterion I was given, R-2.19 v3. It passes part of the criterion, so it also has a clause entry in <code>tests/acceptance/not-testable.yaml</code>. I could not run the type checker or check the YAML: both commands needed approval, and no one was here to give it. The file follows the same imports and patterns as the R-2.18 and R-2.37 tests already in the workspace, but it has not been compiled or run.</p>
+<p><strong>What the test covers.</strong> <code>tests/acceptance/proposals/R-2.19.spec.ts</code> replaces the v2 file and now carries the v3 header. It has nine tests. Each is titled with the criterion&#39;s statement plus a short note on which outcome it checks. Each test publishes its own Sprint With Us opportunity with two phases: a prototype phase wanting frontend work and an implementation phase wanting backend work, each with its own budget. The seeded qualified organization&#39;s administrator holds the frontend capability and its owner the backend one, so one arrangement of people makes a complete proposal. Each refusal test spoils exactly one thing about it.</p>
+<ul><li><strong>Through the proposal form:</strong></li><li>A complete proposal is submitted.</li><li>A proposal with no team for one phase is refused.</li><li>Choosing a second scrum master in a phase replaces the first, so the proposal still goes through.</li><li>Capabilities placed in the wrong phases are refused. Between them the two phases hold every capability, but neither holds its own, which is the per-phase rule v3 added.</li><li>One phase&#39;s cost over that phase&#39;s budget is refused.</li><li>A total cost over the opportunity&#39;s total budget is refused.</li><li><strong>Through <code>proposal-team-request</code>:</strong> v3 says the form itself prevents these, so they are sent straight to the service.</li><li>A phase with two scrum masters is refused.</li><li>A phase with no scrum master is refused.</li><li>A phase whose only holder of a required capability is a person with an unanswered invitation, rather than a confirmed member, is refused.</li></ul>
+<p><strong>One risk.</strong> The total-budget test publishes an opportunity whose phase budgets add up to more than its total budget. Nothing in the spec refuses that, and the earlier v2 file assumed it could not be done. If publishing is refused, the test will fail in setup with a message saying the opportunity was not published, not at the criterion&#39;s assertion.</p>
+<p><strong>Not asserted (the clause entry, owner <code>contract</code>, marked <code>blocked:</code>).</strong> The entry names these clauses:</p>
+<ul><li>&quot;to no other phase, the proposal form offering a team section for exactly the opportunity&#39;s phases&quot;</li><li>&quot;the form shows which phase is incomplete or which cost is over its budget&quot;</li></ul>
+<p>The surface actions and observations I needed but did not find:</p>
+<ul><li>On <code>proposal-swu-create</code>, an observation listing the phases the form offers a team section for.</li><li>Error observations that report what each message is about: the phase whose team, scrum master, capabilities or cost is wrong, or the total cost. Today <code>field_error</code>, <code>capability_gap_error</code> and <code>budget_exceeded_error</code> are text with no location. <code>proposal-swu-edit</code>&#39;s <code>field_error</code> already has this for <code>save_changes</code>.</li><li>A statement of what <code>proposal-team-request</code> sends for a phase the opportunity does not have. Its input is documented only for the phases the opportunity requires, so a team for an extra phase cannot be sent to the service either.</li></ul>
+<p>I changed nothing outside <code>tests/acceptance</code>, and nothing asked me to.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 11:19.</p>
+<div class="body"><p>The question is whether R-2.19.spec.ts asserts R-2.19 v3 and nothing beyond it. Approve. Each of the nine tests asserts only submission or refusal, which is what the criterion states: a complete proposal is submitted; a missing phase team, a missing per-phase capability (both capabilities present across the proposal but each in the wrong phase), a phase cost over its phase budget and a total over the opportunity&#39;s total budget are each refused on the form; two scrum masters, no scrum master and reliance on an unconfirmed (pending) holder of a required capability are refused by the service, which is right because the form&#39;s single choice keeps a vendor from sending those; and replacing a scrum master shows the single choice. The seed agrees with the test&#39;s premises (manifest: organizationAdmin holds Frontend Development, organizationOwner holds Backend Development, organizationMember holds neither, teamCandidatePending is a pending member holding Backend Development). Nothing about how the app is built leaks into the assertions; they use contract observations only. The two unasserted clauses, that the form offers team sections for exactly the opportunity&#39;s phases and that the form says which phase or cost is at fault, carry a clause entry in not-testable.yaml owned by contract. Its reason is genuine: proposal-swu-create in spec/contract/surface.yaml offers no observation of phase sections, and field_error, capability_gap_error and budget_exceeded_error are text with no location. The checks already show that clause as missing-test owed by contract. The runner&#39;s typecheck reports no diagnostics under acceptance/proposals; the 2 failures are in adapters/new, which this proposal does not answer for. Remaining risk: the total-budget test depends on publishing an opportunity whose phase budgets exceed its total, and it fails loudly in setup if that is refused. A type error in this file, or evidence that the unasserted clauses are reachable with the current surface, would change the ruling to a return.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

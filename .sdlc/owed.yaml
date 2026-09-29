@@ -4682,3 +4682,21 @@ owed:
           half, which is already tested through mail-delivery-fault.
         by: contract-v25
         at: 2026-09-29T07:22:08.661Z
+  - kind: missing-test
+    item: R-2.19
+    id: R-2.19
+    version: 3
+    domain: proposals
+    stage: contract
+    why: on proposal-swu-create, an observation listing the phases the form offers a
+      team section for, by phase name; and error observations that report, with
+      each message, what it stands against — the phase (Inception, Prototype,
+      Implementation) whose team, scrum master, capabilities or cost is at
+      fault, or the total cost — as proposal-swu-edit's field_error already
+      describes for save_changes. Optionally, a statement on
+      proposal-team-request of what it sends for a phase the opportunity does
+      not have, so the service's refusal of an extra phase can be asserted.
+    from: derive-tests-proposals-stale-14
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-29T11:19:05.793Z

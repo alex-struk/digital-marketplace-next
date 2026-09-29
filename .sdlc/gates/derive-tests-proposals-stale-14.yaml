@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether R-2.19.spec.ts asserts R-2.19 v3 and nothing beyond it. Approve. Each of the nine tests asserts only submission or refusal, which is what the criterion states: a complete proposal is submitted; a missing phase team, a missing per-phase capability (both capabilities present across the proposal but each in the wrong phase), a phase cost over its phase budget and a total over the opportunity's total budget are each refused on the form; two scrum masters, no scrum master and reliance on an unconfirmed (pending) holder of a required capability are refused by the service, which is right because the form's single choice keeps a vendor from sending those; and replacing a scrum master shows the single choice. The seed agrees with the test's premises (manifest: organizationAdmin holds Frontend Development, organizationOwner holds Backend Development, organizationMember holds neither, teamCandidatePending is a pending member holding Backend Development). Nothing about how the app is built leaks into the assertions; they use contract observations only. The two unasserted clauses, that the form offers team sections for exactly the opportunity's phases and that the form says which phase or cost is at fault, carry a clause entry in not-testable.yaml owned by contract. Its reason is genuine: proposal-swu-create in spec/contract/surface.yaml offers no observation of phase sections, and field_error, capability_gap_error and budget_exceeded_error are text with no location. The checks already show that clause as missing-test owed by contract. The runner's typecheck reports no diagnostics under acceptance/proposals; the 2 failures are in adapters/new, which this proposal does not answer for. Remaining risk: the total-budget test depends on publishing an opportunity whose phase budgets exceed its total, and it fails loudly in setup if that is refused. A type error in this file, or evidence that the unasserted clauses are reachable with the current surface, would change the ruling to a return.
+conditions: []
+cost: 0.4954198
+turns: 7
+session: "57fc2579-dbc2-48ca-bbe7-8906322d66ee"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-29T11:19:05.755Z
