@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-organizations-8 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">298</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">294</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">259</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-organizations-8</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 12:20</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised organizations tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I changed only <code>tests/acceptance/organizations/R-3.24.spec.ts</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I changed only <code>tests/acceptance/organizations/R-3.24.spec.ts</code>. No other test file, no <code>not-testable.yaml</code> entry and nothing under <code>tests/generated</code> was touched. The header stays as it was: the derived date was already 2026-09-29, which is today. I could not run the typecheck because the tool refused to run <code>tsc</code> without approval, so the edit has not been compiled. I checked the types by reading them instead: the <code>ID: string</code> field I added to the local mailbox type matches what the mail fixture&#39;s <code>messagesTo</code> returns, and <code>surface.caughtMessage</code> provides <code>open({ messageId })</code>, <code>subject()</code> and <code>plainTextBody()</code>, as the generated surface declares.</p>
+<p><strong>Condition 1 (the message says an administrator archived the organization).</strong> The administrator case still polls for 30 seconds until a message to the owner (seeded user <code>vendorOne</code>) mentions archiving. It then takes that message, opens it through <code>surface.caughtMessage.open({ messageId })</code>, and joins its subject and plain-text body. It asserts that text matches <code>/archiv/i</code> and <code>/admin/i</code>. That is loose enough that &quot;archived by an administrator&quot;, &quot;an admin has archived&quot; or similar wording will all pass. To get the message&#39;s identifier I split the filtering helper in two: <code>archivingMessages</code> returns the matching messages, and <code>archivingMessagesTo</code> still returns the count, so the existing polling code did not change.</p>
+<p><strong>Condition 2 (the message says the owner can no longer use it).</strong> On the same subject and body text, the test asserts a &quot;no longer / not be able / cannot / can&#39;t / unable&quot; phrase followed, within the same sentence, by &quot;use&quot;, &quot;access&quot; or &quot;available&quot;. Wording isn&#39;t fixed, but the message has to state the loss of use.</p>
+<p><strong>Condition 3 (keep the polling and the seeded records).</strong> Nothing changed here. The administrator case still polls for the 30-second window and uses <code>seed.organizations.unqualified</code>. The owner case still watches the whole window before asserting that nothing arrived, and uses <code>seed.organizations.withPendingInvitation</code> with <code>persona.organizationOwner</code>. The helper split doesn&#39;t change what the owner case does.</p>
+<p>With these assertions the test checks every clause of R-3.24&#39;s &quot;then&quot;, so no clause entry was needed in <code>not-testable.yaml</code>. I acted on all three conditions. I found no contract gaps: the surface already provided everything the new assertions need.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 12:20.</p>
+<div class="body"><p>Question: does the revised R-3.24 test follow from its criterion and nothing else? Approve. The administrator case now opens the archiving message through surface.caughtMessage and asserts that its subject and plain-text body say the organization was archived, that an administrator did it, and that the owner can no longer use or access it, with wording matched loosely. That is every part of the criterion&#39;s &#39;then&#39;. The owner case watches the full settling window and asserts that no archiving message reaches the owner, which is the &#39;no such message&#39; clause. No assertion goes beyond the criterion. The message ID used comes from the mail fixture&#39;s declared contract (tests/fixtures/mail.ts), not from the application. The runner typecheck reports no diagnostics under acceptance/organizations; its failures are in adapters/new, which this proposal does not answer for. Polling and seeded records are unchanged. What would change this: type errors in the organizations suite, or a clause of the &#39;then&#39; left unasserted.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met derive-tests-organizations-stale-9#1: the administrator case opens the archiving message via surface.caughtMessage and asserts /admin/i on its subject plus plain-text body, in tests/acceptance/organizations/R-3.24.spec.ts</li><li>condition-met derive-tests-organizations-stale-9#2: the same message text is asserted to contain a no-longer/cannot/unable phrase followed within the sentence by use/access/available, in tests/acceptance/organizations/R-3.24.spec.ts</li><li>condition-met derive-tests-organizations-stale-9#3: both cases keep the 30-second settling window, and the seeded organizations stay seed.organizations.unqualified (administrator case) and seed.organizations.withPendingInvitation (owner case), in tests/acceptance/organizations/R-3.24.spec.ts</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

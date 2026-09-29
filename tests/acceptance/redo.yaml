@@ -692,3 +692,11 @@ redo:
       before asserting that at least one message mentions archiving, and the
       negative case should likewise wait out the same window before asserting
       nothing arrived
+    closed:
+      outcome: met
+      why: derived again by derive-tests-organizations-stale-9, in the line of work
+        approved as derive-tests-organizations-8
+      by: derive-tests-organizations-8
+      at: 2026-09-29T12:20:44.433Z
+      gate: G3
+      approved_by: agent:reviewer

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-organizations-stale-9 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">298</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">294</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">259</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-organizations-stale-9</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 12:18</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the organizations criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the test for R-3.24.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rewrote the test for R-3.24. It is the only criterion in this run, so one of one got a test and nothing was added to <code>tests/acceptance/not-testable.yaml</code>. The test has not been run: this workspace has no app or mail catcher to run it against. I also couldn&#39;t type-check it, because the check command needed an approval that nobody was here to give.</p>
+<p><strong>What the ruling found and how the new test fixes it.</strong> The old test checked the owner&#39;s mailbox once, straight after the archive action returned. A notice that arrived a moment later counted as never sent. The new file, <code>tests/acceptance/organizations/R-3.24.spec.ts</code>, has two tests:</p>
+<ul><li><strong>Administrator archives:</strong> keeps checking the owner&#39;s mailbox for up to 30 seconds and passes as soon as a message mentioning archiving arrives. This is the same 30-second window the other mail tests use.</li><li><strong>Owner archives their own organization:</strong> watches the owner&#39;s mailbox for the full 30 seconds, checking about once a second, before asserting that no message mentioning archiving came.</li></ul>
+<p><strong>Other changes from the old version:</strong></p>
+<ul><li><strong>Seeded records instead of made-up ones.</strong> The old test registered new organizations with invented names and details. The new one uses seeded organizations and opens them directly by their seeded id with <code>surface.organizationEdit.open</code>.</li><li>For the administrator case it uses <code>seed.organizations.unqualified</code>, which is active and owned by <code>seed.users.vendorOne</code>, so the administrator is clearly not its owner.</li><li>For the owner case it uses <code>seed.organizations.withPendingInvitation</code>, which is active and owned by <code>seed.users.organizationOwner</code>, who signs in as <code>persona.organizationOwner</code>.</li><li>The fixtures reset to the seed before every test, so neither case leaves state behind for the other.</li><li><strong>Mail is cleared right before the archive action.</strong> Only the archive can produce what the test counts.</li><li><strong>Imports.</strong> One existing test imports a type from <code>fixtures/mail</code>, which is outside the allowed import paths. I avoided that by declaring the small mailbox shape the helper needs inside the test file.</li></ul>
+<p><strong>Decision to note.</strong> The test asserts what the criterion&#39;s statement says: the owner receives an email saying the organization has been archived. The longer &quot;then&quot; also mentions that the message says an administrator did it and that the owner can no longer use the organization. I did not assert those points, for two reasons:</p>
+<ul><li>The ruling framed the check as &quot;at least one message mentions archiving&quot;.</li><li>Matching specific wording in the message body risks failing because of phrasing the criterion never fixes.</li></ul>
+<p>I also added no partial-coverage entry for them, because the surface could reach them: the full message body can be read through <code>surface.caughtMessage</code> (<code>htmlBody</code> / <code>plainTextBody</code>). If the ruler wants those details asserted, the test can be extended with what the surface already has.</p>
+<p><strong>Missing surface actions or observations:</strong> none. Everything this criterion needed was there: <code>organizationEdit.open</code> / <code>archiveOrganization</code>, the seeded organizations and users, and <code>mail.messagesTo</code> / <code>mail.clear</code>. I changed nothing outside <code>tests/acceptance/</code>, and nothing asked me to.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 12:19.</p>
+<div class="body"><p>The question is whether the rewritten R-3.24 test follows from its criterion and nothing else. The rewrite fixes the timing defect the earlier ruling raised: the administrator case polls the owner&#39;s mailbox for the 30-second settling window, the owner-archives case watches the whole window before asserting nothing arrived, and both use seeded active organizations, with the administrator case using one owned by another user (vendorOne). The typecheck reports no diagnostics under acceptance/organizations/. The test still asserts only part of its criterion. The criterion&#39;s &#39;then&#39; says the owner&#39;s message tells them the organization was archived by an administrator and that they can no longer use it, and the test checks only that some message&#39;s subject or snippet matches /archiv/. The writer states the surface reaches the full message body through surface.caughtMessage (subject, plainTextBody), and sibling suites already read bodies that way (users/R-4.5, R-4.2). These are clauses the writer could assert and did not, with no not-testable.yaml clause entry beside the test, so a passing run would read as verifying the whole criterion. The earlier ruling&#39;s &#39;at least one message mentions archiving&#39; addressed timing and does not narrow the criterion. The ruling would change to approve once the administrator case opens the archiving message via surface.caughtMessage and asserts, tolerantly of wording, that it says an administrator archived the organization and that the owner can no longer use it, keeping the polling and seeded-record structure as they are.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-3.24 administrator case: the criterion&#39;s &#39;then&#39; requires the owner&#39;s message to say the organization was archived by an administrator. Open the archiving message with surface.caughtMessage and assert its subject or plain-text body says an administrator did it, matching loosely enough that exact phrasing is not fixed.</li><li>R-3.24 administrator case: the criterion&#39;s &#39;then&#39; requires the message to tell the owner they can no longer use the organization. Assert this on the same message body through surface.caughtMessage, which the surface already provides.</li><li>Keep the settling-window polling in both cases and the seeded organizations (unqualified for the administrator case, withPendingInvitation for the owner case) as they are. They correctly answer the earlier ruling.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
