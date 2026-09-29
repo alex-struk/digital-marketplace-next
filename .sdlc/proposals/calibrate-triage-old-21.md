@@ -160,3 +160,18 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is which of the five criteria failing or unbound on the old target were caused by this project's adapter. Ruling: approve, with one triage condition per criterion. R-6.2: the adapter's message_count reports the catcher's own total, read from the same per-worker catcher the test cleared, so 4 messages against 1 invitation is about what the application sent, not how it was read. That makes it a product question. R-8.12: the adapter sent a well-formed multipart upload with the empty read-access list the files suite uses, and the service itself answered 503 Database error. Nothing there points at the binding. R-1.16: field_error walked every wizard step and found no message text, only that the Phases step was refused. Whether the target states the prototype rule at all is for the product owner. R-4.23: the adapter saw the page redirect the vendor away from /sign-up/complete. The test produces 'not yet agreed' by announcing changed terms, which the target does not treat as never having agreed. That is a question about the test or criterion, not the binding. R-2.19: the old application does let a vendor add team members to each Sprint With Us phase, which is its core proposal flow. The binding reached the Team step with an organization chosen and still reported the control missing, so the adapter is at fault; none of the oracle-cannot states applies. What would change this: evidence that the R-6.2 catcher was shared across workers would make R-6.2 adapter-wrong, and a screenshot of the R-2.19 Team step with no adder anywhere after every phase section is expanded would make R-2.19 a product question.
+
+**Conditions:**
+- product-question R-6.2
+- product-question R-8.12
+- product-question R-1.16
+- product-question R-4.23
+- adapter-wrong R-2.19: proposal-swu-create.add_phase_team_member reached the Team step with an organization chosen and looked only for an exactly-matching visible "Add Team Member(s)" text node, then threw unbound. It never expanded each phase's collapsible section (Inception / Prototype / Implementation) before looking, and never looked for the adder by role or partial label (a link or button containing 'Add Team Member') within each phase's block. Expand every phase section first, find the adder within the phase being asked about, and only report it unbound once every phase section is open and it is still absent.
