@@ -594,7 +594,7 @@ pages:
       email_field: "unbound: /sign-up/complete redirects away instead of showing the profile form"
       job_title_field: "unbound: /sign-up/complete redirects away instead of showing the profile form"
       terms_checkbox: bound
-      complete_disabled_until_terms_accepted: "unbound: /sign-up/complete redirects away instead of showing the profile form"
+      complete_disabled_until_terms_accepted: bound
       field_error: "unbound: /sign-up/complete redirects away instead of showing the profile form"
 
   user-sign-out:
