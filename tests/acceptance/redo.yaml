@@ -714,3 +714,13 @@ redo:
       why: derived again by a derive-tests run on notifications
       by: runner:derive-tests
       at: 2026-09-29T13:06:20.039Z
+  - id: R-8.12
+    version: 1
+    why: "the test failed in its own setup and never made the request the criterion
+      is about: the file it needed was never stored, because it runs preliminary
+      account-status steps as an administrator that the criterion does not
+      require, and the service refused the upload that followed, while the same
+      upload by the same persona without those steps is stored elsewhere in the
+      suite. Reach a stored file the vendor may not read without depending on
+      those steps, and report a setup that could not store the file as a setup
+      failure rather than as the criterion failing."
