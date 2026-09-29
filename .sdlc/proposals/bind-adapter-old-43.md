@@ -37,3 +37,27 @@ How rows are recognised and read is unchanged: status, account type, name, and t
 **Checks.** On the target, the new pass read 147 rows in about 0.6 s, taking 16 steps. A deliberately slower scroll (150 px steps, 120 ms pauses) found the same 147 rows, so the larger steps don't skip any.
 
 `bindings.yaml` didn't need changing: all four observations were already `bound`, and nothing else in the adapter was touched. Every route I opened resolved on the target. I changed nothing outside `tests/adapters/old/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the rewritten userTableRows bind the four user-list observations for R-4.14 so that one read finishes within the test's 5 s poll, and touch nothing else? This reaches tech-lead because the loop limit was exceeded (5 sends against policy.loops.rebind of 2), not because the pipeline cannot produce what G3 asks for. The tier is STANDARD and no platform article is involved, so it is ruled here. Ruling: approve. The diff does exactly what send 5 asked for. The mouse-wheel loop (400 px steps, 200 ms pauses, four quiet turns) is replaced by one in-page evaluate pass. It finds the scrolling body, resets it to the top (keeping send 2's fix), steps down 80% of the body's height with a two-frame wait after each step, and stops at the bottom, on a step that does not move, or at a 3.5 s safety limit. The badge wait drops from 10 s to 3 s, so an empty list still answers inside the poll. Row recognition, reading the admin icon (send 3's fix), de-duplication and the output of all four observations (send 4's fix) are unchanged. bindings.yaml is untouched and nothing outside tests/adapters/old/ moves. The runner's typecheck reports no diagnostics under adapters/old/; the failing exit code comes from adapters/new/, which this proposal does not answer for. The author measured 147 rows read in about 0.6 s on the running target, and a slower scroll found the same 147 rows, so the larger steps do not skip any. Residual risks: the adapter was not run end to end through Playwright, and the 3.5 s limit and the no-scroller path both return a partial list without saying so. At 0.6 s measured, neither justifies another round. What would change this ruling: the next test run of R-4.14 timing out again or showing missing rows, which would send it back to bind-adapter to fix the safety limit or the scroll detection.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `ef41fbc0a2af2e37a6d49ea3286d522e004fa022`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 2 diagnostics

@@ -1,18 +1,15 @@
 gate: G3
-verdict: escalated
-by: runner:bind-adapter
-held_by: runner
-escalate_to: tech-lead
-rationale: >-
-  bind-adapter was handed owed work sent back to it more times than the
-  project's policy allows, so this proposal is ruled by tech-lead rather than
-  put to G3's holder for another round.
-
-  - R-4.14 on old: sent to bind-adapter 5 times, past the limit of 2 that
-  policy.loops.rebind sets. What each send asked for:
-    1. userRow (index.ts:3950) reads only the first page of the paginated user list (20 rows, ending before the seeded names later in the alphabet); read every page. signInThroughIdentityProvider goes to /sign-in without signing out first, so while the administrator is still signed in it lands on /dashboard and reports the sign-in control missing; sign out first
-    2. everyUserRow reads the virtualized user table from its current scroll position and only scrolls down, so after the test's first poll leaves the table at the bottom it sees only the tail rows; reset the table body's scrollTop to 0 before reading. And signIn.deactivated-vendor refuses unconditionally, although the test only signs this persona in (after reactivating the account) so they can set their own name; let it use its session-route entry like every other persona, and keep 'cannot show a refusal' only for the refusal-checking reads
-    3. user-list.admin_check reports nothing to read, but the list is a scrolling grid of positioned blocks whose Admin? cell holds a tick icon element when the user is an administrator and nothing otherwise; locate each row by its name cell and read the mark as the presence of that icon in the row's last cell instead of by accessible name or text
-    4. on /users, after user_row had read rows for the named accounts from the table (rows split on their Active/Inactive badge), one of user-list.status_badge, account_type or admin_check answered empty. status_badge and account_type scan page text lines against fixed labels, and admin_check looks for an svg in each row's last cell. Each must read its column from the same table rows user_row reads and answer non-empty for a rendered list.
-    5. user-list.user_row (and status_badge, account_type and admin_check, which share userTableRows) takes longer than 5 s per call, because each read resets the scroll, waits up to 10 s for a badge, then wheel-scrolls the whole ~143-row list 400 px at a time with 200 ms pauses until four quiet turns. Inside the test's expect.poll (default 5 s) no call ever returns, so every test times out with no value read. Make one read of the list finish well within 5 s, for example by scrolling the list's scroll container directly in larger steps or reading the rows in one evaluate pass without per-turn waits, while still covering every row.
-at: 2026-09-29T16:15:59.373Z
+verdict: approve
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  Question: does the rewritten userTableRows bind the four user-list observations for R-4.14 so that one read finishes within the test's 5 s poll, and touch nothing else? This reaches tech-lead because the loop limit was exceeded (5 sends against policy.loops.rebind of 2), not because the pipeline cannot produce what G3 asks for. The tier is STANDARD and no platform article is involved, so it is ruled here. Ruling: approve. The diff does exactly what send 5 asked for. The mouse-wheel loop (400 px steps, 200 ms pauses, four quiet turns) is replaced by one in-page evaluate pass. It finds the scrolling body, resets it to the top (keeping send 2's fix), steps down 80% of the body's height with a two-frame wait after each step, and stops at the bottom, on a step that does not move, or at a 3.5 s safety limit. The badge wait drops from 10 s to 3 s, so an empty list still answers inside the poll. Row recognition, reading the admin icon (send 3's fix), de-duplication and the output of all four observations (send 4's fix) are unchanged. bindings.yaml is untouched and nothing outside tests/adapters/old/ moves. The runner's typecheck reports no diagnostics under adapters/old/; the failing exit code comes from adapters/new/, which this proposal does not answer for. The author measured 147 rows read in about 0.6 s on the running target, and a slower scroll found the same 147 rows, so the larger steps do not skip any. Residual risks: the adapter was not run end to end through Playwright, and the 3.5 s limit and the no-scroller path both return a partial list without saying so. At 0.6 s measured, neither justifies another round. What would change this ruling: the next test run of R-4.14 timing out again or showing missing rows, which would send it back to bind-adapter to fix the safety limit or the scroll detection.
+conditions: []
+cost: 0.2793384
+turns: 1
+session: "c83438d1-8c7e-4917-ad04-ded1c0697c52"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-29T16:16:50.190Z
