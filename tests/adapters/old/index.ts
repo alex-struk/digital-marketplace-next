@@ -2542,7 +2542,8 @@ export default function create(
     );
   }
 
-  // The part of the phases step between one phase's name and the next phase's name.
+  // The part of the phases step (or a proposal's Team step) between one phase's name and the
+  // next phase's name.
   async function phaseBand(phase: string): Promise<{ top: number; bottom: number } | null> {
     const at = async (name: string): Promise<number | null> => {
       const shown = seen(page.getByText(name, { exact: true }));
@@ -2553,7 +2554,9 @@ export default function create(
         .first()
         .boundingBox()
         .catch(() => null);
-      const below = chooser ? chooser.y + chooser.height : 0;
+      // A proposal's Team step has no such chooser; a phase name there counts wherever it
+      // sits, scrolled above the window or not.
+      const below = chooser ? chooser.y + chooser.height : Number.NEGATIVE_INFINITY;
       for (let i = count - 1; i >= 0; i--) {
         const box = await shown.nth(i).boundingBox({ timeout: 500 }).catch(() => null);
         if (box && box.y > below) return box.y;
@@ -4136,11 +4139,80 @@ export default function create(
     await settle();
   }
 
+  // The phases the Team step shows once an organization is chosen, in order, by name.
+  async function teamPhasesShown(): Promise<string[]> {
+    const shown: string[] = [];
+    for (const name of PHASES) {
+      if (await seen(page.getByRole("main").getByText(name, { exact: true })).count()) shown.push(name);
+    }
+    return shown;
+  }
+
+  // Every "Add Team Member(s)" on show. It is plain pressable text, neither a button nor a
+  // link by role, so it is found by its words.
+  const teamAdders = (): Locator => seen(page.getByRole("main").getByText(/Add Team Member/i));
+
+  // The "Add Team Member(s)" inside one phase's section: below its name, above the next's.
+  async function teamPhaseAdder(phase: string): Promise<Locator | null> {
+    const band = await phaseBand(phase);
+    return band ? inBand(teamAdders(), band) : null;
+  }
+
+  // An opportunity with one phase shows that phase's section open. One with more shows each
+  // phase folded under its bare name, with no "Phase Dates", team table or "Add Team
+  // Member(s)" until the name is pressed (seen as the owner of Northern Pines on a published
+  // opportunity with Proof of Concept and Implementation: both names alone, each unfolding to
+  // its own adder). The name toggles its section, so it is pressed only while that phase's
+  // adder is not showing. Resolves the phases shown.
+  async function openTeamPhases(): Promise<string[]> {
+    // The sections appear a moment after the organization is chosen.
+    await seen(page.getByRole("main").getByText(new RegExp(`^(${PHASES.join("|")})$`)))
+      .or(teamAdders())
+      .first()
+      .waitFor({ state: "visible", timeout: LATE_CONTROL_MS })
+      .catch(() => undefined);
+    const shown = await teamPhasesShown();
+    for (const phase of shown) {
+      for (let tries = 0; tries < 3 && !(await teamPhaseAdder(phase)); tries++) {
+        const names = seen(page.getByRole("main").getByText(phase, { exact: true }));
+        const count = await names.count();
+        if (!count) break;
+        await names.nth(count - 1).click();
+        await settle();
+        for (let wait = 0; wait < 15 && !(await teamPhaseAdder(phase)); wait++) await page.waitForTimeout(200);
+      }
+      const adder = await teamPhaseAdder(phase);
+      if (adder) await steadyBox(adder);
+    }
+    return shown;
+  }
+
+  // The adder of the phase asked about (the first shown when none is), every phase unfolded
+  // first. A step naming no phase at all offers whichever adder it shows.
+  async function phaseAdderFor(where: string, phase: string): Promise<{ adder: Locator; phase: string }> {
+    const shownPhases = await openTeamPhases();
+    await teamAdders().first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
+    if (phase && !shownPhases.includes(phase)) {
+      throw new Error(
+        `${where} — refused: this opportunity has no "${phase}" phase on ${page.url()} (its phases: ${shownPhases.join(", ") || "none shown"})`,
+      );
+    }
+    const target = phase || shownPhases[0] || "";
+    const adder = target ? await teamPhaseAdder(target) : (await teamAdders().count()) ? teamAdders().first() : null;
+    if (!adder) {
+      throw new Error(
+        `unbound: ${where} — reached the Team step with an organization chosen and pressed each phase's name to unfold it (${shownPhases.join(", ") || "no phase name shown"}), but no "Add Team Member(s)" showed inside ${target ? `"${target}"` : "any of them"} at ${page.url()}`,
+      );
+    }
+    return { adder, phase: target };
+  }
+
   // "2. Team" shows one section per phase ("Inception", "Proof of Concept", "Implementation"),
   // each with its own "Add Team Member(s)". That opens a dialog listing the organization's
   // confirmed members by name, each picked by pressing it, then "Add Team Member(s)" in the
-  // dialog adds them to the phase's table (seen as the organization owner on a published
-  // Sprint With Us opportunity with only an implementation phase).
+  // dialog adds them to the phase's table (seen as the organization owner on published Sprint
+  // With Us opportunities with only an implementation phase, and with Proof of Concept and
+  // Implementation, adding to the Implementation table).
   async function addSwuPhaseMembers(where: string, input: unknown): Promise<void> {
     await ready();
     if (!(await goToStep("Team"))) await advanceTo(where, "Organization");
@@ -4150,29 +4222,10 @@ export default function create(
     if (!(await ensureProposalOrganization(where))) return;
     const phaseGiven = field(input, "phase", "phaseName") || (typeof input === "string" && PHASES.some((p) => squash(p) === squash(phaseNamed(input))) ? input : "");
     const phase = phaseGiven ? phaseNamed(phaseGiven) : "";
-    const adders = seen(page.getByText("Add Team Member(s)", { exact: true }));
-    await adders.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
-    const adderCount = await adders.count();
-    if (!adderCount) {
-      throw new Error(`unbound: ${where} — reached the Team step with an organization chosen, but no "Add Team Member(s)" is on it at ${page.url()}`);
-    }
-    // The phases this opportunity has, in the order the step shows them.
-    const shownPhases: string[] = [];
-    for (const name of PHASES) {
-      if (await seen(page.getByRole("main").getByText(name, { exact: true })).count()) shownPhases.push(name);
-    }
-    let at = 0;
-    if (phase) {
-      at = shownPhases.indexOf(phase);
-      if (at < 0) {
-        throw new Error(
-          `${where} — refused: this opportunity has no "${phase}" phase on ${page.url()} (its phases: ${shownPhases.join(", ") || "none shown"})`,
-        );
-      }
-    }
+    const found = await phaseAdderFor(where, phase);
     const names = typeof input === "string" && phaseGiven ? [] : await teamMemberNames(where, input);
-    lastSwuPhaseAt = Math.min(at, adderCount - 1);
-    await adders.nth(lastSwuPhaseAt).click();
+    lastSwuPhase = found.phase;
+    await found.adder.click();
     if (!(await dialogUp())) {
       throw new Error(`unbound: ${where} — "Add Team Member(s)" opened no dialog on ${page.url()}`);
     }
@@ -4250,28 +4303,31 @@ export default function create(
     if (!(await goToStep("Team"))) await advanceTo(where, "Organization");
     const names = await teamMemberNames(where, input);
     const phaseGiven = field(input, "phase", "phaseName");
+    // A phase's team table shows only while its section is unfolded.
+    await openTeamPhases();
     for (const name of names.length ? names : [""]) {
       const rows = seen(page.getByRole("row").filter({ has: page.getByRole("radio") }));
       const mine = name ? rows.filter({ hasText: name }) : rows;
       const count = await mine.count();
       if (!count) {
-        throw new Error(`unbound: ${where} — no team member row${name ? ` for "${name}"` : ""} with a Scrum Master choice on ${page.url()}`);
+        throw new Error(`unbound: ${where} — every phase on the Team step unfolded, but no team member row${name ? ` for "${name}"` : ""} with a Scrum Master choice on ${page.url()}`);
       }
-      let pick = 0;
+      let row: Locator | null = mine.first();
       if (phaseGiven && count > 1) {
-        const shownPhases: string[] = [];
-        for (const phase of PHASES) {
-          if (await seen(page.getByRole("main").getByText(phase, { exact: true })).count()) shownPhases.push(phase);
+        const band = await phaseBand(phaseNamed(phaseGiven));
+        row = band ? await inBand(mine, band) : null;
+        if (!row) {
+          throw new Error(`unbound: ${where} — no team member row${name ? ` for "${name}"` : ""} with a Scrum Master choice inside the unfolded "${phaseNamed(phaseGiven)}" section on ${page.url()}`);
         }
-        pick = Math.max(0, Math.min(shownPhases.indexOf(phaseNamed(phaseGiven)), count - 1));
       }
-      await mine.nth(pick).getByRole("radio").first().click();
+      await row.getByRole("radio").first().click();
       await settle();
     }
   }
 
-  // The phase a team member was last added to, whose choice team_member_choices reads.
-  let lastSwuPhaseAt = 0;
+  // The phase a team member was last added to, whose choice team_member_choices reads; the
+  // first phase shown when nobody has been added yet.
+  let lastSwuPhase = "";
 
   // Whether the form's "Organization*" chooser has an organization picked; a form showing no
   // such chooser is taken as having one.
@@ -4294,13 +4350,9 @@ export default function create(
     await ready();
     if (!(await goToStep("Team"))) await advanceTo(where, "Organization");
     if (!(await organizationChosen())) return "";
-    const adders = seen(page.getByText("Add Team Member(s)", { exact: true }));
-    await adders.first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
-    const count = await adders.count();
-    if (!count) {
-      nothing(`${where} — reached the Team step with an organization chosen, but no "Add Team Member(s)" is on it at ${page.url()}`);
-    }
-    await adders.nth(Math.min(lastSwuPhaseAt, count - 1)).click();
+    const shownPhases = await teamPhasesShown();
+    const { adder } = await phaseAdderFor(where, shownPhases.includes(lastSwuPhase) ? lastSwuPhase : "");
+    await adder.click();
     if (!(await dialogUp())) nothing(`${where} — "Add Team Member(s)" opened no dialog on ${page.url()}`);
     const box = dialog().first();
     const standing = new Set<string>(["Add Team Member(s)", "Cancel"]);
