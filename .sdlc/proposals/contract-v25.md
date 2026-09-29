@@ -49,3 +49,14 @@ I couldn't run a YAML parser because this session's permissions refused `python3
 **Not done:** the composition clause of R-6.2 is still not testable on this target. The reasons are above.
 
 re-address missing-test/R-6.2 to ratify: on the old target no stored value can make a notice fail to compose. All database reads sit outside makeSend's catch behind getValidValue null fallbacks, and the builders inside it are pure renderers of records the application has already validated (transport.ts:52–67, notifications/*). Seen from outside the application, a composition failure looks exactly like "no message was sent". The clause needs restating in terms something can observe, or folding into the delivery half, which is already tested through mail-delivery-fault.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether the contract, left unchanged by this run, is what the tests should act through, and whether the one owed item, the composition half of R-6.2 ('when a message cannot be composed'), is correctly handed to ratify instead of being given a seeded fixture. I approve. The run's evidence holds against the old source. The only place that catches a composition failure is makeSend in src/back-end/lib/mailer/transport.ts (lines 55–67): it logs 'Unable to create email content' and does not retry. The notice handlers do their database reads through getValidValue(…, null) (for example notifications/opportunity/code-with-us.tsx), which turns a failed read into a null that makes the handler skip the notice instead of throwing inside the catch. With no record that can make a builder throw, a composition failure looks exactly like 'no message was sent' to anyone outside the application. Building a fixture for it would mean inventing behaviour. The run was also right to refuse the negative-amount case: formatAmount looping forever would hang the whole server, which is not a failure the service survives, and seeding it would corrupt the oracle for every other test. The run changed no contract files and the oracle came up and down cleanly, so there is nothing here that could be wrong about the contract. Handing the clause to ratify is the path the item itself allowed. My recommendation for that ruling is to restate R-6.2 so the observable claim covers delivery failure only, and to either fold composition failure into it as the same 'no message, action still succeeds' outcome or record it as not observable on the old target. It should not be tested through a fabricated fixture. Two things would change this ruling: a stored value that makes a notice builder throw inside makeSend's catch while the triggering action still succeeds, or evidence that a handler reads the database inside the catch without a null fallback.
+
+**Conditions:**
+none
