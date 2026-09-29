@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-triage-old-28 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">302</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">297</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">263</span></a></li><li><a href="../runs.html">Run log <span class="count">17</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-triage-old-28</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-29 15:04</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>1 criterion(s) fail against old: which of them did this project&#39;s own adapter cause?</h2>
+<p><strong>Recommendation.</strong> Sort R-4.14 with a triage condition each, so the adapter&#39;s failures are fixed there and only product questions reach the product owner.</p>
+<p>1 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:4300,">http://localhost:4300,</a> and nobody has sorted them yet. Before any reaches the product owner, say which of them this project&#39;s own adapter caused. The adapter is under <code>tests/adapters/old/</code>; read each one against it and against the test.</p>
+<h4>R-4.14 · v1</h4>
+<p>An administrator can browse everyone registered with the service, listed by status, then account kind, then name, showing each person&#39;s status, account kind, name and whether they are an administrator, and can narrow the list by typing part of a name.</p>
+<ul><li>given: an active vendor, a deactivated vendor and a public sector employee registered with the service</li><li>when: an administrator opens the list of users and then types part of one person&#39;s name</li><li>then: all three are listed with the active accounts before the inactive ones, and the list narrows to the people whose names match what was typed</li><li>test: tests/acceptance/users/R-4.14.spec.ts</li></ul>
+<p><strong>an administrator can browse everyone registered with the service, showing each person&#39;s status, account kind, name and whether they are an administrator</strong> — failed</p>
+<pre><code>Error: Timeout 5000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>everyone registered is listed by status, then account kind, then name</strong> — failed</p>
+<pre><code>Error: Timeout 5000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>an administrator can narrow the list by typing part of a name</strong> — failed</p>
+<pre><code>Error: Timeout 5000ms exceeded while waiting on the predicate</code></pre>
+<h3>Triage conditions</h3>
+<p>One condition per line, one for every criterion the page lists, in exactly one of these forms:</p>
+<ul><li><code>adapter-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion and the test are both fine, and this target&#39;s adapter is what failed: it read the wrong thing off the page, reported a control missing that the page does render, or answered empty where it never reached the page. <code>&lt;why&gt;</code> names what the adapter did wrong, specifically enough for the next binding run to fix it. The criterion is not touched. On an unbound row it sends the binding back to <code>bind-adapter</code> however often it has been sent.</li><li><code>product-question &lt;ID&gt;</code> — nothing in the evidence points at the adapter. The failure goes to the product owner, who decides whether the application, the criterion or the test is wrong. No text after the ID. On an unbound row, use it when the criterion itself looks suspect.</li><li><code>oracle-cannot &lt;ID&gt;: &lt;why&gt;</code> — only for a row listed as unbound, on the oracle&#39;s target: the oracle genuinely cannot be driven into, or observed in, the state the test needs without changing its code — the state sits behind an external identity provider, is reachable only through a link the application emails, or is enforced only by a browser-native dialog. <code>&lt;why&gt;</code> names that state and why the oracle cannot reach it. It closes the row, changes no criterion, and stands until the criterion&#39;s version changes. It is never a way to skip binding work: where the application offers the control under another label, behind a step or as another persona, the answer is <code>adapter-wrong</code>.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. A condition may not span more than one line. When the evidence is genuinely unclear, it is a <code>product-question</code>: a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the adapter comes back from the next binding run unchanged and costs a run to find out.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-29 15:06.</p>
+<div class="body"><p>The question is whether R-4.14&#39;s failure against old was caused by this project&#39;s adapter. Approve, with an adapter-wrong condition. All three tests stop at their first expect.poll on surface.userList.userRow(). The setup steps before it (activating accounts, each person naming themselves) completed. The error is only expect.poll&#39;s &#39;Timeout 5000ms exceeded while waiting on the predicate&#39;, with no received value, so the observation never returned inside the poll&#39;s default 5 s window. That matches the adapter: userRow() goes through userTableRows() (tests/adapters/old/index.ts:6796), which on every call waits 300 ms, waits up to 10 s for the first status badge, then wheel-scrolls the whole ~143-row list 400 px at a time with a 200 ms pause each turn until four turns add nothing. One pass takes longer than the 5 s poll window, so the test never receives a reading. The test&#39;s use of expect.poll with its default window is a fair ask, and every assertion follows from the criterion, so the evidence points at the binding, not at the application or the criterion. This would change if a corrected binding returns within the window and the list still lacks the named people, or orders or narrows them wrongly; that would then be a product-question.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>adapter-wrong R-4.14: user-list.user_row (and status_badge, account_type and admin_check, which share userTableRows) takes longer than 5 s per call, because each read resets the scroll, waits up to 10 s for a badge, then wheel-scrolls the whole ~143-row list 400 px at a time with 200 ms pauses until four quiet turns. Inside the test&#39;s expect.poll (default 5 s) no call ever returns, so every test times out with no value read. Make one read of the list finish well within 5 s, for example by scrolling the list&#39;s scroll container directly in larger steps or reading the rows in one evaluate pass without per-turn waits, while still covering every row.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
