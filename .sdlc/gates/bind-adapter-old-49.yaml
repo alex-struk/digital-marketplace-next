@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  Question: does the rewritten proposal-cwu-edit.proposal_tab bind R-2.2's observation on old, and nothing else? Ruling: approve. The escalation came from the rebind loop limit (3 sends against policy.loops.rebind of 2), not from a pipeline defect, so it is ruled here on the merits. The diff is a single member override in tests/adapters/old/index.ts that answers the third send exactly: it moves the wizard to the '2. Proposal' step (goToStep via the step menu, walkToStep via Previous/Next as fallback) and returns formText(), which joins visible text with fieldValues(), so the value of the 'Proposal' text box now comes back. It only uses helpers already defined in the adapter (enterTab, currentStep, goToStep, walkToStep, formText), it keeps the existing empty-text result when the tab is withheld, and it adds an unbound: throw that points at the right member when the step is missing. The runner's own tsc on revision bdd7f67 passed with no diagnostics under adapters/old/, which answers the author's note that it could not type-check. Nothing outside tests/adapters/old/ changed and bindings.yaml already listed the member as bound. What decided it was the third item in the escalation: the diff matches that request and goes no further. What would change it: the next calibration still reading the proposal text as absent on this page, or the seeded submitted CWU proposal opening with no '2. Proposal' step. The SWU/TWU edit pages the author flagged are not in evidence yet and do not justify widening this diff.
+conditions: []
+cost: 0.2699816
+turns: 2
+session: "4a5e22e5-c5a2-4f1f-8de9-d9ed4dc416d4"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T05:24:34.347Z

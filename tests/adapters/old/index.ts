@@ -5360,6 +5360,20 @@ export default function create(
       "/opportunities/code-with-us/:opportunityId/proposals/:proposalId/edit",
       "",
     ),
+    // The "Proposal" tab opens the wizard on "1. Proponent"; the proposal text itself sits on
+    // "2. Proposal", in a "Proposal" box (disabled until "Edit" is pressed) whose value the
+    // screen's text leaves out. Seen as the vendor on the seeded submitted Code With Us
+    // proposal, whose step reads "The seeded proposal text of proponent 1." only in that box.
+    proposalTab: async () => {
+      if (!(await enterTab(["Proposal Details", "Proposal"]))) return "";
+      if (!(await currentStep())) return formText();
+      if (!(await goToStep("Proposal")) && !(await walkToStep(/^\d+\.\s+Proposal$/i))) {
+        throw new Error(
+          `unbound: proposal-cwu-edit.proposal_tab — opened the "Proposal" tab but the wizard offers no "Proposal" step on ${page.url()}`,
+        );
+      }
+      return formText();
+    },
     addAttachment: (input) => addAttachment("proposal-cwu-edit.add_attachment", input),
     removeAttachment: (input) => removeAttachment("proposal-cwu-edit.remove_attachment", input),
     submittedAt: async () => {
