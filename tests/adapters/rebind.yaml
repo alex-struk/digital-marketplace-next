@@ -2038,3 +2038,8 @@ rebind:
       Changes' and confirm 'Publish Changes to Code With Us Opportunity?' (as
       saveAttachmentForm does), wait for the /api/files/ link, and throw naming
       the missing control instead of returning ''"
+    closed:
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-30T00:58:42.694Z
