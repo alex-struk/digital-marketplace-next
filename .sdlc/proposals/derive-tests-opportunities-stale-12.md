@@ -32,3 +32,24 @@ I rewrote R-1.17's test for v3 of the criterion, so the one criterion I was give
 **What the contract should add:** an observation on `opportunity-swu-create` and `opportunity-twu-create` that reports which fields an evaluation question offers for entry, or at least whether any position or order field is offered. Everything else this criterion needed was already on the surface.
 
 Beyond those two files I edited nothing.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the R-1.17 v3 tests follow from the criterion and nothing else, and is every clause asserted or recorded as not testable? Ruling: return. The rewrite correctly moves every refusal from draft save to submission for review and publication, covers both programs for the minimum score and for publication, and adds draft tests showing out-of-limit questions can be saved; the runner's typecheck passed, and the not-testable entry for 'its position is never entered by the person' names a real missing observation. But the criterion's clause that the minimum score is optional is asserted by no test and recorded in no not-testable entry: every submission and publication test expects a refusal, so an application that required a minimum score would pass all fifteen. The surface reaches this clause: the edit screen offers the opportunity's status, so an accepted submission can be observed. Following the reviewer brief, a clause the writer could assert and did not is grounds to return, not a note on an approval. The same gap exists at the in-range edges (1,000 characters, a 3,000-word limit, position 100), which are only tested one step past the limit. This would be approved once the optional-minimum clause is asserted by an accepted submission, or recorded as not testable with a real reason.
+
+**Conditions:**
+- In tests/acceptance/opportunities/R-1.17.spec.ts, assert the clause 'an optional minimum score': submit for review a Sprint With Us opportunity, complete as in the other tests, whose question is well formed and has no minimum score, and assert the submission is accepted (for example, no field error, and the opportunity's status on its edit screen shows it has left draft). If the surface cannot observe an accepted submission, add a not-testable.yaml entry for R-1.17 v3 with clause 'an optional minimum score' naming exactly what is missing.
+- In the position test in tests/acceptance/opportunities/R-1.17.spec.ts, the criterion allows positions 0 to 100: either assert that an opportunity holding 101 questions (the last at position 100) is not refused on submission for review, or record that clause in not-testable.yaml with the reason.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `3de943f867275f9bce9216c72d3213edd1f7a32a`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/opportunities/`, which this proposal answers for.
+
+    No diagnostics.
