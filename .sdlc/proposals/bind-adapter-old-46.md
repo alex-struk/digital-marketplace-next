@@ -41,3 +41,23 @@ I fixed the R-8.31 finding in `tests/adapters/old/index.ts`. `bindings.yaml` did
 - **Rename before saving.** On a saved record, `add_attachment` now always saves where a save is offered. A criterion that adds a file on a saved record's edit screen and then renames it before saving would find the file already stored.
 
 Every page route I used resolved on the target. I changed nothing outside `tests/adapters/old/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this revision of the old adapter bind the file-attachment control's actions and observations for R-8.31, and nothing else? Ruling: approve. The escalation came from the rebind loop limit (5 sends against a limit of 2), not from a pipeline defect: each send narrowed the binding (the removal path, proposal editing, saving after a removal, storing on a published opportunity, then no silent empty returns), which is progress on one binding and not a stage unable to produce what G3 needs. The fifth send decided it, and the diff meets each of its three asks in tests/adapters/old/index.ts. (1) add_attachment waits up to 5s for the blob: preview and raises when neither a preview nor a message appears, and raises unbound: naming the controls it looked for when no save or later save is offered. (2) open() records the opportunity it was given; attachment_address goes back to that opportunity's route if the page has left it, walks to the Attachments step and checks the step heading. (3) attachment_address raises, with any message the page shows, instead of returning an empty string. The 'message shown, so return' branch is bounded: messages() keeps only lines matching the message pattern and excludes prose, and alertMessages() reads only alert regions, so it cannot hide a failed upload. The runner's typecheck of adapters/old passed with no diagnostics, and the change stays inside tests/adapters. The two risks the worker names (the target silently dropping files over 10MB, and probe files left on the seeded record, which the oracle's seed reload clears) are target behaviour, not binding faults. What would change this ruling: the next calibration showing add_attachment returning with the file only previewed on a record whose save it skipped, or attachment_address reading a different record's attachments.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `caeae0ca80c4fe93443f9781f6fd084a220a9a5e`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    No diagnostics.
