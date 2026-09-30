@@ -211,6 +211,15 @@
 - 05:44:09 verify slice 2: the sandbox did not start, so nothing was verified.
 - 05:46:01 verify slice 2: returned — the sandbox did not start, so nothing was verified. the seed service failed: Next: sdlc run build --slice 2 --revise
 - 05:46:03 run verify: regenerated 362 files in .sdlc, site
+- 05:46:08 deviation: next named `sdlc run calibrate --target old`; ran `sdlc run build --slice 2 --revise`; reason: The Tests phase is held open only by the old target's calibration tail: a few adapter bindings the blind bind-adapter stage keeps missing (R-1.17, R-7.26 and similar), each full run exposing one or two more. They concern the old application's adapter, not the new application. They stay owed; the build proceeds slice by slice meanwhile, by the operator's judgement under the tech lead's delegation for this first autonomous run.
+- 05:53:05 verify slice 2: not verified — R-6.1 could not be tested in this environment.
+- 05:53:06 run verify: regenerated 365 files in .sdlc, site, tests
+- 05:53:31 oracle down old
+- 05:53:41 run bind-adapter: pre-checks failed
+- 05:54:09 oracle down old
+- 06:02:14 run bind-adapter: ok, cost 1.9182974000000004, turns 59, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 06:02:14 propose bind-adapter-new-4 at G3
+- 06:03:15 rule bind-adapter-new-4 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-29
 
