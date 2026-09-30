@@ -114,6 +114,7 @@ pages:
     observations:
       field_error: bound
       score_weight_error: bound
+      evaluation_question_fields: bound
 
   opportunity-swu-view:
     actions:
@@ -165,6 +166,7 @@ pages:
       evaluation_tab: bound
       proposal_deadline: bound
       assignment_date: bound
+      evaluation_question_fields: bound
 
   opportunity-swu-complete:
     actions: {}
@@ -182,6 +184,7 @@ pages:
     observations:
       field_error: bound
       score_weight_error: bound
+      evaluation_question_fields: bound
 
   opportunity-twu-view:
     actions:
@@ -235,6 +238,7 @@ pages:
       assignment_date: bound
       start_date: bound
       completion_date: bound
+      evaluation_question_fields: bound
 
   opportunity-twu-complete:
     actions: {}

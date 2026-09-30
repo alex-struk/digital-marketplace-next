@@ -2550,6 +2550,57 @@ export default function create(
     );
   }
 
+  // The criteria's words for the boxes one evaluation question offers. Any box the form
+  // shows beyond these is reported under its own label, so an extra one is never hidden.
+  const QUESTION_FIELD_NAMES: Record<string, string> = {
+    question: "question",
+    responseguidelines: "guideline",
+    guideline: "guideline",
+    guidelines: "guideline",
+    responsewordlimit: "response_word_limit",
+    wordlimit: "response_word_limit",
+    score: "maximum_score",
+    maximumscore: "maximum_score",
+    minimumscore: "minimum_score",
+  };
+
+  // The boxes the question at a place in the list (the first is 1) offers, one name per line
+  // in the order the form shows them. The step lists each question under its own "Question N"
+  // heading, holding Question, Response Guidelines, Response Word Limit, Score and Minimum
+  // Score (seen as the administrator on both new forms after "Add Question", and on the
+  // seeded closed Sprint With Us and Team With Us opportunities' Opportunity tab, where they
+  // are shown disabled). A list with no question at that place reads as nothing.
+  async function evaluationQuestionFields(where: string, step: string, position?: unknown): Promise<string> {
+    await ready();
+    if (await notFoundShown()) return "";
+    const pattern = new RegExp(`^\\d+\\.\\s+${escapeRegExp(step)}$`, "i");
+    const onStep = await currentStep();
+    if (!onStep || !matches(pattern, (await onStep.innerText()).trim())) {
+      if (!(await goToStep(step)) && !(await walkToStep(pattern))) {
+        throw new Error(`unbound: ${where} — walked every step of the form and none is "${step}" on ${page.url()}`);
+      }
+    }
+    const given = Number.parseInt(typeof position === "object" && position ? field(position, ...ORDER_KEYS) : String(position ?? ""), 10);
+    const place = Number.isFinite(given) && given >= 1 ? given : 1;
+    const outline = (await page.getByRole("main").ariaSnapshot()).split("\n");
+    const heading = (line: string): number | null => {
+      const found = /^\s*-\s*heading\s+"Question\s+(\d+)"/.exec(line);
+      return found ? Number(found[1]) : null;
+    };
+    const start = outline.findIndex((line) => heading(line) === place);
+    if (start < 0) return "";
+    const names: string[] = [];
+    for (const line of outline.slice(start + 1)) {
+      if (heading(line) !== null || /^\s*-\s*text:\s*Add Question/.test(line)) break;
+      const box = /^\s*-\s*(textbox|spinbutton|combobox|checkbox|radio|slider|switch)\s+"([^"]*)"/.exec(line);
+      if (!box) continue;
+      const label = bareLabel(box[2]);
+      const name = QUESTION_FIELD_NAMES[squash(label)] ?? label.toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_|_$/g, "");
+      names.push(name);
+    }
+    return names.join("\n");
+  }
+
   // The phases a Sprint With Us opportunity runs through, in order. The form asks which to
   // start with and then shows that phase and every later one, each folded under its name.
   const PHASES = ["Inception", "Proof of Concept", "Implementation"];
@@ -2894,6 +2945,8 @@ export default function create(
     // The weights and their total are on the Scoring step, wherever publishing left the
     // form, so the refusal is gathered from every step.
     scoreWeightError: () => stepMessages(/100%|weight/i),
+    evaluationQuestionFields: (position?: unknown) =>
+      evaluationQuestionFields("opportunity-swu-create.evaluation_question_fields", "Team Questions", position),
   };
 
   const opportunityTwuCreate: S.OpportunityTwuCreatePage = {
@@ -2918,6 +2971,8 @@ export default function create(
     // The weights and their total are on the Scoring step, wherever publishing left the
     // form, so the refusal is gathered from every step.
     scoreWeightError: () => stepMessages(/100%|weight/i),
+    evaluationQuestionFields: (position?: unknown) =>
+      evaluationQuestionFields("opportunity-twu-create.evaluation_question_fields", "Resource Questions", position),
   };
 
   // The panel is a list of evaluator slots plus a chair. More slots are added one at a
@@ -3649,6 +3704,11 @@ export default function create(
     },
     proposalDeadline: () => wizardDate("opportunity-swu-edit.proposal_deadline", ["Proposal Deadline"]),
     assignmentDate: () => wizardDate("opportunity-swu-edit.assignment_date", ["Assignment Date"]),
+    // The Opportunity tab's "Team Questions" step; a reader not offered the tab reads nothing.
+    evaluationQuestionFields: (position?: unknown) =>
+      inTab(["Opportunity"], () =>
+        evaluationQuestionFields("opportunity-swu-edit.evaluation_question_fields", "Team Questions", position),
+      ),
   };
 
   const opportunityTwuEdit: Open<S.OpportunityTwuEditPage> = {
@@ -3682,6 +3742,11 @@ export default function create(
     assignmentDate: () => wizardDate("opportunity-twu-edit.assignment_date", ["Contract Award Date", "Assignment Date"]),
     startDate: () => wizardDate("opportunity-twu-edit.start_date", ["Contract Start Date", "Start Date"]),
     completionDate: () => wizardDate("opportunity-twu-edit.completion_date", ["Contract Completion Date", "Completion Date"]),
+    // The Opportunity tab's "Resource Questions" step; a reader not offered the tab reads nothing.
+    evaluationQuestionFields: (position?: unknown) =>
+      inTab(["Opportunity"], () =>
+        evaluationQuestionFields("opportunity-twu-edit.evaluation_question_fields", "Resource Questions", position),
+      ),
   };
 
   // The complete report, or nothing where the reader is refused it with the "Not Found" screen.

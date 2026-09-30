@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The question is whether the adapter binds every surface action and observation on old and nothing else. Approved: the four evaluation_question_fields readers navigate to the Team/Resource Questions step (via the Opportunity tab on edit pages), locate the boxes under the requested 'Question N' heading, and map their labels to the criterion's vocabulary. Unknown labels are passed through under their own name rather than suppressed, so the reader decides nothing about pass or fail. The optional place argument defaults to 1 and stays compatible with the generated zero-argument interface. All four are named bound in bindings.yaml, none is unbound, the diff touches only tests/adapters/old/ (nothing under tests/acceptance or any protected path), and the runner's typecheck on this revision passed with no diagnostics under adapters/old/. Tier is STANDARD, so no escalation. The R-1.17 clause about position never being entered stays owed by derive-tests under its existing condition. A calibration failure traced to these readers not reaching the step would change this, as adapter-wrong.
+conditions: []
+cost: 0.30126000000000003
+turns: 2
+session: "cc146ff7-9092-467b-9222-c0402c4be7f4"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T07:09:23.904Z

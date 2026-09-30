@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-52 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">339</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">334</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">305</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-52</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 07:08</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I added the four <code>evaluation_question_fields</code> readers the contract was missing to <code>tests/adapters/old/index.ts</code>, one each for the Sprint With Us and Team With Us create and edit pages.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I added the four <code>evaluation_question_fields</code> readers the contract was missing to <code>tests/adapters/old/index.ts</code>, one each for the Sprint With Us and Team With Us create and edit pages. All four are named <code>bound</code> in <code>tests/adapters/old/bindings.yaml</code>, spelled as the contract spells them. The existing bindings are unchanged, and every page route I used opened on the target. I could not run the TypeScript type-check: the command needed an approval that was not available in this session. So the new code has not been compiled, and the Playwright suite was not run against it.</p>
+<p><strong>What I saw on the target.</strong> I signed in through the administrator&#39;s session route and opened all four places:</p>
+<ul><li><strong>Create forms:</strong> on the new Sprint With Us form I went to step &quot;6. Team Questions&quot;, and on the new Team With Us form to step &quot;6. Resource Questions&quot;. Neither step has any question until &quot;Add Question&quot; is pressed. Each press adds a block headed &quot;Question N&quot; with five boxes: Question, Response Guidelines, Response Word Limit, Score and Minimum Score.</li><li><strong>Edit pages:</strong> I opened the seeded closed Sprint With Us opportunity (<code>…8000-000000000701</code>) and the seeded closed Team With Us opportunity (<code>…8000-000000000801</code>). On each, the Opportunity tab&#39;s &quot;5. Team Questions&quot; or &quot;5. Resource Questions&quot; step lists the seeded questions with the same five boxes, shown disabled.</li><li><strong>No extra field:</strong> no box for a position or order appears anywhere, which matches what the contract says.</li></ul>
+<p><strong>How the reader works.</strong> It goes to the right step, using the step menu first and the form&#39;s own Previous/Next buttons as a fallback. On the edit pages it opens the Opportunity tab first. It then reads the boxes under the &quot;Question N&quot; heading for the place asked and returns them in the criteria&#39;s words, one per line: <code>question</code>, <code>guideline</code>, <code>response_word_limit</code>, <code>maximum_score</code>, <code>minimum_score</code>.</p>
+<ul><li>A box with any other label is reported under its own label, so an unexpected field would show up rather than be hidden.</li><li>The generated interface gives this reader no argument, but the contract says it reads &quot;the question at a given place&quot;. So it takes an optional place (a number, or an object with <code>order</code>/<code>index</code>/<code>position</code>) and defaults to question 1.</li></ul>
+<p><strong>When it returns empty and when it throws.</strong> It returns empty when:</p>
+<ul><li>the list has no question at that place (for example, a new form before &quot;Add Question&quot; is pressed);</li><li>the reader is shown the &quot;Not Found&quot; screen instead of the form;</li><li>the reader is not offered the Opportunity tab on an edit page.</li></ul>
+<p>It throws <code>unbound:</code> only when no step with the right name can be reached.</p>
+<p><strong>Checks.</strong> I ran the same heading-and-box parsing in the browser against the live pages:</p>
+<ul><li>The closed Sprint With Us opportunity&#39;s question 3 gave the five names; question 9 gave empty.</li><li>A new Sprint With Us form gave empty before any question was added.</li><li>After two presses of &quot;Add Question&quot;, places 1 and 2 gave the five names and place 3 gave empty.</li></ul>
+<p>The edit pages were tested only on closed opportunities, where the boxes are read-only; the reader counts them either way. Nothing outside <code>tests/adapters/old/</code> was changed.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-30 07:09.</p>
+<div class="body"><p>The question is whether the adapter binds every surface action and observation on old and nothing else. Approved: the four evaluation_question_fields readers navigate to the Team/Resource Questions step (via the Opportunity tab on edit pages), locate the boxes under the requested &#39;Question N&#39; heading, and map their labels to the criterion&#39;s vocabulary. Unknown labels are passed through under their own name rather than suppressed, so the reader decides nothing about pass or fail. The optional place argument defaults to 1 and stays compatible with the generated zero-argument interface. All four are named bound in bindings.yaml, none is unbound, the diff touches only tests/adapters/old/ (nothing under tests/acceptance or any protected path), and the runner&#39;s typecheck on this revision passed with no diagnostics under adapters/old/. Tier is STANDARD, so no escalation. The R-1.17 clause about position never being entered stays owed by derive-tests under its existing condition. A calibration failure traced to these readers not reaching the step would change this, as adapter-wrong.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
