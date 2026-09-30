@@ -53,3 +53,14 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Which failing criteria did this project's adapter cause? R-8.31's first scenario fails at its first check: attachmentAddress() gave back an empty string on a published Code With Us opportunity, before the test reached the removal it is about. That points at the adapter. addAttachment only saves the form on Team With Us opportunities, so on a Code With Us opportunity the added file stays an unsaved blob: preview. attachmentAddress() then tries 'Save Changes' before 'Publish Changes' (saveAttachmentForm uses the opposite order), and it returns an empty string silently when no save is found or no /api/files/ link appears. The draft-opportunity and proposal scenarios get past the same step, the old application is the reference and keeps attachments on published opportunities, and four earlier triage rounds traced this criterion's failures to the adapter. Approved with one triage condition. This would become a product question if a trace showed the published opportunity saved and the old application still offered no /api/files/ link.
+
+**Conditions:**
+- adapter-wrong R-8.31: on a published Code With Us opportunity fileAttachmentControl.attachmentAddress() returns '' because the added file is never stored: addAttachment saves the form only on Team With Us opportunities, and attachmentAddress tries 'Save Changes' before 'Publish Changes' and returns empty rather than failing when no save is found or no /api/files/ link appears; save a published opportunity through 'Publish Changes' and confirm 'Publish Changes to Code With Us Opportunity?' (as saveAttachmentForm does), wait for the /api/files/ link, and throw naming the missing control instead of returning ''
