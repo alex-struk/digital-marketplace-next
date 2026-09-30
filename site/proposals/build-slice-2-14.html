@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-2-14 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">377</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">371</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">330</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-2-14</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 23:30</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 2 (A person can sign in, finish signing up and sign out) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I fixed R-4.1 and R-4.2.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I fixed R-4.1 and R-4.2. I couldn&#39;t find the cause of R-4.23, so the change I made for it is a guess. <code>npm run check</code> passes: 15, 199 and 102 tests across migrations, frontend and backend. I couldn&#39;t run the stack itself because Docker wasn&#39;t permitted in this session, so none of this has been tried against the real identity provider or the browser flow.</p>
+<p><strong>R-4.1 and R-4.2 (fixed).</strong> A vendor who hasn&#39;t agreed to the terms yet was sent from every screen to <code>/sign-up/complete</code>, and <code>/users/me</code> wasn&#39;t one of the exceptions. A code-hosting identity&#39;s first sign-in always makes such a vendor, so the account that sign-in had just made, with its identifier and email, could never be shown. No criterion asks for the profile to be blocked, and R-4.26 says any signed-in person can open their own profile at <code>/users/me</code>. So <code>openBeforeProfileCompletion</code> in <code>app/backend/src/rules/sign-in.ts</code> now also lets through <code>/users/me</code> and <code>/users/&lt;own id&gt;</code>, and <code>app/frontend/src/app/root-layout.tsx</code> passes it the person&#39;s own identifier. Every other screen still sends that vendor to finish signing up, as the seed manifest describes for the vendor still completing their profile. The profile screen itself was already built and its markup is unchanged.</p>
+<p><strong>R-4.23 (cause not found).</strong> The ruling says only that a value read back empty. Nothing I read showed which value that was. The most likely one is the account record the suite reads at <code>/api/sessions/current</code>, which is documented as empty when nobody is signed in. But I traced both the cookie path and the bearer-token path for a first-time public sector employee and they return the account. That is now covered by a new check in <code>signing-in-end-to-end.test.ts</code>. The two other readings I considered were both too speculative to act on:</p>
+<ul><li><strong>Missing dashboard empty-state messages:</strong> these belong to later slices, and would be untrue for seeded accounts that do have records.</li><li><strong>Signing out and back in hitting a session marked as signed out:</strong> this only happens if the identity provider&#39;s logout fails.</li></ul>
+<p>The one change I made follows the note on R-4.23 and R-4.22 literally: every account just made now lands on <code>/sign-up/complete</code>, whatever its kind. That page moves a non-vendor on to the dashboard, so where the person ends up doesn&#39;t change. Before this, the service sent a new public sector employee straight to the dashboard. If R-4.23 still fails, the next revision needs to know which value read empty.</p>
+<p><strong>Owed condition <code>build-slice-2-12#3</code>.</strong> R-4.3 isn&#39;t in this ruling&#39;s failures, so it no longer reads empty. R-4.1 now fails in a different way: the adapter reaches the profile screen and is redirected, which the gate fix addresses. The departure from the criterion was the gate described above. I consider the condition met for R-4.3 and accounted for on R-4.1, with the caveat that none of this has run against the live stack.</p>
+<p><strong>Unit tests added:</strong></p>
+<ul><li>The rule&#39;s handling of the own profile.</li><li>A non-profile page still being blocked.</li><li>The new landing for a just-made account.</li><li>An unfinished vendor on <code>/users/me</code> seeing their identifier and email field.</li><li>The first-time public sector sign-in, read back by cookie and landing on the dashboard on a second sign-in.</li></ul>
+<p>I recorded the decision in <code>docs/decisions/0019-the-own-profile-stays-open-before-sign-up-is-finished.md</code> and marked 0011 as superseded in part by it. I changed nothing outside <code>app/</code> and <code>docs/decisions/</code>. I installed dependencies to run the check and then removed <code>node_modules</code>.</p>
+<p><strong>What the next slice will find missing:</strong> the dashboard is still only a heading and who is signed in, with no tables or empty-state messages. Editing the profile, the avatar, capabilities and organizations are still slice 3&#39;s and 4&#39;s.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by runner:verify (the runner, automatically) on 2026-09-30 23:32.</p>
+<div class="body"><p>Slice 2 does not yet do what 1 of its criteria say. Each condition is the criterion and what the running application did.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-4.23: Error: expect(received).toBeTruthy() — Received: &quot;&quot;</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
