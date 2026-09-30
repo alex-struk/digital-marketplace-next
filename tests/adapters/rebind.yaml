@@ -2231,3 +2231,47 @@ rebind:
       content region after the heading (excluding site header and footer), and
       match the /api/files/<id> the body's FILE_ID marker names.
     closed: *a15
+  - id: R-1.10
+    target: old
+    why: for the over-length teaser (501 chars) and description (10,001 chars) rows,
+      opportunityCwuCreate.fieldError() returned '' although old draws 'Teaser
+      must be between 0 and 500 characters long.' / 'Description must be between
+      1 and 10000 characters long.' directly under the textarea, and the
+      title-over-200 row passes with the same reader; saidAfterField stops
+      climbing when an ancestor holds more than one field, which the description
+      editor's own image 'Choose File' file input causes, so the field's message
+      is never reached; confirm the value is actually entered into both
+      textareas (Teaser and the Description markdown editor) and read the
+      message drawn in the field's own form group, not counting the editor's
+      file input as a second field
+  - id: R-1.17
+    target: old
+    why: on submission for review, opportunitySwuCreate.fieldError() still returns
+      '' for an empty Question and a 1,001-character Question, while the
+      over-length Response Guidelines row using the same widget passes;
+      addTeamQuestion must enter the Question value so old validates it (for an
+      empty value, type then clear then leave the box so a change fires), and
+      fieldError must read the message old draws under that Question box; for
+      the 102-question row, submitForReview must report whether 'Submit for
+      Review' was pressed or left disabled, and fieldError must include any
+      alert or message old shows after it, rather than ending quietly with
+      nothing read
+  - id: R-7.26
+    target: old
+    why: fileEmbeddedImage returned '' after uploading a body image and publishing;
+      imageSources skips any image with an ancestor whose innerText begins with
+      'Published', and on old's /content/<slug> page the body paragraph follows
+      the 'Published … | Updated …' line inside the content region, so the body
+      image is dropped; exclude only the date line itself, not containers that
+      start with it, and check that imageInsertedIntoText reads the Body box
+      after the upload finished writing '![name](FILE_ID:<id>)' into it
+  - id: R-8.31
+    target: old
+    why: "after fileAttachmentControl.addAttachment on a just-published Code With Us
+      opportunity, attachmentAddress found neither a /api/files/ link nor a
+      blob: preview on the Attachments step of
+      /opportunities/code-with-us/<id>/edit?tab=opportunity, so the file was
+      never added to the form; addAttachment must enter editing on the published
+      opportunity if it is read-only, hand the file to the attachment input,
+      save it through 'Publish Changes' and its confirmation, and raise when no
+      file appears, rather than returning silently"
