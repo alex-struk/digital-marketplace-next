@@ -1,0 +1,375 @@
+{
+  "slice": 2,
+  "proposal": "build-slice-2-8",
+  "app_tree": "ac559b12e568e86f6dabffdbc379df5167944176",
+  "at": "2026-09-30T16:59:48.622Z",
+  "verdict": "fail",
+  "environment": [
+    {
+      "id": "R-6.1",
+      "reason": "its test is written for configuration notifications_disabled (@notifications_disabled), which the target reads at start-up, and verify cannot start the new target in a configuration"
+    }
+  ],
+  "unbound": [
+    {
+      "id": "R-4.6",
+      "reason": "user-profile-self.edit_profile — no control named /^\\s*edit( profile)?\\s*$/i on http://localhost:4300/users/me"
+    },
+    {
+      "id": "R-4.23",
+      "reason": "user-sign-up-complete.terms_checkbox — /sign-up/complete sent this account on to http://localhost:4300/dashboard instead of showing the profile form; it is shown only to an account that has not yet completed its profile"
+    },
+    {
+      "id": "R-4.27",
+      "reason": "user-profile-self.edit_profile — no control named /^\\s*edit( profile)?\\s*$/i on http://localhost:4300/users/me"
+    },
+    {
+      "id": "R-4.28",
+      "reason": "user-profile-self.edit_profile — no control named /^\\s*edit( profile)?\\s*$/i on http://localhost:4300/users/me"
+    },
+    {
+      "id": "R-6.2",
+      "reason": "opportunity-cwu-create.publish — /opportunities/code-with-us/create did not open as a screen at http://localhost:4300/opportunities/code-with-us/create: Page not found The page you are looking for does not exist.; the screen is offered only to a signed-in person who may have it, and was never seen by the session that wrote this adapter"
+    },
+    {
+      "id": "R-6.3",
+      "reason": "organization-edit.add_team_members — /organizations/:orgId/edit did not open as a screen at http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/edit: Page not found The page you are looking for does not exist.; the screen is offered only to a signed-in person who may have it, and was never seen by the session that wrote this adapter"
+    },
+    {
+      "id": "R-6.4",
+      "reason": "organization-edit.add_team_members — /organizations/:orgId/edit did not open as a screen at http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/edit: Page not found The page you are looking for does not exist.; the screen is offered only to a signed-in person who may have it, and was never seen by the session that wrote this adapter"
+    },
+    {
+      "id": "R-6.5",
+      "reason": "organization-edit.add_team_members — /organizations/:orgId/edit did not open as a screen at http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/edit: Page not found The page you are looking for does not exist.; the screen is offered only to a signed-in person who may have it, and was never seen by the session that wrote this adapter"
+    },
+    {
+      "id": "R-6.20",
+      "reason": "signIn.first-time-vendor — the sign-in screen at http://localhost:4300/dashboard offers no \"Sign in as a vendor\" control"
+    },
+    {
+      "id": "R-6.28",
+      "reason": "user-profile.status_badge — /users/:userId did not open as a screen at http://localhost:4300/users/00000000-0000-4000-8000-000000000201: Page not found The page you are looking for does not exist.; the screen is offered only to a signed-in person who may have it, and was never seen by the session that wrote this adapter"
+    }
+  ],
+  "adapter": "310e908ea49a44ce994e0d85e773ae9cdcead971",
+  "rows": [
+    {
+      "id": "R-6.2",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.2.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "When a message cannot be composed or cannot be delivered, the action that triggered it still succeeds, nobody is told, and no further attempt is made.",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.publish — /opportunities/code-with-us/create did not open as a screen at http://localhost:4300/opportunities/code-with-us/create: Page not found The page you are looking for does not exist.; the screen is offered only to a signed-in person who may have it, and was never seen by the session that wrote this adapter"
+        }
+      ],
+      "file_sha": "bc7fd3047214cd83d2a0f47d16c4d1d677798aef",
+      "adapter": "310e908ea49a44ce994e0d85e773ae9cdcead971"
+    },
+    {
+      "id": "R-6.3",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.3.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "When an environment is marked as a test environment, every message it sends is marked as a test in its subject line and carries a test variant of the service's logo.",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.add_team_members — /organizations/:orgId/edit did not open as a screen at http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/edit: Page not found The page you are looking for does not exist.; the screen is offered only to a signed-in person who may have it, and was never seen by the session that wrote this adapter"
+        }
+      ],
+      "file_sha": "d1a9745fa3e8ac6d8d2ec1730c2f5bd86b3bf00d",
+      "adapter": "310e908ea49a44ce994e0d85e773ae9cdcead971"
+    },
+    {
+      "id": "R-6.4",
+      "version": 2,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.4.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "Every message the service sends comes from a single configured sender — a display name followed by one do-not-reply address, the same for every kind of message — and carries no reply-to address distinct from that sender.",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.add_team_members — /organizations/:orgId/edit did not open as a screen at http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/edit: Page not found The page you are looking for does not exist.; the screen is offered only to a signed-in person who may have it, and was never seen by the session that wrote this adapter"
+        }
+      ],
+      "file_sha": "2f9d29bf00cac9bef57bdd64e71c81dfb0608d11",
+      "adapter": "310e908ea49a44ce994e0d85e773ae9cdcead971"
+    },
+    {
+      "id": "R-6.5",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.5.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "Every message is sent in both a formatted and a plain-text form, the plain text being a rendering of the formatted version rather than separately written copy.",
+          "status": "failed",
+          "error": "Error: unbound: organization-edit.add_team_members — /organizations/:orgId/edit did not open as a screen at http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/edit: Page not found The page you are looking for does not exist.; the screen is offered only to a signed-in person who may have it, and was never seen by the session that wrote this adapter"
+        }
+      ],
+      "file_sha": "0b80488201f94a0446679a23a43672088208f6e2",
+      "adapter": "310e908ea49a44ce994e0d85e773ae9cdcead971"
+    },
+    {
+      "id": "R-6.20",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.20.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "A newly created account has new-opportunity notifications off until its holder asks for them.",
+          "status": "failed",
+          "error": "Error: unbound: signIn.first-time-vendor — the sign-in screen at http://localhost:4300/dashboard offers no \"Sign in as a vendor\" control"
+        }
+      ],
+      "file_sha": "ae95bbeec8fc2c066b19ade1425e52a54280b3f6",
+      "adapter": "310e908ea49a44ce994e0d85e773ae9cdcead971"
+    },
+    {
+      "id": "R-6.28",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.28.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "a broadcast to many people always continues past a recipient it cannot address",
+          "status": "failed",
+          "error": "Error: unbound: user-profile.status_badge — /users/:userId did not open as a screen at http://localhost:4300/users/00000000-0000-4000-8000-000000000201: Page not found The page you are looking for does not exist.; the screen is offered only to a signed-in person who may have it, and was never seen by the session that wrote this adapter"
+        }
+      ],
+      "file_sha": "65d2391c7184af25f5579debcad94ba837c6d42c",
+      "adapter": "310e908ea49a44ce994e0d85e773ae9cdcead971"
+    },
+    {
+      "id": "R-4.1",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.1.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the first time a person signs in, the service creates an account for them and decides its kind from the identity they signed in with: a government identity makes a public sector employee",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
+        },
+        {
+          "title": "the first time a person signs in, the service creates an account for them and decides its kind from the identity they signed in with: a code-hosting identity makes a vendor",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
+        }
+      ],
+      "file_sha": "3890cff45760ce7fd62352ec8823b0f71c9bf730",
+      "adapter": "310e908ea49a44ce994e0d85e773ae9cdcead971"
+    },
+    {
+      "id": "R-4.2",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.2.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a person whose account has just been created is sent a welcome message",
+          "status": "passed"
+        },
+        {
+          "title": "a person whose account has just been created is not sent a welcome message when no email address is known for them",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
+        }
+      ],
+      "file_sha": "b880ed664ada2d14833e6c193567686a1e1247bb",
+      "adapter": "310e908ea49a44ce994e0d85e773ae9cdcead971"
+    },
+    {
+      "id": "R-4.3",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.3.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a vendor cannot finish signing up until they confirm they have read and agree to the service's terms and conditions and its privacy policy",
+          "status": "passed"
+        },
+        {
+          "title": "the moment of acceptance is recorded on the vendor's account",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
+        },
+        {
+          "title": "a public sector employee is never asked to agree to the terms and conditions and the privacy policy",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "cd9323e52cbbdaa352cd655bcfd7660e74c0e180",
+      "adapter": "310e908ea49a44ce994e0d85e773ae9cdcead971"
+    },
+    {
+      "id": "R-4.6",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.6.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "two accounts of the same kind may not share an email address, so a vendor's change to an address another vendor holds is not saved",
+          "status": "failed",
+          "error": "Error: unbound: user-profile-self.edit_profile — no control named /^\\s*edit( profile)?\\s*$/i on http://localhost:4300/users/me"
+        }
+      ],
+      "file_sha": "4898f4bdcb76c36fec3c06ccb9b12552d7b6444b",
+      "adapter": "310e908ea49a44ce994e0d85e773ae9cdcead971"
+    },
+    {
+      "id": "R-4.17",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.17.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "signing out ends the person's session with the service, and the person is told they have been signed out",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
+        }
+      ],
+      "file_sha": "1449841c9cdfb9788fcbce2f7723d00908b0c57d",
+      "adapter": "310e908ea49a44ce994e0d85e773ae9cdcead971"
+    },
+    {
+      "id": "R-4.22",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.22.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "after signing in, a person who already had an account is taken to their dashboard",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
+        }
+      ],
+      "file_sha": "c8a771887b9619bdff2ec1b6ffab184db9333ca0",
+      "adapter": "310e908ea49a44ce994e0d85e773ae9cdcead971"
+    },
+    {
+      "id": "R-4.23",
+      "version": 2,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.23.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "the profile-completion page is offered to a vendor who has not yet agreed to the terms",
+          "status": "passed"
+        },
+        {
+          "title": "a vendor who has agreed before is sent to their dashboard instead of the profile-completion page",
+          "status": "failed",
+          "error": "Error: unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete sent this account on to http://localhost:4300/dashboard instead of showing the profile form; it is shown only to an account that has not yet completed its profile"
+        },
+        {
+          "title": "any signed-in person who is not a vendor is sent to their dashboard instead of the profile-completion page",
+          "status": "failed",
+          "error": "Error: unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete sent this account on to http://localhost:4300/dashboard instead of showing the profile form; it is shown only to an account that has not yet completed its profile"
+        },
+        {
+          "title": "a visitor who is not signed in is sent to sign in instead of the profile-completion page",
+          "status": "failed",
+          "error": "Error: unbound: user-sign-up-complete.terms_checkbox — /sign-up/complete did not open as a screen at http://localhost:4300/sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete: sent to the sign-in screen (/sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete); the screen is offered only to a signed-in person who may have it, and was never seen by the session that wrote this adapter"
+        }
+      ],
+      "file_sha": "7fb7cbbf9cb22742dfe5b7054c84049c53341886",
+      "adapter": "310e908ea49a44ce994e0d85e773ae9cdcead971"
+    },
+    {
+      "id": "R-4.24",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.24.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "While completing their profile a person may choose to be told about new opportunities, and the choice is saved with their account.",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"\"\u001b[39m"
+        }
+      ],
+      "file_sha": "d89858c17b18c4cdd32f25f306f94646d9e0b54c",
+      "adapter": "310e908ea49a44ce994e0d85e773ae9cdcead971"
+    },
+    {
+      "id": "R-4.27",
+      "version": 2,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.27.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "a profile requires a name, so a cleared name is reported as invalid and the profile is not saved",
+          "status": "failed",
+          "error": "Error: unbound: user-profile-self.edit_profile — no control named /^\\s*edit( profile)?\\s*$/i on http://localhost:4300/users/me"
+        },
+        {
+          "title": "a profile requires a name of between one and one hundred characters",
+          "status": "failed",
+          "error": "Error: unbound: user-profile-self.edit_profile — no control named /^\\s*edit( profile)?\\s*$/i on http://localhost:4300/users/me"
+        },
+        {
+          "title": "a profile requires an email address in a valid format, so an invalid one is reported and not saved",
+          "status": "failed",
+          "error": "Error: unbound: user-profile-self.edit_profile — no control named /^\\s*edit( profile)?\\s*$/i on http://localhost:4300/users/me"
+        },
+        {
+          "title": "the email address is stored in lower case",
+          "status": "failed",
+          "error": "Error: unbound: user-profile-self.edit_profile — no control named /^\\s*edit( profile)?\\s*$/i on http://localhost:4300/users/me"
+        },
+        {
+          "title": "the profile saves with the job title left blank and no profile picture",
+          "status": "failed",
+          "error": "Error: unbound: user-profile-self.edit_profile — no control named /^\\s*edit( profile)?\\s*$/i on http://localhost:4300/users/me"
+        },
+        {
+          "title": "the job title is limited to one hundred characters",
+          "status": "failed",
+          "error": "Error: unbound: user-profile-self.edit_profile — no control named /^\\s*edit( profile)?\\s*$/i on http://localhost:4300/users/me"
+        }
+      ],
+      "file_sha": "20d6066bee96dd395031e359c9fdff2c0a18fdbe",
+      "adapter": "310e908ea49a44ce994e0d85e773ae9cdcead971"
+    },
+    {
+      "id": "R-4.28",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.28.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "the job title is asked for and shown on a public sector employee's profile",
+          "status": "failed",
+          "error": "Error: unbound: user-profile-self.edit_profile — no control named /^\\s*edit( profile)?\\s*$/i on http://localhost:4300/users/me"
+        },
+        {
+          "title": "a vendor is never asked for a job title",
+          "status": "failed",
+          "error": "Error: unbound: user-profile-self.edit_profile — no control named /^\\s*edit( profile)?\\s*$/i on http://localhost:4300/users/me"
+        }
+      ],
+      "file_sha": "cc7699b45e661656935ffda6a736783bfa965860",
+      "adapter": "310e908ea49a44ce994e0d85e773ae9cdcead971"
+    }
+  ]
+}
