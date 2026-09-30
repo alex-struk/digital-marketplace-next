@@ -38,3 +38,23 @@ I wrote a test for the one criterion, R-2.18 v4. Nothing went into `not-testable
 **What the contract could add:** `proposalSwuEdit` has no observation of the team a saved proposal names. The draft test therefore shows the save went through, but cannot show the pending person is still on the draft afterwards. A team-members observation on `proposal-swu-edit` would close that gap.
 
 I changed no path outside `tests/acceptance`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the rewritten R-2.18 tests follow from R-2.18 v4 and nothing else? Approve. Each clause of v4 is asserted: the service refuses non-active members with the quoted message (Team With Us: pending, former, outside; Sprint With Us: pending and outside, via the request surface that sends a submission); Team With Us duplicate naming is refused with the uniqueness message and Sprint With Us duplicates are not; the Team With Us form offers only active members; the Sprint With Us form also lists the pending invitee, marks them pending once named, and no form offers someone already named; a Sprint With Us proposal naming a pending person saves as a draft and stays a draft, not submitted, after submission is attempted. The draft test fills in cost, references and terms only so the proposal is otherwise complete, and asserts nothing about them. Every surface call is a contract action or observation, and proposal-swu-create's contract comment backs the pending listing, save_draft and the withheld submission, so no implementation detail leaks in. The runner's typecheck passed. The open missing-test on R-2.18, owed by ratify over the v3 wording that contradicted the contract, is answered by v4 and is withdrawn. What would change this: a first run of these tests that fails or comes back unbound.
+
+**Conditions:**
+- condition-withdrawn missing-test/R-2.18: ratify reworded the criterion to v4, which says the Sprint With Us form also lists pending invitees marked pending, so it no longer contradicts the contract; 'the Sprint With Us form offers the active members and lists a pending member, marked pending' asserts the reworded clause
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `7c208fbdf16edeb10af17ae58299b1663b3f239b`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/proposals/`, which this proposal answers for.
+
+    No diagnostics.
