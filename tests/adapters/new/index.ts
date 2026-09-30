@@ -14,11 +14,11 @@
 // the service answers its interface under /api (files included) for whoever the browser's
 // session carries.
 //
-// Nobody can sign in. "Sign In Using GitHub" and "Sign In Using IDIR" on /sign-in both hand
-// off to an external single sign-on service that answers "Login Error: Invalid parameter:
-// redirect_uri" and shows no form. Every screen that needs a session therefore answers a
-// signed-out visitor, the only visitor there can be, with the client's "Not Found" screen,
-// a redirect to /sign-in, or (for /dashboard) a redirect to the home page. Those screens'
+// Signing in now works as far as the sandbox identity provider's own form ("Sign in as a
+// vendor" / "Sign in as a public sector employee" on /sign-in), and signIn() fills it. The
+// screens behind a session were never walked signed in, because the binding session could
+// not use the sandbox password; signed out they answer with the client's "Page not found"
+// screen or a redirect to /sign-in. Those screens'
 // members report "unbound: <page>.<member> — <reason>", and so does their open(), so that a
 // test which only opens such a page is not told it succeeded; a member that is about the
 // refusal itself (refused_for_non_administrator, sign_in_required, ...) reads that refusal.
@@ -260,16 +260,17 @@ export default function create(
 
   const camel = (name: string): string => name.replace(/_([a-z0-9])/g, (_match, c: string) => c.toUpperCase());
 
+  // Sign-in now reaches a real form, but the session that bound this adapter had no sandbox
+  // password it was permitted to use, so no screen behind a session has been walked yet.
   const NOBODY_SIGNS_IN =
-    'nobody can sign in on this target: "Sign In Using GitHub" and "Sign In Using IDIR" on /sign-in both hand off to an external single sign-on service that answers "Login Error: Invalid parameter: redirect_uri" and shows no form';
+    'this screen has not been walked signed in: "Sign in as a vendor" and "Sign in as a public sector employee" on /sign-in now hand off to the sandbox identity provider\'s username and password form, but the session that bound this adapter could not use the sandbox password, so none of the controls signed-in people are shown here have been seen';
 
   // What each such address answered a signed-out visitor when it was opened.
   function signedOutAnswer(route: string): string {
-    if (/^\/dashboard/.test(route)) return "redirects to the home page";
-    if (/^\/(users|organizations\/|sign-up\/complete)|^\/opportunities\/create$|\/complete$/.test(route)) {
+    if (/^\/(dashboard|users|organizations\/|sign-up\/complete)|\/complete$/.test(route)) {
       return "redirects to /sign-in";
     }
-    return 'shows the "Not Found" screen';
+    return 'shows the "Page not found" screen';
   }
 
   const behindSession = (route: string): string =>
@@ -318,12 +319,9 @@ export default function create(
   // read from persona.signIn["sandbox-idp"] and the password from the environment — never
   // from anything written down in the suite.
   //
-  // Nothing here has ever succeeded against this target. /sign-in now offers "Sign In Using
-  // GitHub" (vendors) and "Sign In Using IDIR" (public sector staff and administrators), and
-  // both lead to an external single sign-on service that refuses the request ("Login Error:
-  // Invalid parameter: redirect_uri") without showing a form. The attempt is still made
-  // rather than assumed, so that the reason reported is what the target did when asked, and
-  // so that the day the hand-off reaches a form this keeps working.
+  // /sign-in offers "Sign in as a vendor" and "Sign in as a public sector employee" (buttons),
+  // and each hands off to the sandbox identity provider's "Sign in to your account" form,
+  // which returns through /auth/callback to the marketplace once it accepts the account.
   async function signIn(who: Persona): Promise<void> {
     const table = who.signIn as unknown as null | Record<string, SignInEntry>;
     if (!table) {
@@ -346,46 +344,66 @@ export default function create(
     }
 
     // Start from nobody signed in, then take the way in the sign-in screen offers this kind
-    // of account: GitHub for a vendor, IDIR for public sector staff and administrators.
+    // of account: "Sign in as a vendor" for a vendor, "Sign in as a public sector employee"
+    // for public sector staff and administrators. Every vendor's sandbox username says so.
     await signOut();
     await page.goto(baseURL + "/sign-in", { waitUntil: "domcontentloaded" });
     await ready();
-    const way = /^test-vendor/i.test(entry.username) ? "Sign In Using GitHub" : "Sign In Using IDIR";
-    const offer = seen(page.getByRole("link", { name: new RegExp(`^\\s*${way}\\s*$`, "i") })).first();
-    if (!(await offer.count())) {
-      throw new Error(`unbound: ${where} — the sign-in screen at ${page.url()} offers no "${way}" link`);
+    const way = /vendor/i.test(entry.username) ? "Sign in as a vendor" : "Sign in as a public sector employee";
+    const offer = await findControl(page, new RegExp(`^\\s*${way}\\s*$`, "i"));
+    if (!offer) {
+      throw new Error(`unbound: ${where} — the sign-in screen at ${page.url()} offers no "${way}" control`);
     }
     await offer.click();
-    await page.waitForLoadState("domcontentloaded").catch(() => undefined);
-    await settle();
 
+    // The provider's own form: "Sign in to your account", with "Username", "Password" and
+    // "Sign In". The password box sits beside a "Show password" button, so both are found
+    // as text boxes by name rather than by any label mentioning a password.
     const form = await identityProviderForm();
     if (!form) {
       // Only the provider's origin is named: its address carries the request's parameters.
       const said = (await bodyText().catch(() => "")).replace(/\s+/g, " ").slice(0, 300);
       throw new Error(
-        `unbound: ${where} — "${way}" on /sign-in hands off to ${new URL(page.url()).origin}, which shows no username and password form; it says: ${said}`,
+        `unbound: ${where} — "${way}" on /sign-in hands off to ${originOf(page.url())}, which shows no username and password form; it says: ${said}`,
       );
     }
     await form.username.fill(entry.username);
     await form.password.fill(password);
-    const submit = await findControl(page, /^(sign in|log in|continue|submit)$/i);
-    if (!submit) {
+    const submit = seen(page.getByRole("button", { name: /^\s*(sign in|log in)\s*$/i })).first();
+    if (!(await submit.count())) {
       throw new Error(
-        `unbound: ${where} — the identity provider form on ${page.url()} offers nothing to submit it with`,
+        `unbound: ${where} — the identity provider form at ${originOf(page.url())} offers nothing to submit it with`,
       );
     }
     await submit.click();
-    await page
-      .waitForURL((url) => url.origin === new URL(baseURL).origin, { timeout: 30000 })
-      .catch(() => undefined);
+    const home = originOf(baseURL);
+    const back = await page
+      .waitForURL((url) => url.origin === home && !/^\/auth\/callback/.test(url.pathname), { timeout: 30000 })
+      .then(() => true)
+      .catch(() => false);
+    if (!back) {
+      // Still on the provider: it refused the account, and says why. That is a real failure
+      // of signing in, not a missing binding.
+      const said = (await bodyText().catch(() => "")).replace(/\s+/g, " ").slice(0, 300);
+      throw new Error(
+        `${where} — the identity provider at ${originOf(page.url())} did not hand back to ${home} after "Sign In" as ${entry.username}; it says: ${said}`,
+      );
+    }
     await settle();
   }
 
+  function originOf(href: string): string {
+    return /^[a-z]+:\/\/[^/?#]+/i.exec(href)?.[0] ?? href;
+  }
+
   async function identityProviderForm(): Promise<{ username: Locator; password: Locator } | null> {
-    const username = seen(page.getByLabel(/user\s*name|email|account/i)).first();
-    const password = seen(page.getByLabel(/password/i)).first();
+    const username = seen(page.getByRole("textbox", { name: /^\s*(user\s*name|username or email|email)\s*$/i })).first();
+    const password = seen(page.getByRole("textbox", { name: /^\s*password\s*$/i })).first();
+    await username.waitFor({ state: "visible", timeout: 20000 }).catch(() => undefined);
     if ((await username.count()) && (await password.count())) return { username, password };
+    // A password input has no textbox role in every browser; fall back to its label alone.
+    const byLabel = seen(page.getByLabel(/^\s*password\s*$/i, { exact: false })).first();
+    if ((await username.count()) && (await byLabel.count())) return { username, password: byLabel };
     return null;
   }
 
@@ -1079,9 +1097,9 @@ export default function create(
   // ---------------------------------------------------------------- requests no screen makes
 
   // Each is a request to the service's own interface from the browser's session, so it
-  // carries whoever is signed in — on this target, nobody. What the service answered a
-  // signed-out request with was read for every address below; what it answers somebody
-  // signed in could not be, since nobody can sign in here, so those request bodies follow
+  // carries whoever is signed in. What the service answered a signed-out request with was
+  // read for every address below; what it answers somebody signed in was not, since the
+  // session that bound this adapter could not sign in, so those request bodies follow
   // spec/contract/openapi.yaml and the forms the contract describes.
 
   type Answer = { status: number; body: string };
@@ -2483,33 +2501,43 @@ export default function create(
     refusedWhenNotPermitted: () => refusalShown(),
   };
 
-  // /sign-in: "Welcome Back to the Digital Marketplace", then a "Vendor" card ("Sign In
-  // Using GitHub") and a "Public Sector Employee" card ("Sign In Using IDIR"). /sign-up is
-  // the same with "Sign Up Using …". Each way in leads to the external sign-on service.
-  async function cardFrom(start: string, end?: string): Promise<string> {
+  // /sign-in: "Sign In", "Choose the kind of account you sign in with.", then a "Vendor"
+  // region ("Sign in as a vendor") and a "Public sector employee" region ("Sign in as a
+  // public sector employee"), then "Don't have an account? Sign up". /sign-up ("Choose
+  // Account Type") is the same with "Sign up as …" and closes on "Already have an account?
+  // Sign in". Each way in leads to the sandbox identity provider's form.
+  async function cardFrom(start: RegExp, end?: RegExp): Promise<string> {
     const lines = await textLines();
-    const from = lines.indexOf(start);
+    const from = lines.findIndex((line) => start.test(line));
     if (from < 0) return "";
-    const to = end ? lines.indexOf(end, from + 1) : -1;
+    let to = end ? lines.findIndex((line, i) => i > from && end.test(line)) : -1;
+    if (to < 0) to = lines.findIndex((line, i) => i > from && /^(don.t|already) have an account/i.test(line));
     return lines.slice(from, to > from ? to : undefined).join("\n");
   }
 
+  const VENDOR_CARD = /^vendor$/i;
+  const PUBLIC_SECTOR_CARD = /^public sector employee$/i;
+
   const userSignIn: S.UserSignInPage = {
     open: () => go("/sign-in"),
-    signInAsVendor: () => press("user-sign-in.sign_in_as_vendor", /^sign in using github$/i),
-    signInAsPublicSectorEmployee: () => press("user-sign-in.sign_in_as_public_sector_employee", /^sign in using idir$/i),
+    signInAsVendor: () => press("user-sign-in.sign_in_as_vendor", /^sign in (as a vendor|using github)$/i),
+    signInAsPublicSectorEmployee: () =>
+      press("user-sign-in.sign_in_as_public_sector_employee", /^sign in (as a public sector employee|using idir)$/i),
     goToSignUp: () => press("user-sign-in.go_to_sign_up", /^sign up$/i),
-    vendorCard: () => cardFrom("Vendor", "Public Sector Employee"),
-    publicSectorCard: () => cardFrom("Public Sector Employee"),
+    vendorCard: () => cardFrom(VENDOR_CARD, PUBLIC_SECTOR_CARD),
+    publicSectorCard: () => cardFrom(PUBLIC_SECTOR_CARD),
   };
 
   const userSignUpChooseAccount: S.UserSignUpChooseAccountPage = {
     open: () => go("/sign-up"),
-    signUpAsVendor: () => press("user-sign-up-choose-account.sign_up_as_vendor", /^sign up using github$/i),
+    signUpAsVendor: () => press("user-sign-up-choose-account.sign_up_as_vendor", /^sign up (as a vendor|using github)$/i),
     signUpAsPublicSectorEmployee: () =>
-      press("user-sign-up-choose-account.sign_up_as_public_sector_employee", /^sign up using idir$/i),
-    vendorCard: () => cardFrom("Vendor", "Public Sector Employee"),
-    publicSectorCard: () => cardFrom("Public Sector Employee"),
+      press(
+        "user-sign-up-choose-account.sign_up_as_public_sector_employee",
+        /^sign up (as a public sector employee|using idir)$/i,
+      ),
+    vendorCard: () => cardFrom(VENDOR_CARD, PUBLIC_SECTOR_CARD),
+    publicSectorCard: () => cardFrom(PUBLIC_SECTOR_CARD),
   };
 
   // /sign-out: "You have successfully signed out. Thank you for using the Digital Marketplace."
@@ -2650,6 +2678,7 @@ export default function create(
         "set_evaluation_panel",
         "field_error",
         "score_weight_error",
+        "evaluation_question_fields",
       ],
     ),
 
@@ -2707,6 +2736,7 @@ export default function create(
         "team_scenario_tab",
         "evaluation_panel_tab",
         "consensus_tab",
+        "evaluation_question_fields",
       ],
     ),
     } as S.OpportunitySwuEditPage,
@@ -2731,6 +2761,7 @@ export default function create(
         "set_evaluation_panel",
         "field_error",
         "score_weight_error",
+        "evaluation_question_fields",
       ],
     ),
 
@@ -2796,6 +2827,7 @@ export default function create(
         "challenge_tab",
         "evaluation_panel_tab",
         "consensus_tab",
+        "evaluation_question_fields",
       ],
     ),
     } as S.OpportunityTwuEditPage,
