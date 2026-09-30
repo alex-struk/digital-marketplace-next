@@ -41,3 +41,14 @@ The seed is still files 000 to 015 plus `tests/seed/manifest.yaml`. It holds:
 **Not done or not checked.** I could not re-parse `surface.yaml` with a YAML tool, because the permission layer refused the parse commands. The four edits copy the indentation and shape of the entries around them, so I expect it parses, but it has not been machine-checked in this run. I also could not show the final diff for the same reason.
 
 re-address missing-test/R-1.17 to derive-tests: added the observation `evaluation_question_fields` on opportunity-swu-create, opportunity-twu-create, opportunity-swu-edit and opportunity-twu-edit. It reports the five fields a question offers (question, guideline, response_word_limit, maximum_score, minimum_score) and that no position or order field is offered.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: is this the contract the tests will act through for the owed R-1.17 clause that a question's position 'is never entered by the person'? Ruling: approve. Reason: the proposal adds one observation, evaluation_question_fields, to opportunity-swu-create, opportunity-twu-create, opportunity-swu-edit and opportunity-twu-edit. It reports the five fields a question offers (question, guideline, response_word_limit, maximum_score, minimum_score) and that no position or order field is offered. That is exactly what the missing-test/R-1.17 condition asked for, and it names fields in the criterion's words without leaking markup (test_id stays null for the design gate). I checked it against the old application: sprint-with-us/lib/components/team-questions.tsx holds only those five fields in its Question state (lines 23-29), and getValues (lines 275-291) sends `order` as the list index from the reduce, never from an input. team-with-us/lib/components/resource-questions.tsx is identical in structure (lines 23-28, 278-289). Adding it to the edit pages is right, because questions are added and changed there too. The proposal could not machine-parse surface.yaml; I read the four entries in place and each sits under `observations:` with the same indentation and shape as its neighbours. The generated surface.d.ts accessors match. Nothing else in the contract changed. What would change the ruling: surface.yaml failing to parse, or evidence of a position/order input anywhere in the old question editors. Noted for a later ratification ruling, not this gate: R-1.17's `when` step still lists 'a position outside 0 to 100' as something submitted, which contradicts its own statement that position is never entered and cannot be exercised through this surface. It should be corrected with an `edit`.
+
+**Conditions:**
+none
