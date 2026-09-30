@@ -129,3 +129,14 @@ requests:
     at: 2026-09-28T22:48:49.779Z
     taken: 2026-09-29T00:24:30.306Z
     taken_by: contract-v21
+  - stage: plan
+    why: slice 2 claims R-4.6, R-4.22, R-4.27, R-4.28 and R-6.2 to R-6.5, whose
+      tests go through screens plan/tasks.md gives to later slices (profile
+      editing and /users/:userId, the Code With Us create screen, organization
+      editing, the opportunity dashboard's own-opportunities table); verify on
+      build-slice-2-8 found each failing or unbound there. Move each to the
+      slice that delivers its screen.
+    from: build-slice-2-8
+    gate: G3
+    by: tech-lead
+    at: 2026-09-30T18:06:07.282Z
