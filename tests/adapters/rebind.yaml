@@ -2056,3 +2056,8 @@ rebind:
       step of that same opportunity, in whatever read-only or edit state the
       publish left it, and raise rather than return empty when it finds no link
       there'
+    closed:
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-30T02:30:18.304Z
