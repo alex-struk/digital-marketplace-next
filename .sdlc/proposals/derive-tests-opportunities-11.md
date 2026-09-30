@@ -31,3 +31,24 @@ Both tests use a new helper that tests acceptance, the opposite of the refusal t
 **Left alone:** the reviewer's rationale also mentions two other in-range edges: a question or guideline of exactly 1,000 characters, and a word limit of exactly 3,000. Neither condition asks for them, and I was told to change only what the conditions name, so there are still no tests for them. A later round should add them the same way.
 
 No surface actions or observations were missing for this work.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the revised R-1.17 tests follow from the criterion and nothing else, and are the two owed conditions met? Ruling: approve. Condition 1 is met: a new test submits a Sprint With Us opportunity whose only question has no minimum score and expects it to read as under review, the state R-1.19 names. Condition 2 is met: a new test submits 101 questions, the last at position 100, and expects the same acceptance. The refusal test for a question beyond position 100 still passes the limit by exactly one question. Every clause of R-1.17 v3 is asserted: refusal on submission for review for each limit, the minimum-score clause on both programs, refusal on publication by an administrator on each program, the offending field named, a draft saved while holding an out-of-limit question on both programs, and positions following the order of addition. The one clause no observation reaches, that the person never enters a position, has a real not-testable entry owed by contract. The test's statement string matches the spec's v3 text word for word. The completeness setup (dates, weights, panel) exists only so a refusal has a single cause, and nothing asserts on it. The runner's typecheck passed with no diagnostics. What would change the ruling: an assertion that R-1.17 does not state, or a clause left without a test or a not-testable entry.
+
+**Conditions:**
+- condition-met derive-tests-opportunities-stale-12#1: tests/acceptance/opportunities/R-1.17.spec.ts adds 'a Sprint With Us question with no minimum score is accepted on submission for review', which submits an otherwise complete opportunity and polls the opportunity's view-page status for 'review'
+- condition-met derive-tests-opportunities-stale-12#2: tests/acceptance/opportunities/R-1.17.spec.ts adds 'an opportunity holding 101 questions, the last at position 100, is accepted on submission for review', which uses the same acceptance check
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `2770b288b5f06b096b95cbb454005ee6d95ba0de`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/opportunities/`, which this proposal answers for.
+
+    No diagnostics.
