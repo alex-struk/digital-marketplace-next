@@ -28,3 +28,23 @@ I fixed the two calibration findings (R-1.17 and R-7.26) in `tests/adapters/old/
 I did not upload and publish a real image to check the rendered output end to end. Doing so would have changed a seeded page on the shared target. The marker format comes from an earlier observation recorded in the adapter, and my one attempt to upload from the browser tools failed on a tooling error.
 
 `bindings.yaml` already listed every member involved as `bound`, and nothing became unbound, so I left it unchanged. No route failed to resolve, and I changed nothing outside `tests/adapters/old/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on old, and nothing else? Ruling: approve. The diff touches only tests/adapters/old/index.ts (nothing under tests/acceptance) and the runner's typecheck of this revision passed with no diagnostics under adapters/old. Each change is navigation or locating/reading, with no assertion and no business logic: resourceQuestionsTab now reads the Opportunity tab's '5. Resource Questions' step (the opportunity's authored questions) instead of the sidebar's same-named scoring link, via an authoredQuestions helper that is a straight refactor of the already-fixed Team Questions reader; fieldError no longer invents '<step> is incomplete' text the page never shows and now reports only alerts and under-field messages, empty when the form refuses silently, which removes the adapter speaking for the page; imageRenderedInPublishedText navigates to /content/<slug> before reading and throws unbound via nothing() when no slug is known rather than answering empty; imageInsertedIntoText returns only the image references in the body, which is the observation R-7.26 names. The replacement open() keeps the shape of the at() helper it replaces, and rememberBodyImage exists. Nothing was run end to end (no real image was uploaded and published), and establishing that is calibration's job on its next run, not grounds to hold this gate. What would change the ruling: calibration showing either reader still reads the wrong place, or any binding beginning to decide an outcome.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `fa0a1daf1c1145273baa2a5c9ac85d872f4f2670`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    No diagnostics.
