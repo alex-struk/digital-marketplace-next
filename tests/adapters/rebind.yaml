@@ -2071,6 +2071,11 @@ rebind:
       must find the stored /api/files/ image without per-index waits that can
       hang (for example, snapshot all srcs in one evaluate, or bound each
       attribute read) and then read that image's natural size.
+    closed: &a12
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-30T04:02:29.431Z
   - id: R-2.18
     target: old
     why: proposalSwuCreate.pendingTeamMember is bound to linesMatching(/pending/i),
@@ -2080,6 +2085,7 @@ rebind:
       each named member that carries the pending marker and return that member's
       name (together with the marker), so a person named and marked pending is
       reported by name.
+    closed: *a12
   - id: R-2.2
     target: old
     why: 'unbound: opportunity-cwu-view.start_proposal — no control labelled "Start
@@ -2089,3 +2095,33 @@ rebind:
     adapter: 8f4a860144cdd0ce1f465075a86e0df641cf2e02
     by: runner:calibrate
     at: 2026-09-30T03:55:18.221Z
+    closed:
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-30T04:02:29.380Z
+  - id: R-2.19
+    target: old
+    why: "proposalTeamRequest.refusalByField names each phase through
+      REQUEST_FIELD_NAMES in lowercase ('inception phase', 'prototype phase',
+      'implementation phase'), so an entry like 'inception phase phase: This
+      opportunity does not require this phase.' cannot be located by the phase
+      names the surface uses ('Inception', 'Prototype', 'Implementation');
+      report each message against the phase as 'Inception', 'Prototype' or
+      'Implementation' (capitalised, as the criteria and the surface name them),
+      keeping the service's message text unchanged"
+  - id: R-5.25
+    target: old
+    why: evaluationIndividualListSwu.submitDisabledUntilComplete returns
+      controlState's string ('enabled', 'disabled' or 'absent'), which is truthy
+      in every case, so an offered and enabled 'Submit Scores for Consensus'
+      reads as withheld; it must return an empty string when the control is
+      present and enabled, and a non-empty reason only when it is disabled or
+      not offered
+  - id: R-1.17
+    target: old
+    why: opportunitySwuEdit.teamQuestionsTab opens the sidebar 'Team Questions' tab
+      under OPPORTUNITY EVALUATION, which is the proponents' team-question
+      scoring table, not the opportunity's list of questions; it must read the
+      saved opportunity's own team questions, in the order listed, from the
+      'Opportunity' tab's 'Team Questions' section
