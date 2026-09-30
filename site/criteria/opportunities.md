@@ -20,7 +20,7 @@
 | R-1.14 | acceptance/opportunities/R-1.14.spec.ts |  | pass (carried from 2026-09-30-14) |
 | R-1.15 | acceptance/opportunities/R-1.15.spec.ts |  | pass (carried from 2026-09-30-14) |
 | R-1.16 | acceptance/opportunities/R-1.16.spec.ts |  | fail (ruled: defect-in-old; carried from 2026-09-30-14) |
-| R-1.17 | acceptance/opportunities/R-1.17.spec.ts |  | fail |
+| R-1.17 | acceptance/opportunities/R-1.17.spec.ts |  | stale (ruled: spec-wrong) |
 | R-1.18 | acceptance/opportunities/R-1.18.spec.ts |  | pass (carried from 2026-09-30-14) |
 | R-1.19 | acceptance/opportunities/R-1.19.spec.ts |  | pass (carried from 2026-09-30-14) |
 | R-1.20 | acceptance/opportunities/R-1.20.spec.ts |  | pass (carried from 2026-09-30-14) |
@@ -254,9 +254,9 @@ A Sprint With Us opportunity must have an implementation phase, and may only hav
 - then: the submission is rejected with a message saying a prototype phase must follow an inception phase
 - note: calibrate 2026-09-29: the old target fails this; kept, the rebuild must pass it
 
-### R-1.17 · v2 · confirmed · accepted
+### R-1.17 · v3 · confirmed · accepted
 
-Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position is set by its place in the opportunity's list of questions, which holds at most 100, and is never entered by the person; a question outside these limits is refused.
+Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits.
 - cites: src/shared/lib/validation/opportunity/sprint-with-us.ts:371
 - cites: src/shared/lib/validation/opportunity/team-with-us.ts:111
 - cites: src/shared/lib/resources/opportunity/sprint-with-us.ts:16

@@ -32,7 +32,7 @@
 | R-8.26 | — |  | not-testable |
 | R-8.27 | acceptance/files/R-8.27.spec.ts |  | pass (carried from 2026-09-30-14) |
 | R-8.28 | acceptance/files/R-8.28.spec.ts |  | pass (carried from 2026-09-30-14) |
-| R-8.29 | acceptance/files/R-8.29.spec.ts |  | pass (ruled: adapter-wrong) |
+| R-8.29 | acceptance/files/R-8.29.spec.ts |  | fail |
 | R-8.30 | acceptance/files/R-8.30.spec.ts |  | pass (carried from 2026-09-30-14) |
 | R-8.31 | acceptance/files/R-8.31.spec.ts |  | pass (carried from 2026-09-30-14) |
 
