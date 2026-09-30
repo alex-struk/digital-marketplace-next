@@ -18,10 +18,14 @@
 // vendor" / "Sign in as a public sector employee" on /sign-in), and signIn() fills it. The
 // screens behind a session were never walked signed in, because the binding session could
 // not use the sandbox password; signed out they answer with the client's "Page not found"
-// screen or a redirect to /sign-in. Those screens'
-// members report "unbound: <page>.<member> — <reason>", and so does their open(), so that a
-// test which only opens such a page is not told it succeeded; a member that is about the
-// refusal itself (refused_for_non_administrator, sign_in_required, ...) reads that refusal.
+// screen or (for /dashboard and /sign-up/complete) a redirect to /sign-in. Their open()
+// reports "unbound: <page>.open — <reason>" only when the address really answers with that
+// refusal, so a run that signs in and is shown the screen is not told otherwise. Most of
+// their members report "unbound: <page>.<member> — <reason>"; the dashboard, the Code With
+// Us form, an organization's screen, /sign-up/complete, a profile, one's own profile and
+// one's own notices are instead looked for at run time by role and accessible name (see
+// "signed-in screens, found at run time" below). A member that is about the refusal itself
+// (refused_for_non_administrator, sign_in_required, not_found_page, ...) reads that refusal.
 //
 // Every page is laid out inside one "main" landmark that also holds the site's banner and
 // its footer, so a page's own words are read with the banner's and the footer's taken off.
@@ -265,9 +269,12 @@ export default function create(
   const NOBODY_SIGNS_IN =
     'this screen has not been walked signed in: "Sign in as a vendor" and "Sign in as a public sector employee" on /sign-in now hand off to the sandbox identity provider\'s username and password form, but the session that bound this adapter could not use the sandbox password, so none of the controls signed-in people are shown here have been seen';
 
-  // What each such address answered a signed-out visitor when it was opened.
+  // What each such address answered a signed-out visitor when it was last opened: /dashboard
+  // and /sign-up/complete send them to /sign-in?redirectOnSuccess=…, and everything else
+  // (/users/me, /users/:userId, /organizations/:orgId/edit, the create screens) shows the
+  // client's "Page not found" screen.
   function signedOutAnswer(route: string): string {
-    if (/^\/(dashboard|users|organizations\/|sign-up\/complete)|\/complete$/.test(route)) {
+    if (/^\/(dashboard|sign-up\/complete)(\?|$)/.test(route)) {
       return "redirects to /sign-in";
     }
     return 'shows the "Page not found" screen';
@@ -294,6 +301,10 @@ export default function create(
           .catch(() => undefined);
         await settle();
         if (refusals.length) return;
+        // A run that did sign in (signIn() fills the provider's form with the sandbox
+        // password) may well be shown the screen: then it has opened, and only the members
+        // that were never seen report unbound.
+        if (!(await whyNotHere().catch(() => ""))) return;
         // What the address actually answered this time, rather than what it answered when
         // this adapter was written.
         const shown = await firstHeading().catch(() => "");
@@ -640,11 +651,21 @@ export default function create(
       const said = await bodyText().catch(() => "");
       return /do not have permission|not authori[sz]ed/i.test(said) ? said : "";
     }
-    if (!(await seen(page.getByRole("heading", { name: /^\s*not found\s*$/i })).count())) return "";
+    // "Page not found" over "Back to home" now; "Not Found" over "Go Home" once.
+    if (!(await seen(page.getByRole("heading", { name: /^\s*(page )?not found\s*$/i })).count())) return "";
     const lines = await textLines();
-    const from = Math.max(0, lines.findIndex((line) => /^not found$/i.test(line)));
-    const to = lines.findIndex((line, i) => i > from && /^go home$/i.test(line));
+    const from = Math.max(0, lines.findIndex((line) => /^(page )?not found$/i.test(line)));
+    const to = lines.findIndex((line, i) => i > from && /^(go home|back to home)$/i.test(line));
     return lines.slice(from, to > from ? to : from + 2).join("\n");
+  }
+
+  // Why the browser is not on the screen it was sent to: a refusal (above), or a hand-off to
+  // another origin (the identity provider). Empty when it is on a screen of this target.
+  async function whyNotHere(): Promise<string> {
+    const refused = await refusalShown();
+    if (refused) return refused;
+    if (originOf(page.url()) !== originOf(baseURL)) return `handed off to ${originOf(page.url())}`;
+    return "";
   }
 
   // ---------------------------------------------------------------- the opportunity pages
@@ -2570,26 +2591,840 @@ export default function create(
     placeholderText: () => mainText(),
   };
 
+  // ================================================================ signed-in screens, found at run time
+  //
+  // The screens below are shown only to a signed-in person, and the session that wrote this
+  // adapter could not sign in (it had no use of the sandbox password), so none of their
+  // controls has been looked at. A run that does sign in is shown them, and there each
+  // member looks for what the contract names by role and accessible name — the way a person
+  // reads the screen — and throws "unbound: …" naming what it looked for, and what the
+  // screen offers instead, when it is not there. Nothing here returns a reading from a screen
+  // it did not reach: a refusal, a hand-off to the identity provider, or a missing tab is
+  // unbound, and only a screen that opened and shows nothing reads as empty.
+
+  // The accessible names of what a screen offers, for a reason to name when a control is
+  // not among them.
+  async function offered(): Promise<string> {
+    const names: string[] = [];
+    for (const role of ["tab", "button", "link", "textbox", "checkbox", "combobox"] as const) {
+      const found = seen(page.getByRole(role));
+      const count = Math.min(await found.count().catch(() => 0), 40);
+      for (let i = 0; i < count; i++) {
+        const one = found.nth(i);
+        const name = await one
+          .evaluate((element) => {
+            const input = element as HTMLInputElement;
+            const label = input.labels && input.labels.length ? input.labels[0].innerText : "";
+            return (element.getAttribute("aria-label") || label || (element as HTMLElement).innerText || "").trim();
+          })
+          .catch(() => "");
+        if (name) names.push(`${role} "${name.replace(/\s+/g, " ").slice(0, 60)}"`);
+      }
+    }
+    return names.length ? names.join(", ") : "nothing that can be pressed or filled";
+  }
+
+  // "proposalDeadline", "proposal_deadline" -> /proposal\s*deadline/i, the label a field of
+  // that name carries.
+  const labelFor = (key: string): RegExp =>
+    new RegExp(
+      key
+        .replace(/([a-z0-9])([A-Z])/g, "$1 $2")
+        .split(/[\s_-]+/)
+        .filter(Boolean)
+        .map((word) => word.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+        .join("[\\s-]*"),
+      "i",
+    );
+
+  // A form field by its label, on the view as it stands or behind one of its tabs.
+  async function fieldLabelled(label: RegExp, walkTabs = true): Promise<Locator | null> {
+    const look = async (): Promise<Locator | null> => {
+      for (const role of ["textbox", "combobox", "spinbutton", "checkbox", "radio"] as const) {
+        const found = seen(page.getByRole(role, { name: label }));
+        if (await found.count()) return found.first();
+      }
+      const byLabel = seen(page.getByLabel(label));
+      return (await byLabel.count()) ? byLabel.first() : null;
+    };
+    const here = await look();
+    if (here || !walkTabs) return here;
+    const tabs = seen(page.getByRole("tab"));
+    const count = await tabs.count();
+    for (let i = 0; i < count; i++) {
+      await tabs.nth(i).click().catch(() => undefined);
+      await settle();
+      const found = await look();
+      if (found) return found;
+    }
+    return null;
+  }
+
+  async function valueOf(box: Locator): Promise<string> {
+    const role = await box.getAttribute("type").catch(() => null);
+    if (role === "checkbox" || role === "radio") return (await box.isChecked()) ? "checked" : "unchecked";
+    const value = await box.inputValue().catch(() => null);
+    if (value !== null) return value.trim();
+    return (await box.innerText().catch(() => "")).trim();
+  }
+
+  async function enter(where: string, key: string, box: Locator, value: unknown): Promise<void> {
+    if (await isDisabled(box)) unbound(where, `the field for "${key}" is disabled on ${page.url()}`);
+    const kind = await box.getAttribute("type").catch(() => null);
+    const role = await box.getAttribute("role").catch(() => null);
+    const tag = await box.evaluate((element) => element.tagName.toLowerCase()).catch(() => "");
+    if (kind === "checkbox" || kind === "radio") {
+      await box.setChecked(saysYes(value));
+    } else if (tag === "select") {
+      await box.selectOption({ label: textOf(value) });
+    } else if (role === "combobox" && tag !== "input") {
+      await pickFrom(where, box, textOf(value));
+    } else {
+      await box.fill(textOf(value));
+    }
+  }
+
+  // Every value the test gave, entered in the field its key names, before anything is
+  // pressed. A key no field on the screen takes is reported rather than dropped.
+  async function fillFrom(
+    where: string,
+    input: unknown,
+    labels: Record<string, RegExp> = {},
+    skip: string[] = [],
+  ): Promise<void> {
+    const named = Object.fromEntries(Object.entries(labels).map(([key, label]) => [squash(key), label]));
+    const skipped = skip.map(squash);
+    for (const [key, value] of Object.entries(record(input))) {
+      if (value === undefined || skipped.includes(squash(key))) continue;
+      const label = named[squash(key)] ?? labelFor(key);
+      const box = await fieldLabelled(label);
+      if (!box) unbound(where, `no field on ${page.url()} takes "${key}" (looked for one labelled ${label}); it offers ${await offered()}`);
+      await enter(where, key, box, value);
+    }
+  }
+
+  // The messages a form draws: its alerts, and the description of every field marked
+  // invalid. None drawn reads as nothing.
+  async function formMessages(): Promise<string> {
+    const lines: string[] = [];
+    const alerts = seen(page.getByRole("alert"));
+    for (let i = 0; i < (await alerts.count()); i++) lines.push(...lined(await alerts.nth(i).innerText().catch(() => "")));
+    for (const role of ["textbox", "combobox", "spinbutton", "checkbox"] as const) {
+      const boxes = seen(page.getByRole(role));
+      for (let i = 0; i < (await boxes.count()); i++) {
+        const said = await boxes
+          .nth(i)
+          .evaluate((element) => {
+            if (element.getAttribute("aria-invalid") !== "true") return "";
+            const ids = (element.getAttribute("aria-describedby") ?? element.getAttribute("aria-errormessage") ?? "")
+              .split(/\s+/)
+              .filter(Boolean);
+            return ids.map((id) => document.getElementById(id)?.innerText ?? "").join("\n");
+          })
+          .catch(() => "");
+        lines.push(...lined(said));
+      }
+    }
+    return [...new Set(lines)].join("\n");
+  }
+
+  // A file offered through the chooser a control opens.
+  async function offerFile(where: string, control: RegExp, input: unknown): Promise<void> {
+    const named = given(input, ["file", "name", "fileName", "image", "logo", "avatar", "picture"]);
+    const request = typeof input === "string" ? { name: input } : named && typeof named === "object" ? record(named) : { ...record(input), name: textOf(named) };
+    const name = textOf(record(request).name);
+    if (!name) unbound(where, "the input names no file to offer");
+    const path = uploadFile({
+      name,
+      content: record(request).content as string | Uint8Array | undefined,
+      bytes: record(request).bytes as number | undefined,
+    });
+    const button = await findControl(page, control);
+    if (!button) {
+      // A plain file input, found by its label.
+      const box = seen(page.getByLabel(control));
+      if (await box.count()) {
+        await box.first().setInputFiles(path);
+        await settle();
+        return;
+      }
+      unbound(where, `no control named ${control} on ${page.url()} opens a file chooser; it offers ${await offered()}`);
+    }
+    const chooser = page.waitForEvent("filechooser", { timeout: 10000 });
+    await button.click();
+    await (await chooser).setFiles(path);
+    await settle();
+  }
+
+  // The dialog on screen, or nothing when none is open.
+  function dialog(): Locator {
+    return seen(page.getByRole("dialog").or(page.getByRole("alertdialog"))).last();
+  }
+
+  async function inDialog(where: string, name: RegExp): Promise<void> {
+    await dialog().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    if (!(await dialog().count())) unbound(where, `no dialog is open on ${page.url()} to press ${name} in`);
+    await press(where, name, dialog());
+  }
+
+  async function confirmIfAsked(where: string, name: RegExp): Promise<void> {
+    await dialog().waitFor({ state: "visible", timeout: 3000 }).catch(() => undefined);
+    if (await dialog().count()) await press(where, name, dialog());
+  }
+
+  // One line per table row, its cells joined with " | ".
+  async function tableRows(scope: Scope = page): Promise<string[]> {
+    const rows = seen(scope.getByRole("row"));
+    const out: string[] = [];
+    for (let i = 0; i < (await rows.count()); i++) {
+      const cells = seen(rows.nth(i).getByRole("cell"));
+      const count = await cells.count();
+      if (!count) continue; // the header row
+      const words: string[] = [];
+      for (let c = 0; c < count; c++) words.push((await cells.nth(c).innerText()).replace(/\s+/g, " ").trim());
+      out.push(words.join(" | "));
+    }
+    return out;
+  }
+
+  // The values of one column, found by its header.
+  async function columnOf(header: RegExp): Promise<string[]> {
+    const headers = seen(page.getByRole("columnheader"));
+    let at = -1;
+    for (let i = 0; i < (await headers.count()); i++) {
+      if (header.test((await headers.nth(i).innerText()).trim())) {
+        at = i;
+        break;
+      }
+    }
+    if (at < 0) return [];
+    return (await tableRows()).map((row) => row.split(" | ")[at] ?? "").filter(Boolean);
+  }
+
+  // A row of the screen's tables that names the person or thing the test gave.
+  async function rowNaming(where: string, input: unknown, groups: string[]): Promise<Locator> {
+    const person = personOf(given(input, ["member", "user", "email", "person"]) ?? input);
+    const words = [
+      person?.email,
+      givenText(input, ["email", "name", "title"]),
+      typeof input === "string" ? input : "",
+      seededId(given(input, ["id"]) ?? "", ...groups),
+    ].filter((word): word is string => !!word);
+    const rows = seen(page.getByRole("row"));
+    for (const word of words) {
+      const found = rows.filter({ hasText: word });
+      if (await found.count()) return found.first();
+    }
+    return unbound(where, `no row on ${page.url()} names ${JSON.stringify(input)}; the rows read: ${(await tableRows()).join(" / ") || "none"}`);
+  }
+
+  // The screen a signed-in page is reached at, and the checks every member makes before it
+  // reads or presses anything.
+  function signedInScreen(pageId: string, route: string) {
+    const where = (member: string): string => `${pageId}.${member}`;
+    const on = async (member: string): Promise<void> => {
+      await ready();
+      const why = await whyNotHere();
+      if (why) {
+        unbound(
+          where(member),
+          `${route} did not open as a screen at ${page.url()}: ${why.replace(/\n+/g, " ")}; the screen is offered only to a signed-in person who may have it, and was never seen by the session that wrote this adapter`,
+        );
+      }
+    };
+    return {
+      where,
+      on,
+      open: (params?: Record<string, string>) => go(route, params),
+      press: async (member: string, name: RegExp): Promise<void> => {
+        await on(member);
+        await press(where(member), name);
+      },
+      // A field's value, as a box or as the text shown under its label; a screen that opened
+      // and carries no such field reads as nothing.
+      field: async (member: string, label: RegExp, shownAs: string[] = []): Promise<string> => {
+        await on(member);
+        const box = await fieldLabelled(label, false);
+        if (box) return valueOf(box);
+        return shownAs.length ? valueAfter(shownAs) : "";
+      },
+      // A tab's panel; a screen that opened without that tab reads as nothing.
+      tab: async (member: string, name: RegExp): Promise<string> => {
+        await on(member);
+        const tab = seen(page.getByRole("tab", { name }));
+        if (!(await tab.count())) return "";
+        await tab.first().click();
+        await settle();
+        const panel = seen(page.getByRole("tabpanel"));
+        return (await panel.count()) ? (await panel.first().innerText()).trim() : mainText();
+      },
+      messages: async (member: string, about?: RegExp): Promise<string> => {
+        await on(member);
+        const said = await formMessages();
+        return about ? lined(said).filter((line) => about.test(line)).join("\n") : said;
+      },
+      lines: async (member: string, pattern: RegExp): Promise<string> => {
+        await on(member);
+        return linesMatching(pattern);
+      },
+    };
+  }
+
+  // ---------------------------------------------------------------- the dashboard
+
+  const dash = signedInScreen("opportunity-dashboard", "/dashboard");
+  async function dashboardRows(member: string): Promise<string> {
+    await dash.on(member);
+    const tab = seen(page.getByRole("tab", { name: /opportunities/i }));
+    if (await tab.count()) {
+      await tab.first().click();
+      await settle();
+    }
+    return (await tableRows()).join("\n");
+  }
+  const opportunityDashboard: S.OpportunityDashboardPage = {
+    open: () => dash.open(),
+    createOpportunity: () => dash.press("create_opportunity", /^\s*(\+\s*)?create( an?)?( new)? opportunity\s*$/i),
+    openOpportunity: async (input) => {
+      const where = dash.where("open_opportunity");
+      await dash.on("open_opportunity");
+      const id = seededId(given(input, ["opportunity", "opportunityId", "id"]) ?? "", "opportunities");
+      const title = typeof input === "string" ? input : givenText(input, ["title", "name"]);
+      const links = seen(page.getByRole("link"));
+      for (let i = 0; i < (await links.count()); i++) {
+        const link = links.nth(i);
+        const href = (await link.getAttribute("href")) ?? "";
+        const words = (await link.innerText()).trim();
+        if ((id && href.includes(id)) || (title && words === title)) {
+          await link.click();
+          await settle();
+          return;
+        }
+      }
+      unbound(where, `no opportunity link on ${page.url()} for ${JSON.stringify(input)}; the rows read: ${(await tableRows()).join(" / ") || "none"}`);
+    },
+    myOpportunitiesTable: () => dashboardRows("my_opportunities_table"),
+    opportunityStatus: async () => {
+      await dashboardRows("opportunity_status");
+      return (await columnOf(/^status$/i)).join("\n");
+    },
+    ownOpportunitiesOnly: () => dashboardRows("own_opportunities_only"),
+    allOpportunitiesForAdministrator: () => dashboardRows("all_opportunities_for_administrator"),
+    emptyMyOpportunitiesMessage: () =>
+      dash.lines("empty_my_opportunities_message", /\bno\b.*opportunit|haven.t|have not|nothing to show|get started/i),
+  };
+
+  // ---------------------------------------------------------------- the Code With Us form
+
+  const cwuNew = signedInScreen("opportunity-cwu-create", "/opportunities/code-with-us/create");
+  const CWU_FIELDS: Record<string, RegExp> = {
+    title: /^\s*title\b/i,
+    proposalDeadline: /proposal\s*deadline/i,
+    assignmentDate: /assignment\s*date/i,
+    startDate: /(proposed\s*|work\s*)?start\s*date/i,
+    completionDate: /completion\s*date/i,
+  };
+  async function cwuSubmit(member: string, input: unknown, name: RegExp): Promise<void> {
+    await cwuNew.on(member);
+    await fillFrom(cwuNew.where(member), input, CWU_FIELDS, ["attachment", "attachments", "file"]);
+    await press(cwuNew.where(member), name);
+    await confirmIfAsked(cwuNew.where(member), name);
+  }
+  const opportunityCwuCreate: S.OpportunityCwuCreatePage = {
+    open: () => cwuNew.open(),
+    saveDraft: (input) => cwuSubmit("save_draft", input, /^\s*save draft\s*$/i),
+    submitForReview: (input) => cwuSubmit("submit_for_review", input, /^\s*submit for review\s*$/i),
+    publish: (input) => cwuSubmit("publish", input, /^\s*publish\s*$/i),
+    addAttachment: async (input) => {
+      await cwuNew.on("add_attachment");
+      if (!(await findControl(page, /add attachment/i))) {
+        const tab = seen(page.getByRole("tab", { name: /attachments/i }));
+        if (await tab.count()) {
+          await tab.first().click();
+          await settle();
+        }
+      }
+      await offerFile(cwuNew.where("add_attachment"), /add attachment|attach|choose file/i, input);
+    },
+    fieldError: () => cwuNew.messages("field_error"),
+  };
+
+  // ---------------------------------------------------------------- an organization's own screen
+
+  const orgEdit = signedInScreen("organization-edit", "/organizations/:orgId/edit");
+  const ORG_TAB = {
+    organization: /^\s*organization\s*$/i,
+    team: /^\s*team\s*$/i,
+    swu: /sprint with us/i,
+    twu: /team with us/i,
+    changelog: /history|change\s*log/i,
+  };
+  async function orgTabOpen(member: string, name: RegExp): Promise<void> {
+    await orgEdit.on(member);
+    const tab = seen(page.getByRole("tab", { name }));
+    if (!(await tab.count())) unbound(orgEdit.where(member), `no tab named ${name} on ${page.url()}; it offers ${await offered()}`);
+    await tab.first().click();
+    await settle();
+  }
+  async function orgTabLines(member: string, name: RegExp, pattern: RegExp): Promise<string> {
+    await orgTabOpen(member, name);
+    return linesMatching(pattern);
+  }
+  async function orgEditing(member: string): Promise<void> {
+    await orgTabOpen(member, ORG_TAB.organization);
+    const edit = await findControl(page, /^\s*edit( organization)?\s*$/i);
+    if (edit && !(await isDisabled(edit))) {
+      await edit.click();
+      await settle();
+    }
+  }
+  async function orgInRow(member: string, input: unknown, control: RegExp, confirm: RegExp): Promise<void> {
+    await orgTabOpen(member, ORG_TAB.team);
+    const row = await rowNaming(orgEdit.where(member), input, ["users"]);
+    await press(orgEdit.where(member), control, row);
+    await confirmIfAsked(orgEdit.where(member), confirm);
+  }
+  const organizationEdit: S.OrganizationEditPage = {
+    open: (params) => orgEdit.open(params as unknown as Record<string, string>),
+    editOrganization: async () => {
+      await orgTabOpen("edit_organization", ORG_TAB.organization);
+      await press(orgEdit.where("edit_organization"), /^\s*edit( organization)?\s*$/i);
+    },
+    saveChanges: async (input) => {
+      const where = orgEdit.where("save_changes");
+      await orgEditing("save_changes");
+      const logo = given(input, ["logo", "image", "file"]);
+      await fillFrom(where, input, {}, ["logo", "image", "file"]);
+      if (logo !== undefined) await offerFile(where, /logo|choose image|upload image/i, logo);
+      await press(where, /^\s*save( changes)?\s*$/i);
+      await confirmIfAsked(where, /^\s*save( changes)?\s*$/i);
+    },
+    cancelEditing: () => orgEdit.press("cancel_editing", /^\s*cancel\s*$/i),
+    archiveOrganization: async () => {
+      await orgEdit.press("archive_organization", /^\s*archive( organization)?\s*$/i);
+      await confirmIfAsked(orgEdit.where("archive_organization"), /^\s*archive( organization)?\s*$/i);
+    },
+    addTeamMembers: async (input) => {
+      const where = orgEdit.where("add_team_members");
+      await orgTabOpen("add_team_members", ORG_TAB.team);
+      await press(where, /add team members?/i);
+      const emails = [given(input, ["emails", "email", "members", "member", "users"]) ?? input]
+        .flat()
+        .map((one) => personOf(one)?.email || textOf(one))
+        .filter(Boolean);
+      if (!emails.length) unbound(where, "the input names nobody to invite");
+      const scope = (await dialog().count()) ? dialog() : page;
+      const boxes = seen(scope.getByRole("textbox"));
+      for (let i = 0; i < emails.length; i++) {
+        if ((await boxes.count()) <= i) {
+          const more = await findControl(scope, /add (another|more)|^\s*\+\s*$/i);
+          if (!more) unbound(where, `the invitation form on ${page.url()} has room for ${await boxes.count()} address(es) and offers no way to add another`);
+          await more.click();
+        }
+        await boxes.nth(i).fill(emails[i]);
+      }
+      const kind = givenText(input, ["membershipType", "type", "role"]);
+      if (kind) {
+        const chooser = await fieldLabelled(/membership|type|role/i, false);
+        if (!chooser) unbound(where, `the invitation form on ${page.url()} offers no membership type to choose "${kind}" from`);
+        await enter(where, "membershipType", chooser, kind);
+      }
+      await press(where, /^\s*(add|invite|send)( team members?| invitations?)?\s*$/i, scope);
+    },
+    approvePendingMember: (input) => orgInRow("approve_pending_member", input, /^\s*approve\s*$/i, /^\s*approve\s*$/i),
+    removeTeamMember: (input) => orgInRow("remove_team_member", input, /^\s*remove\s*$/i, /^\s*remove( team member)?\s*$/i),
+    toggleMemberAdminStatus: async (input) => {
+      const where = orgEdit.where("toggle_member_admin_status");
+      await orgTabOpen("toggle_member_admin_status", ORG_TAB.team);
+      const row = await rowNaming(where, input, ["users"]);
+      const box = seen(row.getByRole("checkbox").or(row.getByRole("switch")));
+      if (!(await box.count())) unbound(where, `the member's row on ${page.url()} carries no administrator box`);
+      if (await isDisabled(box.first())) throw new Error(`${where} — the member's administrator box is disabled on ${page.url()}`);
+      await box.first().click();
+      await confirmIfAsked(where, /^\s*(yes|confirm|save|ok|update)\b/i);
+      await settle();
+    },
+    acceptOrgAdminTerms: async (input) => {
+      const where = orgEdit.where("accept_org_admin_terms");
+      await orgEdit.on("accept_org_admin_terms");
+      const box = seen(page.getByRole("checkbox", { name: /terms|agree/i }));
+      if (!(await box.count())) unbound(where, `no terms box on ${page.url()}; it offers ${await offered()}`);
+      const wanted = input === undefined ? true : saysYes(given(input, ["checked", "accept", "value"]) ?? input);
+      await box.first().setChecked(wanted);
+      await settle();
+    },
+    changeOwner: async (input) => {
+      const where = orgEdit.where("change_owner");
+      await orgTabOpen("change_owner", ORG_TAB.team);
+      await press(where, /change owner/i);
+      const person = personOf(given(input, ["newOwner", "owner", "user", "member"]) ?? input);
+      const scope = (await dialog().count()) ? dialog() : page;
+      const chooser = seen(scope.getByRole("combobox")).first();
+      if (!(await chooser.count())) unbound(where, `choosing "Change Owner" on ${page.url()} offers no chooser of people`);
+      const wanted = person?.email || givenText(input, ["name", "email"]);
+      if (!wanted) unbound(where, "the input names no new owner");
+      await pickFrom(where, chooser, wanted);
+      await press(where, /change owner|confirm|save/i, scope);
+      await confirmIfAsked(where, /change owner|confirm|yes/i);
+    },
+    editServiceAreas: async () => {
+      await orgTabOpen("edit_service_areas", ORG_TAB.twu);
+      await press(orgEdit.where("edit_service_areas"), /edit( service areas)?/i);
+    },
+    saveServiceAreas: async (input) => {
+      const where = orgEdit.where("save_service_areas");
+      await orgEdit.on("save_service_areas");
+      const areas = [given(input, ["serviceAreas", "areas", "serviceArea"]) ?? []].flat().map(textOf).filter(Boolean);
+      for (const area of areas) {
+        const box = seen(page.getByRole("checkbox", { name: labelFor(area) }));
+        if (!(await box.count())) unbound(where, `no service area box named "${area}" on ${page.url()}; it offers ${await offered()}`);
+        await box.first().setChecked(true);
+      }
+      await press(where, /^\s*save( changes| service areas)?\s*$/i);
+      await confirmIfAsked(where, /^\s*save/i);
+    },
+    viewSwuTerms: async () => {
+      await orgTabOpen("view_swu_terms", ORG_TAB.swu);
+      await press(orgEdit.where("view_swu_terms"), /terms/i);
+    },
+    viewTwuTerms: async () => {
+      await orgTabOpen("view_twu_terms", ORG_TAB.twu);
+      await press(orgEdit.where("view_twu_terms"), /terms/i);
+    },
+    changeLogo: async (input) => {
+      await orgEditing("change_logo");
+      await offerFile(orgEdit.where("change_logo"), /logo|choose image|upload image/i, input);
+    },
+    currentLogo: async () => {
+      await orgTabOpen("current_logo", ORG_TAB.organization);
+      const image = seen(page.getByRole("img", { name: /logo/i }));
+      return (await image.count()) ? ((await image.first().getAttribute("src")) ?? "") : "";
+    },
+    logoRefusedError: () => orgEdit.messages("logo_refused_error", /logo|image/i),
+    organizationIdentifier: async () => {
+      await orgEdit.on("organization_identifier");
+      return /^\/organizations\/([^/?#]+)/.exec(new URL(page.url()).pathname)?.[1] ?? "";
+    },
+    organizationTab: () => orgEdit.tab("organization_tab", ORG_TAB.organization),
+    teamTab: () => orgEdit.tab("team_tab", ORG_TAB.team),
+    swuQualificationTab: () => orgEdit.tab("swu_qualification_tab", ORG_TAB.swu),
+    twuQualificationTab: () => orgEdit.tab("twu_qualification_tab", ORG_TAB.twu),
+    changelogTab: () => orgEdit.tab("changelog_tab", ORG_TAB.changelog),
+    swuQualifiedBadge: () => orgTabLines("swu_qualified_badge", ORG_TAB.swu, /^(sprint with us )?qualified$|is qualified/i),
+    twuQualifiedBadge: () => orgTabLines("twu_qualified_badge", ORG_TAB.twu, /^(team with us )?qualified$|is qualified/i),
+    ownerBadge: () => orgTabLines("owner_badge", ORG_TAB.team, /^owner$/i),
+    pendingBadge: () => orgTabLines("pending_badge", ORG_TAB.team, /^pending$/i),
+    teamMemberRow: async () => {
+      await orgTabOpen("team_member_row", ORG_TAB.team);
+      return (await tableRows()).join("\n");
+    },
+    teamCapabilities: () => orgTabLines("team_capabilities", ORG_TAB.team, /capabilit/i),
+    swuRequirementTwoMembers: () => orgTabLines("swu_requirement_two_members", ORG_TAB.swu, /\b(two|2)\b.*member/i),
+    swuRequirementAllCapabilities: () => orgTabLines("swu_requirement_all_capabilities", ORG_TAB.swu, /capabilit/i),
+    swuRequirementTermsAccepted: () => orgTabLines("swu_requirement_terms_accepted", ORG_TAB.swu, /terms/i),
+    twuRequirementServiceArea: () => orgTabLines("twu_requirement_service_area", ORG_TAB.twu, /service area/i),
+    twuRequirementTermsAccepted: () => orgTabLines("twu_requirement_terms_accepted", ORG_TAB.twu, /terms/i),
+    serviceAreaCheckbox: async () => {
+      await orgTabOpen("service_area_checkbox", ORG_TAB.twu);
+      const boxes = seen(page.getByRole("checkbox"));
+      const out: string[] = [];
+      for (let i = 0; i < (await boxes.count()); i++) {
+        const name = await boxes.nth(i).evaluate((element) => {
+          const input = element as HTMLInputElement;
+          return (element.getAttribute("aria-label") || (input.labels?.[0]?.innerText ?? "")).trim();
+        });
+        out.push(`${name}: ${(await boxes.nth(i).isChecked()) ? "checked" : "unchecked"}`);
+      }
+      return out.join("\n");
+    },
+    notQualifiedNotice: () => orgEdit.lines("not_qualified_notice", /not (yet )?qualified/i),
+    changelogEntry: async () => {
+      await orgTabOpen("changelog_entry", ORG_TAB.changelog);
+      return (await tableRows()).join("\n");
+    },
+    fieldError: () => orgEdit.messages("field_error"),
+    invalidMembershipTypeError: async () => {
+      await orgEdit.on("invalid_membership_type_error");
+      return unbound(
+        orgEdit.where("invalid_membership_type_error"),
+        "the team screen offers one kind of membership, so a refusal of another kind can only be sent by request, not read off this screen",
+      );
+    },
+  };
+
+  // ---------------------------------------------------------------- completing a profile
+
+  const signUp = signedInScreen("user-sign-up-complete", "/sign-up/complete");
+  const TERMS_BOX = /terms|agree/i;
+  const NOTICES_BOX = /new opportunit/i;
+  async function onSignUpForm(member: string): Promise<void> {
+    await signUp.on(member);
+    await page.waitForURL((url) => url.pathname !== "/sign-up/complete", { timeout: 3000 }).catch(() => undefined);
+    if (new URL(page.url()).pathname !== "/sign-up/complete") {
+      unbound(signUp.where(member), `/sign-up/complete sent this account on to ${page.url()} instead of showing the profile form; it is shown only to an account that has not yet completed its profile`);
+    }
+  }
+  async function setBox(where: string, name: RegExp, wanted: boolean | undefined): Promise<void> {
+    const box = seen(page.getByRole("checkbox", { name }));
+    if (!(await box.count())) unbound(where, `no box named ${name} on ${page.url()}; it offers ${await offered()}`);
+    await box.first().setChecked(wanted ?? !(await box.first().isChecked()));
+    await settle();
+  }
+  const boxWanted = (input: unknown, keys: string[]): boolean | undefined => {
+    if (typeof input === "boolean") return input;
+    const value = given(input, [...keys, "checked", "value", "on", "enabled"]);
+    return value === undefined ? undefined : saysYes(value);
+  };
+  const TERMS_KEYS = ["acceptTerms", "acceptAppTerms", "terms", "acceptedTerms", "agree"];
+  const NOTICE_KEYS = ["notifications", "notificationsOn", "newOpportunities", "notifyNewOpportunities", "toggleNewOpportunityNotifications"];
+  const PROFILE_FIELDS: Record<string, RegExp> = {
+    name: /^\s*(full\s*)?name\b/i,
+    email: /e-?mail/i,
+    jobTitle: /job\s*title/i,
+  };
+  const userSignUpComplete: S.UserSignUpCompletePage = {
+    open: () => signUp.open(),
+    changeAvatar: async (input) => {
+      await onSignUpForm("change_avatar");
+      await offerFile(signUp.where("change_avatar"), /avatar|choose image|upload image|picture|photo/i, input);
+    },
+    acceptAppTerms: async (input) => {
+      await onSignUpForm("accept_app_terms");
+      await setBox(signUp.where("accept_app_terms"), TERMS_BOX, boxWanted(input, TERMS_KEYS) ?? true);
+    },
+    toggleNewOpportunityNotifications: async (input) => {
+      await onSignUpForm("toggle_new_opportunity_notifications");
+      await setBox(signUp.where("toggle_new_opportunity_notifications"), NOTICES_BOX, boxWanted(input, NOTICE_KEYS));
+    },
+    completeProfile: async (input) => {
+      const where = signUp.where("complete_profile");
+      await onSignUpForm("complete_profile");
+      if (given(input, TERMS_KEYS) !== undefined) await setBox(where, TERMS_BOX, boxWanted(input, TERMS_KEYS) ?? true);
+      if (given(input, NOTICE_KEYS) !== undefined) await setBox(where, NOTICES_BOX, boxWanted(input, NOTICE_KEYS) ?? true);
+      const picture = given(input, ["avatar", "image", "picture"]);
+      await fillFrom(where, input, PROFILE_FIELDS, [...TERMS_KEYS, ...NOTICE_KEYS, "avatar", "image", "picture"]);
+      if (picture !== undefined) await offerFile(where, /avatar|choose image|upload image|picture|photo/i, picture);
+      await press(where, /^\s*complete( profile)?\s*$/i);
+      const left = await page
+        .waitForURL((url) => url.pathname !== "/sign-up/complete", { timeout: 20000 })
+        .then(() => true)
+        .catch(() => false);
+      if (!left) {
+        const shown = await formMessages();
+        throw new Error(`${where} — "Complete Profile" was pressed but the page stayed on ${page.url()}; ${shown ? `it shows: ${shown.replace(/\n/g, " ")}` : "it shows no message"}`);
+      }
+      await ready();
+    },
+    idpUsernameReadonly: async () => {
+      await onSignUpForm("idp_username_readonly");
+      const box = await fieldLabelled(/github|idir|user\s*name/i, false);
+      return box ? valueOf(box) : "";
+    },
+    nameField: async () => {
+      await onSignUpForm("name_field");
+      const box = await fieldLabelled(PROFILE_FIELDS.name, false);
+      return box ? valueOf(box) : "";
+    },
+    emailField: async () => {
+      await onSignUpForm("email_field");
+      const box = await fieldLabelled(PROFILE_FIELDS.email, false);
+      return box ? valueOf(box) : "";
+    },
+    jobTitleField: async () => {
+      await onSignUpForm("job_title_field");
+      const box = await fieldLabelled(PROFILE_FIELDS.jobTitle, false);
+      return box ? valueOf(box) : "";
+    },
+    termsCheckbox: async () => {
+      await onSignUpForm("terms_checkbox");
+      const box = seen(page.getByRole("checkbox", { name: TERMS_BOX }));
+      return (await box.count()) ? ((await box.first().isChecked()) ? "checked" : "unchecked") : "";
+    },
+    completeDisabledUntilTermsAccepted: async () => {
+      await onSignUpForm("complete_disabled_until_terms_accepted");
+      const box = seen(page.getByRole("checkbox", { name: TERMS_BOX }));
+      if (!(await box.count()) || (await box.first().isChecked())) return "";
+      const control = await findControl(page, /^\s*complete( profile)?\s*$/i);
+      return control && (await isDisabled(control)) ? "disabled" : "";
+    },
+    fieldError: async () => {
+      await onSignUpForm("field_error");
+      return formMessages();
+    },
+  };
+
+  // ---------------------------------------------------------------- a profile
+
+  function profileScreen(pageId: string, route: string) {
+    const screen = signedInScreen(pageId, route);
+    const w = screen.where;
+    return {
+      open: (params?: Record<string, string>) => screen.open(params),
+      editProfile: () => screen.press("edit_profile", /^\s*edit( profile)?\s*$/i),
+      // What the test gave is entered first, opening the form for editing when it is not
+      // already; a disabled save is the form refusing, and is reported at once.
+      saveChanges: async (input?: unknown) => {
+        await screen.on("save_changes");
+        const picture = given(input, ["avatar", "image", "picture"]);
+        const values = Object.keys(record(input)).length > 0;
+        if (values || picture !== undefined) {
+          const name = await fieldLabelled(PROFILE_FIELDS.name, false);
+          if (!name || (await isDisabled(name))) {
+            const edit = await findControl(page, /^\s*edit( profile)?\s*$/i);
+            if (edit) {
+              await edit.click();
+              await settle();
+            }
+          }
+          await fillFrom(w("save_changes"), input, PROFILE_FIELDS, ["avatar", "image", "picture"]);
+          if (picture !== undefined) await offerFile(w("save_changes"), /avatar|choose image|upload image|picture|photo/i, picture);
+        }
+        await press(w("save_changes"), /^\s*save( changes)?\s*$/i);
+        await confirmIfAsked(w("save_changes"), /^\s*save( changes)?\s*$/i);
+      },
+      cancelEditing: () => screen.press("cancel_editing", /^\s*cancel\s*$/i),
+      changeAvatar: async (input?: unknown) => {
+        await screen.on("change_avatar");
+        await offerFile(w("change_avatar"), /avatar|choose image|upload image|picture|photo/i, input);
+      },
+      deactivateAccount: () => screen.press("deactivate_account", /deactivate( account)?/i),
+      reactivateAccount: () => screen.press("reactivate_account", /reactivate( account)?/i),
+      confirmActivationChange: async () => {
+        await screen.on("confirm_activation_change");
+        await inDialog(w("confirm_activation_change"), /deactivate|reactivate|confirm|^\s*yes\s*$/i);
+      },
+      cancelActivationChange: async () => {
+        await screen.on("cancel_activation_change");
+        await inDialog(w("cancel_activation_change"), /^\s*(cancel|no)\s*$/i);
+      },
+      toggleAdminPermission: async () => {
+        await screen.on("toggle_admin_permission");
+        const box = seen(page.getByRole("checkbox", { name: /admin/i }).or(page.getByRole("switch", { name: /admin/i })));
+        if (!(await box.count())) unbound(w("toggle_admin_permission"), `no administrator box on ${page.url()}; it offers ${await offered()}`);
+        if (await isDisabled(box.first())) throw new Error(`${w("toggle_admin_permission")} — the administrator box is disabled on ${page.url()}`);
+        await box.first().click();
+        await confirmIfAsked(w("toggle_admin_permission"), /^\s*(yes|confirm|save|ok|update)\b/i);
+        await settle();
+      },
+      userIdentifier: async () => {
+        await screen.on("user_identifier");
+        const named = /^\/users\/([^/?#]+)/.exec(new URL(page.url()).pathname)?.[1] ?? "";
+        return named && named !== "me" ? named : textOf((await ownAccount()).id);
+      },
+      profileTab: async () => {
+        await screen.on("profile_tab");
+        const tab = seen(page.getByRole("tab", { name: /^\s*profile\s*$/i }));
+        if (await tab.count()) return screen.tab("profile_tab", /^\s*profile\s*$/i);
+        return mainText();
+      },
+      capabilitiesTab: () => screen.tab("capabilities_tab", /capabilities/i),
+      notificationsTab: () => screen.tab("notifications_tab", /notifications/i),
+      legalTab: () => screen.tab("legal_tab", /policies|terms|legal|agreements/i),
+      organizationsTab: () => screen.tab("organizations_tab", /organizations/i),
+      statusBadge: async () => {
+        await screen.on("status_badge");
+        return valueAfter(["Status", "Account Status"]);
+      },
+      accountType: async () => {
+        await screen.on("account_type");
+        return valueAfter(["Account Type"]);
+      },
+      permissionsLabel: async () => {
+        await screen.on("permissions_label");
+        return valueAfter(["Permissions", "Permission", "Permission(s)"]);
+      },
+      adminCheckbox: async () => {
+        await screen.on("admin_checkbox");
+        const box = seen(page.getByRole("checkbox", { name: /admin/i }).or(page.getByRole("switch", { name: /admin/i })));
+        return (await box.count()) ? ((await box.first().isChecked()) ? "checked" : "unchecked") : "";
+      },
+      idpUsernameReadonly: () => screen.field("idp_username_readonly", /github|idir|user\s*name/i, ["GitHub", "IDIR", "Username"]),
+      nameField: () => screen.field("name_field", PROFILE_FIELDS.name, ["Name"]),
+      emailField: () => screen.field("email_field", PROFILE_FIELDS.email, ["Email", "Email Address"]),
+      jobTitleField: () => screen.field("job_title_field", PROFILE_FIELDS.jobTitle, ["Job Title"]),
+      fieldError: () => screen.messages("field_error"),
+      activationModal: async () => {
+        await screen.on("activation_modal");
+        return (await dialog().count()) ? (await dialog().innerText()).trim() : "";
+      },
+    };
+  }
+
+  const userProfile: S.UserProfilePage = {
+    ...profileScreen("user-profile", "/users/:userId"),
+    open: (params) => go("/users/:userId", params as unknown as Record<string, string>),
+    // An account the reader may not see, or none by that identifier: the "Page not found"
+    // screen, read whole; a profile that opened reads as nothing.
+    notFoundPage: async () => ((await notFoundShown()) ? mainText() : ""),
+  };
+
+  const { reactivateAccount: _selfHasNoReactivate, toggleAdminPermission: _selfHasNoAdmin, permissionsLabel: _selfHasNoPermissions, adminCheckbox: _selfHasNoAdminBox, ...selfProfile } =
+    profileScreen("user-profile-self", "/users/me");
+  void _selfHasNoReactivate;
+  void _selfHasNoAdmin;
+  void _selfHasNoPermissions;
+  void _selfHasNoAdminBox;
+  const userProfileSelf: S.UserProfileSelfPage = {
+    ...selfProfile,
+    open: () => go("/users/me"),
+    // Signed out, /users/me answers with the "Page not found" screen (or, once, a redirect
+    // to /sign-in): that refusal is read back; the profile itself reads as nothing.
+    signInRequired: () => refusalShown(),
+  };
+
+  // ---------------------------------------------------------------- the signed-in person's notices
+
+  const notices = signedInScreen("user-profile-self-notifications", "/users/me?tab=notifications");
+  async function noticesTab(member: string): Promise<void> {
+    await notices.on(member);
+    const tab = seen(page.getByRole("tab", { name: /notifications/i }));
+    if (await tab.count()) {
+      await tab.first().click();
+      await settle();
+    }
+  }
+  async function noticesBox(member: string): Promise<Locator> {
+    await noticesTab(member);
+    const box = seen(page.getByRole("checkbox", { name: NOTICES_BOX }).or(page.getByRole("switch", { name: NOTICES_BOX })));
+    if (!(await box.count())) unbound(notices.where(member), `no new-opportunities box on ${page.url()}; it offers ${await offered()}`);
+    return box.first();
+  }
+  const userProfileSelfNotifications: S.UserProfileSelfNotificationsPage = {
+    open: () => notices.open(),
+    toggleNewOpportunityNotifications: async (input) => {
+      const box = await noticesBox("toggle_new_opportunity_notifications");
+      const wanted = boxWanted(input, NOTICE_KEYS);
+      if (await isDisabled(box)) throw new Error(`${notices.where("toggle_new_opportunity_notifications")} — the new-opportunities box is disabled on ${page.url()}`);
+      if (wanted === undefined || (await box.isChecked()) !== wanted) await box.click();
+      await settle();
+    },
+    confirmUnsubscribe: async () => {
+      await noticesTab("confirm_unsubscribe");
+      await inDialog(notices.where("confirm_unsubscribe"), /unsubscribe|confirm|^\s*yes\s*$/i);
+    },
+    cancelUnsubscribe: async () => {
+      await noticesTab("cancel_unsubscribe");
+      await inDialog(notices.where("cancel_unsubscribe"), /^\s*(cancel|no)\s*$/i);
+    },
+    newOpportunitiesCheckbox: async () => ((await (await noticesBox("new_opportunities_checkbox")).isChecked()) ? "checked" : "unchecked"),
+    notificationEmailAddress: async () => {
+      await noticesTab("notification_email_address");
+      const found = /[^\s@]+@[^\s@]+\.[^\s@]+/.exec(await mainText());
+      return found ? found[0] : "";
+    },
+    unsubscribeModal: async () => {
+      await noticesTab("unsubscribe_modal");
+      return (await dialog().count()) ? (await dialog().innerText()).trim() : "";
+    },
+  };
+
   const surface: S.Surface = {
     signIn,
     signOut,
 
     home,
 
-    opportunityDashboard: absent<S.OpportunityDashboardPage>(
-      "opportunity-dashboard",
-      "/dashboard",
-      behindSession("/dashboard"),
-      [
-        "create_opportunity",
-        "open_opportunity",
-        "my_opportunities_table",
-        "opportunity_status",
-        "own_opportunities_only",
-        "all_opportunities_for_administrator",
-        "empty_my_opportunities_message",
-      ],
-    ),
+    opportunityDashboard,
 
     opportunityList,
 
@@ -2600,12 +3435,7 @@ export default function create(
       ["choose_code_with_us", "choose_sprint_with_us", "choose_team_with_us", "program_card", "max_budget"],
     ),
 
-    opportunityCwuCreate: absent<S.OpportunityCwuCreatePage>(
-      "opportunity-cwu-create",
-      "/opportunities/code-with-us/create",
-      behindSession("/opportunities/code-with-us/create"),
-      ["save_draft", "submit_for_review", "publish", "add_attachment", "field_error"],
-    ),
+    opportunityCwuCreate,
 
     opportunityCwuView: opportunityView<S.OpportunityCwuViewPage>(
       CWU_VIEW,
@@ -3165,59 +3995,7 @@ export default function create(
       ["create_organization", "cancel", "change_logo", "field_error", "submit_disabled_until_valid"],
     ),
 
-    organizationEdit: {
-      ...unboundMembers(
-        "organization-edit",
-        behindSignIn(
-          "an organization's edit screen, where its logo is changed",
-          "redirects to /sign-in?redirectOnSuccess=… (tried with a seeded organization's identifier)",
-        ),
-        ["change_logo", "current_logo", "logo_refused_error"],
-      ),
-      ...absent<S.OrganizationEditPage>(
-      "organization-edit",
-      "/organizations/:orgId/edit",
-      behindSession("/organizations/:orgId/edit"),
-      [
-        "edit_organization",
-        "save_changes",
-        "cancel_editing",
-        "archive_organization",
-        "add_team_members",
-        "approve_pending_member",
-        "remove_team_member",
-        "toggle_member_admin_status",
-        "accept_org_admin_terms",
-        "change_owner",
-        "edit_service_areas",
-        "save_service_areas",
-        "view_swu_terms",
-        "view_twu_terms",
-        "organization_identifier",
-        "organization_tab",
-        "team_tab",
-        "swu_qualification_tab",
-        "twu_qualification_tab",
-        "changelog_tab",
-        "swu_qualified_badge",
-        "twu_qualified_badge",
-        "owner_badge",
-        "pending_badge",
-        "team_member_row",
-        "team_capabilities",
-        "swu_requirement_two_members",
-        "swu_requirement_all_capabilities",
-        "swu_requirement_terms_accepted",
-        "twu_requirement_service_area",
-        "twu_requirement_terms_accepted",
-        "service_area_checkbox",
-        "not_qualified_notice",
-        "changelog_entry",
-        "field_error",
-        "invalid_membership_type_error",
-      ],
-    ),
-    } as S.OrganizationEditPage,
+    organizationEdit,
 
     organizationSwuTerms: absent<S.OrganizationSwuTermsPage>(
       "organization-swu-terms",
@@ -3259,24 +4037,7 @@ export default function create(
 
     userSignUpChooseAccount,
 
-    userSignUpComplete: absent<S.UserSignUpCompletePage>(
-      "user-sign-up-complete",
-      "/sign-up/complete",
-      behindSession("/sign-up/complete"),
-      [
-        "change_avatar",
-        "accept_app_terms",
-        "toggle_new_opportunity_notifications",
-        "complete_profile",
-        "idp_username_readonly",
-        "name_field",
-        "email_field",
-        "job_title_field",
-        "terms_checkbox",
-        "complete_disabled_until_terms_accepted",
-        "field_error",
-      ],
-    ),
+    userSignUpComplete,
 
     userSignOut,
 
@@ -3303,39 +4064,7 @@ export default function create(
       ],
     ),
 
-    userProfile: absent<S.UserProfilePage>(
-      "user-profile",
-      "/users/:userId",
-      behindSession("/users/:userId"),
-      [
-        "edit_profile",
-        "save_changes",
-        "cancel_editing",
-        "change_avatar",
-        "toggle_admin_permission",
-        "deactivate_account",
-        "reactivate_account",
-        "confirm_activation_change",
-        "cancel_activation_change",
-        "user_identifier",
-        "profile_tab",
-        "capabilities_tab",
-        "notifications_tab",
-        "legal_tab",
-        "organizations_tab",
-        "status_badge",
-        "account_type",
-        "permissions_label",
-        "admin_checkbox",
-        "idp_username_readonly",
-        "name_field",
-        "email_field",
-        "job_title_field",
-        "field_error",
-        "activation_modal",
-        "not_found_page",
-      ],
-    ),
+    userProfile,
 
     userProfileCapabilities: absent<S.UserProfileCapabilitiesPage>(
       "user-profile-capabilities",
@@ -3381,36 +4110,7 @@ export default function create(
       ],
     ),
 
-    userProfileSelf: absent<S.UserProfileSelfPage>(
-      "user-profile-self",
-      "/users/me",
-      behindSession("/users/me"),
-      [
-        "edit_profile",
-        "save_changes",
-        "cancel_editing",
-        "change_avatar",
-        "deactivate_account",
-        "confirm_activation_change",
-        "cancel_activation_change",
-        "user_identifier",
-        "profile_tab",
-        "capabilities_tab",
-        "notifications_tab",
-        "legal_tab",
-        "organizations_tab",
-        "status_badge",
-        "account_type",
-        "idp_username_readonly",
-        "name_field",
-        "email_field",
-        "job_title_field",
-        "field_error",
-        "activation_modal",
-      ],
-      // Signed out, /users/me redirects to /sign-in?redirectOnSuccess=%2Fusers%2Fme.
-      ["sign_in_required"],
-    ),
+    userProfileSelf,
 
     userProfileSelfCapabilities: absent<S.UserProfileSelfCapabilitiesPage>(
       "user-profile-self-capabilities",
@@ -3425,19 +4125,7 @@ export default function create(
       ],
     ),
 
-    userProfileSelfNotifications: absent<S.UserProfileSelfNotificationsPage>(
-      "user-profile-self-notifications",
-      "/users/me?tab=notifications",
-      behindSession("/users/me?tab=notifications"),
-      [
-        "toggle_new_opportunity_notifications",
-        "confirm_unsubscribe",
-        "cancel_unsubscribe",
-        "new_opportunities_checkbox",
-        "notification_email_address",
-        "unsubscribe_modal",
-      ],
-    ),
+    userProfileSelfNotifications,
 
     userProfileSelfLegal: absent<S.UserProfileSelfLegalPage>(
       "user-profile-self-legal",
