@@ -202,8 +202,30 @@ reader's attention.
 - **R-8.16 (Slice 3)** describes where an upload is written on the service's own machine. It is an
   implementation fact recovered as a criterion; on OpenShift it becomes a named `emptyDir` volume
   (0006), which is a platform concern more than a user-visible behaviour.
-- **R-6.3 and R-6.1 (Slice 2)** turn on environment configuration. Every sandbox is a test
-  environment, so the "not a test environment" half of R-6.3 is never observable in scope.
+- **R-6.1 (Slice 2) and R-6.3 (Slice 14)** turn on environment configuration. Every sandbox is a
+  test environment, so the "not a test environment" half of R-6.3 is never observable in scope.
+- **R-4.6, R-4.22, R-4.27, R-4.28 and R-6.2 to R-6.5** were first placed in Slice 2, which builds
+  what they describe: account creation, the post-sign-in redirect, the profile-completion form and
+  the mail path. Verification of the build of slices 2–8 found each one failing or unbound there,
+  because its test reaches the behaviour through a screen a later slice delivers. Each now sits with
+  that screen, while the machinery stays in Slice 2. R-4.6, R-4.27 and R-4.28 moved to Slice 3,
+  which delivers profile editing and `/users/:userId`. R-4.22 moved to Slice 8, where the dashboard
+  a returning person lands on, with its own-opportunities table, first exists. R-6.2 moved to Slice
+  7, because its given is publishing an opportunity through the Code With Us create screen. R-6.3 to
+  R-6.5 speak of "any message", and the ruling named no single screen for them. The screens it named
+  for the group were profile editing, Code With Us creation, organization editing and the dashboard.
+  These three are placed in Slice 14. What guarantees the four screens exist before they are verified
+  is the dependency graph, not the order the slices happen to be listed in: Slice 14 depends on Slice
+  8 (the dashboard), which depends on Slice 7 (Code With Us creation), which depends on Slice 3
+  (profile editing), and it depends directly on Slice 11 (organization editing). An earlier placement
+  in Slice 11 relied on a linear build order the depends-on lines did not enforce — Slice 11 depends
+  only on Slice 3 and could be built and verified before Slices 7 and 8 — and was returned for it.
+  Slice 14 was chosen over adding Slice 8 to Slice 11's dependencies so that organizations are not
+  held back behind opportunities for the sake of three mail rules. The fit is uneasy: a
+  service-wide mail rule is answered for by the Code With Us proposal slice only because that is
+  the first slice whose dependency closure holds every screen its tests may send from. If the builder
+  finds the tests going through only one earlier screen, moving them to that screen's slice changes
+  nothing else.
 - **R-2.15 (Slice 14)** records a missing guard — Sprint With Us and Team With Us creation does not
   refuse a submission after the deadline — as accepted behaviour. It is placed with the Code With Us
   guard it contrasts with; the builder must not "fix" the other two programs without a new

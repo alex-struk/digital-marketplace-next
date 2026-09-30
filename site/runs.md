@@ -243,6 +243,11 @@
 - 11:30:39 propose calibrate-triage-old-41 at G3
 - 11:30:43 drive: step 2: `sdlc rule calibrate-triage-old-41 --by agent:reviewer` — calibrate-triage-old-41 is open at G3, held by agent:reviewer
 - 11:31:47 rule calibrate-triage-old-41 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 11:34:33 drive: step 5: `sdlc run plan --revise` — plan-4 was returned at G2 by agent:architect
+- 11:36:07 run plan: ok, cost 0.5544568000000001, turns 28, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 11:36:07 propose plan-5 at G2
+- 11:36:09 drive: step 6: `sdlc rule plan-5 --by agent:architect` — plan-5 is open at G2, held by agent:architect
+- 11:37:27 rule plan-5 approve at G2 by agent:architect (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-29
 

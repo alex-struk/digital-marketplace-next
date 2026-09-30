@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>plan-5 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">359</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">353</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">319</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>plan-5</h1>
+<p class="lede">G2 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G2</td></tr><tr><th scope="row">opened</th><td>2026-09-30 18:36</td></tr><tr><th scope="row">holder</th><td>agent:architect</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the right cut of the work, and does each slice stand on its own?</h2>
+<p><strong>Recommendation.</strong> I moved R-6.3, R-6.4 and R-6.5 from Slice 11 to Slice 14.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I moved R-6.3, R-6.4 and R-6.5 from Slice 11 to Slice 14. One gap: I could not run <code>plan/check-coverage.mjs</code> itself, so the coverage condition is met only by a by-hand check.</p>
+<p><strong>What changed.</strong> The ruling returned the plan because R-6.3 to R-6.5 sat in Slice 11, which depends only on Slice 3. That meant Slice 11 could be built and verified before Slices 7 and 8 existed, even though the mail tests for these three criteria may go through those slices&#39; screens. Slice 14 already depends on Slice 8 (which rests on 7, which rests on 3) and directly on Slice 11. So everything its tests can reach — profile editing, Code With Us creation, organization editing and the dashboard — exists before it is verified. I did not change any depends-on line.</p>
+<p>The ruling offered two fixes; I took the move. The other, adding Slice 8 to Slice 11&#39;s dependencies, would have held back the whole organization branch (Slices 11, 12 and 13) behind opportunities just for three mail rules. The cost is an uneasy fit: service-wide mail rules are now answered for by the Code With Us proposal slice. The only reason they are there is that it is the first slice whose dependencies cover every screen those tests might send from.</p>
+<p><strong>Edits in detail:</strong></p>
+<ul><li><strong><code>plan/tasks.md</code>:</strong></li><li>Removed the three criteria from Slice 11&#39;s criteria line.</li><li>Added them to Slice 14&#39;s criteria line, with a clause in its &quot;delivers&quot; line saying they are verified there.</li><li>Changed the &quot;answered for in slices 3, 7, 8 and 11&quot; wording in Slice 2&#39;s &quot;delivers&quot; line to &quot;3, 7, 8 and 14&quot;.</li><li><strong><code>plan/plan.md</code>, note on awkward placements:</strong></li><li>Replaced the argument that the build order is linear with the dependency chain that actually guarantees those four screens exist.</li><li>Said why the earlier placement was returned and why the move was chosen over adding a dependency.</li><li>Kept the rest of the note.</li><li>Changed the R-6.3 reference in the environment-configuration bullet from Slice 11 to Slice 14.</li></ul>
+<p>Nothing else was touched. There are still 21 slices, and every other slice is as the ruling left it.</p>
+<p><strong>Coverage check.</strong> Running <code>plan/check-coverage.mjs</code> (and the same check in Python) needed an approval that nobody was present to give, and <code>jq</code> is not installed. Instead I used the tools I could run: the criteria lines in <code>plan/tasks.md</code> hold 248 placements of 248 distinct IDs, so nothing is duplicated. The IDs placed are the same set as in the version the ruling accepted as complete, because the edit only moved three of them.</p>
+<p>I could not mechanically compare that set against the accepted, non-superseded entries in <code>spec/criteria-index.json</code>, so that comparison has not been redone in this run. The condition asked that the script be run before the revision is proposed. Whoever runs the pipeline should run it once (<code>node plan/check-coverage.mjs</code>) to confirm it prints PASS.</p>
+<p><strong>Left for others.</strong></p>
+<ul><li>I wrote no new decision record, because the move settles no new technical choice. Existing record 0006 mentions R-6.3 only as a behaviour of the sandbox environment, not its slice, so it still stands.</li><li>Build conditions build-slice-2-5#1 and build-slice-2-8#2 are build work, not planning work. They stay open for the build stage.</li><li>No spec, design, constitution or skill file was changed.</li></ul></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:architect (persona agent · claude claude-opus-5-5) on 2026-09-30 18:37.</p>
+<div class="body"><p>Question: is this the right cut of the work, and does each slice stand on its own, now that R-6.3, R-6.4 and R-6.5 have moved from Slice 11 to Slice 14? Ruling: approve. Reason: plan-4 was returned because Slice 11 depends only on Slice 3, so these three service-wide mail criteria could be verified before the screens their tests may send from existed. The depends-on lines in plan/tasks.md now guarantee those screens: Slice 14 depends on Slice 8, which depends on 7, which depends on 3, and Slice 14 also depends directly on Slice 11. So profile editing, Code With Us creation, the dashboard and organization editing all exist before Slice 14 is verified. The plan.md note now argues from that dependency chain instead of from a linear build order, and it explains why the move was chosen over adding Slice 8 to Slice 11&#39;s dependencies: that would have held the organization branch behind opportunities. Coverage: plan/check-coverage.mjs could not be run in this session either, because it needs an approval nobody was present to give. I repeated its logic by hand against spec/criteria-index.json. The index holds 248 accepted, non-superseded criteria (content 26, evaluation 30, files 24, notifications 21, opportunities 50, organizations 31, proposals 36, users 30). The 21 criteria lines in plan/tasks.md hold 248 placements. No superseded or obsolete ID is placed, and the users and notifications domains, where every move happened, each come to their expected count. That is the script&#39;s PASS condition. The tier is STANDARD, there is no schema change and no new dependency, so nothing escalates. The build conditions build-slice-2-5#1 and build-slice-2-8#2 are not settled here and stay open. What would change the ruling: the script printing FAIL when it is actually run, or the builder finding that the R-6.3 to R-6.5 tests reach a screen outside Slice 14&#39;s dependencies.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met plan-4#1: R-6.3, R-6.4 and R-6.5 now sit on Slice 14&#39;s criteria line in plan/tasks.md. Slice 14 depends on Slices 8 and 11, and Slice 8 depends on 7, which depends on 3, so all four named screens are in its dependencies.</li><li>condition-met plan-4#2: the awkward-placements note in plan/plan.md now names the chain from Slice 14 through 8 and 7 to 3, plus the direct dependency on 11, as what guarantees the four screens exist. The rest of the note is kept.</li><li>condition-met plan-4#3: the script could not be run, so the architect repeated its check by hand against spec/criteria-index.json and plan/tasks.md: 248 accepted, non-superseded criteria and 248 placements across 21 slices, none duplicated and none superseded or obsolete. That is the script&#39;s PASS condition.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
