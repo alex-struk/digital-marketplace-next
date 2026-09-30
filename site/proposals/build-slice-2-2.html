@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-2-2 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">349</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">344</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">315</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-2-2</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 11:34</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 2 (A person can sign in, finish signing up and sign out) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> The seed failure is almost certainly fixed, but I couldn&#39;t prove it: docker commands needed approval this session, so the stack was never started.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>The seed failure is almost certainly fixed, but I couldn&#39;t prove it: docker commands needed approval this session, so the stack was never started. What I can show is that <code>npm --prefix app run check</code> passes, including a new test that runs the seed the way the <code>seed</code> service does.</p>
+<p><strong>What went wrong.</strong> The seed failed because <code>tests/seed/000-installation.sql</code> tried to put Service Designer at service area number 5, and that slot was already taken. The code under <code>app/</code> already handles this: a migration written earlier in this slice (<code>20260930000001_service_areas_as_installed</code>, decision record 0013) renames the old guessed row, Delivery Manager, to Service Designer. With that migration in place, every seed file applies cleanly against an in-process Postgres (PGlite). So the seed container must have run an older migration history than the code it was built from.</p>
+<p><strong>Why that happens.</strong> The <code>seed</code> service sits in a compose profile, so <code>docker compose up --build</code> never builds it. <code>docker compose run seed</code> only builds its image when none exists yet. An image left by an earlier build, from before that migration, would still say Delivery Manager at number 5, which is exactly the failure logged. The seed&#39;s log shows the container being created with no build step, which fits.</p>
+<p><strong>What I changed in <code>app/compose/compose.yaml</code>:</strong></p>
+<ul><li><code>seed</code> and <code>migrate</code> now share one image, <code>digital-marketplace-migrations:local</code>. Both are marked <code>pull_policy: build</code>, so compose rebuilds the image every time either one runs; the build cache keeps that cheap when nothing changed.</li><li><code>frontend</code> and <code>backend</code> are marked <code>pull_policy: build</code> too, so no service can run an out-of-date image.</li><li><code>seed</code> now waits for <code>migrate</code> to finish successfully, so the two never change the schema at the same time.</li></ul>
+<p>Nothing else in the compose file changed. The application still answers on 4300 and the identity provider still publishes at <code>http://localhost:8080/realms/digital-marketplace</code>. I confirmed the edited file parses and reads as intended, but I did not run <code>docker compose config</code> on it.</p>
+<p><strong>What I tested.</strong> I moved the seed&#39;s steps in <code>app/migrations/scripts/seed.cjs</code> (wipe the schema, run every migration, apply every <code>tests/seed/*.sql</code> in order) into an exported <code>seed(knex, directory)</code> function. <code>main()</code> still runs it the same way. The new test, <code>app/migrations/tests/seed.test.mjs</code>, runs it twice over the same PGlite database. It checks that the second run leaves the same data as the first, and that the service areas come out as numbers 1 to 5 ending with Service Designer. Decision record <code>docs/decisions/0014-the-seed-image-is-built-every-time-it-runs.md</code> explains the change.</p>
+<p><strong>Still open.</strong></p>
+<ul><li><strong>Other services:</strong> the ruling named only the seed, and the run stopped there. If the backend, frontend, identity provider or mail services have their own startup faults, they have not been seen yet.</li><li><strong>Criteria:</strong> I changed no code for the 17 slice-2 criteria, so they remain as the existing build left them and untested end to end.</li><li><strong>Outside my stage:</strong> nothing needed a change to files this stage doesn&#39;t own.</li><li><strong>Next slice:</strong> it will find the same state slice 2 was meant to deliver, with the seed now rebuilt every time it runs.</li></ul></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by runner:verify (the runner, automatically) on 2026-09-30 11:38.</p>
+<div class="body"><p>Slice 2 does not yet do what 6 of its criteria say. Each condition is the criterion and what the running application did.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-4.2: Error: SDLC_MAIL_API is not set; a test that uses the <code>mail</code> fixture needs a mail catcher target</li><li>R-6.1: Error: SDLC_MAIL_API is not set; a test that uses the <code>mail</code> fixture needs a mail catcher target</li><li>R-6.2: Error: SDLC_MAIL_API is not set; a test that uses the <code>mail</code> fixture needs a mail catcher target</li><li>R-6.3: Error: SDLC_MAIL_API is not set; a test that uses the <code>mail</code> fixture needs a mail catcher target</li><li>R-6.4: Error: SDLC_MAIL_API is not set; a test that uses the <code>mail</code> fixture needs a mail catcher target</li><li>R-6.5: Error: SDLC_MAIL_API is not set; a test that uses the <code>mail</code> fixture needs a mail catcher target</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
