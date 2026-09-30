@@ -30,7 +30,7 @@
 | R-7.24 | acceptance/content/R-7.24.spec.ts |  | pass (carried from 2026-09-30-17) |
 | R-7.25 | acceptance/content/R-7.25.spec.ts |  | pass (carried from 2026-09-30-17) |
 | D-content-26 | — |  |  |
-| R-7.26 | acceptance/content/R-7.26.spec.ts |  | fail |
+| R-7.26 | acceptance/content/R-7.26.spec.ts |  | fail (ruled: adapter-wrong) |
 | D-content-27 | — |  |  |
 | R-7.27 | acceptance/content/R-7.27.spec.ts |  | pass (carried from 2026-09-30-17) |
 | R-7.28 | acceptance/content/R-7.28.spec.ts |  | pass (carried from 2026-09-30-17) |

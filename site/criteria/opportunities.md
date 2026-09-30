@@ -20,7 +20,7 @@
 | R-1.14 | acceptance/opportunities/R-1.14.spec.ts |  | pass (carried from 2026-09-30-17) |
 | R-1.15 | acceptance/opportunities/R-1.15.spec.ts |  | pass (carried from 2026-09-30-17) |
 | R-1.16 | acceptance/opportunities/R-1.16.spec.ts |  | fail (ruled: defect-in-old; carried from 2026-09-30-17) |
-| R-1.17 | acceptance/opportunities/R-1.17.spec.ts |  | fail |
+| R-1.17 | acceptance/opportunities/R-1.17.spec.ts |  | fail (ruled: adapter-wrong) |
 | R-1.18 | acceptance/opportunities/R-1.18.spec.ts |  | pass (carried from 2026-09-30-17) |
 | R-1.19 | acceptance/opportunities/R-1.19.spec.ts |  | pass (carried from 2026-09-30-17) |
 | R-1.20 | acceptance/opportunities/R-1.20.spec.ts |  | pass (carried from 2026-09-30-17) |
