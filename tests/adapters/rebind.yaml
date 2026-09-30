@@ -2043,3 +2043,16 @@ rebind:
       why: tests/adapters/old has changed since this was found
       by: runner:calibrate
       at: 2026-09-30T00:58:42.694Z
+  - id: R-8.31
+    target: old
+    why: 'on a Code With Us opportunity just published by
+      opportunity-cwu-create.publish and opened by file-attachment-control.open,
+      add_attachment followed by attachment_address returned an empty string,
+      although the target stores the file and links it at /api/files/<id> once
+      "Publish Changes" and its confirmation are accepted; add_attachment must
+      raise when the upload leaves neither a blob: preview nor a stored
+      /api/files/ link, or when no save control is offered, instead of returning
+      silently, and attachment_address must confirm it is on the Attachments
+      step of that same opportunity, in whatever read-only or edit state the
+      publish left it, and raise rather than return empty when it finds no link
+      there'
