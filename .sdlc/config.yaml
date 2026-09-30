@@ -26,6 +26,7 @@ targets:
     base_url: http://localhost:4300
     identity: sandbox-idp
     depends_on: { identity: http://localhost:8080/realms/digital-marketplace }
+    mail_api: http://localhost:8025
 policy:
   gates:
     G0: { holder: "agent:product-owner", escalate_to: tech-lead, human_sample_per_week: 5 }
