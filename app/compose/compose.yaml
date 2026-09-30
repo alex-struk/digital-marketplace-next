@@ -19,7 +19,7 @@ x-database-url: &database-url
   DATABASE_URL: postgresql://marketplace:marketplace@database:5432/digital_marketplace
 
 services:
-  # The single-page app, and the web server that forwards /api, /status and /admin to the
+  # The single-page app, and the web server that forwards /api, /auth, /status and /admin to the
   # service, so a browser sees one origin (decision record 0001).
   frontend:
     build:
@@ -42,10 +42,25 @@ services:
       <<: *database-url
       PORT: "3001"
       NODE_ENV: production
+      # Tokens are checked against the realm as the browser reaches it, which is what they
+      # name as their issuer; the keys are fetched from inside this network (decision record
+      # 0004).
+      OIDC_ISSUER: http://localhost:8080/realms/digital-marketplace
+      OIDC_JWKS_URL: http://idp:8080/realms/digital-marketplace/protocol/openid-connect/certs
+      OIDC_CLIENT_ID: digital-marketplace-app
+      # The service completes sign-in itself, exchanging the code over this network (decision
+      # record 0015); the identity provider still names itself as the browser reaches it.
+      OIDC_BACKCHANNEL_URL: http://idp:8080/realms/digital-marketplace
+      # The mail path (R-6.1 to R-6.5): one sender, every message marked as a test, links and
+      # the logo pointing at where the application answers. Notifications are switched off
+      # only when the environment this is started from asks for it, for R-6.1's own run
+      # (spec/contract/observables.yaml, configurations.notifications_disabled).
       SMTP_HOST: mail
       SMTP_PORT: "1025"
-      OIDC_ISSUER: http://idp:8080/realms/digital-marketplace
-      OIDC_CLIENT_ID: digital-marketplace-app
+      MAILER_FROM: "Digital Marketplace <donotreply@example.test>"
+      SHOW_TEST_INDICATOR: "1"
+      SERVICE_ORIGIN: http://localhost:4300
+      DISABLE_NOTIFICATIONS: ${SDLC_ORACLE_DISABLE_NOTIFICATIONS:-0}
     expose:
       - "3001"
     depends_on:
@@ -61,6 +76,7 @@ services:
     build:
       context: ../..
       dockerfile: app/migrations/Dockerfile
+    pull_policy: build
     environment:
       <<: *database-url
     depends_on:
@@ -73,10 +89,16 @@ services:
   # it twice leaves the same data.
   #
   # It is asked for by name — `docker compose up seed` — and so does not run with the rest.
+  #
+  # Because it sits behind a profile, `up --build` never rebuilds its image, and `run seed`
+  # takes whatever image already carries its name — one built from an earlier migration
+  # history, which then fails on the seed files. `pull_policy: build` rebuilds it every time
+  # it is asked for (decision record 0014).
   seed:
     build:
       context: ../..
       dockerfile: app/migrations/Dockerfile
+    pull_policy: build
     command: ["npm", "run", "seed"]
     environment:
       <<: *database-url
@@ -126,6 +148,10 @@ services:
       KC_BOOTSTRAP_ADMIN_USERNAME: admin
       KC_BOOTSTRAP_ADMIN_PASSWORD: ${SDLC_SANDBOX_PASSWORD:-}
       KC_HEALTH_ENABLED: "true"
+      # Every token names the realm as the browser reaches it, including the ones the service
+      # asks for over the compose network, so the browser can renew them and the service
+      # accepts them (decision record 0015).
+      KC_HOSTNAME: http://localhost:8080
     volumes:
       - idp-import:/opt/keycloak/data/import:ro
     ports:
@@ -136,12 +162,15 @@ services:
     restart: unless-stopped
 
   # Every message the service sends arrives here and goes no further. Read it at
-  # http://localhost:8025.
+  # http://localhost:8025. Its fault injection is on, so a test can make it refuse delivery
+  # the way an unreachable mail server would (R-6.2; spec/contract/observables.yaml,
+  # email.delivery_fault).
   mail:
     image: axllent/mailpit:latest
     environment:
       MP_SMTP_AUTH_ACCEPT_ANY: "1"
       MP_SMTP_AUTH_ALLOW_INSECURE: "1"
+      MP_ENABLE_CHAOS: "true"
     ports:
       - "8025:8025"
       - "1025:1025"

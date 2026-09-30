@@ -1,6 +1,8 @@
 # 0003 · Preserve the recovered HTTP contract, minus its test-only entrances
 
 - Status: proposed (G2), revised after the first G2 return (sign-in section added)
+- Superseded in part by: 0015. `/auth/sign-in` and `/auth/callback` are the service's own
+  redirects, as the contract has them, not screens of the single-page app
 - Date: 2026-09-19
 
 ## Decision

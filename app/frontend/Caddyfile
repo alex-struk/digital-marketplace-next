@@ -19,6 +19,11 @@
 		reverse_proxy {$BACKEND_ORIGIN:backend:3001}
 	}
 
+	# Signing in begins and ends at the service, each with a redirect (decision record 0015).
+	handle /auth/* {
+		reverse_proxy {$BACKEND_ORIGIN:backend:3001}
+	}
+
 	handle /admin/* {
 		reverse_proxy {$BACKEND_ORIGIN:backend:3001}
 	}
