@@ -226,6 +226,21 @@ reader's attention.
   the first slice whose dependency closure holds every screen its tests may send from. If the builder
   finds the tests going through only one earlier screen, moving them to that screen's slice changes
   nothing else.
+- **R-6.20 and R-6.28** were also placed in Slice 2, beside the account creation and mail path
+  they describe, and verification of the build of slices 2–12 found both unbound there. R-6.20's
+  test publishes a Code With Us opportunity through `/opportunities/code-with-us/create` (Slice 7)
+  to show a new account is sent no announcement, so it sits in Slice 8, whose dependency closure
+  (Slices 7, 3, 2, 1) holds that screen, and which carries the new-opportunity notice control
+  (R-6.21) that R-6.20's "until they ask" is shown against.
+  R-6.28's test signs in as an administrator, reads each vendor's profile at `/users/:userId`
+  (Slice 3), then sends the announce-changed-terms broadcast to active vendors (Slice 6) and checks
+  that every vendor with an address received it. It therefore sits in Slice 6, beside the
+  changed-terms broadcast it exercises; Slice 6's closure (Slices 5, 3, 2, 1) holds both screens.
+  An earlier revision put it in Slice 8 against the new-opportunity announcement to subscribers,
+  which its test never uses, and Slice 8's closure does not include Slice 6, so it was returned.
+  The skip-no-address behaviour itself is still built in Slice 2's mail path. The fit is uneasy for
+  R-6.28 in the same way as for R-6.3 to R-6.5: it is a service-wide mail rule answered for where
+  its test first can run.
 - **R-2.15 (Slice 14)** records a missing guard — Sprint With Us and Team With Us creation does not
   refuse a submission after the deadline — as accepted behaviour. It is placed with the Code With Us
   guard it contrasts with; the builder must not "fix" the other two programs without a new
