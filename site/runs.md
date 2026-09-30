@@ -30,6 +30,9 @@
 - 19:53:56 run calibrate: ok, cost 0, turns 0
 - 19:54:13 deviation: next named `sdlc run calibrate --target old --full`; ran `sdlc run ratify --domain proposals`; reason: Apply ratify-proposals-2's approved edit to R-2.18; next keeps naming calibration because of a separate defect being fixed (a ruling made at an earlier criterion version still marks the row), so the approved wording would otherwise wait indefinitely.
 - 19:54:14 run ratify: ok, cost 0, turns 0
+- 19:57:07 run derive-tests: ok, cost 1.033253, turns 24, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 19:57:07 propose derive-tests-proposals-stale-16 at G3
+- 19:57:52 rule derive-tests-proposals-stale-16 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-29
 

@@ -1,0 +1,16 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the rewritten R-2.18 tests follow from R-2.18 v4 and nothing else? Approve. Each clause of v4 is asserted: the service refuses non-active members with the quoted message (Team With Us: pending, former, outside; Sprint With Us: pending and outside, via the request surface that sends a submission); Team With Us duplicate naming is refused with the uniqueness message and Sprint With Us duplicates are not; the Team With Us form offers only active members; the Sprint With Us form also lists the pending invitee, marks them pending once named, and no form offers someone already named; a Sprint With Us proposal naming a pending person saves as a draft and stays a draft, not submitted, after submission is attempted. The draft test fills in cost, references and terms only so the proposal is otherwise complete, and asserts nothing about them. Every surface call is a contract action or observation, and proposal-swu-create's contract comment backs the pending listing, save_draft and the withheld submission, so no implementation detail leaks in. The runner's typecheck passed. The open missing-test on R-2.18, owed by ratify over the v3 wording that contradicted the contract, is answered by v4 and is withdrawn. What would change this: a first run of these tests that fails or comes back unbound.
+conditions:
+  - "condition-withdrawn missing-test/R-2.18: ratify reworded the criterion to v4, which says the Sprint With Us form also lists pending invitees marked pending, so it no longer contradicts the contract; 'the Sprint With Us form offers the active members and lists a pending member, marked pending' asserts the reworded clause"
+cost: 0.39137380000000005
+turns: 5
+session: "ae4fe041-a839-4560-af13-377504f36278"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T02:57:52.019Z

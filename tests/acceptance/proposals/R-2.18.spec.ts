@@ -1,14 +1,13 @@
-// criterion: @R-2.18 v3
-// provenance: blind, spec@c1e09955fdff55e84870c25dfcb8e0fd9981c437, derived 2026-09-28
+// criterion: @R-2.18 v4
+// provenance: blind, spec@58f7a2a6d352ffc30afadcf64eaf66c786693898, derived 2026-09-30
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
-// The criterion says neither refusal is reachable through the proposal form, so the team is
-// put to the service through proposal-team-request, which carries any seed user as a team
-// member, repeats included. The organization is the qualified one, qualified for both
-// programs; its administrator signs in and submits for it. Three people stand outside its
-// active membership: one whose invitation is unanswered, one whose membership has ended, and
-// one who belongs to no organization.
+// The service's refusals are put to it through proposal-team-request, which carries any seed
+// user as a team member, repeats included, and sends the proposal as a submission. The
+// organization is the qualified one, qualified for both programs; its administrator signs in
+// and submits for it. Three people stand outside its active membership: one whose invitation
+// is unanswered, one whose membership has ended, and one who belongs to no organization.
 //
 // Each test publishes its own opportunity, since both programs' seeded ones have closed. The
 // Team With Us opportunity asks for two resources, in the two service areas the organization
@@ -22,14 +21,16 @@ import type { Surface } from "../../fixtures";
 // What the form offers is read from the team-member choice on each create page, by account
 // name as the seed gives it. Each of the organization's three active people is offered, the
 // person whose membership ended and the person outside it are not, and a person once named
-// is offered no longer. On Sprint With Us the person whose invitation is unanswered is
-// listed too, marked pending, as the criterion's note says: shown as pending, not hidden.
+// is offered no longer. The Team With Us choice leaves out the person whose invitation is
+// unanswered; the Sprint With Us choice lists them, and once named they are marked pending.
+// A Sprint With Us proposal naming them is saved as a draft from the create page, then
+// submitted from its own page, and stays a draft.
 
 const notActiveMember = "User is not an active member of the organization.";
 const notUnique = "Please select unique team members.";
 
 const statement =
-  'Every person named on a proposal\'s team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with "User is not an active member of the organization."; a Team With Us proposal is additionally refused by the service when the same person is named twice, with "Please select unique team members.", while the service applies no such uniqueness check to a Sprint With Us phase. The proposal form offers only the organization\'s active members, and does not offer a person already named on the proposal, so neither refusal is reachable through the form.';
+  'Every person named on a proposal\'s team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with "User is not an active member of the organization."; a Team With Us proposal is additionally refused by the service when the same person is named twice, with "Please select unique team members.", while the service applies no such uniqueness check to a Sprint With Us phase. The Team With Us proposal form offers only the organization\'s active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal.';
 
 const settle = { timeout: 20000 };
 const organization = seed.organizations.qualified;
@@ -216,18 +217,23 @@ for (const [who, person] of outsiders) {
   });
 }
 
-test(`${statement} (a Sprint With Us phase naming a person outside the organization is refused)`, async ({
-  surface,
-}) => {
-  test.setTimeout(180000);
-  const opportunityId = await publishSprintOpportunity(surface, "R-2.18 opportunity bid on naming an outsider");
-  await surface.signIn(persona.organizationAdmin);
-  await submitSprintWithUs(surface, opportunityId, [
-    { member: seed.users.organizationOwner, scrumMaster: true },
-    { member: seed.users.teamCandidateOutsider, scrumMaster: false },
-  ]);
-  await expectRefusedWith(surface, notActiveMember, "a phase naming a person who belongs to no organization");
-});
+const sprintOutsiders: Array<[string, { name: string }]> = [
+  ["a person whose invitation to the organization is unanswered", seed.users.teamCandidatePending],
+  ["a person who belongs to no organization", seed.users.teamCandidateOutsider],
+];
+
+for (const [who, person] of sprintOutsiders) {
+  test(`${statement} (a Sprint With Us phase naming ${who} is refused)`, async ({ surface }) => {
+    test.setTimeout(180000);
+    const opportunityId = await publishSprintOpportunity(surface, `R-2.18 opportunity bid on naming ${who} in a phase`);
+    await surface.signIn(persona.organizationAdmin);
+    await submitSprintWithUs(surface, opportunityId, [
+      { member: seed.users.organizationOwner, scrumMaster: true },
+      { member: person, scrumMaster: false },
+    ]);
+    await expectRefusedWith(surface, notActiveMember, `a phase naming ${who}`);
+  });
+}
 
 test(`${statement} (a Team With Us team naming the same person twice is refused)`, async ({ surface }) => {
   test.setTimeout(180000);
@@ -314,7 +320,7 @@ test(`${statement} (the Team With Us form offers only active members, and not a 
   );
 });
 
-test(`${statement} (the Sprint With Us form offers only active members, and not a person already named)`, async ({
+test(`${statement} (the Sprint With Us form offers the active members and lists a pending member, marked pending, and not a person already named)`, async ({
   surface,
 }) => {
   test.setTimeout(180000);
@@ -324,14 +330,82 @@ test(`${statement} (the Sprint With Us form offers only active members, and not 
   await surface.proposalSwuCreate.chooseOrganization({ organization });
   const read = () => surface.proposalSwuCreate.teamMemberChoices();
   const where = "the Sprint With Us phase team choice";
+  const pending = seed.users.teamCandidatePending;
 
   const before = await readChoices(read, where);
   expectOffered(before, null, where);
+  expect(before, `${where} does not list a person whose invitation is unanswered`).toContain(pending.name);
 
   const named = seed.users.organizationOwner;
   await surface.proposalSwuCreate.addPhaseTeamMember({ phase: "Implementation", member: named });
   await expect
     .poll(() => readOrEmpty(read), { ...settle, message: `${where} still offers the person just named` })
     .not.toContain(named.name);
-  expectOffered(await readOrEmpty(read), named, `${where} after naming a member`);
+  const after = await readOrEmpty(read);
+  expectOffered(after, named, `${where} after naming a member`);
+  expect(after, `${where} after naming a member no longer lists the pending person`).toContain(pending.name);
+
+  await surface.proposalSwuCreate.addPhaseTeamMember({ phase: "Implementation", member: pending });
+  await expect
+    .poll(() => readOrEmpty(() => surface.proposalSwuCreate.pendingTeamMember()), {
+      ...settle,
+      message: "the pending person, once named, is not marked pending",
+    })
+    .toContain(pending.name);
+  await expect
+    .poll(() => readOrEmpty(read), { ...settle, message: `${where} still offers the pending person just named` })
+    .not.toContain(pending.name);
+});
+
+async function attempt(act: () => Promise<void>): Promise<void> {
+  try {
+    await act();
+  } catch {
+    // The screen may not offer the submission at all; the proposal's status is what is read.
+  }
+}
+
+test(`${statement} (a Sprint With Us proposal naming a pending member is saved as a draft but refused on submission)`, async ({
+  surface,
+}) => {
+  test.setTimeout(240000);
+  const opportunityId = await publishSprintOpportunity(surface, "R-2.18 opportunity bid on with a pending member");
+  await surface.signIn(persona.organizationAdmin);
+  await surface.proposalSwuCreate.open({ opportunityId });
+  await surface.proposalSwuCreate.chooseOrganization({ organization });
+  await surface.proposalSwuCreate.addPhaseTeamMember({ phase: "Implementation", member: seed.users.organizationOwner });
+  await surface.proposalSwuCreate.addPhaseTeamMember({ phase: "Implementation", member: seed.users.teamCandidatePending });
+  await surface.proposalSwuCreate.setScrumMaster({ phase: "Implementation", member: seed.users.organizationOwner });
+  await surface.proposalSwuCreate.setPhaseProposedCost({ phase: "Implementation", cost: 400000 });
+  await surface.proposalSwuCreate.answerTeamQuestion({
+    order: 0,
+    response: "We delivered a scheduling service for a health authority over eighteen months.",
+  });
+  for (const order of [0, 1, 2]) {
+    await surface.proposalSwuCreate.addReference({
+      order,
+      name: `Reference ${order + 1}`,
+      company: "Reference Company Ltd.",
+      phone: "250-555-0101",
+      email: `reference.${order + 1}@example.test`,
+    });
+  }
+  await surface.proposalSwuCreate.acceptProgramTerms();
+  await surface.proposalSwuCreate.acceptAppTerms();
+  await surface.proposalSwuCreate.saveDraft();
+
+  await expect
+    .poll(() => readOrEmpty(() => surface.proposalSwuEdit.proposalIdentifier()), {
+      ...settle,
+      message: "a proposal naming a pending member was not saved as a draft",
+    })
+    .toBeTruthy();
+  const where = { opportunityId, proposalId: await surface.proposalSwuEdit.proposalIdentifier() };
+  await expect.poll(() => readOrEmpty(() => surface.proposalSwuEdit.status()), settle).toMatch(/draft/i);
+
+  await attempt(() => surface.proposalSwuEdit.submitProposal());
+  await surface.proposalSwuEdit.open(where);
+  const status = await readOrEmpty(() => surface.proposalSwuEdit.status());
+  expect(status, "a proposal naming a pending member was submitted").not.toMatch(/submitted/i);
+  expect(status, "a draft naming a pending member did not stay a draft").toMatch(/draft/i);
 });
