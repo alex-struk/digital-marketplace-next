@@ -322,6 +322,16 @@
 - 15:45:21 calibrate old: a full run, forced with --full
 - 15:45:27 run calibrate: ok, cost 0, turns 0
 - 15:45:29 drive: stopped after 17 steps — waiting on a person: tech-lead: build-slice-2-12; a ruler: missing tests (calibrate)
+- 15:49:05 drive: step 1: `sdlc run bind-adapter --target new --revise` — 1 revision request for target new owed by bind-adapter
+- 15:49:05 run bind-adapter: pre-checks failed
+- 15:49:05 drive: step 1 recovery: the oracle is up, and the new target's sandbox publishes on this machine's ports beside it; taking the oracle down first (sdlc oracle down)
+- 15:49:54 oracle down old
+- 15:49:54 drive: step 1 recovery: the new target's sandbox was not up; starting it from proposal/build-slice-2-12 (sdlc sandbox up --target new --from proposal/build-slice-2-12), running the step once more, and taking it down after (sdlc sandbox down --target new --from proposal/build-slice-2-12)
+- 16:09:41 run bind-adapter: ok, cost 8.786301200000006, turns 199, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 16:09:41 propose bind-adapter-new-10 at G3
+- 16:09:41 drive: step 1 recovery: taking the new target's sandbox down (sdlc sandbox down --target new --from proposal/build-slice-2-12)
+- 16:09:56 drive: step 2: `sdlc rule bind-adapter-new-10 --by agent:reviewer` — bind-adapter-new-10 is open at G3, held by agent:reviewer
+- 16:10:40 rule bind-adapter-new-10 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-29
 

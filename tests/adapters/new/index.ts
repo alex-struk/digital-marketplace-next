@@ -14,18 +14,20 @@
 // the service answers its interface under /api (files included) for whoever the browser's
 // session carries.
 //
-// Signing in now works as far as the sandbox identity provider's own form ("Sign in as a
-// vendor" / "Sign in as a public sector employee" on /sign-in), and signIn() fills it. The
-// screens behind a session were never walked signed in, because the binding session could
-// not use the sandbox password; signed out they answer with the client's "Page not found"
-// screen or (for /dashboard and /sign-up/complete) a redirect to /sign-in. Their open()
-// reports "unbound: <page>.open — <reason>" only when the address really answers with that
-// refusal, so a run that signs in and is shown the screen is not told otherwise. Most of
-// their members report "unbound: <page>.<member> — <reason>"; the dashboard, the Code With
-// Us form, an organization's screen, /sign-up/complete, a profile, one's own profile and
-// one's own notices are instead looked for at run time by role and accessible name (see
-// "signed-in screens, found at run time" below). A member that is about the refusal itself
-// (refused_for_non_administrator, sign_in_required, not_found_page, ...) reads that refusal.
+// Signing in goes through the sandbox identity provider's own form ("Sign in as a vendor" /
+// "Sign in as a public sector employee" on /sign-in), and signIn() fills it. The screens
+// behind a session were walked signed in (as the vendors, the public sector employee, the
+// administrator, the vendor still to complete a profile and the first-time accounts). The
+// running build serves a signed-in person /dashboard (a greeting and nothing else), their
+// own profile at /users/me or /users/<their own id> with its Notifications and Legal
+// sections, and /sign-up/complete to a vendor still to complete a profile; every other
+// screen that needs a session — opportunities, proposals, organizations, content
+// management, evaluation, /users, and another account's /users/:userId even for the
+// administrator — answers "Page not found". Those screens' open() reports "unbound:
+// <page>.open — <reason>" only when the address really answers with that refusal, and
+// their members report "unbound: <page>.<member> — <reason>". A member that is about the
+// refusal itself (refused_for_non_administrator, sign_in_required, not_found_page, ...)
+// reads that refusal.
 //
 // Every page is laid out inside one "main" landmark that also holds the site's banner and
 // its footer, so a page's own words are read with the banner's and the footer's taken off.
@@ -279,10 +281,10 @@ export default function create(
 
   const camel = (name: string): string => name.replace(/_([a-z0-9])/g, (_match, c: string) => c.toUpperCase());
 
-  // Sign-in now reaches a real form, but the session that bound this adapter had no sandbox
-  // password it was permitted to use, so no screen behind a session has been walked yet.
+  // What walking the target signed in found: only the dashboard and one's own account screens
+  // are served to a signed-in person; everything else answers "Page not found".
   const NOBODY_SIGNS_IN =
-    'this screen has not been walked signed in: "Sign in as a vendor" and "Sign in as a public sector employee" on /sign-in now hand off to the sandbox identity provider\'s username and password form, but the session that bound this adapter could not use the sandbox password, so none of the controls signed-in people are shown here have been seen';
+    'walked signed in (as the administrator, and as a vendor for a vendor\'s screens, with the seeded records\' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else) and their own account screens: every opportunity, proposal, organization, content-management and evaluation screen, /opportunities and /organizations included, answers "Page not found"';
 
   // What each such address answered a signed-out visitor when it was last opened: /dashboard
   // and /sign-up/complete send them to /sign-in?redirectOnSuccess=…, and everything else
@@ -297,6 +299,10 @@ export default function create(
 
   const behindSession = (route: string): string =>
     `${route} is offered only to a signed-in person, and ${NOBODY_SIGNS_IN}; opened signed out (with the seeded record's identifier where it takes one) it ${signedOutAnswer(route)}`;
+
+  // A profile section the running build links to but does not draw.
+  const sectionRedrawn = (route: string, label: string): string =>
+    `walked signed in as a vendor, the "${label}" link under "Profile sections" on the profile goes to ${route}, which draws the Profile section again (heading "User Profile", the account facts and "Details") and nothing about ${label.toLowerCase()}; a public sector account's profile offers no "${label}" link at all, and another account's /users/:userId answers "Page not found", even to the administrator`;
 
   function absent<T>(
     pageId: string,
@@ -316,9 +322,8 @@ export default function create(
           .catch(() => undefined);
         await settle();
         if (refusals.length) return;
-        // A run that did sign in (signIn() fills the provider's form with the sandbox
-        // password) may well be shown the screen: then it has opened, and only the members
-        // that were never seen report unbound.
+        // A build that serves the screen to whoever signed in has opened it, and only the
+        // members nothing on it does report unbound.
         if (!(await whyNotHere().catch(() => ""))) return;
         // What the address actually answered this time, rather than what it answered when
         // this adapter was written.
@@ -418,6 +423,17 @@ export default function create(
       );
     }
     await settle();
+    // The client sends the person on after it has loaded their account (a vendor still to
+    // complete a profile to /sign-up/complete, everyone else to /dashboard), so wait until
+    // the address has stopped moving before handing the browser back.
+    let last = page.url();
+    for (let steady = 0, i = 0; steady < 3 && i < 40; i++) {
+      await page.waitForTimeout(250);
+      const now = page.url();
+      steady = now === last ? steady + 1 : 0;
+      last = now;
+    }
+    await ready();
   }
 
   function originOf(href: string): string {
@@ -1172,9 +1188,9 @@ export default function create(
 
   // Each is a request to the service's own interface from the browser's session, so it
   // carries whoever is signed in. What the service answered a signed-out request with was
-  // read for every address below; what it answers somebody signed in was not, since the
-  // session that bound this adapter could not sign in, so those request bodies follow
-  // spec/contract/openapi.yaml and the forms the contract describes.
+  // read for every address below; what it answers somebody signed in has not been read (the
+  // revision that walked the screens signed in did not re-send these requests), so those
+  // request bodies follow spec/contract/openapi.yaml and the forms the contract describes.
 
   type Answer = { status: number; body: string };
 
@@ -2647,9 +2663,9 @@ export default function create(
 
   // ================================================================ signed-in screens, found at run time
   //
-  // The screens below are shown only to a signed-in person, and the session that wrote this
-  // adapter could not sign in (it had no use of the sandbox password), so none of their
-  // controls has been looked at. A run that does sign in is shown them, and there each
+  // The screens below are shown only to a signed-in person. Walked signed in, the running
+  // build draws /dashboard (a greeting only), /sign-up/complete and one's own profile, and
+  // answers the Code With Us form and an organization's screen with "Page not found". Each
   // member looks for what the contract names by role and accessible name — the way a person
   // reads the screen — and throws "unbound: …" naming what it looked for, and what the
   // screen offers instead, when it is not there. Nothing here returns a reading from a screen
@@ -2882,7 +2898,7 @@ export default function create(
       if (why) {
         unbound(
           where(member),
-          `${route} did not open as a screen at ${page.url()}: ${why.replace(/\n+/g, " ")}; the screen is offered only to a signed-in person who may have it, and was never seen by the session that wrote this adapter`,
+          `${route} did not open as a screen at ${page.url()}: ${why.replace(/\n+/g, " ")}; the screen is offered only to a signed-in person who may have it; ${NOBODY_SIGNS_IN}, and /users/:userId opens only for the signed-in person's own identifier (another account's answers "Page not found", even to the administrator)`,
         );
       }
     };
@@ -3339,8 +3355,78 @@ export default function create(
 
   // ---------------------------------------------------------------- a profile
 
+  // Walked signed in: the profile is "User Profile" over a "Profile sections" navigation of
+  // links (Profile, and for a vendor Capabilities and Organizations, then Notifications and
+  // Legal), the account facts "Account type: …", "Status: …" and "Account ID: …" each on a
+  // line, "Details" with read-only "Sign-in username", "Name", "Email address" (and "Job
+  // title" for public sector staff) boxes, and for public sector staff a "Permissions"
+  // section. It offers no edit, save, deactivate or picture control. The Capabilities and
+  // Organizations links go to ?tab=capabilities and ?tab=organizations, which draw the
+  // Profile section again. A vendor still to complete a profile is sent from the profile to
+  // /sign-up/complete, and another account's identifier answers "Page not found".
+  const SECTION_HEADINGS: Record<string, RegExp> = {
+    capabilities: /capabilit/i,
+    organizations: /organi[sz]ations/i,
+    notifications: /^\s*notifications\s*$/i,
+    legal: /policies|terms|legal|agreements/i,
+  };
+  async function profileSection(where: string, name: RegExp, key: string): Promise<string> {
+    const tab = seen(page.getByRole("tab", { name }));
+    if (await tab.count()) {
+      await tab.first().click();
+      await settle();
+      const panel = seen(page.getByRole("tabpanel"));
+      return (await panel.count()) ? (await panel.first().innerText()).trim() : mainText();
+    }
+    const sections = page.getByRole("navigation", { name: /profile sections/i });
+    const link = seen(sections.getByRole("link", { name }));
+    // A screen that opened without that section reads as nothing.
+    if (!(await link.count())) return "";
+    await link.first().click();
+    await settle();
+    await ready();
+    const heading = await firstHeading();
+    const wanted = SECTION_HEADINGS[key];
+    if (wanted && !wanted.test(heading)) {
+      unbound(where, `the "${key}" link under "Profile sections" goes to ${page.url()}, which draws "${heading}" (the Profile section again) and no ${key} section`);
+    }
+    const names = lined(await sections.innerText().catch(() => ""));
+    return (await textLines()).filter((line) => !names.includes(line)).join("\n");
+  }
+
   function profileScreen(pageId: string, route: string) {
-    const screen = signedInScreen(pageId, route);
+    const signedIn = signedInScreen(pageId, route);
+    // The client sends a vendor still to complete a profile from the profile on to
+    // /sign-up/complete: the profile is not what that person is shown, and saying so is
+    // the answer, not a reading of the form it was sent to.
+    const on = async (member: string): Promise<void> => {
+      await signedIn.on(member);
+      await Promise.race([
+        seen(page.getByText(/^\s*status:/i)).first().waitFor({ state: "visible", timeout: 10000 }),
+        page.waitForURL((url) => url.pathname === "/sign-up/complete", { timeout: 10000 }),
+      ]).catch(() => undefined);
+      if (new URL(page.url()).pathname === "/sign-up/complete") {
+        throw new Error(
+          `${pageId}.${member} — ${route} sent this person on to ${page.url()} ("Complete Your Profile"): the account has still to complete its profile, and the profile is not shown to it until then`,
+        );
+      }
+    };
+    const screen = {
+      ...signedIn,
+      on,
+      press: async (member: string, name: RegExp): Promise<void> => {
+        await on(member);
+        await press(signedIn.where(member), name);
+      },
+      tab: async (member: string, name: RegExp, key = ""): Promise<string> => {
+        await on(member);
+        return profileSection(signedIn.where(member), name, key);
+      },
+      messages: async (member: string): Promise<string> => {
+        await on(member);
+        return formMessages();
+      },
+    };
     const w = screen.where;
     const profileField = async (member: string, label: RegExp, shownAs: string[]): Promise<string> => {
       await screen.on(member);
@@ -3406,12 +3492,13 @@ export default function create(
         if (await tab.count()) return screen.tab("profile_tab", /^\s*profile\s*$/i);
         return mainText();
       },
-      capabilitiesTab: () => screen.tab("capabilities_tab", /capabilities/i),
-      notificationsTab: () => screen.tab("notifications_tab", /notifications/i),
-      legalTab: () => screen.tab("legal_tab", /policies|terms|legal|agreements/i),
-      organizationsTab: () => screen.tab("organizations_tab", /organizations/i),
+      capabilitiesTab: () => screen.tab("capabilities_tab", /capabilities/i, "capabilities"),
+      notificationsTab: () => screen.tab("notifications_tab", /notifications/i, "notifications"),
+      legalTab: () => screen.tab("legal_tab", /policies|terms|legal|agreements/i, "legal"),
+      organizationsTab: () => screen.tab("organizations_tab", /organizations/i, "organizations"),
       // Signed in, the profile draws "Account type: Vendor", "Status: Active" and "Account ID: …"
-      // each on a line of its own, the value beside its label.
+      // each on a line of its own, the value beside its label ("Status:" and its value in one
+      // paragraph); on() waits for that line, which is drawn after the heading.
       statusBadge: async () => {
         await screen.on("status_badge");
         return labelledValue(["Status", "Account Status"]);
@@ -3467,47 +3554,196 @@ export default function create(
 
   // ---------------------------------------------------------------- the signed-in person's notices
 
-  const notices = signedInScreen("user-profile-self-notifications", "/users/me?tab=notifications");
-  async function noticesTab(member: string): Promise<void> {
-    await notices.on(member);
-    const tab = seen(page.getByRole("tab", { name: /notifications/i }));
-    if (await tab.count()) {
-      await tab.first().click();
-      await settle();
+  // A section of one's own account: /users/me?tab=… or /users/<own id>?tab=…. The client sends
+  // a vendor still to complete a profile on to /sign-up/complete from here too.
+  function accountSection(pageId: string, route: string) {
+    const screen = signedInScreen(pageId, route);
+    const on = async (member: string): Promise<void> => {
+      await screen.on(member);
+      if (new URL(page.url()).pathname === "/sign-up/complete") {
+        throw new Error(
+          `${pageId}.${member} — ${route} sent this person on to ${page.url()} ("Complete Your Profile"): the account has still to complete its profile, and its account screens are not shown to it until then`,
+        );
+      }
+    };
+    return { ...screen, on };
+  }
+
+  // Walked signed in: "Notifications" over "Notifications are sent to <address>. If this is
+  // wrong, correct it on your profile." and one box, "Email me when new opportunities are
+  // posted". Pressing the box changes nothing — it stays as it was, no dialog opens and
+  // nothing is sent to the service — so no unsubscribe dialog is ever shown.
+  function noticesScreen(pageId: string, route: string) {
+    const notices = accountSection(pageId, route);
+    async function noticesTab(member: string): Promise<void> {
+      await notices.on(member);
+      const tab = seen(page.getByRole("tab", { name: /notifications/i }));
+      if (await tab.count()) {
+        await tab.first().click();
+        await settle();
+      }
     }
+    async function noticesBox(member: string): Promise<Locator> {
+      await noticesTab(member);
+      const box = seen(page.getByRole("checkbox", { name: NOTICES_BOX }).or(page.getByRole("switch", { name: NOTICES_BOX })));
+      if (!(await box.count())) unbound(notices.where(member), `no new-opportunities box on ${page.url()}; it offers ${await offered()}`);
+      return box.first();
+    }
+    return {
+      open: (params?: Record<string, string>) => notices.open(params),
+      toggleNewOpportunityNotifications: async (input?: unknown) => {
+        const where = notices.where("toggle_new_opportunity_notifications");
+        const box = await noticesBox("toggle_new_opportunity_notifications");
+        const wanted = boxWanted(input, NOTICE_KEYS);
+        if (await isDisabled(box)) throw new Error(`${where} — the new-opportunities box is disabled on ${page.url()}`);
+        const was = await box.isChecked();
+        if (wanted !== undefined && was === wanted) return;
+        await box.click();
+        await settle();
+        // A box that did not move and asked nothing has not done what was pressed.
+        if ((await box.isChecked()) === was && !(await dialog().count())) {
+          throw new Error(`${where} — pressing "Email me when new opportunities are posted" on ${page.url()} left it ${was ? "ticked" : "unticked"}, and no dialog opened`);
+        }
+      },
+      confirmUnsubscribe: async () => {
+        await noticesTab("confirm_unsubscribe");
+        await inDialog(notices.where("confirm_unsubscribe"), /unsubscribe|confirm|^\s*yes\s*$/i);
+      },
+      cancelUnsubscribe: async () => {
+        await noticesTab("cancel_unsubscribe");
+        await inDialog(notices.where("cancel_unsubscribe"), /^\s*(cancel|no)\s*$/i);
+      },
+      newOpportunitiesCheckbox: async () => ((await (await noticesBox("new_opportunities_checkbox")).isChecked()) ? "checked" : "unchecked"),
+      notificationEmailAddress: async () => {
+        await noticesTab("notification_email_address");
+        const found = /[^\s@]+@[^\s@]+\.[^\s@]+/.exec(await mainText());
+        return found ? found[0].replace(/[.,;]+$/, "") : "";
+      },
+      unsubscribeModal: async () => {
+        await noticesTab("unsubscribe_modal");
+        return (await dialog().count()) ? (await dialog().innerText()).trim() : "";
+      },
+    };
   }
-  async function noticesBox(member: string): Promise<Locator> {
-    await noticesTab(member);
-    const box = seen(page.getByRole("checkbox", { name: NOTICES_BOX }).or(page.getByRole("switch", { name: NOTICES_BOX })));
-    if (!(await box.count())) unbound(notices.where(member), `no new-opportunities box on ${page.url()}; it offers ${await offered()}`);
-    return box.first();
+  const userProfileSelfNotifications: S.UserProfileSelfNotificationsPage = noticesScreen("user-profile-self-notifications", "/users/me?tab=notifications");
+
+  // ---------------------------------------------------------------- the signed-in person's policies and terms
+
+  // Walked signed in: "Policies, Terms & Agreements" with "Privacy policy" ("Read the Digital
+  // Marketplace privacy policy", "You agreed to this policy when your account was created."),
+  // "Terms and conditions" ("Read the Digital Marketplace terms and conditions", "You agreed
+  // to the terms and conditions on <date>", or "You last agreed …" for the vendor whose
+  // agreement was reset) and "Program terms" (a link for each of Code With Us, Sprint With Us
+  // and Team With Us). Nothing on it asks anyone to accept updated terms, the reset vendor
+  // included: no warning, no button and no dialog.
+  function legalScreen(pageId: string, route: string) {
+    const legal = accountSection(pageId, route);
+    const APP_TERMS = /^\s*read the .*terms and conditions\s*$/i;
+    const PROGRAM_TERMS = /(code|sprint|team) with us terms/i;
+    async function between(member: string, from: RegExp, to: RegExp): Promise<string> {
+      await legal.on(member);
+      const lines = await textLines();
+      const start = lines.findIndex((line) => from.test(line));
+      if (start < 0) return "";
+      const end = lines.findIndex((line, i) => i > start && to.test(line));
+      return lines.slice(start, end > start ? end : undefined).join("\n");
+    }
+    return {
+      open: (params?: Record<string, string>) => legal.open(params),
+      openAppTerms: async () => {
+        await legal.on("open_app_terms");
+        const link = seen(page.getByRole("link", { name: APP_TERMS }));
+        if (!(await link.count())) unbound(legal.where("open_app_terms"), `no "Read the … terms and conditions" link on ${page.url()}; it offers ${await offered()}`);
+        await link.first().click();
+        await settle();
+      },
+      acceptUpdatedTerms: async () => {
+        await legal.on("accept_updated_terms");
+        const button = seen(page.getByRole("button", { name: /accept|agree/i }));
+        if (!(await button.count())) {
+          unbound(legal.where("accept_updated_terms"), `${page.url()} offers no control to accept updated terms (walked signed in as the vendor whose agreement was reset, it says "You last agreed to terms and conditions on …" and offers only links); it offers ${await offered()}`);
+        }
+        if (await isDisabled(button.first())) throw new Error(`${legal.where("accept_updated_terms")} — the accept control is disabled on ${page.url()}`);
+        await button.first().click();
+        await settle();
+      },
+      confirmAcceptUpdatedTerms: async () => {
+        await legal.on("confirm_accept_updated_terms");
+        await inDialog(legal.where("confirm_accept_updated_terms"), /accept|agree|confirm|^\s*yes\s*$/i);
+      },
+      privacyPolicy: () => between("privacy_policy", /^privacy policy$/i, /^terms and conditions$/i),
+      appTermsLink: async () => {
+        await legal.on("app_terms_link");
+        return hrefOf(page, APP_TERMS);
+      },
+      acceptedOnNotice: async () => {
+        await legal.on("accepted_on_notice");
+        return linesMatching(/\bagreed to (the )?terms/i);
+      },
+      termsUpdatedWarning: async () => {
+        await legal.on("terms_updated_warning");
+        return linesMatching(/(terms|conditions)[^.]*\b(updated|changed)\b|\b(updated|new) terms\b|must (accept|agree)/i);
+      },
+      programTermsLinks: async () => {
+        await legal.on("program_terms_links");
+        const links = seen(page.getByRole("link", { name: PROGRAM_TERMS }));
+        const out: string[] = [];
+        for (let i = 0; i < (await links.count()); i++) out.push((await links.nth(i).innerText()).trim());
+        return out.join("\n");
+      },
+      acceptUpdatedTermsModal: async () => {
+        await legal.on("accept_updated_terms_modal");
+        return (await dialog().count()) ? (await dialog().innerText()).trim() : "";
+      },
+    };
   }
-  const userProfileSelfNotifications: S.UserProfileSelfNotificationsPage = {
-    open: () => notices.open(),
-    toggleNewOpportunityNotifications: async (input) => {
-      const box = await noticesBox("toggle_new_opportunity_notifications");
-      const wanted = boxWanted(input, NOTICE_KEYS);
-      if (await isDisabled(box)) throw new Error(`${notices.where("toggle_new_opportunity_notifications")} — the new-opportunities box is disabled on ${page.url()}`);
-      if (wanted === undefined || (await box.isChecked()) !== wanted) await box.click();
-      await settle();
+
+  // ---------------------------------------------------------------- the vendor's dashboard
+
+  // Walked signed in as vendors with and without proposals (and as public sector staff and
+  // the administrator), /dashboard is "Dashboard" over "You are signed in as <name>." and
+  // nothing else: no proposals, no tables, no controls. A vendor still to complete a profile
+  // is sent on to /sign-up/complete instead.
+  const vendorDash = signedInScreen("proposal-vendor-dashboard", "/dashboard");
+  async function vendorDashShown(member: string): Promise<boolean> {
+    await vendorDash.on(member);
+    return new URL(page.url()).pathname !== "/sign-up/complete";
+  }
+  async function vendorDashPress(member: string, name: RegExp): Promise<void> {
+    const where = vendorDash.where(member);
+    if (!(await vendorDashShown(member))) {
+      unbound(where, `/dashboard sent this person on to ${page.url()} ("Complete Your Profile") instead of showing a dashboard`);
+    }
+    const control = seen(page.getByRole("tab", { name }).or(page.getByRole("button", { name })).or(page.getByRole("link", { name })));
+    if (!(await control.count())) {
+      unbound(where, `signed in, /dashboard at ${page.url()} reads only "${(await mainText()).replace(/\n+/g, " / ")}" and offers no control named ${name}`);
+    }
+    await control.first().click();
+    await settle();
+  }
+  // Each reading answers empty when the dashboard shows no proposals (it draws none for
+  // anybody) or when the page sent the person on to complete a profile.
+  async function vendorDashRows(member: string): Promise<string> {
+    if (!(await vendorDashShown(member))) return "";
+    return (await tableRows()).join("\n");
+  }
+  const proposalVendorDashboard: S.ProposalVendorDashboardPage = {
+    open: () => vendorDash.open(),
+    showMyProposals: () => vendorDashPress("show_my_proposals", /my proposals/i),
+    showOrgProposals: () => vendorDashPress("show_org_proposals", /organi[sz]ation.*proposals|team proposals/i),
+    myProposalsTable: () => vendorDashRows("my_proposals_table"),
+    orgProposalsTable: () => vendorDashRows("org_proposals_table"),
+    proposalStatus: async () => {
+      if (!(await vendorDashShown("proposal_status"))) return "";
+      return (await columnOf(/^status$/i)).join("\n");
     },
-    confirmUnsubscribe: async () => {
-      await noticesTab("confirm_unsubscribe");
-      await inDialog(notices.where("confirm_unsubscribe"), /unsubscribe|confirm|^\s*yes\s*$/i);
+    emptyMyProposalsMessage: async () => {
+      if (!(await vendorDashShown("empty_my_proposals_message"))) return "";
+      return linesMatching(/\bno\b.*proposals|haven.t .*proposal|have not .*proposal/i);
     },
-    cancelUnsubscribe: async () => {
-      await noticesTab("cancel_unsubscribe");
-      await inDialog(notices.where("cancel_unsubscribe"), /^\s*(cancel|no)\s*$/i);
-    },
-    newOpportunitiesCheckbox: async () => ((await (await noticesBox("new_opportunities_checkbox")).isChecked()) ? "checked" : "unchecked"),
-    notificationEmailAddress: async () => {
-      await noticesTab("notification_email_address");
-      const found = /[^\s@]+@[^\s@]+\.[^\s@]+/.exec(await mainText());
-      return found ? found[0] : "";
-    },
-    unsubscribeModal: async () => {
-      await noticesTab("unsubscribe_modal");
-      return (await dialog().count()) ? (await dialog().innerText()).trim() : "";
+    emptyOrgProposalsMessage: async () => {
+      if (!(await vendorDashShown("empty_org_proposals_message"))) return "";
+      return linesMatching(/\bno\b.*(organi[sz]ation|team).*proposals|no proposals .*organi[sz]ation/i);
     },
   };
 
@@ -4062,20 +4298,7 @@ export default function create(
       ["exported_proposal"],
     ),
 
-    proposalVendorDashboard: absent<S.ProposalVendorDashboardPage>(
-      "proposal-vendor-dashboard",
-      "/dashboard",
-      behindSession("/dashboard"),
-      [
-        "show_my_proposals",
-        "show_org_proposals",
-        "my_proposals_table",
-        "org_proposals_table",
-        "proposal_status",
-        "empty_my_proposals_message",
-        "empty_org_proposals_message",
-      ],
-    ),
+    proposalVendorDashboard,
 
     proposalListStub,
 
@@ -4107,7 +4330,7 @@ export default function create(
     organizationUserMemberships: absent<S.OrganizationUserMembershipsPage>(
       "organization-user-memberships",
       "/users/:userId?tab=organizations",
-      behindSession("/users/:userId?tab=organizations"),
+      sectionRedrawn("/users/:userId?tab=organizations", "Organizations"),
       [
         "approve_invitation",
         "reject_invitation",
@@ -4139,7 +4362,7 @@ export default function create(
     userList: absent<S.UserListPage>(
       "user-list",
       "/users",
-      behindSession("/users"),
+      'walked signed in as the administrator, /users answers "Page not found" (heading "Page not found", "The page you are looking for does not exist.", "Back to home"): the running build has no list of accounts',
       [
         "search_by_name",
         "open_export_contact_list",
@@ -4162,7 +4385,7 @@ export default function create(
     userProfileCapabilities: absent<S.UserProfileCapabilitiesPage>(
       "user-profile-capabilities",
       "/users/:userId?tab=capabilities",
-      behindSession("/users/:userId?tab=capabilities"),
+      sectionRedrawn("/users/:userId?tab=capabilities", "Capabilities"),
       [
         "toggle_capability",
         "expand_capability_description",
@@ -4172,43 +4395,16 @@ export default function create(
       ],
     ),
 
-    userProfileNotifications: absent<S.UserProfileNotificationsPage>(
-      "user-profile-notifications",
-      "/users/:userId?tab=notifications",
-      behindSession("/users/:userId?tab=notifications"),
-      [
-        "toggle_new_opportunity_notifications",
-        "confirm_unsubscribe",
-        "cancel_unsubscribe",
-        "new_opportunities_checkbox",
-        "notification_email_address",
-        "unsubscribe_modal",
-      ],
-    ),
+    userProfileNotifications: noticesScreen("user-profile-notifications", "/users/:userId?tab=notifications") as S.UserProfileNotificationsPage,
 
-    userProfileLegal: absent<S.UserProfileLegalPage>(
-      "user-profile-legal",
-      "/users/:userId?tab=legal",
-      behindSession("/users/:userId?tab=legal"),
-      [
-        "open_app_terms",
-        "accept_updated_terms",
-        "confirm_accept_updated_terms",
-        "privacy_policy",
-        "app_terms_link",
-        "accepted_on_notice",
-        "terms_updated_warning",
-        "program_terms_links",
-        "accept_updated_terms_modal",
-      ],
-    ),
+    userProfileLegal: legalScreen("user-profile-legal", "/users/:userId?tab=legal") as S.UserProfileLegalPage,
 
     userProfileSelf,
 
     userProfileSelfCapabilities: absent<S.UserProfileSelfCapabilitiesPage>(
       "user-profile-self-capabilities",
       "/users/me?tab=capabilities",
-      behindSession("/users/me?tab=capabilities"),
+      sectionRedrawn("/users/me?tab=capabilities", "Capabilities"),
       [
         "toggle_capability",
         "expand_capability_description",
@@ -4220,27 +4416,12 @@ export default function create(
 
     userProfileSelfNotifications,
 
-    userProfileSelfLegal: absent<S.UserProfileSelfLegalPage>(
-      "user-profile-self-legal",
-      "/users/me?tab=legal",
-      behindSession("/users/me?tab=legal"),
-      [
-        "open_app_terms",
-        "accept_updated_terms",
-        "confirm_accept_updated_terms",
-        "privacy_policy",
-        "app_terms_link",
-        "accepted_on_notice",
-        "terms_updated_warning",
-        "program_terms_links",
-        "accept_updated_terms_modal",
-      ],
-    ),
+    userProfileSelfLegal: legalScreen("user-profile-self-legal", "/users/me?tab=legal") as S.UserProfileSelfLegalPage,
 
     organizationUserMembershipsSelf: absent<S.OrganizationUserMembershipsSelfPage>(
       "organization-user-memberships-self",
       "/users/me?tab=organizations",
-      behindSession("/users/me?tab=organizations"),
+      sectionRedrawn("/users/me?tab=organizations", "Organizations"),
       [
         "approve_invitation",
         "reject_invitation",
@@ -4262,7 +4443,7 @@ export default function create(
     evaluationPanelDashboard: absent<S.EvaluationPanelDashboardPage>(
       "evaluation-panel-dashboard",
       "/dashboard",
-      behindSession("/dashboard"),
+      'walked signed in as the public sector employee, a first-time public sector employee, the administrator and vendors, /dashboard reads only "Dashboard" over "You are signed in as <name>." — no tabs, tables, links or buttons, so no panel\'s opportunities are shown to anybody',
       [
         "show_my_opportunities",
         "show_panel_opportunities",
@@ -4544,7 +4725,7 @@ export default function create(
     notificationUnsubscribeLanding: absent<S.NotificationUnsubscribeLandingPage>(
       "notification-unsubscribe-landing",
       "/users/me?tab=notifications&unsubscribe",
-      behindSession("/users/me?tab=notifications&unsubscribe"),
+      'walked signed in as the administrator, /users/me?tab=notifications&unsubscribe draws the ordinary Notifications section ("Notifications are sent to <address>. …" and the "Email me when new opportunities are posted" box) and no unsubscribe confirmation, dialog or control',
       [
         "confirm_unsubscribe",
         "cancel_unsubscribe",
@@ -4746,7 +4927,7 @@ export default function create(
     fileImagePicker: absent<S.FileImagePickerPage>(
       "file-image-picker",
       "/users/me",
-      behindSession("/users/me"),
+      'walked signed in as vendors, the public sector employee and the administrator, the profile at /users/me says "No profile picture has been added." and offers no picture control; the only one is "Choose a profile picture" on /sign-up/complete, which opened no file chooser (the form\'s file input is hidden and unlabelled), and the organization screens answer "Page not found"',
       [
         "choose_image",
         "image_address",
