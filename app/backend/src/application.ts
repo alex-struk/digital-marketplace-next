@@ -5,7 +5,7 @@ import { middleware as contractValidator } from "express-openapi-validator";
 import { AppModule } from "./app.module";
 import { JsonLogger } from "./common/logging";
 import { RefusalFilter } from "./common/refusals";
-import { loadContract, withoutTestOnlyRoutes } from "./common/contract";
+import { contractForThisService, loadContract } from "./common/contract";
 
 /**
  * The service, assembled. `main.ts` starts it; a test can start the same thing and ask it
@@ -26,7 +26,7 @@ export async function createApplication(): Promise<INestApplication> {
   // by setting `validateResponses` to true.
   app.use(
     contractValidator({
-      apiSpec: withoutTestOnlyRoutes(loadContract()) as never,
+      apiSpec: contractForThisService(loadContract()) as never,
       validateRequests: true,
       validateResponses: false,
       validateSecurity: false,

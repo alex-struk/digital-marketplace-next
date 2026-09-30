@@ -23,6 +23,15 @@
 		reverse_proxy {$BACKEND_ORIGIN:backend:3001}
 	}
 
+	# Where the single-page app signs in: the identity provider's realm as a browser reaches
+	# it, and the public client it signs in as (decision record 0004). There is no secret to
+	# give it. Read from this environment, so one image serves every environment.
+	handle /app-config.json {
+		header Content-Type application/json
+		header Cache-Control no-store
+		respond `{"oidcIssuer":"{$OIDC_ISSUER:http://localhost:8080/realms/digital-marketplace}","oidcClientId":"{$OIDC_CLIENT_ID:digital-marketplace-app}"}` 200
+	}
+
 	# Every other address is a screen. The single-page app's router answers it, and shows
 	# the not-found screen for an address it does not know.
 	handle {

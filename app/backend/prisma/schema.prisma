@@ -3,8 +3,12 @@
 //
 // This file is introspected, not authored: `npm run db:pull --workspace backend` runs
 // `prisma db pull` against a migrated database and writes what is there. It currently holds
-// only the models slice 1 reads, because that is all `prisma db pull` had been asked for;
-// later slices pull the rest of the kept schema in as they reach it.
+// only the models the slices built so far read — pages (slice 1) and accounts (slice 2) —
+// with their scalar columns and constraints as the pull wrote them; later slices pull the
+// rest of the kept schema, and the relations between its tables, in as they reach it.
+//
+// `users.type` and `users.status` carry check constraints Prisma cannot express, so they
+// are plain strings here; the database still refuses any value outside the three of each.
 
 generator client {
   provider = "prisma-client-js"
@@ -36,4 +40,28 @@ model contentVersions {
   content content @relation(fields: [contentId], references: [id], onDelete: Cascade)
 
   @@id([id, contentId])
+}
+
+model users {
+  id                  String    @id @db.Uuid
+  createdAt           DateTime  @db.Timestamptz(6)
+  updatedAt           DateTime  @db.Timestamptz(6)
+  type                String
+  status              String
+  name                String
+  email               String?
+  jobTitle            String?
+  avatarImageFile     String?   @db.Uuid
+  notificationsOn     DateTime? @db.Timestamptz(6)
+  acceptedTermsAt     DateTime? @db.Timestamptz(6)
+  lastAcceptedTermsAt DateTime? @db.Timestamptz(6)
+  idpUsername         String
+  idpId               String
+  deactivatedOn       DateTime? @db.Timestamptz(6)
+  deactivatedBy       String?   @db.Uuid
+  capabilities        String[]  @default([])
+
+  @@unique([type, email], map: "users_type_email_unique")
+  @@unique([type, idpId], map: "users_type_idpid_unique")
+  @@unique([type, idpUsername], map: "users_type_idpusername_unique")
 }
