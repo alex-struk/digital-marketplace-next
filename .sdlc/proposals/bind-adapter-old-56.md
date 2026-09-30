@@ -29,3 +29,23 @@ So the reading logic does reach the Teaser group. The empty read in calibration 
 - **Second look when empty:** the create forms' `fieldError` (Code With Us, Sprint With Us and Team With Us) now has a fallback when it would return nothing. It walks the steps again and reads the group of each text box the test gave a value. It waits up to two seconds per box for old's message to appear. When the first read finds something, this never runs. When a test expects no message, it adds up to two seconds per named box before returning the same empty answer.
 
 All my changes are in `tests/adapters/old/index.ts`. `bindings.yaml` is unchanged: `opportunity-cwu-create` still has every action and `field_error` bound. Every page route I opened resolved on the target. Nothing outside `tests/adapters/old/` was touched, and nothing asked for such a change.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: after three returns over R-1.10 (the 501-character teaser's error reading empty in calibration), does this revision bind the Code With Us create form's actions and observations on old, and nothing else? Approve. The diff stays inside tests/adapters/old/index.ts with bindings.yaml unchanged, and the runner's typecheck on the proposal revision passed with no diagnostics under adapters/old/, which answers the author's own caveat that they could not compile it. The earlier sends are covered: MESSAGE matches 'Teaser must be between 0 and 500 characters long.' through its 'must\s' term, and saidAfterField already excludes file inputs from the field count, so the description editor's Choose File no longer stops the climb. The three new pieces are narrow and cannot mask a failure: the fill check throws when the box still holds fewer characters than given, toFirstStep verifies it reached step 1 and otherwise picks it from the step menu, and the fallback re-reads only the text boxes the test filled, only when the first read found nothing, and waits at most 2 seconds per box. What decided it was the author's browser account: old draws the message and the adapter's own reading finds it in the live page, so what is left is how the page stands at the moment of reading, and only calibration can settle that. Another return would ask for another guess without new evidence. What would change it: if the next calibration still reads an empty fieldError for the 501-character teaser, do not return it to bind-adapter a fifth time. Escalate it to the pipeline owner, because this stage cannot run the failing test or see what calibration saw. None of the owed build conditions (build-slice-2-5#1, build-slice-2-11#4, build-slice-2-11#5) is settled by this adapter-only change, so they stay open.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `f6768fb93be5d47b4b84ac837de5539f737bbb8b`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    No diagnostics.
