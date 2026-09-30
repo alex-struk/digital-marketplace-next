@@ -2168,6 +2168,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: withdrawn
+      why: carried to the new target by the tech lead's decision of 2026-09-29; its
+        test runs in verify on new, where a first-time account can be created.
+      by: tech-lead
+      at: 2026-09-30T22:48:40.985Z
   - kind: missing-test
     item: R-4.2
     id: R-4.2
@@ -2237,6 +2243,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: withdrawn
+      why: carried to the new target by the tech lead's decision of 2026-09-29; its
+        test passes in verify on new (build-slice-2-12).
+      by: tech-lead
+      at: 2026-09-30T22:48:41.141Z
   - kind: missing-test
     item: R-4.5
     id: R-4.5
@@ -2330,6 +2342,12 @@ owed:
           be reached"
         by: runner
         at: 2026-09-25T18:21:03.309Z
+    closed:
+      outcome: withdrawn
+      why: carried to the new target by the tech lead's decision of 2026-09-29; its
+        test runs on new once the slice that claims it is verified.
+      by: tech-lead
+      at: 2026-09-30T22:48:41.281Z
   - kind: missing-test
     item: R-4.13
     id: R-4.13

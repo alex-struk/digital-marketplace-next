@@ -1000,6 +1000,12 @@ conditions:
     stage: build
     by: tech-lead
     at: 2026-09-30T16:11:05.972Z
+    closed:
+      outcome: met
+      why: R-4.17 passes on build-slice-2-12 (tests/results/new/slice-2.json on
+        proposal/build-slice-2-12).
+      by: tech-lead
+      at: 2026-09-30T22:48:40.959Z
   - ref: build-slice-2-8#2
     text: Remove the internal ticket number from
       app/backend/tests/sign-in-flow.test.ts (egress rule E-2).
@@ -1116,6 +1122,13 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-09-30T19:55:30.323Z
+    closed:
+      outcome: met
+      why: the blocking sign-out request before first draw is gone; sign-out is one
+        ordinary request (app/frontend/src/api/accounts.ts on
+        proposal/build-slice-2-12).
+      by: tech-lead
+      at: 2026-09-30T22:48:40.968Z
   - ref: build-slice-2-11#5
     text: Do not quote ticket-shaped strings in the build's journal or proposal
       page. This revision's journal quotes 'SHA-256' and fails egress rule E-2.
@@ -1125,6 +1138,12 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-09-30T19:55:30.323Z
+    closed:
+      outcome: met
+      why: this revision's journal and proposal page carry no ticket-shaped strings;
+        the remaining egress findings are in earlier revisions' files.
+      by: tech-lead
+      at: 2026-09-30T22:48:40.977Z
   - ref: bind-adapter-new-8#1
     text: "surface.signOut() in tests/adapters/new/index.ts must sign out only the
       way a person does: take the header's 'Sign out' link (or open /sign-out
@@ -1153,3 +1172,12 @@ conditions:
         tests/adapters/new/bindings.yaml say so.
       by: agent:reviewer
       at: 2026-09-30T20:04:46.366Z
+  - ref: build-slice-2-12#3
+    text: Recheck R-4.1 and R-4.3 against the rebound adapter; if either still reads
+      empty, find where the application departs from the criterion.
+    from: build-slice-2-12
+    family: build-slice-2
+    gate: G3
+    stage: build
+    by: tech-lead
+    at: 2026-09-30T22:48:40.862Z
