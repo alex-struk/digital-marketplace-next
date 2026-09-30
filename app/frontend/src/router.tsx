@@ -8,10 +8,17 @@ import { NotFound } from "./app/not-found";
 import { HomeScreen } from "./screens/home";
 import { ContentViewScreen } from "./screens/content-view";
 import { LearnMoreScreen, isProgramSlug } from "./screens/learn-more";
+import { SignInScreen, SignUpScreen } from "./screens/sign-in";
+import { SignUpCompleteScreen } from "./screens/sign-up-complete";
+import { SignOutScreen } from "./screens/sign-out";
+import { NoticeScreen } from "./screens/notice";
+import { DashboardScreen } from "./screens/dashboard";
+import { UserProfileScreen } from "./screens/user-profile";
 
 /**
  * The addresses in `spec/contract/surface.yaml`, and nothing else. Every other address is the
- * not-found screen.
+ * not-found screen. `/auth/sign-in` and `/auth/callback` are not screens: the service answers
+ * them, and sign-in begins and ends there (decision record 0015).
  */
 const rootRoute = createRootRoute({
   component: RootLayout,
@@ -43,10 +50,66 @@ const contentViewRoute = createRoute({
   },
 });
 
+const signInRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/sign-in",
+  component: SignInScreen,
+});
+
+const signUpRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/sign-up",
+  component: SignUpScreen,
+});
+
+const signUpCompleteRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/sign-up/complete",
+  component: SignUpCompleteScreen,
+});
+
+const signOutRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/sign-out",
+  component: SignOutScreen,
+});
+
+const noticeRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/notice/$noticeId",
+  component: function NoticeRoute() {
+    const { noticeId } = noticeRoute.useParams();
+    return <NoticeScreen noticeId={noticeId} />;
+  },
+});
+
+const dashboardRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/dashboard",
+  component: DashboardScreen,
+});
+
+// "me" and an identifier share one route: the screen reads "me" as whoever is signed in.
+const userProfileRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/users/$userId",
+  component: function UserProfileRoute() {
+    const { userId } = userProfileRoute.useParams();
+    return <UserProfileScreen userId={userId} />;
+  },
+});
+
 export const routeTree = rootRoute.addChildren([
   homeRoute,
   learnMoreRoute,
   contentViewRoute,
+  signInRoute,
+  signUpRoute,
+  signUpCompleteRoute,
+  signOutRoute,
+  noticeRoute,
+  dashboardRoute,
+  userProfileRoute,
 ]);
 
 export const router = createRouter({
