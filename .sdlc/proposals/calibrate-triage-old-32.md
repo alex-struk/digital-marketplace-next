@@ -53,3 +53,14 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: did this project's adapter cause R-8.31's failure against old? Ruling: approve, triaging R-8.31 as adapter-wrong. The test failed on its setup check expect(fileId).toBeTruthy() (spec line 69) with "": file-attachment-control.attachment_address returned an empty string right after add_attachment on a freshly published Code With Us opportunity. So the run never reached the vendor read or the removal the criterion is about, which means it failed on the way to the place the test asks about. The bind-adapter run in journal 279 saw the old target store exactly this addition: after "Publish Changes" and its "Publish Changes to Code With Us Opportunity?" confirmation, the Attachments step links the file at /api/files/<id>. That run also recorded that it neither compiled the adapter nor re-ran the criterion. In the adapter, add_attachment returns silently when it sees no "Publish Changes" in the top bar or no blob: preview (index.ts 8702-8708), so an upload that never took goes unreported, and attachment_address then returns an empty string instead of raising. The evidence points at the binding, not the product. This ruling would change if a re-bound adapter demonstrably reaches the Attachments step of the saved opportunity, finds neither a preview nor a stored link, and says so, which would make this a product-question.
+
+**Conditions:**
+- adapter-wrong R-8.31: on a Code With Us opportunity just published by opportunity-cwu-create.publish and opened by file-attachment-control.open, add_attachment followed by attachment_address returned an empty string, although the target stores the file and links it at /api/files/<id> once "Publish Changes" and its confirmation are accepted; add_attachment must raise when the upload leaves neither a blob: preview nor a stored /api/files/ link, or when no save control is offered, instead of returning silently, and attachment_address must confirm it is on the Attachments step of that same opportunity, in whatever read-only or edit state the publish left it, and raise rather than return empty when it finds no link there
