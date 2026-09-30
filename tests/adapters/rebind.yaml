@@ -2080,3 +2080,12 @@ rebind:
       each named member that carries the pending marker and return that member's
       name (together with the marker), so a person named and marked pending is
       reported by name.
+  - id: R-2.2
+    target: old
+    why: 'unbound: opportunity-cwu-view.start_proposal — no control labelled "Start
+      Proposal" on
+      http://localhost:3101/opportunities/code-with-us/45f54a1d-5456-4cae-b918-2eaf135fb85f'
+    found: unbound
+    adapter: 8f4a860144cdd0ce1f465075a86e0df641cf2e02
+    by: runner:calibrate
+    at: 2026-09-30T03:55:18.221Z
