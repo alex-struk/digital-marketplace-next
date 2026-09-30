@@ -45,7 +45,13 @@ beforeAll(async () => {
     },
   });
   await knex.migrate.latest();
+  // What the migrations alone left, before the seed files — which restore every page the old
+  // application carried — are applied on top.
+  freshPageSlugs = (await knex("content").select("slug")).map((row) => row.slug);
 }, 120_000);
+
+/** @type {string[]} */
+let freshPageSlugs = [];
 
 afterAll(async () => {
   await knex?.destroy();
@@ -61,13 +67,23 @@ describe("the kept schema", () => {
       await knex.raw(fs.readFileSync(path.join(SEED_DIR, file), "utf8"));
     }
 
-    const [{ count: users }] = (await knex.raw('SELECT count(*)::int AS count FROM "users"')).rows;
-    const [{ count: proposals }] = (
-      await knex.raw('SELECT count(*)::int AS count FROM "swuProposals"')
-    ).rows;
-    // Six public sector accounts and twelve vendors, as tests/seed/manifest.yaml names them.
-    expect(users).toBe(18);
-    expect(proposals).toBe(3);
+    // The seed is another stage's and grows as criteria need records, so what is checked is
+    // that the handles tests/seed/manifest.yaml names are there, not how many rows there are.
+    for (const id of [
+      "00000000-0000-4000-8000-000000000101", // users.administratorOne
+      "00000000-0000-4000-8000-000000000102", // users.staffOne
+      "00000000-0000-4000-8000-000000000201", // users.vendorOne
+      "00000000-0000-4000-8000-000000000207", // users.vendorWithoutEmail
+      "00000000-0000-4000-8000-000000000220", // users.vendorCompletingProfile
+    ]) {
+      expect(await knex("users").where({ id }).first(), id).toBeTruthy();
+    }
+    expect(
+      await knex("cwuProposals").where({ opportunity: "00000000-0000-4000-a007-000000000001" }),
+    ).toHaveLength(2); // opportunities.cwuInProcessing
+    expect(
+      await knex("swuProposals").where({ opportunity: "00000000-0000-4000-8000-000000000701" }),
+    ).toHaveLength(3); // opportunities.closedSprintWithUs
   }, 120_000);
 
   it("holds the page an administrator made, with a history behind it", async () => {
@@ -116,7 +132,7 @@ describe("what a fresh installation carries (R-7.12, R-7.18)", () => {
 
   it("creates none of the seven pages nothing links to", async () => {
     for (const slug of PAGES_NOT_CREATED) {
-      expect(await knex("content").where({ slug }).first()).toBeUndefined();
+      expect(freshPageSlugs, slug).not.toContain(slug);
     }
   });
 
