@@ -354,11 +354,18 @@ export default function create(
   }
 
   // The words a form draws directly after one field, up to where another field begins.
+  // A formatted-text editor (Description, Acceptance Criteria) carries its own image
+  // "Choose File" input in its toolbar, above the box: that is part of the editor, not a
+  // second field, so it never stops the climb — otherwise the message drawn under the
+  // editor, in the field's own group, is never reached (seen as the administrator on the
+  // Code With Us form's Description step, with 10,001 characters entered). The field's own
+  // group — the element holding its label — is then read too, for whatever follows the box
+  // inside it, so a message drawn beneath a box wrapped in its own frames is still found.
   async function saidAfterField(control: Locator): Promise<string[]> {
     const said = await control
       .evaluate((box) => {
         const isField = (node: Element): boolean =>
-          (node instanceof HTMLInputElement && node.type !== "hidden") ||
+          (node instanceof HTMLInputElement && node.type !== "hidden" && node.type !== "file") ||
           node instanceof HTMLTextAreaElement ||
           node instanceof HTMLSelectElement;
         const fieldsIn = (node: Element): number =>
@@ -374,6 +381,33 @@ export default function create(
           const parent: Element | null = node.parentElement;
           if (!parent || fieldsIn(parent) > 1) break;
           node = parent;
+        }
+        // The field's own group: the nearest ancestor that also holds its label, provided it
+        // holds no other field. Everything in it that comes after the box is read.
+        const label = (box as HTMLInputElement).labels?.[0] ?? null;
+        let group: Element | null = null;
+        if (label) {
+          for (let up = box.parentElement, level = 0; up && level < 8; up = up.parentElement, level++) {
+            if (up.contains(label)) {
+              group = up;
+              break;
+            }
+          }
+        }
+        if (group && fieldsIn(group) === 1) {
+          const after = (element: Element): void => {
+            for (const child of Array.from(element.children)) {
+              if (child === label || child.contains(label as Node)) continue;
+              if (child.contains(box)) {
+                after(child);
+                continue;
+              }
+              if (!(box.compareDocumentPosition(child) & Node.DOCUMENT_POSITION_FOLLOWING)) continue;
+              const text = ((child as HTMLElement).innerText ?? "").trim();
+              if (text) for (const line of text.split("\n")) if (!words.includes(line)) words.push(line);
+            }
+          };
+          after(group);
         }
         return words;
       })
@@ -1005,6 +1039,7 @@ export default function create(
     const current = await currentStep();
     if (!current) return false;
     if (matches(pattern, (await current.innerText()).trim())) return true;
+    await letValidationRun();
     // A dialog still open over the form (the terms dialog) would take the click.
     await mustDismissDialog(`going to the step matching ${pattern}`);
     await current.click();
@@ -1029,6 +1064,7 @@ export default function create(
   // Walking with the form's own "Previous" and "Next" reaches every step in order, from
   // wherever an earlier action left the form.
   async function toFirstStep(): Promise<void> {
+    await letValidationRun();
     for (let step = 0; step < 16; step++) {
       const previous = await findControl(page, "Previous");
       if (!previous) return;
@@ -1041,6 +1077,7 @@ export default function create(
     await toFirstStep();
     for (let step = 0; step < 16; step++) {
       if ((await visit()) === true) return;
+      await letValidationRun();
       const next = await findControl(page, "Next");
       if (!next || (await isDisabled(next))) return;
       await next.click();
@@ -1283,6 +1320,7 @@ export default function create(
       throw new Error(`${where} — the field for "${entry.key}" is disabled on ${page.url()}`);
     }
     await box.fill(text);
+    entered();
     if (typed && role === "textbox") {
       // Entered as a person would finish it: one key typed at the end and taken back, then
       // the box left. A question box just added by "Add Question" keeps the text a fill puts
@@ -1293,8 +1331,33 @@ export default function create(
       await page.keyboard.press("ControlOrMeta+End");
       await page.keyboard.type("a");
       await page.keyboard.press("Backspace");
+      await box.blur().catch(() => undefined);
+      entered();
+      // Old checks a question's box about half a second after its last change, and a change
+      // to another box of the same question before then discards that check: the Question
+      // entered before its Response Guidelines never showed "Question must be between 1 and
+      // 1000 characters long." (seen as the government user on a new Sprint With Us form's
+      // Team Questions step, 1,001 characters and then empty). A value outside the 1 to
+      // 1000 characters old states for these boxes is therefore left to be checked before
+      // anything else is touched; a value inside it needs no wait, so a hundred questions
+      // are still entered in good time.
+      if (text.length === 0 || text.length > 1000) await letValidationRun();
+      return;
     }
     await box.blur().catch(() => undefined);
+  }
+
+  // The forms check what was entered a moment after the last change (about half a second on
+  // the opportunity forms), and only then draw their message under the field. A step left, or
+  // a control pressed, before then may never show it, so each waits out that moment first.
+  const VALIDATION_MS = 900;
+  let enteredAt = 0;
+  function entered(): void {
+    enteredAt = Date.now();
+  }
+  async function letValidationRun(): Promise<void> {
+    const left = enteredAt + VALIDATION_MS - Date.now();
+    if (left > 0) await page.waitForTimeout(left);
   }
 
   // Every field label a test has given a value for, empty values included. A required field
@@ -1376,6 +1439,7 @@ export default function create(
         }
       }
       if (!wizard || !pending.length) break;
+      await letValidationRun();
       const next = await findControl(page, "Next");
       if (!next || (await isDisabled(next))) break;
       await next.click();
@@ -1480,6 +1544,7 @@ export default function create(
       if (await box.isDisabled().catch(() => true)) continue;
       dates.last = Math.max(dates.last + 7 * DAY, Date.now() + 14 * DAY);
       await box.fill(isoDay(dates.last));
+      entered();
       await box.blur().catch(() => undefined);
     }
     for (const role of ["textbox", "spinbutton", "combobox"] as const) {
@@ -1513,6 +1578,7 @@ export default function create(
         if ((await box.getAttribute("type")) === "date") continue;
         if ((await box.inputValue().catch(() => "")).trim() !== "") continue;
         await box.fill(placeholderValue(bareLabel(name), role));
+        entered();
         await box.blur().catch(() => undefined);
       }
     }
@@ -1877,9 +1943,20 @@ export default function create(
     // "Add Attachment" is drawn over a "Choose File" input that takes the file. The drawn
     // control sits out of the tab order whether or not it is usable, so the input beneath it
     // is what shows the step is open to attachments.
+    // The formatted-text editors on other steps (Description, Acceptance Criteria) carry a
+    // "Choose File" of their own that takes only images (".jpg,.jpeg,.png"); a file handed to
+    // it goes into that text, not onto the record's attachments. Only an input that limits
+    // nothing to images, on the Attachments step where the form has steps, is the one.
     const usable = async (): Promise<Locator | null> => {
-      const input = seen(page.getByRole("button", { name: "Choose File", exact: true }));
-      if (await input.count()) return input.first();
+      if ((await currentStep()) && !(await onAttachmentsStep())) return null;
+      const inputs = seen(page.getByRole("button", { name: "Choose File", exact: true }));
+      const count = await inputs.count();
+      for (let i = 0; i < count; i++) {
+        const accepts = (await inputs.nth(i).getAttribute("accept").catch(() => null)) ?? "";
+        if (/^\s*(\.(jpe?g|png|gif)\s*,?\s*)+$/i.test(accepts)) continue;
+        if (await inputs.nth(i).isDisabled().catch(() => false)) continue;
+        return inputs.nth(i);
+      }
       const drawn = await findControl(page, "Add Attachment");
       return drawn && !(await isDisabled(drawn)) ? drawn : null;
     };
@@ -2415,6 +2492,7 @@ export default function create(
     // once every value is in is the form refusing what it was given: that is reported at once,
     // naming the steps the form still marks incomplete and what they say.
     async function pressWhenReady(member: string, name: string): Promise<boolean> {
+      await letValidationRun();
       const control = await findControl(navBar(), name);
       if (!control) return false;
       if (await isDisabled(control)) {
@@ -2443,6 +2521,29 @@ export default function create(
       return true;
     }
     const record = () => recordAddress("/opportunities/[a-z-]+");
+    // What old answered a submission it refused: pressed and confirmed, the form stays where
+    // it is and an alert says so ("Unable to Submit Opportunity" / "Sprint With Us
+    // opportunity could not be submitted. Please try again later." — seen as the government
+    // user on a new Sprint With Us form holding 102 questions, where "Submit for Review" is
+    // offered and pressed). It is kept here, since the alert may be gone by the time the
+    // reader has walked the form's steps.
+    let refused: string[] = [];
+    // Alerts already up before the press are not its answer.
+    async function landOrRefused(pattern: RegExp, standing: Set<string>): Promise<void> {
+      const deadline = Date.now() + 20000;
+      while (Date.now() < deadline) {
+        if (pattern.test(new URL(page.url()).pathname)) {
+          await ready();
+          return;
+        }
+        const said = (await everyAlert()).filter((words) => !standing.has(words) && matches(MESSAGE, words));
+        if (said.length) {
+          refused = said;
+          return;
+        }
+        await page.waitForTimeout(250);
+      }
+    }
     return {
       ...at(route),
       saveDraft: async (input?: unknown) => {
@@ -2452,14 +2553,18 @@ export default function create(
         await mustLandOn(`${where}.save_draft`, record());
       },
       submitForReview: async (input?: unknown) => {
+        refused = [];
         await enter("submit_for_review", input);
         if (withheld) return;
+        // Left disabled once every value is in, the form's own messages are the answer and
+        // fieldError reads them; pressed, the submission ends on the record or on old's refusal.
+        const standing = new Set(await everyAlert());
         if (!(await pressWhenReady("submit_for_review", "Submit for Review"))) return;
         await confirmIfAsked(`${where}.submit_for_review`, [
           "Submit for Review",
           "Submit Opportunity",
         ]);
-        await landOn(record());
+        await landOrRefused(record(), standing);
       },
       publish: async (input?: unknown) => {
         await enter("publish", input);
@@ -2474,8 +2579,18 @@ export default function create(
       // Alerts and each field's own error, from every step in turn; a heading or a title
       // that happens to hold a word like "cannot" is never read as an error.
       // A step marked incomplete is not a message against a field, so step titles are never
-      // reported; a form that refuses without a word reads as empty.
-      fieldError: () => stepFormErrors(),
+      // reported; a form that refuses without a word reads as empty. A refusal old announced
+      // once a submission was pressed is included, whether or not its alert is still up.
+      fieldError: async () => {
+        const shown = await stepFormErrors();
+        const found = shown ? shown.split("\n") : [];
+        for (const words of refused) {
+          for (const line of words.split("\n").map((each) => each.trim())) {
+            if (line && !found.includes(line) && !shown.includes(line)) found.push(line);
+          }
+        }
+        return found.join("\n");
+      },
     };
   }
 
@@ -2952,6 +3067,7 @@ export default function create(
         const day = /^\d{4}-\d{2}-\d{2}/.exec(text);
         if (day && role === "textbox") text = day[0];
         await box.fill(text);
+        entered();
         await box.blur().catch(() => undefined);
         // Once the test gives a phase its dates, the phases' dates are the test's alone: none
         // is ever made up for another phase. A budget is not recorded so: every phase carries
@@ -8417,6 +8533,9 @@ export default function create(
       );
     }
     const before = (await body.count()) ? await body.first().inputValue().catch(() => "") : "";
+    const referencesBefore = bodyImageReferences(before);
+    // A notice still up from an earlier step ("Page Published") is not this upload's answer.
+    const standing = new Set(await everyAlert());
     const taken = await control
       .first()
       .setInputFiles(files)
@@ -8429,14 +8548,16 @@ export default function create(
     }
     await settle();
     // The image is stored first and only then written into the text as "![name](FILE_ID:…)";
-    // a refused one leaves the text as it was and says so in an alert. Either ends the wait.
-    for (let waited = 0; waited < 10000 && (await body.count()); waited += 250) {
+    // a refused one leaves the text as it was and says so in an alert of its own. Either ends
+    // the wait; an alert that was already up before the file was chosen does not.
+    for (let waited = 0; waited < 15000 && (await body.count()); waited += 250) {
       const now = await body.first().inputValue().catch(() => before);
-      if (now !== before) {
+      if (bodyImageReferences(now) !== referencesBefore) {
         rememberBodyImage(now);
         break;
       }
-      if (await seen(page.getByRole("alert")).count()) break;
+      const said = (await everyAlert()).filter((words) => !standing.has(words));
+      if (said.length) break;
       await page.waitForTimeout(250);
     }
   }
@@ -8471,9 +8592,16 @@ export default function create(
         for (const image of Array.from(region.querySelectorAll("img"))) {
           if (image.closest("nav, footer, header")) continue;
           if (!(title.compareDocumentPosition(image) & Node.DOCUMENT_POSITION_FOLLOWING)) continue;
+          // Only the date line itself ("Published … | Updated …", every line of it a date or
+          // the bar between them) is left out. The paragraphs of the body that follow it
+          // share a container whose text starts with that line, and they are the body.
           let dated = false;
           for (let part = image.parentElement; part && part !== region; part = part.parentElement) {
-            if (/^\s*(Published|Updated)\b/.test((part as HTMLElement).innerText ?? "")) dated = true;
+            const lines = ((part as HTMLElement).innerText ?? "")
+              .split("\n")
+              .map((line) => line.trim())
+              .filter(Boolean);
+            if (lines.length && lines.every((line) => /^(Published|Updated)\b/.test(line) || line === "|")) dated = true;
           }
           if (dated) continue;
           const src = image.getAttribute("src") ?? "";
@@ -9020,13 +9148,18 @@ export default function create(
     // reported rather than passed over.
     addAttachment: async (input) => {
       const where = "file-attachment-control.add_attachment";
+      // Notices already up ("Opportunity Published" from the publish just before) and the
+      // links already stored are not this addition's answer.
+      const standing = new Set(await everyAlert());
+      const storedBefore = new Set(await attachmentHrefs(isStored));
       await addAttachment(where, input);
       // A file the step takes is previewed at once as a "blob:" link beside its name box.
       const previewed = (await attachmentHrefs(isPreview, 5000)).length > 0;
       if (!previewed) {
-        // A refused upload leaves no preview and its message on the step; there is nothing
-        // to store, and saving would clear the refusal the test reads next.
-        const shown = [await alertMessages(), await messages().catch(() => "")].filter(Boolean).join(" | ");
+        // A refused upload leaves no preview and its own message on the step; there is
+        // nothing to store, and saving would clear the refusal the test reads next.
+        const said = (await everyAlert()).filter((words) => !standing.has(words) && matches(MESSAGE, words));
+        const shown = [...said, await messages().catch(() => "")].filter(Boolean).join(" | ");
         if (shown) return;
         const stored = await attachmentHrefs(isStored);
         throw new Error(
@@ -9059,9 +9192,22 @@ export default function create(
       }
       await saveAttachmentForm(where, "added the file");
       await attachmentsStep();
-      // The stored link replaces the preview once the save lands; a size the service will not
-      // keep is dropped without one, which attachment_address then reports.
-      await attachmentHrefs(isStored, 10000);
+      if (!(await onAttachmentsStep())) await walkToStep(/Attachments$/i);
+      // The stored link replaces the preview once the save lands ("Opportunity Changes
+      // Published", and the step links the file at /api/files/<id> — seen as the administrator
+      // on a Code With Us opportunity just published from the create form). A save that ends
+      // with no new stored link has not kept the file, and says why or is reported as silent.
+      const fresh = await attachmentHrefs((href) => isStored(href) && !storedBefore.has(href), 10000);
+      if (!fresh.length) {
+        const said = (await everyAlert()).filter((words) => !standing.has(words));
+        const shown = [...said, await messages().catch(() => "")].filter(Boolean).join(" | ");
+        if (said.some((words) => matches(MESSAGE, words))) return;
+        throw new Error(
+          `${where} — added the file (previewed as blob:) and saved the form through its save and confirmation, but the Attachments step of ${page.url()} links no new /api/files/ address; ${
+            shown ? `the page shows: ${shown.replace(/\n/g, " ")}` : "the page shows no message"
+          }`,
+        );
+      }
     },
     renameNewAttachment: (input) =>
       renameAttachment("file-attachment-control.rename_new_attachment", input),
@@ -9327,10 +9473,19 @@ export default function create(
     },
     // Only the image reference the upload wrote into the text, never the rest of the body:
     // empty when no image was inserted.
+    // The upload writes "![name](FILE_ID:<id>)" into the Body box once the file is stored, a
+    // moment after it is chosen (seen as the administrator on /content/create), so the box is
+    // read again for a few seconds before it is taken to hold no image.
     imageInsertedIntoText: async () => {
-      const body = await fieldValue(["Body"]);
-      rememberBodyImage(body);
-      return bodyImageReferences(body);
+      let references = "";
+      for (let waited = 0; waited <= 5000; waited += 250) {
+        const body = await fieldValue(["Body"]);
+        rememberBodyImage(body);
+        references = bodyImageReferences(body);
+        if (references) break;
+        await page.waitForTimeout(250);
+      }
+      return references;
     },
     onlyJpegAndPngOffered: () => imageKindsOffered("file-embedded-image.only_jpeg_and_png_offered", "Edit"),
     uploadingIndicator: () => linesMatching(/uploading/i),
