@@ -175,6 +175,8 @@
 - 03:03:45 propose calibrate-triage-old-40 at G3
 - 03:03:49 drive: step 21: `sdlc rule calibrate-triage-old-40 --by agent:reviewer` — calibrate-triage-old-40 is open at G3, held by agent:reviewer
 - 03:06:07 rule calibrate-triage-old-40 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 03:06:13 drive: step 22: `sdlc run calibrate --target old` — phase 2 Tests is not complete (exit: the contract approved, every domain's tests approved, and every calibration row pass or ruled, all measured by the last run), and calibrate for target old is next in it
+- 03:25:31 run calibrate: ok, cost 0, turns 0
 
 # Run record 2026-09-29
 
