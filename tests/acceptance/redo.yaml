@@ -772,3 +772,8 @@ redo:
       question (including the hundred and first), submit or save, and then read
       the refusal and the field it names. Drive the over-length question text
       the same way as the over-length guideline, which is refused as expected.
+    closed:
+      outcome: met
+      why: derived again by a derive-tests run on opportunities
+      by: runner:derive-tests
+      at: 2026-09-30T05:37:57.827Z

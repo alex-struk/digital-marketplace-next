@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-stale-11 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">330</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">325</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">298</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-stale-11</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 05:37</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the opportunities criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I rewrote the test for R-1.17 (v2) in the opportunities domain.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rewrote the test for R-1.17 (v2) in the opportunities domain. It is the only criterion this run was given, so one criterion has a test and none went to <code>not-testable.yaml</code>. I have not run it or type-checked it: the environment refused the command without approval, so it is unverified until a later stage runs it. It uses the same surface calls, fixtures and seed handles as the version it replaces, which did compile.</p>
+<p><strong>What the ruling found.</strong> The old test added an out-of-limit question and then waited for a refusal while the question was still being entered, before anything was submitted. It timed out doing that for the over-length question text.</p>
+<p><strong>What the new test does.</strong> Every out-of-limit case now follows the same path as the guideline case that already passed:</p>
+<ol><li>Enter the question with <code>addTeamQuestion</code> (or <code>addResourceQuestion</code> for Team With Us).</li><li>Submit it by saving the draft with <code>saveDraft</code> and a title.</li><li>Only then wait for <code>fieldError</code> and check that it names the field at fault.</li></ol>
+<p>Each check matches one word in the refusal: &quot;question&quot;, &quot;guideline&quot;, &quot;score&quot;, &quot;word&quot;, or &quot;minimum&quot; for the minimum score. The over-length question text goes through exactly the same steps as the over-length guideline.</p>
+<p><strong>The cases covered:</strong></p>
+<ul><li>A question or guideline that is empty, or over 1,000 characters (both limits in the criterion).</li><li>A maximum score of 0.</li><li>A response word limit of 0, and of 3,001.</li><li>A minimum score equal to the maximum, tested on both Sprint With Us and Team With Us. The criterion&#39;s note says the two programs share the same limits.</li><li>A hundred and first question. It is added, the draft is saved, and the refusal is read. If the form will not take the 101st question at all, that counts as the refusal.</li><li>Position set by place: two questions are added and saved, and the saved draft&#39;s team questions tab must list them in the order added.</li></ul>
+<p>No question is ever given a position, because the criterion says the person never enters one.</p>
+<p><strong>Assumption.</strong> Nothing in the contract says a saved draft checks its questions, or what words a refusal uses. The test assumes that saving is the submission the criterion means, and that each refusal contains its field&#39;s plain-language name. If the target only checks questions on submit-for-review or publish, the draft-save step would have to change.</p>
+<p><strong>Gaps in the contract.</strong> The Sprint With Us and Team With Us create pages offer only <code>fieldError()</code>, a single string. There is no per-field refusal on those pages like the <code>field_errors_by_field</code> observation the proposal create page has. Adding one would let the &quot;names the offending field&quot; part be checked by field rather than by a word in the message. Nothing else I needed was missing, and I changed no file outside <code>tests/acceptance</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-30 05:38.</p>
+<div class="body"><p>Question: do the R-1.17 v2 tests follow from the criterion and nothing else? Ruling: approve. Every clause of the criterion has a case: question and guideline empty and over 1,000 characters, maximum score 0, response word limit 0 and 3,001, minimum score equal to the maximum on both Sprint With Us and Team With Us, a 101st question, and position set by order with no position ever entered, as the criterion requires. Each case enters one out-of-limit question, saves the draft as the submission, and only then reads the refusal, which is the fix the redo request asked for after the old test read the error before submitting. The only extra check is that the refusal contains the field&#39;s plain name (&#39;question&#39;, &#39;guideline&#39;, &#39;score&#39;, &#39;word&#39;, &#39;minimum&#39;), and the criterion&#39;s own &#39;the offending field is named&#39; requires that. No selectors, routes, status codes or storage names leak in. The runner type-checked the proposal revision and it passed with no diagnostics under acceptance/opportunities. When the form will not offer a 101st question, the test counts that as the refusal without reading a field name; that is acceptable because nothing was submitted that could be named. The change to tests/results/old/applied.yaml only removes the earlier R-1.17 rulings recorded against the replaced test file&#39;s sha, which is pipeline bookkeeping. What would change this ruling: calibration showing that the target checks questions only on submit-for-review or publish rather than on draft save, or that its refusals do not use the field&#39;s plain-language name. Either would be a calibrate finding on the next run, not something a reviewer can settle from this diff.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

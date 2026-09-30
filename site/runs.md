@@ -83,6 +83,11 @@
 - 22:24:34 rule bind-adapter-old-49 approve at G3 by agent:tech-lead (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 - 22:24:37 drive: step 16: `sdlc run calibrate --target old` — 1 binding to check again now that its adapter has changed (rebind) for target old owed by calibrate
 - 22:36:28 run calibrate: ok, cost 0, turns 0
+- 22:36:31 drive: step 17: `sdlc run derive-tests --domain opportunities --stale` — 1 test to derive again (redo) in opportunities owed by derive-tests
+- 22:37:57 run derive-tests: ok, cost 0.5969336000000001, turns 14, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 22:37:57 propose derive-tests-opportunities-stale-11 at G3
+- 22:38:02 drive: step 18: `sdlc rule derive-tests-opportunities-stale-11 --by agent:reviewer` — derive-tests-opportunities-stale-11 is open at G3, held by agent:reviewer
+- 22:38:37 rule derive-tests-opportunities-stale-11 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-29
 
