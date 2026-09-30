@@ -39,3 +39,23 @@ It throws `unbound:` only when no step with the right name can be reached.
 - After two presses of "Add Question", places 1 and 2 gave the five names and place 3 gave empty.
 
 The edit pages were tested only on closed opportunities, where the boxes are read-only; the reader counts them either way. Nothing outside `tests/adapters/old/` was changed.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether the adapter binds every surface action and observation on old and nothing else. Approved: the four evaluation_question_fields readers navigate to the Team/Resource Questions step (via the Opportunity tab on edit pages), locate the boxes under the requested 'Question N' heading, and map their labels to the criterion's vocabulary. Unknown labels are passed through under their own name rather than suppressed, so the reader decides nothing about pass or fail. The optional place argument defaults to 1 and stays compatible with the generated zero-argument interface. All four are named bound in bindings.yaml, none is unbound, the diff touches only tests/adapters/old/ (nothing under tests/acceptance or any protected path), and the runner's typecheck on this revision passed with no diagnostics under adapters/old/. Tier is STANDARD, so no escalation. The R-1.17 clause about position never being entered stays owed by derive-tests under its existing condition. A calibration failure traced to these readers not reaching the step would change this, as adapter-wrong.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `bd7dc2d6b9a39246fd4533d1d355dcbd18f7b5d3`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    No diagnostics.
