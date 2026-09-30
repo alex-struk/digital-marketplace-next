@@ -2172,3 +2172,8 @@ rebind:
       finish drawing, then wait a few seconds for an img whose src carries the
       /api/files/<id> the body's FILE_ID marker names; if none appears, throw an
       error naming the sources the page does show, rather than returning ''.
+    closed:
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-30T06:43:03.201Z

@@ -1,5 +1,5 @@
 {
-  "generated_from": "4e0669f519687b2eafcbe688deb8e5d92b569298",
+  "generated_from": "acd83ccd5eee6a143e0a2a1ac526de5e5a118a6a",
   "criteria": [
     {
       "id": "R-7.1",
@@ -4752,10 +4752,10 @@
     },
     {
       "id": "R-1.17",
-      "version": 2,
+      "version": 3,
       "confidence": "confirmed",
       "origin": "recovered",
-      "statement": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position is set by its place in the opportunity's list of questions, which holds at most 100, and is never entered by the person; a question outside these limits is refused.",
+      "statement": "Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits.",
       "cites": [
         {
           "path": "src/shared/lib/validation/opportunity/sprint-with-us.ts",
@@ -4778,7 +4778,7 @@
         "the same limits apply to Sprint With Us \"team questions\" and Team With Us \"resource questions\"; the two differ only in name."
       ],
       "state": "accepted",
-      "raw": "### R-1.17 · v2 · confirmed · recovered",
+      "raw": "### R-1.17 · v3 · confirmed · recovered",
       "line": 195,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
