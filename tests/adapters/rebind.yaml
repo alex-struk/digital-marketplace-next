@@ -2150,3 +2150,11 @@ rebind:
       why: tests/adapters/old has changed since this was found
       by: runner:calibrate
       at: 2026-09-30T04:21:01.332Z
+  - id: R-2.2
+    target: old
+    why: proposal-cwu-edit.proposal_tab clicks the 'Proposal' tab and returns only
+      the visible text of the edit wizard's current step ('1. Proponent'). It
+      never goes to the step holding the proposal text, and it reads visible
+      page text, which leaves out the value in the proposal text box. It must
+      reach the step that holds the proposal text and return that field's value
+      along with the step's text.
