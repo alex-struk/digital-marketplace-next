@@ -2158,3 +2158,8 @@ rebind:
       page text, which leaves out the value in the proposal text box. It must
       reach the step that holds the proposal text and return that field's value
       along with the step's text.
+    closed:
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-30T05:24:37.999Z

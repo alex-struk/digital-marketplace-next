@@ -1,5 +1,5 @@
 {
-  "generated_from": "27096a75e450cf63061d62bcd66dd6f6e3bb349d",
+  "generated_from": "4e0669f519687b2eafcbe688deb8e5d92b569298",
   "criteria": [
     {
       "id": "R-7.1",
@@ -7768,7 +7768,9 @@
       "given": "a Sprint With Us opportunity with an inception phase and a set of required capabilities",
       "when": "a vendor submits a proposal that omits the inception phase, names two scrum masters, leaves a required capability uncovered, or proposes a total cost above the opportunity's maximum budget",
       "then": "each of those submissions is refused, naming the phase, the team or the cost as the reason",
-      "notes": [],
+      "notes": [
+        "calibrate 2026-09-30: the old target fails this; kept, the rebuild must pass it"
+      ],
       "state": "accepted",
       "raw": "### R-2.19 · v3 · confirmed · recovered",
       "line": 229,
@@ -7802,7 +7804,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.20 · v2 · confirmed · recovered",
-      "line": 242,
+      "line": 243,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7833,7 +7835,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.21 · v1 · confirmed · recovered",
-      "line": 253,
+      "line": 254,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7860,7 +7862,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.22 · v1 · confirmed · recovered",
-      "line": 264,
+      "line": 265,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7895,7 +7897,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.23 · v1 · confirmed · recovered",
-      "line": 274,
+      "line": 275,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7934,7 +7936,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.24 · v1 · confirmed · recovered",
-      "line": 286,
+      "line": 287,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -7975,7 +7977,7 @@
       ],
       "state": "accepted",
       "raw": "### R-2.25 · v1 · confirmed · recovered",
-      "line": 299,
+      "line": 300,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8010,7 +8012,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.26 · v1 · confirmed · recovered",
-      "line": 313,
+      "line": 314,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8041,7 +8043,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.27 · v1 · confirmed · recovered",
-      "line": 325,
+      "line": 326,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8080,7 +8082,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.28 · v2 · confirmed · recovered",
-      "line": 336,
+      "line": 337,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8119,7 +8121,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.29 · v1 · confirmed · recovered",
-      "line": 349,
+      "line": 350,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8156,7 +8158,7 @@
       ],
       "state": "accepted",
       "raw": "### R-2.30 · v1 · confirmed · recovered",
-      "line": 362,
+      "line": 363,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8195,7 +8197,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.31 · v1 · confirmed · recovered",
-      "line": 375,
+      "line": 376,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8230,7 +8232,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.32 · v1 · confirmed · recovered",
-      "line": 388,
+      "line": 389,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8271,7 +8273,7 @@
       ],
       "state": "accepted",
       "raw": "### R-2.33 · v1 · confirmed · recovered",
-      "line": 400,
+      "line": 401,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8306,7 +8308,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.34 · v1 · confirmed · recovered",
-      "line": 414,
+      "line": 415,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8348,7 +8350,7 @@
       ],
       "state": "obsolete",
       "raw": "### D-proposals-35 · v1 · open · recovered",
-      "line": 426,
+      "line": 427,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8383,7 +8385,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.35 · v1 · confirmed · recovered",
-      "line": 441,
+      "line": 442,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8422,7 +8424,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.36 · v1 · confirmed · recovered",
-      "line": 453,
+      "line": 454,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8457,7 +8459,7 @@
       ],
       "state": "obsolete",
       "raw": "### D-proposals-37 · v1 · inferred · recovered",
-      "line": 466,
+      "line": 467,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8492,7 +8494,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.37 · v1 · confirmed · recovered",
-      "line": 480,
+      "line": 481,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },
@@ -8527,7 +8529,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-2.38 · v1 · confirmed · recovered",
-      "line": 492,
+      "line": 493,
       "domain": "proposals",
       "file": "spec/domains/proposals.md"
     },

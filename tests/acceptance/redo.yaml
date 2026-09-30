@@ -763,3 +763,12 @@ redo:
       why: derived again by a derive-tests run on opportunities
       by: runner:derive-tests
       at: 2026-09-29T23:44:07.083Z
+  - id: R-1.17
+    version: 2
+    why: The criterion says a question outside the limits is refused when it is
+      submitted, with the offending field named. The test instead expects the
+      refusal to show while the question is still being added, before anything
+      is submitted, and times out waiting for it. Enter each out-of-limit
+      question (including the hundred and first), submit or save, and then read
+      the refusal and the field it names. Drive the over-length question text
+      the same way as the over-length guideline, which is refused as expected.

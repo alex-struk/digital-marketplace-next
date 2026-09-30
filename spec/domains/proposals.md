@@ -238,6 +238,7 @@ A Sprint With Us proposal can be submitted only when it gives a team to every ph
 - when: a vendor submits a proposal that omits the inception phase, names two scrum masters, leaves a required capability uncovered, or proposes a total cost above the opportunity's maximum budget
 - then: each of those submissions is refused, naming the phase, the team or the cost as the reason
 - state: accepted
+- note: calibrate 2026-09-30: the old target fails this; kept, the rebuild must pass it
 
 ### R-2.20 · v2 · confirmed · recovered
 A Team With Us proposal must name at least one team member, each with an hourly rate of at least one dollar and each against a resource that exists, though the service does not check that the resource belongs to the opportunity being bid on.
