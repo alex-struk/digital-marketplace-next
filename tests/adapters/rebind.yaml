@@ -2125,3 +2125,16 @@ rebind:
       scoring table, not the opportunity's list of questions; it must read the
       saved opportunity's own team questions, in the order listed, from the
       'Opportunity' tab's 'Team Questions' section
+  - id: R-2.2
+    target: old
+    why: 'unbound: opportunity-cwu-view.start_proposal — waited 15s for a "Start
+      Proposal" link in the top bar or the page header on
+      http://localhost:4300/opportunities/code-with-us/234371e5-794a-4679-80dc-78b88fca800b
+      and none came; the page is showing status "Open", signed in (top bar:
+      Digital Marketplace | vendor.one@example.test | Dashboard | | |
+      Opportunities | | | Organizations | View Proposal), proposal links shown:
+      View Proposal'
+    found: unbound
+    adapter: 8d4e880431d70ffa638a11d6f199491bf31f6249
+    by: runner:calibrate
+    at: 2026-09-30T04:15:08.308Z

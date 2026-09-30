@@ -13,6 +13,7 @@ no calibration ruling open.
 
 | file | at | pass | fail | unbound | stale | not-testable | attested |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-30-10.json | 2026-09-30T04:15:07.570Z | 2 | 4 | 1 | 0 | 17 | 0 |
 | 2026-09-30-9.json | 2026-09-30T03:55:17.467Z | 1 | 1 | 0 | 0 | 17 | 0 |
 | 2026-09-30-8.json | 2026-09-30T03:46:16.200Z | 194 | 46 | 8 | 0 | 17 | 0 |
 | 2026-09-30-7.json | 2026-09-30T02:53:54.318Z | 2 | 1 | 0 | 0 | 17 | 0 |
@@ -64,5 +65,5 @@ no calibration ruling open.
 
 no calibration ruling open.
 
-Current results: 19 rows measured by 2026-09-30-9 (a scoped run), 246 carried (246 from 2026-09-30-8).
+Current results: 24 rows measured by 2026-09-30-10 (a scoped run), 241 carried (241 from 2026-09-30-8).
 

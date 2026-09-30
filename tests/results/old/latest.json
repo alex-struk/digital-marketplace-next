@@ -2,13 +2,13 @@
   "target": "old",
   "base_url": "http://localhost:4300",
   "spec": "58f7a2a6d352ffc30afadcf64eaf66c786693898",
-  "at": "2026-09-30T03:55:17.467Z",
-  "run": "2026-09-30-9",
+  "at": "2026-09-30T04:15:07.570Z",
+  "run": "2026-09-30-10",
   "scope": "changed",
   "full_run": "2026-09-30-8",
-  "since_full": 1,
+  "since_full": 2,
   "inputs": {
-    "adapter": "8f4a860144cdd0ce1f465075a86e0df641cf2e02",
+    "adapter": "8d4e880431d70ffa638a11d6f199491bf31f6249",
     "contract_seed": "ee98a5d32c43ad7a9aee03a5ab4ff7a7c8221b06",
     "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
     "harness": "7f6d5b77da9ab312b5b1cb1531b1ef97f18622db"
@@ -242,7 +242,7 @@
       "result": "not-testable",
       "reason": "The claim is about the shape of a refused answer — a permission refusal reported as though the submission were faulty. Nothing returns that shape: observables.yaml names a `refusal` status for files and for exports but nothing for a page request, and the content surfaces offer only free-text refused_for_non_administrator and field_error, which cannot be compared for the shape of the answer that produced them.",
       "tests": [],
-      "measured_in": "2026-09-30-9"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-7.12",
@@ -292,7 +292,7 @@
       "result": "not-testable",
       "reason": "The criterion is a contrast between two renderings of one body, and the second cannot be produced. The screens that embed a page's body — the program qualification terms screens and the evaluation instructions screen — embed pages the service creates for itself, which the seed does not name and which no surface addresses by handle, so the body a test writes through content-create or content-edit cannot be got into an embedded rendering, and the bodies organization-swu-terms, organization-twu-terms and the two evaluation-instructions surfaces do report are ones no test can put raw markup into.",
       "tests": [],
-      "measured_in": "2026-09-30-9"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-7.15",
@@ -302,7 +302,7 @@
       "result": "not-testable",
       "reason": "The when is following the service level agreement link offered beside the cost of a program. No surface exists for the learn-more index, and no action on any surface follows a service level agreement link — the program cards are reachable only as opportunity_program_select.program_card, an observation with no link to follow — so the five places the criterion names cannot be reached and the link cannot be followed to whatever answers it.",
       "tests": [],
-      "measured_in": "2026-09-30-9"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-7.16",
@@ -666,7 +666,7 @@
       "result": "not-testable",
       "reason": "The given is a page whose body another screen embeds having been removed. The embedded pages — an opportunity's scope page, a program's evaluation instructions — are ones the service needs, which R-7.25 records the service refuses to remove: content-edit withholds the removal and a request made another way is refused, so there is no path through the surface to the state the criterion starts from.",
       "tests": [],
-      "measured_in": "2026-09-30-9"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-5.1",
@@ -1161,15 +1161,16 @@
         }
       ],
       "file_sha": "f50790b2d86b785d463efb75eff0e50f05b9fa31",
-      "adapter": "8f4a860144cdd0ce1f465075a86e0df641cf2e02",
+      "adapter": "8d4e880431d70ffa638a11d6f199491bf31f6249",
       "contract_seed": "ee98a5d32c43ad7a9aee03a5ab4ff7a7c8221b06",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "7f6d5b77da9ab312b5b1cb1531b1ef97f18622db",
-      "measured_in": "2026-09-30-8",
+      "measured_in": "2026-09-30-10",
       "rulings_seen": [
-        "calibrate-old-6"
+        "calibrate-old-6",
+        "calibrate-triage-old-34"
       ],
-      "carried": true
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-5.26",
@@ -1548,7 +1549,7 @@
       "result": "not-testable",
       "reason": "Neither half of the given can be produced and the outcome cannot be read. No action declares, or withholds, the size of a submission — a file reaches the service only through add_attachment, choose_image or upload_body_image, each of which submits whatever it is handed — and no observation reports an upload refused for size: file_download names only contents, name, type, disposition and its two refusals, and the attachment control names only file_name_error. The outcome the criterion actually turns on, a fault of the service rather than a message about the file, has no observation reporting a fault of the service at all.",
       "tests": [],
-      "measured_in": "2026-09-30-9"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-8.4",
@@ -1558,7 +1559,7 @@
       "result": "not-testable",
       "reason": "The given is a submission carrying no file part or read-access information that is not well-formed data. Every upload in the surface is made by a control that assembles the submission itself, so a malformed one cannot be sent; and the outcome — failing as an unexpected fault and being written to the service's error log — has no observation, since the surface names nothing that reports a fault of the service and observables.yaml exposes no log.",
       "tests": [],
-      "measured_in": "2026-09-30-9"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-8.5",
@@ -1644,7 +1645,7 @@
       "result": "not-testable",
       "reason": "The when is a visitor who is not signed in asking for the attachment of a draft opportunity by its identifier. A visitor cannot open an unpublished opportunity, so there is no download to follow, and no observation returns the identifier of a file a test has uploaded, so it cannot be asked for directly. The criterion's own note says the identifier is published nowhere, which is exactly the reach the surface lacks.",
       "tests": [],
-      "measured_in": "2026-09-30-9"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-8.9",
@@ -1654,7 +1655,7 @@
       "result": "not-testable",
       "reason": "Nothing in the surface attaches a file to a Team With Us proposal and then offers it to the opportunity's owner. The attachment control is listed on the three opportunity forms and the Code With Us proposal form only, so it has no download to follow on a Team With Us proposal, and proposal-twu-view names no attachment action or observation. The criterion's outcome — the owner being refused — therefore has no request to make.",
       "tests": [],
-      "measured_in": "2026-09-30-9"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-8.10",
@@ -1753,15 +1754,11 @@
         }
       ],
       "file_sha": "4e8d6f1d53ecd47c9d5430d46af72c17f689261a",
-      "adapter": "8f4a860144cdd0ce1f465075a86e0df641cf2e02",
+      "adapter": "8d4e880431d70ffa638a11d6f199491bf31f6249",
       "contract_seed": "ee98a5d32c43ad7a9aee03a5ab4ff7a7c8221b06",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "7f6d5b77da9ab312b5b1cb1531b1ef97f18622db",
-      "measured_in": "2026-09-30-9",
-      "rulings_seen": [
-        "calibrate-triage-old-33"
-      ],
-      "ruled": "adapter-wrong"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-8.14",
@@ -1791,7 +1788,7 @@
       "result": "not-testable",
       "reason": "The given is a file uploaded by one person and readable only by them, whose identifier a second person then names as an attachment. No observation returns a stored file's identifier, so the second person has nothing to name; and no action attaches a file by identifier rather than by choosing one from the machine the test runs on.",
       "tests": [],
-      "measured_in": "2026-09-30-9"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-8.16",
@@ -1801,7 +1798,7 @@
       "result": "not-testable",
       "reason": "unobservable: the claim is about a working directory on the service's own machine — a copy written there before the file is stored and removed once the upload is answered. Nothing the service answers ever mentions that directory: an upload's answer carries the stored record, and a stored file's description and bytes carry nothing about where the upload waited. Whether a working copy was written, and whether it is gone, can only be seen by reading that machine's filesystem, which is the implementation rather than anything the service shows, so no page, action or observation added to the contract would reach it without exposing the host's disk.",
       "tests": [],
-      "measured_in": "2026-09-30-9"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-8.17",
@@ -2105,7 +2102,7 @@
       "result": "not-testable",
       "reason": "The claim is about the file after the opportunity it was attached to is gone. Once the opportunity is deleted there is no screen carrying a download to follow, and no observation returns the file's identifier for it to be asked for directly, so whether it remains stored and readable cannot be read either way.",
       "tests": [],
-      "measured_in": "2026-09-30-9"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-8.27",
@@ -2405,7 +2402,7 @@
       "result": "not-testable",
       "reason": "The claim is about the visible address line of a panel notice listing all of its recipients. `mail.messagesTo` searches by one visible address and hands back `To` as an opaque value, so the addresses of the other recipients of the same message cannot be read.",
       "tests": [],
-      "measured_in": "2026-09-30-9"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-6.10",
@@ -2435,7 +2432,7 @@
       "result": "not-testable",
       "reason": "Both halves turn on the notice about a watched opportunity, which is sent as a batch of blind copies. The mail fixture searches by visible recipient only, so a message that did reach a deactivated watcher would not be found, and its absence from a search would be equally consistent with it having been sent.",
       "tests": [],
-      "measured_in": "2026-09-30-9"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-6.12",
@@ -2445,7 +2442,7 @@
       "result": "not-testable",
       "reason": "The criterion is about the wording inside one message. The mail fixture exposes no message body, and the reference page's observations (message_subject, message_summary, message_body) name no way to select one message among the fifty on the page, so a containment assertion over the page as a whole would be satisfied by any message that happens to name a program.",
       "tests": [],
-      "measured_in": "2026-09-30-9"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-6.13",
@@ -2848,15 +2845,16 @@
         }
       ],
       "file_sha": "e578a5959f3b2e9ced33c820d4867a43a54c2796",
-      "adapter": "8f4a860144cdd0ce1f465075a86e0df641cf2e02",
+      "adapter": "8d4e880431d70ffa638a11d6f199491bf31f6249",
       "contract_seed": "ee98a5d32c43ad7a9aee03a5ab4ff7a7c8221b06",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "7f6d5b77da9ab312b5b1cb1531b1ef97f18622db",
-      "measured_in": "2026-09-30-8",
+      "measured_in": "2026-09-30-10",
       "rulings_seen": [
-        "calibrate-old-6"
+        "calibrate-old-6",
+        "calibrate-triage-old-34"
       ],
-      "carried": true
+      "triage": "product-question"
     },
     {
       "id": "R-1.2",
@@ -3337,15 +3335,16 @@
         }
       ],
       "file_sha": "086cd7a99a85fcd67c3ffd1d514625af29234c11",
-      "adapter": "8f4a860144cdd0ce1f465075a86e0df641cf2e02",
+      "adapter": "8d4e880431d70ffa638a11d6f199491bf31f6249",
       "contract_seed": "ee98a5d32c43ad7a9aee03a5ab4ff7a7c8221b06",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "7f6d5b77da9ab312b5b1cb1531b1ef97f18622db",
-      "measured_in": "2026-09-30-8",
+      "measured_in": "2026-09-30-10",
       "rulings_seen": [
-        "calibrate-old-6"
+        "calibrate-old-6",
+        "calibrate-triage-old-34"
       ],
-      "carried": true
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-1.18",
@@ -3747,7 +3746,7 @@
       "result": "not-testable",
       "reason": "blocked: at v2 the criterion states that no screen of the application offers a way to add a private note, so a note can only reach an opportunity's history without the surface — yet the surface still declares add_note on opportunity-cwu-edit and opportunity-swu-edit, a control the criterion says does not exist, and a test acting through it would contradict the criterion rather than check it. What a test could see is a note already on an opportunity's history and who can read it, but no seeded Code With Us or Sprint With Us opportunity carries a private note with a file, and no observation says whether an edit screen offers a note control at all. The service's acceptance of a note from its author or an administrator is a claim about a request no screen sends, which no page could show.",
       "tests": [],
-      "measured_in": "2026-09-30-9"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-1.34",
@@ -4114,7 +4113,7 @@
       "result": "not-testable",
       "reason": "unobservable: nothing the service does could show that a state it does not define is gone. No action requests a move to a suspended state, no observation returns the states an opportunity may hold or the states the list's state filter offers, and the mapping of a historical record onto a defined state happens before the rebuilt system reads it, which is a property of the migration rather than of anything the running service answers with. No addition to the surface would help; this is a claim a human accepts about the rebuild rather than one a test can settle.",
       "tests": [],
-      "measured_in": "2026-09-30-9"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-1.53",
@@ -5131,19 +5130,18 @@
         {
           "title": "a vendor who starts a second proposal against an opportunity they already have a proposal for is taken to the proposal they already hold instead of a new one, and no second proposal is created",
           "status": "failed",
-          "error": "Error: unbound: opportunity-cwu-view.start_proposal — no control labelled \"Start Proposal\" on http://localhost:3101/opportunities/code-with-us/45f54a1d-5456-4cae-b918-2eaf135fb85f"
+          "error": "Error: unbound: opportunity-cwu-view.start_proposal — waited 15s for a \"Start Proposal\" link in the top bar or the page header on http://localhost:4300/opportunities/code-with-us/234371e5-794a-4679-80dc-78b88fca800b and none came; the page is showing status \"Open\", signed in (top bar: Digital Marketplace | vendor.one@example.test | Dashboard | | | Opportunities | | | Organizations | View Proposal), proposal links shown: View Proposal"
         }
       ],
       "file_sha": "6ac717e646d9daa0deb3a161cedc2ab0b9c60b25",
-      "adapter": "8f4a860144cdd0ce1f465075a86e0df641cf2e02",
+      "adapter": "8d4e880431d70ffa638a11d6f199491bf31f6249",
       "contract_seed": "ee98a5d32c43ad7a9aee03a5ab4ff7a7c8221b06",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "7f6d5b77da9ab312b5b1cb1531b1ef97f18622db",
-      "measured_in": "2026-09-30-8",
+      "measured_in": "2026-09-30-10",
       "rulings_seen": [
         "calibrate-old-5"
-      ],
-      "carried": true
+      ]
     },
     {
       "id": "R-2.3",
@@ -5524,7 +5522,7 @@
       "version": 4,
       "domain": "proposals",
       "file": "tests/acceptance/proposals/R-2.18.spec.ts",
-      "result": "fail",
+      "result": "pass",
       "tests": [
         {
           "title": "Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with \"User is not an active member of the organization.\"; a Team With Us proposal is additionally refused by the service when the same person is named twice, with \"Please select unique team members.\", while the service applies no such uniqueness check to a Sprint With Us phase. The Team With Us proposal form offers only the organization's active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal. (a Team With Us team of active members is accepted)",
@@ -5564,8 +5562,7 @@
         },
         {
           "title": "Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with \"User is not an active member of the organization.\"; a Team With Us proposal is additionally refused by the service when the same person is named twice, with \"Please select unique team members.\", while the service applies no such uniqueness check to a Sprint With Us phase. The Team With Us proposal form offers only the organization's active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal. (the Sprint With Us form offers the active members and lists a pending member, marked pending, and not a person already named)",
-          "status": "failed",
-          "error": "Error: the pending person, once named, is not marked pending\n\nthe pending person, once named, is not marked pending\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Quinn Placeholder\"\u001b[39m\nReceived string:    \u001b[31m\"To satisfy this phase's requirements, your team must only consist of confirmed (non-pending) members of the selected organization.\u001b[39m\n\u001b[31mPending\u001b[39m\n\u001b[31mThis list will automatically update to reflect the combined capabilities of your selected team (includes pending team members). To satisfy this phase's requirements, your team must collectively possess all capabilities listed here.\"\u001b[39m\n\nCall Log:\n- Timeout 20000ms exceeded while waiting on the predicate"
+          "status": "passed"
         },
         {
           "title": "Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with \"User is not an active member of the organization.\"; a Team With Us proposal is additionally refused by the service when the same person is named twice, with \"Please select unique team members.\", while the service applies no such uniqueness check to a Sprint With Us phase. The Team With Us proposal form offers only the organization's active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal. (a Sprint With Us proposal naming a pending member is saved as a draft but refused on submission)",
@@ -5573,16 +5570,14 @@
         }
       ],
       "file_sha": "337acb0dae4baf0544de9f479c8c7f149adf4f8d",
-      "adapter": "8f4a860144cdd0ce1f465075a86e0df641cf2e02",
+      "adapter": "8d4e880431d70ffa638a11d6f199491bf31f6249",
       "contract_seed": "ee98a5d32c43ad7a9aee03a5ab4ff7a7c8221b06",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "7f6d5b77da9ab312b5b1cb1531b1ef97f18622db",
-      "measured_in": "2026-09-30-9",
+      "measured_in": "2026-09-30-10",
       "rulings_seen": [
-        "calibrate-old-11",
-        "calibrate-triage-old-33"
-      ],
-      "ruled": "adapter-wrong"
+        "calibrate-old-11"
+      ]
     },
     {
       "id": "R-2.19",
@@ -5625,7 +5620,7 @@
         {
           "title": "A Sprint With Us proposal can be submitted only when it gives a team to every phase the opportunity has and to no other phase, the proposal form offering a team section for exactly the opportunity's phases; each phase has exactly one scrum master, chosen as a single choice among that phase's members; each phase has at least one confirmed member, and those members together hold every capability that phase requires; each phase's proposed cost is no more than that phase's maximum budget, and the total proposed cost is no more than the opportunity's total maximum budget. A proposal missing a phase team or a phase capability, or with a cost over budget, is not submitted, and the form shows which phase is incomplete or which cost is over its budget. (a phase with no scrum master is not submitted)",
           "status": "failed",
-          "error": "Error: a phase naming no scrum master\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeFalsy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"201 {\\\"id\\\":\\\"d10de9c2-8be6-4b11-8038-414257081dc8\\\",\\\"createdAt\\\":\\\"2026-09-30T03:37:16.741Z\\\",\\\"updatedAt\\\":\\\"2026-09-30T03:37:16.741Z\\\",\\\"opportunity\\\":{\\\"id\\\":\\\"926ee74f-2af8-48dc-ab3d-1c7488cd5fdc\\\",\\\"createdAt\\\":\\\"2026-09-30T03:37:14.669Z\\\",\\\"updatedAt\\\":\\\"2026-09-30T03:37:14.669Z\\\",\\\"title\\\":\\\"R-2.19 opportunity bid on with a phase lacking a scrum master\\\",\\\"teaser\\\":\\\"A short summary of the work to be done.\\\",\\\"remoteOk\\\":true,\\\"location\\\":\\\"Victoria\\\",\\\"totalMaxBudget\\\":500000,\\\"proposalDeadline\\\":\\\"2026-10-13T23:00:00.000Z\\\",\\\"status\\\":\\\"PUBLISHED\\\"},\\\"anonymousProponentName\\\":\\\"\\\",\\\"status\\\":\\\"SUBMITTED\\\",\\\"history\\\":[{\\\"createdAt\\\":\\\"2026-09-30T03:37:16.741Z\\\",\\\"note\\\":\\\"\\\",\\\"createdBy\\\":{\\\"id\\\":\\\"00000000-0000-4000-8000-000000000203\\\",\\\"name\\\":\\\"Charlie Placeholder\\\",\\\"avatarImageFile\\\":null},\\\"type\\\":{\\\"tag\\\":\\\"status\\\",\\\"value\\\":\\\"SUBMITTED\\\"}}],\\\"submittedAt\\\":\\\"2026-09-30T03:37:16.741Z\\\",\\\"teamQuestionResponses\\\":[{\\\"order\\\":0,\\\"response\\\":\\\"We delivered a scheduling service for a health authority over eighteen months.\\\"}],\\\"createdBy\\\":{\\\"id\\\":\\\"00000000-0000-4000-8000-000000000203\\\",\\\"name\\\":\\\"Charlie Placeholder\\\",\\\"avatarImageFile\\\":null},\\\"updatedBy\\\":{\\\"id\\\":\\\"00000000-0000-4000-8000-000000000203\\\",\\\"name\\\":\\\"Charlie Placeholder\\\",\\\"avatarImageFile\\\":null},\\\"organization\\\":{\\\"id\\\":\\\"00000000-0000-4000-8000-000000000301\\\",\\\"legalName\\\":\\\"Northern Pines Digital Ltd.\\\",\\\"active\\\":true,\\\"serviceAreas\\\":[{\\\"id\\\":1,\\\"serviceArea\\\":\\\"FULL_STACK_DEVELOPER\\\",\\\"name\\\":\\\"Full Stack Developer\\\"},{\\\"id\\\":3,\\\"serviceArea\\\":\\\"AGILE_COACH\\\",\\\"name\\\":\\\"Agile Coach\\\"}]},\\\"attachments\\\":[],\\\"prototypePhase\\\":{\\\"id\\\":\\\"57804a38-f1de-4517-ac5e-7fb1383c295d\\\",\\\"proposal\\\":\\\"d10de9c2-8be6-4b11-8038-414257081dc8\\\",\\\"phase\\\":\\\"PROTOTYPE\\\",\\\"proposedCost\\\":150000,\\\"members\\\":[{\\\"scrumMaster\\\":true,\\\"capabilities\\\":[\\\"DevOps Engineering\\\",\\\"Frontend Development\\\",\\\"Security Engineering\\\"],\\\"idpUsername\\\":\\\"test-vendor-3\\\",\\\"member\\\":{\\\"id\\\":\\\"00000000-0000-4000-8000-000000000203\\\",\\\"name\\\":\\\"Charlie Placeholder\\\",\\\"avatarImageFile\\\":null},\\\"pending\\\":false}]},\\\"implementationPhase\\\":{\\\"id\\\":\\\"654e9985-c522-4f0b-93fd-118bbd7e9e8b\\\",\\\"proposal\\\":\\\"d10de9c2-8be6-4b11-8038-414257081dc8\\\",\\\"phase\\\":\\\"IMPLEMENTATION\\\",\\\"proposedCost\\\":250000,\\\"members\\\":[{\\\"scrumMaster\\\":false,\\\"capabilities\\\":[\\\"Agile Coaching\\\",\\\"Backend Development\\\",\\\"Delivery Management\\\"],\\\"idpUsername\\\":\\\"test-vendor-2\\\",\\\"member\\\":{\\\"id\\\":\\\"00000000-0000-4000-8000-000000000202\\\",\\\"name\\\":\\\"Blake Placeholder\\\",\\\"avatarImageFile\\\":null},\\\"pending\\\":false}]},\\\"references\\\":[{\\\"name\\\":\\\"Reference 1\\\",\\\"company\\\":\\\"Reference Company Ltd.\\\",\\\"phone\\\":\\\"250-555-0101\\\",\\\"email\\\":\\\"reference.1@example.test\\\",\\\"order\\\":0},{\\\"name\\\":\\\"Reference 2\\\",\\\"company\\\":\\\"Reference Company Ltd.\\\",\\\"phone\\\":\\\"250-555-0101\\\",\\\"email\\\":\\\"reference.2@example.test\\\",\\\"order\\\":1},{\\\"name\\\":\\\"Reference 3\\\",\\\"company\\\":\\\"Reference Company Ltd.\\\",\\\"phone\\\":\\\"250-555-0101\\\",\\\"email\\\":\\\"reference.3@example.test\\\",\\\"order\\\":2}]}\"\u001b[39m"
+          "error": "Error: a phase naming no scrum master\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeFalsy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"201 {\\\"id\\\":\\\"dc28f03b-c23f-4f27-9114-f94d53525c14\\\",\\\"createdAt\\\":\\\"2026-09-30T04:10:28.500Z\\\",\\\"updatedAt\\\":\\\"2026-09-30T04:10:28.500Z\\\",\\\"opportunity\\\":{\\\"id\\\":\\\"310b6636-be78-4847-b34c-a74e3cdec645\\\",\\\"createdAt\\\":\\\"2026-09-30T04:10:26.476Z\\\",\\\"updatedAt\\\":\\\"2026-09-30T04:10:26.476Z\\\",\\\"title\\\":\\\"R-2.19 opportunity bid on with a phase lacking a scrum master\\\",\\\"teaser\\\":\\\"A short summary of the work to be done.\\\",\\\"remoteOk\\\":true,\\\"location\\\":\\\"Victoria\\\",\\\"totalMaxBudget\\\":500000,\\\"proposalDeadline\\\":\\\"2026-10-13T23:00:00.000Z\\\",\\\"status\\\":\\\"PUBLISHED\\\"},\\\"anonymousProponentName\\\":\\\"\\\",\\\"status\\\":\\\"SUBMITTED\\\",\\\"history\\\":[{\\\"createdAt\\\":\\\"2026-09-30T04:10:28.500Z\\\",\\\"note\\\":\\\"\\\",\\\"createdBy\\\":{\\\"id\\\":\\\"00000000-0000-4000-8000-000000000203\\\",\\\"name\\\":\\\"Charlie Placeholder\\\",\\\"avatarImageFile\\\":null},\\\"type\\\":{\\\"tag\\\":\\\"status\\\",\\\"value\\\":\\\"SUBMITTED\\\"}}],\\\"submittedAt\\\":\\\"2026-09-30T04:10:28.500Z\\\",\\\"teamQuestionResponses\\\":[{\\\"order\\\":0,\\\"response\\\":\\\"We delivered a scheduling service for a health authority over eighteen months.\\\"}],\\\"createdBy\\\":{\\\"id\\\":\\\"00000000-0000-4000-8000-000000000203\\\",\\\"name\\\":\\\"Charlie Placeholder\\\",\\\"avatarImageFile\\\":null},\\\"updatedBy\\\":{\\\"id\\\":\\\"00000000-0000-4000-8000-000000000203\\\",\\\"name\\\":\\\"Charlie Placeholder\\\",\\\"avatarImageFile\\\":null},\\\"organization\\\":{\\\"id\\\":\\\"00000000-0000-4000-8000-000000000301\\\",\\\"legalName\\\":\\\"Northern Pines Digital Ltd.\\\",\\\"active\\\":true,\\\"serviceAreas\\\":[{\\\"id\\\":1,\\\"serviceArea\\\":\\\"FULL_STACK_DEVELOPER\\\",\\\"name\\\":\\\"Full Stack Developer\\\"},{\\\"id\\\":3,\\\"serviceArea\\\":\\\"AGILE_COACH\\\",\\\"name\\\":\\\"Agile Coach\\\"}]},\\\"attachments\\\":[],\\\"prototypePhase\\\":{\\\"id\\\":\\\"7dfb38fc-5185-4a29-b9cd-b9950b2f74f4\\\",\\\"proposal\\\":\\\"dc28f03b-c23f-4f27-9114-f94d53525c14\\\",\\\"phase\\\":\\\"PROTOTYPE\\\",\\\"proposedCost\\\":150000,\\\"members\\\":[{\\\"scrumMaster\\\":true,\\\"capabilities\\\":[\\\"DevOps Engineering\\\",\\\"Frontend Development\\\",\\\"Security Engineering\\\"],\\\"idpUsername\\\":\\\"test-vendor-3\\\",\\\"member\\\":{\\\"id\\\":\\\"00000000-0000-4000-8000-000000000203\\\",\\\"name\\\":\\\"Charlie Placeholder\\\",\\\"avatarImageFile\\\":null},\\\"pending\\\":false}]},\\\"implementationPhase\\\":{\\\"id\\\":\\\"e5a5b320-7f76-4978-acef-d8fc0f8df829\\\",\\\"proposal\\\":\\\"dc28f03b-c23f-4f27-9114-f94d53525c14\\\",\\\"phase\\\":\\\"IMPLEMENTATION\\\",\\\"proposedCost\\\":250000,\\\"members\\\":[{\\\"scrumMaster\\\":false,\\\"capabilities\\\":[\\\"Agile Coaching\\\",\\\"Backend Development\\\",\\\"Delivery Management\\\"],\\\"idpUsername\\\":\\\"test-vendor-2\\\",\\\"member\\\":{\\\"id\\\":\\\"00000000-0000-4000-8000-000000000202\\\",\\\"name\\\":\\\"Blake Placeholder\\\",\\\"avatarImageFile\\\":null},\\\"pending\\\":false}]},\\\"references\\\":[{\\\"name\\\":\\\"Reference 1\\\",\\\"company\\\":\\\"Reference Company Ltd.\\\",\\\"phone\\\":\\\"250-555-0101\\\",\\\"email\\\":\\\"reference.1@example.test\\\",\\\"order\\\":0},{\\\"name\\\":\\\"Reference 2\\\",\\\"company\\\":\\\"Reference Company Ltd.\\\",\\\"phone\\\":\\\"250-555-0101\\\",\\\"email\\\":\\\"reference.2@example.test\\\",\\\"order\\\":1},{\\\"name\\\":\\\"Reference 3\\\",\\\"company\\\":\\\"Reference Company Ltd.\\\",\\\"phone\\\":\\\"250-555-0101\\\",\\\"email\\\":\\\"reference.3@example.test\\\",\\\"order\\\":2}]}\"\u001b[39m"
         },
         {
           "title": "A Sprint With Us proposal can be submitted only when it gives a team to every phase the opportunity has and to no other phase, the proposal form offering a team section for exactly the opportunity's phases; each phase has exactly one scrum master, chosen as a single choice among that phase's members; each phase has at least one confirmed member, and those members together hold every capability that phase requires; each phase's proposed cost is no more than that phase's maximum budget, and the total proposed cost is no more than the opportunity's total maximum budget. A proposal missing a phase team or a phase capability, or with a cost over budget, is not submitted, and the form shows which phase is incomplete or which cost is over its budget. (a phase whose only holder of a required capability is not a confirmed member is not submitted)",
@@ -5645,15 +5640,16 @@
         }
       ],
       "file_sha": "f332e0b8ce29f8b75787f43b934e161b62a96069",
-      "adapter": "8f4a860144cdd0ce1f465075a86e0df641cf2e02",
+      "adapter": "8d4e880431d70ffa638a11d6f199491bf31f6249",
       "contract_seed": "ee98a5d32c43ad7a9aee03a5ab4ff7a7c8221b06",
       "override": "a2b2704c6393b9fe712dc5f3e369b69a8c71c0e0",
       "harness": "7f6d5b77da9ab312b5b1cb1531b1ef97f18622db",
-      "measured_in": "2026-09-30-8",
+      "measured_in": "2026-09-30-10",
       "rulings_seen": [
-        "calibrate-old-15"
+        "calibrate-old-15",
+        "calibrate-triage-old-34"
       ],
-      "carried": true
+      "ruled": "adapter-wrong"
     },
     {
       "id": "R-2.20",
@@ -6446,7 +6442,7 @@
       "result": "not-testable",
       "reason": "unobservable: the outcome is that the service offers no way to create an administrator where none exists, and that only a change to the stored data outside the service can. That is the absence of an action anywhere in the service, and no observation reports an absence of that kind — a test could only show that the particular controls it knows of do not do it, never that no other route exists. The given could be seeded (a seed with no administrator account), but that would not help: the claim a test would then have to settle is still the non-existence of a route, and the documented manual route lies outside the service by definition. This is a property to be accepted by a reader of the rebuilt system's routes, not settled by a test.",
       "tests": [],
-      "measured_in": "2026-09-30-9"
+      "measured_in": "2026-09-30-10"
     },
     {
       "id": "R-4.14",

@@ -51,6 +51,8 @@
 - 21:01:52 rule bind-adapter-old-47 escalated at G3 to tech-lead by runner:bind-adapter
 - 21:01:54 drive: step 5: `sdlc rule bind-adapter-old-47 --by agent:tech-lead` — bind-adapter-old-47 was escalated at G3 by runner:bind-adapter to tech-lead, a role an agent plays in this project
 - 21:02:25 rule bind-adapter-old-47 approve at G3 by agent:tech-lead (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 21:02:29 drive: step 6: `sdlc run calibrate --target old` — 2 bindings to check again now that their adapter has changed (rebind), 1 unbound row to check again now that its adapter has changed for target old owed by calibrate
+- 21:15:10 run calibrate: ok, cost 0, turns 0
 
 # Run record 2026-09-29
 
