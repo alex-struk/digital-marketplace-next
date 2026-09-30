@@ -289,6 +289,9 @@
 - 13:14:35 drive: step 7: `sdlc run calibrate --target old` — phase 2 Tests is not complete (exit: the contract approved, every domain's tests approved, and every calibration row pass or ruled, all measured by the last run), and calibrate for target old is next in it
 - 13:17:40 oracle up old: http://localhost:4300 (local port 4300)
 - 13:37:41 run calibrate: ok, cost 0, turns 0
+- 13:37:43 propose calibrate-old-26 at G1
+- 13:37:45 drive: step 8: `sdlc rule calibrate-old-26 --by agent:product-owner` — calibrate-old-26 is open at G1, held by agent:product-owner
+- 13:38:30 rule calibrate-old-26 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-29
 
