@@ -1,16 +1,15 @@
 gate: G2
-verdict: escalated
-by: runner:plan
-held_by: runner
-escalate_to: tech-lead
-rationale: >-
-  plan was handed owed work sent back to it more times than the project's policy
-  allows, so this proposal is ruled by tech-lead rather than put to G2's holder
-  for another round.
-
-  - requests from build-slice-2: sent to plan 3 times, past the limit of 2 that
-  policy.loops.request sets. What each send asked for:
-    1. slice 2 claims R-4.6, R-4.22, R-4.27, R-4.28 and R-6.2 to R-6.5, whose tests go through screens plan/tasks.md gives to later slices (profile editing and /users/:userId, the Code With Us create screen, organization editing, the opportunity dashboard's own-opportunities table); verify on build-slice-2-8 found each failing or unbound there. Move each to the slice that delivers its screen.
-    2. R-6.20's test publishes a Code With Us opportunity (/opportunities/code-with-us/create), a screen Slice 7 delivers, and R-6.28's test reads another person's profile at /users/:userId, which the plan gives to Slice 3; verify on build-slice-2-12 found both unbound on those screens. Move each to a slice whose dependencies deliver its screen.
-    3. slice 2 ('A person can sign in, finish signing up and sign out') claims R-4.23, but R-4.23's test confirms arrival at the dashboard by reading the dashboard's contents: the vendor's proposals table or its empty message, and the public sector employee's opportunities table or its empty message. Those belong to the staff and vendor dashboard slices (6 and 8), not slice 2. Verify on build-slice-2-15 showed the redirect working (terms checkbox absent in both cases) and both dashboard reads returning empty, after three builds. Either move R-4.23, or at least its two dashboard-arrival clauses, to the slice that builds those dashboards, or put the dashboards' empty states and proposals/opportunities listings into slice 2's scope, so the slice claiming R-4.23 can produce what its test observes.
-at: 2026-09-30T23:45:59.550Z
+verdict: approve
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  The question is whether moving R-4.23 out of Slice 2 gives a cut where the slice claiming it can produce what its test observes. Ruling: approve. What decided it is the third item of the escalation account. Build-slice-2-15 showed the profile-completion redirect working (terms checkbox absent for both people) while the test failed only because its dashboard reads came back empty, and those dashboards are not Slice 2's. In plan/tasks.md the staff and administrator dashboard is delivered by Slice 8 (line 47) and the vendor dashboard by Slice 14. Slice 14 depends on Slice 8 and Slice 11, so its dependency closure holds both screens, and it is the earliest slice where R-4.23's test can bind. The proposal correctly points out that the account's 'slices 6 and 8' named the wrong slice for the vendor dashboard. It correctly turns down the alternative remedy (empty dashboards in Slice 2) for the same reason R-4.22 was already moved to Slice 8: listings should not arrive ahead of the data they list. The diff matches the evidence and nothing else moves. Slice 2's criteria line loses only R-4.23, its delivers line records that the redirect is still built there, Slice 14 gains only R-4.23 plus a delivers clause naming the vendor dashboard's empty message, and plan.md's awkward-fit section records the move and its uneasiness. A search of plan/tasks.md shows R-4.23 on exactly one criteria line, Slice 14's. This meets the revision request build-slice-2-15 sent to plan. plan/check-coverage.mjs was not run, here or by plan, because it needs an approval nobody was present to give. It should be run before Slice 14 is built. What would change this ruling: that checker reporting any criterion unplaced or placed twice, or Slice 8 turning out not to deliver the public sector employee's opportunities table and empty message that R-4.23's test reads.
+conditions: []
+cost: 0.445601
+turns: 8
+session: "b825566c-15bc-4b4d-8ad1-240081439c86"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T23:46:52.879Z
