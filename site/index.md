@@ -7,7 +7,7 @@ Profile: rebuild
 | Domain | proposed | accepted | implemented | verified | monitored | obsolete | open questions | total | tests | new | old |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 48/50 (n/t 2) |  | 39 pass · 9 fail · 0 unbound · 0 stale |
-| proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 | 36/36 |  | 32 pass · 4 fail · 0 unbound · 0 stale |
+| proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 | 36/36 |  | 33 pass · 3 fail · 0 unbound · 0 stale |
 | organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 | 31/31 |  | 25 pass · 6 fail · 0 unbound · 0 stale |
 | users | 0 | 32 | 0 | 0 | 0 | 4 | 1 | 36 | 29/30 (n/t 1) |  | 21 pass · 3 fail · 5 unbound · 0 stale |
 | evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 | 30/30 |  | 24 pass · 6 fail · 0 unbound · 0 stale |

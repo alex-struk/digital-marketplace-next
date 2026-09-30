@@ -4,46 +4,46 @@
 
 | id | test | new | old |
 | --- | --- | --- | --- |
-| R-2.1 | acceptance/proposals/R-2.1.spec.ts |  | pass |
-| R-2.2 | acceptance/proposals/R-2.2.spec.ts |  | fail (ruled: adapter-wrong) |
-| R-2.3 | acceptance/proposals/R-2.3.spec.ts |  | pass |
-| R-2.4 | acceptance/proposals/R-2.4.spec.ts |  | pass |
-| R-2.5 | acceptance/proposals/R-2.5.spec.ts |  | pass |
+| R-2.1 | acceptance/proposals/R-2.1.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.2 | acceptance/proposals/R-2.2.spec.ts |  | pass |
+| R-2.3 | acceptance/proposals/R-2.3.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.4 | acceptance/proposals/R-2.4.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.5 | acceptance/proposals/R-2.5.spec.ts |  | pass (carried from 2026-09-30-12) |
 | R-2.6 | — |  |  |
-| R-2.7 | acceptance/proposals/R-2.7.spec.ts |  | pass |
+| R-2.7 | acceptance/proposals/R-2.7.spec.ts |  | pass (carried from 2026-09-30-12) |
 | R-2.8 | — |  |  |
-| R-2.9 | acceptance/proposals/R-2.9.spec.ts |  | fail (ruled: defect-in-old) |
-| R-2.10 | acceptance/proposals/R-2.10.spec.ts |  | fail (ruled: defect-in-old) |
-| R-2.11 | acceptance/proposals/R-2.11.spec.ts |  | pass |
-| R-2.12 | acceptance/proposals/R-2.12.spec.ts |  | pass |
-| R-2.13 | acceptance/proposals/R-2.13.spec.ts |  | pass |
-| R-2.14 | acceptance/proposals/R-2.14.spec.ts |  | pass |
-| R-2.15 | acceptance/proposals/R-2.15.spec.ts |  | pass |
-| R-2.16 | acceptance/proposals/R-2.16.spec.ts |  | pass |
-| R-2.17 | acceptance/proposals/R-2.17.spec.ts |  | pass |
-| R-2.18 | acceptance/proposals/R-2.18.spec.ts |  | pass |
-| R-2.19 | acceptance/proposals/R-2.19.spec.ts |  | fail |
-| R-2.20 | acceptance/proposals/R-2.20.spec.ts |  | pass |
-| R-2.21 | acceptance/proposals/R-2.21.spec.ts |  | pass |
-| R-2.22 | acceptance/proposals/R-2.22.spec.ts |  | pass |
-| R-2.23 | acceptance/proposals/R-2.23.spec.ts |  | pass |
-| R-2.24 | acceptance/proposals/R-2.24.spec.ts |  | pass |
-| R-2.25 | acceptance/proposals/R-2.25.spec.ts |  | pass |
-| R-2.26 | acceptance/proposals/R-2.26.spec.ts |  | pass |
-| R-2.27 | acceptance/proposals/R-2.27.spec.ts |  | pass |
-| R-2.28 | acceptance/proposals/R-2.28.spec.ts |  | pass |
-| R-2.29 | acceptance/proposals/R-2.29.spec.ts |  | pass |
-| R-2.30 | acceptance/proposals/R-2.30.spec.ts |  | pass |
-| R-2.31 | acceptance/proposals/R-2.31.spec.ts |  | pass |
-| R-2.32 | acceptance/proposals/R-2.32.spec.ts |  | pass |
-| R-2.33 | acceptance/proposals/R-2.33.spec.ts |  | pass |
-| R-2.34 | acceptance/proposals/R-2.34.spec.ts |  | pass |
+| R-2.9 | acceptance/proposals/R-2.9.spec.ts |  | fail (ruled: defect-in-old; carried from 2026-09-30-12) |
+| R-2.10 | acceptance/proposals/R-2.10.spec.ts |  | fail (ruled: defect-in-old; carried from 2026-09-30-12) |
+| R-2.11 | acceptance/proposals/R-2.11.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.12 | acceptance/proposals/R-2.12.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.13 | acceptance/proposals/R-2.13.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.14 | acceptance/proposals/R-2.14.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.15 | acceptance/proposals/R-2.15.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.16 | acceptance/proposals/R-2.16.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.17 | acceptance/proposals/R-2.17.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.18 | acceptance/proposals/R-2.18.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.19 | acceptance/proposals/R-2.19.spec.ts |  | fail (ruled: defect-in-old) |
+| R-2.20 | acceptance/proposals/R-2.20.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.21 | acceptance/proposals/R-2.21.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.22 | acceptance/proposals/R-2.22.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.23 | acceptance/proposals/R-2.23.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.24 | acceptance/proposals/R-2.24.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.25 | acceptance/proposals/R-2.25.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.26 | acceptance/proposals/R-2.26.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.27 | acceptance/proposals/R-2.27.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.28 | acceptance/proposals/R-2.28.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.29 | acceptance/proposals/R-2.29.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.30 | acceptance/proposals/R-2.30.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.31 | acceptance/proposals/R-2.31.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.32 | acceptance/proposals/R-2.32.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.33 | acceptance/proposals/R-2.33.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.34 | acceptance/proposals/R-2.34.spec.ts |  | pass (carried from 2026-09-30-12) |
 | D-proposals-35 | — |  |  |
-| R-2.35 | acceptance/proposals/R-2.35.spec.ts |  | pass |
-| R-2.36 | acceptance/proposals/R-2.36.spec.ts |  | pass |
+| R-2.35 | acceptance/proposals/R-2.35.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.36 | acceptance/proposals/R-2.36.spec.ts |  | pass (carried from 2026-09-30-12) |
 | D-proposals-37 | — |  |  |
-| R-2.37 | acceptance/proposals/R-2.37.spec.ts |  | pass |
-| R-2.38 | acceptance/proposals/R-2.38.spec.ts |  | pass |
+| R-2.37 | acceptance/proposals/R-2.37.spec.ts |  | pass (carried from 2026-09-30-12) |
+| R-2.38 | acceptance/proposals/R-2.38.spec.ts |  | pass (carried from 2026-09-30-12) |
 
 ### R-2.1 · v1 · confirmed · accepted
 
@@ -279,6 +279,7 @@ A Sprint With Us proposal can be submitted only when it gives a team to every ph
 - given: a Sprint With Us opportunity with an inception phase and a set of required capabilities
 - when: a vendor submits a proposal that omits the inception phase, names two scrum masters, leaves a required capability uncovered, or proposes a total cost above the opportunity's maximum budget
 - then: each of those submissions is refused, naming the phase, the team or the cost as the reason
+- note: calibrate 2026-09-30: the old target fails this; kept, the rebuild must pass it
 
 ### R-2.20 · v2 · confirmed · accepted
 
