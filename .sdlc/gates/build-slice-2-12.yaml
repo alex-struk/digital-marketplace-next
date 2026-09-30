@@ -1,0 +1,18 @@
+gate: G3
+verdict: escalated
+by: runner:verify
+held_by: runner
+escalate_to: tech-lead
+rationale: "Slice 2 has failed verify 3 times. The failures below may not be the
+  application's: a test, the adapter, the criterion or the sandbox can each be
+  what is wrong (spec 7.1), and another build would not find out which."
+conditions:
+  - 'R-4.1: Error: expect(received).toMatch(expected) — Received string:  ""'
+  - 'R-4.3: Error: expect(received).toBeTruthy() — Received: ""'
+  - "R-4.23: Error: unbound: proposal-vendor-dashboard.my_proposals_table —
+    /dashboard is offered only to a signed-in person, and this screen has not
+    been walked signed in: \"Sign in as a vendor\" and \"Sign in as a public
+    sector employee\" on /sign-in now hand off to the sandbox identity
+    provider's username and password form, but the session that bound this
+    adapter could not use the sandbox password, so none of …"
+at: 2026-09-30T20:13:23.367Z
