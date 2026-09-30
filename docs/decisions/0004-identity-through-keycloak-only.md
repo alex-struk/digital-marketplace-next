@@ -1,6 +1,10 @@
 # 0004 · Every sign-in comes from Keycloak by PKCE; the first administrator comes from seed data
 
 - Status: proposed (G2), revised after the first G2 return to follow the stack profile's sign-in flow
+- Superseded in part by: 0015. The PKCE verifier and the code exchange are held by the service's
+  `/auth/sign-in` and `/auth/callback`; the client is still public and holds no secret
+- Superseded in part by: 0017. Beside the bearer token, sign-in begins a service session in an
+  `HttpOnly` cookie, which signing out ends
 - Date: 2026-09-19
 
 ## Decision

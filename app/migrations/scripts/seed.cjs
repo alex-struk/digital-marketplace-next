@@ -64,7 +64,8 @@ async function main() {
 
     log("migrating");
     const [, applied] = await knex.migrate.latest();
-    log("migrated", { count: applied.length });
+    // Named, so a log shows which history the image carried.
+    log("migrated", { count: applied.length, migrations: applied });
 
     const files = seedFiles(SEED_DIR);
     for (const file of files) {
