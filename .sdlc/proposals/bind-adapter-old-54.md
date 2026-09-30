@@ -30,3 +30,23 @@ The reader now collects every image after the page title within the page's conte
 - The browser tool created a `.playwright-mcp/` folder of console logs at the workspace root, outside my directory. I didn't create it and left it alone.
 
 No other route or binding changed in this pass.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does bind-adapter-old-54 bind R-1.17's question and guideline field errors and R-7.26's published-image observation on old, and nothing else? Ruling: approve. It came here because each item was sent back 3 times against a rebind limit of 2. That is a loop count, not a pipeline defect, so it is ruled here and not escalated. Both fixes answer the third send-back. R-1.17: for addTeamQuestion and addResourceQuestion only, each text box is filled, a key is typed and deleted, and the box is left. Old then checks the box as it stands, so both the 1,001-character Question and an empty value show old's own message. Number fields and other forms are unchanged. R-7.26: the claim that decides it was checked against old's source. The upload writes a 'FILE_ID:<id>' marker (sources/old/src/shared/lib/resources/file.ts:80). Old uses react-markdown ^10.1.0, whose default URL transform blanks that unknown prefix before decodeImgSrc (markdown.tsx:45-47) sees it, so old draws img alt='body-image.png' with src=''. The adapter now finds the image inside the page's content region and reports it as 'img "body-image.png" (no source)' rather than inventing an /api/files address. That is the correct binding. A test that expects /api/files/<id> will fail on old because old does not show the image, not because of the adapter. The diff is confined to tests/adapters/old/index.ts and the runner typecheck passed. What would change this: a run showing the typed entry breaks a number field or another form, or evidence that old does render an image source.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `2e8fb073f11a90d0b74ea8a5f18ad8d92e48462e`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    No diagnostics.
