@@ -2,9 +2,10 @@
 // departure 1). Knex owns the schema's history, in app/migrations.
 //
 // This file is introspected, not authored: `npm run db:pull --workspace backend` runs
-// `prisma db pull` against a migrated database and writes what is there. It currently holds
-// only the models slice 1 reads, because that is all `prisma db pull` had been asked for;
-// later slices pull the rest of the kept schema in as they reach it.
+// `prisma db pull` against a migrated database and writes what is there. Slice 2 pulled the
+// whole kept schema, because signing in reads and writes `users` and every other table
+// refers to it; the names below are Prisma's, not this project's. Nothing here is edited by
+// hand except this comment, which a pull replaces and which is put back afterwards.
 
 generator client {
   provider = "prisma-client-js"
@@ -16,12 +17,12 @@ datasource db {
 }
 
 model content {
-  id        String   @id @db.Uuid
-  createdAt DateTime @db.Timestamptz(6)
-  createdBy String?  @db.Uuid
-  slug      String   @unique
-  fixed     Boolean  @default(false)
-
+  id              String            @id @db.Uuid
+  createdAt       DateTime          @db.Timestamptz(6)
+  createdBy       String?           @db.Uuid
+  slug            String            @unique(map: "content_slug_unique")
+  fixed           Boolean           @default(false)
+  users           users?            @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "content_createdby_foreign")
   contentVersions contentVersions[]
 }
 
@@ -32,8 +33,722 @@ model contentVersions {
   body      String
   createdAt DateTime @db.Timestamptz(6)
   createdBy String?  @db.Uuid
-
-  content content @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  content   content  @relation(fields: [contentId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "contentversions_contentid_foreign")
+  users     users?   @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "contentversions_createdby_foreign")
 
   @@id([id, contentId])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model affiliations {
+  id               String        @id @db.Uuid
+  createdAt        DateTime      @db.Timestamptz(6)
+  updatedAt        DateTime      @db.Timestamptz(6)
+  user             String        @db.Uuid
+  organization     String        @db.Uuid
+  membershipType   String
+  membershipStatus String
+  organizations    organizations @relation(fields: [organization], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "affiliations_organization_foreign")
+  users            users         @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "affiliations_user_foreign")
+}
+
+model cwuOpportunities {
+  id                     String                   @id @db.Uuid
+  createdAt              DateTime                 @db.Timestamptz(6)
+  createdBy              String?                  @db.Uuid
+  users                  users?                   @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuopportunities_createdby_foreign")
+  cwuOpportunityStatuses cwuOpportunityStatuses[]
+  cwuOpportunityVersions cwuOpportunityVersions[]
+  cwuProposals           cwuProposals[]
+}
+
+model cwuOpportunityStatuses {
+  id               String           @id @db.Uuid
+  createdAt        DateTime         @db.Timestamptz(6)
+  createdBy        String?          @db.Uuid
+  opportunity      String           @db.Uuid
+  status           String?
+  event            String?
+  note             String?
+  users            users?           @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuopportunitystatuses_createdby_foreign")
+  cwuOpportunities cwuOpportunities @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cwuopportunitystatuses_opportunity_foreign")
+}
+
+model cwuOpportunityVersions {
+  id                 String           @id @db.Uuid
+  createdAt          DateTime         @db.Timestamptz(6)
+  createdBy          String?          @db.Uuid
+  opportunity        String           @db.Uuid
+  title              String
+  teaser             String           @default("")
+  remoteOk           Boolean
+  remoteDesc         String           @default("")
+  location           String
+  reward             Int
+  skills             String[]         @default([])
+  description        String
+  proposalDeadline   DateTime         @db.Timestamptz(6)
+  assignmentDate     DateTime         @db.Timestamptz(6)
+  startDate          DateTime         @db.Timestamptz(6)
+  completionDate     DateTime?        @db.Timestamptz(6)
+  submissionInfo     String           @default("")
+  acceptanceCriteria String           @default("")
+  evaluationCriteria String           @default("")
+  users              users?           @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuopportunityversions_createdby_foreign")
+  cwuOpportunities   cwuOpportunities @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cwuopportunityversions_opportunity_foreign")
+}
+
+model fileBlobs {
+  hash  String  @id
+  blob  Bytes
+  files files[]
+}
+
+model files {
+  id                                 String                   @id @db.Uuid
+  createdAt                          DateTime                 @db.Timestamptz(6)
+  createdBy                          String?                  @db.Uuid
+  name                               String
+  fileBlob                           String
+  users_files_createdByTousers       users?                   @relation("files_createdByTousers", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "files_createdby_foreign")
+  fileBlobs                          fileBlobs                @relation(fields: [fileBlob], references: [hash], onDelete: NoAction, onUpdate: NoAction, map: "files_fileblob_foreign")
+  organizations                      organizations[]
+  twuProposalAttachments             twuProposalAttachments[]
+  users_users_avatarImageFileTofiles users[]                  @relation("users_avatarImageFileTofiles")
+}
+
+model knex_migrations {
+  id             Int       @id @default(autoincrement())
+  name           String?   @db.VarChar(255)
+  batch          Int?
+  migration_time DateTime? @db.Timestamptz(6)
+}
+
+model knex_migrations_lock {
+  index     Int  @id @default(autoincrement())
+  is_locked Int?
+}
+
+model organizations {
+  id                          String                        @id @db.Uuid
+  createdAt                   DateTime                      @db.Timestamptz(6)
+  updatedAt                   DateTime                      @db.Timestamptz(6)
+  legalName                   String
+  logoImageFile               String?                       @db.Uuid
+  websiteUrl                  String?
+  streetAddress1              String
+  streetAddress2              String?
+  city                        String
+  region                      String
+  mailCode                    String
+  country                     String
+  contactName                 String
+  contactTitle                String?
+  contactEmail                String
+  contactPhone                String?
+  active                      Boolean                       @default(true)
+  deactivatedOn               DateTime?                     @db.Timestamptz(6)
+  deactivatedBy               String?                       @db.Uuid
+  acceptedSWUTerms            DateTime?                     @db.Timestamptz(6)
+  acceptedTWUTerms            DateTime?                     @db.Timestamptz(6)
+  affiliations                affiliations[]
+  cwuProposals                cwuProposals[]
+  users                       users?                        @relation(fields: [deactivatedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "organizations_deactivatedby_foreign")
+  files                       files?                        @relation(fields: [logoImageFile], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "organizations_logoimagefile_foreign")
+  swuProposals                swuProposals[]
+  twuOrganizationServiceAreas twuOrganizationServiceAreas[]
+  twuProposals                twuProposals[]
+}
+
+model serviceAreas {
+  id                          Int                           @id @default(autoincrement())
+  serviceArea                 String                        @unique(map: "serviceareas_servicearea_unique")
+  name                        String
+  twuOrganizationServiceAreas twuOrganizationServiceAreas[]
+  twuResources                twuResources[]
+}
+
+model sessions {
+  id          String   @id @db.Uuid
+  createdAt   DateTime @db.Timestamptz(6)
+  updatedAt   DateTime @db.Timestamptz(6)
+  accessToken String?
+  user        String?  @db.Uuid
+  users       users?   @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sessions_user_foreign")
+}
+
+model swuEvaluationPanelMembers {
+  opportunityVersion     String                 @db.Uuid
+  user                   String                 @db.Uuid
+  chair                  Boolean                @default(false)
+  evaluator              Boolean                @default(false)
+  order                  Int
+  swuOpportunityVersions swuOpportunityVersions @relation(fields: [opportunityVersion], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuevaluationpanelmembers_opportunityversion_foreign")
+  users                  users                  @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuevaluationpanelmembers_user_foreign")
+
+  @@id([opportunityVersion, user])
+}
+
+model swuOpportunities {
+  id                     String                   @id @db.Uuid
+  createdAt              DateTime                 @db.Timestamptz(6)
+  createdBy              String?                  @db.Uuid
+  users                  users?                   @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuopportunities_createdby_foreign")
+  swuOpportunityStatuses swuOpportunityStatuses[]
+  swuOpportunityVersions swuOpportunityVersions[]
+  swuProposals           swuProposals[]
+}
+
+model swuOpportunityPhases {
+  id                     String                 @id @db.Uuid
+  opportunityVersion     String                 @db.Uuid
+  phase                  String
+  startDate              DateTime               @db.Timestamptz(6)
+  completionDate         DateTime               @db.Timestamptz(6)
+  maxBudget              Int
+  createdAt              DateTime               @db.Timestamptz(6)
+  createdBy              String?                @db.Uuid
+  users                  users?                 @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuopportunityphases_createdby_foreign")
+  swuOpportunityVersions swuOpportunityVersions @relation(fields: [opportunityVersion], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuopportunityphases_opportunityversion_foreign")
+  swuPhaseCapabilities   swuPhaseCapabilities[]
+}
+
+model swuOpportunityStatuses {
+  id               String           @id @db.Uuid
+  createdAt        DateTime         @db.Timestamptz(6)
+  createdBy        String?          @db.Uuid
+  opportunity      String           @db.Uuid
+  status           String?
+  event            String?
+  note             String?
+  users            users?           @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuopportunitystatuses_createdby_foreign")
+  swuOpportunities swuOpportunities @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuopportunitystatuses_opportunity_foreign")
+}
+
+model swuOpportunityVersions {
+  id                        String                      @id @db.Uuid
+  createdAt                 DateTime                    @db.Timestamptz(6)
+  createdBy                 String?                     @db.Uuid
+  opportunity               String                      @db.Uuid
+  title                     String
+  teaser                    String                      @default("")
+  remoteOk                  Boolean
+  remoteDesc                String                      @default("")
+  location                  String
+  totalMaxBudget            Int
+  minTeamMembers            Int?
+  mandatorySkills           String[]                    @default([])
+  optionalSkills            String[]                    @default([])
+  description               String
+  proposalDeadline          DateTime                    @db.Timestamptz(6)
+  assignmentDate            DateTime                    @db.Timestamptz(6)
+  questionsWeight           Int
+  codeChallengeWeight       Int
+  scenarioWeight            Int
+  priceWeight               Int
+  swuEvaluationPanelMembers swuEvaluationPanelMembers[]
+  swuOpportunityPhases      swuOpportunityPhases[]
+  users                     users?                      @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuopportunityversions_createdby_foreign")
+  swuOpportunities          swuOpportunities            @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuopportunityversions_opportunity_foreign")
+  swuTeamQuestions          swuTeamQuestions[]
+}
+
+model swuPhaseCapabilities {
+  phase                String               @db.Uuid
+  capability           String
+  fullTime             Boolean              @default(false)
+  createdAt            DateTime             @db.Timestamptz(6)
+  createdBy            String?              @db.Uuid
+  users                users?               @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuphasecapabilities_createdby_foreign")
+  swuOpportunityPhases swuOpportunityPhases @relation(fields: [phase], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuphasecapabilities_phase_foreign")
+
+  @@id([phase, capability])
+}
+
+model swuProposalPhases {
+  id                     String                   @id @db.Uuid
+  proposal               String                   @db.Uuid
+  phase                  String
+  proposedCost           Int
+  swuProposals           swuProposals             @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuproposalphases_proposal_foreign")
+  swuProposalTeamMembers swuProposalTeamMembers[]
+}
+
+model swuProposalReferences {
+  proposal     String       @db.Uuid
+  order        Int
+  name         String
+  company      String
+  phone        String
+  email        String
+  swuProposals swuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuproposalreferences_proposal_foreign")
+
+  @@id([proposal, order])
+}
+
+model swuProposalStatuses {
+  id           String       @id @db.Uuid
+  createdAt    DateTime     @db.Timestamptz(6)
+  createdBy    String?      @db.Uuid
+  proposal     String       @db.Uuid
+  status       String?
+  event        String?
+  note         String?
+  users        users?       @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuproposalstatuses_createdby_foreign")
+  swuProposals swuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuproposalstatuses_proposal_foreign")
+}
+
+model swuProposalTeamMembers {
+  member            String            @db.Uuid
+  phase             String            @db.Uuid
+  scrumMaster       Boolean           @default(false)
+  users             users             @relation(fields: [member], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuproposalteammembers_member_foreign")
+  swuProposalPhases swuProposalPhases @relation(fields: [phase], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuproposalteammembers_phase_foreign")
+
+  @@id([member, phase])
+}
+
+model swuProposals {
+  id                                                 String                                               @id @db.Uuid
+  createdAt                                          DateTime                                             @db.Timestamptz(6)
+  createdBy                                          String?                                              @db.Uuid
+  updatedAt                                          DateTime                                             @db.Timestamptz(6)
+  updatedBy                                          String?                                              @db.Uuid
+  challengeScore                                     Int?
+  scenarioScore                                      Int?
+  priceScore                                         Int?
+  opportunity                                        String                                               @db.Uuid
+  organization                                       String?                                              @db.Uuid
+  anonymousProponentName                             String                                               @default("")
+  swuProposalPhases                                  swuProposalPhases[]
+  swuProposalReferences                              swuProposalReferences[]
+  swuProposalStatuses                                swuProposalStatuses[]
+  users_swuProposals_createdByTousers                users?                                               @relation("swuProposals_createdByTousers", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuproposals_createdby_foreign")
+  swuOpportunities                                   swuOpportunities                                     @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuproposals_opportunity_foreign")
+  organizations                                      organizations?                                       @relation(fields: [organization], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuproposals_organization_foreign")
+  users_swuProposals_updatedByTousers                users?                                               @relation("swuProposals_updatedByTousers", fields: [updatedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuproposals_updatedby_foreign")
+  swuTeamQuestionResponseChairEvaluationStatuses     swuTeamQuestionResponseChairEvaluationStatuses[]
+  swuTeamQuestionResponseChairEvaluations            swuTeamQuestionResponseChairEvaluations[]
+  swuTeamQuestionResponseEvaluatorEvaluationStatuses swuTeamQuestionResponseEvaluatorEvaluationStatuses[]
+  swuTeamQuestionResponseEvaluatorEvaluations        swuTeamQuestionResponseEvaluatorEvaluations[]
+  swuTeamQuestionResponses                           swuTeamQuestionResponses[]
+}
+
+model swuTeamQuestionResponses {
+  proposal     String       @db.Uuid
+  order        Int
+  response     String
+  score        Int?
+  swuProposals swuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuteamquestionresponses_proposal_foreign")
+
+  @@id([proposal, order])
+}
+
+model swuTeamQuestions {
+  opportunityVersion     String                 @db.Uuid
+  question               String
+  guideline              String
+  score                  Int
+  wordLimit              Int
+  order                  Int
+  createdAt              DateTime               @db.Timestamptz(6)
+  createdBy              String?                @db.Uuid
+  minimumScore           Int?
+  users                  users?                 @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuteamquestions_createdby_foreign")
+  swuOpportunityVersions swuOpportunityVersions @relation(fields: [opportunityVersion], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuteamquestions_opportunityversion_foreign")
+
+  @@id([opportunityVersion, order])
+}
+
+model twuEvaluationPanelMembers {
+  opportunityVersion     String                 @db.Uuid
+  user                   String                 @db.Uuid
+  chair                  Boolean                @default(false)
+  evaluator              Boolean                @default(false)
+  order                  Int
+  twuOpportunityVersions twuOpportunityVersions @relation(fields: [opportunityVersion], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuevaluationpanelmembers_opportunityversion_foreign")
+  users                  users                  @relation(fields: [user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuevaluationpanelmembers_user_foreign")
+
+  @@id([opportunityVersion, user])
+}
+
+model twuOpportunities {
+  id                     String                   @id @db.Uuid
+  createdAt              DateTime                 @db.Timestamptz(6)
+  createdBy              String?                  @db.Uuid
+  users                  users?                   @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuopportunities_createdby_foreign")
+  twuOpportunityStatuses twuOpportunityStatuses[]
+  twuOpportunityVersions twuOpportunityVersions[]
+  twuProposals           twuProposals[]
+}
+
+model twuOpportunityStatuses {
+  id               String           @id @db.Uuid
+  createdAt        DateTime         @db.Timestamptz(6)
+  createdBy        String?          @db.Uuid
+  opportunity      String           @db.Uuid
+  status           String?
+  event            String?
+  note             String?
+  users            users?           @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuopportunitystatuses_createdby_foreign")
+  twuOpportunities twuOpportunities @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuopportunitystatuses_opportunity_foreign")
+}
+
+model twuOpportunityVersions {
+  id                        String                      @id @db.Uuid
+  createdAt                 DateTime                    @db.Timestamptz(6)
+  createdBy                 String?                     @db.Uuid
+  opportunity               String                      @db.Uuid
+  title                     String
+  teaser                    String                      @default("")
+  remoteOk                  Boolean
+  remoteDesc                String                      @default("")
+  location                  String
+  maxBudget                 Int
+  description               String
+  proposalDeadline          DateTime                    @db.Timestamptz(6)
+  assignmentDate            DateTime                    @db.Timestamptz(6)
+  startDate                 DateTime                    @db.Timestamptz(6)
+  completionDate            DateTime?                   @db.Timestamptz(6)
+  questionsWeight           Int
+  challengeWeight           Int
+  priceWeight               Int
+  twuEvaluationPanelMembers twuEvaluationPanelMembers[]
+  users                     users?                      @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuopportunityversions_createdby_foreign")
+  twuOpportunities          twuOpportunities            @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuopportunityversions_opportunity_foreign")
+  twuResourceQuestions      twuResourceQuestions[]
+  twuResources              twuResources[]
+}
+
+model twuOrganizationServiceAreas {
+  serviceArea   Int
+  organization  String        @db.Uuid
+  organizations organizations @relation(fields: [organization], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuorganizationserviceareas_organization_foreign")
+  serviceAreas  serviceAreas  @relation(fields: [serviceArea], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuorganizationserviceareas_servicearea_foreign")
+
+  @@id([serviceArea, organization])
+}
+
+model twuProposalMember {
+  member       String       @db.Uuid
+  proposal     String       @db.Uuid
+  hourlyRate   Int
+  resource     String       @db.Uuid
+  users        users        @relation(fields: [member], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuproposalmember_member_foreign")
+  twuProposals twuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuproposalmember_proposal_foreign")
+  twuResources twuResources @relation(fields: [resource], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuproposalmember_resource_foreign")
+
+  @@id([member, proposal])
+}
+
+model twuProposalStatuses {
+  id           String       @id @db.Uuid
+  createdAt    DateTime     @db.Timestamptz(6)
+  createdBy    String?      @db.Uuid
+  proposal     String       @db.Uuid
+  status       String?
+  event        String?
+  note         String?
+  users        users?       @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuproposalstatuses_createdby_foreign")
+  twuProposals twuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuproposalstatuses_proposal_foreign")
+}
+
+model twuProposals {
+  id                                                     String                                                   @id @db.Uuid
+  createdAt                                              DateTime                                                 @db.Timestamptz(6)
+  createdBy                                              String?                                                  @db.Uuid
+  updatedAt                                              DateTime                                                 @db.Timestamptz(6)
+  updatedBy                                              String?                                                  @db.Uuid
+  challengeScore                                         Int?
+  priceScore                                             Int?
+  opportunity                                            String                                                   @db.Uuid
+  organization                                           String?                                                  @db.Uuid
+  anonymousProponentName                                 String                                                   @default("")
+  twuProposalAttachments                                 twuProposalAttachments[]
+  twuProposalMember                                      twuProposalMember[]
+  twuProposalStatuses                                    twuProposalStatuses[]
+  users_twuProposals_createdByTousers                    users?                                                   @relation("twuProposals_createdByTousers", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuproposals_createdby_foreign")
+  twuOpportunities                                       twuOpportunities                                         @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuproposals_opportunity_foreign")
+  organizations                                          organizations?                                           @relation(fields: [organization], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuproposals_organization_foreign")
+  users_twuProposals_updatedByTousers                    users?                                                   @relation("twuProposals_updatedByTousers", fields: [updatedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuproposals_updatedby_foreign")
+  twuResourceQuestionResponseChairEvaluationStatuses     twuResourceQuestionResponseChairEvaluationStatuses[]
+  twuResourceQuestionResponseChairEvaluations            twuResourceQuestionResponseChairEvaluations[]
+  twuResourceQuestionResponseEvaluatorEvaluationStatuses twuResourceQuestionResponseEvaluatorEvaluationStatuses[]
+  twuResourceQuestionResponseEvaluatorEvaluations        twuResourceQuestionResponseEvaluatorEvaluations[]
+  twuResourceQuestionResponses                           twuResourceQuestionResponses[]
+}
+
+model twuResourceQuestionResponses {
+  proposal     String       @db.Uuid
+  order        Int
+  response     String
+  score        Int?
+  twuProposals twuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuresourcequestionresponses_proposal_foreign")
+
+  @@id([proposal, order])
+}
+
+model twuResourceQuestions {
+  opportunityVersion     String                 @db.Uuid
+  question               String
+  guideline              String
+  score                  Int
+  wordLimit              Int
+  order                  Int
+  createdAt              DateTime               @db.Timestamptz(6)
+  createdBy              String?                @db.Uuid
+  minimumScore           Int?
+  users                  users?                 @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuresourcequestions_createdby_foreign")
+  twuOpportunityVersions twuOpportunityVersions @relation(fields: [opportunityVersion], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuresourcequestions_opportunityversion_foreign")
+
+  @@id([opportunityVersion, order])
+}
+
+model twuResources {
+  id                     String                 @id @db.Uuid
+  serviceArea            Int
+  opportunityVersion     String                 @db.Uuid
+  targetAllocation       Int
+  mandatorySkills        String[]               @default([])
+  optionalSkills         String[]               @default([])
+  order                  Int
+  twuProposalMember      twuProposalMember[]
+  twuOpportunityVersions twuOpportunityVersions @relation(fields: [opportunityVersion], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuresources_opportunityversion_foreign")
+  serviceAreas           serviceAreas           @relation(fields: [serviceArea], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuresources_servicearea_foreign")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model users {
+  id                                                     String                                                   @id @db.Uuid
+  createdAt                                              DateTime                                                 @db.Timestamptz(6)
+  updatedAt                                              DateTime                                                 @db.Timestamptz(6)
+  type                                                   String
+  status                                                 String
+  name                                                   String
+  email                                                  String?
+  jobTitle                                               String?
+  avatarImageFile                                        String?                                                  @db.Uuid
+  notificationsOn                                        DateTime?                                                @db.Timestamptz(6)
+  acceptedTermsAt                                        DateTime?                                                @db.Timestamptz(6)
+  lastAcceptedTermsAt                                    DateTime?                                                @db.Timestamptz(6)
+  idpUsername                                            String
+  idpId                                                  String
+  deactivatedOn                                          DateTime?                                                @db.Timestamptz(6)
+  deactivatedBy                                          String?                                                  @db.Uuid
+  capabilities                                           String[]                                                 @default([])
+  affiliations                                           affiliations[]
+  content                                                content[]
+  contentVersions                                        contentVersions[]
+  cwuOpportunities                                       cwuOpportunities[]
+  cwuOpportunityStatuses                                 cwuOpportunityStatuses[]
+  cwuOpportunityVersions                                 cwuOpportunityVersions[]
+  cwuProponents_cwuProponents_createdByTousers           cwuProponents[]                                          @relation("cwuProponents_createdByTousers")
+  cwuProponents_cwuProponents_updatedByTousers           cwuProponents[]                                          @relation("cwuProponents_updatedByTousers")
+  cwuProposalStatuses                                    cwuProposalStatuses[]
+  cwuProposals_cwuProposals_createdByTousers             cwuProposals[]                                           @relation("cwuProposals_createdByTousers")
+  cwuProposals_cwuProposals_updatedByTousers             cwuProposals[]                                           @relation("cwuProposals_updatedByTousers")
+  files_files_createdByTousers                           files[]                                                  @relation("files_createdByTousers")
+  organizations                                          organizations[]
+  sessions                                               sessions[]
+  swuEvaluationPanelMembers                              swuEvaluationPanelMembers[]
+  swuOpportunities                                       swuOpportunities[]
+  swuOpportunityPhases                                   swuOpportunityPhases[]
+  swuOpportunityStatuses                                 swuOpportunityStatuses[]
+  swuOpportunityVersions                                 swuOpportunityVersions[]
+  swuPhaseCapabilities                                   swuPhaseCapabilities[]
+  swuProposalStatuses                                    swuProposalStatuses[]
+  swuProposalTeamMembers                                 swuProposalTeamMembers[]
+  swuProposals_swuProposals_createdByTousers             swuProposals[]                                           @relation("swuProposals_createdByTousers")
+  swuProposals_swuProposals_updatedByTousers             swuProposals[]                                           @relation("swuProposals_updatedByTousers")
+  swuTeamQuestionResponseChairEvaluationStatuses         swuTeamQuestionResponseChairEvaluationStatuses[]
+  swuTeamQuestionResponseChairEvaluations                swuTeamQuestionResponseChairEvaluations[]
+  swuTeamQuestionResponseEvaluatorEvaluationStatuses     swuTeamQuestionResponseEvaluatorEvaluationStatuses[]
+  swuTeamQuestionResponseEvaluatorEvaluations            swuTeamQuestionResponseEvaluatorEvaluations[]
+  swuTeamQuestions                                       swuTeamQuestions[]
+  twuEvaluationPanelMembers                              twuEvaluationPanelMembers[]
+  twuOpportunities                                       twuOpportunities[]
+  twuOpportunityStatuses                                 twuOpportunityStatuses[]
+  twuOpportunityVersions                                 twuOpportunityVersions[]
+  twuProposalMember                                      twuProposalMember[]
+  twuProposalStatuses                                    twuProposalStatuses[]
+  twuProposals_twuProposals_createdByTousers             twuProposals[]                                           @relation("twuProposals_createdByTousers")
+  twuProposals_twuProposals_updatedByTousers             twuProposals[]                                           @relation("twuProposals_updatedByTousers")
+  twuResourceQuestionResponseChairEvaluationStatuses     twuResourceQuestionResponseChairEvaluationStatuses[]
+  twuResourceQuestionResponseChairEvaluations            twuResourceQuestionResponseChairEvaluations[]
+  twuResourceQuestionResponseEvaluatorEvaluationStatuses twuResourceQuestionResponseEvaluatorEvaluationStatuses[]
+  twuResourceQuestionResponseEvaluatorEvaluations        twuResourceQuestionResponseEvaluatorEvaluations[]
+  twuResourceQuestions                                   twuResourceQuestions[]
+  files_users_avatarImageFileTofiles                     files?                                                   @relation("users_avatarImageFileTofiles", fields: [avatarImageFile], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_avatarimagefile_foreign")
+  users                                                  users?                                                   @relation("usersTousers", fields: [deactivatedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "users_deactivatedby_foreign")
+  other_users                                            users[]                                                  @relation("usersTousers")
+
+  @@unique([type, email], map: "users_type_email_unique")
+  @@unique([type, idpId], map: "users_type_idpid_unique")
+  @@unique([type, idpUsername], map: "users_type_idpusername_unique")
+}
+
+model cwuProponents {
+  id                                   String         @id @db.Uuid
+  createdAt                            DateTime       @db.Timestamptz(6)
+  createdBy                            String?        @db.Uuid
+  updatedAt                            DateTime       @db.Timestamptz(6)
+  updatedBy                            String?        @db.Uuid
+  legalName                            String
+  email                                String
+  phone                                String?
+  street1                              String
+  street2                              String?
+  city                                 String
+  region                               String
+  mailCode                             String
+  country                              String
+  users_cwuProponents_createdByTousers users?         @relation("cwuProponents_createdByTousers", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuproponents_createdby_foreign")
+  users_cwuProponents_updatedByTousers users?         @relation("cwuProponents_updatedByTousers", fields: [updatedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuproponents_updatedby_foreign")
+  cwuProposals                         cwuProposals[]
+}
+
+model cwuProposalStatuses {
+  id           String       @id @db.Uuid
+  createdAt    DateTime     @db.Timestamptz(6)
+  createdBy    String?      @db.Uuid
+  proposal     String       @db.Uuid
+  status       String?
+  event        String?
+  note         String?
+  users        users?       @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuproposalstatuses_createdby_foreign")
+  cwuProposals cwuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cwuproposalstatuses_proposal_foreign")
+}
+
+model cwuProposals {
+  id                                  String                @id @db.Uuid
+  createdAt                           DateTime              @db.Timestamptz(6)
+  createdBy                           String?               @db.Uuid
+  updatedAt                           DateTime              @db.Timestamptz(6)
+  updatedBy                           String?               @db.Uuid
+  proposalText                        String                @default("")
+  additionalComments                  String                @default("")
+  proponentIndividual                 String?               @db.Uuid
+  proponentOrganization               String?               @db.Uuid
+  score                               Float?                @db.Real
+  opportunity                         String                @db.Uuid
+  anonymousProponentName              String                @default("")
+  cwuProposalStatuses                 cwuProposalStatuses[]
+  users_cwuProposals_createdByTousers users?                @relation("cwuProposals_createdByTousers", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuproposals_createdby_foreign")
+  cwuOpportunities                    cwuOpportunities      @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cwuproposals_opportunity_foreign")
+  cwuProponents                       cwuProponents?        @relation(fields: [proponentIndividual], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuproposals_proponentindividual_foreign")
+  organizations                       organizations?        @relation(fields: [proponentOrganization], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuproposals_proponentorganization_foreign")
+  users_cwuProposals_updatedByTousers users?                @relation("cwuProposals_updatedByTousers", fields: [updatedBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuproposals_updatedby_foreign")
+}
+
+model swuTeamQuestionResponseChairEvaluationStatuses {
+  proposal              String       @db.Uuid
+  evaluationPanelMember String       @db.Uuid
+  status                String
+  note                  String?
+  createdAt             DateTime     @db.Timestamptz(6)
+  users                 users        @relation(fields: [evaluationPanelMember], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuteamquestionresponsechairevaluationstatuses_evaluationpanelm")
+  swuProposals          swuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuteamquestionresponsechairevaluationstatuses_proposal_foreign")
+
+  @@id([proposal, evaluationPanelMember, createdAt])
+}
+
+model swuTeamQuestionResponseChairEvaluations {
+  proposal              String       @db.Uuid
+  questionOrder         Int
+  evaluationPanelMember String       @db.Uuid
+  createdAt             DateTime     @db.Timestamptz(6)
+  updatedAt             DateTime     @db.Timestamptz(6)
+  score                 Float        @db.Real
+  notes                 String       @default("")
+  users                 users        @relation(fields: [evaluationPanelMember], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuteamquestionresponsechairevaluations_evaluationpanelmember_f")
+  swuProposals          swuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuteamquestionresponsechairevaluations_proposal_foreign")
+
+  @@id([proposal, questionOrder, evaluationPanelMember])
+}
+
+model swuTeamQuestionResponseEvaluatorEvaluationStatuses {
+  proposal              String       @db.Uuid
+  evaluationPanelMember String       @db.Uuid
+  status                String
+  note                  String?
+  createdAt             DateTime     @db.Timestamptz(6)
+  users                 users        @relation(fields: [evaluationPanelMember], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuteamquestionresponseevaluatorevaluationstatuses_evaluationpa")
+  swuProposals          swuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuteamquestionresponseevaluatorevaluationstatuses_proposal_for")
+
+  @@id([proposal, evaluationPanelMember, createdAt])
+}
+
+model swuTeamQuestionResponseEvaluatorEvaluations {
+  proposal              String       @db.Uuid
+  questionOrder         Int
+  evaluationPanelMember String       @db.Uuid
+  createdAt             DateTime     @db.Timestamptz(6)
+  updatedAt             DateTime     @db.Timestamptz(6)
+  score                 Float        @db.Real
+  notes                 String       @default("")
+  users                 users        @relation(fields: [evaluationPanelMember], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "swuteamquestionresponseevaluatorevaluations_evaluationpanelmemb")
+  swuProposals          swuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "swuteamquestionresponseevaluatorevaluations_proposal_foreign")
+
+  @@id([proposal, questionOrder, evaluationPanelMember])
+}
+
+model twuProposalAttachments {
+  proposal     String       @db.Uuid
+  file         String       @db.Uuid
+  files        files        @relation(fields: [file], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuproposalattachments_file_foreign")
+  twuProposals twuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuproposalattachments_proposal_foreign")
+
+  @@id([proposal, file])
+}
+
+model twuResourceQuestionResponseChairEvaluationStatuses {
+  proposal              String       @db.Uuid
+  evaluationPanelMember String       @db.Uuid
+  status                String
+  note                  String?
+  createdAt             DateTime     @db.Timestamptz(6)
+  users                 users        @relation(fields: [evaluationPanelMember], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuresourcequestionresponsechairevaluationstatuses_evaluationpa")
+  twuProposals          twuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuresourcequestionresponsechairevaluationstatuses_proposal_for")
+
+  @@id([proposal, evaluationPanelMember, createdAt])
+}
+
+model twuResourceQuestionResponseChairEvaluations {
+  proposal              String       @db.Uuid
+  questionOrder         Int
+  evaluationPanelMember String       @db.Uuid
+  createdAt             DateTime     @db.Timestamptz(6)
+  updatedAt             DateTime     @db.Timestamptz(6)
+  score                 Float        @db.Real
+  notes                 String       @default("")
+  users                 users        @relation(fields: [evaluationPanelMember], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuresourcequestionresponsechairevaluations_evaluationpanelmemb")
+  twuProposals          twuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuresourcequestionresponsechairevaluations_proposal_foreign")
+
+  @@id([proposal, questionOrder, evaluationPanelMember])
+}
+
+model twuResourceQuestionResponseEvaluatorEvaluationStatuses {
+  proposal              String       @db.Uuid
+  evaluationPanelMember String       @db.Uuid
+  status                String
+  note                  String?
+  createdAt             DateTime     @db.Timestamptz(6)
+  users                 users        @relation(fields: [evaluationPanelMember], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuresourcequestionresponseevaluatorevaluationstatuses_evaluati")
+  twuProposals          twuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuresourcequestionresponseevaluatorevaluationstatuses_proposal")
+
+  @@id([proposal, evaluationPanelMember, createdAt])
+}
+
+model twuResourceQuestionResponseEvaluatorEvaluations {
+  proposal              String       @db.Uuid
+  questionOrder         Int
+  evaluationPanelMember String       @db.Uuid
+  createdAt             DateTime     @db.Timestamptz(6)
+  updatedAt             DateTime     @db.Timestamptz(6)
+  score                 Float        @db.Real
+  notes                 String       @default("")
+  users                 users        @relation(fields: [evaluationPanelMember], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "twuresourcequestionresponseevaluatorevaluations_evaluationpanel")
+  twuProposals          twuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuresourcequestionresponseevaluatorevaluations_proposal_foreig")
+
+  @@id([proposal, questionOrder, evaluationPanelMember])
 }

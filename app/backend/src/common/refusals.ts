@@ -72,6 +72,11 @@ export class RefusalFilter implements ExceptionFilter {
     process.stderr.write(line + "\n")) {}
 
   catch(exception: unknown, host: ArgumentsHost): void {
+    this.answer(exception, host.switchToHttp().getResponse<Response>());
+  }
+
+  /** Answers with the refusal, writing a fault to the operational log. */
+  answer(exception: unknown, response: Response): void {
     const { status, body } = refusalFor(exception);
     if (status >= 500) {
       // The failure reaches the operational log; no request body, address or token does.
@@ -86,6 +91,6 @@ export class RefusalFilter implements ExceptionFilter {
         }),
       );
     }
-    host.switchToHttp().getResponse<Response>().status(status).json(body);
+    response.status(status).json(body);
   }
 }

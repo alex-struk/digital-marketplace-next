@@ -1,6 +1,10 @@
 # 0003 · Preserve the recovered HTTP contract, minus its test-only entrances
 
 - Status: proposed (G2), revised after the first G2 return (sign-in section added)
+- Superseded in part by: 0015. `/auth/sign-in` and `/auth/callback` are the service's own
+  redirects, as the contract has them, not screens of the single-page app
+- Superseded in part by: 0017. A request to `/api` with no token is answered for whoever the
+  service's session cookie names, so a test may sign in through the browser and then call `/api`
 - Date: 2026-09-19
 
 ## Decision
