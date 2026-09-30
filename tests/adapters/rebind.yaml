@@ -2476,6 +2476,11 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
+    closed: &a17
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-09-30T16:22:21.949Z
   - id: R-6.3
     target: new
     why: "unbound: organization-edit.open — /organizations/:orgId/edit is offered
@@ -2494,6 +2499,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
+    closed: *a17
   - id: R-6.4
     target: new
     why: "unbound: organization-edit.open — /organizations/:orgId/edit is offered
@@ -2512,6 +2518,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
+    closed: *a17
   - id: R-6.5
     target: new
     why: "unbound: organization-edit.open — /organizations/:orgId/edit is offered
@@ -2530,6 +2537,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
+    closed: *a17
   - id: R-6.20
     target: new
     why: "unbound: user-profile-self-notifications.open —
@@ -2547,6 +2555,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
+    closed: *a17
   - id: R-6.28
     target: new
     why: "unbound: user-profile.open — /users/:userId is offered only to a signed-in
@@ -2563,6 +2572,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
+    closed: *a17
   - id: R-4.1
     target: new
     why: "unbound: user-profile-self.user_identifier — /users/me is offered only to
@@ -2578,6 +2588,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
+    closed: *a17
   - id: R-4.2
     target: new
     why: "unbound: user-profile-self.email_field — /users/me is offered only to a
@@ -2601,6 +2612,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
+    closed: *a17
   - id: R-4.3
     target: new
     why: "unbound: user-sign-up-complete.open — /sign-up/complete is offered only to
@@ -2626,6 +2638,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
+    closed: *a17
   - id: R-4.6
     target: new
     why: "unbound: user-profile-self.email_field — /users/me is offered only to a
@@ -2641,6 +2654,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
+    closed: *a17
   - id: R-4.22
     target: new
     why: "unbound: opportunity-dashboard.my_opportunities_table — /dashboard is
@@ -2656,6 +2670,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
+    closed: *a17
   - id: R-4.23
     target: new
     why: "unbound: user-sign-up-complete.open — /sign-up/complete is offered only to
@@ -2690,6 +2705,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
+    closed: *a17
   - id: R-4.24
     target: new
     why: "unbound: user-sign-up-complete.open — /sign-up/complete is offered only to
@@ -2706,6 +2722,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
+    closed: *a17
   - id: R-4.27
     target: new
     why: "unbound: user-profile-self.name_field — /users/me is offered only to a
@@ -2737,6 +2754,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
+    closed: *a17
   - id: R-4.28
     target: new
     why: "unbound: user-profile-self.edit_profile — /users/me is offered only to a
@@ -2760,3 +2778,4 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
+    closed: *a17

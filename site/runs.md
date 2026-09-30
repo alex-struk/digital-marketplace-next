@@ -226,6 +226,10 @@
 - 06:22:22 run bind-adapter: ok, cost 5.391597399999999, turns 89, on claude claude-opus-5-5 (2.1.284 (Claude Code))
 - 06:22:22 propose bind-adapter-new-5 at G3
 - 06:23:19 rule bind-adapter-new-5 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 09:11:21 oracle down old
+- 09:11:22 deviation: next named `sdlc run calibrate --target old`; ran `sdlc run build --slice 2 --revise`; reason: The Tests phase is held open only by the old target's calibration tail: a few adapter bindings the blind bind-adapter stage keeps missing (R-1.17, R-7.26 and similar), each full run exposing one or two more. They concern the old application's adapter, not the new application. They stay owed; the build proceeds slice by slice meanwhile, by the operator's judgement under the tech lead's delegation for this first autonomous run.
+- 09:22:22 verify slice 2: returned — R-4.1, R-4.2, R-4.3, R-4.17, R-4.22, R-4.24 fail. Next: sdlc run build --slice 2 --revise
+- 09:22:23 run verify: regenerated 368 files in .sdlc, site, tests
 
 # Run record 2026-09-29
 

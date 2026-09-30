@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-2-5 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">354</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">348</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">317</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-2-5</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 12:49</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 2 (A person can sign in, finish signing up and sign out) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> The seed failure was very likely caused by a stale container image, not by the seed files or the migrations.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>The seed failure was very likely caused by a stale container image, not by the seed files or the migrations. I&#39;ve made the sandbox rebuild that image every time it&#39;s used, but I couldn&#39;t run Docker here, so the fix hasn&#39;t been confirmed in the real sandbox.</p>
+<p><strong>What went wrong.</strong> The error means service area 5 was still <code>DELIVERY_MANAGER</code> when <code>tests/seed/000-installation.sql</code> tried to put it back as <code>SERVICE_DESIGNER</code>. The migration that renames it (<code>20260930000001_service_areas_as_kept</code>) is already in <code>app/migrations</code>. So the image the seed ran from must have been built before that migration existed.</p>
+<p>The compose file makes that easy to hit. The <code>seed</code> service sits behind a profile, so <code>docker compose up --build</code> never rebuilds its image. <code>docker compose run seed</code>, which is what the sandbox used, then reuses whatever image already carries that name.</p>
+<p><strong>What I changed.</strong></p>
+<ul><li><strong>Compose file:</strong> in <code>app/compose/compose.yaml</code>, the <code>seed</code> and <code>migrate</code> services now have <code>pull_policy: build</code>. Compose rebuilds their image every time either is started, including by <code>run seed</code>. Layer caching keeps this cheap when nothing changed.</li><li><strong>Seed log:</strong> the seed script (<code>app/migrations/scripts/seed.cjs</code>) now lists by name the migrations it ran. If this happens again, the log will show which migration history the image carried.</li><li><strong>Decision record:</strong> <code>docs/decisions/0014-the-seed-image-is-rebuilt-when-asked-for.md</code> records the choice and why.</li></ul>
+<p>Nothing else in the application changed. The slice-2 work on sign-in, sign-up, sign-out, the session and the mail path is as the earlier build left it.</p>
+<p><strong>How I checked it.</strong></p>
+<ul><li><strong>Seed script:</strong> I ran it end to end, twice in a row, against an in-process PostgreSQL. Both runs applied all five migrations and all 16 seed files. Both left service areas 1 to 5 with area 5 as <code>SERVICE_DESIGNER</code>, and the same 147 accounts.</li><li><strong>Check script:</strong> <code>npm --prefix app run check</code> passes, with all 74 unit tests.</li><li><strong>Cleanup:</strong> I deleted the <code>node_modules</code> folders I installed, so the workspace carries only source.</li></ul>
+<p><strong>What I could not do.</strong> The sandbox wouldn&#39;t let me run Docker without an approval nobody was here to give. So I couldn&#39;t start the real stack and watch <code>seed</code> rebuild and succeed on actual PostgreSQL. My explanation is an inference: it&#39;s the only one I found that fits the error, given that the current source seeds correctly. If a later run still fails the same way, the new log line will show whether the rename migration was in the image.</p>
+<p>I changed nothing outside <code>app/</code> and <code>docs/decisions/</code>, and no criterion needed a change to the spec, plan, design or seed to build. The next slice will find the sandbox as slice 2 intended it, with the seed image rebuilt whenever it&#39;s used.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by tech-lead (a person) on 2026-09-30 16:11.</p>
+<h3>Conditions</h3><ol class="conditions"><li>Fix R-4.17: signing out must end the session with both the service and the identity provider, and tell the person it succeeded or failed. The adapter has since been rebound (bind-adapter-new-5), so re-verify all of slice 2.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
