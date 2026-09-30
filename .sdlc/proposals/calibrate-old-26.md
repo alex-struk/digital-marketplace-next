@@ -57,3 +57,14 @@ The ID is the criterion's own id exactly as `spec/criteria-index.json` spells it
 takes no text; the other two require a colon and text on the same line. A condition may not span
 more than one line.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does R-1.17's failure against old (an opportunity with a question at position 101, submitted for review, gets 'could not be submitted. Please try again later.' instead of a message naming the question limit) belong to the application, the spec or the test? Ruling: approve, with R-1.17 ruled defect-in-old. Reason: the old source shows the server does refuse it. validateTeamQuestionOrder (src/shared/lib/validation/opportunity/sprint-with-us.ts:367) limits each question's position to 0 to MAX_TEAM_QUESTIONS = 100 and returns an error keyed on 'order'. But the person never enters a position, so the form has no field to show that error against, and the front end shows a generic toast telling them to try again later. That advice is false because the rejection is deterministic. The criterion's 'refused' half matches the old app and its 'offending field is named' half is the correct requirement, so this is a defect in the old app and not a misdescription. The test is sound: it signs in as public sector staff, builds exactly the case the criterion describes, and accepts any message mentioning question, position or order, so a plain 'too many questions' message passes. Spec-wrong would write a misleading error into the rebuild's contract, and test-wrong has nothing to point at. What would change the ruling: evidence that the old front end names the limit somewhere this test does not read (e.g. an inline message on the questions tab rather than the page's field-error area); that would make it test-wrong. This proposal settles none of the three owed instructions (build-slice-2-5#1, build-slice-2-11#4, build-slice-2-11#5), so they stay open. The failing egress check flags only build-slice-2-11 files and one line of .sdlc/conditions.yaml, none of which this diff touches, and build-slice-2-11#5 already covers fixing it.
+
+**Conditions:**
+- defect-in-old R-1.17
