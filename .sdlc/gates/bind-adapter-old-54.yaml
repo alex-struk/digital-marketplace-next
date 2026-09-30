@@ -1,0 +1,21 @@
+gate: G3
+verdict: escalated
+by: runner:bind-adapter
+held_by: runner
+escalate_to: tech-lead
+rationale: >-
+  bind-adapter was handed owed work sent back to it more times than the
+  project's policy allows, so this proposal is ruled by tech-lead rather than
+  put to G3's holder for another round.
+
+  - R-1.17 on old: sent to bind-adapter 3 times, past the limit of 2 that
+  policy.loops.rebind sets. What each send asked for:
+    1. opportunitySwuEdit.teamQuestionsTab opens the sidebar 'Team Questions' tab under OPPORTUNITY EVALUATION, which is the proponents' team-question scoring table, not the opportunity's list of questions; it must read the saved opportunity's own team questions, in the order listed, from the 'Opportunity' tab's 'Team Questions' section
+    2. opportunityTwuEdit.resourceQuestionsTab read the sidebar's 'Resource Questions' link under Opportunity Evaluation (proposal scoring) and returned sidebar and summary text; it must read the opportunity's own Resource Questions step inside the Opportunity tab, where authored questions are listed. Also, opportunityTwuCreate/opportunitySwuCreate.fieldError report '<step> is incomplete' when no field message is shown; they must return only what the page says against fields, never a step title, which currently fails the empty-guideline rows on text the page never said about a field and makes the empty-question row pass on the word 'Questions'.
+    3. opportunitySwuCreate.fieldError returned '' for a 1,001-character question with Submit for Review disabled, although old's Question box uses the same LongText widget and check as Response Guidelines and shows 'Question must be between 1 and 1000 characters long.' (the over-length guideline row passes in the same run); find why addTeamQuestion's Question value or its field message is lost and return it. Also, a value given as empty for Question or Response Guidelines is filled into an already-empty box, which fires no change, so old never validates it: enter it as a person clearing the box would (type, then clear, then leave the box) so old's own refusal is shown, for both addTeamQuestion and addResourceQuestion.
+  - R-7.26 on old: sent to bind-adapter 3 times, past the limit of 2 that
+  policy.loops.rebind sets. What each send asked for:
+    1. unbound: file-embedded-image.upload_body_image — no image file was named
+    2. fileEmbeddedImage.imageRenderedInPublishedText never opens the published /content/<slug> page and reads images beside the heading of the edit screen left after Publish Changes, answering empty; it must open the published page for the slug and read the body's images there. imageInsertedIntoText returns the whole body text, which is truthy with no image in it; it must return the inserted image reference (the FILE_ID or /api/files/ marker) and empty when none was inserted.
+    3. fileEmbeddedImage.imageRenderedInPublishedText returned '' on the published /content/<slug> page, whose body visibly holds img "body-image.png" in the paragraph right after the 'Published … | Updated …' line; imageSources walks only the level-1 heading's next element siblings, which does not reach that paragraph on old's markup. Collect img elements from the page's content region after the heading (excluding site header and footer), and match the /api/files/<id> the body's FILE_ID marker names.
+at: 2026-09-30T09:14:25.309Z
