@@ -1,0 +1,17 @@
+gate: G3
+verdict: escalated
+by: runner:bind-adapter
+held_by: runner
+escalate_to: tech-lead
+rationale: >-
+  bind-adapter was handed owed work sent back to it more times than the
+  project's policy allows, so this proposal is ruled by tech-lead rather than
+  put to G3's holder for another round.
+
+  - R-1.10 on old: sent to bind-adapter 4 times, past the limit of 2 that
+  policy.loops.rebind sets. What each send asked for:
+    1. publish (index.ts:1856-1859, 1880) returns quietly when the Publish control is disabled, so the test treats the submission as made and waits for a field error; it must throw when Publish is disabled. fieldError (index.ts:1885 via messages) also misses the teaser's validation text because it needs a MESSAGE word and skips paragraph lines; read the field's own error
+    2. for the over-length teaser (501 chars) and description (10,001 chars) rows, opportunityCwuCreate.fieldError() returned '' although old draws 'Teaser must be between 0 and 500 characters long.' / 'Description must be between 1 and 10000 characters long.' directly under the textarea, and the title-over-200 row passes with the same reader; saidAfterField stops climbing when an ancestor holds more than one field, which the description editor's own image 'Choose File' file input causes, so the field's message is never reached; confirm the value is actually entered into both textareas (Teaser and the Description markdown editor) and read the message drawn in the field's own form group, not counting the editor's file input as a second field
+    3. on the Code With Us create form, fieldError() read an empty string after publish with a 501-character teaser, although old draws 'Teaser must be between 0 and 500 characters long.' beneath the Teaser box; confirm the fill puts all 501 characters into the Teaser box (not cut short by the box or the fill) and that fieldErrors/stepFormErrors reaches the Teaser field's own group on its step, as it does for the title and description
+    4. on the Code With Us create form, with a 501-character teaser, the first opportunityCwuCreate.fieldError() call never returned within the test's 15-second expect.poll window: the error has no received value, only the poll timeout. When stepFormErrors() reads nothing, the fallback namedFieldErrors() goes through every step again and waits up to 2 seconds for each text box the test filled (title, teaser, location, description, remote description), which can take the whole 15 seconds. Make one fieldError() call return within about 3 seconds: read the Teaser field's own group on '1. Overview' first, spend one shared short wait across all named boxes rather than 2 seconds each, and do not go through the steps twice in one call. Also find out why stepFormErrors() missed the teaser message that old draws on step 1, when it finds the title and description messages.
+at: 2026-09-30T21:51:14.668Z
