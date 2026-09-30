@@ -1,9 +1,11 @@
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  contractForThisService,
   loadContract,
   withLocalServer,
   withoutTestOnlyRoutes,
+  withWholeDescriptions,
 } from "../src/common/contract";
 import { refusalFor } from "../src/common/refusals";
 import { BadRequestException, NotFoundException } from "@nestjs/common";
@@ -35,6 +37,56 @@ describe("the contract the boundary validates against", () => {
     expect(paths["/auth/createsessiongov"]).toBeUndefined();
     expect(paths["/auth/createsessionvendor/{id}"]).toBeUndefined();
     expect(paths["/auth/sign-in"]).toBeDefined();
+  });
+
+  it("puts back together a description YAML split at its comma, and changes nothing else", () => {
+    const mended = withWholeDescriptions({
+      paths: {
+        "/a": {
+          post: {
+            responses: {
+              "201": { description: "Made." },
+              "400": {
+                description: "Refused",
+                "answered with the reasons keyed by what was wrong.": null,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    expect(mended).toEqual({
+      paths: {
+        "/a": {
+          post: {
+            responses: {
+              "201": { description: "Made." },
+              "400": {
+                description: "Refused, answered with the reasons keyed by what was wrong.",
+              },
+            },
+          },
+        },
+      },
+    });
+  });
+
+  it("leaves the recovered contract with no response member a validator would reject", () => {
+    const contract = contractForThisService(loadContract(CONTRACT));
+    const allowed = new Set(["description", "headers", "content", "links"]);
+    const strays: string[] = [];
+    for (const [address, route] of Object.entries(contract.paths as Record<string, Record<string, { responses?: Record<string, object> }>>)) {
+      for (const [method, operation] of Object.entries(route)) {
+        for (const [status, response] of Object.entries(operation?.responses ?? {})) {
+          for (const key of Object.keys(response)) {
+            if (!allowed.has(key)) strays.push(`${method} ${address} ${status} ${key}`);
+          }
+        }
+      }
+    }
+
+    expect(strays).toEqual([]);
   });
 });
 

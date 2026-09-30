@@ -27,10 +27,15 @@ suite's own seed files are really applied.
 SDLC_SANDBOX_PASSWORD=... docker compose -f app/compose/compose.yaml up --build
 ```
 
-The application answers on <http://localhost:4300>. The identity provider is on :8080 and
-the mail catcher on :8025. Every account `tests/seed/manifest.yaml` names signs in at the
-identity provider with its `idp_id` as username and that password; the password is read from
-the environment and is written into no file here.
+The application answers on <http://localhost:4300>. The identity provider's realm is at
+<http://localhost:8080/realms/digital-marketplace> and the mail catcher's API on :8025, with
+the hold proxy's API beside it under `/hold`. Every account `tests/seed/manifest.yaml` names
+signs in at the identity provider with its `idp_id` as username and that password; the
+password is read from the environment and is written into no file here. Starting with
+`SDLC_DISABLE_NOTIFICATIONS=1` switches every message off (R-6.1).
+
+Signing in, what a session answers with, and the cookie that carries the token are in
+decision record 0011; the mail path every message goes through is in 0012.
 
 The schema is brought up to date by the `migrate` service before the service starts. To put
 the data back to the state `tests/seed/manifest.yaml` describes — wiping whatever is there

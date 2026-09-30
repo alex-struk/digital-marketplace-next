@@ -1,0 +1,16 @@
+# The mail catcher's API, with the hold proxy's control API beside it under /hold
+# (spec/contract/observables.yaml, email.delivery_delay). For a builder's machine only.
+{
+	admin off
+	auto_https off
+}
+
+:8025 {
+	handle_path /hold/* {
+		reverse_proxy mail-hold:8474
+	}
+
+	handle {
+		reverse_proxy mail:8025
+	}
+}

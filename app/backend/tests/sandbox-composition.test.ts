@@ -96,6 +96,9 @@ describe("the realm the sandbox identity provider imports", () => {
       "duplicateEmailsAllowed",
       "resetPasswordAllowed",
       "editUsernameAllowed",
+      "accessTokenLifespan",
+      "ssoSessionIdleTimeout",
+      "ssoSessionMaxLifespan",
       "clients",
       "users",
       "roles",
@@ -132,6 +135,132 @@ describe("the realm the sandbox identity provider imports", () => {
   });
 });
 
+type RealmUser = {
+  username: string;
+  email?: string;
+  attributes?: Record<string, string[]>;
+};
+
+type RealmClient = {
+  clientId: string;
+  publicClient: boolean;
+  secret?: string;
+  redirectUris: string[];
+  webOrigins: string[];
+  attributes: Record<string, string>;
+  protocolMappers?: { protocolMapper: string; config: Record<string, string> }[];
+};
+
+describe("signing in through the sandbox realm (R-4.1, decision record 0004)", () => {
+  const { users, clients, components } = realm as {
+    users: RealmUser[];
+    clients: RealmClient[];
+    components?: Record<string, { providerId: string; config: Record<string, string[]> }[]>;
+  };
+  const manifest = readFileSync(path.resolve(composeDir, "../../tests/seed/manifest.yaml"), "utf8");
+  const personas = readFileSync(
+    path.resolve(composeDir, "../../spec/contract/personas.yaml"),
+    "utf8",
+  );
+
+  it("carries every account the seed manifest names as reachable, and every persona's username", () => {
+    const usernames = new Set(users.map((user) => user.username));
+    const seeded = [...manifest.matchAll(/^\s+idp_id: ([a-z0-9-]+)\s*$/gm)]
+      .map((match) => match[1] ?? "")
+      .filter((id) => id !== "migration_user");
+    const signIns = [...personas.matchAll(/sandbox-idp: \{ username: ([a-z0-9-]+) \}/g)].map(
+      (match) => match[1] ?? "",
+    );
+
+    expect([...seeded, ...signIns].filter((name) => !usernames.has(name))).toEqual([]);
+  });
+
+  it("gives every account a kind of identity the service recognises", () => {
+    for (const user of users) {
+      expect(["idir", "github"], user.username).toContain(user.attributes?.identity_provider?.[0]);
+    }
+    const kindOf = (name: string) =>
+      users.find((user) => user.username === name)?.attributes?.identity_provider?.[0];
+    expect(kindOf("first-time-gov")).toBe("idir");
+    expect(kindOf("first-time-vendor")).toBe("github");
+    expect(kindOf("test-admin")).toBe("idir");
+    expect(kindOf("test-vendor-1")).toBe("github");
+  });
+
+  it("leaves the account with no address without one, as the identity provider shares none", () => {
+    expect(users.find((user) => user.username === "test-vendor-7")?.email).toBeUndefined();
+  });
+
+  it("puts the kind of identity in the token, and names the app's client as its audience", () => {
+    const client = clients.find((each) => each.clientId === "digital-marketplace-app");
+    const mappers = client?.protocolMappers ?? [];
+
+    expect(
+      mappers.find((mapper) => mapper.protocolMapper === "oidc-usermodel-attribute-mapper")?.config,
+    ).toMatchObject({
+      "user.attribute": "identity_provider",
+      "claim.name": "identity_provider",
+      "access.token.claim": "true",
+    });
+    expect(
+      mappers.find((mapper) => mapper.protocolMapper === "oidc-audience-mapper")?.config,
+    ).toMatchObject({ "included.client.audience": "digital-marketplace-app" });
+  });
+
+  it("is a public client under PKCE, holding no secret, answering only the app's origin", () => {
+    const client = clients.find((each) => each.clientId === "digital-marketplace-app");
+
+    expect(client?.publicClient).toBe(true);
+    expect(client?.secret).toBeUndefined();
+    expect(client?.attributes["pkce.code.challenge.method"]).toBe("S256");
+    expect(client?.redirectUris).toEqual(["http://localhost:4300/*"]);
+    expect(client?.webOrigins).toEqual(["http://localhost:4300"]);
+    expect(client?.attributes["post.logout.redirect.uris"]).toBe("http://localhost:4300/*");
+  });
+
+  it("declares a user profile that requires nothing, and keeps the identity attributes", () => {
+    const provider = components?.["org.keycloak.userprofile.UserProfileProvider"]?.[0];
+    expect(provider?.providerId).toBe("declarative-user-profile");
+    const profile = JSON.parse(provider?.config["kc.user.profile.config"]?.[0] ?? "{}") as {
+      attributes: { name: string; required?: unknown }[];
+    };
+    const names = profile.attributes.map((attribute) => attribute.name);
+
+    expect(names).toEqual(
+      expect.arrayContaining(["username", "email", "firstName", "lastName", "identity_provider"]),
+    );
+    // Nothing is required, so no account is stopped at sign-in to fill in a missing email
+    // address or name.
+    expect(profile.attributes.filter((attribute) => attribute.required)).toEqual([]);
+  });
+});
+
+describe("the settings the service starts with in the sandbox", () => {
+  const environment = (name: string) =>
+    (service(name) as Service & { environment?: Record<string, string> }).environment ?? {};
+
+  it("checks tokens against the realm the browser signs in to, reading its keys over the network", () => {
+    expect(environment("backend")).toMatchObject({
+      OIDC_ISSUER: "http://localhost:8080/realms/digital-marketplace",
+      OIDC_JWKS_URI: "http://idp:8080/realms/digital-marketplace/protocol/openid-connect/certs",
+      OIDC_CLIENT_ID: "digital-marketplace-app",
+    });
+    expect(environment("frontend")).toMatchObject({
+      OIDC_ISSUER: "http://localhost:8080/realms/digital-marketplace",
+      OIDC_CLIENT_ID: "digital-marketplace-app",
+    });
+  });
+
+  it("sends mail from the configured sender, marked as a test, through the hold proxy (R-6.3, R-6.4)", () => {
+    expect(environment("backend")).toMatchObject({
+      MAILER_FROM: "Digital Marketplace <donotreply@example.test>",
+      SHOW_TEST_INDICATOR: "1",
+      SMTP_HOST: "mail-hold",
+    });
+    expect(environment("mail")).toMatchObject({ MP_ENABLE_CHAOS: "true" });
+  });
+});
+
 describe("the addresses the sandbox publishes", () => {
   it("answers the application on 4300, and lets nothing else take that port", () => {
     const onApp = publishedPorts().filter(({ host }) => host === "4300");
@@ -145,6 +274,12 @@ describe("the addresses the sandbox publishes", () => {
     expect(onEighty.map(({ service }) => service)).toEqual(["idp"]);
     expect(onEighty.map(({ container }) => container)).toEqual(["8080"]);
     expect(service("idp").command).toContain("--http-port=8080");
+  });
+
+  it("publishes the mail catcher's API on 8025 through one front, with nothing else there", () => {
+    const onMail = publishedPorts().filter(({ host }) => host === "8025");
+
+    expect(onMail.map(({ service }) => service)).toEqual(["mail-api"]);
   });
 
   it("starts the identity provider only once the realm has been rendered with a password", () => {

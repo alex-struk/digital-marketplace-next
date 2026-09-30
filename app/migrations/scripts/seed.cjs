@@ -58,24 +58,33 @@ async function main() {
   });
 
   try {
-    log("wiping");
-    await knex.raw('DROP SCHEMA IF EXISTS "public" CASCADE');
-    await knex.raw('CREATE SCHEMA "public"');
-
-    log("migrating");
-    const [, applied] = await knex.migrate.latest();
-    log("migrated", { count: applied.length });
-
-    const files = seedFiles(SEED_DIR);
-    for (const file of files) {
-      const sql = fs.readFileSync(path.join(SEED_DIR, file), "utf8");
-      await knex.raw(sql);
-      log("applied", { file });
-    }
-    log("seeded", { files: files.length });
+    await seed(knex, SEED_DIR);
   } finally {
     await knex.destroy();
   }
+}
+
+/**
+ * Wipe, migrate, and apply every seed file in `directory`, in order.
+ * @param {import("knex").Knex} knex  configured with this package's migrations
+ * @param {string} directory
+ */
+async function seed(knex, directory) {
+  log("wiping");
+  await knex.raw('DROP SCHEMA IF EXISTS "public" CASCADE');
+  await knex.raw('CREATE SCHEMA "public"');
+
+  log("migrating");
+  const [, applied] = await knex.migrate.latest();
+  log("migrated", { count: applied.length });
+
+  const files = seedFiles(directory);
+  for (const file of files) {
+    const sql = fs.readFileSync(path.join(directory, file), "utf8");
+    await knex.raw(sql);
+    log("applied", { file });
+  }
+  log("seeded", { files: files.length });
 }
 
 if (require.main === module) {
@@ -93,4 +102,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { seedFiles };
+module.exports = { seed, seedFiles };
