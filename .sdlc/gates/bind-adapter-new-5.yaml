@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  The diff is limited to tests/adapters/new (bindings.yaml and index.ts) plus proposal bookkeeping. Nothing under tests/acceptance or any protected path changed, and the runner's typecheck on b8e824be passed with no diagnostics under adapters/new. The new code for the seven signed-in screens (dashboard, Code With Us create, organization edit, sign-up complete, user profile, own profile, own notices) is navigation and role/accessible-name lookup only. Every member checks that its screen opened and throws 'unbound:' naming what the screen offers when a control is absent. It returns empty only when the screen opened and shows nothing. The only outright failure is on a disabled control, which is the existing press() convention, so no new pass/fail logic is introduced. The refusal reader now recognises 'Page not found'/'Back to home' as well as 'Not Found'/'Go Home'. Without that, refusal observations read empty on pages that had refused, which could have let refusal tests pass wrongly. The signed-out reasons are corrected: only /dashboard and /sign-up/complete redirect to /sign-in. Every remaining unbound reason is real: the binding session could not use the sandbox password and the provider's form offers no other entry, so no signed-in screen was seen. bindings.yaml therefore keeps those members declared unbound and moves to bound only user-profile.not_found_page and user-profile-self.sign_in_required, both observed on the live target. The proposal claims no criterion as met. A signed-in run showing a lookup that reaches past what the contract names, or evidence that an unbound reason is false, would turn this into a return.
+conditions: []
+cost: 0.5855708
+turns: 2
+session: "770d5b68-db87-4194-8655-554945b75143"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T13:23:19.809Z

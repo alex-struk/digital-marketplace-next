@@ -37,3 +37,23 @@ I've changed the "new" adapter so it can handle the signed-in screens, but I cou
 - R-4.3, R-4.23 and R-4.24 also need the sign-up persona's account to still have an unfinished profile. Otherwise `/sign-up/complete` sends it on, and the adapter reports that as `unbound:`.
 
 Every route in `surface.yaml` that I opened loaded on the target, either as its page or as a refusal. I didn't open all of them, but none I tried failed to resolve. I didn't touch anything outside `tests/adapters/new/`, and no password or environment value is written in the adapter, the bindings file or here.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The diff is limited to tests/adapters/new (bindings.yaml and index.ts) plus proposal bookkeeping. Nothing under tests/acceptance or any protected path changed, and the runner's typecheck on b8e824be passed with no diagnostics under adapters/new. The new code for the seven signed-in screens (dashboard, Code With Us create, organization edit, sign-up complete, user profile, own profile, own notices) is navigation and role/accessible-name lookup only. Every member checks that its screen opened and throws 'unbound:' naming what the screen offers when a control is absent. It returns empty only when the screen opened and shows nothing. The only outright failure is on a disabled control, which is the existing press() convention, so no new pass/fail logic is introduced. The refusal reader now recognises 'Page not found'/'Back to home' as well as 'Not Found'/'Go Home'. Without that, refusal observations read empty on pages that had refused, which could have let refusal tests pass wrongly. The signed-out reasons are corrected: only /dashboard and /sign-up/complete redirect to /sign-in. Every remaining unbound reason is real: the binding session could not use the sandbox password and the provider's form offers no other entry, so no signed-in screen was seen. bindings.yaml therefore keeps those members declared unbound and moves to bound only user-profile.not_found_page and user-profile-self.sign_in_required, both observed on the live target. The proposal claims no criterion as met. A signed-in run showing a lookup that reaches past what the contract names, or evidence that an unbound reason is false, would turn this into a return.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `b8e824be81f15bf660f1114a8946fa3a9bb78215`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
