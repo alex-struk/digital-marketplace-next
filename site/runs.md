@@ -352,6 +352,9 @@
 - 16:45:59 rule plan-8 escalated at G2 to tech-lead by runner:plan
 - 16:46:01 drive: step 15: `sdlc rule plan-8 --by agent:tech-lead` — plan-8 was escalated at G2 by runner:plan to tech-lead, a role an agent plays in this project
 - 16:46:52 rule plan-8 approve at G2 by agent:tech-lead (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 16:48:26 drive: step 17: `sdlc run verify --slice 2` — build-slice-2-16 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 16:50:30 verify slice 2: not verified — R-6.1 could not be tested in this environment.
+- 16:50:31 run verify: regenerated 392 files in .sdlc, site
 
 # Run record 2026-09-29
 
