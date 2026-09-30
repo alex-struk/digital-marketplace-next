@@ -370,6 +370,7 @@ Profile: rebuild
 - [plan-5](proposals/plan-5.md)
 - [plan-6](proposals/plan-6.md)
 - [plan-7](proposals/plan-7.md)
+- [plan-8](proposals/plan-8.md)
 - [policy-agents-backend](proposals/policy-agents-backend.md)
 - [policy-agents-backend-claude](proposals/policy-agents-backend-claude.md)
 - [policy-calibrate-after](proposals/policy-calibrate-after.md)
@@ -407,10 +408,10 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $728.333162
-- Rulings cost: $399.922822
-- Total cost: $1128.255984
-- Agent-held rulings: 352
+- Journal cost: $728.749462
+- Rulings cost: $400.368423
+- Total cost: $1129.117885
+- Agent-held rulings: 353
 - Runner rulings (automatic, no seat held): 10
 - Human rulings: 15
 - Rulings whose seat this page does not recognise: 0

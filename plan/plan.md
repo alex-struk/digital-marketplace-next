@@ -226,6 +226,18 @@ reader's attention.
   the first slice whose dependency closure holds every screen its tests may send from. If the builder
   finds the tests going through only one earlier screen, moving them to that screen's slice changes
   nothing else.
+- **R-4.23** was placed in Slice 2, which builds the profile-completion page and its redirect. The
+  build of Slice 2 showed the redirect working (the terms checkbox absent for both people) while the
+  test still failed, because it confirms arrival by reading the dashboard itself — the public sector
+  employee's opportunities table or its empty message, and the vendor's proposals table or its empty
+  message. Those are delivered in Slice 8 (staff dashboard) and Slice 14 (vendor dashboard). R-4.23
+  now sits in Slice 14, the first slice whose dependency closure holds both (Slice 14 depends on
+  Slice 8). Building empty dashboards into Slice 2 instead was rejected: it would pull the
+  opportunities and proposals listings forward ahead of the data they list, and R-4.22 was already
+  moved to Slice 8 for the same reason. The redirect is still built in Slice 2; only where it is
+  answered for moves. The fit is uneasy in the same way as R-6.3 to R-6.5: a sign-up rule is
+  verified by the Code With Us proposal slice only because that is where the vendor's dashboard
+  first exists.
 - **R-6.20 and R-6.28** were also placed in Slice 2, beside the account creation and mail path
   they describe, and verification of the build of slices 2–12 found both unbound there. R-6.20's
   test publishes a Code With Us opportunity through `/opportunities/code-with-us/create` (Slice 7)

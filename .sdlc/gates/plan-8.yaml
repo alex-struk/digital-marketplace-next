@@ -1,0 +1,15 @@
+gate: G2
+verdict: approve
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  The question is whether moving R-4.23 out of Slice 2 gives a cut where the slice claiming it can produce what its test observes. Ruling: approve. What decided it is the third item of the escalation account. Build-slice-2-15 showed the profile-completion redirect working (terms checkbox absent for both people) while the test failed only because its dashboard reads came back empty, and those dashboards are not Slice 2's. In plan/tasks.md the staff and administrator dashboard is delivered by Slice 8 (line 47) and the vendor dashboard by Slice 14. Slice 14 depends on Slice 8 and Slice 11, so its dependency closure holds both screens, and it is the earliest slice where R-4.23's test can bind. The proposal correctly points out that the account's 'slices 6 and 8' named the wrong slice for the vendor dashboard. It correctly turns down the alternative remedy (empty dashboards in Slice 2) for the same reason R-4.22 was already moved to Slice 8: listings should not arrive ahead of the data they list. The diff matches the evidence and nothing else moves. Slice 2's criteria line loses only R-4.23, its delivers line records that the redirect is still built there, Slice 14 gains only R-4.23 plus a delivers clause naming the vendor dashboard's empty message, and plan.md's awkward-fit section records the move and its uneasiness. A search of plan/tasks.md shows R-4.23 on exactly one criteria line, Slice 14's. This meets the revision request build-slice-2-15 sent to plan. plan/check-coverage.mjs was not run, here or by plan, because it needs an approval nobody was present to give. It should be run before Slice 14 is built. What would change this ruling: that checker reporting any criterion unplaced or placed twice, or Slice 8 turning out not to deliver the public sector employee's opportunities table and empty message that R-4.23's test reads.
+conditions: []
+cost: 0.445601
+turns: 8
+session: "b825566c-15bc-4b4d-8ad1-240081439c86"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T23:46:52.879Z

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>plan-8 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">378</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">372</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">331</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>plan-8</h1>
+<p class="lede">G2 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G2</td></tr><tr><th scope="row">opened</th><td>2026-09-30 23:45</td></tr><tr><th scope="row">holder</th><td>agent:architect</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the right cut of the work, and does each slice stand on its own?</h2>
+<p><strong>Recommendation.</strong> I took up the one condition I was given.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I took up the one condition I was given. R-4.23 has moved out of Slice 2 and into Slice 14. The plan is otherwise unchanged: still twenty-one slices in the same order, with the same dependencies and constitution check, and no new or changed decision records.</p>
+<p>The ruling offered two remedies: move the criterion to the slice that builds the dashboards, or pull the dashboards&#39; empty states and listings into Slice 2. I moved it. R-4.23&#39;s test reads two different dashboards, and they arrive in different slices. The staff and administrator dashboard, with its opportunities table and empty message, comes in Slice 8. The vendor dashboard, with its own and organization proposals and empty message, comes in Slice 14.</p>
+<p>The ruling named Slice 6 for the vendor dashboard, but in this plan Slice 6 is the changed-terms slice; the vendor dashboard is in Slice 14. Slice 14 depends on Slice 8, so it is the first slice where both dashboards exist, and that is where the criterion now sits.</p>
+<p>I turned down the other remedy. Building empty dashboards into Slice 2 would bring the opportunity and proposal listings in before the data they list, which is the same reason R-4.22 had already been moved to Slice 8.</p>
+<p>The redirect itself is still built in Slice 2, where the build already showed it working. Slice 2&#39;s text now lists R-4.23 among the criteria it builds for but that a later slice answers for. Slice 14&#39;s delivers line now names the vendor dashboard&#39;s empty message and says the redirect is shown landing on both dashboards.</p>
+<p>In <code>plan/plan.md</code>, the section on criteria that sit awkwardly has a new entry for R-4.23. It says why it moved, why the other remedy was turned down, and that the fit is uneasy. Like R-6.3 to R-6.5, a sign-up rule is now answered for by the Code With Us proposal slice only because that is where the vendor&#39;s dashboard first exists.</p>
+<p>Placement: R-4.23 now appears on one criteria line, Slice 14&#39;s, and I took nothing else out, so all 248 criteria should each still be in exactly one slice. I could not run <code>plan/check-coverage.mjs</code> to confirm this, because running it needed an approval that nobody was here to give. I checked R-4.23 by searching the criteria lines instead, and the checker should be run when this is ruled on.</p>
+<p>The Slice 2 build (build-slice-2-15) showed the vendor dashboard read coming back empty. That is a build-verification matter for the tech lead, and I left it alone. Nothing asked me to change spec, design, the constitution or skills, and I did not touch them.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:tech-lead (persona agent · claude claude-opus-5-5) on 2026-09-30 23:46.</p>
+<div class="body"><p>The question is whether moving R-4.23 out of Slice 2 gives a cut where the slice claiming it can produce what its test observes. Ruling: approve. What decided it is the third item of the escalation account. Build-slice-2-15 showed the profile-completion redirect working (terms checkbox absent for both people) while the test failed only because its dashboard reads came back empty, and those dashboards are not Slice 2&#39;s. In plan/tasks.md the staff and administrator dashboard is delivered by Slice 8 (line 47) and the vendor dashboard by Slice 14. Slice 14 depends on Slice 8 and Slice 11, so its dependency closure holds both screens, and it is the earliest slice where R-4.23&#39;s test can bind. The proposal correctly points out that the account&#39;s &#39;slices 6 and 8&#39; named the wrong slice for the vendor dashboard. It correctly turns down the alternative remedy (empty dashboards in Slice 2) for the same reason R-4.22 was already moved to Slice 8: listings should not arrive ahead of the data they list. The diff matches the evidence and nothing else moves. Slice 2&#39;s criteria line loses only R-4.23, its delivers line records that the redirect is still built there, Slice 14 gains only R-4.23 plus a delivers clause naming the vendor dashboard&#39;s empty message, and plan.md&#39;s awkward-fit section records the move and its uneasiness. A search of plan/tasks.md shows R-4.23 on exactly one criteria line, Slice 14&#39;s. This meets the revision request build-slice-2-15 sent to plan. plan/check-coverage.mjs was not run, here or by plan, because it needs an approval nobody was present to give. It should be run before Slice 14 is built. What would change this ruling: that checker reporting any criterion unplaced or placed twice, or Slice 8 turning out not to deliver the public sector employee&#39;s opportunities table and empty message that R-4.23&#39;s test reads.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
