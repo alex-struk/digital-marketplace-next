@@ -647,20 +647,28 @@ pages:
       vendor_card: bound
       public_sector_card: bound
 
+  # Walked signed in through the sandbox identity provider. As the vendor still to agree
+  # (test-vendor-17), /sign-up/complete shows "Complete Your Profile": "Sign-in username"
+  # (read-only), "Name", "Email address", "Email me when new opportunities are posted", the
+  # terms box, and "Complete profile", which stays disabled until the terms box is ticked.
+  # As the administrator it sends the browser to /dashboard; signed out, to
+  # /sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete. When the browser is sent on, every
+  # reading below answers empty (the absent form is what those people see, R-4.23) and every
+  # action reports unbound naming where the browser was sent.
   user-sign-up-complete:
     actions:
-      change_avatar: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /sign-up/complete redirects to /sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete. At run time the adapter reports unbound when the page sends the account on instead of showing the form, and otherwise offers the harness's uploadFile file through the chooser a picture control opens"
-      accept_app_terms: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /sign-up/complete redirects to /sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete. At run time the adapter reports unbound when the page sends the account on instead of showing the form, and otherwise ticks the box whose name mentions the terms"
-      toggle_new_opportunity_notifications: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /sign-up/complete redirects to /sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete. At run time the adapter reports unbound when the page sends the account on instead of showing the form, and otherwise sets the box whose name mentions new opportunities"
-      complete_profile: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /sign-up/complete redirects to /sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete. At run time the adapter enters every input key in the field its label names, reports unbound naming a key no field takes, presses 'Complete Profile' and fails naming the form's messages if the page stays"
+      change_avatar: "unbound: signed in as the vendor still to agree and opened /sign-up/complete; pressing 'Choose a profile picture' opened no file chooser, and the form's only file input is hidden and unlabelled, so no file can be offered through anything a person can see"
+      accept_app_terms: bound
+      toggle_new_opportunity_notifications: bound
+      complete_profile: bound
     observations:
-      idp_username_readonly: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /sign-up/complete redirects to /sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete. At run time the adapter reads the field named GitHub, IDIR or Username on the form"
-      name_field: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /sign-up/complete redirects to /sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete. At run time the adapter reads the field labelled Name on the form"
-      email_field: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /sign-up/complete redirects to /sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete. At run time the adapter reads the field labelled Email on the form"
-      job_title_field: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /sign-up/complete redirects to /sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete. At run time the adapter reads the field labelled Job Title, empty on a form without one"
-      terms_checkbox: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /sign-up/complete redirects to /sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete. At run time the adapter reads the terms box as checked or unchecked"
-      complete_disabled_until_terms_accepted: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /sign-up/complete redirects to /sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete. At run time the adapter reads 'disabled' when the terms box is unticked and 'Complete Profile' is disabled"
-      field_error: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /sign-up/complete redirects to /sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete. At run time the adapter reads the form's alerts and the descriptions of fields marked invalid"
+      idp_username_readonly: bound
+      name_field: bound
+      email_field: bound
+      job_title_field: bound
+      terms_checkbox: bound
+      complete_disabled_until_terms_accepted: bound
+      field_error: bound
 
   # "You have successfully signed out. Thank you for using the Digital Marketplace."
   user-sign-out:
