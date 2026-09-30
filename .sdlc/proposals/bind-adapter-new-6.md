@@ -62,3 +62,23 @@ I fixed both compile errors in `tests/adapters/new/index.ts` and changed nothing
 For the error at line 1327, the `readPageByRequest` member of the content-request page took an `input` parameter with no type. I declared it as `input?: unknown`, the same way the other members in the file take their input. The helpers it feeds into (`given`, `textOf`, `record`) all accept `unknown`.
 
 For the error at line 1585, the page-not-found helper `notHere` has its own `params` argument, a map from each route parameter to the seed groups it is looked up in. The `open()` function it builds also named its argument `params`, which hid the outer one. So the `params[name]` lookup was reading the caller's optional values instead of the seed-group map. I renamed the inner argument to `openParams`, so the lookup now uses the seed-group map as intended and the caller's values still go through `supplied`. What each page opens and what it binds is otherwise unchanged. `bindings.yaml` did not change.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on the new target, and nothing else? Mostly yes. The diff touches only tests/adapters/new, the runner's typecheck of adapters/new passes with no diagnostics, the bindings locate and read without asserting, and the unbound reasons for missing routes are grounded in what was walked. One binding is wrong in a way that rules out a criterion this proposal names. In tests/adapters/new/index.ts every reading on the profile-completion page (user-sign-up-complete), termsCheckbox included, goes through onSignUpForm(), which throws 'unbound' whenever the browser is not on /sign-up/complete, whether it went to /dashboard or to /sign-in?redirectOnSuccess. R-4.23 requires exactly those redirects, for a vendor who agreed before, a non-vendor and a signed-out visitor, and three of the four tests in tests/acceptance/users/R-4.23.spec.ts (lines 32, 45 and 57) read termsCheckbox() after the redirect and expect it to be empty. As bound, those tests report the application as missing a surface even when it behaves correctly, so the unbound reason is not real. The adapter already does this correctly for userProfileSelf.signInRequired, which reads the redirect instead of refusing. Returned to fix that binding. The owed build-stage conditions (build-slice-2-5#1, build-slice-2-8#2) are not settled by an adapter change and stay open. I would approve once the form's readings return empty when the browser was redirected away and its actions stay unbound.
+
+**Conditions:**
+- tests/adapters/new/index.ts, user-sign-up-complete: when /sign-up/complete redirects the browser away (to /dashboard for an account that is not a vendor still to agree, or to /sign-in?redirectOnSuccess=... for a signed-out visitor), the form's readings (terms_checkbox, name_field, email_field, job_title_field, idp_username_readonly, complete_disabled_until_terms_accepted, field_error) must return empty rather than throw 'unbound', because the form not being shown is exactly what R-4.23 says those people should see. Keep the actions (accept_app_terms, toggle_new_opportunity_notifications, complete_profile, change_avatar) reporting unbound with where the browser was sent. Record the change against these members in tests/adapters/new/bindings.yaml.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `8d86c3081c42bafec338a0268ec3f3e6b056681b`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
