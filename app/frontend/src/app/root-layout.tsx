@@ -1,7 +1,40 @@
 import { useEffect, useRef } from "react";
 import { Outlet, useRouterState } from "@tanstack/react-router";
+import { openBeforeProfileCompletion, PROFILE_COMPLETION } from "@rules/sign-in";
+import { needsProfileCompletion } from "@rules/users";
+import { leaveRefusedSignIn, useSession } from "../auth/session";
 import { SiteHeader } from "./site-header";
 import { SiteFooter } from "./site-footer";
+import { useGoTo } from "./go-to";
+
+/**
+ * A vendor who has not finished signing up is sent to finish it from every screen but the few
+ * they need on the way: signing out, the notices, the service's own pages, where the terms
+ * and the privacy policy they are asked to agree to are read, and their own profile (R-4.3,
+ * R-4.23, R-4.26).
+ */
+function useSignUpFinishedFirst(address: string): void {
+  const session = useSession();
+  const goTo = useGoTo();
+  const unfinished = session.status === "signed-in" && needsProfileCompletion(session.account);
+  const ownId = session.status === "signed-in" ? session.account.id : null;
+  useEffect(() => {
+    if (unfinished && !openBeforeProfileCompletion(address, ownId)) {
+      goTo(PROFILE_COMPLETION);
+    }
+  }, [unfinished, address, ownId, goTo]);
+}
+
+/**
+ * A sign-in the service refused ends at the identity provider too, so the person can try
+ * another, and lands on the sign-in failure notice (R-4.1, R-4.4, R-4.6).
+ */
+function useRefusedSignInLeft(): void {
+  const session = useSession();
+  useEffect(() => {
+    if (session.status === "refused") void leaveRefusedSignIn("/notice/authFailure");
+  }, [session.status]);
+}
 
 /**
  * Every screen: the banner, the screen itself, and the footer after it, whatever the
@@ -15,6 +48,8 @@ import { SiteFooter } from "./site-footer";
 export function RootLayout() {
   const address = useRouterState({ select: (state) => state.location.pathname });
   const firstScreen = useRef(true);
+  useSignUpFinishedFirst(address);
+  useRefusedSignInLeft();
 
   useEffect(() => {
     if (firstScreen.current) {
