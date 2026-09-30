@@ -46,3 +46,23 @@ Everything else I opened while signed in as the administrator or a vendor answer
 **Side effect on the target:** signing in as the first-time vendor and first-time public sector employee created their accounts on the running target. Those two personas are no longer "first-time" there until the seed is reloaded.
 
 Nothing outside `tests/adapters/new/` was changed. No password or environment value appears in either file.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the adapter for the new app bind every action and reading, and nothing else? Approved. This revision does what the G3 ruling on build-slice-2-12 asked. It signs in as each persona and walks the screens that ruling named. The dashboard readings, including the vendor proposals table R-4.23 reads, are bound and return empty on a dashboard that shows only a greeting. The profile status that R-6.28 and R-4.1 read and the profile-completion form R-4.3 reads are bound. Another account's /users/:userId answers 'Page not found' even to the administrator, so it stays unbound with that reason. Every reason that said the sandbox password could not be used has been replaced; a search of tests/adapters/new on the branch finds none left. The remaining unbound reasons name what the running build actually shows (Page not found, profile section links that redraw the Profile section, a notifications box that does nothing, no control to accept updated terms), which meets the standard for a real reason. The adapter stays an adapter: it has no expect calls and nothing under tests/acceptance changed. The profile readings raise a plain error when the person is sent to /sign-up/complete, and the notifications toggle fails when pressing the box changes nothing. Both report that the page never arrived or the press had no effect; neither judges an outcome. The runner's typecheck on this revision passed with no errors in adapters/new, which covers the author's inability to compile. This proposal does not settle build-slice-2-12#3, which is owed by build; it stays open. R-6.28 reaching another person's profile is already filed with plan. What would change this ruling: a re-walk of the screens signed out, or of the service requests while signed in, showing a bound member that no longer reaches its target.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `cfd18b22a5f25d735c3fafe5dcf510e181b5e33e`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
