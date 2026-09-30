@@ -1125,3 +1125,21 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-09-30T19:55:30.323Z
+  - ref: bind-adapter-new-8#1
+    text: "surface.signOut() in tests/adapters/new/index.ts must sign out only the
+      way a person does: take the header's 'Sign out' link (or open /sign-out
+      when no such link is on screen), wait for the user-sign-out screen, and
+      stop there. Remove the clearCookies() and clearStorage() calls that follow
+      ready() in signOut(). As written they throw away the target's tokens and
+      the identity provider's cookies themselves, so R-4.17's final assertion
+      (userProfileSelf.open() then signInRequired() truthy) passes even if the
+      service never ended the session. Keep the full reset in forgetEveryone()
+      at the start of signIn() and for the anonymous persona, where it belongs.
+      Update the comments above signOut() and above user-sign-out in
+      bindings.yaml to match."
+    from: bind-adapter-new-8
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-09-30T20:02:28.028Z
