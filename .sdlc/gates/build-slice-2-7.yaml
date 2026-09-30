@@ -1,0 +1,18 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 2 does not yet do what 6 of its criteria say. Each condition is
+  the criterion and what the running application did.
+conditions:
+  - 'R-4.1: Error: expect(received).toBeFalsy() — Received: "Page not found'
+  - 'R-4.2: Error: expect(received).toBeTruthy() — Received: ""'
+  - 'R-4.3: TimeoutError: locator.setChecked: Timeout 15000ms exceeded. — <div
+    class="checkbox"></div> intercepts pointer events — <div>…</div> intercepts
+    pointer events'
+  - 'R-4.17: Error: expect(received).toBeFalsy() — Received: "Page not found'
+  - 'R-4.22: Error: expect(received).toBeTruthy() — Received: ""'
+  - 'R-4.24: TimeoutError: locator.setChecked: Timeout 15000ms exceeded. — <div
+    class="checkbox"></div> intercepts pointer events — <div>…</div> intercepts
+    pointer events'
+at: 2026-09-30T16:47:45.171Z
