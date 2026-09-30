@@ -31,3 +31,23 @@ It still returns empty text when the reader isn't offered the tab at all, as bef
 **Scope.** I only overrode the Code With Us edit page. The Sprint With Us and Team With Us edit pages, and the review pages, still use the shared reader, because the finding only named this page. They may have the same problem if their proposal text also sits inside a text box on a later step. That's worth checking in the next calibration.
 
 **Bindings.** `bindings.yaml` already listed `proposal_tab` as bound for this page, and I left it unchanged. Every page route I opened resolved on the target. I edited nothing outside `tests/adapters/old/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the rewritten proposal-cwu-edit.proposal_tab bind R-2.2's observation on old, and nothing else? Ruling: approve. The escalation came from the rebind loop limit (3 sends against policy.loops.rebind of 2), not from a pipeline defect, so it is ruled here on the merits. The diff is a single member override in tests/adapters/old/index.ts that answers the third send exactly: it moves the wizard to the '2. Proposal' step (goToStep via the step menu, walkToStep via Previous/Next as fallback) and returns formText(), which joins visible text with fieldValues(), so the value of the 'Proposal' text box now comes back. It only uses helpers already defined in the adapter (enterTab, currentStep, goToStep, walkToStep, formText), it keeps the existing empty-text result when the tab is withheld, and it adds an unbound: throw that points at the right member when the step is missing. The runner's own tsc on revision bdd7f67 passed with no diagnostics under adapters/old/, which answers the author's note that it could not type-check. Nothing outside tests/adapters/old/ changed and bindings.yaml already listed the member as bound. What decided it was the third item in the escalation: the diff matches that request and goes no further. What would change it: the next calibration still reading the proposal text as absent on this page, or the seeded submitted CWU proposal opening with no '2. Proposal' step. The SWU/TWU edit pages the author flagged are not in evidence yet and do not justify widening this diff.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `bdd7f67b26fa656304f43b8cfa60235a83ffaa47`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    No diagnostics.
