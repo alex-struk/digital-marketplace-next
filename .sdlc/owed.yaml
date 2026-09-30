@@ -4765,7 +4765,7 @@ owed:
     id: R-1.17
     version: 3
     domain: opportunities
-    stage: contract
+    stage: derive-tests
     why: an observation on opportunity-swu-create and opportunity-twu-create
       reporting the fields an evaluation question offers for entry, or at least
       whether any position or order field is offered
@@ -4773,3 +4773,15 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-09-30T06:59:09.355Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: added the observation `evaluation_question_fields` on
+          opportunity-swu-create, opportunity-twu-create, opportunity-swu-edit
+          and opportunity-twu-edit. It reports the five fields a question offers
+          (question, guideline, response_word_limit, maximum_score,
+          minimum_score) and that no position or order field is offered.
+        by: contract-v27
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-09-30T07:02:15.703Z

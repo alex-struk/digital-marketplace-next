@@ -218,6 +218,13 @@ pages:
     observations:
       field_error: { test_id: field-error }
       score_weight_error: { test_id: score-weight-error }
+      # The fields one evaluation (team) question offers the person for entry, named in the
+      # criteria's words, for the question at a given place in the list (the first is 1).
+      # The application offers five: question, guideline, response_word_limit,
+      # maximum_score and minimum_score. No position or order field is offered; a
+      # question's position is its place in the list. Empty when the list holds no
+      # question at that place.
+      evaluation_question_fields: { test_id: null }
 
   - id: opportunity-swu-view
     domain: opportunities
@@ -294,6 +301,8 @@ pages:
       # itself; its start and completion dates are its phases'.
       proposal_deadline: { test_id: null }
       assignment_date: { test_id: null }
+      # As on opportunity-swu-create, read on the team questions tab while editing.
+      evaluation_question_fields: { test_id: null }
 
   - id: opportunity-swu-complete
     domain: opportunities
@@ -319,6 +328,10 @@ pages:
     observations:
       field_error: { test_id: field-error }
       score_weight_error: { test_id: score-weight-error }
+      # As on opportunity-swu-create, for one resource question: question, guideline,
+      # response_word_limit, maximum_score and minimum_score, and no position or order
+      # field.
+      evaluation_question_fields: { test_id: null }
 
   - id: opportunity-twu-view
     domain: opportunities
@@ -391,6 +404,8 @@ pages:
       assignment_date: { test_id: null }
       start_date: { test_id: null }
       completion_date: { test_id: null }
+      # As on opportunity-twu-create, read on the resource questions tab while editing.
+      evaluation_question_fields: { test_id: null }
 
   - id: opportunity-twu-complete
     domain: opportunities
