@@ -255,9 +255,9 @@ A Team With Us proposal may only be submitted on behalf of an organization that 
 - when: the vendor submits a proposal naming that organization
 - then: the submission is refused with "The selected organization does not satisfy this opportunity's service areas."
 
-### R-2.18 · v3 · confirmed · accepted
+### R-2.18 · v4 · confirmed · accepted
 
-Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with "User is not an active member of the organization."; a Team With Us proposal is additionally refused by the service when the same person is named twice, with "Please select unique team members.", while the service applies no such uniqueness check to a Sprint With Us phase. The proposal form offers only the organization's active members, and does not offer a person already named on the proposal, so neither refusal is reachable through the form.
+Every person named on a proposal's team must be an active member of the organization the proposal is submitted for, and the service refuses anyone else with "User is not an active member of the organization."; a Team With Us proposal is additionally refused by the service when the same person is named twice, with "Please select unique team members.", while the service applies no such uniqueness check to a Sprint With Us phase. The Team With Us proposal form offers only the organization's active members; the Sprint With Us form also lists members whose invitation is still pending, marked pending, and a proposal naming one can be saved as a draft but is refused on submission. Neither form offers a person already named on the proposal.
 - cites: src/back-end/lib/validation.ts:964
 - cites: src/back-end/lib/validation.ts:1028
 - cites: src/back-end/lib/validation.ts:360
@@ -516,6 +516,7 @@ The address that lists proposals shows nothing but the words "Proposal List".
 - then: a page appears carrying only the words "Proposal List" and no proposals at all
 - note: the page is a stub that was never finished; the working place to see one's proposals is the vendor's dashboard, which lists their own proposals and their organizations' proposals under two headings. Nothing should carry this address forward without a decision about what belongs on it.
 - note: An address that renders nothing but the words 'Proposal List' is an unfinished stub rather than behaviour to carry forward. A vendor reaches their own and their organizations' proposals from the dashboard, which R-2.24 already states; the proposal-list-stub entry in spec/contract/surface.yaml is removed with it.
+- note: An address that renders nothing but the words 'Proposal List' is an unfinished stub rather than behaviour to carry forward. A vendor reaches their own and their organizations' proposals from the dashboard, which D-proposals-18 already states; the proposal-list-stub entry in spec/contract/surface.yaml is removed with it.
 
 ### R-2.37 · v1 · confirmed · accepted
 
