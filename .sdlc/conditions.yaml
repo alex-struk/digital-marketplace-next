@@ -901,3 +901,32 @@ conditions:
         one condition is no longer listed.
       by: agent:reviewer
       at: 2026-09-29T18:57:59.278Z
+  - ref: bind-adapter-old-50#1
+    text: "tests/adapters/old/index.ts
+      fileEmbeddedImage.imageRenderedInPublishedText: when no matching image
+      appears before the wait ends, return the sources observed (an empty string
+      when there are none) instead of throwing 'unbound:
+      file-embedded-image.image_rendered_in_published_text'. The observation is
+      bound: the published page exists. An image absent from it is a failure of
+      R-8.29's then-clause for the test's assertion to report, not a surface the
+      application lacks."
+    from: bind-adapter-old-50
+    family: bind-adapter-old
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-09-30T06:40:53.710Z
+  - ref: bind-adapter-old-50#2
+    text: "tests/adapters/old/index.ts imageSources()/imageRenderedInPublishedText:
+      collect image sources only from the published page's body text, not every
+      image in the document (document.images and page-wide getByRole('img')), so
+      an unrelated image elsewhere on the page, such as a header logo, cannot be
+      returned as the image rendered in the published text. Keep the ready()
+      wait and the polling for an image kept at /api/files/<id> that was
+      introduced in this revision."
+    from: bind-adapter-old-50
+    family: bind-adapter-old
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-09-30T06:40:53.710Z
