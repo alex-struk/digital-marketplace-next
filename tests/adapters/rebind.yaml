@@ -2204,3 +2204,24 @@ rebind:
       image in it; it must return the inserted image reference (the FILE_ID or
       /api/files/ marker) and empty when none was inserted.
     closed: *a14
+  - id: R-1.17
+    target: old
+    why: "opportunitySwuCreate.fieldError returned '' for a 1,001-character question
+      with Submit for Review disabled, although old's Question box uses the same
+      LongText widget and check as Response Guidelines and shows 'Question must
+      be between 1 and 1000 characters long.' (the over-length guideline row
+      passes in the same run); find why addTeamQuestion's Question value or its
+      field message is lost and return it. Also, a value given as empty for
+      Question or Response Guidelines is filled into an already-empty box, which
+      fires no change, so old never validates it: enter it as a person clearing
+      the box would (type, then clear, then leave the box) so old's own refusal
+      is shown, for both addTeamQuestion and addResourceQuestion."
+  - id: R-7.26
+    target: old
+    why: fileEmbeddedImage.imageRenderedInPublishedText returned '' on the published
+      /content/<slug> page, whose body visibly holds img "body-image.png" in the
+      paragraph right after the 'Published … | Updated …' line; imageSources
+      walks only the level-1 heading's next element siblings, which does not
+      reach that paragraph on old's markup. Collect img elements from the page's
+      content region after the heading (excluding site header and footer), and
+      match the /api/files/<id> the body's FILE_ID marker names.
