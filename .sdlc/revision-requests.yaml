@@ -142,3 +142,40 @@ requests:
     at: 2026-09-30T18:06:07.282Z
     taken: 2026-09-30T18:33:34.181Z
     taken_by: plan-4
+  - stage: bind-adapter
+    why: "The surface's signOut() (tests/adapters/new/index.ts:424) clears cookies
+      and opens '/'. It never signs the person out through the service, and it
+      leaves the app's local storage, which holds the bearer tokens, in place.
+      So R-4.17's signedOutMessage reads the home page and gets '' (verify of
+      build-slice-2-11: 'Received: \"\"'). Bind signing out as the criterion's
+      'when they sign out': open /sign-out, or use the header's sign-out
+      control, and read the user-sign-out screen there. Reset the browser to
+      nobody signed in by clearing local storage and session storage as well as
+      cookies."
+    from: build-slice-2-11
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-09-30T19:55:30.279Z
+  - stage: bind-adapter
+    why: signIn() starts with the same signOut(). Because the tokens stay in local
+      storage, the following visit to /sign-in lands a signed-in person on
+      /dashboard, and the run reports 'the sign-in screen at
+      http://localhost:4300/dashboard offers no "Sign in as a vendor" control'
+      (R-6.20), and R-4.23 fails the same way. Start every sign-in from a
+      browser holding no cookies and no local or session storage for the target.
+    from: build-slice-2-11
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-09-30T19:55:30.279Z
+  - stage: bind-adapter
+    why: "userProfileSelf.statusBadge (and the other valueAfter reads on the
+      own-profile screen) expects a line that says exactly 'Status' with the
+      value on the next line. The target draws 'Status: Active' on one line,
+      with the value in an element carrying data-testid profile-status-badge
+      (app/frontend/src/screens/user-profile.tsx:149). So R-4.1 read '' against
+      /active/i. Bind these observations to what the signed-in screen draws, and
+      walk that screen signed in when binding them."
+    from: build-slice-2-11
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-09-30T19:55:30.279Z
