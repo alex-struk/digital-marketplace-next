@@ -355,6 +355,8 @@
 - 16:48:26 drive: step 17: `sdlc run verify --slice 2` — build-slice-2-16 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
 - 16:50:30 verify slice 2: not verified — R-6.1 could not be tested in this environment.
 - 16:50:31 run verify: regenerated 392 files in .sdlc, site
+- 16:50:32 drive: stopped after 17 steps — waiting on a person: tech-lead: build-slice-2-16
+- 16:50:54 rule build-slice-2-16 refused at G3 by tech-lead (human): rule build-slice-2-16: build-slice-2-16 did not pass verify. An approval is recorded only against a current passing verify result, so this one cannot be: return the proposal and keep your findings as its conditions, or escalate. Which you mean is the ruling.
 
 # Run record 2026-09-29
 
