@@ -4,7 +4,7 @@ import { resolve } from "node:path";
 import express from "express";
 import { middleware as contractValidator } from "express-openapi-validator";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { loadContract, withoutTestOnlyRoutes } from "../src/common/contract";
+import { contractForThisService, loadContract } from "../src/common/contract";
 import { refusalFor } from "../src/common/refusals";
 
 /**
@@ -20,7 +20,7 @@ beforeAll(async () => {
   const app = express();
   app.use(
     contractValidator({
-      apiSpec: withoutTestOnlyRoutes(loadContract(CONTRACT)) as never,
+      apiSpec: contractForThisService(loadContract(CONTRACT)) as never,
       validateRequests: true,
       validateResponses: false,
       validateSecurity: false,
@@ -34,6 +34,12 @@ beforeAll(async () => {
   });
   app.get("/api/counters", (_request, response) => {
     response.json({});
+  });
+  app.get("/api/sessions/:id", (request, response) => {
+    response.json({ id: request.params.id });
+  });
+  app.get("/api/users/:id", (request, response) => {
+    response.json({ id: request.params.id });
   });
   app.use(
     (
@@ -87,6 +93,19 @@ describe("the contract at the boundary", () => {
     const answer = await fetch(`${origin}/status`, { method: "DELETE" });
 
     expect(answer.status).toBeGreaterThanOrEqual(400);
+  });
+
+  it("lets the session route be asked for as the requester's own, by 'current'", async () => {
+    const answer = await fetch(`${origin}/api/sessions/current`);
+
+    expect(answer.status).toBe(200);
+    expect(await answer.json()).toEqual({ id: "current" });
+  });
+
+  it("still holds every other identifier to the contract's format", async () => {
+    const answer = await fetch(`${origin}/api/users/current`);
+
+    expect(answer.status).toBe(400);
   });
 
   it("refuses a query parameter the contract does not name", async () => {

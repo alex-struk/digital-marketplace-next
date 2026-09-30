@@ -1,5 +1,6 @@
 import createClient from "openapi-fetch";
 import type { paths } from "./contract";
+import { currentAccessToken } from "../auth/pkce";
 
 /**
  * The service's own client, generated from `spec/contract/openapi.yaml` — the addresses and
@@ -20,4 +21,14 @@ export const api = createClient<paths>({
   // Asked for at the moment of the request rather than held from when the client was made,
   // so there is one way requests go out and a test can stand in front of it.
   fetch: (request) => globalThis.fetch(request),
+});
+
+// Every request carries the signed-in person's bearer token, when there is one (decision
+// record 0004). The service works out who is asking from it and nothing else.
+api.use({
+  async onRequest({ request }) {
+    const token = await currentAccessToken();
+    if (token) request.headers.set("authorization", `Bearer ${token}`);
+    return request;
+  },
 });
