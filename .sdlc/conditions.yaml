@@ -947,3 +947,30 @@ conditions:
         /api/files/<id> polling are kept.
       by: agent:reviewer
       at: 2026-09-30T06:42:55.960Z
+  - ref: derive-tests-opportunities-stale-12#1
+    text: "In tests/acceptance/opportunities/R-1.17.spec.ts, assert the clause 'an
+      optional minimum score': submit for review a Sprint With Us opportunity,
+      complete as in the other tests, whose question is well formed and has no
+      minimum score, and assert the submission is accepted (for example, no
+      field error, and the opportunity's status on its edit screen shows it has
+      left draft). If the surface cannot observe an accepted submission, add a
+      not-testable.yaml entry for R-1.17 v3 with clause 'an optional minimum
+      score' naming exactly what is missing."
+    from: derive-tests-opportunities-stale-12
+    family: derive-tests-opportunities-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-30T06:56:54.186Z
+  - ref: derive-tests-opportunities-stale-12#2
+    text: "In the position test in tests/acceptance/opportunities/R-1.17.spec.ts,
+      the criterion allows positions 0 to 100: either assert that an opportunity
+      holding 101 questions (the last at position 100) is not refused on
+      submission for review, or record that clause in not-testable.yaml with the
+      reason."
+    from: derive-tests-opportunities-stale-12
+    family: derive-tests-opportunities-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-09-30T06:56:54.186Z
