@@ -1,0 +1,17 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does bind-adapter-old-51 bind every surface action and observation on old, and nothing else, having answered the two instructions G3 left owed on bind-adapter-old-50? Ruling: approve. imageRenderedInPublishedText no longer throws 'unbound'. After the ready() wait and about 5s of polling for an image at /api/files/<id>, it returns the body's image sources, or an empty string, so a missing image is left for R-8.29's assertion to report. The polling only ends the wait early and decides no outcome. imageSources() now collects <img> sources only from the elements after the page's h1, skipping the Published/Updated line. That is the same region the existing pageBody binding walks (tests/adapters/old/index.ts:8456), so the header logo cannot be returned. Only tests/adapters/old/index.ts changed among the stage's outputs, nothing under tests/acceptance was touched, and the runner's typecheck on cddb0ea4e passed with no diagnostics. The change has not been run against a published page containing an image; the next verify/calibrate run establishes that. What would change this ruling: evidence that the published body is not rendered as siblings of the h1. Both pageBody and imageSources() would then read the wrong region, and the binding would need to change.
+conditions:
+  - "condition-met bind-adapter-old-50#1: imageRenderedInPublishedText in tests/adapters/old/index.ts now returns sources.join(\"\\n\") after the ready() wait and a 5s poll for /api/files/<id>, with no throw; the result is empty when the body shows no images."
+  - "condition-met bind-adapter-old-50#2: imageSources() in tests/adapters/old/index.ts collects <img> src values only from the h1's following siblings, skipping the Published/Updated line (the same region pageBody reads), and no longer uses document.images or page-wide getByRole('img'); the ready() wait and the /api/files/<id> polling are kept."
+cost: 0.2890898
+turns: 2
+session: "29e15186-69c2-4f49-958f-7cc5d39c9053"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T06:42:55.925Z
