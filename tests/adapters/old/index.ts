@@ -3132,13 +3132,48 @@ export default function create(
     }
   }
 
+  // A vendor looking at an open opportunity is offered "Start Proposal" twice: a link in the
+  // top bar and another in the page's header, both leading to the opportunity's
+  // "/proposals/create" (seen as vendors 1, 2, 5 and 8 on the seeded published Code With Us
+  // opportunity; neither shows for a visitor, public sector staff or an administrator). The
+  // links are drawn once the opportunity and the session have loaded, which on a slow target
+  // takes longer than the other top-bar controls, so they are waited for longer. When neither
+  // comes, the reason says what the page did show, so a page shown to the wrong person or an
+  // opportunity not open reads as that rather than as a missing control.
+  async function startProposal(where: string): Promise<void> {
+    await ready();
+    const starters = seen(page.getByRole("link", { name: "Start Proposal", exact: true }))
+      .or(seen(page.getByRole("button", { name: "Start Proposal", exact: true })));
+    await starters.first().waitFor({ state: "visible", timeout: 15000 }).catch(() => undefined);
+    if (await starters.count()) {
+      const inBar = seen(navBar().getByRole("link", { name: "Start Proposal", exact: true }));
+      const control = (await inBar.count()) ? inBar.first() : starters.first();
+      if (await isDisabled(control)) {
+        throw new Error(`${where} — "Start Proposal" is disabled on ${page.url()}`);
+      }
+      await control.click({ timeout: CLICK_MS });
+      await settle();
+      return;
+    }
+    const barText = ((await navBar().innerText().catch(() => "")) || "").replace(/\s*\n\s*/g, " | ");
+    const signedIn = /@/.test(barText) ? "signed in" : "not signed in";
+    const status = (await linesMatching(/^(Open|Closed|Draft|Under Review|Evaluation|Awarded|Suspended|Cancel+ed)$/i).catch(() => "")) || "no status shown";
+    const proposalLinks = seen(page.getByRole("link", { name: /proposal/i }));
+    const others = (await proposalLinks.allInnerTexts().catch(() => [])).map((each) => each.trim()).filter(Boolean);
+    throw new Error(
+      `unbound: ${where} — waited 15s for a "Start Proposal" link in the top bar or the page header on ${page.url()} and none came; the page is ${
+        (await notFoundShown()) ? "showing Not Found" : `showing status "${status.replace(/\n/g, ", ")}"`
+      }, ${signedIn} (top bar: ${barText || "empty"})${others.length ? `, proposal links shown: ${others.join(", ")}` : ""}`,
+    );
+  }
+
   // The three public opportunity pages share their shape; only the money and the middle
   // of the page differ by programme.
   function opportunityView(where: string, route: string, programme: string) {
     return {
       ...at(route),
       toggleWatch: () => press(`${where}.toggle_watch`, ["Watch", "Watching", "Unwatch"]),
-      startProposal: () => press(`${where}.start_proposal`, ["Start Proposal"], navBar()),
+      startProposal: () => startProposal(`${where}.start_proposal`),
       opportunityIdentifier: async () => opportunityId(),
       // The header reads "Published <date>" above the title, beside "Updated <date>".
       publishedDate: () => linesMatching(/^Published\s/),
@@ -4637,6 +4672,43 @@ export default function create(
     return names.join("\n");
   }
 
+  // The members named on the phases' team tables who still carry "Pending": each member sits
+  // on a row of their own under "TEAM MEMBER", their name in the first cell with "Pending" on
+  // the line below it while their invitation is unanswered (seen as the owner of Northern
+  // Pines on the seeded open Sprint With Us opportunity, "Blake Placeholder" and "Quinn
+  // Placeholder" added to Implementation: Quinn's cell reads "Quinn Placeholder | Pending",
+  // Blake's the name alone). One line per such member, "<name> — Pending". The step's standing
+  // instructions, which also say "pending", are not a member's entry and are not read. The
+  // rows are read in one pass, so a table redrawn part way through cannot leave a read waiting.
+  // With the Team step reached and nobody pending on it, that nothing is the answer.
+  async function swuPendingMembers(where: string): Promise<string> {
+    await ready();
+    if (!(await goToStep("Team"))) await advanceTo(where, "Organization");
+    if (!(await organizationChosen())) return "";
+    await openTeamPhases();
+    const entries = await page
+      .getByRole("main")
+      .getByRole("row")
+      .evaluateAll((rows) =>
+        rows.map((row) => {
+          const box = row as HTMLElement;
+          const shown = !!(box.offsetWidth || box.offsetHeight || row.getClientRects().length);
+          const first = row.children[0] as HTMLElement | undefined;
+          return { shown, cell: first ? first.innerText : "" };
+        }),
+      )
+      .catch(() => [] as Array<{ shown: boolean; cell: string }>);
+    const pending: string[] = [];
+    for (const { shown, cell } of entries) {
+      if (!shown) continue;
+      const lines = cell.split("\n").map((line) => line.trim()).filter(Boolean);
+      if (lines.length < 2 || !lines.slice(1).some((line) => /^pending$/i.test(line))) continue;
+      const line = `${lines[0]} — Pending`;
+      if (!pending.includes(line)) pending.push(line);
+    }
+    return pending.join("\n");
+  }
+
   // The resource a team member was last named for, whose choice team_member_choices reads
   // when every resource already has somebody.
   let lastTwuResourceAt = 0;
@@ -4738,7 +4810,7 @@ export default function create(
     capabilityGapError: () => messages(/capabilit/i),
     budgetExceededError: () => messages(/budget|exceed/i),
     unqualifiedOrganizationNotice: () => linesMatching(/qualif/i),
-    pendingTeamMember: () => linesMatching(/pending/i),
+    pendingTeamMember: () => swuPendingMembers("proposal-swu-create.pending_team_member"),
     teamMemberChoices: () => swuMemberChoices("proposal-swu-create.team_member_choices"),
     phaseTeamSections: () => swuPhaseTeamSections("proposal-swu-create.phase_team_sections"),
     phaseRequirements: () => swuPhaseRequirements("proposal-swu-create.phase_requirements"),
@@ -8883,25 +8955,44 @@ export default function create(
   async function pictures(): Promise<string[]> {
     const bar = await navBar().boundingBox().catch(() => null);
     const below = bar ? bar.y + bar.height : 0;
-    const images = seen(page.getByRole("img"));
-    const count = await images.count();
-    const sources: string[] = [];
-    for (let i = 0; i < count; i++) {
-      const source = await images.nth(i).getAttribute("src");
-      if (!source) continue;
-      const box = await images.nth(i).boundingBox();
-      if (box && box.y + box.height <= below) continue;
-      sources.push(source);
-    }
-    return sources;
+    // Every picture is read in one pass: a screen that redraws its pictures (the organization
+    // edit screen does, once its record loads) cannot then leave a read waiting on a picture
+    // that has gone.
+    const images = await page
+      .getByRole("img")
+      .evaluateAll((nodes) =>
+        nodes.map((node) => {
+          const box = node.getBoundingClientRect();
+          const style = window.getComputedStyle(node);
+          const shown =
+            (box.width > 0 || box.height > 0) && style.visibility !== "hidden" && style.display !== "none";
+          return {
+            source: node.getAttribute("src") ?? "",
+            shown,
+            bottom: box.bottom,
+          };
+        }),
+      )
+      .catch(() => [] as Array<{ source: string; shown: boolean; bottom: number }>);
+    return images
+      .filter(({ source, shown, bottom }) => source && shown && bottom > below)
+      .map(({ source }) => source);
   }
 
   // A stored picture is shown from the service's file address; the placeholder shown when
   // there is none comes from the site's static images and is not a stored image.
   async function storedImageAddress(): Promise<string> {
     await ready();
-    // Only the placeholder, or no picture at all: nothing is stored to point at.
-    return (await pictures()).find((source) => source.includes("/api/files/")) ?? "";
+    // A screen that has just saved draws its stored picture a moment after its record
+    // reloads, so the pictures are looked at again for a few seconds before concluding.
+    const until = Date.now() + LATE_CONTROL_MS;
+    for (;;) {
+      const stored = (await pictures()).find((source) => source.includes("/api/files/"));
+      if (stored) return stored;
+      // Only the placeholder, or no picture at all: nothing is stored to point at.
+      if (Date.now() >= until) return "";
+      await page.waitForTimeout(250);
+    }
   }
 
   // The size the image was stored at, read by loading the stored image itself. With no
@@ -8913,8 +9004,15 @@ export default function create(
       (src) =>
         new Promise<{ width: number; height: number } | null>((resolve) => {
           const image = new Image();
-          image.onload = () => resolve({ width: image.naturalWidth, height: image.naturalHeight });
-          image.onerror = () => resolve(null);
+          const timer = window.setTimeout(() => resolve(null), 10000);
+          image.onload = () => {
+            window.clearTimeout(timer);
+            resolve({ width: image.naturalWidth, height: image.naturalHeight });
+          };
+          image.onerror = () => {
+            window.clearTimeout(timer);
+            resolve(null);
+          };
           image.src = src;
         }),
       source,

@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  The question is whether the old adapter binds every surface action and observation on old, and nothing else, now that R-2.18 has been sent back to bind-adapter past policy.loops.rebind. Ruling: approve. The runner escalated because it hit the loop limit, not because the pipeline could not produce what G3 asks for. Each of the three sends asked for something different (the Organization chooser, then the phase team-member boxes, then the pending-member reading), which is progress rather than a stage that cannot converge, so there is no pipeline defect to escalate. The proposal answers the third send directly: proposalSwuCreate.pendingTeamMember no longer returns every line containing 'pending' from linesMatching(/pending/i). It reads the visible team-table rows in one pass and returns '<name> — Pending' only for members whose cell carries the Pending marker, and the author reports it returned exactly the pending invitee on the seeded Sprint With Us opportunity and excluded the confirmed member. For R-8.13, the picture reader now reads in one evaluateAll pass so a redraw cannot stall it, and the natural-size measurement has a 10s timeout. For R-2.2, the Start Proposal control still exists, so it stays bound; the action now accepts either Start Proposal link and fails with a diagnostic that tells an adapter fault apart from the opportunity's state. The diff is confined to tests/adapters/old/index.ts, binds no new member, and the runner's typecheck of this revision passed with no diagnostics under adapters/old/. The tier is STANDARD and no platform article is touched. The known cost is that storedImageAddress now takes about 5s to report no stored picture, which slows the answer but does not change it. What would change this ruling: a run of the R-2.18, R-8.13 or R-2.2 tests on old that fails because of these bindings, for example swuPendingMembers returning empty while a member is shown as Pending, or startProposal failing where a vendor is offered the link.
+conditions: []
+cost: 0.2878784
+turns: 1
+session: "7349bd46-875c-4465-a09f-db6185213ffd"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T04:02:25.979Z
