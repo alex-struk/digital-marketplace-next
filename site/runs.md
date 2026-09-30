@@ -183,6 +183,14 @@
 - 03:45:56 rule bind-adapter-old-55 escalated at G3 to tech-lead by runner:bind-adapter
 - 03:45:58 drive: step 24: `sdlc rule bind-adapter-old-55 --by agent:tech-lead` — bind-adapter-old-55 was escalated at G3 by runner:bind-adapter to tech-lead, a role an agent plays in this project
 - 03:46:43 rule bind-adapter-old-55 approve at G3 by agent:tech-lead (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 03:46:47 drive: step 25: `sdlc run calibrate --target old` — 4 bindings to check again now that their adapter has changed (rebind) for target old owed by calibrate
+- 03:47:53 oracle down old
+- 03:47:55 deviation: next named `sdlc run calibrate --target old`; ran `sdlc run build --slice 2`; reason: The Tests phase is held open only by the old target's calibration tail: a few adapter bindings the blind bind-adapter stage keeps missing (R-1.17, R-7.26 and similar), each full run exposing one or two more. They concern the old application's adapter, not the new application. They stay owed; the build proceeds slice by slice meanwhile, by the operator's judgement under the tech lead's delegation for this first autonomous run.
+- 04:23:46 verify slice 2: the sandbox did not start, so nothing was verified.
+- 04:24:16 verify slice 2: the sandbox did not start, so nothing was verified.
+- 04:26:57 oracle down old
+- 04:27:45 verify slice 2: returned — the sandbox did not start, so nothing was verified. the seed service failed: Next: sdlc run build --slice 2 --revise
+- 04:27:46 run verify: regenerated 3 files in .sdlc, site
 
 # Run record 2026-09-29
 
