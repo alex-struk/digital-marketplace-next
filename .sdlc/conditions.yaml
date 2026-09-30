@@ -1195,6 +1195,14 @@ conditions:
     stage: plan
     by: agent:architect
     at: 2026-09-30T23:13:15.063Z
+    closed:
+      outcome: met
+      why: R-6.28 moved from Slice 8's criteria line to Slice 6's in plan/tasks.md,
+        and its broadcast wording (skip a vendor with no address, carry on past
+        one it cannot reach) moved from Slice 8's delivers line to Slice 6's.
+        Slice 2's answered-for list now names slice 6.
+      by: agent:architect
+      at: 2026-09-30T23:14:53.722Z
   - ref: plan-6#2
     text: Rewrite the R-6.20/R-6.28 entry in plan/plan.md so that R-6.28 is placed
       with the changed-terms broadcast in Slice 6, not with the new-opportunity
@@ -1206,3 +1214,12 @@ conditions:
     stage: plan
     by: agent:architect
     at: 2026-09-30T23:13:15.063Z
+    closed:
+      outcome: met
+      why: the R-6.20/R-6.28 entry among the awkward placements in plan/plan.md now
+        places R-6.28 with the changed-terms broadcast in Slice 6 and gives the
+        reason from its test (vendor profiles from Slice 3, the broadcast from
+        Slice 6), and keeps R-6.20 in Slice 8 with its reasoning about the Slice
+        7 publishing screen and R-6.21.
+      by: agent:architect
+      at: 2026-09-30T23:14:53.731Z
