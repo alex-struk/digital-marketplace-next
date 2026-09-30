@@ -1,16 +1,15 @@
 gate: G3
-verdict: escalated
-by: runner:bind-adapter
-held_by: runner
-escalate_to: tech-lead
-rationale: >-
-  bind-adapter was handed owed work sent back to it more times than the
-  project's policy allows, so this proposal is ruled by tech-lead rather than
-  put to G3's holder for another round.
-
-  - R-2.18 on old: sent to bind-adapter 3 times, past the limit of 2 that
-  policy.loops.rebind sets. What each send asked for:
-    1. unbound: proposal-swu-create.choose_organization — no chooser labelled "Organization" on http://localhost:3102/opportunities/sprint-with-us/b554b879-6b2a-4cc4-a30e-0146b427cb4a/proposals/create; unbound: proposal-twu-create.choose_organization — no chooser labelled "Organization" on http://localhost:3102/opportunities/team-with-us/fff810ff-43f2-4519-b93e-cddf478bdd53/proposals/create; unbound: proposal-swu-create.choose_organization — no chooser labelled "Organization" on http://localhost:3102/opportunities/sprint-with-us/e1538502-a23f-40e8-b3c7-6cdbafd2f648/proposals/create
-    2. unbound: proposal-swu-create.add_phase_team_member — no box labelled "Implementation" on http://localhost:3101/opportunities/sprint-with-us/e652a07b-961c-4a90-b21f-d36fa0973763/proposals/create; unbound: proposal-twu-create.add_team_member_for_resource — no chooser labelled "Team Member" or "Member" on http://localhost:3101/opportunities/team-with-us/6f53e368-0ff9-409a-80aa-9249efe193a5/proposals/create; unbound: proposal-swu-create.add_phase_team_member — no box labelled "Implementation" on http://localhost:3101/opportunities/sprint-with-us/ac51cca7-212e-4f41-813e-14c435d9c826/proposals/create
-    3. proposalSwuCreate.pendingTeamMember is bound to linesMatching(/pending/i), which returns every page line containing 'pending', here the form's standing instruction paragraphs plus a lone 'Pending' line, instead of the named member's entry in the phase team list. It must read the entry of each named member that carries the pending marker and return that member's name (together with the marker), so a person named and marked pending is reported by name.
-at: 2026-09-30T04:01:52.359Z
+verdict: approve
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  The question is whether the old adapter binds every surface action and observation on old, and nothing else, now that R-2.18 has been sent back to bind-adapter past policy.loops.rebind. Ruling: approve. The runner escalated because it hit the loop limit, not because the pipeline could not produce what G3 asks for. Each of the three sends asked for something different (the Organization chooser, then the phase team-member boxes, then the pending-member reading), which is progress rather than a stage that cannot converge, so there is no pipeline defect to escalate. The proposal answers the third send directly: proposalSwuCreate.pendingTeamMember no longer returns every line containing 'pending' from linesMatching(/pending/i). It reads the visible team-table rows in one pass and returns '<name> — Pending' only for members whose cell carries the Pending marker, and the author reports it returned exactly the pending invitee on the seeded Sprint With Us opportunity and excluded the confirmed member. For R-8.13, the picture reader now reads in one evaluateAll pass so a redraw cannot stall it, and the natural-size measurement has a 10s timeout. For R-2.2, the Start Proposal control still exists, so it stays bound; the action now accepts either Start Proposal link and fails with a diagnostic that tells an adapter fault apart from the opportunity's state. The diff is confined to tests/adapters/old/index.ts, binds no new member, and the runner's typecheck of this revision passed with no diagnostics under adapters/old/. The tier is STANDARD and no platform article is touched. The known cost is that storedImageAddress now takes about 5s to report no stored picture, which slows the answer but does not change it. What would change this ruling: a run of the R-2.18, R-8.13 or R-2.2 tests on old that fails because of these bindings, for example swuPendingMembers returning empty while a member is shown as Pending, or startProposal failing where a vendor is offered the link.
+conditions: []
+cost: 0.2878784
+turns: 1
+session: "7349bd46-875c-4465-a09f-db6185213ffd"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T04:02:25.979Z
