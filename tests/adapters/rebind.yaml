@@ -2216,6 +2216,11 @@ rebind:
       fires no change, so old never validates it: enter it as a person clearing
       the box would (type, then clear, then leave the box) so old's own refusal
       is shown, for both addTeamQuestion and addResourceQuestion."
+    closed: &a15
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-30T09:15:25.389Z
   - id: R-7.26
     target: old
     why: fileEmbeddedImage.imageRenderedInPublishedText returned '' on the published
@@ -2225,3 +2230,4 @@ rebind:
       reach that paragraph on old's markup. Collect img elements from the page's
       content region after the heading (excluding site header and footer), and
       match the /api/files/<id> the body's FILE_ID marker names.
+    closed: *a15
