@@ -2244,6 +2244,11 @@ rebind:
       textareas (Teaser and the Description markdown editor) and read the
       message drawn in the field's own form group, not counting the editor's
       file input as a second field
+    closed: &a16
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-30T18:10:15.965Z
   - id: R-1.17
     target: old
     why: on submission for review, opportunitySwuCreate.fieldError() still returns
@@ -2256,6 +2261,7 @@ rebind:
       Review' was pressed or left disabled, and fieldError must include any
       alert or message old shows after it, rather than ending quietly with
       nothing read
+    closed: *a16
   - id: R-7.26
     target: old
     why: fileEmbeddedImage returned '' after uploading a body image and publishing;
@@ -2265,6 +2271,7 @@ rebind:
       image is dropped; exclude only the date line itself, not containers that
       start with it, and check that imageInsertedIntoText reads the Body box
       after the upload finished writing '![name](FILE_ID:<id>)' into it
+    closed: *a16
   - id: R-8.31
     target: old
     why: "after fileAttachmentControl.addAttachment on a just-published Code With Us
@@ -2275,6 +2282,7 @@ rebind:
       opportunity if it is read-only, hand the file to the attachment input,
       save it through 'Publish Changes' and its confirmation, and raise when no
       file appears, rather than returning silently"
+    closed: *a16
   - id: R-6.2
     target: new
     why: 'unbound: signIn.administrator — the sign-in screen at
@@ -2284,7 +2292,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
-    closed: &a16
+    closed: &a17
       outcome: met
       why: tests/adapters/new has changed since this was found
       by: runner:verify
@@ -2298,7 +2306,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
-    closed: *a16
+    closed: *a17
   - id: R-6.4
     target: new
     why: 'unbound: signIn.organization-owner — the sign-in screen at
@@ -2308,7 +2316,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
-    closed: *a16
+    closed: *a17
   - id: R-6.5
     target: new
     why: 'unbound: signIn.organization-owner — the sign-in screen at
@@ -2318,7 +2326,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
-    closed: *a16
+    closed: *a17
   - id: R-6.20
     target: new
     why: 'unbound: signIn.vendor-with-notices-off — the sign-in screen at
@@ -2328,7 +2336,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
-    closed: *a16
+    closed: *a17
   - id: R-6.28
     target: new
     why: 'unbound: signIn.administrator — the sign-in screen at
@@ -2338,7 +2346,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
-    closed: *a16
+    closed: *a17
   - id: R-4.1
     target: new
     why: 'unbound: signIn.first-time-public-sector-employee — the sign-in screen at
@@ -2350,7 +2358,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
-    closed: *a16
+    closed: *a17
   - id: R-4.2
     target: new
     why: 'unbound: signIn.first-time-vendor — the sign-in screen at
@@ -2362,7 +2370,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
-    closed: *a16
+    closed: *a17
   - id: R-4.3
     target: new
     why: 'unbound: signIn.first-time-vendor — the sign-in screen at
@@ -2374,7 +2382,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
-    closed: *a16
+    closed: *a17
   - id: R-4.6
     target: new
     why: 'unbound: signIn.vendor — the sign-in screen at
@@ -2384,7 +2392,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
-    closed: *a16
+    closed: *a17
   - id: R-4.17
     target: new
     why: 'unbound: signIn.vendor — the sign-in screen at
@@ -2394,7 +2402,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
-    closed: *a16
+    closed: *a17
   - id: R-4.22
     target: new
     why: 'unbound: signIn.public-sector-staff — the sign-in screen at
@@ -2404,7 +2412,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
-    closed: *a16
+    closed: *a17
   - id: R-4.23
     target: new
     why: "unbound: signIn.vendor-completing-profile — the sign-in screen at
@@ -2426,7 +2434,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
-    closed: *a16
+    closed: *a17
   - id: R-4.24
     target: new
     why: 'unbound: signIn.vendor-completing-profile — the sign-in screen at
@@ -2436,7 +2444,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
-    closed: *a16
+    closed: *a17
   - id: R-4.27
     target: new
     why: 'unbound: signIn.public-sector-staff — the sign-in screen at
@@ -2446,7 +2454,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
-    closed: *a16
+    closed: *a17
   - id: R-4.28
     target: new
     why: 'unbound: signIn.public-sector-staff — the sign-in screen at
@@ -2458,7 +2466,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
-    closed: *a16
+    closed: *a17
   - id: R-6.2
     target: new
     why: "unbound: opportunity-cwu-create.open — /opportunities/code-with-us/create
@@ -2476,7 +2484,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
-    closed: &a17
+    closed: &a18
       outcome: met
       why: tests/adapters/new has changed since this was found
       by: runner:verify
@@ -2499,7 +2507,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
-    closed: *a17
+    closed: *a18
   - id: R-6.4
     target: new
     why: "unbound: organization-edit.open — /organizations/:orgId/edit is offered
@@ -2518,7 +2526,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
-    closed: *a17
+    closed: *a18
   - id: R-6.5
     target: new
     why: "unbound: organization-edit.open — /organizations/:orgId/edit is offered
@@ -2537,7 +2545,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
-    closed: *a17
+    closed: *a18
   - id: R-6.20
     target: new
     why: "unbound: user-profile-self-notifications.open —
@@ -2555,7 +2563,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
-    closed: *a17
+    closed: *a18
   - id: R-6.28
     target: new
     why: "unbound: user-profile.open — /users/:userId is offered only to a signed-in
@@ -2572,7 +2580,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
-    closed: *a17
+    closed: *a18
   - id: R-4.1
     target: new
     why: "unbound: user-profile-self.user_identifier — /users/me is offered only to
@@ -2588,7 +2596,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
-    closed: *a17
+    closed: *a18
   - id: R-4.2
     target: new
     why: "unbound: user-profile-self.email_field — /users/me is offered only to a
@@ -2612,7 +2620,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
-    closed: *a17
+    closed: *a18
   - id: R-4.3
     target: new
     why: "unbound: user-sign-up-complete.open — /sign-up/complete is offered only to
@@ -2638,7 +2646,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
-    closed: *a17
+    closed: *a18
   - id: R-4.6
     target: new
     why: "unbound: user-profile-self.email_field — /users/me is offered only to a
@@ -2654,7 +2662,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
-    closed: *a17
+    closed: *a18
   - id: R-4.22
     target: new
     why: "unbound: opportunity-dashboard.my_opportunities_table — /dashboard is
@@ -2670,7 +2678,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
-    closed: *a17
+    closed: *a18
   - id: R-4.23
     target: new
     why: "unbound: user-sign-up-complete.open — /sign-up/complete is offered only to
@@ -2705,7 +2713,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
-    closed: *a17
+    closed: *a18
   - id: R-4.24
     target: new
     why: "unbound: user-sign-up-complete.open — /sign-up/complete is offered only to
@@ -2722,7 +2730,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
-    closed: *a17
+    closed: *a18
   - id: R-4.27
     target: new
     why: "unbound: user-profile-self.name_field — /users/me is offered only to a
@@ -2754,7 +2762,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
-    closed: *a17
+    closed: *a18
   - id: R-4.28
     target: new
     why: "unbound: user-profile-self.edit_profile — /users/me is offered only to a
@@ -2778,4 +2786,4 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
-    closed: *a17
+    closed: *a18

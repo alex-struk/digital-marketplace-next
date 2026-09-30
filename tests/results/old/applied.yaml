@@ -516,23 +516,3 @@ rulings:
     version: 1
     verb: defect-in-old
     gate: calibrate-old-25
-  - id: R-1.10
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-40
-    adapter: 3c430ddd73d4ed0a48cfdb587104cc59a3687f51
-  - id: R-1.17
-    version: 3
-    verb: adapter-wrong
-    gate: calibrate-triage-old-40
-    adapter: 3c430ddd73d4ed0a48cfdb587104cc59a3687f51
-  - id: R-7.26
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-40
-    adapter: 3c430ddd73d4ed0a48cfdb587104cc59a3687f51
-  - id: R-8.31
-    version: 1
-    verb: adapter-wrong
-    gate: calibrate-triage-old-40
-    adapter: 3c430ddd73d4ed0a48cfdb587104cc59a3687f51
