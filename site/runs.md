@@ -67,6 +67,11 @@
 - 21:32:50 propose calibrate-triage-old-35 at G3
 - 21:32:51 drive: step 11: `sdlc rule calibrate-triage-old-35 --by agent:reviewer` — calibrate-triage-old-35 is open at G3, held by agent:reviewer
 - 21:33:56 rule calibrate-triage-old-35 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 21:33:59 drive: step 12: `sdlc run calibrate --target old --full` — phase 2 Tests is not complete (exit: the contract approved, every domain's tests approved, and every calibration row pass or ruled, all measured by the last run), and calibrate for target old is next in it; a full run is due: 3 scoped calibrations since the last full run (2026-09-30-8); policy.calibrate.full_every is 4
+- 22:20:25 oracle up old in configuration notifications_disabled: local port 3103
+- 22:21:04 oracle down old in configuration notifications_disabled
+- 22:21:04 calibrate old: a full run, forced with --full
+- 22:21:07 run calibrate: ok, cost 0, turns 0
 
 # Run record 2026-09-29
 
