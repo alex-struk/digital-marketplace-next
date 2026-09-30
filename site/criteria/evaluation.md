@@ -28,7 +28,7 @@
 | R-5.22 | acceptance/evaluation/R-5.22.spec.ts |  | pass (carried from 2026-09-30-8) |
 | R-5.23 | acceptance/evaluation/R-5.23.spec.ts |  | pass (carried from 2026-09-30-8) |
 | R-5.24 | acceptance/evaluation/R-5.24.spec.ts |  | pass (carried from 2026-09-30-8) |
-| R-5.25 | acceptance/evaluation/R-5.25.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-5.25 | acceptance/evaluation/R-5.25.spec.ts |  | pass |
 | R-5.26 | acceptance/evaluation/R-5.26.spec.ts |  | pass (carried from 2026-09-30-8) |
 | R-5.27 | acceptance/evaluation/R-5.27.spec.ts |  | pass (carried from 2026-09-30-8) |
 | R-5.28 | acceptance/evaluation/R-5.28.spec.ts |  | pass (carried from 2026-09-30-8) |

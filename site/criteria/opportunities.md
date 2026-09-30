@@ -4,7 +4,7 @@
 
 | id | test | new | old |
 | --- | --- | --- | --- |
-| R-1.1 | acceptance/opportunities/R-1.1.spec.ts |  | fail |
+| R-1.1 | acceptance/opportunities/R-1.1.spec.ts |  | fail (ruled: defect-in-old) |
 | R-1.2 | acceptance/opportunities/R-1.2.spec.ts |  | pass (carried from 2026-09-30-8) |
 | R-1.3 | acceptance/opportunities/R-1.3.spec.ts |  | pass (carried from 2026-09-30-8) |
 | R-1.4 | acceptance/opportunities/R-1.4.spec.ts |  | pass (carried from 2026-09-30-8) |
@@ -20,7 +20,7 @@
 | R-1.14 | acceptance/opportunities/R-1.14.spec.ts |  | pass (carried from 2026-09-30-8) |
 | R-1.15 | acceptance/opportunities/R-1.15.spec.ts |  | pass (carried from 2026-09-30-8) |
 | R-1.16 | acceptance/opportunities/R-1.16.spec.ts |  | fail (ruled: defect-in-old; carried from 2026-09-30-8) |
-| R-1.17 | acceptance/opportunities/R-1.17.spec.ts |  | fail (ruled: adapter-wrong) |
+| R-1.17 | acceptance/opportunities/R-1.17.spec.ts |  | fail |
 | R-1.18 | acceptance/opportunities/R-1.18.spec.ts |  | pass (carried from 2026-09-30-8) |
 | R-1.19 | acceptance/opportunities/R-1.19.spec.ts |  | pass (carried from 2026-09-30-8) |
 | R-1.20 | acceptance/opportunities/R-1.20.spec.ts |  | pass (carried from 2026-09-30-8) |
@@ -76,6 +76,7 @@ A published opportunity whose proposal deadline has passed closes on its own at 
 - when: the service next handles any request
 - then: the opportunity moves to its program's first evaluation stage with the note "This opportunity has closed.", its submitted proposals move to review, and its author receives a notification
 - note: closure is driven by ordinary traffic rather than a clock, throttled so it runs at most once a minute, and additionally attached to the health-check route so that it still runs when the site is idle. An opportunity therefore closes at the first request after its deadline, not at the deadline itself.
+- note: calibrate 2026-09-30: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.2 · v1 · confirmed · accepted
 
