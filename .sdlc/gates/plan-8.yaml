@@ -1,0 +1,16 @@
+gate: G2
+verdict: escalated
+by: runner:plan
+held_by: runner
+escalate_to: tech-lead
+rationale: >-
+  plan was handed owed work sent back to it more times than the project's policy
+  allows, so this proposal is ruled by tech-lead rather than put to G2's holder
+  for another round.
+
+  - requests from build-slice-2: sent to plan 3 times, past the limit of 2 that
+  policy.loops.request sets. What each send asked for:
+    1. slice 2 claims R-4.6, R-4.22, R-4.27, R-4.28 and R-6.2 to R-6.5, whose tests go through screens plan/tasks.md gives to later slices (profile editing and /users/:userId, the Code With Us create screen, organization editing, the opportunity dashboard's own-opportunities table); verify on build-slice-2-8 found each failing or unbound there. Move each to the slice that delivers its screen.
+    2. R-6.20's test publishes a Code With Us opportunity (/opportunities/code-with-us/create), a screen Slice 7 delivers, and R-6.28's test reads another person's profile at /users/:userId, which the plan gives to Slice 3; verify on build-slice-2-12 found both unbound on those screens. Move each to a slice whose dependencies deliver its screen.
+    3. slice 2 ('A person can sign in, finish signing up and sign out') claims R-4.23, but R-4.23's test confirms arrival at the dashboard by reading the dashboard's contents: the vendor's proposals table or its empty message, and the public sector employee's opportunities table or its empty message. Those belong to the staff and vendor dashboard slices (6 and 8), not slice 2. Verify on build-slice-2-15 showed the redirect working (terms checkbox absent in both cases) and both dashboard reads returning empty, after three builds. Either move R-4.23, or at least its two dashboard-arrival clauses, to the slice that builds those dashboards, or put the dashboards' empty states and proposals/opportunities listings into slice 2's scope, so the slice claiming R-4.23 can produce what its test observes.
+at: 2026-09-30T23:45:59.550Z
