@@ -81,3 +81,15 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Asked which of the two criteria failing against old were caused by this project's adapter. Approved with one triage condition each. R-1.10 (a teaser over 500 characters): fieldError returned an empty string for the whole 15-second poll. The adapter's own documentation (tests/adapters/old/index.ts, above fieldErrors) quotes old drawing 'Teaser must be between 0 and 500 characters long.' after the Teaser box, which its MESSAGE pattern matches, and the same reader answers the title and description cases on the same form. So the adapter answered empty where the page renders a message: adapter-wrong. R-1.17 (a question whose position would fall beyond 100): the adapter added 102 questions, pressed and confirmed Submit for Review, and captured old's own refusal alert ('Unable to Submit Opportunity / Sprint With Us opportunity could not be submitted. Please try again later.'), which it documents as old's actual answer to this exact scenario. That alert names no question, position or order field, and nothing in the evidence points at the harness: product-question. If the next binding run shows the full 501-character teaser reaching the box and old drawing no message, R-1.10 would become a product question too. Neither owed instruction (build-slice-2-5#1, build-slice-2-8#2) is settled by this triage, so both stay open.
+
+**Conditions:**
+- adapter-wrong R-1.10: on the Code With Us create form, fieldError() read an empty string after publish with a 501-character teaser, although old draws 'Teaser must be between 0 and 500 characters long.' beneath the Teaser box; confirm the fill puts all 501 characters into the Teaser box (not cut short by the box or the fill) and that fieldErrors/stepFormErrors reaches the Teaser field's own group on its step, as it does for the title and description
+- product-question R-1.17
