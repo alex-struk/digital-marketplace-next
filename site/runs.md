@@ -156,6 +156,9 @@
 - 01:25:56 rule bind-adapter-old-53 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 - 01:26:00 drive: step 15: `sdlc run calibrate --target old` — 2 bindings to check again now that their adapter has changed (rebind) for target old owed by calibrate
 - 01:45:10 run calibrate: ok, cost 0, turns 0
+- 01:45:11 propose calibrate-triage-old-39 at G3
+- 01:45:13 drive: step 16: `sdlc rule calibrate-triage-old-39 --by agent:reviewer` — calibrate-triage-old-39 is open at G3, held by agent:reviewer
+- 01:47:57 rule calibrate-triage-old-39 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-29
 
