@@ -191,6 +191,16 @@
 - 04:26:57 oracle down old
 - 04:27:45 verify slice 2: returned — the sandbox did not start, so nothing was verified. the seed service failed: Next: sdlc run build --slice 2 --revise
 - 04:27:46 run verify: regenerated 3 files in .sdlc, site
+- 04:28:53 oracle down old
+- 04:28:54 deviation: next named `sdlc run calibrate --target old`; ran `sdlc run build --slice 2`; reason: The Tests phase is held open only by the old target's calibration tail: a few adapter bindings the blind bind-adapter stage keeps missing (R-1.17, R-7.26 and similar), each full run exposing one or two more. They concern the old application's adapter, not the new application. They stay owed; the build proceeds slice by slice meanwhile, by the operator's judgement under the tech lead's delegation for this first autonomous run.
+- 04:28:54 run build: proposal build-slice-2 still open
+- 04:29:36 oracle down old
+- 04:29:38 deviation: next named `sdlc run calibrate --target old`; ran `sdlc run verify --slice 2`; reason: The Tests phase is held open only by the old target's calibration tail: a few adapter bindings the blind bind-adapter stage keeps missing (R-1.17, R-7.26 and similar), each full run exposing one or two more. They concern the old application's adapter, not the new application. They stay owed; the build proceeds slice by slice meanwhile, by the operator's judgement under the tech lead's delegation for this first autonomous run.
+- 04:29:38 run verify: pre-checks failed
+- 04:30:43 oracle down old
+- 04:30:44 deviation: next named `sdlc run calibrate --target old`; ran `sdlc run build --slice 2 --revise`; reason: The Tests phase is held open only by the old target's calibration tail: a few adapter bindings the blind bind-adapter stage keeps missing (R-1.17, R-7.26 and similar), each full run exposing one or two more. They concern the old application's adapter, not the new application. They stay owed; the build proceeds slice by slice meanwhile, by the operator's judgement under the tech lead's delegation for this first autonomous run.
+- 04:38:45 verify slice 2: returned — R-4.2, R-6.1, R-6.2, R-6.3, R-6.4, R-6.5 fail. Next: sdlc run build --slice 2 --revise
+- 04:38:46 run verify: regenerated 362 files in .sdlc, site
 
 # Run record 2026-09-29
 
