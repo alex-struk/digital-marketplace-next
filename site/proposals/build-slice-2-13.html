@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-2-13 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">376</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">370</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">330</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-2-13</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 23:17</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 2 (A person can sign in, finish signing up and sign out) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I left the application unchanged in this revision.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I left the application unchanged in this revision. The ruling asked me to recheck R-4.1 and R-4.3 against the rebound adapter and, if either still read empty, find where the app departs from the criterion. I couldn&#39;t do that recheck against the running app. Reading the code, I found nothing in the app to correct for either criterion.</p>
+<p><strong>What stopped the live check.</strong> Starting the compose stack (<code>docker compose … up --build</code>) needs a permission this unattended session can&#39;t get, so I never had a running app or sandbox identity provider to sign in to. I also have neither the adapter nor the acceptance tests. The adapter rebinding the ruling depends on is filed with the bind-adapter stage, and I have no sign that it has run. So I can&#39;t say what either criterion now reads.</p>
+<p><strong>What I checked instead.</strong> I followed both criteria from sign-in to the markup the adapter reads.</p>
+<ul><li><strong>R-4.1 (the account a first sign-in creates).</strong></li><li>Seed users <code>first-time-gov</code> and <code>first-time-vendor</code> are in the sandbox realm. Each carries an <code>identity_provider</code> attribute, and the service maps it to an account kind: <code>idir</code> makes a public sector employee, <code>github</code> a vendor.</li><li>On a first sign-in, <code>AccountsService.signIn</code> creates the account. It is active, because that is the database default for a new account. Signing in again finds the same account through <code>findBySignIn</code> instead of making a second one.</li><li><code>GET /api/sessions/current</code> returns the account with its <code>status</code>.</li><li><code>/users/me</code> draws it once the signed-in account is known. <code>profile-status-badge</code> shows &quot;Active&quot;, on the element carrying that test id, on the profile section every account kind is offered.</li><li>A unit test in <code>app/frontend/tests/signing-in.test.tsx</code> already checks that the badge reads &quot;Active&quot;.</li><li>The earlier empty reading matches what the ruling found: the binding was written before anyone could see this screen signed in. Nothing I found in the app would produce it.</li><li><strong>R-4.3 (the terms agreement).</strong></li><li><code>/sign-up/complete</code> matches its catalogue story and every test id <code>surface.yaml</code> lists for <code>user-sign-up-complete</code>.</li><li><code>sign-up-complete-button</code> carries a real <code>disabled</code> attribute until <code>sign-up-terms-checkbox</code> is ticked. Decision record 0016 already lets the checkbox take a click on its own input.</li><li>Completing the form saves the profile, then the notice choice, then <code>acceptTerms</code>, which records both <code>acceptedTermsAt</code> and <code>lastAcceptedTermsAt</code>.</li><li>A public sector employee is never sent to this page, and the service refuses <code>acceptTerms</code> for one.</li><li>For a vendor, the moment of agreeing shows on <code>/users/me?tab=legal</code> as <code>legal-accepted-on</code> (&quot;You agreed to the terms and conditions on …&quot;).</li><li>The seed&#39;s <code>vendorCompletingProfile</code> (test-vendor-17) is sent to the completion page from every screen except sign-out, notices and content pages.</li><li>Unit tests cover the disabled-until-ticked control, the completion requests and the accepted-on text.</li></ul>
+<p><strong>Checks.</strong> After installing the app&#39;s dependencies (the workspace had none), <code>npm --prefix app run check</code> passes: typecheck plus 101 unit tests in 7 files. I wrote no new tests, because I changed no code.</p>
+<p><strong>What I did not do, because other stages own it.</strong></p>
+<ul><li>I did not touch <code>tests/adapters</code>. The rebinding of <code>/dashboard</code>, <code>/users/:userId</code>, the own profile&#39;s status and the profile-completion form belongs to bind-adapter.</li><li>I did not move R-6.20 or R-6.28 to other slices; that belongs to the plan stage. R-6.20 needs the Code With Us create screen from slice 7, and R-6.28 needs another person&#39;s profile from slice 3.</li></ul>
+<p><strong>Where the next check should look.</strong> Once the adapter has been bound against signed-in screens, the recheck should run again. If R-4.1 or R-4.3 still reads empty then, the place to look is what the bound selector finds on the live page. The markup and data these two criteria need are in place.</p>
+<p><strong>What the next slice will find missing.</strong> Nothing new since the last revision. Slice 3 still owns editing the profile, the picture, capabilities, organizations, changing the notice choice, unsubscribing, deactivation, and <code>GET /api/users/{id}</code>, as decision record 0016 describes.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by runner:verify (the runner, automatically) on 2026-09-30 23:20.</p>
+<div class="body"><p>Slice 2 does not yet do what 3 of its criteria say. Each condition is the criterion and what the running application did.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-4.1: Error: user-profile-self.user_identifier — /users/me sent this person on to <a href="http://localhost:4300/sign-up/complete">http://localhost:4300/sign-up/complete</a> (&quot;Complete Your Profile&quot;): the account has still to complete its profile, and the profile is not shown to it until then</li><li>R-4.2: Error: user-profile-self.email_field — /users/me sent this person on to <a href="http://localhost:4300/sign-up/complete">http://localhost:4300/sign-up/complete</a> (&quot;Complete Your Profile&quot;): the account has still to complete its profile, and the profile is not shown to it until then</li><li>R-4.23: Error: expect(received).toBeTruthy() — Received: &quot;&quot;</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
