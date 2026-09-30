@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-2-9 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">361</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">355</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">319</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-2-9</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 18:44</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 2 (A person can sign in, finish signing up and sign out) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> This revision does both things the ruling asked for.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>This revision does both things the ruling asked for. Signing out (R-4.17) now also works in two edge cases, but I could not run it live, so it is checked only by reading the code and by unit tests.</p>
+<p><strong>Ticket number (egress rule E-2).</strong> The rule&#39;s text isn&#39;t in this workspace, so I couldn&#39;t tell for certain which number it meant in <code>app/backend/tests/sign-in-flow.test.ts</code>. The file had three reference numbers: a pointer to decision record 0015 in the header comment, the criterion number R-4.4 in one test group&#39;s title, and the RFC 7636 number in one test&#39;s title and comment. Criterion numbers appear in every other test file and only this file was named, so the RFC number is the most likely target. I removed all three rather than guess. The comment now says &quot;the worked example from the PKCE standard&#39;s appendix&quot;. The only numbers left are port numbers in addresses and HTTP status codes.</p>
+<p><strong>Signing out (R-4.17, condition <code>build-slice-2-5#1</code>).</strong> I read the whole sign-out path again: the header&#39;s &quot;Sign out&quot; link to <code>/sign-out</code>, the screen, the session code in the browser, the service&#39;s <code>DELETE /api/sessions/current</code>, the token check on every <code>/api</code> request, and the sandbox realm&#39;s client settings. The order is right:</p>
+<ul><li>The service is told first and refuses that session&#39;s tokens from then on.</li><li>The page then ends the identity provider&#39;s session with a direct request.</li><li>If that request fails, the browser is sent to the identity provider&#39;s logout page and comes back to <code>/sign-out</code>.</li><li>&quot;You have successfully signed out&quot; (<code>sign-out-success</code>) appears only once both have ended the session. If the service can&#39;t be told, the page shows <code>sign-out-failed</code>.</li><li>Pages that need a sign-in send a visitor back to sign in.</li><li>A request to end someone else&#39;s session is refused.</li></ul>
+<p>The realm allows <code>http://localhost:4300</code> as the page&#39;s origin and as the place to return to after logout, so both routes back work.</p>
+<p>Two edge cases could leave a person told the wrong thing, so I fixed them:</p>
+<ul><li><strong>Retried sign-out.</strong> If someone signed out in another tab or an earlier attempt, the service answers the sign-out request with &quot;not signed in&quot; (401). The page used to call that a failure and stop, leaving the identity provider&#39;s session running. A 401 now counts as &quot;the service holds no session&quot;, and sign-out goes on to the identity provider. This is in <code>app/frontend/src/api/accounts.ts</code>.</li><li><strong>Tokens that outlived the one signed out with.</strong> The service remembered a signed-out session only until the token used to sign out expired. Another tab could hold a token from the same session renewed moments later, and it would have been accepted again after that. The session is now remembered for at least one full token lifetime (an hour by default) after sign-out. This is in <code>app/backend/src/auth/signed-out-sessions.ts</code>.</li></ul>
+<p>I updated decision record 0011&#39;s sign-out paragraph to say both of these.</p>
+<p><strong>Tests.</strong> I added a frontend test for the &quot;not signed in&quot; answer: sign-out reaches the identity provider and the success message shows. I added a backend test for the new minimum time a signed-out session is remembered, and adjusted the existing one to match. <code>npm --prefix app run check</code> typechecks and passes in all three packages: 296 tests, 15 + 186 + 95. The dependencies weren&#39;t installed here, so I installed them for the check and removed the <code>node_modules</code> folders afterwards, since there is no ignore file and they would otherwise have travelled with the proposal.</p>
+<p><strong>What I could not do.</strong> I couldn&#39;t run slice 2 end to end in a browser. Ports 4300 and 8025 are held by another pipeline&#39;s running stack, which I left alone, and I wasn&#39;t permitted to start containers even for Keycloak alone on the free port 8080. So I haven&#39;t observed two things live: whether Keycloak 26.0 lets the page read the reply to its logout request, and how sign-out behaves with the newly rebound test adapter. If the page can&#39;t read that reply, the fallback through the identity provider&#39;s logout page still ends the session and returns to <code>/sign-out</code>. The condition asked for all of slice 2 to be re-verified; in practice that means the acceptance run after this turn.</p>
+<p>The other criteria (R-4.1, R-4.2, R-4.3, R-4.23, R-4.24, R-6.1, R-6.20, R-6.28) are as the earlier revision built them, and I changed nothing there. As instructed, I left alone the condition addressed to the plan stage about moving R-4.6, R-4.22, R-4.27, R-4.28 and R-6.2 to R-6.5 to later slices. The next slice will still find a backend that runs as a single instance, because the list of signed-out sessions is kept in memory.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by runner:verify (the runner, automatically) on 2026-09-30 18:48.</p>
+<div class="body"><p>Slice 2 does not yet do what 5 of its criteria say. Each condition is the criterion and what the running application did.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-4.1: Error: expect(received).toBeTruthy() — Received: &quot;&quot;</li><li>R-4.2: Error: expect(received).toBeTruthy() — Received: &quot;&quot;</li><li>R-4.3: Error: expect(received).toBeTruthy() — Received: &quot;&quot;</li><li>R-4.17: Error: expect(received).toBeTruthy() — Received: &quot;&quot;</li><li>R-4.24: Error: expect(received).not.toBe(expected) // Object.is equality — Expected: not &quot;&quot;</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
