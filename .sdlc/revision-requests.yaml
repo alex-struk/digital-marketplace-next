@@ -214,3 +214,19 @@ requests:
     at: 2026-09-30T22:48:40.628Z
     taken: 2026-09-30T23:11:59.474Z
     taken_by: plan-6
+  - stage: plan
+    why: "slice 2 ('A person can sign in, finish signing up and sign out') claims
+      R-4.23, but R-4.23's test confirms arrival at the dashboard by reading the
+      dashboard's contents: the vendor's proposals table or its empty message,
+      and the public sector employee's opportunities table or its empty message.
+      Those belong to the staff and vendor dashboard slices (6 and 8), not slice
+      2. Verify on build-slice-2-15 showed the redirect working (terms checkbox
+      absent in both cases) and both dashboard reads returning empty, after
+      three builds. Either move R-4.23, or at least its two dashboard-arrival
+      clauses, to the slice that builds those dashboards, or put the dashboards'
+      empty states and proposals/opportunities listings into slice 2's scope, so
+      the slice claiming R-4.23 can produce what its test observes."
+    from: build-slice-2-15
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-09-30T23:45:08.121Z
