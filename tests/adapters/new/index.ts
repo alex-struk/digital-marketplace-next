@@ -168,6 +168,21 @@ export default function create(
     return "";
   }
 
+  // A value drawn beside its label on one line, the way the signed-in profile draws its
+  // account facts ("Account type: Vendor", "Status: Active"), or under a label on a line of
+  // its own; labels are matched without regard to case.
+  async function labelledValue(labels: string[]): Promise<string> {
+    const wanted = labels.map((label) => label.toLowerCase());
+    const lines = await textLines();
+    for (let i = 0; i < lines.length; i++) {
+      const beside = /^([^:]+):\s*(.+)$/.exec(lines[i]);
+      if (beside && wanted.includes(beside[1].trim().toLowerCase())) return beside[2].trim();
+      const alone = lines[i].replace(/:\s*$/, "").trim().toLowerCase();
+      if (wanted.includes(alone) && i + 1 < lines.length) return lines[i + 1];
+    }
+    return "";
+  }
+
   async function firstHeading(): Promise<string> {
     const heading = seen(page.getByRole("heading"));
     return (await heading.count()) ? (await heading.first().innerText()).trim() : "";
@@ -337,7 +352,7 @@ export default function create(
     const table = who.signIn as unknown as null | Record<string, SignInEntry>;
     if (!table) {
       // The anonymous visitor has no account; being signed out is the whole state.
-      await signOut();
+      await forgetEveryone();
       return;
     }
     const where = `signIn.${who.id}`;
@@ -354,10 +369,12 @@ export default function create(
       );
     }
 
-    // Start from nobody signed in, then take the way in the sign-in screen offers this kind
-    // of account: "Sign in as a vendor" for a vendor, "Sign in as a public sector employee"
-    // for public sector staff and administrators. Every vendor's sandbox username says so.
-    await signOut();
+    // Start from a browser holding nothing for the target (a person still signed in is
+    // sent from /sign-in on to /dashboard), then take the way in the sign-in screen offers
+    // this kind of account: "Sign in as a vendor" for a vendor, "Sign in as a public sector
+    // employee" for public sector staff and administrators. Every vendor's sandbox username
+    // says so.
+    await forgetEveryone();
     await page.goto(baseURL + "/sign-in", { waitUntil: "domcontentloaded" });
     await ready();
     const way = /vendor/i.test(entry.username) ? "Sign in as a vendor" : "Sign in as a public sector employee";
@@ -418,13 +435,49 @@ export default function create(
     return null;
   }
 
-  // There is no session to end on this target and no "/sign-out" screen to end it on, so
-  // being signed out is a matter of the browser carrying nothing: the cookies go, and the
-  // browser is left on the one page that is always readable.
-  async function signOut(): Promise<void> {
+  // Nobody signed in: the browser carries no cookies (the marketplace's nor the identity
+  // provider's) and none of the target's local or session storage, where the client keeps
+  // "digital-marketplace.tokens" and "digital-marketplace.account". Storage can only be
+  // emptied from the target's own origin, so the browser is left on "/" and reloaded there.
+  async function forgetEveryone(): Promise<void> {
     await page.context().clearCookies().catch(() => undefined);
+    if (originOf(page.url()) !== originOf(baseURL)) {
+      await page.goto(baseURL + "/", { waitUntil: "domcontentloaded" });
+    }
+    await clearStorage();
     await page.goto(baseURL + "/", { waitUntil: "domcontentloaded" });
     await settle();
+  }
+
+  async function clearStorage(): Promise<void> {
+    await page
+      .evaluate(() => {
+        window.localStorage.clear();
+        window.sessionStorage.clear();
+      })
+      .catch(() => undefined);
+  }
+
+  // Signing out the way a person does: the "Sign out" link in the header's "Account"
+  // navigation (it goes to /sign-out), or /sign-out itself when the browser is not on a
+  // marketplace screen carrying that link. The service ends the session there and draws
+  // "Signed Out" / "You have successfully signed out" / "Sign in again", and the browser is
+  // left on that screen for user-sign-out to read. Nothing is cleared here: whether the
+  // session actually ended is the service's to decide and the test's to check. The full
+  // reset lives in forgetEveryone(), at the start of signIn() and for the anonymous persona.
+  async function signOut(): Promise<void> {
+    const onTarget = originOf(page.url()) === originOf(baseURL);
+    const link = onTarget
+      ? seen(page.getByRole("navigation").getByRole("link", { name: /^\s*sign out\s*$/i })).first()
+      : null;
+    if (link && (await link.count())) {
+      await link.click();
+      await page.waitForURL((url) => url.pathname === "/sign-out", { timeout: 15000 }).catch(() => undefined);
+    }
+    if (new URL(page.url()).pathname !== "/sign-out") {
+      await page.goto(baseURL + "/sign-out", { waitUntil: "domcontentloaded" });
+    }
+    await ready();
   }
 
   // ================================================================ the pages that are here
@@ -2561,7 +2614,8 @@ export default function create(
     publicSectorCard: () => cardFrom(PUBLIC_SECTOR_CARD),
   };
 
-  // /sign-out: "You have successfully signed out. Thank you for using the Digital Marketplace."
+  // /sign-out: "Signed Out" / "You have successfully signed out" / "Sign in again", whether
+  // reached through the header's "Sign out" link (surface.signOut) or opened directly.
   const userSignOut: S.UserSignOutPage = {
     open: () => go("/sign-out"),
     signedOutMessage: () => linesMatching(/signed out/i),
@@ -3288,6 +3342,11 @@ export default function create(
   function profileScreen(pageId: string, route: string) {
     const screen = signedInScreen(pageId, route);
     const w = screen.where;
+    const profileField = async (member: string, label: RegExp, shownAs: string[]): Promise<string> => {
+      await screen.on(member);
+      const box = await fieldLabelled(label, false);
+      return box ? valueOf(box) : labelledValue(shownAs);
+    };
     return {
       open: (params?: Record<string, string>) => screen.open(params),
       editProfile: () => screen.press("edit_profile", /^\s*edit( profile)?\s*$/i),
@@ -3351,27 +3410,31 @@ export default function create(
       notificationsTab: () => screen.tab("notifications_tab", /notifications/i),
       legalTab: () => screen.tab("legal_tab", /policies|terms|legal|agreements/i),
       organizationsTab: () => screen.tab("organizations_tab", /organizations/i),
+      // Signed in, the profile draws "Account type: Vendor", "Status: Active" and "Account ID: …"
+      // each on a line of its own, the value beside its label.
       statusBadge: async () => {
         await screen.on("status_badge");
-        return valueAfter(["Status", "Account Status"]);
+        return labelledValue(["Status", "Account Status"]);
       },
       accountType: async () => {
         await screen.on("account_type");
-        return valueAfter(["Account Type"]);
+        return labelledValue(["Account Type"]);
       },
       permissionsLabel: async () => {
         await screen.on("permissions_label");
-        return valueAfter(["Permissions", "Permission", "Permission(s)"]);
+        return labelledValue(["Permissions", "Permission", "Permission(s)"]);
       },
       adminCheckbox: async () => {
         await screen.on("admin_checkbox");
         const box = seen(page.getByRole("checkbox", { name: /admin/i }).or(page.getByRole("switch", { name: /admin/i })));
         return (await box.count()) ? ((await box.first().isChecked()) ? "checked" : "unchecked") : "";
       },
-      idpUsernameReadonly: () => screen.field("idp_username_readonly", /github|idir|user\s*name/i, ["GitHub", "IDIR", "Username"]),
-      nameField: () => screen.field("name_field", PROFILE_FIELDS.name, ["Name"]),
-      emailField: () => screen.field("email_field", PROFILE_FIELDS.email, ["Email", "Email Address"]),
-      jobTitleField: () => screen.field("job_title_field", PROFILE_FIELDS.jobTitle, ["Job Title"]),
+      // Signed in, "Details" carries "Sign-in username", "Name" and "Email address" as
+      // labelled text boxes; a label drawn with its value as text is read beside or under it.
+      idpUsernameReadonly: () => profileField("idp_username_readonly", /github|idir|user\s*name/i, ["Sign-in username", "GitHub", "IDIR", "Username"]),
+      nameField: () => profileField("name_field", PROFILE_FIELDS.name, ["Name"]),
+      emailField: () => profileField("email_field", PROFILE_FIELDS.email, ["Email", "Email Address"]),
+      jobTitleField: () => profileField("job_title_field", PROFILE_FIELDS.jobTitle, ["Job Title"]),
       fieldError: () => screen.messages("field_error"),
       activationModal: async () => {
         await screen.on("activation_modal");

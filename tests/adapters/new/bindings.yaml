@@ -670,7 +670,10 @@ pages:
       complete_disabled_until_terms_accepted: bound
       field_error: bound
 
-  # "You have successfully signed out. Thank you for using the Digital Marketplace."
+  # Reached signed in through the header's "Sign out" link (and signed out, by opening
+  # /sign-out): "Signed Out" / "You have successfully signed out" / "Sign in again".
+  # surface.signOut() takes that link (or opens /sign-out), waits for this screen and stops
+  # there; it clears no cookies or storage of its own.
   user-sign-out:
     actions: {}
     observations:
@@ -783,12 +786,16 @@ pages:
       notifications_tab: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /users/me shows 'Page not found'. At run time the adapter reads the Notifications tab's panel, empty on a profile without that tab"
       legal_tab: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /users/me shows 'Page not found'. At run time the adapter reads the policies and terms tab's panel, empty on a profile without that tab"
       organizations_tab: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /users/me shows 'Page not found'. At run time the adapter reads the Organizations tab's panel, empty on a profile without that tab"
-      status_badge: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /users/me shows 'Page not found'. At run time the adapter reads the value under 'Status'"
-      account_type: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /users/me shows 'Page not found'. At run time the adapter reads the value under 'Account Type'"
-      idp_username_readonly: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /users/me shows 'Page not found'. At run time the adapter reads the field (or the value under the label) GitHub, IDIR or Username"
-      name_field: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /users/me shows 'Page not found'. At run time the adapter reads the field (or the value under the label) Name"
-      email_field: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /users/me shows 'Page not found'. At run time the adapter reads the field (or the value under the label) Email"
-      job_title_field: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /users/me shows 'Page not found'. At run time the adapter reads the field (or the value under the label) Job Title"
+      # Walked signed in as a vendor: /users/me draws "Account type: Vendor" and "Status: Active",
+      # each value beside its label on one line, over "Details" with "Sign-in username", "Name"
+      # and "Email address" as labelled text boxes. It carries no "Job Title" box, which then
+      # reads as nothing.
+      status_badge: bound
+      account_type: bound
+      idp_username_readonly: bound
+      name_field: bound
+      email_field: bound
+      job_title_field: bound
       field_error: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /users/me shows 'Page not found'. At run time the adapter reads the form's alerts and the descriptions of fields marked invalid"
       activation_modal: "unbound: never seen signed in (the provider's Username/Password form needs the sandbox password, which the binding session could not use); signed out /users/me shows 'Page not found'. At run time the adapter reads the open dialog, empty when none is open"
       # Signed out, /users/me shows "Page not found" over "The page you are looking for does not exist." /
