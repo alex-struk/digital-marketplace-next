@@ -2189,6 +2189,11 @@ rebind:
       page says against fields, never a step title, which currently fails the
       empty-guideline rows on text the page never said about a field and makes
       the empty-question row pass on the word 'Questions'.
+    closed: &a14
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-30T08:26:00.891Z
   - id: R-7.26
     target: old
     why: fileEmbeddedImage.imageRenderedInPublishedText never opens the published
@@ -2198,3 +2203,4 @@ rebind:
       imageInsertedIntoText returns the whole body text, which is truthy with no
       image in it; it must return the inserted image reference (the FILE_ID or
       /api/files/ marker) and empty when none was inserted.
+    closed: *a14

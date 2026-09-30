@@ -1,5 +1,5 @@
 {
-  "generated_from": "acd83ccd5eee6a143e0a2a1ac526de5e5a118a6a",
+  "generated_from": "aed71bf2a3867625d321c48de284130155ba09bc",
   "criteria": [
     {
       "id": "R-7.1",
@@ -3204,7 +3204,8 @@
       "when": "they choose an image and it is accepted",
       "then": "the image is inserted into the text as a reference the service resolves for itself, and a reader of the finished page sees the image",
       "notes": [
-        "the stored text never contains a web address, so the same text renders correctly wherever the service is running and whatever address it answers on. A marker that does not resolve to a known file identifier is left alone and treated as an ordinary address, so text written elsewhere still works. The content domain already expects image upload in the editor and defers what may be uploaded to here; this criterion is the other half of that."
+        "the stored text never contains a web address, so the same text renders correctly wherever the service is running and whatever address it answers on. A marker that does not resolve to a known file identifier is left alone and treated as an ordinary address, so text written elsewhere still works. The content domain already expects image upload in the editor and defers what may be uploaded to here; this criterion is the other half of that.",
+        "calibrate 2026-09-30: the old target fails this; kept, the rebuild must pass it"
       ],
       "state": "accepted",
       "raw": "### R-8.29 · v1 · confirmed · recovered",
@@ -3253,7 +3254,7 @@
       ],
       "state": "accepted",
       "raw": "### R-8.30 · v1 · confirmed · recovered",
-      "line": 377,
+      "line": 378,
       "domain": "files",
       "file": "spec/domains/files.md"
     },
@@ -3268,7 +3269,7 @@
       "state": "accepted",
       "replaces": "R-8.26",
       "raw": "### R-8.31 · v1 · confirmed · authored",
-      "line": 392,
+      "line": 393,
       "domain": "files",
       "file": "spec/domains/files.md"
     },

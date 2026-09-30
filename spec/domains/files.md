@@ -373,6 +373,7 @@ An image placed into a piece of formatted text is stored as an ordinary file mar
 - then: the image is inserted into the text as a reference the service resolves for itself, and a reader of the finished page sees the image
 - state: accepted
 - note: the stored text never contains a web address, so the same text renders correctly wherever the service is running and whatever address it answers on. A marker that does not resolve to a known file identifier is left alone and treated as an ordinary address, so text written elsewhere still works. The content domain already expects image upload in the editor and defers what may be uploaded to here; this criterion is the other half of that.
+- note: calibrate 2026-09-30: the old target fails this; kept, the rebuild must pass it
 
 ### R-8.30 · v1 · confirmed · recovered
 A profile picture or an organization logo whose name does not end in .jpg, .jpeg or .png is refused.
