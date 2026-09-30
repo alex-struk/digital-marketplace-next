@@ -2275,3 +2275,167 @@ rebind:
       opportunity if it is read-only, hand the file to the attachment input,
       save it through 'Publish Changes' and its confirmation, and raise when no
       file appears, rather than returning silently"
+  - id: R-6.2
+    target: new
+    why: 'unbound: signIn.administrator — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using IDIR" link'
+    found: unbound
+    adapter: ac9049c0c3988cf831674b7fa3d19c84333667bb
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T12:53:05.292Z
+  - id: R-6.3
+    target: new
+    why: 'unbound: signIn.organization-owner — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using GitHub" link'
+    found: unbound
+    adapter: ac9049c0c3988cf831674b7fa3d19c84333667bb
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T12:53:05.292Z
+  - id: R-6.4
+    target: new
+    why: 'unbound: signIn.organization-owner — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using GitHub" link'
+    found: unbound
+    adapter: ac9049c0c3988cf831674b7fa3d19c84333667bb
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T12:53:05.292Z
+  - id: R-6.5
+    target: new
+    why: 'unbound: signIn.organization-owner — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using GitHub" link'
+    found: unbound
+    adapter: ac9049c0c3988cf831674b7fa3d19c84333667bb
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T12:53:05.292Z
+  - id: R-6.20
+    target: new
+    why: 'unbound: signIn.vendor-with-notices-off — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using GitHub" link'
+    found: unbound
+    adapter: ac9049c0c3988cf831674b7fa3d19c84333667bb
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T12:53:05.292Z
+  - id: R-6.28
+    target: new
+    why: 'unbound: signIn.administrator — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using IDIR" link'
+    found: unbound
+    adapter: ac9049c0c3988cf831674b7fa3d19c84333667bb
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T12:53:05.292Z
+  - id: R-4.1
+    target: new
+    why: 'unbound: signIn.first-time-public-sector-employee — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using IDIR" link;
+      unbound: signIn.first-time-vendor — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using IDIR" link'
+    found: unbound
+    adapter: ac9049c0c3988cf831674b7fa3d19c84333667bb
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T12:53:05.292Z
+  - id: R-4.2
+    target: new
+    why: 'unbound: signIn.first-time-vendor — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using IDIR" link;
+      unbound: signIn.first-time-vendor-without-email — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using IDIR" link'
+    found: unbound
+    adapter: ac9049c0c3988cf831674b7fa3d19c84333667bb
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T12:53:05.292Z
+  - id: R-4.3
+    target: new
+    why: 'unbound: signIn.first-time-vendor — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using IDIR" link;
+      unbound: signIn.first-time-public-sector-employee — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using IDIR" link'
+    found: unbound
+    adapter: ac9049c0c3988cf831674b7fa3d19c84333667bb
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T12:53:05.292Z
+  - id: R-4.6
+    target: new
+    why: 'unbound: signIn.vendor — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using GitHub" link'
+    found: unbound
+    adapter: ac9049c0c3988cf831674b7fa3d19c84333667bb
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T12:53:05.292Z
+  - id: R-4.17
+    target: new
+    why: 'unbound: signIn.vendor — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using GitHub" link'
+    found: unbound
+    adapter: ac9049c0c3988cf831674b7fa3d19c84333667bb
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T12:53:05.292Z
+  - id: R-4.22
+    target: new
+    why: 'unbound: signIn.public-sector-staff — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using IDIR" link'
+    found: unbound
+    adapter: ac9049c0c3988cf831674b7fa3d19c84333667bb
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T12:53:05.292Z
+  - id: R-4.23
+    target: new
+    why: "unbound: signIn.vendor-completing-profile — the sign-in screen at
+      http://localhost:4300/sign-in offers no \"Sign In Using GitHub\" link;
+      unbound: signIn.vendor-with-terms-reset — the sign-in screen at
+      http://localhost:4300/sign-in offers no \"Sign In Using GitHub\" link;
+      unbound: signIn.public-sector-staff — the sign-in screen at
+      http://localhost:4300/sign-in offers no \"Sign In Using IDIR\" link;
+      unbound: user-sign-up-complete.open — /sign-up/complete is offered only to
+      a signed-in person, and nobody can sign in on this target: \"Sign In Using
+      GitHub\" and \"Sign In Using IDIR\" on /sign-in both hand off to an
+      external single sign-on service that answers \"Login Error: Invalid
+      parameter: redirect_uri\" and shows no form; opened signed out (with the
+      seeded record's identifier where it takes one) it redirects to /sign-in
+      (it shows \"Sign In\" at
+      http://localhost:4300/sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete)"
+    found: unbound
+    adapter: ac9049c0c3988cf831674b7fa3d19c84333667bb
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T12:53:05.292Z
+  - id: R-4.24
+    target: new
+    why: 'unbound: signIn.vendor-completing-profile — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using GitHub" link'
+    found: unbound
+    adapter: ac9049c0c3988cf831674b7fa3d19c84333667bb
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T12:53:05.292Z
+  - id: R-4.27
+    target: new
+    why: 'unbound: signIn.public-sector-staff — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using IDIR" link'
+    found: unbound
+    adapter: ac9049c0c3988cf831674b7fa3d19c84333667bb
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T12:53:05.292Z
+  - id: R-4.28
+    target: new
+    why: 'unbound: signIn.public-sector-staff — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using IDIR" link;
+      unbound: signIn.vendor — the sign-in screen at
+      http://localhost:4300/sign-in offers no "Sign In Using GitHub" link'
+    found: unbound
+    adapter: ac9049c0c3988cf831674b7fa3d19c84333667bb
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T12:53:05.292Z
