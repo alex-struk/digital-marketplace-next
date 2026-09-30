@@ -2061,3 +2061,22 @@ rebind:
       why: tests/adapters/old has changed since this was found
       by: runner:calibrate
       at: 2026-09-30T02:30:18.304Z
+  - id: R-8.13
+    target: old
+    why: fileImagePicker.storedImageWidth/Height read the stored image through
+      pictures(), which counts visible images once and then calls
+      nth(i).getAttribute on a live locator; on the organization edit page an
+      image left or hid before index 16 was reached and getAttribute timed out
+      after 15s, so the binding failed before ever finding the stored logo. It
+      must find the stored /api/files/ image without per-index waits that can
+      hang (for example, snapshot all srcs in one evaluate, or bound each
+      attribute read) and then read that image's natural size.
+  - id: R-2.18
+    target: old
+    why: proposalSwuCreate.pendingTeamMember is bound to linesMatching(/pending/i),
+      which returns every page line containing 'pending', here the form's
+      standing instruction paragraphs plus a lone 'Pending' line, instead of the
+      named member's entry in the phase team list. It must read the entry of
+      each named member that carries the pending marker and return that member's
+      name (together with the marker), so a person named and marked pending is
+      reported by name.

@@ -46,6 +46,7 @@ applied:
   - calibrate-old-21
   - calibrate-triage-old-31
   - calibrate-triage-old-32
+  - calibrate-triage-old-33
 rulings:
   - id: R-8.18
     version: 1
@@ -473,3 +474,13 @@ rulings:
     version: 1
     verb: product-question
     gate: calibrate-triage-old-30
+  - id: R-8.13
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-33
+    adapter: 8f4a860144cdd0ce1f465075a86e0df641cf2e02
+  - id: R-2.18
+    version: 4
+    verb: adapter-wrong
+    gate: calibrate-triage-old-33
+    adapter: 8f4a860144cdd0ce1f465075a86e0df641cf2e02
