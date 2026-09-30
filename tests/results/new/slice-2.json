@@ -1,0 +1,329 @@
+{
+  "slice": 2,
+  "proposal": "build-slice-2-2",
+  "app_tree": "587a8c9eeb0a17c77372231c0f7aa4b1d818089d",
+  "at": "2026-09-30T11:38:33.442Z",
+  "verdict": "fail",
+  "rows": [
+    {
+      "id": "R-6.1",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.1.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "When notifications are switched off for an environment, nothing the service does sends a message, and every action that would have sent one still completes normally.",
+          "status": "failed",
+          "error": "Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture needs a mail catcher target"
+        }
+      ],
+      "file_sha": "bb9eb9ed63138a7459136875f5fc0960113da847"
+    },
+    {
+      "id": "R-6.2",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.2.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "When a message cannot be composed or cannot be delivered, the action that triggered it still succeeds, nobody is told, and no further attempt is made.",
+          "status": "failed",
+          "error": "Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture needs a mail catcher target"
+        }
+      ],
+      "file_sha": "bc7fd3047214cd83d2a0f47d16c4d1d677798aef"
+    },
+    {
+      "id": "R-6.3",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.3.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "When an environment is marked as a test environment, every message it sends is marked as a test in its subject line and carries a test variant of the service's logo.",
+          "status": "failed",
+          "error": "Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture needs a mail catcher target"
+        }
+      ],
+      "file_sha": "d1a9745fa3e8ac6d8d2ec1730c2f5bd86b3bf00d"
+    },
+    {
+      "id": "R-6.4",
+      "version": 2,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.4.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "Every message the service sends comes from a single configured sender — a display name followed by one do-not-reply address, the same for every kind of message — and carries no reply-to address distinct from that sender.",
+          "status": "failed",
+          "error": "Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture needs a mail catcher target"
+        }
+      ],
+      "file_sha": "2f9d29bf00cac9bef57bdd64e71c81dfb0608d11"
+    },
+    {
+      "id": "R-6.5",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.5.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "Every message is sent in both a formatted and a plain-text form, the plain text being a rendering of the formatted version rather than separately written copy.",
+          "status": "failed",
+          "error": "Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture needs a mail catcher target"
+        }
+      ],
+      "file_sha": "0b80488201f94a0446679a23a43672088208f6e2"
+    },
+    {
+      "id": "R-6.20",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.20.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "A newly created account has new-opportunity notifications off until its holder asks for them.",
+          "status": "failed",
+          "error": "Error: unbound: signIn.vendor-with-notices-off — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using GitHub\" link"
+        }
+      ],
+      "file_sha": "ae95bbeec8fc2c066b19ade1425e52a54280b3f6"
+    },
+    {
+      "id": "R-6.28",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.28.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "a broadcast to many people always continues past a recipient it cannot address",
+          "status": "failed",
+          "error": "Error: unbound: signIn.administrator — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using IDIR\" link"
+        }
+      ],
+      "file_sha": "65d2391c7184af25f5579debcad94ba837c6d42c"
+    },
+    {
+      "id": "R-4.1",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.1.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "the first time a person signs in, the service creates an account for them and decides its kind from the identity they signed in with: a government identity makes a public sector employee",
+          "status": "failed",
+          "error": "Error: unbound: signIn.first-time-public-sector-employee — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using IDIR\" link"
+        },
+        {
+          "title": "the first time a person signs in, the service creates an account for them and decides its kind from the identity they signed in with: a code-hosting identity makes a vendor",
+          "status": "failed",
+          "error": "Error: unbound: signIn.first-time-vendor — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using IDIR\" link"
+        }
+      ],
+      "file_sha": "3890cff45760ce7fd62352ec8823b0f71c9bf730"
+    },
+    {
+      "id": "R-4.2",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.2.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "a person whose account has just been created is sent a welcome message",
+          "status": "failed",
+          "error": "Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture needs a mail catcher target"
+        },
+        {
+          "title": "a person whose account has just been created is not sent a welcome message when no email address is known for them",
+          "status": "failed",
+          "error": "Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture needs a mail catcher target"
+        }
+      ],
+      "file_sha": "b880ed664ada2d14833e6c193567686a1e1247bb"
+    },
+    {
+      "id": "R-4.3",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.3.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "a vendor cannot finish signing up until they confirm they have read and agree to the service's terms and conditions and its privacy policy",
+          "status": "failed",
+          "error": "Error: unbound: signIn.first-time-vendor — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using IDIR\" link"
+        },
+        {
+          "title": "the moment of acceptance is recorded on the vendor's account",
+          "status": "failed",
+          "error": "Error: unbound: signIn.first-time-vendor — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using IDIR\" link"
+        },
+        {
+          "title": "a public sector employee is never asked to agree to the terms and conditions and the privacy policy",
+          "status": "failed",
+          "error": "Error: unbound: signIn.first-time-public-sector-employee — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using IDIR\" link"
+        }
+      ],
+      "file_sha": "cd9323e52cbbdaa352cd655bcfd7660e74c0e180"
+    },
+    {
+      "id": "R-4.6",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.6.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "two accounts of the same kind may not share an email address, so a vendor's change to an address another vendor holds is not saved",
+          "status": "failed",
+          "error": "Error: unbound: signIn.vendor — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using GitHub\" link"
+        }
+      ],
+      "file_sha": "4898f4bdcb76c36fec3c06ccb9b12552d7b6444b"
+    },
+    {
+      "id": "R-4.17",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.17.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "signing out ends the person's session with the service, and the person is told they have been signed out",
+          "status": "failed",
+          "error": "Error: unbound: signIn.vendor — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using GitHub\" link"
+        }
+      ],
+      "file_sha": "1449841c9cdfb9788fcbce2f7723d00908b0c57d"
+    },
+    {
+      "id": "R-4.22",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.22.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "after signing in, a person who already had an account is taken to their dashboard",
+          "status": "failed",
+          "error": "Error: unbound: signIn.public-sector-staff — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using IDIR\" link"
+        }
+      ],
+      "file_sha": "c8a771887b9619bdff2ec1b6ffab184db9333ca0"
+    },
+    {
+      "id": "R-4.23",
+      "version": 2,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.23.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "the profile-completion page is offered to a vendor who has not yet agreed to the terms",
+          "status": "failed",
+          "error": "Error: unbound: signIn.vendor-completing-profile — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using GitHub\" link"
+        },
+        {
+          "title": "a vendor who has agreed before is sent to their dashboard instead of the profile-completion page",
+          "status": "failed",
+          "error": "Error: unbound: signIn.vendor-with-terms-reset — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using GitHub\" link"
+        },
+        {
+          "title": "any signed-in person who is not a vendor is sent to their dashboard instead of the profile-completion page",
+          "status": "failed",
+          "error": "Error: unbound: signIn.public-sector-staff — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using IDIR\" link"
+        },
+        {
+          "title": "a visitor who is not signed in is sent to sign in instead of the profile-completion page",
+          "status": "failed",
+          "error": "Error: unbound: user-sign-up-complete.open — /sign-up/complete is offered only to a signed-in person, and nobody can sign in on this target: \"Sign In Using GitHub\" and \"Sign In Using IDIR\" on /sign-in both hand off to an external single sign-on service that answers \"Login Error: Invalid parameter: redirect_uri\" and shows no form; opened signed out (with the seeded record's identifier where it takes one) it redirects to /sign-in (it shows \"Sign In\" at http://localhost:4300/sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete)"
+        }
+      ],
+      "file_sha": "7fb7cbbf9cb22742dfe5b7054c84049c53341886"
+    },
+    {
+      "id": "R-4.24",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.24.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "While completing their profile a person may choose to be told about new opportunities, and the choice is saved with their account.",
+          "status": "failed",
+          "error": "Error: unbound: signIn.vendor-completing-profile — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using GitHub\" link"
+        }
+      ],
+      "file_sha": "d89858c17b18c4cdd32f25f306f94646d9e0b54c"
+    },
+    {
+      "id": "R-4.27",
+      "version": 2,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.27.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "a profile requires a name, so a cleared name is reported as invalid and the profile is not saved",
+          "status": "failed",
+          "error": "Error: unbound: signIn.public-sector-staff — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using IDIR\" link"
+        },
+        {
+          "title": "a profile requires a name of between one and one hundred characters",
+          "status": "failed",
+          "error": "Error: unbound: signIn.public-sector-staff — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using IDIR\" link"
+        },
+        {
+          "title": "a profile requires an email address in a valid format, so an invalid one is reported and not saved",
+          "status": "failed",
+          "error": "Error: unbound: signIn.public-sector-staff — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using IDIR\" link"
+        },
+        {
+          "title": "the email address is stored in lower case",
+          "status": "failed",
+          "error": "Error: unbound: signIn.public-sector-staff — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using IDIR\" link"
+        },
+        {
+          "title": "the profile saves with the job title left blank and no profile picture",
+          "status": "failed",
+          "error": "Error: unbound: signIn.public-sector-staff — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using IDIR\" link"
+        },
+        {
+          "title": "the job title is limited to one hundred characters",
+          "status": "failed",
+          "error": "Error: unbound: signIn.public-sector-staff — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using IDIR\" link"
+        }
+      ],
+      "file_sha": "20d6066bee96dd395031e359c9fdff2c0a18fdbe"
+    },
+    {
+      "id": "R-4.28",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.28.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "the job title is asked for and shown on a public sector employee's profile",
+          "status": "failed",
+          "error": "Error: unbound: signIn.public-sector-staff — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using IDIR\" link"
+        },
+        {
+          "title": "a vendor is never asked for a job title",
+          "status": "failed",
+          "error": "Error: unbound: signIn.vendor — the sign-in screen at http://localhost:4300/sign-in offers no \"Sign In Using GitHub\" link"
+        }
+      ],
+      "file_sha": "cc7699b45e661656935ffda6a736783bfa965860"
+    }
+  ]
+}
