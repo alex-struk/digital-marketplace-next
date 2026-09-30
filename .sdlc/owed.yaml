@@ -4760,3 +4760,16 @@ owed:
       file_sha: f332e0b8ce29f8b75787f43b934e161b62a96069
       by: runner
       at: 2026-09-30T03:47:02.929Z
+  - kind: missing-test
+    item: R-1.17
+    id: R-1.17
+    version: 3
+    domain: opportunities
+    stage: contract
+    why: an observation on opportunity-swu-create and opportunity-twu-create
+      reporting the fields an evaluation question offers for entry, or at least
+      whether any position or order field is offered
+    from: derive-tests-opportunities-11
+    gate: G3
+    by: agent:reviewer
+    at: 2026-09-30T06:59:09.355Z

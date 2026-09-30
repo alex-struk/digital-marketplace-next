@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-11 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">337</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">332</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">303</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-11</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 06:58</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised opportunities tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I added two acceptance tests to <code>tests/acceptance/opportunities/R-1.17.spec.ts</code>, one for each condition, but I could not typecheck them: running <code>tsc</code> needed approval, and nobody was here to give it.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I added two acceptance tests to <code>tests/acceptance/opportunities/R-1.17.spec.ts</code>, one for each condition, but I could not typecheck them: running <code>tsc</code> needed approval, and nobody was here to give it. The new code only reuses types, helpers and surface calls the file and neighbouring tests already use, but that is not a typecheck.</p>
+<p>Both tests use a new helper that tests acceptance, the opposite of the refusal tests already in the file. It signs in as public sector staff and builds a Sprint With Us opportunity through the existing setup, complete in every other respect. It then submits it for review and reads the new opportunity&#39;s identifier from the edit screen. Last, it opens the opportunity&#39;s own page and waits for <code>opportunitySwuView.status()</code> to read &quot;review&quot;. R-1.19 and R-1.48 use this same pattern to show an opportunity has left draft. The edit screen has no status observation of its own, so the status is read on the opportunity&#39;s view page, which the contract gives one. So an application that required a minimum score, or refused the question at position 100, would now fail.</p>
+<p><strong>Condition 1 (the minimum score is optional):</strong> a new test submits a Sprint With Us opportunity whose only question is the well-formed baseline question, which has no minimum score. It expects the opportunity to read as under review. The clause is now tested, so it needs no not-testable entry.</p>
+<p><strong>Condition 2 (position 100 is allowed):</strong> a new test submits an opportunity holding 101 questions, the last at position 100, and expects the same acceptance. It has the same 20-minute time limit as the existing test that goes one past the limit. That existing refusal test is unchanged.</p>
+<p><strong>Other changes:</strong></p>
+<ul><li>I added a short comment at the top of the file saying why these two tests expect acceptance.</li><li>Because the file&#39;s content changed, I set the header&#39;s &quot;derived&quot; date to 2026-09-29, which is today. It had read 2026-09-30, a day in the future. The criterion line and spec sha are unchanged.</li><li>No other file under <code>tests/acceptance/opportunities/</code> changed, and I did not edit <code>tests/acceptance/not-testable.yaml</code>. Its existing R-1.17 entry, for the clause &quot;its position is never entered by the person&quot;, stays as it was.</li></ul>
+<p><strong>Left alone:</strong> the reviewer&#39;s rationale also mentions two other in-range edges: a question or guideline of exactly 1,000 characters, and a word limit of exactly 3,000. Neither condition asks for them, and I was told to change only what the conditions name, so there are still no tests for them. A later round should add them the same way.</p>
+<p>No surface actions or observations were missing for this work.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-30 06:59.</p>
+<div class="body"><p>Question: do the revised R-1.17 tests follow from the criterion and nothing else, and are the two owed conditions met? Ruling: approve. Condition 1 is met: a new test submits a Sprint With Us opportunity whose only question has no minimum score and expects it to read as under review, the state R-1.19 names. Condition 2 is met: a new test submits 101 questions, the last at position 100, and expects the same acceptance. The refusal test for a question beyond position 100 still passes the limit by exactly one question. Every clause of R-1.17 v3 is asserted: refusal on submission for review for each limit, the minimum-score clause on both programs, refusal on publication by an administrator on each program, the offending field named, a draft saved while holding an out-of-limit question on both programs, and positions following the order of addition. The one clause no observation reaches, that the person never enters a position, has a real not-testable entry owed by contract. The test&#39;s statement string matches the spec&#39;s v3 text word for word. The completeness setup (dates, weights, panel) exists only so a refusal has a single cause, and nothing asserts on it. The runner&#39;s typecheck passed with no diagnostics. What would change the ruling: an assertion that R-1.17 does not state, or a clause left without a test or a not-testable entry.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met derive-tests-opportunities-stale-12#1: tests/acceptance/opportunities/R-1.17.spec.ts adds &#39;a Sprint With Us question with no minimum score is accepted on submission for review&#39;, which submits an otherwise complete opportunity and polls the opportunity&#39;s view-page status for &#39;review&#39;</li><li>condition-met derive-tests-opportunities-stale-12#2: tests/acceptance/opportunities/R-1.17.spec.ts adds &#39;an opportunity holding 101 questions, the last at position 100, is accepted on submission for review&#39;, which uses the same acceptance check</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

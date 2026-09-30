@@ -1,0 +1,17 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the revised R-1.17 tests follow from the criterion and nothing else, and are the two owed conditions met? Ruling: approve. Condition 1 is met: a new test submits a Sprint With Us opportunity whose only question has no minimum score and expects it to read as under review, the state R-1.19 names. Condition 2 is met: a new test submits 101 questions, the last at position 100, and expects the same acceptance. The refusal test for a question beyond position 100 still passes the limit by exactly one question. Every clause of R-1.17 v3 is asserted: refusal on submission for review for each limit, the minimum-score clause on both programs, refusal on publication by an administrator on each program, the offending field named, a draft saved while holding an out-of-limit question on both programs, and positions following the order of addition. The one clause no observation reaches, that the person never enters a position, has a real not-testable entry owed by contract. The test's statement string matches the spec's v3 text word for word. The completeness setup (dates, weights, panel) exists only so a refusal has a single cause, and nothing asserts on it. The runner's typecheck passed with no diagnostics. What would change the ruling: an assertion that R-1.17 does not state, or a clause left without a test or a not-testable entry.
+conditions:
+  - "condition-met derive-tests-opportunities-stale-12#1: tests/acceptance/opportunities/R-1.17.spec.ts adds 'a Sprint With Us question with no minimum score is accepted on submission for review', which submits an otherwise complete opportunity and polls the opportunity's view-page status for 'review'"
+  - "condition-met derive-tests-opportunities-stale-12#2: tests/acceptance/opportunities/R-1.17.spec.ts adds 'an opportunity holding 101 questions, the last at position 100, is accepted on submission for review', which uses the same acceptance check"
+cost: 0.3857226
+turns: 2
+session: "24ee58a0-e4f5-4d47-b624-67eaf5a95009"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T06:59:09.266Z
