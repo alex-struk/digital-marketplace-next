@@ -167,6 +167,11 @@
 - 02:14:25 rule bind-adapter-old-54 escalated at G3 to tech-lead by runner:bind-adapter
 - 02:14:27 drive: step 19: `sdlc rule bind-adapter-old-54 --by agent:tech-lead` — bind-adapter-old-54 was escalated at G3 by runner:bind-adapter to tech-lead, a role an agent plays in this project
 - 02:15:21 rule bind-adapter-old-54 approve at G3 by agent:tech-lead (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 02:15:25 drive: step 20: `sdlc run calibrate --target old --full` — 2 bindings to check again now that their adapter has changed (rebind) for target old owed by calibrate; a full run is due: 3 scoped calibrations since the last full run (2026-09-30-17); policy.calibrate.full_every is 4
+- 03:02:56 oracle up old in configuration notifications_disabled: local port 3103
+- 03:03:36 oracle down old in configuration notifications_disabled
+- 03:03:36 calibrate old: a full run, forced with --full
+- 03:03:43 run calibrate: ok, cost 0, turns 0
 
 # Run record 2026-09-29
 
