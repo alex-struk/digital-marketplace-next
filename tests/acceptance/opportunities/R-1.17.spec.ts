@@ -1,5 +1,5 @@
 // criterion: @R-1.17 v3
-// provenance: blind, spec@acd83ccd5eee6a143e0a2a1ac526de5e5a118a6a, derived 2026-09-29
+// provenance: blind, spec@acd83ccd5eee6a143e0a2a1ac526de5e5a118a6a, derived 2026-09-30
 import { test, expect, persona, seed } from "../../fixtures";
 import type { Surface } from "../../fixtures";
 
@@ -14,6 +14,11 @@ import type { Surface } from "../../fixtures";
 // minimum score is taken on both programs, since the two differ only in name; publication by
 // an administrator is taken once on each program. The draft half saves a question outside
 // several limits at once and reads it back from the saved draft.
+//
+// That the person never enters a position is read from the fields a question offers for
+// entry, on each program's create screen with one question on the list, and again on its
+// edit screen once the draft is saved: the five fields the criterion names are offered, and
+// no position or order field is.
 //
 // A position runs from 0 to 100 and is set by the question's place, so the only question
 // whose position falls outside it is the hundred-and-second. If the form will not take that
@@ -345,4 +350,50 @@ test(`${statement} (a Team With Us draft may be saved holding a question outside
 
   await surface.opportunityTwuEdit.open({ opportunityId });
   await expect.poll(() => readOrEmpty(() => surface.opportunityTwuEdit.resourceQuestionsTab()), settle).toContain(question);
+});
+
+const offeredFields = [/\bquestion\b/i, /guideline/i, /response[_ ]word[_ ]limit/i, /maximum[_ ]score/i, /minimum[_ ]score/i];
+
+function expectTheFiveFieldsAndNoPosition(fields: string): void {
+  for (const field of offeredFields) expect(fields).toMatch(field);
+  expect(fields).not.toMatch(/position|order/i);
+}
+
+test(`${statement} (a Sprint With Us question offers its question, guideline, word limit, maximum and minimum score for entry, and never a position)`, async ({
+  surface,
+}) => {
+  await surface.signIn(persona.publicSectorStaff);
+  await surface.opportunitySwuCreate.open();
+  await surface.opportunitySwuCreate.addTeamQuestion(sound);
+  await expect.poll(() => readOrEmpty(() => surface.opportunitySwuCreate.evaluationQuestionFields()), settle).toMatch(/guideline/i);
+  expectTheFiveFieldsAndNoPosition(await surface.opportunitySwuCreate.evaluationQuestionFields());
+
+  await surface.opportunitySwuCreate.saveDraft({ title: "R-1.17 Sprint With Us draft whose question fields are read" });
+  await expect.poll(() => readOrEmpty(() => surface.opportunitySwuEdit.opportunityIdentifier()), settle).toBeTruthy();
+  const opportunityId = await surface.opportunitySwuEdit.opportunityIdentifier();
+
+  await surface.opportunitySwuEdit.open({ opportunityId });
+  await expect.poll(() => readOrEmpty(() => surface.opportunitySwuEdit.evaluationQuestionFields()), settle).toMatch(/guideline/i);
+  expectTheFiveFieldsAndNoPosition(await surface.opportunitySwuEdit.evaluationQuestionFields());
+});
+
+test(`${statement} (a Team With Us question offers its question, guideline, word limit, maximum and minimum score for entry, and never a position)`, async ({
+  surface,
+}) => {
+  await surface.signIn(persona.publicSectorStaff);
+  await surface.opportunityTwuCreate.open();
+  await surface.opportunityTwuCreate.addResourceQuestion({
+    ...sound,
+    question: "Describe how your resource has delivered work of this kind before.",
+  });
+  await expect.poll(() => readOrEmpty(() => surface.opportunityTwuCreate.evaluationQuestionFields()), settle).toMatch(/guideline/i);
+  expectTheFiveFieldsAndNoPosition(await surface.opportunityTwuCreate.evaluationQuestionFields());
+
+  await surface.opportunityTwuCreate.saveDraft({ title: "R-1.17 Team With Us draft whose question fields are read" });
+  await expect.poll(() => readOrEmpty(() => surface.opportunityTwuEdit.opportunityIdentifier()), settle).toBeTruthy();
+  const opportunityId = await surface.opportunityTwuEdit.opportunityIdentifier();
+
+  await surface.opportunityTwuEdit.open({ opportunityId });
+  await expect.poll(() => readOrEmpty(() => surface.opportunityTwuEdit.evaluationQuestionFields()), settle).toMatch(/guideline/i);
+  expectTheFiveFieldsAndNoPosition(await surface.opportunityTwuEdit.evaluationQuestionFields());
 });
