@@ -1,16 +1,9 @@
 gate: G3
-verdict: escalated
-by: agent:tech-lead
-held_by: agent
-escalate_to: tech-lead
-stalled: "agent:tech-lead escalated to tech-lead, the role it holds itself, so no seat this pipeline can fill is waiting on it: a person has to rule it, or the proposal has to be withdrawn."
-rationale: |2-
-  The question is whether slice 2 (sign in, finish signing up, sign out) does what its criteria say. After three failed builds the answer can't come from this pipeline as it stands, so I am escalating to the person who owns the pipeline. Of 16 criteria, 0 passed. The empty readings behind R-4.1, R-4.2, R-4.3, R-4.17, R-4.22 and R-4.24 trace to the new app's adapter. tests/adapters/new/bindings.yaml marks every signed-in screen (user-profile-self, the profile tabs, user-sign-up-complete's terms box, the notification checkbox) as 'unbound: never seen signed in', because the session that wrote the adapter could not use the sandbox password on the identity provider's form. Those selectors were guessed from the signed-out redirect. The build stage could not start Docker in an unattended session, so it has not run the stack either. No stage in the loop can reach a signed-in browser, which makes this a stage that cannot produce what its gate asks for, and another build would repeat the same blind attempt. Two further problems also need someone above this gate. First, the slice claims R-6.2 to R-6.5, R-4.6, R-4.27 and R-4.28, whose tests go through screens the plan gives to later slices (creating a Code With Us opportunity, editing an organization, the Edit Profile control). Second, R-4.23 fails on a redirect to the dashboard that the criterion asks for. The account the proposal gives of its own changes (the /users/me read-only profile, the notice shown when sign-in is required, the checkbox click-through fix) is plausible, but none of it has been seen working. Condition build-slice-2-5#1 (R-4.17) and the missing tests owed for R-4.1 and R-4.2 stay open. The egress check fails on an internal ticket number at app/backend/tests/sign-in-flow.test.ts:186 (rule E-2), which the next build must remove. This becomes an ordinary ruling once the adapter-binding and build sessions can sign in to the sandbox identity provider and run the compose stack, the slice's claimed criteria are trimmed to screens it owns, and a rebind and re-verify produce a result about the application rather than about the adapter.
-cost: 1.1035582
-turns: 5
-session: "46e16603-6d18-4cf4-beb4-4db77fd75bff"
-backend: claude
-model: "claude-opus-5-5"
-cli: "2.1.284 (Claude Code)"
-isolation: "none"
-at: 2026-09-30T17:01:01.014Z
+verdict: return
+by: tech-lead
+held_by: human
+note: "Ruled by the operator agent under Alex's standing delegation (2026-09-30) to rule application questions on his behalf."
+conditions:
+  - "addressed-to plan: slice 2 claims R-4.6, R-4.22, R-4.27, R-4.28 and R-6.2 to R-6.5, whose tests go through screens plan/tasks.md gives to later slices (profile editing and /users/:userId, the Code With Us create screen, organization editing, the opportunity dashboard's own-opportunities table); verify on build-slice-2-8 found each failing or unbound there. Move each to the slice that delivers its screen."
+  - "Remove the internal ticket number from app/backend/tests/sign-in-flow.test.ts (egress rule E-2)."
+at: 2026-09-30T18:06:07.243Z
