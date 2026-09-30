@@ -125,6 +125,7 @@ export default function create(
     // A screen opened is a form begun afresh: the fields and terms an earlier form was given
     // say nothing about this one.
     namedLabels.clear();
+    namedTexts.clear();
     acceptedTerms.clear();
     leavePhaseChoice = false;
     termsRefused = false;
@@ -1063,13 +1064,19 @@ export default function create(
 
   // Walking with the form's own "Previous" and "Next" reaches every step in order, from
   // wherever an earlier action left the form.
+  // A walk that has not reached step 1 by then (a "Previous" press that did not land) is
+  // finished from the step menu, so the first step's fields are never left unread.
   async function toFirstStep(): Promise<void> {
     await letValidationRun();
     for (let step = 0; step < 16; step++) {
       const previous = await findControl(page, "Previous");
-      if (!previous) return;
+      if (!previous) break;
       await previous.click();
       await settle();
+    }
+    const onStep = await currentStep();
+    if (onStep && !matches(/^1\.\s/, (await onStep.innerText().catch(() => "")).trim())) {
+      await chooseStep(/^1\.\s+\S/);
     }
   }
 
@@ -1321,6 +1328,32 @@ export default function create(
     }
     await box.fill(text);
     entered();
+    // The box must hold every character given — a 501-character teaser is the value under
+    // test, and one cut short would test a different value. A box that took only the start
+    // of it is filled again key by key; one that still holds less is reported with what it
+    // took. A box that reformats what it is given (a date, a figure) is left as it is.
+    const wanted = text.replace(/\r\n?/g, "\n");
+    const held = async (): Promise<string> => (await box.inputValue().catch(() => wanted)).replace(/\r\n?/g, "\n");
+    // Spaces a box trims from either end are its own doing, not a value cut short.
+    const cutShort = (now: string): boolean =>
+      now.trim().length < wanted.trim().length && wanted.trim().startsWith(now.trim());
+    if (cutShort(await held())) {
+      // The form may have been drawn afresh under the first fill; it is given once more.
+      await page.waitForTimeout(300);
+      await box.fill(text);
+      entered();
+      if (cutShort(await held()) && wanted.length <= 2000) {
+        await box.fill("");
+        await box.pressSequentially(wanted, { timeout: 60000 });
+        entered();
+      }
+      const now = await held();
+      if (cutShort(now)) {
+        throw new Error(
+          `${where} — the field for "${entry.key}" on ${page.url()} took ${now.length} of the ${wanted.length} characters given`,
+        );
+      }
+    }
     if (typed && role === "textbox") {
       // Entered as a person would finish it: one key typed at the end and taken back, then
       // the box left. A question box just added by "Add Question" keeps the text a fill puts
@@ -1363,6 +1396,8 @@ export default function create(
   // Every field label a test has given a value for, empty values included. A required field
   // the test named is left exactly as the test left it, never filled in on its behalf.
   const namedLabels = new Set<string>();
+  // The text boxes among them the test gave a value with words in.
+  const namedTexts = new Set<string>();
 
   // Set while the phases of a Sprint With Us form are left for the test to choose.
   let leavePhaseChoice = false;
@@ -1386,6 +1421,7 @@ export default function create(
         if (at >= count) continue;
         await enterValue(where, entry, role, boxes.nth(at), typed);
         namedLabels.add(squash(label));
+        if (role === "textbox" && asText(entry.value) !== "") namedTexts.add(squash(label));
         return true;
       }
       // A yes-or-no question is a pair of radios under a plain label.
@@ -2584,6 +2620,11 @@ export default function create(
       fieldError: async () => {
         const shown = await stepFormErrors();
         const found = shown ? shown.split("\n") : [];
+        // Nothing read yet: each box the test named is looked at once more, on its own step,
+        // with a moment allowed for old's check to draw.
+        if (!found.length) {
+          for (const line of await namedFieldErrors()) if (!found.includes(line)) found.push(line);
+        }
         for (const words of refused) {
           for (const line of words.split("\n").map((each) => each.trim())) {
             if (line && !found.includes(line) && !shown.includes(line)) found.push(line);
@@ -2605,6 +2646,34 @@ export default function create(
       }
     });
     return found.join("\n");
+  }
+
+  // What old draws in the own group of each text box the test gave a value, gathered from
+  // every step. Old checks a box a moment after its last change and draws its verdict
+  // there; a box the test named is given a short while for it before being read as silent,
+  // so a check still on its way (seen for the 501-character Teaser on the Code With Us
+  // form's Overview step) is not read as no message at all.
+  async function namedFieldErrors(): Promise<string[]> {
+    const found: string[] = [];
+    if (!namedTexts.size) return found;
+    const visit = async (): Promise<void> => {
+      const boxes = seen(page.getByRole("textbox"));
+      const count = await boxes.count();
+      for (let i = 0; i < count; i++) {
+        const box = boxes.nth(i);
+        if (!namedTexts.has(squash(bareLabel(await accessibleName(box))))) continue;
+        const deadline = Date.now() + 2000;
+        for (;;) {
+          const said = (await saidAfterField(box)).filter((line) => matches(MESSAGE, line));
+          for (const line of said) if (!found.includes(line)) found.push(line);
+          if (said.length || Date.now() >= deadline) break;
+          await page.waitForTimeout(250);
+        }
+      }
+    };
+    if (await currentStep()) await walkSteps(visit);
+    else await visit();
+    return found;
   }
 
   // The phase a Sprint With Us form starts with, when one has been chosen.

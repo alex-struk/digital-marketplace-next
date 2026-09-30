@@ -292,6 +292,12 @@
 - 13:37:43 propose calibrate-old-26 at G1
 - 13:37:45 drive: step 8: `sdlc rule calibrate-old-26 --by agent:product-owner` — calibrate-old-26 is open at G1, held by agent:product-owner
 - 13:38:30 rule calibrate-old-26 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 13:38:34 drive: step 9: `sdlc run bind-adapter --target old` — 1 binding to fix (rebind) for target old owed by bind-adapter
+- 13:47:38 run bind-adapter: ok, cost 3.070446399999999, turns 78, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 13:47:38 propose bind-adapter-old-56 at G3
+- 13:47:38 rule bind-adapter-old-56 escalated at G3 to tech-lead by runner:bind-adapter
+- 13:47:40 drive: step 10: `sdlc rule bind-adapter-old-56 --by agent:tech-lead` — bind-adapter-old-56 was escalated at G3 by runner:bind-adapter to tech-lead, a role an agent plays in this project
+- 13:48:18 rule bind-adapter-old-56 approve at G3 by agent:tech-lead (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-29
 
