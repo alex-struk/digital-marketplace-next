@@ -207,3 +207,18 @@ criteria:
       clause, which only a request no screen sends could show, needs restating
       in ratify in terms something observes, or withdrawing.
     owner: contract
+  - id: R-1.17
+    version: 3
+    clause: its position is never entered by the person
+    reason: "blocked: the test adds every question without a position and shows the
+      position follows the question's place, but nothing reports whether the
+      question editor offers a position or order control at all. The
+      add_team_question and add_resource_question actions take whatever keys a
+      test hands them, and neither opportunity-swu-create nor
+      opportunity-twu-create names an observation of the controls a question
+      offers, so a form that still let the person type a position would pass
+      the test just the same."
+    missing: an observation on opportunity-swu-create and opportunity-twu-create
+      reporting the fields an evaluation question offers for entry, or at least
+      whether any position or order field is offered
+    owner: contract
