@@ -56,3 +56,14 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether this project's adapter caused R-8.29 to fail against old, where a truthiness check received an empty string. Approved, with R-8.29 sorted as a product question. The earlier suspect was fileEmbeddedImage.imageRenderedInPublishedText, and bind-adapter-old-51 has fixed it: it now waits with ready() and polls for about 5 seconds for an image at /api/files/<id>. It also reads only the h1's following siblings, which is the right place. The old app draws <h1>, then DateMetadata, then <Markdown source={content.body}> as siblings inside one Col (sources/old/src/front-end/typescript/lib/pages/content/view.tsx:111-121). So the adapter reaches the drawn page and reads the body region. The empty answer is explained by the old app itself. The editor stores the image in the body as ![name](FILE_ID:<uuid>). The old Markdown view (lib/views/markdown.tsx) hands that to react-markdown ^10.1.0 with no urlTransform set. That library's default URL filter blanks any URL whose scheme is not http, https, mailto, irc, ircs or xmpp, and 'FILE_ID:' parses as such a scheme. So the custom img renderer receives an empty src, decodeImgSrc('') returns '', and the page draws <img src="">. The adapter correctly drops that and reports no image. The reader of the finished page does not see the image, which is exactly what the criterion's 'then' clause asks for, so whether that is an old-app defect is the product owner's call. What would change this ruling: a rerun that pins the empty value to a line other than imageRenderedInPublishedText, such as inserted, fileId, readableWhenSignedOutIfPublic or fileContents, and shows the adapter reading the wrong field or answer there.
+
+**Conditions:**
+- product-question R-8.29
