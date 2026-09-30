@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-2-6 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">355</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">349</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">317</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-2-6</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 16:17</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 2 (A person can sign in, finish signing up and sign out) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I could not run it against the real sandbox, and I did not re-check the rest of slice 2 end to end.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I&#39;ve changed sign-out so that it no longer shows &quot;signed out&quot; before the identity provider&#39;s session has actually ended. I could not run it against the real sandbox, and I did not re-check the rest of slice 2 end to end. Docker Compose needed an approval this session could not get, and there is no browser here, so both the fix and the rest of the slice are checked only by unit tests. <code>npm --prefix app run check</code> passes: 15 migrations tests, 154 backend and 78 frontend.</p>
+<p><strong>What I think was wrong with R-4.17.</strong> Opening <code>/sign-out</code> did three things in order:</p>
+<ol><li>Told the service (<code>DELETE /api/sessions/current</code>).</li><li>Marked the browser as signed out, which put the <code>sign-out-success</code> message on screen.</li><li>Only then sent the browser to Keycloak&#39;s logout page, which comes back to <code>/sign-out</code>.</li></ol>
+<p>So for a moment the page said the person was signed out while Keycloak still held their session. Anything that saw the message and moved on cut off the trip to Keycloak, and that session stayed alive. The app also never learned whether the Keycloak step worked, so it couldn&#39;t honestly report success or failure. I couldn&#39;t check this against a running app, so it&#39;s my best reading of the code, not something I watched happen.</p>
+<p><strong>What it does now</strong> (<code>app/frontend/src/auth/session.ts</code>, <code>app/frontend/src/screens/sign-out.tsx</code>, <code>app/frontend/src/auth/identity-client.ts</code>):</p>
+<ul><li>It tells the service first, as before. If that fails, nothing is signed out and <code>sign-out-failed</code> is shown.</li><li>It then ends the Keycloak session directly from the page, with a form POST to the realm&#39;s logout endpoint carrying the client id and the refresh token. A public client can do this without a secret, and Keycloak answers 204.</li><li>The success message appears only once both the service and Keycloak have confirmed.</li><li>If that POST is refused or its answer can&#39;t be read, the browser falls back to the old redirect through Keycloak&#39;s logout page. The screen stays at &quot;Signing Out&quot; until the browser comes back to <code>/sign-out</code> as a signed-out visitor, and only then shows success.</li><li>A sign-in the service refused is signed out of Keycloak the same way, without asking the service.</li><li>Someone who opens <code>/sign-out</code> already signed out just sees the success message.</li></ul>
+<p><strong>Two assumptions I couldn&#39;t check live:</strong></p>
+<ul><li><strong>Browser access to Keycloak&#39;s logout endpoint.</strong> I expect Keycloak to allow the browser to read the logout POST&#39;s answer, because the realm lists <code>http://localhost:4300</code> as an allowed web origin. If it doesn&#39;t, the redirect fallback still ends the session, just more slowly.</li><li><strong>The session id in Keycloak&#39;s tokens.</strong> The service refuses old tokens by the session id they carry. I believe Keycloak 26 includes one in its access tokens, but if a token has none, the service now uses the token&#39;s own id instead (<code>app/backend/src/auth/identity.ts</code>). Without that, a token with no session id would have kept working after sign-out.</li></ul>
+<p><strong>Tests added:</strong></p>
+<ul><li>The success message stays hidden while the service call is still pending, and Keycloak is contacted only after the service answers.</li><li>When Keycloak can&#39;t be reached from the page, the fallback redirect happens and no success is shown.</li><li>A refused sign-in is signed out of Keycloak without calling the service.</li><li>The logout request has the right address and form fields, and the stored tokens are cleared.</li><li>A refusal or network error is reported as failure.</li><li>The session-id fallback in the backend.</li></ul>
+<p>I updated the signing-out paragraph of <code>docs/decisions/0011-signing-in-and-the-session.md</code> to match.</p>
+<p>I changed nothing outside <code>app/</code> and <code>docs/decisions/</code>, and left the rest of slice 2 as it was. I removed the <code>node_modules</code> I installed to run the checks, since nothing ignores them. The next stage should bring the sandbox up and run a real sign-out, checking two things:</p>
+<ul><li>Keycloak&#39;s logout POST returns 204 and the browser can read that answer.</li><li>After signing out, signing in again asks for a password.</li></ul></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by runner:verify (the runner, automatically) on 2026-09-30 16:22.</p>
+<div class="body"><p>Slice 2 does not yet do what 6 of its criteria say. Each condition is the criterion and what the running application did.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-4.1: Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeFalsy[2m()[22m</li><li>R-4.2: Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m</li><li>R-4.3: TimeoutError: locator.setChecked: Timeout 15000ms exceeded.</li><li>R-4.17: Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeFalsy[2m()[22m</li><li>R-4.22: Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m</li><li>R-4.24: TimeoutError: locator.setChecked: Timeout 15000ms exceeded.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
