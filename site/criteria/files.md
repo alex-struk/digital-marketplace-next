@@ -32,7 +32,7 @@
 | R-8.26 | — |  | not-testable |
 | R-8.27 | acceptance/files/R-8.27.spec.ts |  | pass (carried from 2026-09-30-17) |
 | R-8.28 | acceptance/files/R-8.28.spec.ts |  | pass (carried from 2026-09-30-17) |
-| R-8.29 | acceptance/files/R-8.29.spec.ts |  | fail (carried from 2026-09-30-17) |
+| R-8.29 | acceptance/files/R-8.29.spec.ts |  | fail (ruled: defect-in-old) |
 | R-8.30 | acceptance/files/R-8.30.spec.ts |  | pass (carried from 2026-09-30-17) |
 | R-8.31 | acceptance/files/R-8.31.spec.ts |  | pass (carried from 2026-09-30-17) |
 
@@ -383,6 +383,7 @@ An image placed into a piece of formatted text is stored as an ordinary file mar
 - when: they choose an image and it is accepted
 - then: the image is inserted into the text as a reference the service resolves for itself, and a reader of the finished page sees the image
 - note: the stored text never contains a web address, so the same text renders correctly wherever the service is running and whatever address it answers on. A marker that does not resolve to a known file identifier is left alone and treated as an ordinary address, so text written elsewhere still works. The content domain already expects image upload in the editor and defers what may be uploaded to here; this criterion is the other half of that.
+- note: calibrate 2026-09-30: the old target fails this; kept, the rebuild must pass it
 
 ### R-8.30 · v1 · confirmed · accepted
 

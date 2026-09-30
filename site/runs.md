@@ -154,6 +154,8 @@
 - 01:25:20 propose bind-adapter-old-53 at G3
 - 01:25:22 drive: step 14: `sdlc rule bind-adapter-old-53 --by agent:reviewer` — bind-adapter-old-53 is open at G3, held by agent:reviewer
 - 01:25:56 rule bind-adapter-old-53 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 01:26:00 drive: step 15: `sdlc run calibrate --target old` — 2 bindings to check again now that their adapter has changed (rebind) for target old owed by calibrate
+- 01:45:10 run calibrate: ok, cost 0, turns 0
 
 # Run record 2026-09-29
 
