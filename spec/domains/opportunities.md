@@ -14,6 +14,7 @@ A published opportunity whose proposal deadline has passed closes on its own at 
 - then: the opportunity moves to its program's first evaluation stage with the note "This opportunity has closed.", its submitted proposals move to review, and its author receives a notification
 - state: accepted
 - note: closure is driven by ordinary traffic rather than a clock, throttled so it runs at most once a minute, and additionally attached to the health-check route so that it still runs when the site is idle. An opportunity therefore closes at the first request after its deadline, not at the deadline itself.
+- note: calibrate 2026-09-30: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.2 · v1 · confirmed · recovered
 An anonymous visitor or a vendor sees only opportunities that have been published; drafts and opportunities under review are not listed to them and cannot be opened by them.

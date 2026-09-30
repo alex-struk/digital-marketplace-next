@@ -2110,6 +2110,11 @@ rebind:
       report each message against the phase as 'Inception', 'Prototype' or
       'Implementation' (capitalised, as the criteria and the surface name them),
       keeping the service's message text unchanged"
+    closed: &a13
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-30T04:21:01.387Z
   - id: R-5.25
     target: old
     why: evaluationIndividualListSwu.submitDisabledUntilComplete returns
@@ -2118,6 +2123,7 @@ rebind:
       reads as withheld; it must return an empty string when the control is
       present and enabled, and a non-empty reason only when it is disabled or
       not offered
+    closed: *a13
   - id: R-1.17
     target: old
     why: opportunitySwuEdit.teamQuestionsTab opens the sidebar 'Team Questions' tab
@@ -2125,6 +2131,7 @@ rebind:
       scoring table, not the opportunity's list of questions; it must read the
       saved opportunity's own team questions, in the order listed, from the
       'Opportunity' tab's 'Team Questions' section
+    closed: *a13
   - id: R-2.2
     target: old
     why: 'unbound: opportunity-cwu-view.start_proposal — waited 15s for a "Start
@@ -2138,3 +2145,8 @@ rebind:
     adapter: 8d4e880431d70ffa638a11d6f199491bf31f6249
     by: runner:calibrate
     at: 2026-09-30T04:15:08.308Z
+    closed:
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-30T04:21:01.332Z
