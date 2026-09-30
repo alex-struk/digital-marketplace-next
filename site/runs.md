@@ -240,6 +240,9 @@
 - 11:06:48 drive: step 1: `sdlc run calibrate --target old` — 4 bindings to check again now that their adapter has changed (rebind) for target old owed by calibrate
 - 11:10:15 oracle up old: http://localhost:4300 (local port 4300)
 - 11:30:37 run calibrate: ok, cost 0, turns 0
+- 11:30:39 propose calibrate-triage-old-41 at G3
+- 11:30:43 drive: step 2: `sdlc rule calibrate-triage-old-41 --by agent:reviewer` — calibrate-triage-old-41 is open at G3, held by agent:reviewer
+- 11:31:47 rule calibrate-triage-old-41 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-29
 

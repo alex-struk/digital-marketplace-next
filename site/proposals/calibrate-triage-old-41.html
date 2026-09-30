@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-triage-old-41 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">357</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">351</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">318</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-triage-old-41</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 18:30</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>2 criterion(s) fail against old: which of them did this project&#39;s own adapter cause?</h2>
+<p><strong>Recommendation.</strong> Sort R-1.10, R-1.17 with a triage condition each, so the adapter&#39;s failures are fixed there and only product questions reach the product owner.</p>
+<p>2 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:4300,">http://localhost:4300,</a> and nobody has sorted them yet. Before any reaches the product owner, say which of them this project&#39;s own adapter caused. The adapter is under <code>tests/adapters/old/</code>; read each one against it and against the test.</p>
+<h4>R-1.10 · v1</h4>
+<p>An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters.</p>
+<ul><li>given: a member of public sector staff creating or editing an opportunity that is not a draft</li><li>when: they submit it with a missing title, a title over 200 characters, a teaser over 500 characters, a missing location, or a description that is missing or over 10,000 characters</li><li>then: the submission is rejected and the offending field is named in the response</li><li>test: tests/acceptance/opportunities/R-1.10.spec.ts</li></ul>
+<p><strong>An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a teaser over 500 characters)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-1.17 · v3</h4>
+<p>Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity&#39;s list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits.</p>
+<ul><li>given: a member of public sector staff adding an evaluation question to an opportunity</li><li>when: they submit a question or guideline outside 1 to 1,000 characters, a score below 1, a word limit outside 1 to 3,000, a position outside 0 to 100, or a minimum score equal to or above the question&#39;s score</li><li>then: the submission is rejected and the offending field is named</li><li>test: tests/acceptance/opportunities/R-1.17.spec.ts</li></ul>
+<p><strong>Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity&#39;s list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a question whose position would fall beyond 100 is refused on submission for review)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/question|position|order/i[39m
+Received string:  [31m&quot;Unable to Submit Opportunity[39m
+[31mSprint With Us opportunity could not be submitted. Please try again later.&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<h3>Triage conditions</h3>
+<p>One condition per line, one for every criterion the page lists, in exactly one of these forms:</p>
+<ul><li><code>adapter-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion and the test are both fine, and this target&#39;s adapter is what failed: it read the wrong thing off the page, reported a control missing that the page does render, or answered empty where it never reached the page. <code>&lt;why&gt;</code> names what the adapter did wrong, specifically enough for the next binding run to fix it. The criterion is not touched. On an unbound row it sends the binding back to <code>bind-adapter</code> however often it has been sent.</li><li><code>product-question &lt;ID&gt;</code> — nothing in the evidence points at the adapter. The failure goes to the product owner, who decides whether the application, the criterion or the test is wrong. No text after the ID. On an unbound row, use it when the criterion itself looks suspect.</li><li><code>oracle-cannot &lt;ID&gt;: &lt;why&gt;</code> — only for a row listed as unbound, on the oracle&#39;s target: the oracle genuinely cannot be driven into, or observed in, the state the test needs without changing its code — the state sits behind an external identity provider, is reachable only through a link the application emails, or is enforced only by a browser-native dialog. <code>&lt;why&gt;</code> names that state and why the oracle cannot reach it. It closes the row, changes no criterion, and stands until the criterion&#39;s version changes. It is never a way to skip binding work: where the application offers the control under another label, behind a step or as another persona, the answer is <code>adapter-wrong</code>.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. A condition may not span more than one line. When the evidence is genuinely unclear, it is a <code>product-question</code>: a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the adapter comes back from the next binding run unchanged and costs a run to find out.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-30 18:31.</p>
+<div class="body"><p>Asked which of the two criteria failing against old were caused by this project&#39;s adapter. Approved with one triage condition each. R-1.10 (a teaser over 500 characters): fieldError returned an empty string for the whole 15-second poll. The adapter&#39;s own documentation (tests/adapters/old/index.ts, above fieldErrors) quotes old drawing &#39;Teaser must be between 0 and 500 characters long.&#39; after the Teaser box, which its MESSAGE pattern matches, and the same reader answers the title and description cases on the same form. So the adapter answered empty where the page renders a message: adapter-wrong. R-1.17 (a question whose position would fall beyond 100): the adapter added 102 questions, pressed and confirmed Submit for Review, and captured old&#39;s own refusal alert (&#39;Unable to Submit Opportunity / Sprint With Us opportunity could not be submitted. Please try again later.&#39;), which it documents as old&#39;s actual answer to this exact scenario. That alert names no question, position or order field, and nothing in the evidence points at the harness: product-question. If the next binding run shows the full 501-character teaser reaching the box and old drawing no message, R-1.10 would become a product question too. Neither owed instruction (build-slice-2-5#1, build-slice-2-8#2) is settled by this triage, so both stay open.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>adapter-wrong R-1.10: on the Code With Us create form, fieldError() read an empty string after publish with a 501-character teaser, although old draws &#39;Teaser must be between 0 and 500 characters long.&#39; beneath the Teaser box; confirm the fill puts all 501 characters into the Teaser box (not cut short by the box or the fill) and that fieldErrors/stepFormErrors reaches the Teaser field&#39;s own group on its step, as it does for the title and description</li><li>product-question R-1.17</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
