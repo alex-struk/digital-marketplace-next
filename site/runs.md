@@ -33,6 +33,10 @@
 - 19:57:07 run derive-tests: ok, cost 1.033253, turns 24, on claude claude-opus-5-5 (2.1.284 (Claude Code))
 - 19:57:07 propose derive-tests-proposals-stale-16 at G3
 - 19:57:52 rule derive-tests-proposals-stale-16 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 20:45:34 oracle up old in configuration notifications_disabled: local port 3103
+- 20:46:16 oracle down old in configuration notifications_disabled
+- 20:46:16 calibrate old: a full run, forced with --full
+- 20:46:19 run calibrate: ok, cost 0, turns 0
 
 # Run record 2026-09-29
 
