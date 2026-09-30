@@ -58,6 +58,7 @@ applied:
   - calibrate-old-25
   - calibrate-triage-old-39
   - calibrate-triage-old-40
+  - calibrate-triage-old-41
 rulings:
   - id: R-8.18
     version: 1
@@ -516,3 +517,13 @@ rulings:
     version: 1
     verb: defect-in-old
     gate: calibrate-old-25
+  - id: R-1.10
+    version: 1
+    verb: adapter-wrong
+    gate: calibrate-triage-old-41
+    adapter: 46f2a691b0622a553fb54b75a0bc7072b59c780f
+  - id: R-1.17
+    version: 3
+    verb: product-question
+    gate: calibrate-triage-old-41
+    file_sha: 77ce5ec31b1d3b023e47f65d4fad5e17c9f743a8

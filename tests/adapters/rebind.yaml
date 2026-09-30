@@ -2787,3 +2787,11 @@ rebind:
     by: runner:verify
     at: 2026-09-30T13:07:10.177Z
     closed: *a18
+  - id: R-1.10
+    target: old
+    why: on the Code With Us create form, fieldError() read an empty string after
+      publish with a 501-character teaser, although old draws 'Teaser must be
+      between 0 and 500 characters long.' beneath the Teaser box; confirm the
+      fill puts all 501 characters into the Teaser box (not cut short by the box
+      or the fill) and that fieldErrors/stepFormErrors reaches the Teaser
+      field's own group on its step, as it does for the title and description
