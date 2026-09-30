@@ -84,3 +84,15 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: which of the two failing criteria against old did this project's own adapter cause? Ruling: approve, with both sorted as adapter-wrong. For R-8.13 the organization-logo test never reached the stored image. pictures() in tests/adapters/old/index.ts counts the visible images once, then asks each one for its src by position. On the organization edit page the image at position 16 was gone or hidden by the time the loop reached it, so getAttribute waited out its 15-second timeout. The failure happened while the adapter was looking for the picture, and it says nothing about what size the logo was stored at. The two profile-picture tests use the same binding and are not on the failure list. For R-2.18, pendingTeamMember is bound to linesMatching(/pending/i), which returns every line on the page containing 'pending'. It returned two paragraphs of the page's standing instructions and a lone 'Pending' line, never the named person's entry. The lone 'Pending' line suggests the page does render a pending marker, but on a line separate from the name, so the adapter read the wrong part of the page. What would change the ruling: if a corrected binding reliably reaches the stored logo, or the named person's entry in the team list, and the size or the pending marker is still wrong, the failure is the application's and goes to the product owner.
+
+**Conditions:**
+- adapter-wrong R-8.13: fileImagePicker.storedImageWidth/Height read the stored image through pictures(), which counts visible images once and then calls nth(i).getAttribute on a live locator; on the organization edit page an image left or hid before index 16 was reached and getAttribute timed out after 15s, so the binding failed before ever finding the stored logo. It must find the stored /api/files/ image without per-index waits that can hang (for example, snapshot all srcs in one evaluate, or bound each attribute read) and then read that image's natural size.
+- adapter-wrong R-2.18: proposalSwuCreate.pendingTeamMember is bound to linesMatching(/pending/i), which returns every page line containing 'pending', here the form's standing instruction paragraphs plus a lone 'Pending' line, instead of the named member's entry in the phase team list. It must read the entry of each named member that carries the pending marker and return that member's name (together with the marker), so a person named and marked pending is reported by name.
