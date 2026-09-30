@@ -1,5 +1,12 @@
 # Run log
 
+# Run record 2026-09-30
+
+- 17:41:29 oracle up old in configuration notifications_disabled: local port 3103
+- 17:42:06 oracle down old in configuration notifications_disabled
+- 17:42:06 calibrate old: a full run, forced with --full
+- 17:42:09 run calibrate: ok, cost 0, turns 0
+
 # Run record 2026-09-29
 
 - 17:00:13 run bind-adapter: ok, cost 5.2657204, turns 122, on claude claude-opus-5-5 (2.1.284 (Claude Code))
