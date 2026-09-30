@@ -916,6 +916,14 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-09-30T06:40:53.710Z
+    closed:
+      outcome: met
+      why: imageRenderedInPublishedText in tests/adapters/old/index.ts now returns
+        sources.join("\n") after the ready() wait and a 5s poll for
+        /api/files/<id>, with no throw; the result is empty when the body shows
+        no images.
+      by: agent:reviewer
+      at: 2026-09-30T06:42:55.951Z
   - ref: bind-adapter-old-50#2
     text: "tests/adapters/old/index.ts imageSources()/imageRenderedInPublishedText:
       collect image sources only from the published page's body text, not every
@@ -930,3 +938,12 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-09-30T06:40:53.710Z
+    closed:
+      outcome: met
+      why: imageSources() in tests/adapters/old/index.ts collects <img> src values
+        only from the h1's following siblings, skipping the Published/Updated
+        line (the same region pageBody reads), and no longer uses
+        document.images or page-wide getByRole('img'); the ready() wait and the
+        /api/files/<id> polling are kept.
+      by: agent:reviewer
+      at: 2026-09-30T06:42:55.960Z
