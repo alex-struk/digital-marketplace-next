@@ -1,0 +1,16 @@
+gate: G1
+verdict: approve
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  The question is whether R-8.29's failure against old (a truthiness check receiving an empty string) is the application's fault, the spec's, or the test's. Ruling: approve with defect-in-old. The old source shows the criterion is right and the old application fails it. The editor stores an embedded image in the body as ![name](FILE_ID:<uuid>) (prefix defined at shared/lib/resources/file.ts:80). The old Markdown view (lib/views/markdown.tsx:45-48) has a decodeImgSrc helper whose only job is to turn that marker into a download address when the text is displayed, which is exactly the behaviour the criterion describes. But the view renders through react-markdown ^10.1.0 (package.json:138) without overriding its default URL filter (markdown.tsx:141-145). That filter blanks any URL whose scheme is not on its safe list, and 'FILE_ID:' parses as such a scheme. So the custom img renderer receives an empty src, decodeImgSrc('') returns '', and the published page draws <img src="">: a reader of the finished page does not see the image. The reviewer at calibrate-triage-old-37 had already fixed the harness's reading of the published page and traced the empty value to this path, so the test is not at fault. The intent (the marker resolved at display time and the image visible to readers) is plainly what the old code meant to do, so the criterion stands as the rebuild's obligation rather than being rewritten to match the broken rendering. What would change this ruling: a rerun that pins the empty value to a different assertion (the inserted reference, the file id, or the signed-out download checks) rather than the published-page image check, which would make it a harness question again.
+conditions:
+  - "defect-in-old R-8.29"
+cost: 0.3913896
+turns: 9
+session: "e6c94ac2-9b84-468e-9b3b-05bc0dd98fa1"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T08:20:58.832Z
