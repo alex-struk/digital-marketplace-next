@@ -1009,3 +1009,37 @@ conditions:
     stage: build
     by: tech-lead
     at: 2026-09-30T18:06:07.564Z
+  - ref: plan-4#1
+    text: In plan/tasks.md, the slice that claims R-6.3, R-6.4 and R-6.5 must
+      depend, directly or through other slices, on Slices 3, 7, 8 and 11,
+      because the screens named for their tests are delivered by those slices.
+      Slice 11 currently depends only on Slice 3, so the placement relies on a
+      linear build order that the depends-on lines do not enforce. Do this
+      either by adding Slice 8 to Slice 11's depends-on line or by moving the
+      three criteria to Slice 14, which already depends on Slices 8 and 11.
+    from: plan-4
+    family: plan
+    gate: G2
+    stage: plan
+    by: agent:architect
+    at: 2026-09-30T18:34:30.582Z
+  - ref: plan-4#2
+    text: In plan/plan.md, replace the argument that the build order is linear with
+      the dependency that actually guarantees the four screens exist before
+      R-6.3 to R-6.5 are verified, and keep the rest of the note on awkward
+      placements.
+    from: plan-4
+    family: plan
+    gate: G2
+    stage: plan
+    by: agent:architect
+    at: 2026-09-30T18:34:30.582Z
+  - ref: plan-4#3
+    text: Run plan/check-coverage.mjs and confirm the total is still 248 criteria,
+      each assigned to exactly one slice, before the revision is proposed.
+    from: plan-4
+    family: plan
+    gate: G2
+    stage: plan
+    by: agent:architect
+    at: 2026-09-30T18:34:30.582Z
