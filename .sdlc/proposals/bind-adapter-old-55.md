@@ -35,3 +35,23 @@ I could not reproduce the Teaser failure. A 501-character Teaser is entered and 
 - **Silent endings.** If no preview appears, it now raises unless a new refusal alert or a message on the step explains why. If the save produces no new `/api/files/` link, it raises and says what the page shows.
 
 On the target I left several draft Code With Us and Sprint With Us opportunities, one published Code With Us opportunity with an attachment, and one published content page. I opened the seeded published Code With Us opportunity for editing and added a file to it, but cancelled without saving. Nothing outside `tests/adapters/old/` was touched.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the old adapter now bind every surface action and observation for R-1.10, R-1.17, R-7.26 and R-8.31, and nothing else? The runner escalated because the rebind loop limit was exceeded; nothing points to a pipeline fault, so I am ruling on the merits. Approve. The diff stays inside tests/adapters/old/index.ts, and each change answers the latest request for one criterion. R-1.17: waits out old's roughly half-second validation for question values that are empty or over 1,000 characters; submitForReview ends on the record or on old's refusal alert, which fieldError keeps. R-7.26: excludes only the date line; the upload wait ignores alerts already showing; imageInsertedIntoText re-reads the Body box. R-8.31: uses only the non-image-only Choose File on the Attachments step, and both silent endings now raise. R-1.10: file inputs no longer count as fields, and the label group is read for the message. The runner's typecheck of this revision passed with no diagnostics under adapters/old/, which covers the author's inability to compile. I checked the R-7.26 date-line filter against old's pages/content/view.tsx. The Col holds the h1, then DateMetadata, then Markdown; an image-only paragraph has empty innerText and the Col starts with the title, so the body image is kept. The R-1.10 Teaser cause was not reproduced; the validation wait is a reasonable hedge, and the next test run will confirm or refute it. What would change the ruling: a following run failing one of these criteria on the adapter's own reading or entry rather than on how old behaves, which would be a fresh finding, not a reason to reopen this.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `47820d35a85421abd081ccde4a1bae881bf5668a`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    No diagnostics.
