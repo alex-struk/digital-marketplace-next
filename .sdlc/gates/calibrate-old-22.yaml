@@ -1,0 +1,16 @@
+gate: G1
+verdict: approve
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  Question: why does R-1.1's Sprint With Us / Team With Us half, where the evaluators on the panel are told the opportunity is ready for evaluation, fail against the old application? Ruling: approve, defect-in-old. When the deadline passes, the old application's closing sweep sends each lapsed opportunity through rawSWUOpportunityToSWUOpportunity / rawTWUOpportunityToTWUOpportunity. Those converters never load the evaluation panel; only the single-opportunity read does (sprint-with-us.ts:934, team-with-us.ts:989). handleSWUReadyForEvaluation and handleTWUReadyForEvaluation only send when that panel list is filled in, so no email ever goes out. The intent is clear: there is a dedicated handler that picks out the evaluators and a finished template, 'A Sprint With Us Opportunity is Ready to Be Evaluated'. The missing email is a defect in the old application, not a behaviour the spec should drop. The other two parts of R-1.1 pass against old: the opportunity moves to its first evaluation stage with 'This opportunity has closed.', and its submitted proposals move to review. So the criterion is sound and the test stands as the rebuild's obligation. Two points for follow-up, not ruled here. First, the criterion's 'then' clause says 'its author receives a notification', which does not match its statement for Sprint With Us and Team With Us; a later spec edit should align them. Second, this email's subject is generic and the opportunity title sits in the body's description list, so if the rebuild keeps the old template, a match on subject plus snippet may not find the title. What would change this ruling: evidence that the lapsed-opportunity query does attach the evaluation panel, for example a mailpit capture from the old target showing the ready-for-evaluation email reaching the seeded evaluators. That would mean the test is reading the mail wrongly, and the ruling would become test-wrong.
+conditions:
+  - "defect-in-old R-1.1"
+cost: 0.5179606
+turns: 13
+session: "c751a382-59d5-43fc-8fa4-4fde0ef6b194"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T04:16:07.250Z
