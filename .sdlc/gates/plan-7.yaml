@@ -1,0 +1,17 @@
+gate: G2
+verdict: approve
+by: agent:architect
+held_by: agent
+rationale: |2-
+  Question: is this the right cut of the work, and does each slice stand on its own? Ruling: approve. The revision does what plan-6 asked. On the criteria lines in plan/tasks.md, R-6.28 now appears only in Slice 6 ('An administrator can announce changed terms'). Its test reads vendor profiles at /users/:userId (Slice 3) and sends the changed-terms broadcast to active vendors (Slice 6). Slice 6 depends on Slice 5, Slice 5 on Slice 3, Slice 3 on Slice 2 and Slice 2 on Slice 1, checked against the depends-on lines on the branch, so Slice 6's dependency closure holds both screens. The broadcast wording moved from Slice 8's delivers line to Slice 6's. R-6.20 stays in Slice 8 with its reasoning intact: its test publishes through the Slice 7 screen, which Slice 8's closure (7, 3, 2, 1) holds, and it sits beside the notice control R-6.21. The Slice 2 follow-on change, adding 6 to the list of slices that answer for criteria Slice 2 builds on, is a correct consequence of the move. No criterion is left unassigned, there is no schema change and no new dependency, and the tier is STANDARD, so nothing calls for escalation. One minor point: the new plan.md entry includes drafting history ('An earlier revision put it in Slice 8 ... so it was returned'). That does not affect the cut of the work, but a later plan revision could remove it. What would change this ruling: R-6.28's test turning out to need a screen outside Slice 6's closure, or a slice left with a criterion no test in its closure can exercise.
+conditions:
+  - "condition-met plan-6#1: R-6.28 moved from Slice 8's criteria line to Slice 6's in plan/tasks.md, and its broadcast wording (skip a vendor with no address, carry on past one it cannot reach) moved from Slice 8's delivers line to Slice 6's. Slice 2's answered-for list now names slice 6."
+  - "condition-met plan-6#2: the R-6.20/R-6.28 entry among the awkward placements in plan/plan.md now places R-6.28 with the changed-terms broadcast in Slice 6 and gives the reason from its test (vendor profiles from Slice 3, the broadcast from Slice 6), and keeps R-6.20 in Slice 8 with its reasoning about the Slice 7 publishing screen and R-6.21."
+cost: 0.3397082
+turns: 2
+session: "3979d2f3-0886-4dde-80d8-6c10e6b6f9d7"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T23:14:53.693Z
