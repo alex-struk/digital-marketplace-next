@@ -185,3 +185,15 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is which of R-1.17 and R-8.29's failures against old were caused by this project's adapter. Approved with one triage condition each. R-1.17: in all ten cases the adapter's saveDraft completed, and saveDraft (index.ts:2435) throws through mustLandOn unless the browser lands on the saved opportunity's address. So the old app accepted every draft carrying an out-of-limit question, including a 101st. fieldError (index.ts:2463) then went through every step of the saved form and found nothing. The adapter misread nothing: the app took a draft the criterion says it should refuse, and whether the refusal belongs at draft save or only at submit/publish is the product owner's question. R-8.29: the error shows an empty string from a toBeTruthy check with no line. The prime suspect is fileEmbeddedImage.imageRenderedInPublishedText (index.ts:9167). It lists the page's images immediately after contentView.open without the ready() wait that pageTitle and pageBody on the same page call first (index.ts:8415-8424), so it can read the page before it has drawn and return ''. That is the adapter answering empty where it never reached the page. Earlier rounds have already sent this test's path back to the adapter three times. The failing line was not confirmed by a rerun, because the target could not be reached from this session. What would change the ruling: a rerun showing R-8.29's empty value comes from readableWhenSignedOutIfPublic or fileContents on a drawn page, which would make it a product-question; or evidence that the old app refuses the draft and the adapter misses the refusal, which would make R-1.17 adapter-wrong.
+
+**Conditions:**
+- product-question R-1.17
+- adapter-wrong R-8.29: fileEmbeddedImage.imageRenderedInPublishedText collects img src attributes immediately after contentView.open without first calling ready() (as contentView.pageTitle and pageBody on the same /content/:slug page do), so it can read the page before it draws and return ''. Wait for the page to finish drawing, then wait a few seconds for an img whose src carries the /api/files/<id> the body's FILE_ID marker names; if none appears, throw an error naming the sources the page does show, rather than returning ''.
