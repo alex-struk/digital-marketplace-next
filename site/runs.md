@@ -261,6 +261,14 @@
 - 12:23:21 drive: step 1: `sdlc run verify --slice 2` — build-slice-2-10 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
 - 12:26:20 verify slice 2: returned — R-4.1, R-4.3, R-4.17 fail. Next: sdlc run build --slice 2 --revise
 - 12:26:22 run verify: regenerated 374 files in .sdlc, site
+- 12:27:49 drive: step 3: `sdlc run bind-adapter --target new --revise` — bind-adapter-new-6 was returned at G3 by agent:reviewer
+- 12:27:50 run bind-adapter: pre-checks failed
+- 12:27:50 drive: stopped after 3 steps — step 3 (`sdlc run bind-adapter --target new --revise`) failed
+- 12:46:21 deviation: next named `sdlc run verify --slice 2`; ran `sdlc run bind-adapter --target new`; reason: Rebinding in place of the revision of bind-adapter-new-6, whose return was spent by a refused pre-check (fixed in the pipeline as docs/decisions/0080). The reviewer's condition on bind-adapter-new-6, to meet here: tests/adapters/new/index.ts, user-sign-up-complete: when /sign-up/complete redirects the browser away (to /dashboard for an account that is not a vendor still to agree, or to /sign-in?redirectOnSuccess=... for a signed-out visitor), the form's readings (terms_checkbox, name_field, email_field, job_title_field, idp_username_readonly, complete_disabled_until_terms_accepted, field_error) must return empty rather than throw unbound, because the form not being shown is exactly what R-4.23 says those people should see. Keep the actions (accept_app_terms, toggle_new_opportunity_notifications, complete_profile, change_avatar) reporting unbound with where the browser was sent. Record the change against these members in tests/adapters/new/bindings.yaml. Run by the operator under the tech lead's delegation for this autonomous run.
+- 12:50:28 run bind-adapter: ok, cost 1.5579007999999999, turns 48, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 12:50:28 propose bind-adapter-new-7 at G3
+- 12:50:45 drive: step 1: `sdlc rule bind-adapter-new-7 --by agent:reviewer` — bind-adapter-new-7 is open at G3, held by agent:reviewer
+- 12:51:24 rule bind-adapter-new-7 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-29
 

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-7 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">364</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">358</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">320</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-7</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 19:50</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I changed only the profile-completion page (<code>user-sign-up-complete</code>) in <code>tests/adapters/new/index.ts</code> and <code>tests/adapters/new/bindings.yaml</code>, to meet the reviewer&#39;s condition from the previous binding…</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I changed only the profile-completion page (<code>user-sign-up-complete</code>) in <code>tests/adapters/new/index.ts</code> and <code>tests/adapters/new/bindings.yaml</code>, to meet the reviewer&#39;s condition from the previous binding run. I couldn&#39;t type-check the adapter: the type-checker command needed an approval nobody can give in this session. I checked the new logic by running the same steps in the browser against the live target, but a compile error, though unlikely, has not been ruled out.</p>
+<p><strong>The fix the reviewer asked for.</strong> The page <code>/sign-up/complete</code> sends most people somewhere else. I confirmed both cases on the running target:</p>
+<ul><li>A signed-out visitor goes to <code>/sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete</code>.</li><li>The administrator, signed in, goes to <code>/dashboard</code>.</li></ul>
+<p>When that happens, the seven readings of the form now return empty instead of throwing unbound. Those readings are <code>terms_checkbox</code>, <code>name_field</code>, <code>email_field</code>, <code>job_title_field</code>, <code>idp_username_readonly</code>, <code>complete_disabled_until_terms_accepted</code> and <code>field_error</code>. The four actions still report unbound in that situation, and the message names the address the browser was sent to. If the browser is somewhere else entirely, meaning the page was never opened, the readings still throw unbound. Only a redirect to <code>/dashboard</code> or <code>/sign-in</code> counts as the page&#39;s answer.</p>
+<p><strong>New finding: signing in works now.</strong> Every earlier binding of this target said the sandbox password couldn&#39;t be used, so no signed-in page had ever been looked at. In this session, the identity provider&#39;s Username and Password form accepted the substituted password for both <code>test-admin</code> and <code>test-vendor-17</code>. The adapter&#39;s existing <code>signIn</code> follows the same path I took by hand.</p>
+<p><strong>The form itself, now seen.</strong> Signed in as the vendor who still has a profile to complete (<code>test-vendor-17</code>), I opened &quot;Complete Your Profile&quot;. It shows:</p>
+<ul><li>a read-only &quot;Sign-in username&quot;</li><li>&quot;Name&quot; and &quot;Email address&quot;</li><li>&quot;Email me when new opportunities are posted&quot;</li><li>a box agreeing to the terms and privacy policy</li><li>&quot;Complete profile&quot;, disabled until that box is ticked</li></ul>
+<p>The adapter&#39;s existing label patterns match every one of these. There is no job title field, so <code>job_title_field</code> correctly reads empty. I didn&#39;t press &quot;Complete profile&quot;, so that vendor&#39;s seeded state is unchanged. On the strength of what I saw, the bindings file now lists as bound: <code>accept_app_terms</code>, <code>toggle_new_opportunity_notifications</code>, <code>complete_profile</code>, and all seven readings.</p>
+<p><strong><code>change_avatar</code> stays unbound, for a new reason.</strong> The &quot;Choose a profile picture&quot; button is the contract&#39;s <code>change-avatar</code> control, but pressing it opened no file chooser. The form&#39;s only file input is hidden and has no label, so nothing a person can see lets a file be offered. The adapter now reports this as unbound with that explanation, instead of timing out after 10 seconds.</p>
+<p><strong>Not done, outside this stage&#39;s scope:</strong> the rest of the adapter still says in its comments and bindings that no signed-in page was ever seen. That is out of date now that sign-in works. A full rebind of the signed-in pages would probably move many members from unbound to bound; I only rebound this one page.</p>
+<p>No page route failed to load. I changed nothing outside <code>tests/adapters/new/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-30 19:51.</p>
+<div class="body"><p>Question: does the new adapter bind every surface action and observation on the profile-completion page, and nothing else? It does. The change meets bind-adapter-new-6#1 as worded: when /sign-up/complete sends the browser to /dashboard or /sign-in, the seven readings return empty; the four actions still report unbound, naming where the browser was sent; and a browser that is anywhere else still reports unbound. Every binding is navigation and locators only. Returning empty is a reading, not a verdict: every test in tests/acceptance/users/R-4.23.spec.ts calls open() before reading, then asserts the terms box is absent and asserts the destination screen (dashboard table or empty message, or the sign-in vendor card) is present. So an adapter that cannot tell a redirect from a browser already sitting on /dashboard cannot pass a test vacuously. Moving the form&#39;s members to bound rests on the form being seen signed in as the vendor still to agree, and the labels observed match the adapter&#39;s patterns. change_avatar&#39;s unbound reason names a real gap in the surface: the picture control opens no file chooser and the only file input is hidden and unlabelled. Only tests/adapters/new/ changed; nothing under tests/acceptance did. The runner&#39;s typecheck on this revision passed with no diagnostics. Tier is STANDARD and no residual risk is marked unaccepted, so there is no escalation. What would change this ruling: evidence that &#39;Complete profile&#39; is not disabled until the terms box is ticked, or that a label pattern misses a field on the form, which would make a member marked bound wrong. build-slice-2-5#1 and build-slice-2-8#2 are owed by build and are not settled here.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met bind-adapter-new-6#1: in tests/adapters/new/index.ts, signUpFormShown() returns false when /sign-up/complete has sent the browser to /dashboard or /sign-in; the seven readings (idpUsernameReadonly, nameField, emailField, jobTitleField, termsCheckbox, completeDisabledUntilTermsAccepted, fieldError) then return empty, while the actions still go through onSignUpForm(), which reports unbound naming page.url(). The change is recorded against these members, with a comment, under user-sign-up-complete in tests/adapters/new/bindings.yaml.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

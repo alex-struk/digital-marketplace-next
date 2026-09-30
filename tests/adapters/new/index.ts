@@ -3154,14 +3154,37 @@ export default function create(
 
   // ---------------------------------------------------------------- completing a profile
 
+  // "Complete Your Profile" is shown only to a vendor still to agree: "Sign-in username"
+  // (read-only), "Name", "Email address", "Email me when new opportunities are posted", the
+  // terms box, and "Complete profile", disabled until the terms box is ticked. Anyone else is
+  // sent on: an account with nothing to complete to /dashboard, a signed-out visitor to
+  // /sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete.
   const signUp = signedInScreen("user-sign-up-complete", "/sign-up/complete");
   const TERMS_BOX = /terms|agree/i;
   const NOTICES_BOX = /new opportunit/i;
-  async function onSignUpForm(member: string): Promise<void> {
+  const SENT_ON = ["/dashboard", "/sign-in"];
+  // Whether the profile form is on screen. False when /sign-up/complete sent the browser on
+  // to /dashboard or /sign-in, which is the page answering that this person has no profile to
+  // complete; anywhere else the page was never reached, which is unbound.
+  async function signUpFormShown(member: string): Promise<boolean> {
+    await settle();
+    // The page sends people on after it loads, so wait for the form or for the move away.
+    await Promise.race([
+      seen(page.getByRole("heading", { name: /complete your profile/i })).first().waitFor({ state: "visible", timeout: 10000 }),
+      page.waitForURL((url) => url.pathname !== "/sign-up/complete", { timeout: 10000 }),
+    ]).catch(() => undefined);
+    await settle();
+    const at = new URL(page.url());
+    if (originOf(page.url()) === originOf(baseURL) && SENT_ON.includes(at.pathname)) return false;
+    if (at.pathname !== "/sign-up/complete") {
+      unbound(signUp.where(member), `the browser is at ${page.url()}, not on /sign-up/complete nor where that page sends people (/dashboard, /sign-in); open() was not the last place it went`);
+    }
     await signUp.on(member);
-    await page.waitForURL((url) => url.pathname !== "/sign-up/complete", { timeout: 3000 }).catch(() => undefined);
-    if (new URL(page.url()).pathname !== "/sign-up/complete") {
-      unbound(signUp.where(member), `/sign-up/complete sent this account on to ${page.url()} instead of showing the profile form; it is shown only to an account that has not yet completed its profile`);
+    return true;
+  }
+  async function onSignUpForm(member: string): Promise<void> {
+    if (!(await signUpFormShown(member))) {
+      unbound(signUp.where(member), `/sign-up/complete sent the browser on to ${page.url()} instead of showing the profile form; it is shown only to a vendor who has still to agree to the terms`);
     }
   }
   async function setBox(where: string, name: RegExp, wanted: boolean | undefined): Promise<void> {
@@ -3186,7 +3209,12 @@ export default function create(
     open: () => signUp.open(),
     changeAvatar: async (input) => {
       await onSignUpForm("change_avatar");
-      await offerFile(signUp.where("change_avatar"), /avatar|choose image|upload image|picture|photo/i, input);
+      // While binding, pressing "Choose a profile picture" opened no file chooser, and the
+      // form's only file input is hidden and unlabelled; say so rather than leave a bare timeout.
+      await offerFile(signUp.where("change_avatar"), /avatar|choose image|upload image|picture|photo/i, input).catch((error: Error) => {
+        if (!/filechooser/i.test(error.message)) throw error;
+        unbound(signUp.where("change_avatar"), `signed in as a vendor still to agree, on the "Complete Your Profile" form at ${page.url()}, pressing "Choose a profile picture" opened no file chooser, and no labelled file field is offered`);
+      });
     },
     acceptAppTerms: async (input) => {
       await onSignUpForm("accept_app_terms");
@@ -3215,40 +3243,42 @@ export default function create(
       }
       await ready();
     },
+    // Each reading answers empty when the page sent the browser on instead of showing the
+    // form: no form is what an account with nothing to complete, or a signed-out visitor, sees.
     idpUsernameReadonly: async () => {
-      await onSignUpForm("idp_username_readonly");
+      if (!(await signUpFormShown("idp_username_readonly"))) return "";
       const box = await fieldLabelled(/github|idir|user\s*name/i, false);
       return box ? valueOf(box) : "";
     },
     nameField: async () => {
-      await onSignUpForm("name_field");
+      if (!(await signUpFormShown("name_field"))) return "";
       const box = await fieldLabelled(PROFILE_FIELDS.name, false);
       return box ? valueOf(box) : "";
     },
     emailField: async () => {
-      await onSignUpForm("email_field");
+      if (!(await signUpFormShown("email_field"))) return "";
       const box = await fieldLabelled(PROFILE_FIELDS.email, false);
       return box ? valueOf(box) : "";
     },
     jobTitleField: async () => {
-      await onSignUpForm("job_title_field");
+      if (!(await signUpFormShown("job_title_field"))) return "";
       const box = await fieldLabelled(PROFILE_FIELDS.jobTitle, false);
       return box ? valueOf(box) : "";
     },
     termsCheckbox: async () => {
-      await onSignUpForm("terms_checkbox");
+      if (!(await signUpFormShown("terms_checkbox"))) return "";
       const box = seen(page.getByRole("checkbox", { name: TERMS_BOX }));
       return (await box.count()) ? ((await box.first().isChecked()) ? "checked" : "unchecked") : "";
     },
     completeDisabledUntilTermsAccepted: async () => {
-      await onSignUpForm("complete_disabled_until_terms_accepted");
+      if (!(await signUpFormShown("complete_disabled_until_terms_accepted"))) return "";
       const box = seen(page.getByRole("checkbox", { name: TERMS_BOX }));
       if (!(await box.count()) || (await box.first().isChecked())) return "";
       const control = await findControl(page, /^\s*complete( profile)?\s*$/i);
       return control && (await isDisabled(control)) ? "disabled" : "";
     },
     fieldError: async () => {
-      await onSignUpForm("field_error");
+      if (!(await signUpFormShown("field_error"))) return "";
       return formMessages();
     },
   };
