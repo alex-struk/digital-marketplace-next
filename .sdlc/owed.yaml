@@ -4205,6 +4205,14 @@ owed:
     clause: the Sprint With Us proposal form offers only the organization's active
       members, so a person whose invitation to the organization is unanswered is
       not offered
+    closed:
+      outcome: withdrawn
+      why: ratify reworded the criterion to v4, which says the Sprint With Us form
+        also lists pending invitees marked pending, so it no longer contradicts
+        the contract; 'the Sprint With Us form offers the active members and
+        lists a pending member, marked pending' asserts the reworded clause
+      by: agent:reviewer
+      at: 2026-09-30T02:57:52.042Z
   - kind: missing-test
     item: R-5.3
     id: R-5.3
