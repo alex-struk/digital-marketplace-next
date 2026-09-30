@@ -21,19 +21,19 @@
 | R-5.15 | — |  |  |
 | R-5.16 | acceptance/evaluation/R-5.16.spec.ts |  | pass |
 | R-5.17 | acceptance/evaluation/R-5.17.spec.ts |  | pass |
-| R-5.18 | acceptance/evaluation/R-5.18.spec.ts |  | pass (ruled: spec-wrong) |
+| R-5.18 | acceptance/evaluation/R-5.18.spec.ts |  | pass |
 | R-5.19 | acceptance/evaluation/R-5.19.spec.ts |  | pass |
 | R-5.20 | acceptance/evaluation/R-5.20.spec.ts |  | pass (ruled: defect-in-old) |
 | R-5.21 | acceptance/evaluation/R-5.21.spec.ts |  | pass |
 | R-5.22 | acceptance/evaluation/R-5.22.spec.ts |  | pass |
 | R-5.23 | acceptance/evaluation/R-5.23.spec.ts |  | pass |
 | R-5.24 | acceptance/evaluation/R-5.24.spec.ts |  | pass |
-| R-5.25 | acceptance/evaluation/R-5.25.spec.ts |  | fail (ruled: spec-wrong) |
+| R-5.25 | acceptance/evaluation/R-5.25.spec.ts |  | fail |
 | R-5.26 | acceptance/evaluation/R-5.26.spec.ts |  | pass |
 | R-5.27 | acceptance/evaluation/R-5.27.spec.ts |  | pass |
 | R-5.28 | acceptance/evaluation/R-5.28.spec.ts |  | pass |
 | R-5.29 | acceptance/evaluation/R-5.29.spec.ts |  | pass |
-| R-5.30 | acceptance/evaluation/R-5.30.spec.ts |  | pass (ruled: spec-wrong) |
+| R-5.30 | acceptance/evaluation/R-5.30.spec.ts |  | pass |
 | R-5.31 | acceptance/evaluation/R-5.31.spec.ts |  | pass |
 | R-5.32 | acceptance/evaluation/R-5.32.spec.ts |  | pass |
 | R-5.33 | acceptance/evaluation/R-5.33.spec.ts |  | pass |

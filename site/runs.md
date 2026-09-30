@@ -37,6 +37,9 @@
 - 20:46:16 oracle down old in configuration notifications_disabled
 - 20:46:16 calibrate old: a full run, forced with --full
 - 20:46:19 run calibrate: ok, cost 0, turns 0
+- 20:46:21 propose calibrate-triage-old-33 at G3
+- 20:46:25 drive: step 1: `sdlc rule calibrate-triage-old-33 --by agent:reviewer` — calibrate-triage-old-33 is open at G3, held by agent:reviewer
+- 20:47:02 rule calibrate-triage-old-33 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-29
 
