@@ -34,3 +34,23 @@ It is used only by the profile screens, so reads on other pages are unchanged. W
 In `bindings.yaml`, under `user-profile-self`, I changed `status_badge`, `account_type`, `idp_username_readonly`, `name_field`, `email_field` and `job_title_field` from unbound to `bound`, since I have now walked them signed in. I also updated the comment above `user-sign-out` to describe the real screen. Everything else in both files is as I found it, including the unbound reasons on other signed-in screens that still say they were never walked. Those screens are outside these conditions, so I did not walk them.
 
 The `permissions_label` read for another user's profile uses the same helper, but I only saw that screen signed in as a vendor on their own profile, not as an administrator looking at someone else's, so it stays as it was in the bindings file. Every route I touched (`/sign-in`, `/sign-out`, `/users/me`) opened on the target.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on new, and nothing else? Ruling: return. The revision answers all three conditions it was handed. signIn() and the anonymous persona now start from forgetEveryone(), which clears cookies plus local and session storage; signOut() goes through the header's Sign out link or /sign-out and reads the real sign-out screen; the own-profile reads use a same-line or next-line label reader, walked signed in as a vendor. The typecheck is green, nothing under tests/acceptance changed, and the egress failure is in .sdlc/conditions.yaml on main, which this branch does not touch. But signOut() goes on to clear every cookie, including the identity provider's, and the target's local and session storage after the service's sign-out screen is drawn. R-4.17's test calls surface.signOut(), then userProfileSelf.open(), and expects signInRequired() to be truthy, which is the only assertion of the clause 'signing out ends the person's session with the service'. Because the adapter discards the session itself, that assertion can no longer fail, so the adapter is deciding whether the test passes rather than driving the page. The wipe also adds nothing when the service works, since the proposal itself saw the real sign-out empty local storage. This would be approved if signOut() stopped at the user-sign-out screen and did no clearing of its own, with the full reset kept in forgetEveryone() only. The build conditions build-slice-2-5#1, build-slice-2-11#4 and build-slice-2-11#5 are not settled by an adapter proposal and stay open.
+
+**Conditions:**
+- surface.signOut() in tests/adapters/new/index.ts must sign out only the way a person does: take the header's 'Sign out' link (or open /sign-out when no such link is on screen), wait for the user-sign-out screen, and stop there. Remove the clearCookies() and clearStorage() calls that follow ready() in signOut(). As written they throw away the target's tokens and the identity provider's cookies themselves, so R-4.17's final assertion (userProfileSelf.open() then signInRequired() truthy) passes even if the service never ended the session. Keep the full reset in forgetEveryone() at the start of signIn() and for the anonymous persona, where it belongs. Update the comments above signOut() and above user-sign-out in bindings.yaml to match.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `69a19e33c54f74b7b2459d8fa27ad817e5b2f259`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
