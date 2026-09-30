@@ -248,6 +248,15 @@
 - 11:36:07 propose plan-5 at G2
 - 11:36:09 drive: step 6: `sdlc rule plan-5 --by agent:architect` — plan-5 is open at G2, held by agent:architect
 - 11:37:27 rule plan-5 approve at G2 by agent:architect (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 11:44:09 drive: step 8: `sdlc run verify --slice 2` — build-slice-2-9 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 11:44:09 verify slice 2: the sandbox did not start, so nothing was verified.
+- 11:44:10 drive: stopped after 8 steps — step 8 (`sdlc run verify --slice 2`) failed
+- 11:44:32 drive: step 1: `sdlc run verify --slice 2` — build-slice-2-9 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 11:44:32 verify slice 2: the sandbox did not start, so nothing was verified.
+- 11:44:32 drive: step 1 recovery: the sandbox could not start on a port this machine already holds, and the oracle is up; taking it down (sdlc oracle down), then running the step once more
+- 11:45:20 oracle down old
+- 11:48:33 verify slice 2: returned — R-4.1, R-4.2, R-4.3, R-4.17, R-4.24 fail. Next: sdlc run build --slice 2 --revise
+- 11:48:34 run verify: regenerated 373 files in .sdlc, site
 
 # Run record 2026-09-29
 

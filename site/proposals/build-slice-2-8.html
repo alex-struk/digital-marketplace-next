@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-2-8 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">360</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">354</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">319</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-2-8</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 16:55</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 2 (A person can sign in, finish signing up and sign out) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> Starting Docker needed an approval this unattended session can&#39;t get.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I&#39;ve fixed the two causes behind the six returned criteria, but I couldn&#39;t run the application in a browser here, so none of the six has been seen passing yet. Starting Docker needed an approval this unattended session can&#39;t get. <code>npm --prefix app run check</code> passes (typechecks plus 294 unit tests), and the frontend production build succeeds.</p>
+<p><strong>What was wrong.</strong> The sign-in flow rebuilt last time (decision record 0015) was not the problem this time. Two separate things were:</p>
+<ul><li><strong><code>/users/me</code> didn&#39;t exist.</strong> The contract&#39;s place to read your own account is <code>/users/me</code>, and it is also the natural example of &quot;a page that requires signing in&quot;. The plan gives that screen to slice 3, so this app showed its missing page there. That fits R-4.1 and R-4.17 failing on &quot;Page not found&quot;. R-4.2 and R-4.22 read back empty; I&#39;m inferring they read the same page, because the ruling doesn&#39;t say which page they read.</li><li><strong>The checkboxes couldn&#39;t be clicked on their real input.</strong> The design system&#39;s Checkbox tucks the real <code>&lt;input&gt;</code> into a one-pixel hidden box, so a click aimed at the input landed on the drawn square instead. That matches the R-4.3 and R-4.24 timeouts: the terms box and the new-opportunity notices box couldn&#39;t be ticked.</li></ul>
+<p><strong>What I changed.</strong></p>
+<ul><li><strong>New read-only own profile</strong> (<code>app/frontend/src/screens/user-profile.tsx</code>), served at <code>/users/me</code> and at <code>/users/:userId</code> when the identifier is your own. Anyone else&#39;s identifier shows the missing page. It is built from the <code>user-profile-self</code> design stories and shows:</li><li>the section tabs for the account&#39;s kind;</li><li>account type, status, identifier, and the read-only sign-in username, name, email and job title;</li><li>the administrator-permissions label for public sector employees;</li><li>a notifications section with the address and the new-opportunities checkbox as it stands;</li><li>a legal section showing when the terms were agreed (a new <code>readMoment</code> date formatter) and the policy and program links.</li></ul>
+<p>It uses the account <code>/api/sessions/current</code> already returns, so the backend is unchanged. One departure from the stories: the status badge appears on every own profile, not only an administrator&#39;s, so that R-4.1&#39;s &quot;active account&quot; can be read.</p>
+<ul><li><strong>Sign-in notice.</strong> A visitor opening a page that needs sign-in (including <code>/users/me</code>, which R-4.17 relies on) is sent to sign in. The sign-in screen now shows the <code>sign-in-required</code> notice whenever it carries a return address. The header gains a &quot;My profile&quot; link.</li><li><strong>Checkbox fix</strong> (<code>app/frontend/src/styles.css</code>). Every design-system checkbox now lays its real input transparently over the whole control, so a click on the box or the words ticks it. Keyboard and screen-reader behaviour and the look are unchanged, and later slices&#39; checkboxes get the same fix.</li></ul>
+<p>New unit tests cover: a visitor at <code>/users/me</code> being sent to sign in with the notice; the fields shown for a public sector account; your own identifier versus somebody else&#39;s; the notices checkbox reflecting the saved choice; the agreed-on date wording; a section the account isn&#39;t offered falling back to the profile; and accessibility scans of the three new views. Decision record <code>docs/decisions/0016</code> explains all of this.</p>
+<p><strong>Owed condition <code>build-slice-2-5#1</code> (R-4.17).</strong> Sign-out itself was unchanged by this revision. It tells the service first, then ends the identity provider&#39;s session, and only then says &quot;signed out&quot;; if the service can&#39;t be told, it shows the failure message. The realm&#39;s client allows <code>http://localhost:4300</code> as a web origin and post-logout address, which that step needs. The failure the latest ruling reported was the missing <code>/users/me</code>, which now sends a signed-out person to sign in. I believe the condition is met, but it has only been re-verified in unit tests, not against the running stack.</p>
+<p><strong>What I could not do or check:</strong></p>
+<ul><li>The six criteria were never exercised in a real browser against the real identity provider.</li><li>The checkbox fix was checked against how react-aria builds the control, not tried in a browser.</li><li>The profile is deliberately partial. Editing, the picture, the capabilities and organizations sections (asking for them shows the profile section), changing the notice choice and the unsubscribe question, deactivation and <code>GET /api/users/{id}</code> remain slice 3&#39;s. An administrator&#39;s view of someone else&#39;s profile remains slice 4&#39;s. Slice 3 should replace this screen rather than build around it.</li><li>A vendor who hasn&#39;t finished signing up is still sent to <code>/sign-up/complete</code> from every other screen, as the personas contract says. So a first-time vendor who began sign-in from <code>/users/me</code> ends up on the completion page, not back on <code>/users/me</code>. That departs from R-4.22&#39;s note; I kept the personas contract&#39;s behaviour and didn&#39;t change it.</li></ul>
+<p>Nothing outside <code>app/</code> and <code>docs/decisions/</code> was touched. The dependencies I installed to run the check and the build output were removed afterwards.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by tech-lead (a person) on 2026-09-30 18:06.</p>
+<h3>Conditions</h3><ol class="conditions"><li>addressed-to plan: slice 2 claims R-4.6, R-4.22, R-4.27, R-4.28 and R-6.2 to R-6.5, whose tests go through screens plan/tasks.md gives to later slices (profile editing and /users/:userId, the Code With Us create screen, organization editing, the opportunity dashboard&#39;s own-opportunities table); verify on build-slice-2-8 found each failing or unbound there. Move each to the slice that delivers its screen.</li><li>Remove the internal ticket number from app/backend/tests/sign-in-flow.test.ts (egress rule E-2).</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

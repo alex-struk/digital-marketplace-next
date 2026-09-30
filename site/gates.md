@@ -5,6 +5,7 @@
 | 2026-09-30T18:37:27.838Z | plan-5 | G2 | approve | agent:architect | persona agent · claude claude-opus-5-5 | $0.6301608000000001 | sample |
 | 2026-09-30T18:34:30.566Z | plan-4 | G2 | return | agent:architect | persona agent · claude claude-opus-5-5 | $0.3989806000000001 | sample |
 | 2026-09-30T18:31:47.316Z | calibrate-triage-old-41 | G3 | approve | agent:reviewer | persona agent · claude claude-opus-5-5 | $0.7272714 |  |
+| 2026-09-30T18:06:07.243Z | build-slice-2-8 | G3 | return | tech-lead | a person |  |  |
 | 2026-09-30T16:47:45.171Z | build-slice-2-7 | G3 | return | runner:verify | the runner, automatically |  |  |
 | 2026-09-30T16:22:08.578Z | build-slice-2-6 | G3 | return | runner:verify | the runner, automatically |  |  |
 | 2026-09-30T16:11:05.885Z | build-slice-2-5 | G3 | return | tech-lead | a person |  |  |
