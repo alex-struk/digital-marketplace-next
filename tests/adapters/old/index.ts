@@ -1378,6 +1378,13 @@ export default function create(
       return;
     }
     await box.blur().catch(() => undefined);
+    // The same holds between boxes of one form: on the Code With Us Overview step a change to
+    // Remote Description within half a second of the Teaser discards the Teaser's check, and a
+    // 501-character Teaser then never shows "Teaser must be between 0 and 500 characters
+    // long." (seen as the administrator, Remote OK "Yes", Teaser then Remote Description
+    // entered back to back). A value long enough to be over a limit, or given as empty, is
+    // therefore left to be checked before the next box is touched.
+    if (text.length === 0 || text.length > 200) await letValidationRun();
   }
 
   // The forms check what was entered a moment after the last change (about half a second on
@@ -2617,17 +2624,13 @@ export default function create(
       // A step marked incomplete is not a message against a field, so step titles are never
       // reported; a form that refuses without a word reads as empty. A refusal old announced
       // once a submission was pressed is included, whether or not its alert is still up.
+      // One walk of the steps, from '1. Overview', reads it all within a few seconds: the
+      // boxes the test named share one short wait for a check still on its way.
       fieldError: async () => {
-        const shown = await stepFormErrors();
-        const found = shown ? shown.split("\n") : [];
-        // Nothing read yet: each box the test named is looked at once more, on its own step,
-        // with a moment allowed for old's check to draw.
-        if (!found.length) {
-          for (const line of await namedFieldErrors()) if (!found.includes(line)) found.push(line);
-        }
+        const found = await stepFieldErrors(true);
         for (const words of refused) {
           for (const line of words.split("\n").map((each) => each.trim())) {
-            if (line && !found.includes(line) && !shown.includes(line)) found.push(line);
+            if (line && !found.includes(line)) found.push(line);
           }
         }
         return found.join("\n");
@@ -2638,40 +2641,67 @@ export default function create(
   // A wizard shows a field's error only on the step holding that field, so the form's alerts
   // and field errors are gathered from every step in turn.
   async function stepFormErrors(pattern?: RegExp): Promise<string> {
-    if (!(await currentStep())) return formErrors(pattern);
-    const found: string[] = [];
-    await walkSteps(async () => {
-      for (const line of (await formErrors(pattern)).split("\n")) {
-        if (line && !found.includes(line)) found.push(line);
-      }
-    });
-    return found.join("\n");
+    return (await stepFieldErrors(false, pattern)).join("\n");
   }
 
-  // What old draws in the own group of each text box the test gave a value, gathered from
-  // every step. Old checks a box a moment after its last change and draws its verdict
-  // there; a box the test named is given a short while for it before being read as silent,
-  // so a check still on its way (seen for the 501-character Teaser on the Code With Us
-  // form's Overview step) is not read as no message at all.
-  async function namedFieldErrors(): Promise<string[]> {
+  // The wizard walked once, quickly: to step 1 from the step menu, then forward with "Next",
+  // each step read as soon as its name has changed rather than after the network has gone
+  // quiet (the steps are drawn in place; nothing is fetched between them).
+  async function quickWalk(visit: () => Promise<void>): Promise<void> {
+    const first = /^1\.\s+\S/;
+    const stepName = async (): Promise<string> =>
+      ((await (await currentStep())?.innerText().catch(() => "")) ?? "").trim();
+    await letValidationRun();
+    if (!matches(first, await stepName())) await chooseStep(first);
+    for (let step = 0; step < 16; step++) {
+      await visit();
+      const before = await stepName();
+      const next = await findControl(page, "Next");
+      if (!next || (await isDisabled(next))) return;
+      await next.click();
+      const deadline = Date.now() + 2000;
+      while (Date.now() < deadline && (await stepName()) === before) await page.waitForTimeout(50);
+      if ((await stepName()) === before) return;
+    }
+  }
+
+  // Alerts and each field's own message, from every step of the wizard in turn. With `named`,
+  // a box the test gave words that is silent while nothing at all has been read yet is given
+  // a moment for old's check to draw — one short allowance shared by every such box, not a
+  // wait apiece — so a check still on its way is not read as no message.
+  const NAMED_WAIT_MS = 1200;
+  async function stepFieldErrors(named: boolean, pattern?: RegExp): Promise<string[]> {
     const found: string[] = [];
-    if (!namedTexts.size) return found;
+    const add = (line: string): void => {
+      if (line && !found.includes(line)) found.push(line);
+    };
+    let allowance = named ? NAMED_WAIT_MS : 0;
     const visit = async (): Promise<void> => {
+      for (const line of (await formErrors(pattern)).split("\n")) add(line);
+      if (!named || !namedTexts.size) return;
+      const silent: Locator[] = [];
       const boxes = seen(page.getByRole("textbox"));
       const count = await boxes.count();
       for (let i = 0; i < count; i++) {
         const box = boxes.nth(i);
         if (!namedTexts.has(squash(bareLabel(await accessibleName(box))))) continue;
-        const deadline = Date.now() + 2000;
-        for (;;) {
-          const said = (await saidAfterField(box)).filter((line) => matches(MESSAGE, line));
-          for (const line of said) if (!found.includes(line)) found.push(line);
-          if (said.length || Date.now() >= deadline) break;
-          await page.waitForTimeout(250);
+        const said = (await saidAfterField(box)).filter((line) => matches(MESSAGE, line));
+        if (said.length) said.forEach(add);
+        else silent.push(box);
+      }
+      while (silent.length && allowance > 0 && !found.length) {
+        await page.waitForTimeout(250);
+        allowance -= 250;
+        for (let i = silent.length - 1; i >= 0; i--) {
+          const said = (await saidAfterField(silent[i])).filter((line) => matches(MESSAGE, line));
+          if (said.length) {
+            said.forEach(add);
+            silent.splice(i, 1);
+          }
         }
       }
     };
-    if (await currentStep()) await walkSteps(visit);
+    if (await currentStep()) await quickWalk(visit);
     else await visit();
     return found;
   }

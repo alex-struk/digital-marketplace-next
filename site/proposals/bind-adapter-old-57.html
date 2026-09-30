@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-57 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">371</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">365</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">326</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-57</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 21:51</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I fixed the R-1.10 finding in <code>tests/adapters/old/index.ts</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I fixed the R-1.10 finding in <code>tests/adapters/old/index.ts</code>. I checked each piece of the fix by replaying it in the browser against the running target. I could not run the adapter itself: running Node needed an approval nobody was here to give, and the browser tool&#39;s sandbox can&#39;t load TypeScript. So the edited file has not been typechecked or run end to end; the next calibration run is the real test. <code>bindings.yaml</code> is unchanged, because <code>opportunity-cwu-create.fieldError</code> was bound before and still is.</p>
+<p><strong>Why the Teaser message was missed.</strong> The reader was never at fault. On the Code With Us form (<code>/opportunities/code-with-us/create</code>, signed in as the administrator), old draws the Teaser message in an ordinary <code>&lt;small&gt;</code> right after the box, and the reader finds it whenever it is there. The problem was that the message was never drawn:</p>
+<ul><li>Old checks each box about half a second after its last change.</li><li>The Teaser and Remote Description checks are linked: changing Remote Description within that half-second cancels the Teaser&#39;s pending check, and nothing rechecks it afterwards.</li><li>The adapter enters Remote OK first, then Title, Teaser and Remote Description back to back, so the 501-character Teaser was never judged.</li></ul>
+<p>I isolated this by filling the Teaser and then changing one other field straight after, in separate tries. Only Remote Description cancelled the message; Title, Location and Fixed-Price Award did not. That is why the Title and Description messages were found and the Teaser one wasn&#39;t.</p>
+<p><strong>Fix to entering values.</strong> After a text box is given a value longer than 200 characters, or an empty one, the adapter now waits out old&#39;s check before touching the next field. Short, ordinary values carry no wait, so long forms stay fast. With the adapter&#39;s fill order plus this wait, &quot;Teaser must be between 0 and 500 characters long.&quot; now appears and stays.</p>
+<p><strong>Fix to the reader&#39;s speed.</strong> <code>fieldError()</code> now goes through the wizard once instead of twice:</p>
+<ul><li>It jumps to &quot;1. Overview&quot; from the step menu, so the Teaser&#39;s step is read first.</li><li>It moves forward with &quot;Next&quot;, reading each step as soon as its name changes, rather than waiting for the network to go quiet.</li><li>Boxes the test filled that show nothing share a single 1.2-second wait, and only while nothing has been found yet. Before, each box got 2 seconds.</li></ul>
+<p>I removed the old fallback that went through the steps a second time. The shared step reader that the publish and submit actions call when their control stays disabled uses the same quicker walk. Replayed in the browser from step 3 of a filled form, the walk read the Teaser message in about 2 seconds, so one call should finish in roughly 3 seconds.</p>
+<p>Nothing else was asked of this stage, no page route failed to resolve during this work, and I changed nothing outside <code>tests/adapters/old/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:tech-lead (persona agent · claude claude-opus-5-5) on 2026-09-30 21:52.</p>
+<div class="body"><p>Question: does the old adapter bind every surface action and observation, and nothing else, given the R-1.10 finding (a teaser over 500 characters must be rejected with the field named)? That finding was sent back to bind-adapter four times against a limit of two. Ruling: approve. The account of the escalation decided it, specifically the fourth send. It asked for three concrete things and the diff does each. fieldError now makes one walk of the wizard (quickWalk), starting at &#39;1. Overview&#39; from the step menu. Silent named boxes share one 1.2-second wait instead of 2 seconds each. The second walk through the steps (the namedFieldErrors fallback) is removed. The fourth send also asked why the Teaser message was missed when the Title and Description messages were found. The proposal gives a cause isolated in the browser: changing Remote Description within old&#39;s half-second check window cancels the Teaser&#39;s pending check, and nothing rechecks it. The fill fix matches that cause: it waits out the check only after empty values or values over 200 characters. Everything stays inside tests/adapters/old/, bindings.yaml is unchanged, no binding is added, and the runner&#39;s typecheck of the proposal revision passed with no diagnostics. The escalation came from the loop limit, not from the pipeline being unable to produce what G3 asks for, so it is ruled here and not sent to the pipeline owner. What would change this: the next calibration run still showing fieldError() empty or timing out on the 501-character Teaser row, or the faster step walk skipping a step that the publish/submit reader used to reach. The three owed instructions (build-slice-2-5#1, build-slice-2-11#4, build-slice-2-11#5) are all asked of build, are not settled by this proposal, and stay open.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
