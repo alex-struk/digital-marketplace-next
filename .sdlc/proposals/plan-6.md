@@ -34,3 +34,15 @@ I considered putting R-6.28 in Slice 3, which delivers its screen. I rejected it
 **Not verified.** I could not run `plan/check-coverage.mjs`, because running it needed an approval nobody was here to give. Searching the file by hand shows each criterion on exactly one criteria line, in Slice 8; the only other mentions are in Slice 2's delivers text, which the check does not read.
 
 The ruling asked nothing of a person, and I changed nothing under spec, design, `constitution.md` or `.claude/skills`. The one request was taken up, and none is deferred.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:architect
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Is this the right cut of the work, and does each slice stand on its own? Return. Moving R-6.20 to Slice 8 is sound: its test publishes a Code With Us opportunity, and Slice 8's closure includes Slice 7, which delivers that screen. Moving R-6.28 to Slice 8 is not. Its test signs in as an administrator, reads each vendor's profile at /users/:userId (Slice 3), then sends the announce-changed-terms broadcast to active vendors (Slice 6) and checks every addressable vendor received it. Slice 8's closure (Slices 7, 3, 2, 1) does not include Slice 6, so R-6.28 would be unbound there exactly as it was in Slice 2. Slice 6's closure (Slices 5, 3, 2, 1) holds both screens. The new plan.md entry is also wrong: it justifies Slice 8 by a 'broadcast to subscribers' of new-opportunity notices, which R-6.28's test never uses. Approving would need R-6.28 on Slice 6's criteria line and the plan.md entry rewritten to match. build-slice-2-12#3 is asked of build and is not settled here, so it stays open.
+
+**Conditions:**
+- Move R-6.28 from Slice 8's criteria line to Slice 6's. Its test sends the announce-changed-terms broadcast to active vendors, which Slice 6 delivers, and reads vendor profiles at /users/:userId, which Slice 3 delivers. Slice 6's dependency closure (Slices 5, 3, 2, 1) holds both screens. Slice 8's closure (Slices 7, 3, 2, 1) does not include Slice 6. Take R-6.28's broadcast wording out of Slice 8's delivers line and add it to Slice 6's.
+- Rewrite the R-6.20/R-6.28 entry in plan/plan.md so that R-6.28 is placed with the changed-terms broadcast in Slice 6, not with the new-opportunity announcement to subscribers, which its test does not use. Keep R-6.20's placement in Slice 8 and the reasoning for it.
