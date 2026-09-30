@@ -2177,3 +2177,24 @@ rebind:
       why: tests/adapters/old has changed since this was found
       by: runner:calibrate
       at: 2026-09-30T06:43:03.201Z
+  - id: R-1.17
+    target: old
+    why: opportunityTwuEdit.resourceQuestionsTab read the sidebar's 'Resource
+      Questions' link under Opportunity Evaluation (proposal scoring) and
+      returned sidebar and summary text; it must read the opportunity's own
+      Resource Questions step inside the Opportunity tab, where authored
+      questions are listed. Also,
+      opportunityTwuCreate/opportunitySwuCreate.fieldError report '<step> is
+      incomplete' when no field message is shown; they must return only what the
+      page says against fields, never a step title, which currently fails the
+      empty-guideline rows on text the page never said about a field and makes
+      the empty-question row pass on the word 'Questions'.
+  - id: R-7.26
+    target: old
+    why: fileEmbeddedImage.imageRenderedInPublishedText never opens the published
+      /content/<slug> page and reads images beside the heading of the edit
+      screen left after Publish Changes, answering empty; it must open the
+      published page for the slug and read the body's images there.
+      imageInsertedIntoText returns the whole body text, which is truthy with no
+      image in it; it must return the inserted image reference (the FILE_ID or
+      /api/files/ marker) and empty when none was inserted.
