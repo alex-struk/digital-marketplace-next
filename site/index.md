@@ -13,7 +13,7 @@ Profile: rebuild
 | evaluation | 0 | 37 | 0 | 0 | 0 | 0 | 0 | 37 | 30/30 |  | 23 pass · 7 fail · 0 unbound · 0 stale |
 | notifications | 0 | 28 | 0 | 0 | 0 | 0 | 0 | 28 | 21/21 |  | 17 pass · 6 fail · 2 unbound · 0 stale |
 | content | 0 | 29 | 0 | 0 | 0 | 2 | 0 | 31 | 25/26 (n/t 1) |  | 21 pass · 4 fail · 0 unbound · 0 stale |
-| files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 23/24 (n/t 1) |  | 16 pass · 8 fail · 0 unbound · 0 stale |
+| files | 0 | 31 | 0 | 0 | 0 | 0 | 0 | 31 | 23/24 (n/t 1) |  | 17 pass · 7 fail · 0 unbound · 0 stale |
 | **Totals** | 0 | 286 | 0 | 0 | 0 | 9 | 3 | 295 |  |  |  |
 
 ## Pages
