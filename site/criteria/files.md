@@ -34,7 +34,7 @@
 | R-8.28 | acceptance/files/R-8.28.spec.ts |  | pass (carried from 2026-09-30-4) |
 | R-8.29 | acceptance/files/R-8.29.spec.ts |  | pass (carried from 2026-09-30-4) |
 | R-8.30 | acceptance/files/R-8.30.spec.ts |  | pass (carried from 2026-09-30-4) |
-| R-8.31 | acceptance/files/R-8.31.spec.ts |  | pass |
+| R-8.31 | acceptance/files/R-8.31.spec.ts |  | pass (carried from 2026-09-30-6) |
 
 ### R-8.1 · v1 · confirmed · accepted
 
