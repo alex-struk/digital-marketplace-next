@@ -1023,6 +1023,14 @@ conditions:
     stage: plan
     by: agent:architect
     at: 2026-09-30T18:34:30.582Z
+    closed:
+      outcome: met
+      why: R-6.3, R-6.4 and R-6.5 now sit on Slice 14's criteria line in
+        plan/tasks.md. Slice 14 depends on Slices 8 and 11, and Slice 8 depends
+        on 7, which depends on 3, so all four named screens are in its
+        dependencies.
+      by: agent:architect
+      at: 2026-09-30T18:37:27.865Z
   - ref: plan-4#2
     text: In plan/plan.md, replace the argument that the build order is linear with
       the dependency that actually guarantees the four screens exist before
@@ -1034,6 +1042,13 @@ conditions:
     stage: plan
     by: agent:architect
     at: 2026-09-30T18:34:30.582Z
+    closed:
+      outcome: met
+      why: the awkward-placements note in plan/plan.md now names the chain from Slice
+        14 through 8 and 7 to 3, plus the direct dependency on 11, as what
+        guarantees the four screens exist. The rest of the note is kept.
+      by: agent:architect
+      at: 2026-09-30T18:37:27.872Z
   - ref: plan-4#3
     text: Run plan/check-coverage.mjs and confirm the total is still 248 criteria,
       each assigned to exactly one slice, before the revision is proposed.
@@ -1043,3 +1058,12 @@ conditions:
     stage: plan
     by: agent:architect
     at: 2026-09-30T18:34:30.582Z
+    closed:
+      outcome: met
+      why: "the script could not be run, so the architect repeated its check by hand
+        against spec/criteria-index.json and plan/tasks.md: 248 accepted,
+        non-superseded criteria and 248 placements across 21 slices, none
+        duplicated and none superseded or obsolete. That is the script's PASS
+        condition."
+      by: agent:architect
+      at: 2026-09-30T18:37:27.880Z
