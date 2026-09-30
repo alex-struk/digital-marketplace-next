@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the R-1.17 v2 tests follow from the criterion and nothing else? Ruling: approve. Every clause of the criterion has a case: question and guideline empty and over 1,000 characters, maximum score 0, response word limit 0 and 3,001, minimum score equal to the maximum on both Sprint With Us and Team With Us, a 101st question, and position set by order with no position ever entered, as the criterion requires. Each case enters one out-of-limit question, saves the draft as the submission, and only then reads the refusal, which is the fix the redo request asked for after the old test read the error before submitting. The only extra check is that the refusal contains the field's plain name ('question', 'guideline', 'score', 'word', 'minimum'), and the criterion's own 'the offending field is named' requires that. No selectors, routes, status codes or storage names leak in. The runner type-checked the proposal revision and it passed with no diagnostics under acceptance/opportunities. When the form will not offer a 101st question, the test counts that as the refusal without reading a field name; that is acceptable because nothing was submitted that could be named. The change to tests/results/old/applied.yaml only removes the earlier R-1.17 rulings recorded against the replaced test file's sha, which is pipeline bookkeeping. What would change this ruling: calibration showing that the target checks questions only on submit-for-review or publish rather than on draft save, or that its refusals do not use the field's plain-language name. Either would be a calibrate finding on the next run, not something a reviewer can settle from this diff.
+conditions: []
+cost: 0.33020140000000003
+turns: 2
+session: "9ace8a9e-5f98-4d6e-bd46-e36c8894fdc3"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T05:38:37.770Z

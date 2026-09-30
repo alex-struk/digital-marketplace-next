@@ -39,3 +39,23 @@ No question is ever given a position, because the criterion says the person neve
 **Assumption.** Nothing in the contract says a saved draft checks its questions, or what words a refusal uses. The test assumes that saving is the submission the criterion means, and that each refusal contains its field's plain-language name. If the target only checks questions on submit-for-review or publish, the draft-save step would have to change.
 
 **Gaps in the contract.** The Sprint With Us and Team With Us create pages offer only `fieldError()`, a single string. There is no per-field refusal on those pages like the `field_errors_by_field` observation the proposal create page has. Adding one would let the "names the offending field" part be checked by field rather than by a word in the message. Nothing else I needed was missing, and I changed no file outside `tests/acceptance`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the R-1.17 v2 tests follow from the criterion and nothing else? Ruling: approve. Every clause of the criterion has a case: question and guideline empty and over 1,000 characters, maximum score 0, response word limit 0 and 3,001, minimum score equal to the maximum on both Sprint With Us and Team With Us, a 101st question, and position set by order with no position ever entered, as the criterion requires. Each case enters one out-of-limit question, saves the draft as the submission, and only then reads the refusal, which is the fix the redo request asked for after the old test read the error before submitting. The only extra check is that the refusal contains the field's plain name ('question', 'guideline', 'score', 'word', 'minimum'), and the criterion's own 'the offending field is named' requires that. No selectors, routes, status codes or storage names leak in. The runner type-checked the proposal revision and it passed with no diagnostics under acceptance/opportunities. When the form will not offer a 101st question, the test counts that as the refusal without reading a field name; that is acceptable because nothing was submitted that could be named. The change to tests/results/old/applied.yaml only removes the earlier R-1.17 rulings recorded against the replaced test file's sha, which is pipeline bookkeeping. What would change this ruling: calibration showing that the target checks questions only on submit-for-review or publish rather than on draft save, or that its refusals do not use the field's plain-language name. Either would be a calibrate finding on the next run, not something a reviewer can settle from this diff.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `1424ba8651d25d788c1ebf781aaa60444fdb3e9c`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/opportunities/`, which this proposal answers for.
+
+    No diagnostics.
