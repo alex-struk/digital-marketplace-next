@@ -1,0 +1,8 @@
+gate: G3
+verdict: return
+by: tech-lead
+held_by: human
+note: ""
+conditions:
+  - "Fix R-4.17: signing out must end the session with both the service and the identity provider, and tell the person it succeeded or failed. The adapter has since been rebound (bind-adapter-new-5), so re-verify all of slice 2."
+at: 2026-09-30T16:11:05.885Z
