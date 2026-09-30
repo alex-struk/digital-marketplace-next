@@ -1,0 +1,12 @@
+gate: G3
+verdict: escalated
+by: runner:verify
+held_by: runner
+escalate_to: tech-lead
+rationale: "Slice 2 has failed verify 3 times. The failures below may not be the
+  application's: a test, the adapter, the criterion or the sandbox can each be
+  what is wrong (spec 7.1), and another build would not find out which."
+conditions:
+  - "R-4.17: Error:
+    \e[2mexpect(\e[22m\e[31mreceived\e[39m\e[2m).\e[22mtoBeTruthy\e[2m()\e[22m"
+at: 2026-09-30T13:06:57.856Z
