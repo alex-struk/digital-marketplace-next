@@ -40,3 +40,23 @@ isolation: "none"
 **What should happen next.** The next calibration should get past `signIn`, since it now has the password from the environment. Its tests will then stop at the signed-in screens, which still report unbound because nobody has seen them signed in. The next binding run should be given a way to sign in, so it can bind those screens, starting with the question fields on the Sprint With Us team questions step and the Team With Us resource questions step.
 
 I changed nothing outside `tests/adapters/new/`. I also left a small helper script in my scratch space; it contains no secret and is not part of the proposal.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on `new`, and nothing else? Ruling: approve. The diff changes only tests/adapters/new/ and nothing under tests/acceptance or app/. The bindings are navigation and locators only. signIn now drives the sign-in screen's new 'Sign in as a vendor' / 'Sign in as a public sector employee' buttons and the sandbox identity provider's Username/Password/'Sign In' form, and it throws a plain error rather than an 'unbound:' one when the provider keeps the browser. That is a failure to get somewhere, not a pass/fail decision. Its rule for choosing the vendor button (username contains 'vendor') holds for every persona in tests/generated/personas.ts (test-vendor-1..7, test-gov, test-admin). The four new evaluation_question_fields members are present in the adapter and named once each in bindings.yaml. The runner's typecheck passed with no diagnostics under adapters/new/. One caution: the refreshed unbound reasons for signed-in screens describe a limit of the binding session (it had no usable sandbox password), not something missing from the target. They are accurate and do not blame the application, and a return could not fix them, because this stage cannot give itself the password. What would change the ruling: if the next calibration shows signIn failing against the provider form, or if a later binding run with a working sign-in still leaves these reasons in place instead of binding those screens, that run should be returned.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `436d5fe38fb17c330be6460f8c3a66fccb7b978c`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
