@@ -2284,6 +2284,11 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
+    closed: &a16
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-09-30T13:07:10.177Z
   - id: R-6.3
     target: new
     why: 'unbound: signIn.organization-owner — the sign-in screen at
@@ -2293,6 +2298,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
+    closed: *a16
   - id: R-6.4
     target: new
     why: 'unbound: signIn.organization-owner — the sign-in screen at
@@ -2302,6 +2308,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
+    closed: *a16
   - id: R-6.5
     target: new
     why: 'unbound: signIn.organization-owner — the sign-in screen at
@@ -2311,6 +2318,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
+    closed: *a16
   - id: R-6.20
     target: new
     why: 'unbound: signIn.vendor-with-notices-off — the sign-in screen at
@@ -2320,6 +2328,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
+    closed: *a16
   - id: R-6.28
     target: new
     why: 'unbound: signIn.administrator — the sign-in screen at
@@ -2329,6 +2338,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
+    closed: *a16
   - id: R-4.1
     target: new
     why: 'unbound: signIn.first-time-public-sector-employee — the sign-in screen at
@@ -2340,6 +2350,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
+    closed: *a16
   - id: R-4.2
     target: new
     why: 'unbound: signIn.first-time-vendor — the sign-in screen at
@@ -2351,6 +2362,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
+    closed: *a16
   - id: R-4.3
     target: new
     why: 'unbound: signIn.first-time-vendor — the sign-in screen at
@@ -2362,6 +2374,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
+    closed: *a16
   - id: R-4.6
     target: new
     why: 'unbound: signIn.vendor — the sign-in screen at
@@ -2371,6 +2384,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
+    closed: *a16
   - id: R-4.17
     target: new
     why: 'unbound: signIn.vendor — the sign-in screen at
@@ -2380,6 +2394,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
+    closed: *a16
   - id: R-4.22
     target: new
     why: 'unbound: signIn.public-sector-staff — the sign-in screen at
@@ -2389,6 +2404,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
+    closed: *a16
   - id: R-4.23
     target: new
     why: "unbound: signIn.vendor-completing-profile — the sign-in screen at
@@ -2410,6 +2426,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
+    closed: *a16
   - id: R-4.24
     target: new
     why: 'unbound: signIn.vendor-completing-profile — the sign-in screen at
@@ -2419,6 +2436,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
+    closed: *a16
   - id: R-4.27
     target: new
     why: 'unbound: signIn.public-sector-staff — the sign-in screen at
@@ -2428,6 +2446,7 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
+    closed: *a16
   - id: R-4.28
     target: new
     why: 'unbound: signIn.public-sector-staff — the sign-in screen at
@@ -2439,3 +2458,305 @@ rebind:
     slice: 2
     by: runner:verify
     at: 2026-09-30T12:53:05.292Z
+    closed: *a16
+  - id: R-6.2
+    target: new
+    why: "unbound: opportunity-cwu-create.open — /opportunities/code-with-us/create
+      is offered only to a signed-in person, and this screen has not been walked
+      signed in: \"Sign in as a vendor\" and \"Sign in as a public sector
+      employee\" on /sign-in now hand off to the sandbox identity provider's
+      username and password form, but the session that bound this adapter could
+      not use the sandbox password, so none of the controls signed-in people are
+      shown here have been seen; opened signed out (with the seeded record's
+      identifier where it takes one) it shows the \"Page not found\" screen (it
+      shows \"Page not found\" at
+      http://localhost:4300/opportunities/code-with-us/create)"
+    found: unbound
+    adapter: 18717ba0113669d088d5cccd874d41724c074c78
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T13:07:10.177Z
+  - id: R-6.3
+    target: new
+    why: "unbound: organization-edit.open — /organizations/:orgId/edit is offered
+      only to a signed-in person, and this screen has not been walked signed in:
+      \"Sign in as a vendor\" and \"Sign in as a public sector employee\" on
+      /sign-in now hand off to the sandbox identity provider's username and
+      password form, but the session that bound this adapter could not use the
+      sandbox password, so none of the controls signed-in people are shown here
+      have been seen; opened signed out (with the seeded record's identifier
+      where it takes one) it redirects to /sign-in (it shows \"Page not found\"
+      at
+      http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/\
+      edit)"
+    found: unbound
+    adapter: 18717ba0113669d088d5cccd874d41724c074c78
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T13:07:10.177Z
+  - id: R-6.4
+    target: new
+    why: "unbound: organization-edit.open — /organizations/:orgId/edit is offered
+      only to a signed-in person, and this screen has not been walked signed in:
+      \"Sign in as a vendor\" and \"Sign in as a public sector employee\" on
+      /sign-in now hand off to the sandbox identity provider's username and
+      password form, but the session that bound this adapter could not use the
+      sandbox password, so none of the controls signed-in people are shown here
+      have been seen; opened signed out (with the seeded record's identifier
+      where it takes one) it redirects to /sign-in (it shows \"Page not found\"
+      at
+      http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/\
+      edit)"
+    found: unbound
+    adapter: 18717ba0113669d088d5cccd874d41724c074c78
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T13:07:10.177Z
+  - id: R-6.5
+    target: new
+    why: "unbound: organization-edit.open — /organizations/:orgId/edit is offered
+      only to a signed-in person, and this screen has not been walked signed in:
+      \"Sign in as a vendor\" and \"Sign in as a public sector employee\" on
+      /sign-in now hand off to the sandbox identity provider's username and
+      password form, but the session that bound this adapter could not use the
+      sandbox password, so none of the controls signed-in people are shown here
+      have been seen; opened signed out (with the seeded record's identifier
+      where it takes one) it redirects to /sign-in (it shows \"Page not found\"
+      at
+      http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/\
+      edit)"
+    found: unbound
+    adapter: 18717ba0113669d088d5cccd874d41724c074c78
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T13:07:10.177Z
+  - id: R-6.20
+    target: new
+    why: "unbound: user-profile-self-notifications.open —
+      /users/me?tab=notifications is offered only to a signed-in person, and
+      this screen has not been walked signed in: \"Sign in as a vendor\" and
+      \"Sign in as a public sector employee\" on /sign-in now hand off to the
+      sandbox identity provider's username and password form, but the session
+      that bound this adapter could not use the sandbox password, so none of the
+      controls signed-in people are shown here have been seen; opened signed out
+      (with the seeded record's identifier where it takes one) it redirects to
+      /sign-in (it shows \"Page not found\" at
+      http://localhost:4300/users/me?tab=notifications)"
+    found: unbound
+    adapter: 18717ba0113669d088d5cccd874d41724c074c78
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T13:07:10.177Z
+  - id: R-6.28
+    target: new
+    why: "unbound: user-profile.open — /users/:userId is offered only to a signed-in
+      person, and this screen has not been walked signed in: \"Sign in as a
+      vendor\" and \"Sign in as a public sector employee\" on /sign-in now hand
+      off to the sandbox identity provider's username and password form, but the
+      session that bound this adapter could not use the sandbox password, so
+      none of the controls signed-in people are shown here have been seen;
+      opened signed out (with the seeded record's identifier where it takes one)
+      it redirects to /sign-in (it shows \"Page not found\" at
+      http://localhost:4300/users/00000000-0000-4000-8000-000000000101)"
+    found: unbound
+    adapter: 18717ba0113669d088d5cccd874d41724c074c78
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T13:07:10.177Z
+  - id: R-4.1
+    target: new
+    why: "unbound: user-profile-self.user_identifier — /users/me is offered only to
+      a signed-in person, and this screen has not been walked signed in: \"Sign
+      in as a vendor\" and \"Sign in as a public sector employee\" on /sign-in
+      now hand off to the sandbox identity provider's username and password
+      form, but the session that bound this adapter could not use the sandbox
+      password, so none of the controls signed-in people are shown here have
+      been seen; opened signed out (with the seeded record's identifier where it
+      takes one) it redirects to /sign-in"
+    found: unbound
+    adapter: 18717ba0113669d088d5cccd874d41724c074c78
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T13:07:10.177Z
+  - id: R-4.2
+    target: new
+    why: "unbound: user-profile-self.email_field — /users/me is offered only to a
+      signed-in person, and this screen has not been walked signed in: \"Sign in
+      as a vendor\" and \"Sign in as a public sector employee\" on /sign-in now
+      hand off to the sandbox identity provider's username and password form,
+      but the session that bound this adapter could not use the sandbox
+      password, so none of the controls signed-in people are shown here have
+      been seen; opened signed out (with the seeded record's identifier where it
+      takes one) it redirects to /sign-in; unbound:
+      user-profile-self.user_identifier — /users/me is offered only to a
+      signed-in person, and this screen has not been walked signed in: \"Sign in
+      as a vendor\" and \"Sign in as a public sector employee\" on /sign-in now
+      hand off to the sandbox identity provider's username and password form,
+      but the session that bound this adapter could not use the sandbox
+      password, so none of the controls signed-in people are shown here have
+      been seen; opened signed out (with the seeded record's identifier where it
+      takes one) it redirects to /sign-in"
+    found: unbound
+    adapter: 18717ba0113669d088d5cccd874d41724c074c78
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T13:07:10.177Z
+  - id: R-4.3
+    target: new
+    why: "unbound: user-sign-up-complete.open — /sign-up/complete is offered only to
+      a signed-in person, and this screen has not been walked signed in: \"Sign
+      in as a vendor\" and \"Sign in as a public sector employee\" on /sign-in
+      now hand off to the sandbox identity provider's username and password
+      form, but the session that bound this adapter could not use the sandbox
+      password, so none of the controls signed-in people are shown here have
+      been seen; opened signed out (with the seeded record's identifier where it
+      takes one) it redirects to /sign-in (it shows \"Complete Your Profile\" at
+      http://localhost:4300/sign-up/complete); unbound:
+      user-sign-up-complete.open — /sign-up/complete is offered only to a
+      signed-in person, and this screen has not been walked signed in: \"Sign in
+      as a vendor\" and \"Sign in as a public sector employee\" on /sign-in now
+      hand off to the sandbox identity provider's username and password form,
+      but the session that bound this adapter could not use the sandbox
+      password, so none of the controls signed-in people are shown here have
+      been seen; opened signed out (with the seeded record's identifier where it
+      takes one) it redirects to /sign-in (it shows \"Dashboard\" at
+      http://localhost:4300/dashboard)"
+    found: unbound
+    adapter: 18717ba0113669d088d5cccd874d41724c074c78
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T13:07:10.177Z
+  - id: R-4.6
+    target: new
+    why: "unbound: user-profile-self.email_field — /users/me is offered only to a
+      signed-in person, and this screen has not been walked signed in: \"Sign in
+      as a vendor\" and \"Sign in as a public sector employee\" on /sign-in now
+      hand off to the sandbox identity provider's username and password form,
+      but the session that bound this adapter could not use the sandbox
+      password, so none of the controls signed-in people are shown here have
+      been seen; opened signed out (with the seeded record's identifier where it
+      takes one) it redirects to /sign-in"
+    found: unbound
+    adapter: 18717ba0113669d088d5cccd874d41724c074c78
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T13:07:10.177Z
+  - id: R-4.22
+    target: new
+    why: "unbound: opportunity-dashboard.my_opportunities_table — /dashboard is
+      offered only to a signed-in person, and this screen has not been walked
+      signed in: \"Sign in as a vendor\" and \"Sign in as a public sector
+      employee\" on /sign-in now hand off to the sandbox identity provider's
+      username and password form, but the session that bound this adapter could
+      not use the sandbox password, so none of the controls signed-in people are
+      shown here have been seen; opened signed out (with the seeded record's
+      identifier where it takes one) it redirects to /sign-in"
+    found: unbound
+    adapter: 18717ba0113669d088d5cccd874d41724c074c78
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T13:07:10.177Z
+  - id: R-4.23
+    target: new
+    why: "unbound: user-sign-up-complete.open — /sign-up/complete is offered only to
+      a signed-in person, and this screen has not been walked signed in: \"Sign
+      in as a vendor\" and \"Sign in as a public sector employee\" on /sign-in
+      now hand off to the sandbox identity provider's username and password
+      form, but the session that bound this adapter could not use the sandbox
+      password, so none of the controls signed-in people are shown here have
+      been seen; opened signed out (with the seeded record's identifier where it
+      takes one) it redirects to /sign-in (it shows \"Complete Your Profile\" at
+      http://localhost:4300/sign-up/complete); unbound:
+      user-sign-up-complete.open — /sign-up/complete is offered only to a
+      signed-in person, and this screen has not been walked signed in: \"Sign in
+      as a vendor\" and \"Sign in as a public sector employee\" on /sign-in now
+      hand off to the sandbox identity provider's username and password form,
+      but the session that bound this adapter could not use the sandbox
+      password, so none of the controls signed-in people are shown here have
+      been seen; opened signed out (with the seeded record's identifier where it
+      takes one) it redirects to /sign-in (it shows \"Dashboard\" at
+      http://localhost:4300/dashboard); unbound: user-sign-up-complete.open —
+      /sign-up/complete is offered only to a signed-in person, and this screen
+      has not been walked signed in: \"Sign in as a vendor\" and \"Sign in as a
+      public sector employee\" on /sign-in now hand off to the sandbox identity
+      provider's username and password form, but the session that bound this
+      adapter could not use the sandbox password, so none of the controls
+      signed-in people are shown here have been seen; opened signed out (with
+      the seeded record's identifier where it takes one) it redirects to
+      /sign-in (it shows \"Sign In\" at
+      http://localhost:4300/sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete)"
+    found: unbound
+    adapter: 18717ba0113669d088d5cccd874d41724c074c78
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T13:07:10.177Z
+  - id: R-4.24
+    target: new
+    why: "unbound: user-sign-up-complete.open — /sign-up/complete is offered only to
+      a signed-in person, and this screen has not been walked signed in: \"Sign
+      in as a vendor\" and \"Sign in as a public sector employee\" on /sign-in
+      now hand off to the sandbox identity provider's username and password
+      form, but the session that bound this adapter could not use the sandbox
+      password, so none of the controls signed-in people are shown here have
+      been seen; opened signed out (with the seeded record's identifier where it
+      takes one) it redirects to /sign-in (it shows \"Complete Your Profile\" at
+      http://localhost:4300/sign-up/complete)"
+    found: unbound
+    adapter: 18717ba0113669d088d5cccd874d41724c074c78
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T13:07:10.177Z
+  - id: R-4.27
+    target: new
+    why: "unbound: user-profile-self.name_field — /users/me is offered only to a
+      signed-in person, and this screen has not been walked signed in: \"Sign in
+      as a vendor\" and \"Sign in as a public sector employee\" on /sign-in now
+      hand off to the sandbox identity provider's username and password form,
+      but the session that bound this adapter could not use the sandbox
+      password, so none of the controls signed-in people are shown here have
+      been seen; opened signed out (with the seeded record's identifier where it
+      takes one) it redirects to /sign-in; unbound:
+      user-profile-self.edit_profile — /users/me is offered only to a signed-in
+      person, and this screen has not been walked signed in: \"Sign in as a
+      vendor\" and \"Sign in as a public sector employee\" on /sign-in now hand
+      off to the sandbox identity provider's username and password form, but the
+      session that bound this adapter could not use the sandbox password, so
+      none of the controls signed-in people are shown here have been seen;
+      opened signed out (with the seeded record's identifier where it takes one)
+      it redirects to /sign-in; unbound: user-profile-self.email_field —
+      /users/me is offered only to a signed-in person, and this screen has not
+      been walked signed in: \"Sign in as a vendor\" and \"Sign in as a public
+      sector employee\" on /sign-in now hand off to the sandbox identity
+      provider's username and password form, but the session that bound this
+      adapter could not use the sandbox password, so none of the controls
+      signed-in people are shown here have been seen; opened signed out (with
+      the seeded record's identifier where it takes one) it redirects to
+      /sign-in"
+    found: unbound
+    adapter: 18717ba0113669d088d5cccd874d41724c074c78
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T13:07:10.177Z
+  - id: R-4.28
+    target: new
+    why: "unbound: user-profile-self.edit_profile — /users/me is offered only to a
+      signed-in person, and this screen has not been walked signed in: \"Sign in
+      as a vendor\" and \"Sign in as a public sector employee\" on /sign-in now
+      hand off to the sandbox identity provider's username and password form,
+      but the session that bound this adapter could not use the sandbox
+      password, so none of the controls signed-in people are shown here have
+      been seen; opened signed out (with the seeded record's identifier where it
+      takes one) it redirects to /sign-in; unbound:
+      user-profile-self.job_title_field — /users/me is offered only to a
+      signed-in person, and this screen has not been walked signed in: \"Sign in
+      as a vendor\" and \"Sign in as a public sector employee\" on /sign-in now
+      hand off to the sandbox identity provider's username and password form,
+      but the session that bound this adapter could not use the sandbox
+      password, so none of the controls signed-in people are shown here have
+      been seen; opened signed out (with the seeded record's identifier where it
+      takes one) it redirects to /sign-in"
+    found: unbound
+    adapter: 18717ba0113669d088d5cccd874d41724c074c78
+    slice: 2
+    by: runner:verify
+    at: 2026-09-30T13:07:10.177Z
