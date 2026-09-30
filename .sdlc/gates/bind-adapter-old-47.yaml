@@ -1,0 +1,16 @@
+gate: G3
+verdict: escalated
+by: runner:bind-adapter
+held_by: runner
+escalate_to: tech-lead
+rationale: >-
+  bind-adapter was handed owed work sent back to it more times than the
+  project's policy allows, so this proposal is ruled by tech-lead rather than
+  put to G3's holder for another round.
+
+  - R-2.18 on old: sent to bind-adapter 3 times, past the limit of 2 that
+  policy.loops.rebind sets. What each send asked for:
+    1. unbound: proposal-swu-create.choose_organization — no chooser labelled "Organization" on http://localhost:3102/opportunities/sprint-with-us/b554b879-6b2a-4cc4-a30e-0146b427cb4a/proposals/create; unbound: proposal-twu-create.choose_organization — no chooser labelled "Organization" on http://localhost:3102/opportunities/team-with-us/fff810ff-43f2-4519-b93e-cddf478bdd53/proposals/create; unbound: proposal-swu-create.choose_organization — no chooser labelled "Organization" on http://localhost:3102/opportunities/sprint-with-us/e1538502-a23f-40e8-b3c7-6cdbafd2f648/proposals/create
+    2. unbound: proposal-swu-create.add_phase_team_member — no box labelled "Implementation" on http://localhost:3101/opportunities/sprint-with-us/e652a07b-961c-4a90-b21f-d36fa0973763/proposals/create; unbound: proposal-twu-create.add_team_member_for_resource — no chooser labelled "Team Member" or "Member" on http://localhost:3101/opportunities/team-with-us/6f53e368-0ff9-409a-80aa-9249efe193a5/proposals/create; unbound: proposal-swu-create.add_phase_team_member — no box labelled "Implementation" on http://localhost:3101/opportunities/sprint-with-us/ac51cca7-212e-4f41-813e-14c435d9c826/proposals/create
+    3. proposalSwuCreate.pendingTeamMember is bound to linesMatching(/pending/i), which returns every page line containing 'pending', here the form's standing instruction paragraphs plus a lone 'Pending' line, instead of the named member's entry in the phase team list. It must read the entry of each named member that carries the pending marker and return that member's name (together with the marker), so a person named and marked pending is reported by name.
+at: 2026-09-30T04:01:52.359Z
