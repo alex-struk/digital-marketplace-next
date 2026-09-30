@@ -1181,6 +1181,13 @@ conditions:
     stage: build
     by: tech-lead
     at: 2026-09-30T22:48:40.862Z
+    closed:
+      outcome: met
+      why: R-4.1 and R-4.3 both pass in the verify result for build-slice-2-15
+        (tests/results/new/slice-2.json, adapter 5088e169), so neither reads
+        empty against the rebound adapter any more.
+      by: agent:tech-lead
+      at: 2026-09-30T23:45:08.352Z
   - ref: plan-6#1
     text: Move R-6.28 from Slice 8's criteria line to Slice 6's. Its test sends the
       announce-changed-terms broadcast to active vendors, which Slice 6
