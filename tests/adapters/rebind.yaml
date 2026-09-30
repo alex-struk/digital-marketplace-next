@@ -2800,3 +2800,18 @@ rebind:
       why: tests/adapters/old has changed since this was found
       by: runner:calibrate
       at: 2026-09-30T20:48:22.608Z
+  - id: R-1.10
+    target: old
+    why: "on the Code With Us create form, with a 501-character teaser, the first
+      opportunityCwuCreate.fieldError() call never returned within the test's
+      15-second expect.poll window: the error has no received value, only the
+      poll timeout. When stepFormErrors() reads nothing, the fallback
+      namedFieldErrors() goes through every step again and waits up to 2 seconds
+      for each text box the test filled (title, teaser, location, description,
+      remote description), which can take the whole 15 seconds. Make one
+      fieldError() call return within about 3 seconds: read the Teaser field's
+      own group on '1. Overview' first, spend one shared short wait across all
+      named boxes rather than 2 seconds each, and do not go through the steps
+      twice in one call. Also find out why stepFormErrors() missed the teaser
+      message that old draws on step 1, when it finds the title and description
+      messages."
