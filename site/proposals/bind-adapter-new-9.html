@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-9 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">366</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">360</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">321</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-9</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 20:03</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I made the one change the ruling asked for.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made the one change the ruling asked for. <code>signOut()</code> no longer clears anything.</p>
+<p><strong>What changed.</strong> In <code>tests/adapters/new/index.ts</code>, <code>signOut()</code> still signs out the way a person does. It clicks the &quot;Sign out&quot; link in the header&#39;s navigation, or opens <code>/sign-out</code> if that link isn&#39;t on screen. It then waits for the sign-out screen (&quot;Signed Out&quot; / &quot;You have successfully signed out&quot;) and stops. I removed the two calls that came after that wait: the one clearing every cookie, including the identity provider&#39;s, and the one clearing the target&#39;s local and session storage. The browser now stays signed out only if the service really ended the session. So R-4.17&#39;s last check (<code>userProfileSelf.open()</code>, then <code>signInRequired()</code> truthy) can fail again if the service does not end the session.</p>
+<p><strong>What stays as it was.</strong> The full reset in <code>forgetEveryone()</code> is unchanged: it clears all cookies and the target&#39;s local and session storage, then reloads on <code>/</code>. It still runs at the start of <code>signIn()</code> and for the anonymous persona. The helper that clears storage is still used there, so nothing is left unused. I rewrote the comment above <code>signOut()</code> to say it clears nothing and why. In <code>bindings.yaml</code>, the comment above <code>user-sign-out</code> now says <code>signOut()</code> takes the link (or opens <code>/sign-out</code>), waits for the screen and stops, with no clearing of its own. No binding status changed; both <code>user-sign-out</code> observations are still <code>bound</code>.</p>
+<p><strong>Not done.</strong></p>
+<ul><li>I did not re-walk the target in a browser or rebind anything else, as the revision instructions said.</li><li>I could not rerun the typecheck: this session was not permitted to run <code>tsc</code>. The edit only deletes two statements and changes comments, so I don&#39;t expect it to break the typecheck, but it has not been confirmed.</li></ul>
+<p><strong>Left open.</strong> The build conditions <code>build-slice-2-5#1</code>, <code>build-slice-2-11#4</code> and <code>build-slice-2-11#5</code> cannot be settled by an adapter proposal and are still open. The egress failure recorded in <code>.sdlc/conditions.yaml</code> is also outside this stage&#39;s territory. I changed nothing outside <code>tests/adapters/new/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-30 20:04.</p>
+<div class="body"><p>Question: does this adapter bind every surface action and observation on new, and nothing else, and does it carry out bind-adapter-new-8#1? Ruling: approve. On the branch, surface.signOut() in tests/adapters/new/index.ts takes the header&#39;s &#39;Sign out&#39; link (or opens /sign-out), waits on ready() and stops. The only clearCookies() and clearStorage() calls left are inside forgetEveryone(), which runs at the start of signIn() and for the anonymous persona. So R-4.17&#39;s final check (userProfileSelf.open() then signInRequired()) again depends on the service actually ending the session, which is what the earlier ruling asked for. The comments above signOut() and above user-sign-out in bindings.yaml describe this. Nothing under tests/acceptance changed, and the runner&#39;s typecheck on this revision passed with no diagnostics under adapters/new/. The profile rebinding carried over from the earlier revision (labelledValue, profileField) only locates and reads values: it asserts nothing and decides no outcome. job_title_field is bound although the page draws no Job Title box. The locator is real, and an absent field will show as a test failure against the application rather than being hidden, so I accept it. The egress failure at .sdlc/conditions.yaml:1121 is on main and outside this proposal. The build conditions build-slice-2-5#1, build-slice-2-11#4 and build-slice-2-11#5 are build&#39;s and stay open. What would change the ruling: a verify run showing signOut() does not reach the user-sign-out screen, or evidence that the profile shows Job Title under another label.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met bind-adapter-new-8#1: signOut() in tests/adapters/new/index.ts now takes the header&#39;s Sign out link or opens /sign-out, waits on ready() and stops, with no clearCookies() or clearStorage() of its own. The full reset stays in forgetEveryone(), called at the start of signIn() and for the anonymous persona. The comments above signOut() and above user-sign-out in tests/adapters/new/bindings.yaml say so.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
