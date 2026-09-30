@@ -2027,3 +2027,14 @@ rebind:
       why: tests/adapters/old has changed since this was found
       by: runner:calibrate
       at: 2026-09-29T17:15:17.633Z
+  - id: R-8.31
+    target: old
+    why: "on a published Code With Us opportunity
+      fileAttachmentControl.attachmentAddress() returns '' because the added
+      file is never stored: addAttachment saves the form only on Team With Us
+      opportunities, and attachmentAddress tries 'Save Changes' before 'Publish
+      Changes' and returns empty rather than failing when no save is found or no
+      /api/files/ link appears; save a published opportunity through 'Publish
+      Changes' and confirm 'Publish Changes to Code With Us Opportunity?' (as
+      saveAttachmentForm does), wait for the /api/files/ link, and throw naming
+      the missing control instead of returning ''"
