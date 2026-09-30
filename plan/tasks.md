@@ -13,12 +13,12 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: nothing
 
 ### Slice 2 · A person can sign in, finish signing up and sign out
-- criteria: R-4.1, R-4.2, R-4.3, R-4.6, R-4.17, R-4.22, R-4.23, R-4.24, R-4.27, R-4.28, R-6.1, R-6.2, R-6.3, R-6.4, R-6.5, R-6.20, R-6.28
-- delivers: sign-in and sign-up screens, OpenID Connect sign-in with PKCE from the single-page app through the sandbox Keycloak realm (public client, no secret in the browser), bearer-token checks on every `/api` route with authorization by the account kind and status held in `users`, `/api/sessions/current` creating the account on first sign-in by identity kind, the profile-completion screen with terms agreement and the new-opportunity notice choice, the return to the page sign-in began from, sign-out from the service and the identity provider, and the mail path every later slice uses — one configured sender, formatted and plain-text forms, test marking, the environment switch, fire-and-forget delivery that never fails the action, and skipping recipients with no address — shown first by the welcome message
+- criteria: R-4.1, R-4.2, R-4.3, R-4.17, R-4.23, R-4.24, R-6.1, R-6.20, R-6.28
+- delivers: sign-in and sign-up screens, OpenID Connect sign-in with PKCE from the single-page app through the sandbox Keycloak realm (public client, no secret in the browser), bearer-token checks on every `/api` route with authorization by the account kind and status held in `users`, `/api/sessions/current` creating the account on first sign-in by identity kind, the profile-completion screen with terms agreement and the new-opportunity notice choice, the return to the page sign-in began from, sign-out from the service and the identity provider, and the mail path every later slice uses — one configured sender, formatted and plain-text forms, test marking, the environment switch, fire-and-forget delivery that never fails the action, and skipping recipients with no address — shown first by the welcome message; the criteria about the one sender, the two forms, test marking and silent delivery failure (R-6.2 to R-6.5), the uniqueness of accounts and emails (R-4.6), the profile's fields (R-4.27, R-4.28) and where sign-in lands (R-4.22) are built on here but answered for in slices 3, 7, 8 and 11, whose screens their tests go through
 - depends on: Slice 1
 
 ### Slice 3 · A person can keep their own profile, picture and notification choice
-- criteria: R-4.5, R-4.8, R-4.9, R-4.18, R-4.25, R-4.26, R-4.29, R-4.33, R-4.34, R-6.6, R-6.7, R-6.16, R-8.1, R-8.2, R-8.5, R-8.6, R-8.7, R-8.10, R-8.11, R-8.12, R-8.13, R-8.16, R-8.17, R-8.18, R-8.21, R-8.23, R-8.24, R-8.28, R-8.30
+- criteria: R-4.5, R-4.6, R-4.8, R-4.9, R-4.18, R-4.25, R-4.26, R-4.27, R-4.28, R-4.29, R-4.33, R-4.34, R-6.6, R-6.7, R-6.16, R-8.1, R-8.2, R-8.5, R-8.6, R-8.7, R-8.10, R-8.11, R-8.12, R-8.13, R-8.16, R-8.17, R-8.18, R-8.21, R-8.23, R-8.24, R-8.28, R-8.30
 - delivers: the profile at `/users/:userId` and `/users/me` with the sections each kind of account is offered (profile, capabilities, organizations placeholder, notifications, legal), editing one's own details, the profile-picture picker, vendor capabilities, the notifications section and the unsubscribe landing every message links to, self-deactivation with its notice and reactivation on next sign-in; and underneath the picture, the whole file store — upload at `/api/files` and `/api/avatars`, content-deduplicated storage in the database, read-access rules, description and download, size and name limits, image type checks and resizing, the upload working directory on the backend's `emptyDir` volume, downloads fetched by the single-page app with the bearer token, and correct refusals for malformed uploads
 - depends on: Slice 2
 
@@ -38,12 +38,12 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 5
 
 ### Slice 7 · Staff can draft, submit and publish a Code With Us opportunity
-- criteria: R-1.4, R-1.7, R-1.8, R-1.9, R-1.10, R-1.11, R-1.12, R-1.14, R-1.19, R-1.20, R-1.21, R-1.22, R-1.23, R-1.29, R-1.34, R-1.37, R-1.48, R-1.51, R-1.53, R-1.56, R-6.8, R-6.15, R-8.19, R-8.22, R-8.25, R-8.27
+- criteria: R-1.4, R-1.7, R-1.8, R-1.9, R-1.10, R-1.11, R-1.12, R-1.14, R-1.19, R-1.20, R-1.21, R-1.22, R-1.23, R-1.29, R-1.34, R-1.37, R-1.48, R-1.51, R-1.53, R-1.56, R-6.2, R-6.8, R-6.15, R-8.19, R-8.22, R-8.25, R-8.27
 - delivers: the program chooser, the Code With Us create form and manage page with its summary, opportunity and history tabs, the public Code With Us view, versioned saves, the full opportunity state model and its permitted-transition table for all three programs (with "suspended" mapped away in data), draft/submit-for-review/publish/delete with their permission rules, the attachment control, and the submitted-for-review and published notices — the first messages to many recipients, batched and blind-copied
 - depends on: Slice 3
 
 ### Slice 8 · Anyone can find opportunities and follow the ones they care about
-- criteria: R-1.2, R-1.3, R-1.5, R-1.6, R-1.38, R-1.39, R-6.21, R-6.27
+- criteria: R-1.2, R-1.3, R-1.5, R-1.6, R-1.38, R-1.39, R-4.22, R-6.21, R-6.27
 - delivers: the opportunity list at `/opportunities` grouped into unpublished, open and closed with filters and search, visibility by role on list and view, view counting, watching and unwatching, the new-opportunity notice control on the list at every width, the staff and administrator dashboard, and the home page's browse entry
 - depends on: Slice 7
 
@@ -58,7 +58,7 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 7
 
 ### Slice 11 · A vendor can register and look after an organization
-- criteria: R-3.1, R-3.2, R-3.3, R-3.6, R-3.15, R-3.18, R-3.19, R-3.20, R-3.21, R-3.22, R-3.23, R-3.24
+- criteria: R-3.1, R-3.2, R-3.3, R-3.6, R-3.15, R-3.18, R-3.19, R-3.20, R-3.21, R-3.22, R-3.23, R-3.24, R-6.3, R-6.4, R-6.5
 - delivers: the public organization list with role-dependent columns, registering an organization with its logo, the organization management page's profile tab with edit and archive offered only to the owner and administrators, the owner's archive notice, and the list of organizations a vendor may act for
 - depends on: Slice 3
 

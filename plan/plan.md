@@ -202,8 +202,24 @@ reader's attention.
 - **R-8.16 (Slice 3)** describes where an upload is written on the service's own machine. It is an
   implementation fact recovered as a criterion; on OpenShift it becomes a named `emptyDir` volume
   (0006), which is a platform concern more than a user-visible behaviour.
-- **R-6.3 and R-6.1 (Slice 2)** turn on environment configuration. Every sandbox is a test
-  environment, so the "not a test environment" half of R-6.3 is never observable in scope.
+- **R-6.1 (Slice 2) and R-6.3 (Slice 11)** turn on environment configuration. Every sandbox is a
+  test environment, so the "not a test environment" half of R-6.3 is never observable in scope.
+- **R-4.6, R-4.22, R-4.27, R-4.28 and R-6.2 to R-6.5** were first placed in Slice 2, which builds
+  what they describe: account creation, the post-sign-in redirect, the profile-completion form and
+  the mail path. Verification of the build of slices 2–8 found each one failing or unbound there,
+  because its test reaches the behaviour through a screen a later slice delivers. Each now sits with
+  that screen, while the machinery stays in Slice 2. R-4.6, R-4.27 and R-4.28 moved to Slice 3,
+  which delivers profile editing and `/users/:userId`. R-4.22 moved to Slice 8, where the dashboard
+  a returning person lands on, with its own-opportunities table, first exists. R-6.2 moved to Slice
+  7, because its given is publishing an opportunity through the Code With Us create screen. R-6.3 to
+  R-6.5 speak of "any message", and the ruling named no single screen for them. The screens it named
+  for the group were profile editing, Code With Us creation, organization editing and the dashboard.
+  These three are placed in Slice 11, which delivers organization editing and is the first slice in
+  build order after which all four of those screens exist. The build order is linear, so Slices 3, 7
+  and 8 are built before 11 whichever of those screens a test sends its message from. That is also
+  why this uneasy fit is acceptable: a mail rule is answered for by a slice about organizations only
+  because that is where its test was found to run. If the builder of Slice 11 finds the tests going
+  through a screen that belongs to an earlier slice, moving them earlier changes nothing else.
 - **R-2.15 (Slice 14)** records a missing guard — Sprint With Us and Team With Us creation does not
   refuse a submission after the deadline — as accepted behaviour. It is placed with the Code With Us
   guard it contrasts with; the builder must not "fix" the other two programs without a new
