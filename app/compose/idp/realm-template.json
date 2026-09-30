@@ -20,14 +20,61 @@
       "directAccessGrantsEnabled": false,
       "serviceAccountsEnabled": false,
       "fullScopeAllowed": true,
-      "redirectUris": ["http://localhost:4300/*"],
-      "webOrigins": ["http://localhost:4300"],
+      "redirectUris": [
+        "http://localhost:4300/*"
+      ],
+      "webOrigins": [
+        "http://localhost:4300"
+      ],
       "attributes": {
         "pkce.code.challenge.method": "S256",
         "post.logout.redirect.uris": "http://localhost:4300/*"
-      }
+      },
+      "protocolMappers": [
+        {
+          "name": "identity provider",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "identity_provider",
+            "claim.name": "identity_provider",
+            "jsonType.label": "String",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true",
+            "introspection.token.claim": "true",
+            "multivalued": "false"
+          }
+        },
+        {
+          "name": "audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.client.audience": "digital-marketplace-app",
+            "id.token.claim": "false",
+            "access.token.claim": "true",
+            "introspection.token.claim": "true"
+          }
+        }
+      ]
     }
   ],
+  "components": {
+    "org.keycloak.userprofile.UserProfileProvider": [
+      {
+        "providerId": "declarative-user-profile",
+        "subComponents": {},
+        "config": {
+          "kc.user.profile.config": [
+            "{\"attributes\":[{\"name\":\"username\",\"displayName\":\"${username}\",\"validations\":{\"length\":{\"min\":3,\"max\":255},\"username-prohibited-characters\":{},\"up-username-not-idn-homograph\":{}},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\"]},\"multivalued\":false},{\"name\":\"email\",\"displayName\":\"${email}\",\"validations\":{\"email\":{},\"length\":{\"max\":255}},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\"]},\"multivalued\":false},{\"name\":\"firstName\",\"displayName\":\"${firstName}\",\"validations\":{\"length\":{\"max\":255},\"person-name-prohibited-characters\":{}},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\"]},\"multivalued\":false},{\"name\":\"lastName\",\"displayName\":\"${lastName}\",\"validations\":{\"length\":{\"max\":255},\"person-name-prohibited-characters\":{}},\"permissions\":{\"view\":[\"admin\",\"user\"],\"edit\":[\"admin\"]},\"multivalued\":false}],\"groups\":[{\"name\":\"user-metadata\",\"displayHeader\":\"User metadata\",\"displayDescription\":\"Attributes, which refer to user metadata\"}],\"unmanagedAttributePolicy\":\"ENABLED\"}"
+          ]
+        }
+      }
+    ]
+  },
   "users": [
     {
       "username": "test-admin",
@@ -36,9 +83,20 @@
       "email": "admin.one@example.test",
       "firstName": "Robin",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["idir"], "account_type": ["ADMIN"] },
+      "attributes": {
+        "identity_provider": [
+          "idir"
+        ],
+        "account_type": [
+          "ADMIN"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     },
     {
@@ -48,9 +106,20 @@
       "email": "admin.two@example.test",
       "firstName": "Morgan",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["idir"], "account_type": ["ADMIN"] },
+      "attributes": {
+        "identity_provider": [
+          "idir"
+        ],
+        "account_type": [
+          "ADMIN"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     },
     {
@@ -60,9 +129,20 @@
       "email": "staff.one@example.test",
       "firstName": "Casey",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["idir"], "account_type": ["GOV"] },
+      "attributes": {
+        "identity_provider": [
+          "idir"
+        ],
+        "account_type": [
+          "GOV"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     },
     {
@@ -72,9 +152,20 @@
       "email": "staff.two@example.test",
       "firstName": "Devon",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["idir"], "account_type": ["GOV"] },
+      "attributes": {
+        "identity_provider": [
+          "idir"
+        ],
+        "account_type": [
+          "GOV"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     },
     {
@@ -84,9 +175,20 @@
       "email": "panel.evaluator@example.test",
       "firstName": "Emery",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["idir"], "account_type": ["GOV"] },
+      "attributes": {
+        "identity_provider": [
+          "idir"
+        ],
+        "account_type": [
+          "GOV"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     },
     {
@@ -96,9 +198,20 @@
       "email": "panel.chair@example.test",
       "firstName": "Emerson",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["idir"], "account_type": ["GOV"] },
+      "attributes": {
+        "identity_provider": [
+          "idir"
+        ],
+        "account_type": [
+          "GOV"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     },
     {
@@ -108,9 +221,20 @@
       "email": "vendor.one@example.test",
       "firstName": "Alex",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     },
     {
@@ -120,9 +244,20 @@
       "email": "org.owner@example.test",
       "firstName": "Blake",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     },
     {
@@ -132,9 +267,20 @@
       "email": "org.admin@example.test",
       "firstName": "Charlie",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     },
     {
@@ -144,9 +290,20 @@
       "email": "org.member@example.test",
       "firstName": "Dana",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     },
     {
@@ -156,9 +313,20 @@
       "email": "vendor.deactivated@example.test",
       "firstName": "Ellis",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     },
     {
@@ -168,9 +336,20 @@
       "email": "file.owner@example.test",
       "firstName": "Finley",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     },
     {
@@ -179,9 +358,20 @@
       "emailVerified": false,
       "firstName": "Gray",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     },
     {
@@ -191,9 +381,20 @@
       "email": "vendor.notices.off@example.test",
       "firstName": "Harper",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     },
     {
@@ -203,9 +404,20 @@
       "email": "vendor.invited@example.test",
       "firstName": "Indigo",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     },
     {
@@ -215,9 +427,20 @@
       "email": "vendor.terms.reset@example.test",
       "firstName": "Jules",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     },
     {
@@ -227,9 +450,20 @@
       "email": "proponent.two@example.test",
       "firstName": "Kai",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     },
     {
@@ -239,9 +473,203 @@
       "email": "proponent.three@example.test",
       "firstName": "Larkin",
       "lastName": "Placeholder",
-      "attributes": { "identity_provider": ["bceid"], "account_type": ["VENDOR"] },
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
       "credentials": [
-        { "type": "password", "value": "__SANDBOX_PASSWORD__", "temporary": false }
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "test-vendor-13",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "vendor.returning@example.test",
+      "firstName": "Harper",
+      "lastName": "Placeholder",
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "test-vendor-14",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "proponent.four@example.test",
+      "firstName": "Indigo",
+      "lastName": "Placeholder",
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "test-vendor-15",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "proponent.five@example.test",
+      "firstName": "Jesse",
+      "lastName": "Placeholder",
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "test-vendor-16",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "proponent.six@example.test",
+      "firstName": "Kai",
+      "lastName": "Placeholder",
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "test-vendor-17",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "vendor.completing@example.test",
+      "firstName": "Tatum",
+      "lastName": "Placeholder",
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "first-time-gov",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "first.gov@example.test",
+      "firstName": "Logan",
+      "lastName": "Placeholder",
+      "attributes": {
+        "identity_provider": [
+          "idir"
+        ],
+        "account_type": [
+          "GOV"
+        ]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "first-time-vendor",
+      "enabled": true,
+      "emailVerified": true,
+      "email": "first.vendor@example.test",
+      "firstName": "Jordan",
+      "lastName": "Placeholder",
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
+      ]
+    },
+    {
+      "username": "first-time-vendor-no-email",
+      "enabled": true,
+      "emailVerified": false,
+      "firstName": "Riley",
+      "lastName": "Placeholder",
+      "attributes": {
+        "identity_provider": [
+          "bceid"
+        ],
+        "account_type": [
+          "VENDOR"
+        ]
+      },
+      "credentials": [
+        {
+          "type": "password",
+          "value": "__SANDBOX_PASSWORD__",
+          "temporary": false
+        }
       ]
     }
   ]
