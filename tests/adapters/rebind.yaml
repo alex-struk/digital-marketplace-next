@@ -2815,3 +2815,8 @@ rebind:
       twice in one call. Also find out why stepFormErrors() missed the teaser
       message that old draws on step 1, when it finds the title and description
       messages."
+    closed:
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-30T21:52:14.144Z
