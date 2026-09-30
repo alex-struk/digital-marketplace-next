@@ -1143,3 +1143,13 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-09-30T20:02:28.028Z
+    closed:
+      outcome: met
+      why: signOut() in tests/adapters/new/index.ts now takes the header's Sign out
+        link or opens /sign-out, waits on ready() and stops, with no
+        clearCookies() or clearStorage() of its own. The full reset stays in
+        forgetEveryone(), called at the start of signIn() and for the anonymous
+        persona. The comments above signOut() and above user-sign-out in
+        tests/adapters/new/bindings.yaml say so.
+      by: agent:reviewer
+      at: 2026-09-30T20:04:46.366Z
