@@ -4791,3 +4791,9 @@ owed:
         by: runner
         at: 2026-09-30T07:11:28.409Z
     target: old
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-1.17 v3 fail"
+      file_sha: 77ce5ec31b1d3b023e47f65d4fad5e17c9f743a8
+      by: runner
+      at: 2026-09-30T07:59:27.776Z
