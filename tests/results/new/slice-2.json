@@ -1,0 +1,9 @@
+{
+  "slice": 2,
+  "proposal": "build-slice-2-4",
+  "app_tree": "1920fe85e2c87019a74071e9a34866eaab4be7cf",
+  "at": "2026-09-30T12:45:50.220Z",
+  "verdict": "fail",
+  "not_verified": "the sandbox did not start, so no acceptance test ran",
+  "rows": []
+}
