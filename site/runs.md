@@ -205,6 +205,12 @@
 - 04:39:13 deviation: next named `sdlc run calibrate --target old`; ran `sdlc run build --slice 2 --revise`; reason: The Tests phase is held open only by the old target's calibration tail: a few adapter bindings the blind bind-adapter stage keeps missing (R-1.17, R-7.26 and similar), each full run exposing one or two more. They concern the old application's adapter, not the new application. They stay owed; the build proceeds slice by slice meanwhile, by the operator's judgement under the tech lead's delegation for this first autonomous run.
 - 04:44:43 verify slice 2: 6 criteria still fail after 3 builds; escalated to tech-lead.
 - 04:44:44 run verify: regenerated 363 files in .sdlc, site
+- 05:10:40 withdraw build-slice-2-3 at G3 by agent:tech-lead: Verify judged it on broken evidence: the suite was never given the new target's mail catcher (six mail-fixture criteria could not run) and the new target's adapter still looked for the old application's sign-in links (eleven unbound rows), neither of which the builder can fix. The pipeline now passes targets.new.mail_api to the suite and routes unbound rows on the new target to bind-adapter (0075); slice 2 is built and verified again under the corrected verify.
+- 05:10:58 oracle down old
+- 05:10:59 deviation: next named `sdlc run calibrate --target old`; ran `sdlc run build --slice 2`; reason: The Tests phase is held open only by the old target's calibration tail: a few adapter bindings the blind bind-adapter stage keeps missing (R-1.17, R-7.26 and similar), each full run exposing one or two more. They concern the old application's adapter, not the new application. They stay owed; the build proceeds slice by slice meanwhile, by the operator's judgement under the tech lead's delegation for this first autonomous run.
+- 05:44:09 verify slice 2: the sandbox did not start, so nothing was verified.
+- 05:46:01 verify slice 2: returned — the sandbox did not start, so nothing was verified. the seed service failed: Next: sdlc run build --slice 2 --revise
+- 05:46:03 run verify: regenerated 362 files in .sdlc, site
 
 # Run record 2026-09-29
 

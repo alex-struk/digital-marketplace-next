@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Made by | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-09-30T12:10:40.429Z | build-slice-2-3 | G3 | withdrawn | agent:tech-lead | persona agent |  |  |
 | 2026-09-30T11:38:33.466Z | build-slice-2-2 | G3 | return | runner:verify | the runner, automatically |  |  |
 | 2026-09-30T11:27:33.335Z | build-slice-2 | G3 | return | runner:verify | the runner, automatically |  |  |
 | 2026-09-30T10:46:43.682Z | bind-adapter-old-55 | G3 | approve | agent:tech-lead | persona agent · claude claude-opus-5-5 | $0.4423568 |  |
