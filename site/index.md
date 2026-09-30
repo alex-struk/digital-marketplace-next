@@ -100,6 +100,7 @@ Profile: rebuild
 - [calibrate-old-2](proposals/calibrate-old-2.md)
 - [calibrate-old-20](proposals/calibrate-old-20.md)
 - [calibrate-old-21](proposals/calibrate-old-21.md)
+- [calibrate-old-22](proposals/calibrate-old-22.md)
 - [calibrate-old-3](proposals/calibrate-old-3.md)
 - [calibrate-old-4](proposals/calibrate-old-4.md)
 - [calibrate-old-5](proposals/calibrate-old-5.md)
@@ -356,9 +357,9 @@ Profile: rebuild
 ## Totals
 
 - Journal cost: $687.52502
-- Rulings cost: $378.146013
-- Total cost: $1065.671033
-- Agent-held rulings: 311
+- Rulings cost: $378.663974
+- Total cost: $1066.188994
+- Agent-held rulings: 312
 - Runner rulings (automatic, no seat held): 1
 - Human rulings: 12
 - Rulings whose seat this page does not recognise: 0
