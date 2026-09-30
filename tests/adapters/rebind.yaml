@@ -2163,3 +2163,12 @@ rebind:
       why: tests/adapters/old has changed since this was found
       by: runner:calibrate
       at: 2026-09-30T05:24:37.999Z
+  - id: R-8.29
+    target: old
+    why: fileEmbeddedImage.imageRenderedInPublishedText collects img src attributes
+      immediately after contentView.open without first calling ready() (as
+      contentView.pageTitle and pageBody on the same /content/:slug page do), so
+      it can read the page before it draws and return ''. Wait for the page to
+      finish drawing, then wait a few seconds for an img whose src carries the
+      /api/files/<id> the body's FILE_ID marker names; if none appears, throw an
+      error naming the sources the page does show, rather than returning ''.
