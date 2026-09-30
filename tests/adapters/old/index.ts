@@ -2360,8 +2360,6 @@ export default function create(
     // "Not Found" at the form's address: no form to fill and nothing to press. That refusal is
     // what the test goes on to read, so the action ends there.
     let withheld = false;
-    // The steps the form still marked incomplete when it held its saving control disabled.
-    let refusedSteps: string[] = [];
     async function enter(member: string, input: unknown): Promise<void> {
       await ready();
       withheld = await notFoundShown();
@@ -2369,7 +2367,6 @@ export default function create(
       // The form is drawn a moment after the screen's heading.
       await seen(page.getByText(STEP)).first().waitFor({ state: "visible", timeout: LATE_CONTROL_MS }).catch(() => undefined);
       homelessDates = [];
-      refusedSteps = [];
       let rest = input;
       if (phased) {
         const split = phaseDatesOf(input);
@@ -2411,11 +2408,9 @@ export default function create(
         if (shown.trim() && !homelessDates.length) return false;
         // Disabled with steps marked incomplete once every value given is in is the form
         // refusing those values (phases whose dates overlap, say) without a word: the action
-        // ends there too, and fieldError() reports the steps it marks incomplete.
-        if (steps.length && !homelessDates.length) {
-          refusedSteps = steps;
-          return false;
-        }
+        // ends there too; fieldError() then reads only what the page says against fields
+        // (nothing, when it says nothing), never a step's title.
+        if (steps.length && !homelessDates.length) return false;
         const dates = homelessDates.length
           ? `; the input gave ${quoted(homelessDates)} but named no phase and the form holds none, and this form takes dates only on a phase`
           : "";
@@ -2460,11 +2455,9 @@ export default function create(
       },
       // Alerts and each field's own error, from every step in turn; a heading or a title
       // that happens to hold a word like "cannot" is never read as an error.
-      fieldError: async () => {
-        const shown = await stepFormErrors();
-        const steps = refusedSteps.map((step) => `${step} is incomplete`);
-        return [shown, ...steps].filter(Boolean).join("\n");
-      },
+      // A step marked incomplete is not a message against a field, so step titles are never
+      // reported; a form that refuses without a word reads as empty.
+      fieldError: () => stepFormErrors(),
     };
   }
 
@@ -2570,6 +2563,42 @@ export default function create(
   // Score (seen as the administrator on both new forms after "Add Question", and on the
   // seeded closed Sprint With Us and Team With Us opportunities' Opportunity tab, where they
   // are shown disabled). A list with no question at that place reads as nothing.
+  // An opportunity's own authored questions, in the order it lists them: the "Opportunity"
+  // tab's questions step ("5. Team Questions" on Sprint With Us, "5. Resource Questions" on
+  // Team With Us), one "Question N" block per question holding its Question, Response
+  // Guidelines, Response Word Limit, Score and Minimum Score boxes (seen as an administrator
+  // on the seeded closed opportunities of both programmes). The sidebar link of the same name
+  // under OPPORTUNITY EVALUATION is the proponents' scoring table, not this. A reader not
+  // offered the Opportunity tab reads nothing.
+  function authoredQuestions(where: string, step: string): Promise<string> {
+    return inTab(["Opportunity"], async () => {
+      if (!(await walkToStep(new RegExp(`^\\d+\\.\\s+${escapeRegExp(step)}$`)))) {
+        nothing(`${where} — walked the Opportunity tab's steps and none is "${step}" on ${page.url()}`);
+      }
+      const questions = seen(page.getByRole("textbox", { name: "Question", exact: true }));
+      const guidelines = seen(page.getByRole("textbox", { name: "Response Guidelines", exact: true }));
+      const limits = seen(page.getByRole("spinbutton", { name: /Word Limit/ }));
+      const scores = seen(page.getByRole("spinbutton", { name: "Score", exact: true }));
+      const minimums = seen(page.getByRole("spinbutton", { name: "Minimum Score", exact: true }));
+      const valueOf = async (boxes: Locator, i: number): Promise<string> =>
+        i < (await boxes.count()) ? (await boxes.nth(i).inputValue().catch(() => "")).trim() : "";
+      const blocks: string[] = [];
+      const count = await questions.count();
+      for (let i = 0; i < count; i++) {
+        blocks.push(
+          [
+            `Question ${i + 1}: ${await valueOf(questions, i)}`,
+            `Response Guidelines: ${await valueOf(guidelines, i)}`,
+            `Response Word Limit: ${await valueOf(limits, i)}`,
+            `Score: ${await valueOf(scores, i)}`,
+            `Minimum Score: ${await valueOf(minimums, i)}`,
+          ].join("\n"),
+        );
+      }
+      return blocks.join("\n");
+    });
+  }
+
   async function evaluationQuestionFields(where: string, step: string, position?: unknown): Promise<string> {
     await ready();
     if (await notFoundShown()) return "";
@@ -3665,33 +3694,7 @@ export default function create(
     // as an administrator on the seeded closed Sprint With Us opportunity). The sidebar's
     // "Team Questions" under OPPORTUNITY EVALUATION is the proponents' scoring table, not
     // this. A reader not offered the Opportunity tab reads nothing.
-    teamQuestionsTab: () =>
-      inTab(["Opportunity"], async () => {
-        if (!(await walkToStep(/^\d+\.\s+Team Questions$/))) {
-          nothing(`opportunity-swu-edit.team_questions_tab — walked the Opportunity tab's steps and none is "Team Questions" on ${page.url()}`);
-        }
-        const questions = seen(page.getByRole("textbox", { name: "Question", exact: true }));
-        const guidelines = seen(page.getByRole("textbox", { name: "Response Guidelines", exact: true }));
-        const limits = seen(page.getByRole("spinbutton", { name: /Word Limit/ }));
-        const scores = seen(page.getByRole("spinbutton", { name: "Score", exact: true }));
-        const minimums = seen(page.getByRole("spinbutton", { name: "Minimum Score", exact: true }));
-        const valueOf = async (boxes: Locator, i: number): Promise<string> =>
-          i < (await boxes.count()) ? (await boxes.nth(i).inputValue().catch(() => "")).trim() : "";
-        const blocks: string[] = [];
-        const count = await questions.count();
-        for (let i = 0; i < count; i++) {
-          blocks.push(
-            [
-              `Question ${i + 1}: ${await valueOf(questions, i)}`,
-              `Response Guidelines: ${await valueOf(guidelines, i)}`,
-              `Response Word Limit: ${await valueOf(limits, i)}`,
-              `Score: ${await valueOf(scores, i)}`,
-              `Minimum Score: ${await valueOf(minimums, i)}`,
-            ].join("\n"),
-          );
-        }
-        return blocks.join("\n");
-      }),
+    teamQuestionsTab: () => authoredQuestions("opportunity-swu-edit.team_questions_tab", "Team Questions"),
     codeChallengeTab: () => tabContent(["Code Challenge"]),
     teamScenarioTab: () => tabContent(["Team Scenario"]),
     evaluationPanelTab: () => tabContent(["Evaluation Panel"]),
@@ -3731,7 +3734,10 @@ export default function create(
       ]);
     },
     offeredStateChanges: () => offeredStateChanges("opportunity-twu-edit.offered_state_changes"),
-    resourceQuestionsTab: () => tabContent(["Resource Questions"]),
+    // The opportunity's own resource questions, from the Opportunity tab's
+    // "5. Resource Questions" step — not the sidebar's scoring link of the same name.
+    resourceQuestionsTab: () =>
+      authoredQuestions("opportunity-twu-edit.resource_questions_tab", "Resource Questions"),
     challengeTab: () => tabContent(["Challenge", "Interview/Challenge", "Code Challenge"]),
     evaluationPanelTab: () => tabContent(["Evaluation Panel"]),
     consensusTab: () => tabContent(["Consensus"]),
@@ -9245,8 +9251,28 @@ export default function create(
     },
   };
 
+  // The image references in a page's body: "FILE_ID:<id>" as the editor writes an upload
+  // in, or an address under /api/files/. Empty when the body carries none.
+  function bodyImageReferences(body: string): string {
+    return [...body.matchAll(/FILE_ID:[0-9a-f-]+|\/api\/files\/[^\s)"'\]]+/gi)].map((found) => found[0]).join("\n");
+  }
+
+  // The page the image is being put into, by its slug: taken from the address the screen is
+  // at (/content/<slug>/edit after "Publish Changes", or /content/<slug>), else from the
+  // slug this page was last opened with.
+  let embeddedSlug = "";
+  function slugInView(): string {
+    const path = new URL(page.url(), baseURL || "http://localhost").pathname;
+    const found = /^\/content\/([^/]+)(?:\/edit)?\/?$/.exec(path);
+    return found && found[1] !== "create" ? decodeURIComponent(found[1]) : embeddedSlug;
+  }
+
   const fileEmbeddedImage: S.FileEmbeddedImagePage = {
-    ...at("/content/:slug/edit"),
+    open: async (params?: Record<string, string>) => {
+      const slug = params?.slug || params?.id;
+      if (slug) embeddedSlug = slug;
+      await go("/content/:slug/edit", params);
+    },
     uploadBodyImage: (input) => uploadBodyImage("file-embedded-image.upload_body_image", input),
     // An uploaded image goes into the text as a reference to the address it is kept at.
     // The body refers to an upload as "![name](FILE_ID:<id>)"; the file is kept at its own
@@ -9260,13 +9286,30 @@ export default function create(
       if (byId) return `/api/files/${byId[1]}`;
       return storedImageAddress();
     },
-    imageInsertedIntoText: () => fieldValue(["Body"]),
+    // Only the image reference the upload wrote into the text, never the rest of the body:
+    // empty when no image was inserted.
+    imageInsertedIntoText: async () => {
+      const body = await fieldValue(["Body"]);
+      rememberBodyImage(body);
+      return bodyImageReferences(body);
+    },
     onlyJpegAndPngOffered: () => imageKindsOffered("file-embedded-image.only_jpeg_and_png_offered", "Edit"),
     uploadingIndicator: () => linesMatching(/uploading/i),
-    // Read on the published /content/:slug page: once it has drawn, the body's FILE_ID marker
-    // is shown as an image kept at /api/files/<id>, which may arrive a moment after the text.
-    // When none arrives, the body's images are what is there — empty when it shows none.
+    // Read on the published /content/<slug> page, opened here for the page's slug (the edit
+    // screen "Publish Changes" leaves behind shows the title, not the published body): once it
+    // has drawn, the body's FILE_ID marker is shown as an image kept at /api/files/<id>, which
+    // may arrive a moment after the text. When none arrives, the body's images are what is
+    // there — empty when it shows none.
     imageRenderedInPublishedText: async () => {
+      const slug = slugInView();
+      if (!slug) {
+        nothing(`file-embedded-image.image_rendered_in_published_text — no page slug known on ${page.url()}, and the page was never opened with one`);
+      }
+      const published = address("/content/:slug", { slug });
+      if (new URL(page.url()).pathname !== new URL(published).pathname) {
+        await page.goto(published, { waitUntil: "domcontentloaded" });
+        await settle();
+      }
       await ready();
       const wanted = bodyImageId ? `/api/files/${bodyImageId}` : "/api/files/";
       let sources: string[] = [];
