@@ -1,12 +1,16 @@
 gate: G3
 verdict: escalated
-by: runner:verify
-held_by: runner
+by: agent:tech-lead
+held_by: agent
 escalate_to: tech-lead
-rationale: "Slice 2 has failed verify 3 times. The failures below may not be the
-  application's: a test, the adapter, the criterion or the sandbox can each be
-  what is wrong (spec 7.1), and another build would not find out which."
-conditions:
-  - "R-4.17: Error:
-    \e[2mexpect(\e[22m\e[31mreceived\e[39m\e[2m).\e[22mtoBeTruthy\e[2m()\e[22m"
-at: 2026-09-30T13:06:57.856Z
+stalled: "agent:tech-lead escalated to tech-lead, the role it holds itself, so no seat this pipeline can fill is waiting on it: a person has to rule it, or the proposal has to be withdrawn."
+rationale: |2-
+  Question: does slice 2 (sign in, finish signing up, sign out) do what its 16 criteria say, given that verify failed it three times and escalated rather than ruling? Ruling: escalate to the pipeline owner, because the cause is the pipeline and not the application. Fifteen of the sixteen criteria are 'unbound', meaning the test harness has no binding for the screen or control the test needs, so they never touched the application. tests/adapters/new/bindings.yaml (lines 10-17) gives the reason: the agent that walks the app to record bindings 'could not use the sandbox password', so no screen that needs a signed-in person (/users/me, /sign-up/complete, /dashboard, /organizations/:id/edit and the rest) was ever seen. The pipeline did not give the binding stage the credential its job needs. Re-running bind-adapter without it gets the same result, and a fourth build cannot bind anything. The one real failure, R-4.17 (sign-out), got an empty string at tests/acceptance/users/R-4.17.spec.ts:19 or :23. Both lines read screens bound only while signed out, so the failure cannot be pinned on the application. R-6.1 cannot run because verify cannot start the new target with notifications switched off, which is also a pipeline capability that does not exist. The proposal diagnoses and fixes a stale seed image (pull_policy: build on seed and migrate). That is a reasonable change, but no seed failure appears in this verify result, so it does not answer this escalation. Verify's own account decided it: it said the fault could lie in the adapter or the sandbox rather than the application, and bindings.yaml confirms it lies with the adapter binding. What would change the ruling: once the pipeline gives the binding stage the sandbox password (SDLC_SANDBOX_PASSWORD or its equivalent) and verify can start the target in a named configuration, this should come back as a return with addressed-to bind-adapter to walk the signed-in screens, followed by a fresh build and verify.
+cost: 0.8548272
+turns: 8
+session: "94407647-2954-42e2-9d71-59dd8df787e5"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T13:07:59.068Z
