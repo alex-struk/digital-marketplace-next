@@ -124,3 +124,16 @@ not span more than one line. When the evidence is genuinely unclear, it is a `pr
 a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the
 adapter comes back from the next binding run unchanged and costs a run to find out.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: which of the three criteria failing against the old target were caused by this project's own adapter? Ruling: approve, with one triage condition per criterion. R-2.2 is the adapter's fault. The test's check that the vendor lands on the proposal they already hold passed. The failing read is proposal-cwu-edit.proposal_tab (tests/adapters/old/index.ts:5352): it clicks the 'Proposal' tab and returns the visible text of the current wizard step. The capture shows step '1. Proponent', so the step holding the proposal text was never opened, and on an edit form that text is a field value, which visible page text does not include. R-1.17 is a product question. Its failing rows use the same addQuestion/fillSlot/fieldError path as sibling rows that passed (for example, the 1,001-character guideline was refused and read correctly). For the 101st question, 'Add Question' was offered and the form showed no fault. Nothing points at the binding. R-2.19 is a product question. The adapter sent the request as the test built it (implementation member scrumMaster:false), and the old application answered 201 SUBMITTED, so the application accepted it. What would change this ruling: evidence that the truncated R-2.2 capture contains the proposal text, or that the R-1.17 question box cuts input at 1,000 characters while the adapter's entry method gets round that limit.
+
+**Conditions:**
+- adapter-wrong R-2.2: proposal-cwu-edit.proposal_tab clicks the 'Proposal' tab and returns only the visible text of the edit wizard's current step ('1. Proponent'). It never goes to the step holding the proposal text, and it reads visible page text, which leaves out the value in the proposal text box. It must reach the step that holds the proposal text and return that field's value along with the step's text.
+- product-question R-1.17
+- product-question R-2.19
