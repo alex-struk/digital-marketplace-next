@@ -1067,3 +1067,21 @@ conditions:
         condition."
       by: agent:architect
       at: 2026-09-30T18:37:27.880Z
+  - ref: bind-adapter-new-6#1
+    text: "tests/adapters/new/index.ts, user-sign-up-complete: when
+      /sign-up/complete redirects the browser away (to /dashboard for an account
+      that is not a vendor still to agree, or to /sign-in?redirectOnSuccess=...
+      for a signed-out visitor), the form's readings (terms_checkbox,
+      name_field, email_field, job_title_field, idp_username_readonly,
+      complete_disabled_until_terms_accepted, field_error) must return empty
+      rather than throw 'unbound', because the form not being shown is exactly
+      what R-4.23 says those people should see. Keep the actions
+      (accept_app_terms, toggle_new_opportunity_notifications, complete_profile,
+      change_avatar) reporting unbound with where the browser was sent. Record
+      the change against these members in tests/adapters/new/bindings.yaml."
+    from: bind-adapter-new-6
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:reviewer
+    at: 2026-09-30T19:27:42.126Z
