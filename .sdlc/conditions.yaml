@@ -962,6 +962,14 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-30T06:56:54.186Z
+    closed:
+      outcome: met
+      why: tests/acceptance/opportunities/R-1.17.spec.ts adds 'a Sprint With Us
+        question with no minimum score is accepted on submission for review',
+        which submits an otherwise complete opportunity and polls the
+        opportunity's view-page status for 'review'
+      by: agent:reviewer
+      at: 2026-09-30T06:59:09.290Z
   - ref: derive-tests-opportunities-stale-12#2
     text: "In the position test in tests/acceptance/opportunities/R-1.17.spec.ts,
       the criterion allows positions 0 to 100: either assert that an opportunity
@@ -974,3 +982,10 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-09-30T06:56:54.186Z
+    closed:
+      outcome: met
+      why: tests/acceptance/opportunities/R-1.17.spec.ts adds 'an opportunity holding
+        101 questions, the last at position 100, is accepted on submission for
+        review', which uses the same acceptance check
+      by: agent:reviewer
+      at: 2026-09-30T06:59:09.299Z
