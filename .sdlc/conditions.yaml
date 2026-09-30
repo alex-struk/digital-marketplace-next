@@ -989,3 +989,14 @@ conditions:
         review', which uses the same acceptance check
       by: agent:reviewer
       at: 2026-09-30T06:59:09.299Z
+  - ref: build-slice-2-5#1
+    text: "Fix R-4.17: signing out must end the session with both the service and
+      the identity provider, and tell the person it succeeded or failed. The
+      adapter has since been rebound (bind-adapter-new-5), so re-verify all of
+      slice 2."
+    from: build-slice-2-5
+    family: build-slice-2
+    gate: G3
+    stage: build
+    by: tech-lead
+    at: 2026-09-30T16:11:05.972Z
