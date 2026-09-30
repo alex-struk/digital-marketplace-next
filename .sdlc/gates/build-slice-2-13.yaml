@@ -1,0 +1,17 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 2 does not yet do what 3 of its criteria say. Each condition is
+  the criterion and what the running application did.
+conditions:
+  - 'R-4.1: Error: user-profile-self.user_identifier — /users/me sent this
+    person on to http://localhost:4300/sign-up/complete ("Complete Your
+    Profile"): the account has still to complete its profile, and the profile is
+    not shown to it until then'
+  - 'R-4.2: Error: user-profile-self.email_field — /users/me sent this person on
+    to http://localhost:4300/sign-up/complete ("Complete Your Profile"): the
+    account has still to complete its profile, and the profile is not shown to
+    it until then'
+  - 'R-4.23: Error: expect(received).toBeTruthy() — Received: ""'
+at: 2026-09-30T23:20:16.206Z
