@@ -1,0 +1,12 @@
+gate: G3
+verdict: withdrawn
+by: agent:tech-lead
+held_by: agent
+note: "Verify judged it on broken evidence: the suite was never given the new
+  target's mail catcher (six mail-fixture criteria could not run) and the new
+  target's adapter still looked for the old application's sign-in links (eleven
+  unbound rows), neither of which the builder can fix. The pipeline now passes
+  targets.new.mail_api to the suite and routes unbound rows on the new target to
+  bind-adapter (0075); slice 2 is built and verified again under the corrected
+  verify."
+at: 2026-09-30T12:10:40.429Z
