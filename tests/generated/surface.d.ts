@@ -227,6 +227,7 @@ export interface OpportunitySwuCreatePage {
   setEvaluationPanel(input?: unknown): Promise<void>;
   fieldError(): Promise<string>;
   scoreWeightError(): Promise<string>;
+  evaluationQuestionFields(): Promise<string>;
 }
 
 export interface OpportunitySwuViewPage {
@@ -278,6 +279,7 @@ export interface OpportunitySwuEditPage {
   evaluationTab(): Promise<string>;
   proposalDeadline(): Promise<string>;
   assignmentDate(): Promise<string>;
+  evaluationQuestionFields(): Promise<string>;
 }
 
 export interface OpportunitySwuCompletePage {
@@ -295,6 +297,7 @@ export interface OpportunityTwuCreatePage {
   setEvaluationPanel(input?: unknown): Promise<void>;
   fieldError(): Promise<string>;
   scoreWeightError(): Promise<string>;
+  evaluationQuestionFields(): Promise<string>;
 }
 
 export interface OpportunityTwuViewPage {
@@ -348,6 +351,7 @@ export interface OpportunityTwuEditPage {
   assignmentDate(): Promise<string>;
   startDate(): Promise<string>;
   completionDate(): Promise<string>;
+  evaluationQuestionFields(): Promise<string>;
 }
 
 export interface OpportunityTwuCompletePage {
