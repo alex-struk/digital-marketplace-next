@@ -2795,3 +2795,8 @@ rebind:
       fill puts all 501 characters into the Teaser box (not cut short by the box
       or the fill) and that fieldErrors/stepFormErrors reaches the Teaser
       field's own group on its step, as it does for the title and description
+    closed:
+      outcome: met
+      why: tests/adapters/old has changed since this was found
+      by: runner:calibrate
+      at: 2026-09-30T20:48:22.608Z

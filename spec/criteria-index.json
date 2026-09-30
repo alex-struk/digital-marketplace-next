@@ -1,5 +1,5 @@
 {
-  "generated_from": "aed71bf2a3867625d321c48de284130155ba09bc",
+  "generated_from": "76d9da180ae1fba4b970cd40bf8a0a55a680eb3e",
   "criteria": [
     {
       "id": "R-7.1",
@@ -4776,7 +4776,8 @@
       "when": "they submit a question or guideline outside 1 to 1,000 characters, a score below 1, a word limit outside 1 to 3,000, a position outside 0 to 100, or a minimum score equal to or above the question's score",
       "then": "the submission is rejected and the offending field is named",
       "notes": [
-        "the same limits apply to Sprint With Us \"team questions\" and Team With Us \"resource questions\"; the two differ only in name."
+        "the same limits apply to Sprint With Us \"team questions\" and Team With Us \"resource questions\"; the two differ only in name.",
+        "calibrate 2026-09-30: the old target fails this; kept, the rebuild must pass it"
       ],
       "state": "accepted",
       "raw": "### R-1.17 · v3 · confirmed · recovered",
@@ -4811,7 +4812,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.18 · v1 · confirmed · recovered",
-      "line": 207,
+      "line": 208,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -4848,7 +4849,7 @@
       ],
       "state": "accepted",
       "raw": "### R-1.19 · v1 · confirmed · recovered",
-      "line": 218,
+      "line": 219,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -4881,7 +4882,7 @@
       ],
       "state": "accepted",
       "raw": "### R-1.20 · v1 · confirmed · recovered",
-      "line": 231,
+      "line": 232,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -4911,7 +4912,7 @@
       ],
       "state": "accepted",
       "raw": "### R-1.21 · v1 · confirmed · recovered",
-      "line": 243,
+      "line": 244,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -4946,7 +4947,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.22 · v1 · confirmed · recovered",
-      "line": 255,
+      "line": 256,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -4973,7 +4974,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.23 · v1 · confirmed · recovered",
-      "line": 267,
+      "line": 268,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5002,7 +5003,7 @@
       ],
       "state": "accepted",
       "raw": "### R-1.24 · v1 · confirmed · recovered",
-      "line": 277,
+      "line": 278,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5035,7 +5036,7 @@
       ],
       "state": "accepted",
       "raw": "### R-1.25 · v1 · confirmed · recovered",
-      "line": 288,
+      "line": 289,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5066,7 +5067,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.26 · v1 · confirmed · recovered",
-      "line": 300,
+      "line": 301,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5089,7 +5090,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.27 · v1 · confirmed · recovered",
-      "line": 311,
+      "line": 312,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5126,7 +5127,7 @@
       ],
       "state": "accepted",
       "raw": "### R-1.28 · v1 · confirmed · recovered",
-      "line": 320,
+      "line": 321,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5149,7 +5150,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.29 · v2 · confirmed · recovered",
-      "line": 333,
+      "line": 334,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5182,7 +5183,7 @@
       ],
       "state": "accepted",
       "raw": "### R-1.30 · v1 · confirmed · recovered",
-      "line": 342,
+      "line": 343,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5209,7 +5210,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.31 · v1 · confirmed · recovered",
-      "line": 354,
+      "line": 355,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5244,7 +5245,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.32 · v1 · confirmed · recovered",
-      "line": 364,
+      "line": 365,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5277,7 +5278,7 @@
       ],
       "state": "accepted",
       "raw": "### R-1.33 · v2 · confirmed · recovered",
-      "line": 376,
+      "line": 377,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5300,7 +5301,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.34 · v1 · confirmed · recovered",
-      "line": 388,
+      "line": 389,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5329,7 +5330,7 @@
       ],
       "state": "accepted",
       "raw": "### R-1.35 · v1 · confirmed · recovered",
-      "line": 397,
+      "line": 398,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5352,7 +5353,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.36 · v1 · confirmed · recovered",
-      "line": 408,
+      "line": 409,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5379,7 +5380,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.37 · v1 · confirmed · recovered",
-      "line": 417,
+      "line": 418,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5408,7 +5409,7 @@
       ],
       "state": "accepted",
       "raw": "### R-1.38 · v1 · confirmed · recovered",
-      "line": 427,
+      "line": 428,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5437,7 +5438,7 @@
       ],
       "state": "accepted",
       "raw": "### R-1.39 · v1 · confirmed · recovered",
-      "line": 438,
+      "line": 439,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5464,7 +5465,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.40 · v1 · confirmed · recovered",
-      "line": 449,
+      "line": 450,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5493,7 +5494,7 @@
       ],
       "state": "accepted",
       "raw": "### R-1.41 · v1 · confirmed · recovered",
-      "line": 459,
+      "line": 460,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5516,7 +5517,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.42 · v1 · confirmed · recovered",
-      "line": 470,
+      "line": 471,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5543,7 +5544,7 @@
       "notes": [],
       "state": "accepted",
       "raw": "### R-1.43 · v1 · confirmed · recovered",
-      "line": 479,
+      "line": 480,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5582,7 +5583,7 @@
       "state": "accepted",
       "supersededBy": "R-1.48",
       "raw": "### R-1.44 · v1 · confirmed · recovered",
-      "line": 489,
+      "line": 490,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5617,7 +5618,7 @@
       "state": "accepted",
       "supersededBy": "R-1.49",
       "raw": "### R-1.45 · v1 · confirmed · recovered",
-      "line": 504,
+      "line": 505,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5652,7 +5653,7 @@
       "state": "accepted",
       "supersededBy": "R-1.50",
       "raw": "### R-1.46 · v1 · confirmed · recovered",
-      "line": 518,
+      "line": 519,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5687,7 +5688,7 @@
       "state": "accepted",
       "supersededBy": "R-1.51",
       "raw": "### R-1.47 · v1 · confirmed · recovered",
-      "line": 532,
+      "line": 533,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5702,7 +5703,7 @@
       "state": "accepted",
       "replaces": "R-1.44",
       "raw": "### R-1.48 · v1 · confirmed · authored",
-      "line": 546,
+      "line": 547,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5719,7 +5720,7 @@
       "state": "accepted",
       "replaces": "R-1.45",
       "raw": "### R-1.49 · v1 · confirmed · authored",
-      "line": 551,
+      "line": 552,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5734,7 +5735,7 @@
       "state": "accepted",
       "replaces": "R-1.46",
       "raw": "### R-1.50 · v1 · confirmed · authored",
-      "line": 557,
+      "line": 558,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5776,7 +5777,7 @@
       ],
       "state": "obsolete",
       "raw": "### D-opportunities-51 · v1 · open · recovered",
-      "line": 562,
+      "line": 563,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5791,7 +5792,7 @@
       "state": "accepted",
       "replaces": "R-1.47",
       "raw": "### R-1.51 · v1 · confirmed · authored",
-      "line": 577,
+      "line": 578,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5831,7 +5832,7 @@
       "state": "accepted",
       "supersededBy": "R-1.55",
       "raw": "### R-1.52 · v1 · confirmed · recovered",
-      "line": 582,
+      "line": 583,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5869,7 +5870,7 @@
       ],
       "state": "accepted",
       "raw": "### R-1.53 · v2 · confirmed · recovered",
-      "line": 598,
+      "line": 599,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5909,7 +5910,7 @@
       "state": "accepted",
       "supersededBy": "R-1.56",
       "raw": "### R-1.54 · v1 · confirmed · recovered",
-      "line": 612,
+      "line": 613,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5926,7 +5927,7 @@
       "state": "accepted",
       "replaces": "R-1.52",
       "raw": "### R-1.55 · v1 · confirmed · authored",
-      "line": 628,
+      "line": 629,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },
@@ -5941,7 +5942,7 @@
       "state": "accepted",
       "replaces": "R-1.54",
       "raw": "### R-1.56 · v1 · confirmed · authored",
-      "line": 634,
+      "line": 635,
       "domain": "opportunities",
       "file": "spec/domains/opportunities.md"
     },

@@ -203,6 +203,7 @@ Each evaluation question on a Sprint With Us or Team With Us opportunity carries
 - then: the submission is rejected and the offending field is named
 - state: accepted
 - note: the same limits apply to Sprint With Us "team questions" and Team With Us "resource questions"; the two differ only in name.
+- note: calibrate 2026-09-30: the old target fails this; kept, the rebuild must pass it
 
 ### R-1.18 · v1 · confirmed · recovered
 Each resource on a Team With Us opportunity names one service area and a target allocation between 1 and 100 per cent of full time.
