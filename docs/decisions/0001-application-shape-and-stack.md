@@ -1,6 +1,7 @@
 # 0001 · Build on the openshift-ts stack profile, with two recorded departures
 
 - Status: proposed (G2), revised after the first G2 return
+- Superseded in part by: 0015, for where the sign-in and callback addresses are answered
 - Date: 2026-09-19
 - Supersedes: the first version of this record, which chose Fastify, Knex for all data access, an
   `app/server`/`app/web`/`app/shared` layout and a server-side sign-in flow without acknowledging

@@ -1,14 +1,18 @@
-import { Header } from "@bcgov/design-system-react-components";
+import { Header, Link } from "@bcgov/design-system-react-components";
+import { useSession } from "../auth/session";
+import { row } from "./layout";
 
 /**
  * The banner every screen carries.
  *
- * The navigation menu — which offers the content area only to an administrator (R-7.6), and
- * the rest of the service only to somebody signed in — arrives with the slice that has
- * somebody to sign in. Until then the banner names the service, leads back to its home page,
- * and carries the keyboard route past itself.
+ * It names the service, leads back to its home page, carries the keyboard route past itself,
+ * and offers the way in or out: signing in and signing up to a visitor, and the dashboard and
+ * signing out to somebody signed in (R-4.17). The rest of the navigation menu — the content
+ * area for an administrator (R-7.6), the user list, the profile — arrives with the slices that
+ * build those screens.
  */
 export function SiteHeader() {
+  const session = useSession();
   return (
     <div data-testid="site-header">
       <Header
@@ -19,7 +23,20 @@ export function SiteHeader() {
             Skip to main content
           </a>,
         ]}
-      />
+      >
+        {session.status === "signed-in" ? (
+          <nav aria-label="Account" style={row}>
+            <Link href="/dashboard">Dashboard</Link>
+            <Link href="/users/me">My profile</Link>
+            <Link href="/sign-out">Sign out</Link>
+          </nav>
+        ) : session.status === "starting" ? null : (
+          <nav aria-label="Account" style={row}>
+            <Link href="/sign-in">Sign in</Link>
+            <Link href="/sign-up">Sign up</Link>
+          </nav>
+        )}
+      </Header>
     </div>
   );
 }

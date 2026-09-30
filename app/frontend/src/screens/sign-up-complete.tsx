@@ -1,0 +1,233 @@
+import { FormEvent, useEffect, useState } from "react";
+import { FileTrigger } from "react-aria-components";
+import {
+  Button,
+  Checkbox,
+  Form,
+  Heading,
+  InlineAlert,
+  Link,
+  Text,
+  TextField,
+} from "@bcgov/design-system-react-components";
+import { DASHBOARD } from "@rules/sign-in";
+import { needsProfileCompletion, ProfileErrors, validateProfile } from "@rules/users";
+import { Account, changeOwnAccount } from "../api/accounts";
+import { page, stack } from "../app/layout";
+import { Loading } from "../app/loading";
+import { useScreenTitle } from "../app/screen-title";
+import { holdAccount, useSession } from "../auth/session";
+import { useGoTo } from "../app/go-to";
+
+/**
+ * Complete Your Profile (user-sign-up-complete). Offered only to a vendor who has never agreed
+ * to the terms; a vendor who has, and every public sector employee, go on to their dashboard,
+ * and a visitor is sent to sign in (R-4.23).
+ */
+export function SignUpCompleteScreen() {
+  useScreenTitle("Complete Your Profile");
+  const session = useSession();
+  const goTo = useGoTo();
+
+  const offered = session.status === "signed-in" && needsProfileCompletion(session.account);
+
+  useEffect(() => {
+    if (session.status === "visitor") {
+      goTo("/sign-in?redirectOnSuccess=%2Fsign-up%2Fcomplete");
+    } else if (session.status === "signed-in" && !offered) {
+      goTo(DASHBOARD);
+    }
+  }, [session.status, offered, goTo]);
+
+  if (session.status !== "signed-in" || !offered) {
+    return (
+      <div style={page}>
+        <Heading level={1}>Complete Your Profile</Heading>
+        <Loading label="Loading…" />
+      </div>
+    );
+  }
+  return <CompletionForm account={session.account} />;
+}
+
+type Problem = { readonly field: keyof ProfileErrors; readonly label: string; readonly message: string };
+
+const FIELD_LABELS: Record<keyof ProfileErrors, { label: string; id: string }> = {
+  name: { label: "Name", id: "profile-name" },
+  email: { label: "Email address", id: "profile-email" },
+  jobTitle: { label: "Job title", id: "profile-job-title" },
+};
+
+function CompletionForm({ account }: { account: Account }) {
+  const goTo = useGoTo();
+  const [name, setName] = useState(account.name);
+  const [email, setEmail] = useState(account.email ?? "");
+  const [notices, setNotices] = useState(false);
+  const [agreed, setAgreed] = useState(false);
+  const [errors, setErrors] = useState<ProfileErrors>({});
+  const [saveFailed, setSaveFailed] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [pictureChosen, setPictureChosen] = useState(false);
+
+  const problems: Problem[] = (Object.keys(errors) as (keyof ProfileErrors)[])
+    .filter((field) => errors[field])
+    .map((field) => ({
+      field,
+      label: FIELD_LABELS[field].label,
+      message: errors[field] as string,
+    }));
+
+  async function complete(event: FormEvent) {
+    event.preventDefault();
+    if (!agreed || saving) return;
+    setSaveFailed(false);
+
+    // The same rule the service applies, so the form and the service never disagree (R-4.27).
+    const validation = validateProfile({ name, email });
+    if (!validation.ok) {
+      setErrors(validation.errors);
+      return;
+    }
+    setErrors({});
+    setSaving(true);
+
+    // The details first, so that a refusal — an email address another account holds, among
+    // others — leaves the person where they were, with nothing they entered lost (R-4.6).
+    // The terms last, because agreeing is what completes the profile (R-4.3).
+    const steps: (() => ReturnType<typeof changeOwnAccount>)[] = [
+      () => changeOwnAccount(account.id, "updateProfile", validation.profile),
+      ...(notices ? [() => changeOwnAccount(account.id, "updateNotifications", true)] : []),
+      () => changeOwnAccount(account.id, "acceptTerms"),
+    ];
+    let latest: Account = account;
+    for (const step of steps) {
+      const answer = await step();
+      if (answer.kind !== "saved") {
+        setSaving(false);
+        setSaveFailed(true);
+        return;
+      }
+      latest = answer.account;
+    }
+    holdAccount(latest);
+    goTo(DASHBOARD);
+  }
+
+  return (
+    <div style={page}>
+      <Heading level={1}>Complete Your Profile</Heading>
+      {saveFailed ? (
+        <InlineAlert
+          variant="danger"
+          role="alert"
+          title="Your profile could not be saved"
+          description="Nothing you entered has been lost. Check your details and try again."
+        />
+      ) : null}
+      {problems.length > 0 ? (
+        <div tabIndex={-1}>
+          <InlineAlert variant="danger" role="alert">
+            {/* The design system's alert shows no title of its own once it has children, and
+                names itself by the element with this id, so the title is given here. */}
+            <span className="title" id="alert-title">
+              {`Your profile has ${problems.length} ${problems.length === 1 ? "problem" : "problems"}`}
+            </span>
+            <ul>
+              {problems.map((problem) => (
+                <li key={problem.field} data-testid="field-error">
+                  <Link href={`#${FIELD_LABELS[problem.field].id}`}>
+                    {`${problem.label}: ${problem.message.charAt(0).toLowerCase()}${problem.message.slice(1)}`}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </InlineAlert>
+        </div>
+      ) : (
+        <Text elementType="p">Confirm your details to finish creating your vendor account.</Text>
+      )}
+      <Form validationBehavior="aria" style={stack} onSubmit={complete}>
+        <div style={stack}>
+          <Text elementType="p">Profile picture (optional)</Text>
+          <Text elementType="p" size="small" color="secondary">
+            {pictureChosen
+              ? "You can add a profile picture from your profile once it is complete."
+              : "No profile picture has been added."}
+          </Text>
+          <div>
+            <FileTrigger acceptedFileTypes={["image/*"]} onSelect={() => setPictureChosen(true)}>
+              <Button variant="secondary" data-testid="change-avatar">
+                Choose a profile picture
+              </Button>
+            </FileTrigger>
+          </div>
+        </div>
+        <TextField
+          label="Sign-in username"
+          value={account.idpUsername}
+          isReadOnly
+          description="The account you signed in with. It cannot be changed."
+          data-testid="idp-username-field"
+        />
+        <TextField
+          id="profile-name"
+          label="Name"
+          value={name}
+          onChange={setName}
+          isRequired
+          isInvalid={Boolean(errors.name)}
+          errorMessage={errors.name}
+          data-testid="name-field"
+        />
+        <TextField
+          id="profile-email"
+          label="Email address"
+          type="email"
+          value={email}
+          onChange={setEmail}
+          isRequired
+          isInvalid={Boolean(errors.email)}
+          errorMessage={errors.email}
+          data-testid="email-field"
+        />
+        <Checkbox
+          isSelected={notices}
+          onChange={setNotices}
+          data-testid="sign-up-notifications-checkbox"
+        >
+          Email me when new opportunities are posted
+        </Checkbox>
+        <div style={stack}>
+          <Text elementType="p">
+            Read the <Link href="/content/terms-and-conditions">terms and conditions</Link> and
+            the <Link href="/content/privacy">privacy policy</Link> before you agree to them.
+          </Text>
+          <Checkbox
+            isRequired
+            isSelected={agreed}
+            onChange={setAgreed}
+            data-testid="sign-up-terms-checkbox"
+          >
+            I have read and agree to the terms and conditions and the privacy policy
+          </Checkbox>
+        </div>
+        {agreed ? null : (
+          <Text id="sign-up-complete-hint" elementType="p" size="small" color="secondary">
+            Agree to the terms and conditions and the privacy policy to complete your profile.
+          </Text>
+        )}
+        <div>
+          <Button
+            type="submit"
+            variant="primary"
+            isDisabled={!agreed || saving}
+            aria-describedby={agreed ? undefined : "sign-up-complete-hint"}
+            data-testid="sign-up-complete-button"
+          >
+            Complete profile
+          </Button>
+        </div>
+      </Form>
+    </div>
+  );
+}

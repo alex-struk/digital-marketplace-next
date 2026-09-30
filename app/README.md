@@ -30,7 +30,25 @@ SDLC_SANDBOX_PASSWORD=... docker compose -f app/compose/compose.yaml up --build
 The application answers on <http://localhost:4300>. The identity provider is on :8080 and
 the mail catcher on :8025. Every account `tests/seed/manifest.yaml` names signs in at the
 identity provider with its `idp_id` as username and that password; the password is read from
-the environment and is written into no file here.
+the environment and is written into no file here. So do the first-time identities
+`spec/contract/personas.yaml` names, which have no account until they sign in.
+
+Signing in begins and ends at the service: `/auth/sign-in` sends the browser to the identity
+provider, and `/auth/callback` makes the account on a first sign-in, then redirects to the landing
+page with the tokens (decision record 0015). The web server in front of the app forwards `/auth`
+there, as it does `/api`. The callback also sets an `HttpOnly` session cookie, so a request to
+`/api` from the same browser that carries no bearer token is still answered for the person who
+signed in, until they sign out (decision record 0017).
+
+The app draws its first screen without waiting on the network: the account comes with the tokens
+and is kept beside them, and the service's answer replaces it a moment later. Signing out is one
+request, which ends the service's session and the identity provider's. Opening `/sign-out` makes
+that request before the page is drawn, so the page says at once how it went (decision record
+0018).
+
+Every message the service sends is marked as a test and comes from
+`Digital Marketplace <donotreply@example.test>` (decision record 0013). Start with
+`SDLC_ORACLE_DISABLE_NOTIFICATIONS=1` in the environment to switch all mail off (R-6.1).
 
 The schema is brought up to date by the `migrate` service before the service starts. To put
 the data back to the state `tests/seed/manifest.yaml` describes — wiping whatever is there

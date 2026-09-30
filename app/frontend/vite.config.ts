@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 /**
  * One origin. In a sandbox the frontend container's web server serves this app and forwards
- * `/api`, `/status` and `/admin` to the backend (app/frontend/Caddyfile, decision record
+ * `/api`, `/auth`, `/status` and `/admin` to the backend (app/frontend/Caddyfile, decision record
  * 0001). On a builder's machine the dev server does the same, so an address is the same
  * address wherever the app runs.
  */
@@ -24,6 +24,7 @@ export default defineConfig({
     proxy: {
       "/api": { target: BACKEND, changeOrigin: false },
       "/status": { target: BACKEND, changeOrigin: false },
+      "/auth": { target: BACKEND, changeOrigin: false },
       "/admin": { target: BACKEND, changeOrigin: false },
     },
   },
