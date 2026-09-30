@@ -487,21 +487,11 @@ rulings:
     version: 3
     verb: defect-in-old
     gate: calibrate-old-22
-  - id: R-1.17
-    version: 2
-    verb: product-question
-    gate: calibrate-triage-old-35
-    file_sha: 086cd7a99a85fcd67c3ffd1d514625af29234c11
   - id: R-2.19
     version: 3
     verb: product-question
     gate: calibrate-triage-old-35
     file_sha: f332e0b8ce29f8b75787f43b934e161b62a96069
-  - id: R-1.17
-    version: 2
-    verb: test-wrong
-    gate: calibrate-old-23
-    file_sha: 086cd7a99a85fcd67c3ffd1d514625af29234c11
   - id: R-2.19
     version: 3
     verb: defect-in-old
