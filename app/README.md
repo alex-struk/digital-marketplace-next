@@ -30,7 +30,12 @@ SDLC_SANDBOX_PASSWORD=... docker compose -f app/compose/compose.yaml up --build
 The application answers on <http://localhost:4300>. The identity provider is on :8080 and
 the mail catcher on :8025. Every account `tests/seed/manifest.yaml` names signs in at the
 identity provider with its `idp_id` as username and that password; the password is read from
-the environment and is written into no file here.
+the environment and is written into no file here. So do the first-time identities
+`spec/contract/personas.yaml` names, which have no account until they sign in.
+
+Every message the service sends is marked as a test and comes from
+`Digital Marketplace <donotreply@example.test>` (decision record 0013). Start with
+`SDLC_ORACLE_DISABLE_NOTIFICATIONS=1` in the environment to switch all mail off (R-6.1).
 
 The schema is brought up to date by the `migrate` service before the service starts. To put
 the data back to the state `tests/seed/manifest.yaml` describes — wiping whatever is there

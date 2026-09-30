@@ -132,6 +132,112 @@ describe("the realm the sandbox identity provider imports", () => {
   });
 });
 
+describe("signing in to the sandbox realm (slice 2)", () => {
+  type RealmUser = {
+    username: string;
+    email?: string;
+    attributes?: Record<string, string[]>;
+  };
+  type Realm = {
+    users: RealmUser[];
+    clients: {
+      clientId: string;
+      publicClient?: boolean;
+      protocolMappers?: { protocolMapper: string; config: Record<string, string> }[];
+      attributes?: Record<string, string>;
+    }[];
+    components?: Record<string, { providerId: string; config: Record<string, string[]> }[]>;
+  };
+  const sandbox = realm as Realm;
+  const personas = parseYaml(
+    readFileSync(path.resolve(__dirname, "../../../spec/contract/personas.yaml"), "utf8"),
+  ) as { personas: { id: string; sign_in: { "sandbox-idp"?: { username?: string } } | null }[] };
+
+  it("carries every persona the acceptance suite signs in as", () => {
+    const usernames = new Set(sandbox.users.map((user) => user.username));
+    const wanted = personas.personas
+      .map((persona) => persona.sign_in?.["sandbox-idp"]?.username)
+      .filter((username): username is string => Boolean(username));
+
+    expect(wanted.filter((username) => !usernames.has(username))).toEqual([]);
+  });
+
+  it("says of every account which way in it came, which decides the kind of account (R-4.1)", () => {
+    for (const user of sandbox.users) {
+      expect(["idir", "bceid", "github"], user.username).toContain(
+        user.attributes?.identity_provider?.[0],
+      );
+    }
+  });
+
+  it("holds a first-time account with no email address, for R-4.1 and R-4.2", () => {
+    const noEmail = sandbox.users.find((user) => user.username === "first-time-vendor-no-email");
+    expect(noEmail).toBeDefined();
+    expect(noEmail?.email).toBeUndefined();
+  });
+
+  it("puts the way in, and this client as audience, into every access token", () => {
+    const client = sandbox.clients.find((c) => c.clientId === "digital-marketplace-app");
+    expect(client?.publicClient).toBe(true);
+    expect(client?.attributes?.["pkce.code.challenge.method"]).toBe("S256");
+    const mappers = client?.protocolMappers ?? [];
+    expect(mappers).toContainEqual(
+      expect.objectContaining({
+        protocolMapper: "oidc-usermodel-attribute-mapper",
+        config: expect.objectContaining({
+          "user.attribute": "identity_provider",
+          "claim.name": "identity_provider",
+          "access.token.claim": "true",
+        }),
+      }),
+    );
+    expect(mappers).toContainEqual(
+      expect.objectContaining({
+        protocolMapper: "oidc-audience-mapper",
+        config: expect.objectContaining({ "included.client.audience": "digital-marketplace-app" }),
+      }),
+    );
+  });
+
+  it("does not ask an account with no email address for one when it signs in, and keeps its attributes", () => {
+    // Keycloak's own default profile requires an email address of every user, which would stop
+    // a persona without one at an "update your account" page instead of signing it in.
+    const provider = sandbox.components?.["org.keycloak.userprofile.UserProfileProvider"]?.[0];
+    expect(provider?.providerId).toBe("declarative-user-profile");
+    const profile = JSON.parse(provider?.config["kc.user.profile.config"]?.[0] ?? "{}") as {
+      attributes: { name: string; required?: unknown }[];
+      unmanagedAttributePolicy?: string;
+    };
+    expect(profile.attributes.find((attribute) => attribute.name === "email")?.required).toBeUndefined();
+    expect(profile.unmanagedAttributePolicy).toBe("ENABLED");
+  });
+});
+
+describe("the mail path's settings in the sandbox (R-6.1 to R-6.4)", () => {
+  type Env = Record<string, string>;
+  const backend = compose.services.backend as Service & { environment: Env };
+  const mail = compose.services.mail as Service & { environment: Env };
+
+  it("sends from the one configured sender, marked as a test, and links to where the application answers", () => {
+    expect(backend.environment.MAILER_FROM).toBe("Digital Marketplace <donotreply@example.test>");
+    expect(backend.environment.SHOW_TEST_INDICATOR).toBe("1");
+    expect(backend.environment.SERVICE_ORIGIN).toBe("http://localhost:4300");
+  });
+
+  it("switches notifications off only when the environment asks", () => {
+    expect(backend.environment.DISABLE_NOTIFICATIONS).toBe("${SDLC_ORACLE_DISABLE_NOTIFICATIONS:-0}");
+  });
+
+  it("lets a test make the mail catcher refuse delivery", () => {
+    expect(mail.environment.MP_ENABLE_CHAOS).toBe("true");
+  });
+
+  it("checks tokens against the realm the browser signs in at", () => {
+    expect(backend.environment.OIDC_ISSUER).toBe("http://localhost:8080/realms/digital-marketplace");
+    expect(backend.environment.OIDC_CLIENT_ID).toBe("digital-marketplace-app");
+  });
+});
+
 describe("the addresses the sandbox publishes", () => {
   it("answers the application on 4300, and lets nothing else take that port", () => {
     const onApp = publishedPorts().filter(({ host }) => host === "4300");

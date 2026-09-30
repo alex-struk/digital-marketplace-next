@@ -22,12 +22,27 @@ that variable is unset, `idp-realm` fails and the identity provider — which wa
 never starts, rather than coming up with accounts nobody can use.
 
 The `identity_provider` attribute records which way in an account came through, which is what
-fixes the kind of account on a first sign-in (R-4.1). The slice that builds sign-in decides
-what it reads; it is recorded here so the accounts are not ambiguous. `account_type` is
-recorded beside it for the same reason.
+fixes the kind of account on a first sign-in (R-4.1): `idir` makes a public sector employee and
+`bceid` (or `github`) a vendor. The client puts it into every access token as the
+`identity_provider` claim, which is what the service reads (decision record 0011).
+`account_type` is recorded beside it so the accounts are not ambiguous to a reader; nothing
+reads it.
+
+Three accounts exist here and nowhere in the seed — `first-time-gov`, `first-time-vendor` and
+`first-time-vendor-no-email` — because the criteria about a first sign-in need a person the
+service has no account for yet (spec/contract/personas.yaml).
+
+## The user profile
+
+Keycloak 26's own user profile requires an email address of every user, and would stop an
+account without one (`test-vendor-7`, `first-time-vendor-no-email`) at an "update your account"
+page instead of signing it in. The realm therefore carries its own profile (the
+`org.keycloak.userprofile.UserProfileProvider` component) in which the address is optional and
+attributes the profile does not declare, such as `identity_provider`, are kept.
 
 ## The client
 
 One client, `digital-marketplace-app`: the single-page app, a public client under PKCE, so no
 secret is held in a browser (decision record 0004). Its redirect and post-logout URIs are the
-one origin the application answers on, `http://localhost:4300`.
+one origin the application answers on, `http://localhost:4300`. Two mappers put the
+`identity_provider` claim and the client itself (as audience) into its access tokens.
