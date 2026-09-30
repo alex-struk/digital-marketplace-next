@@ -164,3 +164,14 @@ The ID is the criterion's own id exactly as `spec/criteria-index.json` spells it
 takes no text; the other two require a colon and text on the same line. A condition may not span
 more than one line.
 
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: R-1.17 fails on all ten out-of-limit cases against old. Is that the application's fault, the spec's, or the test's? Ruling: spec-wrong. Reason: each test saved a Sprint With Us or Team With Us draft carrying one out-of-limit question. The save succeeded (the adapter's saveDraft would have thrown had it not landed on the record), and no refusal ever appeared. The old application does this on purpose: sources/old/src/back-end/lib/resources/opportunity/sprint-with-us/index.ts:412 ('Do not validate other fields if the opportunity a draft') returns the team questions as entered when the status is Draft, and validateTeamQuestions (line 586) runs only for a status other than Draft. team-with-us/index.ts:364 does the same for resource questions. So the limits hold when the opportunity is submitted for review or published, not when a draft is saved. The criterion never said when the limits apply, which is what let a blind test take 'save draft' as the submission. The old behaviour (drafts may be incomplete) is a reasonable product choice, not a defect, so the fix is the statement, not defect-in-old. In the same pass the statement is corrected on capacity: validateTeamQuestionOrder accepts positions 0 to 100 inclusive (validateNumber compares with < min and > max), which admits 101 questions, so the claim that the list 'holds at most 100' is replaced by the position range the code enforces. The minimum-score clause is already right (validateTeamQuestionMinimumScore caps it at score - 1). What would change this ruling: evidence that the old front-end blocks a draft save with out-of-limit questions before the request is sent, which would make this test-wrong instead.
+
+**Conditions:**
+- spec-wrong R-1.17: Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity's list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits.
