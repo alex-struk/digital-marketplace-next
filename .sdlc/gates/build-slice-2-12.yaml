@@ -1,18 +1,16 @@
 gate: G3
 verdict: escalated
-by: runner:verify
-held_by: runner
+by: agent:tech-lead
+held_by: agent
 escalate_to: tech-lead
-rationale: "Slice 2 has failed verify 3 times. The failures below may not be the
-  application's: a test, the adapter, the criterion or the sandbox can each be
-  what is wrong (spec 7.1), and another build would not find out which."
-conditions:
-  - 'R-4.1: Error: expect(received).toMatch(expected) — Received string:  ""'
-  - 'R-4.3: Error: expect(received).toBeTruthy() — Received: ""'
-  - "R-4.23: Error: unbound: proposal-vendor-dashboard.my_proposals_table —
-    /dashboard is offered only to a signed-in person, and this screen has not
-    been walked signed in: \"Sign in as a vendor\" and \"Sign in as a public
-    sector employee\" on /sign-in now hand off to the sandbox identity
-    provider's username and password form, but the session that bound this
-    adapter could not use the sandbox password, so none of …"
-at: 2026-09-30T20:13:23.367Z
+stalled: "agent:tech-lead escalated to tech-lead, the role it holds itself, so no seat this pipeline can fill is waiting on it: a person has to rule it, or the proposal has to be withdrawn."
+rationale: |2-
+  Question: does slice 2 (sign in, finish signing up, sign out) do what its criteria say? Ruling: escalate to the pipeline owner. runner:verify's account decided it: the failures may not be the application's. Every criterion that did not pass traces to one pipeline gap. The bind-adapter stage cannot use the sandbox password, so it has never walked a signed-in screen. R-6.20 and R-6.28 are unbound because their screens were opened signed out and answered not-found; /users/$userId does exist in app/frontend/src/router.tsx, so that was a visitor being refused. R-4.23 is unbound for the reason stated in the adapter itself (tests/adapters/new/index.ts:285): 'the session that bound this adapter could not use the sandbox password'. R-4.1 and R-4.3 fail on empty reads, although the rebound adapter reads the 'Status: Active' line the screen draws (index.ts:3413-3417). The adapter has already been rebound (bind-adapter-new-9) and the gap is unchanged, so returning to build or to bind-adapter would repeat the loop. The previous ruling said this case goes to the pipeline owner. Approval is also blocked by missing-test/R-4.1 and missing-test/R-4.2, which need first-time personas and a way to reset an identity to never-signed-in; no build can supply either. This revision settles all three open instructions: build-slice-2-5#1, because R-4.17 passes against d27b6d8; build-slice-2-11#4, because the blocking sign-out request is gone and sign-out is one ordinary DELETE (app/frontend/src/api/accounts.ts:99-101); and build-slice-2-11#5, because the remaining egress failures are all in build-slice-2-11 files and .sdlc/conditions.yaml, none in this revision's journal or proposal page. Record these as condition-met on the next ruling that can carry them. What would change the ruling: a way for bind-adapter to sign in to the sandbox, a rebind that walks the signed-in screens, and first-time personas for R-4.1 and R-4.2. If verify still failed after that, it would be a finding about the application and would go back to build.
+cost: 0.8920109999999999
+turns: 7
+session: "78bcb8f9-6032-422e-951e-4222acf7c505"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T20:14:31.970Z
