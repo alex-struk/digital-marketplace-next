@@ -3155,6 +3155,17 @@ export default function create(
       await settle();
       return;
     }
+    // A vendor who already holds a proposal on the opportunity is offered "View Proposal" in
+    // the same two places instead (vendor 1 on an opportunity published during a run, after a
+    // proposal of theirs was made on it). The application keeps one proposal per person per
+    // opportunity, and this is its one way on from here to that vendor's proposal.
+    const viewers = seen(page.getByRole("link", { name: "View Proposal", exact: true }));
+    if (await viewers.count()) {
+      const inBar = seen(navBar().getByRole("link", { name: "View Proposal", exact: true }));
+      await ((await inBar.count()) ? inBar.first() : viewers.first()).click({ timeout: CLICK_MS });
+      await settle();
+      return;
+    }
     const barText = ((await navBar().innerText().catch(() => "")) || "").replace(/\s*\n\s*/g, " | ");
     const signedIn = /@/.test(barText) ? "signed in" : "not signed in";
     const status = (await linesMatching(/^(Open|Closed|Draft|Under Review|Evaluation|Awarded|Suspended|Cancel+ed)$/i).catch(() => "")) || "no status shown";
@@ -3593,7 +3604,39 @@ export default function create(
         "Continue",
       ]);
     },
-    teamQuestionsTab: () => tabContent(["Team Questions"]),
+    // The opportunity's own team questions, in the order it lists them: the "Opportunity"
+    // tab's "5. Team Questions" step, one "Question N" block per question holding its
+    // Question, Response Guidelines, Response Word Limit, Score and Minimum Score boxes (seen
+    // as an administrator on the seeded closed Sprint With Us opportunity). The sidebar's
+    // "Team Questions" under OPPORTUNITY EVALUATION is the proponents' scoring table, not
+    // this. A reader not offered the Opportunity tab reads nothing.
+    teamQuestionsTab: () =>
+      inTab(["Opportunity"], async () => {
+        if (!(await walkToStep(/^\d+\.\s+Team Questions$/))) {
+          nothing(`opportunity-swu-edit.team_questions_tab — walked the Opportunity tab's steps and none is "Team Questions" on ${page.url()}`);
+        }
+        const questions = seen(page.getByRole("textbox", { name: "Question", exact: true }));
+        const guidelines = seen(page.getByRole("textbox", { name: "Response Guidelines", exact: true }));
+        const limits = seen(page.getByRole("spinbutton", { name: /Word Limit/ }));
+        const scores = seen(page.getByRole("spinbutton", { name: "Score", exact: true }));
+        const minimums = seen(page.getByRole("spinbutton", { name: "Minimum Score", exact: true }));
+        const valueOf = async (boxes: Locator, i: number): Promise<string> =>
+          i < (await boxes.count()) ? (await boxes.nth(i).inputValue().catch(() => "")).trim() : "";
+        const blocks: string[] = [];
+        const count = await questions.count();
+        for (let i = 0; i < count; i++) {
+          blocks.push(
+            [
+              `Question ${i + 1}: ${await valueOf(questions, i)}`,
+              `Response Guidelines: ${await valueOf(guidelines, i)}`,
+              `Response Word Limit: ${await valueOf(limits, i)}`,
+              `Score: ${await valueOf(scores, i)}`,
+              `Minimum Score: ${await valueOf(minimums, i)}`,
+            ].join("\n"),
+          );
+        }
+        return blocks.join("\n");
+      }),
     codeChallengeTab: () => tabContent(["Code Challenge"]),
     teamScenarioTab: () => tabContent(["Team Scenario"]),
     evaluationPanelTab: () => tabContent(["Evaluation Panel"]),
@@ -7479,8 +7522,16 @@ export default function create(
       proponentRow: () => tableText(),
       anonymousProponentName: () => anonymousProponents(),
       evaluationStatus: () => tableText(),
-      submitDisabledUntilComplete: () =>
-        controlState(["Submit Scores for Consensus", "Submit for Consensus", "Submit Scores"]),
+      // Empty when "Submit Scores for Consensus" is offered and may be pressed; otherwise why
+      // it is withheld.
+      submitDisabledUntilComplete: async () => {
+        await ready();
+        const state = await controlState(["Submit Scores for Consensus", "Submit for Consensus", "Submit Scores"]);
+        if (state === "enabled") return "";
+        return state === "disabled"
+          ? `"Submit Scores for Consensus" is disabled`
+          : `"Submit Scores for Consensus" is not offered`;
+      },
       incompleteEvaluationError: async () =>
         [...(await everyAlert(/complete|incomplete/i)), await messages(/complete|incomplete/i), submitRefusal]
           .filter(Boolean)
@@ -10155,9 +10206,12 @@ export default function create(
     additionalcomment: "additional comments",
     organization: "organization",
     opportunity: "opportunity",
-    inceptionphase: "inception phase",
-    prototypephase: "prototype phase",
-    implementationphase: "implementation phase",
+    // A Sprint With Us phase is named as the phases are named everywhere else ("Inception"),
+    // with the part of it a message concerns after it ("Inception phase: This opportunity
+    // does not require this phase.", "Inception members: ...").
+    inceptionphase: "Inception",
+    prototypephase: "Prototype",
+    implementationphase: "Implementation",
     teamquestionresponses: "team question responses",
     resourcequestionresponses: "resource question responses",
     hourlyrate: "hourly rate",
