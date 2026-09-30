@@ -1085,3 +1085,15 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-09-30T19:27:42.126Z
+    closed:
+      outcome: met
+      why: in tests/adapters/new/index.ts, signUpFormShown() returns false when
+        /sign-up/complete has sent the browser to /dashboard or /sign-in; the
+        seven readings (idpUsernameReadonly, nameField, emailField,
+        jobTitleField, termsCheckbox, completeDisabledUntilTermsAccepted,
+        fieldError) then return empty, while the actions still go through
+        onSignUpForm(), which reports unbound naming page.url(). The change is
+        recorded against these members, with a comment, under
+        user-sign-up-complete in tests/adapters/new/bindings.yaml.
+      by: agent:reviewer
+      at: 2026-09-30T19:51:24.114Z
