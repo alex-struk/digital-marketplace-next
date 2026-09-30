@@ -1,0 +1,9 @@
+gate: G3
+verdict: return
+by: tech-lead
+held_by: human
+note: "Ruled by the operator agent under Alex's standing delegation (2026-09-30) to rule application questions on his behalf."
+conditions:
+  - "addressed-to plan: slice 2 claims R-4.6, R-4.22, R-4.27, R-4.28 and R-6.2 to R-6.5, whose tests go through screens plan/tasks.md gives to later slices (profile editing and /users/:userId, the Code With Us create screen, organization editing, the opportunity dashboard's own-opportunities table); verify on build-slice-2-8 found each failing or unbound there. Move each to the slice that delivers its screen."
+  - "Remove the internal ticket number from app/backend/tests/sign-in-flow.test.ts (egress rule E-2)."
+at: 2026-09-30T18:06:07.243Z
