@@ -4765,7 +4765,7 @@ owed:
     id: R-1.17
     version: 3
     domain: opportunities
-    stage: derive-tests
+    stage: calibrate
     why: an observation on opportunity-swu-create and opportunity-twu-create
       reporting the fields an evaluation question offers for entry, or at least
       whether any position or order field is offered
@@ -4785,3 +4785,9 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-09-30T07:02:15.703Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v3 exists and has not run
+        by: runner
+        at: 2026-09-30T07:11:28.409Z
+    target: old

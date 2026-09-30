@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-stale-13 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">340</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">335</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">306</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-stale-13</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 07:10</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these tests follow from the opportunities criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> R-1.17 (v3) now has its complete test.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>R-1.17 (v3) now has its complete test. It was the only criterion I was given, and it no longer has an entry in <code>tests/acceptance/not-testable.yaml</code>. I couldn&#39;t compile or run anything here: the type check needed approval that this session can&#39;t get. The new calls use only methods declared in <code>tests/generated/surface.d.ts</code>, but nothing has confirmed that the file compiles or that the tests pass.</p>
+<p><strong>What was owed.</strong> An earlier run had already written <code>tests/acceptance/opportunities/R-1.17.spec.ts</code>. It covered every clause except &quot;its position is never entered by the person&quot;, which sat in <code>not-testable.yaml</code> because nothing could show whether the question editor offers a position or order field. The contract stage has since added the observation <code>evaluation_question_fields</code> to four pages: the Sprint With Us and Team With Us create pages and their edit pages. According to the contract, it lists the fields one question offers: question, guideline, response_word_limit, maximum_score and minimum_score, with no position or order field.</p>
+<p><strong>What I added.</strong> Two tests in the existing file, one for each program. Each one signs in as the public sector staff persona and adds one question on the create page. It reads <code>evaluationQuestionFields()</code>, then saves a draft, opens that draft on the edit page and reads the fields again. On both pages it checks that all five fields are named and that nothing matches &quot;position&quot; or &quot;order&quot;. The name checks accept either underscores or spaces, because the contract doesn&#39;t say how the observation&#39;s text is formatted. I also dated the header 2026-09-30 and added a paragraph to the file&#39;s opening comment explaining how this clause is checked. I deleted the R-1.17 entry, since every clause of the criterion is now asserted and it can&#39;t have both a test and an entry.</p>
+<p><strong>One thing the contract should fix.</strong> The comment in <code>surface.yaml</code> says the observation reports on &quot;the question at a given place in the list (the first is 1)&quot;, but the generated <code>evaluationQuestionFields()</code> takes no argument, so a test can&#39;t say which place it means. I kept each test to a single question so the answer can&#39;t be ambiguous. The contract should either give the observation that parameter or remove the wording.</p>
+<p>No other surface action or observation was missing. I edited only <code>tests/acceptance/opportunities/R-1.17.spec.ts</code> and <code>tests/acceptance/not-testable.yaml</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-30 07:11.</p>
+<div class="body"><p>Question: do the new R-1.17 tests follow from the opportunities criterion and from nothing else? Ruling: approve. The criterion says each Sprint With Us and Team With Us evaluation question carries a question, guideline, maximum score, response word limit and optional minimum score, and that its position is set by its place in the list and never entered by the person. The two added tests, one per program, add one question on the create screen and read the fields it offers through the contract observation evaluationQuestionFields, then read them again on the edit screen after saving a draft. On both screens they check that the five fields the criterion names are offered and that no position or order field is. Every assertion follows from the criterion&#39;s text, nothing but generated surface calls is used, and the runner&#39;s typecheck passed with no diagnostics. With the last clause now asserted, deleting the R-1.17 entry from not-testable.yaml is correct. The change to tests/results/old/applied.yaml is the pipeline&#39;s own housekeeping, not the writer&#39;s output. The contract&#39;s description of the observation mentions a place in the list that the generated method takes no argument for; the tests avoid it by using a single question, so it does not bear on them. The owed missing test for R-1.17 stays open until a run of these tests is recorded. The ruling would change if a run showed the observation&#39;s reported labels could not be matched to the criterion&#39;s field names, which calibration would sort as an adapter or product question.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
