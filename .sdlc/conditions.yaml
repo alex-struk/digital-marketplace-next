@@ -1000,3 +1000,12 @@ conditions:
     stage: build
     by: tech-lead
     at: 2026-09-30T16:11:05.972Z
+  - ref: build-slice-2-8#2
+    text: Remove the internal ticket number from
+      app/backend/tests/sign-in-flow.test.ts (egress rule E-2).
+    from: build-slice-2-8
+    family: build-slice-2
+    gate: G3
+    stage: build
+    by: tech-lead
+    at: 2026-09-30T18:06:07.564Z
