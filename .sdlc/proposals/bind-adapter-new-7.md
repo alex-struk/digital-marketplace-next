@@ -39,3 +39,23 @@ The adapter's existing label patterns match every one of these. There is no job 
 **Not done, outside this stage's scope:** the rest of the adapter still says in its comments and bindings that no signed-in page was ever seen. That is out of date now that sign-in works. A full rebind of the signed-in pages would probably move many members from unbound to bound; I only rebound this one page.
 
 No page route failed to load. I changed nothing outside `tests/adapters/new/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the new adapter bind every surface action and observation on the profile-completion page, and nothing else? It does. The change meets bind-adapter-new-6#1 as worded: when /sign-up/complete sends the browser to /dashboard or /sign-in, the seven readings return empty; the four actions still report unbound, naming where the browser was sent; and a browser that is anywhere else still reports unbound. Every binding is navigation and locators only. Returning empty is a reading, not a verdict: every test in tests/acceptance/users/R-4.23.spec.ts calls open() before reading, then asserts the terms box is absent and asserts the destination screen (dashboard table or empty message, or the sign-in vendor card) is present. So an adapter that cannot tell a redirect from a browser already sitting on /dashboard cannot pass a test vacuously. Moving the form's members to bound rests on the form being seen signed in as the vendor still to agree, and the labels observed match the adapter's patterns. change_avatar's unbound reason names a real gap in the surface: the picture control opens no file chooser and the only file input is hidden and unlabelled. Only tests/adapters/new/ changed; nothing under tests/acceptance did. The runner's typecheck on this revision passed with no diagnostics. Tier is STANDARD and no residual risk is marked unaccepted, so there is no escalation. What would change this ruling: evidence that 'Complete profile' is not disabled until the terms box is ticked, or that a label pattern misses a field on the form, which would make a member marked bound wrong. build-slice-2-5#1 and build-slice-2-8#2 are owed by build and are not settled here.
+
+**Conditions:**
+- condition-met bind-adapter-new-6#1: in tests/adapters/new/index.ts, signUpFormShown() returns false when /sign-up/complete has sent the browser to /dashboard or /sign-in; the seven readings (idpUsernameReadonly, nameField, emailField, jobTitleField, termsCheckbox, completeDisabledUntilTermsAccepted, fieldError) then return empty, while the actions still go through onSignUpForm(), which reports unbound naming page.url(). The change is recorded against these members, with a comment, under user-sign-up-complete in tests/adapters/new/bindings.yaml.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `1b061da37d626547deaa47d7c2f92f74b62f2cc6`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
