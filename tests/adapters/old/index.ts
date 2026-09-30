@@ -2004,7 +2004,7 @@ export default function create(
   // its top bar offers: "Publish Changes" on a published opportunity, "Save Changes" on a
   // draft, "Submit Changes for Review" for an author awaiting review, and on a submitted
   // proposal "Submit Changes" with its terms dialog.
-  async function saveAttachmentForm(where: string): Promise<void> {
+  async function saveAttachmentForm(where: string, change = "removed the attachment"): Promise<void> {
     const saves = ["Publish Changes", "Save Changes", "Submit Changes for Review"];
     for (const name of saves) {
       if (!(await findControl(navBar(), name))) continue;
@@ -2018,7 +2018,7 @@ export default function create(
       return;
     }
     throw new Error(
-      `unbound: ${where} — removed the attachment, then found no ${quoted([...saves, "Submit Changes"])} in the top bar of ${page.url()} to save the removal with`,
+      `unbound: ${where} — ${change}, then found no ${quoted([...saves, "Submit Changes"])} in the top bar of ${page.url()} to save it with`,
     );
   }
 
@@ -8657,30 +8657,29 @@ export default function create(
         }
         return found;
       };
+      const where = "file-attachment-control.attachment_address";
       let found = await stored();
       if (!found.length && (await attachmentLink(0))) {
-        // A published opportunity saves through "Publish Changes", a draft through "Save Changes".
-        const saves = ["Save Changes", "Publish Changes", "Submit Changes for Review"];
-        let save: Locator | null = null;
-        for (const name of saves) {
-          const control = await findControl(navBar(), name);
-          if (control && !(await isDisabled(control))) {
-            save = control;
-            break;
-          }
+        // Only a preview: the file is not stored until the form is saved — a published
+        // opportunity through "Publish Changes" and its "Publish Changes to Code With Us
+        // Opportunity?" confirmation, a draft through "Save Changes". A save not offered
+        // is reported rather than read as no address.
+        await saveAttachmentForm(where, "found the added file only previewed (blob:) on the Attachments step");
+        await attachmentsStep();
+        for (let wait = 0; wait < 20 && !found.length; wait++) {
+          found = await stored();
+          if (!found.length) await page.waitForTimeout(500);
         }
-        if (save) {
-          await save.click();
-          await settle();
-          await confirmIfAsked("file-attachment-control.attachment_address", saves);
-          await saved(saves);
-          await attachmentsStep();
-          for (let wait = 0; wait < 20 && !found.length; wait++) {
-            found = await stored();
-            if (!found.length) await page.waitForTimeout(500);
-          }
+        if (!found.length) {
+          const shown = [await alertMessages(), await messages().catch(() => "")].filter(Boolean).join(" | ");
+          throw new Error(
+            `${where} — saved the form holding the added file, but the Attachments step on ${page.url()} still links no /api/files/ address; ${
+              shown ? `the page shows: ${shown.replace(/\n/g, " ")}` : "the page shows no message"
+            }`,
+          );
         }
       }
+      // Reached the Attachments step: no preview and no stored link means it holds no file.
       return found.join("\n");
     },
     // Whichever form is open, the limit is stated on its Attachments step.
@@ -8691,17 +8690,23 @@ export default function create(
     // The upload is made through the page's own file chooser, so its refusal is whatever
     // message the step shows afterwards, whole.
     uploadRefusedForSize: () => messages(),
-    // On a published Team With Us opportunity an attachment is added in "Edit" and only
-    // stored once "Publish Changes" is pressed and "Publish Changes to Team With Us
-    // Opportunity?" confirmed (seen as the administrator on a published Team With Us
-    // opportunity: the step then links the file at /api/files/). The addition is saved there,
-    // so what the test reads next is the stored attachment.
+    // On a published opportunity of any program an attachment is added in "Edit" and only
+    // stored once "Publish Changes" is pressed and its confirmation ("Publish Changes to Code
+    // With Us Opportunity?", "... Team With Us Opportunity?") accepted — seen as the
+    // administrator on the seeded published Code With Us opportunity and on a published Team
+    // With Us one: the step then links the file at /api/files/ instead of a blob: preview.
+    // The addition is saved there, so what the test reads next is the stored attachment.
     addAttachment: async (input) => {
       const where = "file-attachment-control.add_attachment";
       await addAttachment(where, input);
-      if (!/^\/opportunities\/team-with-us\//.test(new URL(page.url()).pathname)) return;
       if (!(await findControl(navBar(), "Publish Changes"))) return;
-      await saveAttachmentForm(where);
+      // A refused upload leaves no preview and its message on the step; there is nothing to
+      // store, and publishing would clear the refusal the test reads next.
+      const previewed = await seen(page.getByRole("link"))
+        .evaluateAll((links) => links.some((l) => (l.getAttribute("href") ?? "").startsWith("blob:")))
+        .catch(() => false);
+      if (!previewed) return;
+      await saveAttachmentForm(where, "added the file");
       await attachmentsStep();
     },
     renameNewAttachment: (input) =>

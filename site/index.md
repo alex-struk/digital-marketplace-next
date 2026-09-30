@@ -72,6 +72,7 @@ Profile: rebuild
 - [bind-adapter-old-42](proposals/bind-adapter-old-42.md)
 - [bind-adapter-old-43](proposals/bind-adapter-old-43.md)
 - [bind-adapter-old-44](proposals/bind-adapter-old-44.md)
+- [bind-adapter-old-45](proposals/bind-adapter-old-45.md)
 - [bind-adapter-old-5](proposals/bind-adapter-old-5.md)
 - [bind-adapter-old-6](proposals/bind-adapter-old-6.md)
 - [bind-adapter-old-7](proposals/bind-adapter-old-7.md)
@@ -348,10 +349,10 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $681.755785
-- Rulings cost: $374.44301
-- Total cost: $1056.198795
-- Agent-held rulings: 304
+- Journal cost: $682.845064
+- Rulings cost: $374.737379
+- Total cost: $1057.582443
+- Agent-held rulings: 305
 - Runner rulings (automatic, no seat held): 1
 - Human rulings: 12
 - Rulings whose seat this page does not recognise: 0
