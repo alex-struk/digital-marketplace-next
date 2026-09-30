@@ -1,22 +1,16 @@
 gate: G3
 verdict: escalated
-by: runner:verify
-held_by: runner
+by: agent:tech-lead
+held_by: agent
 escalate_to: tech-lead
-rationale: "Slice 2 has failed verify 3 times. The failures below may not be the
-  application's: a test, the adapter, the criterion or the sandbox can each be
-  what is wrong (spec 7.1), and another build would not find out which."
-conditions:
-  - "R-4.2: Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture
-    needs a mail catcher target"
-  - "R-6.1: Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture
-    needs a mail catcher target"
-  - "R-6.2: Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture
-    needs a mail catcher target"
-  - "R-6.3: Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture
-    needs a mail catcher target"
-  - "R-6.4: Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture
-    needs a mail catcher target"
-  - "R-6.5: Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture
-    needs a mail catcher target"
-at: 2026-09-30T11:44:31.629Z
+stalled: "agent:tech-lead escalated to tech-lead, the role it holds itself, so no seat this pipeline can fill is waiting on it: a person has to rule it, or the proposal has to be withdrawn."
+rationale: |2-
+  Question: does slice 2 (sign in, finish signing up, sign out) do what its criteria say, after three failed verifies? Ruling: escalate to the pipeline owner, because neither group of failures is the application's and the larger one can only be fixed by the owner. (1) R-4.2 and R-6.1 to R-6.5 never reached the application: the harness stopped them with 'SDLC_MAIL_API is not set', because the project configuration's targets.new.depends_on names only the identity provider and no mail catcher. The branch's compose file publishes Mailpit's API, with the hold proxy under /hold, at http://localhost:8025. No stage a return can reach writes the project configuration, so a fourth build would fail identically. The owner needs to add the mail catcher to targets.new at http://localhost:8025, waited for at /api/v1/info, and schedule R-6.1's separate run with SDLC_DISABLE_NOTIFICATIONS=1. (2) The eleven 'unbound' sign-in failures are the adapter's, not the application's. tests/adapters/new/index.ts looks for links named 'Sign In Using GitHub' and 'Sign In Using IDIR', the old application's labels. The new /sign-in offers buttons named 'Sign in as a vendor' and 'Sign in as a public sector employee', exactly as the approved design (design/catalogue/user-sign-in.default.stories.tsx) shows. The adapter also chooses the way in by /^test-vendor/, so it sends first-time-vendor to IDIR. This should go to bind-adapter to rebind to the design's buttons and choose by the persona's kind of account. (3) Separately, the egress check fails on rule E-2 (internal ticket number) at app/frontend/src/auth/pkce.ts:38 and docs/decisions/0011-signing-in-and-what-a-session-answers.md:13; both are the build's to remove when the slice is next returned. The owed tests missing-test/R-4.1 and missing-test/R-4.2 stay open: their blocker, first-time personas and a way to list every message in the catcher, is still real. What would change this: with the mail catcher in the target's description and the adapter rebound, a verify that still failed the slice's criteria would be the application's, and the ruling would be a return to build.
+cost: 0.9665126
+turns: 9
+session: "75fabee4-8da3-4bcf-9bed-8302b42d1e8a"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T11:45:50.957Z
