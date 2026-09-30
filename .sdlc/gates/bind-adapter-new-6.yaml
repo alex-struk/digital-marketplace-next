@@ -1,0 +1,16 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does this adapter bind every surface action and observation on the new target, and nothing else? Mostly yes. The diff touches only tests/adapters/new, the runner's typecheck of adapters/new passes with no diagnostics, the bindings locate and read without asserting, and the unbound reasons for missing routes are grounded in what was walked. One binding is wrong in a way that rules out a criterion this proposal names. In tests/adapters/new/index.ts every reading on the profile-completion page (user-sign-up-complete), termsCheckbox included, goes through onSignUpForm(), which throws 'unbound' whenever the browser is not on /sign-up/complete, whether it went to /dashboard or to /sign-in?redirectOnSuccess. R-4.23 requires exactly those redirects, for a vendor who agreed before, a non-vendor and a signed-out visitor, and three of the four tests in tests/acceptance/users/R-4.23.spec.ts (lines 32, 45 and 57) read termsCheckbox() after the redirect and expect it to be empty. As bound, those tests report the application as missing a surface even when it behaves correctly, so the unbound reason is not real. The adapter already does this correctly for userProfileSelf.signInRequired, which reads the redirect instead of refusing. Returned to fix that binding. The owed build-stage conditions (build-slice-2-5#1, build-slice-2-8#2) are not settled by an adapter change and stay open. I would approve once the form's readings return empty when the browser was redirected away and its actions stay unbound.
+conditions:
+  - "tests/adapters/new/index.ts, user-sign-up-complete: when /sign-up/complete redirects the browser away (to /dashboard for an account that is not a vendor still to agree, or to /sign-in?redirectOnSuccess=... for a signed-out visitor), the form's readings (terms_checkbox, name_field, email_field, job_title_field, idp_username_readonly, complete_disabled_until_terms_accepted, field_error) must return empty rather than throw 'unbound', because the form not being shown is exactly what R-4.23 says those people should see. Keep the actions (accept_app_terms, toggle_new_opportunity_notifications, complete_profile, change_avatar) reporting unbound with where the browser was sent. Record the change against these members in tests/adapters/new/bindings.yaml."
+cost: 0.8791996000000002
+turns: 6
+session: "ab3069f1-b955-4196-a8e1-5a00e71e39b2"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T19:27:42.111Z
