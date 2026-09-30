@@ -1,0 +1,20 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 2 does not yet do what 6 of its criteria say. Each condition is
+  the criterion and what the running application did.
+conditions:
+  - "R-4.2: Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture
+    needs a mail catcher target"
+  - "R-6.1: Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture
+    needs a mail catcher target"
+  - "R-6.2: Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture
+    needs a mail catcher target"
+  - "R-6.3: Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture
+    needs a mail catcher target"
+  - "R-6.4: Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture
+    needs a mail catcher target"
+  - "R-6.5: Error: SDLC_MAIL_API is not set; a test that uses the `mail` fixture
+    needs a mail catcher target"
+at: 2026-09-30T11:38:33.466Z
