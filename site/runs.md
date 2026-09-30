@@ -234,6 +234,9 @@
 - 09:41:42 verify slice 2: the sandbox did not start, so nothing was verified.
 - 09:47:59 verify slice 2: returned — R-4.1, R-4.2, R-4.3, R-4.17, R-4.22, R-4.24 fail. Next: sdlc run build --slice 2 --revise
 - 09:48:00 run verify: regenerated 368 files in .sdlc, site
+- 09:48:04 deviation: next named `sdlc run calibrate --target old`; ran `sdlc run build --slice 2 --revise`; reason: The Tests phase is held open only by the old target's calibration tail: a few adapter bindings the blind bind-adapter stage keeps missing (R-1.17, R-7.26 and similar), each full run exposing one or two more. They concern the old application's adapter, not the new application. They stay owed; the build proceeds slice by slice meanwhile, by the operator's judgement under the tech lead's delegation for this first autonomous run.
+- 10:00:01 verify slice 2: 6 criteria still fail after 3 builds; escalated to tech-lead.
+- 10:00:01 run verify: regenerated 369 files in .sdlc, site
 
 # Run record 2026-09-29
 
