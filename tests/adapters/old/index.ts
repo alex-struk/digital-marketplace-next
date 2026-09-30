@@ -1258,7 +1258,13 @@ export default function create(
     throw new Error(`unbound: ${where} — the chooser offers no option matching "${item}" on ${page.url()}`);
   }
 
-  async function enterValue(where: string, entry: Entry, role: string, box: Locator): Promise<void> {
+  async function enterValue(
+    where: string,
+    entry: Entry,
+    role: string,
+    box: Locator,
+    typed = false,
+  ): Promise<void> {
     if (role === "checkbox") {
       if ((await box.isChecked()) !== saysYes(entry.value)) await box.click();
       return;
@@ -1277,6 +1283,17 @@ export default function create(
       throw new Error(`${where} — the field for "${entry.key}" is disabled on ${page.url()}`);
     }
     await box.fill(text);
+    if (typed && role === "textbox") {
+      // Entered as a person would finish it: one key typed at the end and taken back, then
+      // the box left. A question box just added by "Add Question" keeps the text a fill puts
+      // there without taking it in (Submit for Review stays disabled and no message shows),
+      // and a value given as empty put into a box already empty changes nothing, so old never
+      // checks it; the keystroke makes old read the box as it stands and show its own verdict.
+      await box.focus();
+      await page.keyboard.press("ControlOrMeta+End");
+      await page.keyboard.type("a");
+      await page.keyboard.press("Backspace");
+    }
     await box.blur().catch(() => undefined);
   }
 
@@ -1293,6 +1310,7 @@ export default function create(
     scope: Scope,
     last: boolean,
     slot?: number,
+    typed = false,
   ): Promise<boolean> {
     for (const wanted of labelsFor(entry.key)) {
       const [label, position] = wanted.split("#");
@@ -1303,7 +1321,7 @@ export default function create(
         if (!count) continue;
         const at = position ? Number(position) - 1 : slot !== undefined ? slot : last ? count - 1 : 0;
         if (at >= count) continue;
-        await enterValue(where, entry, role, boxes.nth(at));
+        await enterValue(where, entry, role, boxes.nth(at), typed);
         namedLabels.add(squash(label));
         return true;
       }
@@ -1336,7 +1354,7 @@ export default function create(
   async function fillForm(
     where: string,
     input: unknown,
-    options: { scope?: Scope; last?: boolean; skip?: string[]; slot?: number } = {},
+    options: { scope?: Scope; last?: boolean; skip?: string[]; slot?: number; typed?: boolean } = {},
   ): Promise<void> {
     const pending = entriesOf(input, options.skip ?? []);
     if (!pending.length) return;
@@ -1350,7 +1368,7 @@ export default function create(
       while (progress && pending.length) {
         progress = false;
         for (let i = 0; i < pending.length; i++) {
-          if (await setField(where, pending[i], scope, options.last ?? false, options.slot)) {
+          if (await setField(where, pending[i], scope, options.last ?? false, options.slot, options.typed ?? false)) {
             pending.splice(i, 1);
             i--;
             progress = true;
@@ -2502,6 +2520,7 @@ export default function create(
     isEmpty: (slot: number) => Promise<boolean>,
     input: unknown,
     orderNamesSlot = true,
+    typed = false,
   ): Promise<void> {
     const onStep = await currentStep();
     if (!onStep || !matches(step, (await onStep.innerText()).trim())) {
@@ -2523,7 +2542,7 @@ export default function create(
     if ((await headings.count()) <= slot) {
       throw new Error(`unbound: ${where} — "${add}" did not make a ${heading} ${slot + 1} on ${page.url()}`);
     }
-    await fillForm(where, input, { scope: page, slot, skip: ORDER_KEYS });
+    await fillForm(where, input, { scope: page, slot, skip: ORDER_KEYS, typed });
   }
 
   async function addQuestion(where: string, step: string, input: unknown): Promise<void> {
@@ -2540,6 +2559,8 @@ export default function create(
       // A question form has no position field: an "order" in the input is a value the form
       // does not take, not the number of a slot to make.
       false,
+      // Question and Response Guidelines are typed into, so old checks each as it stands.
+      true,
     );
   }
 
@@ -8428,9 +8449,12 @@ export default function create(
     if (ids.length) bodyImageId = ids[ids.length - 1][1];
   }
 
-  // Images in the published body only: what follows the page's title, less the
-  // "Published … | Updated …" line — the same body pageBody reads — so the site header's
-  // logo is never taken for an image in the text. Named and unnamed images alike.
+  // Images in the published body only: every image in the page's content region that comes
+  // after its title, less the "Published … | Updated …" line and anything inside the site's
+  // own navigation or footer, so the header's logo and avatar are never taken for an image
+  // in the text. Named and unnamed images alike. Old draws the body's FILE_ID image as an
+  // image named after the file whose source is left empty; such an image is still on the
+  // page, so it is reported by its name rather than dropped.
   async function imageSources(): Promise<string[]> {
     const heading = seen(page.getByRole("heading", { level: 1 }));
     if (!(await heading.count())) return [];
@@ -8438,10 +8462,25 @@ export default function create(
       .first()
       .evaluate((title) => {
         const sources: string[] = [];
-        for (let part = title.nextElementSibling; part; part = part.nextElementSibling) {
-          if (/^\s*(Published|Updated)\b/.test((part as HTMLElement).innerText ?? "")) continue;
-          const images = part.tagName === "IMG" ? [part] : Array.from(part.querySelectorAll("img"));
-          for (const image of images) sources.push(image.getAttribute("src") ?? "");
+        let region: Element = title.parentElement ?? title;
+        // Widen to the content region: the nearest ancestor that still holds no navigation
+        // or footer of the site.
+        while (region.parentElement && !region.parentElement.querySelector("nav, footer, header")) {
+          region = region.parentElement;
+        }
+        for (const image of Array.from(region.querySelectorAll("img"))) {
+          if (image.closest("nav, footer, header")) continue;
+          if (!(title.compareDocumentPosition(image) & Node.DOCUMENT_POSITION_FOLLOWING)) continue;
+          let dated = false;
+          for (let part = image.parentElement; part && part !== region; part = part.parentElement) {
+            if (/^\s*(Published|Updated)\b/.test((part as HTMLElement).innerText ?? "")) dated = true;
+          }
+          if (dated) continue;
+          const src = image.getAttribute("src") ?? "";
+          const name = image.getAttribute("alt") ?? "";
+          if (src) sources.push(src);
+          else if (name) sources.push(`img "${name}" (no source)`);
+          else sources.push("img (no source)");
         }
         return sources;
       })
@@ -9299,7 +9338,9 @@ export default function create(
     // screen "Publish Changes" leaves behind shows the title, not the published body): once it
     // has drawn, the body's FILE_ID marker is shown as an image kept at /api/files/<id>, which
     // may arrive a moment after the text. When none arrives, the body's images are what is
-    // there — empty when it shows none.
+    // there — empty when it shows none. Old draws the marker as an image named after the file
+    // with an empty source, reported as `img "<name>" (no source)`, never as an address it
+    // does not carry.
     imageRenderedInPublishedText: async () => {
       const slug = slugInView();
       if (!slug) {
