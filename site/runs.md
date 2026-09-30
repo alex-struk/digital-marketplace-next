@@ -272,6 +272,9 @@
 - 12:51:28 drive: step 2: `sdlc run verify --slice 2` — build-slice-2-11 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
 - 12:53:54 verify slice 2: 4 criteria still fail after 3 builds; escalated to tech-lead.
 - 12:53:55 run verify: regenerated 3 files in .sdlc, site
+- 12:55:35 drive: step 4: `sdlc run bind-adapter --target <target> --revise` — 3 revision requests owed by bind-adapter
+- 12:55:35 run bind-adapter: pre-checks failed
+- 12:55:35 drive: stopped after 4 steps — step 4 (`sdlc run bind-adapter --target <target> --revise`) failed
 
 # Run record 2026-09-29
 
