@@ -13,8 +13,8 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: nothing
 
 ### Slice 2 · A person can sign in, finish signing up and sign out
-- criteria: R-4.1, R-4.2, R-4.3, R-4.17, R-4.23, R-4.24, R-6.1, R-6.20, R-6.28
-- delivers: sign-in and sign-up screens, OpenID Connect sign-in with PKCE from the single-page app through the sandbox Keycloak realm (public client, no secret in the browser), bearer-token checks on every `/api` route with authorization by the account kind and status held in `users`, `/api/sessions/current` creating the account on first sign-in by identity kind, the profile-completion screen with terms agreement and the new-opportunity notice choice, the return to the page sign-in began from, sign-out from the service and the identity provider, and the mail path every later slice uses — one configured sender, formatted and plain-text forms, test marking, the environment switch, fire-and-forget delivery that never fails the action, and skipping recipients with no address — shown first by the welcome message; the criteria about the one sender, the two forms, test marking and silent delivery failure (R-6.2 to R-6.5), the uniqueness of accounts and emails (R-4.6), the profile's fields (R-4.27, R-4.28) and where sign-in lands (R-4.22) are built on here but answered for in slices 3, 7, 8 and 14, whose screens their tests go through
+- criteria: R-4.1, R-4.2, R-4.3, R-4.17, R-4.23, R-4.24, R-6.1
+- delivers: sign-in and sign-up screens, OpenID Connect sign-in with PKCE from the single-page app through the sandbox Keycloak realm (public client, no secret in the browser), bearer-token checks on every `/api` route with authorization by the account kind and status held in `users`, `/api/sessions/current` creating the account on first sign-in by identity kind, the profile-completion screen with terms agreement and the new-opportunity notice choice, the return to the page sign-in began from, sign-out from the service and the identity provider, and the mail path every later slice uses — one configured sender, formatted and plain-text forms, test marking, the environment switch, fire-and-forget delivery that never fails the action, and skipping recipients with no address — shown first by the welcome message; the criteria about the one sender, the two forms, test marking and silent delivery failure (R-6.2 to R-6.5), the uniqueness of accounts and emails (R-4.6), the profile's fields (R-4.27, R-4.28), where sign-in lands (R-4.22), new accounts starting with new-opportunity notices off (R-6.20) and skipping recipients with no address (R-6.28) are built on here but answered for in slices 3, 7, 8 and 14, whose screens their tests go through
 - depends on: Slice 1
 
 ### Slice 3 · A person can keep their own profile, picture and notification choice
@@ -43,8 +43,8 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 3
 
 ### Slice 8 · Anyone can find opportunities and follow the ones they care about
-- criteria: R-1.2, R-1.3, R-1.5, R-1.6, R-1.38, R-1.39, R-4.22, R-6.21, R-6.27
-- delivers: the opportunity list at `/opportunities` grouped into unpublished, open and closed with filters and search, visibility by role on list and view, view counting, watching and unwatching, the new-opportunity notice control on the list at every width, the staff and administrator dashboard, and the home page's browse entry
+- criteria: R-1.2, R-1.3, R-1.5, R-1.6, R-1.38, R-1.39, R-4.22, R-6.20, R-6.21, R-6.27, R-6.28
+- delivers: the opportunity list at `/opportunities` grouped into unpublished, open and closed with filters and search, visibility by role on list and view, view counting, watching and unwatching, the new-opportunity notice control on the list at every width, shown against the announcement Slice 7's publishing sends — a new account is not sent it until it asks, and the broadcast skips a subscriber with no address and carries on past one it cannot reach, the staff and administrator dashboard, and the home page's browse entry
 - depends on: Slice 7
 
 ### Slice 9 · An opportunity's author and administrators can run it after publication
