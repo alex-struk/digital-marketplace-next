@@ -1,0 +1,17 @@
+gate: G3
+verdict: return
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does bind-adapter-old-50 keep fileEmbeddedImage.imageRenderedInPublishedText (R-8.29) an adapter, meaning navigation and locators only? Ruling: return. The revision correctly waits for the published /content/:slug page to draw (ready()), polls for the image instead of reading an empty page too early, and also collects images that have no name. It touches nothing under tests/acceptance, and the runner's typecheck passed with no diagnostics under adapters/old/. But when no image kept at /api/files/<id> appears within about five seconds, the observation throws 'unbound: …' instead of returning what it observed. unbound means the application provides no surface for the adapter to bind. Here the page exists and the observation bound to it. An image missing from the published text is the very outcome R-8.29's then-clause ('a reader of the finished page sees the image') tests. Throwing would record a genuine product failure as a binding gap and route it toward test-overreach or re-scoping, which could get a correct test re-derived. That is the adapter deciding the outcome's classification, which is not an adapter's job. The throw exists because the observation reads every image on the whole page (document.images), so an unrelated image such as the site header's logo would satisfy the test's toBeTruthy. The right fix is a locator fix: scope the observation to the published body text, and return an empty string on timeout. What would change the ruling: a revision that scopes to the rendered body and returns rather than throws when the image never appears.
+conditions:
+  - "tests/adapters/old/index.ts fileEmbeddedImage.imageRenderedInPublishedText: when no matching image appears before the wait ends, return the sources observed (an empty string when there are none) instead of throwing 'unbound: file-embedded-image.image_rendered_in_published_text'. The observation is bound: the published page exists. An image absent from it is a failure of R-8.29's then-clause for the test's assertion to report, not a surface the application lacks."
+  - "tests/adapters/old/index.ts imageSources()/imageRenderedInPublishedText: collect image sources only from the published page's body text, not every image in the document (document.images and page-wide getByRole('img')), so an unrelated image elsewhere on the page, such as a header logo, cannot be returned as the image rendered in the published text. Keep the ready() wait and the polling for an image kept at /api/files/<id> that was introduced in this revision."
+cost: 0.36018100000000003
+turns: 6
+session: "4a4f7e88-9f00-45cd-bd84-5234c524fb68"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-09-30T06:40:53.694Z
