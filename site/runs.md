@@ -316,6 +316,11 @@
 - 14:52:09 rule bind-adapter-old-57 approve at G3 by agent:tech-lead (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 - 14:52:13 drive: step 16: `sdlc run calibrate --target old` — 1 binding to check again now that its adapter has changed (rebind) for target old owed by calibrate
 - 14:54:41 run calibrate: ok, cost 0, turns 0
+- 14:54:44 drive: step 17: `sdlc run calibrate --target old --full` — phase 2 Tests is not complete (exit: the contract approved, every domain's tests approved, and every calibration row pass or ruled, all measured by the last run), and calibrate for target old is next in it: every row passes or is ruled, but 247 rows were carried from an earlier run (2026-09-30-25) rather than measured by the last one; the Tests phase closes only on a run that measures every row
+- 15:44:40 oracle up old in configuration notifications_disabled: local port 3103
+- 15:45:21 oracle down old in configuration notifications_disabled
+- 15:45:21 calibrate old: a full run, forced with --full
+- 15:45:27 run calibrate: ok, cost 0, turns 0
 
 # Run record 2026-09-29
 
