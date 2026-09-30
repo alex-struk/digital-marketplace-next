@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-51 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">334</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">329</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">301</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-51</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 06:42</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I changed the one observation this ruling returned, <code>fileEmbeddedImage.imageRenderedInPublishedText</code> (R-8.29), and nothing else.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I changed the one observation this ruling returned, <code>fileEmbeddedImage.imageRenderedInPublishedText</code> (R-8.29), and nothing else. I couldn&#39;t run the typecheck: the session refused approval for the <code>tsc</code> command, so the edit has only been checked by reading it. It hasn&#39;t been run end to end against a published page with an image in it either.</p>
+<p><strong>Throw replaced with a return.</strong> The observation still waits for the published <code>/content/:slug</code> page to finish drawing, the <code>ready()</code> wait this revision added. It then polls for about five seconds for an image kept at <code>/api/files/&lt;id&gt;</code>, where the id comes from the <code>FILE_ID</code> marker last written into the body. When that image never arrives, it now returns whatever image sources the body shows, or an empty string if there are none. It no longer throws <code>unbound: …</code>. The page exists and the observation binds to it, so a missing image is for R-8.29&#39;s assertion to report.</p>
+<p><strong>Image search limited to the body text.</strong> On the target I opened the seeded <code>/content/about-us</code> page and looked at how it is laid out. The only image anywhere on it is the site header&#39;s logo, <code>/images/logo.svg</code>. The page&#39;s title (its top heading) is followed by a line reading &quot;Published … | Updated …&quot;, then the body. <code>imageSources()</code> now starts from that heading and collects images only from what follows it, skipping the Published/Updated line. This is the same region <code>contentView.pageBody</code> already reads. It still picks up images with no name, so they are included, but it no longer uses <code>document.images</code> or a page-wide image-role search. The header logo therefore can&#39;t satisfy the test. If the page has no top heading, the function returns an empty list. Against <code>about-us</code> the new scoping returns nothing, which is correct: that page&#39;s body has no images.</p>
+<p><strong>Bindings file.</strong> <code>bindings.yaml</code> already listed <code>image_rendered_in_published_text</code> as <code>bound</code>, so I left it as it was. Nothing outside <code>tests/adapters/old/</code> was touched, no route failed to resolve, and no password or environment value appears in anything written.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-30 06:42.</p>
+<div class="body"><p>Question: does bind-adapter-old-51 bind every surface action and observation on old, and nothing else, having answered the two instructions G3 left owed on bind-adapter-old-50? Ruling: approve. imageRenderedInPublishedText no longer throws &#39;unbound&#39;. After the ready() wait and about 5s of polling for an image at /api/files/&lt;id&gt;, it returns the body&#39;s image sources, or an empty string, so a missing image is left for R-8.29&#39;s assertion to report. The polling only ends the wait early and decides no outcome. imageSources() now collects &lt;img&gt; sources only from the elements after the page&#39;s h1, skipping the Published/Updated line. That is the same region the existing pageBody binding walks (tests/adapters/old/index.ts:8456), so the header logo cannot be returned. Only tests/adapters/old/index.ts changed among the stage&#39;s outputs, nothing under tests/acceptance was touched, and the runner&#39;s typecheck on cddb0ea4e passed with no diagnostics. The change has not been run against a published page containing an image; the next verify/calibrate run establishes that. What would change this ruling: evidence that the published body is not rendered as siblings of the h1. Both pageBody and imageSources() would then read the wrong region, and the binding would need to change.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met bind-adapter-old-50#1: imageRenderedInPublishedText in tests/adapters/old/index.ts now returns sources.join(&quot;\n&quot;) after the ready() wait and a 5s poll for /api/files/&lt;id&gt;, with no throw; the result is empty when the body shows no images.</li><li>condition-met bind-adapter-old-50#2: imageSources() in tests/adapters/old/index.ts collects &lt;img&gt; src values only from the h1&#39;s following siblings, skipping the Published/Updated line (the same region pageBody reads), and no longer uses document.images or page-wide getByRole(&#39;img&#39;); the ready() wait and the /api/files/&lt;id&gt; polling are kept.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

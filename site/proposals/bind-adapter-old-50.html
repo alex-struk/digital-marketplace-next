@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-old-50 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">334</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">329</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">301</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-old-50</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 06:40</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on old, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I fixed the one flagged binding, <code>fileEmbeddedImage.imageRenderedInPublishedText</code> (R-8.29), but I could not run the TypeScript compiler, so the edit is not typechecked.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I fixed the one flagged binding, <code>fileEmbeddedImage.imageRenderedInPublishedText</code> (R-8.29), but I could not run the TypeScript compiler, so the edit is not typechecked. It also has not been run against the target or checked in the browser.</p>
+<p><strong>The problem.</strong> This observation is read on the published <code>/content/:slug</code> page. It collected image sources as soon as <code>contentView.open</code> returned, without waiting for the page to finish drawing. So it could read an empty page and return <code>&#39;&#39;</code>, which a test then took as its answer.</p>
+<p><strong>What it does now:</strong></p>
+<ul><li>It waits for the page to draw, the same way <code>contentView.pageTitle</code> and <code>pageBody</code> do on that page.</li><li>It then checks the page&#39;s images for up to about five seconds, looking for one whose source contains <code>/api/files/&lt;id&gt;</code>. The id is the one named in the body&#39;s <code>FILE_ID</code> marker.</li><li>The adapter knows that id because the body&#39;s text, once the upload writes the <code>FILE_ID:&lt;id&gt;</code> reference into it, is now recorded. This happens in two places: in <code>uploadBodyImage</code>, and in <code>fileEmbeddedImage.imageAddress</code> when it reads the editor&#39;s Body field.</li><li>If no upload has been seen, it accepts any image kept under <code>/api/files/</code>.</li><li>Images come from those with an image role plus the page&#39;s full image list. An image with no name has no image role, so the first source alone would miss it.</li><li>When a matching image appears, it returns all the sources it found.</li><li>If none appears, it throws <code>unbound: file-embedded-image.image_rendered_in_published_text — …</code>, naming the page, the address it waited for and every image source the page did show. It never returns <code>&#39;&#39;</code> in that case.</li></ul>
+<p>The changes are all in <code>tests/adapters/old/index.ts</code>: the upload helper (around line 8340), a new helper for collecting image sources just below it, and the observation itself (around line 9190).</p>
+<p><strong>Checks.</strong> Both ways of running the compiler needed approval, which nobody is here to give. I checked by reading instead: <code>tsconfig</code> targets ES2022 with the DOM library, which covers <code>matchAll</code> and <code>document.images</code>, and the new code follows patterns already in the file. I relied on the finding&#39;s description of how the published page shows the image rather than looking at a published page myself.</p>
+<p><code>bindings.yaml</code> did not need changing, since this observation was already listed as bound. No other binding was touched, no file outside <code>tests/adapters/old/</code> was changed, and I found no page route in <code>surface.yaml</code> that failed to resolve.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-30 06:40.</p>
+<div class="body"><p>Question: does bind-adapter-old-50 keep fileEmbeddedImage.imageRenderedInPublishedText (R-8.29) an adapter, meaning navigation and locators only? Ruling: return. The revision correctly waits for the published /content/:slug page to draw (ready()), polls for the image instead of reading an empty page too early, and also collects images that have no name. It touches nothing under tests/acceptance, and the runner&#39;s typecheck passed with no diagnostics under adapters/old/. But when no image kept at /api/files/&lt;id&gt; appears within about five seconds, the observation throws &#39;unbound: …&#39; instead of returning what it observed. unbound means the application provides no surface for the adapter to bind. Here the page exists and the observation bound to it. An image missing from the published text is the very outcome R-8.29&#39;s then-clause (&#39;a reader of the finished page sees the image&#39;) tests. Throwing would record a genuine product failure as a binding gap and route it toward test-overreach or re-scoping, which could get a correct test re-derived. That is the adapter deciding the outcome&#39;s classification, which is not an adapter&#39;s job. The throw exists because the observation reads every image on the whole page (document.images), so an unrelated image such as the site header&#39;s logo would satisfy the test&#39;s toBeTruthy. The right fix is a locator fix: scope the observation to the published body text, and return an empty string on timeout. What would change the ruling: a revision that scopes to the rendered body and returns rather than throws when the image never appears.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>tests/adapters/old/index.ts fileEmbeddedImage.imageRenderedInPublishedText: when no matching image appears before the wait ends, return the sources observed (an empty string when there are none) instead of throwing &#39;unbound: file-embedded-image.image_rendered_in_published_text&#39;. The observation is bound: the published page exists. An image absent from it is a failure of R-8.29&#39;s then-clause for the test&#39;s assertion to report, not a surface the application lacks.</li><li>tests/adapters/old/index.ts imageSources()/imageRenderedInPublishedText: collect image sources only from the published page&#39;s body text, not every image in the document (document.images and page-wide getByRole(&#39;img&#39;)), so an unrelated image elsewhere on the page, such as a header logo, cannot be returned as the image rendered in the published text. Keep the ready() wait and the polling for an image kept at /api/files/&lt;id&gt; that was introduced in this revision.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

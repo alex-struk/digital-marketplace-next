@@ -8339,10 +8339,43 @@ export default function create(
     // The image is stored first and only then written into the text as "![name](FILE_ID:…)";
     // a refused one leaves the text as it was and says so in an alert. Either ends the wait.
     for (let waited = 0; waited < 10000 && (await body.count()); waited += 250) {
-      if ((await body.first().inputValue().catch(() => before)) !== before) break;
+      const now = await body.first().inputValue().catch(() => before);
+      if (now !== before) {
+        rememberBodyImage(now);
+        break;
+      }
       if (await seen(page.getByRole("alert")).count()) break;
       await page.waitForTimeout(250);
     }
+  }
+
+  // The identifier of the image last written into a page's body, so the published page can
+  // be read for that very image once it is opened.
+  let bodyImageId = "";
+  function rememberBodyImage(body: string): void {
+    const ids = [...body.matchAll(/FILE_ID:([0-9a-f-]+)/gi), ...body.matchAll(/\/api\/files\/([0-9a-f-]+)/gi)];
+    if (ids.length) bodyImageId = ids[ids.length - 1][1];
+  }
+
+  // Images in the published body only: what follows the page's title, less the
+  // "Published … | Updated …" line — the same body pageBody reads — so the site header's
+  // logo is never taken for an image in the text. Named and unnamed images alike.
+  async function imageSources(): Promise<string[]> {
+    const heading = seen(page.getByRole("heading", { level: 1 }));
+    if (!(await heading.count())) return [];
+    const found = await heading
+      .first()
+      .evaluate((title) => {
+        const sources: string[] = [];
+        for (let part = title.nextElementSibling; part; part = part.nextElementSibling) {
+          if (/^\s*(Published|Updated)\b/.test((part as HTMLElement).innerText ?? "")) continue;
+          const images = part.tagName === "IMG" ? [part] : Array.from(part.querySelectorAll("img"));
+          for (const image of images) sources.push(image.getAttribute("src") ?? "");
+        }
+        return sources;
+      })
+      .catch(() => [] as string[]);
+    return [...new Set(found.filter(Boolean))];
   }
 
   // The name shown under "Published By" or "Updated By" links to that person's profile;
@@ -9155,6 +9188,7 @@ export default function create(
     // address under that identifier.
     async imageAddress() {
       const body = await fieldValue(["Body"]);
+      rememberBodyImage(body);
       const inText = /\/api\/files\/[^\s)"'\]]+/.exec(body);
       if (inText) return inText[0];
       const byId = /FILE_ID:([0-9a-f-]+)/i.exec(body);
@@ -9164,13 +9198,17 @@ export default function create(
     imageInsertedIntoText: () => fieldValue(["Body"]),
     onlyJpegAndPngOffered: () => imageKindsOffered("file-embedded-image.only_jpeg_and_png_offered", "Edit"),
     uploadingIndicator: () => linesMatching(/uploading/i),
+    // Read on the published /content/:slug page: once it has drawn, the body's FILE_ID marker
+    // is shown as an image kept at /api/files/<id>, which may arrive a moment after the text.
+    // When none arrives, the body's images are what is there — empty when it shows none.
     imageRenderedInPublishedText: async () => {
-      const images = seen(page.getByRole("img"));
-      const count = await images.count();
-      const sources: string[] = [];
-      for (let i = 0; i < count; i++) {
-        const source = await images.nth(i).getAttribute("src");
-        if (source) sources.push(source);
+      await ready();
+      const wanted = bodyImageId ? `/api/files/${bodyImageId}` : "/api/files/";
+      let sources: string[] = [];
+      for (let waited = 0; waited <= 5000; waited += 250) {
+        sources = await imageSources();
+        if (sources.some((source) => source.includes(wanted))) break;
+        await page.waitForTimeout(250);
       }
       return sources.join("\n");
     },
