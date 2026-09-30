@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>calibrate-triage-old-40 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">346</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">341</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">313</span></a></li><li><a href="../runs.html">Run log <span class="count">18</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>calibrate-triage-old-40</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-09-30 10:03</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr></tbody></table></div>
+<div class="body"><h2>4 criterion(s) fail against old: which of them did this project&#39;s own adapter cause?</h2>
+<p><strong>Recommendation.</strong> Sort R-1.10, R-1.17, R-7.26, R-8.31 with a triage condition each, so the adapter&#39;s failures are fixed there and only product questions reach the product owner.</p>
+<p>4 criterion(s) failed against the <strong>old</strong> target at <a href="http://localhost:4300,">http://localhost:4300,</a> and nobody has sorted them yet. Before any reaches the product owner, say which of them this project&#39;s own adapter caused. The adapter is under <code>tests/adapters/old/</code>; read each one against it and against the test.</p>
+<h4>R-1.10 · v1</h4>
+<p>An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters.</p>
+<ul><li>given: a member of public sector staff creating or editing an opportunity that is not a draft</li><li>when: they submit it with a missing title, a title over 200 characters, a teaser over 500 characters, a missing location, or a description that is missing or over 10,000 characters</li><li>then: the submission is rejected and the offending field is named in the response</li><li>test: tests/acceptance/opportunities/R-1.10.spec.ts</li></ul>
+<p><strong>An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a teaser over 500 characters)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a description over 10,000 characters)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-1.17 · v3</h4>
+<p>Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity&#39;s list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits.</p>
+<ul><li>given: a member of public sector staff adding an evaluation question to an opportunity</li><li>when: they submit a question or guideline outside 1 to 1,000 characters, a score below 1, a word limit outside 1 to 3,000, a position outside 0 to 100, or a minimum score equal to or above the question&#39;s score</li><li>then: the submission is rejected and the offending field is named</li><li>test: tests/acceptance/opportunities/R-1.17.spec.ts</li></ul>
+<p><strong>Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity&#39;s list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (an empty question is refused on submission for review, naming the question)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/question/i[39m
+Received string:  [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity&#39;s list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a question over 1,000 characters is refused on submission for review, naming the question)</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoMatch[2m([22m[32mexpected[39m[2m)[22m
+
+Expected pattern: [32m/question/i[39m
+Received string:  [31m&quot;&quot;[39m
+
+Call Log:
+- Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<p><strong>Each evaluation question on a Sprint With Us or Team With Us opportunity carries a question and a guideline of 1 to 1,000 characters, a maximum score of at least 1, a response word limit of 1 to 3,000, and an optional minimum score that must be lower than the maximum score; its position (0 to 100) is set by its place in the opportunity&#39;s list of questions and is never entered by the person. These limits are enforced when the opportunity is submitted for review or published, where a question outside them is refused and the offending field is named; saving the opportunity as a draft does not apply them, so a draft may be saved holding a question outside these limits. (a question whose position would fall beyond 100 is refused on submission for review)</strong> — failed</p>
+<pre><code>Error: Timeout 15000ms exceeded while waiting on the predicate</code></pre>
+<h4>R-7.26 · v1</h4>
+<p>A page&#39;s body is written as marked-up text with an editor offering formatting shortcuts, a link to the guidance page, and image upload that places the uploaded image into the body.</p>
+<ul><li>given: an administrator editing a page&#39;s body</li><li>when: they use the image control to choose an image file</li><li>then: the image is stored by the service and a reference to it is inserted into the body at the cursor, and the published page shows the image</li><li>test: tests/acceptance/content/R-7.26.spec.ts</li></ul>
+<p><strong>the editor&#39;s image control stores the image, places a reference to it in the body, and the published page shows it</strong> — failed</p>
+<pre><code>Error: [2mexpect([22m[31mreceived[39m[2m).[22mtoBeTruthy[2m()[22m
+
+Received: [31m&quot;&quot;[39m</code></pre>
+<h4>R-8.31 · v1</h4>
+<p>Removing an attachment from an opportunity or a proposal, or deleting the opportunity or proposal it hangs on, withdraws every read path the file held through that association, and a file that no record refers to any longer is identifiable as detached so that stored content can be disposed of under the records-retention rule for procurement attachments, which is set outside this domain.</p>
+<ul><li>test: tests/acceptance/files/R-8.31.spec.ts</li></ul>
+<p><strong>removing an attachment from an opportunity withdraws the read path the file held through that opportunity</strong> — failed</p>
+<pre><code>Error: file-attachment-control.attachment_address — on the Attachments step of http://localhost:4300/opportunities/code-with-us/59271071-6ff4-46d7-9c5c-309c6a5427ad/edit?tab=opportunity there is neither a stored /api/files/ link nor a blob: preview of an added file; the page shows no message</code></pre>
+<h3>Triage conditions</h3>
+<p>One condition per line, one for every criterion the page lists, in exactly one of these forms:</p>
+<ul><li><code>adapter-wrong &lt;ID&gt;: &lt;why&gt;</code> — the criterion and the test are both fine, and this target&#39;s adapter is what failed: it read the wrong thing off the page, reported a control missing that the page does render, or answered empty where it never reached the page. <code>&lt;why&gt;</code> names what the adapter did wrong, specifically enough for the next binding run to fix it. The criterion is not touched. On an unbound row it sends the binding back to <code>bind-adapter</code> however often it has been sent.</li><li><code>product-question &lt;ID&gt;</code> — nothing in the evidence points at the adapter. The failure goes to the product owner, who decides whether the application, the criterion or the test is wrong. No text after the ID. On an unbound row, use it when the criterion itself looks suspect.</li><li><code>oracle-cannot &lt;ID&gt;: &lt;why&gt;</code> — only for a row listed as unbound, on the oracle&#39;s target: the oracle genuinely cannot be driven into, or observed in, the state the test needs without changing its code — the state sits behind an external identity provider, is reachable only through a link the application emails, or is enforced only by a browser-native dialog. <code>&lt;why&gt;</code> names that state and why the oracle cannot reach it. It closes the row, changes no criterion, and stands until the criterion&#39;s version changes. It is never a way to skip binding work: where the application offers the control under another label, behind a step or as another persona, the answer is <code>adapter-wrong</code>.</li></ul>
+<p>The ID is the criterion&#39;s own id exactly as <code>spec/criteria-index.json</code> spells it. A condition may not span more than one line. When the evidence is genuinely unclear, it is a <code>product-question</code>: a failure wrongly sent to the product owner is answered there, while one wrongly blamed on the adapter comes back from the next binding run unchanged and costs a run to find out.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-09-30 10:06.</p>
+<div class="body"><p>The question is which of the four criteria failing against old were caused by this project&#39;s own adapter. Ruling: approve, with all four sent back as adapter-wrong. I read each failure against tests/adapters/old/index.ts and the test; no page snapshot survives from this run. R-1.10: the title-over-200 row passes with the same stepFormErrors/fieldErrors reader, while the teaser and description rows read &#39;&#39; for 15s. Old validates both limits on the client and draws the message after the box, and the adapter&#39;s own comment quotes &#39;Teaser must be between 0 and 500 characters long.&#39;. saidAfterField stops climbing as soon as an ancestor holds more than one field, and the description editor&#39;s image &#39;Choose File&#39; input sits in the same group, so the message beneath is never reached. R-1.17: the empty-question and over-length-question rows fail exactly as ruled in calibrate-triage-old-39, while the over-length-guideline row using the same LongText widget passes, so addTeamQuestion&#39;s Question entry or its message is still lost. The position row goes with them so the binding run can report what old actually shows. R-7.26: imageSources discards any image whose ancestor&#39;s innerText begins with &#39;Published&#39;. On old the body follows the &#39;Published … | Updated …&#39; line inside the content region, so the reader can drop the body image the previous triage saw rendered. R-8.31: attachmentAddress itself reports that the Attachments step holds neither a stored /api/files/ link nor a blob: preview, so addAttachment left no file on the form without raising. Earlier triage recorded that old stores and links the file once &#39;Publish Changes&#39; is confirmed. What would change this: a snapshot showing old&#39;s page with no field message on the teaser, description or question, or no image in the published body, would make that row a product-question.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>adapter-wrong R-1.10: for the over-length teaser (501 chars) and description (10,001 chars) rows, opportunityCwuCreate.fieldError() returned &#39;&#39; although old draws &#39;Teaser must be between 0 and 500 characters long.&#39; / &#39;Description must be between 1 and 10000 characters long.&#39; directly under the textarea, and the title-over-200 row passes with the same reader; saidAfterField stops climbing when an ancestor holds more than one field, which the description editor&#39;s own image &#39;Choose File&#39; file input causes, so the field&#39;s message is never reached; confirm the value is actually entered into both textareas (Teaser and the Description markdown editor) and read the message drawn in the field&#39;s own form group, not counting the editor&#39;s file input as a second field</li><li>adapter-wrong R-1.17: on submission for review, opportunitySwuCreate.fieldError() still returns &#39;&#39; for an empty Question and a 1,001-character Question, while the over-length Response Guidelines row using the same widget passes; addTeamQuestion must enter the Question value so old validates it (for an empty value, type then clear then leave the box so a change fires), and fieldError must read the message old draws under that Question box; for the 102-question row, submitForReview must report whether &#39;Submit for Review&#39; was pressed or left disabled, and fieldError must include any alert or message old shows after it, rather than ending quietly with nothing read</li><li>adapter-wrong R-7.26: fileEmbeddedImage returned &#39;&#39; after uploading a body image and publishing; imageSources skips any image with an ancestor whose innerText begins with &#39;Published&#39;, and on old&#39;s /content/&lt;slug&gt; page the body paragraph follows the &#39;Published … | Updated …&#39; line inside the content region, so the body image is dropped; exclude only the date line itself, not containers that start with it, and check that imageInsertedIntoText reads the Body box after the upload finished writing &#39;!<a href="FILE_ID:&amp;lt;id&amp;gt;">name</a>&#39; into it</li><li>adapter-wrong R-8.31: after fileAttachmentControl.addAttachment on a just-published Code With Us opportunity, attachmentAddress found neither a /api/files/ link nor a blob: preview on the Attachments step of /opportunities/code-with-us/&lt;id&gt;/edit?tab=opportunity, so the file was never added to the form; addAttachment must enter editing on the published opportunity if it is read-only, hand the file to the attachment input, save it through &#39;Publish Changes&#39; and its confirmation, and raise when no file appears, rather than returning silently</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
