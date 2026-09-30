@@ -8621,6 +8621,32 @@ export default function create(
 
   // The attachment control is a step of the opportunity and proposal forms rather than
   // a tab of its own; opening it means opening the form and walking to that step.
+  // The opportunity file-attachment-control.open was last given, so a later read can tell
+  // whether the page still shows that opportunity's forms and go back to it when not.
+  let attachmentsOf: { opportunityId: string; route: string } | null = null;
+
+  // The addresses of the attachment links on the step: stored files ("/api/files/") and
+  // additions only previewed until the form is saved ("blob:"). Read again for a few seconds,
+  // since the links are drawn a moment after the step or the save that produces them.
+  async function attachmentHrefs(wanted: (href: string) => boolean, waitMs = 0): Promise<string[]> {
+    const deadline = Date.now() + waitMs;
+    for (;;) {
+      const found = await seen(page.getByRole("link"))
+        .evaluateAll((links) => links.map((l) => l.getAttribute("href") ?? ""))
+        .catch(() => [] as string[]);
+      const picked = found.filter(wanted);
+      if (picked.length || Date.now() >= deadline) return picked;
+      await page.waitForTimeout(250);
+    }
+  }
+  const isStored = (href: string): boolean => href.includes("/api/files/");
+  const isPreview = (href: string): boolean => href.startsWith("blob:");
+
+  async function onAttachmentsStep(): Promise<boolean> {
+    const step = await currentStep();
+    return step !== null && matches(/Attachments$/i, (await step.innerText().catch(() => "")).trim());
+  }
+
   const fileAttachmentControl: S.FileAttachmentControlPage = {
     async open(params) {
       const programme = params?.program || "code-with-us";
@@ -8630,7 +8656,9 @@ export default function create(
           "unbound: file-attachment-control.open — the attachments step needs the opportunity it belongs to",
         );
       }
-      await go(`/opportunities/${programme}/${opportunityId}/edit?tab=opportunity`);
+      const route = `/opportunities/${programme}/${opportunityId}/edit?tab=opportunity`;
+      attachmentsOf = { opportunityId, route };
+      await go(route);
       // The step is headed "N. Attachments" and states its size limit whether or not the
       // form is being edited; "Add Attachment" appears only once editing has begun.
       await attachmentsStep();
@@ -8644,32 +8672,35 @@ export default function create(
       // first step, sometimes with an emptied dialog still open — the links are on the
       // Attachments step. A save's confirmation left open ("Publish Changes to Team With Us
       // Opportunity?") is confirmed, since dismissing it would discard the addition.
-      await confirmOpenSave("file-attachment-control.attachment_address");
-      await dismissDialog();
-      await attachmentsStep();
-      const stored = async (): Promise<string[]> => {
-        const links = seen(page.getByRole("link"));
-        const count = await links.count();
-        const found: string[] = [];
-        for (let i = 0; i < count; i++) {
-          const href = await links.nth(i).getAttribute("href");
-          if (href && href.includes("/api/files/")) found.push(href);
-        }
-        return found;
-      };
       const where = "file-attachment-control.attachment_address";
-      let found = await stored();
-      if (!found.length && (await attachmentLink(0))) {
+      await confirmOpenSave(where);
+      await dismissDialog();
+      // The opportunity open() was given, whose forms (the opportunity's own, or a proposal
+      // made against it) all sit under its address. A page left anywhere else is taken back
+      // to that opportunity's form, read-only or being edited as it was left.
+      if (attachmentsOf && !new URL(page.url()).pathname.includes(attachmentsOf.opportunityId)) {
+        await go(attachmentsOf.route);
+      }
+      await attachmentsStep();
+      if (!(await onAttachmentsStep())) await walkToStep(/Attachments$/i);
+      if (!(await onAttachmentsStep())) {
+        const step = await currentStep();
+        throw new Error(
+          `unbound: ${where} — went to the Attachments step by the opportunity tab, the step menu and Previous/Next, but ${page.url()} shows ${
+            step ? `"${(await step.innerText()).trim()}"` : "no numbered step"
+          } instead`,
+        );
+      }
+      const stored = (waitMs = 0): Promise<string[]> => attachmentHrefs(isStored, waitMs);
+      let found = await stored(3000);
+      if (!found.length && (await attachmentHrefs(isPreview)).length) {
         // Only a preview: the file is not stored until the form is saved — a published
         // opportunity through "Publish Changes" and its "Publish Changes to Code With Us
         // Opportunity?" confirmation, a draft through "Save Changes". A save not offered
         // is reported rather than read as no address.
         await saveAttachmentForm(where, "found the added file only previewed (blob:) on the Attachments step");
         await attachmentsStep();
-        for (let wait = 0; wait < 20 && !found.length; wait++) {
-          found = await stored();
-          if (!found.length) await page.waitForTimeout(500);
-        }
+        found = await stored(10000);
         if (!found.length) {
           const shown = [await alertMessages(), await messages().catch(() => "")].filter(Boolean).join(" | ");
           throw new Error(
@@ -8679,7 +8710,16 @@ export default function create(
           );
         }
       }
-      // Reached the Attachments step: no preview and no stored link means it holds no file.
+      // On the Attachments step with nothing linked: the file the test attached is not
+      // there, and an empty address would only send the next reader to the wrong place.
+      if (!found.length) {
+        const shown = [await alertMessages(), await messages().catch(() => "")].filter(Boolean).join(" | ");
+        throw new Error(
+          `${where} — on the Attachments step of ${page.url()} there is neither a stored /api/files/ link nor a blob: preview of an added file; ${
+            shown ? `the page shows: ${shown.replace(/\n/g, " ")}` : "the page shows no message"
+          }`,
+        );
+      }
       return found.join("\n");
     },
     // Whichever form is open, the limit is stated on its Attachments step.
@@ -8695,19 +8735,53 @@ export default function create(
     // With Us Opportunity?", "... Team With Us Opportunity?") accepted — seen as the
     // administrator on the seeded published Code With Us opportunity and on a published Team
     // With Us one: the step then links the file at /api/files/ instead of a blob: preview.
-    // The addition is saved there, so what the test reads next is the stored attachment.
+    // The addition is saved there, so what the test reads next is the stored attachment. An
+    // upload that leaves no preview and no message, or a saved record offering no save, is
+    // reported rather than passed over.
     addAttachment: async (input) => {
       const where = "file-attachment-control.add_attachment";
       await addAttachment(where, input);
-      if (!(await findControl(navBar(), "Publish Changes"))) return;
-      // A refused upload leaves no preview and its message on the step; there is nothing to
-      // store, and publishing would clear the refusal the test reads next.
-      const previewed = await seen(page.getByRole("link"))
-        .evaluateAll((links) => links.some((l) => (l.getAttribute("href") ?? "").startsWith("blob:")))
-        .catch(() => false);
-      if (!previewed) return;
+      // A file the step takes is previewed at once as a "blob:" link beside its name box.
+      const previewed = (await attachmentHrefs(isPreview, 5000)).length > 0;
+      if (!previewed) {
+        // A refused upload leaves no preview and its message on the step; there is nothing
+        // to store, and saving would clear the refusal the test reads next.
+        const shown = [await alertMessages(), await messages().catch(() => "")].filter(Boolean).join(" | ");
+        if (shown) return;
+        const stored = await attachmentHrefs(isStored);
+        throw new Error(
+          `${where} — gave the Attachments step's file chooser the file on ${page.url()}, but no blob: preview of it appeared and the page shows no message${
+            stored.length ? ` (only the attachments already stored: ${stored.join(", ")})` : ""
+          }`,
+        );
+      }
+      // On a form still being created the file is stored by the create action itself.
+      if (/\/create$/.test(new URL(page.url()).pathname)) return;
+      // On a saved record the addition is stored only once the form is saved — "Publish
+      // Changes" and its "Publish Changes to Code With Us Opportunity?" confirmation on a
+      // published opportunity — and the top bar draws that control a moment after the step.
+      const saves = ["Publish Changes", "Save Changes", "Submit Changes for Review", "Submit Changes"];
+      const deadline = Date.now() + LATE_CONTROL_MS;
+      let offered = false;
+      while (!offered) {
+        for (const name of saves) if (await findControl(navBar(), name)) offered = true;
+        if (offered || Date.now() >= deadline) break;
+        await page.waitForTimeout(250);
+      }
+      if (!offered) {
+        // A draft form saved by the test's own next action (a draft proposal's "Submit" or
+        // "Save Draft") keeps the addition for that action, as a form being created does.
+        const later = ["Submit", "Save Draft", "Publish", "Submit for Review"];
+        for (const name of later) if (await findControl(navBar(), name)) return;
+        throw new Error(
+          `unbound: ${where} — added the file (previewed as blob:) on ${page.url()}, but the top bar offers none of ${quoted([...saves, ...later])} to store it with`,
+        );
+      }
       await saveAttachmentForm(where, "added the file");
       await attachmentsStep();
+      // The stored link replaces the preview once the save lands; a size the service will not
+      // keep is dropped without one, which attachment_address then reports.
+      await attachmentHrefs(isStored, 10000);
     },
     renameNewAttachment: (input) =>
       renameAttachment("file-attachment-control.rename_new_attachment", input),
