@@ -1,0 +1,16 @@
+gate: G3
+verdict: return
+by: tech-lead
+held_by: human
+note: "Ruled by the operator agent under Alex's standing delegation (2026-09-30) to rule application questions on his behalf. The sandbox-password gap the escalation cites was closed in the pipeline (docs/decisions/0077); what remains is adapter coverage of signed-in screens, two criteria placed on the wrong slice, and two empty readings to recheck once those screens are bound."
+conditions:
+  - "addressed-to bind-adapter: tests/adapters/new still carries bindings written before a binding session could sign in, and says so in its reasons ('could not use the sandbox password'). Sign in as each persona the way docs/decisions/0077 allows and walk every screen whose binding says it was never seen signed in: /dashboard (proposal-vendor-dashboard, including my_proposals_table, which R-4.23 reads), /users/:userId (user-profile, including status_badge, which R-6.28 reads), the own profile's status (R-4.1 read '' against /active/i on build-slice-2-12) and the profile-completion form (R-4.3 read ''). Replace every stale reason with what the signed-in screen shows."
+  - "addressed-to plan: R-6.20's test publishes a Code With Us opportunity (/opportunities/code-with-us/create), a screen Slice 7 delivers, and R-6.28's test reads another person's profile at /users/:userId, which the plan gives to Slice 3; verify on build-slice-2-12 found both unbound on those screens. Move each to a slice whose dependencies deliver its screen."
+  - "Recheck R-4.1 and R-4.3 against the rebound adapter; if either still reads empty, find where the application departs from the criterion."
+  - "condition-met build-slice-2-5#1: R-4.17 passes on build-slice-2-12 (tests/results/new/slice-2.json on proposal/build-slice-2-12)."
+  - "condition-met build-slice-2-11#4: the blocking sign-out request before first draw is gone; sign-out is one ordinary request (app/frontend/src/api/accounts.ts on proposal/build-slice-2-12)."
+  - "condition-met build-slice-2-11#5: this revision's journal and proposal page carry no ticket-shaped strings; the remaining egress findings are in earlier revisions' files."
+  - "condition-withdrawn missing-test/R-4.1: carried to the new target by the tech lead's decision of 2026-09-29; its test runs in verify on new, where a first-time account can be created."
+  - "condition-withdrawn missing-test/R-4.2: carried to the new target by the tech lead's decision of 2026-09-29; its test passes in verify on new (build-slice-2-12)."
+  - "condition-withdrawn missing-test/R-4.5: carried to the new target by the tech lead's decision of 2026-09-29; its test runs on new once the slice that claims it is verified."
+at: 2026-09-30T22:48:40.579Z
