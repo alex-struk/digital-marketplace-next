@@ -1,0 +1,6 @@
+gate: G3
+verdict: approve
+by: tech-lead
+held_by: human
+note: "Ruled by the operator agent under Alex's standing delegation (2026-09-30) to rule application questions on his behalf. Every criterion slice 2 claims that this environment can test passes on build-slice-2-16 (R-4.1, R-4.2, R-4.3, R-4.17, R-4.24). R-6.1 is written for the notifications_disabled configuration, which verify cannot start the new target in (docs/decisions/0071, 0075); it is an environment gap, not a finding about the build, and stays unverified on new until verify can start a configuration."
+at: 2026-09-30T23:56:05.343Z

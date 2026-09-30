@@ -1,0 +1,107 @@
+{
+  "slice": 2,
+  "proposal": "build-slice-2-16",
+  "app_tree": "2f3bc8df069f2717147f24411ff646f57cec5399",
+  "at": "2026-09-30T23:50:18.665Z",
+  "verdict": "environment",
+  "environment": [
+    {
+      "id": "R-6.1",
+      "reason": "its test is written for configuration notifications_disabled (@notifications_disabled), which the target reads at start-up, and verify cannot start the new target in a configuration"
+    }
+  ],
+  "adapter": "5088e169e1d75634ccea14e90a0358f63dd785a2",
+  "rows": [
+    {
+      "id": "R-4.1",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.1.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the first time a person signs in, the service creates an account for them and decides its kind from the identity they signed in with: a government identity makes a public sector employee",
+          "status": "passed"
+        },
+        {
+          "title": "the first time a person signs in, the service creates an account for them and decides its kind from the identity they signed in with: a code-hosting identity makes a vendor",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "3890cff45760ce7fd62352ec8823b0f71c9bf730",
+      "adapter": "5088e169e1d75634ccea14e90a0358f63dd785a2"
+    },
+    {
+      "id": "R-4.2",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.2.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a person whose account has just been created is sent a welcome message",
+          "status": "passed"
+        },
+        {
+          "title": "a person whose account has just been created is not sent a welcome message when no email address is known for them",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "b880ed664ada2d14833e6c193567686a1e1247bb",
+      "adapter": "5088e169e1d75634ccea14e90a0358f63dd785a2"
+    },
+    {
+      "id": "R-4.3",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.3.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a vendor cannot finish signing up until they confirm they have read and agree to the service's terms and conditions and its privacy policy",
+          "status": "passed"
+        },
+        {
+          "title": "the moment of acceptance is recorded on the vendor's account",
+          "status": "passed"
+        },
+        {
+          "title": "a public sector employee is never asked to agree to the terms and conditions and the privacy policy",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "cd9323e52cbbdaa352cd655bcfd7660e74c0e180",
+      "adapter": "5088e169e1d75634ccea14e90a0358f63dd785a2"
+    },
+    {
+      "id": "R-4.17",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.17.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "signing out ends the person's session with the service, and the person is told they have been signed out",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "1449841c9cdfb9788fcbce2f7723d00908b0c57d",
+      "adapter": "5088e169e1d75634ccea14e90a0358f63dd785a2"
+    },
+    {
+      "id": "R-4.24",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.24.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "While completing their profile a person may choose to be told about new opportunities, and the choice is saved with their account.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "d89858c17b18c4cdd32f25f306f94646d9e0b54c",
+      "adapter": "5088e169e1d75634ccea14e90a0358f63dd785a2"
+    }
+  ]
+}
