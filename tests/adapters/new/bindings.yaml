@@ -93,7 +93,8 @@ pages:
   # review"). Every input key goes to its field: title, teaser, location, remoteOk (the
   # "Remote OK: remote work is acceptable" box), remoteDesc, reward, skills (the multi-pick
   # "Skills" chooser), description and the four dates; a key no field takes is reported
-  # unbound by name.
+  # unbound by name. Anybody who may not create an opportunity (a vendor, a visitor) is
+  # answered "Page not found", which the actions report as a refusal, not as unbound.
   opportunity-cwu-create:
     actions:
       save_draft: bound
@@ -128,9 +129,12 @@ pages:
 
   # Signed in as the administrator, or a public sector employee for their own opportunity:
   # "Status: <state>", "Opportunity ID: <id>", an "Opportunity actions" group (a draft:
-  # Edit, Publish or Submit for review, Delete; published: Edit; awarded: nothing) and the
-  # sections Summary, Opportunity (the form, with Save changes), Addenda (once published)
-  # and History. Publishing and deleting are confirmed in a dialog.
+  # Publish to the administrator or Submit for review to its author, and Delete, with no
+  # Edit because the draft's form is already editable, so edit_details edits it in place;
+  # published: Edit; awarded: nothing) and the sections Summary, Opportunity (the form,
+  # with Save changes), Addenda (once published) and History. Publishing and deleting are
+  # confirmed in a dialog. Publish is offered only to the administrator: for anybody else
+  # its absence (or the screen answering "Page not found") is reported as a refusal.
   opportunity-cwu-edit:
     actions:
       edit_details: bound
@@ -1420,9 +1424,11 @@ pages:
     actions:
       # Bound on a Code With Us opportunity's form (?tab=opportunity), signed in as the
       # administrator or the public sector employee who owns it: "Add attachment" opens the
-      # file chooser; a new file is listed "New: <name>, <size>." with a "Name for <name>"
-      # box and "Will be saved as: <name>"; a stored one has a read-only name, a
-      # "Download <name>" link to /api/files/<id>?type=blob and "Remove <name>". The Sprint
+      # file chooser; a chosen file is stored at once and listed "New: <name>, <size>.
+      # Uploaded and attached to this opportunity." with its "Download <name>" link, a
+      # "Name for <name>" box and "Will be saved as: <name>"; one saved since has a
+      # read-only name, a "Download <name>" link to /api/files/<id>?type=blob and
+      # "Remove <name>". A row with that link counts as stored, whatever its wording. The Sprint
       # With Us and Team With Us forms answer "Page not found", where every member reports
       # unbound at run time.
       add_attachment: bound
