@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>contract-v29 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">444</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">438</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">375</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>contract-v29</h1>
+<p class="lede">G1 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G1</td></tr><tr><th scope="row">opened</th><td>2026-10-01 13:49</td></tr><tr><th scope="row">holder</th><td>agent:product-owner</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the contract the tests will act through?</h2>
+<p><strong>Recommendation.</strong> I added the one thing the owed test needed: a way to read an opportunity&#39;s view count.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I added the one thing the owed test needed: a way to read an opportunity&#39;s view count. The oracle started cleanly with the existing override, and the new read works against it.</p>
+<p><strong>What this run changed.</strong> The contract was already complete from earlier runs: pages, personas, the API description, observables, sixteen seed files with their manifest, and the Compose override. This run owed one missing test, R-1.6 (&quot;opening an opportunity&#39;s public page counts as a view&quot;). The observables file already described a <code>counters</code> observable, but no surface page reached it, so a test had nothing to call. I added one page to <code>spec/contract/surface.yaml</code>:</p>
+<ul><li><strong><code>opportunity-counters</code></strong> (domain <code>opportunities</code>), route <code>/api/counters?counters=opportunity.:program.:opportunityId.views</code>, with no actions and two observations:</li><li><code>view_count</code>: a whole number. A counter that has never been incremented is left out of the service&#39;s answer and reads as 0.</li><li><code>refused_when_not_permitted</code>.</li></ul>
+<p>Both route parameters can be filled. <code>:program</code> comes from the fixed set the application defines. <code>:opportunityId</code> is a seed handle, such as <code>seed.opportunities.publishedCodeWithUs</code>, or the <code>opportunity_identifier</code> read off the page a newly published opportunity lands on. In <code>spec/contract/observables.yaml</code>, the <code>counters</code> entry now names the counter&#39;s form, says what the answer looks like, says who may read it, and points to the new page.</p>
+<p><strong>Where the contract differs from the request.</strong> The missing-test note asked for the count to be &quot;readable signed out or by any persona&quot;. The old application does not allow that. <code>permissions.readManyCounters</code> (<code>src/back-end/lib/permissions.ts:1622</code>) allows only administrators and public sector staff, and I confirmed against the running oracle that a request with no session is refused. The page therefore tells the test to read the count as <code>persona.administrator</code>, open the public page as whoever the criterion names (signed out included), and read the count again as the administrator. The criterion is still fully testable this way.</p>
+<p>The page also records two timing hazards:</p>
+<ul><li>The public page asks for its view to be counted as it loads and does not wait for the answer (<code>view.tsx:98</code>). A test should re-read every 500 ms for up to five seconds before comparing.</li><li>Every test that opens the same opportunity moves the same counter. A test checking for an increase of exactly one should either run alone against that opportunity or use one it published itself.</li></ul>
+<p><strong>Personas, seed and sign-in.</strong> Nothing changed this run. The oracle signs in through session routes:</p>
+<ul><li><code>/auth/createsessionadmin</code> for the administrator</li><li><code>/auth/createsessiongov</code> for public sector staff</li><li><code>/auth/createsessionvendor/:n</code> for vendors</li></ul>
+<p>The new target signs in through sandbox identity-provider usernames. The anonymous visitor has <code>sign_in: null</code>. Seed files <code>000</code> to <code>015</code> hold the synthetic installation, users, organizations, content, opportunities at each stage, evaluations, files and profile records, all named in <code>tests/seed/manifest.yaml</code>. I did not seed a view count. The test reads the count before and after, so no prior count needs to be planted.</p>
+<p><strong>Oracle.</strong> I ran <code>oracle up</code> with the existing override unchanged, on the first attempt:</p>
+<ul><li>All 78 migrations ran and the app container started on port 4300, with the mail API on 8025.</li><li>Signed in as the administrator, I fetched the seeded opportunity <code>00000000-0000-4000-8000-000000000601</code> through the application&#39;s own API, and it came back with its seeded title.</li><li>Reading its view counter returned <code>{}</code>. One increment made it 1. The same read with no session was refused with &quot;You do not have permission to perform this action.&quot;</li></ul>
+<p>I ran <code>oracle down</code> afterwards and it completed. The sandbox here blocks shell variable expansion, so I ran the pipeline&#39;s command-line tool by its absolute path (<code>~/GitHub/agentic-sdlc/bin/sdlc.mjs</code>) rather than through <code>$SDLC_BIN</code>. For the same reason I could not run a YAML parser over the edited files. The two edits are small and indented the same way as the entries around them, and I read the surrounding text before making them.</p>
+<p><strong>Not recovered.</strong> Reading the count signed out, as the missing-test note hoped, is not possible against the old application. The page states this rather than hiding it.</p>
+<p>re-address missing-test/R-1.6 to derive-tests: added surface page <code>opportunity-counters</code> (route <code>/api/counters?counters=opportunity.:program.:opportunityId.views</code>) with observation <code>view_count</code> (absent counter reads as 0; readable as persona.administrator or public-sector-staff, refused signed out), and linked it from <code>observables.counters.surface</code>; verified on the oracle that one increment of seed.opportunities.publishedCodeWithUs moves the count from absent to 1.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:product-owner (persona agent · claude claude-opus-5-5) on 2026-10-01 13:50.</p>
+<div class="body"><p>Question: is opportunity-counters the contract the R-1.6 test will act through? Ruling: approve. Reason: R-1.6 says opening an opportunity&#39;s public page increases its recorded view count by one, for anyone, signed in or not; until now no surface page could read that count, so the owed test could not be written. The new page reads it, and its claims hold against the old source: readManyCounters (src/back-end/lib/permissions.ts:1622) allows only isAdmin or isGovernment; the counter name opportunity.&lt;program&gt;.&lt;id&gt;.views with program code-with-us, sprint-with-us or team-with-us matches src/shared/lib/resources/counter.ts:14-23; and all three public view pages call api.counters.update without waiting for the answer as they load (code-with-us/view.tsx:98, team-with-us/view.tsx:121, sprint-with-us/view.tsx:130), which is why the test has to re-read the count for a few seconds. Restricting who can read the count does not narrow R-1.6, which constrains who opens the page and not who reads the count, so reading it before and after as persona.administrator tests the criterion as written. The note that reading the count signed out is impossible is stated as a fact about the old application rather than hidden, and the interference note (shared counter; run alone or publish a fresh opportunity) is a property of the data a blind test author needs. What would change the ruling: evidence that the old application exposes view counts to vendors or anonymous visitors on some other route (the page would then need that route or a second observation), or the edited YAML failing to parse once checked with a parser.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

@@ -2452,3 +2452,30 @@ pages:
       new_opportunity_notices_since: { test_id: user-account-notices-since }
       refused_when_not_permitted: { test_id: user-account-refused }
       refusal_status: { test_id: user-account-refusal-status }
+
+  # How many times an opportunity has been opened, as the service counts it. :program is
+  # code-with-us, sprint-with-us or team-with-us; :opportunityId a seed.opportunities
+  # handle or an opportunity_identifier read where the opportunity landed. The counter's
+  # name is opportunity.<program>.<opportunityId>.views (observables.counters).
+  #
+  # The service answers this only to an administrator or public sector staff; a vendor or
+  # a request with no session is refused as not permitted. A test that checks views reads
+  # the count as persona.administrator, opens the opportunity's public page as whoever the
+  # criterion names (signed out included), and reads the count again as the administrator.
+  #
+  # The public page asks for its own view to be counted as it loads and does not wait for
+  # the answer, so the count may change a moment after the page appears. A test reads it
+  # again every 500 milliseconds until it differs from the earlier reading or five seconds
+  # pass, then compares. Every test that opens the same opportunity's public page moves
+  # the same counter, so a test that checks an exact increase either runs alone against
+  # that opportunity or uses one it has just published itself.
+  - id: opportunity-counters
+    domain: opportunities
+    route: /api/counters?counters=opportunity.:program.:opportunityId.views
+    title: "An opportunity's view count, by request"
+    actions: {}
+    observations:
+      # The count as a whole number. An opportunity never opened has no counter yet, and
+      # the service leaves it out of its answer; that reads as 0.
+      view_count: { test_id: null }
+      refused_when_not_permitted: { test_id: null }

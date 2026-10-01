@@ -113,6 +113,7 @@ export interface Surface {
   proposalEvaluationRequest: ProposalEvaluationRequestPage;
   userAccountSelfRequest: UserAccountSelfRequestPage;
   userAccountRequest: UserAccountRequestPage;
+  opportunityCounters: OpportunityCountersPage;
 }
 
 export interface HomePage {
@@ -1544,4 +1545,10 @@ export interface UserAccountRequestPage {
   newOpportunityNoticesSince(): Promise<string>;
   refusedWhenNotPermitted(): Promise<string>;
   refusalStatus(): Promise<string>;
+}
+
+export interface OpportunityCountersPage {
+  open(params: { program: string; opportunityId: string }): Promise<void>;
+  viewCount(): Promise<string>;
+  refusedWhenNotPermitted(): Promise<string>;
 }

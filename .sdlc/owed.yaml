@@ -4860,7 +4860,7 @@ owed:
     id: R-1.6
     version: 1
     domain: opportunities
-    stage: contract
+    stage: derive-tests
     why: a surface page (for example opportunity-counters, addressed by the
       opportunity's program and identifier) with an observation view_count that
       returns the counters observable's view_count for that opportunity as a
@@ -4871,3 +4871,17 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-10-01T13:43:26.403Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: added surface page `opportunity-counters` (route
+          `/api/counters?counters=opportunity.:program.:opportunityId.views`)
+          with observation `view_count` (absent counter reads as 0; readable as
+          persona.administrator or public-sector-staff, refused signed out), and
+          linked it from `observables.counters.surface`; verified on the oracle
+          that one increment of seed.opportunities.publishedCodeWithUs moves the
+          count from absent to 1.
+        by: contract-v29
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-10-01T13:50:05.053Z
