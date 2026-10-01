@@ -1327,6 +1327,16 @@ conditions:
     stage: plan
     by: agent:architect
     at: 2026-10-01T01:51:36.281Z
+    closed:
+      outcome: met
+      why: R-6.16 is moved from Slice 11 to Slice 12's criteria in plan/tasks.md.
+        Slice 11's delivers line no longer mentions it, and Slice 12's delivers
+        line now says the invitation to join the organization is a message the
+        notification preference does not govern, so it links to the reader's
+        notification settings (built in Slice 3) without offering to unsubscribe
+        (plan/tasks.md lines 60-67).
+      by: agent:architect
+      at: 2026-10-01T01:53:10.344Z
   - ref: plan-9#2
     text: Make plan/plan.md (the awkward-placement entry and the R-6.6 vs R-6.16
       note) and docs/decisions/0013-the-mail-path.md say Slice 12 and the
@@ -1338,3 +1348,12 @@ conditions:
     stage: plan
     by: agent:architect
     at: 2026-10-01T01:51:36.281Z
+    closed:
+      outcome: met
+      why: plan/plan.md (the awkward-placement entry near line 272, and the 'R-6.6 vs
+        R-6.16 (slices 21 and 12)' note near line 291) and
+        docs/decisions/0013-the-mail-path.md (lines 46-50) now name Slice 12 and
+        the organization invitation for R-6.16. No Slice 11 or archive-notice
+        wording for R-6.16 is left.
+      by: agent:architect
+      at: 2026-10-01T01:53:10.355Z
