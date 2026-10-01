@@ -1,0 +1,17 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the adapter for target new bind every surface action and observation, and nothing else? Approve. The only change is the comment above mail-delivery-delay in tests/adapters/new/bindings.yaml. No binding changed, no assertion or business logic was added, and nothing under tests/acceptance was touched. R-6.24's three members (slow_delivery, restore_delivery_speed, delivery_slowed) stay unbound, and each reason names a real missing surface: the delay proxy's control API is not served on this sandbox. The evidence supports that: the compose services list no proxy, ${SDLC_MAIL_API}/hold answers the catcher's 404, and no host port belongs to a proxy. The contract gives no other address to bind, so this is a sandbox gap and not an adapter defect, which answers the tech-lead's revision request. The typecheck on adapters/new passed with no diagnostics. The egress failures are all in other proposals' files, not in this diff. The ruling would change to a return if the delay proxy turned out to be reachable at an address the adapter does not call, or if the contract named one the adapter did not try.
+reprompt: |2-
+  You ruled approve. "build-slice-6-3" is not an open condition. No condition is open in this project, so there is nothing here to close.
+conditions: []
+cost: 0.5482174
+turns: 4
+session: "29b245e6-baac-4db3-8d71-7a629e3f089d"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T06:02:12.579Z

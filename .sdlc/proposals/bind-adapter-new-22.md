@@ -27,3 +27,23 @@ The ruling asked me to bind R-6.24's delay page to wherever the delay proxy actu
 I left the adapter code in `tests/adapters/new/index.ts` exactly as it was. It already calls the address the contract names, and on a 404 it throws an `unbound:` error that calls this a sandbox gap. Once a mail-hold proxy is served under `/hold` next to the catcher, the binding should work without changes. Nothing else in the adapter or bindings file was touched.
 
 **For whoever acts on this.** The fix is in the sandbox, not the adapter. The new target's environment needs the pass-through proxy that `observables.yaml` describes under `delivery_delay`: sitting between the service and the catcher's SMTP port, with its control API served at `${SDLC_MAIL_API}/hold`. Until that exists, R-6.24 can't be measured on this target. I am not deferring the request: the answer is this sandbox gap.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the adapter for target new bind every surface action and observation, and nothing else? Approve. The only change is the comment above mail-delivery-delay in tests/adapters/new/bindings.yaml. No binding changed, no assertion or business logic was added, and nothing under tests/acceptance was touched. R-6.24's three members (slow_delivery, restore_delivery_speed, delivery_slowed) stay unbound, and each reason names a real missing surface: the delay proxy's control API is not served on this sandbox. The evidence supports that: the compose services list no proxy, ${SDLC_MAIL_API}/hold answers the catcher's 404, and no host port belongs to a proxy. The contract gives no other address to bind, so this is a sandbox gap and not an adapter defect, which answers the tech-lead's revision request. The typecheck on adapters/new passed with no diagnostics. The egress failures are all in other proposals' files, not in this diff. The ruling would change to a return if the delay proxy turned out to be reachable at an address the adapter does not call, or if the contract named one the adapter did not try.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `0368273e0991b8f50da4143673db0795771bfb9a`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
