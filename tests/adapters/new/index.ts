@@ -2176,6 +2176,85 @@ export default function create(
       refusedText(actingFor.last("refused_when_not_permitted"), (status) => status === 401 || status === 403),
   };
 
+  // ------------------------------------------------ watching, by request
+
+  // POST /api/subscribers/:program { opportunity } answers 201 with the subscription
+  // ({ opportunity: { id }, user: { id }, createdAt }); DELETE /api/subscribers/:program/:id
+  // (the opportunity's identifier) answers 200 with the subscription it removed. This target
+  // files every refusal under one generic list, never under a reason of its own: signed out
+  // 401 {"errors":["You must be signed in to watch an opportunity."]}; a second watch 400
+  // {"errors":["opportunity: You are already watching this opportunity."]}; one's own
+  // opportunity 400 {"errors":["You cannot subscribe to your own opportunity."]}; an
+  // identifier naming nothing readable 400 {"errors":["opportunity: No opportunity you may
+  // read is held at that identifier."]}; stopping a watch there is none 400
+  // {"errors":["opportunity: You are not watching this opportunity."]}.
+  const watchRequest = requests("opportunity-watch-request");
+  let watchProgram = "";
+  let watchOpportunity = "";
+  const seededOpportunities = (seed as unknown as Record<string, Record<string, { id?: unknown; program?: unknown }>>)
+    .opportunities ?? {};
+
+  function watchTarget(member: string, input: unknown): { program: string; id: string } {
+    const where = `opportunity-watch-request.${member}`;
+    const named =
+      typeof input === "string" || typeof input === "number"
+        ? String(input)
+        : given(input, ["opportunity", "opportunityId", "opportunityIdentifier", "identifier", "id"]);
+    const id = seededId(named, "opportunities") || watchOpportunity;
+    if (!id) unbound(where, "the input names no opportunity to watch");
+    const seeded = Object.values(seededOpportunities).find((each) => String(each.id) === id);
+    const program = field(input, "program") || watchProgram || textOf(seeded?.program);
+    if (!program) unbound(where, "no program was opened and the input names none");
+    watchOpportunity = id;
+    watchProgram = program;
+    return { program, id };
+  }
+
+  const opportunityWatchRequest: S.OpportunityWatchRequestPage = {
+    open: async (params) => {
+      watchProgram = params?.program ?? "";
+      watchOpportunity = "";
+    },
+    async watchByRequest(input) {
+      const member = "watch_by_request";
+      const { program, id } = watchTarget(member, input);
+      await watchRequest.send(member, "POST", `${baseURL}/api/subscribers/${encodeURIComponent(program)}`, {
+        opportunity: id,
+      });
+    },
+    async stopWatchingByRequest(input) {
+      const member = "stop_watching_by_request";
+      const { program, id } = watchTarget(member, input);
+      await watchRequest.send(
+        member,
+        "DELETE",
+        `${baseURL}/api/subscribers/${encodeURIComponent(program)}/${encodeURIComponent(id)}`,
+      );
+    },
+    requestAccepted: async () => acceptedText(watchRequest.last("request_accepted")),
+    refusalStatus: async () => refusalStatusOf(watchRequest.last("refusal_status")),
+    // The name(s) the refusal body files its messages under, as the service gives them.
+    refusalReason: async () => {
+      const got = watchRequest.last("refusal_reason");
+      if (got.status < 400) return "";
+      const body = parse(got.body);
+      return body && typeof body === "object" && !Array.isArray(body) ? Object.keys(body).join("\n") : "";
+    },
+    refusalMessages: async () => messagesOf(watchRequest.last("refusal_messages")),
+    // GET /api/opportunities/:program/:id carries "subscribed" for the signed-in person.
+    watching: async () => {
+      const where = "opportunity-watch-request.watching";
+      if (!watchOpportunity || !watchProgram) unbound(where, "no opportunity has been asked about on this page yet");
+      const got = await peek(
+        `${baseURL}/api/opportunities/${encodeURIComponent(watchProgram)}/${encodeURIComponent(watchOpportunity)}`,
+      );
+      if (got.status !== 200) {
+        unbound(where, `GET /api/opportunities/${watchProgram}/${watchOpportunity} answered ${got.status}, not the opportunity`);
+      }
+      return textOf(record(got.json).subscribed);
+    },
+  };
+
   // ------------------------------------------------ memberships
 
   // POST /api/affiliations { userEmail, organization, membershipType }; signed out this
@@ -5730,7 +5809,7 @@ export default function create(
   // History, none of them a report; and the opportunity the screen loads from
   // /api/opportunities/code-with-us/:id carries no view, watcher or proposal count to show.
   const REPORTING_LOOKED =
-    "looked again as the administrator and as the owning public sector employee on the seeded published, lapsed-with-three-proposals, in-processing and awarded Code With Us opportunities (and on the published one after the administrator ticked \"Watch this opportunity\" on its page): the Summary carries only Proposal deadline, Reward, Published, Created by and Last changed by, the only sections are Summary, Opportunity, Addenda and History, and the opportunity the screen loads from /api/opportunities/code-with-us/:id carries no view, watcher or proposal count";
+    "looked again as the administrator and as the owning public sector employee on the seeded published, lapsed-with-three-proposals, in-processing and awarded Code With Us opportunities (and on the published one after the administrator ticked \"Watch this opportunity\" on its page): the Summary carries only Proposal deadline, Reward, Published, Created by and Last changed by, the only sections are Summary, Opportunity, Addenda and History, and the opportunity the screen loads from /api/opportunities/code-with-us/:id carries no view, watcher or proposal count; looked once more as the administrator: ?tab=reporting and ?tab=proposals on the manage screen fall back to the same Summary, the public opportunity page, /dashboard and /opportunities show no count either, and /opportunities/code-with-us/:id/complete answers Page not found on the seeded lapsed, final-stage and in-processing ones. The application does count (GET /api/counters answers opportunity.code-with-us.<id>.views and .watchers with numbers), but no screen shows those numbers, and reading the API here would report a count the page never displays";
   async function reportingCount(member: string, term: RegExp): Promise<string> {
     const shown = await summaryTerm(member, term);
     if (shown) return shown;
@@ -7159,6 +7238,7 @@ export default function create(
     caughtMessageList,
     mailDeliveryFault,
     mailDeliveryDelay,
+    opportunityWatchRequest,
     organizationActingForList,
     affiliationInvitationRequest,
     affiliationApprovalRequest,
