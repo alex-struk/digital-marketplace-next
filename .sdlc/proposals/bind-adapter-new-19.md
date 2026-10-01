@@ -35,3 +35,23 @@ I bound all seven members of `notification-terms-broadcast` against the running 
 I removed the old shared "not announced" reason and the generic unbound stub. In `tests/adapters/new/bindings.yaml`, all seven members (three actions, four observations) are now marked `bound`, spelled as the contract spells them. No other page's bindings changed, and every route I opened this run resolved.
 
 **Not checked.** Running the TypeScript type checker needed approval this unattended session couldn't get. I checked by hand that every helper and type the new code uses exists in the file and is in scope. I wrote nothing outside `tests/adapters/new/`, and no password or environment value appears in the adapter or the bindings file.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether the adapter binds every action and observation on notification-terms-broadcast and nothing else. Approve. All seven members (three actions, four observations) are bound by role and accessible name. Actions find a control and press it. Observations return the control's label, the dialog text, or the region's status or alert, or empty when none is there. There is no assertion or business logic, and the only throws are an `unbound:` when the screen was refused or the control is missing, and a fast failure when the control is disabled. Nothing under tests/acceptance changed. The runner's typecheck on this revision passed with no diagnostics in adapters/new/. Every member the acceptance specs call (R-7.13, R-6.18, R-6.23, R-6.24, R-4.16 and the other specs that drive the page) has a binding. The empty readings for an absent control or dialog let the 'not offered to anyone else' clauses be observed. The failure state was seen only by faking a 400 answer while exploring. That stub is not in the adapter, so the failure reader is a plain locator on the region's alert. The ruling would change if verify showed a binding reading something other than what its member names, for example the success reader picking up text outside the announcement region, or if a test called a member this adapter leaves out.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `ea992e1d3adb03612904c03a470ec60f6d4bb82d`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
