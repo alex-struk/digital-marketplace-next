@@ -43,3 +43,23 @@ I've re-bound the three content-management pages (`content-list`, `content-creat
 **What's still unreachable.** I checked again as the administrator: `/opportunities`, `/organizations`, `/opportunities/create` and `/proposals` still answer "Page not found". Those members stay unbound with their existing reasons. Every page route in the content domain resolves on the target.
 
 I changed only `tests/adapters/new/index.ts` and `tests/adapters/new/bindings.yaml`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this adapter bind every action and observation on 'new' that it can, and nothing else? Ruling: approve. Only tests/adapters/new/index.ts and bindings.yaml changed in the adapter's output, plus the stage's own .sdlc records. Nothing under tests/acceptance, app/ or spec/ changed. The author could not type-check, but the runner did on this exact revision (5b7de8bb3), and tsc --noEmit reported no errors under adapters/new/. The new content-list, content-create and content-edit bindings only navigate and read: they press named controls, fill fields, and read table columns, the page's listed facts, status and alert text, and control state. Every judgement stays with the test. ordered_by_title returns the titles in the order shown and the test decides whether that order is right. delete_withheld_for_fixed_page reports 'absent', 'disabled' or 'enabled' without saying which is correct. version_history reads empty because the screen offers no earlier versions, which matches what R-7.28 says ('nothing in the service can show'). The bindings fail loudly where they should: an input key with no matching field reports 'unbound:', a disabled Publish button quotes the page's reason, and a missing confirmation throws. The create-form actions do nothing for a refused person, so the test reads the refusal next. This copies the old adapter and decides nothing about the outcome. The one remaining unbound reason, notification-terms-broadcast, was corrected to what the administrator actually sees on /content/terms-and-conditions/edit, and that reason holds. The shared wording reused across hundreds of other members now drops content management from its list of 'Page not found' screens, which matches the corrected walk. One binding has not yet been seen to work: upload_body_image (R-8.29). The author says plainly that the file chooser never appeared while binding, and the binding throws a clear error if a real run gets no chooser, so calibration will catch it rather than hide it. What would change this ruling: calibration showing that upload_body_image, or the edit-screen readers that find each fact by the value next to its label, read something other than what the criterion names. Those would come back here as adapter-wrong conditions.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `5b7de8bb3de24799f14eeaffd5525c57dc4ac8fd`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
