@@ -1,0 +1,20 @@
+gate: G3
+verdict: escalated
+by: runner:bind-adapter
+held_by: runner
+escalate_to: tech-lead
+rationale: >-
+  bind-adapter was handed owed work sent back to it more times than the
+  project's policy allows, so this proposal is ruled by tech-lead rather than
+  put to G3's holder for another round.
+
+  - requests from build-slice-7: sent to bind-adapter 3 times, past the limit of
+  2 that policy.loops.request sets. What each send asked for:
+    1. the new adapter reads a manage screen's Opportunity tab (opportunityCwuEdit readers used by R-1.4, R-1.21 and R-1.56) as the tab panel's innerText, which never includes the values of inputs and textareas. Verify received the form's labels ('Title(required) … Is remote work acceptable? (required) Yes …') with no saved description or location in them. The readers must take the values of the labelled fields (or the read-only summary) in that panel, not only its text.
+    2. rebind against build-slice-7-4 every member of opportunity-cwu-create, opportunity-cwu-edit (including publish and the Opportunity tab readers), file-attachment-control and the signed-in /dashboard whose binding is unbound or was walked against an earlier slice-7 build. Their recorded reasons ('/opportunities/code-with-us/create ... Page not found', the dashboard serving 'a greeting and nothing else', an administrator offered 'Submit for review') contradict app/frontend/src/router.tsx:139, dashboard.tsx and opportunity-cwu-edit.tsx:132-133 on this build, as the escalation of build-slice-7-4 sets out.
+    3. fileAttachmentControl on target new must treat an attachment row that carries an /api/files/ download link as stored, whatever its label, or addAttachment must leave the added file stored before it returns. R-8.19 and R-8.25 read '' at existingAttachmentRow() straight after addAttachment, because isNew (/^\s*new:/im) drops the row. The app (app/frontend/src/app/attachments.tsx:347-352) now stores the file when it is chosen and shows its download link on a row still worded 'New: <name>, <size>. …'.
+    4. opportunityCwuEdit.publish on target new reported R-1.22 unbound with the actions 'Edit', 'Submit for review', 'Delete' on a draft. Those are a public sector employee's actions. The app offers Publish to an administrator on a draft or under review (opportunity-cwu-edit.tsx:137). For a non-administrator, an absent Publish control is the refusal R-1.22 asks for and should be reported as one, not as unbound.
+    5. opportunityCwuEdit.editDetails on target new reported R-1.21 unbound because it found no 'Edit' control on /opportunities/code-with-us/<id>/edit?tab=opportunity for a draft (actions 'Submit for review', 'Delete'). On a draft that tab shows the form already editable, so the binding should edit the form in place when there is no Edit control.
+    6. opportunityCwuCreate.saveDraft on target new reported R-1.7 unbound because /opportunities/code-with-us/create answered 'Page not found'. For a vendor or a visitor, that is the refusal R-1.7 asks for, and the binding should report it as a refusal. If the same answer came for the administrator or public sector staff, say which persona saw it.
+    7. R-8.17 read '' at a toBeTruthy assertion on target new, and the result does not say which one. The attachment control states 'Any type of file, up to 10 MB each.', which matches sizeLimitStatedBeforeChoosing's pattern. Either fileUpload.refusedForSize or that reader read empty. Re-run R-8.17 and report which step read '' and what the page showed there.
+at: 2026-10-01T10:07:10.423Z
