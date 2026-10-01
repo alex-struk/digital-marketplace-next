@@ -1,0 +1,24 @@
+gate: G3
+verdict: escalated
+by: runner:verify
+held_by: runner
+escalate_to: tech-lead
+rationale: "Slice 7 has failed verify 3 times. The failures below may not be the
+  application's: a test, the adapter, the criterion or the sandbox can each be
+  what is wrong (spec 7.1), and another build would not find out which."
+conditions:
+  - 'R-1.10: Error: expect(received).toBeTruthy() — Received: ""'
+  - 'R-1.21: Error: expect(received).toMatch(expected) — Received
+    string:  "Opportunity'
+  - "R-1.53: Error: unbound: opportunity-swu-create.open —
+    /opportunities/sprint-with-us/create is offered only to a signed-in person,
+    and walked signed in (as the administrator, as a public sector employee, and
+    as a vendor for a vendor's screens — the seeded organization owner for the
+    organization screens — with the seeded records' identifiers), the running
+    build serves a signed-in person /dashboard (a greet…"
+  - 'R-8.17: Error: expect(received).toBeTruthy() — Received: ""'
+  - 'R-8.19: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    ""'
+  - 'R-8.25: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    ""'
+at: 2026-10-01T08:40:52.545Z
