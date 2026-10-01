@@ -1,0 +1,123 @@
+{
+  "slice": 6,
+  "proposal": "build-slice-6-5",
+  "app_tree": "e1a13da1566ceb51d4a8715302edfbdc012cbe9c",
+  "at": "2026-10-01T06:18:24.418Z",
+  "verdict": "pass",
+  "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4",
+  "rows": [
+    {
+      "id": "R-7.13",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.13.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the service's own terms and conditions page carries, for an administrator, the action that announces changed terms to vendors, and warns first that vendors will have to accept the new terms",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "0d8495078033e481b21e492cb2533be0569b638f",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-6.18",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.18.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "The message announcing changed terms names every program whose proposals require a current acceptance — Code With Us, Sprint With Us and Team With Us — or names none of them rather than a subset.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "26bc7e05183ae73ea52d4fc0bfc71768a935ba35",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-6.23",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.23.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an administrator viewing the service's terms and conditions can announce that they have changed, which withdraws every vendor's standing acceptance and sends each active vendor a message asking them to read and accept the new terms",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "382b55f41023ffce1354e6afc1c4002d153ca2b7",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-6.24",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.24.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "An announcement of changed terms is reported as successful as soon as the acceptances are withdrawn, before any message has been sent.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "b21755aea16f19b0a80070b935984bce0f25c327",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-6.28",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.28.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a broadcast to many people always continues past a recipient it cannot address",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "65d2391c7184af25f5579debcad94ba837c6d42c",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-4.16",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.16.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "when an administrator announces that the terms have changed, every vendor's standing acceptance is withdrawn and each of them is asked to read and agree to the new terms before continuing",
+          "status": "passed"
+        },
+        {
+          "title": "agreeing to the new terms records a fresh acceptance",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "0ab6e785ac2a6b91867539c9d2ca89870ab4cfd5",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-4.33",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.33.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a vendor's profile carries a section setting out the privacy policy, the service's terms and conditions with the date and time they agreed to them, and the terms of each of the three programs",
+          "status": "passed"
+        },
+        {
+          "title": "nobody but a vendor is shown the section",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "b259aec2a9d0b91047c425d59f0722396640f170",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    }
+  ]
+}
