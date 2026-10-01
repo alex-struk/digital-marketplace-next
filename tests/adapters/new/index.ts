@@ -290,9 +290,6 @@ export default function create(
   const NOBODY_SIGNS_IN =
     'walked signed in (as the administrator, and as a vendor for a vendor\'s screens — the seeded organization owner for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers "Page not found"';
 
-  const TERMS_NOT_ANNOUNCED =
-    'signed in as the administrator and opened /content/terms-and-conditions/edit (the seeded page the service needs, reached from "terms-and-conditions" in the /content list): it shows the page\'s facts, the note "The service needs this page", "Edit page" and the current wording, and walked into "Edit page" it shows only the form with "Cancel" and "Publish changes" — nothing on either offers to notify vendors of changed terms';
-
   // What each such address answered a signed-out visitor when it was last opened: /dashboard
   // and /sign-up/complete send them to /sign-in?redirectOnSuccess=…, and everything else
   // (/users/me, /users/:userId, /organizations/:orgId/edit, the create screens) shows the
@@ -960,6 +957,58 @@ export default function create(
     if (await managementRefused()) return "";
     return read();
   }
+
+  // The terms page's management screen, signed in as the administrator, carries a region
+  // headed "Notify vendors of updated terms" below the current wording: a button of that
+  // name opens an unnamed dialog ("Notify vendors that the terms have changed?") with
+  // "Cancel" and "Notify vendors". Once confirmed the region announces a status "Vendors
+  // have been notified …", or an alert "Vendors have not been notified …" when the service
+  // refuses. Anyone else is shown "Page not found" there, with no such control.
+  const TERMS_ROUTE = "/content/terms-and-conditions/edit";
+  const announcement = (): Locator =>
+    seen(page.getByRole("main").getByRole("region", { name: /^\s*notify vendors of updated terms\s*$/i }));
+  const NOTIFY_CONTROL = /^\s*notify vendors of updated terms\s*$/i;
+
+  async function announcementSays(role: "status" | "alert", pattern: RegExp): Promise<string> {
+    await ready();
+    const said = seen(announcement().getByRole(role)).filter({ hasText: pattern });
+    await said.first().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+    return (await said.allInnerTexts()).map((words) => words.trim()).join("\n");
+  }
+
+  const termsBroadcast: S.NotificationTermsBroadcastPage = {
+    open: () => go(TERMS_ROUTE),
+    notifyVendorsOfUpdatedTerms: async () => {
+      const where = "notification-terms-broadcast.notify_vendors_of_updated_terms";
+      await ready();
+      const refused = await refusalShown();
+      if (refused) unbound(where, `the terms page's management screen did not open at ${page.url()}: ${refused}`);
+      const control = seen(announcement().getByRole("button", { name: NOTIFY_CONTROL })).first();
+      if (!(await control.count())) unbound(where, `no control named ${NOTIFY_CONTROL} on ${page.url()}`);
+      if (await isDisabled(control)) {
+        throw new Error(`${where} — the control named ${NOTIFY_CONTROL} is disabled on ${page.url()}`);
+      }
+      await control.click();
+      await dialogShown();
+    },
+    confirmNotifyVendors: () =>
+      pressInDialog("notification-terms-broadcast.confirm_notify_vendors", /^\s*notify vendors\s*$/i),
+    cancelNotifyVendors: () =>
+      pressInDialog("notification-terms-broadcast.cancel_notify_vendors", /^\s*cancel\s*$/i),
+    // The control's own words where it is offered; nothing where it is not, the refusal a
+    // non-administrator is shown included.
+    notifyVendorsControl: async () => {
+      await ready();
+      const control = seen(page.getByRole("main").getByRole("button", { name: NOTIFY_CONTROL })).first();
+      return (await control.count()) ? (await control.innerText()).trim() : "";
+    },
+    notifyVendorsConfirmation: async () => {
+      if (!(await dialogShown())) return "";
+      return (await openDialog().first().innerText()).trim();
+    },
+    notifyVendorsSuccess: () => announcementSays("status", /have been notified/i),
+    notifyVendorsFailure: () => announcementSays("alert", /\S/),
+  };
 
   const contentList: S.ContentListPage = {
     open: () => go("/content"),
@@ -5986,20 +6035,7 @@ export default function create(
       ),
     } as S.NotificationOptinOpportunityListPage,
 
-    notificationTermsBroadcast: absent<S.NotificationTermsBroadcastPage>(
-      "notification-terms-broadcast",
-      "/content/terms-and-conditions/edit",
-      TERMS_NOT_ANNOUNCED,
-      [
-        "notify_vendors_of_updated_terms",
-        "confirm_notify_vendors",
-        "cancel_notify_vendors",
-        "notify_vendors_control",
-        "notify_vendors_confirmation",
-        "notify_vendors_success",
-        "notify_vendors_failure",
-      ],
-    ),
+    notificationTermsBroadcast: termsBroadcast,
 
     // The service answers this address itself, and is no screen: signed in as the
     // administrator it answers 404 {"errors":["Cannot GET /admin/email-notification-reference"]},
