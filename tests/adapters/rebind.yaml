@@ -3266,3 +3266,25 @@ rebind:
     by: runner:verify
     at: 2026-10-01T01:16:56.464Z
     closed: *a20
+  - id: R-4.14
+    target: new
+    why: 'unbound: user-list.user_row — walked signed in as the administrator,
+      /users answers "Page not found" (heading "Page not found", "The page you
+      are looking for does not exist.", "Back to home"): the running build has
+      no list of accounts'
+    found: unbound
+    adapter: 43ef2fbfc56500d55fc337f064aaffc1605b89bc
+    slice: 4
+    by: runner:verify
+    at: 2026-10-01T02:53:15.019Z
+  - id: R-4.32
+    target: new
+    why: 'unbound: user-list.open_export_contact_list — walked signed in as the
+      administrator, /users answers "Page not found" (heading "Page not found",
+      "The page you are looking for does not exist.", "Back to home"): the
+      running build has no list of accounts'
+    found: unbound
+    adapter: 43ef2fbfc56500d55fc337f064aaffc1605b89bc
+    slice: 4
+    by: runner:verify
+    at: 2026-10-01T02:53:15.019Z
