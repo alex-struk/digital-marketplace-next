@@ -277,3 +277,16 @@ requests:
     at: 2026-10-01T01:45:25.171Z
     taken: 2026-10-01T02:01:28.818Z
     taken_by: design-users-3
+  - stage: plan
+    why: slice 3 claims R-8.13, R-8.21, R-8.28 and R-8.30 whole, but each has an
+      organization-logo half that the acceptance suite exercises on
+      /organizations/:orgId/edit (and the organization list for R-8.28), which
+      slice 3 does not build. The verify run against c13c0cc reports those
+      halves unbound ('/organizations/:orgId/edit did not open as a screen') or
+      failing, while the profile-picture halves of R-8.13 and R-8.28 pass. Move
+      these criteria, or their logo halves, to the slice that builds the
+      organization edit screen, or make that slice a prerequisite of slice 3.
+    from: build-slice-3-4
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-01T02:18:11.073Z
