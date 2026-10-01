@@ -292,3 +292,22 @@ requests:
     at: 2026-10-01T02:18:11.073Z
     taken: 2026-10-01T02:19:02.506Z
     taken_by: plan-11
+  - stage: bind-adapter
+    target: new
+    why: "contentView.updatedDate for target new (tests/adapters/new/index.ts:698)
+      reads datedLine(\"Updated\"), which expects a 'Published <date> | Updated
+      <date>' line. The public page at /content/<address> shows its dates as a
+      definition list, with 'Published' and 'Last updated' as terms and the date
+      in the next element (design/DESIGN.md:1614,
+      design/catalogue/content-view.default.stories.tsx:30,
+      app/frontend/src/screens/content-view.tsx:68-91). The regex never matches
+      'Last updated', so updatedDate returns '' both before and after a change,
+      and R-7.8's not.toBe(readerUpdatedBefore) fails with Expected: not \"\".
+      Bind updatedDate (and publishedDate, for consistency) to the value after
+      the 'Last updated' / 'Published' term on the public page, as
+      contentEdit.updatedDate already does with contentFact(\"Last updated\").
+      If the term is missing, throw an unbound error rather than returning ''."
+    from: build-slice-5-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-01T04:36:13.792Z
