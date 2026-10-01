@@ -51,3 +51,23 @@ The reasons the ruling quoted ("Code With Us create … Page not found", the adm
 **Test data.** While binding I created one draft Code With Us opportunity, "Rebind check 7-4", and attached `renamed.pdf` to it. Both are still on the target.
 
 Nothing under `spec/`, `tests/seed`, `tests/generated` or the harness files was touched. No request is deferred.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does bind-adapter-new-27 bind every surface action and observation on the new target, and nothing else? Approved. The diff edits only tests/adapters/new; nothing under tests/acceptance changed, and the runner's typecheck on the proposal revision passed with no diagnostics under adapters/new. The two newly bound dashboard actions are locator and navigation code only (index.ts: createOpportunity presses a link named 'Create an opportunity'; openOpportunity clicks the link whose href carries the seeded id or whose text equals the title, and throws unbound otherwise). Neither asserts anything. They match the walked dashboard: a 'Create an opportunity' link to /opportunities/create, plus an opportunities table whose titles link to each opportunity's management screen. The Sprint With Us and Team With Us create pages, which R-1.48 ('in all three programs') and R-1.9 reach through their tests, stay unbound. Their reasons are real and name what is missing from the surface: the chooser at /opportunities/create links to /opportunities/sprint-with-us/create and /opportunities/team-with-us/create, and both answer 'Page not found' to the administrator and to a public sector employee. That is the application not serving a screen, not the adapter overreaching. The open plan revision request from build-slice-7-4 already covers moving R-1.9 out of slice 7. The failed egress check flags only files this diff does not touch. Two comments still describe the earlier build: index.ts around line 3416 says the Code With Us form answers 'Page not found', and the notification-email-reference reasons say the dashboard is 'a greeting only'. Neither changes binding behaviour; the email-reference wording is outside the scope of the build-slice-7-4 request, and the line-3416 comment should be corrected on the next binding run. The owed build-slice-7-3#1, build-slice-7-3#2 and build-slice-7-4#3 are not settled here: they ask build for application behaviour and for a recheck after a verify run on the rebound adapter. The walk is not that verify result, so they stay open for the next build ruling. The ruling would change to a return if a verify run showed the new dashboard bindings failing to reach the table or the links, or if either sprint-with-us/team-with-us create route turned out to resolve on this target.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `1d4194409d18c7d737d4858668aaa57817772b44`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
