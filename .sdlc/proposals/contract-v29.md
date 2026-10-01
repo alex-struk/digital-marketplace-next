@@ -48,3 +48,14 @@ I ran `oracle down` afterwards and it completed. The sandbox here blocks shell v
 **Not recovered.** Reading the count signed out, as the missing-test note hoped, is not possible against the old application. The page states this rather than hiding it.
 
 re-address missing-test/R-1.6 to derive-tests: added surface page `opportunity-counters` (route `/api/counters?counters=opportunity.:program.:opportunityId.views`) with observation `view_count` (absent counter reads as 0; readable as persona.administrator or public-sector-staff, refused signed out), and linked it from `observables.counters.surface`; verified on the oracle that one increment of seed.opportunities.publishedCodeWithUs moves the count from absent to 1.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:product-owner
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: is opportunity-counters the contract the R-1.6 test will act through? Ruling: approve. Reason: R-1.6 says opening an opportunity's public page increases its recorded view count by one, for anyone, signed in or not; until now no surface page could read that count, so the owed test could not be written. The new page reads it, and its claims hold against the old source: readManyCounters (src/back-end/lib/permissions.ts:1622) allows only isAdmin or isGovernment; the counter name opportunity.<program>.<id>.views with program code-with-us, sprint-with-us or team-with-us matches src/shared/lib/resources/counter.ts:14-23; and all three public view pages call api.counters.update without waiting for the answer as they load (code-with-us/view.tsx:98, team-with-us/view.tsx:121, sprint-with-us/view.tsx:130), which is why the test has to re-read the count for a few seconds. Restricting who can read the count does not narrow R-1.6, which constrains who opens the page and not who reads the count, so reading it before and after as persona.administrator tests the criterion as written. The note that reading the count signed out is impossible is stated as a fact about the old application rather than hidden, and the interference note (shared counter; run alone or publish a fresh opportunity) is a property of the data a blind test author needs. What would change the ruling: evidence that the old application exposes view counts to vendors or anonymous visitors on some other route (the page would then need that route or a second observation), or the edited YAML failing to parse once checked with a parser.
+
+**Conditions:**
+none
