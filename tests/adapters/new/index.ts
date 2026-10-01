@@ -18,7 +18,8 @@
 // "Sign in as a public sector employee" on /sign-in), and signIn() fills it. The screens
 // behind a session were walked signed in (as the vendors, the public sector employee, the
 // administrator, the vendor still to complete a profile and the first-time accounts). The
-// running build serves a signed-in person /dashboard (a greeting and nothing else), their
+// running build serves a signed-in person /dashboard (to the administrator and public sector
+// staff, "Create an opportunity" over a table of opportunities, each linked), their
 // own profile at /users/me or /users/<their own id> (editable, with its picture picker) with
 // its Capabilities, Organizations, Notifications and Legal sections, another account's
 // /users/:userId and the list of accounts at /users to the administrator, the content
@@ -295,7 +296,7 @@ export default function create(
   // and a Code With Us opportunity's management screen; everything else answers "Page not
   // found".
   const NOBODY_SIGNS_IN =
-    'walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor\'s screens — the seeded organization owner for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard (a greeting and nothing else), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers "Page not found"';
+    'walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor\'s screens — the seeded organization owner for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard (to the administrator "Create an opportunity" over "All opportunities", each Code With Us opportunity linked to its management screen; to public sector staff the same over "My opportunities"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers "Page not found"';
 
   // What each such address answered a signed-out visitor when it was last opened: /dashboard
   // and /sign-up/complete send them to /sign-in?redirectOnSuccess=…, and everything else
@@ -3413,7 +3414,7 @@ export default function create(
   // ================================================================ signed-in screens, found at run time
   //
   // The screens below are shown only to a signed-in person. Walked signed in, the running
-  // build draws /dashboard (a greeting only), /sign-up/complete and one's own profile, and
+  // build draws /dashboard, /sign-up/complete and one's own profile, and
   // answers the Code With Us form and an organization's screen with "Page not found". Each
   // member looks for what the contract names by role and accessible name — the way a person
   // reads the screen — and throws "unbound: …" naming what it looked for, and what the
@@ -3706,6 +3707,12 @@ export default function create(
   }
 
   // ---------------------------------------------------------------- the dashboard
+  //
+  // Signed in as the administrator: "Dashboard", a "Create an opportunity" link to
+  // /opportunities/create, and "All opportunities" — a table (Title, Program, Status, Last
+  // updated, Created by) of every opportunity, each title a link to its management screen.
+  // A public sector employee sees the same over "My opportunities", or, with none, "You have
+  // not created any opportunities yet." and no table.
 
   const dash = signedInScreen("opportunity-dashboard", "/dashboard");
   async function dashboardRows(member: string): Promise<string> {
@@ -5892,7 +5899,7 @@ export default function create(
     opportunitySwuCreate: absent<S.OpportunitySwuCreatePage>(
       "opportunity-swu-create",
       "/opportunities/sprint-with-us/create",
-      `${behindSession("/opportunities/sprint-with-us/create")}; looked for again as the administrator and as a public sector employee: /opportunities/create offers "Create a Sprint With Us opportunity", and following that link lands on "Page not found" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on "Page not found", as do /opportunities/sprint-with-us, the seeded at-consensus Sprint With Us opportunity's view and edit screens, and the guessed spellings /opportunities/swu/create and /sprint-with-us/create, and the Code With Us create form offers no program chooser that would reach a Sprint With Us form`,
+      `${behindSession("/opportunities/sprint-with-us/create")}; looked for again as the administrator and as a public sector employee: /opportunities/create offers "Create a Sprint With Us opportunity", and following that link lands on "Page not found" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on "Page not found", as do /opportunities/sprint-with-us, the seeded at-consensus Sprint With Us opportunity's view and edit screens, and the guessed spellings /opportunities/swu/create and /sprint-with-us/create, and the Code With Us create form offers no program chooser that would reach a Sprint With Us form; walked again on this build signed in as the administrator: the dashboard's "Create an opportunity" leads to /opportunities/create, whose "Create a Sprint With Us opportunity" link lands on "Page not found" at /opportunities/sprint-with-us/create, as it does for a public sector employee, and the administrator's "All opportunities" table lists Code With Us opportunities only`,
       [
         "save_draft",
         "submit_for_review",
@@ -5975,7 +5982,7 @@ export default function create(
     opportunityTwuCreate: absent<S.OpportunityTwuCreatePage>(
       "opportunity-twu-create",
       "/opportunities/team-with-us/create",
-      `${behindSession("/opportunities/team-with-us/create")}; looked for again as the administrator and as a public sector employee: /opportunities/create offers "Create a Team With Us opportunity", and following that link lands on "Page not found" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on "Page not found", as do /opportunities/team-with-us and the guessed spellings /opportunities/twu/create and /team-with-us/create, and the Code With Us create form offers no program chooser that would reach a Team With Us form`,
+      `${behindSession("/opportunities/team-with-us/create")}; looked for again as the administrator and as a public sector employee: /opportunities/create offers "Create a Team With Us opportunity", and following that link lands on "Page not found" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on "Page not found", as do /opportunities/team-with-us and the guessed spellings /opportunities/twu/create and /team-with-us/create, and the Code With Us create form offers no program chooser that would reach a Team With Us form; walked again on this build signed in as the administrator: the dashboard's "Create an opportunity" leads to /opportunities/create, whose "Create a Team With Us opportunity" link lands on "Page not found" at /opportunities/team-with-us/create, as it does for a public sector employee, and the administrator's "All opportunities" table lists Code With Us opportunities only`,
       [
         "save_draft",
         "submit_for_review",
