@@ -247,6 +247,8 @@ requests:
     gate: G3
     by: agent:tech-lead
     at: 2026-10-01T01:45:25.171Z
+    taken: 2026-10-01T01:47:34.593Z
+    taken_by: bind-adapter-new-14
   - stage: plan
     why: "slice 3 claims R-8.17, R-6.6, R-6.16 and R-4.33, but verify reports each
       unbound because its test acts through a screen no slice-3 build serves:
