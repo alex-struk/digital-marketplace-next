@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does this adapter bind every surface action and observation on new, and nothing else? Approved. The diff touches only tests/adapters/new (no tests/acceptance, app or spec changes) and adds no assertions; the new bindings for the program chooser, the Code With Us create form, the management screen, the attachment control and the redrawn public page are navigation and locators only. Every remaining unbound reason names the roles and seeded records it was walked with and what was missing from the page (no cancel control, no addendum or note controls, no Proposals section or reporting counts, Sprint With Us/Team With Us/proposal/report screens answering 'Page not found'), so each one is real. The runner's typecheck passed with no diagnostics under adapters/new, which covers the author's caveat that nothing had been compiled, and the separation check now passes. The egress failure is about older .sdlc and site files from earlier build slices that this diff does not touch. Saving the form inside the attachment readers is normalisation the surface needs, since it has no save member. Reading the draft's 'counted once published' note, and an awarded page that names no winner, as empty is reporting what the page shows; neither is a pass/fail decision. Would change if a reader were shown to decide an outcome rather than report the page, or if an unbound reason were contradicted by a page that offers the control.
+conditions: []
+cost: 0.7398980000000001
+turns: 2
+session: "881f92c2-9c0f-436a-81b0-d1b761e12d10"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T07:20:11.757Z
