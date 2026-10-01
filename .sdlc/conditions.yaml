@@ -1247,6 +1247,16 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-01T00:52:20.583Z
+    closed:
+      outcome: met
+      why: offerFile in tests/adapters/new/index.ts (lines 2825-2835) dropped the
+        hidden-input fallback and reports unbound when no file chooser opens;
+        bindings.yaml marks user-profile.change_avatar (line 747),
+        user-sign-up-complete.change_avatar (line 681),
+        file-image-picker.choose_image (line 1390) and
+        user-profile-self.change_avatar (line 843) unbound with that reason
+      by: agent:reviewer
+      at: 2026-10-01T00:56:11.854Z
   - ref: bind-adapter-new-11#2
     text: "tests/adapters/new/index.ts file-image-picker readings: remove
       savePicture and the picturePending mechanism, so imageAddress,
@@ -1263,3 +1273,12 @@ conditions:
     stage: bind-adapter
     by: agent:reviewer
     at: 2026-10-01T00:52:20.583Z
+    closed:
+      outcome: met
+      why: savePicture and picturePending no longer appear anywhere under
+        tests/adapters/new; the fileImagePicker readings (storedPictureAddress,
+        storedPictureSize, rejectedImageError, imageReadableWhenSignedOut) read
+        only the drawn page and never press Save changes, and the 'no save step'
+        comments are removed
+      by: agent:reviewer
+      at: 2026-10-01T00:56:11.865Z
