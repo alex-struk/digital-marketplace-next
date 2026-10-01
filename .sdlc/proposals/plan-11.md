@@ -33,3 +33,14 @@ I took up the one request this revision carries, from the G3 ruling on build sli
 **What I could not do.** I couldn't run the coverage checker, `plan/check-coverage.mjs`, because running it needed approval and nobody was there to give it. I checked by search instead that each of the four moved criteria appears in exactly one criteria line. I didn't re-check the full set of 248 mechanically, but no other placement changed.
 
 I assumed nothing new about the stack or the platform, wrote no new decision record, and found no condition addressed to a person.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:architect
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: is this the right cut of the work, and does each slice stand on its own, now that the plan has taken up the G3 request from build-slice-3-4? Ruling: approve. R-8.13, R-8.21, R-8.28 and R-8.30 each cover a profile picture and an organization logo. The acceptance suite tests the logo half on /organizations/:orgId/edit, and for R-8.28 on the public organization list too. Slice 3 builds neither screen. Slice 11 builds both and already depends on Slice 3, so it can show both halves of each criterion. Moving all four whole to Slice 11 is the right cut. Splitting each criterion into a picture half and a logo half would need new criterion IDs, which only the spec stage can author. Making Slice 11 a prerequisite of Slice 3 would hold Slices 4, 5, 7 and 11 behind organizations. The proposal rejects both alternatives for these reasons. Slice 3's deliverable still builds the image route, type checks and resizing, and says those rules are answered for in Slice 11. Slice 3 still stands on its own with its remaining 24 criteria. A search of plan/tasks.md shows each of the four criteria in exactly one criteria line, Slice 11's. The full coverage checker was not run, but the diff only moves those four IDs between two slices, so no criterion lost its slice. As architect: no schema change, no new dependency, no change to the stack or to any decision record, and the tier is STANDARD, so nothing has to be escalated. No J3 forbidden pattern appears. The plan.md note says the move is uneasy in the same way as R-8.17: the behaviour is built in one slice and answered for in a later one. That is a fair statement of the cost. The owed conditions build-slice-3-4#3, #4 and #5 belong to build and are not settled by this plan change. #3 and #4 describe picture-picker behaviour that Slice 3 still builds, so they remain owed by build. I leave all three open on purpose. This ruling would change if a criterion were found in no slice or in two, or if Slice 11 turned out not to build the /organizations/:orgId/edit screen its deliverable now names.
+
+**Conditions:**
+none
