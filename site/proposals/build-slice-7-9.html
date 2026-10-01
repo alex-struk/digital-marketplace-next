@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-7-9 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">435</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">429</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">367</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-7-9</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 10:59</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 7 (Staff can draft, submit and publish a Code With Us opportunity) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I made no changes to the application.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made no changes to the application. This return is addressed to the adapter stage, and it names nothing for this stage to fix.</p>
+<p><strong>What I did:</strong> The ruling reads the five failures against the application tree (a21fb0c) and puts each one down to the test adapter for the new target, not to the application:</p>
+<ul><li><strong>R-1.7 and R-1.22:</strong> the application refuses as the criteria ask. An anonymous visitor at the create page gets &quot;Page not found&quot;, and a staff member is offered no Publish action. The failures come from the adapter throwing on a refusal, which the tests do not catch.</li><li><strong>R-8.19 and R-8.25:</strong> the application shows a file&#39;s download link only once the upload has finished. The adapter reads the row before the upload is done.</li><li><strong>R-1.21:</strong> the application shows &quot;This opportunity is incomplete&quot; inside the open tab&#39;s section, and the alert disappears if the page is reloaded. The ruling asks the adapter stage to find out whether its submit-for-review step pressed the control at all, or whether its reader reloaded the page.</li></ul>
+<p>All three conditions are filed for the adapter stage and I was told to leave them alone. The ruling also says the next return comes to this stage only if a corrected adapter still reads these criteria as failing against the same tree. So I kept the tree as it is and did not change how the incomplete alert or the attachment row behave. Changing either would move what the adapter stage is being asked to check.</p>
+<p><strong>What I checked:</strong> <code>npm --prefix app run check</code> failed at first with <code>tsc: not found</code>, because this workspace had no installed dependencies. After <code>npm --prefix app ci</code> it passes: typechecks clean, and unit tests pass in all three packages (16, 394 and 233 tests). The one error-level log line in that output is a mail-delivery failure that a test sets up deliberately; it checks that a failed delivery is quietly ignored. Nothing under <code>app/</code> or <code>docs/decisions/</code> was edited.</p>
+<p><strong>Not done here:</strong> The three adapter conditions, as filed:</p>
+<ol><li>Return quietly when a person is refused.</li><li>Wait for each upload to show its link or its error.</li><li>Read the incomplete alert without reloading the page, and report which cause it was.</li></ol>
+<p>R-1.51 has no test checking it, and the ruling did not rule on it. Nothing new is missing for the next slice beyond what the earlier slice 7 build already reported.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 11:48.</p>
+<div class="body"><p>The question is whether slice 7 (staff draft, submit and publish a Code With Us opportunity) does what its criteria say. Verify is unbound on R-8.19 and R-8.25, so the ruling is a return. In both tests every Code With Us case passes: an attachment on a CWU draft is refused to a vendor and served once the opportunity is published, and the creator path also passes. The unbound cases are the Sprint With Us and Team With Us creation screens and the CWU proposal-create screen. The application answers &#39;Page not found&#39; on all of them, and the plan and decision record 0030 put them in later slices (SWU/TWU opportunities in slice 10, proposals later). The tests do not overreach. R-8.19 says in so many words &#39;for all three programs alike&#39;, and R-8.25 names Sprint With Us opportunities and proposal attachments, so each test asks for what its criterion states. The build also did not fall short of what slice 7 asked for, because those screens are not slice 7&#39;s to build. What is wrong is the slice&#39;s claim: slice 7 claims two whole criteria that it can only partly exercise, and that belongs to plan. Nothing in the reviewed code needs changing. The CWU service, the rules module, the attachment read path, the blind-copy batching and the unit tests follow the criteria they cite, and no secrets or personal data appear. R-1.51&#39;s not-testable reason is real, and the backend end-to-end test shows the schema refuses a suspended state, so I would accept the slice with it unasserted. This ruling would change to an approval once verify is current and nothing fails: either the plan stops claiming the SWU/TWU/proposal clauses of R-8.19 and R-8.25 in slice 7, or it keeps those criteria for the slices that build those screens.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>addressed-to plan: Slice 7 claims R-8.19 and R-8.25 whole. Their acceptance tests also exercise attachments on Sprint With Us and Team With Us opportunities (R-8.19 says &#39;for all three programs alike&#39;) and on a Code With Us proposal (R-8.25), and creating any of those is built in later slices: SWU/TWU opportunity creation is slice 10 per decision record 0030, and CWU proposals come later. Verify for slice 7 against tree a21fb0c passed every Code With Us case of both tests and was unbound only on /opportunities/sprint-with-us/create, /opportunities/team-with-us/create and the CWU proposal-create screen. Move R-8.19 and R-8.25 so that each is claimed by the slice that builds the last of those screens (or by a later slice), and have slice 7 claim only what its Code With Us screens can exercise.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
