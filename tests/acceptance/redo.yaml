@@ -786,6 +786,11 @@ redo:
       watcher count. The contract's counters observable (watcher_count, read
       directly) already observes what the criterion names.
     verb: test-overreaches
+    closed: &a16
+      outcome: met
+      why: derived again by a derive-tests run on opportunities
+      by: runner:derive-tests
+      at: 2026-10-01T13:42:08.137Z
   - id: R-1.6
     version: 1
     why: the test reads the view count from a reporting figure on the opportunity's
@@ -797,3 +802,4 @@ redo:
       observes what the criterion names, and it can check an increase of exactly
       one rather than only a change.
     verb: test-overreaches
+    closed: *a16

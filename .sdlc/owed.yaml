@@ -4820,13 +4820,11 @@ owed:
     id: R-1.5
     version: 1
     domain: opportunities
-    stage: derive-tests
+    stage: calibrate
     why: the surface offers only a watch toggle, so asking twice turns the watch off
       instead of making a second request, and no observation reports a refusal
       as a duplicate; it needs a watch action that does not toggle and an
       observation of the refusal
-    clause: the same opportunity cannot be watched twice (the second request is
-      refused as a duplicate)
     from: bind-adapter-new-35
     gate: G3
     by: agent:reviewer
@@ -4845,3 +4843,31 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-10-01T13:28:33.394Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-10-01T13:43:26.403Z
+    asserted:
+      - clause: the same opportunity cannot be watched twice (the second request is
+          refused as a duplicate)
+        by: derive-tests-opportunities-stale-14
+        gate: G3
+        at: 2026-10-01T13:43:26.403Z
+    target: old
+  - kind: missing-test
+    item: R-1.6
+    id: R-1.6
+    version: 1
+    domain: opportunities
+    stage: contract
+    why: a surface page (for example opportunity-counters, addressed by the
+      opportunity's program and identifier) with an observation view_count that
+      returns the counters observable's view_count for that opportunity as a
+      number, readable signed out or by any persona, so a test can read it, open
+      opportunity-cwu-view for seed.opportunities.publishedCodeWithUs, and read
+      it again to check an increase of exactly one.
+    from: derive-tests-opportunities-stale-14
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-01T13:43:26.403Z

@@ -1,53 +1,62 @@
 // criterion: @R-1.5 v1
-// provenance: blind, spec@7a0d47692af14ab67cbbdeb0e701a6cf71199a60, derived 2026-09-11
+// provenance: blind, spec@76d9da180ae1fba4b970cd40bf8a0a55a680eb3e, derived 2026-10-01
 import { test, expect, persona, seed } from "../../fixtures";
 
-// The seeded published opportunity was created by a member of public sector staff, so both
-// signed-in people below are watching something they did not create. Watching is not
-// readable on the opportunity itself — the only observation that counts watchers is the
-// author's and the administrator's reporting — so each reading is taken as the
-// administrator either side of the vendor's action.
-//
-// The third part of the criterion, that the same opportunity cannot be watched twice, is
-// not asserted. The surface names one action for watching, a toggle, so asking twice
-// switches the watch off rather than asking again; and no observation reports a request
-// refused as a duplicate. It needs an action that watches without toggling and an
-// observation of that refusal.
+// seed.opportunities.publishedCodeWithUs was created by somebody other than the vendor and
+// is watched by nobody, so the vendor is a signed-in person viewing an opportunity they did
+// not create and do not yet watch. Watching is asked for through opportunity-watch-request,
+// which always asks to watch and never toggles, so a second ask really is a second request.
+// Whether the person watches is read from what the service reports on the opportunity
+// itself. A test that leaves a watch in place stops it when it ends.
 
-const opportunityId = seed.opportunities.publishedCodeWithUs.id;
+const opportunity = seed.opportunities.publishedCodeWithUs;
+const program = opportunity.program;
+const opportunityId = opportunity.id;
 
-test("any signed-in person may watch an opportunity they did not create", async ({ surface }) => {
-  await surface.signIn(persona.administrator);
-  await surface.opportunityCwuEdit.open({ opportunityId });
-  const before = await surface.opportunityCwuEdit.reportingWatchers();
-  await surface.signOut();
+async function readOrEmpty(read: () => Promise<string>): Promise<string> {
+  try {
+    return (await read()) ?? "";
+  } catch {
+    return "";
+  }
+}
 
-  await surface.signIn(persona.vendor);
-  await surface.opportunityCwuView.open({ opportunityId });
-  await surface.opportunityCwuView.toggleWatch();
-  await surface.signOut();
+function isYes(value: string): boolean {
+  return !["", "false", "no", "0"].includes(value.trim().toLowerCase());
+}
 
-  await surface.signIn(persona.administrator);
-  await surface.opportunityCwuEdit.open({ opportunityId });
-  expect(await surface.opportunityCwuEdit.reportingWatchers()).not.toBe(before);
-});
-
-test("any signed-in person may stop watching an opportunity they did not create", async ({
+test("any signed-in person may watch an opportunity they did not create, and cannot watch the same opportunity twice", async ({
   surface,
 }) => {
-  await surface.signIn(persona.administrator);
-  await surface.opportunityCwuEdit.open({ opportunityId });
-  const before = await surface.opportunityCwuEdit.reportingWatchers();
-  await surface.signOut();
+  await surface.signIn(persona.vendor);
+  const watch = surface.opportunityWatchRequest;
 
-  await surface.signIn(persona.organizationOwner);
-  await surface.opportunityCwuView.open({ opportunityId });
-  await surface.opportunityCwuView.toggleWatch();
-  await surface.opportunityCwuView.open({ opportunityId });
-  await surface.opportunityCwuView.toggleWatch();
-  await surface.signOut();
+  await watch.open({ program });
+  expect(isYes(await readOrEmpty(() => watch.watching()))).toBe(false);
 
-  await surface.signIn(persona.administrator);
-  await surface.opportunityCwuEdit.open({ opportunityId });
-  expect(await surface.opportunityCwuEdit.reportingWatchers()).toBe(before);
+  await watch.watchByRequest({ opportunityId });
+  expect(await readOrEmpty(() => watch.requestAccepted())).toBeTruthy();
+  expect(isYes(await readOrEmpty(() => watch.watching()))).toBe(true);
+
+  await watch.open({ program });
+  await watch.watchByRequest({ opportunityId });
+  expect(await readOrEmpty(() => watch.requestAccepted())).toBeFalsy();
+  expect(await readOrEmpty(() => watch.refusalReason())).toBe("conflict");
+  expect(isYes(await readOrEmpty(() => watch.watching()))).toBe(true);
+
+  await watch.open({ program });
+  await watch.stopWatchingByRequest({ opportunityId });
+});
+
+test("any signed-in person may stop watching an opportunity they did not create", async ({ surface }) => {
+  await surface.signIn(persona.vendor);
+  const watch = surface.opportunityWatchRequest;
+
+  await watch.open({ program });
+  await watch.watchByRequest({ opportunityId });
+  expect(isYes(await readOrEmpty(() => watch.watching()))).toBe(true);
+
+  await watch.open({ program });
+  await watch.stopWatchingByRequest({ opportunityId });
+  expect(isYes(await readOrEmpty(() => watch.watching()))).toBe(false);
 });

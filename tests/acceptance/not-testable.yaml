@@ -207,3 +207,20 @@ criteria:
       clause, which only a request no screen sends could show, needs restating
       in ratify in terms something observes, or withdrawing.
     owner: contract
+  - id: R-1.6
+    version: 1
+    reason: "blocked: the criterion's outcome is the recorded view count of an
+      opportunity, and the only surface observation that returns a view count is
+      reporting_views on opportunity-cwu-edit, a figure on the management screen
+      that the criterion never mentions and that a test may not lean on. The
+      contract names the count the criterion means as the counters observable
+      (view_count, read over http), but that observable is on no surface page,
+      so a test, which reaches only surface, persona, seed and mail, cannot read
+      it before and after the public page is opened."
+    missing: "a surface page (for example opportunity-counters, addressed by the
+      opportunity's program and identifier) with an observation view_count that
+      returns the counters observable's view_count for that opportunity as a
+      number, readable signed out or by any persona, so a test can read it, open
+      opportunity-cwu-view for seed.opportunities.publishedCodeWithUs, and read
+      it again to check an increase of exactly one."
+    owner: contract

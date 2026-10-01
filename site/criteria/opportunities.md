@@ -9,7 +9,7 @@
 | R-1.3 | acceptance/opportunities/R-1.3.spec.ts |  | pass |
 | R-1.4 | acceptance/opportunities/R-1.4.spec.ts |  | pass |
 | R-1.5 | acceptance/opportunities/R-1.5.spec.ts |  | pass |
-| R-1.6 | acceptance/opportunities/R-1.6.spec.ts |  | pass |
+| R-1.6 | not testable: blocked: the criterion's outcome is the recorded view count of an opportunity, and the only surface observation that returns a view count is reporting_views on opportunity-cwu-edit, a figure on the management screen that the criterion never mentions and that a test may not lean on. The contract names the count the criterion means as the counters observable (view_count, read over http), but that observable is on no surface page, so a test, which reaches only surface, persona, seed and mail, cannot read it before and after the public page is opened. |  | pass |
 | R-1.7 | acceptance/opportunities/R-1.7.spec.ts |  | pass |
 | R-1.8 | acceptance/opportunities/R-1.8.spec.ts |  | pass |
 | R-1.9 | acceptance/opportunities/R-1.9.spec.ts |  | fail (ruled: defect-in-old) |
