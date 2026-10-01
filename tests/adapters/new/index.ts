@@ -2924,6 +2924,36 @@ export default function create(
     return { name, mimeType: MIME[ending] || "application/octet-stream", buffer: readFileSync(path) };
   }
 
+  // How big the test asked the file to be, in bytes, however it said so: a number of bytes
+  // under any of the usual names, a size written with its unit ("11 MB", "10.5MB", "512 KB"),
+  // or a number under a name that carries the unit (sizeMB, megabytes, sizeKB). A size the
+  // test gave and this cannot read is left out rather than guessed, and the content (or the
+  // harness's default) decides the file. Units are binary: the service's 10 MB is 10 × 1024².
+  function bytesGiven(input: unknown): number | undefined {
+    const UNIT: Record<string, number> = { b: 1, byte: 1, bytes: 1, kb: 1024, kib: 1024, mb: 1024 ** 2, mib: 1024 ** 2, gb: 1024 ** 3, gib: 1024 ** 3 };
+    const read = (value: unknown, scale: number): number | undefined => {
+      if (typeof value === "number" && Number.isFinite(value) && value >= 0) return Math.round(value * scale);
+      if (typeof value !== "string") return undefined;
+      const said = /^\s*(\d+(?:\.\d+)?)\s*([a-z]*)\s*$/i.exec(value.replace(/[,_]/g, ""));
+      if (!said) return undefined;
+      const unit = said[2].toLowerCase();
+      const factor = unit ? UNIT[unit] : scale;
+      return factor === undefined ? undefined : Math.round(Number(said[1]) * factor);
+    };
+    const scaled: [string[], number][] = [
+      [["bytes", "size", "sizeBytes", "size_bytes", "sizeInBytes", "byteLength"], 1],
+      [["kilobytes", "sizeKB", "size_kb", "kb", "sizeKiB"], 1024],
+      [["megabytes", "sizeMB", "size_mb", "mb", "sizeMiB"], 1024 ** 2],
+    ];
+    for (const [names, scale] of scaled) {
+      const value = given(input, names);
+      if (value === undefined || value === null) continue;
+      const bytes = read(value, scale);
+      if (bytes !== undefined) return bytes;
+    }
+    return undefined;
+  }
+
   type Upload = { name: string; metadata?: string; file?: { fileName: string; mimeType: string; buffer: Buffer } };
 
   // Who may read a stored file, exactly as the input states it: a bare word is a tag, a
@@ -2944,11 +2974,10 @@ export default function create(
     const name = field(input, "name", "storedName") || fileName;
     if (!withFile) return { name, metadata };
     const content = given(input, ["content", "contents", "body", "text"]);
-    const bytes = Number.parseInt(field(input, "bytes", "size", "sizeBytes", "size_bytes"), 10);
     const made = fileGiven(
       fileName,
       typeof content === "string" || content instanceof Uint8Array ? content : undefined,
-      Number.isFinite(bytes) ? bytes : undefined,
+      bytesGiven(input),
     );
     const mimeType = field(input, "mimeType", "contentType", "content_type") || made.mimeType;
     return { name, metadata, file: { fileName, mimeType, buffer: made.buffer } };
@@ -3574,7 +3603,7 @@ export default function create(
     const payload = fileGiven(
       name,
       record(request).content as string | Uint8Array | undefined,
-      record(request).bytes as number | undefined,
+      bytesGiven(request) ?? bytesGiven(input),
     );
     const button = await findControl(page, control);
     if (!button) {
