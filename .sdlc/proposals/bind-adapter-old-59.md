@@ -31,3 +31,27 @@ I've brought the old adapter up to the current contract. The two new observation
 - **When there's nothing to read:** both observations throw `unbound:` only if no opportunity was ever opened. A page that was reached and refused, or reached and empty, is reported as it is.
 
 Nothing in this run was reported unbound, and I made no changes outside `tests/adapters/old/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether bind-adapter-old-59 binds the contract's new opportunity-counters page (view_count, refused_when_not_permitted) on old, and nothing else. It does. The diff touches only tests/adapters/old/index.ts and bindings.yaml plus pipeline records, with nothing under tests/acceptance, the contract or tests/generated. The runner's typecheck failed with exit 2 but reports no diagnostics under adapters/old/; its only diagnostic is in adapters/new/, which this proposal does not answer for. open builds the counter name opportunity.<program>.<id>.views from params, or from the seed record's program, and requests the route surface.yaml:2474 declares. view_count returns the count or '0' for an absent counter, which observables.yaml:321-322 states explicitly, and returns empty on a refused request. refused_when_not_permitted reports status and body on 401/403, the same pattern every existing refusal binding in the file uses. Neither observation decides an outcome, and unbound: is thrown only when no opportunity was ever opened. The author's browser check against the seeded Code With Us opportunity matches the bindings for administrator, staff and vendor; the unshown signed-out case is a question about the application, not the binding. The test for R-1.6 is already tracked as owed by derive-tests, so no condition is needed. What would change this ruling: a diagnostic under adapters/old/ in the runner's typecheck, or a calibration showing the adapter reads a counter other than the one the criterion names.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `7e6aa4d33a2b68be0ff76f8f4fb8b7e3a0f275fb`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 1 diagnostic
