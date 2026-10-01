@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-6-2 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">406</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">400</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">348</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-6-2</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 05:30</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 6 (An administrator can announce changed terms, and vendors accept them again) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> <strong>The failure I couldn&#39;t reproduce.</strong> The ruling says vendors still had their acceptance after an administrator announced changed terms.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I&#39;ve made one change for slice 6, but I can&#39;t say it fixes R-6.23, because I never found where the running application departs from that criterion.</p>
+<p><strong>The failure I couldn&#39;t reproduce.</strong> The ruling says vendors still had their acceptance after an administrator announced changed terms. Everything I could run says the application withdraws all of them:</p>
+<ul><li><strong>Database query.</strong> The withdrawal updates every row in <code>users</code> whose type is VENDOR (deactivated vendors included), clears <code>acceptedTermsAt</code> and keeps <code>lastAcceptedTermsAt</code>.</li><li><strong>Full request against a database built from <code>tests/seed</code>.</strong> I sent the announcement as an administrator through the contract check. That covered the body with no <code>value</code>, with <code>value: null</code> and with <code>value: {}</code>. The end-to-end test then checks the database and finds no vendor with an acceptance. Those three cases are now permanent tests.</li><li><strong>Production settings with mail on.</strong> I ran a throwaway test with mail switched on and the mail server refusing every connection. Reading <code>/api/users</code> straight after the answer showed no vendor still holding an acceptance, and the broadcast carried on past every failed message.</li><li><strong>Every other route to acceptance.</strong> Nothing in the backend or frontend records an acceptance except the vendor&#39;s own explicit &quot;accept terms&quot; request. The legal section, the sign-up completion, cached session state, the cookie session and token renewal all read fresh data.</li><li><strong>Tests running alongside.</strong> The seed manifest says the harness reseeds before every test, so tests run one at a time and another test can&#39;t re-accept in between.</li></ul>
+<p><strong>What I changed.</strong> The announcement now answers the moment the withdrawal is committed. Reading the active vendors and sending their messages happen only after the answer. If reading the vendors fails, it&#39;s logged, and the withdrawal and the answer still stand. This narrows any gap between the confirmation and a read that follows it, and fits R-6.24 more closely. Decision record 0027 is updated to match.</p>
+<p><strong>Tests added.</strong></p>
+<ul><li>The ordering is now: withdrawn, answered, active vendors read, then sent.</li><li>A failure to read the vendors leaves the withdrawal and a correct answer in place.</li><li>The three body shapes above.</li></ul>
+<p><code>npm --prefix app run check</code> passes in all three packages (16, 332 and 189 tests).</p>
+<p><strong>What I couldn&#39;t do.</strong> Starting the compose stack needs approval that no one here could give. So I never drove real Keycloak, Caddy, Postgres or a browser, which is exactly where the failure would have to be.</p>
+<p><strong>One explanation I can&#39;t rule out.</strong> If the acceptance test signs in as a vendor or public sector person and then as the administrator in the same browser without fully signing out, Keycloak&#39;s single sign-on could quietly keep the earlier person signed in. The administrator&#39;s announcement would then be refused and nothing withdrawn. I left sign-in alone because it belongs to earlier slices. Forcing a fresh login doesn&#39;t help either: Keycloak then asks only for the existing user&#39;s password and won&#39;t let someone else sign in.</p>
+<p>If R-6.23 fails again, the next stage should run it against the compose stack and check three things:</p>
+<ul><li>the status the announcement got;</li><li>who the service thought was signed in when it was sent;</li><li>whether the vendors still holding an acceptance are all of them (the request never took effect) or just a few (something accepted again afterwards).</li></ul>
+<p>I didn&#39;t change anything else in the slice. Nothing outside <code>app/</code> and <code>docs/decisions/</code> was touched.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by runner:verify (the runner, automatically) on 2026-10-01 05:36.</p>
+<div class="body"><p>Slice 6 does not yet do what 1 of its criteria say. Each condition is the criterion and what the running application did.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-6.23: Error: vendors whose acceptance was not withdrawn</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
