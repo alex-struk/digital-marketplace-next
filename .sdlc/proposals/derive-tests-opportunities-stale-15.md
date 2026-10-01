@@ -31,3 +31,23 @@ Two choices worth knowing:
 **What could break it.** The test assumes nothing else views this seeded opportunity between the two reads. A suite run in parallel against a shared target could break that. Also, the counters page takes the seed's `program` value (`code-with-us`) as-is; the contract stage reported checking that this addressing works on the oracle.
 
 I changed nothing outside `tests/acceptance`.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the R-1.6 test follow from its criterion and nothing else, and does it assert every clause? Ruling: return. What the test asserts is sound and stays within the contract surface. It reads the count through the opportunity-counters page as the administrator, which the contract allows. It opens the public page as a visitor who is not signed in and checks for an increase of exactly one. The removed not-testable entry is properly answered by the new counters page. The runner's typecheck passed. The identifier check after opening the public page only confirms the page actually opened, so it is acceptable. The problem is a missing clause. The criterion's 'when' is 'anyone, signed in or not, opens its public page', and the test only exercises 'not'. A signed-in visitor opening the page is a separate path: an application could count only anonymous views, or skip views from logged-in users, and this test would still pass. As written, the test's first passing run would close R-1.6's missing test with the signed-in half owed by nobody. The writer can assert it: the generated personas include an actable vendor (persona.vendor, reached by /auth/createsessionvendor). Nothing names that clause in not-testable.yaml. Per the brief, a clause the writer could assert and did not is a return, not a note on an approval. The ruling would change to approve once the test also has a signed-in visitor who is not staff (for example persona.vendor) open the public page between two counter reads and asserts the count rose by exactly one, alongside the anonymous case. A not-testable.yaml entry carrying `clause` would also do, but only with a real surface reason, and there doesn't appear to be one.
+
+**Conditions:**
+- R-1.6: the criterion's 'when' covers anyone 'signed in or not', but tests/acceptance/opportunities/R-1.6.spec.ts only opens the public page signed out. Add a viewing by a signed-in persona that is not staff (e.g. persona.vendor): read the count, open opportunityCwuView signed in as that persona, sign out, read again, and assert an increase of exactly one. Keep the anonymous case. If the surface truly cannot reach a signed-in viewing, record a not-testable.yaml entry for R-1.6 carrying `clause: signed-in visitor opens the public page` with the concrete surface gap instead.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `e37bc8f526ef85e9b1ac8c66d90c6837ff502cd1`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `acceptance/opportunities/`, which this proposal answers for.
+
+    No diagnostics.
