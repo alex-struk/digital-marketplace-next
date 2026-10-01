@@ -1,0 +1,16 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 5 does not yet do what 3 of its criteria say. Each condition is
+  the criterion and what the running application did.
+conditions:
+  - 'R-7.8: Error: expect(received).not.toBe(expected) // Object.is equality —
+    Expected: not ""'
+  - 'R-7.26: Error: file-embedded-image.upload_body_image — "Insert image" on
+    http://localhost:4300/content/derived-with-image-mup0utcw/edit opened no
+    file chooser'
+  - 'R-8.29: Error: file-embedded-image.upload_body_image — "Insert image" on
+    http://localhost:4300/content/r-8-29-image-mup0x96d/edit opened no file
+    chooser'
+at: 2026-10-01T04:18:20.895Z
