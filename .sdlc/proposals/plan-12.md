@@ -39,3 +39,15 @@ There are still 21 slices in the same order with the same dependencies. No crite
 **Assumptions:** I assumed from the ruling's wording that R-6.2's test also publishes an opportunity, which is that criterion's given. If its test goes only through `/organizations/:orgId/edit`, it can move to slice 11 without changing anything else.
 
 No conditions were addressed to a person, and none asked me to change paths outside `plan` and `docs/decisions`. Nothing is deferred.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:architect
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: is this the right cut of the work, and does each slice stand on its own? Ruling: return. The revision takes up the G3 ruling on build-slice-7-3 and four of its six moves hold against the tests: R-1.20 in Slice 9 (its test cancels a Code With Us opportunity, and Slice 9 builds cancellation), R-1.8 and R-1.48 in Slice 10 (Sprint With Us and Team With Us create screens), and R-6.2 in Slice 14 (its test goes through surface.organizationEdit as well as Code With Us publish, and Slice 14's dependencies include both Slice 7 and Slice 11). Two moves repeat the defect the revision exists to fix. R-6.15's test checks two notices. The second walks Team With Us individual evaluation and consensus submission (evaluationIndividualCreateTwu, evaluationConsensusCreateTwu) to reach the owner's notice, and those screens are built in Slices 17 and 18. Slice 10's dependency chain is Slice 7 and Slice 3 only. R-1.19's third test ('an opportunity finally reaches cancelled') calls cancelOpportunity. Only Slice 9 builds that, and Slice 10's chain does not include Slice 9. Both would be unbound at Slice 10's build for the same reason they were at Slice 7's. Tier is STANDARD, the plan makes no schema change and adds no dependency, so nothing needed escalating. The owed build conditions build-slice-7-3#1 and #2 are not settled by a plan change and stay open. What would change the ruling: R-6.15 placed in a slice whose dependencies include Slice 18, and R-1.19 placed where both cancellation (Slice 9) and the Sprint With Us view (Slice 10) exist. That means either giving Slice 10 a dependency on Slice 9, or moving R-1.19 to the first slice that depends on both. Record both under 'Criteria that sit awkwardly where they are'.
+
+**Conditions:**
+- Move R-6.15 out of Slice 10. Its test also checks the owner's notice, which it reaches by walking Team With Us individual evaluation and the chair's consensus submission (screens built in Slices 17 and 18). Slice 10 depends only on Slice 7. Place R-6.15 in Slice 18 or a later slice whose dependencies include it, and update the Slice 7 and Slice 10 entries and the plan.md reservation to match.
+- Fix R-1.19's placement. Its test cancels an opportunity with the cancel action, which only Slice 9 builds, and Slice 10 does not depend on Slice 9. Either add Slice 9 to Slice 10's dependencies (and say why in plan.md), or move R-1.19 to the first slice that depends on both Slice 9 and Slice 10. In both cases, record the reservation in plan.md.
