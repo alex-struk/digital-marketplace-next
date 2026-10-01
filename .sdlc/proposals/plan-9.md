@@ -33,3 +33,15 @@ There are still 21 slices; none was added, removed or reordered, and every other
 **Decision records.** I wrote no new record. I edited one: `docs/decisions/0013` said the footer criteria R-6.6 and R-6.16 belonged to Slice 3. It now says they are built there but answered for in Slices 21 and 11.
 
 **What I left.** No condition was addressed to a person, and nothing asked me to change spec, design, constitution.md or the skills, so I left nothing for anyone else. I made no new assumptions about the stack or the platform.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:architect
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: is this the right cut of the work, and does each slice stand on its own? Ruling: return. Three of the four moves are sound. R-8.17 goes to Slice 7, which builds the attachment control. R-6.6 goes to Slice 21, which builds the email notification reference, and widening its dependencies to Slices 4, 6 and 9 is right because its description already claims every message. R-4.33 goes to Slice 6, which serves the terms-and-conditions managing screen and whose dependencies include the profile from Slice 3. R-6.16 is misplaced. Its acceptance test signs in as the organization's owner, opens the organization's edit screen, adds a team member by email, and reads the invitation to join the organization. Slice 12 builds both the team tab and that invitation; Slice 11 builds neither. Placed in Slice 11, R-6.16 would be unbound for the same reason the Slice 3 build found these four unbound. The test is correct against R-6.16 as written, so nothing is owed by derive-tests and the fix belongs to plan. The tier is STANDARD, the plan changes no schema and adds no dependency, so nothing escalates. The instructions build-slice-3-3#1 and #2 are build's and stay open. What would change the ruling: R-6.16 moved to Slice 12 with the invitation named as its ungoverned message, and the plan.md and decision 0013 notes following it.
+
+**Conditions:**
+- Move R-6.16 from Slice 11 to Slice 12 in plan/tasks.md. Its acceptance test signs in as the organization owner, opens the organization's edit screen, adds a team member by email, and reads the invitation to join the organization. Slice 12 builds both of these ('the team tab — inviting by email ... and the messages each step sends'); Slice 11 builds neither. Take the R-6.16 clause out of Slice 11's delivers line, and add to Slice 12's delivers line that the invitation is a message the notification preference does not govern, so it links to the reader's notification settings (built in Slice 3) without offering to unsubscribe.
+- Make plan/plan.md (the awkward-placement entry and the R-6.6 vs R-6.16 note) and docs/decisions/0013-the-mail-path.md say Slice 12 and the organization invitation wherever they now say Slice 11 and the archive notice for R-6.16.
