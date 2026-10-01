@@ -1282,3 +1282,32 @@ conditions:
         comments are removed
       by: agent:reviewer
       at: 2026-10-01T00:56:11.865Z
+  - ref: build-slice-3-3#1
+    text: "R-8.13, R-8.21, R-8.28, R-8.30: on /users/me in edit mode, pressing the
+      'Choose a profile picture' button (data-testid change-avatar, a
+      design-system Button inside react-aria FileTrigger in
+      app/frontend/src/app/image-picker.tsx) opens no file chooser in Chromium
+      driven by Playwright (page.waitForEvent('filechooser') times out), and the
+      hidden file input is never clicked. jsdom unit tests do not exercise this.
+      Make the button open the browser's file chooser, for example by making
+      sure FileTrigger's press handler reaches the design-system Button, or by
+      using a native file input with a label. Watch it work in the running app;
+      doing that needs the docker compose approval this stage's session could
+      not grant."
+    from: build-slice-3-3
+    family: build-slice-3
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-01T01:45:25.355Z
+  - ref: build-slice-3-3#2
+    text: Egress check E-2 flags
+      docs/decisions/0021-the-file-store-and-its-answers.md:56, where 'SHA-256'
+      reads as an internal ticket number. Reword it (for example 'a sha256
+      digest') so the egress check passes.
+    from: build-slice-3-3
+    family: build-slice-3
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-01T01:45:25.355Z
