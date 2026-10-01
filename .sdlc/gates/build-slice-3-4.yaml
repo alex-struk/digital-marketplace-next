@@ -1,12 +1,21 @@
 gate: G3
-verdict: escalated
-by: runner:verify
-held_by: runner
-escalate_to: tech-lead
-rationale: "Slice 3 has failed verify 3 times. The failures below may not be the
-  application's: a test, the adapter, the criterion or the sandbox can each be
-  what is wrong (spec 7.1), and another build would not find out which."
+verdict: return
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  The question is whether slice 3 does what its criteria say, after runner:verify escalated three failed builds. The ruling is return. What decided it: the verify run against c13c0cc shows the picker change worked. The profile-picture tests of R-8.13 (wide and tall) and R-8.28 now pass in Chromium, and those tests cannot pass unless the chooser opens. So build-slice-3-3#1 is met. Decision record 0021 is gone from the egress failures, so build-slice-3-3#2 is met. The failures that remain are of two kinds. (1) Application faults on the profile picture. R-8.30: after the picker refuses 'portrait.gif', pressing Save changes runs save() in user-profile.tsx, which ignores the pending rejection. It saves the profile and closes the form, so the refusal disappears and the test reads an empty string. R-8.21: checkChosenPicture checks only the name and size, so a '.png' whose content is text is refused only when the form is saved, while the test reads the refusal at choose time. The criterion does not set the timing, but a check of the first bytes in the browser meets the test without contradicting the criterion, and it matches how the picker already copies the service's name and size checks. That is cheaper than regenerating the test. (2) A plan fault. R-8.13, R-8.21, R-8.28 and R-8.30 each have an organization-logo half that is exercised on /organizations/:orgId/edit, which slice 3 does not build, so those halves are unbound or failing whatever build does. R-8.16 cannot be checked from outside the service, but the backend end-to-end suite asserts the upload directory is empty after every upload. I would not hold an approval on it alone. The egress hits that remain are in .sdlc/ ledger and site/ files that build cannot write. One of them is this proposal's own page, which quotes the old wording. If they persist after the app work passes, they are for the pipeline owner. What would change the ruling: the profile-picture halves of R-8.21 and R-8.30 pass in the acceptance run, and the logo halves are moved by plan.
 conditions:
-  - 'R-8.21: Error: expect(received).toBeTruthy() — Received: ""'
-  - 'R-8.30: Error: expect(received).toBeTruthy() — Received: ""'
-at: 2026-10-01T02:16:24.206Z
+  - "condition-met build-slice-3-3#1: image-picker.tsx now opens a native file input from the button. In the verify run against c13c0cc, Chromium passes the profile-picture tests of R-8.13 (wide and tall) and R-8.28, which need the chooser to open (tests/results/new/slice-3.json)."
+  - "condition-met build-slice-3-3#2: docs/decisions/0021-the-file-store-and-its-answers.md no longer appears among the egress E-2 failures on this proposal's checks."
+  - "R-8.30: on /users/me in edit mode, after the picker refuses a chosen picture (for example 'portrait.gif'), pressing Save changes must not silently save and close the form. save() in app/frontend/src/screens/user-profile.tsx ignores the pending rejection, saves, and calls onDone, which unmounts the picker and its refusal alert. The verify test then reads an empty refusal. While a refusal is showing, keep the form open with the refusal visible and focused, and do not save. Add a unit test covering it."
+  - "R-8.21: when a picture is chosen, check the file's first bytes in the browser (JPEG FF D8 FF, or the 8-byte PNG signature) and show a refusal in the picker's alert straight away, as is already done for the name ending and the size. checkChosenPicture in app/frontend/src/app/image-picker.tsx checks only the name and size, so a '.png' whose content is text is accepted at choose time, and the verify test reads no refusal. Keep the service's own check. Add a unit test covering it."
+  - "When the summary describes the earlier egress fix, do not quote the wording that was replaced. The proposal page is itself checked by egress rule E-2 and is flagged for quoting it."
+  - "addressed-to plan: slice 3 claims R-8.13, R-8.21, R-8.28 and R-8.30 whole, but each has an organization-logo half that the acceptance suite exercises on /organizations/:orgId/edit (and the organization list for R-8.28), which slice 3 does not build. The verify run against c13c0cc reports those halves unbound ('/organizations/:orgId/edit did not open as a screen') or failing, while the profile-picture halves of R-8.13 and R-8.28 pass. Move these criteria, or their logo halves, to the slice that builds the organization edit screen, or make that slice a prerequisite of slice 3."
+cost: 1.1205458
+turns: 13
+session: "17c953e3-f203-470b-b22b-9137dae10337"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T02:18:11.059Z
