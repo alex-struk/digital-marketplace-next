@@ -1,0 +1,17 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 3 does not yet do what 3 of its criteria say. Each condition is
+  the criterion and what the running application did.
+conditions:
+  - 'R-4.18: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    "User Profile'
+  - 'R-4.29: Error: expect(received).not.toBe(expected) // Object.is equality —
+    Expected: not "checked"'
+  - "R-8.23: Error: ENAMETOOLONG: name too long, open
+    '/tmp/sdlc-upload-BLeRfh/nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn\
+    nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn\
+    nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn\
+    nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn.pdf'"
+at: 2026-10-01T01:16:42.487Z
