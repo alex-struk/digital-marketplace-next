@@ -51,3 +51,14 @@ That makes six story files under `design/catalogue/`. In `spec/contract/surface.
 Every one of them appears in a story. Under the users domain's per-screen notes in `design/DESIGN.md` I added a paragraph explaining the three addresses. I also added gap 11: the criteria give no status number for a refused request, and don't say whether a signed-out visitor gets the same refusal as a signed-in person without permission. So the stories say "Refused: not permitted" and leave the number open.
 
 The R-4.29 ruling (build-slice-3-3) was already reflected in the notifications notes, so I didn't touch it again. Those notes say the box turns notices on or off at any time with no question, and the confirmation is asked only on arrival from the unsubscribe link. No request was deferred, and no condition was addressed to a person.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:ux-reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: do the users screens serve the users criteria and rest on the design system? Approve. The DESIGN.md revision brings the users section into line with R-4.29: the new-opportunity notice checkbox turns on or off at any time and saves with no question in either direction, and unsubscribe-confirm is asked only on arrival from a message's unsubscribe link, changing nothing until confirmed. This answers the design revision request from build-slice-3-3. The fix turn catalogues the three users data addresses (user-list-request, user-account-self-request, user-account-request) as response references in the established files-domain pattern. They use the design system's Heading and Text and a plain description list, with spacing and weight from tokens used across the catalogue. Each has only the states that give different answers: admin-only list per R-4.21, owner-or-admin record per R-4.25, notices-since empty when off per R-4.24. All eight surface test IDs are filled and each appears in a story. The report shows 489 stories and 0 violations. Gap 11 states rather than invents the refusal status. The egress failures are confined to older build-slice gate, proposal and site files outside this diff and outside design's writable paths. build-slice-3-3#1 and #2 are owed by build, are not settled here, and remain open. The ruling would change on a hard-coded value in place of a token, any accessibility violation, or a bound test ID with no story carrying it.
+
+**Conditions:**
+none
