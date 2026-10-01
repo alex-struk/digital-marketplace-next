@@ -5,12 +5,16 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 const require = createRequire(import.meta.url);
-const { PAGE_SLUGS, PLACEHOLDER_BODY, PAGES_NOT_CREATED } = require("../lib/fixed-pages.cjs");
+const { PAGE_SLUGS, PLACEHOLDER_BODY, SERVICE_LEVEL_AGREEMENT_SLUG } = require("../lib/fixed-pages.cjs");
 const { seedFiles } = require("../scripts/seed.cjs");
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
 describe("the pages a fresh installation needs (R-7.12, R-7.18)", () => {
+  it("is the twenty-two R-7.12 counts", () => {
+    expect(PAGE_SLUGS).toHaveLength(22);
+  });
+
   it("offers the footer's five pages", () => {
     // R-7.19: About, Disclaimer, Privacy, Accessibility and Copyright are linked from
     // every screen, so every one of them has to exist on a fresh installation.
@@ -19,20 +23,15 @@ describe("the pages a fresh installation needs (R-7.12, R-7.18)", () => {
     }
   });
 
-  it("offers the service level agreement page", () => {
-    // R-7.18: the five places that link to it resolve on a fresh installation.
-    expect(PAGE_SLUGS).toContain("service-level-agreement");
+  it("does not store the service level agreement page, which the service answers itself", () => {
+    // R-7.18 is met by the service answering that address (decision record 0026), so the
+    // count R-7.12 gives is not pushed to twenty-three.
+    expect(PAGE_SLUGS).not.toContain(SERVICE_LEVEL_AGREEMENT_SLUG);
   });
 
   it("offers the service's own terms and the formatting guidance", () => {
     expect(PAGE_SLUGS).toContain("terms-and-conditions");
     expect(PAGE_SLUGS).toContain("markdown-guide");
-  });
-
-  it("creates none of the seven pages nothing links to", () => {
-    for (const slug of PAGES_NOT_CREATED) {
-      expect(PAGE_SLUGS).not.toContain(slug);
-    }
   });
 
   it("names every address only once", () => {

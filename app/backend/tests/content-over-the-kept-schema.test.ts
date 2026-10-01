@@ -7,6 +7,7 @@ import { PrismaService } from "../src/prisma/prisma.service";
 import { PrismaPageStore } from "../src/content/prisma-page.store";
 import { ContentService } from "../src/content/content.service";
 import { ContentController } from "../src/content/content.controller";
+import { ManagedPage } from "../src/content/page";
 import { freePort } from "./free-port";
 
 /**
@@ -87,6 +88,7 @@ beforeAll(async () => {
   prisma = new PrismaService({ datasourceUrl: url });
   controller = new ContentController(
     new ContentService(new PrismaPageStore(prisma)),
+    { readingAccount: async () => null },
   );
 }, 120_000);
 
@@ -110,11 +112,22 @@ describe("a page read by its address (R-7.1)", () => {
   });
 
   it("comes back for a page the service made for itself, at its placeholder wording", async () => {
+    const page = await controller.read("privacy");
+
+    expect(page.title).toBe("privacy");
+    expect(page.body).toBe("Initial version");
+    expect(page.fixed).toBe(true);
+  });
+
+  it("comes back for the service level agreement page, which nobody has written (R-7.18)", async () => {
     const page = await controller.read("service-level-agreement");
+    const privacy = await controller.read("privacy");
 
     expect(page.title).toBe("service-level-agreement");
     expect(page.body).toBe("Initial version");
     expect(page.fixed).toBe(true);
+    // Dated as the installation is.
+    expect(page.createdAt).toBe(privacy.createdAt);
   });
 });
 
@@ -144,5 +157,59 @@ describe("an address that holds no page (R-7.2, R-7.3)", () => {
     await expect(
       controller.read("00000000-0000-4000-8000-000000000999"),
     ).rejects.toMatchObject({ status: 404 });
+  });
+});
+
+describe("the list of pages on a fresh installation (R-7.5, R-7.12)", () => {
+  it("carries the twenty-two pages the service needs, each titled by its address and holding the placeholder", async () => {
+    const asAdministrator = new ContentController(
+      new ContentService(new PrismaPageStore(prisma)),
+      { readingAccount: async () => ({ id: ADMINISTRATOR, type: "ADMIN" }) },
+    );
+    const pages = await asAdministrator.list({} as never);
+    const needed = pages.filter((page) => page.fixed);
+
+    expect(needed).toHaveLength(22);
+    for (const page of needed) {
+      expect(page.title).toBe(page.slug);
+      expect(page.body).toBe("Initial version");
+    }
+    // The service level agreement page is answered, not stored, so it is not listed.
+    expect(pages.map((page) => page.slug)).not.toContain("service-level-agreement");
+    // Every page once, the administrator's own among them, in order of title.
+    expect(pages).toHaveLength(23);
+    expect(pages.map((page) => page.slug)).toContain("about-us");
+    const titles = pages.map((page) => page.title);
+    expect(titles).toEqual([...titles].sort((a, b) => a.localeCompare(b, "en")));
+  });
+
+  it("is refused to anyone who is not an administrator", async () => {
+    await expect(controller.list({} as never)).rejects.toMatchObject({ status: 401 });
+  });
+});
+
+describe("an administrator writing the service level agreement page (R-7.18, R-7.25)", () => {
+  it("stores it as a page the service needs, at its own address, authored by them", async () => {
+    const asAdministrator = new ContentController(
+      new ContentService(new PrismaPageStore(prisma)),
+      { readingAccount: async () => ({ id: ADMINISTRATOR, type: "ADMIN" }) },
+    );
+    const answered = (await asAdministrator.read("service-level-agreement", {} as never)) as ManagedPage;
+    expect(answered.createdBy).toBeNull();
+    expect(answered.updatedBy).toBeNull();
+    await expect(asAdministrator.remove(answered.id, {} as never)).rejects.toMatchObject({ status: 400 });
+
+    const written = await asAdministrator.change(
+      answered.id,
+      { title: "Service level agreement", slug: "service-level-agreement", body: "What we commit to." },
+      {} as never,
+    );
+
+    expect(written.id).not.toBe("service-level-agreement");
+    expect(written.fixed).toBe(true);
+    expect(written.updatedBy).toEqual({ id: ADMINISTRATOR, name: "Robin Placeholder" });
+    const read = await controller.read("service-level-agreement");
+    expect(read.body).toBe("What we commit to.");
+    expect(read.id).toBe(written.id);
   });
 });

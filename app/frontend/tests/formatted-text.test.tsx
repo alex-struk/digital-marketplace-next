@@ -112,6 +112,16 @@ describe("a body as formatted text (R-7.1)", () => {
     );
   });
 
+  it("shows an image stored in the service from the file's own address (R-8.29)", () => {
+    render(
+      <FormattedText markup={"![Map of the venue](@file/5b2e0c3a-8d41-4f6e-a1c2-000000000806)"} />,
+    );
+    const image = screen.getByTestId("content-body-image");
+
+    expect(image.getAttribute("src")).toBe("/api/files/5b2e0c3a-8d41-4f6e-a1c2-000000000806?type=blob");
+    expect(image.getAttribute("alt")).toBe("Map of the venue");
+  });
+
   it("reads one body the same way every time it is asked", () => {
     // The same renderer runs on a page's own address and wherever a screen embeds the body,
     // so one body can only have one reading (R-7.17).
