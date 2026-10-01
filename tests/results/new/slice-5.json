@@ -1,0 +1,363 @@
+{
+  "slice": 5,
+  "proposal": "build-slice-5-2",
+  "app_tree": "4ec8d759f5f4648148e2e362ac0676d65b71775b",
+  "at": "2026-10-01T04:18:20.868Z",
+  "verdict": "fail",
+  "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028",
+  "rows": [
+    {
+      "id": "R-7.5",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.5.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the list of pages names every page with its title, its public address, whether the service needs it, and when it was created and last updated, ordered by title",
+          "status": "passed"
+        },
+        {
+          "title": "only an administrator can see the list of pages",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "93603858147f51d24dc1933b7738fc2726a8f5bf",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    },
+    {
+      "id": "R-7.6",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.6.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a signed-in vendor who reaches any of the managing screens directly is shown the not-found screen",
+          "status": "passed"
+        },
+        {
+          "title": "a signed-in public sector employee who reaches any of the managing screens directly is shown the not-found screen",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "5afb1bd675636affc6d4f4e471b1fa33e412e606",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    },
+    {
+      "id": "R-7.7",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.7.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an administrator can create a page by giving it a title, an address and a body, and once published it is readable by anyone at that address",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "775710536200b028feefc3bdc996e198ead979a2",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    },
+    {
+      "id": "R-7.8",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.8.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "publishing a change to a page shows the new text to every reader from that moment, and the page's updated date becomes the moment of the change",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mnot\u001b[2m.\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: not \u001b[32m\"\"\u001b[39m"
+        }
+      ],
+      "file_sha": "e9f3d7db7eb0b6a937c9d0257a57b468c998df14",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    },
+    {
+      "id": "R-7.9",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.9.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Removing an ordinary page removes it and every version of it permanently, and its address stops answering",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "115d322ce61a9a5ae61ab82cb0ea23579f70d40f",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    },
+    {
+      "id": "R-7.10",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.10.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a signed-in vendor asking the service to create, change or remove a page is refused, and nothing is created, changed or removed",
+          "status": "passed"
+        },
+        {
+          "title": "a signed-in public sector employee asking the service to create, change or remove a page is refused, and nothing is created, changed or removed",
+          "status": "passed"
+        },
+        {
+          "title": "a visitor who is not signed in asking the service to create, change or remove a page is refused, and nothing is created, changed or removed",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "57384b1c69479b54cc16c7e247f60ebd58187501",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    },
+    {
+      "id": "R-7.12",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.12.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a fresh installation carries a full set of the pages the service needs, each holding placeholder text and titled by its own address until somebody writes it",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "6cc2ac5d1f59645976f408e9b5c7f017cc2f5d8f",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    },
+    {
+      "id": "R-7.16",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.16.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a request refused for lack of permission is reported as a permission refusal, in the same shape for every page request, whether it reads the list, creates, changes or removes one",
+          "status": "passed"
+        },
+        {
+          "title": "a request refused for lack of permission to read one page is reported as a permission refusal in the same shape as every other page request",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "c9d8a5f9269cad2d325fdabdb67ae4cacbd5dda3",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    },
+    {
+      "id": "R-7.20",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.20.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — creating a page with an empty title",
+          "status": "passed"
+        },
+        {
+          "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — creating a page with a body longer than fifty thousand characters",
+          "status": "passed"
+        },
+        {
+          "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — creating a page with a title longer than a hundred characters",
+          "status": "passed"
+        },
+        {
+          "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — creating a page with an empty body",
+          "status": "passed"
+        },
+        {
+          "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — changing a page to an empty title",
+          "status": "passed"
+        },
+        {
+          "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — changing a page to a body longer than fifty thousand characters",
+          "status": "passed"
+        },
+        {
+          "title": "A page must have a title of between one and a hundred characters and a body of between one and fifty thousand characters, and a submission failing either is refused with the failing field named — a page with a title of a hundred characters and a body of fifty thousand is accepted",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "4fd6d775dcdc40b58960a2adcf24b76dfe278c30",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    },
+    {
+      "id": "R-7.21",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.21.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A page's address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused — an address containing a capital letter",
+          "status": "passed"
+        },
+        {
+          "title": "A page's address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused — an address containing a space",
+          "status": "passed"
+        },
+        {
+          "title": "A page's address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused — an address containing an underscore",
+          "status": "passed"
+        },
+        {
+          "title": "A page's address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused — an address containing a leading hyphen",
+          "status": "passed"
+        },
+        {
+          "title": "A page's address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused — an address containing a trailing hyphen",
+          "status": "passed"
+        },
+        {
+          "title": "A page's address must be lowercase letters and digits in hyphen-separated groups, and any other address is refused — an address of lowercase letters and digits in hyphen-separated groups is accepted",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "6e85e9d899e0ce83759fbf1c7ca26fa842ec81a8",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    },
+    {
+      "id": "R-7.22",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.22.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "No two pages may share an address, whether the clash arises on creating a page or on renaming one — on creating a page",
+          "status": "passed"
+        },
+        {
+          "title": "No two pages may share an address, whether the clash arises on creating a page or on renaming one — on renaming one",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "dce4cd1003049d39f8a7034dcbda1d9d67f99182",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    },
+    {
+      "id": "R-7.23",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.23.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "nothing in the service shows, compares or restores an earlier version of a page",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "80d45da9b26d713b0ae46e5627dec5a3a8a9caf7",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    },
+    {
+      "id": "R-7.24",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.24.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "renaming a page moves it to its new address at once and leaves nothing at the old one",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "d882be6411353a6cdeec3fd88c34e6bb5aa85100",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    },
+    {
+      "id": "R-7.25",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.25.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a page the service itself depends on may have its title and body changed",
+          "status": "passed"
+        },
+        {
+          "title": "a page the service itself depends on may not be renamed or removed, and its managing screen says so",
+          "status": "passed"
+        },
+        {
+          "title": "a request to rename or remove a page the service itself depends on, made another way, is refused",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "1d33d9b8321c4ff48a520d4e77f9d9137e95d8eb",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    },
+    {
+      "id": "R-7.26",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.26.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the editor's image control stores the image, places a reference to it in the body, and the published page shows it",
+          "status": "failed",
+          "error": "Error: file-embedded-image.upload_body_image — \"Insert image\" on http://localhost:4300/content/derived-with-image-mup0utcw/edit opened no file chooser"
+        }
+      ],
+      "file_sha": "c49b3aad1468a813b4ffecf603af5b9d2db5c5a5",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    },
+    {
+      "id": "R-7.27",
+      "version": 1,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.27.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the managing screen of a page names the service itself as publisher and last editor where no person is recorded",
+          "status": "passed"
+        },
+        {
+          "title": "the managing screen of a page names who first published it and who last changed it",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "4b2f1430e2096c0eed179594b5b4bbbc9163ee8d",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    },
+    {
+      "id": "R-7.28",
+      "version": 2,
+      "domain": "content",
+      "file": "tests/acceptance/content/R-7.28.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an administrator who publishes over a page another has changed since it was opened silently replaces that wording and is told the change was published",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "28524159f7addeb951124bb965c15a0864cb45ac",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    },
+    {
+      "id": "R-8.29",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.29.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an image placed into a piece of formatted text is stored as an ordinary file marked readable by anyone, and the text refers to it by an internal marker that is turned into a download address only when the text is displayed",
+          "status": "failed",
+          "error": "Error: file-embedded-image.upload_body_image — \"Insert image\" on http://localhost:4300/content/r-8-29-image-mup0x96d/edit opened no file chooser"
+        }
+      ],
+      "file_sha": "40960082bed86c3793c3b890a295d06e1b5a1892",
+      "adapter": "3d06f908cc7595902bbce5b90dd86bfba43ec028"
+    }
+  ]
+}
