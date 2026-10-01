@@ -351,6 +351,14 @@
 - 06:15:48 run verify: regenerated 452 files in .sdlc, site, tests
 - 06:15:53 drive: step 10: `sdlc run bind-adapter --target new` — 2 bindings the adapter reports unbound for target new owed by bind-adapter; the application it binds against is on proposal/build-slice-8-2 alone, so sdlc sandbox up --target new --from proposal/build-slice-8-2 first
 - 06:15:54 run bind-adapter: pre-checks failed
+- 06:19:36 drive: step 12: `sdlc run contract` — 1 missing test owed by contract
+- 06:22:09 run contract: post-checks failed, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 06:22:09 drive: stopped after 12 steps — step 12 (`sdlc run contract`) failed
+- 06:25:27 drive: step 1: `sdlc run contract` — 1 missing test owed by contract
+- 06:27:33 run contract: ok, cost 0.9821458000000003, turns 32, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 06:27:33 propose contract-v28 at G1
+- 06:27:36 drive: step 2: `sdlc rule contract-v28 --by agent:product-owner` — contract-v28 is open at G1, held by agent:product-owner
+- 06:28:32 rule contract-v28 approve at G1 by agent:product-owner (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-30
 

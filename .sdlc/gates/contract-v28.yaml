@@ -1,0 +1,15 @@
+gate: G1
+verdict: approve
+by: agent:product-owner
+held_by: agent
+rationale: |2-
+  Question: is opportunity-watch-request the contract the tests will use to check R-1.5's duplicate clause? Ruling: approve. The opportunity screens only offer a watch toggle, and pressing it again stops the watch, so no test written against the screens could ever send a second watch request. The new page adds a watch action that never toggles, and readings for whether the request was accepted, the refusal's status, reason and messages, and whether the person is watching. I checked this against the old Code With Us handler (sources/old/src/back-end/lib/resources/subscribers/code-with-us.ts). A request with no session is refused under permissions. An unknown opportunity is refused under notFound. Watching your own opportunity is refused under opportunity with 'You cannot subscribe to your own opportunity.' An existing watch is refused under conflict with 'This user is already subscribed to this opportunity.' Each refusal is a 400 and records nothing. Stopping a watch looks it up by the opportunity's id and the signed-in user, not by a subscription id, so the openapi.yaml descriptions are correct and the old API files' 'Subscription id' label is wrong. The old opportunity reads set a subscribed flag, so the watching reading is a separate check that the first request was recorded. In the seed, publishedCodeWithUs is created by users.staffOne and no watch is inserted, so users.vendorOne starts unwatched, which is the criterion's starting condition. Telling a test to stop watching when it ends is reasonable because the seed is not shown to be restored between tests. I only read the Code With Us handler; the Sprint With Us and Team With Us handlers are accepted on the proposal's statement that all three match. The page has not been run against the old application because the oracle could not be started from that session. That is calibrate's job and not a reason to hold the contract back. The condition missing-test/R-1.5 stays open until a test written from this page runs, and I am not withdrawing it. What would change this ruling: evidence that the Sprint With Us or Team With Us handler treats a repeat watch differently, or a calibration run showing the old application does not refuse a duplicate under conflict. R-1.5 is already confirmed, so no condition lines are needed.
+conditions: []
+cost: 0.3781744
+turns: 8
+session: "c1706431-13b5-44db-b8ac-cd2750e47369"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T13:28:32.536Z

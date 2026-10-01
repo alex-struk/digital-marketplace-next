@@ -4820,7 +4820,7 @@ owed:
     id: R-1.5
     version: 1
     domain: opportunities
-    stage: contract
+    stage: derive-tests
     why: the surface offers only a watch toggle, so asking twice turns the watch off
       instead of making a second request, and no observation reports a refusal
       as a duplicate; it needs a watch action that does not toggle and an
@@ -4831,3 +4831,17 @@ owed:
     gate: G3
     by: agent:reviewer
     at: 2026-10-01T13:19:31.924Z
+    readdressed:
+      - from: contract
+        to: derive-tests
+        why: added surface page opportunity-watch-request (route
+          /api/subscribers/:program) with action watch_by_request, which always
+          asks to watch and never toggles, plus stop_watching_by_request, and
+          observations request_accepted, watching, refusal_reason (conflict for
+          a duplicate), refusal_messages and refusal_status;
+          opportunities.publishedCodeWithUs as users.vendorOne is a starting
+          point with no watch seeded.
+        by: contract-v28
+        gate: G1
+        approved_by: agent:product-owner
+        at: 2026-10-01T13:28:33.394Z

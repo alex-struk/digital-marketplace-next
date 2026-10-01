@@ -96,6 +96,7 @@ export interface Surface {
   caughtMessageList: CaughtMessageListPage;
   mailDeliveryFault: MailDeliveryFaultPage;
   mailDeliveryDelay: MailDeliveryDelayPage;
+  opportunityWatchRequest: OpportunityWatchRequestPage;
   organizationActingForList: OrganizationActingForListPage;
   affiliationInvitationRequest: AffiliationInvitationRequestPage;
   affiliationApprovalRequest: AffiliationApprovalRequestPage;
@@ -1377,6 +1378,17 @@ export interface MailDeliveryDelayPage {
   slowDelivery(input?: unknown): Promise<void>;
   restoreDeliverySpeed(input?: unknown): Promise<void>;
   deliverySlowed(): Promise<string>;
+}
+
+export interface OpportunityWatchRequestPage {
+  open(params: { program: string }): Promise<void>;
+  watchByRequest(input?: unknown): Promise<void>;
+  stopWatchingByRequest(input?: unknown): Promise<void>;
+  requestAccepted(): Promise<string>;
+  refusalStatus(): Promise<string>;
+  refusalReason(): Promise<string>;
+  refusalMessages(): Promise<string>;
+  watching(): Promise<string>;
 }
 
 export interface OrganizationActingForListPage {

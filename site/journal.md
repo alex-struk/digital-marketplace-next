@@ -1,5 +1,131 @@
 # Journal
 
+## 371 · contract · 2026-10-01
+
+cost $0.9821458000000003 · turns 32 · claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+I added the page R-1.5 was missing, but I could not start the oracle from this session, so the new page hasn't been checked against the running old application.
+
+**What R-1.5 needed.** The criterion says a second request to watch the same opportunity is refused as a duplicate. The opportunity screens only offer `toggle_watch`, and pressing it again stops the watch, so the screens never send a second watch request. The old code handles a repeated watch in all three programs (`src/back-end/lib/resources/subscribers/{code,sprint,team}-with-us.ts`, lines 52–157):
+- A second watch request is refused with a 400. The refusal is filed under `conflict` with the message "This user is already subscribed to this opportunity."
+- Watching your own opportunity is filed under `opportunity` with "You cannot subscribe to your own opportunity."
+- An unknown opportunity is filed under `notFound`; a request with no session under `permissions`.
+- Stopping a watch is addressed by the opportunity's id, not a subscription id.
+- Every opportunity read carries a `subscribed` flag for the signed-in person.
+
+A previous run of this stage added the same kind of page, but that run failed its post-checks and nothing of it reached the repository, so I wrote it again.
+
+**What I added.** One page in `spec/contract/surface.yaml`: `opportunity-watch-request` (domain `opportunities`, route `/api/subscribers/:program`). It sits in the existing section for requests the screens never make and follows the shape of the other `*-request` pages there.
+- **Actions:**
+  - `watch_by_request` always asks to start watching; it never toggles.
+  - `stop_watching_by_request` asks to stop.
+- **Observations:**
+  - `request_accepted`, `refusal_status` and `refusal_messages`.
+  - `refusal_reason`, which reads `conflict` for a duplicate.
+  - `watching`, read from the opportunity's own `subscribed` flag. This is a separate confirmation that the first request recorded the watch.
+- **Starting point:** `opportunities.publishedCodeWithUs`, created by `users.staffOne`, watched as `users.vendorOne`. No seed file inserts any watch, so it starts unwatched. The page tells a test to stop watching when it ends, because I found nothing in the contract saying data goes back to the seed between tests.
+
+**API description fix.** In `spec/contract/openapi.yaml`, I added a description to each of the three stop-watching operations. The old application's own API files call the path parameter a "Subscription id", but the code looks the watch up by opportunity id.
+
+**Unchanged.** Every other page, `personas.yaml`, `observables.yaml`, the seed files and `.sdlc/oracle/compose.yml` are as they were. Nothing was deleted.
+
+**What I could not do.**
+- **Oracle:** the permission layer refused every command that reads `$SDLC_BIN`, including `node $SDLC_BIN oracle up` and `printenv SDLC_BIN`. The previous run hit the same refusal. So I never ran `oracle up`, `oracle down` was not needed, and no containers were started. The next run with that permission should confirm three things: as `users.vendorOne`, the first `watch_by_request` is accepted, `watching` then reads true, and the second request returns 400 under `conflict`.
+- **YAML check:** a parser run also needed approval. I matched the new entry's indentation and syntax to its neighbours by eye.
+
+**Unrelated failing check.** The previous run's post-check failure was the egress rule E-2 flagging the string "SHA-256" as an internal ticket number. It appears in gate rulings, recorded conditions and proposal pages under `.sdlc/` and `site/`. None of those is in a file this stage may edit, and my changes contain no such string. If the check runs over the whole repository again, it will likely fail again for that reason alone.
+
+re-address missing-test/R-1.5 to derive-tests: added surface page opportunity-watch-request (route /api/subscribers/:program) with action watch_by_request, which always asks to watch and never toggles, plus stop_watching_by_request, and observations request_accepted, watching, refusal_reason (conflict for a duplicate), refusal_messages and refusal_status; opportunities.publishedCodeWithUs as users.vendorOne is a starting point with no watch seeded.
+
+## 370 · contract · 2026-10-01
+
+cost $1.3708224 · turns 38 · claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+I added the piece that R-1.5 was missing, but I couldn't start the oracle from this session, so nothing in this run was checked against the old application.
+
+**What R-1.5 needed.** The criterion says a second request to watch the same opportunity is refused as a duplicate. The opportunity screens only offer a watch toggle. Pressing it a second time stops the watch, so the screens never send a second watch request. In the old application (`src/back-end/lib/resources/subscribers/*.ts`, lines 52–149), a second watch request gets a 400 with the reason `conflict` and the message "This user is already subscribed to this opportunity." Watching an opportunity you created gets the reason `opportunity` and "You cannot subscribe to your own opportunity." All three programs behave the same way.
+
+**What I added.** One new entry in `spec/contract/surface.yaml`: `opportunity-watch-request` (domain `opportunities`, route `/api/subscribers/:program`). I put it in the existing section for requests the screens never make, and it follows the same pattern as the other `*-request` entries there.
+- **Actions:**
+  - `watch_by_request` always sends a new watch; it never toggles.
+  - `stop_watching_by_request` stops a watch. Its path uses the opportunity's identifier, not a subscription identifier, because that is how the old service looks a watch up.
+- **Observations:**
+  - `request_accepted`, `refusal_status`, `refusal_messages`.
+  - `refusal_reason`: `conflict`, `opportunity`, `notFound` or `permissions`.
+  - `watching`: the opportunity's own `subscribed` flag for the person signed in. This is a separate way to confirm that the first request recorded the watch.
+  - `watcher_count`: the old service only gives this to the opportunity's author and to administrators. The entry says so, so a test reads it as `users.staffOne` or `users.administratorOne`.
+
+**Seed.** No change was needed. Nothing is seeded as watched, and `opportunities.publishedCodeWithUs`, created by `users.staffOne`, can be watched by `users.vendorOne`.
+
+**Unchanged files.** The API description (`openapi.yaml`) already lists all six watch routes, recovered from the old application's own API files. I left it, `personas.yaml`, `observables.yaml`, the seed files and `.sdlc/oracle/compose.yml` as they were. Every other existing page stays as it was; nothing was deleted.
+
+**Oracle not run.** Every command that expands `$SDLC_BIN` (`node $SDLC_BIN oracle up`, and printing the variable) was refused by this session's permission layer. Running with the sandbox off was refused the same way. I can't list anything outside the repository, so I couldn't find the command-line tool another way. As a result:
+- I never ran `oracle up` or `oracle down`, so no containers were started or left running.
+- I also couldn't run a YAML parser. I checked by eye that the new entry's indentation and syntax match its neighbours.
+
+The next run should start the oracle and confirm two things: the second `watch_by_request` from `users.vendorOne` returns 400 with `conflict`, and `watching` reads true after the first request.
+
+re-address missing-test/R-1.5 to derive-tests: added surface page opportunity-watch-request (route /api/subscribers/:program) with action watch_by_request, which sends a watch without toggling, and observations request_accepted, watching, refusal_reason (conflict for a duplicate), refusal_messages, refusal_status and watcher_count; opportunities.publishedCodeWithUs as users.vendorOne is a watchable starting point with no watch already seeded.
+
+## Fix turn
+
+I made no edits this pass. That was deliberate: none of the 23 flagged lines is in a file this stage owns.
+
+Every flagged line quotes the string "SHA-256". The egress rule reads that string as an internal ticket number, because it has the same shape as one (capital letters, a hyphen, digits). The files involved are `.sdlc/conditions.yaml`, the gate rulings for build slices 2-11 and 3-3, the build-slice proposal pages under `.sdlc/proposals/`, and their rendered copies under `site/proposals/`. All of them were committed by earlier build and gate stages; the newest of them was committed on 2026-09-30. Most of the flagged lines are the gate's own wording, including the instruction "Do not quote ticket-shaped strings…". Two are the build stage's own journal text.
+
+This stage may only edit `spec/contract/`, `tests/seed/` and `.sdlc/oracle/compose.yml`, and a guard rejects edits anywhere else. Rewording gate rulings and recorded conditions would also change records that belong to the gates, which is not this stage's call.
+
+I searched the files this stage does own for anything in the same shape, leaving out the criterion and rule ids like "R-4.17" and "E-2". Nothing turned up. My only uncommitted changes are the earlier additions to `spec/contract/surface.yaml` and the regenerated `tests/generated/surface.d.ts`, and neither contains the string.
+
+**Journal addition:** No files were changed in response to the egress check. All 23 lines it flagged quote "SHA-256", which the check reads as a ticket number, and they sit in gate rulings, recorded conditions and build proposal pages, both their sources under `.sdlc/` and their published copies under `site/`. Earlier build and gate stages wrote all of those files, and this stage has no permission to edit them. The contract, seed and oracle files this stage owns contain nothing in that shape. The rewording, for example to "a sha256 digest", has to happen in a gate or build stage, or be done by whoever owns those records. Until then, the check will keep failing on every stage's run no matter what that stage writes.
+
+.sdlc/conditions.yaml:1134: internal ticket number (rule E-2)
+.sdlc/conditions.yaml:1313: internal ticket number (rule E-2)
+.sdlc/gates/build-slice-2-11.yaml:6: internal ticket number (rule E-2)
+.sdlc/gates/build-slice-2-11.yaml:12: internal ticket number (rule E-2)
+.sdlc/gates/build-slice-3-3.yaml:9: internal ticket number (rule E-2)
+.sdlc/proposals/build-slice-2-11.md:42: internal ticket number (rule E-2)
+.sdlc/proposals/build-slice-2-11.md:73: internal ticket number (rule E-2)
+.sdlc/proposals/build-slice-2-11.md:80: internal ticket number (rule E-2)
+.sdlc/proposals/build-slice-3-3.md:54: internal ticket number (rule E-2)
+.sdlc/proposals/build-slice-3-4.md:28: internal ticket number (rule E-2)
+.sdlc/proposals/build-slice-3.md:23: internal ticket number (rule E-2)
+site/proposals/build-slice-2-11.html:33: internal ticket number (rule E-2)
+site/proposals/build-slice-2-11.html:42: internal ticket number (rule E-2)
+site/proposals/build-slice-2-11.html:43: internal ticket number (rule E-2)
+site/proposals/build-slice-2-11.md:38: internal ticket number (rule E-2)
+site/proposals/build-slice-2-11.md:69: internal ticket number (rule E-2)
+site/proposals/build-slice-2-11.md:76: internal ticket number (rule E-2)
+site/proposals/build-slice-3-3.html:40: internal ticket number (rule E-2)
+site/proposals/build-slice-3-3.md:50: internal ticket number (rule E-2)
+site/proposals/build-slice-3-4.html:31: internal ticket number (rule E-2)
+site/proposals/build-slice-3-4.md:24: internal ticket number (rule E-2)
+site/proposals/build-slice-3.html:28: internal ticket number (rule E-2)
+site/proposals/build-slice-3.md:19: internal ticket number (rule E-2)
+.sdlc/conditions.yaml:1134: internal ticket number (rule E-2)
+.sdlc/conditions.yaml:1313: internal ticket number (rule E-2)
+.sdlc/gates/build-slice-2-11.yaml:6: internal ticket number (rule E-2)
+.sdlc/gates/build-slice-2-11.yaml:12: internal ticket number (rule E-2)
+.sdlc/gates/build-slice-3-3.yaml:9: internal ticket number (rule E-2)
+.sdlc/proposals/build-slice-2-11.md:42: internal ticket number (rule E-2)
+.sdlc/proposals/build-slice-2-11.md:73: internal ticket number (rule E-2)
+.sdlc/proposals/build-slice-2-11.md:80: internal ticket number (rule E-2)
+.sdlc/proposals/build-slice-3-3.md:54: internal ticket number (rule E-2)
+.sdlc/proposals/build-slice-3-4.md:28: internal ticket number (rule E-2)
+.sdlc/proposals/build-slice-3.md:23: internal ticket number (rule E-2)
+site/proposals/build-slice-2-11.html:33: internal ticket number (rule E-2)
+site/proposals/build-slice-2-11.html:42: internal ticket number (rule E-2)
+site/proposals/build-slice-2-11.html:43: internal ticket number (rule E-2)
+site/proposals/build-slice-2-11.md:38: internal ticket number (rule E-2)
+site/proposals/build-slice-2-11.md:69: internal ticket number (rule E-2)
+site/proposals/build-slice-2-11.md:76: internal ticket number (rule E-2)
+site/proposals/build-slice-3-3.html:40: internal ticket number (rule E-2)
+site/proposals/build-slice-3-3.md:50: internal ticket number (rule E-2)
+site/proposals/build-slice-3-4.html:31: internal ticket number (rule E-2)
+site/proposals/build-slice-3-4.md:24: internal ticket number (rule E-2)
+site/proposals/build-slice-3.html:28: internal ticket number (rule E-2)
+site/proposals/build-slice-3.md:19: internal ticket number (rule E-2)
+
 ## 369 · bind-adapter · 2026-10-01
 
 cost $3.2667854000000003 · turns 107 · claude claude-opus-5-5 (2.1.284 (Claude Code))
