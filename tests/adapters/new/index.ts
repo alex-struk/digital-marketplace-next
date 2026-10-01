@@ -3770,11 +3770,20 @@ export default function create(
   const CWU_SKILLS = ["skills", "mandatorySkills", "requiredSkills", "skill"];
   const CWU_FILES = ["attachment", "attachments", "file", "files"];
 
-  // "Is remote work acceptable?" is a pair of radios ("Yes", "No") drawn under their own
-  // labels, which take the click; the radio itself sits beneath them.
+  // Whether remote work is acceptable is the Overview's "Remote OK: remote work is
+  // acceptable" box, under Location and above "Remote work description". A form that asks it
+  // instead as "Is remote work acceptable?" with "Yes" and "No" radios is answered there.
   async function chooseRemote(where: string, value: unknown): Promise<void> {
+    const box = seen(page.getByRole("checkbox", { name: /remote (ok|work)/i })).first();
+    if (await box.count()) {
+      const want = saysYes(value);
+      if ((await box.isChecked().catch(() => !want)) === want) return;
+      await box.setChecked(want).catch(() => undefined);
+      if ((await box.isChecked().catch(() => !want)) !== want) await box.setChecked(want, { force: true });
+      return;
+    }
     const group = seen(page.getByRole("radiogroup", { name: /remote work/i })).first();
-    if (!(await group.count())) unbound(where, `no "Is remote work acceptable?" choice on ${page.url()}; it offers ${await offered()}`);
+    if (!(await group.count())) unbound(where, `no "Remote OK" box and no "Is remote work acceptable?" choice on ${page.url()}; it offers ${await offered()}`);
     const answer = saysYes(value) ? "Yes" : "No";
     const radio = group.getByRole("radio", { name: answer, exact: true });
     if (await radio.isChecked().catch(() => false)) return;
