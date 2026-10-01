@@ -1,0 +1,26 @@
+gate: G3
+verdict: escalated
+by: runner:verify
+held_by: runner
+escalate_to: tech-lead
+rationale: "Slice 7 has failed verify 3 times. The failures below may not be the
+  application's: a test, the adapter, the criterion or the sandbox can each be
+  what is wrong (spec 7.1), and another build would not find out which."
+conditions:
+  - 'R-1.4: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    "Opportunity'
+  - 'R-1.9: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    ""'
+  - 'R-1.10: Error: expect(received).toBeTruthy() — Received: ""'
+  - 'R-1.21: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    "Opportunity'
+  - 'R-1.53: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    ""'
+  - 'R-1.56: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    "Opportunity'
+  - 'R-8.17: Error: expect(received).toBeTruthy() — Received: ""'
+  - 'R-8.19: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    ""'
+  - 'R-8.25: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    ""'
+at: 2026-10-01T08:09:38.424Z
