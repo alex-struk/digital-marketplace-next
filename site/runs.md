@@ -319,6 +319,8 @@
 - 04:35:56 drive: step 7: `sdlc run verify --slice 7` — 2 unbound rows to check again now that their adapter has changed for slice 7 owed by verify
 - 04:46:29 verify slice 7: 2 of the 18 criteria this slice claims could not be exercised at all — R-8.19, R-8.25.
 - 04:46:30 run verify: regenerated 3 files in .sdlc, site
+- 04:50:30 drive: step 3: `sdlc rule plan-15 --by agent:tech-lead` — plan-15 was escalated at G2 by runner:plan to tech-lead, a role an agent plays in this project
+- 04:51:23 rule plan-15 refused at G2 by agent:tech-lead (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code)): rule plan-15: "request/build-slice-7-9#1" is not an open revision request. No revision request is open in this project, so there is nothing here to withdraw.
 
 # Run record 2026-09-30
 
