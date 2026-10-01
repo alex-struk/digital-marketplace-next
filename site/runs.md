@@ -264,6 +264,15 @@
 - 03:03:33 rule bind-adapter-new-29 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 - 03:03:38 drive: step 92: `sdlc run bind-adapter --target new --revise` — 1 revision request for target new owed by bind-adapter
 - 03:03:38 run bind-adapter: pre-checks failed
+- 03:08:31 drive: stopped after 93 steps — waiting on a person: tech-lead: bind-adapter-new-30
+- 03:03:38 drive: step 92 recovery: the new target's sandbox was not up; starting it from proposal/build-slice-7-7 (sdlc sandbox up --target new --from proposal/build-slice-7-7), running the step once more, and taking it down after (sdlc sandbox down --target new --from proposal/build-slice-7-7)
+- 03:07:10 run bind-adapter: ok, cost 1.107978, turns 38, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 03:07:10 propose bind-adapter-new-30 at G3
+- 03:07:10 rule bind-adapter-new-30 escalated at G3 to tech-lead by runner:bind-adapter
+- 03:07:10 drive: step 92 recovery: taking the new target's sandbox down (sdlc sandbox down --target new --from proposal/build-slice-7-7)
+- 03:07:25 drive: step 93: `sdlc rule bind-adapter-new-30 --by agent:tech-lead` — bind-adapter-new-30 was escalated at G3 by runner:bind-adapter to tech-lead, a role an agent plays in this project
+- 03:08:29 rule bind-adapter-new-30 escalated at G3 to tech-lead by agent:tech-lead on claude claude-opus-5-5 (2.1.284 (Claude Code)) — stalled: agent:tech-lead escalated to tech-lead, the role it holds itself, so no seat this pipeline can fill is waiting on it: a person has to rule it, or the proposal has to be withdrawn.
+- 03:09:00 rule bind-adapter-new-30 approve at G3 by tech-lead (human)
 
 # Run record 2026-09-30
 

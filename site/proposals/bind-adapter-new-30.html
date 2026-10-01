@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-30 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">428</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">422</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">360</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-30</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 10:07</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I fixed how the adapter reads the file size a test asks for, which is the only cause of R-8.17&#39;s empty read I could reproduce.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I fixed how the adapter reads the file size a test asks for, which is the only cause of R-8.17&#39;s empty read I could reproduce. But I couldn&#39;t re-run R-8.17 itself: its test isn&#39;t in this workspace and the suite&#39;s dependencies aren&#39;t installed. So I can&#39;t say for certain which of its steps read the empty string. Nothing was type-checked or run after the edit; I only read it through. The Sprint With Us and Team With Us create pages still don&#39;t exist on the target, so they stay unbound.</p>
+<p><strong>What the running target does with a file over 10 MB.</strong> I signed in as the administrator through the identity provider&#39;s form.</p>
+<ul><li><strong>The service directly:</strong> sending 11 MB, 10.5 MB and 30 MB files to <code>/api/files</code> each got a 413 with &quot;The file is larger than 10 MB. Upload a file of 10 MB or smaller.&quot; The limit is 10 × 1024 × 1024 bytes: one byte over is refused for size, and exactly 10 MB is not. With no one signed in, the same upload gets a 401.</li><li><strong>The attachment control on screen:</strong> on the seeded draft Code With Us opportunity&#39;s form, the attachments area says &quot;Any type of file, up to 10 MB each.&quot; before any file is chosen. Offering an 11 MB file there lists it and shows an alert: &quot;big.pdf is too large to attach — It is 11.0 MB. Attachments must be 10 MB or smaller. Remove it, then attach a smaller file.&quot;</li></ul>
+<p>So <code>size_limit_stated_before_choosing</code>, <code>upload_refused_for_size</code> and <code>refused_for_size</code> all read something whenever a file that really is over the limit reaches the target. <code>refused_for_size</code> returns empty only when the service accepted the upload, so the file the adapter sent must have been small.</p>
+<p><strong>Why the file was small.</strong> The two upload paths in the adapter read the test&#39;s size badly:</p>
+<ul><li>The direct upload read <code>bytes</code>, <code>size</code>, <code>sizeBytes</code> or <code>size_bytes</code> with a plain integer parse. A size written with a unit, like &quot;11 MB&quot;, became 11 bytes, and a key like <code>sizeMB</code> was ignored.</li><li>The attachment control&#39;s path read only a numeric <code>bytes</code> key and ignored every other way of giving a size.</li></ul>
+<p>Either way the harness wrote a tiny file, the service or the form accepted it, and the refusal reader correctly reported that nothing was refused.</p>
+<p><strong>The change.</strong> In <code>tests/adapters/new/index.ts</code> I added one shared helper, <code>bytesGiven</code>, used by both paths. It accepts:</p>
+<ul><li>a number of bytes under the usual names;</li><li>a size written with its unit (&quot;11 MB&quot;, &quot;10.5MB&quot;, &quot;512 KB&quot;), counting a megabyte as 1024 × 1024 bytes like the service does;</li><li>a number under a name that carries the unit (<code>sizeMB</code>, <code>megabytes</code>, <code>sizeKB</code>).</li></ul>
+<p>A size it can&#39;t read is left out rather than guessed. Nothing else in the adapter changed, and <code>bindings.yaml</code> is unchanged because every member involved was already bound.</p>
+<p><strong>Something I noticed and left alone.</strong> <code>refused_for_size</code> treats any refusal below 500 as a size refusal. The service sends a 400 for a missing read-access statement, which would read as a size refusal even though it isn&#39;t one. The condition didn&#39;t name this, so I didn&#39;t change it; tightening it to 413 or to the size message is a decision for a later revision.</p>
+<p><strong>The two unbound pages (R-1.9, R-1.48).</strong> I looked again as the administrator. <code>/opportunities/create</code> still offers &quot;Create a Sprint With Us opportunity&quot; and &quot;Create a Team With Us opportunity&quot;. Following either link, and opening <code>/opportunities/sprint-with-us/create</code> or <code>/opportunities/team-with-us/create</code> directly, lands on &quot;Page not found&quot;. The existing unbound reasons already describe this, and I left them unchanged.</p>
+<p>deferred-request 1: R-8.17&#39;s test isn&#39;t in this workspace and the suite can&#39;t run here, so I couldn&#39;t re-run it to name the step that read empty. On the live target, both size readers and the size-limit reader return text when a genuinely oversize file arrives. The empty read matches the adapter sending a small file because it misread the requested size, which this revision fixes. Whether that was R-8.17&#39;s actual input needs a run of the criterion itself.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by tech-lead (a person) on 2026-10-01 10:09.</p>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
