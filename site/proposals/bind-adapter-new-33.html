@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-33 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">433</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">427</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">365</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-33</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 11:13</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> None of the four criteria could be unblocked: the three screens they need are still not served by the running target, so I left all three unbound.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>None of the four criteria could be unblocked: the three screens they need are still not served by the running target, so I left all three unbound. I couldn&#39;t run the type-checker because the command needed approval. The change is small: the edited text is still well formed and builds a string.</p>
+<p><strong>What I looked for this pass.</strong> R-1.48, R-1.9, R-8.19 and R-8.25 depend on three screens: the Sprint With Us create form, the Team With Us create form, and the Code With Us proposal form. I signed in through the identity provider&#39;s own form, once as the administrator and once as a vendor.</p>
+<ul><li><strong>As the administrator:</strong> the dashboard&#39;s &quot;Create an opportunity&quot; leads to <code>/opportunities/create</code>. That page links to the Code With Us, Sprint With Us and Team With Us forms. Following the Sprint With Us link and the Team With Us link both land on &quot;Page not found&quot;, and so does opening those two addresses directly. <code>/opportunities</code>, <code>/opportunities/sprint-with-us</code>, <code>/opportunities/team-with-us</code> and <code>/organizations</code> also answer &quot;Page not found&quot;. The dashboard&#39;s &quot;All opportunities&quot; table lists only Code With Us opportunities. The header offers only Dashboard, Users, Content, My profile and Sign out.</li><li><strong>As a vendor (<code>test-vendor-1</code>):</strong> the dashboard is just a greeting, and the header offers only Dashboard, My profile and Sign out. I opened the seeded published Code With Us opportunity, whose proposal deadline is June 1, 2030. Its public page shows the details, key dates and addenda, but has no link or button at all. For that opportunity, <code>/opportunities/code-with-us/&lt;id&gt;/proposals/create</code>, <code>/proposals/code-with-us/create?opportunityId=&lt;id&gt;</code> and <code>/opportunities/&lt;id&gt;</code> all answer &quot;Page not found&quot;.</li></ul>
+<p><strong>What changed.</strong> The adapter&#39;s behaviour is the same as before. <code>open()</code> for these pages still navigates to the route and throws <code>unbound:</code> only if the page really shows a refusal. That means it will bind on its own once a build serves these screens. I added the walks above to the reasons in <code>tests/adapters/new/index.ts</code> for:</p>
+<ul><li><code>opportunity-swu-create.open</code></li><li><code>opportunity-twu-create.open</code></li><li>every member of <code>proposal-cwu-create</code></li></ul>
+<p><strong>What I left alone.</strong> I didn&#39;t edit <code>tests/adapters/new/bindings.yaml</code>. Every name in it is still named once, with the same bound or unbound status. Nothing outside <code>tests/adapters/new/</code> was changed.</p>
+<p><strong>Routes that did not resolve.</strong> On this target, <code>/opportunities/sprint-with-us/create</code>, <code>/opportunities/team-with-us/create</code> and <code>/opportunities/code-with-us/:opportunityId/proposals/create</code> don&#39;t resolve for any persona I tried. All three show &quot;Page not found&quot;, even though the target&#39;s own program chooser links to the first two.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 11:13.</p>
+<div class="body"><p>Question: does this adapter bind every surface action and observation on new, and nothing else? Ruling: approve. The diff changes only the unbound reason strings for opportunity-swu-create.open, opportunity-twu-create.open and every member of proposal-cwu-create in tests/adapters/new/index.ts. The adapter still navigates to each route and reports unbound only when the page itself refuses, so it will bind once a build serves the screens. bindings.yaml is unchanged, nothing under tests/acceptance changed, and no assertion or business logic was added. The unbound reasons are real: as the administrator, the target&#39;s own chooser at /opportunities/create links to the Sprint With Us and Team With Us create forms, and both links land on &#39;Page not found&#39;, as do the addresses opened directly. As a vendor, the seeded published Code With Us opportunity, which is open until 2030, offers no action, and every candidate proposal-create route answers &#39;Page not found&#39;. So the application lacks the screens. The tests do not reach past R-1.48, R-1.9, R-8.19 or R-8.25: each criterion needs creating Sprint With Us or Team With Us opportunities, or attaching to a Code With Us proposal. The runner&#39;s typecheck passed with no diagnostics under adapters/new/. The egress failure flags only older .sdlc gate, proposal and site files that this diff does not touch. What would change the ruling: a binding that decides a pass or fail, an edit under tests/acceptance, or evidence that any of these routes renders the form on the current target, which would make the unbound reasons false.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
