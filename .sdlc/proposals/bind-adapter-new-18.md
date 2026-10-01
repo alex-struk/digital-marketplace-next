@@ -26,3 +26,23 @@ I rebound `contentView.publishedDate` and `contentView.updatedDate` in the adapt
 **Not verified.** The typechecker could not run because this session needed approval for the command and none was given, so the file has not been compiled. Instead I checked by hand that every name the new code uses is defined in the same `create` scope. In the browser I confirmed that each entry's following element holds the date. I did not run the acceptance suite.
 
 All requests in the ruling were taken up; none are deferred.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether the target `new` adapter now binds `contentView.publishedDate` and `contentView.updatedDate` correctly, and whether it still does nothing but navigation and locating. It does. The diff touches only `tests/adapters/new/index.ts`. A new helper, `publicDate`, finds the 'Published' or 'Last updated' entry in the main area of the public page's term list and reads the date from the element after it, using the same `contentFact` that `contentEdit.updatedDate` already uses. When the entry is missing, it now throws an unbound error naming the address and the entry instead of returning an empty string, so a missing date can no longer pass silently as ''. That is what made R-7.8's `not.toBe(readerUpdatedBefore)` fail before. The adapter makes no assertion and contains no business logic. The existing behaviour where the not-found page returns '' is unchanged, which is legitimate because that page has no date to show. Nothing under `tests/acceptance` changed, and no protected path is touched. The author could not compile the file, but the runner's typecheck on this revision passed with no diagnostics under `adapters/new/`. The egress failures are all in proposal and gate files from earlier slices and are not in this diff. The tier is STANDARD and no residual risk is marked unaccepted, so nothing needs escalating. I would return this if a verify run showed either member answering unbound on a seeded published page that does display the entry. That would mean the term locator, an exact case-insensitive match on the entry text within the main area, misses how the page marks it up.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `2225eac3f068c28442389569b640dbb72bd23332`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
