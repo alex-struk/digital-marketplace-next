@@ -1300,6 +1300,14 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-01T01:45:25.355Z
+    closed:
+      outcome: met
+      why: image-picker.tsx now opens a native file input from the button. In the
+        verify run against c13c0cc, Chromium passes the profile-picture tests of
+        R-8.13 (wide and tall) and R-8.28, which need the chooser to open
+        (tests/results/new/slice-3.json).
+      by: agent:tech-lead
+      at: 2026-10-01T02:18:11.434Z
   - ref: build-slice-3-3#2
     text: Egress check E-2 flags
       docs/decisions/0021-the-file-store-and-its-answers.md:56, where 'SHA-256'
@@ -1311,6 +1319,12 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-01T01:45:25.355Z
+    closed:
+      outcome: met
+      why: docs/decisions/0021-the-file-store-and-its-answers.md no longer appears
+        among the egress E-2 failures on this proposal's checks.
+      by: agent:tech-lead
+      at: 2026-10-01T02:18:11.449Z
   - ref: plan-9#1
     text: Move R-6.16 from Slice 11 to Slice 12 in plan/tasks.md. Its acceptance
       test signs in as the organization owner, opens the organization's edit
@@ -1357,3 +1371,42 @@ conditions:
         wording for R-6.16 is left.
       by: agent:architect
       at: 2026-10-01T01:53:10.355Z
+  - ref: build-slice-3-4#3
+    text: "R-8.30: on /users/me in edit mode, after the picker refuses a chosen
+      picture (for example 'portrait.gif'), pressing Save changes must not
+      silently save and close the form. save() in
+      app/frontend/src/screens/user-profile.tsx ignores the pending rejection,
+      saves, and calls onDone, which unmounts the picker and its refusal alert.
+      The verify test then reads an empty refusal. While a refusal is showing,
+      keep the form open with the refusal visible and focused, and do not save.
+      Add a unit test covering it."
+    from: build-slice-3-4
+    family: build-slice-3
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-01T02:18:11.278Z
+  - ref: build-slice-3-4#4
+    text: "R-8.21: when a picture is chosen, check the file's first bytes in the
+      browser (JPEG FF D8 FF, or the 8-byte PNG signature) and show a refusal in
+      the picker's alert straight away, as is already done for the name ending
+      and the size. checkChosenPicture in app/frontend/src/app/image-picker.tsx
+      checks only the name and size, so a '.png' whose content is text is
+      accepted at choose time, and the verify test reads no refusal. Keep the
+      service's own check. Add a unit test covering it."
+    from: build-slice-3-4
+    family: build-slice-3
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-01T02:18:11.278Z
+  - ref: build-slice-3-4#5
+    text: When the summary describes the earlier egress fix, do not quote the
+      wording that was replaced. The proposal page is itself checked by egress
+      rule E-2 and is flagged for quoting it.
+    from: build-slice-3-4
+    family: build-slice-3
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-01T02:18:11.278Z
