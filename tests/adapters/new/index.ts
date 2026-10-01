@@ -5407,6 +5407,85 @@ export default function create(
     const region = seen(page.getByRole("main").getByRole("region", { name: new RegExp(`^${tab}$`, "i") }));
     return (await region.count()) ? lined(await region.first().innerText()).join("\n") : "";
   }
+  // The Opportunity section is the form itself, and a form's text never carries what is in
+  // its boxes: "Title(required)", "Location(required)", "Description (required)" and the rest
+  // are labels whose values live in the fields. So the section is read as its text followed
+  // by one "<label>: <value>" line for each field in it — text boxes and areas, the chosen
+  // answer of each radio group ("Is remote work acceptable? (required): Yes"), ticked boxes
+  // and the chosen options of a list ("Skills (required): Backend Development, …").
+  async function formSectionText(member: string, tab: string): Promise<string> {
+    const text = await sectionText(member, tab);
+    if (!text) return text;
+    const region = seen(page.getByRole("main").getByRole("region", { name: new RegExp(`^${tab}$`, "i") })).first();
+    const fields = await region.evaluate((root) => {
+      const words = (node: Element | null | undefined) => ((node as HTMLElement | null)?.innerText ?? node?.textContent ?? "").replace(/\s+/g, " ").trim();
+      const named = (element: Element): string => {
+        const labelled = element.getAttribute("aria-labelledby");
+        if (labelled) {
+          const said = labelled.split(/\s+/).map((id) => words(document.getElementById(id))).filter(Boolean).join(" ");
+          if (said) return said;
+        }
+        const labels = (element as HTMLInputElement).labels;
+        if (labels && labels.length) {
+          // A label that wraps its list would otherwise read out every option in it.
+          const label = labels[0].cloneNode(true) as Element;
+          for (const inner of Array.from(label.querySelectorAll("select, textarea, input"))) inner.remove();
+          const said = (label.textContent ?? "").replace(/\s+/g, " ").trim();
+          if (said) return said;
+        }
+        const own = (element.getAttribute("aria-label") ?? "").trim();
+        if (own) return own;
+        // The skills list is a hidden list of options behind a "Skills (required)" button that
+        // opens it; its name is the label that button is named by, less the button's own text.
+        for (let at = element.parentElement, up = 0; at && at !== root && up < 4; at = at.parentElement, up++) {
+          const opener = Array.from(at.querySelectorAll("button")).find((one) => one.getAttribute("aria-haspopup") === "listbox" && one.hasAttribute("aria-labelledby"));
+          if (!opener) continue;
+          const said = (opener.getAttribute("aria-labelledby") ?? "")
+            .split(/\s+/)
+            .map((id) => document.getElementById(id))
+            .filter((one) => one && !opener.contains(one))
+            .map((one) => words(one))
+            .filter(Boolean)
+            .join(" ");
+          if (said) return said;
+        }
+        return "";
+      };
+      const out: string[] = [];
+      const groupsDone = new Set<Element>();
+      for (const element of Array.from(root.querySelectorAll("input, textarea, select"))) {
+        if (element instanceof HTMLSelectElement) {
+          const chosen = Array.from(element.selectedOptions).map((option) => option.text.trim()).filter(Boolean);
+          if (chosen.length) out.push(`${named(element)}: ${chosen.join(", ")}`);
+          continue;
+        }
+        const box = element as HTMLInputElement | HTMLTextAreaElement;
+        const type = (box.getAttribute("type") ?? "text").toLowerCase();
+        if (type === "hidden" || type === "file" || type === "button" || type === "submit") continue;
+        if (type === "radio" || type === "checkbox") {
+          let group: Element | null = box.parentElement;
+          while (group && group !== root && !/^(radiogroup|group)$/.test(group.getAttribute("role") ?? "") && group.tagName !== "FIELDSET") group = group.parentElement;
+          if (group === root) group = null;
+          const groupName = group
+            ? named(group) || words(group.querySelector("legend"))
+            : "";
+          if (type === "radio" && group) {
+            if (groupsDone.has(group)) continue;
+            groupsDone.add(group);
+            const picked = Array.from(group.querySelectorAll("input")).filter((one) => one.type === "radio" && one.checked);
+            out.push(`${groupName}: ${picked.map((one) => named(one)).join(", ")}`);
+          } else if ((box as HTMLInputElement).checked) {
+            out.push(groupName ? `${groupName}: ${named(box)}` : `${named(box)}: checked`);
+          }
+          continue;
+        }
+        if (!box.value) continue;
+        out.push(`${named(box)}: ${box.value}`);
+      }
+      return out;
+    });
+    return [text, ...fields].join("\n");
+  }
   async function manageAction(member: string, name: RegExp, confirm: RegExp | null): Promise<void> {
     const where = cwuManage.where(member);
     await cwuManage.on(member);
@@ -5521,7 +5600,7 @@ export default function create(
     createdByName: () => summaryTerm("created_by_name", /^created by$/i),
     lastChangedByName: () => summaryTerm("last_changed_by_name", /^last changed by$/i),
     summaryTab: () => sectionText("summary_tab", "Summary"),
-    opportunityTab: () => sectionText("opportunity_tab", "Opportunity"),
+    opportunityTab: () => formSectionText("opportunity_tab", "Opportunity"),
     addendaTab: () => sectionText("addenda_tab", "Addenda"),
     historyTab: () => sectionText("history_tab", "History"),
     proposalsTab: async () => {
@@ -5813,7 +5892,7 @@ export default function create(
     opportunitySwuCreate: absent<S.OpportunitySwuCreatePage>(
       "opportunity-swu-create",
       "/opportunities/sprint-with-us/create",
-      behindSession("/opportunities/sprint-with-us/create"),
+      `${behindSession("/opportunities/sprint-with-us/create")}; looked for again as the administrator and as a public sector employee: /opportunities/create offers "Create a Sprint With Us opportunity", and following that link lands on "Page not found" too`,
       [
         "save_draft",
         "submit_for_review",
@@ -5896,7 +5975,7 @@ export default function create(
     opportunityTwuCreate: absent<S.OpportunityTwuCreatePage>(
       "opportunity-twu-create",
       "/opportunities/team-with-us/create",
-      behindSession("/opportunities/team-with-us/create"),
+      `${behindSession("/opportunities/team-with-us/create")}; looked for again as the administrator and as a public sector employee: /opportunities/create offers "Create a Team With Us opportunity", and following that link lands on "Page not found" too`,
       [
         "save_draft",
         "submit_for_review",

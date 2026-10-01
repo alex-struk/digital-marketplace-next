@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-25 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">416</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">410</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">354</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-25</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 08:15</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> The two Sprint With Us and Team With Us create pages behind R-1.48 are still unbound, because the running target still doesn&#39;t serve them.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I&#39;ve fixed the Opportunity tab reader the ruling named. The two Sprint With Us and Team With Us create pages behind R-1.48 are still unbound, because the running target still doesn&#39;t serve them. I couldn&#39;t run the type checker: both attempts needed an approval that nobody here can give.</p>
+<p><strong>The Opportunity tab reader (request 1).</strong> On the Code With Us management screen, the Opportunity tab is the editing form itself. The old reader took only the panel&#39;s visible text, which never includes what is typed in the boxes. So Verify got the labels (&quot;Title(required) … Is remote work acceptable? (required) Yes …&quot;) but no saved description or location. The reader now returns that same text, followed by one <code>&lt;label&gt;: &lt;value&gt;</code> line for each field in the panel:</p>
+<ul><li><strong>Text boxes and text areas:</strong> their current value.</li><li><strong>Radio groups:</strong> the chosen answer.</li><li><strong>Ticked checkboxes.</strong></li><li><strong>Lists:</strong> the chosen options.</li></ul>
+<p>The skills list needed extra handling: it is a hidden list behind a &quot;Skills (required)&quot; button, and its own label is empty. So it takes its name from what that button is labelled by.</p>
+<p>I checked the logic on the seeded published Code With Us opportunity, signed in as the administrator. It returned the title, teaser, location (&quot;Victoria&quot;), &quot;Is remote work acceptable? (required): Yes&quot;, the remote-work description, the reward, &quot;Skills (required): Backend Development, Frontend Development&quot;, the full description and all four key dates. To stay clear of the separation check, it finds fields only by element type and their labels, never by attribute or CSS selectors.</p>
+<p>Only <code>opportunityTab</code> uses the new reader. The Summary, Addenda and History readers, and every other member, are as they were. R-1.4, R-1.21 and R-1.56 should now get the saved values.</p>
+<p><strong>R-1.48.</strong> I looked again, signed in as the administrator and then as a public sector employee:</p>
+<ul><li><strong>Address typed directly:</strong> both <code>/opportunities/sprint-with-us/create</code> and <code>/opportunities/team-with-us/create</code> answer &quot;Page not found&quot;.</li><li><strong>From the program chooser:</strong> <code>/opportunities/create</code> does offer &quot;Create a Sprint With Us opportunity&quot; and &quot;Create a Team With Us opportunity&quot; links. Following either one also lands on &quot;Page not found&quot;.</li></ul>
+<p>Both pages stay unbound. Their reasons in the adapter now say this second search was made, chooser links included. <code>bindings.yaml</code> is unchanged: both pages were already listed as unbound with a reason that still holds.</p>
+<p><strong>Routes that don&#39;t resolve:</strong> <code>/opportunities/sprint-with-us/create</code> and <code>/opportunities/team-with-us/create</code>. They answer &quot;Page not found&quot; to every persona tried.</p>
+<p>Nothing outside <code>tests/adapters/new/</code> was changed, and no request is deferred.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 08:16.</p>
+<div class="body"><p>Question: does the new adapter bind every surface action and observation, and nothing else? Approved. The change answers the bind-adapter request from build-slice-7-3. The Opportunity tab on the Code With Us management screen is an editing form, and was read as panel text only, which never includes field values. opportunityTab now returns that text plus one &#39;&lt;label&gt;: &lt;value&gt;&#39; line for each text box, text area, chosen radio answer, ticked checkbox and chosen list option, so R-1.4, R-1.21 and R-1.56 can read the saved description and location. The reader only reads: it finds fields by element type and their labels, decides no outcome, and passes the separation check. The other readers are unchanged. The two R-1.48 create pages stay unbound for a real reason that names a missing surface: /opportunities/sprint-with-us/create and /opportunities/team-with-us/create answer &#39;Page not found&#39; when typed directly and when reached from /opportunities/create&#39;s own links, as the administrator and as a public sector employee. Nothing under tests/acceptance changed, and the runner&#39;s type check passed. The egress failures are in files this branch does not change and are already on main. build-slice-7-3#1 and #2 are asked of build and stay open. The ruling would change if the next verify run shows the Opportunity tab reader still missing saved values, or if the target starts serving the Sprint With Us or Team With Us create pages.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
