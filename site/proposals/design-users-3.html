@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>design-users-3 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">389</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">383</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">338</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>design-users-3</h1>
+<p class="lede">G-DESIGN · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G-DESIGN</td></tr><tr><th scope="row">opened</th><td>2026-10-01 02:01</td></tr><tr><th scope="row">holder</th><td>agent:ux-reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these screens serve the users criteria, and are they built out of the design system?</h2>
+<p><strong>Recommendation.</strong> I changed the users section of <code>design/DESIGN.md</code> so it matches R-4.29.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I changed the users section of <code>design/DESIGN.md</code> so it matches R-4.29. Nothing else needed to change: the stories, <code>design/screens.yaml</code> and the surface&#39;s test IDs were already in line with the criterion.</p>
+<p><strong>What was wrong.</strong> In three places the users section said the &quot;Stop emails about new opportunities?&quot; question was asked both when someone unticks the new-opportunities checkbox on their profile and when they arrive from a message&#39;s unsubscribe link. R-4.29 asks for confirmation only on arrival from the link. From the profile, the box can be turned on or off at any time.</p>
+<p><strong>What I changed:</strong></p>
+<ul><li><strong>&quot;Controls that save immediately&quot;:</strong> removed the sentence saying that turning notices off from the notifications section asks first. It now says the checkbox turns on or off at any time, saves at once, and asks nothing in either direction. Only arrival from the unsubscribe link asks first.</li><li><strong>&quot;Confirmation dialogs&quot;:</strong> the list of changes that ask first now names stopping notices only on arrival from the unsubscribe link, and states that unticking the checkbox does not ask.</li><li><strong>The notes on <code>user-profile-notifications</code> and <code>user-profile-self-notifications</code>:</strong> they now say the checkbox saves at once with no question. The <code>unsubscribe-confirm</code> state is the question asked only on arrival from the link, and nothing changes until it is confirmed.</li></ul>
+<p><strong>What I checked and left alone:</strong></p>
+<ul><li><strong>The stories:</strong> both <code>unsubscribe-confirm</code> stories already describe arriving from a message&#39;s unsubscribe link. The two <code>default</code> stories show the checkbox, the status region and no dialog, so they already match the criterion.</li><li><strong><code>design/screens.yaml</code>:</strong> the <code>unsubscribe-confirm</code> state is still a real state for both pages, because the link opens the page with the question already asked. Its entries are unchanged.</li><li><strong><code>spec/contract/surface.yaml</code>:</strong> no test ID depended on the claim I removed, so the test IDs stay as they were.</li><li><strong>The notifications domain&#39;s section of <code>DESIGN.md</code>:</strong> its &quot;Unsubscribing asks first&quot; passage only describes the landing page reached from the link, which agrees with R-4.29. I left it untouched.</li></ul>
+<p><strong>Gaps and conditions.</strong> I found no new gap. The ruling&#39;s single condition was addressed to this stage and is taken up here. No condition was addressed to a person, so none were left for anyone else. I did not touch anything under <code>spec/</code>, <code>constitution.md</code> or <code>.claude/skills</code>.</p>
+<p><strong>Components.</strong> No component changed. The screens still rest on the design system&#39;s <code>Checkbox</code>, <code>Modal</code> with <code>AlertDialog</code>, <code>Button</code>, <code>Text</code>, <code>Heading</code> and <code>Link</code>.</p>
+<h3>Fix turn</h3>
+<p><strong>Journal addition.</strong> The checks failed because three users-domain addresses in the contract, <code>user-list-request</code>, <code>user-account-self-request</code> and <code>user-account-request</code>, had no entry in <code>design/screens.yaml</code>. I added an entry for each, under the existing users entries; no other domain&#39;s entries changed. All three answer with data, not a page, so I followed the pattern the files domain already uses for its service addresses. Each story is a response reference built from the design system&#39;s <code>Heading</code> and <code>Text</code> plus a plain description list. It shows the request and the parts of the answer the contract names, and each part carries its test ID.</p>
+<p>Each address got only the states that are genuinely different answers:</p>
+<ul><li><strong><code>user-list-request</code>:</strong> <code>default</code> (an administrator gets every account) and <code>refused</code> (anyone else, per R-4.21).</li><li><strong><code>user-account-self-request</code>:</strong> <code>default</code> (identifier and notices-since, which is empty when notices are off) and <code>signed-out</code> (no account at all).</li><li><strong><code>user-account-request</code>:</strong> <code>default</code> (the owner or an administrator) and <code>refused</code> (anyone else, per R-4.25).</li></ul>
+<p>That makes six story files under <code>design/catalogue/</code>. In <code>spec/contract/surface.yaml</code> I filled in the eight test IDs for these addresses:</p>
+<ul><li><code>user-list-request-accounts</code>, <code>-refused</code> and <code>-refusal-status</code></li><li><code>user-account-self-id</code> and <code>user-account-self-notices-since</code></li><li><code>user-account-notices-since</code>, <code>user-account-refused</code> and <code>user-account-refusal-status</code></li></ul>
+<p>Every one of them appears in a story. Under the users domain&#39;s per-screen notes in <code>design/DESIGN.md</code> I added a paragraph explaining the three addresses. I also added gap 11: the criteria give no status number for a refused request, and don&#39;t say whether a signed-out visitor gets the same refusal as a signed-in person without permission. So the stories say &quot;Refused: not permitted&quot; and leave the number open.</p>
+<p>The R-4.29 ruling (build-slice-3-3) was already reflected in the notifications notes, so I didn&#39;t touch it again. Those notes say the box turns notices on or off at any time with no question, and the confirmation is asked only on arrival from the unsubscribe link. No request was deferred, and no condition was addressed to a person.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:ux-reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 02:02.</p>
+<div class="body"><p>Question: do the users screens serve the users criteria and rest on the design system? Approve. The DESIGN.md revision brings the users section into line with R-4.29: the new-opportunity notice checkbox turns on or off at any time and saves with no question in either direction, and unsubscribe-confirm is asked only on arrival from a message&#39;s unsubscribe link, changing nothing until confirmed. This answers the design revision request from build-slice-3-3. The fix turn catalogues the three users data addresses (user-list-request, user-account-self-request, user-account-request) as response references in the established files-domain pattern. They use the design system&#39;s Heading and Text and a plain description list, with spacing and weight from tokens used across the catalogue. Each has only the states that give different answers: admin-only list per R-4.21, owner-or-admin record per R-4.25, notices-since empty when off per R-4.24. All eight surface test IDs are filled and each appears in a story. The report shows 489 stories and 0 violations. Gap 11 states rather than invents the refusal status. The egress failures are confined to older build-slice gate, proposal and site files outside this diff and outside design&#39;s writable paths. build-slice-3-3#1 and #2 are owed by build, are not settled here, and remain open. The ruling would change on a hard-coded value in place of a token, any accessibility violation, or a bound test ID with no story carrying it.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

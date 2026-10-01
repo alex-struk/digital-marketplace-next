@@ -1,7 +1,7 @@
 {
-  "generated": "2026-09-19T09:01:12.307Z",
+  "generated": "2026-10-01T01:58:49.669Z",
   "axe": "4.13.0",
-  "catalogue": "8b8f997008459a4e978f639fb951c491a34a3df3d462229ff81e486388493116",
+  "catalogue": "2eb8e996c968c0f44407ed8190fb0129522b9e2a1e260353b222c03a3e51bc71",
   "ok": true,
   "messages": [],
   "compile": [
@@ -2592,6 +2592,42 @@
       "violations": []
     },
     {
+      "id": "users-user-account-request-default--default",
+      "title": "users/user-account-request/default",
+      "file": "./catalogue/user-account-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-account-request-refused--refused",
+      "title": "users/user-account-request/refused",
+      "file": "./catalogue/user-account-request.refused.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-account-self-request-default--default",
+      "title": "users/user-account-self-request/default",
+      "file": "./catalogue/user-account-self-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-account-self-request-signed-out--signed-out",
+      "title": "users/user-account-self-request/signed-out",
+      "file": "./catalogue/user-account-self-request.signed-out.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-list-request-default--default",
+      "title": "users/user-list-request/default",
+      "file": "./catalogue/user-list-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "users-user-list-request-refused--refused",
+      "title": "users/user-list-request/refused",
+      "file": "./catalogue/user-list-request.refused.stories.tsx",
+      "violations": []
+    },
+    {
       "id": "users-user-list-default--default",
       "title": "users/user-list/default",
       "file": "./catalogue/user-list.default.stories.tsx",
@@ -2917,7 +2953,7 @@
     }
   ],
   "totals": {
-    "stories": 483,
+    "stories": 489,
     "violations": 0,
     "failed": 0
   }

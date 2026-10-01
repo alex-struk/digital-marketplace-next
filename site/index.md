@@ -369,6 +369,7 @@ Profile: rebuild
 - [design-proposals](proposals/design-proposals.md)
 - [design-users](proposals/design-users.md)
 - [design-users-2](proposals/design-users-2.md)
+- [design-users-3](proposals/design-users-3.md)
 - [gates-simulated-v1](proposals/gates-simulated-v1.md)
 - [intent-digital-marketplace-rebuild](proposals/intent-digital-marketplace-rebuild.md)
 - [plan](proposals/plan.md)
@@ -418,10 +419,10 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $733.097111
-- Rulings cost: $404.550781
-- Total cost: $1137.647892
-- Agent-held rulings: 360
+- Journal cost: $734.184293
+- Rulings cost: $404.913611
+- Total cost: $1139.097904
+- Agent-held rulings: 361
 - Runner rulings (automatic, no seat held): 12
 - Human rulings: 16
 - Rulings whose seat this page does not recognise: 0

@@ -42,6 +42,12 @@
 - 18:52:26 propose plan-10 at G2
 - 18:52:28 drive: step 19: `sdlc rule plan-10 --by agent:architect` — plan-10 is open at G2, held by agent:architect
 - 18:53:10 rule plan-10 approve at G2 by agent:architect (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 18:53:12 drive: stopped after 19 steps — waiting on a person: a ruler: revision requests (design)
+- 18:53:30 deviation: next named `nothing: every open item waits on a person`; ran `sdlc run design --domain users --revise`; reason: The revision request filed by the build-slice-3-3 ruling (addressed-to design) is about R-4.29, a criterion of the users domain; next waits for a ruler to name the domain because a build ruling names none (docs/decisions/0081). Named by the operator under the tech lead's delegation.
+- 19:01:28 run design: ok after a fix turn, cost 1.0871814, turns 41, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 19:01:28 propose design-users-3 at G-DESIGN
+- 19:01:45 drive: step 1: `sdlc rule design-users-3 --by agent:ux-reviewer` — design-users-3 is open at G-DESIGN, held by agent:ux-reviewer
+- 19:02:15 rule design-users-3 approve at G-DESIGN by agent:ux-reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-30
 

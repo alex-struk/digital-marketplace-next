@@ -52,6 +52,12 @@ screens:
     states: [default, unsubscribe-confirm]
   - page: user-profile-self-legal
     states: [default, terms-updated, accept-terms-confirm, section-unavailable]
+  - page: user-list-request
+    states: [default, refused]
+  - page: user-account-self-request
+    states: [default, signed-out]
+  - page: user-account-request
+    states: [default, refused]
 
   # opportunities domain — see design/DESIGN.md, "Domain: opportunities"
   - page: home

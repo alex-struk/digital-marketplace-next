@@ -1,0 +1,15 @@
+gate: G-DESIGN
+verdict: approve
+by: agent:ux-reviewer
+held_by: agent
+rationale: |2-
+  Question: do the users screens serve the users criteria and rest on the design system? Approve. The DESIGN.md revision brings the users section into line with R-4.29: the new-opportunity notice checkbox turns on or off at any time and saves with no question in either direction, and unsubscribe-confirm is asked only on arrival from a message's unsubscribe link, changing nothing until confirmed. This answers the design revision request from build-slice-3-3. The fix turn catalogues the three users data addresses (user-list-request, user-account-self-request, user-account-request) as response references in the established files-domain pattern. They use the design system's Heading and Text and a plain description list, with spacing and weight from tokens used across the catalogue. Each has only the states that give different answers: admin-only list per R-4.21, owner-or-admin record per R-4.25, notices-since empty when off per R-4.24. All eight surface test IDs are filled and each appears in a story. The report shows 489 stories and 0 violations. Gap 11 states rather than invents the refusal status. The egress failures are confined to older build-slice gate, proposal and site files outside this diff and outside design's writable paths. build-slice-3-3#1 and #2 are owed by build, are not settled here, and remain open. The ruling would change on a hard-coded value in place of a token, any accessibility violation, or a bound test ID with no story carrying it.
+conditions: []
+cost: 0.36282939999999997
+turns: 2
+session: "548d55bf-efc3-456e-b768-ddf46f4ca4e2"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T02:02:15.991Z
