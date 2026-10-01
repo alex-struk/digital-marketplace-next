@@ -1,0 +1,327 @@
+{
+  "slice": 7,
+  "proposal": "build-slice-7-10",
+  "app_tree": "1108fc01dc1f6ae25ac832dbad38696205504079",
+  "at": "2026-10-01T12:09:23.153Z",
+  "verdict": "pass-unasserted",
+  "unasserted": [
+    {
+      "id": "R-1.51",
+      "result": "not-testable",
+      "reason": "unobservable: nothing the service does could show that a state it does not define is gone. No action requests a move to a suspended state, no observation returns the states an opportunity may hold or the states the list's state filter offers, and the mapping of a historical record onto a defined state happens before the rebuilt system reads it, which is a property of the migration rather than of anything the running service answers with. No addition to the surface would help; this is a claim a human accepts about the rebuild rather than one a test can settle."
+    }
+  ],
+  "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99",
+  "rows": [
+    {
+      "id": "R-8.17",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.17.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the size limit on an upload is stated in the interface before a person chooses a file",
+          "status": "passed"
+        },
+        {
+          "title": "an upload larger than the service's size limit is refused as the requester's error, with a message naming the limit",
+          "status": "passed"
+        },
+        {
+          "title": "an attachment larger than the service's size limit is refused in the interface with a message naming the limit",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "bc05ce48ab51c8bd6f00215e6cdc0b831d687024",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-8.27",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.27.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an attachment can be given a different display name before it is uploaded, and the ending of the original file is put back on if the person leaves it off",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "a43a7ee3cc230b8b3dbab22a658f081c7997ddca",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-6.8",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.8.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A notice that goes to many people at once is split into batches of at most fifty and addressed so that no recipient can see who else received it.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "93f67a730eb9465d1f151e7d5db467ed3c703474",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.4",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.4.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "every change to an opportunity's content creates a new version of it and the opportunity always shows its most recent version",
+          "status": "passed"
+        },
+        {
+          "title": "every change to an opportunity's content records an edit in its history",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "290689fa9f95bb53e8bc6da390783e84a8fc2799",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.7",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.7.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an anonymous visitor's attempt to create an opportunity is refused and no opportunity is created",
+          "status": "passed"
+        },
+        {
+          "title": "a vendor's attempt to create an opportunity is refused and no opportunity is created",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "2866b3d1584c3ffb141b0c1d4695337c2e95459e",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.10",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.10.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a missing title)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a title over 200 characters)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a teaser over 500 characters)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a missing location)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a missing description)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a description over 10,000 characters)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "43430986b64a075323f242d8620294061de587f8",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.11",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.11.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "An opportunity that is not a draft must state whether remote work is acceptable, and must carry a remote-work description of up to 500 characters whenever remote work is acceptable. (one that does not say whether remote work is acceptable is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft must state whether remote work is acceptable, and must carry a remote-work description of up to 500 characters whenever remote work is acceptable. (one that accepts remote work with no remote-work description is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft must state whether remote work is acceptable, and must carry a remote-work description of up to 500 characters whenever remote work is acceptable. (one that accepts remote work with a remote-work description over 500 characters is refused)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "6ac8875bd3b39f1de123be051c176521834bc3ba",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.12",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.12.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A Code With Us opportunity must offer a reward of at least $1 and at most $70,000, and must name at least one skill. (a reward below $1 is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us opportunity must offer a reward of at least $1 and at most $70,000, and must name at least one skill. (a reward above $70,000 is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us opportunity must offer a reward of at least $1 and at most $70,000, and must name at least one skill. (naming no skill is refused)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "ad8de230fa438cd99e4ed5593e1f80873a806c87",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.14",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.14.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "An opportunity's key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen. (a proposal deadline earlier than today is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity's key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen. (an assignment date before the proposal deadline is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity's key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen. (a start date before the assignment date is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity's key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen. (a completion date before the start date is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity's key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen. (the proposal deadline is recorded as 4:00 p.m. on the day chosen)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "55271bb50468e8dc99b0b921209d519d88fa5215",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.21",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.21.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Submitting a draft opportunity for review is refused unless the opportunity is complete, and the person is told the opportunity is incomplete rather than which field is missing.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "9d8843efc9e8926f9b02d36d9808973923ae948f",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.22",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.22.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "only an administrator may publish an opportunity",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "08a09c408e86f3fe87df48c868af8ca90b573564",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.23",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.23.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "publishing an opportunity records the moment of publication, which is thereafter shown as its published date",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "458cb922cf730ba4a792f99013237c40dbdbd282",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.29",
+      "version": 2,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.29.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "The names of the people who created and last changed an opportunity are withheld from anyone who is neither an administrator nor one of those people.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "28d2ce38d0da3c2a3ad374f27a3f367074bf0570",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.34",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.34.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Publishing an opportunity notifies everyone who has asked for new-opportunity notifications, and separately confirms the publication to the opportunity's author. — everyone who has asked for new-opportunity notifications is notified",
+          "status": "passed"
+        },
+        {
+          "title": "Publishing an opportunity notifies everyone who has asked for new-opportunity notifications, and separately confirms the publication to the opportunity's author. — the opportunity's author receives a separate confirmation",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "da03866dfe5ec05521978621856b6028ec9957af",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.37",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.37.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Submitting an opportunity for review notifies every administrator, and confirms the submission to its author. — every administrator is notified",
+          "status": "passed"
+        },
+        {
+          "title": "Submitting an opportunity for review notifies every administrator, and confirms the submission to its author. — the author receives a confirmation",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "35205c76ed42ccd81295c6aa24eabd9027961203",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.51",
+      "version": 1,
+      "domain": "opportunities",
+      "file": null,
+      "result": "not-testable",
+      "reason": "unobservable: nothing the service does could show that a state it does not define is gone. No action requests a move to a suspended state, no observation returns the states an opportunity may hold or the states the list's state filter offers, and the mapping of a historical record onto a defined state happens before the rebuilt system reads it, which is a property of the migration rather than of anything the running service answers with. No addition to the surface would help; this is a claim a human accepts about the rebuild rather than one a test can settle.",
+      "tests": []
+    }
+  ]
+}
