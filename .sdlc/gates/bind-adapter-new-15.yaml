@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Does the new-target adapter bind every user-list action and observation, and nothing else? Approve. The diff touches only tests/adapters/new (bindings.yaml and index.ts) and leaves tests/acceptance unchanged. All 13 user-list members move from unbound to bound, backed by a walk of /users signed in as the administrator: a search box, an 'Export contact list' dialog, and one table of Status, Account type, Name and Administrator. That replaces the stale reason that the administrator was shown 'Page not found'. The bindings only navigate and find things by role, label, text or link address. Readers return what the page shows. The only throws are an 'Export' button that cannot be pressed and an input key the dialog does not offer, so no binding decides whether a test passes. Read against the R-4.14 and R-4.32 tests, every call they make is bound, and the names they pass ('public sector employee', 'vendor', 'email address', search text) reach the dialog's labels and the search box. The runner's own typecheck of this revision passed with no diagnostics under adapters/new, which covers the author's inability to compile. The fix-turn rename to exportBoxWanted removes the duplicate helper without changing behaviour. The two choices the author flagged, empty readers for a non-administrator and one reload before trusting 'Page not found', are reasonable and decide no outcome. The egress failures are in other slices' files that this proposal does not touch. The ruling would change to a return if a run showed /users still refused to the administrator, or a dialog label the adapter's mapping does not reach.
+conditions: []
+cost: 0.4680366
+turns: 6
+session: "2fa6ee51-4de3-47a0-a94f-0921e60ce755"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T03:01:06.414Z
