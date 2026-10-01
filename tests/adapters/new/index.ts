@@ -1876,6 +1876,15 @@ export default function create(
               attributes: { latency: 3000, jitter: 0 },
             });
     const settled = method === "GET" ? [200] : method === "POST" ? [200, 201, 409] : [200, 204, 404];
+    // On a catcher started without the proxy beside it, every /hold address gets the same
+    // plain "404 page not found" as any address the catcher does not serve.
+    if (got.status === 404 && method !== "DELETE") {
+      unbound(
+        where,
+        `the mail catcher answered 404 for ${method} ${TOXICS}, the same not-found it gives any address it does not ` +
+          `serve: the delay proxy's control API (observables.yaml delivery_delay) is not mounted beside this catcher`,
+      );
+    }
     if (!settled.includes(got.status)) unbound(where, `the mail delay proxy answered ${got.status} for ${method} ${TOXICS}`);
     return got.json;
   }

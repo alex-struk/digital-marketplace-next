@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-20 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">404</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">398</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">348</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-20</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 05:11</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I looked for R-6.24 again, and it is still not bindable on this environment.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I looked for R-6.24 again, and it is still not bindable on this environment. The adapter&#39;s binding matches what the contract specifies; what&#39;s missing is the delay proxy itself, which isn&#39;t running.</p>
+<p><strong>What I checked.</strong> <code>spec/contract/observables.yaml</code> (<code>delivery_delay</code>) says the slow-mail proxy&#39;s control API sits beside the mail catcher under <code>${SDLC_MAIL_API}/hold</code>. The existing adapter already calls exactly what it specifies:</p>
+<ul><li><strong><code>open</code> and <code>delivery_slowed</code>:</strong> <code>GET /hold/proxies/smtp/toxics</code>.</li><li><strong><code>slow_delivery</code>:</strong> <code>POST</code> there with a three-second toxic named &quot;hold&quot;.</li><li><strong><code>restore_delivery_speed</code>:</strong> <code>DELETE .../toxics/hold</code>.</li></ul>
+<p>I made the requests from the catcher&#39;s own origin in the browser. Every <code>/hold</code> address answered 404 with <code>404 page not found</code>: <code>/hold</code>, <code>/hold/</code>, <code>/hold/proxies</code>, <code>/hold/proxies/smtp/toxics</code>, <code>/hold/version</code> and <code>/hold/reset</code>. Made-up paths like <code>/nonexistent-xyz</code> and <code>/proxies</code> got the same response with the same headers, so the catcher has nothing mounted under <code>/hold</code>.</p>
+<p>The catcher itself is healthy. <code>/api/v1/chaos</code> answers 200, which means the separate mail-refusal page still works, and <code>/api/v1/webui</code> confirms the catcher&#39;s fault injection is switched on. I also tried:</p>
+<ul><li>the proxy&#39;s usual port, 8474 (<code>/proxies</code> and <code>/version</code>): connection refused;</li><li>ports 8475 and 8026: no answer, though the catcher page&#39;s security policy blocks requests to other addresses, so those two tests prove nothing;</li><li><code>/hold/proxies/smtp/toxics</code> on the target at <a href="http://localhost:4300:">http://localhost:4300:</a> its own &quot;Page not found&quot; page.</li></ul>
+<p>There was no other place to try. This is a fixed control interface, not something hidden behind a label, a sign-in or a different persona.</p>
+<p><strong>What I changed.</strong> I edited one thing in <code>tests/adapters/new/index.ts</code>. When a <code>GET</code> or <code>POST</code> to the delay proxy gets a 404, the <code>unbound:</code> reason now says the catcher answered 404 the same way it does for any address it doesn&#39;t serve, so the proxy&#39;s control API is not mounted. Everything else is as before:</p>
+<ul><li>A <code>DELETE</code> that gets a 404 still counts as &quot;nothing left to remove&quot;, so restoring speed never fails a test.</li><li>Other unexpected status codes keep the old message.</li><li>The binding still works on a catcher set up the way <code>observables.yaml</code> describes.</li></ul>
+<p><strong>What I left alone.</strong> <code>bindings.yaml</code> still lists all three <code>mail-delivery-delay</code> members as <code>bound</code>, because the binding is right and only the environment is missing a piece. The fix is to start the pass-through proxy (<code>mail-hold</code>) with its control API under <code>/hold</code> on the catcher, and to route the service&#39;s SMTP through it. That is outside this stage&#39;s paths, so I didn&#39;t touch any harness or environment file.</p>
+<p><strong>Not checked.</strong> I couldn&#39;t type-check the edit: the command needed an approval nobody was here to give. The new branch only calls the existing <code>unbound(where, reason)</code> helper the same way the surrounding code does.</p>
+<p>I found no other unbound members to revisit, and every other route in the surface was left as the previous binding had it.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 05:12.</p>
+<div class="body"><p>Question: does the bind-adapter-new-20 adapter bind every surface action and observation on new, and nothing else? Approved. The only change (tests/adapters/new/index.ts:1879) gives a more specific unbound reason when GET/POST to the delay proxy&#39;s control API returns 404. A 404 already fell outside the accepted codes for both methods and the unbound helper throws, so behaviour is unchanged, DELETE-404 still counts as nothing left to remove, and no assertion or business logic is added. Nothing under tests/acceptance changed, and the runner&#39;s typecheck passed. The reason is real: every /hold path got the catcher&#39;s generic not-found while the catcher itself is healthy, so the delivery_delay control API named in observables.yaml is absent from the environment. The bindings themselves match the contract, so keeping the mail-delivery-delay members bound is correct. The egress failures are all in older build-slice files outside this diff. The ruling would change if the binding diverged from observables.yaml or a mounted /hold endpoint were shown to exist that the adapter fails to reach.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
