@@ -1,0 +1,16 @@
+gate: G2
+verdict: escalated
+by: runner:plan
+held_by: runner
+escalate_to: tech-lead
+rationale: >-
+  plan was handed owed work sent back to it more times than the project's policy
+  allows, so this proposal is ruled by tech-lead rather than put to G2's holder
+  for another round.
+
+  - requests from build-slice-7: sent to plan 3 times, past the limit of 2 that
+  policy.loops.request sets. What each send asked for:
+    1. slice 7 (draft, submit and publish a Code With Us opportunity) claims criteria whose tests can only be walked on screens other slices build. R-1.8, R-1.19, R-1.48 and R-6.15 were unbound because /opportunities/sprint-with-us/create and the Sprint With Us view do not exist until slice 10. R-6.2 was unbound because /organizations/:orgId/edit is not served. R-1.20 was unbound because there is no cancel action, which this slice's build lists as not built. Move each to the slice that builds its screen, or split out a Code With Us-only claim, so slice 7 claims only what its build can make walkable.
+    2. slice 7 still claims R-1.9, R-1.53 and R-1.56, whose tests open /opportunities/sprint-with-us/create (Slice 10), and R-8.22, whose test opens /opportunities/code-with-us/:opportunityId/proposals/create (Slice 14); verify on build-slice-7-4 found each unbound on those screens. Move each to a slice whose dependencies deliver its screen.
+    3. Slice 7 claims R-8.19 and R-8.25 whole. Their acceptance tests also exercise attachments on Sprint With Us and Team With Us opportunities (R-8.19 says 'for all three programs alike') and on a Code With Us proposal (R-8.25), and creating any of those is built in later slices: SWU/TWU opportunity creation is slice 10 per decision record 0030, and CWU proposals come later. Verify for slice 7 against tree a21fb0c passed every Code With Us case of both tests and was unbound only on /opportunities/sprint-with-us/create, /opportunities/team-with-us/create and the CWU proposal-create screen. Move R-8.19 and R-8.25 so that each is claimed by the slice that builds the last of those screens (or by a later slice), and have slice 7 claim only what its Code With Us screens can exercise.
+at: 2026-10-01T11:50:27.496Z
