@@ -350,3 +350,5 @@ requests:
       why: there is no delay proxy on this sandbox to bind to, so R-6.24 can only be
         reported as a sandbox gap until one is provided.
       proposal: bind-adapter-new-21
+    taken: 2026-10-01T06:01:07.789Z
+    taken_by: bind-adapter-new-22
