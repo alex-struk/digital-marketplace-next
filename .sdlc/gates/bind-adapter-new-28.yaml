@@ -1,0 +1,19 @@
+gate: G3
+verdict: return
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  The question is whether the new adapter binds every surface action and observation correctly after taking up the five conditions from build-slice-7-7. The changes for conditions 1-4 match what was asked. A row carrying an /api/files/ link now counts as stored. Publish and a create screen answering 'Page not found' are reported as refusals for anyone who may not do them, and as unbound with the persona named otherwise. editDetails edits a draft's form in place. Nothing beyond those conditions moved. Condition 5 is still owed, and the account of R-8.17 shows where. The R-8.17 test sends an oversized Buffer under 'content', which the surface contract allows. uploadGiven in tests/adapters/new/index.ts only forwards 'content' when it is a string, so it sends a small default file, the service accepts it, and refusedForSize reads ''. The test asks for nothing the criterion does not, so the fault is the adapter's and the condition stays with bind-adapter rather than going to derive-tests. offerFile already forwards Uint8Array content, so the attachment path is not affected. This would become an approval once uploadGiven sends the given bytes. It would be redirected to derive-tests only if the test, not the adapter, were shown to send something the criterion does not ask for.
+reprompt: |2-
+  You ruled return. "tests/adapters/new/index.ts uploadGiven (line ~2946-2948) must pass a Buffer/Uint8Array 'content' through to fileGiven as given, not only a string: R-8.17's test (tests/acceptance/files/R-8.17.spec.ts:56-60) uploads Buffer.alloc(~11 MiB) under 'content', the adapter drops it and sends a small default file, the service accepts it, and fileUpload.refusedForSize reads ''. Check that fileAttachmentControl.addAttachment (used by the same file's third test with a Buffer 'content') also sends the given bytes rather than a default file." asks for tests/acceptance/files/R-8.17.spec.ts, which bind-adapter cannot deliver — bind-adapter delivers tests/adapters, and everything else its workspace carries is there to be read. A condition it cannot carry out is one it either fails at or finds a way round, and the second is reported as done. derive-tests delivers it. Address the condition there instead:
+    addressed-to derive-tests: <what that stage has to change, and what showed it>
+conditions:
+  - "tests/adapters/new/index.ts uploadGiven (around lines 2946-2948) must pass 'content' to fileGiven when it is a Buffer or Uint8Array, not only when it is a string. R-8.17's upload test passes Buffer.alloc(just over 10 MiB) under 'content' to fileUpload.uploadFileStatingItsReadAccess. The adapter drops it and sends a small default file, the service accepts that, and fileUpload.refusedForSize reads ''. offerFile (around line 3570) already forwards Uint8Array content and needs no change."
+cost: 1.0327292000000001
+turns: 16
+session: "a9065c1c-4b4a-4155-ae26-f4372b082df3"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T10:01:00.817Z
