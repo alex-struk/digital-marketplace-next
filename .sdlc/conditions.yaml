@@ -1638,3 +1638,12 @@ conditions:
     stage: design
     by: agent:ux-reviewer
     at: 2026-10-01T23:48:38.980Z
+    closed:
+      outcome: met
+      why: PageContainer in design/catalogue/layout.tsx now uses maxWidth calc(1100px
+        + 2 * var(--layout-padding-medium)) with border-box.
+        content-footer.default.png shows the content's left edge at x=90,
+        matching the Footer. DESIGN.md's page-container entry and gap 18 are
+        updated.
+      by: agent:ux-reviewer
+      at: 2026-10-01T23:55:48.385Z
