@@ -3662,6 +3662,11 @@ rebind:
     slice: 6
     by: runner:verify
     at: 2026-10-01T05:00:27.710Z
+    closed: &a24
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-01T05:09:53.358Z
   - id: R-6.18
     target: new
     why: "unbound: notification-terms-broadcast.notify_vendors_of_updated_terms —
@@ -3677,6 +3682,7 @@ rebind:
     slice: 6
     by: runner:verify
     at: 2026-10-01T05:00:27.710Z
+    closed: *a24
   - id: R-6.23
     target: new
     why: "unbound: notification-terms-broadcast.notify_vendors_control — signed in
@@ -3691,6 +3697,7 @@ rebind:
     slice: 6
     by: runner:verify
     at: 2026-10-01T05:00:27.710Z
+    closed: *a24
   - id: R-6.24
     target: new
     why: "unbound: notification-terms-broadcast.notify_vendors_of_updated_terms —
@@ -3706,6 +3713,7 @@ rebind:
     slice: 6
     by: runner:verify
     at: 2026-10-01T05:00:27.710Z
+    closed: *a24
   - id: R-4.16
     target: new
     why: "unbound: notification-terms-broadcast.notify_vendors_of_updated_terms —
@@ -3721,3 +3729,13 @@ rebind:
     slice: 6
     by: runner:verify
     at: 2026-10-01T05:00:27.710Z
+    closed: *a24
+  - id: R-6.24
+    target: new
+    why: "unbound: mail-delivery-delay.open — the mail delay proxy answered 404 for
+      GET /hold/proxies/smtp/toxics"
+    found: unbound
+    adapter: b0e2ba0604b0f79c7346049f5e52bf503bea71c3
+    slice: 6
+    by: runner:verify
+    at: 2026-10-01T05:09:53.358Z
