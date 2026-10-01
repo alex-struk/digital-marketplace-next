@@ -1055,9 +1055,20 @@ export default function create(
     refusedForNonAdministrator: () => refusalShown(),
   };
 
+  // What the editor's status line said while the last image was being put in, every wording
+  // in order; read by file-embedded-image.uploading_indicator.
+  let bodyImageNotices: string[] = [];
+
   // "Insert image" over the body opens the browser's file chooser (JPEG or PNG, up to 10 MB);
-  // the image is stored at once and written into the body at the cursor, or refused in the
-  // status beside it.
+  // the image is stored at once and written into the body at the cursor as
+  // "![Describe this image](@file/<id>)", announced in the status beside it ("<name> was
+  // inserted at the cursor. …"), or refused in an alert ("<name> could not be inserted / It
+  // is not a JPEG or PNG image. … Nothing was added to the body.") with the body untouched.
+  //
+  // Walked as the administrator on /content/about-us/edit after "Edit page" (and on
+  // /content/create): pressing "Insert image" — by mouse or by Enter — opened no chooser on
+  // the running build, while "Bold" beside it did work on the body. That is the control
+  // failing a person, so it fails the action plainly rather than reporting it unbound.
   async function insertBodyImage(where: string, input: unknown): Promise<void> {
     await ready();
     const refused = await refusalShown();
@@ -1081,14 +1092,34 @@ export default function create(
     await pressOnScreen(where, /^\s*insert image\s*$/i);
     const offered = await chooser;
     if (!offered) throw new Error(`${where} — "Insert image" on ${page.url()} opened no file chooser`);
+    // Every wording the status line takes from here on, however briefly it is shown.
+    bodyImageNotices = [];
+    await page
+      .getByRole("main")
+      .getByRole("status")
+      .evaluateAll((lines) => {
+        const heard: string[] = [];
+        (window as unknown as { __bodyImageNotices: string[] }).__bodyImageNotices = heard;
+        for (const line of lines) {
+          new MutationObserver(() => {
+            const words = (line as HTMLElement).innerText.trim();
+            if (words && heard[heard.length - 1] !== words) heard.push(words);
+          }).observe(line, { subtree: true, childList: true, characterData: true });
+        }
+      })
+      .catch(() => undefined);
     await offered.setFiles(path);
     for (let waited = 0; waited < 15000; waited += 250) {
       if ((await body.inputValue().catch(() => before)) !== before) break;
+      if (await seen(page.getByRole("main").getByRole("alert")).filter({ hasText: /could not be inserted/i }).count()) break;
       const said = (await seen(page.getByRole("main").getByRole("status")).allInnerTexts()).join("").trim();
       if (said && !/uploading|storing/i.test(said)) break;
       await page.waitForTimeout(250);
     }
     await settle();
+    bodyImageNotices = await page
+      .evaluate(() => (window as unknown as { __bodyImageNotices?: string[] }).__bodyImageNotices ?? [])
+      .catch(() => []);
   }
 
   const contentEdit: S.ContentEditPage = {
@@ -1193,6 +1224,125 @@ export default function create(
         const region = seen(page.getByRole("main").getByRole("region", { name: /history|versions/i }));
         return (await region.count()) ? (await region.first().innerText()).trim() : "";
       }),
+  };
+
+  // ---------------------------------------------------------------- an image in the body
+
+  // The image control of the formatted-text editor, bound where the contract places it: the
+  // administrator's /content/<slug>/edit, after "Edit page" (walked on the seeded about-us
+  // page). The toolbar "Formatting for Body" carries "Insert image", described by "Insert
+  // image takes a JPEG or PNG image, up to 10 MB. An inserted image is stored as soon as you
+  // choose it and anyone can see it." An inserted image goes into the body as
+  // "![Describe this image](@file/<id>)", and the published /content/<slug> draws it as an
+  // image whose address is /api/files/<id>?type=blob (the image itself; /api/files/<id>
+  // alone answers the file's record, not the image).
+
+  let embeddedSlug = "";
+
+  function slugInView(): string {
+    const path = new URL(page.url()).pathname;
+    const found = /^\/content\/([^/]+)(?:\/edit)?\/?$/.exec(path);
+    return found && found[1] !== "create" ? decodeURIComponent(found[1]) : embeddedSlug;
+  }
+
+  // The body as the screen holds it: the form's box while editing, the "Current wording"
+  // box otherwise.
+  async function bodyNow(): Promise<string> {
+    const box = (await editableBox("body")) ?? contentBox("body").first();
+    return (await box.count()) ? box.inputValue() : "";
+  }
+
+  // The images written into a body, one per line, as the body carries them.
+  const imagesInBody = (body: string): string[] =>
+    [...body.matchAll(/!\[[^\]]*\]\(([^)\s]+)\)/g)].map((found) => found[0]);
+
+  const servedAt = (reference: string): string => {
+    const id = /^@file\/([^)\s]+)$/.exec(reference)?.[1];
+    return id ? `/api/files/${id}?type=blob` : reference;
+  };
+
+  const fileEmbeddedImage: S.FileEmbeddedImagePage = {
+    open: async (params) => {
+      if (params?.slug) embeddedSlug = params.slug;
+      await go("/content/:slug/edit", params as unknown as Record<string, string>);
+    },
+    uploadBodyImage: (input) => insertBodyImage("file-embedded-image.upload_body_image", input),
+    // The address the last image in the body is kept at; nothing when the body has none. The
+    // body's reference is read again for a few seconds, since it is written once the image is
+    // stored.
+    imageAddress: () =>
+      onPageScreen("file-embedded-image.image_address", async () => {
+        for (let waited = 0; ; waited += 250) {
+          const last = imagesInBody(await bodyNow()).pop();
+          if (last) return servedAt(/\(([^)\s]+)\)$/.exec(last)?.[1] ?? "");
+          if (waited >= 5000) return "";
+          await page.waitForTimeout(250);
+        }
+      }),
+    // Only the image references in the body ("![Describe this image](@file/<id>)"), never the
+    // rest of the wording: empty when no image was put in.
+    imageInsertedIntoText: () =>
+      onPageScreen("file-embedded-image.image_inserted_into_text", async () => {
+        for (let waited = 0; ; waited += 250) {
+          const found = imagesInBody(await bodyNow());
+          if (found.length || waited >= 5000) return found.join("\n");
+          await page.waitForTimeout(250);
+        }
+      }),
+    // The rule the editor states under its toolbar, which "Insert image" is described by.
+    onlyJpegAndPngOffered: () =>
+      onPageScreen("file-embedded-image.only_jpeg_and_png_offered", async () => {
+        if (!(await editableBox("body")) && (await screenControl(/^\s*edit page\s*$/i).count())) {
+          await pressOnScreen("file-embedded-image.only_jpeg_and_png_offered", /^\s*edit page\s*$/i);
+        }
+        if (!(await screenControl(/^\s*insert image\s*$/i).count())) {
+          unbound(
+            "file-embedded-image.only_jpeg_and_png_offered",
+            `no "Insert image" control over the body on ${page.url()}, after "Edit page" where offered`,
+          );
+        }
+        return linesMatching(/^insert image takes /i);
+      }),
+    // Every wording the status line took while the last image was being stored that speaks
+    // of it being under way; the status as it stands when no image was put in here.
+    uploadingIndicator: () =>
+      onPageScreen("file-embedded-image.uploading_indicator", async () => {
+        const heard = bodyImageNotices.length
+          ? bodyImageNotices
+          : await seen(page.getByRole("main").getByRole("status")).allInnerTexts();
+        return heard
+          .map((words) => words.trim())
+          .filter((words) => /uploading|storing|inserting|in progress/i.test(words))
+          .join("\n");
+      }),
+    // Read on the published /content/<slug>: the addresses of the images its text draws from
+    // the service's stored files, one per line; empty when it draws none.
+    imageRenderedInPublishedText: async () => {
+      const where = "file-embedded-image.image_rendered_in_published_text";
+      const slug = slugInView();
+      if (!slug) unbound(where, `no page address is known on ${page.url()}, and the page was never opened with one`);
+      const published = address("/content/:slug", { slug });
+      if (new URL(page.url()).pathname !== new URL(published).pathname) {
+        await page.goto(published, { waitUntil: "domcontentloaded" });
+      }
+      await ready();
+      const refused = await refusalShown();
+      if (refused) unbound(where, `the published page did not open at ${page.url()}: ${refused}`);
+      let sources: string[] = [];
+      for (let waited = 0; waited <= 5000; waited += 250) {
+        sources = (
+          await seen(page.getByRole("main").getByRole("img")).evaluateAll((images) =>
+            images.map((image) => image.getAttribute("src") ?? ""),
+          )
+        ).filter((source) => source.includes("/api/files/"));
+        if (sources.length) break;
+        await page.waitForTimeout(250);
+      }
+      return sources.join("\n");
+    },
+    // The body as it stands after a refused image, for the test to compare with what it was.
+    uploadFailureLeavesTextUnchanged: () =>
+      onPageScreen("file-embedded-image.upload_failure_leaves_text_unchanged", async () => (await bodyNow()).trim()),
   };
 
   // ================================================================ the rest of the surface
@@ -5912,20 +6062,7 @@ export default function create(
 
     fileImagePicker,
 
-    fileEmbeddedImage: absent<S.FileEmbeddedImagePage>(
-      "file-embedded-image",
-      "/content/:slug/edit",
-      behindSession("/content/:slug/edit"),
-      [
-        "upload_body_image",
-        "image_address",
-        "image_inserted_into_text",
-        "only_jpeg_and_png_offered",
-        "uploading_indicator",
-        "image_rendered_in_published_text",
-        "upload_failure_leaves_text_unchanged",
-      ],
-    ),
+    fileEmbeddedImage,
 
     caughtMessage,
     caughtMessageList,
