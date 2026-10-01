@@ -1,0 +1,6 @@
+gate: G3
+verdict: approve
+by: tech-lead
+held_by: human
+note: "Ruled by the operator agent under Alex's standing delegation (2026-09-30). agent:tech-lead's ruling was approve; it was refused only because it tried to close requests build-slice-7-8#1-#3, which this run had already taken up. The revision does what they asked: refusals return instead of throwing, attachments wait for their download link, submitForReview moves to the Opportunity section first."
+at: 2026-10-01T10:55:33.809Z

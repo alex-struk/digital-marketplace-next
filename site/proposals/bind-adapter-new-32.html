@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-32 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">431</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">425</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">364</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-32</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 10:54</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I checked each one on the running target, but I couldn&#39;t compile or run the suite: the type checker needs a command approval this session doesn&#39;t have, and the workspace has no <code>node_modules</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I&#39;ve made all three changes in <code>tests/adapters/new/index.ts</code>. I checked each one on the running target, but I couldn&#39;t compile or run the suite: the type checker needs a command approval this session doesn&#39;t have, and the workspace has no <code>node_modules</code>. The test runs on target new will be the real check. <code>bindings.yaml</code> is unchanged, because no member moved between bound and unbound. Nothing outside <code>tests/adapters/new/</code> was touched.</p>
+<p><strong>Condition 1 (refusals in <code>saveDraft</code> and <code>publish</code>).</strong> These actions no longer throw when the person is refused.</p>
+<ul><li><strong>What changed:</strong> this covers the create form&#39;s Save draft, Submit for review and Publish when the form answers &quot;Page not found&quot;, and <code>opportunityCwuEdit.publish</code> when the screen is refused or offers no &quot;Publish&quot;. The refusal is now added to a list kept in the adapter and printed with <code>console.info</code>, and the action returns. The test&#39;s own follow-up reading then decides the outcome, as it does on target old.</li><li><strong>What still throws:</strong> the existing &quot;unbound&quot; for a person who may create but finds the form missing, and the &quot;control is disabled&quot; error.</li></ul>
+<p><strong>Condition 2 (<code>addAttachment</code>).</strong> <code>addAttachmentFile</code> no longer returns after a general wait for the page to settle.</p>
+<ul><li><strong>What I saw on the target:</strong> a new file&#39;s row reads &quot;Uploading…&quot; for under 100 ms. Then it gets its &quot;Download &lt;name&gt;&quot; link to <code>/api/files/&lt;id&gt;</code>. A file over 10 MB gets the alert &quot;&lt;name&gt; is too large to attach&quot; straight away. The create form behaves the same way.</li><li><strong>What changed:</strong> the action now waits, up to 30 seconds, until the row for that file name carries the link or a &quot;too large to attach&quot; / &quot;could not be attached&quot; alert. If neither appears, it throws an error naming the file and what its row shows. This covers both <code>fileAttachmentControl.addAttachment</code> and <code>opportunityCwuCreate.addAttachment</code>.</li><li><strong>Small supporting change:</strong> <code>offerFile</code> now returns the name it offered the file under.</li></ul>
+<p><strong>Condition 3 (R-1.21, the missing &quot;incomplete&quot; alert).</strong> I tested this on a live draft with an empty location, signed in as the public sector employee.</p>
+<ul><li><strong><code>submitForReview</code>:</strong> it was not the cause. It does press &quot;Submit for review&quot;, there is no confirmation step, and the page stays where it is.</li><li><strong><code>opportunityTab</code>:</strong> it does not reload when already on <code>?tab=opportunity</code>. It only navigates when on a different section.</li><li><strong>The cause:</strong> the alert &quot;This opportunity is incomplete&quot; is drawn inside whichever section is open. Pressed from Summary, the alert sat in the Summary section. Moving to the Opportunity section lost it, whether by loading the address or by clicking the section link. Summary is the default section, where <code>open()</code> and a fresh save land. So the cause is the section the button was pressed from, combined with the tab switch in <code>opportunityTab</code>. Pressed from <code>?tab=opportunity</code>, the alert appears in the Opportunity section and is still there 6 seconds later.</li><li><strong>What changed:</strong> <code>submitForReview</code> now goes to the Opportunity section before pressing, then leaves the page alone.</li><li><strong>Uncertain:</strong> I can&#39;t see the R-1.21 test. That this is its path is inferred from the target&#39;s behaviour, not confirmed. A test that reads <code>summary_tab</code> after submitting would now lose the alert instead.</li></ul>
+<p><strong>R-1.48 and R-1.9 (Sprint With Us and Team With Us create screens).</strong> These stay unbound with their existing reasons.</p>
+<ul><li>Signed in as the public sector employee, the &quot;Create a Sprint With Us opportunity&quot; and &quot;Create a Team With Us opportunity&quot; links on <code>/opportunities/create</code> both lead to &quot;Page not found&quot;.</li><li>So do <code>/opportunities/sprint-with-us/create</code> and <code>/opportunities/team-with-us/create</code> opened directly, and the short forms <code>/opportunities/swu/create</code> and <code>/opportunities/twu/create</code>.</li><li>Neither route resolves on this target.</li></ul>
+<p>To probe, I created a throwaway Code With Us draft as the public sector employee and deleted it afterwards. The only other leftover is one unsaved file uploaded on the create form, which I never saved.</p>
+<p>No condition is deferred.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by tech-lead (a person) on 2026-10-01 10:55.</p>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
