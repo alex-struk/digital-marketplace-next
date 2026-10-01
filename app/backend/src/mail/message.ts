@@ -42,3 +42,22 @@ export interface Envelope {
   readonly bcc?: readonly (string | null | undefined)[];
   readonly message: Message;
 }
+
+/**
+ * One message to many people: split into batches of at most `size`, each carrying its batch as
+ * blind copies and nobody in the visible address line, which the mailer fills with the service's
+ * own address. No recipient can see who else received it (R-6.8, R-6.15). A recipient with no
+ * address keeps its place in a batch and is skipped when the batch is sent (R-6.28).
+ */
+export function blindCopiedBatches(
+  recipients: readonly (string | null | undefined)[],
+  message: Message,
+  size: number,
+): Envelope[] {
+  const batchSize = Math.max(1, Math.floor(size));
+  const batches: Envelope[] = [];
+  for (let start = 0; start < recipients.length; start += batchSize) {
+    batches.push({ to: [], bcc: recipients.slice(start, start + batchSize), message });
+  }
+  return batches;
+}

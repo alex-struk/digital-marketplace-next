@@ -30,6 +30,18 @@ export function readDate(iso: string): { dateTime: string; label: string } | nul
 }
 
 /**
+ * A calendar day, written YYYY-MM-DD, as a screen shows it: "October 2, 2026". An opportunity's
+ * dates are days, not moments, so they are read as written and not converted (R-1.14).
+ */
+export function readDay(day: string): { dateTime: string; label: string } | null {
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(day);
+  if (!match) return null;
+  const month = MONTHS[Number(match[2]) - 1];
+  if (!month) return null;
+  return { dateTime: day, label: `${month} ${Number(match[3])}, ${Number(match[1])}` };
+}
+
+/**
  * A moment as a screen shows it, to the minute: "September 1, 2026 at 10:30 a.m.". Read in UTC,
  * like `readDate`.
  */
