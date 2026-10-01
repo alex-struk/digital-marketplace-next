@@ -51,3 +51,14 @@ Gaps 1 to 14 from the earlier run still stand.
 **Components relied on most:** the design system's `Heading`, `Text`, `TextField`, `TextArea`, `Form`, `Button`, `ButtonGroup`, `InlineAlert`, `Link`, `Modal`/`AlertDialog`, `ProgressCircle`, and `Footer` with `FooterLinks`. The project's own components, each listed and justified in `DESIGN.md`, are now `PageContainer`, `Stack`, the body editor, the formatted-text renderer, the key-facts list, the data table and the status badge.
 
 I edited only files under `design/` and the content pages' test IDs in `spec/contract/surface.yaml`; nothing else under `spec` was changed.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:ux-reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Do the content screens serve their criteria and use the design system? Return. Accessibility is clean: design/report.json shows 493 stories and 0 violations, including the four new content-request stories. The 11 test-ID changes in surface.yaml all replace null, so no existing ID changed. Spacing comes from design tokens; the only literal size is the 1100px in layout.tsx, which no token carries. PageContainer and Stack are standard HTML styled with tokens, and DESIGN.md names them as the project's own. The screenshots show an even large/medium/small rhythm with no doubled margins. content-request follows the users and files domains' response-reference pattern, and its gaps 15-17 are real problems with the criteria. The one failure is alignment, which this proposal's gap 18 raised itself and the screenshot settles: in content-footer.default.png at 1280px, the page content starts at x=106 and the design system's Footer content at x=90. PageContainer puts its side padding inside the 1100px (border-box), while the Footer uses its 1100px for content alone, so every screen is 16px off the banner. Lining up with the banner is the purpose of this layout, and every later domain will copy layout.tsx, so this is fixed here rather than left as a note. A revision where the content's left edge matches the Footer's at desktop width, with nothing else changed, would be approved.
+
+**Conditions:**
+- In design/catalogue/layout.tsx, make PageContainer's content column match the design system's Header and Footer content width. Its left edge must line up with the Footer's (x=90 at a 1280px viewport, where it is now x=106). For example, set maxWidth to calc(1100px + 2 * var(--layout-padding-medium)) under border-box, so the side padding sits outside the 1100px. Keep 1100px written only in layout.tsx, and update DESIGN.md's page-container entry and gap 18 to say what is now true. Shown by content-footer.default.png: the container's content starts 16px (one --layout-padding-medium) to the right of the Footer's content.
