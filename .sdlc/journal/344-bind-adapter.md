@@ -1,0 +1,43 @@
+---
+stage: "bind-adapter"
+title: "bind adapter"
+at: "2026-10-01T03:58:10.054Z"
+cost: 2.3116024000000004
+turns: 66
+session: "1e7c1509-0ec8-4a2c-b0b3-81f276c1b606"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+---
+
+I rebound the `file-embedded-image` page in `tests/adapters/new/`. All seven of its members are now bound, including `upload_body_image`, which R-7.26 and R-8.29 need. But pressing "Insert image" on the running build opens no file chooser, so those two criteria should now fail as real failures rather than come back unbound.
+
+**What the old reason got wrong.** The previous reason said `/content/:slug/edit` answers "Page not found" to everyone. That is not true now, and the adapter's own header already said the administrator is served it. I signed in through the sandbox identity provider as the administrator (`test-admin`) and opened the seeded `about-us` page at `/content/about-us/edit`. After pressing "Edit page", the form shows a "Formatting for Body" toolbar with an "Insert image" button. The rule text beneath it reads "Insert image takes a JPEG or PNG image, up to 10 MB…". The page was there all along; it had just been left as a stub that reported everything unbound.
+
+**What the page does.** I fed an image straight into the editor's hidden file input. I did this only while exploring; the adapter never does it.
+- **A valid PNG:** it is stored at once and written into the body at the cursor as `![Describe this image](@file/<id>)`. The status line reads "pic.png was inserted at the cursor…".
+- **After publishing:** the public page `/content/about-us` shows the image, loaded from `/api/files/<id>?type=blob`. Without `?type=blob`, that address returns the file's record as JSON, not the image.
+- **A GIF, or a ".png" that is not really an image:** an alert says "<name> could not be inserted / It is not a JPEG or PNG image… Nothing was added to the body." The body is left unchanged.
+
+**Why the action is bound rather than unbound.** Pressing "Insert image" opens no file chooser, whether by mouse or by Enter, on both the edit and create screens. I checked that the button never triggers its file input at all, while "Bold" in the same toolbar does change the body. I also tried dropping and pasting an image onto the Body box; neither inserts anything. The control is on the page in the state the contract describes, and it does not work. That is the application failing a person, so `uploadBodyImage` throws a plain failure ("'Insert image' … opened no file chooser") rather than `unbound:`. The test should decide that outcome, not the adapter.
+
+**What I changed in `index.ts`:**
+- **The shared image-insert helper** (which `content-create` and `content-edit` also use) now stops waiting as soon as a "could not be inserted" alert appears. It also records every wording the status line shows during an upload, which `uploading_indicator` reads.
+- **The new `fileEmbeddedImage` binding** replaces the stub:
+  - `image_address` turns the body's last `@file/<id>` into `/api/files/<id>?type=blob`.
+  - `image_inserted_into_text` returns only the image lines in the body.
+  - `only_jpeg_and_png_offered` returns the editor's stated rule.
+  - `image_rendered_in_published_text` opens `/content/<slug>` and reads the addresses of the stored-file images there.
+  - `upload_failure_leaves_text_unchanged` returns the body as it stands.
+  
+  Each of these returns empty when it reaches the page and finds nothing.
+
+In `bindings.yaml`, all seven are marked `bound`, with a comment explaining the dead button. Nothing else in the surface changed.
+
+**What I could not do:**
+- I couldn't type-check or run the suite. No TypeScript or Playwright is installed in the workspace, and running Node needed approval this session doesn't have. I checked the new readers' locator logic by running the same queries live in the browser.
+- I never saw an "uploading" wording, because a 1×1 image is stored too fast to show one. So `uploading_indicator` is bound but unconfirmed.
+- While exploring I published one image into the live `about-us` page. The seed restores it before each test, but the running target holds that change until then.
+
+Every route in `surface.yaml` that I opened this run resolved.

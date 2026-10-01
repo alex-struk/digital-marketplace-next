@@ -1444,16 +1444,25 @@ pages:
       stored_image_width: bound
       stored_image_height: bound
 
+  # Bound on the administrator's /content/<slug>/edit after "Edit page" (walked on the seeded
+  # about-us page): the "Formatting for Body" toolbar carries "Insert image", described by
+  # "Insert image takes a JPEG or PNG image, up to 10 MB. …". A stored image goes into the
+  # body as "![Describe this image](@file/<id>)" with "<name> was inserted at the cursor." in
+  # the status; a refused one raises "<name> could not be inserted / … Nothing was added to
+  # the body." and leaves the body as it was; the published /content/<slug> draws the image
+  # from /api/files/<id>?type=blob. Pressing "Insert image" itself (by mouse or by Enter)
+  # opened no file chooser on the running build, while "Bold" beside it worked on the body:
+  # the action reports that as a plain failure of the control, not as unbound.
   file-embedded-image:
     actions:
-      upload_body_image: "unbound: the formatted-text editor sits on the content and opportunity forms, which are offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found', as it does every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included: it serves a signed-in person only /dashboard and their own account screens; opened signed out, /content/:slug/edit and the opportunity forms show the Not Found screen, so no image can be put into a page to be seen rendered"
+      upload_body_image: bound
     observations:
-      image_address: "unbound: the formatted-text editor sits on the content and opportunity forms, which are offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found', as it does every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included: it serves a signed-in person only /dashboard and their own account screens; opened signed out, /content/:slug/edit and the opportunity forms show the Not Found screen, so no image can be put into a page to be seen rendered"
-      image_inserted_into_text: "unbound: the formatted-text editor sits on the content and opportunity forms, which are offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found', as it does every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included: it serves a signed-in person only /dashboard and their own account screens; opened signed out, /content/:slug/edit and the opportunity forms show the Not Found screen, so no image can be put into a page to be seen rendered"
-      only_jpeg_and_png_offered: "unbound: the formatted-text editor sits on the content and opportunity forms, which are offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found', as it does every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included: it serves a signed-in person only /dashboard and their own account screens; opened signed out, /content/:slug/edit and the opportunity forms show the Not Found screen, so no image can be put into a page to be seen rendered"
-      uploading_indicator: "unbound: the formatted-text editor sits on the content and opportunity forms, which are offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found', as it does every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included: it serves a signed-in person only /dashboard and their own account screens; opened signed out, /content/:slug/edit and the opportunity forms show the Not Found screen, so no image can be put into a page to be seen rendered"
-      image_rendered_in_published_text: "unbound: the formatted-text editor sits on the content and opportunity forms, which are offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found', as it does every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included: it serves a signed-in person only /dashboard and their own account screens; opened signed out, /content/:slug/edit and the opportunity forms show the Not Found screen, so no image can be put into a page to be seen rendered"
-      upload_failure_leaves_text_unchanged: "unbound: the formatted-text editor sits on the content and opportunity forms, which are offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found', as it does every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included: it serves a signed-in person only /dashboard and their own account screens; opened signed out, /content/:slug/edit and the opportunity forms show the Not Found screen, so no image can be put into a page to be seen rendered"
+      image_address: bound
+      image_inserted_into_text: bound
+      only_jpeg_and_png_offered: bound
+      uploading_indicator: bound
+      image_rendered_in_published_text: bound
+      upload_failure_leaves_text_unchanged: bound
 
   # The mail catcher's pages are bound against Mailpit's own interface (message list and
   # message by identifier, /api/v1/chaos for the sender fault, /hold/proxies/smtp/toxics for
