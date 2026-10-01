@@ -44,3 +44,27 @@ What the target answered:
 
 - The contract describes the signed-out refusal and the duplicate refusal in words that fit what the target sends (401 `permissions` and 409 `conflict`). It names no status codes, so I am only noting the codes the target used.
 - The contract did not ask me to change anything outside `tests/adapters/old/`, and I did not.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does bind-adapter-old-58 bind every action and observation of the opportunity-watch-request surface on old, and nothing else? Approve. All seven members the contract lists at spec/contract/surface.yaml:1996 (watch_by_request, stop_watching_by_request, request_accepted, refusal_status, refusal_reason, refusal_messages, watching) are bound, and none is left unbound. The bindings only navigate and read. The actions send the POST/DELETE to /api/subscribers/<program> and assert nothing. The readers reuse the adapter's existing helpers (answer, answered, accepted, lastRefusal) and return what the service said: refusal_reason returns the top-level key the refusal is filed under, as the contract comment describes, and watching reads the opportunity's own subscribed flag from /api/opportunities/<program>/<id> without overwriting the last request's answer, as the contract asks. Nothing under tests/acceptance changed (git diff main...HEAD -- tests/acceptance is empty). The runner's typecheck reports no diagnostics under adapters/old/; its only failure is in adapters/new/, which this proposal does not answer for. The open missing-test on R-1.5 (the duplicate-watch clause) is owed by derive-tests under an earlier ruling and is not this adapter's to discharge; this binding gives derive-tests the surface it needs, since the duplicate request answers 409 conflict. The ruling would change if tsc reported errors under adapters/old/, if the diff touched tests/acceptance, or if a binding decided an outcome instead of reporting it.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `bcb195780026c94428600beb2bb4bc90ec9cfdd6`
+Typecheck: **failed**; exit code: 2.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/old/`, which this proposal answers for.
+
+    
+
+Diagnostics elsewhere in the suite, which this proposal does not answer for:
+
+    adapters/new/: 1 diagnostic
