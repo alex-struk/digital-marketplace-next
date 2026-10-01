@@ -15,6 +15,16 @@ export interface MailSettings {
   /** Whom a message tells its reader to write to with questions (R-4.20, R-4.30). */
   readonly contactEmail: string;
   readonly smtp: { readonly host: string; readonly port: number };
+  /** How many people one message to many carries at most, as blind copies (R-6.8); 50 when unsaid. */
+  readonly batchSize?: number;
+}
+
+/** How many recipients one batch of a notice to many carries when nothing is configured (R-6.8). */
+export const DEFAULT_BATCH_SIZE = 50;
+
+function batchSizeFrom(value: string | undefined): number {
+  const size = Number(value);
+  return Number.isInteger(size) && size > 0 ? size : DEFAULT_BATCH_SIZE;
 }
 
 /** What the sandbox is configured with when nothing is said (spec/contract/observables.yaml). */
@@ -61,5 +71,6 @@ export function mailSettingsFrom(env: NodeJS.ProcessEnv): MailSettings {
       host: env.SMTP_HOST?.trim() || "localhost",
       port: Number(env.SMTP_PORT ?? 1025),
     },
+    batchSize: batchSizeFrom(env.MAILER_BATCH_SIZE),
   };
 }

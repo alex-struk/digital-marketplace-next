@@ -416,11 +416,12 @@ describe("the dashboard", () => {
   });
 
   it("is where a signed-in person is", async () => {
+    serve(() => json(200, []));
     resetSessionForTests({ status: "signed-in", account: staff }, fakeIdentity());
     renderAt("/dashboard");
 
     await screen.findByRole("heading", { level: 1, name: "Dashboard" });
-    expect(screen.getByText(/Casey Placeholder/)).toBeTruthy();
+    expect(await screen.findByRole("heading", { level: 2, name: "My opportunities" })).toBeTruthy();
   });
 });
 

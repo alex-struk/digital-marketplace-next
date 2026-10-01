@@ -1,0 +1,418 @@
+import { ReactNode, RefObject, useEffect, useRef, useState } from "react";
+import { AlertDialog, Button, ButtonGroup, Heading, Link, Modal, Text } from "@bcgov/design-system-react-components";
+import { useNavigate, useSearch } from "@tanstack/react-router";
+import {
+  CwuStatus,
+  OPPORTUNITY_INCOMPLETE,
+  earliestDeadlineFor,
+  historyEntryLabel,
+  isUnpublished,
+  mayDeleteOpportunity,
+  mayEditOpportunity,
+  mayManageOpportunity,
+  mayPublishOpportunity,
+  maySubmitForReview,
+} from "@rules/opportunities";
+import type { Account } from "../api/accounts";
+import {
+  CwuOpportunity,
+  SaveAnswer,
+  changeCwuOpportunity,
+  deleteCwuOpportunity,
+  fetchCwuOpportunity,
+} from "../api/opportunities";
+import { facts, page, row, stack, tabList } from "../app/layout";
+import { Loading } from "../app/loading";
+import { NotFound } from "../app/not-found";
+import { RequireSignIn } from "../app/require-sign-in";
+import { useScreenTitle } from "../app/screen-title";
+import { TitledAlert } from "../app/titled-alert";
+import { CwuOpportunityForm, PublishDialog, valuesFrom } from "./opportunity-cwu-form";
+import {
+  Fact,
+  StatusBadge,
+  deadlineLabel,
+  momentLabel,
+  publishedLabel,
+  rewardLabel,
+  todayInPacific,
+} from "./opportunity-parts";
+
+/**
+ * Manage a Code With Us opportunity, at `/opportunities/code-with-us/:opportunityId/edit`
+ * (opportunity-cwu-edit): its summary, its details in their form, and its history, each on its
+ * own address (`?tab=…`). Only its author and administrators see it; anybody else is shown the
+ * missing page (R-1.3, R-1.30).
+ *
+ * The action bar offers only what the person may do in the opportunity's state
+ * (design/DESIGN.md, "Who is offered what on the manage page"): a draft's author may edit it,
+ * submit it for review and delete it; an administrator may edit, publish and delete a draft or an
+ * opportunity under review, and edit one that is published (R-1.20, R-1.22, R-1.53, R-1.56).
+ */
+
+type Tab = "summary" | "opportunity" | "addenda" | "history";
+
+type Loaded = { readonly kind: "loading" } | { readonly kind: "missing" } | { readonly kind: "found"; readonly opportunity: CwuOpportunity };
+
+export function OpportunityCwuEditScreen({ opportunityId }: { opportunityId: string }) {
+  useScreenTitle("Manage a Code With Us opportunity");
+  return (
+    <RequireSignIn title="Manage a Code With Us opportunity" loadingLabel="Loading opportunity…">
+      {(account) => <ManageLoader account={account} opportunityId={opportunityId} />}
+    </RequireSignIn>
+  );
+}
+
+function ManageLoader({ account, opportunityId }: { account: Account; opportunityId: string }) {
+  const [loaded, setLoaded] = useState<Loaded>({ kind: "loading" });
+  useEffect(() => {
+    let current = true;
+    void fetchCwuOpportunity(opportunityId).then((answer) => {
+      if (current) setLoaded(answer.kind === "found" ? { kind: "found", opportunity: answer.opportunity } : { kind: "missing" });
+    });
+    return () => {
+      current = false;
+    };
+  }, [opportunityId]);
+
+  if (loaded.kind === "loading") {
+    return (
+      <div style={page}>
+        <Heading level={1}>Manage a Code With Us opportunity</Heading>
+        <Loading label="Loading opportunity…" />
+      </div>
+    );
+  }
+  if (
+    loaded.kind === "missing" ||
+    !mayManageOpportunity(account, { status: loaded.opportunity.status, createdBy: loaded.opportunity.createdBy?.id ?? null })
+  ) {
+    return <NotFound />;
+  }
+  return <Manage account={account} initial={loaded.opportunity} />;
+}
+
+/** What the page says after something it did: done, refused as incomplete, or refused otherwise. */
+type Notice =
+  | { readonly kind: "done"; readonly text: string }
+  | { readonly kind: "incomplete"; readonly action: "submit" | "publish" }
+  | { readonly kind: "refused"; readonly text: string };
+
+const DONE: Readonly<Record<"submit" | "publish" | "save", string>> = {
+  submit: "The opportunity has been submitted for review. Every administrator has been told.",
+  publish: "The opportunity has been published.",
+  save: "Your changes have been saved.",
+};
+
+function Manage({ account, initial }: { account: Account; initial: CwuOpportunity }) {
+  const navigate = useNavigate();
+  const search = useSearch({ strict: false }) as Record<string, unknown>;
+  const [opportunity, setOpportunity] = useState(initial);
+  const [notice, setNotice] = useState<Notice | null>(null);
+  const [dialog, setDialog] = useState<"publish" | "delete" | null>(null);
+  const [busy, setBusy] = useState(false);
+  const noticeRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (notice && notice.kind !== "done") noticeRef.current?.focus();
+  }, [notice]);
+
+  const standing = { status: opportunity.status, createdBy: opportunity.createdBy?.id ?? null };
+  const draft = opportunity.status === "DRAFT";
+  const offered = tabsFor(opportunity.status);
+  const tab: Tab = offered.includes(search.tab as Tab) ? (search.tab as Tab) : "summary";
+  const base = `/opportunities/code-with-us/${opportunity.id}/edit`;
+  const mayEdit = mayEditOpportunity(account, standing);
+  const administrator = account.type === "ADMIN";
+  const today = todayInPacific();
+
+  const offers = {
+    edit: mayEdit,
+    // A draft's author is offered Submit for review; an administrator publishes instead.
+    submit: draft && !administrator && maySubmitForReview(account, standing),
+    publish: isUnpublished(opportunity.status) && mayPublishOpportunity(account),
+    delete: mayDeleteOpportunity(account, standing),
+  };
+  const editing = tab === "opportunity" && mayEdit;
+
+  function goToTab(next: Tab) {
+    void navigate({ to: "/opportunities/code-with-us/$opportunityId/edit", params: { opportunityId: opportunity.id }, search: { tab: next } as never });
+  }
+
+  async function act(action: "submit" | "publish") {
+    if (busy) return;
+    setBusy(true);
+    const answer = await changeCwuOpportunity(opportunity.id, action === "submit" ? "submitForReview" : "publish");
+    setBusy(false);
+    setDialog(null);
+    if (answer.kind === "saved") {
+      setOpportunity(answer.opportunity);
+      setNotice({ kind: "done", text: DONE[action] });
+      return;
+    }
+    setNotice(refusalNotice(answer, action));
+  }
+
+  async function remove() {
+    if (busy) return;
+    setBusy(true);
+    const answer = await deleteCwuOpportunity(opportunity.id);
+    setBusy(false);
+    setDialog(null);
+    if (answer.kind === "saved") {
+      void navigate({ to: "/dashboard" });
+      return;
+    }
+    setNotice({
+      kind: "refused",
+      text: answer.kind === "refused" ? answer.reasons.join(" ") : "The opportunity could not be deleted. Try again.",
+    });
+  }
+
+  return (
+    <div style={page}>
+      <Text elementType="p" size="small" color="secondary">
+        Manage a Code With Us opportunity
+      </Text>
+      <Heading level={1}>{opportunity.title || "Untitled opportunity"}</Heading>
+      <div style={row}>
+        <Text elementType="p">
+          Status: <StatusBadge status={opportunity.status} />
+        </Text>
+        <Text elementType="p" size="small" color="secondary">
+          Opportunity ID: <span data-testid="opportunity-identifier">{opportunity.id}</span>
+        </Text>
+      </div>
+      {/* The actions stay on every tab, the Opportunity tab's form included, so a draft can be put
+          forward from wherever its author is; only Edit is left off where the form is already
+          open (decision record 0032). */}
+      {(offers.edit && !editing) || offers.submit || offers.publish || offers.delete ? (
+        <ButtonGroup ariaLabel="Opportunity actions">
+          {offers.edit && !editing ? (
+            <Button variant="secondary" onPress={() => goToTab("opportunity")} data-testid="opportunity-edit-button">
+              Edit
+            </Button>
+          ) : null}
+          {offers.submit ? (
+            <Button variant="primary" isDisabled={busy} onPress={() => void act("submit")} data-testid="opportunity-submit-for-review">
+              Submit for review
+            </Button>
+          ) : null}
+          {offers.publish ? (
+            <Button variant="primary" isDisabled={busy} onPress={() => setDialog("publish")} data-testid="opportunity-publish">
+              Publish
+            </Button>
+          ) : null}
+          {offers.delete ? (
+            <Button variant="secondary" danger isDisabled={busy} onPress={() => setDialog("delete")} data-testid="opportunity-delete-button">
+              Delete
+            </Button>
+          ) : null}
+        </ButtonGroup>
+      ) : null}
+      <nav aria-label="Opportunity sections">
+        <ul style={tabList}>
+          {offered.map((name) => (
+            <li key={name}>
+              <Link
+                href={name === "summary" ? `${base}?tab=summary` : `${base}?tab=${name}`}
+                aria-current={name === tab ? "page" : undefined}
+                data-testid={`opportunity-tab-${name}`}
+              >
+                {TAB_NAMES[name]}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <section aria-labelledby="tab-heading" style={stack}>
+        <Heading level={2} id="tab-heading">
+          {TAB_NAMES[tab]}
+        </Heading>
+        {/* What an action came to is said in the section being read, whichever tab it is. */}
+        <NoticeArea notice={notice} noticeRef={noticeRef} />
+        {tab === "summary" ? <SummaryTab opportunity={opportunity} /> : null}
+        {tab === "opportunity" ? (
+          <CwuOpportunityForm
+            key={opportunity.updatedAt}
+            purpose="edit"
+            account={account}
+            initial={valuesFrom(opportunity)}
+            initialAttachments={opportunity.attachments}
+            isDraft={draft}
+            today={today}
+            earliestDeadline={earliestDeadlineFor(opportunity, today)}
+            headingLevel={3}
+            readOnly={!mayEdit}
+            consequence={
+              <Text elementType="p">
+                {draft
+                  ? "Saving records a new version of the draft. Nothing is checked until it is submitted for review or published."
+                  : "Saving records a new version. Everyone watching this opportunity, everyone who has submitted a proposal, and its author will be emailed."}
+              </Text>
+            }
+            onSend={(_action, submission) => changeCwuOpportunity(opportunity.id, "edit", submission)}
+            onSaved={(saved) => {
+              setOpportunity(saved);
+              setNotice({ kind: "done", text: DONE.save });
+            }}
+            onCancel={() => goToTab("summary")}
+          />
+        ) : null}
+        {tab === "addenda" ? <Text elementType="p">No addenda have been added.</Text> : null}
+        {tab === "history" ? <HistoryTab opportunity={opportunity} /> : null}
+      </section>
+      <PublishDialog
+        isOpen={dialog === "publish"}
+        isSending={busy}
+        onCancel={() => setDialog(null)}
+        onConfirm={() => void act("publish")}
+      />
+      <Modal isOpen={dialog === "delete"} isDismissable onOpenChange={(open) => (!open && !busy ? setDialog(null) : undefined)}>
+        <AlertDialog
+          variant="destructive"
+          title="Delete this opportunity?"
+          data-testid="opportunity-delete-dialog"
+          buttons={
+            <>
+              <Button variant="secondary" isDisabled={busy} onPress={() => setDialog(null)} data-testid="opportunity-dialog-cancel">
+                Cancel
+              </Button>
+              <Button variant="primary" danger isDisabled={busy} onPress={() => void remove()} data-testid="opportunity-delete-confirm">
+                Delete opportunity
+              </Button>
+            </>
+          }
+        >
+          <Text elementType="p">The opportunity and everything entered in it will be removed. This cannot be undone.</Text>
+        </AlertDialog>
+      </Modal>
+    </div>
+  );
+}
+
+const TAB_NAMES: Readonly<Record<Tab, string>> = {
+  summary: "Summary",
+  opportunity: "Opportunity",
+  addenda: "Addenda",
+  history: "History",
+};
+
+/** The tabs follow the stage: an addendum needs an opportunity that is no longer a draft (R-1.32). */
+export function tabsFor(status: CwuStatus): readonly Tab[] {
+  return status === "DRAFT" ? ["summary", "opportunity", "history"] : ["summary", "opportunity", "addenda", "history"];
+}
+
+function refusalNotice(answer: Exclude<SaveAnswer, { kind: "saved" }>, action: "submit" | "publish"): Notice {
+  if (answer.kind === "refused" && answer.reasons.includes(OPPORTUNITY_INCOMPLETE)) return { kind: "incomplete", action };
+  if (answer.kind === "refused") return { kind: "refused", text: answer.reasons.join(" ") };
+  return { kind: "refused", text: "The service could not do that. Try again." };
+}
+
+function NoticeArea({ notice, noticeRef }: { notice: Notice | null; noticeRef: RefObject<HTMLDivElement> }) {
+  let shown: ReactNode = null;
+  if (notice?.kind === "incomplete") {
+    shown = (
+      <div tabIndex={-1} ref={noticeRef} data-testid="opportunity-incomplete-message">
+        <TitledAlert variant="danger" role="alert" title="This opportunity is incomplete">
+          <Text elementType="p">
+            {`It could not be ${notice.action === "submit" ? "submitted for review" : "published"}. Edit the opportunity, complete and save the form, and then ${
+              notice.action === "submit" ? "submit it" : "publish it"
+            } again.`}
+          </Text>
+        </TitledAlert>
+      </div>
+    );
+  } else if (notice?.kind === "refused") {
+    shown = (
+      <div tabIndex={-1} ref={noticeRef}>
+        <TitledAlert variant="danger" role="alert" title="That could not be done">
+          <Text elementType="p">{notice.text}</Text>
+        </TitledAlert>
+      </div>
+    );
+  }
+  return (
+    <>
+      {shown}
+      <div role="status">{notice?.kind === "done" ? <Text elementType="p">{notice.text}</Text> : null}</div>
+    </>
+  );
+}
+
+function SummaryTab({ opportunity }: { opportunity: CwuOpportunity }) {
+  return (
+    <>
+      <dl style={facts}>
+        <Fact label="Proposal deadline">{deadlineLabel(opportunity.proposalDeadline)}</Fact>
+        <Fact label="Reward">{rewardLabel(opportunity.reward)}</Fact>
+        <Fact label="Published">{publishedLabel(opportunity.publishedAt)}</Fact>
+        {opportunity.createdBy ? (
+          <Fact label="Created by" testId="opportunity-created-by">
+            {opportunity.createdBy.name}
+          </Fact>
+        ) : null}
+        {opportunity.updatedBy ? (
+          <Fact label="Last changed by" testId="opportunity-last-changed-by">
+            {opportunity.updatedBy.name}
+          </Fact>
+        ) : null}
+      </dl>
+      {isUnpublished(opportunity.status) ? (
+        <Text elementType="p" size="small" color="secondary">
+          Views, watchers and proposals are counted once the opportunity is published.
+        </Text>
+      ) : null}
+    </>
+  );
+}
+
+const cell = {
+  textAlign: "start",
+  padding: "var(--layout-padding-small)",
+  borderBottom: "var(--layout-border-width-small) solid var(--surface-color-border-default)",
+} as const;
+
+/** Every change of state and every event, newest first, with who made it (R-1.4, R-1.30). */
+function HistoryTab({ opportunity }: { opportunity: CwuOpportunity }) {
+  const history = opportunity.history ?? [];
+  return (
+    <div role="region" aria-labelledby="history-caption" tabIndex={0} style={{ overflowX: "auto" }}>
+      <table style={{ borderCollapse: "collapse", width: "100%" }}>
+        <caption id="history-caption" style={{ textAlign: "start" }}>
+          <Text size="small" color="secondary">
+            Every change of state and every event, newest first
+          </Text>
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col" style={cell}>
+              Date
+            </th>
+            <th scope="col" style={cell}>
+              Entry
+            </th>
+            <th scope="col" style={cell}>
+              By
+            </th>
+            <th scope="col" style={cell}>
+              Note
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {history.map((entry, index) => (
+            <tr key={`${entry.createdAt}-${index}`}>
+              <td style={cell}>
+                <time dateTime={entry.createdAt}>{momentLabel(entry.createdAt)}</time>
+              </td>
+              <td style={cell}>{historyEntryLabel(entry)}</td>
+              <td style={cell}>{entry.createdBy?.name ?? ""}</td>
+              <td style={cell}>{entry.note ?? ""}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
