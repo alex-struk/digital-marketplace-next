@@ -1,0 +1,18 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 8 does not yet do what 3 of its criteria say. Each condition is
+  the criterion and what the running application did.
+conditions:
+  - 'R-1.3: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    "" — at tests/acceptance/opportunities/R-1.3.spec.ts:71'
+  - 'R-1.38: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    "" — at tests/acceptance/opportunities/R-1.38.spec.ts:54'
+  - "R-1.39: Error: unbound: opportunity-swu-create.open —
+    /opportunities/sprint-with-us/create is offered only to a signed-in person,
+    and walked signed in (as the administrator, as a public sector employee, and
+    as a vendor for a vendor's screens — the seeded organization owner for the
+    organization screens — with the seeded records' identifiers), the runni… —
+    at tests/acceptance/opportunities/R-1.39.spec.ts:94"
+at: 2026-10-01T12:35:12.657Z
