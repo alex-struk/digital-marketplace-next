@@ -1589,3 +1589,12 @@ conditions:
     stage: bind-adapter
     by: agent:tech-lead
     at: 2026-10-01T10:01:00.835Z
+    closed:
+      outcome: met
+      why: uploadGiven in tests/adapters/new/index.ts (around line 2948) now passes
+        'content' to fileGiven when it is a string or a Uint8Array (Buffer
+        included), so R-8.17's Buffer.alloc(just over 10 MiB) is uploaded as
+        given instead of a default file; offerFile is unchanged; the runner
+        typecheck on 4aadbd4eb passed.
+      by: agent:reviewer
+      at: 2026-10-01T10:03:33.795Z
