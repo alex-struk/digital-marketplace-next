@@ -1,0 +1,15 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 7 does not yet do what 2 of its criteria say. Each condition is
+  the criterion and what the running application did.
+conditions:
+  - 'R-1.48: Error: expect(received).toBeTruthy() — Received: ""'
+  - 'R-1.53: Error: unbound: opportunity-cwu-create.save_draft — no field on
+    http://localhost:4300/opportunities/code-with-us/create takes "remoteOk"
+    (looked for one labelled /remote[\s-]*Ok/i); it offers button "Decrease",
+    button "Increase", button "Select an item", button "Add attachment", button
+    "Save draft", button "Publish", link "Skip to main content", link
+    "Dashboard", link "Users", link "Content", lin…'
+at: 2026-10-01T07:03:19.982Z
