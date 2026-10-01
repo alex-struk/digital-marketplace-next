@@ -1,0 +1,12 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 5 does not yet do what 2 of its criteria say. Each condition is
+  the criterion and what the running application did.
+conditions:
+  - 'R-7.8: Error: expect(received).not.toBe(expected) // Object.is equality —
+    Expected: not ""'
+  - "R-7.12: Error: expect(received).toBe(expected) // Object.is equality —
+    Expected: 22 — Received: 23"
+at: 2026-10-01T03:50:34.792Z
