@@ -6,7 +6,7 @@ Profile: rebuild
 
 | Domain | proposed | accepted | implemented | verified | monitored | obsolete | open questions | total | tests | new | old |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 47/50 (n/t 3) |  | 39 pass · 9 fail · 0 unbound · 0 stale |
+| opportunities | 0 | 56 | 0 | 0 | 0 | 1 | 1 | 57 | 48/50 (n/t 2) |  | 39 pass · 9 fail · 0 unbound · 0 stale |
 | proposals | 0 | 38 | 0 | 0 | 0 | 2 | 1 | 40 | 36/36 |  | 33 pass · 3 fail · 0 unbound · 0 stale |
 | organizations | 0 | 35 | 0 | 0 | 0 | 0 | 0 | 35 | 31/31 |  | 25 pass · 6 fail · 0 unbound · 0 stale |
 | users | 0 | 32 | 0 | 0 | 0 | 4 | 1 | 36 | 29/30 (n/t 1) |  | 21 pass · 3 fail · 5 unbound · 0 stale |
@@ -334,6 +334,7 @@ Profile: rebuild
 - [derive-tests-opportunities](proposals/derive-tests-opportunities.md)
 - [derive-tests-opportunities-10](proposals/derive-tests-opportunities-10.md)
 - [derive-tests-opportunities-11](proposals/derive-tests-opportunities-11.md)
+- [derive-tests-opportunities-12](proposals/derive-tests-opportunities-12.md)
 - [derive-tests-opportunities-2](proposals/derive-tests-opportunities-2.md)
 - [derive-tests-opportunities-3](proposals/derive-tests-opportunities-3.md)
 - [derive-tests-opportunities-4](proposals/derive-tests-opportunities-4.md)
@@ -348,6 +349,7 @@ Profile: rebuild
 - [derive-tests-opportunities-stale-12](proposals/derive-tests-opportunities-stale-12.md)
 - [derive-tests-opportunities-stale-13](proposals/derive-tests-opportunities-stale-13.md)
 - [derive-tests-opportunities-stale-14](proposals/derive-tests-opportunities-stale-14.md)
+- [derive-tests-opportunities-stale-15](proposals/derive-tests-opportunities-stale-15.md)
 - [derive-tests-opportunities-stale-2](proposals/derive-tests-opportunities-stale-2.md)
 - [derive-tests-opportunities-stale-3](proposals/derive-tests-opportunities-stale-3.md)
 - [derive-tests-opportunities-stale-4](proposals/derive-tests-opportunities-stale-4.md)
@@ -476,10 +478,10 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $789.783945
-- Rulings cost: $431.366424
-- Total cost: $1221.150369
-- Agent-held rulings: 404
+- Journal cost: $790.095378
+- Rulings cost: $431.930972
+- Total cost: $1222.02635
+- Agent-held rulings: 406
 - Runner rulings (automatic, no seat held): 21
 - Human rulings: 21
 - Rulings whose seat this page does not recognise: 0

@@ -4860,7 +4860,7 @@ owed:
     id: R-1.6
     version: 1
     domain: opportunities
-    stage: derive-tests
+    stage: calibrate
     why: a surface page (for example opportunity-counters, addressed by the
       opportunity's program and identifier) with an observation view_count that
       returns the counters observable's view_count for that opportunity as a
@@ -4885,3 +4885,9 @@ owed:
         gate: G1
         approved_by: agent:product-owner
         at: 2026-10-01T13:50:05.053Z
+      - from: derive-tests
+        to: calibrate
+        why: a test for v1 exists and has not run
+        by: runner
+        at: 2026-10-01T14:03:09.693Z
+    target: old

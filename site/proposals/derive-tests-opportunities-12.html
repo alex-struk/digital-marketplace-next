@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>derive-tests-opportunities-12 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">448</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">442</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">378</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>derive-tests-opportunities-12</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 14:02</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do the revised opportunities tests now follow from their criteria and from nothing else?</h2>
+<p><strong>Recommendation.</strong> I acted on the one condition.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I acted on the one condition. R-1.6 now also tests a signed-in visitor who is not staff. I couldn&#39;t run the typecheck: the command needed approval and nobody was there to give it.</p>
+<p><strong>Condition 1 (R-1.6, the signed-in half of &quot;anyone, signed in or not&quot;).</strong> I changed only <code>tests/acceptance/opportunities/R-1.6.spec.ts</code>. The anonymous case is unchanged: an administrator reads the view count on the opportunity-counters page and signs out, an anonymous visitor opens <code>opportunityCwuView</code>, and the count must have risen by exactly one. After that, the test now signs in as <code>persona.vendor</code>, opens the same public page, checks that it really opened by reading the opportunity&#39;s identifier, and signs out. The administrator then reads the count again, and the test requires it to have risen by exactly one more.</p>
+<p>I checked <code>tests/generated/personas.ts</code> first. The vendor persona can be signed in as (session route <code>/auth/createsessionvendor/1</code>), it is not staff, and its abilities include viewing a published opportunity. So the surface does reach this clause, and I added no <code>not-testable.yaml</code> entry for R-1.6. There was none there before either.</p>
+<p>Both viewings sit in the single existing <code>test()</code>, under the criterion&#39;s own title. The criterion has only one given/when/then, and Playwright refuses two tests with the same title in one file. I updated the explanatory comment to describe both viewings. The header is unchanged: the &quot;derived&quot; date was already 2026-10-01, which is today.</p>
+<p><strong>Not verified.</strong> The typecheck (<code>tsc --noEmit</code>) was not run. As a substitute, I confirmed the new code only uses calls the file already used (<code>surface.signIn</code>, <code>surface.signOut</code>, <code>opportunityCwuView.open</code>, <code>opportunityIdentifier</code>) plus the <code>persona.vendor</code> key, which exists in the generated personas. A later stage should still run the typecheck.</p>
+<p>No other file under <code>tests/acceptance/opportunities/</code> and no entry in <code>tests/acceptance/not-testable.yaml</code> was touched. I wrote nothing outside the paths this stage delivers, and nothing new is missing from the contract surface.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 14:03.</p>
+<div class="body"><p>Question: do the revised opportunities tests now follow from their criteria and nothing else? Approve. R-1.6 says any visitor, signed in or not, opening an opportunity&#39;s public page raises its recorded view count by one. The revised test keeps the anonymous viewing, which must raise the count read on opportunity-counters by exactly one. It adds a viewing by persona.vendor, a signed-in persona who is not staff, which must raise it by exactly one more. That asserts both halves of the criterion&#39;s &#39;when&#39; and its &#39;then&#39;. The other checks are an identifier read confirming the public page opened and an integer check on the first reading. Both are preconditions of the criterion&#39;s own given/when, not new claims. The test uses no selectors, routes or storage names. The not-testable entry for R-1.6 was removed correctly, because the opportunity-counters surface page it asked for now exists and the test uses it. The runner&#39;s typecheck on this revision passed with no diagnostics. The test now carries out the earlier condition. missing-test/R-1.6 stays open until a run of this test is recorded, which is correct, so it is not withdrawn. The ruling would change if a run showed opportunity-counters cannot be bound, or that reading it changes the count.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met derive-tests-opportunities-stale-15#1: tests/acceptance/opportunities/R-1.6.spec.ts now adds a signed-in, non-staff viewing (persona.vendor signs in, opens opportunityCwuView, signs out) between two administrator reads of opportunity-counters and asserts an increase of exactly one, while keeping the anonymous viewing and its own exactly-one assertion</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
