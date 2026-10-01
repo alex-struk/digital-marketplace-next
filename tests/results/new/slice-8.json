@@ -1,0 +1,250 @@
+{
+  "slice": 8,
+  "proposal": "build-slice-8",
+  "app_tree": "bb72c17a494fc38cb1b27a260bbc020585a449cd",
+  "at": "2026-10-01T12:35:12.636Z",
+  "verdict": "fail",
+  "unbound": [
+    {
+      "id": "R-1.2",
+      "reason": "opportunity-cwu-view.status — the opportunity did not open at http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-000000000602: Page not found"
+    },
+    {
+      "id": "R-1.5",
+      "reason": "opportunity-cwu-edit.reporting_watchers — the summary on http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/edit?tab=summary shows no /^watchers$/i count (it shows Manage a Code With Us opportunity / Seeded published Code With Us opportunity / Status: Published / Opportunity ID: 00000000-0000-4000-8000-000000000601 / Edit / Proposal deadline / June 1, 2030 at 4:00 p.m. Pacific time / Reward / $5,000 / Published / January 5, 2026 / Created by / Casey Placeholder / Last changed by); walked as the administrator and as a public sector employee on the seeded draft, published, awarded and with-three-proposals Code With Us opportunities and on ones just saved and published"
+    },
+    {
+      "id": "R-1.6",
+      "reason": "opportunity-cwu-edit.reporting_views — the summary on http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/edit?tab=summary shows no /^views$/i count (it shows Manage a Code With Us opportunity / Seeded published Code With Us opportunity / Status: Published / Opportunity ID: 00000000-0000-4000-8000-000000000601 / Edit / Proposal deadline / June 1, 2030 at 4:00 p.m. Pacific time / Reward / $5,000 / Published / January 5, 2026 / Created by / Casey Placeholder / Last changed by); walked as the administrator and as a public sector employee on the seeded draft, published, awarded and with-three-proposals Code With Us opportunities and on ones just saved and published"
+    },
+    {
+      "id": "R-6.21",
+      "reason": "notification-optin-opportunity-list.notification_control_state — opened /opportunities signed out: it carries a program chooser, \"Remote OK\" and a search box and no control about new-opportunity notifications, which is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\""
+    },
+    {
+      "id": "R-6.27",
+      "reason": "notification-optin-opportunity-list.notification_control — opened /opportunities signed out: it carries a program chooser, \"Remote OK\" and a search box and no control about new-opportunity notifications, which is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\""
+    }
+  ],
+  "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99",
+  "rows": [
+    {
+      "id": "R-6.20",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.20.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A newly created account has new-opportunity notifications off until its holder asks for them.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "ae95bbeec8fc2c066b19ade1425e52a54280b3f6",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-6.21",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.21.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "a signed-in person can turn new-opportunity notices on and off from the list of opportunities itself, without opening their settings",
+          "status": "failed",
+          "error": "Error: unbound: notification-optin-opportunity-list.notification_control_state — opened /opportunities signed out: it carries a program chooser, \"Remote OK\" and a search box and no control about new-opportunity notifications, which is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"",
+          "line": 21
+        }
+      ],
+      "file_sha": "d32273b34c8fffa6b723758ba6600cf56a061ee4",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-6.27",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.27.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "the choice to be notified about newly published opportunities is offered on the list of opportunities itself at every screen width, so a person reading the list on a phone reaches it the same way as a person reading it on a desktop",
+          "status": "failed",
+          "error": "Error: unbound: notification-optin-opportunity-list.notification_control — opened /opportunities signed out: it carries a program chooser, \"Remote OK\" and a search box and no control about new-opportunity notifications, which is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"",
+          "line": 16
+        }
+      ],
+      "file_sha": "50fb32c7a165776dbfa97a129851c34823ca49a3",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.2",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.2.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "an anonymous visitor or a vendor is not listed drafts and opportunities under review",
+          "status": "passed"
+        },
+        {
+          "title": "an anonymous visitor or a vendor cannot open a draft or an opportunity under review",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-view.status — the opportunity did not open at http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-000000000602: Page not found\nThe page you are looking for does not exist.",
+          "line": 33
+        }
+      ],
+      "file_sha": "c26a9c52245e2fd0d19a2c2502f23a79e779526a",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.3",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.3.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "A member of public sector staff sees every published opportunity plus their own drafts and opportunities under review, and an administrator sees every opportunity. (a member of public sector staff sees every published opportunity plus their own drafts and opportunities under review)",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Seeded published Code With Us opportunity\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate",
+          "line": 71
+        },
+        {
+          "title": "A member of public sector staff sees every published opportunity plus their own drafts and opportunities under review, and an administrator sees every opportunity. (an administrator sees every opportunity)",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Seeded published Code With Us opportunity\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate",
+          "line": 88
+        }
+      ],
+      "file_sha": "cf0e4515c5af580eb292797e7efa479dca0b5ec3",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.5",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.5.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "any signed-in person may watch an opportunity they did not create",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-edit.reporting_watchers — the summary on http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/edit?tab=summary shows no /^watchers$/i count (it shows Manage a Code With Us opportunity / Seeded published Code With Us opportunity / Status: Published / Opportunity ID: 00000000-0000-4000-8000-000000000601 / Edit / Proposal deadline / June 1, 2030 at 4:00 p.m. Pacific time / Reward / $5,000 / Published / January 5, 2026 / Created by / Casey Placeholder / Last changed by); walked as the administrator and as a public sector employee on the seeded draft, published, awarded and with-three-proposals Code With Us opportunities and on ones just saved and published",
+          "line": 22
+        },
+        {
+          "title": "any signed-in person may stop watching an opportunity they did not create",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-edit.reporting_watchers — the summary on http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/edit?tab=summary shows no /^watchers$/i count (it shows Manage a Code With Us opportunity / Seeded published Code With Us opportunity / Status: Published / Opportunity ID: 00000000-0000-4000-8000-000000000601 / Edit / Proposal deadline / June 1, 2030 at 4:00 p.m. Pacific time / Reward / $5,000 / Published / January 5, 2026 / Created by / Casey Placeholder / Last changed by); walked as the administrator and as a public sector employee on the seeded draft, published, awarded and with-three-proposals Code With Us opportunities and on ones just saved and published",
+          "line": 40
+        }
+      ],
+      "file_sha": "a7b376d4df346de32e8ff367a7751ad27835dfea",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.6",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.6.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "opening an opportunity's public screen counts as a view of that opportunity",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-edit.reporting_views — the summary on http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/edit?tab=summary shows no /^views$/i count (it shows Manage a Code With Us opportunity / Seeded published Code With Us opportunity / Status: Published / Opportunity ID: 00000000-0000-4000-8000-000000000601 / Edit / Proposal deadline / June 1, 2030 at 4:00 p.m. Pacific time / Reward / $5,000 / Published / January 5, 2026 / Created by / Casey Placeholder / Last changed by); walked as the administrator and as a public sector employee on the seeded draft, published, awarded and with-three-proposals Code With Us opportunities and on ones just saved and published",
+          "line": 18
+        }
+      ],
+      "file_sha": "a3729efcc390362f5f10e50d30330bb4a8d45eff",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.38",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.38.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "the opportunity list shows open opportunities with the nearest proposal deadline first",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"R-1.38 open opportunity whose deadline is sooner\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m",
+          "line": 54
+        },
+        {
+          "title": "the opportunity list groups unpublished opportunities apart, most recently changed first",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"R-1.38 unpublished opportunity changed earlier\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m",
+          "line": 74
+        },
+        {
+          "title": "the opportunity list groups closed opportunities apart from open and unpublished ones",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"Seeded closed Sprint With Us opportunity\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m",
+          "line": 93
+        }
+      ],
+      "file_sha": "539418a1eca884d95395627760fb8bf806f2e7a1",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-1.39",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.39.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location. (by program)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen; looked for again as the administrator and as a public sector employee: /opportunities/create offers \"Create a Sprint With Us opportunity\", and following that link lands on \"Page not found\" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on \"Page not found\", as do /opportunities/sprint-with-us, the seeded at-consensus Sprint With Us opportunity's view and edit screens, and the guessed spellings /opportunities/swu/create and /sprint-with-us/create, and the Code With Us create form offers no program chooser that would reach a Sprint With Us form; walked again on this build signed in as the administrator: the dashboard's \"Create an opportunity\" leads to /opportunities/create, whose \"Create a Sprint With Us opportunity\" link lands on \"Page not found\" at /opportunities/sprint-with-us/create, as it does for a public sector employee, and the administrator's \"All opportunities\" table lists Code With Us opportunities only; looked for once more signed in as the administrator, both by following the chooser's link from the dashboard and by address: still \"Page not found\", as are /opportunities, /opportunities/sprint-with-us and /organizations, and the administrator's header offers only Dashboard, Users, Content, My profile and Sign out (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)",
+          "line": 94
+        },
+        {
+          "title": "The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location. (by state)",
+          "status": "failed",
+          "error": "Error: Before any state is chosen: \"R-1.39 published opportunity narrowed by state\" should be listed, and is not\n\nBefore any state is chosen: \"R-1.39 published opportunity narrowed by state\" should be listed, and is not\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate",
+          "line": 67
+        },
+        {
+          "title": "The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location. (to remote-friendly opportunities only)",
+          "status": "failed",
+          "error": "Error: Before remote-only is ticked: \"R-1.39 published opportunity that accepts remote work\" should be listed, and is not\n\nBefore remote-only is ticked: \"R-1.39 published opportunity that accepts remote work\" should be listed, and is not\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate",
+          "line": 67
+        },
+        {
+          "title": "The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location. (by free text matched against title and location)",
+          "status": "failed",
+          "error": "Error: Before any text is searched for: \"R-1.39 published opportunity about kittiwakes\" should be listed, and is not\n\nBefore any text is searched for: \"R-1.39 published opportunity about kittiwakes\" should be listed, and is not\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate",
+          "line": 67
+        },
+        {
+          "title": "The opportunity list can be narrowed by program, by state, to remote-friendly opportunities only, and by free text matched against title and location. (only opportunities matching every chosen condition remain visible)",
+          "status": "failed",
+          "error": "Error: Before anything is chosen: \"R-1.39 remote opportunity about puffins\" should be listed, and is not\n\nBefore anything is chosen: \"R-1.39 remote opportunity about puffins\" should be listed, and is not\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate",
+          "line": 67
+        }
+      ],
+      "file_sha": "3e8624a257b7d82b1173aff420e84d28022a5bf7",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    },
+    {
+      "id": "R-4.22",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.22.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "after signing in, a person who already had an account is taken to their dashboard",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "c8a771887b9619bdff2ec1b6ffab184db9333ca0",
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
+    }
+  ]
+}
