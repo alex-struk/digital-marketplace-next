@@ -188,6 +188,18 @@ reader's attention.
   a rule about all three programs is answered for by the Sprint With Us slice, a service-wide
   mail rule by the Code With Us proposal slice, and the blind-copy rule by the consensus slice,
   only because those are where their tests first can run.
+- **R-1.9, R-1.53, R-1.56 and R-8.22** were also placed in Slice 7, which builds draft saving with
+  defaulted dates, the delete permission rule, the edit-after-publication rule and the attachment
+  control. A second G3 ruling on the build of Slice 7 found each unbound there, for the same reason
+  as the item above: their tests open screens Slice 7 does not serve. R-1.9, R-1.53 and R-1.56 open
+  `/opportunities/sprint-with-us/create`, so they sit in Slice 10 beside R-1.8 and R-1.48, whose
+  closure (Slices 9, 8, 7) holds the Code With Us screens as well. R-8.22 opens
+  `/opportunities/code-with-us/:opportunityId/proposals/create`, so it sits in Slice 14, which builds
+  that screen and depends on Slice 8 and so on Slice 7's opportunity attachment control. All four
+  are still built in Slice 7; only where each is answered for moves, and no slice's dependencies
+  change. The fit is uneasy in the same way: a rule about all three programs is answered for by the
+  Sprint With Us slice, and a rule about attaching to opportunities and proposals by the proposal
+  slice, because that is where their tests first can run.
 - **R-1.1 (Slice 16)** is one sentence about three programs. Its Code With Us half is demonstrated
   in the same slice as the rest of Code With Us evaluation; its Sprint With Us and Team With Us
   half (the evaluators being told) is why Slice 16 waits for Slice 15.
