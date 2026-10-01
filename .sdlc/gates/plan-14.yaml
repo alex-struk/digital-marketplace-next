@@ -1,0 +1,15 @@
+gate: G2
+verdict: approve
+by: agent:architect
+held_by: agent
+rationale: |2-
+  The question is whether moving R-1.9, R-1.53, R-1.56 and R-8.22 out of Slice 7 is the right cut, and whether each slice still stands on its own. Approved. The move does what the build-slice-7-4 ruling asked: the rebind record shows R-1.9 unbound on /opportunities/sprint-with-us/create and R-8.22 unbound on /opportunities/code-with-us/:opportunityId/proposals/create. Each of the four criteria now sits in exactly one slice and none remains in Slice 7. Slice 10 (depends on Slices 7 and 9) and Slice 14 (depends on Slice 8, which depends on Slice 7) both include the screens their tests open. Slice 7 still says it builds all four, and plan.md says plainly that the fit is uneasy. The tier is STANDARD, there is no data model change and no new dependency, and the constitution check is unaffected, so nothing calls for escalation. Two older rebind entries show R-1.56 also failing on the Code With Us create form, which has no remote-work field. That is a build defect and stays with build, not this plan. This plan settles none of the open build conditions (build-slice-7-3#1, build-slice-7-3#2, build-slice-7-4#3), so they stay open. The ruling would change if a moved criterion's test needed a screen outside its new slice's dependencies, or if any criterion were left unassigned or assigned twice.
+conditions: []
+cost: 0.41521779999999997
+turns: 6
+session: "39ab2f67-e75d-4aab-b196-e732cc1d89f7"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T08:54:34.055Z
