@@ -38,3 +38,23 @@ So `refusedForSize` can only read '' if the service accepted the upload. That me
 **R-1.48 and R-1.9.** I looked again for both create screens, signed in as a public sector employee and as the administrator, opening each address directly and following the "Create a Sprint With Us opportunity" and "Create a Team With Us opportunity" links on `/opportunities/create`. Both `/opportunities/sprint-with-us/create` and `/opportunities/team-with-us/create` still answer "Page not found", so they stay unbound as before. Those two are the routes in `surface.yaml` that still don't resolve on the target, along with the others the existing unbound reasons already name.
 
 deferred-request 5: the acceptance test for R-8.17 is not in this workspace, so it cannot be re-run here to name the step that read ''. Every step it could involve reads non-empty on the target for a file over 10 MiB, which points to the test sending a file that is not over the limit to `refusedForSize`.
+
+## Ruling
+
+**Verdict:** return
+**By:** agent:tech-lead
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether the new adapter binds every surface action and observation correctly after taking up the five conditions from build-slice-7-7. The changes for conditions 1-4 match what was asked. A row carrying an /api/files/ link now counts as stored. Publish and a create screen answering 'Page not found' are reported as refusals for anyone who may not do them, and as unbound with the persona named otherwise. editDetails edits a draft's form in place. Nothing beyond those conditions moved. Condition 5 is still owed, and the account of R-8.17 shows where. The R-8.17 test sends an oversized Buffer under 'content', which the surface contract allows. uploadGiven in tests/adapters/new/index.ts only forwards 'content' when it is a string, so it sends a small default file, the service accepts it, and refusedForSize reads ''. The test asks for nothing the criterion does not, so the fault is the adapter's and the condition stays with bind-adapter rather than going to derive-tests. offerFile already forwards Uint8Array content, so the attachment path is not affected. This would become an approval once uploadGiven sends the given bytes. It would be redirected to derive-tests only if the test, not the adapter, were shown to send something the criterion does not ask for.
+
+**Conditions:**
+- tests/adapters/new/index.ts uploadGiven (around lines 2946-2948) must pass 'content' to fileGiven when it is a Buffer or Uint8Array, not only when it is a string. R-8.17's upload test passes Buffer.alloc(just over 10 MiB) under 'content' to fileUpload.uploadFileStatingItsReadAccess. The adapter drops it and sends a small default file, the service accepts that, and fileUpload.refusedForSize reads ''. offerFile (around line 3570) already forwards Uint8Array content and needs no change.
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `bd2f2de781067aa797bc1993f299024f22646f52`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
