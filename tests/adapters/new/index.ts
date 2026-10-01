@@ -1430,6 +1430,14 @@ export default function create(
     throw new Error(`unbound: ${where} — ${why}`);
   }
 
+  // An action the page refused this person: recorded here and on the run's output, not
+  // thrown, so the test's own follow-up reading of the outcome decides.
+  const refusalLog: string[] = [];
+  function noteRefusal(what: string): void {
+    refusalLog.push(what);
+    console.info(`refused: ${what}`);
+  }
+
   // Members of a page that remains unreachable, each refusing with the same reason.
   function unboundMembers(pageId: string, why: string, names: readonly string[]): Record<string, unknown> {
     const built: Record<string, unknown> = {};
@@ -3634,7 +3642,8 @@ export default function create(
   }
 
   // A file offered through the chooser a control opens.
-  async function offerFile(where: string, control: RegExp, input: unknown): Promise<void> {
+  // Returns the name the file was offered under.
+  async function offerFile(where: string, control: RegExp, input: unknown): Promise<string> {
     const named = given(input, ["file", "name", "fileName", "image", "logo", "avatar", "picture"]);
     const request = typeof input === "string" ? { name: input } : named && typeof named === "object" ? record(named) : { ...record(input), name: textOf(named) };
     const name = textOf(record(request).name);
@@ -3653,7 +3662,7 @@ export default function create(
       if (await box.count()) {
         await box.first().setInputFiles(payload);
         await settle();
-        return;
+        return name;
       }
       unbound(where, `no control named ${control} on ${page.url()} opens a file chooser; it offers ${await offered()}`);
     }
@@ -3663,7 +3672,7 @@ export default function create(
     if (opened) {
       await opened.setFiles(payload);
       await settle();
-      return;
+      return name;
     }
     // Walked signed in as the administrator and as a vendor: "Edit profile" draws the
     // "Profile picture (optional)" group with its rule and a "Choose a profile picture"
@@ -3935,13 +3944,15 @@ export default function create(
   async function cwuSubmit(member: string, input: unknown, name: RegExp): Promise<void> {
     const where = cwuNew.where(member);
     // The form is offered to the administrator and public sector staff; anybody else (a
-    // vendor, a visitor) is answered "Page not found", which is the refusal itself.
+    // vendor, a visitor) is answered "Page not found", which is the refusal itself. It is
+    // logged, not thrown: the test's own follow-up reading decides what the refusal means.
     await ready();
     const why = await whyNotHere();
     if (why && !actingMay(/^create opportunity$/i)) {
-      throw new Error(
-        `${where} — refused: /opportunities/code-with-us/create answered ${actingId()} with ${why.replace(/\n+/g, " ")} at ${page.url()}; only a person who may create an opportunity is offered the form`,
+      noteRefusal(
+        `${where} — /opportunities/code-with-us/create answered ${actingId()} with ${why.replace(/\n+/g, " ")} at ${page.url()}; only a person who may create an opportunity is offered the form`,
       );
+      return;
     }
     if (why) {
       unbound(where, `/opportunities/code-with-us/create did not open at ${page.url()} for ${actingId()}, who may create an opportunity: ${why.replace(/\n+/g, " ")}`);
@@ -3962,13 +3973,36 @@ export default function create(
   }
 
   // "Add attachment" opens the file chooser; the file is listed as "New: <name>, <size>.",
-  // with a "Name for <name> (optional)" box, until the form is saved.
+  // with a "Name for <name> (optional)" box, until the form is saved. The row reads
+  // "Uploading…" first; the action returns only once the upload has ended, either with the
+  // row's "Download <name>" link to /api/files/<id> or with its alert ("<name> is too large
+  // to attach", "<name> could not be attached").
   async function addAttachmentFile(where: string, input: unknown): Promise<void> {
     const control = /^\s*add attachment\s*$/i;
     if (!(await findControl(page, control))) {
       unbound(where, `no "Add attachment" control on ${page.url()}; it offers ${await offered()}`);
     }
-    await offerFile(where, control, input);
+    const name = await offerFile(where, control, input);
+    const region = attachmentRegion();
+    const row = seen(region.getByRole("listitem")).filter({ hasText: name }).last();
+    const ended = new RegExp(`${escapeRx(name)}.*(too large to attach|could not be attached)`, "i");
+    const deadline = Date.now() + 30000;
+    while (Date.now() < deadline) {
+      if (await row.count()) {
+        const stored = await row
+          .getByRole("link", { name: new RegExp(`^\\s*download\\b`, "i") })
+          .evaluateAll((links) => links.some((link) => (link.getAttribute("href") ?? "").includes("/api/files/")))
+          .catch(() => false);
+        if (stored) return;
+        const alerts = await seen(row.getByRole("alert")).allInnerTexts().catch(() => [] as string[]);
+        if (alerts.some((said) => ended.test(said.replace(/\s+/g, " ")))) return;
+      }
+      const regionAlerts = await seen(region.getByRole("alert")).allInnerTexts().catch(() => [] as string[]);
+      if (regionAlerts.some((said) => ended.test(said.replace(/\s+/g, " ")))) return;
+      await page.waitForTimeout(100);
+    }
+    const shown = (await row.count()) ? lined(await row.innerText().catch(() => "")).join(" / ") : "no row naming it";
+    throw new Error(`${where} — "${name}" was offered on ${page.url()} and after 30 s its row carries neither a "Download ${name}" link nor an alert that it could not be attached (${shown})`);
   }
 
   const opportunityCwuCreate: S.OpportunityCwuCreatePage = {
@@ -5672,27 +5706,36 @@ export default function create(
         await ready();
       }
     },
+    // Pressed from the Opportunity section, the form being submitted. The answer to an
+    // incomplete draft ("This opportunity is incomplete …") is drawn inside whichever section
+    // is open and is held only in the page, so it is left as it is for the readers; pressed
+    // from the Summary section (where open() and a fresh save land) the alert went with that
+    // section and opportunity_tab, which has to switch sections, could never see it.
     submitForReview: async (input) => {
       await saveCwuDetails("submit_for_review", input);
+      await toSection("submit_for_review", "Opportunity");
       await manageAction("submit_for_review", /^\s*submit for review\s*$/i, /^\s*submit( for review| opportunity)?\s*$/i);
     },
     // "Publish" is offered to the administrator, on a draft or one under review. Anybody else
     // is offered no "Publish" (a public sector employee's own draft offers "Submit for
-    // review" and "Delete") or not the screen at all, and that absence is the refusal.
+    // review" and "Delete") or not the screen at all, and that absence is the refusal. It is
+    // logged and the action returns, so the test's own follow-up reading decides.
     publish: async (input) => {
       if (!actingMay(/^publish opportunity$/i)) {
         const where = cwuManage.where("publish");
         await ready();
         const why = await whyNotHere();
         if (why) {
-          throw new Error(`${where} — refused: the management screen answered ${actingId()} with ${why.replace(/\n+/g, " ")} at ${page.url()}`);
+          noteRefusal(`${where} — the management screen answered ${actingId()} with ${why.replace(/\n+/g, " ")} at ${page.url()}`);
+          return;
         }
         if (!(await actionsGroup().count())) await toSection("publish", "Summary");
         const control = (await actionsGroup().count()) ? seen(actionsGroup().getByRole("button", { name: /^\s*publish\s*$/i })).first() : null;
         if (!control || !(await control.count())) {
           const status = (await textLines()).find((line) => /^status:/i.test(line)) ?? "no status shown";
           const there = (await actionsGroup().count()) ? (await actionsGroup().getByRole("button").allInnerTexts()).map((one) => `"${one.trim()}"`).join(", ") : "nothing";
-          throw new Error(`${where} — refused: no "Publish" among the opportunity's actions for ${actingId()} on ${page.url()} (${status}; the actions offered are ${there})`);
+          noteRefusal(`${where} — no "Publish" among the opportunity's actions for ${actingId()} on ${page.url()} (${status}; the actions offered are ${there})`);
+          return;
         }
       }
       await saveCwuDetails("publish", input);
