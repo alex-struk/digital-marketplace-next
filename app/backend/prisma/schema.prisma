@@ -4,9 +4,10 @@
 // This file is introspected, not authored: `npm run db:pull --workspace backend` runs
 // `prisma db pull` against a migrated database and writes what is there. Slice 2 pulled the
 // whole kept schema, because signing in reads and writes `users` and every other table
-// refers to it; slice 3 pulled again after adding the three file read-access tables. The names
-// below are Prisma's, not this project's. Nothing here is edited by hand except this comment,
-// which a pull replaces and which is put back afterwards.
+// refers to it; slice 3 pulled again after adding the three file read-access tables; slice 7
+// pulled again after adding the Code With Us attachments and the opportunity state checks. The
+// names below are Prisma's, not this project's. Nothing here is edited by hand except this
+// comment, which a pull replaces and which is put back afterwards.
 
 generator client {
   provider = "prisma-client-js"
@@ -76,27 +77,28 @@ model cwuOpportunityStatuses {
 }
 
 model cwuOpportunityVersions {
-  id                 String           @id @db.Uuid
-  createdAt          DateTime         @db.Timestamptz(6)
-  createdBy          String?          @db.Uuid
-  opportunity        String           @db.Uuid
-  title              String
-  teaser             String           @default("")
-  remoteOk           Boolean
-  remoteDesc         String           @default("")
-  location           String
-  reward             Int
-  skills             String[]         @default([])
-  description        String
-  proposalDeadline   DateTime         @db.Timestamptz(6)
-  assignmentDate     DateTime         @db.Timestamptz(6)
-  startDate          DateTime         @db.Timestamptz(6)
-  completionDate     DateTime?        @db.Timestamptz(6)
-  submissionInfo     String           @default("")
-  acceptanceCriteria String           @default("")
-  evaluationCriteria String           @default("")
-  users              users?           @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuopportunityversions_createdby_foreign")
-  cwuOpportunities   cwuOpportunities @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cwuopportunityversions_opportunity_foreign")
+  id                        String                      @id @db.Uuid
+  createdAt                 DateTime                    @db.Timestamptz(6)
+  createdBy                 String?                     @db.Uuid
+  opportunity               String                      @db.Uuid
+  title                     String
+  teaser                    String                      @default("")
+  remoteOk                  Boolean
+  remoteDesc                String                      @default("")
+  location                  String
+  reward                    Int
+  skills                    String[]                    @default([])
+  description               String
+  proposalDeadline          DateTime                    @db.Timestamptz(6)
+  assignmentDate            DateTime                    @db.Timestamptz(6)
+  startDate                 DateTime                    @db.Timestamptz(6)
+  completionDate            DateTime?                   @db.Timestamptz(6)
+  submissionInfo            String                      @default("")
+  acceptanceCriteria        String                      @default("")
+  evaluationCriteria        String                      @default("")
+  cwuOpportunityAttachments cwuOpportunityAttachments[]
+  users                     users?                      @relation(fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuopportunityversions_createdby_foreign")
+  cwuOpportunities          cwuOpportunities            @relation(fields: [opportunity], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cwuopportunityversions_opportunity_foreign")
 }
 
 model fileBlobs {
@@ -106,19 +108,20 @@ model fileBlobs {
 }
 
 model files {
-  id                                 String                    @id @db.Uuid
-  createdAt                          DateTime                  @db.Timestamptz(6)
-  createdBy                          String?                   @db.Uuid
+  id                                 String                      @id @db.Uuid
+  createdAt                          DateTime                    @db.Timestamptz(6)
+  createdBy                          String?                     @db.Uuid
   name                               String
   fileBlob                           String
+  cwuOpportunityAttachments          cwuOpportunityAttachments[]
   filePermissionsPublic              filePermissionsPublic?
   filePermissionsUser                filePermissionsUser[]
   filePermissionsUserType            filePermissionsUserType[]
-  users_files_createdByTousers       users?                    @relation("files_createdByTousers", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "files_createdby_foreign")
-  fileBlobs                          fileBlobs                 @relation(fields: [fileBlob], references: [hash], onDelete: NoAction, onUpdate: NoAction, map: "files_fileblob_foreign")
+  users_files_createdByTousers       users?                      @relation("files_createdByTousers", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "files_createdby_foreign")
+  fileBlobs                          fileBlobs                   @relation(fields: [fileBlob], references: [hash], onDelete: NoAction, onUpdate: NoAction, map: "files_fileblob_foreign")
   organizations                      organizations[]
   twuProposalAttachments             twuProposalAttachments[]
-  users_users_avatarImageFileTofiles users[]                   @relation("users_avatarImageFileTofiles")
+  users_users_avatarImageFileTofiles users[]                     @relation("users_avatarImageFileTofiles")
 }
 
 model knex_migrations {
@@ -779,4 +782,13 @@ model filePermissionsUserType {
   files    files  @relation(fields: [file], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "filepermissionsusertype_file_foreign")
 
   @@id([file, userType])
+}
+
+model cwuOpportunityAttachments {
+  opportunityVersion     String                 @db.Uuid
+  file                   String                 @db.Uuid
+  files                  files                  @relation(fields: [file], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "cwuopportunityattachments_file_foreign")
+  cwuOpportunityVersions cwuOpportunityVersions @relation(fields: [opportunityVersion], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "cwuopportunityattachments_opportunityversion_foreign")
+
+  @@id([opportunityVersion, file])
 }
