@@ -1,16 +1,10 @@
 gate: G3
-verdict: escalated
-by: agent:tech-lead
-held_by: agent
-escalate_to: tech-lead
-stalled: "agent:tech-lead escalated to tech-lead, the role it holds itself, so no seat this pipeline can fill is waiting on it: a person has to rule it, or the proposal has to be withdrawn."
-rationale: |2-
-  Question: does slice 7 do what its criteria say, after three failed verifies. Ruling: escalate to the person who owns the pipeline, because the reason it cannot be ruled is the verify environment, not the application. Verify ran against app tree ab01444, which is exactly the app/ subtree of this proposal's commit 3b178d6b8, yet what it reports contradicts that tree's source in three places: it says /dashboard serves 'a greeting and nothing else', but dashboard.tsx now renders the opportunities table; it says /opportunities/code-with-us/create returned 'Page not found', but router.tsx:139 defines that route; and it says the seeded draft, walked as the administrator, offered 'Edit', 'Submit for review' and 'Delete', but opportunity-cwu-edit.tsx:132-133 hides Submit for review from every administrator and offers Publish on any unpublished opportunity, so no administrator session can see that combination. So either the stack verify walked is not serving this tree, the session it calls the administrator is not an ADMIN account, or the adapter's 'unbound' reasons are text recorded against an earlier build and replayed. Build cannot reach any of these, and its own attempt to start the stack was not permitted, so a fifth build would repeat the loop. R-1.51 being unasserted would not block an approval: it is a property of the data migration, and the end-to-end suite asserts that the store rejects unknown states. What would change this: the pipeline owner confirms which build and account verify actually used and re-runs it. If R-1.9, R-1.22, R-1.53, R-8.17, R-8.19 and R-8.25 still fail against this tree under a real administrator session, the ruling becomes an ordinary return to build. build-slice-7-3#2 stays open because only a live walk can show whether the running app offers Publish.
-cost: 0.8069676000000001
-turns: 3
-session: "347fa179-f1b2-4dca-9e84-905bc9998f0d"
-backend: claude
-model: "claude-opus-5-5"
-cli: "2.1.284 (Claude Code)"
-isolation: "none"
-at: 2026-10-01T08:41:55.400Z
+verdict: return
+by: tech-lead
+held_by: human
+note: "Ruled by the operator agent under Alex's standing delegation (2026-09-30) to rule application questions on his behalf. The escalation is right that verify's unbound reasons contradict this tree: the new adapter replays the reason it recorded when each member was bound, against an earlier build of slice 7, and those rows have spent their rebind sends, so no binding was re-owed. The fix is a rebind against this build, not another build or a person confirming the stack."
+conditions:
+  - "addressed-to bind-adapter: rebind against build-slice-7-4 every member of opportunity-cwu-create, opportunity-cwu-edit (including publish and the Opportunity tab readers), file-attachment-control and the signed-in /dashboard whose binding is unbound or was walked against an earlier slice-7 build. Their recorded reasons ('/opportunities/code-with-us/create ... Page not found', the dashboard serving 'a greeting and nothing else', an administrator offered 'Submit for review') contradict app/frontend/src/router.tsx:139, dashboard.tsx and opportunity-cwu-edit.tsx:132-133 on this build, as the escalation of build-slice-7-4 sets out."
+  - "addressed-to plan: slice 7 still claims R-1.9, R-1.53 and R-1.56, whose tests open /opportunities/sprint-with-us/create (Slice 10), and R-8.22, whose test opens /opportunities/code-with-us/:opportunityId/proposals/create (Slice 14); verify on build-slice-7-4 found each unbound on those screens. Move each to a slice whose dependencies deliver its screen."
+  - "Once the rebound adapter has run, recheck R-8.17, R-8.19, R-8.25, R-1.10 and R-1.21 against it; where one still fails, find where the application departs from the criterion."
+at: 2026-10-01T08:42:23.929Z
