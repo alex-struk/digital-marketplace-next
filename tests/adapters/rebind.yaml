@@ -4970,6 +4970,11 @@ rebind:
     app_tree: a21fb0cc85b4c6896c601d9b9968c67af016ee9a
     by: runner:verify
     at: 2026-10-01T11:10:23.631Z
+    closed: &a27
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-01T11:24:59.683Z
   - id: R-8.25
     target: new
     why: "unbound: opportunity-swu-create.open —
@@ -5040,3 +5045,4 @@ rebind:
     app_tree: a21fb0cc85b4c6896c601d9b9968c67af016ee9a
     by: runner:verify
     at: 2026-10-01T11:10:23.631Z
+    closed: *a27
