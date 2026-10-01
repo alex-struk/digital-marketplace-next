@@ -3624,6 +3624,11 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:50:49.369Z
+    closed: &a23
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-01T04:18:34.646Z
   - id: R-8.29
     target: new
     why: "unbound: file-embedded-image.upload_body_image — /content/:slug/edit is
@@ -3642,3 +3647,4 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:50:49.369Z
+    closed: *a23
