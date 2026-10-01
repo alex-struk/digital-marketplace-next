@@ -481,9 +481,12 @@ requests:
     by: agent:tech-lead
     at: 2026-10-01T09:50:03.359Z
     deferred:
-      at: 2026-10-01T09:59:04.225Z
-      why: the acceptance test for R-8.17 is not in this workspace, so it cannot be
-        re-run here to name the step that read ''. Every step it could involve
-        reads non-empty on the target for a file over 10 MiB, which points to
-        the test sending a file that is not over the limit to `refusedForSize`.
-      proposal: bind-adapter-new-28
+      at: 2026-10-01T10:07:10.465Z
+      why: R-8.17's test isn't in this workspace and the suite can't run here, so I
+        couldn't re-run it to name the step that read empty. On the live target,
+        both size readers and the size-limit reader return text when a genuinely
+        oversize file arrives. The empty read matches the adapter sending a
+        small file because it misread the requested size, which this revision
+        fixes. Whether that was R-8.17's actual input needs a run of the
+        criterion itself.
+      proposal: bind-adapter-new-30
