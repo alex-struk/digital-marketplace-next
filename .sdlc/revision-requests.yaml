@@ -490,3 +490,5 @@ requests:
         fixes. Whether that was R-8.17's actual input needs a run of the
         criterion itself.
       proposal: bind-adapter-new-30
+    taken: 2026-10-01T10:31:14.750Z
+    taken_by: bind-adapter-new-31
