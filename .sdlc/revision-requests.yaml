@@ -508,6 +508,8 @@ requests:
     gate: G3
     by: agent:tech-lead
     at: 2026-10-01T10:48:05.567Z
+    taken: 2026-10-01T10:54:02.665Z
+    taken_by: bind-adapter-new-32
   - stage: bind-adapter
     target: new
     why: fileAttachmentControl.addAttachment (and
@@ -524,6 +526,8 @@ requests:
     gate: G3
     by: agent:tech-lead
     at: 2026-10-01T10:48:05.567Z
+    taken: 2026-10-01T10:54:02.665Z
+    taken_by: bind-adapter-new-32
   - stage: bind-adapter
     target: new
     why: R-1.21 on target new read opportunityTab() without the word 'incomplete'
@@ -539,3 +543,5 @@ requests:
     gate: G3
     by: agent:tech-lead
     at: 2026-10-01T10:48:05.567Z
+    taken: 2026-10-01T10:54:02.665Z
+    taken_by: bind-adapter-new-32
