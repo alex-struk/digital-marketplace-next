@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-21 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">407</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">401</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">349</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-21</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 05:58</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I made two changes in <code>tests/adapters/new/</code>, one for each condition.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made two changes in <code>tests/adapters/new/</code>, one for each condition. I could not run the TypeScript check: the commands to run it needed approval, which isn&#39;t available in this unattended session. The edits are small (one pattern, two comments, one error message and one YAML block), but nothing has checked them by running.</p>
+<p><strong>Condition 1, the terms-acceptance notice.</strong> I signed in through the identity provider&#39;s own form as the seeded vendor who never accepted the terms. Their Legal section says &quot;You have not agreed to the terms and conditions.&quot; The old pattern, <code>/\bagreed to (the )?terms/i</code>, matched that line, so a vendor with no acceptance was read as holding one. <code>userProfileSelfLegal.acceptedOnNotice</code> now matches only a line that begins &quot;You agreed to the terms…&quot; (it also accepts &quot;You agreed to terms…&quot;). The page check tests each line on its own, so these all now read as empty:</p>
+<ul><li>the &quot;You have not agreed…&quot; line;</li><li>the reset vendor&#39;s &quot;You last agreed to terms and conditions on …&quot;;</li><li>the new &quot;Review and agree to the terms&quot; text.</li></ul>
+<p>I also checked <code>termsUpdatedWarning</code> for this vendor. Their section shows &quot;Agree to the terms and conditions&quot;, &quot;Review and agree to the terms and conditions to continue using the Digital Marketplace.&quot; and &quot;Review and agree to the terms&quot;. None of these match the warning&#39;s pattern, so it returns empty, which is consistent for someone who never agreed. I did not re-walk a vendor with a standing acceptance. The affirmative wording comes from the earlier accepted walk.</p>
+<p><strong>Condition 2, the mail-delivery delay.</strong> This sandbox has no delay proxy that I could find. On the mail catcher, every <code>/hold</code> address I tried answers the catcher&#39;s plain &quot;404 page not found&quot;: <code>/hold/proxies/smtp/toxics</code>, <code>/hold/proxies</code> and <code>/hold/version</code>. Nothing answers on the proxy&#39;s usual control port, 8474, or on 8026–8027, 8475–8477, 18474 or 28474. Port 1025 is the catcher&#39;s own SMTP and 8080 is the identity provider.</p>
+<p>The contract gives no other address for the proxy, so the code still points at the catcher&#39;s <code>/hold</code> address, as <code>observables.yaml</code> (<code>delivery_delay</code>) says. The comment and the unbound message now say this is a sandbox gap, not the target&#39;s. In <code>bindings.yaml</code>, <code>slow_delivery</code>, <code>restore_delivery_speed</code> and <code>delivery_slowed</code> on <code>mail-delivery-delay</code> changed from <code>bound</code> to unbound, with what I tried. The same binding should work unchanged once the sandbox serves the proxy.</p>
+<p>One quirk is left as it was: restoring the delay still treats a 404 as done, so a test&#39;s cleanup won&#39;t fail. On this sandbox that means <code>restore_delivery_speed</code> quietly does nothing rather than throwing, even though the bindings file lists it as unbound.</p>
+<p><strong>Not in scope, noticed in passing.</strong> The never-agreed vendor&#39;s Legal section now offers a &quot;Review and agree to the terms&quot; item. The accepted bindings say no such control exists, based on walks as the reset vendor and the organization owner, so <code>accept_updated_terms</code> may be reachable for this vendor. I didn&#39;t rebind it because neither condition asked for it.</p>
+<p>Nothing else was changed, and no file outside <code>tests/adapters/new/</code> was touched.</p>
+<p>deferred-request 2: there is no delay proxy on this sandbox to bind to, so R-6.24 can only be reported as a sandbox gap until one is provided.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 05:59.</p>
+<div class="body"><p>Question: does the new target&#39;s adapter bind every surface action and observation, and nothing else, now that the two revision requests from build-slice-6-3 have been answered? Ruling: approve. userProfileSelfLegal.acceptedOnNotice now matches only an affirmative line beginning &#39;You agreed to (the) terms&#39;, the same as the old target&#39;s /you agreed to/i. The never-agreed vendor&#39;s &#39;You have not agreed…&#39; line and the reset vendor&#39;s &#39;You last agreed…&#39; line now read as empty, and the author checked that termsUpdatedWarning returns empty for a vendor who never agreed. The mail-delivery-delay members are marked unbound with a real reason. Every /hold address on the mail catcher answers its plain 404 and no proxy answers on 8474 or the nearby ports, so this is a missing surface on the sandbox and not a convenience. The binding still points at the only address the contract gives (observables.yaml delivery_delay), so it should work unchanged once the sandbox serves the proxy. The diff touches only tests/adapters/new/, adds no assertions or business logic, and leaves nothing under tests/acceptance changed. The runner&#39;s typecheck on this revision passed with no diagnostics under adapters/new/. The egress failures are all in files this proposal does not change. Two smaller points do not block approval. First, restore_delivery_speed still treats a 404 as done, which keeps test cleanup from failing. Second, the never-agreed vendor&#39;s &#39;Review and agree to the terms&#39; item may make accept_updated_terms reachable for that vendor, which neither request asked about. What would change the ruling: evidence that a vendor with a standing acceptance renders a line the new pattern misses, or that the delay proxy is reachable at some address on this sandbox.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

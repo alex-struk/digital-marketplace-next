@@ -1,0 +1,17 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the new target's adapter bind every surface action and observation, and nothing else, now that the two revision requests from build-slice-6-3 have been answered? Ruling: approve. userProfileSelfLegal.acceptedOnNotice now matches only an affirmative line beginning 'You agreed to (the) terms', the same as the old target's /you agreed to/i. The never-agreed vendor's 'You have not agreed…' line and the reset vendor's 'You last agreed…' line now read as empty, and the author checked that termsUpdatedWarning returns empty for a vendor who never agreed. The mail-delivery-delay members are marked unbound with a real reason. Every /hold address on the mail catcher answers its plain 404 and no proxy answers on 8474 or the nearby ports, so this is a missing surface on the sandbox and not a convenience. The binding still points at the only address the contract gives (observables.yaml delivery_delay), so it should work unchanged once the sandbox serves the proxy. The diff touches only tests/adapters/new/, adds no assertions or business logic, and leaves nothing under tests/acceptance changed. The runner's typecheck on this revision passed with no diagnostics under adapters/new/. The egress failures are all in files this proposal does not change. Two smaller points do not block approval. First, restore_delivery_speed still treats a 404 as done, which keeps test cleanup from failing. Second, the never-agreed vendor's 'Review and agree to the terms' item may make accept_updated_terms reachable for that vendor, which neither request asked about. What would change the ruling: evidence that a vendor with a standing acceptance renders a line the new pattern misses, or that the delay proxy is reachable at some address on this sandbox.
+reprompt: |2-
+  You ruled approve. "build-slice-6-3" is not an open condition. No condition is open in this project, so there is nothing here to close.
+conditions: []
+cost: 0.5832600000000001
+turns: 3
+session: "2c98fd73-5e1b-44e2-8c47-9e78870a9707"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T05:59:44.784Z
