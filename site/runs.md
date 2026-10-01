@@ -275,6 +275,8 @@
 - 03:09:00 rule bind-adapter-new-30 approve at G3 by tech-lead (human)
 - 03:26:05 drive: step 1: `sdlc run bind-adapter --target new --revise` — 1 revision request for target new owed by bind-adapter; request request/build-slice-7-7#5 (deferred by bind-adapter-new-30; withdraw it on a ruling with condition-withdrawn request/build-slice-7-7#5: <why>)
 - 03:26:06 run bind-adapter: pre-checks failed
+- 03:32:37 drive: stopped after 2 steps — waiting on a person: tech-lead: bind-adapter-new-31
+- 03:32:54 rule bind-adapter-new-31 refused at G3 by tech-lead (human): rule bind-adapter-new-31: "request/build-slice-7-7#5" is not an open revision request. No revision request is open in this project, so there is nothing here to withdraw.
 
 # Run record 2026-09-30
 
