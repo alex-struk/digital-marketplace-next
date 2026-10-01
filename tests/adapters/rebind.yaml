@@ -3648,3 +3648,76 @@ rebind:
     by: runner:verify
     at: 2026-10-01T03:50:49.369Z
     closed: *a23
+  - id: R-7.13
+    target: new
+    why: "unbound: notification-terms-broadcast.notify_vendors_control — signed in
+      as the administrator and opened /content/terms-and-conditions/edit (the
+      seeded page the service needs, reached from \"terms-and-conditions\" in
+      the /content list): it shows the page's facts, the note \"The service
+      needs this page\", \"Edit page\" and the current wording, and walked into
+      \"Edit page\" it shows only the form with \"Cancel\" and \"Publish
+      changes\" — nothing on either offers to notify vendors of changed terms"
+    found: unbound
+    adapter: eba1ccf826dd1e16cc4e91b3e3cd8d5d7bf50634
+    slice: 6
+    by: runner:verify
+    at: 2026-10-01T05:00:27.710Z
+  - id: R-6.18
+    target: new
+    why: "unbound: notification-terms-broadcast.notify_vendors_of_updated_terms —
+      signed in as the administrator and opened
+      /content/terms-and-conditions/edit (the seeded page the service needs,
+      reached from \"terms-and-conditions\" in the /content list): it shows the
+      page's facts, the note \"The service needs this page\", \"Edit page\" and
+      the current wording, and walked into \"Edit page\" it shows only the form
+      with \"Cancel\" and \"Publish changes\" — nothing on either offers to
+      notify vendors of changed terms"
+    found: unbound
+    adapter: eba1ccf826dd1e16cc4e91b3e3cd8d5d7bf50634
+    slice: 6
+    by: runner:verify
+    at: 2026-10-01T05:00:27.710Z
+  - id: R-6.23
+    target: new
+    why: "unbound: notification-terms-broadcast.notify_vendors_control — signed in
+      as the administrator and opened /content/terms-and-conditions/edit (the
+      seeded page the service needs, reached from \"terms-and-conditions\" in
+      the /content list): it shows the page's facts, the note \"The service
+      needs this page\", \"Edit page\" and the current wording, and walked into
+      \"Edit page\" it shows only the form with \"Cancel\" and \"Publish
+      changes\" — nothing on either offers to notify vendors of changed terms"
+    found: unbound
+    adapter: eba1ccf826dd1e16cc4e91b3e3cd8d5d7bf50634
+    slice: 6
+    by: runner:verify
+    at: 2026-10-01T05:00:27.710Z
+  - id: R-6.24
+    target: new
+    why: "unbound: notification-terms-broadcast.notify_vendors_of_updated_terms —
+      signed in as the administrator and opened
+      /content/terms-and-conditions/edit (the seeded page the service needs,
+      reached from \"terms-and-conditions\" in the /content list): it shows the
+      page's facts, the note \"The service needs this page\", \"Edit page\" and
+      the current wording, and walked into \"Edit page\" it shows only the form
+      with \"Cancel\" and \"Publish changes\" — nothing on either offers to
+      notify vendors of changed terms"
+    found: unbound
+    adapter: eba1ccf826dd1e16cc4e91b3e3cd8d5d7bf50634
+    slice: 6
+    by: runner:verify
+    at: 2026-10-01T05:00:27.710Z
+  - id: R-4.16
+    target: new
+    why: "unbound: notification-terms-broadcast.notify_vendors_of_updated_terms —
+      signed in as the administrator and opened
+      /content/terms-and-conditions/edit (the seeded page the service needs,
+      reached from \"terms-and-conditions\" in the /content list): it shows the
+      page's facts, the note \"The service needs this page\", \"Edit page\" and
+      the current wording, and walked into \"Edit page\" it shows only the form
+      with \"Cancel\" and \"Publish changes\" — nothing on either offers to
+      notify vendors of changed terms"
+    found: unbound
+    adapter: eba1ccf826dd1e16cc4e91b3e3cd8d5d7bf50634
+    slice: 6
+    by: runner:verify
+    at: 2026-10-01T05:00:27.710Z
