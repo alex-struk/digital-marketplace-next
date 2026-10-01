@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does bind-adapter-old-58 bind every action and observation of the opportunity-watch-request surface on old, and nothing else? Approve. All seven members the contract lists at spec/contract/surface.yaml:1996 (watch_by_request, stop_watching_by_request, request_accepted, refusal_status, refusal_reason, refusal_messages, watching) are bound, and none is left unbound. The bindings only navigate and read. The actions send the POST/DELETE to /api/subscribers/<program> and assert nothing. The readers reuse the adapter's existing helpers (answer, answered, accepted, lastRefusal) and return what the service said: refusal_reason returns the top-level key the refusal is filed under, as the contract comment describes, and watching reads the opportunity's own subscribed flag from /api/opportunities/<program>/<id> without overwriting the last request's answer, as the contract asks. Nothing under tests/acceptance changed (git diff main...HEAD -- tests/acceptance is empty). The runner's typecheck reports no diagnostics under adapters/old/; its only failure is in adapters/new/, which this proposal does not answer for. The open missing-test on R-1.5 (the duplicate-watch clause) is owed by derive-tests under an earlier ruling and is not this adapter's to discharge; this binding gives derive-tests the surface it needs, since the duplicate request answers 409 conflict. The ruling would change if tsc reported errors under adapters/old/, if the diff touched tests/acceptance, or if a binding decided an outcome instead of reporting it.
+conditions: []
+cost: 0.3630764
+turns: 8
+session: "070f8633-6bb5-497c-9df4-0d071778a509"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T13:34:34.546Z

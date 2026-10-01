@@ -9998,6 +9998,91 @@ export default function create(
     return inAddress ? inAddress[1] : value;
   }
 
+  // Watching an opportunity, as a request. Checked here, as users.vendorOne on
+  // seed.opportunities.publishedCodeWithUs: POST /api/subscribers/<program> with
+  // { opportunity } answered 201 with the subscription, and asked again 409
+  // {"conflict":["This user is already subscribed to this opportunity."]}; DELETE
+  // /api/subscribers/<program>/<opportunity> answered 200, and asked again 404
+  // {"notFound":["This user is not subscribed to this opportunity."]}; an identifier naming
+  // no opportunity 404 {"notFound":["The specified opportunity does not exist"]}. As the
+  // opportunity's author, 400 {"opportunity":["You cannot subscribe to your own
+  // opportunity."]}; signed out, both requests 401 {"permissions":[...]}. Sprint With Us and
+  // Team With Us answered the same way.
+  const WATCH_REQUEST = "opportunity-watch-request";
+  let watchProgram = "";
+  let watchOpportunity = "";
+
+  // The opportunity the input names, as a handle, an identifier or the seeded record, and
+  // the programme it belongs to: the one opened, else the one the input or the seed names.
+  function watchTarget(where: string, input: unknown): { program: string; opportunity: string } {
+    const named = typeof input === "string" ? input : given(input, ["opportunity", "opportunityId", "opportunityIdentifier", "id"]);
+    const opportunity = seededId(named, "opportunities");
+    if (!opportunity) nothing(`${where} — the input names no opportunity (${JSON.stringify(input)})`);
+    const fromSeed = Object.values(seed.opportunities as unknown as Record<string, { id?: unknown; program?: unknown }>).find(
+      (each) => each && String(each.id) === opportunity,
+    )?.program;
+    const program =
+      watchProgram ||
+      givenText(input, ["program", "programme"]) ||
+      (named && typeof named === "object" ? String((named as Record<string, unknown>).program ?? "") : "") ||
+      (typeof fromSeed === "string" ? fromSeed : "");
+    if (!program) nothing(`${where} — no programme was opened or named for opportunity ${opportunity}`);
+    watchOpportunity = opportunity;
+    return { program, opportunity };
+  }
+
+  const opportunityWatchRequest: PageOf<"opportunityWatchRequest"> = {
+    open: async (params?: { program?: string }) => {
+      watchProgram = params?.program ?? "";
+      watchOpportunity = "";
+      lastAnswer = null;
+    },
+    async watchByRequest(input?: unknown) {
+      const where = `${WATCH_REQUEST}.watch_by_request`;
+      const { program, opportunity } = watchTarget(where, input);
+      await send(where, "POST", `${baseURL}/api/subscribers/${encodeURIComponent(program)}`, { opportunity });
+    },
+    async stopWatchingByRequest(input?: unknown) {
+      const where = `${WATCH_REQUEST}.stop_watching_by_request`;
+      const { program, opportunity } = watchTarget(where, input);
+      await send(
+        where,
+        "DELETE",
+        `${baseURL}/api/subscribers/${encodeURIComponent(program)}/${encodeURIComponent(opportunity)}`,
+      );
+    },
+    requestAccepted: async () => accepted(`${WATCH_REQUEST}.request_accepted`),
+    refusalStatus: async () => {
+      const got = answer(`${WATCH_REQUEST}.refusal_status`);
+      return got.status >= 400 ? String(got.status) : "";
+    },
+    // The name the refusal's messages are filed under (conflict, opportunity, notFound,
+    // permissions); an accepted request reads as nothing.
+    refusalReason: async () => {
+      const got = answer(`${WATCH_REQUEST}.refusal_reason`);
+      if (got.status < 400) return "";
+      return Object.keys(answered()).join("\n");
+    },
+    refusalMessages: async () =>
+      (lastRefusal(`${WATCH_REQUEST}.refusal_messages`) ?? []).map((entry) => entry.message).join("\n"),
+    // The opportunity's own "subscribed" flag, read on the side so the watch request's
+    // answer stays the one the other observations read. Signed out, the opportunity carries
+    // no such flag, which reads as nothing.
+    watching: async () => {
+      const where = `${WATCH_REQUEST}.watching`;
+      if (!watchOpportunity) nothing(`${where} — no watch request has named an opportunity yet`);
+      const program = watchProgram || watchTarget(where, watchOpportunity).program;
+      const found = await peek(
+        `${baseURL}/api/opportunities/${encodeURIComponent(program)}/${encodeURIComponent(watchOpportunity)}`,
+      );
+      if (found.status !== 200 || !found.json || typeof found.json !== "object") {
+        nothing(`${where} — /api/opportunities/${program}/${watchOpportunity} answered ${found.status}`);
+      }
+      const flag = (found.json as Record<string, unknown>).subscribed;
+      return typeof flag === "boolean" ? String(flag) : "";
+    },
+  };
+
   const organizationActingForList: PageOf<"organizationActingForList"> = {
     open: async () => {
       await send("organization-acting-for-list.open", "GET", `${baseURL}/api/ownedOrganizations`);
@@ -11184,6 +11269,7 @@ export default function create(
     caughtMessageList,
     mailDeliveryFault,
     mailDeliveryDelay,
+    opportunityWatchRequest,
     organizationActingForList,
     affiliationInvitationRequest,
     affiliationApprovalRequest,

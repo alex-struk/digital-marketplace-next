@@ -1268,6 +1268,17 @@ pages:
     observations:
       delivery_slowed: bound
 
+  opportunity-watch-request:
+    actions:
+      watch_by_request: bound
+      stop_watching_by_request: bound
+    observations:
+      request_accepted: bound
+      refusal_status: bound
+      refusal_reason: bound
+      refusal_messages: bound
+      watching: bound
+
   organization-acting-for-list:
     actions: {}
     observations:
