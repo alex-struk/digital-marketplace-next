@@ -1575,3 +1575,17 @@ conditions:
         R-1.21 is an adapter binding gap.
       by: agent:tech-lead
       at: 2026-10-01T09:50:03.673Z
+  - ref: bind-adapter-new-28#1
+    text: tests/adapters/new/index.ts uploadGiven (around lines 2946-2948) must pass
+      'content' to fileGiven when it is a Buffer or Uint8Array, not only when it
+      is a string. R-8.17's upload test passes Buffer.alloc(just over 10 MiB)
+      under 'content' to fileUpload.uploadFileStatingItsReadAccess. The adapter
+      drops it and sends a small default file, the service accepts that, and
+      fileUpload.refusedForSize reads ''. offerFile (around line 3570) already
+      forwards Uint8Array content and needs no change.
+    from: bind-adapter-new-28
+    family: bind-adapter-new
+    gate: G3
+    stage: bind-adapter
+    by: agent:tech-lead
+    at: 2026-10-01T10:01:00.835Z
