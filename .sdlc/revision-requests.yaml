@@ -492,3 +492,50 @@ requests:
       proposal: bind-adapter-new-30
     taken: 2026-10-01T10:31:14.750Z
     taken_by: bind-adapter-new-31
+  - stage: bind-adapter
+    target: new
+    why: "on target new, opportunityCwuCreate.saveDraft and
+      opportunityCwuEdit.publish must return without throwing when the person is
+      refused (the create page answers 'Page not found', or no Publish control
+      is offered), so the test's own follow-up observation decides. The refusal
+      can be recorded in a log, not as an error. R-1.7 and R-1.22 fail on target
+      new with the error '— refused: …' thrown from index.ts:5688/:5695 and from
+      saveDraft. Both tests call the action and then read the outcome from an
+      administrator's dashboard or the opportunity's status, without a
+      try/catch, and both pass on target old, whose adapter does not throw
+      there."
+    from: build-slice-7-8
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-01T10:48:05.567Z
+  - stage: bind-adapter
+    target: new
+    why: fileAttachmentControl.addAttachment (and
+      opportunityCwuCreate.addAttachment) on target new must not return until
+      the added file's row carries its 'Download <name>' link to /api/files/ or
+      shows the '<name> is too large to attach' / 'could not be attached' alert.
+      The app renders that link only after the upload completes
+      (app/frontend/src/app/attachments.tsx:349, attachment.stored). R-8.19 and
+      R-8.25 still read '' at existingAttachmentRow() immediately after
+      addAttachment, although isStored now accepts a linked 'New:' row
+      (index.ts:5815-5820), because addAttachment returns after a generic
+      settle().
+    from: build-slice-7-8
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-01T10:48:05.567Z
+  - stage: bind-adapter
+    target: new
+    why: R-1.21 on target new read opportunityTab() without the word 'incomplete'
+      after opportunityCwuEdit.submitForReview on a draft whose location was
+      emptied. The app shows the alert 'This opportunity is incomplete' inside
+      the open tab's section (opportunity-cwu-edit.tsx:237, :329-332). It is
+      in-page state, and a page.goto or reload loses it. Check that
+      submitForReview actually presses 'Submit for review' and leaves the page
+      as it is, and that opportunityTab reads the current page without reloading
+      when it is already on ?tab=opportunity. Report which of the two was the
+      cause.
+    from: build-slice-7-8
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-01T10:48:05.567Z
