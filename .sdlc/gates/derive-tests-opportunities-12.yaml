@@ -1,0 +1,16 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: do the revised opportunities tests now follow from their criteria and nothing else? Approve. R-1.6 says any visitor, signed in or not, opening an opportunity's public page raises its recorded view count by one. The revised test keeps the anonymous viewing, which must raise the count read on opportunity-counters by exactly one. It adds a viewing by persona.vendor, a signed-in persona who is not staff, which must raise it by exactly one more. That asserts both halves of the criterion's 'when' and its 'then'. The other checks are an identifier read confirming the public page opened and an integer check on the first reading. Both are preconditions of the criterion's own given/when, not new claims. The test uses no selectors, routes or storage names. The not-testable entry for R-1.6 was removed correctly, because the opportunity-counters surface page it asked for now exists and the test uses it. The runner's typecheck on this revision passed with no diagnostics. The test now carries out the earlier condition. missing-test/R-1.6 stays open until a run of this test is recorded, which is correct, so it is not withdrawn. The ruling would change if a run showed opportunity-counters cannot be bound, or that reading it changes the count.
+conditions:
+  - "condition-met derive-tests-opportunities-stale-15#1: tests/acceptance/opportunities/R-1.6.spec.ts now adds a signed-in, non-staff viewing (persona.vendor signs in, opens opportunityCwuView, signs out) between two administrator reads of opportunity-counters and asserts an increase of exactly one, while keeping the anonymous viewing and its own exactly-one assertion"
+cost: 0.2695664
+turns: 1
+session: "5ed6aa08-a9af-49ca-adf0-7ae9c1943849"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T14:03:09.590Z
