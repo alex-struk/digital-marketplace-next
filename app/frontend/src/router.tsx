@@ -7,6 +7,9 @@ import { RootLayout } from "./app/root-layout";
 import { NotFound } from "./app/not-found";
 import { HomeScreen } from "./screens/home";
 import { ContentViewScreen } from "./screens/content-view";
+import { ContentListScreen } from "./screens/content-list";
+import { ContentCreateScreen } from "./screens/content-create";
+import { ContentEditScreen } from "./screens/content-edit";
 import { LearnMoreScreen, isProgramSlug } from "./screens/learn-more";
 import { SignInScreen, SignUpScreen } from "./screens/sign-in";
 import { SignUpCompleteScreen } from "./screens/sign-up-complete";
@@ -48,6 +51,29 @@ const contentViewRoute = createRoute({
   component: function ContentViewRoute() {
     const { slug } = contentViewRoute.useParams();
     return <ContentViewScreen address={slug} />;
+  },
+});
+
+// The content area, an administrator's alone (R-7.5, R-7.6). "/content/create" is a fixed
+// address, so it is matched before any page's own address is.
+const contentListRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/content",
+  component: ContentListScreen,
+});
+
+const contentCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/content/create",
+  component: ContentCreateScreen,
+});
+
+const contentEditRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/content/$slug/edit",
+  component: function ContentEditRoute() {
+    const { slug } = contentEditRoute.useParams();
+    return <ContentEditScreen slug={slug} />;
   },
 });
 
@@ -110,6 +136,9 @@ export const routeTree = rootRoute.addChildren([
   homeRoute,
   learnMoreRoute,
   contentViewRoute,
+  contentListRoute,
+  contentCreateRoute,
+  contentEditRoute,
   signInRoute,
   signUpRoute,
   signUpCompleteRoute,
