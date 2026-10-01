@@ -2,7 +2,7 @@
   "slice": 7,
   "proposal": "build-slice-7-9",
   "app_tree": "a21fb0cc85b4c6896c601d9b9968c67af016ee9a",
-  "at": "2026-10-01T11:10:11.429Z",
+  "at": "2026-10-01T11:24:45.918Z",
   "verdict": "unbound",
   "unasserted": [
     {
@@ -14,14 +14,14 @@
   "unbound": [
     {
       "id": "R-8.19",
-      "reason": "opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen; looked for again as the administrator and as a public sector employee: /opportunities/create offers \"Create a Sprint With Us opportunity\", and following that link lands on \"Page not found\" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on \"Page not found\", as do /opportunities/sprint-with-us, the seeded at-consensus Sprint With Us opportunity's view and edit screens, and the guessed spellings /opportunities/swu/create and /sprint-with-us/create, and the Code With Us create form offers no program chooser that would reach a Sprint With Us form; walked again on this build signed in as the administrator: the dashboard's \"Create an opportunity\" leads to /opportunities/create, whose \"Create a Sprint With Us opportunity\" link lands on \"Page not found\" at /opportunities/sprint-with-us/create, as it does for a public sector employee, and the administrator's \"All opportunities\" table lists Code With Us opportunities only (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
+      "reason": "opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen; looked for again as the administrator and as a public sector employee: /opportunities/create offers \"Create a Sprint With Us opportunity\", and following that link lands on \"Page not found\" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on \"Page not found\", as do /opportunities/sprint-with-us, the seeded at-consensus Sprint With Us opportunity's view and edit screens, and the guessed spellings /opportunities/swu/create and /sprint-with-us/create, and the Code With Us create form offers no program chooser that would reach a Sprint With Us form; walked again on this build signed in as the administrator: the dashboard's \"Create an opportunity\" leads to /opportunities/create, whose \"Create a Sprint With Us opportunity\" link lands on \"Page not found\" at /opportunities/sprint-with-us/create, as it does for a public sector employee, and the administrator's \"All opportunities\" table lists Code With Us opportunities only; looked for once more signed in as the administrator, both by following the chooser's link from the dashboard and by address: still \"Page not found\", as are /opportunities, /opportunities/sprint-with-us and /organizations, and the administrator's header offers only Dashboard, Users, Content, My profile and Sign out (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
     },
     {
       "id": "R-8.25",
-      "reason": "opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen; looked for again as the administrator and as a public sector employee: /opportunities/create offers \"Create a Sprint With Us opportunity\", and following that link lands on \"Page not found\" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on \"Page not found\", as do /opportunities/sprint-with-us, the seeded at-consensus Sprint With Us opportunity's view and edit screens, and the guessed spellings /opportunities/swu/create and /sprint-with-us/create, and the Code With Us create form offers no program chooser that would reach a Sprint With Us form; walked again on this build signed in as the administrator: the dashboard's \"Create an opportunity\" leads to /opportunities/create, whose \"Create a Sprint With Us opportunity\" link lands on \"Page not found\" at /opportunities/sprint-with-us/create, as it does for a public sector employee, and the administrator's \"All opportunities\" table lists Code With Us opportunities only (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
+      "reason": "opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen; looked for again as the administrator and as a public sector employee: /opportunities/create offers \"Create a Sprint With Us opportunity\", and following that link lands on \"Page not found\" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on \"Page not found\", as do /opportunities/sprint-with-us, the seeded at-consensus Sprint With Us opportunity's view and edit screens, and the guessed spellings /opportunities/swu/create and /sprint-with-us/create, and the Code With Us create form offers no program chooser that would reach a Sprint With Us form; walked again on this build signed in as the administrator: the dashboard's \"Create an opportunity\" leads to /opportunities/create, whose \"Create a Sprint With Us opportunity\" link lands on \"Page not found\" at /opportunities/sprint-with-us/create, as it does for a public sector employee, and the administrator's \"All opportunities\" table lists Code With Us opportunities only; looked for once more signed in as the administrator, both by following the chooser's link from the dashboard and by address: still \"Page not found\", as are /opportunities, /opportunities/sprint-with-us and /organizations, and the administrator's header offers only Dashboard, Users, Content, My profile and Sign out (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
     }
   ],
-  "adapter": "af476dea45990eb607d5baab08309baaff80b5a7",
+  "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99",
   "rows": [
     {
       "id": "R-8.17",
@@ -44,7 +44,7 @@
         }
       ],
       "file_sha": "bc05ce48ab51c8bd6f00215e6cdc0b831d687024",
-      "adapter": "af476dea45990eb607d5baab08309baaff80b5a7"
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
     },
     {
       "id": "R-8.19",
@@ -60,18 +60,18 @@
         {
           "title": "an attachment on a Sprint With Us opportunity is uploaded with no read access recorded against the file itself, so that the opportunity decides who may read it",
           "status": "failed",
-          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen; looked for again as the administrator and as a public sector employee: /opportunities/create offers \"Create a Sprint With Us opportunity\", and following that link lands on \"Page not found\" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on \"Page not found\", as do /opportunities/sprint-with-us, the seeded at-consensus Sprint With Us opportunity's view and edit screens, and the guessed spellings /opportunities/swu/create and /sprint-with-us/create, and the Code With Us create form offers no program chooser that would reach a Sprint With Us form; walked again on this build signed in as the administrator: the dashboard's \"Create an opportunity\" leads to /opportunities/create, whose \"Create a Sprint With Us opportunity\" link lands on \"Page not found\" at /opportunities/sprint-with-us/create, as it does for a public sector employee, and the administrator's \"All opportunities\" table lists Code With Us opportunities only (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen; looked for again as the administrator and as a public sector employee: /opportunities/create offers \"Create a Sprint With Us opportunity\", and following that link lands on \"Page not found\" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on \"Page not found\", as do /opportunities/sprint-with-us, the seeded at-consensus Sprint With Us opportunity's view and edit screens, and the guessed spellings /opportunities/swu/create and /sprint-with-us/create, and the Code With Us create form offers no program chooser that would reach a Sprint With Us form; walked again on this build signed in as the administrator: the dashboard's \"Create an opportunity\" leads to /opportunities/create, whose \"Create a Sprint With Us opportunity\" link lands on \"Page not found\" at /opportunities/sprint-with-us/create, as it does for a public sector employee, and the administrator's \"All opportunities\" table lists Code With Us opportunities only; looked for once more signed in as the administrator, both by following the chooser's link from the dashboard and by address: still \"Page not found\", as are /opportunities, /opportunities/sprint-with-us and /organizations, and the administrator's header offers only Dashboard, Users, Content, My profile and Sign out (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)",
           "line": 60
         },
         {
           "title": "an attachment on a Team With Us opportunity is uploaded with no read access recorded against the file itself, so that the opportunity decides who may read it",
           "status": "failed",
-          "error": "Error: unbound: opportunity-twu-create.open — /opportunities/team-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen; looked for again as the administrator and as a public sector employee: /opportunities/create offers \"Create a Team With Us opportunity\", and following that link lands on \"Page not found\" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on \"Page not found\", as do /opportunities/team-with-us and the guessed spellings /opportunities/twu/create and /team-with-us/create, and the Code With Us create form offers no program chooser that would reach a Team With Us form; walked again on this build signed in as the administrator: the dashboard's \"Create an opportunity\" leads to /opportunities/create, whose \"Create a Team With Us opportunity\" link lands on \"Page not found\" at /opportunities/team-with-us/create, as it does for a public sector employee, and the administrator's \"All opportunities\" table lists Code With Us opportunities only (it shows \"Page not found\" at http://localhost:4300/opportunities/team-with-us/create)",
+          "error": "Error: unbound: opportunity-twu-create.open — /opportunities/team-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen; looked for again as the administrator and as a public sector employee: /opportunities/create offers \"Create a Team With Us opportunity\", and following that link lands on \"Page not found\" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on \"Page not found\", as do /opportunities/team-with-us and the guessed spellings /opportunities/twu/create and /team-with-us/create, and the Code With Us create form offers no program chooser that would reach a Team With Us form; walked again on this build signed in as the administrator: the dashboard's \"Create an opportunity\" leads to /opportunities/create, whose \"Create a Team With Us opportunity\" link lands on \"Page not found\" at /opportunities/team-with-us/create, as it does for a public sector employee, and the administrator's \"All opportunities\" table lists Code With Us opportunities only; looked for once more signed in as the administrator, both by following the chooser's link from the dashboard and by address: still \"Page not found\", as are /opportunities, /opportunities/team-with-us and /organizations, and the administrator's header offers only Dashboard, Users, Content, My profile and Sign out (it shows \"Page not found\" at http://localhost:4300/opportunities/team-with-us/create)",
           "line": 74
         }
       ],
       "file_sha": "30f3519b79116388fb73969dd123b0c7e05e0eb9",
-      "adapter": "af476dea45990eb607d5baab08309baaff80b5a7"
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
     },
     {
       "id": "R-8.25",
@@ -87,7 +87,7 @@
         {
           "title": "an attachment on a Sprint With Us opportunity is refused to a vendor before the opportunity is publicly visible, and readable by them once it is",
           "status": "failed",
-          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen; looked for again as the administrator and as a public sector employee: /opportunities/create offers \"Create a Sprint With Us opportunity\", and following that link lands on \"Page not found\" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on \"Page not found\", as do /opportunities/sprint-with-us, the seeded at-consensus Sprint With Us opportunity's view and edit screens, and the guessed spellings /opportunities/swu/create and /sprint-with-us/create, and the Code With Us create form offers no program chooser that would reach a Sprint With Us form; walked again on this build signed in as the administrator: the dashboard's \"Create an opportunity\" leads to /opportunities/create, whose \"Create a Sprint With Us opportunity\" link lands on \"Page not found\" at /opportunities/sprint-with-us/create, as it does for a public sector employee, and the administrator's \"All opportunities\" table lists Code With Us opportunities only (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen; looked for again as the administrator and as a public sector employee: /opportunities/create offers \"Create a Sprint With Us opportunity\", and following that link lands on \"Page not found\" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on \"Page not found\", as do /opportunities/sprint-with-us, the seeded at-consensus Sprint With Us opportunity's view and edit screens, and the guessed spellings /opportunities/swu/create and /sprint-with-us/create, and the Code With Us create form offers no program chooser that would reach a Sprint With Us form; walked again on this build signed in as the administrator: the dashboard's \"Create an opportunity\" leads to /opportunities/create, whose \"Create a Sprint With Us opportunity\" link lands on \"Page not found\" at /opportunities/sprint-with-us/create, as it does for a public sector employee, and the administrator's \"All opportunities\" table lists Code With Us opportunities only; looked for once more signed in as the administrator, both by following the chooser's link from the dashboard and by address: still \"Page not found\", as are /opportunities, /opportunities/sprint-with-us and /organizations, and the administrator's header offers only Dashboard, Users, Content, My profile and Sign out (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)",
           "line": 100
         },
         {
@@ -97,12 +97,12 @@
         {
           "title": "an attachment on a proposal is readable by whoever may read that proposal",
           "status": "failed",
-          "error": "Error: unbound: proposal-cwu-create.open — /opportunities/code-with-us/:opportunityId/proposals/create is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/code-with-us/863f48b5-1e40-4a2e-bc84-bd05f10c63e3/proposals/create)",
+          "error": "Error: unbound: proposal-cwu-create.open — /opportunities/code-with-us/:opportunityId/proposals/create is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen; looked for once more signed in as a vendor: the seeded published Code With Us opportunity's public page (proposal deadline June 1, 2030) shows its details, key dates and addenda but no link or button at all, the vendor's header offers only Dashboard, My profile and Sign out, the dashboard shows only a greeting, and /opportunities/code-with-us/:opportunityId/proposals/create, /proposals/code-with-us/create?opportunityId=<id> and /opportunities/:opportunityId all answer \"Page not found\" for that opportunity (it shows \"Page not found\" at http://localhost:4300/opportunities/code-with-us/2ea36420-4f1d-4358-b8c6-0d95a5104f71/proposals/create)",
           "line": 173
         }
       ],
       "file_sha": "3dea46f61c56ee6819beaf1453ad2ce0efc6ae60",
-      "adapter": "af476dea45990eb607d5baab08309baaff80b5a7"
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
     },
     {
       "id": "R-8.27",
@@ -117,7 +117,7 @@
         }
       ],
       "file_sha": "a43a7ee3cc230b8b3dbab22a658f081c7997ddca",
-      "adapter": "af476dea45990eb607d5baab08309baaff80b5a7"
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
     },
     {
       "id": "R-6.8",
@@ -132,7 +132,7 @@
         }
       ],
       "file_sha": "93f67a730eb9465d1f151e7d5db467ed3c703474",
-      "adapter": "af476dea45990eb607d5baab08309baaff80b5a7"
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
     },
     {
       "id": "R-1.4",
@@ -151,7 +151,7 @@
         }
       ],
       "file_sha": "290689fa9f95bb53e8bc6da390783e84a8fc2799",
-      "adapter": "af476dea45990eb607d5baab08309baaff80b5a7"
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
     },
     {
       "id": "R-1.7",
@@ -170,7 +170,7 @@
         }
       ],
       "file_sha": "2866b3d1584c3ffb141b0c1d4695337c2e95459e",
-      "adapter": "af476dea45990eb607d5baab08309baaff80b5a7"
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
     },
     {
       "id": "R-1.10",
@@ -205,7 +205,7 @@
         }
       ],
       "file_sha": "43430986b64a075323f242d8620294061de587f8",
-      "adapter": "af476dea45990eb607d5baab08309baaff80b5a7"
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
     },
     {
       "id": "R-1.11",
@@ -228,7 +228,7 @@
         }
       ],
       "file_sha": "6ac8875bd3b39f1de123be051c176521834bc3ba",
-      "adapter": "af476dea45990eb607d5baab08309baaff80b5a7"
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
     },
     {
       "id": "R-1.12",
@@ -251,7 +251,7 @@
         }
       ],
       "file_sha": "ad8de230fa438cd99e4ed5593e1f80873a806c87",
-      "adapter": "af476dea45990eb607d5baab08309baaff80b5a7"
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
     },
     {
       "id": "R-1.14",
@@ -282,7 +282,7 @@
         }
       ],
       "file_sha": "55271bb50468e8dc99b0b921209d519d88fa5215",
-      "adapter": "af476dea45990eb607d5baab08309baaff80b5a7"
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
     },
     {
       "id": "R-1.21",
@@ -297,7 +297,7 @@
         }
       ],
       "file_sha": "9d8843efc9e8926f9b02d36d9808973923ae948f",
-      "adapter": "af476dea45990eb607d5baab08309baaff80b5a7"
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
     },
     {
       "id": "R-1.22",
@@ -312,7 +312,7 @@
         }
       ],
       "file_sha": "08a09c408e86f3fe87df48c868af8ca90b573564",
-      "adapter": "af476dea45990eb607d5baab08309baaff80b5a7"
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
     },
     {
       "id": "R-1.23",
@@ -327,7 +327,7 @@
         }
       ],
       "file_sha": "458cb922cf730ba4a792f99013237c40dbdbd282",
-      "adapter": "af476dea45990eb607d5baab08309baaff80b5a7"
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
     },
     {
       "id": "R-1.29",
@@ -342,7 +342,7 @@
         }
       ],
       "file_sha": "28d2ce38d0da3c2a3ad374f27a3f367074bf0570",
-      "adapter": "af476dea45990eb607d5baab08309baaff80b5a7"
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
     },
     {
       "id": "R-1.34",
@@ -361,7 +361,7 @@
         }
       ],
       "file_sha": "da03866dfe5ec05521978621856b6028ec9957af",
-      "adapter": "af476dea45990eb607d5baab08309baaff80b5a7"
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
     },
     {
       "id": "R-1.37",
@@ -380,7 +380,7 @@
         }
       ],
       "file_sha": "35205c76ed42ccd81295c6aa24eabd9027961203",
-      "adapter": "af476dea45990eb607d5baab08309baaff80b5a7"
+      "adapter": "260ee7bdd7ef9220151803f2fe6da35d2cd2ed99"
     },
     {
       "id": "R-1.51",
