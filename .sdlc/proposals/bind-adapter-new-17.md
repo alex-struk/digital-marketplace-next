@@ -45,3 +45,23 @@ In `bindings.yaml`, all seven are marked `bound`, with a comment explaining the 
 - While exploring I published one image into the live `about-us` page. The seed restores it before each test, but the running target holds that change until then.
 
 Every route in `surface.yaml` that I opened this run resolved.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the bind-adapter-new-17 adapter bind every surface action and observation on the new target's file-embedded-image page, and nothing else? Ruling: approve. The old unbound reason (/content/:slug/edit answers 'Page not found') is replaced by observed evidence: signed in as the administrator, /content/about-us/edit shows the 'Formatting for Body' toolbar with 'Insert image' and its stated JPEG/PNG rule. All seven members are bound to navigation and readers only. The readers return the body's image references, the stated rule, the status wordings, the image addresses on the published page and the current body, each empty when nothing is found, and none decides a pass. imageAddress maps the body's own @file/<id> reference to its served form without guaranteeing R-8.29's 'not the address' assertion: a body holding a real address would come back unchanged and fail it. uploadBodyImage arms the filechooser wait before pressing the control (index.ts:1091), so 'opened no file chooser' is the application failing a person, and reporting it as a plain failure rather than unbound correctly leaves R-7.26 and R-8.29 to fail on their own tests. Nothing under tests/acceptance changed, no protected path is touched, the runner's typecheck of adapters/new passed with no diagnostics, and the failing egress check names only files outside this diff. Residual: uploading_indicator is bound but unobserved, because a small image is stored too fast to show an uploading wording. Tier is STANDARD and no residual risk is marked unaccepted, so there is no escalation. What would change the ruling: verify evidence that the control does open a chooser the helper failed to catch, which would make this an adapter fault and a return to bind-adapter.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `042b95e2e248a0a8d8ce4125daf6b06be6f3f767`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
