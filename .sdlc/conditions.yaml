@@ -1311,3 +1311,30 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-01T01:45:25.355Z
+  - ref: plan-9#1
+    text: Move R-6.16 from Slice 11 to Slice 12 in plan/tasks.md. Its acceptance
+      test signs in as the organization owner, opens the organization's edit
+      screen, adds a team member by email, and reads the invitation to join the
+      organization. Slice 12 builds both of these ('the team tab — inviting by
+      email ... and the messages each step sends'); Slice 11 builds neither.
+      Take the R-6.16 clause out of Slice 11's delivers line, and add to Slice
+      12's delivers line that the invitation is a message the notification
+      preference does not govern, so it links to the reader's notification
+      settings (built in Slice 3) without offering to unsubscribe.
+    from: plan-9
+    family: plan
+    gate: G2
+    stage: plan
+    by: agent:architect
+    at: 2026-10-01T01:51:36.281Z
+  - ref: plan-9#2
+    text: Make plan/plan.md (the awkward-placement entry and the R-6.6 vs R-6.16
+      note) and docs/decisions/0013-the-mail-path.md say Slice 12 and the
+      organization invitation wherever they now say Slice 11 and the archive
+      notice for R-6.16.
+    from: plan-9
+    family: plan
+    gate: G2
+    stage: plan
+    by: agent:architect
+    at: 2026-10-01T01:51:36.281Z
