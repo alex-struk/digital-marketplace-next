@@ -4815,3 +4815,19 @@ owed:
       file_sha: 77ce5ec31b1d3b023e47f65d4fad5e17c9f743a8
       by: runner
       at: 2026-09-30T07:59:27.776Z
+  - kind: missing-test
+    item: R-1.5
+    id: R-1.5
+    version: 1
+    domain: opportunities
+    stage: contract
+    why: the surface offers only a watch toggle, so asking twice turns the watch off
+      instead of making a second request, and no observation reports a refusal
+      as a duplicate; it needs a watch action that does not toggle and an
+      observation of the refusal
+    clause: the same opportunity cannot be watched twice (the second request is
+      refused as a duplicate)
+    from: bind-adapter-new-35
+    gate: G3
+    by: agent:reviewer
+    at: 2026-10-01T13:19:31.924Z
