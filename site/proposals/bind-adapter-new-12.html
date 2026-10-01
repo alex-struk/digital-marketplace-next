@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-12 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">382</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">376</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">334</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-12</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 00:55</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I removed both workarounds the ruling named.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I removed both workarounds the ruling named. The profile-picture picker is now reported unbound everywhere it appears, and its readings only read the page. I could not run the typecheck: running <code>tsc</code> here needed an approval this session doesn&#39;t have. I read the edited code by hand instead, but whether it compiles is unconfirmed.</p>
+<p><strong>What I checked first.</strong> I signed in through the identity provider as the first vendor, opened the profile and pressed &quot;Edit profile&quot;. Then I pressed &quot;Choose a profile picture&quot; by click, by Enter and by Space, each time waiting for a file chooser. None opened. The only thing labelled &quot;profile picture&quot; is the &quot;Profile picture (optional)&quot; group around the button; there is no file field a person can see. So the condition&#39;s unbound case applies.</p>
+<p><strong>File chooser (<code>offerFile</code> in <code>index.ts</code>).</strong></p>
+<ul><li>The fallback that put the file straight into the hidden file field in the button&#39;s group is gone.</li><li>If pressing the button opens no chooser, the method now throws <code>unbound:</code>, saying the button opens no file chooser and nothing a person can see takes a file.</li><li>The chooser path and the plain labelled file field path are unchanged. A future build whose button does open a chooser would bind without further edits.</li><li>I also removed the matching comment at sign-up&#39;s <code>changeAvatar</code>.</li></ul>
+<p><strong>Picker readings (<code>index.ts</code>).</strong></p>
+<ul><li><code>savePicture</code> and <code>picturePending</code> are removed, along with the comment saying the contract gives the picker no save step.</li><li><code>imageAddress</code>, <code>currentImage</code>, <code>rejectedImageError</code>, <code>imageReadableWhenSignedOut</code>, <code>storedImageWidth</code> and <code>storedImageHeight</code> now read what the page shows and never press &quot;Save changes&quot;.</li><li>With no stored picture, or no refusal shown, each of them returns empty.</li><li>Saving belongs to <code>userProfileSelf.saveChanges</code>, which the tests call themselves.</li></ul>
+<p><strong><code>bindings.yaml</code>.</strong> These members are now unbound, each with a reason saying how I reached the button:</p>
+<ul><li><code>user-profile.change_avatar</code></li><li><code>user-sign-up-complete.change_avatar</code></li><li><code>file-image-picker.choose_image</code></li><li><code>user-profile-self.change_avatar</code> — not named in the conditions, but it uses the same button and the same code. Leaving it bound would have contradicted what the adapter now does.</li></ul>
+<p>I rewrote the comment above <code>file-image-picker</code> to match. The readings stay bound.</p>
+<p><strong><code>/sign-up/complete</code>.</strong> I did not walk it again this run. Its reason rests on the earlier walk, which found the same button opening no chooser there, plus this run&#39;s result on the profile.</p>
+<p><strong>Side effects to know about.</strong></p>
+<ul><li>Any action that brings in a picture through its input now stops with that same unbound reason. That covers <code>saveChanges</code> and <code>completeProfile</code> given a picture, and the logo on the unserved organization screens.</li><li>As a result, R-8.21, R-8.28 and R-8.30 will report unbound wherever they need a picture chosen. That is the outcome the ruling asked for.</li></ul>
+<p><strong>Left alone.</strong></p>
+<ul><li>The other unbound criteria (R-8.13, R-8.17, R-6.6, R-6.16, R-4.33) and the accepted R-4.8 and R-4.25 bindings, as instructed. No page route resolved differently from before.</li><li>The 1×1 PNG left as the seeded administrator&#39;s profile picture is still there. The interface offers no way to remove it, and nothing outside <code>tests/adapters/new/</code> was mine to change.</li><li>The egress-check failure is in files this stage does not own.</li></ul></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 00:56.</p>
+<div class="body"><p>Question: does this adapter bind every surface action and observation on new, and nothing else, and does it carry out the two instructions bind-adapter-new-11 left owed? Ruling: approve. offerFile (tests/adapters/new/index.ts:2804-2835) no longer puts files into the hidden input in the picker&#39;s group. When pressing the control opens no file chooser it reports unbound, saying the button opens no file chooser and nothing a person can see takes a file. The only setInputFiles left is the path for a visible, labelled file field, which the condition allowed to stay. bindings.yaml marks user-profile.change_avatar, user-sign-up-complete.change_avatar, file-image-picker.choose_image and user-profile-self.change_avatar unbound with walked reasons, and that last one follows from the same code. savePicture, picturePending and the &#39;no save step&#39; comments are gone. The six picker readings read only what the page draws and return empty where nothing is drawn, so saving stays with userProfileSelf.saveChanges, which the tests call themselves. The newly bound profile-edit, deactivation and capabilities members are navigation and locators. toggleCapability throws only when the click it was asked to make did not take, which is a failed action, not a pass/fail decision. Nothing under tests/acceptance changed, and the runner&#39;s typecheck of this revision passed with no diagnostics. What would change the ruling: evidence that the picker button does open a chooser in a Playwright run, which would make the unbound reasons false, or a binding found to decide an outcome rather than reach the page.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met bind-adapter-new-11#1: offerFile in tests/adapters/new/index.ts (lines 2825-2835) dropped the hidden-input fallback and reports unbound when no file chooser opens; bindings.yaml marks user-profile.change_avatar (line 747), user-sign-up-complete.change_avatar (line 681), file-image-picker.choose_image (line 1390) and user-profile-self.change_avatar (line 843) unbound with that reason</li><li>condition-met bind-adapter-new-11#2: savePicture and picturePending no longer appear anywhere under tests/adapters/new; the fileImagePicker readings (storedPictureAddress, storedPictureSize, rejectedImageError, imageReadableWhenSignedOut) read only the drawn page and never press Save changes, and the &#39;no save step&#39; comments are removed</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

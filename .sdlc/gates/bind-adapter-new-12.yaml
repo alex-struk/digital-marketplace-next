@@ -1,0 +1,17 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does this adapter bind every surface action and observation on new, and nothing else, and does it carry out the two instructions bind-adapter-new-11 left owed? Ruling: approve. offerFile (tests/adapters/new/index.ts:2804-2835) no longer puts files into the hidden input in the picker's group. When pressing the control opens no file chooser it reports unbound, saying the button opens no file chooser and nothing a person can see takes a file. The only setInputFiles left is the path for a visible, labelled file field, which the condition allowed to stay. bindings.yaml marks user-profile.change_avatar, user-sign-up-complete.change_avatar, file-image-picker.choose_image and user-profile-self.change_avatar unbound with walked reasons, and that last one follows from the same code. savePicture, picturePending and the 'no save step' comments are gone. The six picker readings read only what the page draws and return empty where nothing is drawn, so saving stays with userProfileSelf.saveChanges, which the tests call themselves. The newly bound profile-edit, deactivation and capabilities members are navigation and locators. toggleCapability throws only when the click it was asked to make did not take, which is a failed action, not a pass/fail decision. Nothing under tests/acceptance changed, and the runner's typecheck of this revision passed with no diagnostics. What would change the ruling: evidence that the picker button does open a chooser in a Playwright run, which would make the unbound reasons false, or a binding found to decide an outcome rather than reach the page.
+conditions:
+  - "condition-met bind-adapter-new-11#1: offerFile in tests/adapters/new/index.ts (lines 2825-2835) dropped the hidden-input fallback and reports unbound when no file chooser opens; bindings.yaml marks user-profile.change_avatar (line 747), user-sign-up-complete.change_avatar (line 681), file-image-picker.choose_image (line 1390) and user-profile-self.change_avatar (line 843) unbound with that reason"
+  - "condition-met bind-adapter-new-11#2: savePicture and picturePending no longer appear anywhere under tests/adapters/new; the fileImagePicker readings (storedPictureAddress, storedPictureSize, rejectedImageError, imageReadableWhenSignedOut) read only the drawn page and never press Save changes, and the 'no save step' comments are removed"
+cost: 0.5323184
+turns: 6
+session: "cb59fcea-d621-430a-ac5b-9faee1a6bb5f"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T00:56:11.828Z
