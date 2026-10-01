@@ -1,0 +1,31 @@
+gate: G3
+verdict: escalated
+by: runner:verify
+held_by: runner
+escalate_to: tech-lead
+rationale: "Slice 3 has failed verify 3 times. The failures below may not be the
+  application's: a test, the adapter, the criterion or the sandbox can each be
+  what is wrong (spec 7.1), and another build would not find out which."
+conditions:
+  - 'R-8.13: Error: file-image-picker.choose_image — pressed "Choose a profile
+    picture" on http://localhost:4300/users/me and no file chooser opened, so
+    "R-8.13 wide.png" could not be offered; the page offers no other way a
+    person can give it a file'
+  - 'R-8.21: Error: file-image-picker.choose_image — pressed "Choose a profile
+    picture" on http://localhost:4300/users/me and no file chooser opened, so
+    "R-8.21 portrait.png" could not be offered; the page offers no other way a
+    person can give it a file'
+  - "R-8.23: Error: ENAMETOOLONG: name too long, open
+    '/tmp/sdlc-upload-zeHQw2/nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn\
+    nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn\
+    nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn\
+    nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn.pdf'"
+  - 'R-8.28: Error: file-image-picker.choose_image — pressed "Choose a profile
+    picture" on http://localhost:4300/users/me and no file chooser opened, so
+    "R-8.28 portrait.png" could not be offered; the page offers no other way a
+    person can give it a file'
+  - 'R-8.30: Error: file-image-picker.choose_image — pressed "Choose a profile
+    picture" on http://localhost:4300/users/me and no file chooser opened, so
+    "portrait.gif" could not be offered; the page offers no other way a person
+    can give it a file'
+at: 2026-10-01T01:43:41.543Z
