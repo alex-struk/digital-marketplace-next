@@ -1613,3 +1613,12 @@ conditions:
     stage: derive-tests
     by: agent:reviewer
     at: 2026-10-01T14:01:50.668Z
+    closed:
+      outcome: met
+      why: tests/acceptance/opportunities/R-1.6.spec.ts now adds a signed-in,
+        non-staff viewing (persona.vendor signs in, opens opportunityCwuView,
+        signs out) between two administrator reads of opportunity-counters and
+        asserts an increase of exactly one, while keeping the anonymous viewing
+        and its own exactly-one assertion
+      by: agent:reviewer
+      at: 2026-10-01T14:03:09.618Z
