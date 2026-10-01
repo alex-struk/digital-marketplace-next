@@ -9,7 +9,7 @@ machine.
 | `backend/` | the NestJS service: the recovered contract at `spec/contract/openapi.yaml`, validated at one boundary, over the kept schema through Prisma |
 | `backend/src/rules/` | the validation and permission rules, as plain TypeScript with no framework in them. Both sides call these; the frontend imports the directory as `@rules` |
 | `migrations/` | the kept schema's Knex history, and the seed |
-| `compose/` | PostgreSQL, a sandbox identity provider and a mail catcher, for a builder's machine only |
+| `compose/` | PostgreSQL, a sandbox identity provider, a mail catcher behind a delay proxy, for a builder's machine only |
 
 ## Checking it
 
@@ -51,6 +51,13 @@ Every message the service sends is marked as a test and comes from
 `Digital Marketplace <donotreply@example.test>` (decision record 0013). Start with
 `SDLC_ORACLE_DISABLE_NOTIFICATIONS=1` in the environment to switch all mail off (R-6.1).
 
+The service sends its mail through a delay proxy (Toxiproxy, `mail-hold`) to the catcher, and
+:8025 is a small reverse proxy (Caddy, `mail-front`) in front of both: the catcher's own
+interface and API at the root, including its fault injection, and the proxy's control API under
+`/hold` — `GET /hold/proxies/smtp/toxics` reads it, `POST` there adds a toxic, `DELETE
+/hold/proxies/smtp/toxics/hold` removes it, `POST /hold/reset` clears them all. With no toxic in
+force mail passes unchanged (decision record 0028, for R-6.24).
+
 Uploads (`POST /api/files`, `POST /api/avatars`) are read by their handler rather than by the
 boundary validator, written to the working directory `FILE_UPLOADS_DIR` (a tmpfs in compose, the
 backend's `emptyDir` volume in a sandbox) and removed once answered; the bytes are kept in the
@@ -66,6 +73,14 @@ there, and every page request they make is refused 401 in one shape (decision re
 A page the service needs can be re-worded but neither moved nor removed. An image inserted
 into a body is stored readable by anyone and referred to as `@file/<identifier>`, which the
 renderer turns into the file's address only when the text is shown.
+
+## Changed terms
+
+The managing screen of `/content/terms-and-conditions` is the only one that offers "Notify vendors
+of updated terms". When an administrator confirms it, the screen calls `POST /api/emailNotifications`
+(`updateTerms`). That withdraws every vendor's standing acceptance, answers, and then emails each
+active vendor, one message each. A vendor sees the warning on their own legal section
+(`/users/me?tab=legal`) and agrees again from there (decision record 0027).
 
 ## The first administrator
 

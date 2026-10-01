@@ -55,7 +55,9 @@ services:
       # the logo pointing at where the application answers. Notifications are switched off
       # only when the environment this is started from asks for it, for R-6.1's own run
       # (spec/contract/observables.yaml, configurations.notifications_disabled).
-      SMTP_HOST: mail
+      # Every message goes through the delay proxy, which passes it to the catcher unchanged
+      # unless a test has slowed it (R-6.24; decision record 0028).
+      SMTP_HOST: mail-hold
       SMTP_PORT: "1025"
       MAILER_FROM: "Digital Marketplace <donotreply@example.test>"
       SHOW_TEST_INDICATOR: "1"
@@ -171,18 +173,50 @@ services:
     restart: unless-stopped
 
   # Every message the service sends arrives here and goes no further. Read it at
-  # http://localhost:8025. Its fault injection is on, so a test can make it refuse delivery
-  # the way an unreachable mail server would (R-6.2; spec/contract/observables.yaml,
-  # email.delivery_fault).
+  # http://localhost:8025, through mail-front. Its fault injection is on, so a test can make it
+  # refuse delivery the way an unreachable mail server would (R-6.2; spec/contract/
+  # observables.yaml, email.delivery_fault).
   mail:
     image: axllent/mailpit:latest
     environment:
       MP_SMTP_AUTH_ACCEPT_ANY: "1"
       MP_SMTP_AUTH_ALLOW_INSECURE: "1"
       MP_ENABLE_CHAOS: "true"
+    expose:
+      - "8025"
+      - "1025"
+    restart: unless-stopped
+
+  # A pass-through proxy between the service and the catcher's SMTP port, with one proxy
+  # named smtp. With nothing in force it changes nothing; a test can slow every reply the mail
+  # server makes, to see that an answer does not wait for its messages (R-6.24;
+  # spec/contract/observables.yaml, email.delivery_delay; decision record 0028).
+  mail-hold:
+    image: ghcr.io/shopify/toxiproxy:latest
+    command: ["-host=0.0.0.0", "-config=/config/toxiproxy.json"]
+    volumes:
+      - ./mail/toxiproxy.json:/config/toxiproxy.json:ro
+    expose:
+      - "1025"
+      - "8474"
+    depends_on:
+      mail:
+        condition: service_started
+    restart: unless-stopped
+
+  # What answers on http://localhost:8025: the catcher's interface and API at the root,
+  # unchanged, and the delay proxy's control API under /hold.
+  mail-front:
+    image: caddy:2-alpine
+    volumes:
+      - ./mail/Caddyfile:/etc/caddy/Caddyfile:ro
     ports:
       - "8025:8025"
-      - "1025:1025"
+    depends_on:
+      mail:
+        condition: service_started
+      mail-hold:
+        condition: service_started
     restart: unless-stopped
 
 volumes:
