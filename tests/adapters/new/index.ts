@@ -2161,6 +2161,22 @@ export default function create(
     ".zip": "application/zip",
   };
 
+  // The file a test names, as bytes in memory under that name. The harness makes the bytes
+  // (so every adapter offers the same content for the same name and type), but it makes
+  // them under a short stand-in name with the same ending: the name itself is what some
+  // criteria turn on, and a name longer than the file system allows (256 characters, say)
+  // has to reach the service as it is rather than fail on this machine's disk first.
+  function fileGiven(name: string, content?: string | Uint8Array, bytes?: number): { name: string; mimeType: string; buffer: Buffer } {
+    const ending = extname(name).toLowerCase();
+    const standIn = /^\.[a-z0-9]{1,10}$/.test(ending) ? `offered${ending}` : "offered";
+    const path = uploadFile({
+      name: standIn,
+      ...(typeof bytes === "number" && Number.isFinite(bytes) ? { bytes } : {}),
+      ...(content !== undefined ? { content } : {}),
+    });
+    return { name, mimeType: MIME[ending] || "application/octet-stream", buffer: readFileSync(path) };
+  }
+
   type Upload = { name: string; metadata?: string; file?: { fileName: string; mimeType: string; buffer: Buffer } };
 
   // Who may read a stored file, exactly as the input states it: a bare word is a tag, a
@@ -2173,7 +2189,7 @@ export default function create(
     return JSON.stringify(Array.isArray(stated) ? stated : [stated]);
   }
 
-  // The file the test names, made by the harness under that name with whatever content or
+  // The file the test names, made by the harness and sent under that name with whatever content or
   // size the test gave; the stored name is the one given for it, or the file's own.
   function uploadGiven(where: string, input: unknown, metadata: string | undefined, withFile = true): Upload {
     const fileName = field(input, "file", "fileName", "file_name", "name") || (typeof input === "string" ? input : "");
@@ -2182,13 +2198,9 @@ export default function create(
     if (!withFile) return { name, metadata };
     const content = given(input, ["content", "contents", "body", "text"]);
     const bytes = Number.parseInt(field(input, "bytes", "size", "sizeBytes", "size_bytes"), 10);
-    const path = uploadFile({
-      name: fileName,
-      ...(Number.isFinite(bytes) ? { bytes } : {}),
-      ...(typeof content === "string" ? { content } : {}),
-    });
-    const mimeType = field(input, "mimeType", "contentType", "content_type") || MIME[extname(fileName).toLowerCase()] || "application/octet-stream";
-    return { name, metadata, file: { fileName, mimeType, buffer: readFileSync(path) } };
+    const made = fileGiven(fileName, typeof content === "string" ? content : undefined, Number.isFinite(bytes) ? bytes : undefined);
+    const mimeType = field(input, "mimeType", "contentType", "content_type") || made.mimeType;
+    return { name, metadata, file: { fileName, mimeType, buffer: made.buffer } };
   }
 
   async function sendUpload(where: string, form: Upload): Promise<void> {
@@ -2806,17 +2818,19 @@ export default function create(
     const request = typeof input === "string" ? { name: input } : named && typeof named === "object" ? record(named) : { ...record(input), name: textOf(named) };
     const name = textOf(record(request).name);
     if (!name) unbound(where, "the input names no file to offer");
-    const path = uploadFile({
+    // Offered as a payload, not a path: Playwright hands the browser these bytes under this
+    // name, so a name no file on disk could carry still reaches the page as it was given.
+    const payload = fileGiven(
       name,
-      content: record(request).content as string | Uint8Array | undefined,
-      bytes: record(request).bytes as number | undefined,
-    });
+      record(request).content as string | Uint8Array | undefined,
+      record(request).bytes as number | undefined,
+    );
     const button = await findControl(page, control);
     if (!button) {
       // A plain file input, found by its label.
       const box = seen(page.getByLabel(control));
       if (await box.count()) {
-        await box.first().setInputFiles(path);
+        await box.first().setInputFiles(payload);
         await settle();
         return;
       }
@@ -2826,7 +2840,7 @@ export default function create(
     await button.click();
     const opened = await chooser;
     if (opened) {
-      await opened.setFiles(path);
+      await opened.setFiles(payload);
       await settle();
       return;
     }
