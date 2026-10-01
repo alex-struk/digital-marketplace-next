@@ -38,3 +38,23 @@ Both pages stay unbound. Their reasons in the adapter now say this second search
 **Routes that don't resolve:** `/opportunities/sprint-with-us/create` and `/opportunities/team-with-us/create`. They answer "Page not found" to every persona tried.
 
 Nothing outside `tests/adapters/new/` was changed, and no request is deferred.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the new adapter bind every surface action and observation, and nothing else? Approved. The change answers the bind-adapter request from build-slice-7-3. The Opportunity tab on the Code With Us management screen is an editing form, and was read as panel text only, which never includes field values. opportunityTab now returns that text plus one '<label>: <value>' line for each text box, text area, chosen radio answer, ticked checkbox and chosen list option, so R-1.4, R-1.21 and R-1.56 can read the saved description and location. The reader only reads: it finds fields by element type and their labels, decides no outcome, and passes the separation check. The other readers are unchanged. The two R-1.48 create pages stay unbound for a real reason that names a missing surface: /opportunities/sprint-with-us/create and /opportunities/team-with-us/create answer 'Page not found' when typed directly and when reached from /opportunities/create's own links, as the administrator and as a public sector employee. Nothing under tests/acceptance changed, and the runner's type check passed. The egress failures are in files this branch does not change and are already on main. build-slice-7-3#1 and #2 are asked of build and stay open. The ruling would change if the next verify run shows the Opportunity tab reader still missing saved values, or if the target starts serving the Sprint With Us or Team With Us create pages.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `3ff40b1c46d8c0fa0e57a381820596fb41158e0a`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
