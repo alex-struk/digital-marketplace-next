@@ -1460,3 +1460,17 @@ conditions:
     stage: build
     by: agent:reviewer
     at: 2026-10-01T06:10:26.624Z
+    closed:
+      outcome: met
+      why: The sandbox's mail now goes through Toxiproxy service mail-hold, which runs
+        one proxy named smtp on 1025 forwarding to mail:1025
+        (app/compose/mail/toxiproxy.json). The backend's SMTP_HOST points at
+        mail-hold. Caddy service mail-front (app/compose/mail/Caddyfile) is the
+        only service published on 8025. It serves Mailpit at the root, chaos
+        fault injection included, and Toxiproxy's control API under /hold with
+        the prefix stripped (app/compose/compose.yaml). The change is recorded
+        in docs/decisions/0028-mail-goes-through-a-delay-proxy.md and
+        app/README.md. Verify for build-slice-6-5 passed R-6.24, R-6.28 and the
+        other claimed criteria against tree e1a13da.
+      by: agent:reviewer
+      at: 2026-10-01T06:19:19.750Z
