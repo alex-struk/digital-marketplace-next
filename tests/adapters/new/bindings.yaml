@@ -106,13 +106,18 @@ pages:
 
   # The public page as the running build now draws it: terms and definitions (Status,
   # Proposal deadline, Reward, Location, Remote work, Published, Created by, Last changed
-  # by), "Opportunity ID: <id>", and Description, Skills, Key dates and Addenda sections.
+  # by), "Opportunity ID: <id>", a "Watch this opportunity" checkbox to anybody signed in,
+  # and Description, Skills, Key dates and Addenda sections. A draft answers anybody who may
+  # not see it (a vendor, another staff member) "Page not found"; for an opportunity known
+  # to exist (seeded, or seen open earlier in the run) every reading is then empty.
   opportunity-cwu-view:
     actions:
-      toggle_watch: "unbound: walked as the administrator, a public sector employee and a vendor on the seeded published, draft and awarded Code With Us opportunities and on one just published: the page offers no control to watch the opportunity (its only control is 'Manage this opportunity', to staff)"
-      start_proposal: "unbound: walked as a vendor (and as the administrator and a public sector employee) on the seeded published Code With Us opportunity: the page offers no way to start a proposal, and /opportunities/code-with-us/:opportunityId/proposals/create answers 'Page not found' to the vendor"
+      toggle_watch: bound
+      start_proposal: "unbound: walked signed in as a vendor (and as the administrator and a public sector employee) on the seeded published Code With Us opportunity, whose proposal deadline is in 2030: the page's only control is the 'Watch this opportunity' checkbox (and 'Manage this opportunity', to staff), with no way to start a proposal, and /opportunities/code-with-us/:opportunityId/proposals/create answers 'Page not found' to the vendor"
     observations:
       opportunity_identifier: bound
+      # The administrator reads the seeded draft of another staff member as "Draft"; a
+      # vendor and the other public sector employee are answered "Page not found" and read "".
       status: bound
       published_date: bound
       created_by_name: bound
@@ -153,8 +158,8 @@ pages:
       addenda_tab: bound
       history_tab: bound
       proposals_tab: "unbound: walked as the administrator on the seeded lapsed Code With Us opportunity with three proposals (and on the published, awarded and draft ones): the sections offered are Summary, Opportunity, Addenda and History only, and ?tab=proposals shows the summary"
-      reporting_views: "unbound: walked as the administrator on the seeded published, lapsed and awarded Code With Us opportunities and on one just published: the summary shows Proposal deadline, Reward, Published, Created by and Last changed by and no count of views; a draft's summary says 'Views, watchers and proposals are counted once the opportunity is published.' (read there as nothing)"
-      reporting_watchers: "unbound: walked as the administrator on the seeded published, lapsed and awarded Code With Us opportunities and on one just published: the summary shows no count of watchers; a draft's summary says 'Views, watchers and proposals are counted once the opportunity is published.' (read there as nothing)"
+      reporting_views: "unbound: looked again as the administrator and as the owning public sector employee on the seeded published, lapsed-with-three-proposals, in-processing and awarded Code With Us opportunities: the Summary shows only Proposal deadline, Reward, Published, Created by and Last changed by, the only sections are Summary, Opportunity, Addenda and History, and the opportunity the screen loads from /api/opportunities/code-with-us/:id carries no view count; a draft's summary says 'Views, watchers and proposals are counted once the opportunity is published.' (read there as nothing)"
+      reporting_watchers: "unbound: looked again as the administrator and as the owning public sector employee on the seeded published, lapsed-with-three-proposals, in-processing and awarded Code With Us opportunities, and on the published one after the administrator ticked 'Watch this opportunity' on its page and came back: the Summary still shows no count of watchers, no section is a report, and the opportunity the screen loads from /api/opportunities/code-with-us/:id carries no watcher count; a draft's summary says 'Views, watchers and proposals are counted once the opportunity is published.' (read there as nothing)"
       reporting_proposals: "unbound: walked as the administrator on the seeded lapsed Code With Us opportunity with three proposals and on the published and awarded ones: the summary shows no count of proposals; a draft's summary says 'Views, watchers and proposals are counted once the opportunity is published.' (read there as nothing)"
       proposal_deadline: bound
       assignment_date: bound
@@ -1207,13 +1212,21 @@ pages:
       # Signed out, the address redirects to /sign-in carrying itself as redirectOnSuccess, which this reads.
       sign_in_required: bound
 
+  # Signed in (as a vendor, a public sector employee or the administrator), /opportunities
+  # carries a "New opportunity emails" region: "You are emailed at <address> when new
+  # opportunities are posted." with "Stop emailing me about new opportunities", or "You are
+  # not emailed …" with "Email me about new opportunities"; pressing it saves at once.
+  # notification_control reads the region's words, notification_control_state "checked" or
+  # "unchecked" (as the profile's box reads); a signed-out visitor has no region, read "".
+  # At a phone's width (375 pixels) the region stays shown, so the narrow-screen reading
+  # returns its words, and "" only when it is hidden there.
   notification-optin-opportunity-list:
     actions:
-      toggle_new_opportunity_notifications: "unbound: opened /opportunities signed out: it carries a program chooser, 'Remote OK' and a search box and no control about new-opportunity notifications, which is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found', as it does every Sprint With Us, Team With Us, proposal, organization and evaluation screen, /opportunities and /organizations included (rechecked signed in as the administrator, a public sector employee and a vendor: besides /dashboard, the account screens and /content, the only opportunity screens it serves are a Code With Us opportunity's public page and, to the administrator and public sector staff only, /opportunities/create, /opportunities/code-with-us/create and a Code With Us opportunity's management screen)"
+      toggle_new_opportunity_notifications: bound
     observations:
-      notification_control: "unbound: opened /opportunities signed out: it carries a program chooser, 'Remote OK' and a search box and no control about new-opportunity notifications, which is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found', as it does every Sprint With Us, Team With Us, proposal, organization and evaluation screen, /opportunities and /organizations included (rechecked signed in as the administrator, a public sector employee and a vendor: besides /dashboard, the account screens and /content, the only opportunity screens it serves are a Code With Us opportunity's public page and, to the administrator and public sector staff only, /opportunities/create, /opportunities/code-with-us/create and a Code With Us opportunity's management screen)"
-      notification_control_state: "unbound: opened /opportunities signed out: it carries a program chooser, 'Remote OK' and a search box and no control about new-opportunity notifications, which is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found', as it does every Sprint With Us, Team With Us, proposal, organization and evaluation screen, /opportunities and /organizations included (rechecked signed in as the administrator, a public sector employee and a vendor: besides /dashboard, the account screens and /content, the only opportunity screens it serves are a Code With Us opportunity's public page and, to the administrator and public sector staff only, /opportunities/create, /opportunities/code-with-us/create and a Code With Us opportunity's management screen)"
-      notification_control_hidden_on_narrow_screen: "unbound: opened /opportunities signed out: it carries a program chooser, 'Remote OK' and a search box and no control about new-opportunity notifications, which is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens, with the seeded records' identifiers) the running build answers it with 'Page not found', as it does every Sprint With Us, Team With Us, proposal, organization and evaluation screen, /opportunities and /organizations included (rechecked signed in as the administrator, a public sector employee and a vendor: besides /dashboard, the account screens and /content, the only opportunity screens it serves are a Code With Us opportunity's public page and, to the administrator and public sector staff only, /opportunities/create, /opportunities/code-with-us/create and a Code With Us opportunity's management screen)"
+      notification_control: bound
+      notification_control_state: bound
+      notification_control_hidden_on_narrow_screen: bound
 
   notification-terms-broadcast:
     actions:
