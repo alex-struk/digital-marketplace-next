@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does bind-adapter-new-34 bind every surface action and observation the five named criteria need on target new, and nothing else? Approve. The new notification-optin-opportunity-list bindings (R-6.21, R-6.27) are navigation and locators only: they read the 'New opportunity emails' region's words and its state as 'checked'/'unchecked', press its button honouring a requested end state, and read it at 375px before restoring the viewport. The toggle throws only when the press fails to take effect, which is the action failing, not a pass/fail judgement. For R-1.2 the opportunity-cwu-view readers return empty when 'Page not found' is answered for an opportunity known to exist (seeded or seen open this run) and still report unbound for unknown ids. That is a faithful reading of the page withholding a draft, and it matches what the criterion says and what the R-1.2 test reads (status falsy). toggle_watch is bound to the 'Watch this opportunity' checkbox actually rendered. The unbound reasons kept for start_proposal, reporting_views and reporting_watchers (R-1.5, R-1.6) name concrete missing surface: no count in the Summary, no report section, no view or watcher figures in the loaded opportunity data. They are real reasons. The runner's typecheck on this revision passed with no diagnostics under adapters/new/, and the diff touches only tests/adapters/new (plus generated proposal/journal/run records), with nothing under tests/acceptance. Two matters belong elsewhere and are not conditions on this adapter: the R-1.5 test drives a second toggleWatch and expects the watcher count to return to its prior value, which tests unwatching rather than 'a second watch is refused as a duplicate', and should be raised against derive-tests when R-1.5's build result is ruled; and the many unbound reasons elsewhere in the adapter that still cite '/opportunities answers Page not found' are stale and need a further binding pass. What would change the ruling: evidence that the known-opportunity refusal rule masks a genuinely broken route as an empty reading, or any change under tests/acceptance.
+conditions: []
+cost: 0.4231214
+turns: 3
+session: "4582aa34-8874-43ed-8cab-ee6eb99f3722"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T12:44:39.173Z

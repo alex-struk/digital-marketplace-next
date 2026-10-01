@@ -40,3 +40,23 @@ The new reasons in the adapter and in `bindings.yaml` say all of this.
 **Out-of-date reasons I left alone.** Many other unbound reasons in the adapter rest on a shared statement that `/opportunities`, the Sprint With Us and Team With Us screens and the rest answer "Page not found" when signed in. That is no longer true: `/opportunities` and all 40 seeded opportunities, Sprint With Us and Team With Us included, now appear in the list. In `bindings.yaml`, `opportunity-list.filter_by_status` and `opportunity-list.toggle_watch` are unbound for that reason, yet the list now has a Status filter. I kept to the five criteria I was asked about, so those other screens need to be looked at again.
 
 Every route I opened resolved. I changed only `tests/adapters/new/index.ts` and `tests/adapters/new/bindings.yaml`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does bind-adapter-new-34 bind every surface action and observation the five named criteria need on target new, and nothing else? Approve. The new notification-optin-opportunity-list bindings (R-6.21, R-6.27) are navigation and locators only: they read the 'New opportunity emails' region's words and its state as 'checked'/'unchecked', press its button honouring a requested end state, and read it at 375px before restoring the viewport. The toggle throws only when the press fails to take effect, which is the action failing, not a pass/fail judgement. For R-1.2 the opportunity-cwu-view readers return empty when 'Page not found' is answered for an opportunity known to exist (seeded or seen open this run) and still report unbound for unknown ids. That is a faithful reading of the page withholding a draft, and it matches what the criterion says and what the R-1.2 test reads (status falsy). toggle_watch is bound to the 'Watch this opportunity' checkbox actually rendered. The unbound reasons kept for start_proposal, reporting_views and reporting_watchers (R-1.5, R-1.6) name concrete missing surface: no count in the Summary, no report section, no view or watcher figures in the loaded opportunity data. They are real reasons. The runner's typecheck on this revision passed with no diagnostics under adapters/new/, and the diff touches only tests/adapters/new (plus generated proposal/journal/run records), with nothing under tests/acceptance. Two matters belong elsewhere and are not conditions on this adapter: the R-1.5 test drives a second toggleWatch and expects the watcher count to return to its prior value, which tests unwatching rather than 'a second watch is refused as a duplicate', and should be raised against derive-tests when R-1.5's build result is ruled; and the many unbound reasons elsewhere in the adapter that still cite '/opportunities answers Page not found' are stale and need a further binding pass. What would change the ruling: evidence that the known-opportunity refusal rule masks a genuinely broken route as an empty reading, or any change under tests/acceptance.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `97970d7e4c6245e208c059becda2975664559af7`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
