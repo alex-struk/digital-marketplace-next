@@ -1488,6 +1488,14 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-01T08:11:14.988Z
+    closed:
+      outcome: met
+      why: /dashboard now lists the person's own opportunities (all of them for an
+        administrator), each with title, status and a link
+        (app/frontend/src/screens/dashboard.tsx). The design has no tabs on this
+        page.
+      by: agent:tech-lead
+      at: 2026-10-01T09:50:03.644Z
   - ref: build-slice-7-3#2
     text: "On /opportunities/code-with-us/<id>/edit, offer an administrator a
       'Publish' action on a draft as well as on an opportunity under review: the
@@ -1500,6 +1508,13 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-01T08:11:14.988Z
+    closed:
+      outcome: met
+      why: an administrator is offered Publish on a draft as well as under review
+        (app/frontend/src/screens/opportunity-cwu-edit.tsx:137,
+        isUnpublished(status) && mayPublishOpportunity(account)).
+      by: agent:tech-lead
+      at: 2026-10-01T09:50:03.658Z
   - ref: plan-12#1
     text: Move R-6.15 out of Slice 10. Its test also checks the owner's notice,
       which it reaches by walking Team With Us individual evaluation and the
@@ -1552,3 +1567,11 @@ conditions:
     stage: build
     by: tech-lead
     at: 2026-10-01T08:42:24.223Z
+    closed:
+      outcome: withdrawn
+      why: the recheck it asked of build points to the target-new adapter, not the
+        application, for R-8.19, R-8.25 and R-8.17, and it is now asked of
+        bind-adapter in this ruling's addressed-to conditions. R-1.10 passes and
+        R-1.21 is an adapter binding gap.
+      by: agent:tech-lead
+      at: 2026-10-01T09:50:03.673Z
