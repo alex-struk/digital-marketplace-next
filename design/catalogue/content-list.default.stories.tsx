@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Heading, Link, Text } from "@bcgov/design-system-react-components";
+import { PageContainer, Stack } from "./layout";
 
 // content-list · default — an administrator in the content area. Every page is listed once, ordered by title, with its
 // public address, whether the service needs it, and its created and updated dates (R-7.5). The title opens the page's
@@ -7,8 +8,8 @@ import { Heading, Link, Text } from "@bcgov/design-system-react-components";
 const meta: Meta = { title: "content/content-list/default" };
 export default meta;
 
-const page = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
-const toolbar = { display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: "var(--layout-margin-medium)" } as const;
+// The project's own data table and status badge (see design/DESIGN.md): the cells and the badge carry their own inner
+// spacing; where the table sits on the page is the stack's.
 const cell = {
   textAlign: "start",
   padding: "var(--layout-padding-small)",
@@ -33,48 +34,50 @@ const pages = [
 
 export const Default: StoryObj = {
   render: () => (
-    <div style={page}>
-      <div style={toolbar}>
-        <Heading level={1}>Content Management</Heading>
-        <Link href="/content/create" isButton buttonVariant="primary" data-testid="content-create-link">Create page</Link>
-      </div>
-      <Text elementType="p">
-        Pages marked "Needed by the service" are linked to or embedded by the service. Their title and body can be changed,
-        but they cannot be moved to another address or removed.
-      </Text>
-      <div role="region" aria-labelledby="content-list-caption" tabIndex={0} style={{ overflowX: "auto" }}>
-        <table style={{ borderCollapse: "collapse", width: "100%" }} data-testid="content-list-table">
-          <caption id="content-list-caption" style={{ textAlign: "start" }}>
-            <Text size="small" color="secondary">Every page, in order of title</Text>
-          </caption>
-          <thead>
-            <tr>
-              <th scope="col" style={cell}>Title</th>
-              <th scope="col" style={cell}>Public address</th>
-              <th scope="col" style={cell}>Needed by the service</th>
-              <th scope="col" style={cell}>Created</th>
-              <th scope="col" style={cell}>Last updated</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pages.map((p) => (
-              <tr key={p.slug} data-testid="content-list-row">
-                <td style={cell}>
-                  <Link href={`/content/${p.slug}/edit`} data-testid="content-list-title-link">{p.title}</Link>
-                </td>
-                <td style={cell}>
-                  <Link href={`/content/${p.slug}`} data-testid="content-list-address-link">/content/{p.slug}</Link>
-                </td>
-                <td style={cell}>
-                  <span data-testid="content-list-fixed">{p.fixed ? <span style={badge}>Yes</span> : "No"}</span>
-                </td>
-                <td style={cell}><time dateTime={p.created[0]} data-testid="content-list-created">{p.created[1]}</time></td>
-                <td style={cell}><time dateTime={p.updated[0]} data-testid="content-list-updated">{p.updated[1]}</time></td>
+    <PageContainer>
+      <Stack gap="large">
+        <Stack direction="row" align="center" justify="space-between" gap="medium">
+          <Heading level={1}>Content Management</Heading>
+          <Link href="/content/create" isButton buttonVariant="primary" data-testid="content-create-link">Create page</Link>
+        </Stack>
+        <Text elementType="p">
+          Pages marked "Needed by the service" are linked to or embedded by the service. Their title and body can be changed,
+          but they cannot be moved to another address or removed.
+        </Text>
+        <div role="region" aria-labelledby="content-list-caption" tabIndex={0} style={{ overflowX: "auto" }}>
+          <table style={{ borderCollapse: "collapse", width: "100%" }} data-testid="content-list-table">
+            <caption id="content-list-caption" style={{ textAlign: "start" }}>
+              <Text size="small" color="secondary">Every page, in order of title</Text>
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col" style={cell}>Title</th>
+                <th scope="col" style={cell}>Public address</th>
+                <th scope="col" style={cell}>Needed by the service</th>
+                <th scope="col" style={cell}>Created</th>
+                <th scope="col" style={cell}>Last updated</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+            </thead>
+            <tbody>
+              {pages.map((p) => (
+                <tr key={p.slug} data-testid="content-list-row">
+                  <td style={cell}>
+                    <Link href={`/content/${p.slug}/edit`} data-testid="content-list-title-link">{p.title}</Link>
+                  </td>
+                  <td style={cell}>
+                    <Link href={`/content/${p.slug}`} data-testid="content-list-address-link">/content/{p.slug}</Link>
+                  </td>
+                  <td style={cell}>
+                    <span data-testid="content-list-fixed">{p.fixed ? <span style={badge}>Yes</span> : "No"}</span>
+                  </td>
+                  <td style={cell}><time dateTime={p.created[0]} data-testid="content-list-created">{p.created[1]}</time></td>
+                  <td style={cell}><time dateTime={p.updated[0]} data-testid="content-list-updated">{p.updated[1]}</time></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Stack>
+    </PageContainer>
   ),
 };

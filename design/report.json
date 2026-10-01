@@ -1,7 +1,7 @@
 {
-  "generated": "2026-10-01T01:58:49.669Z",
+  "generated": "2026-10-01T23:43:59.114Z",
   "axe": "4.13.0",
-  "catalogue": "2eb8e996c968c0f44407ed8190fb0129522b9e2a1e260353b222c03a3e51bc71",
+  "catalogue": "4bb136417ce8ce785858a8d31e50ede6b81cc8be944ce887645aca666332cce9",
   "ok": true,
   "messages": [],
   "compile": [
@@ -153,6 +153,30 @@
       "id": "content-content-list-not-found--not-found",
       "title": "content/content-list/not-found",
       "file": "./catalogue/content-list.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-request-default--default",
+      "title": "content/content-request/default",
+      "file": "./catalogue/content-request.default.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-request-invalid--invalid",
+      "title": "content/content-request/invalid",
+      "file": "./catalogue/content-request.invalid.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-request-not-found--not-found",
+      "title": "content/content-request/not-found",
+      "file": "./catalogue/content-request.not-found.stories.tsx",
+      "violations": []
+    },
+    {
+      "id": "content-content-request-refused--refused",
+      "title": "content/content-request/refused",
+      "file": "./catalogue/content-request.refused.stories.tsx",
       "violations": []
     },
     {
@@ -2953,7 +2977,7 @@
     }
   ],
   "totals": {
-    "stories": 489,
+    "stories": 493,
     "violations": 0,
     "failed": 0
   }

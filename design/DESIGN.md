@@ -1498,11 +1498,12 @@ words that no criterion gives, the story or this list says so.
 ## Domain: content
 
 The service's own prose is held as pages: a title, a body of formatted text and a short address,
-readable by anyone at `/content/<address>` and managed by an administrator. This domain designs six
+readable by anyone at `/content/<address>` and managed by an administrator. This domain designs seven
 surfaces: the footer's five links to those pages (`content-footer`), the service level agreement
 link on the Code With Us learn-more screen (`content-service-level-agreement-link`), the
 administrator's list of pages (`content-list`), creating a page (`content-create`), a page's
-managing screen (`content-edit`), and the public page itself (`content-view`). Every state named in
+managing screen (`content-edit`), the public page itself (`content-view`), and the requests the
+service answers about pages (`content-request`, a response reference rather than a screen). Every state named in
 `design/screens.yaml` has a story at `design/catalogue/<page>.<state>.stories.tsx`, and the story is
 what a build copies.
 
@@ -1545,6 +1546,19 @@ These are built from standard HTML, or from `react-aria-components` (the library
 is itself built on), and styled only with tokens. None of them is a design-system component, and
 none may be presented as one.
 
+- **Page container** (`PageContainer`, `design/catalogue/layout.tsx`). The one column every screen's
+  content sits in: at most 1100 pixels wide, centred, with `--layout-padding-medium` on either side
+  and `--layout-padding-large` above and below. It matches the content width of the design system's
+  own `Header` and `Footer`, so a screen lines up with the banner. The design system ships no page
+  grid or container component, which is why it is the project's own. 1100px is the one literal
+  size in the catalogue, because no token carries it, and it is written only here.
+- **Stack** (`Stack`, `design/catalogue/layout.tsx`). The one way items are spaced: a flex column
+  (or, with `direction="row"`, a wrapping row) whose `gap` is `--layout-margin-small`, `-medium` or
+  `-large` and nothing else. It removes the margins the design system's `Text` and `Heading` carry
+  (and a `dt`'s or `dd`'s) from each of its items, and from a heading or paragraph that is the only
+  content of an item's wrapper, so a gap is never the token plus a component's margin. It takes no
+  `style` or `className`, so no screen can add spacing beside it. The design system has no stack or
+  spacing primitive.
 - **Body editor.** This is new in this domain. The design system has no rich-text or markdown
   editor, and the opportunities domain's gap 21 left this decision to the content domain. The
   editor is a composition, not a new widget: a `Toolbar` from `react-aria-components`, labelled
@@ -1571,14 +1585,33 @@ none may be presented as one.
   either way.
 
 No token beyond those the earlier domains list is used: `--layout-margin-{none,small,medium,large}`,
-`--layout-padding-{small,large}`, `--layout-border-width-small`,
+`--layout-padding-{small,medium,large}`, `--layout-border-width-small`,
 `--layout-border-radius-{medium,circular}`, `--surface-color-border-{default,medium}` and
 `--typography-font-weights-bold`.
 
 ### How each screen is laid out
 
-The users domain's layout applies: a single-column grid, with `--layout-margin-large` between
-regions and `--layout-padding-large` around the page. Action rows wrap.
+Every screen of this domain is built the same way, from `layout.tsx` and nothing else: one
+`PageContainer`, and inside it one `Stack gap="large"` whose items are the screen's regions. No story
+sets a width, an outer padding, a margin or a gap of its own. The rhythm is fixed:
+
+- **`large`** between the regions of a page: the heading block, an alert, the key facts, the action
+  row, each `<section>`.
+- **`medium`** between the items of a region: the fields of a form, a section's heading and what
+  follows it, the key facts beside one another, the placeholder frame's content.
+- **`small`** between a label and what it labels: "Manage a page" and the H1 it sits over; the
+  address field, its rule and the resulting address; the formatting toolbar, the body and the
+  formatting-guide link; a `dt` and its `dd` in a response reference; and between the buttons of
+  the formatting toolbar and the spinner and text of a loading row.
+
+A form is a design-system `Form` holding one `Stack gap="medium"`. Rows (the list's H1 with Create
+page, the key facts, the toolbar's buttons, the loading row) are `Stack direction="row"`, which
+always wraps, so nothing is pushed off a 320-pixel screen or at 400% zoom; the key facts fall into a
+column when they no longer fit. The list's table keeps its own scrolling region, the one place that
+scrolls sideways. Dialogs are portalled by `Modal` and laid out by the design system. The footer sits
+after the container, not inside it, because the design system's `Footer` centres its own content to
+the same width. The placeholder frames (footer and service level agreement stories) keep their own
+border and inner padding and lay out their content with a stack.
 
 - **Footer.** It sits on every screen, after the main content, whatever the viewer's sign-in state
   (R-7.19). The five links appear in the order R-7.19 names them (About, Disclaimer, Privacy,
@@ -1717,6 +1750,9 @@ WCAG 2.1 AA applies (P1, J5). The users domain's list applies here too. This dom
   visible text label rather than an icon.
 - **A link that opens a new tab says so** in its text ("How to format text (opens in a new tab)").
 - **Dates** are `<time datetime>` elements.
+- **Reflow (WCAG 1.4.10).** Every screen stays usable at 320 pixels wide and at 400% zoom. The
+  page container has no minimum width, every row is a wrapping stack, and the only sideways scroll
+  is the list's table, in its own labelled, focusable region.
 - **Checks still required.** Keyboard use of the formatting toolbar and the image chooser, a
   screen-reader check of the address rule and the resulting-address line as the person types, and
   a check of a real body with headings, lists and images through the renderer have not been done.
@@ -1759,6 +1795,18 @@ The following bindings are not obvious from their names:
   `content-list-title-link`s inside it.
 - **Links in a body.** `follow_body_link` is `content-body-link`, which the renderer puts on every
   link it renders.
+- **What the body turned into.** `body_element_names` and `body_script_ran` are both
+  `content-page-body`, the element the renderer writes the body into. The first is read as the
+  names of the elements inside it, in document order. The second is not an element at all: it is
+  whether a dialog was raised while that element rendered, so the ID names the body the adapter
+  waits for before it starts watching (see gap 16). With R-7.17's renderer the first never
+  contains `script` and the second is always empty.
+- **Requests.** On `content-request` the six actions are `content-request-read-list`,
+  `-read-page`, `-create`, `-change`, `-rename` and `-remove`, one per request.
+  `request_accepted` is `content-request-accepted`, `refusal_status` is
+  `content-request-refusal-status`, and `refusal_shape` is `content-request-refusal-shape`. As in
+  the users and files domains, **the adapter reads these as names for parts of the request and the
+  HTTP answer**, not as elements in a browser.
 - **Something that must be absent.** `version_history` is `content-version-history`, and **no story
   renders it, on purpose**. R-7.23 says nothing in the service shows an earlier version, and the
   surface's own comment says the observation exists to come back empty. A build must never render
@@ -1799,7 +1847,28 @@ long, R-7.20), `duplicate-slug` (a rename to "about" refused, R-7.22), `publish-
 broadcast section, and its states, are the notifications domain's.
 
 **content-view** — `default` (the page at "privacy" read by a visitor who is not signed in,
-R-7.1), `loading`, `not-found` (R-7.2, R-7.3).
+R-7.1), `loading`, `not-found` (R-7.2, R-7.3). A body that carries raw markup is not a state of its
+own: the renderer shows it as text inside the same `content-page-body`, which is exactly what
+`body_element_names` and `body_script_ran` check (R-7.17).
+
+**content-request** — `default`, `refused`, `invalid`, `not-found`. The address answers with data,
+so, as with the users domain's and the files domain's service addresses, each story is a response
+reference: the requests, then the answer, each part on an element carrying its test ID, built from
+`Heading`, `Text` and a description list in a stack. The methods and addresses are those of
+`spec/contract/openapi.yaml` (GET and POST `/api/content`; GET, PUT and DELETE
+`/api/content/<address>`, a rename being a PUT that sends a new address). The states are the
+distinct answers:
+
+- `default`: an administrator's six requests are answered (`content-request-accepted`).
+- `refused`: anyone but an administrator reads the list, or creates, changes, renames or removes a
+  page. Nothing changes (R-7.10), and every one of those refusals is a permission refusal in one
+  form, never reported as a faulty submission (R-7.16, which replaces R-7.11). The status reads
+  "Refused: not permitted", in the users domain's words.
+- `invalid`: what an administrator sent is refused, with nothing changed: a title or body of the
+  wrong length naming the failing field (R-7.20), an address that breaks the rule (R-7.21) or that
+  another page holds (R-7.22), a rename or removal of a page the service needs (R-7.25), or a read
+  at an address that is not well formed (R-7.3). The status reads "Refused: invalid request".
+- `not-found`: a read at a well-formed address no page holds (R-7.2).
 
 ### Gaps
 
@@ -1868,6 +1937,33 @@ words that no criterion gives, the story or this list says so.
 14. **Content the spec does not carry.** Every page body in the stories is a placeholder, marked as
     such. The people named ("Test Administrator", "Test Administrator Two") are synthetic, in the
     users domain's style, and the page "hackathon-rules" is an invented ordinary page.
+15. **Reading one page refused for lack of permission.** R-7.16 lists reading one page among the
+    requests whose permission refusal must share one form. But R-7.1 lets anyone, signed in or not,
+    read a page, and no criterion names anyone who may not. So `content-request.refused` shows five
+    requests, not six, and a permission refusal of a read has no case to design. Either R-7.16
+    should drop reading one page, or a criterion should say who is refused it.
+16. **An observation that is not an element.** `content-view.body_script_ran` is read as a dialog
+    the browser raises, which no element carries. It is bound to `content-page-body` because that
+    is the rendered body the adapter must wait for before it watches. If the contract wants every
+    test ID to name the element that shows the value, this observation should be marked as read
+    from the browser, the way `content-edit.version_history` is a statement that something is
+    absent (gap 1).
+17. **Refusal statuses and the form of an answer.** The criteria say "permission refusal",
+    "invalid request" and "not found" but give no status numbers for the content requests, and the
+    interface description gives one only for reading a page (400 and 404). Neither says which
+    fields a refused answer carries. The stories say what each refusal must name (the lack of
+    permission, or the failing field or address) and leave the numbers and field names to the
+    build. Which refusal R-7.25's refused rename or removal of a needed page is, a permission
+    refusal or an invalid request, is not stated. The design files it under `invalid`, because the
+    administrator is permitted and the request itself is what the service will not take.
+18. **The page container's box.** The layout rule says the container is at most 1100 pixels wide,
+    with `--layout-padding-medium` on either side. `PageContainer` counts the padding inside the
+    1100 pixels (`box-sizing: border-box`), so the text column is 1100 pixels less the two paddings.
+    If the design system's `Header` measures its 1100 pixels without the padding, the columns will
+    be one padding apart at wide widths, and the container should change in `layout.tsx` alone.
+    The container also adds `--layout-padding-large` above and below, which the rule does not
+    mention, because the catalogue renders full-screen and content would otherwise touch the top
+    edge.
 
 ---
 

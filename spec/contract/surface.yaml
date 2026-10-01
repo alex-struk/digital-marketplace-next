@@ -1718,8 +1718,8 @@ pages:
       # a dialog (alert, confirm or prompt) the page raised on opening or within a few
       # seconds after — and empty otherwise. seed.content.scriptProbePage carries markup
       # that raises one if it runs.
-      body_element_names: { test_id: null }
-      body_script_ran: { test_id: null }
+      body_element_names: { test_id: content-page-body }
+      body_script_ran: { test_id: content-page-body }
       published_date: { test_id: content-published-date }
       updated_date: { test_id: content-updated-date }
       readable_when_signed_out: { test_id: content-page }
@@ -2099,18 +2099,18 @@ pages:
     route: /api/content/:slug
     title: "Requests about a page"
     actions:
-      read_page_list_by_request: { test_id: null }
-      read_page_by_request: { test_id: null }
-      create_page_by_request: { test_id: null }
-      change_page_by_request: { test_id: null }
-      rename_page_by_request: { test_id: null }
-      remove_page_by_request: { test_id: null }
+      read_page_list_by_request: { test_id: content-request-read-list }
+      read_page_by_request: { test_id: content-request-read-page }
+      create_page_by_request: { test_id: content-request-create }
+      change_page_by_request: { test_id: content-request-change }
+      rename_page_by_request: { test_id: content-request-rename }
+      remove_page_by_request: { test_id: content-request-remove }
     observations:
-      request_accepted: { test_id: null }
-      refusal_status: { test_id: null }
+      request_accepted: { test_id: content-request-accepted }
+      refusal_status: { test_id: content-request-refusal-status }
       # The form of the refused answer — which fields it carries and how the reason is
       # named — so that two refusals can be compared (observables.yaml, refusals.shape).
-      refusal_shape: { test_id: null }
+      refusal_shape: { test_id: content-request-refusal-shape }
 
   # One panel member's individual evaluation of one proponent, as a request. :userId is
   # the panel member, as on evaluation-individual-edit-swu.
