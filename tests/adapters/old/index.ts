@@ -11172,6 +11172,46 @@ export default function create(
     },
   };
 
+  // An opportunity's view count, asked afresh each time it is read so a test polling for a
+  // change sees what the service holds now. Checked here on seed.opportunities
+  // .publishedCodeWithUs: GET /api/counters?counters=opportunity.code-with-us.<id>.views
+  // answered 200 {} as the administrator before the public page was opened, and 200
+  // {"opportunity.code-with-us.<id>.views":1} once it had been; public sector staff read the
+  // same; a vendor was answered 401 ["You do not have permission to perform this action."].
+  const COUNTERS = "opportunity-counters";
+  let counterName = "";
+
+  async function counterAnswer(what: string): Promise<{ status: number; body: string; json: unknown }> {
+    if (!counterName) nothing(`${COUNTERS}.${what} — no opportunity was opened to count`);
+    return accountAnswer(`${COUNTERS}.${what}`, `${baseURL}/api/counters?counters=${encodeURIComponent(counterName)}`);
+  }
+
+  const opportunityCounters: PageOf<"opportunityCounters"> = {
+    open: async (params?: { program?: string; opportunityId?: string }) => {
+      const opportunity = seededId(params?.opportunityId ?? "", "opportunities");
+      const fromSeed = Object.values(seed.opportunities as unknown as Record<string, { id?: unknown; program?: unknown }>).find(
+        (each) => each && String(each.id) === opportunity,
+      )?.program;
+      const program = String(params?.program ?? "") || (typeof fromSeed === "string" ? fromSeed : "");
+      if (!opportunity) nothing(`${COUNTERS}.open — no opportunity was named`);
+      if (!program) nothing(`${COUNTERS}.open — no programme was named for opportunity ${opportunity}`);
+      counterName = `opportunity.${program}.${opportunity}.views`;
+      await counterAnswer("open");
+    },
+    // A counter never incremented is left out of the answer, which reads as 0. A refused
+    // request has no count to read, and reads as nothing.
+    viewCount: async () => {
+      const got = await counterAnswer("view_count");
+      if (got.status !== 200 || !got.json || typeof got.json !== "object" || Array.isArray(got.json)) return "";
+      const count = (got.json as Record<string, unknown>)[counterName];
+      return count === undefined || count === null ? "0" : String(count);
+    },
+    refusedWhenNotPermitted: async () => {
+      const got = await counterAnswer("refused_when_not_permitted");
+      return got.status === 401 || got.status === 403 ? `${got.status} ${got.body}` : "";
+    },
+  };
+
   // Bound first and returned after, so a page only the newer surface declares is not refused
   // as an unknown property when this compiles against an older one.
   const surface = {
@@ -11286,6 +11326,7 @@ export default function create(
     proposalEvaluationRequest,
     userAccountSelfRequest,
     userAccountRequest,
+    opportunityCounters,
   };
   return surface;
 }

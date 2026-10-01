@@ -1433,3 +1433,9 @@ pages:
       new_opportunity_notices_since: bound
       refused_when_not_permitted: bound
       refusal_status: bound
+
+  opportunity-counters:
+    actions: {}
+    observations:
+      view_count: bound
+      refused_when_not_permitted: bound
