@@ -66,3 +66,23 @@ I fixed the single failed check: the adapter no longer contains anything the che
 I renamed the parameter to `matches` in its declaration and at its one call site. The helper behaves exactly as before, and its two callers pass their match functions by position, so neither needed changing. A search of `tests/adapters/new/` now finds no bare `test(` call; every other occurrence is a regular-expression `.test(...)` method call.
 
 Nothing else in the adapter or in `bindings.yaml` changed. That includes the unbound members the rerun request listed, so they stay unbound with the same reasons. I did not compile the adapter or run it after the rename.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on new, and nothing else? Approved. The diff touches only tests/adapters/new (no tests/acceptance, app or spec changes) and adds no assertions; the new bindings for the program chooser, the Code With Us create form, the management screen, the attachment control and the redrawn public page are navigation and locators only. Every remaining unbound reason names the roles and seeded records it was walked with and what was missing from the page (no cancel control, no addendum or note controls, no Proposals section or reporting counts, Sprint With Us/Team With Us/proposal/report screens answering 'Page not found'), so each one is real. The runner's typecheck passed with no diagnostics under adapters/new, which covers the author's caveat that nothing had been compiled, and the separation check now passes. The egress failure is about older .sdlc and site files from earlier build slices that this diff does not touch. Saving the form inside the attachment readers is normalisation the surface needs, since it has no save member. Reading the draft's 'counted once published' note, and an awarded page that names no winner, as empty is reporting what the page shows; neither is a pass/fail decision. Would change if a reader were shown to decide an outcome rather than report the page, or if an unbound reason were contradicted by a page that offers the control.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `0f5d076417df1267690e9aad6020002e9085c521`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
