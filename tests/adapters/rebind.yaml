@@ -5082,6 +5082,11 @@ rebind:
     app_tree: bb72c17a494fc38cb1b27a260bbc020585a449cd
     by: runner:verify
     at: 2026-10-01T12:35:24.909Z
+    closed: &a29
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-01T13:15:46.765Z
   - id: R-6.27
     target: new
     why: "unbound: notification-optin-opportunity-list.notification_control — opened
@@ -5112,6 +5117,7 @@ rebind:
     app_tree: bb72c17a494fc38cb1b27a260bbc020585a449cd
     by: runner:verify
     at: 2026-10-01T12:35:24.909Z
+    closed: *a29
   - id: R-1.2
     target: new
     why: "unbound: opportunity-cwu-view.status — the opportunity did not open at
@@ -5123,6 +5129,7 @@ rebind:
     app_tree: bb72c17a494fc38cb1b27a260bbc020585a449cd
     by: runner:verify
     at: 2026-10-01T12:35:24.909Z
+    closed: *a29
   - id: R-1.5
     target: new
     why: "unbound: opportunity-cwu-edit.reporting_watchers — the summary on
@@ -5142,6 +5149,7 @@ rebind:
     app_tree: bb72c17a494fc38cb1b27a260bbc020585a449cd
     by: runner:verify
     at: 2026-10-01T12:35:24.909Z
+    closed: *a29
   - id: R-1.6
     target: new
     why: "unbound: opportunity-cwu-edit.reporting_views — the summary on
@@ -5160,3 +5168,52 @@ rebind:
     app_tree: bb72c17a494fc38cb1b27a260bbc020585a449cd
     by: runner:verify
     at: 2026-10-01T12:35:24.909Z
+    closed: *a29
+  - id: R-1.5
+    target: new
+    why: 'unbound: opportunity-cwu-edit.reporting_watchers — the summary on
+      http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/edit?tab=summary
+      shows no /^watchers$/i count (it shows Manage a Code With Us opportunity /
+      Seeded published Code With Us opportunity / Status: Published /
+      Opportunity ID: 00000000-0000-4000-8000-000000000601 / Edit / Proposal
+      deadline / June 1, 2030 at 4:00 p.m. Pacific time / Reward / $5,000 /
+      Published / January 5, 2026 / Created by / Casey Placeholder / Last
+      changed by); looked again as the administrator and as the owning public
+      sector employee on the seeded published, lapsed-with-three-proposals,
+      in-processing and awarded Code With Us opportunities (and on the published
+      one after the administrator ticked "Watch this opportunity" on its page):
+      the Summary carries only Proposal deadline, Reward, Published, Created by
+      and Last changed by, the only sections are Summary, Opportunity, Addenda
+      and History, and the opportunity the screen loads from
+      /api/opportunities/code-with-us/:id carries no view, watcher or proposal
+      count'
+    found: unbound
+    adapter: 8a14a08770f8169ea777cd717609d5a89a9adefa
+    slice: 8
+    app_tree: 7636177085ac8122e8aa18c80f4b872fd84e93f1
+    by: runner:verify
+    at: 2026-10-01T13:15:46.765Z
+  - id: R-1.6
+    target: new
+    why: 'unbound: opportunity-cwu-edit.reporting_views — the summary on
+      http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/edit?tab=summary
+      shows no /^views$/i count (it shows Manage a Code With Us opportunity /
+      Seeded published Code With Us opportunity / Status: Published /
+      Opportunity ID: 00000000-0000-4000-8000-000000000601 / Edit / Proposal
+      deadline / June 1, 2030 at 4:00 p.m. Pacific time / Reward / $5,000 /
+      Published / January 5, 2026 / Created by / Casey Placeholder / Last
+      changed by); looked again as the administrator and as the owning public
+      sector employee on the seeded published, lapsed-with-three-proposals,
+      in-processing and awarded Code With Us opportunities (and on the published
+      one after the administrator ticked "Watch this opportunity" on its page):
+      the Summary carries only Proposal deadline, Reward, Published, Created by
+      and Last changed by, the only sections are Summary, Opportunity, Addenda
+      and History, and the opportunity the screen loads from
+      /api/opportunities/code-with-us/:id carries no view, watcher or proposal
+      count'
+    found: unbound
+    adapter: 8a14a08770f8169ea777cd717609d5a89a9adefa
+    slice: 8
+    app_tree: 7636177085ac8122e8aa18c80f4b872fd84e93f1
+    by: runner:verify
+    at: 2026-10-01T13:15:46.765Z
