@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { CwuAttachmentReadPath } from "../opportunities/cwu-attachment-read-path";
 import { FILE_READ_PATHS, FILE_STORE, FileReadPath } from "./file";
 import { FilesService } from "./files.service";
 import { PrismaFileStore } from "./prisma-file.store";
@@ -11,9 +12,14 @@ import { PrismaFileStore } from "./prisma-file.store";
   providers: [
     FilesService,
     { provide: FILE_STORE, useClass: PrismaFileStore },
-    // What a file is attached to can make it readable (R-8.20). No slice before the one that
-    // attaches files to opportunities has anything to add here.
-    { provide: FILE_READ_PATHS, useValue: [] as readonly FileReadPath[] },
+    // What a file is attached to can make it readable (R-8.20): a Code With Us opportunity, so
+    // far (R-8.25). Each slice that attaches files to something else adds its own path here.
+    CwuAttachmentReadPath,
+    {
+      provide: FILE_READ_PATHS,
+      inject: [CwuAttachmentReadPath],
+      useFactory: (codeWithUs: CwuAttachmentReadPath): readonly FileReadPath[] => [codeWithUs],
+    },
   ],
   exports: [FilesService],
 })
