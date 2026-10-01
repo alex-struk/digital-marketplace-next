@@ -1542,3 +1542,13 @@ conditions:
         cannot be shown before cancellation) are recorded in plan/plan.md.
       by: agent:architect
       at: 2026-10-01T08:20:23.759Z
+  - ref: build-slice-7-4#3
+    text: Once the rebound adapter has run, recheck R-8.17, R-8.19, R-8.25, R-1.10
+      and R-1.21 against it; where one still fails, find where the application
+      departs from the criterion.
+    from: build-slice-7-4
+    family: build-slice-7
+    gate: G3
+    stage: build
+    by: tech-lead
+    at: 2026-10-01T08:42:24.223Z
