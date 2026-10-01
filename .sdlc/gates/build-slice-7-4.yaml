@@ -1,0 +1,10 @@
+gate: G3
+verdict: return
+by: tech-lead
+held_by: human
+note: "Ruled by the operator agent under Alex's standing delegation (2026-09-30) to rule application questions on his behalf. The escalation is right that verify's unbound reasons contradict this tree: the new adapter replays the reason it recorded when each member was bound, against an earlier build of slice 7, and those rows have spent their rebind sends, so no binding was re-owed. The fix is a rebind against this build, not another build or a person confirming the stack."
+conditions:
+  - "addressed-to bind-adapter: rebind against build-slice-7-4 every member of opportunity-cwu-create, opportunity-cwu-edit (including publish and the Opportunity tab readers), file-attachment-control and the signed-in /dashboard whose binding is unbound or was walked against an earlier slice-7 build. Their recorded reasons ('/opportunities/code-with-us/create ... Page not found', the dashboard serving 'a greeting and nothing else', an administrator offered 'Submit for review') contradict app/frontend/src/router.tsx:139, dashboard.tsx and opportunity-cwu-edit.tsx:132-133 on this build, as the escalation of build-slice-7-4 sets out."
+  - "addressed-to plan: slice 7 still claims R-1.9, R-1.53 and R-1.56, whose tests open /opportunities/sprint-with-us/create (Slice 10), and R-8.22, whose test opens /opportunities/code-with-us/:opportunityId/proposals/create (Slice 14); verify on build-slice-7-4 found each unbound on those screens. Move each to a slice whose dependencies deliver its screen."
+  - "Once the rebound adapter has run, recheck R-8.17, R-8.19, R-8.25, R-1.10 and R-1.21 against it; where one still fails, find where the application departs from the criterion."
+at: 2026-10-01T08:42:23.929Z
