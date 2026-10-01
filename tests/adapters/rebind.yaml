@@ -3311,6 +3311,11 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:31:33.774Z
+    closed: &a22
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-01T03:50:49.369Z
   - id: R-7.7
     target: new
     why: "unbound: content-create.enter_title — /content/create is offered only to a
@@ -3328,6 +3333,7 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:31:33.774Z
+    closed: *a22
   - id: R-7.8
     target: new
     why: "unbound: content-edit.updated_date — /content/:slug/edit is offered only
@@ -3345,6 +3351,7 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:31:33.774Z
+    closed: *a22
   - id: R-7.9
     target: new
     why: "unbound: content-edit.page_address — /content/:slug/edit is offered only
@@ -3362,6 +3369,7 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:31:33.774Z
+    closed: *a22
   - id: R-7.10
     target: new
     why: "unbound: content-create.enter_title — /content/create is offered only to a
@@ -3379,6 +3387,7 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:31:33.774Z
+    closed: *a22
   - id: R-7.12
     target: new
     why: "unbound: content-list.page_count — the content management list
@@ -3396,6 +3405,7 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:31:33.774Z
+    closed: *a22
   - id: R-7.20
     target: new
     why: "unbound: content-create.enter_title — /content/create is offered only to a
@@ -3423,6 +3433,7 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:31:33.774Z
+    closed: *a22
   - id: R-7.21
     target: new
     why: "unbound: content-create.enter_title — /content/create is offered only to a
@@ -3440,6 +3451,7 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:31:33.774Z
+    closed: *a22
   - id: R-7.22
     target: new
     why: "unbound: content-create.enter_title — /content/create is offered only to a
@@ -3457,6 +3469,7 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:31:33.774Z
+    closed: *a22
   - id: R-7.23
     target: new
     why: "unbound: content-edit.start_editing — /content/:slug/edit is offered only
@@ -3474,6 +3487,7 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:31:33.774Z
+    closed: *a22
   - id: R-7.24
     target: new
     why: "unbound: content-create.enter_title — /content/create is offered only to a
@@ -3491,6 +3505,7 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:31:33.774Z
+    closed: *a22
   - id: R-7.25
     target: new
     why: "unbound: content-edit.start_editing — /content/:slug/edit is offered only
@@ -3518,6 +3533,7 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:31:33.774Z
+    closed: *a22
   - id: R-7.26
     target: new
     why: "unbound: content-create.enter_title — /content/create is offered only to a
@@ -3535,6 +3551,7 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:31:33.774Z
+    closed: *a22
   - id: R-7.27
     target: new
     why: "unbound: content-edit.published_by — /content/:slug/edit is offered only
@@ -3552,6 +3569,7 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:31:33.774Z
+    closed: *a22
   - id: R-7.28
     target: new
     why: "unbound: content-edit.start_editing — /content/:slug/edit is offered only
@@ -3569,6 +3587,7 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:31:33.774Z
+    closed: *a22
   - id: R-8.29
     target: new
     why: "unbound: content-create.enter_title — /content/create is offered only to a
@@ -3586,3 +3605,40 @@ rebind:
     slice: 5
     by: runner:verify
     at: 2026-10-01T03:31:33.774Z
+    closed: *a22
+  - id: R-7.26
+    target: new
+    why: "unbound: file-embedded-image.upload_body_image — /content/:slug/edit is
+      offered only to a signed-in person, and walked signed in (as the
+      administrator, and as a vendor for a vendor's screens — the seeded
+      organization owner for the organization screens — with the seeded records'
+      identifiers), the running build serves a signed-in person only /dashboard
+      (a greeting and nothing else), the account screens under /users and, to
+      the administrator, the content-management screens under /content: every
+      opportunity, proposal, organization and evaluation screen, /opportunities
+      and /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: 8cba531e11764d432a80b74793b821647052b3b8
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:50:49.369Z
+  - id: R-8.29
+    target: new
+    why: "unbound: file-embedded-image.upload_body_image — /content/:slug/edit is
+      offered only to a signed-in person, and walked signed in (as the
+      administrator, and as a vendor for a vendor's screens — the seeded
+      organization owner for the organization screens — with the seeded records'
+      identifiers), the running build serves a signed-in person only /dashboard
+      (a greeting and nothing else), the account screens under /users and, to
+      the administrator, the content-management screens under /content: every
+      opportunity, proposal, organization and evaluation screen, /opportunities
+      and /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: 8cba531e11764d432a80b74793b821647052b3b8
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:50:49.369Z
