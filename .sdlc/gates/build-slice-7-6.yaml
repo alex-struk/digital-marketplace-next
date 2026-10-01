@@ -1,0 +1,13 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 7 does not yet do what 3 of its criteria say. Each condition is
+  the criterion and what the running application did.
+conditions:
+  - 'R-8.17: Error: expect(received).toBeTruthy() — Received: ""'
+  - 'R-8.19: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    ""'
+  - 'R-8.25: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    ""'
+at: 2026-10-01T09:29:54.636Z
