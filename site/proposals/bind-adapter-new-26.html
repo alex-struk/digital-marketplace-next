@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-26 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">420</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">414</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">356</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-26</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 08:45</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> <strong>What I was asked to do.</strong> Calibration could not test R-1.9 and R-1.48 because this adapter reported two pages unbound: <code>opportunity-swu-create</code> (route <code>/opportunities/sprint-with-us/create</code>) and `op…</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<h3>Journal: re-checking the Sprint With Us and Team With Us create screens on target &quot;new&quot;</h3>
+<p><strong>What I was asked to do.</strong> Calibration could not test R-1.9 and R-1.48 because this adapter reported two pages unbound: <code>opportunity-swu-create</code> (route <code>/opportunities/sprint-with-us/create</code>) and <code>opportunity-twu-create</code> (<code>/opportunities/team-with-us/create</code>). I was asked to look for both again on the running target at <a href="http://localhost:4300">http://localhost:4300</a> and bind them wherever the application offers them.</p>
+<p><strong>Finding: the running build does not offer either screen, so both pages stay unbound.</strong> I searched in these ways:</p>
+<ul><li><strong>Signed in as the administrator, then as a public sector employee.</strong> I used the real identity-provider form both times. <code>/opportunities/create</code> loads and offers three links: Code With Us, &quot;Create a Sprint With Us opportunity&quot; and &quot;Create a Team With Us opportunity&quot;. I clicked each link inside the page rather than typing its address, in case the page loaded on its own behaved differently. Both clicks land on &quot;Page not found&quot;, the same as opening the addresses directly.</li><li><strong>Nearby addresses.</strong> <code>/opportunities/sprint-with-us</code>, <code>/opportunities/team-with-us</code>, <code>/opportunities</code> and some guessed spellings (<code>/opportunities/swu/create</code>, <code>/opportunities/twu/create</code>, <code>/sprint-with-us/create</code>, <code>/team-with-us/create</code>) all answer &quot;Page not found&quot;. <code>/opportunities/create?type=swu</code> only shows the same three-way chooser again.</li><li><strong>Another way in through the Code With Us form.</strong> The Code With Us create form loads, but nothing on it lets you choose a program, and it never mentions Sprint With Us or Team With Us.</li><li><strong>The seeded Sprint With Us record.</strong> As the public sector employee, I opened the view and edit screens of the seeded Sprint With Us opportunity that is at the consensus stage. Both answer &quot;Page not found&quot;.</li><li><strong>The header menu.</strong> For a signed-in public sector employee it offers only Dashboard, Users, Content, My profile, Sign out and Create an opportunity. None of those leads to either screen.</li></ul>
+<p><strong>What I changed.</strong> In <code>tests/adapters/new/index.ts</code> I made one kind of change. The unbound reasons for <code>opportunitySwuCreate</code> and <code>opportunityTwuCreate</code> now also list this round&#39;s checks, so the next reader can see what was tried and not only that nothing was found. Nothing else in the adapter changed. I left <code>tests/adapters/new/bindings.yaml</code> alone: it still lists every member of both pages as unbound with the &quot;Page not found&quot; reason, and that is still accurate.</p>
+<p><strong>Not done.</strong> I could not run the TypeScript typecheck because running the compiler was not approved in this session. My only edits added plain text inside two existing quoted strings, with no new quote or substitution characters, so I don&#39;t expect them to break compilation, but that has not been checked.</p>
+<p><strong>Routes in <code>surface.yaml</code> that do not resolve on the target.</strong> <code>/opportunities/sprint-with-us/create</code> and <code>/opportunities/team-with-us/create</code> both answer &quot;Page not found&quot; when signed in and when signed out. The other Sprint With Us and Team With Us screens behave the same way, as the earlier reasons already record. R-1.9 and R-1.48 can only be tested once the build actually serves these screens. That is a gap in the application, not something a binding can fix.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 08:46.</p>
+<div class="body"><p>Question: does the adapter for target &#39;new&#39; bind every surface action and observation it can, and nothing else? Approve. The only change is longer text in the unbound reasons for opportunitySwuCreate and opportunityTwuCreate in tests/adapters/new/index.ts. No locator, assertion or business logic is touched, and nothing under tests/acceptance changed. The reasons are real: they name the missing surface (/opportunities/sprint-with-us/create and /opportunities/team-with-us/create answer &#39;Page not found&#39; for an administrator and for a public sector employee, including when the link on /opportunities/create is followed). That matches the application, whose frontend has no route or screen for either path (sprint-with-us and team-with-us appear only in the API types, the learn-more pages and the terms links). It is also consistent with the tech lead&#39;s earlier finding that these screens belong to Slice 10. The runner&#39;s typecheck on this revision passed with no diagnostics under adapters/new, so the binder&#39;s unchecked compile risk is settled. R-1.9 and R-1.48 stay unexercised because of a gap in the application or the slice plan, not in the adapter. This proposal settles none of the open instructions (build-slice-7-3#1, build-slice-7-3#2, build-slice-7-4#3), so they stay open. The ruling would change if a binding added an assertion, if a test file were touched, or if either screen proved to be served by the build.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
