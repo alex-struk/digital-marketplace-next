@@ -4855,6 +4855,12 @@ owed:
         gate: G3
         at: 2026-10-01T13:43:26.403Z
     target: old
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-1.5 v1 pass"
+      file_sha: 8a5ee084c449c6ab7763854f7f2ef9beb14198fa
+      by: runner
+      at: 2026-10-01T15:09:55.435Z
   - kind: missing-test
     item: R-1.6
     id: R-1.6
@@ -4891,3 +4897,9 @@ owed:
         by: runner
         at: 2026-10-01T14:03:09.693Z
     target: old
+    closed:
+      outcome: met
+      why: "tests/results/old/latest.json: R-1.6 v1 pass"
+      file_sha: 9b7d07591ed3ed99a90e31a9a48ebc15c6bfaf5b
+      by: runner
+      at: 2026-10-01T15:09:55.435Z
