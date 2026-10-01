@@ -1,0 +1,850 @@
+{
+  "slice": 7,
+  "proposal": "build-slice-7",
+  "app_tree": "5e2be50527f59721d95aa46f76d757348e0d8489",
+  "at": "2026-10-01T07:03:19.957Z",
+  "verdict": "fail",
+  "unasserted": [
+    {
+      "id": "R-1.51",
+      "result": "not-testable",
+      "reason": "unobservable: nothing the service does could show that a state it does not define is gone. No action requests a move to a suspended state, no observation returns the states an opportunity may hold or the states the list's state filter offers, and the mapping of a historical record onto a defined state happens before the rebuilt system reads it, which is a property of the migration rather than of anything the running service answers with. No addition to the surface would help; this is a claim a human accepts about the rebuild rather than one a test can settle."
+    }
+  ],
+  "unbound": [
+    {
+      "id": "R-1.4",
+      "reason": "opportunity-cwu-create.publish — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+    },
+    {
+      "id": "R-1.7",
+      "reason": "opportunity-cwu-create.save_draft — /opportunities/code-with-us/create did not open as a screen at http://localhost:4300/opportunities/code-with-us/create: Page not found The page you are looking for does not exist.; the screen is offered only to a signed-in person who may have it; walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\", and /users/:userId opens for the signed-in person's own identifier and, to the administrator, for another account's"
+    },
+    {
+      "id": "R-1.8",
+      "reason": "opportunity-program-select.choose_code_with_us — /opportunities/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+    },
+    {
+      "id": "R-1.9",
+      "reason": "opportunity-cwu-edit.opportunity_identifier — /opportunities/code-with-us/:opportunityId/edit is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+    },
+    {
+      "id": "R-1.14",
+      "reason": "opportunity-cwu-create.publish — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+    },
+    {
+      "id": "R-1.19",
+      "reason": "opportunity-cwu-create.save_draft — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+    },
+    {
+      "id": "R-1.20",
+      "reason": "opportunity-cwu-create.publish — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+    },
+    {
+      "id": "R-1.21",
+      "reason": "opportunity-cwu-create.save_draft — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+    },
+    {
+      "id": "R-1.22",
+      "reason": "opportunity-cwu-create.save_draft — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+    },
+    {
+      "id": "R-1.23",
+      "reason": "opportunity-cwu-create.publish — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+    },
+    {
+      "id": "R-1.34",
+      "reason": "opportunity-cwu-create.save_draft — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+    },
+    {
+      "id": "R-1.37",
+      "reason": "opportunity-cwu-create.submit_for_review — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+    },
+    {
+      "id": "R-1.56",
+      "reason": "opportunity-cwu-create.save_draft — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+    },
+    {
+      "id": "R-6.2",
+      "reason": "opportunity-cwu-create.publish — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+    },
+    {
+      "id": "R-6.8",
+      "reason": "opportunity-cwu-create.publish — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+    },
+    {
+      "id": "R-6.15",
+      "reason": "opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
+    },
+    {
+      "id": "R-8.17",
+      "reason": "file-attachment-control.size_limit_stated_before_choosing — /opportunities/:program/:opportunityId/edit?tab=opportunity is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+    },
+    {
+      "id": "R-8.19",
+      "reason": "opportunity-cwu-edit.opportunity_identifier — /opportunities/code-with-us/:opportunityId/edit is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+    },
+    {
+      "id": "R-8.22",
+      "reason": "opportunity-cwu-edit.opportunity_identifier — /opportunities/code-with-us/:opportunityId/edit is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+    },
+    {
+      "id": "R-8.25",
+      "reason": "opportunity-cwu-create.save_draft — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+    },
+    {
+      "id": "R-8.27",
+      "reason": "file-attachment-control.add_attachment — /opportunities/:program/:opportunityId/edit?tab=opportunity is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+    }
+  ],
+  "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4",
+  "rows": [
+    {
+      "id": "R-8.17",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.17.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "the size limit on an upload is stated in the interface before a person chooses a file",
+          "status": "failed",
+          "error": "Error: unbound: file-attachment-control.size_limit_stated_before_choosing — /opportunities/:program/:opportunityId/edit?tab=opportunity is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+        },
+        {
+          "title": "an upload larger than the service's size limit is refused as the requester's error, with a message naming the limit",
+          "status": "failed",
+          "error": "Error: unbound: file-attachment-control.size_limit_stated_before_choosing — /opportunities/:program/:opportunityId/edit?tab=opportunity is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+        },
+        {
+          "title": "an attachment larger than the service's size limit is refused in the interface with a message naming the limit",
+          "status": "failed",
+          "error": "Error: unbound: file-attachment-control.size_limit_stated_before_choosing — /opportunities/:program/:opportunityId/edit?tab=opportunity is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+        }
+      ],
+      "file_sha": "bc05ce48ab51c8bd6f00215e6cdc0b831d687024",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-8.19",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.19.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "an attachment on a Code With Us opportunity is uploaded with no read access recorded against the file itself, so that the opportunity decides who may read it",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-edit.opportunity_identifier — /opportunities/code-with-us/:opportunityId/edit is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+        },
+        {
+          "title": "an attachment on a Sprint With Us opportunity is uploaded with no read access recorded against the file itself, so that the opportunity decides who may read it",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
+        },
+        {
+          "title": "an attachment on a Team With Us opportunity is uploaded with no read access recorded against the file itself, so that the opportunity decides who may read it",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.open — /opportunities/team-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/team-with-us/create)"
+        }
+      ],
+      "file_sha": "30f3519b79116388fb73969dd123b0c7e05e0eb9",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-8.22",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.22.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "a file may be attached to an opportunity only by someone who is permitted to read that file: someone who may not read it is refused",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-edit.opportunity_identifier — /opportunities/code-with-us/:opportunityId/edit is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+        },
+        {
+          "title": "a file may be attached to an opportunity only by someone who is permitted to read that file: someone who may read it is allowed",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-edit.opportunity_identifier — /opportunities/code-with-us/:opportunityId/edit is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+        },
+        {
+          "title": "a file may be attached to a proposal only by someone who is permitted to read that file: someone who may not read it is refused",
+          "status": "failed",
+          "error": "Error: unbound: proposal-cwu-create.open — /opportunities/code-with-us/:opportunityId/proposals/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/proposals/create)"
+        },
+        {
+          "title": "a file may be attached to a proposal only by someone who is permitted to read that file: someone who may read it is allowed",
+          "status": "failed",
+          "error": "Error: unbound: proposal-cwu-create.open — /opportunities/code-with-us/:opportunityId/proposals/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/proposals/create)"
+        }
+      ],
+      "file_sha": "1cd3bf318a0e03f83c1b33a1dd4423b791149876",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-8.25",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.25.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "an attachment on a Code With Us opportunity is refused to a vendor before the opportunity is publicly visible, and readable by them once it is",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.save_draft — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        },
+        {
+          "title": "an attachment on a Sprint With Us opportunity is refused to a vendor before the opportunity is publicly visible, and readable by them once it is",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
+        },
+        {
+          "title": "an attachment on an opportunity that is not yet publicly visible is readable by the opportunity's creator",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-edit.opportunity_identifier — /opportunities/code-with-us/:opportunityId/edit is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+        },
+        {
+          "title": "an attachment on a proposal is readable by whoever may read that proposal",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.publish — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        }
+      ],
+      "file_sha": "3dea46f61c56ee6819beaf1453ad2ce0efc6ae60",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-8.27",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.27.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "an attachment can be given a different display name before it is uploaded, and the ending of the original file is put back on if the person leaves it off",
+          "status": "failed",
+          "error": "Error: unbound: file-attachment-control.add_attachment — /opportunities/:program/:opportunityId/edit?tab=opportunity is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+        }
+      ],
+      "file_sha": "a43a7ee3cc230b8b3dbab22a658f081c7997ddca",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-6.2",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.2.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "When a message cannot be composed or cannot be delivered, the action that triggered it still succeeds, nobody is told, and no further attempt is made.",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.publish — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        }
+      ],
+      "file_sha": "bc7fd3047214cd83d2a0f47d16c4d1d677798aef",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-6.8",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.8.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "A notice that goes to many people at once is split into batches of at most fifty and addressed so that no recipient can see who else received it.",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.publish — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        }
+      ],
+      "file_sha": "93f67a730eb9465d1f151e7d5db467ed3c703474",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-6.15",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.15.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service's own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity's owner exactly as it does to every other multi-recipient notice (the notice sent to an evaluation panel)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
+        },
+        {
+          "title": "A notice sent to more than one person must hide every recipient from the others, carrying the batch as blind copies with the service's own address as the visible recipient, and this applies to the notices sent to an evaluation panel and to an opportunity's owner exactly as it does to every other multi-recipient notice (the notice sent to an opportunity's owner)",
+          "status": "failed",
+          "error": "Error: unbound: evaluation-individual-create-twu.enter_question_score — /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource-questions/evaluations/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+        }
+      ],
+      "file_sha": "6f0039750ad77cbe645a2b1b5be45cce814cc2a7",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.4",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.4.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "every change to an opportunity's content creates a new version of it and the opportunity always shows its most recent version",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.publish — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        },
+        {
+          "title": "every change to an opportunity's content records an edit in its history",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.publish — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        }
+      ],
+      "file_sha": "290689fa9f95bb53e8bc6da390783e84a8fc2799",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.7",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.7.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "an anonymous visitor's attempt to create an opportunity is refused and no opportunity is created",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.save_draft — /opportunities/code-with-us/create did not open as a screen at http://localhost:4300/opportunities/code-with-us/create: Page not found The page you are looking for does not exist.; the screen is offered only to a signed-in person who may have it; walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\", and /users/:userId opens for the signed-in person's own identifier and, to the administrator, for another account's"
+        },
+        {
+          "title": "a vendor's attempt to create an opportunity is refused and no opportunity is created",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.save_draft — /opportunities/code-with-us/create did not open as a screen at http://localhost:4300/opportunities/code-with-us/create: Page not found The page you are looking for does not exist.; the screen is offered only to a signed-in person who may have it; walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\", and /users/:userId opens for the signed-in person's own identifier and, to the administrator, for another account's"
+        }
+      ],
+      "file_sha": "2866b3d1584c3ffb141b0c1d4695337c2e95459e",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.8",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.8.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "Every opportunity belongs to exactly one of three procurement programs — Code With Us, Sprint With Us or Team With Us — chosen when it is created and never changed afterwards. (Code With Us)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-program-select.choose_code_with_us — /opportunities/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+        },
+        {
+          "title": "Every opportunity belongs to exactly one of three procurement programs — Code With Us, Sprint With Us or Team With Us — chosen when it is created and never changed afterwards. (Sprint With Us)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-program-select.choose_sprint_with_us — /opportunities/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+        },
+        {
+          "title": "Every opportunity belongs to exactly one of three procurement programs — Code With Us, Sprint With Us or Team With Us — chosen when it is created and never changed afterwards. (Team With Us)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-program-select.choose_team_with_us — /opportunities/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+        }
+      ],
+      "file_sha": "3e298917785ffe1f0a02f47ad668d2bfca8e5cf6",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.9",
+      "version": 2,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.9.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "Code With Us: a draft whose dates are missing is accepted, its proposal deadline, assignment date and start date are set to fourteen days from the day of saving, and its completion date is left empty",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-edit.opportunity_identifier — /opportunities/code-with-us/:opportunityId/edit is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+        },
+        {
+          "title": "Code With Us: a draft whose dates are invalid is accepted, its proposal deadline, assignment date and start date are set to fourteen days from the day of saving, and its completion date is left empty",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-edit.opportunity_identifier — /opportunities/code-with-us/:opportunityId/edit is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen"
+        },
+        {
+          "title": "Sprint With Us: a draft whose dates are missing is accepted, its proposal deadline, assignment date and start date are set to fourteen days from the day of saving, and its completion date is left empty",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
+        },
+        {
+          "title": "Sprint With Us: a draft whose dates are invalid is accepted, its proposal deadline, assignment date and start date are set to fourteen days from the day of saving, and its completion date is left empty",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
+        },
+        {
+          "title": "Team With Us: a draft whose dates are missing is accepted, its proposal deadline, assignment date and start date are set to fourteen days from the day of saving, and its completion date is left empty",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.open — /opportunities/team-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/team-with-us/create)"
+        },
+        {
+          "title": "Team With Us: a draft whose dates are invalid is accepted, its proposal deadline, assignment date and start date are set to fourteen days from the day of saving, and its completion date is left empty",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.open — /opportunities/team-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/team-with-us/create)"
+        }
+      ],
+      "file_sha": "f00a1673daf842881af0e4d5c99746c639c9864b",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.10",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.10.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a missing title)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a title over 200 characters)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a teaser over 500 characters)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a missing location)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a missing description)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a description over 10,000 characters)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "43430986b64a075323f242d8620294061de587f8",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.11",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.11.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "An opportunity that is not a draft must state whether remote work is acceptable, and must carry a remote-work description of up to 500 characters whenever remote work is acceptable. (one that does not say whether remote work is acceptable is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft must state whether remote work is acceptable, and must carry a remote-work description of up to 500 characters whenever remote work is acceptable. (one that accepts remote work with no remote-work description is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft must state whether remote work is acceptable, and must carry a remote-work description of up to 500 characters whenever remote work is acceptable. (one that accepts remote work with a remote-work description over 500 characters is refused)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "6ac8875bd3b39f1de123be051c176521834bc3ba",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.12",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.12.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A Code With Us opportunity must offer a reward of at least $1 and at most $70,000, and must name at least one skill. (a reward below $1 is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us opportunity must offer a reward of at least $1 and at most $70,000, and must name at least one skill. (a reward above $70,000 is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us opportunity must offer a reward of at least $1 and at most $70,000, and must name at least one skill. (naming no skill is refused)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "ad8de230fa438cd99e4ed5593e1f80873a806c87",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.14",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.14.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "An opportunity's key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen. (a proposal deadline earlier than today is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity's key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen. (an assignment date before the proposal deadline is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity's key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen. (a start date before the assignment date is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity's key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen. (a completion date before the start date is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity's key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen. (the proposal deadline is recorded as 4:00 p.m. on the day chosen)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.publish — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        }
+      ],
+      "file_sha": "55271bb50468e8dc99b0b921209d519d88fa5215",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.19",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.19.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "an opportunity moves through the states draft, under review and published",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.save_draft — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        },
+        {
+          "title": "an opportunity moves on to a program-specific evaluation stage",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-view.status — the opportunity did not open at http://localhost:4300/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701: Page not found\nThe page you are looking for does not exist."
+        },
+        {
+          "title": "an opportunity finally reaches cancelled",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.publish — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        }
+      ],
+      "file_sha": "572b44c8d33cf78d69084bf0d363c08265c2ec79",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.20",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.20.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "a request to change an opportunity to a state that is not reachable from its own is refused and its state is unchanged",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.publish — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        },
+        {
+          "title": "an opportunity may only change state along the permitted path for its program",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.publish — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        }
+      ],
+      "file_sha": "b66e8a3a0cd09a73f7b830b130638bcbd4fa4caa",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.21",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.21.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "Submitting a draft opportunity for review is refused unless the opportunity is complete, and the person is told the opportunity is incomplete rather than which field is missing.",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.save_draft — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        }
+      ],
+      "file_sha": "9d8843efc9e8926f9b02d36d9808973923ae948f",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.22",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.22.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "only an administrator may publish an opportunity",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.save_draft — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        }
+      ],
+      "file_sha": "08a09c408e86f3fe87df48c868af8ca90b573564",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.23",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.23.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "publishing an opportunity records the moment of publication, which is thereafter shown as its published date",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.publish — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        }
+      ],
+      "file_sha": "458cb922cf730ba4a792f99013237c40dbdbd282",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.29",
+      "version": 2,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.29.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "The names of the people who created and last changed an opportunity are withheld from anyone who is neither an administrator nor one of those people.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "28d2ce38d0da3c2a3ad374f27a3f367074bf0570",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.34",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.34.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "Publishing an opportunity notifies everyone who has asked for new-opportunity notifications, and separately confirms the publication to the opportunity's author. — everyone who has asked for new-opportunity notifications is notified",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.save_draft — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        },
+        {
+          "title": "Publishing an opportunity notifies everyone who has asked for new-opportunity notifications, and separately confirms the publication to the opportunity's author. — the opportunity's author receives a separate confirmation",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.save_draft — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        }
+      ],
+      "file_sha": "da03866dfe5ec05521978621856b6028ec9957af",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.37",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.37.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "Submitting an opportunity for review notifies every administrator, and confirms the submission to its author. — every administrator is notified",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.submit_for_review — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        },
+        {
+          "title": "Submitting an opportunity for review notifies every administrator, and confirms the submission to its author. — the author receives a confirmation",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.submit_for_review — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        }
+      ],
+      "file_sha": "35205c76ed42ccd81295c6aa24eabd9027961203",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.48",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.48.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Code With Us: created as published by a public sector employee who is not an administrator, refused)",
+          "status": "passed"
+        },
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Code With Us: created as a draft by a public sector employee who is not an administrator)",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
+        },
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Code With Us: created under review by a public sector employee who is not an administrator)",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBeTruthy\u001b[2m()\u001b[22m\n\nReceived: \u001b[31m\"\"\u001b[39m"
+        },
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Sprint With Us: created as published by a public sector employee who is not an administrator, refused)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
+        },
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Sprint With Us: created as a draft by a public sector employee who is not an administrator)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
+        },
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Sprint With Us: created under review by a public sector employee who is not an administrator)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
+        },
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Team With Us: created as published by a public sector employee who is not an administrator, refused)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.open — /opportunities/team-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/team-with-us/create)"
+        },
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Team With Us: created as a draft by a public sector employee who is not an administrator)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.open — /opportunities/team-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/team-with-us/create)"
+        },
+        {
+          "title": "Creating an opportunity with its state set to published is refused unless the requester is an administrator; a public sector employee who is not an administrator may create an opportunity only as a draft or under review, in all three programs. (Team With Us: created under review by a public sector employee who is not an administrator)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.open — /opportunities/team-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/team-with-us/create)"
+        }
+      ],
+      "file_sha": "e0649f8e6c8b3a9aaaedcad073b4bd055e07b566",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.51",
+      "version": 1,
+      "domain": "opportunities",
+      "file": null,
+      "result": "not-testable",
+      "reason": "unobservable: nothing the service does could show that a state it does not define is gone. No action requests a move to a suspended state, no observation returns the states an opportunity may hold or the states the list's state filter offers, and the mapping of a historical record onto a defined state happens before the rebuilt system reads it, which is a property of the migration rather than of anything the running service answers with. No addition to the surface would help; this is a claim a human accepts about the rebuild rather than one a test can settle.",
+      "tests": []
+    },
+    {
+      "id": "R-1.53",
+      "version": 2,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.53.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Code With Us: an administrator deletes a draft)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.save_draft — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Publish\", link \"Skip to main content\", link \"Dashboard\", link \"Users\", link \"Content\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Code With Us: an administrator deletes an opportunity under review)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.submit_for_review — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Code With Us: the public sector employee who created it deletes a draft)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.save_draft — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Code With Us: the public sector employee who created it is refused once it is under review, and it remains)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.submit_for_review — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Sprint With Us: an administrator deletes a draft)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Sprint With Us: an administrator deletes an opportunity under review)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Sprint With Us: the public sector employee who created it deletes a draft)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Sprint With Us: the public sector employee who created it is refused once it is under review, and it remains)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Team With Us: an administrator deletes a draft)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.open — /opportunities/team-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/team-with-us/create)"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Team With Us: an administrator deletes an opportunity under review)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.open — /opportunities/team-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/team-with-us/create)"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Team With Us: the public sector employee who created it deletes a draft)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.open — /opportunities/team-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/team-with-us/create)"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Team With Us: the public sector employee who created it is refused once it is under review, and it remains)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.open — /opportunities/team-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/team-with-us/create)"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Code With Us: a request to delete an opportunity that has been published is refused, and it remains)",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Sprint With Us: a request to delete an opportunity that has been published is refused, and it remains)",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32mtrue\u001b[39m\nReceived: \u001b[31mfalse\u001b[39m"
+        },
+        {
+          "title": "An opportunity may be deleted only while it is a draft or under review: an administrator may delete one in either state, and the public sector employee who created it may delete it only while it is a draft. The same rule governs Code With Us, Sprint With Us and Team With Us alike, and any other request to delete is refused and the opportunity remains. (Team With Us: a request to delete an opportunity that has been published is refused, and it remains)",
+          "status": "skipped"
+        }
+      ],
+      "file_sha": "8d8823bac435b9a815e5b181069ca47ba9edde6a",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    },
+    {
+      "id": "R-1.56",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.56.spec.ts",
+      "result": "unbound",
+      "tests": [
+        {
+          "title": "Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike. (Code With Us: an administrator changes the details of a published opportunity)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.save_draft — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        },
+        {
+          "title": "Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike. (Code With Us: the public sector employee who created a published opportunity is refused)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-cwu-create.save_draft — no field on http://localhost:4300/opportunities/code-with-us/create takes \"remoteOk\" (looked for one labelled /remote[\\s-]*Ok/i); it offers button \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add attachment\", button \"Save draft\", button \"Submit for review\", link \"Skip to main content\", link \"Dashboard\", link \"My profile\", link \"Sign out\", link \"Call, email or text us\", link \"find a service centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link \"Accessibility\", link \"Copyright\", textbox \"Title(required)\", textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox \"Remote work description\", textbox \"Reward(required)\", textbox \"Description (required)\", textbox \"Proposal deadline(required)\", textbox \"Assignment date(required)\", textbox \"Start date(required)\", textbox \"Completion date (optional)\""
+        },
+        {
+          "title": "Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike. (Sprint With Us: an administrator changes the details of a published opportunity)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
+        },
+        {
+          "title": "Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike. (Sprint With Us: the public sector employee who created a published opportunity is refused)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)"
+        },
+        {
+          "title": "Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike. (Team With Us: an administrator changes the details of a published opportunity)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.open — /opportunities/team-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/team-with-us/create)"
+        },
+        {
+          "title": "Once an opportunity is published, only an administrator may change its details; a request from the public sector employee who created it is refused, and the same rule governs Code With Us, Sprint With Us and Team With Us alike. (Team With Us: the public sector employee who created a published opportunity is refused)",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.open — /opportunities/team-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/team-with-us/create)"
+        }
+      ],
+      "file_sha": "78217ffaca923ee84a6ffb0ba301f373308035ab",
+      "adapter": "02f1de54ad09c5f64bdc95302a086dad33fbb8e4"
+    }
+  ]
+}
