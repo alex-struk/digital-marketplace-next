@@ -3787,6 +3787,11 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: &a25
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-01T07:41:22.234Z
   - id: R-8.22
     target: new
     why: "unbound: opportunity-cwu-edit.opportunity_identifier —
@@ -3819,6 +3824,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
   - id: R-8.25
     target: new
     why: "unbound: opportunity-cwu-create.save_draft — no field on
@@ -3878,6 +3884,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
   - id: R-8.27
     target: new
     why: "unbound: file-attachment-control.add_attachment —
@@ -3897,6 +3904,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
   - id: R-6.8
     target: new
     why: 'unbound: opportunity-cwu-create.publish — no field on
@@ -3917,6 +3925,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
   - id: R-6.15
     target: new
     why: "unbound: opportunity-swu-create.open —
@@ -3950,6 +3959,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
   - id: R-1.4
     target: new
     why: 'unbound: opportunity-cwu-create.publish — no field on
@@ -3970,6 +3980,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
   - id: R-1.7
     target: new
     why: "unbound: opportunity-cwu-create.save_draft —
@@ -3991,6 +4002,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
   - id: R-1.8
     target: new
     why: "unbound: opportunity-program-select.choose_code_with_us —
@@ -4031,6 +4043,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
   - id: R-1.9
     target: new
     why: "unbound: opportunity-cwu-edit.opportunity_identifier —
@@ -4074,6 +4087,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
   - id: R-1.14
     target: new
     why: 'unbound: opportunity-cwu-create.publish — no field on
@@ -4094,6 +4108,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
   - id: R-1.19
     target: new
     why: 'unbound: opportunity-cwu-create.save_draft — no field on
@@ -4129,6 +4144,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
   - id: R-1.20
     target: new
     why: 'unbound: opportunity-cwu-create.publish — no field on
@@ -4149,6 +4165,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
   - id: R-1.21
     target: new
     why: 'unbound: opportunity-cwu-create.save_draft — no field on
@@ -4169,6 +4186,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
   - id: R-1.22
     target: new
     why: 'unbound: opportunity-cwu-create.save_draft — no field on
@@ -4189,6 +4207,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
   - id: R-1.23
     target: new
     why: 'unbound: opportunity-cwu-create.publish — no field on
@@ -4209,6 +4228,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
   - id: R-1.34
     target: new
     why: 'unbound: opportunity-cwu-create.save_draft — no field on
@@ -4229,6 +4249,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
   - id: R-1.37
     target: new
     why: 'unbound: opportunity-cwu-create.submit_for_review — no field on
@@ -4249,6 +4270,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
   - id: R-1.56
     target: new
     why: "unbound: opportunity-cwu-create.save_draft — no field on
@@ -4294,3 +4316,454 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:03:32.287Z
+    closed: *a25
+  - id: R-8.22
+    target: new
+    why: "unbound: proposal-cwu-create.open —
+      /opportunities/code-with-us/:opportunityId/proposals/create is offered
+      only to a signed-in person, and walked signed in (as the administrator, as
+      a public sector employee, and as a vendor for a vendor's screens — the
+      seeded organization owner for the organization screens — with the seeded
+      records' identifiers), the running build serves a signed-in person
+      /dashboard (a greeting and nothing else), the account screens under
+      /users, to the administrator the content-management screens under
+      /content, and to the administrator and public sector staff only
+      /opportunities/create, /opportunities/code-with-us/create and
+      /opportunities/code-with-us/:opportunityId/edit; every other opportunity,
+      proposal, organization and evaluation screen — every Sprint With Us and
+      Team With Us screen (tried with the seeded closed, awarded and
+      at-consensus opportunities of both), the Code With Us proposal screens
+      (tried as a vendor with the seeded published Code With Us opportunity,
+      whose page offers no way to start one),
+      /opportunities/code-with-us/:opportunityId/complete, /opportunities and
+      /organizations included — answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen (it shows \"Page not found\" at
+      http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-\
+      000000000601/proposals/create)"
+    found: unbound
+    adapter: dafd81f30b6e205758566c2d9a2048ecab6cac55
+    slice: 7
+    by: runner:verify
+    at: 2026-10-01T07:41:22.234Z
+  - id: R-6.8
+    target: new
+    why: 'unbound: opportunity-cwu-create.publish — no "Is remote work acceptable?"
+      choice on http://localhost:4300/opportunities/code-with-us/create; it
+      offers button "Decrease", button "Increase", button "Select an item",
+      button "Add attachment", button "Save draft", button "Publish", link "Skip
+      to main content", link "Dashboard", link "Users", link "Content", link "My
+      profile", link "Sign out", link "Call, email or text us", link "find a
+      service centre", link "About", link "Disclaimer", link "Privacy", link
+      "Accessibility", link "Copyright", textbox "Title(required)", textbox
+      "Teaser (optional)", textbox "Location(required)", textbox "Remote work
+      description", textbox "Reward(required)", textbox "Description
+      (required)", textbox "Proposal deadline(required)", textbox "Assignment
+      date(required)", textbox "Start date(required)", textbox "Completion date
+      (optional)", checkbox "Remote OK: remote work is acceptable"'
+    found: unbound
+    adapter: dafd81f30b6e205758566c2d9a2048ecab6cac55
+    slice: 7
+    by: runner:verify
+    at: 2026-10-01T07:41:22.234Z
+  - id: R-6.15
+    target: new
+    why: "unbound: opportunity-swu-create.open —
+      /opportunities/sprint-with-us/create is offered only to a signed-in
+      person, and walked signed in (as the administrator, as a public sector
+      employee, and as a vendor for a vendor's screens — the seeded organization
+      owner for the organization screens — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard (a
+      greeting and nothing else), the account screens under /users, to the
+      administrator the content-management screens under /content, and to the
+      administrator and public sector staff only /opportunities/create,
+      /opportunities/code-with-us/create and
+      /opportunities/code-with-us/:opportunityId/edit; every other opportunity,
+      proposal, organization and evaluation screen — every Sprint With Us and
+      Team With Us screen (tried with the seeded closed, awarded and
+      at-consensus opportunities of both), the Code With Us proposal screens
+      (tried as a vendor with the seeded published Code With Us opportunity,
+      whose page offers no way to start one),
+      /opportunities/code-with-us/:opportunityId/complete, /opportunities and
+      /organizations included — answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen (it shows \"Page not found\" at
+      http://localhost:4300/opportunities/sprint-with-us/create); unbound:
+      evaluation-individual-create-twu.enter_question_score —
+      /opportunities/team-with-us/:opportunityId/proposals/:proposalId/resource\
+      -questions/evaluations/create is offered only to a signed-in person, and
+      walked signed in (as the administrator, as a public sector employee, and
+      as a vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person /dashboard (a greeting and nothing else),
+      the account screens under /users, to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff only /opportunities/create,
+      /opportunities/code-with-us/create and
+      /opportunities/code-with-us/:opportunityId/edit; every other opportunity,
+      proposal, organization and evaluation screen — every Sprint With Us and
+      Team With Us screen (tried with the seeded closed, awarded and
+      at-consensus opportunities of both), the Code With Us proposal screens
+      (tried as a vendor with the seeded published Code With Us opportunity,
+      whose page offers no way to start one),
+      /opportunities/code-with-us/:opportunityId/complete, /opportunities and
+      /organizations included — answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: dafd81f30b6e205758566c2d9a2048ecab6cac55
+    slice: 7
+    by: runner:verify
+    at: 2026-10-01T07:41:22.234Z
+  - id: R-1.4
+    target: new
+    why: 'unbound: opportunity-cwu-create.publish — no "Is remote work acceptable?"
+      choice on http://localhost:4300/opportunities/code-with-us/create; it
+      offers button "Decrease", button "Increase", button "Select an item",
+      button "Add attachment", button "Save draft", button "Publish", link "Skip
+      to main content", link "Dashboard", link "Users", link "Content", link "My
+      profile", link "Sign out", link "Call, email or text us", link "find a
+      service centre", link "About", link "Disclaimer", link "Privacy", link
+      "Accessibility", link "Copyright", textbox "Title(required)", textbox
+      "Teaser (optional)", textbox "Location(required)", textbox "Remote work
+      description", textbox "Reward(required)", textbox "Description
+      (required)", textbox "Proposal deadline(required)", textbox "Assignment
+      date(required)", textbox "Start date(required)", textbox "Completion date
+      (optional)", checkbox "Remote OK: remote work is acceptable"'
+    found: unbound
+    adapter: dafd81f30b6e205758566c2d9a2048ecab6cac55
+    slice: 7
+    by: runner:verify
+    at: 2026-10-01T07:41:22.234Z
+  - id: R-1.7
+    target: new
+    why: "unbound: opportunity-cwu-create.save_draft —
+      /opportunities/code-with-us/create did not open as a screen at
+      http://localhost:4300/opportunities/code-with-us/create: Page not found
+      The page you are looking for does not exist.; the screen is offered only
+      to a signed-in person who may have it; walked signed in (as the
+      administrator, as a public sector employee, and as a vendor for a vendor's
+      screens — the seeded organization owner for the organization screens —
+      with the seeded records' identifiers), the running build serves a
+      signed-in person /dashboard (a greeting and nothing else), the account
+      screens under /users, to the administrator the content-management screens
+      under /content, and to the administrator and public sector staff only
+      /opportunities/create, /opportunities/code-with-us/create and
+      /opportunities/code-with-us/:opportunityId/edit; every other opportunity,
+      proposal, organization and evaluation screen — every Sprint With Us and
+      Team With Us screen (tried with the seeded closed, awarded and
+      at-consensus opportunities of both), the Code With Us proposal screens
+      (tried as a vendor with the seeded published Code With Us opportunity,
+      whose page offers no way to start one),
+      /opportunities/code-with-us/:opportunityId/complete, /opportunities and
+      /organizations included — answers \"Page not found\", and /users/:userId
+      opens for the signed-in person's own identifier and, to the administrator,
+      for another account's"
+    found: unbound
+    adapter: dafd81f30b6e205758566c2d9a2048ecab6cac55
+    slice: 7
+    by: runner:verify
+    at: 2026-10-01T07:41:22.234Z
+  - id: R-1.8
+    target: new
+    why: "unbound: opportunity-cwu-create.save_draft — no \"Is remote work
+      acceptable?\" choice on
+      http://localhost:4300/opportunities/code-with-us/create; it offers button
+      \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add
+      attachment\", button \"Save draft\", button \"Submit for review\", link
+      \"Skip to main content\", link \"Dashboard\", link \"My profile\", link
+      \"Sign out\", link \"Call, email or text us\", link \"find a service
+      centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link
+      \"Accessibility\", link \"Copyright\", textbox \"Title(required)\",
+      textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox
+      \"Remote work description\", textbox \"Reward(required)\", textbox
+      \"Description (required)\", textbox \"Proposal deadline(required)\",
+      textbox \"Assignment date(required)\", textbox \"Start date(required)\",
+      textbox \"Completion date (optional)\", checkbox \"Remote OK: remote work
+      is acceptable\"; unbound: opportunity-swu-create.add_phase —
+      /opportunities/sprint-with-us/create is offered only to a signed-in
+      person, and walked signed in (as the administrator, as a public sector
+      employee, and as a vendor for a vendor's screens — the seeded organization
+      owner for the organization screens — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard (a
+      greeting and nothing else), the account screens under /users, to the
+      administrator the content-management screens under /content, and to the
+      administrator and public sector staff only /opportunities/create,
+      /opportunities/code-with-us/create and
+      /opportunities/code-with-us/:opportunityId/edit; every other opportunity,
+      proposal, organization and evaluation screen — every Sprint With Us and
+      Team With Us screen (tried with the seeded closed, awarded and
+      at-consensus opportunities of both), the Code With Us proposal screens
+      (tried as a vendor with the seeded published Code With Us opportunity,
+      whose page offers no way to start one),
+      /opportunities/code-with-us/:opportunityId/complete, /opportunities and
+      /organizations included — answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen; unbound: opportunity-twu-create.add_resource —
+      /opportunities/team-with-us/create is offered only to a signed-in person,
+      and walked signed in (as the administrator, as a public sector employee,
+      and as a vendor for a vendor's screens — the seeded organization owner for
+      the organization screens — with the seeded records' identifiers), the
+      running build serves a signed-in person /dashboard (a greeting and nothing
+      else), the account screens under /users, to the administrator the
+      content-management screens under /content, and to the administrator and
+      public sector staff only /opportunities/create,
+      /opportunities/code-with-us/create and
+      /opportunities/code-with-us/:opportunityId/edit; every other opportunity,
+      proposal, organization and evaluation screen — every Sprint With Us and
+      Team With Us screen (tried with the seeded closed, awarded and
+      at-consensus opportunities of both), the Code With Us proposal screens
+      (tried as a vendor with the seeded published Code With Us opportunity,
+      whose page offers no way to start one),
+      /opportunities/code-with-us/:opportunityId/complete, /opportunities and
+      /organizations included — answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: dafd81f30b6e205758566c2d9a2048ecab6cac55
+    slice: 7
+    by: runner:verify
+    at: 2026-10-01T07:41:22.234Z
+  - id: R-1.14
+    target: new
+    why: 'unbound: opportunity-cwu-create.publish — no "Is remote work acceptable?"
+      choice on http://localhost:4300/opportunities/code-with-us/create; it
+      offers button "Decrease", button "Increase", button "Select an item",
+      button "Add attachment", button "Save draft", button "Publish", link "Skip
+      to main content", link "Dashboard", link "Users", link "Content", link "My
+      profile", link "Sign out", link "Call, email or text us", link "find a
+      service centre", link "About", link "Disclaimer", link "Privacy", link
+      "Accessibility", link "Copyright", textbox "Title(required)", textbox
+      "Teaser (optional)", textbox "Location(required)", textbox "Remote work
+      description", textbox "Reward(required)", textbox "Description
+      (required)", textbox "Proposal deadline(required)", textbox "Assignment
+      date(required)", textbox "Start date(required)", textbox "Completion date
+      (optional)", checkbox "Remote OK: remote work is acceptable"'
+    found: unbound
+    adapter: dafd81f30b6e205758566c2d9a2048ecab6cac55
+    slice: 7
+    by: runner:verify
+    at: 2026-10-01T07:41:22.234Z
+  - id: R-1.19
+    target: new
+    why: 'unbound: opportunity-cwu-create.save_draft — no "Is remote work
+      acceptable?" choice on
+      http://localhost:4300/opportunities/code-with-us/create; it offers button
+      "Decrease", button "Increase", button "Select an item", button "Add
+      attachment", button "Save draft", button "Submit for review", link "Skip
+      to main content", link "Dashboard", link "My profile", link "Sign out",
+      link "Call, email or text us", link "find a service centre", link "About",
+      link "Disclaimer", link "Privacy", link "Accessibility", link "Copyright",
+      textbox "Title(required)", textbox "Teaser (optional)", textbox
+      "Location(required)", textbox "Remote work description", textbox
+      "Reward(required)", textbox "Description (required)", textbox "Proposal
+      deadline(required)", textbox "Assignment date(required)", textbox "Start
+      date(required)", textbox "Completion date (optional)", checkbox "Remote
+      OK: remote work is acceptable"; unbound: opportunity-swu-view.status — the
+      opportunity did not open at
+      http://localhost:4300/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000701:
+      Page not found; unbound: opportunity-cwu-create.publish — no "Is remote
+      work acceptable?" choice on
+      http://localhost:4300/opportunities/code-with-us/create; it offers button
+      "Decrease", button "Increase", button "Select an item", button "Add
+      attachment", button "Save draft", button "Publish", link "Skip to main
+      content", link "Dashboard", link "Users", link "Content", link "My
+      profile", link "Sign out", link "Call, email or text us", link "find a
+      service centre", link "About", link "Disclaimer", link "Privacy", link
+      "Accessibility", link "Copyright", textbox "Title(required)", textbox
+      "Teaser (optional)", textbox "Location(required)", textbox "Remote work
+      description", textbox "Reward(required)", textbox "Description
+      (required)", textbox "Proposal deadline(required)", textbox "Assignment
+      date(required)", textbox "Start date(required)", textbox "Completion date
+      (optional)", checkbox "Remote OK: remote work is acceptable"'
+    found: unbound
+    adapter: dafd81f30b6e205758566c2d9a2048ecab6cac55
+    slice: 7
+    by: runner:verify
+    at: 2026-10-01T07:41:22.234Z
+  - id: R-1.20
+    target: new
+    why: 'unbound: opportunity-cwu-create.publish — no "Is remote work acceptable?"
+      choice on http://localhost:4300/opportunities/code-with-us/create; it
+      offers button "Decrease", button "Increase", button "Select an item",
+      button "Add attachment", button "Save draft", button "Publish", link "Skip
+      to main content", link "Dashboard", link "Users", link "Content", link "My
+      profile", link "Sign out", link "Call, email or text us", link "find a
+      service centre", link "About", link "Disclaimer", link "Privacy", link
+      "Accessibility", link "Copyright", textbox "Title(required)", textbox
+      "Teaser (optional)", textbox "Location(required)", textbox "Remote work
+      description", textbox "Reward(required)", textbox "Description
+      (required)", textbox "Proposal deadline(required)", textbox "Assignment
+      date(required)", textbox "Start date(required)", textbox "Completion date
+      (optional)", checkbox "Remote OK: remote work is acceptable"'
+    found: unbound
+    adapter: dafd81f30b6e205758566c2d9a2048ecab6cac55
+    slice: 7
+    by: runner:verify
+    at: 2026-10-01T07:41:22.234Z
+  - id: R-1.21
+    target: new
+    why: 'unbound: opportunity-cwu-create.save_draft — no "Is remote work
+      acceptable?" choice on
+      http://localhost:4300/opportunities/code-with-us/create; it offers button
+      "Decrease", button "Increase", button "Select an item", button "Add
+      attachment", button "Save draft", button "Submit for review", link "Skip
+      to main content", link "Dashboard", link "My profile", link "Sign out",
+      link "Call, email or text us", link "find a service centre", link "About",
+      link "Disclaimer", link "Privacy", link "Accessibility", link "Copyright",
+      textbox "Title(required)", textbox "Teaser (optional)", textbox
+      "Location(required)", textbox "Remote work description", textbox
+      "Reward(required)", textbox "Description (required)", textbox "Proposal
+      deadline(required)", textbox "Assignment date(required)", textbox "Start
+      date(required)", textbox "Completion date (optional)", checkbox "Remote
+      OK: remote work is acceptable"'
+    found: unbound
+    adapter: dafd81f30b6e205758566c2d9a2048ecab6cac55
+    slice: 7
+    by: runner:verify
+    at: 2026-10-01T07:41:22.234Z
+  - id: R-1.22
+    target: new
+    why: 'unbound: opportunity-cwu-create.save_draft — no "Is remote work
+      acceptable?" choice on
+      http://localhost:4300/opportunities/code-with-us/create; it offers button
+      "Decrease", button "Increase", button "Select an item", button "Add
+      attachment", button "Save draft", button "Submit for review", link "Skip
+      to main content", link "Dashboard", link "My profile", link "Sign out",
+      link "Call, email or text us", link "find a service centre", link "About",
+      link "Disclaimer", link "Privacy", link "Accessibility", link "Copyright",
+      textbox "Title(required)", textbox "Teaser (optional)", textbox
+      "Location(required)", textbox "Remote work description", textbox
+      "Reward(required)", textbox "Description (required)", textbox "Proposal
+      deadline(required)", textbox "Assignment date(required)", textbox "Start
+      date(required)", textbox "Completion date (optional)", checkbox "Remote
+      OK: remote work is acceptable"'
+    found: unbound
+    adapter: dafd81f30b6e205758566c2d9a2048ecab6cac55
+    slice: 7
+    by: runner:verify
+    at: 2026-10-01T07:41:22.234Z
+  - id: R-1.23
+    target: new
+    why: 'unbound: opportunity-cwu-create.publish — no "Is remote work acceptable?"
+      choice on http://localhost:4300/opportunities/code-with-us/create; it
+      offers button "Decrease", button "Increase", button "Select an item",
+      button "Add attachment", button "Save draft", button "Publish", link "Skip
+      to main content", link "Dashboard", link "Users", link "Content", link "My
+      profile", link "Sign out", link "Call, email or text us", link "find a
+      service centre", link "About", link "Disclaimer", link "Privacy", link
+      "Accessibility", link "Copyright", textbox "Title(required)", textbox
+      "Teaser (optional)", textbox "Location(required)", textbox "Remote work
+      description", textbox "Reward(required)", textbox "Description
+      (required)", textbox "Proposal deadline(required)", textbox "Assignment
+      date(required)", textbox "Start date(required)", textbox "Completion date
+      (optional)", checkbox "Remote OK: remote work is acceptable"'
+    found: unbound
+    adapter: dafd81f30b6e205758566c2d9a2048ecab6cac55
+    slice: 7
+    by: runner:verify
+    at: 2026-10-01T07:41:22.234Z
+  - id: R-1.34
+    target: new
+    why: 'unbound: opportunity-cwu-create.save_draft — no "Is remote work
+      acceptable?" choice on
+      http://localhost:4300/opportunities/code-with-us/create; it offers button
+      "Decrease", button "Increase", button "Select an item", button "Add
+      attachment", button "Save draft", button "Submit for review", link "Skip
+      to main content", link "Dashboard", link "My profile", link "Sign out",
+      link "Call, email or text us", link "find a service centre", link "About",
+      link "Disclaimer", link "Privacy", link "Accessibility", link "Copyright",
+      textbox "Title(required)", textbox "Teaser (optional)", textbox
+      "Location(required)", textbox "Remote work description", textbox
+      "Reward(required)", textbox "Description (required)", textbox "Proposal
+      deadline(required)", textbox "Assignment date(required)", textbox "Start
+      date(required)", textbox "Completion date (optional)", checkbox "Remote
+      OK: remote work is acceptable"'
+    found: unbound
+    adapter: dafd81f30b6e205758566c2d9a2048ecab6cac55
+    slice: 7
+    by: runner:verify
+    at: 2026-10-01T07:41:22.234Z
+  - id: R-1.37
+    target: new
+    why: 'unbound: opportunity-cwu-create.submit_for_review — no "Is remote work
+      acceptable?" choice on
+      http://localhost:4300/opportunities/code-with-us/create; it offers button
+      "Decrease", button "Increase", button "Select an item", button "Add
+      attachment", button "Save draft", button "Submit for review", link "Skip
+      to main content", link "Dashboard", link "My profile", link "Sign out",
+      link "Call, email or text us", link "find a service centre", link "About",
+      link "Disclaimer", link "Privacy", link "Accessibility", link "Copyright",
+      textbox "Title(required)", textbox "Teaser (optional)", textbox
+      "Location(required)", textbox "Remote work description", textbox
+      "Reward(required)", textbox "Description (required)", textbox "Proposal
+      deadline(required)", textbox "Assignment date(required)", textbox "Start
+      date(required)", textbox "Completion date (optional)", checkbox "Remote
+      OK: remote work is acceptable"'
+    found: unbound
+    adapter: dafd81f30b6e205758566c2d9a2048ecab6cac55
+    slice: 7
+    by: runner:verify
+    at: 2026-10-01T07:41:22.234Z
+  - id: R-1.56
+    target: new
+    why: "unbound: opportunity-cwu-create.save_draft — no \"Is remote work
+      acceptable?\" choice on
+      http://localhost:4300/opportunities/code-with-us/create; it offers button
+      \"Decrease\", button \"Increase\", button \"Select an item\", button \"Add
+      attachment\", button \"Save draft\", button \"Submit for review\", link
+      \"Skip to main content\", link \"Dashboard\", link \"My profile\", link
+      \"Sign out\", link \"Call, email or text us\", link \"find a service
+      centre\", link \"About\", link \"Disclaimer\", link \"Privacy\", link
+      \"Accessibility\", link \"Copyright\", textbox \"Title(required)\",
+      textbox \"Teaser (optional)\", textbox \"Location(required)\", textbox
+      \"Remote work description\", textbox \"Reward(required)\", textbox
+      \"Description (required)\", textbox \"Proposal deadline(required)\",
+      textbox \"Assignment date(required)\", textbox \"Start date(required)\",
+      textbox \"Completion date (optional)\", checkbox \"Remote OK: remote work
+      is acceptable\"; unbound: opportunity-swu-create.open —
+      /opportunities/sprint-with-us/create is offered only to a signed-in
+      person, and walked signed in (as the administrator, as a public sector
+      employee, and as a vendor for a vendor's screens — the seeded organization
+      owner for the organization screens — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard (a
+      greeting and nothing else), the account screens under /users, to the
+      administrator the content-management screens under /content, and to the
+      administrator and public sector staff only /opportunities/create,
+      /opportunities/code-with-us/create and
+      /opportunities/code-with-us/:opportunityId/edit; every other opportunity,
+      proposal, organization and evaluation screen — every Sprint With Us and
+      Team With Us screen (tried with the seeded closed, awarded and
+      at-consensus opportunities of both), the Code With Us proposal screens
+      (tried as a vendor with the seeded published Code With Us opportunity,
+      whose page offers no way to start one),
+      /opportunities/code-with-us/:opportunityId/complete, /opportunities and
+      /organizations included — answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen (it shows \"Page not found\" at
+      http://localhost:4300/opportunities/sprint-with-us/create); unbound:
+      opportunity-twu-create.open — /opportunities/team-with-us/create is
+      offered only to a signed-in person, and walked signed in (as the
+      administrator, as a public sector employee, and as a vendor for a vendor's
+      screens — the seeded organization owner for the organization screens —
+      with the seeded records' identifiers), the running build serves a
+      signed-in person /dashboard (a greeting and nothing else), the account
+      screens under /users, to the administrator the content-management screens
+      under /content, and to the administrator and public sector staff only
+      /opportunities/create, /opportunities/code-with-us/create and
+      /opportunities/code-with-us/:opportunityId/edit; every other opportunity,
+      proposal, organization and evaluation screen — every Sprint With Us and
+      Team With Us screen (tried with the seeded closed, awarded and
+      at-consensus opportunities of both), the Code With Us proposal screens
+      (tried as a vendor with the seeded published Code With Us opportunity,
+      whose page offers no way to start one),
+      /opportunities/code-with-us/:opportunityId/complete, /opportunities and
+      /organizations included — answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen (it shows \"Page not found\" at
+      http://localhost:4300/opportunities/team-with-us/create)"
+    found: unbound
+    adapter: dafd81f30b6e205758566c2d9a2048ecab6cac55
+    slice: 7
+    by: runner:verify
+    at: 2026-10-01T07:41:22.234Z
