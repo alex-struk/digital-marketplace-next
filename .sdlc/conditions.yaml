@@ -1474,3 +1474,29 @@ conditions:
         other claimed criteria against tree e1a13da.
       by: agent:reviewer
       at: 2026-10-01T06:19:19.750Z
+  - ref: build-slice-7-3#1
+    text: The signed-in dashboard at /dashboard must list the person's own
+      opportunities in a table, with each row carrying the title and status and
+      linking to the opportunity (an administrator sees all of them), with an
+      Opportunities tab if the design uses tabs. R-1.9's acceptance test reads
+      the saved draft's title from that table and got an empty string, because
+      the build's /dashboard renders only a greeting. R-1.53, R-8.17, R-8.19 and
+      R-8.25 read empty for the same reason.
+    from: build-slice-7-3
+    family: build-slice-7
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-01T08:11:14.988Z
+  - ref: build-slice-7-3#2
+    text: "On /opportunities/code-with-us/<id>/edit, offer an administrator a
+      'Publish' action on a draft as well as on an opportunity under review: the
+      code-with-us path permits DRAFT->PUBLISHED. Verify walked the seeded draft
+      as administrator and found only 'Edit', 'Submit for review' and 'Delete'
+      (R-1.22)."
+    from: build-slice-7-3
+    family: build-slice-7
+    gate: G3
+    stage: build
+    by: agent:tech-lead
+    at: 2026-10-01T08:11:14.988Z
