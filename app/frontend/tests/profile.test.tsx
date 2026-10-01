@@ -177,7 +177,7 @@ describe("the sections a profile offers (R-4.34, R-4.33)", () => {
 
     serve(() => json(200, { ...vendor, status: "INACTIVE_USER" }));
     renderAt(`/users/${vendor.id}`);
-    await screen.findByText(/They reactivate it by signing in again/);
+    await screen.findByText(/reactivates it themselves by signing in again/);
     expect(screen.queryByTestId("profile-reactivate-button")).toBeNull();
   });
 

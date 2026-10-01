@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { Injectable } from "@nestjs/common";
 import { Prisma } from "@prisma/client";
 import { PrismaService } from "../prisma/prisma.service";
-import { AccountKind, AccountStatus } from "../rules/users";
+import { AccountKind, AccountStatus, Contact } from "../rules/users";
 import {
   Account,
   AccountChange,
@@ -84,6 +84,35 @@ export class PrismaAccountStore implements AccountStore {
   async findById(id: string): Promise<Account | null> {
     const row = await this.prisma.users.findUnique({ where: { id } });
     return row ? asAccount(row) : null;
+  }
+
+  async list(): Promise<Account[]> {
+    const rows = await this.prisma.users.findMany();
+    return rows.map(asAccount);
+  }
+
+  async activeContacts(kinds: readonly AccountKind[]): Promise<Contact[]> {
+    const rows = await this.prisma.users.findMany({
+      where: { status: "ACTIVE", type: { in: [...kinds] } },
+      orderBy: [{ type: "asc" }, { name: "asc" }],
+      select: {
+        type: true,
+        name: true,
+        email: true,
+        affiliations: {
+          // Only memberships still current, in organizations still active (R-4.32).
+          where: { membershipStatus: "ACTIVE", organizations: { active: true } },
+          select: { organizations: { select: { legalName: true } } },
+          orderBy: { createdAt: "asc" },
+        },
+      },
+    });
+    return rows.map((row) => ({
+      type: row.type as AccountKind,
+      name: row.name,
+      email: row.email,
+      organizationNames: row.affiliations.map((affiliation) => affiliation.organizations.legalName),
+    }));
   }
 
   async create(account: NewAccount): Promise<Account> {

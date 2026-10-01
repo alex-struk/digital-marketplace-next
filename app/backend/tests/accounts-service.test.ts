@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Identity } from "../src/auth/identity";
 import { Envelope } from "../src/mail/message";
 import { Mailer } from "../src/mail/mailer";
-import { AccountKind } from "../src/rules/users";
+import { AccountKind, Contact } from "../src/rules/users";
 import {
   Account,
   AccountChange,
@@ -23,6 +23,16 @@ class AccountsInMemory implements AccountStore {
 
   async findById(id: string) {
     return this.rows.find((row) => row.id === id) ?? null;
+  }
+
+  async list() {
+    return [...this.rows];
+  }
+
+  async activeContacts(kinds: readonly AccountKind[]): Promise<Contact[]> {
+    return this.rows
+      .filter((row) => row.status === "ACTIVE" && kinds.includes(row.type))
+      .map((row) => ({ type: row.type, name: row.name, email: row.email, organizationNames: [] }));
   }
 
   private collides(candidate: Pick<Account, "id" | "type" | "email" | "idpUsername">) {
@@ -76,6 +86,7 @@ class AccountsInMemory implements AccountStore {
       acceptedTermsAt: iso(change.acceptedTermsAt, current.acceptedTermsAt),
       lastAcceptedTermsAt: iso(change.lastAcceptedTermsAt, current.lastAcceptedTermsAt),
       status: change.status ?? current.status,
+      type: change.type ?? current.type,
       deactivatedOn: iso(change.deactivatedOn, current.deactivatedOn),
       deactivatedBy:
         change.deactivatedBy === undefined ? current.deactivatedBy : change.deactivatedBy,
@@ -104,7 +115,10 @@ beforeEach(() => {
   store = new AccountsInMemory();
   sent = [];
   const mailer = { send: vi.fn((envelope: Envelope) => sent.push(envelope)) } as unknown as Mailer;
-  service = new AccountsService(store, mailer, { serviceOrigin: "http://localhost:4300" });
+  service = new AccountsService(store, mailer, {
+    serviceOrigin: "http://localhost:4300",
+    contactEmail: "digitalmarketplace@example.test",
+  });
 });
 
 describe("a first sign-in (R-4.1)", () => {
@@ -238,7 +252,7 @@ describe("completing a profile", () => {
   });
 
   it("saves the name and email address, the address in lower case (R-4.27)", async () => {
-    const saved = await service.changeOwn(vendor, vendor.id, "updateProfile", {
+    const saved = await service.change(vendor, vendor.id, "updateProfile", {
       name: "Jordan P.",
       email: "Jordan@Example.TEST",
     });
@@ -248,14 +262,14 @@ describe("completing a profile", () => {
 
   it("refuses an empty name or a malformed address, naming the fields", async () => {
     await expect(
-      service.changeOwn(vendor, vendor.id, "updateProfile", { name: "", email: "nope" }),
+      service.change(vendor, vendor.id, "updateProfile", { name: "", email: "nope" }),
     ).rejects.toMatchObject({ status: 400 });
   });
 
   it("keeps a job title the request does not carry (R-4.28)", async () => {
     store.rows[0] = { ...(store.rows[0] as Account), jobTitle: "Founder" };
 
-    const saved = await service.changeOwn(vendor, vendor.id, "updateProfile", {
+    const saved = await service.change(vendor, vendor.id, "updateProfile", {
       name: "Jordan",
       email: "first.vendor@example.test",
     });
@@ -267,12 +281,12 @@ describe("completing a profile", () => {
     await service.signIn(identity({ username: "other", email: "taken@example.test" }));
 
     await expect(
-      service.changeOwn(vendor, vendor.id, "updateProfile", { name: "J", email: "taken@example.test" }),
+      service.change(vendor, vendor.id, "updateProfile", { name: "J", email: "taken@example.test" }),
     ).rejects.toMatchObject({ status: 400, message: "Your profile could not be saved." });
   });
 
   it("records when the vendor agreed to the terms, both as standing and as last accepted (R-4.3)", async () => {
-    const saved = await service.changeOwn(vendor, vendor.id, "acceptTerms", null);
+    const saved = await service.change(vendor, vendor.id, "acceptTerms", null);
 
     expect(saved.acceptedTermsAt).not.toBeNull();
     expect(saved.lastAcceptedTermsAt).toBe(saved.acceptedTermsAt);
@@ -281,16 +295,16 @@ describe("completing a profile", () => {
   it("never asks a public sector employee to agree to the terms (R-4.3)", async () => {
     const staff = (await service.signIn(identity({ username: "g", identityProvider: "idir" }))).account;
 
-    await expect(service.changeOwn(staff, staff.id, "acceptTerms", null)).rejects.toMatchObject({
+    await expect(service.change(staff, staff.id, "acceptTerms", null)).rejects.toMatchObject({
       status: 403,
     });
   });
 
   it("records the moment new-opportunity notices were asked for, and empties it when they are stopped (R-4.24)", async () => {
-    const on = await service.changeOwn(vendor, vendor.id, "updateNotifications", true);
+    const on = await service.change(vendor, vendor.id, "updateNotifications", true);
     expect(on.notificationsOn).toMatch(/^\d{4}-\d{2}-\d{2}T/);
 
-    const off = await service.changeOwn(vendor, vendor.id, "updateNotifications", false);
+    const off = await service.change(vendor, vendor.id, "updateNotifications", false);
     expect(off.notificationsOn).toBeNull();
   });
 
@@ -298,13 +312,132 @@ describe("completing a profile", () => {
     const other = (await service.signIn(identity({ username: "other", email: "o@example.test" }))).account;
 
     await expect(
-      service.changeOwn(vendor, other.id, "updateNotifications", true),
+      service.change(vendor, other.id, "updateNotifications", true),
     ).rejects.toMatchObject({ status: 403 });
   });
 
-  it("refuses a change it does not make here", async () => {
-    await expect(service.changeOwn(vendor, vendor.id, "updateAdminPermissions", true)).rejects.toMatchObject({
+  it("refuses a change it does not make", async () => {
+    await expect(service.change(vendor, vendor.id, "renameEverything", true)).rejects.toMatchObject({
       status: 400,
     });
+  });
+
+  it("refuses an administrator's change to anyone but an administrator (R-4.12, R-4.19)", async () => {
+    await expect(service.change(vendor, vendor.id, "updateAdminPermissions", true)).rejects.toMatchObject({
+      status: 403,
+    });
+    await expect(service.change(vendor, vendor.id, "reactivateUser", null)).rejects.toMatchObject({
+      status: 403,
+    });
+  });
+});
+
+describe("an administrator's powers over somebody else's account", () => {
+  let admin: Account;
+  let staff: Account;
+  let vendor: Account;
+
+  beforeEach(async () => {
+    const promoted = (await service.signIn(identity({ username: "a", identityProvider: "idir", email: "a@example.test" })))
+      .account;
+    store.rows[0] = { ...promoted, type: "ADMIN" };
+    admin = store.rows[0] as Account;
+    staff = (await service.signIn(identity({ username: "g", identityProvider: "idir", email: "g@example.test" }))).account;
+    vendor = (await service.signIn(identity({ username: "v", email: "v@example.test", name: "Vee Vendor" }))).account;
+    sent.length = 0;
+  });
+
+  it("grants a public sector employee administrator rights, and withdraws them again (R-4.12)", async () => {
+    const granted = await service.change(admin, staff.id, "updateAdminPermissions", true);
+    expect(granted.type).toBe("ADMIN");
+
+    const withdrawn = await service.change(admin, staff.id, "updateAdminPermissions", false);
+    expect(withdrawn.type).toBe("GOV");
+  });
+
+  it("refuses to make a vendor an administrator, saying vendors cannot be (R-4.12)", async () => {
+    await expect(service.change(admin, vendor.id, "updateAdminPermissions", true)).rejects.toMatchObject({
+      status: 400,
+      message: "Vendors cannot be granted administrator permissions.",
+    });
+    expect((await store.findById(vendor.id))?.type).toBe("VENDOR");
+  });
+
+  it("deactivates an active account, recording when and by whom, and tells the person (R-4.30)", async () => {
+    const { account, own } = await service.deactivate(admin, vendor.id);
+
+    expect(own).toBe(false);
+    expect(account).toMatchObject({ status: "INACTIVE_ADMIN", deactivatedBy: admin.id });
+    expect(account.deactivatedOn).not.toBeNull();
+    expect(sent).toHaveLength(1);
+    expect(sent[0]?.to).toEqual(["v@example.test"]);
+    expect(sent[0]?.message.body.map((block) => JSON.stringify(block)).join(" ")).toMatch(
+      /An administrator has deactivated your Digital Marketplace account.*digitalmarketplace@example\.test/,
+    );
+  });
+
+  it("refuses to deactivate an account that is already inactive (R-4.31)", async () => {
+    await service.deactivate(admin, vendor.id);
+
+    await expect(service.deactivate(admin, vendor.id)).rejects.toMatchObject({
+      status: 400,
+      message: "This account is already inactive.",
+    });
+  });
+
+  it("accepts an administrator's request to deactivate their own account (R-4.31)", async () => {
+    const { account, own } = await service.deactivate(admin, admin.id);
+
+    expect(own).toBe(true);
+    expect(account.status).toBe("INACTIVE_USER");
+  });
+
+  it("lets nobody else deactivate somebody else's account", async () => {
+    await expect(service.deactivate(staff, vendor.id)).rejects.toMatchObject({ status: 403 });
+  });
+
+  it("reactivates an account an administrator deactivated, telling the person an administrator did (R-4.19, R-4.20)", async () => {
+    await service.deactivate(admin, vendor.id);
+    sent.length = 0;
+
+    const reactivated = await service.change(admin, vendor.id, "reactivateUser", null);
+
+    expect(reactivated.status).toBe("ACTIVE");
+    expect(sent).toHaveLength(1);
+    expect(sent[0]?.message.kind).toBe("reactivated-by-administrator");
+    expect(JSON.stringify(sent[0]?.message.body)).toContain("An administrator has reactivated your Digital Marketplace account");
+    expect(JSON.stringify(sent[0]?.message.body)).not.toContain("You have successfully reactivated");
+  });
+
+  it("refuses to reactivate an account its owner deactivated (R-4.19)", async () => {
+    await service.deactivate(vendor, vendor.id);
+
+    await expect(service.change(admin, vendor.id, "reactivateUser", null)).rejects.toMatchObject({ status: 400 });
+    expect((await store.findById(vendor.id))?.status).toBe("INACTIVE_USER");
+  });
+
+  it("still refuses sign-in to an account an administrator deactivated (R-4.4)", async () => {
+    await service.deactivate(admin, vendor.id);
+
+    await expect(service.signIn(identity({ username: "v", email: "v@example.test" }))).rejects.toBeInstanceOf(SignInRefused);
+  });
+
+  it("lists everyone, active first, then by kind and name, to an administrator only (R-4.14, R-4.21)", async () => {
+    await service.deactivate(admin, staff.id);
+
+    const listed = await service.list(admin);
+    expect(listed.map((account) => account.id)).toEqual([admin.id, vendor.id, staff.id]);
+
+    await expect(service.list(vendor)).rejects.toMatchObject({ status: 401 });
+    await expect(service.list(null)).rejects.toMatchObject({ status: 401 });
+  });
+
+  it("exports active contacts to an administrator only, refusing a request that chooses nothing (R-4.32)", async () => {
+    await expect(service.contactList(vendor, "VENDOR", "email")).rejects.toMatchObject({ status: 401 });
+    await expect(service.contactList(admin, "", "email")).rejects.toMatchObject({ status: 400 });
+
+    const { asked, contacts } = await service.contactList(admin, "VENDOR", "firstName,email");
+    expect(asked).toEqual({ kinds: ["VENDOR"], fields: ["firstName", "email"] });
+    expect(contacts.map((contact) => contact.email)).toEqual(["v@example.test"]);
   });
 });

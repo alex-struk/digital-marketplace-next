@@ -57,6 +57,29 @@ backend's `emptyDir` volume in a sandbox) and removed once answered; the bytes a
 database, once per distinct content (decision record 0021). A service that cannot make that
 directory does not start.
 
+## The first administrator
+
+The service offers no way to make the first administrator (R-4.13). An administrator is made
+only by another administrator, who ticks Administrator on a public sector employee's profile;
+a vendor can never be one (R-4.12). Where no administrator exists, the one route is to change
+the stored account kind directly, outside the service:
+
+1. Have the person sign in once with their government identity, so that the service makes a
+   public sector employee account for them.
+2. With a connection to the database, change that account's kind:
+
+   ```sql
+   UPDATE "users" SET "type" = 'ADMIN', "updatedAt" = now()
+   WHERE "type" = 'GOV' AND "idpUsername" = '<their sign-in username>';
+   ```
+
+3. They are an administrator from their next request; they need not sign in again.
+
+The sandbox needs none of this: the seed writes the first administrator straight into the data
+(`users.administratorOne` in `tests/seed/manifest.yaml`, signing in as `test-admin`).
+
+## Resetting the data
+
 The schema is brought up to date by the `migrate` service before the service starts. To put
 the data back to the state `tests/seed/manifest.yaml` describes — wiping whatever is there
 first, so running it twice leaves the same data:
