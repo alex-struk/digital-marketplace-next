@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the new-target adapter bind every surface member the contract adds, and nothing else? Approve. The two members of opportunity-counters are bound as reads only: view_count fetches /api/counters fresh on each read and turns an absent counter into "0", which the contract itself specifies (spec/contract/observables.yaml, 'absent counter reads as 0'), and refused_when_not_permitted returns the status and body only on 401/403. Neither asserts anything or decides a pass. On this target nobody is refused, so a refusal test will fail against the application, which is the right place for that failure. The unbound reasons for opportunity-cwu-edit.reporting_views (R-1.6) and reporting_watchers (R-1.5) are real: the reason names the missing observation, which is that no screen shows the count, backed by a third look at the Code With Us and Sprint With Us admin summaries after a public-page visit moved the view count to 1. Reading the counters API there would report a number the page never displays. Nothing under tests/acceptance changed, and the runner's typecheck on this revision passed with no diagnostics in adapters/new/. The open missing-test entries for R-1.5 (owed by calibrate) and R-1.6 (owed by derive-tests) belong to other stages, so this ruling adds no conditions. The ruling would change if a binding were found to assert an outcome, or if a screen on new were found to show the views or watchers count.
+conditions: []
+cost: 0.3182984
+turns: 2
+session: "7ce1ca3f-4f82-430c-885c-703bf7c26700"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T14:00:09.192Z

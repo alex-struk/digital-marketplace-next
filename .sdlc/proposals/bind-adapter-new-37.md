@@ -31,3 +31,23 @@ To bind it I opened the seeded published Code With Us opportunity on the target.
 The application does count views; it just never shows the number on a screen, so I left these screen observations unbound rather than reading them from the API. The views count can be read through `opportunity-counters.view_count`.
 
 In `bindings.yaml` I added `opportunity-counters` with both observations bound, spelled as the contract spells them. Every page whose route I opened resolved on the target. I wrote nothing outside `tests/adapters/new/`, and the password was only ever typed as its variable name.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the new-target adapter bind every surface member the contract adds, and nothing else? Approve. The two members of opportunity-counters are bound as reads only: view_count fetches /api/counters fresh on each read and turns an absent counter into "0", which the contract itself specifies (spec/contract/observables.yaml, 'absent counter reads as 0'), and refused_when_not_permitted returns the status and body only on 401/403. Neither asserts anything or decides a pass. On this target nobody is refused, so a refusal test will fail against the application, which is the right place for that failure. The unbound reasons for opportunity-cwu-edit.reporting_views (R-1.6) and reporting_watchers (R-1.5) are real: the reason names the missing observation, which is that no screen shows the count, backed by a third look at the Code With Us and Sprint With Us admin summaries after a public-page visit moved the view count to 1. Reading the counters API there would report a number the page never displays. Nothing under tests/acceptance changed, and the runner's typecheck on this revision passed with no diagnostics in adapters/new/. The open missing-test entries for R-1.5 (owed by calibrate) and R-1.6 (owed by derive-tests) belong to other stages, so this ruling adds no conditions. The ruling would change if a binding were found to assert an outcome, or if a screen on new were found to show the views or watchers count.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `86ffaf1edc25edc49101d33eaf1834916b0ad872`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
