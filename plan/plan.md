@@ -262,16 +262,38 @@ reader's attention.
   stage (Slice 19) to be shown, so the whole export family is built once, there.
 - **R-6.13 and R-6.19 (Slice 21)** can only be true once every message exists, which makes this the
   one slice whose size is set by all the others.
+- **R-8.17, R-6.6, R-6.16 and R-4.33** were placed in Slice 3, beside the file store, the
+  notification settings and the vendor's legal section they describe. Verification of the build of
+  Slice 3 found each unbound there, because its test acts through a screen Slice 3 does not serve.
+  Each now sits with that screen, while what it describes is still built in Slice 3. R-8.17's test
+  uses the attachment control on an opportunity's management screen, so it sits in Slice 7, which
+  builds that control; the size limit itself is enforced by the file store from Slice 3. R-6.6's test
+  reads the email notification reference at `/admin/email-notification-reference`, so it sits in
+  Slice 21. R-6.16's test acts from `/organizations/:orgId/edit`, so it sits in Slice 11, whose
+  archive notice is a message the notification preference does not govern. R-4.33's test starts at
+  `/content/terms-and-conditions/edit`, the managing screen of the terms page, so it sits in Slice 6
+  with the changed-terms announcement and re-acceptance on the same legal section; Slice 6's closure
+  (Slices 5, 3, 2, 1) holds both that screen and the vendor's profile. Moving R-6.6 to Slice 21 also
+  made plain that Slice 21's dependencies did not reach every slice that sends a message: Slices 4
+  (account notices), 6 (the changed-terms broadcast) and 9 (addendum and cancellation notices) were
+  outside its closure, though its own description already claimed every message built in slices 2
+  to 19. They are now named in its depends-on line; no other slice's position changes. The fit is
+  uneasy for R-6.6 and R-4.33 in the same way as for R-6.3 to R-6.5: a rule about every message, or
+  about one profile section, is answered for where its test first can run.
 
 ## Accepted criteria that pull against each other
 
 These are all accepted and none supersedes another, so each is planned as written; the builder of
 the named slice should raise them rather than silently pick a reading.
 
-- **R-6.6 vs R-6.16 (Slice 3).** R-6.6 says every message ends with an offer labelled
+- **R-6.6 vs R-6.16 (slices 21 and 11).** R-6.6 says every message ends with an offer labelled
   Unsubscribe; R-6.16 says a message the preference does not govern must not offer to unsubscribe.
-  Both are in Slice 3 so one builder reconciles them. The plan's reading is that R-6.16, authored
-  later to replace R-6.10, narrows R-6.6 to the new-opportunity announcement.
+  They were together in Slice 3 so one builder could reconcile them; their tests now place them
+  apart, so the reconciliation is made once, in the shared message footer Slice 3 builds, and Slice
+  11's builder must not change it for R-6.16 without knowing Slice 21 reads it for R-6.6. The plan's
+  reading is that R-6.16, authored later to replace R-6.10, narrows R-6.6 to the new-opportunity
+  announcement — which means R-6.6's test, if it expects the offer on every sample in the reference,
+  will meet the archive notice and others without it, and should be raised rather than satisfied.
 - **R-5.11 vs R-5.28 (Slice 17).** R-5.11 opens individual evaluations to the administrator and the
   owner "at every stage"; R-5.28 says no one but the evaluator reads them before consensus, and an
   administrator off the panel only after the question stages. Both are in Slice 17. They cannot

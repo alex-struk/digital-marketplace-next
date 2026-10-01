@@ -43,8 +43,9 @@ a test can make it refuse delivery (R-6.2).
 ## What is not built here
 
 - The unsubscribe offer and the link to notification settings at the foot of a message (R-6.6,
-  R-6.16) are slice 3's, with the settings page they lead to. The welcome message carries
-  neither.
+  R-6.16) are built in slice 3, with the settings page they lead to. The welcome message carries
+  neither. They are answered for where their tests act: R-6.6 in slice 21 through the email
+  notification reference, R-6.16 in slice 11 through the organization's edit screen.
 - Batching many recipients into groups of fifty (R-6.8) is slice 7's, where the first message
   to many people is sent.
 - The slow-delivery proxy the observables describe at `${SDLC_MAIL_API}/hold` (for R-6.24) is not

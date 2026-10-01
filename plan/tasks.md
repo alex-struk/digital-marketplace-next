@@ -18,7 +18,7 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 1
 
 ### Slice 3 · A person can keep their own profile, picture and notification choice
-- criteria: R-4.5, R-4.6, R-4.8, R-4.9, R-4.18, R-4.25, R-4.26, R-4.27, R-4.28, R-4.29, R-4.33, R-4.34, R-6.6, R-6.7, R-6.16, R-8.1, R-8.2, R-8.5, R-8.6, R-8.7, R-8.10, R-8.11, R-8.12, R-8.13, R-8.16, R-8.17, R-8.18, R-8.21, R-8.23, R-8.24, R-8.28, R-8.30
+- criteria: R-4.5, R-4.6, R-4.8, R-4.9, R-4.18, R-4.25, R-4.26, R-4.27, R-4.28, R-4.29, R-4.34, R-6.7, R-8.1, R-8.2, R-8.5, R-8.6, R-8.7, R-8.10, R-8.11, R-8.12, R-8.13, R-8.16, R-8.18, R-8.21, R-8.23, R-8.24, R-8.28, R-8.30
 - delivers: the profile at `/users/:userId` and `/users/me` with the sections each kind of account is offered (profile, capabilities, organizations placeholder, notifications, legal), editing one's own details, the profile-picture picker, vendor capabilities, the notifications section and the unsubscribe landing every message links to, self-deactivation with its notice and reactivation on next sign-in; and underneath the picture, the whole file store — upload at `/api/files` and `/api/avatars`, content-deduplicated storage in the database, read-access rules, description and download, size and name limits, image type checks and resizing, the upload working directory on the backend's `emptyDir` volume, downloads fetched by the single-page app with the bearer token, and correct refusals for malformed uploads
 - depends on: Slice 2
 
@@ -33,13 +33,13 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 3
 
 ### Slice 6 · An administrator can announce changed terms, and vendors accept them again
-- criteria: R-4.16, R-6.18, R-6.23, R-6.24, R-6.28, R-7.13
-- delivers: the announce-changed-terms action on the terms and conditions page's managing screen only, withdrawal of every vendor's standing acceptance, the broadcast to active vendors naming all three programs — which skips a vendor with no address and carries on past one it cannot reach — and the terms-updated warning and re-acceptance on the vendor's legal section
+- criteria: R-4.16, R-4.33, R-6.18, R-6.23, R-6.24, R-6.28, R-7.13
+- delivers: the announce-changed-terms action on the terms and conditions page's managing screen only, withdrawal of every vendor's standing acceptance, the broadcast to active vendors naming all three programs — which skips a vendor with no address and carries on past one it cannot reach — and the terms-updated warning and re-acceptance on the vendor's legal section, which sets out the privacy policy, the service's terms with the date and time the vendor agreed to them and the three program terms, and is shown to nobody but a vendor (R-4.33, whose test reaches it from `/content/terms-and-conditions/edit`)
 - depends on: Slice 5
 
 ### Slice 7 · Staff can draft, submit and publish a Code With Us opportunity
-- criteria: R-1.4, R-1.7, R-1.8, R-1.9, R-1.10, R-1.11, R-1.12, R-1.14, R-1.19, R-1.20, R-1.21, R-1.22, R-1.23, R-1.29, R-1.34, R-1.37, R-1.48, R-1.51, R-1.53, R-1.56, R-6.2, R-6.8, R-6.15, R-8.19, R-8.22, R-8.25, R-8.27
-- delivers: the program chooser, the Code With Us create form and manage page with its summary, opportunity and history tabs, the public Code With Us view, versioned saves, the full opportunity state model and its permitted-transition table for all three programs (with "suspended" mapped away in data), draft/submit-for-review/publish/delete with their permission rules, the attachment control, and the submitted-for-review and published notices — the first messages to many recipients, batched and blind-copied
+- criteria: R-1.4, R-1.7, R-1.8, R-1.9, R-1.10, R-1.11, R-1.12, R-1.14, R-1.19, R-1.20, R-1.21, R-1.22, R-1.23, R-1.29, R-1.34, R-1.37, R-1.48, R-1.51, R-1.53, R-1.56, R-6.2, R-6.8, R-6.15, R-8.17, R-8.19, R-8.22, R-8.25, R-8.27
+- delivers: the program chooser, the Code With Us create form and manage page with its summary, opportunity and history tabs, the public Code With Us view, versioned saves, the full opportunity state model and its permitted-transition table for all three programs (with "suspended" mapped away in data), draft/submit-for-review/publish/delete with their permission rules, the attachment control with the upload size limit stated before a file is chosen and an oversize upload refused with a message naming it (R-8.17), and the submitted-for-review and published notices — the first messages to many recipients, batched and blind-copied
 - depends on: Slice 3
 
 ### Slice 8 · Anyone can find opportunities and follow the ones they care about
@@ -58,8 +58,8 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 7
 
 ### Slice 11 · A vendor can register and look after an organization
-- criteria: R-3.1, R-3.2, R-3.3, R-3.6, R-3.15, R-3.18, R-3.19, R-3.20, R-3.21, R-3.22, R-3.23, R-3.24
-- delivers: the public organization list with role-dependent columns, registering an organization with its logo, the organization management page's profile tab with edit and archive offered only to the owner and administrators, the owner's archive notice, and the list of organizations a vendor may act for
+- criteria: R-3.1, R-3.2, R-3.3, R-3.6, R-3.15, R-6.16, R-3.18, R-3.19, R-3.20, R-3.21, R-3.22, R-3.23, R-3.24
+- delivers: the public organization list with role-dependent columns, registering an organization with its logo, the organization management page's profile tab with edit and archive offered only to the owner and administrators, the owner's archive notice — a message the notification preference does not govern, so it links to the reader's notification settings (built in Slice 3) without offering to unsubscribe (R-6.16) — and the list of organizations a vendor may act for
 - depends on: Slice 3
 
 ### Slice 12 · An organization can build its team
@@ -108,6 +108,6 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 19
 
 ### Slice 21 · An administrator can preview every message the service sends
-- criteria: R-6.13, R-6.19
-- delivers: the email notification reference at `/admin/email-notification-reference`, showing a sample, subject and summary of every message built in slices 2 to 19, refused to anyone but an administrator
-- depends on: Slice 19
+- criteria: R-6.6, R-6.13, R-6.19
+- delivers: the email notification reference at `/admin/email-notification-reference`, showing a sample, subject and summary of every message built in slices 2 to 19, refused to anyone but an administrator, with each sample ending in the Unsubscribe offer that opens the reader's notification settings (built in Slice 3) with the confirmation already asked (R-6.6)
+- depends on: Slice 4, Slice 6, Slice 9, Slice 19
