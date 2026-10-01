@@ -1500,3 +1500,28 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-01T08:11:14.988Z
+  - ref: plan-12#1
+    text: Move R-6.15 out of Slice 10. Its test also checks the owner's notice,
+      which it reaches by walking Team With Us individual evaluation and the
+      chair's consensus submission (screens built in Slices 17 and 18). Slice 10
+      depends only on Slice 7. Place R-6.15 in Slice 18 or a later slice whose
+      dependencies include it, and update the Slice 7 and Slice 10 entries and
+      the plan.md reservation to match.
+    from: plan-12
+    family: plan
+    gate: G2
+    stage: plan
+    by: agent:architect
+    at: 2026-10-01T08:18:33.163Z
+  - ref: plan-12#2
+    text: Fix R-1.19's placement. Its test cancels an opportunity with the cancel
+      action, which only Slice 9 builds, and Slice 10 does not depend on Slice
+      9. Either add Slice 9 to Slice 10's dependencies (and say why in plan.md),
+      or move R-1.19 to the first slice that depends on both Slice 9 and Slice
+      10. In both cases, record the reservation in plan.md.
+    from: plan-12
+    family: plan
+    gate: G2
+    stage: plan
+    by: agent:architect
+    at: 2026-10-01T08:18:33.163Z
