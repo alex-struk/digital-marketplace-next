@@ -200,6 +200,19 @@ reader's attention.
   change. The fit is uneasy in the same way: a rule about all three programs is answered for by the
   Sprint With Us slice, and a rule about attaching to opportunities and proposals by the proposal
   slice, because that is where their tests first can run.
+- **R-8.19 and R-8.25** were placed in Slice 7, which builds the opportunity attachment control
+  and the file store's read-through-what-it-hangs-on rule. A G3 ruling on the build of Slice 7
+  found every Code With Us case of both tests passing there and the rest unbound, because R-8.19's
+  test ("for all three programs alike") also attaches files on `/opportunities/sprint-with-us/create`
+  and `/opportunities/team-with-us/create` (Slice 10) and R-8.25's attaches one to a Code With Us
+  proposal (Slice 14). Both now sit in Slice 15, the first slice whose dependency closure (Slices
+  14, 13, 10 and back through 7) holds all three screens. Slice 14 builds the last of them in build
+  order but does not depend on Slice 10, and placing them there would have meant adding that
+  dependency and holding the Code With Us proposal slice back for Sprint With Us creation; Slice 15
+  needs no dependency change. Both rules are still built in Slice 7, and the proposal half of
+  R-8.25 in Slice 14 with R-8.20. The fit is uneasy in the same way as the items above: a file
+  rule is answered for by the Sprint With Us and Team With Us proposal slice, only because that is
+  where its test first can run.
 - **R-1.1 (Slice 16)** is one sentence about three programs. Its Code With Us half is demonstrated
   in the same slice as the rest of Code With Us evaluation; its Sprint With Us and Team With Us
   half (the evaluators being told) is why Slice 16 waits for Slice 15.
@@ -351,7 +364,7 @@ the named slice should raise them rather than silently pick a reading.
   owner "at every stage"; R-5.28 says no one but the evaluator reads them before consensus, and an
   administrator off the panel only after the question stages. Both are in Slice 17. They cannot
   both hold for an administrator during individual evaluation.
-- **R-8.25 vs R-8.20 (slices 7 and 14).** R-8.25 names only Code With Us and Sprint With Us
+- **R-8.25 vs R-8.20 (slices 15 and 14).** R-8.25 names only Code With Us and Sprint With Us
   attachments; R-8.20 requires one rule for all three programs. The plan applies R-8.25's rule to
   Team With Us too.
 - **R-4.31 (Slice 4) against the direction of R-5.9 (Slice 10).** R-4.31 keeps a rule on the interface alone (an
@@ -437,13 +450,14 @@ get. Its output is therefore **not** attached, and whoever next holds a shell sh
 place, the placements were checked by hand against the index, domain by domain. This revision moved
 two IDs and no others: R-7.12 from Slice 1 to Slice 5, and R-7.17 from Slice 1 to Slice 10. Both
 stay in the content domain, and both land in slices the table below already lists, so every count in
-it is unchanged.
+it is unchanged. A later revision moved R-8.19 and R-8.25 from Slice 7 to Slice 15; the files row
+now lists Slice 15, and no count changes.
 
 | Domain | Accepted, not superseded | Placed | Slices |
 | --- | --- | --- | --- |
 | content (R-7) | 26 | 26 | 1, 5, 6, 10 |
 | evaluation (R-5) | 30 | 30 | 10, 16, 17, 18 |
-| files (R-8) | 24 | 24 | 3, 5, 7, 14 |
+| files (R-8) | 24 | 24 | 3, 5, 7, 14, 15 |
 | notifications (R-6) | 21 | 21 | 2, 3, 6, 7, 8, 9, 16, 21 |
 | opportunities (R-1) | 50 | 50 | 7, 8, 9, 10, 14, 16, 18, 19, 20 |
 | organizations (R-3) | 31 | 31 | 11, 12, 13 |
