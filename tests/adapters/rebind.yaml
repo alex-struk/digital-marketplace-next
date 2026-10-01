@@ -5052,3 +5052,111 @@ rebind:
     by: runner:verify
     at: 2026-10-01T11:10:23.631Z
     closed: *a28
+  - id: R-6.21
+    target: new
+    why: "unbound: notification-optin-opportunity-list.notification_control_state —
+      opened /opportunities signed out: it carries a program chooser, \"Remote
+      OK\" and a search box and no control about new-opportunity notifications,
+      which is offered only to a signed-in person, and walked signed in (as the
+      administrator, as a public sector employee, and as a vendor for a vendor's
+      screens — the seeded organization owner for the organization screens —
+      with the seeded records' identifiers), the running build serves a
+      signed-in person /dashboard (to the administrator \"Create an
+      opportunity\" over \"All opportunities\", each Code With Us opportunity
+      linked to its management screen; to public sector staff the same over \"My
+      opportunities\"), the account screens under /users, to the administrator
+      the content-management screens under /content, and to the administrator
+      and public sector staff only /opportunities/create,
+      /opportunities/code-with-us/create and
+      /opportunities/code-with-us/:opportunityId/edit; every other opportunity,
+      proposal, organization and evaluation screen — every Sprint With Us and
+      Team With Us screen (tried with the seeded closed, awarded and
+      at-consensus opportunities of both), the Code With Us proposal screens
+      (tried as a vendor with the seeded published Code With Us opportunity,
+      whose page offers no way to start one),
+      /opportunities/code-with-us/:opportunityId/complete, /opportunities and
+      /organizations included — answers \"Page not found\""
+    found: unbound
+    adapter: 260ee7bdd7ef9220151803f2fe6da35d2cd2ed99
+    slice: 8
+    app_tree: bb72c17a494fc38cb1b27a260bbc020585a449cd
+    by: runner:verify
+    at: 2026-10-01T12:35:24.909Z
+  - id: R-6.27
+    target: new
+    why: "unbound: notification-optin-opportunity-list.notification_control — opened
+      /opportunities signed out: it carries a program chooser, \"Remote OK\" and
+      a search box and no control about new-opportunity notifications, which is
+      offered only to a signed-in person, and walked signed in (as the
+      administrator, as a public sector employee, and as a vendor for a vendor's
+      screens — the seeded organization owner for the organization screens —
+      with the seeded records' identifiers), the running build serves a
+      signed-in person /dashboard (to the administrator \"Create an
+      opportunity\" over \"All opportunities\", each Code With Us opportunity
+      linked to its management screen; to public sector staff the same over \"My
+      opportunities\"), the account screens under /users, to the administrator
+      the content-management screens under /content, and to the administrator
+      and public sector staff only /opportunities/create,
+      /opportunities/code-with-us/create and
+      /opportunities/code-with-us/:opportunityId/edit; every other opportunity,
+      proposal, organization and evaluation screen — every Sprint With Us and
+      Team With Us screen (tried with the seeded closed, awarded and
+      at-consensus opportunities of both), the Code With Us proposal screens
+      (tried as a vendor with the seeded published Code With Us opportunity,
+      whose page offers no way to start one),
+      /opportunities/code-with-us/:opportunityId/complete, /opportunities and
+      /organizations included — answers \"Page not found\""
+    found: unbound
+    adapter: 260ee7bdd7ef9220151803f2fe6da35d2cd2ed99
+    slice: 8
+    app_tree: bb72c17a494fc38cb1b27a260bbc020585a449cd
+    by: runner:verify
+    at: 2026-10-01T12:35:24.909Z
+  - id: R-1.2
+    target: new
+    why: "unbound: opportunity-cwu-view.status — the opportunity did not open at
+      http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-\
+      000000000602: Page not found"
+    found: unbound
+    adapter: 260ee7bdd7ef9220151803f2fe6da35d2cd2ed99
+    slice: 8
+    app_tree: bb72c17a494fc38cb1b27a260bbc020585a449cd
+    by: runner:verify
+    at: 2026-10-01T12:35:24.909Z
+  - id: R-1.5
+    target: new
+    why: "unbound: opportunity-cwu-edit.reporting_watchers — the summary on
+      http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-\
+      000000000601/edit?tab=summary shows no /^watchers$/i count (it shows
+      Manage a Code With Us opportunity / Seeded published Code With Us
+      opportunity / Status: Published / Opportunity ID:
+      00000000-0000-4000-8000-000000000601 / Edit / Proposal deadline / June 1,
+      2030 at 4:00 p.m. Pacific time / Reward / $5,000 / Published / January 5,
+      2026 / Created by / Casey Placeholder / Last changed by); walked as the
+      administrator and as a public sector employee on the seeded draft,
+      published, awarded and with-three-proposals Code With Us opportunities and
+      on ones just saved and published"
+    found: unbound
+    adapter: 260ee7bdd7ef9220151803f2fe6da35d2cd2ed99
+    slice: 8
+    app_tree: bb72c17a494fc38cb1b27a260bbc020585a449cd
+    by: runner:verify
+    at: 2026-10-01T12:35:24.909Z
+  - id: R-1.6
+    target: new
+    why: "unbound: opportunity-cwu-edit.reporting_views — the summary on
+      http://localhost:4300/opportunities/code-with-us/00000000-0000-4000-8000-\
+      000000000601/edit?tab=summary shows no /^views$/i count (it shows Manage a
+      Code With Us opportunity / Seeded published Code With Us opportunity /
+      Status: Published / Opportunity ID: 00000000-0000-4000-8000-000000000601 /
+      Edit / Proposal deadline / June 1, 2030 at 4:00 p.m. Pacific time / Reward
+      / $5,000 / Published / January 5, 2026 / Created by / Casey Placeholder /
+      Last changed by); walked as the administrator and as a public sector
+      employee on the seeded draft, published, awarded and with-three-proposals
+      Code With Us opportunities and on ones just saved and published"
+    found: unbound
+    adapter: 260ee7bdd7ef9220151803f2fe6da35d2cd2ed99
+    slice: 8
+    app_tree: bb72c17a494fc38cb1b27a260bbc020585a449cd
+    by: runner:verify
+    at: 2026-10-01T12:35:24.909Z
