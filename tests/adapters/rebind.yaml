@@ -2846,6 +2846,11 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T00:34:19.399Z
+    closed: &a19
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-01T01:16:56.464Z
   - id: R-8.17
     target: new
     why: "unbound: file-attachment-control.size_limit_stated_before_choosing —
@@ -2863,6 +2868,7 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T00:34:19.399Z
+    closed: *a19
   - id: R-8.21
     target: new
     why: "unbound: file-image-picker.current_image — walked signed in as vendors,
@@ -2889,6 +2895,7 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T00:34:19.399Z
+    closed: *a19
   - id: R-8.28
     target: new
     why: "unbound: file-image-picker.choose_image — walked signed in as vendors, the
@@ -2915,6 +2922,7 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T00:34:19.399Z
+    closed: *a19
   - id: R-8.30
     target: new
     why: "unbound: file-image-picker.choose_image — walked signed in as vendors, the
@@ -2941,6 +2949,7 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T00:34:19.399Z
+    closed: *a19
   - id: R-6.6
     target: new
     why: "unbound: notification-email-reference.message_body —
@@ -2958,6 +2967,7 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T00:34:19.399Z
+    closed: *a19
   - id: R-6.16
     target: new
     why: "unbound: organization-edit.add_team_members — /organizations/:orgId/edit
@@ -2978,6 +2988,7 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T00:34:19.399Z
+    closed: *a19
   - id: R-4.8
     target: new
     why: "unbound: user-profile-self-capabilities.toggle_capability — walked signed
@@ -2992,6 +3003,7 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T00:34:19.399Z
+    closed: *a19
   - id: R-4.25
     target: new
     why: "unbound: user-profile.email_field — /users/:userId did not open as a
@@ -3012,6 +3024,7 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T00:34:19.399Z
+    closed: *a19
   - id: R-4.33
     target: new
     why: "unbound: notification-terms-broadcast.open —
@@ -3030,3 +3043,212 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T00:34:19.399Z
+    closed: *a19
+  - id: R-8.13
+    target: new
+    why: "unbound: file-image-picker.choose_image — the button /^\\s*choose (a |a
+      different )?(profile picture|logo)\\s*$/i on
+      http://localhost:4300/users/me opens no file chooser, and nothing a person
+      can see takes a file; unbound: organization-edit.edit_organization —
+      /organizations/:orgId/edit did not open as a screen at
+      http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/\
+      edit: Page not found The page you are looking for does not exist.; the
+      screen is offered only to a signed-in person who may have it; walked
+      signed in (as the administrator, and as a vendor for a vendor's screens —
+      the seeded organization owner for the organization screens — with the
+      seeded records' identifiers), the running build serves a signed-in person
+      only /dashboard (a greeting and nothing else) and the account screens
+      under /users: every opportunity, proposal, organization,
+      content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\", and /users/:userId
+      opens for the signed-in person's own identifier and, to the administrator,
+      for another account's"
+    found: unbound
+    adapter: a1e16439c9c6fac60e9f3c032404458e308c590a
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T01:16:56.464Z
+  - id: R-8.17
+    target: new
+    why: "unbound: file-attachment-control.size_limit_stated_before_choosing —
+      /opportunities/:program/:opportunityId/edit?tab=opportunity is offered
+      only to a signed-in person, and walked signed in (as the administrator,
+      and as a vendor for a vendor's screens — the seeded organization owner for
+      the organization screens — with the seeded records' identifiers), the
+      running build serves a signed-in person only /dashboard (a greeting and
+      nothing else) and the account screens under /users: every opportunity,
+      proposal, organization, content-management and evaluation screen,
+      /opportunities and /organizations included, answers \"Page not found\";
+      opened signed out (with the seeded record's identifier where it takes one)
+      it shows the \"Page not found\" screen"
+    found: unbound
+    adapter: a1e16439c9c6fac60e9f3c032404458e308c590a
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T01:16:56.464Z
+  - id: R-8.21
+    target: new
+    why: "unbound: file-image-picker.choose_image — the button /^\\s*choose (a |a
+      different )?(profile picture|logo)\\s*$/i on
+      http://localhost:4300/users/me opens no file chooser, and nothing a person
+      can see takes a file; unbound: organization-edit.edit_organization —
+      /organizations/:orgId/edit did not open as a screen at
+      http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/\
+      edit: Page not found The page you are looking for does not exist.; the
+      screen is offered only to a signed-in person who may have it; walked
+      signed in (as the administrator, and as a vendor for a vendor's screens —
+      the seeded organization owner for the organization screens — with the
+      seeded records' identifiers), the running build serves a signed-in person
+      only /dashboard (a greeting and nothing else) and the account screens
+      under /users: every opportunity, proposal, organization,
+      content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\", and /users/:userId
+      opens for the signed-in person's own identifier and, to the administrator,
+      for another account's"
+    found: unbound
+    adapter: a1e16439c9c6fac60e9f3c032404458e308c590a
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T01:16:56.464Z
+  - id: R-8.28
+    target: new
+    why: "unbound: file-image-picker.choose_image — the button /^\\s*choose (a |a
+      different )?(profile picture|logo)\\s*$/i on
+      http://localhost:4300/users/me opens no file chooser, and nothing a person
+      can see takes a file; unbound: organization-edit.edit_organization —
+      /organizations/:orgId/edit did not open as a screen at
+      http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/\
+      edit: Page not found The page you are looking for does not exist.; the
+      screen is offered only to a signed-in person who may have it; walked
+      signed in (as the administrator, and as a vendor for a vendor's screens —
+      the seeded organization owner for the organization screens — with the
+      seeded records' identifiers), the running build serves a signed-in person
+      only /dashboard (a greeting and nothing else) and the account screens
+      under /users: every opportunity, proposal, organization,
+      content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\", and /users/:userId
+      opens for the signed-in person's own identifier and, to the administrator,
+      for another account's"
+    found: unbound
+    adapter: a1e16439c9c6fac60e9f3c032404458e308c590a
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T01:16:56.464Z
+  - id: R-8.30
+    target: new
+    why: "unbound: file-image-picker.choose_image — the button /^\\s*choose (a |a
+      different )?(profile picture|logo)\\s*$/i on
+      http://localhost:4300/users/me opens no file chooser, and nothing a person
+      can see takes a file; unbound: organization-edit.edit_organization —
+      /organizations/:orgId/edit did not open as a screen at
+      http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/\
+      edit: Page not found The page you are looking for does not exist.; the
+      screen is offered only to a signed-in person who may have it; walked
+      signed in (as the administrator, and as a vendor for a vendor's screens —
+      the seeded organization owner for the organization screens — with the
+      seeded records' identifiers), the running build serves a signed-in person
+      only /dashboard (a greeting and nothing else) and the account screens
+      under /users: every opportunity, proposal, organization,
+      content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\", and /users/:userId
+      opens for the signed-in person's own identifier and, to the administrator,
+      for another account's"
+    found: unbound
+    adapter: a1e16439c9c6fac60e9f3c032404458e308c590a
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T01:16:56.464Z
+  - id: R-6.6
+    target: new
+    why: "unbound: notification-email-reference.message_body — signed in as the
+      administrator (test-admin) and opened /admin/email-notification-reference:
+      the service answers it 404 {\"errors\":[\"Cannot GET
+      /admin/email-notification-reference\"]} rather than drawing a screen, the
+      same addresses under /api answer 404 \"not found\", and no link on the
+      administrator's dashboard or profile leads to an email reference; walked
+      signed in (as the administrator, and as a vendor for a vendor's screens —
+      the seeded organization owner for the organization screens — with the
+      seeded records' identifiers), the running build serves a signed-in person
+      only /dashboard (a greeting and nothing else) and the account screens
+      under /users: every opportunity, proposal, organization,
+      content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\""
+    found: unbound
+    adapter: a1e16439c9c6fac60e9f3c032404458e308c590a
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T01:16:56.464Z
+  - id: R-6.7
+    target: new
+    why: 'unbound:
+      notification-unsubscribe-landing.confirmation_names_signed_in_address —
+      walked signed in as the administrator,
+      /users/me?tab=notifications&unsubscribe draws the ordinary Notifications
+      section ("Notifications are sent to <address>. …" and the "Email me when
+      new opportunities are posted" box) and no unsubscribe confirmation, dialog
+      or control'
+    found: unbound
+    adapter: a1e16439c9c6fac60e9f3c032404458e308c590a
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T01:16:56.464Z
+  - id: R-6.16
+    target: new
+    why: "unbound: organization-edit.add_team_members — /organizations/:orgId/edit
+      did not open as a screen at
+      http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/\
+      edit: Page not found The page you are looking for does not exist.; the
+      screen is offered only to a signed-in person who may have it; walked
+      signed in (as the administrator, and as a vendor for a vendor's screens —
+      the seeded organization owner for the organization screens — with the
+      seeded records' identifiers), the running build serves a signed-in person
+      only /dashboard (a greeting and nothing else) and the account screens
+      under /users: every opportunity, proposal, organization,
+      content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\", and /users/:userId
+      opens for the signed-in person's own identifier and, to the administrator,
+      for another account's"
+    found: unbound
+    adapter: a1e16439c9c6fac60e9f3c032404458e308c590a
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T01:16:56.464Z
+  - id: R-4.25
+    target: new
+    why: "unbound: user-profile.email_field — /users/:userId did not open as a
+      screen at
+      http://localhost:4300/users/00000000-0000-4000-8000-000000000202: Page not
+      found The page you are looking for does not exist.; the screen is offered
+      only to a signed-in person who may have it; walked signed in (as the
+      administrator, and as a vendor for a vendor's screens — the seeded
+      organization owner for the organization screens — with the seeded records'
+      identifiers), the running build serves a signed-in person only /dashboard
+      (a greeting and nothing else) and the account screens under /users: every
+      opportunity, proposal, organization, content-management and evaluation
+      screen, /opportunities and /organizations included, answers \"Page not
+      found\", and /users/:userId opens for the signed-in person's own
+      identifier and, to the administrator, for another account's"
+    found: unbound
+    adapter: a1e16439c9c6fac60e9f3c032404458e308c590a
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T01:16:56.464Z
+  - id: R-4.33
+    target: new
+    why: "unbound: notification-terms-broadcast.open —
+      /content/terms-and-conditions/edit is offered only to a signed-in person,
+      and walked signed in (as the administrator, and as a vendor for a vendor's
+      screens — the seeded organization owner for the organization screens —
+      with the seeded records' identifiers), the running build serves a
+      signed-in person only /dashboard (a greeting and nothing else) and the
+      account screens under /users: every opportunity, proposal, organization,
+      content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen (it shows \"Page not found\" at
+      http://localhost:4300/content/terms-and-conditions/edit)"
+    found: unbound
+    adapter: a1e16439c9c6fac60e9f3c032404458e308c590a
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T01:16:56.464Z
