@@ -3739,3 +3739,8 @@ rebind:
     slice: 6
     by: runner:verify
     at: 2026-10-01T05:09:53.358Z
+    closed:
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-01T05:36:17.173Z

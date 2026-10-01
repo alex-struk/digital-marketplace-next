@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-6 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">405</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">399</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">348</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-6</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 04:56</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 6 (An administrator can announce changed terms, and vendors accept them again) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I built all seven slice 6 criteria (R-4.16, R-4.33, R-6.18, R-6.23, R-6.24, R-6.28 and R-7.13).</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I built all seven slice 6 criteria (R-4.16, R-4.33, R-6.18, R-6.23, R-6.24, R-6.28 and R-7.13). <code>npm --prefix app run check</code> passes: every workspace typechecks and all 533 tests pass, 26 of them new. I did not bring the compose stack up; reasons are at the end.</p>
+<p><strong>What was built</strong></p>
+<ul><li><strong>Announcing changed terms (R-6.23, R-6.24, R-4.16).</strong> The backend has a new handler for <code>POST /api/emailNotifications</code> with the action <code>updateTerms</code>, in <code>app/backend/src/notifications/</code>.</li><li>It first withdraws every vendor&#39;s standing acceptance, including deactivated vendors&#39;. The date each vendor last accepted is kept.</li><li>It then reads the active vendors and answers. Only after the answer are the messages handed to the existing mailer, one per vendor. So the administrator is told it worked before any email goes out.</li><li><strong>Who may announce.</strong> Anyone who is not an administrator, signed in or not, is refused with 400. The contract names 400 for exactly that case, so I followed it rather than the 401 the page requests use. Decision record 0027 explains this and what would reverse it.</li><li><strong>The message (R-6.18).</strong> It names Code With Us, Sprint With Us and Team With Us together, links to <code>/users/me?tab=legal</code>, and does not offer to unsubscribe.</li><li><strong>Recipients it can&#39;t address or reach (R-6.28).</strong> The existing mailer already skipped a vendor with no address and carried on past one the mail server refused. This slice sends through that path, and tests show it working for this broadcast.</li><li><strong>Where the action appears (R-7.13).</strong> A new shared rule, <code>carriesTermsAnnouncement</code> in <code>rules/content.ts</code>, matches the page address <code>terms-and-conditions</code>. Only that page&#39;s managing screen shows the &quot;Notify vendors of updated terms&quot; section, built from the four notification-terms-broadcast stories. It asks first, then shows the success or failure message. The managing screen was already shown only to administrators.</li><li><strong>The vendor&#39;s legal section (R-4.33, R-4.16).</strong> Slice 3 had already built the section and shows it only on a vendor&#39;s own profile. I added:</li><li>a warning, shown whenever the vendor has no standing acceptance, giving the date they last agreed;</li><li>the &quot;Review and agree to the updated terms&quot; button and its confirmation dialog, which saves a fresh acceptance;</li><li>a failure message if that save is refused.</li></ul>
+<p>A public sector employee who asks for the section gets their profile instead. An administrator viewing a vendor sees only the profile section. Agreeing on someone else&#39;s behalf is refused by the service, an administrator included.</p>
+<p><strong>Tests</strong></p>
+<ul><li><strong>Backend unit tests</strong> use an in-memory store and the real mailer. They cover:</li><li>deactivated vendors losing their acceptance while the last-accepted date is kept;</li><li>one message per active vendor and none to deactivated vendors;</li><li>refusal for a visitor, a public sector employee and a vendor;</li><li>the answer coming before any message;</li><li>skipping a vendor with no address and carrying on past a refused one;</li><li>the message&#39;s wording, link and missing unsubscribe offer.</li><li><strong>Backend end-to-end test.</strong> It runs the real service against a database built from the migrations and the acceptance seed, through the contract check. It covers the 400 refusals, the withdrawal across every vendor, a fresh acceptance, and refusal of an acceptance made by an administrator.</li><li><strong>Frontend tests</strong> cover the rule, the section appearing only on the terms page and only for administrators, cancel/confirm/failure, the legal section for each kind of account, re-acceptance and its failure, and an accessibility scan of both screens.</li></ul>
+<p><strong>Not done, and for later slices</strong></p>
+<ul><li><strong>Live stack not run.</strong> This slice doesn&#39;t change <code>app/compose/compose.yaml</code>. The machine is shared with other running services, so I didn&#39;t start the stack on ports 4300 and 8080.</li><li><strong>Blocking a vendor who hasn&#39;t re-accepted.</strong> R-4.16 says vendors are asked to agree &quot;before continuing&quot;. The only place built for that is the legal section, and the design records that gap itself. Actually refusing a proposal from such a vendor belongs to the proposal slices (14 and 15), which should check <code>acceptedTermsAt</code>.</li><li><strong>Email preview page.</strong> Slice 21&#39;s preview page should include this message, using <code>termsUpdated</code> from <code>mail/notifications/terms-updated.ts</code>.</li><li><strong>Placeholder wording.</strong> The privacy-policy text on the legal section is still the stand-in from slice 3; the spec doesn&#39;t supply the real text.</li></ul>
+<p>I changed nothing outside <code>app/</code> and <code>docs/decisions/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by runner:verify (the runner, automatically) on 2026-10-01 05:09.</p>
+<div class="body"><p>Slice 6 does not yet do what 1 of its criteria say. Each condition is the criterion and what the running application did.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-6.23: Error: vendors whose acceptance was not withdrawn</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
