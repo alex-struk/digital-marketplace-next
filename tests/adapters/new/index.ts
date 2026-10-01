@@ -5892,7 +5892,7 @@ export default function create(
     opportunitySwuCreate: absent<S.OpportunitySwuCreatePage>(
       "opportunity-swu-create",
       "/opportunities/sprint-with-us/create",
-      `${behindSession("/opportunities/sprint-with-us/create")}; looked for again as the administrator and as a public sector employee: /opportunities/create offers "Create a Sprint With Us opportunity", and following that link lands on "Page not found" too`,
+      `${behindSession("/opportunities/sprint-with-us/create")}; looked for again as the administrator and as a public sector employee: /opportunities/create offers "Create a Sprint With Us opportunity", and following that link lands on "Page not found" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on "Page not found", as do /opportunities/sprint-with-us, the seeded at-consensus Sprint With Us opportunity's view and edit screens, and the guessed spellings /opportunities/swu/create and /sprint-with-us/create, and the Code With Us create form offers no program chooser that would reach a Sprint With Us form`,
       [
         "save_draft",
         "submit_for_review",
@@ -5975,7 +5975,7 @@ export default function create(
     opportunityTwuCreate: absent<S.OpportunityTwuCreatePage>(
       "opportunity-twu-create",
       "/opportunities/team-with-us/create",
-      `${behindSession("/opportunities/team-with-us/create")}; looked for again as the administrator and as a public sector employee: /opportunities/create offers "Create a Team With Us opportunity", and following that link lands on "Page not found" too`,
+      `${behindSession("/opportunities/team-with-us/create")}; looked for again as the administrator and as a public sector employee: /opportunities/create offers "Create a Team With Us opportunity", and following that link lands on "Page not found" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on "Page not found", as do /opportunities/team-with-us and the guessed spellings /opportunities/twu/create and /team-with-us/create, and the Code With Us create form offers no program chooser that would reach a Team With Us form`,
       [
         "save_draft",
         "submit_for_review",
