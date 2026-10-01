@@ -98,6 +98,8 @@ export interface CwuOpportunityAnswer {
   readonly evaluationCriteria: string;
   readonly attachments: readonly FileRecord[];
   readonly addenda: readonly never[];
+  /** Whether the person asking watches it; false for a visitor (R-1.5). */
+  readonly subscribed: boolean;
   /** Present only for the author and administrators (R-1.30). */
   readonly history?: readonly {
     readonly createdAt: string;

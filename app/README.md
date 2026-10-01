@@ -97,6 +97,21 @@ Submitting for review emails every administrator, publishing emails everyone wit
 notices on, each in batches of `MAILER_BATCH_SIZE` (50) blind copies, and both confirm to the
 author.
 
+## Finding and following opportunities
+
+Anybody browses at `/opportunities` ("Browse opportunities" on the home page). The list reads all
+three programs and shows what the service lets the person read — published opportunities, and to
+staff their own unpublished ones and to administrators every one — grouped into unpublished, open
+and closed, narrowed by program, state, remote work and words in the title or location. The rules
+for that are `backend/src/rules/opportunity-list.ts`, shared by the screen and the service.
+
+A signed-in person watches an opportunity they did not create from its card or its page
+(`/api/subscribers/<program>`), and turns the new-opportunity emails on or off from the control at
+the top of the list, which saves at once. Opening a Code With Us opportunity's page counts a view
+(`PUT /api/counters/opportunity.code-with-us.<id>.views`); counts are read at
+`GET /api/counters?counters=<name>`. The home page's awarded figures come from `/api/metrics`.
+Decision record 0034 has the answers and refusals.
+
 ## The first administrator
 
 The service offers no way to make the first administrator (R-4.13). An administrator is made

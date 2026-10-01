@@ -50,6 +50,8 @@ export interface CwuOpportunity {
   readonly attachments: readonly Attachment[];
   /** Absent unless the reader is the author or an administrator (R-1.30). */
   readonly history?: readonly HistoryEntry[];
+  /** Whether the reader watches it (R-1.5). */
+  readonly subscribed: boolean;
 }
 
 const STATES: readonly string[] = ["DRAFT", "UNDER_REVIEW", "PUBLISHED", "EVALUATION", "PROCESSING", "AWARDED", "CANCELED"];
@@ -109,6 +111,7 @@ export function readCwuOpportunity(value: unknown): CwuOpportunity | null {
       ? record.attachments.map(readAttachment).filter((file): file is Attachment => file !== null)
       : [],
     ...("history" in record ? { history: readHistory(record.history) } : {}),
+    subscribed: record.subscribed === true,
   };
 }
 

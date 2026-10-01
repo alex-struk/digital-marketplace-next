@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Heading, Link, Text } from "@bcgov/design-system-react-components";
 import type { Account } from "../api/accounts";
-import { CwuOpportunity, listCwuOpportunities } from "../api/opportunities";
+import { PROGRAM_NAMES } from "@rules/opportunities";
+import { ListedOpportunity, listAllOpportunities } from "../api/opportunity-list";
 import { page, stack } from "../app/layout";
 import { Loading } from "../app/loading";
 import { RequireSignIn } from "../app/require-sign-in";
@@ -15,9 +16,9 @@ import { StatusBadge } from "./opportunity-parts";
  *
  * A member of public sector staff sees the opportunities they created, and an administrator every
  * opportunity with who created it (opportunity-dashboard; R-1.3). Each row names the opportunity,
- * links to its manage page, and shows its state. Only Code With Us opportunities exist so far; the
- * other programs' rows arrive with the slices that make them. What a vendor or an evaluation panel
- * member sees here belongs to the slices that make proposals and evaluations.
+ * links to its manage page, and shows its state, in all three programs (the Sprint With Us and
+ * Team With Us manage pages are slice 10's). What a vendor or an evaluation panel member sees here
+ * belongs to the slices that make proposals and evaluations.
  */
 export function DashboardScreen() {
   useScreenTitle("Dashboard");
@@ -39,7 +40,7 @@ export function DashboardScreen() {
 
 type Listed =
   | { readonly kind: "loading" }
-  | { readonly kind: "listed"; readonly opportunities: readonly CwuOpportunity[] }
+  | { readonly kind: "listed"; readonly opportunities: readonly ListedOpportunity[] }
   | { readonly kind: "failed" };
 
 const cell = {
@@ -50,7 +51,7 @@ const cell = {
 } as const;
 
 /** Which of the listed opportunities the dashboard shows: an administrator all, anyone else their own. */
-export function dashboardRows(account: Pick<Account, "id" | "type">, all: readonly CwuOpportunity[]): CwuOpportunity[] {
+export function dashboardRows(account: Pick<Account, "id" | "type">, all: readonly ListedOpportunity[]): ListedOpportunity[] {
   const shown = account.type === "ADMIN" ? [...all] : all.filter((opportunity) => opportunity.createdBy?.id === account.id);
   return shown.sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 }
@@ -61,7 +62,7 @@ function OpportunityDashboard({ account }: { account: Account }) {
 
   useEffect(() => {
     let current = true;
-    void listCwuOpportunities().then((answer) => {
+    void listAllOpportunities().then((answer) => {
       if (current) setListed(answer.kind === "listed" ? { kind: "listed", opportunities: answer.opportunities } : { kind: "failed" });
     });
     return () => {
@@ -118,13 +119,16 @@ function OpportunityDashboard({ account }: { account: Account }) {
               </thead>
               <tbody>
                 {rows.map((opportunity) => (
-                  <tr key={opportunity.id} data-testid="dashboard-opportunity-row">
+                  <tr key={`${opportunity.program}-${opportunity.id}`} data-testid="dashboard-opportunity-row">
                     <td style={cell}>
-                      <Link href={`/opportunities/code-with-us/${opportunity.id}/edit`} data-testid="dashboard-opportunity-link">
+                      <Link
+                        href={`/opportunities/${opportunity.program}/${opportunity.id}/edit`}
+                        data-testid="dashboard-opportunity-link"
+                      >
                         {opportunity.title || "Untitled opportunity"}
                       </Link>
                     </td>
-                    <td style={cell}>Code With Us</td>
+                    <td style={cell}>{PROGRAM_NAMES[opportunity.program]}</td>
                     <td style={cell}>
                       <StatusBadge status={opportunity.status} />
                     </td>

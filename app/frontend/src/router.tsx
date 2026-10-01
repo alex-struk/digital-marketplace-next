@@ -18,6 +18,7 @@ import { NoticeScreen } from "./screens/notice";
 import { DashboardScreen } from "./screens/dashboard";
 import { UserListScreen } from "./screens/user-list";
 import { UserProfileScreen } from "./screens/user-profile";
+import { OpportunityListScreen } from "./screens/opportunity-list";
 import { OpportunityProgramSelectScreen } from "./screens/opportunity-program-select";
 import { OpportunityCwuCreateScreen } from "./screens/opportunity-cwu-create";
 import { OpportunityCwuViewScreen } from "./screens/opportunity-cwu-view";
@@ -128,6 +129,12 @@ const userListRoute = createRoute({
 
 // Opportunities. The fixed addresses — choosing a program, creating in one — are matched before
 // an opportunity's own address is.
+const opportunityListRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities",
+  component: OpportunityListScreen,
+});
+
 const opportunityProgramSelectRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/opportunities/create",
@@ -183,6 +190,7 @@ export const routeTree = rootRoute.addChildren([
   dashboardRoute,
   userListRoute,
   userProfileRoute,
+  opportunityListRoute,
   opportunityProgramSelectRoute,
   opportunityCwuCreateRoute,
   opportunityCwuViewRoute,
