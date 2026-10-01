@@ -2830,9 +2830,16 @@ export default function create(
       await settle();
       return;
     }
-    // Walked signed in: "Choose a profile picture" opened no file chooser by click, Enter or
-    // Space, and no file field a person can see sits beside it.
-    unbound(where, `the button ${control} on ${page.url()} opens no file chooser, and nothing a person can see takes a file`);
+    // Walked signed in as the administrator and as a vendor: "Edit profile" draws the
+    // "Profile picture (optional)" group with its rule and a "Choose a profile picture"
+    // button, and pressing that button (click, Enter or Space) opens no file chooser — the
+    // file field beside it, hidden from view, is never even clicked. The control the
+    // contract names is on the page and does nothing, so this is the page failing to take a
+    // file, reported as it is and not as an unbound member.
+    const label = ((await button.innerText().catch(() => "")) || String(control)).trim();
+    throw new Error(
+      `${where} — pressed "${label}" on ${page.url()} and no file chooser opened, so "${name}" could not be offered; the page offers no other way a person can give it a file`,
+    );
   }
 
   // The dialog on screen, or nothing when none is open.
@@ -3547,8 +3554,32 @@ export default function create(
     };
   }
 
+  // /users/:userId is a screen this build serves: walked signed in, it opens for the signed-in
+  // person's own identifier and, to the administrator, for another account's (the seeded
+  // organization owner's profile shows "Email address", "Name", "Sign-in username" and its
+  // status to test-admin). Walked as a vendor, another account's identifier answers "Page not
+  // found": that is the service refusing this person the account, so a reading of the
+  // profile reports what they are shown — nothing — and not_found_page reads the refusal.
+  // Actions on a refused profile still report the refusal, since there is nothing to press.
+  const profileOfUserId = profileScreen("user-profile", "/users/:userId");
+  const PROFILE_READINGS = [
+    "userIdentifier", "profileTab", "capabilitiesTab", "notificationsTab", "legalTab", "organizationsTab",
+    "statusBadge", "accountType", "permissionsLabel", "adminCheckbox", "idpUsernameReadonly", "nameField",
+    "emailField", "jobTitleField", "fieldError", "activationModal",
+  ] as const;
+  const readingsOfRefusedProfile: Partial<Record<(typeof PROFILE_READINGS)[number], () => Promise<string>>> = {};
+  for (const name of PROFILE_READINGS) {
+    const read = profileOfUserId[name] as () => Promise<string>;
+    readingsOfRefusedProfile[name] = async () => {
+      const at = new URL(page.url());
+      if (originOf(page.url()) === originOf(baseURL) && /^\/users\/[^/]+$/.test(at.pathname) && (await notFoundShown())) return "";
+      return read();
+    };
+  }
+
   const userProfile: S.UserProfilePage = {
-    ...profileScreen("user-profile", "/users/:userId"),
+    ...profileOfUserId,
+    ...(readingsOfRefusedProfile as Pick<S.UserProfilePage, (typeof PROFILE_READINGS)[number]>),
     open: (params) => go("/users/:userId", params as unknown as Record<string, string>),
     // An account the reader may not see, or none by that identifier: the "Page not found"
     // screen, read whole; a profile that opened reads as nothing.
@@ -3578,7 +3609,7 @@ export default function create(
   // picture wider or taller than 500 pixels is made smaller to fit, keeping its proportions.
   // Anyone can see your profile picture, including people who are not signed in." and a
   // "Choose a profile picture" button, which opens no file chooser (click, Enter or Space),
-  // so choosing a picture reports unbound. A stored picture is shown as "Your current profile
+  // so choosing a picture fails, naming that button (see offerFile). A stored picture is shown as "Your current profile
   // picture"; refusals are alerts in the group. Readings read what the page shows and never
   // press "Save changes": saving is userProfileSelf.saveChanges, which a test calls itself.
   const PICKER_GROUP = /^\s*(profile picture|logo)\b/i;
@@ -3770,6 +3801,60 @@ export default function create(
     };
   }
   const userProfileSelfNotifications: S.UserProfileSelfNotificationsPage = noticesScreen("user-profile-self-notifications", "/users/me?tab=notifications");
+
+  // Walked signed in: /users/me?tab=notifications&unsubscribe opens on the Notifications
+  // section ("Notifications are sent to <address>. If this address is wrong, correct it on
+  // your profile." and the "Email me when new opportunities are posted" box). To an account
+  // that receives those emails (test-vendor-1, box ticked) it also opens a dialog, "Stop
+  // emails about new opportunities?", saying "You are signed in as <name>. <address> will no
+  // longer be emailed when new opportunities are posted." with "Keep receiving them" and
+  // "Unsubscribe"; "Keep receiving them" closes it and leaves the box ticked. To an account
+  // that does not receive them (the administrator, box unticked) no dialog opens, and the
+  // readings report that empty. Signed out the address redirects to /sign-in, which
+  // sign_in_required reads, and the readings read that refusal as nothing shown.
+  function unsubscribeLanding(): S.NotificationUnsubscribeLandingPage {
+    const pageId = "notification-unsubscribe-landing";
+    const route = "/users/me?tab=notifications&unsubscribe";
+    const notices = noticesScreen(pageId, route);
+    // True once the section is drawn, after giving the dialog its moment to open over it.
+    const reached = async (): Promise<boolean> => {
+      await ready();
+      if (await whyNotHere()) return false;
+      await dialog().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+      return true;
+    };
+    const inConfirmation = async (member: string, name: RegExp, what: string): Promise<void> => {
+      const where = `${pageId}.${member}`;
+      if (!(await reached())) unbound(where, `${route} did not open (${await whyNotHere()})`);
+      if (!(await dialog().count())) {
+        throw new Error(
+          `${where} — signed in and opened ${page.url()}: no "Stop emails about new opportunities?" dialog opened, so there is no "${what}" to press (the dialog is shown only to an account whose "Email me when new opportunities are posted" box is ticked)`,
+        );
+      }
+      await press(where, name, dialog());
+      await settle();
+    };
+    return {
+      open: () => go(route),
+      confirmUnsubscribe: () => inConfirmation("confirm_unsubscribe", /^\s*unsubscribe\s*$/i, "Unsubscribe"),
+      cancelUnsubscribe: () => inConfirmation("cancel_unsubscribe", /^\s*(keep receiving( them)?|cancel)\s*$/i, "Keep receiving them"),
+      unsubscribeConfirmation: async () => {
+        if (!(await reached())) return "";
+        return (await dialog().count()) ? (await dialog().innerText()).trim() : "";
+      },
+      confirmationNamesSignedInAddress: async () => {
+        if (!(await reached())) return "";
+        if (!(await dialog().count())) return "";
+        const found = /[^\s@]+@[^\s@]+\.[^\s@]+/.exec(await dialog().innerText());
+        return found ? found[0].replace(/[.,;]+$/, "") : "";
+      },
+      resolvesToSignedInPerson: async () => {
+        if (!(await reached())) return "";
+        return notices.notificationEmailAddress();
+      },
+      signInRequired: () => refusalShown(),
+    } as S.NotificationUnsubscribeLandingPage;
+  }
 
   // ---------------------------------------------------------------- the signed-in person's capabilities
 
@@ -4947,20 +5032,7 @@ export default function create(
       ],
     ),
 
-    notificationUnsubscribeLanding: absent<S.NotificationUnsubscribeLandingPage>(
-      "notification-unsubscribe-landing",
-      "/users/me?tab=notifications&unsubscribe",
-      'walked signed in as the administrator, /users/me?tab=notifications&unsubscribe draws the ordinary Notifications section ("Notifications are sent to <address>. …" and the "Email me when new opportunities are posted" box) and no unsubscribe confirmation, dialog or control',
-      [
-        "confirm_unsubscribe",
-        "cancel_unsubscribe",
-        "unsubscribe_confirmation",
-        "confirmation_names_signed_in_address",
-        "resolves_to_signed_in_person",
-      ],
-      // Signed out, the address redirects to /sign-in, carrying itself as redirectOnSuccess.
-      ["sign_in_required"],
-    ),
+    notificationUnsubscribeLanding: unsubscribeLanding(),
 
     // The list itself opens for anybody; the notification control on it is a signed-in
     // person's own, and none is drawn for a signed-out visitor.

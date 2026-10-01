@@ -678,7 +678,9 @@ pages:
   # signing in is taken on the screen the person actually lands on.
   user-sign-up-complete:
     actions:
-      change_avatar: "unbound: walked signed in as a vendor still to complete a profile, the 'Choose a profile picture' button in the 'Profile picture (optional)' group on /sign-up/complete opens no file chooser, the same button that opens none on /users/me in a Playwright run (click, Enter, Space), and nothing a person can see takes a file"
+      # The 'Choose a profile picture' button is on the form and opens no file chooser; the
+      # action presses it and fails naming that button (see file-image-picker).
+      change_avatar: bound
       accept_app_terms: bound
       toggle_new_opportunity_notifications: bound
       complete_profile: bound
@@ -744,7 +746,9 @@ pages:
       edit_profile: bound
       save_changes: bound
       cancel_editing: bound
-      change_avatar: "unbound: walked signed in as a vendor and as the administrator, opened the profile and pressed 'Edit profile'; the 'Choose a profile picture' button in the 'Profile picture (optional)' group opens no file chooser (pressed by click, Enter and Space in a Playwright run), and nothing a person can see takes a file"
+      # Pressed on the form 'Edit profile' opens; it fails naming the inert 'Choose a profile
+      # picture' button (see file-image-picker).
+      change_avatar: bound
       toggle_admin_permission: "unbound: walked signed in as the administrator, its own /users/<id> says 'You have administrator permissions.' with no box, and another account's /users/:userId (the organization owner's) opens with the account facts and 'Details' and no control at all — no administrator box, switch or button"
       deactivate_account: bound
       reactivate_account: "unbound: walked signed in as the administrator, another account's /users/:userId (the organization owner's) opens with the account facts and 'Details' and no control at all, and one's own profile offers only 'Deactivate account' (to a vendor); no reactivate control is drawn anywhere on the profile"
@@ -840,7 +844,9 @@ pages:
       edit_profile: bound
       save_changes: bound
       cancel_editing: bound
-      change_avatar: "unbound: walked signed in as a vendor and as the administrator, opened /users/me and pressed 'Edit profile'; the 'Choose a profile picture' button in the 'Profile picture (optional)' group opens no file chooser (pressed by click, Enter and Space in a Playwright run), and nothing a person can see takes a file"
+      # Pressed on the form 'Edit profile' opens; it fails naming the inert 'Choose a profile
+      # picture' button (see file-image-picker).
+      change_avatar: bound
       deactivate_account: bound
       confirm_activation_change: bound
       cancel_activation_change: bound
@@ -1157,12 +1163,18 @@ pages:
 
   notification-unsubscribe-landing:
     actions:
-      confirm_unsubscribe: "unbound: walked signed in as the administrator, /users/me?tab=notifications&unsubscribe draws the ordinary Notifications section ('Notifications are sent to <address>. …' and the 'Email me when new opportunities are posted' box) and no unsubscribe confirmation, dialog or control"
-      cancel_unsubscribe: "unbound: walked signed in as the administrator, /users/me?tab=notifications&unsubscribe draws the ordinary Notifications section ('Notifications are sent to <address>. …' and the 'Email me when new opportunities are posted' box) and no unsubscribe confirmation, dialog or control"
+      # Walked signed in as test-vendor-1 (box ticked): the address opens the dialog "Stop
+      # emails about new opportunities?" with "Keep receiving them" and "Unsubscribe". To the
+      # administrator (box unticked) no dialog opens, and pressing either fails saying so.
+      confirm_unsubscribe: bound
+      cancel_unsubscribe: bound
     observations:
-      unsubscribe_confirmation: "unbound: walked signed in as the administrator, /users/me?tab=notifications&unsubscribe draws the ordinary Notifications section ('Notifications are sent to <address>. …' and the 'Email me when new opportunities are posted' box) and no unsubscribe confirmation, dialog or control"
-      confirmation_names_signed_in_address: "unbound: walked signed in as the administrator, /users/me?tab=notifications&unsubscribe draws the ordinary Notifications section ('Notifications are sent to <address>. …' and the 'Email me when new opportunities are posted' box) and no unsubscribe confirmation, dialog or control"
-      resolves_to_signed_in_person: "unbound: walked signed in as the administrator, /users/me?tab=notifications&unsubscribe draws the ordinary Notifications section ('Notifications are sent to <address>. …' and the 'Email me when new opportunities are posted' box) and no unsubscribe confirmation, dialog or control"
+      # The dialog's words ("You are signed in as <name>. <address> will no longer be emailed
+      # …") and the address in them; empty when no dialog opened. resolves_to_signed_in_person
+      # reads the address "Notifications are sent to" names.
+      unsubscribe_confirmation: bound
+      confirmation_names_signed_in_address: bound
+      resolves_to_signed_in_person: bound
       # Signed out, the address redirects to /sign-in carrying itself as redirectOnSuccess, which this reads.
       sign_in_required: bound
 
@@ -1377,8 +1389,10 @@ pages:
   # organization-owner vendor. "Edit profile" opens the form whose "Profile picture
   # (optional)" group holds the rule "A JPEG or PNG image, up to 10 MB. A picture wider or
   # taller than 500 pixels is made smaller to fit, …" and "Choose a profile picture". That
-  # button opens no file chooser (click, Enter, Space in a Playwright run) and nothing a
-  # person can see takes a file, so choose_image is unbound. The readings read only what the
+  # button opens no file chooser (click, Enter, Space in a Playwright run; the hidden file
+  # field beside it is never even clicked). The control is on the page and does nothing, so
+  # choose_image (and every change_avatar) is bound and fails naming that button, rather
+  # than reporting the page's own fault as unbound. The readings read only what the
   # page shows and never press "Save changes" (saving is user-profile-self.save_changes): a
   # stored picture is "Your current profile picture" at /api/files/<id>?type=blob, which
   # answered a request carrying no session 200 image/png; refusals are alerts in the group;
@@ -1387,7 +1401,7 @@ pages:
   # profile's picture in the logo's place.
   file-image-picker:
     actions:
-      choose_image: "unbound: walked signed in as a vendor and as the administrator, opened /users/me and pressed 'Edit profile'; the 'Choose a profile picture' button in the 'Profile picture (optional)' group opens no file chooser (pressed by click, Enter and Space in a Playwright run), and nothing a person can see takes a file"
+      choose_image: bound
     observations:
       image_address: bound
       current_image: bound
