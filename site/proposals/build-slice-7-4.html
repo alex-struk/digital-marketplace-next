@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-7-4 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">423</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">417</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">358</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-7-4</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 08:25</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 7 (Staff can draft, submit and publish a Code With Us opportunity) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> This revision adds the opportunities table to <code>/dashboard</code>, which was the application fault the ruling named first.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>This revision adds the opportunities table to <code>/dashboard</code>, which was the application fault the ruling named first. For the second fault, an administrator getting no Publish on a draft, the source already offers it, so I made no change there; I couldn&#39;t confirm what the live app does. <code>npm --prefix app run check</code> passes: migrations 16 tests, backend 394, frontend 227.</p>
+<p><strong>What changed: the dashboard.</strong> Until now <code>/dashboard</code> showed only a greeting. For public sector staff and administrators it now follows the opportunity-dashboard design stories. It shows the heading and a &quot;Create an opportunity&quot; link, then one of these:</p>
+<ul><li><strong>Rows to show:</strong> a table with Title, Program, Status and Last updated, newest first. Each title links to <code>/opportunities/code-with-us/&lt;id&gt;/edit</code>. Every test id the stories and <code>surface.yaml</code> give is on the same element as in the story.</li><li><strong>Nothing yet:</strong> a staff member who has created nothing sees &quot;You have not created any opportunities yet.&quot; Administrators see &quot;All opportunities&quot; and an extra &quot;Created by&quot; column; both follow the administrator story.</li><li><strong>Still loading or failed:</strong> a loading message while the list comes in, and an error alert if it fails.</li></ul>
+<p>The rows come from a new <code>listCwuOpportunities()</code> call in <code>app/frontend/src/api/opportunities.ts</code>, which uses the existing list endpoint. A staff member sees only rows whose creator is them, because the list also returns other people&#39;s published opportunities. An administrator sees every row. Vendors still get the greeting, since their dashboard belongs to the proposals slice. Only Code With Us rows exist so far; the other two programs&#39; rows will come with their slices.</p>
+<p>This is what R-1.9&#39;s test reads after saving a draft. R-1.53, R-8.17, R-8.19 and R-8.25 read empty for what looks like the same reason, so they may recover too. I couldn&#39;t run the acceptance suite to confirm that.</p>
+<p><strong>Publish on a draft (R-1.22): not reproduced.</strong> On <code>/opportunities/code-with-us/&lt;id&gt;/edit</code>, the code offers Publish to any administrator on a draft or an opportunity under review, and hides Submit for review from them. What the verify walk reported — Edit, Submit for review and Delete — is exactly what a draft&#39;s non-administrator author is shown. So either that walk was signed in as staff, or the live session reported the administrator as a staff account. I found nothing in the sign-in or account code that would cause the second.</p>
+<p>I tried to start the stack with <code>docker compose</code> to check, but this session wasn&#39;t permitted to run it. A later stage that can run the stack should walk the seeded draft as <code>test-admin</code> and look at the account type <code>GET /api/sessions/current</code> returns.</p>
+<p><strong>Unit tests added:</strong></p>
+<ul><li>A staff member sees only their own opportunities, newest first, each with its status and manage link.</li><li>An administrator sees every opportunity, with who created it.</li><li>The empty-state message.</li><li>An automated accessibility check (axe) on the table.</li><li>An administrator on a draft gets Publish and no Submit for review, and publishing sends <code>{tag: &quot;publish&quot;}</code>.</li></ul>
+<p>I also updated one older sign-in test that expected the greeting&#39;s name on the dashboard, and added two lines to <code>app/README.md</code>.</p>
+<p><strong>Not mine to do.</strong> Two of the ruling&#39;s conditions went to other stages, and I left both alone:</p>
+<ul><li><strong>Test adapter:</strong> it must read field values on the Opportunity tab. This is the remaining cause of R-1.4, R-1.21 and R-1.56 failing.</li><li><strong>Plan:</strong> it must move R-1.8, R-1.19, R-1.48, R-6.15, R-6.2 and R-1.20 to the slices that build their screens. They stay unwalkable here, because the Sprint With Us screens, the organization edit screen and a cancel action don&#39;t exist yet.</li></ul>
+<p>The next slice will find no vendor or evaluation-panel version of the dashboard, and no Sprint With Us or Team With Us rows in the table.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by tech-lead (a person) on 2026-10-01 08:42.</p>
+<h3>Conditions</h3><ol class="conditions"><li>addressed-to bind-adapter: rebind against build-slice-7-4 every member of opportunity-cwu-create, opportunity-cwu-edit (including publish and the Opportunity tab readers), file-attachment-control and the signed-in /dashboard whose binding is unbound or was walked against an earlier slice-7 build. Their recorded reasons (&#39;/opportunities/code-with-us/create ... Page not found&#39;, the dashboard serving &#39;a greeting and nothing else&#39;, an administrator offered &#39;Submit for review&#39;) contradict app/frontend/src/router.tsx:139, dashboard.tsx and opportunity-cwu-edit.tsx:132-133 on this build, as the escalation of build-slice-7-4 sets out.</li><li>addressed-to plan: slice 7 still claims R-1.9, R-1.53 and R-1.56, whose tests open /opportunities/sprint-with-us/create (Slice 10), and R-8.22, whose test opens /opportunities/code-with-us/:opportunityId/proposals/create (Slice 14); verify on build-slice-7-4 found each unbound on those screens. Move each to a slice whose dependencies deliver its screen.</li><li>Once the rebound adapter has run, recheck R-8.17, R-8.19, R-8.25, R-1.10 and R-1.21 against it; where one still fails, find where the application departs from the criterion.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
