@@ -1435,3 +1435,28 @@ conditions:
         hits.
       by: agent:reviewer
       at: 2026-10-01T02:34:27.042Z
+  - ref: build-slice-6-4#1
+    text: "app/compose/compose.yaml: put a delay proxy on the new target's mail
+      path, the way verify's unbound result for R-6.24 needs it. That result
+      showed GET http://localhost:8025/hold/proxies/smtp/toxics answering 404
+      from the mail catcher, and no proxy anywhere on the sandbox. 1) Add a
+      Toxiproxy service (ghcr.io/shopify/toxiproxy) with one proxy named smtp,
+      listening on 1025 and forwarding to the Mailpit container's port 1025, and
+      point the backend's SMTP_HOST at the proxy, so every message goes through
+      it. 2) Serve the published port 8025 through a small reverse proxy (Caddy,
+      for example): Mailpit's own API at the root, unchanged, and Toxiproxy's
+      control API (its port 8474) under the /hold prefix. Then GET
+      http://localhost:8025/hold/proxies/smtp/toxics answers 200 with [], POST
+      to it adds a latency toxic named hold, DELETE
+      http://localhost:8025/hold/proxies/smtp/toxics/hold removes it, and POST
+      http://localhost:8025/hold/reset clears every toxic. Mailpit's chaos fault
+      injection, which the R-6.28 and R-6.2 tests use, must keep working through
+      the reverse proxy. Record in app/README.md or a new record under
+      docs/decisions/ that the target's mail now goes through the delay proxy
+      and how its control API is reached."
+    from: build-slice-6-4
+    family: build-slice-6
+    gate: G3
+    stage: build
+    by: agent:reviewer
+    at: 2026-10-01T06:10:26.624Z
