@@ -30,6 +30,28 @@ export function fileNameError(name: string | null | undefined): string | null {
   return length >= 1 && length <= FILE_NAME_MAX_LENGTH ? null : FILE_NAME_LENGTH_MESSAGE;
 }
 
+// ------------------------------------------------------------------------ attachments
+
+/**
+ * The name an attachment is stored under (R-8.27): the name the person typed, with the original
+ * file's ending put back when they left it off, or the original name when they typed nothing.
+ * The result is held to the same length rule as any file name (R-8.23).
+ */
+export function attachmentName(original: string, typed: string): string {
+  const name = typed.trim();
+  if (name === "") return original;
+  const dot = original.lastIndexOf(".");
+  if (dot <= 0 || dot === original.length - 1) return name;
+  const ending = original.slice(dot);
+  return name.toLowerCase().endsWith(ending.toLowerCase()) ? name : `${name}${ending}`;
+}
+
+/** A size as a person reads it beside a file: "1.2 MB", or "340 KB" under a megabyte. */
+export function readableSize(bytes: number): string {
+  if (bytes >= 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  return `${Math.max(1, Math.round(bytes / 1024))} KB`;
+}
+
 // ------------------------------------------------------------------------ pictures
 
 /** The endings a profile picture or logo's name may have, compared without regard to case (R-8.30). */
