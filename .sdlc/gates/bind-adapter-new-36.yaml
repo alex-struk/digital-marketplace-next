@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the bind-adapter-new-36 adapter bind every surface action and observation on the new target, and nothing else? Ruling: approve. The new opportunity-watch-request binding covers exactly the seven members the generated surface declares (OpportunityWatchRequestPage: watchByRequest, stopWatchingByRequest, requestAccepted, refusalStatus, refusalReason, refusalMessages, watching), mirrors the old target's bindings for the same page, and the runner's typecheck on this revision passed with no diagnostics under adapters/new/, which replaces the author's untested-compile caveat. The bindings are navigation and reading only: the actions send the request with the session's cookies, and the observations return what the last response or a fresh GET of the opportunity carries. refusal_reason reports the body's own key ('errors') rather than mapping message text onto the contract's reason names, so a mismatch with the contract will surface as a real test failure, not be decided by the adapter. The two changed unbound reasons (opportunity-cwu-edit reporting_views and reporting_watchers) are real: they name screens walked and show that the counts exist only behind GET /api/counters and are never displayed, so there is no page observation to bind. Nothing under tests/acceptance changed, and nothing outside tests/adapters/new changed apart from pipeline records. Tier is STANDARD and no residual risk is marked unaccepted, so there is no escalation. The open missing-test for the R-1.5 duplicate-watch clause stays owed by derive-tests, and this page is the surface that test needs. What would change the ruling: evidence that a binding decides an outcome (for example by translating refusal text into a contract reason), a typecheck failure on this revision, or any change under tests/acceptance.
+conditions: []
+cost: 0.3370692
+turns: 3
+session: "4a9193b5-a9bb-408b-9760-455bb131c6ec"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T13:40:03.691Z

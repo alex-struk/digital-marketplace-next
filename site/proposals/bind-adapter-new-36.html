@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-36 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">442</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">436</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">373</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-36</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 13:39</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I added the seven missing members, but nothing in it has been compiled or run as a test.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I added the seven missing members, but nothing in it has been compiled or run as a test. This workspace has no TypeScript compiler, and the script that would have compared <code>bindings.yaml</code> against the contract needed an approval this session couldn&#39;t get. In place of both, I sent the same requests by hand on the running target and checked the helpers the new code uses against the rest of <code>tests/adapters/new/index.ts</code>.</p>
+<p><strong>What was added.</strong> The <code>opportunity-watch-request</code> page is now in <code>tests/adapters/new/index.ts</code> and named in <code>bindings.yaml</code>, with all seven members bound: <code>watch_by_request</code>, <code>stop_watching_by_request</code>, <code>request_accepted</code>, <code>refusal_status</code>, <code>refusal_reason</code>, <code>refusal_messages</code> and <code>watching</code>. Nothing else in either file changed. I didn&#39;t walk the target again for anything already accepted.</p>
+<p><strong>What I tried on the running target.</strong> I sent the requests from a browser session on <a href="http://localhost:4300">http://localhost:4300</a> against the seeded published Code With Us opportunity, and they behaved like this:</p>
+<div class="scroll"><table><thead><tr><th>Request</th><th>Who</th><th>Answer</th></tr></thead><tbody><tr><td>watch</td><td>signed out</td><td>401, &quot;You must be signed in to watch an opportunity.&quot;</td></tr><tr><td>watch</td><td>vendor (<code>test-vendor-1</code>)</td><td>201, with the subscription</td></tr><tr><td>watch again</td><td>vendor</td><td>400, &quot;opportunity: You are already watching this opportunity.&quot;</td></tr><tr><td>stop watching</td><td>vendor</td><td>200</td></tr><tr><td>stop watching again</td><td>vendor</td><td>400, &quot;opportunity: You are not watching this opportunity.&quot;</td></tr><tr><td>watch an identifier that names nothing</td><td>vendor</td><td>400, &quot;opportunity: No opportunity you may read is held at that identifier.&quot;</td></tr><tr><td>watch one&#39;s own opportunity</td><td>creating staff member (<code>test-gov</code>)</td><td>400, &quot;You cannot subscribe to your own opportunity.&quot;</td></tr></tbody></table></div>
+<p>The opportunity&#39;s <code>subscribed</code> flag went false, then true, then false along with these requests. I finished with the vendor&#39;s watch stopped, so nobody watches the opportunity now, which is the state the contract expects the next test to start from.</p>
+<p><strong>How the adapter binds them.</strong> The two actions send the request with the browser&#39;s session. They take the opportunity as a seed handle, an identifier, or a record. The program comes from <code>open()</code>, the input, or the seeded record.</p>
+<p>The four answer observations read the last answer:</p>
+<ul><li><code>request_accepted</code> is empty when the request was refused.</li><li><code>refusal_status</code> and <code>refusal_messages</code> are empty when it was accepted. Messages come back exactly as the service wrote them, prefix included.</li></ul>
+<p><code>watching</code> asks for the opportunity again and reads its <code>subscribed</code> flag, so it doesn&#39;t depend on the answer to the watch request.</p>
+<p><strong>A difference a reviewer should know about.</strong> The contract says a refusal is filed under <code>conflict</code>, <code>opportunity</code>, <code>notFound</code> or <code>permissions</code>. This target files every refusal under one generic <code>errors</code> list. Some messages carry an &quot;opportunity: &quot; prefix and some don&#39;t: the own-opportunity and signed-out ones don&#39;t. So <code>refusal_reason</code> returns the key the service actually uses, which on this target is always <code>errors</code>. I deliberately didn&#39;t translate message text into the contract&#39;s reason names, because that would be the adapter choosing the result. A test that expects <code>conflict</code> for a duplicate watch will fail on this target, and that failure is a real difference between the target and the contract.</p>
+<p><strong>The two criteria from the ruling.</strong> I didn&#39;t change the unbound reasons for <code>opportunity-cwu-edit.reporting_watchers</code> and <code>reporting_views</code> (criteria R-1.5 and R-1.6). The ruling accepted those reasons as real, and fixing it is addressed to the test-writing stage (read the counts through the contract&#39;s counters observable). The R-1.5 duplicate-watch gap is addressed to the contract stage. I left both alone. The new page does make the duplicate refusal visible, which is what the contract stage asked for.</p>
+<p><strong>Pages that didn&#39;t resolve.</strong> Every address this page uses answered on the target.</p>
+<p>I wrote nothing outside <code>tests/adapters/new/</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 13:40.</p>
+<div class="body"><p>Question: does the bind-adapter-new-36 adapter bind every surface action and observation on the new target, and nothing else? Ruling: approve. The new opportunity-watch-request binding covers exactly the seven members the generated surface declares (OpportunityWatchRequestPage: watchByRequest, stopWatchingByRequest, requestAccepted, refusalStatus, refusalReason, refusalMessages, watching), mirrors the old target&#39;s bindings for the same page, and the runner&#39;s typecheck on this revision passed with no diagnostics under adapters/new/, which replaces the author&#39;s untested-compile caveat. The bindings are navigation and reading only: the actions send the request with the session&#39;s cookies, and the observations return what the last response or a fresh GET of the opportunity carries. refusal_reason reports the body&#39;s own key (&#39;errors&#39;) rather than mapping message text onto the contract&#39;s reason names, so a mismatch with the contract will surface as a real test failure, not be decided by the adapter. The two changed unbound reasons (opportunity-cwu-edit reporting_views and reporting_watchers) are real: they name screens walked and show that the counts exist only behind GET /api/counters and are never displayed, so there is no page observation to bind. Nothing under tests/acceptance changed, and nothing outside tests/adapters/new changed apart from pipeline records. Tier is STANDARD and no residual risk is marked unaccepted, so there is no escalation. The open missing-test for the R-1.5 duplicate-watch clause stays owed by derive-tests, and this page is the surface that test needs. What would change the ruling: evidence that a binding decides an outcome (for example by translating refusal text into a contract reason), a typecheck failure on this revision, or any change under tests/acceptance.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

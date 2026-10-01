@@ -158,8 +158,8 @@ pages:
       addenda_tab: bound
       history_tab: bound
       proposals_tab: "unbound: walked as the administrator on the seeded lapsed Code With Us opportunity with three proposals (and on the published, awarded and draft ones): the sections offered are Summary, Opportunity, Addenda and History only, and ?tab=proposals shows the summary"
-      reporting_views: "unbound: looked again as the administrator and as the owning public sector employee on the seeded published, lapsed-with-three-proposals, in-processing and awarded Code With Us opportunities: the Summary shows only Proposal deadline, Reward, Published, Created by and Last changed by, the only sections are Summary, Opportunity, Addenda and History, and the opportunity the screen loads from /api/opportunities/code-with-us/:id carries no view count; a draft's summary says 'Views, watchers and proposals are counted once the opportunity is published.' (read there as nothing)"
-      reporting_watchers: "unbound: looked again as the administrator and as the owning public sector employee on the seeded published, lapsed-with-three-proposals, in-processing and awarded Code With Us opportunities, and on the published one after the administrator ticked 'Watch this opportunity' on its page and came back: the Summary still shows no count of watchers, no section is a report, and the opportunity the screen loads from /api/opportunities/code-with-us/:id carries no watcher count; a draft's summary says 'Views, watchers and proposals are counted once the opportunity is published.' (read there as nothing)"
+      reporting_views: "unbound: looked again as the administrator and as the owning public sector employee on the seeded published, lapsed-with-three-proposals, in-processing and awarded Code With Us opportunities: the Summary shows only Proposal deadline, Reward, Published, Created by and Last changed by, the only sections are Summary, Opportunity, Addenda and History, and the opportunity the screen loads from /api/opportunities/code-with-us/:id carries no view count; a draft's summary says 'Views, watchers and proposals are counted once the opportunity is published.' (read there as nothing). Looked once more as the administrator: ?tab=reporting and ?tab=proposals fall back to the same Summary, the public opportunity page, /dashboard and /opportunities show no count, and /complete answers Page not found on the seeded lapsed, final-stage and in-processing ones. GET /api/counters does answer the views counter with a number, but no screen shows it, so this page observation stays unbound rather than being read from the API"
+      reporting_watchers: "unbound: looked again as the administrator and as the owning public sector employee on the seeded published, lapsed-with-three-proposals, in-processing and awarded Code With Us opportunities, and on the published one after the administrator ticked 'Watch this opportunity' on its page and came back: the Summary still shows no count of watchers, no section is a report, and the opportunity the screen loads from /api/opportunities/code-with-us/:id carries no watcher count; a draft's summary says 'Views, watchers and proposals are counted once the opportunity is published.' (read there as nothing). Looked once more as the administrator: ?tab=reporting and ?tab=proposals fall back to the same Summary, the public opportunity page, /dashboard and /opportunities show no count, and /complete answers Page not found on the seeded lapsed, final-stage and in-processing ones. GET /api/counters does answer the watchers counter with a number, but no screen shows it, so this page observation stays unbound rather than being read from the API"
       reporting_proposals: "unbound: walked as the administrator on the seeded lapsed Code With Us opportunity with three proposals and on the published and awarded ones: the summary shows no count of proposals; a draft's summary says 'Views, watchers and proposals are counted once the opportunity is published.' (read there as nothing)"
       proposal_deadline: bound
       assignment_date: bound
@@ -1566,6 +1566,22 @@ pages:
   # {"permissions":[...]} or ["You do not have permission to perform this action."],
   # /api/sessions/current "null", /api/ownedOrganizations []). A request sends only what
   # the test gave it: nothing it leaves out is filled in here.
+  # Watching was sent signed out, as users.vendorOne and as users.staffOne, against
+  # seed.opportunities.publishedCodeWithUs: a watch answered 201, a second watch 400, a stop
+  # 200, a second stop 400, and the opportunity's "subscribed" flag followed each one. This
+  # target files every refusal under a single "errors" list (sometimes prefixed
+  # "opportunity: "), never under conflict, opportunity, notFound or permissions, and
+  # refusal_reason reports that key exactly as the service gives it.
+  opportunity-watch-request:
+    actions:
+      watch_by_request: bound
+      stop_watching_by_request: bound
+    observations:
+      request_accepted: bound
+      refusal_status: bound
+      refusal_reason: bound
+      refusal_messages: bound
+      watching: bound
   organization-acting-for-list:
     actions: {}
     observations:
