@@ -1173,6 +1173,10 @@ paths:
       operationId: unwatchCodeWithUsOpportunity
       tags: [Subscribers]
       summary: Deletes an existing Subscription to a Code-With-Us opportunity.
+      description: >-
+        The path identifier is the opportunity's, not the subscription's: the handler
+        (src/back-end/lib/resources/subscribers/code-with-us.ts) finds the signed-in user's
+        subscription by opportunity and user, and answers 400 notFound when there is none.
       parameters: [{ $ref: "#/components/parameters/PathId" }]
       responses:
         "200": { description: Receive the deleted Subscription. }
@@ -1201,6 +1205,9 @@ paths:
       operationId: unwatchSprintWithUsOpportunity
       tags: [Subscribers]
       summary: Deletes an existing Subscription to a Sprint-With-Us opportunity.
+      description: >-
+        The path identifier is the opportunity's, not the subscription's, as for
+        unwatchCodeWithUsOpportunity.
       parameters: [{ $ref: "#/components/parameters/PathId" }]
       responses:
         "200": { description: Receive the deleted Subscription. }
@@ -1227,7 +1234,9 @@ paths:
       operationId: unwatchTeamWithUsOpportunity
       tags: [Subscribers]
       summary: Deletes an existing Subscription to a Team-With-Us opportunity.
-      description: Recovered from routes.
+      description: >-
+        Recovered from routes. The path identifier is the opportunity's, not the
+        subscription's, as for unwatchCodeWithUsOpportunity.
       parameters: [{ $ref: "#/components/parameters/PathId" }]
       responses:
         "200": { description: Receive the deleted Subscription. }
