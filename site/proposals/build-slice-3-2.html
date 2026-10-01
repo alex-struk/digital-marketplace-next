@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-3-2 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">385</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">379</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">335</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-3-2</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 01:03</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 3 (A person can keep their own profile, picture and notification choice) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> This revision addresses three of the five returned criteria (R-4.27, R-4.29, R-6.7) and probably a fourth (R-4.18).</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>This revision addresses three of the five returned criteria (R-4.27, R-4.29, R-6.7) and probably a fourth (R-4.18). The fifth (R-8.23) fails in the test harness itself and nothing in the application can fix it. <code>npm --prefix app run check</code> passes across all three packages (15, 240 and 130 tests). I did not bring up the compose sandbox or drive a browser against it. The tool permissions in this session would not let me check the sandbox password or the compose state. The changes are therefore checked only by unit tests, not against the running application. Everything else in slice 3 is as it was.</p>
+<p><strong>R-6.7 and R-4.29: the new-opportunity box lagged behind the click.</strong> The box on the notifications page only changed once the service had answered. Read straight after pressing, it still showed the old state: unticked after pressing it on (R-6.7), and still ticked after confirming &quot;Unsubscribe&quot; (R-4.29). It now changes at once: ticked when pressed, unticked when stopping is confirmed, and the question closes on confirm. If the service refuses, the box goes back and the existing &quot;Your choice could not be saved&quot; alert appears. Turning notices off still asks first, as the criterion requires. The change is in <code>NotificationsSection</code> in <code>app/frontend/src/screens/user-profile.tsx</code>.</p>
+<p><strong>R-4.27: names over 100 characters were cut short instead of reported.</strong> The profile edit form put a 100-character browser limit on the name and job title fields. A 101-character name was silently trimmed to 100 and then saved, so no error was ever shown. The sign-up form, where R-4.27 passed in slice 2, has no such limit. I removed both limits, so an over-long name or job title is now kept as typed and reported by the same rule the service applies.</p>
+<p><strong>R-4.18: a best guess, not a confirmed fix.</strong> The ruling only shows that the page text began &quot;User Profile&quot; and lacked some expected string. On both an administrator&#39;s view and one&#39;s own profile, the name, email address and job title appeared only inside read-only input boxes. Text in those boxes does not count as page text. The profile now also shows a line above the account facts naming the person, with a public sector employee&#39;s job title and the email address, so it reads correctly after a save and to an administrator. If the test was instead looking for the administrator&#39;s deactivate, reactivate or administrator-rights controls, the plan gives those to slice 4. They are still not drawn, so the test will keep failing until slice 4 is built. I did not build them, to stay out of slice 4&#39;s work.</p>
+<p><strong>R-8.23: the failure is in the test harness.</strong> The error is the test runner&#39;s own failure to create a 256-character file name in its own temp folder (<code>/tmp/sdlc-upload-…</code>). Most file systems will not store a name that long. The application&#39;s upload folder is <code>/srv/uploads</code> (by default it is named <code>digital-marketplace-uploads</code>), so the path in the error is not ours. The backend does refuse a 256-character name with &quot;The file name must be between 1 and 255 characters long.&quot; Two backend tests cover this: <code>app/backend/tests/file-rules.test.ts</code> and <code>app/backend/tests/profile-and-files-end-to-end.test.ts</code>. The test would need to send the name in the upload request without writing that file to disk. Changing it belongs to whoever owns the acceptance suite, not this stage.</p>
+<p><strong>Unit tests added</strong>, in <code>app/frontend/tests/profile.test.tsx</code>:</p>
+<ul><li>The box is ticked the moment it is pressed, before the service answers, and goes back if the service refuses.</li><li>The box is unticked as soon as stopping is confirmed, before the service answers.</li><li>A 101-character name is kept in full, reported as an error, and nothing is sent.</li><li>The name and email appear in the page text, both on an administrator&#39;s view and after one&#39;s own save.</li></ul>
+<p>I added a short section to <code>docs/decisions/0023-the-profile-in-slice-3.md</code> recording these three choices. To run the tests I installed packages under <code>app/</code>, then deleted those <code>node_modules</code> folders, because there is no ignore file and they would otherwise have travelled with the proposal.</p>
+<p><strong>What slice 4 will find missing:</strong> the administrator controls on somebody else&#39;s profile (administrator box, deactivate, reactivate) and the service behaviour behind them. The service still refuses an administrator&#39;s deactivation of someone else&#39;s account with 403, and has no reactivate or administrator-rights changes yet.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by runner:verify (the runner, automatically) on 2026-10-01 01:16.</p>
+<div class="body"><p>Slice 3 does not yet do what 3 of its criteria say. Each condition is the criterion and what the running application did.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-4.18: Error: expect(received).toContain(expected) // indexOf — Received string:    &quot;User Profile</li><li>R-4.29: Error: expect(received).not.toBe(expected) // Object.is equality — Expected: not &quot;checked&quot;</li><li>R-8.23: Error: ENAMETOOLONG: name too long, open &#39;/tmp/sdlc-upload-BLeRfh/nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn.pdf&#39;</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

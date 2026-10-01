@@ -3068,6 +3068,11 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T01:16:56.464Z
+    closed: &a20
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-01T01:43:53.196Z
   - id: R-8.17
     target: new
     why: "unbound: file-attachment-control.size_limit_stated_before_choosing —
@@ -3086,6 +3091,7 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T01:16:56.464Z
+    closed: *a20
   - id: R-8.21
     target: new
     why: "unbound: file-image-picker.choose_image — the button /^\\s*choose (a |a
@@ -3110,6 +3116,7 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T01:16:56.464Z
+    closed: *a20
   - id: R-8.28
     target: new
     why: "unbound: file-image-picker.choose_image — the button /^\\s*choose (a |a
@@ -3134,6 +3141,7 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T01:16:56.464Z
+    closed: *a20
   - id: R-8.30
     target: new
     why: "unbound: file-image-picker.choose_image — the button /^\\s*choose (a |a
@@ -3158,6 +3166,7 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T01:16:56.464Z
+    closed: *a20
   - id: R-6.6
     target: new
     why: "unbound: notification-email-reference.message_body — signed in as the
@@ -3178,6 +3187,7 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T01:16:56.464Z
+    closed: *a20
   - id: R-6.7
     target: new
     why: 'unbound:
@@ -3192,6 +3202,7 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T01:16:56.464Z
+    closed: *a20
   - id: R-6.16
     target: new
     why: "unbound: organization-edit.add_team_members — /organizations/:orgId/edit
@@ -3213,6 +3224,7 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T01:16:56.464Z
+    closed: *a20
   - id: R-4.25
     target: new
     why: "unbound: user-profile.email_field — /users/:userId did not open as a
@@ -3233,6 +3245,7 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T01:16:56.464Z
+    closed: *a20
   - id: R-4.33
     target: new
     why: "unbound: notification-terms-broadcast.open —
@@ -3252,3 +3265,4 @@ rebind:
     slice: 3
     by: runner:verify
     at: 2026-10-01T01:16:56.464Z
+    closed: *a20
