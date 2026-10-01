@@ -1,0 +1,21 @@
+# What answers on http://localhost:8025: the mail catcher's own interface and API at the root,
+# unchanged, and the delay proxy's control API under /hold (decision record 0028).
+{
+	admin off
+	auto_https off
+}
+
+:8025 {
+	handle_path /hold/* {
+		# The proxy refuses any caller whose user agent looks like a browser's, as a guard
+		# against cross-site requests. Only this sandbox reaches it, so every caller is named
+		# the same way.
+		reverse_proxy mail-hold:8474 {
+			header_up User-Agent "mail-front"
+		}
+	}
+
+	handle {
+		reverse_proxy mail:8025
+	}
+}

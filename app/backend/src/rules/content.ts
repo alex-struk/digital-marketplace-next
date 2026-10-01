@@ -182,3 +182,16 @@ export function comparePagesByTitle(
 ): number {
   return a.title.localeCompare(b.title, "en") || a.slug.localeCompare(b.slug, "en");
 }
+
+/** The address of the service's own terms and conditions. */
+export const TERMS_AND_CONDITIONS_ADDRESS = "terms-and-conditions";
+
+/**
+ * Whether a page's managing screen offers the announcement of changed terms to vendors. Only
+ * the service's own terms and conditions page does, matched by its address, which the service
+ * never lets change (R-7.13, R-7.25). Who may use it is a separate matter: an administrator,
+ * as for every managing screen (R-6.23).
+ */
+export function carriesTermsAnnouncement(slug: string): boolean {
+  return slug === TERMS_AND_CONDITIONS_ADDRESS;
+}

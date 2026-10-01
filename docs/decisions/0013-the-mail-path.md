@@ -47,8 +47,8 @@ a test can make it refuse delivery (R-6.2).
   neither.
 - Batching many recipients into groups of fifty (R-6.8) is slice 7's, where the first message
   to many people is sent.
-- The slow-delivery proxy the observables describe at `${SDLC_MAIL_API}/hold` (for R-6.24) is not
-  in the compose file; slice 6, which owns R-6.24, needs it.
+- The slow-delivery proxy the observables describe at `${SDLC_MAIL_API}/hold` (for R-6.24) was
+  not in the compose file here; slice 6 added it (decision record 0028).
 
 ## What would reverse it
 
