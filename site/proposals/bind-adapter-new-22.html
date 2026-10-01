@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-22 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">408</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">402</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">350</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-22</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 06:01</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> The ruling asked me to bind R-6.24&#39;s delay page to wherever the delay proxy actually runs on the new target.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>The ruling asked me to bind R-6.24&#39;s delay page to wherever the delay proxy actually runs on the new target. It can&#39;t be bound: this sandbox has no delay proxy anywhere. That is a gap in the sandbox, not in the target, and it should be raised that way instead of being carried as an unbound criterion.</p>
+<p><strong>What I checked.</strong> The new target was restarted shortly before this run. Its compose project now has five running containers: frontend, backend, identity provider (Keycloak), Postgres, and a plain Mailpit catcher on ports 1025 and 8025. Two one-off setup jobs (database migration and identity-provider realm setup) ran and exited. There is no mail-hold or toxiproxy container in it. The contract places the proxy&#39;s control API beside the catcher under <code>${SDLC_MAIL_API}/hold</code>. I opened <code>http://localhost:8025/hold/proxies/smtp/toxics</code> in the browser and it still answers 404, the same not-found the catcher gives any address it doesn&#39;t serve. I also listed every listening port on the host. Each one belongs to the target, its catcher or identity provider, or to unrelated projects; none is the proxy&#39;s control port 8474 or anything like it. The contract gives no other address for this proxy, so there was nowhere else to bind it.</p>
+<p><strong>What I changed.</strong> Only the explanatory comment above <code>mail-delivery-delay</code> in <code>tests/adapters/new/bindings.yaml</code>. It now records the recheck: the compose project&#39;s full list of services and the absence of any proxy port on the host. The three members keep their entries as before:</p>
+<ul><li><code>slow_delivery</code>: unbound, sandbox gap</li><li><code>restore_delivery_speed</code>: unbound, sandbox gap</li><li><code>delivery_slowed</code>: unbound, sandbox gap</li></ul>
+<p>I left the adapter code in <code>tests/adapters/new/index.ts</code> exactly as it was. It already calls the address the contract names, and on a 404 it throws an <code>unbound:</code> error that calls this a sandbox gap. Once a mail-hold proxy is served under <code>/hold</code> next to the catcher, the binding should work without changes. Nothing else in the adapter or bindings file was touched.</p>
+<p><strong>For whoever acts on this.</strong> The fix is in the sandbox, not the adapter. The new target&#39;s environment needs the pass-through proxy that <code>observables.yaml</code> describes under <code>delivery_delay</code>: sitting between the service and the catcher&#39;s SMTP port, with its control API served at <code>${SDLC_MAIL_API}/hold</code>. Until that exists, R-6.24 can&#39;t be measured on this target. I am not deferring the request: the answer is this sandbox gap.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 06:02.</p>
+<div class="body"><p>Question: does the adapter for target new bind every surface action and observation, and nothing else? Approve. The only change is the comment above mail-delivery-delay in tests/adapters/new/bindings.yaml. No binding changed, no assertion or business logic was added, and nothing under tests/acceptance was touched. R-6.24&#39;s three members (slow_delivery, restore_delivery_speed, delivery_slowed) stay unbound, and each reason names a real missing surface: the delay proxy&#39;s control API is not served on this sandbox. The evidence supports that: the compose services list no proxy, ${SDLC_MAIL_API}/hold answers the catcher&#39;s 404, and no host port belongs to a proxy. The contract gives no other address to bind, so this is a sandbox gap and not an adapter defect, which answers the tech-lead&#39;s revision request. The typecheck on adapters/new passed with no diagnostics. The egress failures are all in other proposals&#39; files, not in this diff. The ruling would change to a return if the delay proxy turned out to be reachable at an address the adapter does not call, or if the contract named one the adapter did not try.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

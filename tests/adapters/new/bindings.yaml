@@ -1502,8 +1502,11 @@ pages:
   # /hold/version all answer the catcher's plain "404 page not found", and nothing answers
   # on the proxy's usual control port 8474 or the ports around the catcher (8026-8027,
   # 8474-8477, 18474, 28474; 1025 is the catcher's own SMTP port, 8080 the identity
-  # provider). A sandbox gap, not the target's: once the proxy is served there the binding
-  # works unchanged.
+  # provider). Rechecked on the restarted target: its compose project runs only frontend,
+  # backend, identity provider, database and a bare mail catcher (plus one-shot migrate and
+  # realm jobs) — no mail-hold proxy service exists in it, and no other listening port on
+  # the host belongs to one. A sandbox gap, not the target's: once the proxy is served
+  # there the binding works unchanged.
   mail-delivery-delay:
     actions:
       slow_delivery: "unbound: the delay proxy's control API is not served on this sandbox: POST ${SDLC_MAIL_API}/hold/proxies/smtp/toxics answers the mail catcher's plain 404, and no proxy answers on port 8474 or the ports around the catcher (sandbox gap)"
