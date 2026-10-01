@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-7-5 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">424</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">418</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">358</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-7-5</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 08:58</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 7 (Staff can draft, submit and publish a Code With Us opportunity) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I made no changes to the application in this revision.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made no changes to the application in this revision. Both conditions owed from the earlier ruling are already met in this build. When I went back over R-8.17, R-8.19, R-8.25, R-1.10 and R-1.21, the code and unit tests showed nothing that departs from the criteria. One thing I could not do: drive the running application. Docker is not permitted in this session, so I could not start the compose stack. I also never saw what the rebound adapter reported, so this recheck rests on reading the code and running the unit tests, not on a live walk.</p>
+<p><strong>Checks.</strong> After installing dependencies with <code>npm ci</code>, <code>npm --prefix app run check</code> typechecks all three packages and passes: migrations 16 tests, backend 394, frontend 227. Every <code>test_id</code> that <code>surface.yaml</code> gives the dashboard, the program chooser, the Code With Us create, view and manage pages, and the attachment control is in the markup, on the element the design stories put it on.</p>
+<p><strong><code>build-slice-7-3#1</code> (dashboard table): met.</strong> For staff and administrators, <code>/dashboard</code> (<code>app/frontend/src/screens/dashboard.tsx</code>) shows a table (<code>dashboard-opportunities-table</code>):</p>
+<ul><li>Each row (<code>dashboard-opportunity-row</code>) carries the title as a link to the manage page (<code>dashboard-opportunity-link</code>), the program, a status badge (<code>opportunity-status</code>) and the last-updated date.</li><li>Staff see only the opportunities they created. An administrator sees all of them, with an extra &quot;Created by&quot; column.</li><li>With nothing listed it shows <code>dashboard-empty-message</code>.</li></ul>
+<p>The dashboard design for staff has no tabs, so I added no Opportunities tab. The only dashboard tab in the surface belongs to the evaluation panel (<code>dashboard-show-my-opportunities</code>), which a later slice builds. Unit tests in <code>frontend/tests/code-with-us-opportunities.test.tsx</code> cover the staff list, the administrator list and the empty state.</p>
+<p><strong><code>build-slice-7-3#2</code> (Publish on a draft): met.</strong> On the manage page, Publish is offered on any unpublished opportunity to anyone allowed to publish, which means administrators (<code>opportunity-cwu-edit.tsx:132-133</code>). Submit for review is withheld from administrators. So an administrator looking at a draft sees Edit, Publish and Delete. The backend allows DRAFT→PUBLISHED on the Code With Us path. The unit test &quot;offers an administrator Publish on a draft too, with no Submit for review, and publishes it&quot; covers this.</p>
+<p><strong>The five criteria:</strong></p>
+<ul><li><strong>R-1.10:</strong> Submitting for review or publishing anything other than a draft is checked against the full rules. Each problem appears in a <code>field-error</code> line that starts with the field&#39;s name, for example &quot;Title: enter a title.&quot;. The service names each field in its refusal the same way.</li><li>The over-length cases (title over 200 characters, teaser over 500, description over 10,000) cannot be typed into the form. The design catalogue and DESIGN.md require <code>maxLength</code> at exactly those limits, so the browser stops the extra characters at entry. A test that tries to type an over-long title through the screen will find no error.</li><li>Removing that cap would break the design. If the rebound adapter fails on that case, the fix is a design question for another stage, not this build&#39;s to settle.</li><li><strong>R-1.21:</strong> Submitting an incomplete draft for review is refused with the fixed message &quot;This opportunity is incomplete. Please edit the opportunity, complete and save the form, and then submit it again.&quot;. The manage page shows it as <code>opportunity-incomplete-message</code> and does not name a field.</li><li>Ours checks every field, not only the five the spec&#39;s note lists for the old system. A Code With Us draft missing a reward is therefore refused at this point instead of at publication.</li><li>That is stricter than the old behaviour the note describes, but the criterion&#39;s own given/when/then still holds.</li><li><strong>R-8.17:</strong> The size limit (&quot;Any type of file, up to 10 MB each.&quot;, <code>attachment-size-limit</code>) is stated before a file is chosen, and the Add attachment button points to it.</li><li>A file over the limit is refused on its own row (<code>attachment-size-error</code>) with its size and the limit. If an oversized upload reaches the service anyway, it is refused with a 413 whose message names 10 MB.</li><li><strong>R-8.19:</strong> The attachment control uploads with an empty read-access list. Who may read the file is decided entirely by the opportunity it is attached to.</li><li><strong>R-8.25:</strong> <code>CwuAttachmentReadPath</code> checks the current version and current status of the attaching opportunity on every read.</li><li>Before publication, only the opportunity&#39;s creator and administrators can read the file. A vendor asking for it gets a 401 &quot;not authorized&quot; refusal.</li><li>Once an administrator publishes it (including straight from a draft), anyone can read it.</li></ul>
+<p><strong>Next steps.</strong> The next run should take the rebound adapter&#39;s results for these five criteria. If one still fails, the result should say what the running application did, and that is where to look. The two items addressed to other stages I left alone:</p>
+<ul><li>The rebind is bind-adapter&#39;s.</li><li>Moving R-1.9, R-1.53, R-1.56 and R-8.22 to a slice whose screens exist is the plan&#39;s.</li></ul></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by runner:verify (the runner, automatically) on 2026-10-01 09:08.</p>
+<div class="body"><p>Slice 7 does not yet do what 5 of its criteria say. Each condition is the criterion and what the running application did.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-1.10: Error: expect(received).toBeTruthy() — Received: &quot;&quot;</li><li>R-1.21: Error: expect(received).toMatch(expected) — Received string:  &quot;Opportunity</li><li>R-8.17: Error: expect(received).toBeTruthy() — Received: &quot;&quot;</li><li>R-8.19: Error: expect(received).toContain(expected) // indexOf — Received string:    &quot;&quot;</li><li>R-8.25: Error: expect(received).toContain(expected) // indexOf — Received string:    &quot;&quot;</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
