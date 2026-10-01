@@ -30,3 +30,23 @@ None of the four criteria could be unblocked: the three screens they need are st
 **What I left alone.** I didn't edit `tests/adapters/new/bindings.yaml`. Every name in it is still named once, with the same bound or unbound status. Nothing outside `tests/adapters/new/` was changed.
 
 **Routes that did not resolve.** On this target, `/opportunities/sprint-with-us/create`, `/opportunities/team-with-us/create` and `/opportunities/code-with-us/:opportunityId/proposals/create` don't resolve for any persona I tried. All three show "Page not found", even though the target's own program chooser links to the first two.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on new, and nothing else? Ruling: approve. The diff changes only the unbound reason strings for opportunity-swu-create.open, opportunity-twu-create.open and every member of proposal-cwu-create in tests/adapters/new/index.ts. The adapter still navigates to each route and reports unbound only when the page itself refuses, so it will bind once a build serves the screens. bindings.yaml is unchanged, nothing under tests/acceptance changed, and no assertion or business logic was added. The unbound reasons are real: as the administrator, the target's own chooser at /opportunities/create links to the Sprint With Us and Team With Us create forms, and both links land on 'Page not found', as do the addresses opened directly. As a vendor, the seeded published Code With Us opportunity, which is open until 2030, offers no action, and every candidate proposal-create route answers 'Page not found'. So the application lacks the screens. The tests do not reach past R-1.48, R-1.9, R-8.19 or R-8.25: each criterion needs creating Sprint With Us or Team With Us opportunities, or attaching to a Code With Us proposal. The runner's typecheck passed with no diagnostics under adapters/new/. The egress failure flags only older .sdlc gate, proposal and site files that this diff does not touch. What would change the ruling: a binding that decides a pass or fail, an edit under tests/acceptance, or evidence that any of these routes renders the form on the current target, which would make the unbound reasons false.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `20e7aa5625e172a6e35bbb02be740254d5af6d86`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
