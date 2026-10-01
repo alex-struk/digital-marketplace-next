@@ -37,3 +37,16 @@ To make sure the picker and the service judge content by the same rule, I moved 
 - **Earlier egress wording.** Following the ruling, I have not quoted the wording that the earlier egress fix replaced.
 
 I wrote no new decision record. The npm dependencies I installed to run the checks have been removed again, so the workspace is as it came apart from the changes above.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does slice 3 (a person keeps their own profile, picture and notification choice) do what its criteria say? Ruling: approve. The verify result is pass-unasserted and current for this proposal (application tree 473d5bd): 23 of the 24 claimed criteria pass and none fail. The one never asserted, R-8.16 (the working copy of an upload is removed once answered), is recorded not-testable for a real reason: the working directory lives on the service's own machine and nothing the contract surface returns mentions it. The slice's own end-to-end test (app/backend/tests/profile-and-files-end-to-end.test.ts) checks that FILE_UPLOADS_DIR is empty after successful, refused and oversized uploads, so I accept the slice on what was asserted. Both picture faults the last ruling named are fixed in the code. save() in app/frontend/src/screens/user-profile.tsx waits for a pending picture check and, while a refusal stands, sends nothing and moves focus back to the refusal (R-8.30). checkChosenPicture in app/frontend/src/app/image-picker.tsx reads the first 8 bytes using the shared imageKindOf, so the browser and the service judge content by the same rule, and the service's own check is unchanged (R-8.21). New unit tests cover both. The remaining egress hits are all in .sdlc and site files outside build's writable paths, and this proposal page no longer quotes the replaced wording. What would change the ruling: a fresh verify result recorded against a later tree that fails any claimed criterion, or evidence that the upload working directory is not emptied on some path.
+
+**Conditions:**
+- condition-met build-slice-3-4#3: save() in app/frontend/src/screens/user-profile.tsx (lines 496-508) awaits any pending picture check and, while a refusal stands, sends nothing and bumps rejectionFocus so ImagePicker refocuses the same refusal alert; covered by app/frontend/tests/profile.test.tsx:323.
+- condition-met build-slice-3-4#4: checkChosenPicture in app/frontend/src/app/image-picker.tsx reads the first IMAGE_SIGNATURE_LENGTH bytes and refuses content that imageKindOf (now shared from app/backend/src/rules/files.ts) reads as neither JPEG nor PNG, showing the refusal at choose time; the service check in app/backend/src/files/images.ts is unchanged; covered by app/frontend/tests/profile.test.tsx:342.
+- condition-met build-slice-3-4#5: the build-slice-3-5 proposal page describes the earlier egress fix without quoting the replaced wording and does not appear among the egress E-2 hits.
