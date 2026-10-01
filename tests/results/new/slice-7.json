@@ -1,0 +1,397 @@
+{
+  "slice": 7,
+  "proposal": "build-slice-7-8",
+  "app_tree": "a21fb0cc85b4c6896c601d9b9968c67af016ee9a",
+  "at": "2026-10-01T10:45:29.500Z",
+  "verdict": "fail",
+  "unasserted": [
+    {
+      "id": "R-1.51",
+      "result": "not-testable",
+      "reason": "unobservable: nothing the service does could show that a state it does not define is gone. No action requests a move to a suspended state, no observation returns the states an opportunity may hold or the states the list's state filter offers, and the mapping of a historical record onto a defined state happens before the rebuilt system reads it, which is a property of the migration rather than of anything the running service answers with. No addition to the surface would help; this is a claim a human accepts about the rebuild rather than one a test can settle."
+    }
+  ],
+  "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc",
+  "rows": [
+    {
+      "id": "R-8.17",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.17.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the size limit on an upload is stated in the interface before a person chooses a file",
+          "status": "passed"
+        },
+        {
+          "title": "an upload larger than the service's size limit is refused as the requester's error, with a message naming the limit",
+          "status": "passed"
+        },
+        {
+          "title": "an attachment larger than the service's size limit is refused in the interface with a message naming the limit",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "bc05ce48ab51c8bd6f00215e6cdc0b831d687024",
+      "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc"
+    },
+    {
+      "id": "R-8.19",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.19.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an attachment on a Code With Us opportunity is uploaded with no read access recorded against the file itself, so that the opportunity decides who may read it",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"R-8.19 code-with-us attachment.pdf\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m",
+          "line": 22
+        },
+        {
+          "title": "an attachment on a Sprint With Us opportunity is uploaded with no read access recorded against the file itself, so that the opportunity decides who may read it",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen; looked for again as the administrator and as a public sector employee: /opportunities/create offers \"Create a Sprint With Us opportunity\", and following that link lands on \"Page not found\" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on \"Page not found\", as do /opportunities/sprint-with-us, the seeded at-consensus Sprint With Us opportunity's view and edit screens, and the guessed spellings /opportunities/swu/create and /sprint-with-us/create, and the Code With Us create form offers no program chooser that would reach a Sprint With Us form; walked again on this build signed in as the administrator: the dashboard's \"Create an opportunity\" leads to /opportunities/create, whose \"Create a Sprint With Us opportunity\" link lands on \"Page not found\" at /opportunities/sprint-with-us/create, as it does for a public sector employee, and the administrator's \"All opportunities\" table lists Code With Us opportunities only (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)",
+          "line": 60
+        },
+        {
+          "title": "an attachment on a Team With Us opportunity is uploaded with no read access recorded against the file itself, so that the opportunity decides who may read it",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-twu-create.open — /opportunities/team-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen; looked for again as the administrator and as a public sector employee: /opportunities/create offers \"Create a Team With Us opportunity\", and following that link lands on \"Page not found\" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on \"Page not found\", as do /opportunities/team-with-us and the guessed spellings /opportunities/twu/create and /team-with-us/create, and the Code With Us create form offers no program chooser that would reach a Team With Us form; walked again on this build signed in as the administrator: the dashboard's \"Create an opportunity\" leads to /opportunities/create, whose \"Create a Team With Us opportunity\" link lands on \"Page not found\" at /opportunities/team-with-us/create, as it does for a public sector employee, and the administrator's \"All opportunities\" table lists Code With Us opportunities only (it shows \"Page not found\" at http://localhost:4300/opportunities/team-with-us/create)",
+          "line": 74
+        }
+      ],
+      "file_sha": "30f3519b79116388fb73969dd123b0c7e05e0eb9",
+      "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc"
+    },
+    {
+      "id": "R-8.25",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.25.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an attachment on a Code With Us opportunity is refused to a vendor before the opportunity is publicly visible, and readable by them once it is",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoContain\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // indexOf\u001b[22m\n\nExpected substring: \u001b[32m\"R-8.25 cwu.pdf\"\u001b[39m\nReceived string:    \u001b[31m\"\"\u001b[39m",
+          "line": 48
+        },
+        {
+          "title": "an attachment on a Sprint With Us opportunity is refused to a vendor before the opportunity is publicly visible, and readable by them once it is",
+          "status": "failed",
+          "error": "Error: unbound: opportunity-swu-create.open — /opportunities/sprint-with-us/create is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen; looked for again as the administrator and as a public sector employee: /opportunities/create offers \"Create a Sprint With Us opportunity\", and following that link lands on \"Page not found\" too; rechecked once more signed in as the administrator and as a public sector employee: following the link in the page still lands on \"Page not found\", as do /opportunities/sprint-with-us, the seeded at-consensus Sprint With Us opportunity's view and edit screens, and the guessed spellings /opportunities/swu/create and /sprint-with-us/create, and the Code With Us create form offers no program chooser that would reach a Sprint With Us form; walked again on this build signed in as the administrator: the dashboard's \"Create an opportunity\" leads to /opportunities/create, whose \"Create a Sprint With Us opportunity\" link lands on \"Page not found\" at /opportunities/sprint-with-us/create, as it does for a public sector employee, and the administrator's \"All opportunities\" table lists Code With Us opportunities only (it shows \"Page not found\" at http://localhost:4300/opportunities/sprint-with-us/create)",
+          "line": 100
+        },
+        {
+          "title": "an attachment on an opportunity that is not yet publicly visible is readable by the opportunity's creator",
+          "status": "passed"
+        },
+        {
+          "title": "an attachment on a proposal is readable by whoever may read that proposal",
+          "status": "failed",
+          "error": "Error: unbound: proposal-cwu-create.open — /opportunities/code-with-us/:opportunityId/proposals/create is offered only to a signed-in person, and walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor's screens — the seeded organization owner for the organization screens — with the seeded records' identifiers), the running build serves a signed-in person /dashboard (to the administrator \"Create an opportunity\" over \"All opportunities\", each Code With Us opportunity linked to its management screen; to public sector staff the same over \"My opportunities\"), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers \"Page not found\"; opened signed out (with the seeded record's identifier where it takes one) it shows the \"Page not found\" screen (it shows \"Page not found\" at http://localhost:4300/opportunities/code-with-us/5fceead2-785e-48b1-84dc-b22817f40c72/proposals/create)",
+          "line": 173
+        }
+      ],
+      "file_sha": "3dea46f61c56ee6819beaf1453ad2ce0efc6ae60",
+      "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc"
+    },
+    {
+      "id": "R-8.27",
+      "version": 1,
+      "domain": "files",
+      "file": "tests/acceptance/files/R-8.27.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an attachment can be given a different display name before it is uploaded, and the ending of the original file is put back on if the person leaves it off",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "a43a7ee3cc230b8b3dbab22a658f081c7997ddca",
+      "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc"
+    },
+    {
+      "id": "R-6.8",
+      "version": 1,
+      "domain": "notifications",
+      "file": "tests/acceptance/notifications/R-6.8.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A notice that goes to many people at once is split into batches of at most fifty and addressed so that no recipient can see who else received it.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "93f67a730eb9465d1f151e7d5db467ed3c703474",
+      "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc"
+    },
+    {
+      "id": "R-1.4",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.4.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "every change to an opportunity's content creates a new version of it and the opportunity always shows its most recent version",
+          "status": "passed"
+        },
+        {
+          "title": "every change to an opportunity's content records an edit in its history",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "290689fa9f95bb53e8bc6da390783e84a8fc2799",
+      "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc"
+    },
+    {
+      "id": "R-1.7",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.7.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "an anonymous visitor's attempt to create an opportunity is refused and no opportunity is created",
+          "status": "failed",
+          "error": "Error: opportunity-cwu-create.save_draft — refused: /opportunities/code-with-us/create answered nobody signed in with Page not found The page you are looking for does not exist. at http://localhost:4300/opportunities/code-with-us/create; only a person who may create an opportunity is offered the form",
+          "line": 16
+        },
+        {
+          "title": "a vendor's attempt to create an opportunity is refused and no opportunity is created",
+          "status": "failed",
+          "error": "Error: opportunity-cwu-create.save_draft — refused: /opportunities/code-with-us/create answered vendor with Page not found The page you are looking for does not exist. at http://localhost:4300/opportunities/code-with-us/create; only a person who may create an opportunity is offered the form",
+          "line": 30
+        }
+      ],
+      "file_sha": "2866b3d1584c3ffb141b0c1d4695337c2e95459e",
+      "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc"
+    },
+    {
+      "id": "R-1.10",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.10.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a missing title)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a title over 200 characters)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a teaser over 500 characters)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a missing location)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a missing description)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft is rejected unless it carries a title of 1 to 200 characters, a teaser of at most 500 characters, a location, and a description of 1 to 10,000 characters. (a description over 10,000 characters)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "43430986b64a075323f242d8620294061de587f8",
+      "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc"
+    },
+    {
+      "id": "R-1.11",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.11.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "An opportunity that is not a draft must state whether remote work is acceptable, and must carry a remote-work description of up to 500 characters whenever remote work is acceptable. (one that does not say whether remote work is acceptable is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft must state whether remote work is acceptable, and must carry a remote-work description of up to 500 characters whenever remote work is acceptable. (one that accepts remote work with no remote-work description is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity that is not a draft must state whether remote work is acceptable, and must carry a remote-work description of up to 500 characters whenever remote work is acceptable. (one that accepts remote work with a remote-work description over 500 characters is refused)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "6ac8875bd3b39f1de123be051c176521834bc3ba",
+      "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc"
+    },
+    {
+      "id": "R-1.12",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.12.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "A Code With Us opportunity must offer a reward of at least $1 and at most $70,000, and must name at least one skill. (a reward below $1 is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us opportunity must offer a reward of at least $1 and at most $70,000, and must name at least one skill. (a reward above $70,000 is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "A Code With Us opportunity must offer a reward of at least $1 and at most $70,000, and must name at least one skill. (naming no skill is refused)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "ad8de230fa438cd99e4ed5593e1f80873a806c87",
+      "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc"
+    },
+    {
+      "id": "R-1.14",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.14.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "An opportunity's key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen. (a proposal deadline earlier than today is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity's key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen. (an assignment date before the proposal deadline is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity's key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen. (a start date before the assignment date is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity's key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen. (a completion date before the start date is refused)",
+          "status": "passed"
+        },
+        {
+          "title": "An opportunity's key dates must run in order — the proposal deadline no earlier than today, then the assignment date, then the start date, then the completion date — and each date is recorded as 4:00 p.m. Pacific time on the day chosen. (the proposal deadline is recorded as 4:00 p.m. on the day chosen)",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "55271bb50468e8dc99b0b921209d519d88fa5215",
+      "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc"
+    },
+    {
+      "id": "R-1.21",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.21.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "Submitting a draft opportunity for review is refused unless the opportunity is complete, and the person is told the opportunity is incomplete rather than which field is missing.",
+          "status": "failed",
+          "error": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoMatch\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m\n\nExpected pattern: \u001b[32m/incomplete/i\u001b[39m\nReceived string:  \u001b[31m\"Opportunity\u001b[39m\n\u001b[31mOverview\u001b[39m\n\u001b[31mTitle(required)\u001b[39m\n\u001b[31mUp to 200 characters.\u001b[39m\n\u001b[31mTeaser (optional)\u001b[39m\n\u001b[31mA sentence or two shown in the opportunity list. Up to 500 characters.\u001b[39m\n\u001b[31mLocation(required)\u001b[39m\n\u001b[31mIs remote work acceptable? (required)\u001b[39m\n\u001b[31mYes\u001b[39m\n\u001b[31mNo\u001b[39m\n\u001b[31mRemote work description (required)\u001b[39m\n\u001b[31mSay what remote work involves. Required when remote work is acceptable. Up to 500 characters.\u001b[39m\n\u001b[31mReward and skills\u001b[39m\n\u001b[31mReward(required)\u001b[39m\n\u001b[31mBetween $1 and $70,000.\u001b[39m\n\u001b[31mSkills (required)\u001b[39m\n\u001b[31mBackend Development\u001b[39m\n\u001b[31mChoose at least one skill.\u001b[39m\n\u001b[31mAccessibility\u001b[39m\n\u001b[31mAgile Coaching\u001b[39m\n\u001b[31mBackend Development\u001b[39m\n\u001b[31mBusiness Analysis\u001b[39m\n\u001b[31mCloud Infrastructure\u001b[39m\n\u001b[31mData Science\u001b[39m\n\u001b[31mDatabase Administration\u001b[39m\n\u001b[31mDelivery Management\u001b[39m\n\u001b[31mDevOps Engineering\u001b[39m\n\u001b[31mFrontend Development\u001b[39m\n\u001b[31mMobile Development\u001b[39m\n\u001b[31mQuality Assurance\u001b[39m\n\u001b[31mSecurity Engineering\u001b[39m\n\u001b[31mTechnical Architecture\u001b[39m\n\u001b[31mTechnical Writing\u001b[39m\n\u001b[31mUser Experience Design\u001b[39m\n\u001b[31mUser Research\u001b[39m\n\u001b[31mDescription\u001b[39m\n\u001b[31mDescription (required)\u001b[39m\n\u001b[31mFormatted text, up to 10,000 characters.\u001b[39m\n\u001b[31mKey dates\u001b[39m\n\u001b[31mEach date must fall on or after the one before it.\u001b[39m\n\u001b[31mProposal deadline(required)\u001b[39m\n\u001b[31mProposals close at 4:00 p.m. Pacific time on this day. It cannot be before today.\u001b[39m\n\u001b[31mAssignment date(required)\u001b[39m\n\u001b[31mOn or after the proposal deadline.\u001b[39m\n\u001b[31mStart date(required)\u001b[39m\n\u001b[31mOn or after the assignment date.\u001b[39m\n\u001b[31mCompletion date (optional)\u001b[39m\n\u001b[31mOn or after the start date.\u001b[39m\n\u001b[31mAttachments\u001b[39m\n\u001b[31mAttach any documents proponents need. Anyone who can read this opportunity can read its attachments. Removing an attachment stops it being readable through this opportunity once you save.\u001b[39m\n\u001b[31mNo attachments have been added.\u001b[39m\n\u001b[31mAny type of file, up to 10 MB each.\u001b[39m\n\u001b[31mAdd attachment\u001b[39m\n\u001b[31mSaving records a new version of the draft. Nothing is checked until it is submitted for review or published.\u001b[39m\n\u001b[31mSave changes\u001b[39m\n\u001b[31mCancel\u001b[39m\n\u001b[31mTitle(required): R-1.21 saved draft with its location emptied, submitted for review\u001b[39m\n\u001b[31mTeaser (optional): A short summary of the work to be done.\u001b[39m\n\u001b[31mIs remote work acceptable? (required): Yes\u001b[39m\n\u001b[31mRemote work description (required): Remote work is acceptable anywhere in the province.\u001b[39m\n\u001b[31mReward(required): $5,000\u001b[39m\n\u001b[31mSkills (required): Backend Development\u001b[39m\n\u001b[31mDescription (required): A full description of the work to be done.\u001b[39m\n\u001b[31mProposal deadline(required): 2026-10-15\u001b[39m\n\u001b[31mAssignment date(required): 2026-10-22\u001b[39m\n\u001b[31mStart date(required): 2026-10-29\u001b[39m\n\u001b[31mCompletion date (optional): 2026-12-30\"\u001b[39m\n\nCall Log:\n- Timeout 15000ms exceeded while waiting on the predicate",
+          "line": 78
+        }
+      ],
+      "file_sha": "9d8843efc9e8926f9b02d36d9808973923ae948f",
+      "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc"
+    },
+    {
+      "id": "R-1.22",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.22.spec.ts",
+      "result": "fail",
+      "tests": [
+        {
+          "title": "only an administrator may publish an opportunity",
+          "status": "failed",
+          "error": "Error: opportunity-cwu-edit.publish — refused: no \"Publish\" among the opportunity's actions for public-sector-staff on http://localhost:4300/opportunities/code-with-us/cbe4ed54-3c5d-4cf6-8274-7e1364a52684/edit (Status: Draft; the actions offered are \"Edit\", \"Submit for review\", \"Delete\")",
+          "line": 39
+        }
+      ],
+      "file_sha": "08a09c408e86f3fe87df48c868af8ca90b573564",
+      "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc"
+    },
+    {
+      "id": "R-1.23",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.23.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "publishing an opportunity records the moment of publication, which is thereafter shown as its published date",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "458cb922cf730ba4a792f99013237c40dbdbd282",
+      "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc"
+    },
+    {
+      "id": "R-1.29",
+      "version": 2,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.29.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "The names of the people who created and last changed an opportunity are withheld from anyone who is neither an administrator nor one of those people.",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "28d2ce38d0da3c2a3ad374f27a3f367074bf0570",
+      "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc"
+    },
+    {
+      "id": "R-1.34",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.34.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Publishing an opportunity notifies everyone who has asked for new-opportunity notifications, and separately confirms the publication to the opportunity's author. — everyone who has asked for new-opportunity notifications is notified",
+          "status": "passed"
+        },
+        {
+          "title": "Publishing an opportunity notifies everyone who has asked for new-opportunity notifications, and separately confirms the publication to the opportunity's author. — the opportunity's author receives a separate confirmation",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "da03866dfe5ec05521978621856b6028ec9957af",
+      "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc"
+    },
+    {
+      "id": "R-1.37",
+      "version": 1,
+      "domain": "opportunities",
+      "file": "tests/acceptance/opportunities/R-1.37.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "Submitting an opportunity for review notifies every administrator, and confirms the submission to its author. — every administrator is notified",
+          "status": "passed"
+        },
+        {
+          "title": "Submitting an opportunity for review notifies every administrator, and confirms the submission to its author. — the author receives a confirmation",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "35205c76ed42ccd81295c6aa24eabd9027961203",
+      "adapter": "5208156e033da992ac397b39b7106a51ee64a4bc"
+    },
+    {
+      "id": "R-1.51",
+      "version": 1,
+      "domain": "opportunities",
+      "file": null,
+      "result": "not-testable",
+      "reason": "unobservable: nothing the service does could show that a state it does not define is gone. No action requests a move to a suspended state, no observation returns the states an opportunity may hold or the states the list's state filter offers, and the mapping of a historical record onto a defined state happens before the rebuilt system reads it, which is a property of the migration rather than of anything the running service answers with. No addition to the surface would help; this is a claim a human accepts about the rebuild rather than one a test can settle.",
+      "tests": []
+    }
+  ]
+}

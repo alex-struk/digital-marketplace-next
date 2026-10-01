@@ -1,0 +1,28 @@
+gate: G3
+verdict: escalated
+by: runner:verify
+held_by: runner
+escalate_to: tech-lead
+rationale: "Slice 7 has failed verify 3 times. The failures below may not be the
+  application's: a test, the adapter, the criterion or the sandbox can each be
+  what is wrong (spec 7.1), and another build would not find out which."
+conditions:
+  - "R-1.7: Error: opportunity-cwu-create.save_draft — refused:
+    /opportunities/code-with-us/create answered nobody signed in with Page not
+    found The page you are looking for does not exist. at
+    http://localhost:4300/opportunities/code-with-us/create; only a person who
+    may create an opportunity is offered the form — at
+    tests/acceptance/opportunities/R-1.7.spec.ts:16"
+  - 'R-1.21: Error: expect(received).toMatch(expected) — Received
+    string:  "Opportunity — at tests/acceptance/opportunities/R-1.21.spec.ts:78'
+  - "R-1.22: Error: opportunity-cwu-edit.publish — refused: no \"Publish\" among
+    the opportunity's actions for public-sector-staff on
+    http://localhost:4300/opportunities/code-with-us/cbe4ed54-3c5d-4cf6-8274-7e\
+    1364a52684/edit (Status: Draft; the actions offered are \"Edit\", \"Submit
+    for review\", \"Delete\") — at
+    tests/acceptance/opportunities/R-1.22.spec.ts:39"
+  - 'R-8.19: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    "" — at tests/acceptance/files/R-8.19.spec.ts:22'
+  - 'R-8.25: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    "" — at tests/acceptance/files/R-8.25.spec.ts:48'
+at: 2026-10-01T10:45:29.577Z
