@@ -23,7 +23,11 @@ let state: SessionState = { status: "starting" };
 const listeners = new Set<() => void>();
 let identity: IdentityClient | null = null;
 
+/** Counts every change of who is held, so a late answer can tell it has been overtaken. */
+let generation = 0;
+
 function become(next: SessionState): void {
+  generation += 1;
   state = next;
   for (const listener of listeners) listener();
 }
@@ -45,6 +49,25 @@ export function useSession(): SessionState {
 /** The account a screen was just told about, such as one it has saved. */
 export function holdAccount(account: Account): void {
   become({ status: "signed-in", account });
+}
+
+/**
+ * Asks the service again for the signed-in person's account, and holds what it says, so that a
+ * screen shows the account as it stands now and not as it stood when the app started. Things
+ * change without the person doing anything: an administrator's announcement of changed terms
+ * withdraws every vendor's acceptance while they are signed in (R-6.23, R-4.16).
+ *
+ * The answer is dropped if anything has changed who is held while it was on its way — a save
+ * the screen made in the meantime is newer than what was read before it — or if it is somebody
+ * else's account, or none.
+ */
+export async function refreshHeldAccount(read: (accountId: string) => Promise<Account | null>): Promise<void> {
+  if (state.status !== "signed-in") return;
+  const asked = generation;
+  const id = state.account.id;
+  const account = await read(id);
+  if (!account || account.id !== id || asked !== generation) return;
+  holdAccount(account);
 }
 
 /** The sign-out page (user-sign-out). */

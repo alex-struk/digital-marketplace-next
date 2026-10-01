@@ -40,7 +40,12 @@ import { Loading } from "../app/loading";
 import { NotFound } from "../app/not-found";
 import { RequireSignIn } from "../app/require-sign-in";
 import { useScreenTitle } from "../app/screen-title";
-import { DEACTIVATED_OWN_ACCOUNT_NOTICE, endAfterOwnDeactivation, holdAccount } from "../auth/session";
+import {
+  DEACTIVATED_OWN_ACCOUNT_NOTICE,
+  endAfterOwnDeactivation,
+  holdAccount,
+  refreshHeldAccount,
+} from "../auth/session";
 import { readDate, readMoment } from "../lib/dates";
 
 /**
@@ -1067,11 +1072,48 @@ function NotificationsSection({
 /**
  * The privacy policy, the service's terms with when they were agreed to, and the three programs'
  * terms; offered on a vendor's own profile only (R-4.33).
+ *
+ * Once an administrator has announced changed terms, the vendor's standing acceptance is gone:
+ * the section warns them, says when they last agreed, and offers to review and agree to the new
+ * terms, which records a fresh acceptance (R-4.16).
+ *
+ * The announcement can come while the vendor is signed in, so the section asks the service for
+ * the account each time it is opened rather than trusting the one held since the app started
+ * (R-6.23).
  */
-function LegalSection({ account }: { account: Account }) {
+function LegalSection({ account: held }: { account: Account }) {
   useScreenTitle("Policies, Terms & Agreements");
+  // The account as it now stands, once an agreement has been saved.
+  const [account, setAccount] = useState(held);
+  useEffect(() => setAccount(held), [held]);
+  useEffect(() => {
+    void refreshHeldAccount(async (id) => {
+      const found = await fetchAccount(id);
+      return found.kind === "found" ? found.account : null;
+    });
+  }, [held.id]);
+  const [asking, setAsking] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [justAgreed, setJustAgreed] = useState(false);
   const agreed = account.acceptedTermsAt ? readMoment(account.acceptedTermsAt) : null;
   const lastAgreed = account.lastAcceptedTermsAt ? readMoment(account.lastAcceptedTermsAt) : null;
+
+  async function agree() {
+    setSaving(true);
+    setFailed(false);
+    const answer = await changeOwnAccount(account.id, "acceptTerms");
+    setSaving(false);
+    setAsking(false);
+    if (answer.kind !== "saved") {
+      setFailed(true);
+      return;
+    }
+    setAccount(answer.account);
+    setJustAgreed(true);
+    holdAccount(answer.account);
+  }
+
   return (
     <>
       <section aria-labelledby="privacy-heading" style={stack} data-testid="legal-privacy-policy">
@@ -1089,6 +1131,44 @@ function LegalSection({ account }: { account: Account }) {
         <Heading level={2} id="terms-heading">
           Terms and conditions
         </Heading>
+        {agreed ? null : (
+          <div data-testid="legal-terms-updated-warning">
+            <InlineAlert
+              variant="warning"
+              title={lastAgreed ? "The terms and conditions have changed" : "Agree to the terms and conditions"}
+              description={
+                lastAgreed
+                  ? "Review and agree to the updated terms and conditions to continue using the Digital Marketplace."
+                  : "Review and agree to the terms and conditions to continue using the Digital Marketplace."
+              }
+              buttons={
+                <Button
+                  variant="primary"
+                  onPress={() => {
+                    setFailed(false);
+                    setAsking(true);
+                  }}
+                  data-testid="legal-accept-updated-terms-button"
+                >
+                  {lastAgreed ? "Review and agree to the updated terms" : "Review and agree to the terms"}
+                </Button>
+              }
+            />
+          </div>
+        )}
+        {failed ? (
+          <InlineAlert
+            variant="danger"
+            role="alert"
+            title="Your agreement could not be saved"
+            description="Nothing has changed. Please try again."
+          />
+        ) : null}
+        <div role="status">
+          {agreed && justAgreed ? (
+            <Text elementType="p">Thank you. Your agreement to the terms and conditions has been recorded.</Text>
+          ) : null}
+        </div>
         <Text elementType="p">
           <Link href="/content/terms-and-conditions" data-testid="legal-app-terms-link">
             Read the Digital Marketplace terms and conditions
@@ -1131,6 +1211,34 @@ function LegalSection({ account }: { account: Account }) {
           </li>
         </ul>
       </section>
+      <Modal isOpen={asking} isDismissable onOpenChange={(open) => (saving ? undefined : setAsking(open))}>
+        <AlertDialog
+          variant="confirmation"
+          title={lastAgreed ? "Agree to the updated terms and conditions?" : "Agree to the terms and conditions?"}
+          data-testid="legal-accept-terms-modal"
+          buttons={
+            <>
+              <Button variant="secondary" isDisabled={saving} onPress={() => setAsking(false)}>
+                Not now
+              </Button>
+              <Button
+                variant="primary"
+                isDisabled={saving}
+                onPress={() => void agree()}
+                data-testid="legal-accept-terms-confirm-button"
+              >
+                I agree
+              </Button>
+            </>
+          }
+        >
+          <Text elementType="p">
+            By agreeing, you confirm you have read and agree to the{" "}
+            <Link href="/content/terms-and-conditions">Digital Marketplace terms and conditions</Link>. The date and
+            time you agree will be recorded on your account.
+          </Text>
+        </AlertDialog>
+      </Modal>
     </>
   );
 }
