@@ -777,3 +777,23 @@ redo:
       why: derived again by a derive-tests run on opportunities
       by: runner:derive-tests
       at: 2026-09-30T05:37:57.827Z
+  - id: R-1.5
+    version: 1
+    why: the test reads the watcher count from a reporting figure on the
+      opportunity's management screen (opportunityCwuEdit.reportingWatchers),
+      but the criterion asks only that watching is recorded for the person and
+      that a second watch is refused; it says nothing about any screen showing a
+      watcher count. The contract's counters observable (watcher_count, read
+      directly) already observes what the criterion names.
+    verb: test-overreaches
+  - id: R-1.6
+    version: 1
+    why: the test reads the view count from a reporting figure on the opportunity's
+      management screen as the administrator
+      (opportunityCwuEdit.reportingViews), but the criterion asks only that the
+      recorded view count for the opportunity increases by one when its public
+      page is opened; it does not require the count to be displayed anywhere.
+      The contract's counters observable (view_count, read directly) already
+      observes what the criterion names, and it can check an increase of exactly
+      one rather than only a change.
+    verb: test-overreaches
