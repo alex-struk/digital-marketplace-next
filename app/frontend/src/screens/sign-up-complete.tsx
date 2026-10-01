@@ -1,5 +1,4 @@
-import { FormEvent, useEffect, useState } from "react";
-import { FileTrigger } from "react-aria-components";
+import { FormEvent, useEffect, useRef, useState } from "react";
 import {
   Button,
   Checkbox,
@@ -13,6 +12,8 @@ import {
 import { DASHBOARD } from "@rules/sign-in";
 import { needsProfileCompletion, ProfileErrors, validateProfile } from "@rules/users";
 import { Account, changeOwnAccount } from "../api/accounts";
+import { uploadPicture } from "../api/files";
+import { ImagePicker, PictureRejection, checkChosenPicture } from "../app/image-picker";
 import { page, stack } from "../app/layout";
 import { Loading } from "../app/loading";
 import { useScreenTitle } from "../app/screen-title";
@@ -67,7 +68,9 @@ function CompletionForm({ account }: { account: Account }) {
   const [errors, setErrors] = useState<ProfileErrors>({});
   const [saveFailed, setSaveFailed] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [pictureChosen, setPictureChosen] = useState(false);
+  const [chosen, setChosen] = useState<File | null>(null);
+  const [rejection, setRejection] = useState<PictureRejection | null>(null);
+  const choosing = useRef<{ turn: number; check: Promise<File | null> | null }>({ turn: 0, check: null });
 
   const problems: Problem[] = (Object.keys(errors) as (keyof ProfileErrors)[])
     .filter((field) => errors[field])
@@ -91,11 +94,37 @@ function CompletionForm({ account }: { account: Account }) {
     setErrors({});
     setSaving(true);
 
+    // A chosen picture is stored first, so the details can name it (file-image-picker).
+    // A choice still being checked is waited for, so it is not left out.
+    const picture = choosing.current.check ? await choosing.current.check : chosen;
+    let avatarImageFile: string | undefined;
+    if (picture) {
+      const stored = await uploadPicture(picture);
+      if (stored.kind !== "stored") {
+        setSaving(false);
+        if (stored.kind === "refused") {
+          setRejection({
+            name: picture.name,
+            reason: `${stored.reasons.join(" ") || "The service did not accept it."} Choose another picture, or none.`,
+          });
+          setChosen(null);
+        } else {
+          setSaveFailed(true);
+        }
+        return;
+      }
+      avatarImageFile = stored.id;
+    }
+
     // The details first, so that a refusal — an email address another account holds, among
     // others — leaves the person where they were, with nothing they entered lost (R-4.6).
     // The terms last, because agreeing is what completes the profile (R-4.3).
     const steps: (() => ReturnType<typeof changeOwnAccount>)[] = [
-      () => changeOwnAccount(account.id, "updateProfile", validation.profile),
+      () =>
+        changeOwnAccount(account.id, "updateProfile", {
+          ...validation.profile,
+          ...(avatarImageFile ? { avatarImageFile } : {}),
+        }),
       ...(notices ? [() => changeOwnAccount(account.id, "updateNotifications", true)] : []),
       () => changeOwnAccount(account.id, "acceptTerms"),
     ];
@@ -147,21 +176,24 @@ function CompletionForm({ account }: { account: Account }) {
         <Text elementType="p">Confirm your details to finish creating your vendor account.</Text>
       )}
       <Form validationBehavior="aria" style={stack} onSubmit={complete}>
-        <div style={stack}>
-          <Text elementType="p">Profile picture (optional)</Text>
-          <Text elementType="p" size="small" color="secondary">
-            {pictureChosen
-              ? "You can add a profile picture from your profile once it is complete."
-              : "No profile picture has been added."}
-          </Text>
-          <div>
-            <FileTrigger acceptedFileTypes={["image/*"]} onSelect={() => setPictureChosen(true)}>
-              <Button variant="secondary" data-testid="change-avatar">
-                Choose a profile picture
-              </Button>
-            </FileTrigger>
-          </div>
-        </div>
+        <ImagePicker
+          storedFileId={account.avatarImageFile}
+          chosen={chosen}
+          rejection={rejection}
+          onChoose={(file) => {
+            // Only the latest choice counts: one still being read when another is made is set aside.
+            const turn = ++choosing.current.turn;
+            choosing.current.check = checkChosenPicture(file).then((refused) => {
+              const accepted = refused ? null : file;
+              if (turn === choosing.current.turn) {
+                choosing.current.check = null;
+                setRejection(refused);
+                setChosen(accepted);
+              }
+              return accepted;
+            });
+          }}
+        />
         <TextField
           label="Sign-in username"
           value={account.idpUsername}

@@ -116,7 +116,7 @@ describe("the environment switches (R-6.1, R-6.3)", () => {
 describe("the two forms of a message (R-6.5)", () => {
   it("carry the same words and the same links", () => {
     const html = renderHtml(message, settings);
-    const text = renderText(message);
+    const text = renderText(message, settings);
 
     for (const words of ["A <sample> message", "Read ", "the terms", " first.", "Sign in"]) {
       expect(text).toContain(words);

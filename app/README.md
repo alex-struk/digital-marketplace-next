@@ -51,6 +51,12 @@ Every message the service sends is marked as a test and comes from
 `Digital Marketplace <donotreply@example.test>` (decision record 0013). Start with
 `SDLC_ORACLE_DISABLE_NOTIFICATIONS=1` in the environment to switch all mail off (R-6.1).
 
+Uploads (`POST /api/files`, `POST /api/avatars`) are read by their handler rather than by the
+boundary validator, written to the working directory `FILE_UPLOADS_DIR` (a tmpfs in compose, the
+backend's `emptyDir` volume in a sandbox) and removed once answered; the bytes are kept in the
+database, once per distinct content (decision record 0021). A service that cannot make that
+directory does not start.
+
 The schema is brought up to date by the `migrate` service before the service starts. To put
 the data back to the state `tests/seed/manifest.yaml` describes — wiping whatever is there
 first, so running it twice leaves the same data:
