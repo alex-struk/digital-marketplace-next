@@ -48,3 +48,23 @@ The four answer observations read the last answer:
 **Pages that didn't resolve.** Every address this page uses answered on the target.
 
 I wrote nothing outside `tests/adapters/new/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the bind-adapter-new-36 adapter bind every surface action and observation on the new target, and nothing else? Ruling: approve. The new opportunity-watch-request binding covers exactly the seven members the generated surface declares (OpportunityWatchRequestPage: watchByRequest, stopWatchingByRequest, requestAccepted, refusalStatus, refusalReason, refusalMessages, watching), mirrors the old target's bindings for the same page, and the runner's typecheck on this revision passed with no diagnostics under adapters/new/, which replaces the author's untested-compile caveat. The bindings are navigation and reading only: the actions send the request with the session's cookies, and the observations return what the last response or a fresh GET of the opportunity carries. refusal_reason reports the body's own key ('errors') rather than mapping message text onto the contract's reason names, so a mismatch with the contract will surface as a real test failure, not be decided by the adapter. The two changed unbound reasons (opportunity-cwu-edit reporting_views and reporting_watchers) are real: they name screens walked and show that the counts exist only behind GET /api/counters and are never displayed, so there is no page observation to bind. Nothing under tests/acceptance changed, and nothing outside tests/adapters/new changed apart from pipeline records. Tier is STANDARD and no residual risk is marked unaccepted, so there is no escalation. The open missing-test for the R-1.5 duplicate-watch clause stays owed by derive-tests, and this page is the surface that test needs. What would change the ruling: evidence that a binding decides an outcome (for example by translating refusal text into a contract reason), a typecheck failure on this revision, or any change under tests/acceptance.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `cef276ac904b040fae269b290e14c1c1592945dd`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
