@@ -21,9 +21,10 @@
 // running build serves a signed-in person /dashboard (a greeting and nothing else), their
 // own profile at /users/me or /users/<their own id> (editable, with its picture picker) with
 // its Capabilities, Organizations, Notifications and Legal sections, another account's
-// /users/:userId and the list of accounts at /users to the administrator, and
-// /sign-up/complete to a vendor still to complete a profile; every other screen that needs
-// a session — opportunities, proposals, organizations, content management, evaluation —
+// /users/:userId and the list of accounts at /users to the administrator, the content
+// management screens (/content, /content/create, /content/:slug/edit) to the administrator,
+// and /sign-up/complete to a vendor still to complete a profile; every other screen that
+// needs a session — opportunities, proposals, organizations, evaluation —
 // answers "Page not found" (so does /users, to anyone but the administrator), and
 // /admin/email-notification-reference is not a screen at all (the service answers it 404
 // "Cannot GET", to the administrator too). Those screens' open() reports "unbound:
@@ -287,7 +288,10 @@ export default function create(
   // What walking the target signed in found: only the dashboard and one's own account screens
   // are served to a signed-in person; everything else answers "Page not found".
   const NOBODY_SIGNS_IN =
-    'walked signed in (as the administrator, and as a vendor for a vendor\'s screens — the seeded organization owner for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else) and the account screens under /users: every opportunity, proposal, organization, content-management and evaluation screen, /opportunities and /organizations included, answers "Page not found"';
+    'walked signed in (as the administrator, and as a vendor for a vendor\'s screens — the seeded organization owner for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers "Page not found"';
+
+  const TERMS_NOT_ANNOUNCED =
+    'signed in as the administrator and opened /content/terms-and-conditions/edit (the seeded page the service needs, reached from "terms-and-conditions" in the /content list): it shows the page\'s facts, the note "The service needs this page", "Edit page" and the current wording, and walked into "Edit page" it shows only the form with "Cancel" and "Publish changes" — nothing on either offers to notify vendors of changed terms';
 
   // What each such address answered a signed-out visitor when it was last opened: /dashboard
   // and /sign-up/complete send them to /sign-in?redirectOnSuccess=…, and everything else
@@ -659,9 +663,12 @@ export default function create(
           `unbound: content-view.follow_body_link — no page is published at ${page.url()}, so there is no body to follow a link in`,
         );
       }
-      // The body is the block after the title and its dated line; the banner's and the
-      // footer's links, which share the same landmark, are not the page's own.
-      const body = seen(page.getByRole("heading", { level: 1 })).first().locator("xpath=following-sibling::*[2]");
+      // The page is drawn as an article in main: its title, its dates as terms, its body and
+      // a line stating its own address, which carries no link. So every link in the article
+      // is in the body (seen with a page written to link to /content/about).
+      const main = page.getByRole("main");
+      const article = seen(main.getByRole("article"));
+      const body = (await article.count()) ? article.first() : main.first();
       const links = seen(body.getByRole("link"));
       const count = await links.count();
       for (let i = 0; i < count; i++) {
@@ -672,7 +679,7 @@ export default function create(
         return;
       }
       throw new Error(
-        `unbound: content-view.follow_body_link — the body of the page at ${page.url()} carries no link; a page with one could only be written on /content/create or /content/:slug/edit, which are offered only to a signed-in administrator, and ${NOBODY_SIGNS_IN}`,
+        `unbound: content-view.follow_body_link — the body of the page at ${page.url()} carries no link to follow`,
       );
     },
     pageAddress: async () => {
@@ -691,6 +698,501 @@ export default function create(
     updatedDate: async () => ((await notFoundShown()) ? "" : datedLine("Updated")),
     readableWhenSignedOut: () => mainText(),
     notFoundForUnknownAddress: async () => ((await notFoundShown()) ? mainText() : ""),
+  };
+
+  // ---------------------------------------------------------------- managing pages
+  //
+  // Served to the administrator (the header's "Content" link): /content lists every page in
+  // a table captioned "Every page, in order of title" (Title, Public address, Needed by the
+  // service, Created, Last updated) under a "Create page" link; /content/create is a form
+  // (Title, Address, a formatted Body with an "Insert image" button) with "Cancel" and
+  // "Publish page" in a "Page actions" group, "Publish page" confirmed in a "Publish this
+  // page?" dialog, after which the browser lands on the new page's /content/<slug>/edit with
+  // a "Page published" status. That screen shows the page's facts as a list of terms
+  // (Public address, Published, Published by, Last updated, Last updated by), "Edit page" and
+  // "Delete page" in "Page actions", and the current wording read-only; "Edit page" opens
+  // the form with "Cancel" and "Publish changes" ("Publish your changes?" to confirm, then a
+  // "Changes published" status). "Delete page" asks "Delete “<title>”?" and lands on
+  // /content with a "Page removed" status. A page the service needs carries a note "The
+  // service needs this page", no "Delete page", and an Address field it will not let be
+  // changed. A refused address is announced as an alert ("This address is already in use")
+  // and under the field; a field the form will not accept is marked invalid, with its reason
+  // beside it and in a "Fix N field(s) to publish the page" note. Anybody else, signed out
+  // included, is shown "Page not found" at all three addresses.
+
+  // The refusal a person who may not manage pages is shown, or "" when the screen is up.
+  async function managementRefused(): Promise<string> {
+    await ready();
+    return refusalShown();
+  }
+
+  // Controls pressed on the form or the screen itself, never their namesakes in a dialog.
+  function screenControl(name: RegExp): Locator {
+    return seen(page.getByRole("main").getByRole("button", { name }));
+  }
+
+  function openDialog(): Locator {
+    return seen(page.getByRole("dialog")).filter({ hasText: /\S/ });
+  }
+
+  async function pressOnScreen(where: string, name: RegExp): Promise<void> {
+    await ready();
+    const refused = await refusalShown();
+    if (refused) unbound(where, `the management screen did not open at ${page.url()}: ${refused}`);
+    const control = screenControl(name).first();
+    if (!(await control.count())) unbound(where, `no control named ${name} on ${page.url()}`);
+    if (await isDisabled(control)) {
+      const said = await linesMatching(/^(fill in|fix \d+ field)/i);
+      throw new Error(`${where} — the control named ${name} is disabled on ${page.url()}${said ? `; the page says: ${said}` : ""}`);
+    }
+    await control.click();
+    await settle();
+  }
+
+  async function dialogShown(timeout = 5000): Promise<boolean> {
+    await openDialog().first().waitFor({ state: "visible", timeout }).catch(() => undefined);
+    if (!(await openDialog().count())) return false;
+    await page.waitForTimeout(300);
+    return true;
+  }
+
+  async function pressInDialog(where: string, name: RegExp): Promise<void> {
+    if (!(await dialogShown())) unbound(where, `no confirmation is open on ${page.url()}`);
+    const control = seen(openDialog().first().getByRole("button", { name })).first();
+    if (!(await control.count())) unbound(where, `the confirmation on ${page.url()} offers no control named ${name}`);
+    await control.click();
+    await openDialog().first().waitFor({ state: "hidden", timeout: 15000 }).catch(() => undefined);
+    await settle();
+  }
+
+  async function closeDialog(): Promise<void> {
+    for (let attempt = 0; attempt < 3 && (await openDialog().count()); attempt++) {
+      const cancel = seen(openDialog().first().getByRole("button", { name: /^\s*(cancel|close)\s*$/i })).first();
+      if (await cancel.count()) await cancel.click().catch(() => undefined);
+      else await page.keyboard.press("Escape").catch(() => undefined);
+      await openDialog().first().waitFor({ state: "hidden", timeout: 2000 }).catch(() => undefined);
+    }
+  }
+
+  // The form's three fields, by the start of their labels ("Title(required)", "Address",
+  // "Body (required)"); on a page's screen the read-only "Current wording" boxes carry the
+  // same names, so the editable one is taken when there is one.
+  const CONTENT_FIELDS: Record<string, { label: RegExp; keys: string[] }> = {
+    title: { label: /^\s*title/i, keys: ["title", "pageTitle", "name"] },
+    slug: { label: /^\s*address/i, keys: ["slug", "address", "path", "url"] },
+    body: { label: /^\s*body/i, keys: ["body", "content", "text", "markdown"] },
+  };
+
+  function contentBox(which: string): Locator {
+    return seen(page.getByRole("main").getByRole("textbox", { name: CONTENT_FIELDS[which].label }));
+  }
+
+  async function editableBox(which: string): Promise<Locator | null> {
+    const boxes = contentBox(which);
+    const count = await boxes.count();
+    for (let i = 0; i < count; i++) if (await boxes.nth(i).isEditable().catch(() => false)) return boxes.nth(i);
+    return null;
+  }
+
+  // The values an input hands over, by field: a bare value is the field the action names,
+  // and a record fills every field it carries. A key matching no field is reported, never
+  // dropped.
+  function contentValues(where: string, input: unknown, which?: string): Record<string, string> {
+    if (input === undefined || input === null) return which ? { [which]: "" } : {};
+    if (typeof input !== "object" || Array.isArray(input)) {
+      if (!which) unbound(where, `the input ${JSON.stringify(input)} names no field of the form`);
+      return { [which]: textOf(input) };
+    }
+    const out: Record<string, string> = {};
+    for (const [key, value] of Object.entries(record(input))) {
+      const slot = Object.keys(CONTENT_FIELDS).find((name) => CONTENT_FIELDS[name].keys.map(squash).includes(squash(key)));
+      if (!slot) unbound(where, `the input carries "${key}", and the form has no field for it (only Title, Address and Body)`);
+      out[slot] = textOf(value);
+    }
+    if (which && !(which in out)) {
+      const values = Object.values(record(input)).filter((value) => typeof value === "string");
+      if (values.length === 1 && !Object.keys(out).length) out[which] = String(values[0]);
+    }
+    return out;
+  }
+
+  async function fillContent(where: string, values: Record<string, string>, startIfNeeded: boolean): Promise<void> {
+    if (!Object.keys(values).length) return;
+    await ready();
+    const refused = await refusalShown();
+    if (refused) unbound(where, `the management screen did not open at ${page.url()}: ${refused}`);
+    // A page's screen shows its wording read-only until "Edit page" is pressed.
+    if (startIfNeeded && !(await editableBox(Object.keys(values)[0])) && (await screenControl(/^\s*edit page\s*$/i).count())) {
+      await pressOnScreen(where, /^\s*edit page\s*$/i);
+    }
+    for (const [which, value] of Object.entries(values)) {
+      let box = await editableBox(which);
+      if (!box) {
+        await contentBox(which).first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+        box = await editableBox(which);
+      }
+      if (!box) {
+        if (await contentBox(which).count()) {
+          const said = await linesMatching(/cannot be changed|cannot change/i);
+          throw new Error(`${where} — the ${which === "slug" ? "Address" : which} field is read-only on ${page.url()}${said ? `: ${said}` : ""}`);
+        }
+        unbound(where, `no ${which === "slug" ? "Address" : which} field on ${page.url()}`);
+      }
+      await box.fill(value);
+    }
+    await page.keyboard.press("Tab").catch(() => undefined);
+    await settle();
+  }
+
+  // Every reason the form gives for not taking what was entered: the alert it raises, each
+  // invalid field's own message, and the list of fields still to fix.
+  async function contentErrors(pattern?: RegExp): Promise<string> {
+    await ready();
+    const said: string[] = [];
+    const alerts = seen(page.getByRole("main").getByRole("alert"));
+    for (let i = 0; i < (await alerts.count()); i++) said.push((await alerts.nth(i).innerText()).trim());
+    const HELP = /^(between 1 and|use lowercase letters and numbers, in groups|public address:|formatted text,|changing the address moves|the service needs this page at)/i;
+    const boxes = seen(page.getByRole("main").getByRole("textbox"));
+    for (let i = 0; i < (await boxes.count()); i++) {
+      const box = boxes.nth(i);
+      if ((await box.getAttribute("aria-invalid")) !== "true") continue;
+      const described = await box.evaluate((element) =>
+        (element.getAttribute("aria-describedby") ?? "")
+          .split(/\s+/)
+          .filter(Boolean)
+          .map((id) => (document.getElementById(id) as HTMLElement | null)?.innerText?.trim() ?? ""),
+      );
+      for (const words of described) if (words && !HELP.test(words)) said.push(words);
+    }
+    const notes = seen(page.getByRole("main").getByRole("note", { name: /^\s*fix \d+ field/i }));
+    for (let i = 0; i < (await notes.count()); i++) said.push(...lined(await notes.nth(i).innerText()));
+    return [...new Set(said.filter(Boolean))].filter((words) => !pattern || pattern.test(words)).join("\n");
+  }
+
+  // A status the screen announces ("Page published", "Changes published", "Page removed").
+  async function contentStatus(pattern: RegExp): Promise<string> {
+    await ready();
+    const statuses = seen(page.getByRole("main").getByRole("status")).filter({ hasText: pattern });
+    await statuses.first().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    return (await statuses.allInnerTexts()).map((words) => words.trim()).join("\n");
+  }
+
+  async function screenControlState(name: RegExp): Promise<string> {
+    await ready();
+    const control = screenControl(name).first();
+    if (!(await control.count())) return "absent";
+    return (await isDisabled(control)) ? "disabled" : "enabled";
+  }
+
+  // The page list's body rows, once drawn; none when the list is refused.
+  async function contentRows(): Promise<Locator[]> {
+    await ready();
+    if (await refusalShown()) return [];
+    const table = seen(page.getByRole("main").getByRole("table")).first();
+    await seen(table.getByRole("cell")).first().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+    const rows = table.getByRole("row").filter({ has: page.getByRole("cell") });
+    const out: Locator[] = [];
+    for (let i = 0; i < (await rows.count()); i++) out.push(rows.nth(i));
+    return out;
+  }
+
+  async function contentColumn(index: number): Promise<string> {
+    const lines: string[] = [];
+    for (const row of await contentRows()) {
+      const cell = row.getByRole("cell").nth(index);
+      lines.push((await cell.innerText()).trim());
+    }
+    return lines.join("\n");
+  }
+
+  // The row a test names by title, address or slug; the first row when it names none.
+  async function contentRow(where: string, input: unknown): Promise<Locator> {
+    const named = typeof input === "object" && input !== null
+      ? field(input, "slug", "address", "title", "name", "page")
+      : textOf(input);
+    const rows = await contentRows();
+    if (!rows.length) {
+      const refused = await refusalShown();
+      unbound(where, refused ? `the page list did not open at ${page.url()}: ${refused}` : `the page list at ${page.url()} has no rows`);
+    }
+    if (!named) return rows[0];
+    const wanted = named.replace(/^\/?content\//, "").replace(/^\//, "");
+    for (const row of rows) {
+      const cells = (await row.getByRole("cell").allInnerTexts()).map((words) => words.trim());
+      if (cells[0] === named || cells[1] === `/content/${wanted}` || cells[1] === named) return row;
+    }
+    unbound(where, `no page titled or addressed "${named}" in the list at ${page.url()}`);
+  }
+
+  // The value the page's screen gives under one of its terms ("Published", "Published by").
+  async function contentFact(term: string): Promise<{ words: string; href: string }> {
+    await ready();
+    const terms = seen(page.getByRole("main").getByRole("term")).filter({ hasText: new RegExp(`^\\s*${term}\\s*$`, "i") });
+    if (!(await terms.count())) return { words: "", href: "" };
+    const value = terms.first().locator("xpath=following-sibling::*[1]");
+    const words = (await value.innerText().catch(() => "")).trim();
+    const link = seen(value.getByRole("link")).first();
+    const href = (await link.count()) ? ((await link.getAttribute("href")) ?? "") : "";
+    return { words, href };
+  }
+
+  // A reader on a page's screen: unbound when the screen was refused, its value otherwise.
+  async function onPageScreen<T>(where: string, read: () => Promise<T>): Promise<T> {
+    const refused = await managementRefused();
+    if (refused) unbound(where, `the page's management screen did not open at ${page.url()}: ${refused}`);
+    return read();
+  }
+
+  // A reader on the list or the create form: what the screen shows, nothing when it is the
+  // refusal (a person who may not manage pages is shown none of it).
+  async function onScreen(read: () => Promise<string>): Promise<string> {
+    if (await managementRefused()) return "";
+    return read();
+  }
+
+  const contentList: S.ContentListPage = {
+    open: () => go("/content"),
+    openPageForEditing: async (input) => {
+      const where = "content-list.open_page_for_editing";
+      const row = await contentRow(where, input);
+      await row.getByRole("cell").nth(0).getByRole("link").first().click();
+      await page.waitForURL((url) => /\/content\/[^/]+\/edit$/.test(url.pathname), { timeout: 15000 }).catch(() => undefined);
+      await ready();
+    },
+    openPublicPage: async (input) => {
+      const where = "content-list.open_public_page";
+      const row = await contentRow(where, input);
+      const href = await row.getByRole("cell").nth(1).getByRole("link").first().getAttribute("href");
+      if (!href) unbound(where, `the row on ${page.url()} carries no public address link`);
+      await visit(href);
+    },
+    createPage: async () => {
+      const where = "content-list.create_page";
+      await ready();
+      const refused = await refusalShown();
+      if (refused) unbound(where, `the page list did not open at ${page.url()}: ${refused}`);
+      const link = seen(page.getByRole("main").getByRole("link", { name: /^\s*create page\s*$/i })).first();
+      if (!(await link.count())) unbound(where, `no "Create page" link on ${page.url()}`);
+      await link.click();
+      await page.waitForURL((url) => url.pathname === "/content/create", { timeout: 15000 }).catch(() => undefined);
+      await ready();
+    },
+    pageTitle: () => contentColumn(0),
+    pagePublicAddress: () => contentColumn(1),
+    // "<public address>: Yes" for a page the service needs, ": No" for an ordinary one.
+    pageIsFixed: async () => {
+      const lines: string[] = [];
+      for (const row of await contentRows()) {
+        const cells = (await row.getByRole("cell").allInnerTexts()).map((words) => words.trim());
+        lines.push(`${cells[1]}: ${cells[2]}`);
+      }
+      return lines.join("\n");
+    },
+    pageCreatedDate: () => contentColumn(3),
+    pageUpdatedDate: () => contentColumn(4),
+    orderedByTitle: () => contentColumn(0),
+    refusedForNonAdministrator: () => refusalShown(),
+    pageCount: async () => {
+      if (await managementRefused()) return "";
+      return String((await contentRows()).length);
+    },
+  };
+
+  // A person who may not manage pages is shown "Page not found" at /content/create, with no
+  // form to type into; that refusal is what the test reads next, so the form's actions do
+  // nothing there rather than report the form missing.
+  const contentCreate: S.ContentCreatePage = {
+    open: () => go("/content/create"),
+    enterTitle: async (input) => {
+      if (await managementRefused()) return;
+      await fillContent("content-create.enter_title", contentValues("content-create.enter_title", input, "title"), false);
+    },
+    enterSlug: async (input) => {
+      if (await managementRefused()) return;
+      await fillContent("content-create.enter_slug", contentValues("content-create.enter_slug", input, "slug"), false);
+    },
+    enterBody: async (input) => {
+      if (await managementRefused()) return;
+      await fillContent("content-create.enter_body", contentValues("content-create.enter_body", input, "body"), false);
+    },
+    uploadBodyImage: (input) => insertBodyImage("content-create.upload_body_image", input),
+    publishPage: async (input) => {
+      const where = "content-create.publish_page";
+      if (await managementRefused()) return;
+      await fillContent(where, contentValues(where, input), false);
+      await pressOnScreen(where, /^\s*publish page\s*$/i);
+      if (!(await dialogShown())) {
+        throw new Error(`${where} — pressing "Publish page" raised no "Publish this page?" confirmation on ${page.url()}`);
+      }
+    },
+    // Accepted, the browser lands on the new page's screen; refused, the form stays with an
+    // alert. Whichever comes first ends the wait.
+    confirmPublish: async () => {
+      if (await managementRefused()) return;
+      await pressInDialog("content-create.confirm_publish", /^\s*publish page\s*$/i);
+      await Promise.race([
+        page.waitForURL((url) => url.pathname !== "/content/create", { timeout: 15000 }),
+        seen(page.getByRole("main").getByRole("alert")).first().waitFor({ state: "visible", timeout: 15000 }),
+      ]).catch(() => undefined);
+      await ready();
+    },
+    cancel: async () => {
+      if (await managementRefused()) return;
+      await closeDialog();
+      await pressOnScreen("content-create.cancel", /^\s*cancel\s*$/i);
+    },
+    fieldError: () => onScreen(() => contentErrors()),
+    // "Use lowercase letters and numbers, in groups joined by single hyphens, like about-us.
+    // No capital letters, spaces or underscores, and no hyphen at the start or end."
+    slugRuleHelp: () => onScreen(() => linesMatching(/^use lowercase letters and numbers, in groups/i)),
+    // "Public address: http://…/content/<slug>", or "shown once the address is valid."
+    resultingPublicAddress: () =>
+      onScreen(async () => (await linesMatching(/^public address:/i)).replace(/^public address:\s*/i, "")),
+    publishDisabledUntilValid: () => onScreen(() => screenControlState(/^\s*publish page\s*$/i)),
+    publishConfirmation: async () => ((await dialogShown(2000)) ? (await openDialog().first().innerText()).trim() : ""),
+    publishedSuccess: () => onScreen(() => contentStatus(/page published/i)),
+    duplicateSlugError: () => onScreen(() => contentErrors(/already (in use|uses)/i)),
+    refusedForNonAdministrator: () => refusalShown(),
+  };
+
+  // "Insert image" over the body opens the browser's file chooser (JPEG or PNG, up to 10 MB);
+  // the image is stored at once and written into the body at the cursor, or refused in the
+  // status beside it.
+  async function insertBodyImage(where: string, input: unknown): Promise<void> {
+    await ready();
+    const refused = await refusalShown();
+    if (refused) unbound(where, `the management screen did not open at ${page.url()}: ${refused}`);
+    if (!(await editableBox("body")) && (await screenControl(/^\s*edit page\s*$/i).count())) {
+      await pressOnScreen(where, /^\s*edit page\s*$/i);
+    }
+    const body = await editableBox("body");
+    if (!body) unbound(where, `no editable Body on ${page.url()}`);
+    const name = field(input, "file", "fileName", "file_name", "name", "image") || (typeof input === "string" ? input : "") || "body-image.png";
+    const content = given(input, ["content", "contents"]);
+    const bytes = Number(field(input, "bytes", "size", "sizeBytes"));
+    const path = uploadFile({
+      name,
+      ...(typeof content === "string" || content instanceof Uint8Array ? { content } : {}),
+      ...(Number.isFinite(bytes) && bytes > 0 ? { bytes } : {}),
+    });
+    const before = await body.inputValue();
+    await body.click();
+    const chooser = page.waitForEvent("filechooser", { timeout: 10000 }).catch(() => null);
+    await pressOnScreen(where, /^\s*insert image\s*$/i);
+    const offered = await chooser;
+    if (!offered) throw new Error(`${where} — "Insert image" on ${page.url()} opened no file chooser`);
+    await offered.setFiles(path);
+    for (let waited = 0; waited < 15000; waited += 250) {
+      if ((await body.inputValue().catch(() => before)) !== before) break;
+      const said = (await seen(page.getByRole("main").getByRole("status")).allInnerTexts()).join("").trim();
+      if (said && !/uploading|storing/i.test(said)) break;
+      await page.waitForTimeout(250);
+    }
+    await settle();
+  }
+
+  const contentEdit: S.ContentEditPage = {
+    open: (params) => go("/content/:slug/edit", params as unknown as Record<string, string>),
+    startEditing: () => pressOnScreen("content-edit.start_editing", /^\s*edit page\s*$/i),
+    editTitle: (input) => fillContent("content-edit.edit_title", contentValues("content-edit.edit_title", input, "title"), true),
+    editSlug: (input) => fillContent("content-edit.edit_slug", contentValues("content-edit.edit_slug", input, "slug"), true),
+    editBody: (input) => fillContent("content-edit.edit_body", contentValues("content-edit.edit_body", input, "body"), true),
+    uploadBodyImage: (input) => insertBodyImage("content-edit.upload_body_image", input),
+    publishChanges: async (input) => {
+      const where = "content-edit.publish_changes";
+      await fillContent(where, contentValues(where, input), true);
+      await pressOnScreen(where, /^\s*publish changes\s*$/i);
+      if (!(await dialogShown())) {
+        throw new Error(`${where} — pressing "Publish changes" raised no "Publish your changes?" confirmation on ${page.url()}`);
+      }
+    },
+    confirmPublishChanges: async () => {
+      await pressInDialog("content-edit.confirm_publish_changes", /^\s*publish changes\s*$/i);
+      await Promise.race([
+        seen(page.getByRole("main").getByRole("status")).filter({ hasText: /\S/ }).first().waitFor({ state: "visible", timeout: 15000 }),
+        seen(page.getByRole("main").getByRole("alert")).first().waitFor({ state: "visible", timeout: 15000 }),
+      ]).catch(() => undefined);
+      await ready();
+    },
+    cancelEditing: async () => {
+      await closeDialog();
+      await pressOnScreen("content-edit.cancel_editing", /^\s*cancel\s*$/i);
+    },
+    // Withheld from a page the service needs; that is read by delete_withheld_for_fixed_page.
+    deletePage: async () => {
+      const where = "content-edit.delete_page";
+      await ready();
+      if (!(await refusalShown()) && !(await screenControl(/^\s*delete page\s*$/i).count())) {
+        const note = await linesMatching(/cannot change its address or delete it/i);
+        throw new Error(`${where} — no "Delete page" on ${page.url()}${note ? `: ${note}` : ""}`);
+      }
+      await pressOnScreen(where, /^\s*delete page\s*$/i);
+      if (!(await dialogShown())) throw new Error(`${where} — pressing "Delete page" raised no confirmation on ${page.url()}`);
+    },
+    confirmDeletePage: async () => {
+      await pressInDialog("content-edit.confirm_delete_page", /^\s*delete page\s*$/i);
+      await Promise.race([
+        page.waitForURL((url) => url.pathname === "/content", { timeout: 15000 }),
+        seen(page.getByRole("main").getByRole("alert")).first().waitFor({ state: "visible", timeout: 15000 }),
+      ]).catch(() => undefined);
+      await ready();
+    },
+    // Under "Public address" on the screen, or "Public address: http://…/content/<slug>"
+    // while the form is open.
+    pageAddress: () =>
+      onPageScreen("content-edit.page_address", async () => {
+        const fact = (await contentFact("Public address")).words;
+        if (fact) return fact;
+        const stated = /(\/content\/[^\s/]+)\s*$/.exec(await linesMatching(/^public address:/i));
+        return stated ? stated[1] : (/^(\/content\/[^/]+)\/edit$/.exec(new URL(page.url()).pathname)?.[1] ?? "");
+      }),
+    publishedDate: () => onPageScreen("content-edit.published_date", async () => (await contentFact("Published")).words),
+    updatedDate: () => onPageScreen("content-edit.updated_date", async () => (await contentFact("Last updated")).words),
+    // A page no person wrote names "System", with no link.
+    publishedBy: () => onPageScreen("content-edit.published_by", async () => (await contentFact("Published by")).words),
+    updatedBy: () => onPageScreen("content-edit.updated_by", async () => (await contentFact("Last updated by")).words),
+    publishedByLink: () =>
+      onPageScreen("content-edit.published_by_link", async () => {
+        const href = (await contentFact("Published by")).href;
+        return href ? new URL(href, baseURL).pathname : "";
+      }),
+    updatedByLink: () =>
+      onPageScreen("content-edit.updated_by_link", async () => {
+        const href = (await contentFact("Last updated by")).href;
+        return href ? new URL(href, baseURL).pathname : "";
+      }),
+    fixedPageWarning: () =>
+      onPageScreen("content-edit.fixed_page_warning", async () => {
+        const note = seen(page.getByRole("main").getByRole("note", { name: /service needs this page/i }));
+        return (await note.count()) ? (await note.first().innerText()).trim() : "";
+      }),
+    // "The service needs this page at this address, so the address cannot be changed." on
+    // the form, "… you cannot change its address or delete it." on the screen.
+    slugLockedForFixedPage: () =>
+      onPageScreen("content-edit.slug_locked_for_fixed_page", () =>
+        linesMatching(/address cannot be changed|cannot change its address/i),
+      ),
+    deleteWithheldForFixedPage: () =>
+      onPageScreen("content-edit.delete_withheld_for_fixed_page", () => screenControlState(/^\s*delete page\s*$/i)),
+    fieldError: () => onPageScreen("content-edit.field_error", () => contentErrors()),
+    duplicateSlugError: () => onPageScreen("content-edit.duplicate_slug_error", () => contentErrors(/already (in use|uses)/i)),
+    changesPublishedSuccess: () =>
+      onPageScreen("content-edit.changes_published_success", () => contentStatus(/changes published/i)),
+    // Announced on the page list, where the browser lands once the page is gone.
+    deletedSuccess: () => onPageScreen("content-edit.deleted_success", () => contentStatus(/page removed|deleted/i)),
+    refusedForNonAdministrator: () => refusalShown(),
+    bodyBeingEdited: () =>
+      onPageScreen("content-edit.body_being_edited", async () => {
+        const box = (await editableBox("body")) ?? contentBox("body").first();
+        return (await box.count()) ? (await box.inputValue()).trim() : "";
+      }),
+    // The screen offers no earlier versions ("The wording it replaces is kept on record, but
+    // it cannot be viewed or restored from the service."), so this reads empty.
+    versionHistory: () =>
+      onPageScreen("content-edit.version_history", async () => {
+        const region = seen(page.getByRole("main").getByRole("region", { name: /history|versions/i }));
+        return (await region.count()) ? (await region.first().innerText()).trim() : "";
+      }),
   };
 
   // ================================================================ the rest of the surface
@@ -5326,7 +5828,7 @@ export default function create(
     notificationTermsBroadcast: absent<S.NotificationTermsBroadcastPage>(
       "notification-terms-broadcast",
       "/content/terms-and-conditions/edit",
-      behindSession("/content/terms-and-conditions/edit"),
+      TERMS_NOT_ANNOUNCED,
       [
         "notify_vendors_of_updated_terms",
         "confirm_notify_vendors",
@@ -5353,97 +5855,9 @@ export default function create(
     contentFooter,
     contentServiceLevelAgreementLink,
 
-    contentList: {
-      ...unboundMembers(
-        "content-list",
-        behindSignIn("the content management list (administrators only)", 'shows the "Not Found" screen'),
-        ["page_count"],
-      ),
-      ...absent<S.ContentListPage>(
-      "content-list",
-      "/content",
-      behindSession("/content"),
-      [
-        "open_page_for_editing",
-        "open_public_page",
-        "create_page",
-        "page_title",
-        "page_public_address",
-        "page_is_fixed",
-        "page_created_date",
-        "page_updated_date",
-        "ordered_by_title",
-      ],
-      ["refused_for_non_administrator"],
-    ),
-    } as S.ContentListPage,
-
-    contentCreate: absent<S.ContentCreatePage>(
-      "content-create",
-      "/content/create",
-      behindSession("/content/create"),
-      [
-        "enter_title",
-        "enter_slug",
-        "enter_body",
-        "upload_body_image",
-        "publish_page",
-        "confirm_publish",
-        "cancel",
-        "field_error",
-        "slug_rule_help",
-        "resulting_public_address",
-        "publish_disabled_until_valid",
-        "publish_confirmation",
-        "published_success",
-        "duplicate_slug_error",
-      ],
-      ["refused_for_non_administrator"],
-    ),
-
-    contentEdit: {
-      ...unboundMembers(
-        "content-edit",
-        behindSignIn(
-          "a page's management screen (administrators only)",
-          'shows the "Not Found" screen (tried with /content/about/edit)',
-        ),
-        ["published_by_link", "updated_by_link"],
-      ),
-      ...absent<S.ContentEditPage>(
-      "content-edit",
-      "/content/:slug/edit",
-      behindSession("/content/:slug/edit"),
-      [
-        "start_editing",
-        "edit_title",
-        "edit_slug",
-        "edit_body",
-        "upload_body_image",
-        "publish_changes",
-        "confirm_publish_changes",
-        "cancel_editing",
-        "delete_page",
-        "confirm_delete_page",
-        "page_address",
-        "published_date",
-        "updated_date",
-        "published_by",
-        "updated_by",
-        "fixed_page_warning",
-        "slug_locked_for_fixed_page",
-        "delete_withheld_for_fixed_page",
-        "field_error",
-        "duplicate_slug_error",
-        "changes_published_success",
-        "deleted_success",
-        "body_being_edited",
-        "version_history",
-      ],
-      ["refused_for_non_administrator"],
-    ),
-    } as S.ContentEditPage,
-
+    contentList,
+    contentCreate,
+    contentEdit,
     contentView,
 
     fileUpload,
