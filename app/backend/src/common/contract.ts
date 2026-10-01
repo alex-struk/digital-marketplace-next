@@ -186,6 +186,33 @@ export function withAnyFileIdentifier(document: ContractDocument): ContractDocum
 }
 
 /**
+ * A page is changed and removed at `/api/content/{id}` by its identifier or by its address,
+ * as it is read there (R-7.4), so `updateContent` and `deleteContent` take any string rather
+ * than only an identifier. The handler reads the value the way reading does, and refuses
+ * anybody but an administrator before it looks at the value at all, so a refusal for lack of
+ * permission takes the same shape whatever page is named (R-7.16; decision record 0025).
+ */
+export function withAnyPageReference(document: ContractDocument): ContractDocument {
+  const paths = { ...((document.paths as Record<string, unknown>) ?? {}) };
+  const page = paths["/api/content/{id}"] as Record<string, Record<string, unknown>> | undefined;
+  if (!page) return document;
+  const relaxed = { ...page };
+  for (const method of ["put", "delete"] as const) {
+    const operation = page[method];
+    if (!operation) continue;
+    const parameters = (Array.isArray(operation.parameters) ? operation.parameters : []).map(
+      (parameter: Record<string, unknown>) =>
+        parameter.$ref === "#/components/parameters/PathId"
+          ? { name: "id", in: "path", required: true, schema: { type: "string" } }
+          : parameter,
+    );
+    relaxed[method] = { ...operation, parameters };
+  }
+  paths["/api/content/{id}"] = relaxed;
+  return { ...document, paths };
+}
+
+/**
  * The contact list's two parameters are comma-separated lists (exportContactList). The
  * validator otherwise insists a comma in a query value be written `%2C`, and refuses
  * `?userTypes=GOV,VENDOR` — the form the service the contract was recovered from answered, and

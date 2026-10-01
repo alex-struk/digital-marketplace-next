@@ -14,6 +14,7 @@ import {
   isUploadRoute,
   loadContract,
   withAnyFileIdentifier,
+  withAnyPageReference,
   withContactListsAsWritten,
   withCurrentSession,
   withIdentityProviderCallback,
@@ -47,8 +48,10 @@ export async function createApplication(): Promise<INestApplication> {
   app.use(
     contractValidator({
       apiSpec: withContactListsAsWritten(
-        withAnyFileIdentifier(
-          withIdentityProviderCallback(withCurrentSession(withoutTestOnlyRoutes(loadContract()))),
+        withAnyPageReference(
+          withAnyFileIdentifier(
+            withIdentityProviderCallback(withCurrentSession(withoutTestOnlyRoutes(loadContract()))),
+          ),
         ),
       ) as never,
       validateRequests: true,

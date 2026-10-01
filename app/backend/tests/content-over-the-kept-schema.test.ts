@@ -87,6 +87,7 @@ beforeAll(async () => {
   prisma = new PrismaService({ datasourceUrl: url });
   controller = new ContentController(
     new ContentService(new PrismaPageStore(prisma)),
+    { readingAccount: async () => null },
   );
 }, 120_000);
 
@@ -144,5 +145,31 @@ describe("an address that holds no page (R-7.2, R-7.3)", () => {
     await expect(
       controller.read("00000000-0000-4000-8000-000000000999"),
     ).rejects.toMatchObject({ status: 404 });
+  });
+});
+
+describe("the list of pages on a fresh installation (R-7.5, R-7.12)", () => {
+  it("carries the sixteen pages the service needs, each titled by its address and holding the placeholder", async () => {
+    const asAdministrator = new ContentController(
+      new ContentService(new PrismaPageStore(prisma)),
+      { readingAccount: async () => ({ id: ADMINISTRATOR, type: "ADMIN" }) },
+    );
+    const pages = await asAdministrator.list({} as never);
+    const needed = pages.filter((page) => page.fixed);
+
+    expect(needed).toHaveLength(16);
+    for (const page of needed) {
+      expect(page.title).toBe(page.slug);
+      expect(page.body).toBe("Initial version");
+    }
+    // Every page once, the administrator's own among them, in order of title.
+    expect(pages).toHaveLength(17);
+    expect(pages.map((page) => page.slug)).toContain("about-us");
+    const titles = pages.map((page) => page.title);
+    expect(titles).toEqual([...titles].sort((a, b) => a.localeCompare(b, "en")));
+  });
+
+  it("is refused to anyone who is not an administrator", async () => {
+    await expect(controller.list({} as never)).rejects.toMatchObject({ status: 401 });
   });
 });

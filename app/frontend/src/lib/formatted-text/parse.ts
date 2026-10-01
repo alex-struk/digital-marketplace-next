@@ -12,6 +12,8 @@
  * words it is.
  */
 
+import { resolveEmbeddedFile } from "@rules/files";
+
 export type Inline =
   | { readonly kind: "text"; readonly text: string }
   | { readonly kind: "strong"; readonly children: readonly Inline[] }
@@ -95,7 +97,9 @@ export function parseInline(source: string): Inline[] {
     if (imageSrc !== undefined) {
       const src = readHref(imageSrc);
       if (src) {
-        nodes.push({ kind: "image", src, alt: imageAlt ?? "" });
+        // An image stored in the service is written as a marker, and becomes the file's
+        // address only here, when the text is displayed (R-8.29).
+        nodes.push({ kind: "image", src: resolveEmbeddedFile(src), alt: imageAlt ?? "" });
       } else {
         nodes.push({ kind: "text", text: whole });
       }

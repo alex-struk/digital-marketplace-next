@@ -57,6 +57,16 @@ backend's `emptyDir` volume in a sandbox) and removed once answered; the bytes a
 database, once per distinct content (decision record 0021). A service that cannot make that
 directory does not start.
 
+## The service's own pages
+
+Anybody reads a page at `/content/<address>`. An administrator manages them from "Content" in
+the navigation menu: the list at `/content`, a new page at `/content/create`, and each page's
+managing screen at `/content/<address>/edit`. Everybody else is shown the not-found screen
+there, and every page request they make is refused 401 in one shape (decision record 0025).
+A page the service needs can be re-worded but neither moved nor removed. An image inserted
+into a body is stored readable by anyone and referred to as `@file/<identifier>`, which the
+renderer turns into the file's address only when the text is shown.
+
 ## The first administrator
 
 The service offers no way to make the first administrator (R-4.13). An administrator is made
