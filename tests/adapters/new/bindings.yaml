@@ -1193,14 +1193,14 @@ pages:
 
   notification-terms-broadcast:
     actions:
-      notify_vendors_of_updated_terms: "unbound: signed in as the administrator and opened /content/terms-and-conditions/edit (the seeded page the service needs, reached from 'terms-and-conditions' in the /content list): it shows the page's facts, the note 'The service needs this page', 'Edit page' and the current wording, and walked into 'Edit page' it shows only the form with 'Cancel' and 'Publish changes'; nothing on either offers to notify vendors of changed terms"
-      confirm_notify_vendors: "unbound: signed in as the administrator and opened /content/terms-and-conditions/edit (the seeded page the service needs, reached from 'terms-and-conditions' in the /content list): it shows the page's facts, the note 'The service needs this page', 'Edit page' and the current wording, and walked into 'Edit page' it shows only the form with 'Cancel' and 'Publish changes'; nothing on either offers to notify vendors of changed terms"
-      cancel_notify_vendors: "unbound: signed in as the administrator and opened /content/terms-and-conditions/edit (the seeded page the service needs, reached from 'terms-and-conditions' in the /content list): it shows the page's facts, the note 'The service needs this page', 'Edit page' and the current wording, and walked into 'Edit page' it shows only the form with 'Cancel' and 'Publish changes'; nothing on either offers to notify vendors of changed terms"
+      notify_vendors_of_updated_terms: bound
+      confirm_notify_vendors: bound
+      cancel_notify_vendors: bound
     observations:
-      notify_vendors_control: "unbound: signed in as the administrator and opened /content/terms-and-conditions/edit (the seeded page the service needs, reached from 'terms-and-conditions' in the /content list): it shows the page's facts, the note 'The service needs this page', 'Edit page' and the current wording, and walked into 'Edit page' it shows only the form with 'Cancel' and 'Publish changes'; nothing on either offers to notify vendors of changed terms"
-      notify_vendors_confirmation: "unbound: signed in as the administrator and opened /content/terms-and-conditions/edit (the seeded page the service needs, reached from 'terms-and-conditions' in the /content list): it shows the page's facts, the note 'The service needs this page', 'Edit page' and the current wording, and walked into 'Edit page' it shows only the form with 'Cancel' and 'Publish changes'; nothing on either offers to notify vendors of changed terms"
-      notify_vendors_success: "unbound: signed in as the administrator and opened /content/terms-and-conditions/edit (the seeded page the service needs, reached from 'terms-and-conditions' in the /content list): it shows the page's facts, the note 'The service needs this page', 'Edit page' and the current wording, and walked into 'Edit page' it shows only the form with 'Cancel' and 'Publish changes'; nothing on either offers to notify vendors of changed terms"
-      notify_vendors_failure: "unbound: signed in as the administrator and opened /content/terms-and-conditions/edit (the seeded page the service needs, reached from 'terms-and-conditions' in the /content list): it shows the page's facts, the note 'The service needs this page', 'Edit page' and the current wording, and walked into 'Edit page' it shows only the form with 'Cancel' and 'Publish changes'; nothing on either offers to notify vendors of changed terms"
+      notify_vendors_control: bound
+      notify_vendors_confirmation: bound
+      notify_vendors_success: bound
+      notify_vendors_failure: bound
 
   notification-email-reference:
     actions:
