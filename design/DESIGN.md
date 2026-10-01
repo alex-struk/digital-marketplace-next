@@ -140,8 +140,9 @@ These rules apply to the profile-completion form (`user-sign-up-complete`) and t
 - **Controls that save immediately.** The capability checkboxes (R-4.8), the new-opportunity notice
   checkbox, and the Administrator checkbox (R-4.12) save as soon as they are changed, and each
   screen says so in text before the control. The outcome is announced through a `role="status"`
-  region already on the page. Turning notices **off** from the notifications section asks first
-  (see the confirmation dialogs below). A refusal is shown as a `danger` `InlineAlert` right after
+  region already on the page. The new-opportunity notice checkbox turns on or off at any time
+  without a question, in either direction (R-4.29). Only arrival from a message's unsubscribe link
+  asks first (see the confirmation dialogs below). A refusal is shown as a `danger` `InlineAlert` right after
   the control, linked to it by `aria-describedby`, and the control returns to its saved value
   (`user-profile.admin-refused`).
 - **The export form** (R-4.32). "Export" is disabled until at least one account type and one field
@@ -151,7 +152,9 @@ These rules apply to the profile-completion form (`user-sign-up-complete`) and t
 ### Confirmation dialogs
 
 Every consequential change asks first, in a `Modal` holding an `AlertDialog`: deactivating an
-account, reactivating one, agreeing to updated terms, and stopping new-opportunity notices. The
+account, reactivating one, agreeing to updated terms, and stopping new-opportunity notices on
+arrival from a message's unsubscribe link. (Unticking the notice checkbox on the profile does not
+ask, R-4.29.) The
 dialog title is a question. The body says what will happen, in plain words, including who will be
 emailed. The buttons are the specific action ("Deactivate account", "Reactivate account", "I agree",
 "Unsubscribe") and Cancel. Destructive dialogs use `variant="destructive"` and a `danger` primary
@@ -291,8 +294,10 @@ page, a public sector employee) being shown the profile section instead.
 
 **user-profile-notifications** / **user-profile-self-notifications** — `default` states the address
 notices go to, links to correct it on the profile, and gives the new-opportunities checkbox.
-`unsubscribe-confirm` is the question, naming that address, that is asked before notices stop,
-both from the checkbox and on arrival from a message's unsubscribe link (R-4.29).
+The checkbox turns notices on or off at any time and saves at once, with no question in either
+direction. `unsubscribe-confirm` is the question, naming that address, that is asked before notices
+stop only on arrival from a message's unsubscribe link (R-4.29). Nothing changes until it is
+confirmed.
 `user-profile-notifications` also has `section-unavailable`, for an administrator on someone
 else's profile. The self page has no such state, because every kind of account offers notifications.
 
@@ -309,6 +314,22 @@ Notifications sections, the permissions label), `administrator` (status badge, n
 checkbox, no Deactivate, R-4.31), `loading`, `editing` (a vendor, so no job title), `invalid`,
 `save-failed`, `deactivate-confirm`, and `sign-in-required` (a visitor who is not signed in is shown
 sign-in with a note that they will be returned to their profile, R-4.26).
+
+**user-list-request**, **user-account-self-request**, **user-account-request** — these three
+addresses answer with data, so there is nothing on them for a person to see. As with the files
+domain's service addresses, each story is a response reference built from `Heading`, `Text` and a
+plain description list: the request, and the parts of the answer the surface names, each on an
+element carrying its test ID. **The adapter reads these test IDs as names for parts of the HTTP
+answer**, not as elements in a browser. `user-list-request` has `default` (an administrator is
+answered with every account, `user-list-request-accounts`) and `refused` (anyone else,
+`user-list-request-refused`, with the status on `user-list-request-refusal-status`) (R-4.21).
+`user-account-self-request` has `default` (`user-account-self-id`, and
+`user-account-self-notices-since`, which is empty when notices are off, R-4.24) and `signed-out`
+(no account, so both are empty). `user-account-request` has `default` (the owner or an
+administrator, `user-account-notices-since`) and `refused` (anyone else, `user-account-refused`,
+with the status on `user-account-refusal-status`) (R-4.25). The criteria name no status number for
+a refusal, so the stories say "Refused: not permitted"; which number it is remains the build's to
+state (gap 11).
 
 ### Gaps
 
@@ -346,6 +367,11 @@ These are work for the spec. None of them was filled with invented behaviour.
     names listed above could not be checked against the live design-system repository in this run.
     A build must confirm them against the installed package versions. If a token is missing, it
     must be raised here rather than replaced by a typed value.
+11. **The status of a refused request.** R-4.21 and R-4.25 say the list and an account record are
+    refused, but give no status number, and nothing says whether a visitor who is not signed in is
+    refused with the same status as a signed-in person who lacks permission. `refusal_status` on
+    `user-list-request` and `user-account-request` can be bound, but the value it should hold is
+    not specified.
 
 ---
 

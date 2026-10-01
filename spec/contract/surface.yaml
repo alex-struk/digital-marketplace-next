@@ -2036,9 +2036,9 @@ pages:
     title: "Everyone registered with the service"
     actions: {}
     observations:
-      accounts_answered: { test_id: null }
-      refused_when_not_permitted: { test_id: null }
-      refusal_status: { test_id: null }
+      accounts_answered: { test_id: user-list-request-accounts }
+      refused_when_not_permitted: { test_id: user-list-request-refused }
+      refusal_status: { test_id: user-list-request-refusal-status }
 
   # Requests to read, create, change, rename or remove a page, as the service answers
   # them. :slug is the page's address; reading the list and creating a page address the
@@ -2391,12 +2391,12 @@ pages:
     title: "One's own account record, by request"
     actions: {}
     observations:
-      user_identifier: { test_id: null }
+      user_identifier: { test_id: user-account-self-id }
       # The date and time new-opportunity notices were turned on, as an ISO 8601 instant,
       # or empty when they are off. Turning them off clears it rather than recording when.
       # When nobody is signed in the service answers with no account at all, and
       # user_identifier is empty too.
-      new_opportunity_notices_since: { test_id: null }
+      new_opportunity_notices_since: { test_id: user-account-self-notices-since }
 
   # Somebody's account record by identifier, as the service answers it. :userId is a
   # seed.users handle or a user_identifier read elsewhere. The service answers the person
@@ -2407,6 +2407,6 @@ pages:
     title: "An account record, by request"
     actions: {}
     observations:
-      new_opportunity_notices_since: { test_id: null }
-      refused_when_not_permitted: { test_id: null }
-      refusal_status: { test_id: null }
+      new_opportunity_notices_since: { test_id: user-account-notices-since }
+      refused_when_not_permitted: { test_id: user-account-refused }
+      refusal_status: { test_id: user-account-refusal-status }
