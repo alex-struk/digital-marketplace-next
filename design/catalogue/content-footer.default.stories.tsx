@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Footer, FooterLinks, Heading, Link, Text } from "@bcgov/design-system-react-components";
+import { PageContainer, Stack } from "./layout";
 
 // content-footer · default — the footer every screen carries, here under the home page as a visitor who is not signed
 // in sees it. Its "About this service" list links to the five pages the service keeps for its own prose (R-7.19). The
@@ -7,10 +8,9 @@ import { Footer, FooterLinks, Heading, Link, Text } from "@bcgov/design-system-r
 const meta: Meta = { title: "content/content-footer/default" };
 export default meta;
 
-const page = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
+// The placeholder frame marks out a screen this domain does not design. Its border and inner padding are its own; its
+// content is laid out by the stack.
 const frame = {
-  display: "grid",
-  gap: "var(--layout-margin-medium)",
   padding: "var(--layout-padding-large)",
   border: "var(--layout-border-width-small) solid var(--surface-color-border-default)",
   borderRadius: "var(--layout-border-radius-medium)",
@@ -25,15 +25,20 @@ const pages = [
   { slug: "copyright", label: "Copyright", testId: "footer-copyright-link" },
 ];
 
+// The footer sits outside the page container: the design system's Footer centres its own content to the same width.
 export const Default: StoryObj = {
   render: () => (
     <div>
-      <div style={page}>
-        <section aria-labelledby="home-placeholder-heading" style={frame}>
-          <Heading level={1} id="home-placeholder-heading">Digital Marketplace</Heading>
-          <Text elementType="p">Placeholder: the home page is designed by the opportunities domain.</Text>
-        </section>
-      </div>
+      <PageContainer>
+        <Stack gap="large">
+          <section aria-labelledby="home-placeholder-heading" style={frame}>
+            <Stack gap="medium">
+              <Heading level={1} id="home-placeholder-heading">Digital Marketplace</Heading>
+              <Text elementType="p">Placeholder: the home page is designed by the opportunities domain.</Text>
+            </Stack>
+          </section>
+        </Stack>
+      </PageContainer>
       <div data-testid="site-footer">
         <Footer
           links={

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>design-content-3 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">451</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">445</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">380</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>design-content-3</h1>
+<p class="lede">G-DESIGN · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G-DESIGN</td></tr><tr><th scope="row">opened</th><td>2026-10-01 23:54</td></tr><tr><th scope="row">holder</th><td>agent:ux-reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Do these screens serve the content criteria, and are they built out of the design system?</h2>
+<p><strong>Recommendation.</strong> I made the one change the ruling asked for.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made the one change the ruling asked for. Before this fix, the page content on every screen started 16px to the right of the design system&#39;s Footer content.</p>
+<p><strong>The fix.</strong> It is in <code>design/catalogue/layout.tsx</code>. <code>PageContainer</code> was counting its side padding (<code>--layout-padding-medium</code>) inside the 1100px limit because of <code>border-box</code>, which left the content column 1100px minus two paddings. The Footer, by contrast, uses its whole 1100px for content. I changed the container&#39;s maximum width to <code>calc(1100px + 2 * var(--layout-padding-medium))</code> and kept <code>border-box</code>. The padding now sits outside the 1100px, so at desktop width the content column is 1100px and its left edge lands where the Footer&#39;s does (x=90 at a 1280px viewport). On a narrow screen the padding still keeps content off the window edge. The 1100px value is still written only in <code>layout.tsx</code>, and I added a comment there saying why the padding sits outside it. Every story imports this container, so every screen in the catalogue (content and the other domains) picks up the fix without its own file changing.</p>
+<p><strong>DESIGN.md.</strong> I made two edits:</p>
+<ul><li>The page-container entry in the list of the project&#39;s own components now says the content is at most 1100px wide, with the padding outside it, and gives the <code>calc(...)</code> width.</li><li>Gap 18 is now marked resolved. It records the old mismatch, what the 1280px screenshot showed, what changed, and that the change was confined to <code>layout.tsx</code>. Its note on the vertical <code>--layout-padding-large</code> padding is unchanged.</li></ul>
+<p><strong>What I left alone.</strong> I changed no screen, no state, no entry in <code>screens.yaml</code> and no story, as the ruling asked. I also made no edits to <code>spec/contract/surface.yaml</code>: the 11 test IDs filled in last round are kept exactly as they were. Gaps 15 to 17, the content-request problems with the criteria, are still open and are work for the spec stage, not this one.</p>
+<p>The ruling&#39;s conditions were all addressed to this stage, so none are left for a person. The new alignment will be confirmed by the pipeline&#39;s own compile and scan, and by the reviewer&#39;s screenshot of <code>content-footer.default</code>. That screenshot should show the content&#39;s left edge at the Footer&#39;s, not 16px to its right.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:ux-reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 23:55.</p>
+<div class="body"><p>Question: do the content screens serve their criteria and use the design system? Ruling: approve. The only owed condition (design-content-2#1) is met. In design/catalogue/layout.tsx, PageContainer&#39;s maxWidth is now calc(1100px + 2 * var(--layout-padding-medium)) under border-box. 1100px is written only there, and padding is the medium and large tokens. In content-footer.default.png the content&#39;s left edge is at x=90, flush with the Footer&#39;s. content-edit, content-list, content-view and content-request also start at x=90, with even token-based stack spacing. The axe report has 0 violations across 493 stories. Every surface.yaml change against main fills a null test_id; none that was filled is changed. DESIGN.md&#39;s page-container entry and gap 18 describe the current box. Gaps 15-17 are spec-side issues, outside this gate. Would change the ruling: any screen whose content does not start at the Footer&#39;s left edge, an accessibility violation, or a change to an already-filled test_id.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met design-content-2#1: PageContainer in design/catalogue/layout.tsx now uses maxWidth calc(1100px + 2 * var(--layout-padding-medium)) with border-box. content-footer.default.png shows the content&#39;s left edge at x=90, matching the Footer. DESIGN.md&#39;s page-container entry and gap 18 are updated.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

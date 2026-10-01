@@ -420,6 +420,10 @@
 - 08:50:40 oracle down old
 - 16:32:25 init: pipeline fc2fd10, packs 3, skills installed 0, skipped 0, briefs 2 written, 0 left as the project has them
 - 16:33:03 deviation: next named `sdlc run verify --slice 8`; ran `sdlc run design --domain content`; reason: The pipeline's layout rules changed (docs/decisions/0086 in the pipeline; see "Layout" in your instructions). This domain's screens were designed before them. Bring every story of this domain into line: define the page container and the stack once in design/catalogue/layout.tsx (or reuse them if another domain already defined them there), list them in DESIGN.md among the project's own components, and lay out each of this domain's stories with them, so content sits in the container and spacing comes only from the stack with the design system's own Text and Heading margins removed. No story sets its own width, outer padding or gaps. Change layout only: keep every page, every state, every test_id, every component choice and all wording exactly as they are.
+- 16:50:50 deviation: next named `sdlc run verify --slice 8`; ran `sdlc run design --domain content --revise`; reason: The tech lead decided on 2026-10-01 to bring every approved design into line with the layout rule (pipeline decision 0086) before more slices are built or verified, since every later build copies its screens from the catalogue. This revision answers the UX reviewer's return of design-content-2.
+- 16:54:34 run design: ok, cost 0.221717, turns 8, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 16:54:34 propose design-content-3 at G-DESIGN
+- 16:55:48 rule design-content-3 approve at G-DESIGN by agent:ux-reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-30
 
