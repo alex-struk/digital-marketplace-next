@@ -288,6 +288,11 @@
 - 03:35:42 drive: step 2: `sdlc run verify --slice 7` — build-slice-7-8 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
 - 03:45:42 verify slice 7: 5 criteria still fail after 3 builds; escalated to tech-lead.
 - 03:45:43 run verify: regenerated 443 files in .sdlc, site
+- 03:48:09 drive: step 4: `sdlc run bind-adapter --target new --revise` — 3 revision requests for target new owed by bind-adapter; requests request/build-slice-7-8#1, request/build-slice-7-8#2, request/build-slice-7-8#3
+- 03:48:10 run bind-adapter: pre-checks failed
+- 03:54:02 drive: step 4 recovery: taking the new target's sandbox down (sdlc sandbox down --target new --from proposal/build-slice-7-8)
+- 03:54:17 drive: step 5: `sdlc rule bind-adapter-new-32 --by agent:tech-lead` — bind-adapter-new-32 was escalated at G3 by runner:bind-adapter to tech-lead, a role an agent plays in this project
+- 03:55:13 rule bind-adapter-new-32 refused at G3 by agent:tech-lead (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code)): rule bind-adapter-new-32: "request/build-slice-7-8#1" is not an open revision request. No revision request is open in this project, so there is nothing here to withdraw.
 
 # Run record 2026-09-30
 
