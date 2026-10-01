@@ -412,3 +412,63 @@ requests:
     at: 2026-10-01T08:42:23.973Z
     taken: 2026-10-01T08:53:55.859Z
     taken_by: plan-14
+  - stage: bind-adapter
+    target: new
+    why: "fileAttachmentControl on target new must treat an attachment row that
+      carries an /api/files/ download link as stored, whatever its label, or
+      addAttachment must leave the added file stored before it returns. R-8.19
+      and R-8.25 read '' at existingAttachmentRow() straight after
+      addAttachment, because isNew (/^\\s*new:/im) drops the row. The app
+      (app/frontend/src/app/attachments.tsx:347-352) now stores the file when it
+      is chosen and shows its download link on a row still worded 'New: <name>,
+      <size>. …'."
+    from: build-slice-7-7
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-01T09:50:03.359Z
+  - stage: bind-adapter
+    target: new
+    why: opportunityCwuEdit.publish on target new reported R-1.22 unbound with the
+      actions 'Edit', 'Submit for review', 'Delete' on a draft. Those are a
+      public sector employee's actions. The app offers Publish to an
+      administrator on a draft or under review (opportunity-cwu-edit.tsx:137).
+      For a non-administrator, an absent Publish control is the refusal R-1.22
+      asks for and should be reported as one, not as unbound.
+    from: build-slice-7-7
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-01T09:50:03.359Z
+  - stage: bind-adapter
+    target: new
+    why: opportunityCwuEdit.editDetails on target new reported R-1.21 unbound
+      because it found no 'Edit' control on
+      /opportunities/code-with-us/<id>/edit?tab=opportunity for a draft (actions
+      'Submit for review', 'Delete'). On a draft that tab shows the form already
+      editable, so the binding should edit the form in place when there is no
+      Edit control.
+    from: build-slice-7-7
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-01T09:50:03.359Z
+  - stage: bind-adapter
+    target: new
+    why: opportunityCwuCreate.saveDraft on target new reported R-1.7 unbound because
+      /opportunities/code-with-us/create answered 'Page not found'. For a vendor
+      or a visitor, that is the refusal R-1.7 asks for, and the binding should
+      report it as a refusal. If the same answer came for the administrator or
+      public sector staff, say which persona saw it.
+    from: build-slice-7-7
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-01T09:50:03.359Z
+  - stage: bind-adapter
+    target: new
+    why: R-8.17 read '' at a toBeTruthy assertion on target new, and the result does
+      not say which one. The attachment control states 'Any type of file, up to
+      10 MB each.', which matches sizeLimitStatedBeforeChoosing's pattern.
+      Either fileUpload.refusedForSize or that reader read empty. Re-run R-8.17
+      and report which step read '' and what the page showed there.
+    from: build-slice-7-7
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-01T09:50:03.359Z
