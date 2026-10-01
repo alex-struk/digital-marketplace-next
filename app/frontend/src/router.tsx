@@ -13,6 +13,7 @@ import { SignUpCompleteScreen } from "./screens/sign-up-complete";
 import { SignOutScreen } from "./screens/sign-out";
 import { NoticeScreen } from "./screens/notice";
 import { DashboardScreen } from "./screens/dashboard";
+import { UserListScreen } from "./screens/user-list";
 import { UserProfileScreen } from "./screens/user-profile";
 
 /**
@@ -89,6 +90,12 @@ const dashboardRoute = createRoute({
   component: DashboardScreen,
 });
 
+const userListRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/users",
+  component: UserListScreen,
+});
+
 // "me" and an identifier share one route: the screen reads "me" as whoever is signed in.
 const userProfileRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -109,6 +116,7 @@ export const routeTree = rootRoute.addChildren([
   signOutRoute,
   noticeRoute,
   dashboardRoute,
+  userListRoute,
   userProfileRoute,
 ]);
 

@@ -1,0 +1,209 @@
+{
+  "slice": 4,
+  "proposal": "build-slice-4",
+  "app_tree": "0b0c9d77cbbf16f89b3b83bb3a13b5476ecb89cb",
+  "at": "2026-10-01T03:06:34.487Z",
+  "verdict": "pass-unasserted",
+  "unasserted": [
+    {
+      "id": "R-4.13",
+      "result": "not-testable",
+      "reason": "unobservable: the outcome is that the service offers no way to create an administrator where none exists, and that only a change to the stored data outside the service can. That is the absence of an action anywhere in the service, and no observation reports an absence of that kind — a test could only show that the particular controls it knows of do not do it, never that no other route exists. The given could be seeded (a seed with no administrator account), but that would not help: the claim a test would then have to settle is still the non-existence of a route, and the documented manual route lies outside the service by definition. This is a property to be accepted by a reader of the rebuilt system's routes, not settled by a test."
+    }
+  ],
+  "adapter": "0e7991290a57fee2351feafc004ac4740e378b73",
+  "rows": [
+    {
+      "id": "R-4.4",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.4.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a person whose account an administrator deactivated cannot sign in; they are shown a sign-in failure notice instead of being let in",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "7360c14b10f22ae5b918e7c9a1b12e8a9ea3d651",
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
+    },
+    {
+      "id": "R-4.12",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.12.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an administrator may grant administrator rights over a public sector employee's account",
+          "status": "passed"
+        },
+        {
+          "title": "withdrawing the rights returns the person to an ordinary public sector employee account",
+          "status": "passed"
+        },
+        {
+          "title": "a vendor can never be granted administrator rights",
+          "status": "passed"
+        },
+        {
+          "title": "only an administrator may grant or withdraw administrator rights",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "d0d277f369a73d9e66bb9ce7b2527fbd2e376c7b",
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
+    },
+    {
+      "id": "R-4.13",
+      "version": 1,
+      "domain": "users",
+      "file": null,
+      "result": "not-testable",
+      "reason": "unobservable: the outcome is that the service offers no way to create an administrator where none exists, and that only a change to the stored data outside the service can. That is the absence of an action anywhere in the service, and no observation reports an absence of that kind — a test could only show that the particular controls it knows of do not do it, never that no other route exists. The given could be seeded (a seed with no administrator account), but that would not help: the claim a test would then have to settle is still the non-existence of a route, and the documented manual route lies outside the service by definition. This is a property to be accepted by a reader of the rebuilt system's routes, not settled by a test.",
+      "tests": []
+    },
+    {
+      "id": "R-4.14",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.14.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an administrator can browse everyone registered with the service, showing each person's status, account kind, name and whether they are an administrator",
+          "status": "passed"
+        },
+        {
+          "title": "everyone registered is listed by status, then account kind, then name",
+          "status": "passed"
+        },
+        {
+          "title": "an administrator can narrow the list by typing part of a name",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "312431e4b9300abac886c8a5130a43ead5368569",
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
+    },
+    {
+      "id": "R-4.19",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.19.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the control to reactivate an account is offered for an account that an administrator deactivated",
+          "status": "passed"
+        },
+        {
+          "title": "an account its owner deactivated carries no reactivation control; the profile states instead that the person reactivates it themselves by signing in again",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "1037e517f2f0bc384e598506efd5cf9c3f372272",
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
+    },
+    {
+      "id": "R-4.20",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.20.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "a person whose account an administrator reactivates is told that an administrator has reactivated their Digital Marketplace account and whom to contact with questions",
+          "status": "passed"
+        },
+        {
+          "title": "the message telling a person they reactivated the account themselves is not sent when an administrator reactivates it",
+          "status": "passed"
+        },
+        {
+          "title": "the message telling a person they reactivated the account themselves is sent when they did so by signing in again",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "f61428ec0f59343cf9775f1546d92faa2e542561",
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
+    },
+    {
+      "id": "R-4.21",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.21.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "the list of everyone registered with the service may be read by an administrator",
+          "status": "passed"
+        },
+        {
+          "title": "the list of everyone registered with the service, requested by a public sector employee who is not an administrator, is refused rather than answered",
+          "status": "passed"
+        },
+        {
+          "title": "the list of everyone registered with the service, requested by a vendor, is refused rather than answered",
+          "status": "passed"
+        },
+        {
+          "title": "the list of everyone registered with the service, requested by a visitor who is not signed in, is refused rather than answered",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "77dd467a303b8ed79d4d1f3c07d2e5a9bb6c4d32",
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
+    },
+    {
+      "id": "R-4.30",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.30.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an administrator may deactivate another person's account, and the account is marked as deactivated by an administrator",
+          "status": "passed"
+        },
+        {
+          "title": "the person is told by email",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "b245f3913c51f20f99fe4fe5826e9d40b75f3648",
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
+    },
+    {
+      "id": "R-4.31",
+      "version": 2,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.31.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "an administrator viewing their own profile is offered no deactivation control",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "f86df56eff7d375a4d67f51887bbad9d04804765",
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
+    },
+    {
+      "id": "R-4.32",
+      "version": 1,
+      "domain": "users",
+      "file": "tests/acceptance/users/R-4.32.spec.ts",
+      "result": "pass",
+      "tests": [
+        {
+          "title": "at least one kind and one field must be chosen before an administrator may export the contact list",
+          "status": "passed"
+        }
+      ],
+      "file_sha": "464c65b34b5f9e883e3212204c4640d90651ac9c",
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
+    }
+  ]
+}

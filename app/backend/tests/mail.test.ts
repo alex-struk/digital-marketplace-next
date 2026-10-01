@@ -11,6 +11,7 @@ const settings: MailSettings = {
   disabled: false,
   testEnvironment: true,
   serviceOrigin: "http://localhost:4300",
+  contactEmail: "digitalmarketplace@example.test",
   smtp: { host: "mail", port: 1025 },
 };
 

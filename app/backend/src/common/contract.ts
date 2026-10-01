@@ -185,6 +185,27 @@ export function withAnyFileIdentifier(document: ContractDocument): ContractDocum
   return { ...document, paths };
 }
 
+/**
+ * The contact list's two parameters are comma-separated lists (exportContactList). The
+ * validator otherwise insists a comma in a query value be written `%2C`, and refuses
+ * `?userTypes=GOV,VENDOR` — the form the service the contract was recovered from answered, and
+ * the one observables.yaml writes the address in. The comma is allowed as written here; the
+ * lists are still required and still strings, and what they may name is checked by the handler
+ * (R-4.32).
+ */
+export function withContactListsAsWritten(document: ContractDocument): ContractDocument {
+  const paths = { ...((document.paths as Record<string, unknown>) ?? {}) };
+  const contactList = paths["/api/contact-list"] as Record<string, Record<string, unknown>> | undefined;
+  const read = contactList?.get;
+  if (!contactList || !read) return document;
+  const parameters = (Array.isArray(read.parameters) ? read.parameters : []).map(
+    (parameter: Record<string, unknown>) =>
+      parameter.in === "query" ? { ...parameter, allowReserved: true } : parameter,
+  );
+  paths["/api/contact-list"] = { ...contactList, get: { ...read, parameters } };
+  return { ...document, paths };
+}
+
 export function withoutTestOnlyRoutes(
   document: ContractDocument,
 ): ContractDocument {

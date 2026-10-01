@@ -12,11 +12,16 @@ export interface MailSettings {
   readonly testEnvironment: boolean;
   /** Where the service is reached, for the links and the logo in a message. */
   readonly serviceOrigin: string;
+  /** Whom a message tells its reader to write to with questions (R-4.20, R-4.30). */
+  readonly contactEmail: string;
   readonly smtp: { readonly host: string; readonly port: number };
 }
 
 /** What the sandbox is configured with when nothing is said (spec/contract/observables.yaml). */
 export const DEFAULT_SENDER = "Digital Marketplace <donotreply@example.test>";
+
+/** Whom to write to with questions when nothing is said; an invented address, like the sender. */
+export const DEFAULT_CONTACT_EMAIL = "digitalmarketplace@example.test";
 
 /** The mark a test environment puts at the start of every subject (R-6.3). */
 export const TEST_SUBJECT_PREFIX = "[TEST] ";
@@ -51,6 +56,7 @@ export function mailSettingsFrom(env: NodeJS.ProcessEnv): MailSettings {
     disabled: isOn(env.DISABLE_NOTIFICATIONS),
     testEnvironment: isOn(env.SHOW_TEST_INDICATOR),
     serviceOrigin: origin,
+    contactEmail: env.CONTACT_EMAIL?.trim() || DEFAULT_CONTACT_EMAIL,
     smtp: {
       host: env.SMTP_HOST?.trim() || "localhost",
       port: Number(env.SMTP_PORT ?? 1025),

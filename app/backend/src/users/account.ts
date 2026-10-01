@@ -1,4 +1,4 @@
-import { AccountKind, AccountStatus } from "../rules/users";
+import { AccountKind, AccountStatus, Contact } from "../rules/users";
 
 /**
  * A person's account, as the kept `users` table holds it and as the service answers with it
@@ -46,6 +46,8 @@ export interface AccountChange {
   readonly acceptedTermsAt?: Date;
   readonly lastAcceptedTermsAt?: Date;
   readonly status?: AccountStatus;
+  /** Granting or withdrawing administrator rights changes the kind (R-4.12). */
+  readonly type?: AccountKind;
   readonly deactivatedOn?: Date | null;
   readonly deactivatedBy?: string | null;
 }
@@ -65,6 +67,13 @@ export interface AccountStore {
   /** The account signed in with this username, among accounts of the given kinds. */
   findBySignIn(username: string, kinds: readonly AccountKind[]): Promise<Account | null>;
   findById(id: string): Promise<Account | null>;
+  /** Everyone registered, in no particular order (R-4.14). */
+  list(): Promise<Account[]>;
+  /**
+   * The active accounts of the given kinds, each with the legal names of the active
+   * organizations they currently belong to, for the contact list (R-4.32).
+   */
+  activeContacts(kinds: readonly AccountKind[]): Promise<Contact[]>;
   /** Makes the account, or throws `DuplicateAccount` when one would collide with another. */
   create(account: NewAccount): Promise<Account>;
   /** Changes the account, or throws `DuplicateAccount` when the change would collide. */

@@ -72,6 +72,94 @@ export async function fetchAccount(accountId: string): Promise<AccountAnswer> {
   }
 }
 
+/** What asking for everyone registered came back with (R-4.14, R-4.21). */
+export type AccountListAnswer =
+  | { readonly kind: "listed"; readonly accounts: readonly Account[] }
+  | { readonly kind: "refused" };
+
+/** Everyone registered. The service answers an administrator alone (R-4.21). */
+export async function fetchAccounts(): Promise<AccountListAnswer> {
+  try {
+    const { data, response } = await api.GET("/api/users");
+    if (!response.ok || !Array.isArray(data)) return { kind: "refused" };
+    const accounts = (data as unknown[]).map(readAccount).filter((account): account is Account => account !== null);
+    return { kind: "listed", accounts };
+  } catch {
+    return { kind: "refused" };
+  }
+}
+
+function reasonsIn(body: unknown): string[] {
+  const errors = (body as { errors?: unknown } | null)?.errors;
+  return Array.isArray(errors) ? errors.filter((reason): reason is string => typeof reason === "string") : [];
+}
+
+/** What an administrator's change to somebody else's account came back with, and why it was refused. */
+export type AdministrationAnswer =
+  | { readonly kind: "saved"; readonly account: Account }
+  | { readonly kind: "refused"; readonly reasons: readonly string[] };
+
+async function administrationAnswer(
+  request: Promise<{ data?: unknown; error?: unknown; response: Response }>,
+): Promise<AdministrationAnswer> {
+  try {
+    const { data, error, response } = await request;
+    const account = response.ok ? readAccount(data) : null;
+    return account ? { kind: "saved", account } : { kind: "refused", reasons: reasonsIn(error) };
+  } catch {
+    return { kind: "refused", reasons: [] };
+  }
+}
+
+/**
+ * An administrator's change to somebody else's account: reactivating it (R-4.19) or granting or
+ * withdrawing administrator rights (R-4.12).
+ */
+export function administerAccount(
+  accountId: string,
+  tag: "reactivateUser" | "updateAdminPermissions",
+  value?: boolean,
+): Promise<AdministrationAnswer> {
+  return administrationAnswer(
+    api.PUT("/api/users/{id}", {
+      params: { path: { id: accountId } },
+      body: value === undefined ? { tag } : { tag, value },
+    }),
+  );
+}
+
+/** An administrator deactivating somebody else's account (R-4.30). */
+export function deactivateAccount(accountId: string): Promise<AdministrationAnswer> {
+  return administrationAnswer(api.DELETE("/api/users/{id}", { params: { path: { id: accountId } } }));
+}
+
+/**
+ * Saves the contact list an administrator asked for to their device (R-4.32). The file is
+ * fetched by the app with the person's bearer token, then offered under the name the service
+ * gave it.
+ */
+export async function downloadContactList(userTypes: readonly string[], fields: readonly string[]): Promise<boolean> {
+  try {
+    const { data, response } = await api.GET("/api/contact-list", {
+      params: { query: { userTypes: userTypes.join(","), fields: fields.join(",") } },
+      parseAs: "blob",
+    });
+    if (!response.ok || !(data instanceof Blob)) return false;
+    const named = /filename="?([^";]+)"?/.exec(response.headers.get("content-disposition") ?? "")?.[1];
+    const address = URL.createObjectURL(data);
+    const link = document.createElement("a");
+    link.href = address;
+    link.download = named ?? "dm-contacts.csv";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(address), 0);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 /** What the service said to a person deactivating their own account (R-4.9). */
 export type DeactivationAnswer =
   | { readonly kind: "deactivated"; readonly identityProviderSignedOut: boolean }

@@ -11,10 +11,24 @@ import { Mailer, MAIL_SETTINGS } from "../mail/mailer";
 import { MailSettings } from "../mail/settings";
 import { welcome } from "../mail/notifications/welcome";
 import { deactivatedOwnAccount, reactivatedOwnAccount } from "../mail/notifications/own-account";
+import {
+  deactivatedByAdministrator,
+  reactivatedByAdministrator,
+} from "../mail/notifications/administrator";
 import { isIdentifier } from "../rules/files";
 import {
+  ALREADY_INACTIVE,
+  Contact,
+  ContactListRequest,
   accountKindForIdentity,
+  accountKindsExported,
   accountKindsFor,
+  administers,
+  compareListedAccounts,
+  kindWithAdministratorRights,
+  mayListAccounts,
+  reactivationRefusal,
+  readContactListRequest,
   mayAgreeToTerms,
   mayReadAccount,
   mayRecordCapabilities,
@@ -47,6 +61,9 @@ const PROFILE_NOT_SAVED = "Your profile could not be saved.";
 /** The refusal of a request to read somebody else's account (R-4.25). */
 export const NOT_PERMITTED_TO_READ_ACCOUNT = "You are not permitted to read that account.";
 
+/** The refusal of the list of users, or of the contact list, to anyone but an administrator (R-4.21, R-4.32). */
+export const ADMINISTRATORS_ONLY = "Only an administrator may do that.";
+
 /** Until a file store is wired in, no picture can be named. */
 const NO_PICTURES: PictureAccess = { mayRead: async () => false };
 
@@ -61,7 +78,7 @@ export class AccountsService {
   constructor(
     @Inject(ACCOUNT_STORE) private readonly accounts: AccountStore,
     private readonly mailer: Mailer,
-    @Inject(MAIL_SETTINGS) private readonly mail: Pick<MailSettings, "serviceOrigin">,
+    @Inject(MAIL_SETTINGS) private readonly mail: Pick<MailSettings, "serviceOrigin" | "contactEmail">,
     @Inject(PICTURE_ACCESS) private readonly pictures: PictureAccess = NO_PICTURES,
   ) {}
 
@@ -144,11 +161,58 @@ export class AccountsService {
   }
 
   /**
-   * One change to one's own account, named by its tag as every update is (the contract's
-   * TaggedRequestBody). A person changes only their own account through these; a change
-   * submitted against anybody else's is refused, an administrator's included (R-4.18).
+   * Everyone registered, for an administrator only, in the order the list is read in (R-4.14).
+   * Anyone else — a public sector employee who is not an administrator, a vendor, a visitor — is
+   * refused, and told nothing about any account (R-4.21).
    */
-  async changeOwn(
+  async list(viewer: Account | null): Promise<Account[]> {
+    if (!mayListAccounts(viewer)) throw new UnauthorizedException(ADMINISTRATORS_ONLY);
+    return (await this.accounts.list()).sort(compareListedAccounts);
+  }
+
+  /**
+   * What an administrator's export asks for, read from the address's two lists, and the
+   * contacts it lists: the active accounts of the kinds asked for, administrators with public
+   * sector employees, each with the organizations they belong to (R-4.32). Anyone else is
+   * refused, and a request choosing no kind or no field is the requester's error.
+   */
+  async contactList(
+    viewer: Account | null,
+    userTypes: unknown,
+    fields: unknown,
+  ): Promise<{ readonly asked: ContactListRequest; readonly contacts: Contact[] }> {
+    // Who is asking is settled first, so a refusal says nothing about how the request was made.
+    if (!administers(viewer)) throw new UnauthorizedException(ADMINISTRATORS_ONLY);
+    const read = readContactListRequest(userTypes, fields);
+    if (!read.ok) throw new BadRequestException(read.errors);
+    const contacts = await this.accounts.activeContacts(accountKindsExported(read.request.kinds));
+    return { asked: read.request, contacts };
+  }
+
+  /**
+   * One change to an account, named by its tag as every update is (the contract's
+   * TaggedRequestBody).
+   *
+   * Reactivating an account and granting or withdrawing administrator rights are an
+   * administrator's, over anybody's account (R-4.12, R-4.19). Every other change is to one's own
+   * account only; a change of that kind submitted against anybody else's is refused, an
+   * administrator's included (R-4.18).
+   */
+  async change(actor: Account, accountId: string, tag: string, value: unknown): Promise<Account> {
+    if (tag === "reactivateUser" || tag === "updateAdminPermissions") {
+      if (!administers(actor)) {
+        throw new ForbiddenException("Only an administrator may do that.");
+      }
+      const target = await this.accounts.findById(accountId);
+      if (!target) throw new NotFoundException("No account is held at that address.");
+      return tag === "reactivateUser"
+        ? this.reactivate(target)
+        : this.updateAdministratorRights(target, value);
+    }
+    return this.changeOwn(actor, accountId, tag, value);
+  }
+
+  private async changeOwn(
     actor: Account,
     accountId: string,
     tag: string,
@@ -172,24 +236,80 @@ export class AccountsService {
   }
 
   /**
-   * Deactivating one's own account (R-4.9): it is marked as deactivated by its owner, with the
-   * date, and kept rather than erased; the person is told by email how to come back. Ending the
-   * session is the caller's, since that is where the session is known.
+   * Deactivating an account, kept rather than erased, with the date and who did it.
    *
-   * An administrator deactivating somebody else's account is slice 4's (R-4.30) and is refused
-   * here until then.
+   * A person deactivating their own is marked as having done it themselves and told by email
+   * how to come back (R-4.9); ending their session is the caller's, since that is where the
+   * session is known, and `own` says it is to be ended. An administrator is offered no control
+   * for their own account, but the service accepts the request (R-4.31).
+   *
+   * An administrator deactivating somebody else's marks it as deactivated by an administrator,
+   * and the person is told by email that their access has been removed (R-4.30). An account
+   * already inactive is refused (R-4.31). Nobody else may deactivate another's account.
    */
-  async deactivateOwn(actor: Account, accountId: string): Promise<Account> {
-    if (actor.id !== accountId) {
+  async deactivate(
+    actor: Account,
+    accountId: string,
+  ): Promise<{ readonly account: Account; readonly own: boolean }> {
+    if (actor.id === accountId) {
+      const account = await this.accounts.update(actor.id, {
+        status: "INACTIVE_USER",
+        deactivatedOn: new Date(),
+        deactivatedBy: actor.id,
+      });
+      this.mailer.send(deactivatedOwnAccount(account, this.mail.serviceOrigin));
+      return { account, own: true };
+    }
+    if (!administers(actor)) {
       throw new ForbiddenException("You may deactivate only your own account.");
     }
-    const account = await this.accounts.update(actor.id, {
-      status: "INACTIVE_USER",
+    const target = await this.accounts.findById(accountId);
+    if (!target) throw new NotFoundException("No account is held at that address.");
+    if (target.status !== "ACTIVE") throw new BadRequestException(ALREADY_INACTIVE);
+    const account = await this.accounts.update(target.id, {
+      status: "INACTIVE_ADMIN",
       deactivatedOn: new Date(),
       deactivatedBy: actor.id,
     });
-    this.mailer.send(deactivatedOwnAccount(account, this.mail.serviceOrigin));
+    this.mailer.send(deactivatedByAdministrator(account, this.mail));
+    return { account, own: false };
+  }
+
+  /**
+   * An administrator reactivating an account. Only one an administrator deactivated may be; one
+   * its owner deactivated comes back by its owner signing in again (R-4.19). The person is told
+   * an administrator reactivated it (R-4.20). The record of when it was deactivated is kept, as
+   * it is when a person comes back by signing in.
+   */
+  private async reactivate(target: Account): Promise<Account> {
+    const refusal = reactivationRefusal(target.status);
+    if (refusal) throw new BadRequestException(refusal);
+    const account = await this.accounts.update(target.id, { status: "ACTIVE" });
+    this.mailer.send(reactivatedByAdministrator(account, this.mail));
     return account;
+  }
+
+  /**
+   * Granting or withdrawing administrator rights, which takes effect at once. Only a public
+   * sector employee's account may hold them, and withdrawing them makes it an ordinary public
+   * sector employee's again; a vendor is refused, in the words the profile shows (R-4.12).
+   */
+  private async updateAdministratorRights(target: Account, value: unknown): Promise<Account> {
+    if (typeof value !== "boolean") {
+      throw new BadRequestException("Say whether the person is to be an administrator.");
+    }
+    const outcome = kindWithAdministratorRights(target.type, value);
+    if (!outcome.ok) throw new BadRequestException(outcome.reason);
+    if (outcome.kind === target.type) return target;
+    try {
+      return await this.accounts.update(target.id, { type: outcome.kind });
+    } catch (error) {
+      // Another account of the new kind already holds the person's sign-in or address (R-4.6).
+      if (error instanceof DuplicateAccount) {
+        throw new BadRequestException("The person's administrator permissions could not be changed.");
+      }
+      throw error;
+    }
   }
 
   /**

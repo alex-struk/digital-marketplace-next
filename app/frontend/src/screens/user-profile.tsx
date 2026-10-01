@@ -20,13 +20,16 @@ import {
   asksForJobTitle,
   isPublicSector,
   offersOwnDeactivation,
+  offersReactivation,
   profileSectionShown,
   profileSections,
   validateProfile,
 } from "@rules/users";
 import {
   Account,
+  administerAccount,
   changeOwnAccount,
+  deactivateAccount,
   deactivateOwnAccount,
   fetchAccount,
 } from "../api/accounts";
@@ -38,7 +41,7 @@ import { NotFound } from "../app/not-found";
 import { RequireSignIn } from "../app/require-sign-in";
 import { useScreenTitle } from "../app/screen-title";
 import { DEACTIVATED_OWN_ACCOUNT_NOTICE, endAfterOwnDeactivation, holdAccount } from "../auth/session";
-import { readMoment } from "../lib/dates";
+import { readDate, readMoment } from "../lib/dates";
 
 /**
  * The profile, at `/users/me` and `/users/:userId` (user-profile, user-profile-self and their
@@ -47,8 +50,9 @@ import { readMoment } from "../lib/dates";
  * A person sees the sections their kind of account is offered and keeps their own details,
  * picture, capabilities and notice choice here, and may deactivate their own account (R-4.8,
  * R-4.9, R-4.18, R-4.26, R-4.27, R-4.28, R-4.29, R-4.33, R-4.34). An administrator sees
- * somebody else's profile section alone; anyone else is shown the missing page (R-4.25). An
- * administrator's controls over somebody else's account are slice 4's.
+ * somebody else's profile section alone, with the controls that grant or withdraw administrator
+ * rights and deactivate or reactivate the account (R-4.12, R-4.19, R-4.30); anyone else is shown
+ * the missing page (R-4.25).
  */
 
 const SECTION_NAMES: Record<ProfileSection, string> = {
@@ -170,8 +174,11 @@ function SomebodyElsesProfile({ viewer, userId }: { viewer: Account; userId: str
   return <AdministratorsView account={answer} />;
 }
 
-function AdministratorsView({ account }: { account: Account }) {
+function AdministratorsView({ account: read }: { account: Account }) {
   useScreenTitle("User Profile");
+  // The account as it now stands, once an administrator's change to it has been saved.
+  const [account, setAccount] = useState(read);
+  useEffect(() => setAccount(read), [read]);
   return (
     <div style={page}>
       <Heading level={1}>User Profile</Heading>
@@ -183,83 +190,189 @@ function AdministratorsView({ account }: { account: Account }) {
         <StoredPicture account={account} whose="their" />
         <ReadOnlyDetails account={account} />
       </section>
-      <AdministratorsPowers account={account} />
+      <AdministratorRights account={account} onSaved={setAccount} />
+      <AccountStatusControls account={account} onSaved={setAccount} />
     </div>
   );
 }
 
-const POWERS_NOT_YET = "This control is not available yet.";
+/** A reason the service gave, as an alert's title, which carries no closing full stop. */
+const asTitle = (reason: string | undefined, otherwise: string) => (reason ?? otherwise).replace(/\.$/, "");
 
 /**
- * What an administrator may do to somebody else's account, and nothing more: grant or withdraw
- * administrator rights, and deactivate or reactivate it (R-4.18; user-profile, default). The
- * controls are drawn where the design puts them; what they do is slice 4's (R-4.12, R-4.19,
- * R-4.30), so until then they are offered disabled, saying so.
+ * Granting or withdrawing administrator rights, saved as soon as the box is ticked or unticked
+ * (R-4.12). The box shows the change at once and goes back, with the service's reason, if it is
+ * refused — as it is for a vendor (user-profile, admin-refused).
  */
-function AdministratorsPowers({ account }: { account: Account }) {
+function AdministratorRights({ account, onSaved }: { account: Account; onSaved: (account: Account) => void }) {
+  const stored = account.type === "ADMIN";
+  const [on, setOn] = useState(stored);
+  const [saving, setSaving] = useState(false);
+  const [refusal, setRefusal] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
+  useEffect(() => setOn(stored), [stored]);
+
+  async function save(value: boolean) {
+    setOn(value);
+    setSaving(true);
+    setRefusal(null);
+    setStatus(null);
+    const answer = await administerAccount(account.id, "updateAdminPermissions", value);
+    setSaving(false);
+    if (answer.kind !== "saved") {
+      setOn(stored);
+      setRefusal(asTitle(answer.reasons[0], "The administrator permissions could not be changed"));
+      return;
+    }
+    onSaved(answer.account);
+    setStatus(
+      answer.account.type === "ADMIN"
+        ? `Saved. ${answer.account.name} is now an administrator.`
+        : `Saved. ${answer.account.name} is no longer an administrator.`,
+    );
+  }
+
   return (
+    <section aria-labelledby="permissions-heading" style={stack}>
+      <Heading level={2} id="permissions-heading">
+        Permissions
+      </Heading>
+      <Text id="admin-hint" elementType="p" size="small" color="secondary">
+        The change takes effect as soon as you tick or untick the box.
+      </Text>
+      <Checkbox
+        isSelected={on}
+        isDisabled={saving}
+        onChange={(value) => void save(value)}
+        aria-describedby={refusal ? "admin-hint admin-refused" : "admin-hint"}
+        data-testid="profile-admin-checkbox"
+      >
+        Administrator
+      </Checkbox>
+      {refusal ? (
+        <div id="admin-refused">
+          <InlineAlert variant="danger" role="alert" title={refusal} />
+        </div>
+      ) : null}
+      <div role="status">{status ? <Text elementType="p">{status}</Text> : null}</div>
+    </section>
+  );
+}
+
+/**
+ * Deactivating an active account (R-4.30) and reactivating one an administrator deactivated
+ * (R-4.19, R-4.20), each asked first. An account its owner deactivated carries no reactivation
+ * control, only the statement that its owner comes back by signing in again (R-4.19).
+ */
+function AccountStatusControls({ account, onSaved }: { account: Account; onSaved: (account: Account) => void }) {
+  const [asking, setAsking] = useState(false);
+  const [working, setWorking] = useState(false);
+  const [refusal, setRefusal] = useState<string | null>(null);
+  const [status, setStatus] = useState<string | null>(null);
+  const deactivating = account.status === "ACTIVE";
+  const deactivated = account.deactivatedOn ? readDate(account.deactivatedOn) : null;
+  const onDate = deactivated ? (
     <>
-      <section aria-labelledby="permissions-heading" style={stack}>
-        <Heading level={2} id="permissions-heading">
-          Permissions
-        </Heading>
-        <Checkbox
-          isSelected={account.type === "ADMIN"}
-          isDisabled
-          aria-describedby="admin-hint"
-          data-testid="profile-admin-checkbox"
-        >
-          Administrator
-        </Checkbox>
-        <Text id="admin-hint" elementType="p" size="small" color="secondary">
-          {`Administrator rights can be granted or withdrawn here. ${POWERS_NOT_YET}`}
-        </Text>
-      </section>
-      <section aria-labelledby="status-heading" style={stack}>
-        <Heading level={2} id="status-heading">
-          Account status
-        </Heading>
-        {account.status === "ACTIVE" ? (
-          <>
-            <Text elementType="p">Deactivating this account removes the person’s access. They will be told by email.</Text>
-            <div>
+      {" on "}
+      <time dateTime={deactivated.dateTime}>{deactivated.label}</time>
+    </>
+  ) : null;
+
+  async function confirm() {
+    if (working) return;
+    setWorking(true);
+    setRefusal(null);
+    setStatus(null);
+    const answer = deactivating
+      ? await deactivateAccount(account.id)
+      : await administerAccount(account.id, "reactivateUser");
+    setWorking(false);
+    setAsking(false);
+    if (answer.kind !== "saved") {
+      setRefusal(
+        asTitle(
+          answer.reasons[0],
+          deactivating ? "The account could not be deactivated" : "The account could not be reactivated",
+        ),
+      );
+      return;
+    }
+    onSaved(answer.account);
+    setStatus(
+      deactivating
+        ? `${answer.account.name}’s account has been deactivated. They have been told by email.`
+        : `${answer.account.name}’s account has been reactivated. They have been told by email.`,
+    );
+  }
+
+  return (
+    <section aria-labelledby="status-heading" style={stack}>
+      <Heading level={2} id="status-heading">
+        Account status
+      </Heading>
+      {deactivating ? (
+        <>
+          <Text elementType="p">Deactivating this account removes the person’s access. They will be told by email.</Text>
+          <div>
+            <Button variant="secondary" danger onPress={() => setAsking(true)} data-testid="profile-deactivate-button">
+              Deactivate account
+            </Button>
+          </div>
+        </>
+      ) : offersReactivation(account.status) ? (
+        <>
+          <Text elementType="p">An administrator deactivated this account{onDate}.</Text>
+          <Text elementType="p">Reactivating it lets the person sign in again. They will be told by email.</Text>
+          <div>
+            <Button variant="primary" onPress={() => setAsking(true)} data-testid="profile-reactivate-button">
+              Reactivate account
+            </Button>
+          </div>
+        </>
+      ) : (
+        <InlineAlert
+          variant="info"
+          title={`This person deactivated their own account${deactivated ? ` on ${deactivated.label}` : ""}`}
+          description="An administrator cannot reactivate it. The person reactivates it themselves by signing in again."
+        />
+      )}
+      {refusal ? <InlineAlert variant="danger" role="alert" title={refusal} /> : null}
+      <div role="status">{status ? <Text elementType="p">{status}</Text> : null}</div>
+      <Modal isOpen={asking} isDismissable onOpenChange={(open) => (working ? undefined : setAsking(open))}>
+        <AlertDialog
+          variant={deactivating ? "destructive" : "confirmation"}
+          title={deactivating ? "Deactivate this account?" : "Reactivate this account?"}
+          data-testid="activation-modal"
+          buttons={
+            <>
               <Button
                 variant="secondary"
-                danger
-                isDisabled
-                aria-describedby="status-hint"
-                data-testid="profile-deactivate-button"
+                isDisabled={working}
+                onPress={() => setAsking(false)}
+                data-testid="activation-cancel-button"
               >
-                Deactivate account
+                Cancel
               </Button>
-            </div>
-          </>
-        ) : account.status === "INACTIVE_ADMIN" ? (
-          <>
-            <Text elementType="p">An administrator deactivated this account. Reactivating it restores the person’s access.</Text>
-            <div>
               <Button
                 variant="primary"
-                isDisabled
-                aria-describedby="status-hint"
-                data-testid="profile-reactivate-button"
+                danger={deactivating}
+                isDisabled={working}
+                onPress={() => void confirm()}
+                data-testid="activation-confirm-button"
               >
-                Reactivate account
+                {deactivating ? "Deactivate account" : "Reactivate account"}
               </Button>
-            </div>
-          </>
-        ) : (
+            </>
+          }
+        >
           <Text elementType="p">
-            The person deactivated this account themselves. They reactivate it by signing in again.
+            {deactivating
+              ? `${account.name} will no longer be able to sign in. They will be sent an email saying an administrator has removed their access.`
+              : `${account.name} will be able to sign in again. They will be sent an email saying an administrator has reactivated their account.`}
           </Text>
-        )}
-        {account.status !== "INACTIVE_USER" ? (
-          <Text id="status-hint" elementType="p" size="small" color="secondary">
-            {POWERS_NOT_YET}
-          </Text>
-        ) : null}
-      </section>
-    </>
+        </AlertDialog>
+      </Modal>
+    </section>
   );
 }
 
