@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-29 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">427</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">421</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">359</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-29</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 10:02</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I made the one change the ruling asked for, which was condition 5.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made the one change the ruling asked for, which was condition 5. In <code>uploadGiven</code> (<code>tests/adapters/new/index.ts</code>, around line 2948), the file&#39;s <code>content</code> is now passed to <code>fileGiven</code> when it is a <code>Uint8Array</code> as well as when it is a string. A <code>Buffer</code> is a kind of <code>Uint8Array</code>, so the R-8.17 test&#39;s <code>Buffer.alloc(just over 10 MiB)</code> now reaches the service as the oversized file it is, instead of being swapped for a small default file. <code>fileGiven</code>&#39;s signature and the harness&#39;s <code>uploadFile</code> already accepted <code>Uint8Array</code> content, so no other code had to change. <code>offerFile</code> was left alone, as the ruling said. <code>bindings.yaml</code> is unchanged, because nothing moved between bound and unbound.</p>
+<p>I have not confirmed the fix by running anything. This session would not let me run the type check, and I did not run R-8.17 against the target. The next calibration will be the first to show whether <code>fileUpload.refusedForSize</code> now reads the refusal. For the same reason, the open request from build-slice-7-7, about which step of R-8.17 read &#39;&#39;, is still unanswered. It belongs to whichever run takes it up.</p>
+<p>I looked again at what R-1.48 and R-1.9 need, without redoing the full walk. I signed in through the sandbox identity provider as the public sector employee (<code>test-gov</code>), which landed on /dashboard. I then opened <code>/opportunities/sprint-with-us/create</code> and <code>/opportunities/team-with-us/create</code>. Both answer &quot;Page not found&quot;, with the signed-in account menu showing, and they did the same when I was signed out. The earlier finding stands: the running build offers neither create screen, so <code>opportunity-swu-create.open</code> and <code>opportunity-twu-create.open</code> stay unbound with the reasons they already had.</p>
+<p>No other page&#39;s route was checked again in this run. Nothing outside <code>tests/adapters/new/</code> was touched, and no password or environment value was written anywhere.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 10:03.</p>
+<div class="body"><p>Question: does the new adapter bind every surface action and observation, and nothing else, now that the last owed condition is addressed? Ruling: approve. Condition bind-adapter-new-28#1 is carried out: uploadGiven in tests/adapters/new/index.ts now forwards &#39;content&#39; to fileGiven when it is a Uint8Array (which includes Buffer) as well as a string, and fileGiven (line 2916) already takes string | Uint8Array and passes it to uploadFile, so R-8.17&#39;s oversized Buffer now reaches the service as the oversized file. The rest of the diff is the work for conditions 1-4 carried from bind-adapter-new-28, which that ruling found matched what was asked: stored-row detection by /api/files/ link, refusal-versus-unbound for publish and the create screen keyed on the acting persona, and in-place editing of a draft. All of it is navigation, locating elements and reporting refusals, with no assertion of its own. Nothing under tests/acceptance changed, and the runner&#39;s typecheck passed with no diagnostics under adapters/new. The unbound reasons for opportunity-swu-create.open and opportunity-twu-create.open are real: both routes answer &#39;Page not found&#39; signed in and signed out, which is the application lacking those screens. The fix has not been run against the target, and the next calibration is the first evidence for fileUpload.refusedForSize. What would change this ruling: a calibration showing R-8.17 still sends a small file, or still reads &#39;&#39; because of the binding, would bring it back to bind-adapter. The separate build-slice-7-7 request about which step of R-8.17 read &#39;&#39; remains open for its own run.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met bind-adapter-new-28#1: uploadGiven in tests/adapters/new/index.ts (around line 2948) now passes &#39;content&#39; to fileGiven when it is a string or a Uint8Array (Buffer included), so R-8.17&#39;s Buffer.alloc(just over 10 MiB) is uploaded as given instead of a default file; offerFile is unchanged; the runner typecheck on 4aadbd4eb passed.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

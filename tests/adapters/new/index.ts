@@ -365,11 +365,20 @@ export default function create(
   // /sign-in offers "Sign in as a vendor" and "Sign in as a public sector employee" (buttons),
   // and each hands off to the sandbox identity provider's "Sign in to your account" form,
   // which returns through /auth/callback to the marketplace once it accepts the account.
+  // Who the browser was last signed in as (the anonymous visitor when signed out), so a
+  // screen or control that is missing can be told apart as a refusal of that person.
+  let actingAs: Persona | null = null;
+  const actingMay = (capability: RegExp): boolean =>
+    !!actingAs && ((actingAs as unknown as { can?: string[] }).can ?? []).some((one) => capability.test(one));
+  const actingId = (): string => (actingAs as unknown as { id?: string } | null)?.id ?? "nobody signed in";
+
   async function signIn(who: Persona): Promise<void> {
     const table = who.signIn as unknown as null | Record<string, SignInEntry>;
+    actingAs = null;
     if (!table) {
       // The anonymous visitor has no account; being signed out is the whole state.
       await forgetEveryone();
+      actingAs = who;
       return;
     }
     const where = `signIn.${who.id}`;
@@ -446,6 +455,7 @@ export default function create(
       last = now;
     }
     await ready();
+    actingAs = who;
   }
 
   function originOf(href: string): string {
@@ -494,6 +504,7 @@ export default function create(
   // session actually ended is the service's to decide and the test's to check. The full
   // reset lives in forgetEveryone(), at the start of signIn() and for the anonymous persona.
   async function signOut(): Promise<void> {
+    actingAs = null;
     const onTarget = originOf(page.url()) === originOf(baseURL);
     const link = onTarget
       ? seen(page.getByRole("navigation").getByRole("link", { name: /^\s*sign out\s*$/i })).first()
@@ -2934,7 +2945,11 @@ export default function create(
     if (!withFile) return { name, metadata };
     const content = given(input, ["content", "contents", "body", "text"]);
     const bytes = Number.parseInt(field(input, "bytes", "size", "sizeBytes", "size_bytes"), 10);
-    const made = fileGiven(fileName, typeof content === "string" ? content : undefined, Number.isFinite(bytes) ? bytes : undefined);
+    const made = fileGiven(
+      fileName,
+      typeof content === "string" || content instanceof Uint8Array ? content : undefined,
+      Number.isFinite(bytes) ? bytes : undefined,
+    );
     const mimeType = field(input, "mimeType", "contentType", "content_type") || made.mimeType;
     return { name, metadata, file: { fileName, mimeType, buffer: made.buffer } };
   }
@@ -3849,6 +3864,18 @@ export default function create(
   // management screen; one it refuses stays on the form with its messages.
   async function cwuSubmit(member: string, input: unknown, name: RegExp): Promise<void> {
     const where = cwuNew.where(member);
+    // The form is offered to the administrator and public sector staff; anybody else (a
+    // vendor, a visitor) is answered "Page not found", which is the refusal itself.
+    await ready();
+    const why = await whyNotHere();
+    if (why && !actingMay(/^create opportunity$/i)) {
+      throw new Error(
+        `${where} — refused: /opportunities/code-with-us/create answered ${actingId()} with ${why.replace(/\n+/g, " ")} at ${page.url()}; only a person who may create an opportunity is offered the form`,
+      );
+    }
+    if (why) {
+      unbound(where, `/opportunities/code-with-us/create did not open at ${page.url()} for ${actingId()}, who may create an opportunity: ${why.replace(/\n+/g, " ")}`);
+    }
     await cwuNew.on(member);
     await fillCwuForm(where, input);
     await press(where, name);
@@ -5380,10 +5407,12 @@ export default function create(
   // "Page not found"): "Manage a Code With Us opportunity" over the title, "Status: <state>"
   // and "Opportunity ID: <id>", an "Opportunity actions" group, and the sections as links
   // under "Opportunity sections" (?tab=summary, opportunity, addenda, history). The actions
-  // offered follow the state: a draft offers "Edit", "Publish" (the administrator) or
-  // "Submit for review" (staff), and "Delete"; a published opportunity only "Edit"; an
-  // awarded one nothing. "Edit" goes to ?tab=opportunity, the form itself, with "Save
-  // changes" and "Cancel". Publishing and deleting ask first ("Publish opportunity",
+  // offered follow the state: a draft offers "Publish" (the administrator) or "Submit for
+  // review" (its own author on the staff), and "Delete", with no "Edit" because its
+  // ?tab=opportunity form is already editable; another staff member's draft answers a
+  // public sector employee "Page not found"; a
+  // published opportunity only "Edit"; an awarded one nothing. "Edit" goes to
+  // ?tab=opportunity, the form itself, with "Save changes" and "Cancel". Publishing and deleting ask first ("Publish opportunity",
   // "Delete opportunity").
   const CWU_EDIT = "opportunity-cwu-edit";
   const cwuManage = signedInScreen(CWU_EDIT, "/opportunities/code-with-us/:opportunityId/edit");
@@ -5548,11 +5577,25 @@ export default function create(
   }
   const opportunityCwuEdit: S.OpportunityCwuEditPage = {
     open: (params) => cwuManage.open(params as unknown as Record<string, string>),
-    // "Edit" opens the form; whatever the input carries is entered and saved there.
+    // "Edit" opens the form; whatever the input carries is entered and saved there. A draft
+    // offers no "Edit": its ?tab=opportunity shows the form already editable, with "Save
+    // changes", so it is edited in place.
     editDetails: async (input) => {
-      await manageAction("edit_details", /^\s*edit\s*$/i, null);
+      const where = cwuManage.where("edit_details");
+      await cwuManage.on("edit_details");
+      if (!(await actionsGroup().count())) await toSection("edit_details", "Summary");
+      const edit = (await actionsGroup().count()) ? seen(actionsGroup().getByRole("button", { name: /^\s*edit\s*$/i })).first() : null;
+      if (edit && (await edit.count())) {
+        await manageAction("edit_details", /^\s*edit\s*$/i, null);
+      } else {
+        await toCwuForm("edit_details");
+        if (!(await findControl(page.getByRole("main"), /^\s*save changes\s*$/i))) {
+          const status = (await textLines()).find((line) => /^status:/i.test(line)) ?? "no status shown";
+          const there = (await actionsGroup().count()) ? (await actionsGroup().getByRole("button").allInnerTexts()).map((one) => `"${one.trim()}"`).join(", ") : "nothing";
+          unbound(where, `no "Edit" among the opportunity's actions on ${page.url()} (${status}; the actions offered are ${there}), and its Opportunity section offers no "Save changes" to edit the form in place; ${CWU_MANAGE_WALKED}`);
+        }
+      }
       if (Object.keys(record(input)).length) {
-        const where = cwuManage.where("edit_details");
         await fillCwuForm(where, input);
         await press(where, /^\s*save changes\s*$/i);
         await confirmIfAsked(where, /^\s*(save|publish)( changes)?\s*$/i);
@@ -5563,7 +5606,25 @@ export default function create(
       await saveCwuDetails("submit_for_review", input);
       await manageAction("submit_for_review", /^\s*submit for review\s*$/i, /^\s*submit( for review| opportunity)?\s*$/i);
     },
+    // "Publish" is offered to the administrator, on a draft or one under review. Anybody else
+    // is offered no "Publish" (a public sector employee's own draft offers "Submit for
+    // review" and "Delete") or not the screen at all, and that absence is the refusal.
     publish: async (input) => {
+      if (!actingMay(/^publish opportunity$/i)) {
+        const where = cwuManage.where("publish");
+        await ready();
+        const why = await whyNotHere();
+        if (why) {
+          throw new Error(`${where} — refused: the management screen answered ${actingId()} with ${why.replace(/\n+/g, " ")} at ${page.url()}`);
+        }
+        if (!(await actionsGroup().count())) await toSection("publish", "Summary");
+        const control = (await actionsGroup().count()) ? seen(actionsGroup().getByRole("button", { name: /^\s*publish\s*$/i })).first() : null;
+        if (!control || !(await control.count())) {
+          const status = (await textLines()).find((line) => /^status:/i.test(line)) ?? "no status shown";
+          const there = (await actionsGroup().count()) ? (await actionsGroup().getByRole("button").allInnerTexts()).map((one) => `"${one.trim()}"`).join(", ") : "nothing";
+          throw new Error(`${where} — refused: no "Publish" among the opportunity's actions for ${actingId()} on ${page.url()} (${status}; the actions offered are ${there})`);
+        }
+      }
       await saveCwuDetails("publish", input);
       await manageAction("publish", /^\s*publish\s*$/i, /^\s*publish( opportunity)?\s*$/i);
     },
@@ -5633,8 +5694,9 @@ export default function create(
   // "Add attachment", which opens the file chooser. A stored attachment is a list item with
   // its name in a read-only "Attachment name" box ("Already stored, so its name cannot be
   // changed."), a "Download <name>" link to /api/files/<id>?type=blob and "Remove <name>". A
-  // file just added is "New: <name>, <size>. It is uploaded when you save." with a "Name for
-  // <name> (optional)" box, "Will be saved as: <name>" and "Remove <name>"; one over the
+  // file just added is stored at once and is "New: <name>, <size>. Uploaded and attached to
+  // this opportunity. …" with its "Download <name>" link, a "Name for <name> (optional)" box,
+  // "Will be saved as: <name>" and "Remove <name>"; one over the
   // limit is "New: <name>, <size>." with the alert "<name> is too large to attach". Changes
   // are kept by the form's "Save changes" (or by the create form's own action). The Sprint
   // With Us and Team With Us forms answer "Page not found".
@@ -5665,16 +5727,27 @@ export default function create(
   function attachmentItems(region: Locator): Locator {
     return seen(region.getByRole("listitem"));
   }
-  async function itemsMatching(region: Locator, matches: (words: string) => boolean): Promise<Locator[]> {
+  // Each row is judged by its words and by whether it carries a link to the stored file.
+  async function itemsMatching(region: Locator, matches: (words: string, stored: boolean) => boolean): Promise<Locator[]> {
     const items = attachmentItems(region);
     const out: Locator[] = [];
     for (let i = 0; i < (await items.count()); i++) {
       const words = await items.nth(i).innerText().catch(() => "");
-      if (matches(words)) out.push(items.nth(i));
+      const stored = await items
+        .nth(i)
+        .getByRole("link")
+        .evaluateAll((links) => links.some((link) => (link.getAttribute("href") ?? "").includes("/api/files/")))
+        .catch(() => false);
+      if (matches(words, stored)) out.push(items.nth(i));
     }
     return out;
   }
+  // A file just chosen is stored at once and its row, still worded "New: <name>, <size>.
+  // Uploaded and attached to this opportunity. …", carries its "Download <name>" link to
+  // /api/files/<id>; so a row with that link is stored whatever it says, and "new" (the
+  // "Name for <name>" box, "Will be saved as") is its wording alone.
   const isNew = (words: string): boolean => /^\s*new:/im.test(words);
+  const isStored = (words: string, stored: boolean): boolean => stored || !isNew(words);
   async function rowLines(rows: Locator[]): Promise<string> {
     const out: string[] = [];
     for (const row of rows) {
@@ -5686,7 +5759,7 @@ export default function create(
     return out.join("\n");
   }
   // The row a test names: by the file's name, or the first of its kind.
-  async function rowNamed(region: Locator, input: unknown, test: (words: string) => boolean): Promise<Locator | null> {
+  async function rowNamed(region: Locator, input: unknown, test: (words: string, stored: boolean) => boolean): Promise<Locator | null> {
     const name = givenText(input, ["file", "fileName", "name", "attachment", "from"]) || (typeof input === "string" ? input : "");
     const rows = await itemsMatching(region, test);
     if (name) {
@@ -5725,8 +5798,9 @@ export default function create(
         .catch(() => undefined);
       await ready();
     },
-    // The file is listed as new; it is stored when the form is saved, which the readers
-    // that need it stored (attachment_address, download_attachment, the public list) do.
+    // The file is stored as soon as it is chosen and listed as new with its download link;
+    // a name typed for it is given when the form is saved, which the readers that need the
+    // final name (attachment_address, download_attachment, the public list) do.
     addAttachment: async (input) => {
       await onAttachments("add_attachment");
       await addAttachmentFile(`${ATTACH}.add_attachment`, input);
@@ -5753,7 +5827,7 @@ export default function create(
     removeExistingAttachment: async (input) => {
       const where = `${ATTACH}.remove_existing_attachment`;
       const region = await onAttachments("remove_existing_attachment");
-      const row = await rowNamed(region, input, (words) => !isNew(words));
+      const row = await rowNamed(region, input, isStored);
       if (!row) unbound(where, `no stored attachment on ${page.url()} matches ${JSON.stringify(input)}; the list reads: ${(await rowLines(await itemsMatching(region, () => true))) || "nothing"}`);
       await press(where, /^\s*remove\b/i, row);
       await saveAttachments(where);
@@ -5765,7 +5839,7 @@ export default function create(
         await saveAttachments(where);
         region = await onAttachments("download_attachment");
       }
-      const row = await rowNamed(region, input, (words) => !isNew(words));
+      const row = await rowNamed(region, input, isStored);
       const link = row ? seen(row.getByRole("link", { name: /^download\b/i })).first() : null;
       if (!link || !(await link.count())) unbound(where, `no stored attachment with a "Download" link on ${page.url()} matches ${JSON.stringify(input)}`);
       const download = page.waitForEvent("download", { timeout: 10000 }).catch(() => null);
@@ -5796,10 +5870,10 @@ export default function create(
     },
     newAttachmentRow: async () => rowLines(await itemsMatching(await onAttachments("new_attachment_row"), isNew)),
     existingAttachmentRow: async () =>
-      rowLines(await itemsMatching(await onAttachments("existing_attachment_row"), (words) => !isNew(words))),
+      rowLines(await itemsMatching(await onAttachments("existing_attachment_row"), isStored)),
     // What a stored attachment's name box says about changing it, and whether it can be.
     existingAttachmentNameReadOnly: async () => {
-      const rows = await itemsMatching(await onAttachments("existing_attachment_name_read_only"), (words) => !isNew(words));
+      const rows = await itemsMatching(await onAttachments("existing_attachment_name_read_only"), isStored);
       const out: string[] = [];
       for (const row of rows) {
         const box = row.getByRole("textbox").first();
