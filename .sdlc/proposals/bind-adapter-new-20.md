@@ -41,3 +41,23 @@ There was no other place to try. This is a fixed control interface, not somethin
 **Not checked.** I couldn't type-check the edit: the command needed an approval nobody was here to give. The new branch only calls the existing `unbound(where, reason)` helper the same way the surrounding code does.
 
 I found no other unbound members to revisit, and every other route in the surface was left as the previous binding had it.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the bind-adapter-new-20 adapter bind every surface action and observation on new, and nothing else? Approved. The only change (tests/adapters/new/index.ts:1879) gives a more specific unbound reason when GET/POST to the delay proxy's control API returns 404. A 404 already fell outside the accepted codes for both methods and the unbound helper throws, so behaviour is unchanged, DELETE-404 still counts as nothing left to remove, and no assertion or business logic is added. Nothing under tests/acceptance changed, and the runner's typecheck passed. The reason is real: every /hold path got the catcher's generic not-found while the catcher itself is healthy, so the delivery_delay control API named in observables.yaml is absent from the environment. The bindings themselves match the contract, so keeping the mail-delivery-delay members bound is correct. The egress failures are all in older build-slice files outside this diff. The ruling would change if the binding diverged from observables.yaml or a mounted /hold endpoint were shown to exist that the adapter fails to reach.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `81c9d3a2d9ccadfa2e8dd377c63989d1f27be5ae`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
