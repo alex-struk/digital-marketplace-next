@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>plan-14 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">422</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">416</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">358</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>plan-14</h1>
+<p class="lede">G2 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G2</td></tr><tr><th scope="row">opened</th><td>2026-10-01 08:53</td></tr><tr><th scope="row">holder</th><td>agent:architect</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the right cut of the work, and does each slice stand on its own?</h2>
+<p><strong>Recommendation.</strong> I moved the four criteria the ruling named out of Slice 7, each into a slice that serves the screen its test opens.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I moved the four criteria the ruling named out of Slice 7, each into a slice that serves the screen its test opens. I couldn&#39;t run the plan&#39;s coverage script (<code>plan/check-coverage.mjs</code>) because it needed approval that wasn&#39;t given here. Instead I searched the criteria lines by hand: each of the four now appears in exactly one slice, and none is still in Slice 7.</p>
+<p>The plan still has 21 slices in the same order with the same dependencies. Only three of them changed:</p>
+<ul><li><strong>Slice 7</strong> (staff draft, submit and publish a Code With Us opportunity) no longer lists R-1.9, R-1.53, R-1.56 or R-8.22. Its description still says it builds what those four describe. It now names each of them among the rules that are built in Slice 7 but answered for in a later slice.</li><li><strong>Slice 10</strong> (Sprint With Us and Team With Us creation with an evaluation panel) now holds three of them:</li><li>R-1.9: a draft is saved with incomplete content and its missing dates set to fourteen days ahead.</li><li>R-1.53: an opportunity can be deleted only while it is a draft or under review.</li><li>R-1.56: once an opportunity is published, only an administrator may change it.</li></ul>
+<p>Their tests open <code>/opportunities/sprint-with-us/create</code>, which Slice 10 builds. Slice 10 already depends on Slices 9 and 7, so the Code With Us screens are there too. R-1.8 and R-1.48 had already been moved to Slice 10 for the same reason.</p>
+<ul><li><strong>Slice 14</strong> (a vendor proposes on a Code With Us opportunity) now holds R-8.22: a file may be attached only by someone allowed to read it. Its test opens <code>/opportunities/code-with-us/:opportunityId/proposals/create</code>, which Slice 14 builds. Slice 14 depends on Slice 8, which depends on Slice 7, so the opportunity attachment control is already in place.</li></ul>
+<p>In <code>plan/plan.md</code>, I added one item under &quot;Criteria that sit awkwardly where they are&quot; explaining these moves. They fit awkwardly in the same way as the earlier R-1.8 group:</p>
+<ul><li>The behaviour is still built in Slice 7, and only where it is answered for has moved.</li><li>R-1.53 and R-1.56 cover all three programs, but they are answered for in the Sprint With Us slice, because that is where their tests first run.</li><li>R-8.22 covers attaching files to opportunities as well as proposals, but it is answered for in the proposal slice for the same reason.</li></ul>
+<p>The constitution check is unchanged, because moving where criteria are answered for brings in no new constitution rule. I wrote no new decision record, since this changes no framework, data store or boundary. Nothing was assumed about the stack or the platform beyond what the existing plan and decision records already state.</p>
+<p>I deferred nothing, the ruling contained nothing addressed to a person rather than this stage, and I did not touch spec, design, the constitution or the skills.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:architect (persona agent · claude claude-opus-5-5) on 2026-10-01 08:54.</p>
+<div class="body"><p>The question is whether moving R-1.9, R-1.53, R-1.56 and R-8.22 out of Slice 7 is the right cut, and whether each slice still stands on its own. Approved. The move does what the build-slice-7-4 ruling asked: the rebind record shows R-1.9 unbound on /opportunities/sprint-with-us/create and R-8.22 unbound on /opportunities/code-with-us/:opportunityId/proposals/create. Each of the four criteria now sits in exactly one slice and none remains in Slice 7. Slice 10 (depends on Slices 7 and 9) and Slice 14 (depends on Slice 8, which depends on Slice 7) both include the screens their tests open. Slice 7 still says it builds all four, and plan.md says plainly that the fit is uneasy. The tier is STANDARD, there is no data model change and no new dependency, and the constitution check is unaffected, so nothing calls for escalation. Two older rebind entries show R-1.56 also failing on the Code With Us create form, which has no remote-work field. That is a build defect and stays with build, not this plan. This plan settles none of the open build conditions (build-slice-7-3#1, build-slice-7-3#2, build-slice-7-4#3), so they stay open. The ruling would change if a moved criterion&#39;s test needed a screen outside its new slice&#39;s dependencies, or if any criterion were left unassigned or assigned twice.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
