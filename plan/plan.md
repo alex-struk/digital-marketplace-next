@@ -282,6 +282,19 @@ reader's attention.
   to 19. They are now named in its depends-on line; no other slice's position changes. The fit is
   uneasy for R-6.6 and R-4.33 in the same way as for R-6.3 to R-6.5: a rule about every message, or
   about one profile section, is answered for where its test first can run.
+- **R-8.13, R-8.21, R-8.28 and R-8.30** were placed in Slice 3, beside the image route they
+  describe. Each covers both a profile picture and an organization logo, and the acceptance suite
+  exercises the logo half on `/organizations/:orgId/edit` (and, for R-8.28, on the public
+  organization list). The verification of the build of Slices 3–4 found those logo halves unbound
+  or failing, because Slice 3 builds neither screen, while the profile-picture halves of R-8.13 and
+  R-8.28 passed. All four now sit whole in Slice 11, which builds the organization list and the
+  management page's profile tab with its logo. Slice 11 depends on Slice 3, so the picture halves
+  can still be shown there. The image checks and resizing are still built in Slice 3, and the logo
+  is only a second caller of the same route. Making Slice 11 a prerequisite of Slice 3 was rejected,
+  because it would hold profile editing back behind organizations. Splitting each criterion into a
+  picture half and a logo half would need new criterion IDs, which are the spec's to author. The fit
+  is uneasy in the same way as for R-8.17: the behaviour is built in one slice and answered for in a
+  later one where every half of its test can run.
 
 ## Accepted criteria that pull against each other
 
