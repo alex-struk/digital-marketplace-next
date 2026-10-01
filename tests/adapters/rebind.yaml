@@ -3277,6 +3277,11 @@ rebind:
     slice: 4
     by: runner:verify
     at: 2026-10-01T02:53:15.019Z
+    closed: &a21
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-01T03:06:46.683Z
   - id: R-4.32
     target: new
     why: 'unbound: user-list.open_export_contact_list — walked signed in as the
@@ -3288,3 +3293,4 @@ rebind:
     slice: 4
     by: runner:verify
     at: 2026-10-01T02:53:15.019Z
+    closed: *a21
