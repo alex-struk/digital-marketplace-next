@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-5-2 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">399</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">393</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">344</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-5-2</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 04:10</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 5 (An administrator can write and manage the service&#39;s pages) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I also couldn&#39;t run the stack.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I&#39;ve fixed R-7.12 and changed the code behind R-7.8, but the R-7.8 change is a judgement I couldn&#39;t confirm: the ruling didn&#39;t say which value came back empty. I also couldn&#39;t run the stack. Starting it with docker compose needs an approval this session doesn&#39;t have, so neither fix has been tried in a browser against a seeded sandbox. <code>npm --prefix app run check</code> passes: typecheck, plus 16 migration, 313 backend and 176 frontend tests.</p>
+<p><strong>R-7.12 (expected 22 needed pages, got 23).</strong> The seed puts back the 22 pages the old application created. Our migration had also stored a needed page at <code>service-level-agreement</code>, which the seed doesn&#39;t know about, so the list showed 23.</p>
+<ul><li><strong>Migrations.</strong> A new migration, <code>20260930000005_the_twenty_two_needed_pages.cjs</code>, adds the seven pages the first one left out: the six program guides and the Team With Us opportunity scope page. It also removes the stored service-level-agreement page, but only while nobody has written it. The first migration still creates its original sixteen, so the history reads the same on every database. Fresh and seeded installations now both store exactly the 22.</li><li><strong>Service-level-agreement page (R-7.18).</strong> Its links must still resolve, so the service now answers that address itself when no page is stored there. It is titled by its address, bodied &quot;Initial version&quot;, marked as needed, has no author, and is dated like the other needed pages. The rule is in <code>app/backend/src/content/built-in-pages.ts</code>.</li><li>It doesn&#39;t appear in the page list, so the count stays at 22.</li><li>It still resolves after the test harness empties the tables and reapplies the seed.</li><li>An administrator can open its managing screen but can&#39;t remove it. The first time they publish wording for it, it becomes a stored needed page.</li></ul>
+<p><strong>R-7.8 (some value read as empty).</strong> I looked for an empty value in the dates, bodies, authorship links, the publish response and the design system&#39;s text fields, and found none. The one thing R-7.8 asks for that the managing screen didn&#39;t show was the moment of the change: its dates were day-only, so no time could be read from them. The published and last-updated dates on <code>/content/:slug/edit</code> now read like &quot;September 30, 2026 at 5:00 p.m.&quot;, and their <code>datetime</code> attribute carries the full timestamp. The public page and the list keep the day-only dates their design stories show. If the suite reads R-7.8&#39;s date from the public page instead, this won&#39;t fix it.</p>
+<p><strong>Unit tests updated:</strong></p>
+<ul><li>The 22-page set and the order-independent &quot;exactly these 22&quot; check.</li><li>After the seed: exactly 22 needed pages.</li><li>Re-running the new migration leaves an existing installation&#39;s pages untouched.</li><li>The service-level-agreement page: answered with the placeholder, absent from the list, can&#39;t be removed, and becomes a stored needed page when an administrator writes it.</li><li>The managing screen&#39;s dates to the minute.</li></ul>
+<p><strong>Things outside this stage:</strong></p>
+<ul><li><strong>Records not edited.</strong> Decision records 0007 and 0008 had chosen sixteen pages. The new record 0026 supersedes their page set. I added a status pointer to 0008, corrected the page-count paragraph in 0025, and left 0007&#39;s text alone.</li><li><strong>Plan and seed comments.</strong> <code>plan/plan.md</code> still says sixteen, and the comment in <code>tests/seed/003-content.sql</code> says nineteen. Neither is this stage&#39;s to change; whoever owns them should bring them into line with 22.</li><li><strong>Seed and R-7.18.</strong> The surface entry for the service-level-agreement link still says the service &quot;creates no such page for itself&quot;. With this change the address answers even though the seed never restores it.</li></ul>
+<p>Nothing is missing for the next slice from these fixes.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by runner:verify (the runner, automatically) on 2026-10-01 04:18.</p>
+<div class="body"><p>Slice 5 does not yet do what 3 of its criteria say. Each condition is the criterion and what the running application did.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-7.8: Error: expect(received).not.toBe(expected) // Object.is equality — Expected: not &quot;&quot;</li><li>R-7.26: Error: file-embedded-image.upload_body_image — &quot;Insert image&quot; on <a href="http://localhost:4300/content/derived-with-image-mup0utcw/edit">http://localhost:4300/content/derived-with-image-mup0utcw/edit</a> opened no file chooser</li><li>R-8.29: Error: file-embedded-image.upload_body_image — &quot;Insert image&quot; on <a href="http://localhost:4300/content/r-8-29-image-mup0x96d/edit">http://localhost:4300/content/r-8-29-image-mup0x96d/edit</a> opened no file chooser</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
