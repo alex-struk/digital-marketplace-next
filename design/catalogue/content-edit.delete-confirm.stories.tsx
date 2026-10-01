@@ -1,22 +1,25 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { AlertDialog, Button, ButtonGroup, Heading, Modal, Text } from "@bcgov/design-system-react-components";
+import { PageContainer, Stack } from "./layout";
 
 // content-edit · delete-confirm — the administrator pressed Delete page on an ordinary page. This one question is the only
 // safeguard: removal is immediate and permanent, takes every version with it, and the address stops answering (R-7.9).
 const meta: Meta = { title: "content/content-edit/delete-confirm" };
 export default meta;
 
-const page = { display: "grid", gap: "var(--layout-margin-large)", padding: "var(--layout-padding-large)" } as const;
-
 export const DeleteConfirm: StoryObj = {
   render: () => (
-    <div style={page}>
-      <Text elementType="p" size="small" color="secondary">Manage a page</Text>
-      <Heading level={1}>Hackathon rules</Heading>
-      <ButtonGroup ariaLabel="Page actions">
-        <Button variant="primary" data-testid="content-edit-button">Edit page</Button>
-        <Button variant="secondary" danger data-testid="content-delete-button">Delete page</Button>
-      </ButtonGroup>
+    <PageContainer>
+      <Stack gap="large">
+        <Stack gap="small">
+          <Text elementType="p" size="small" color="secondary">Manage a page</Text>
+          <Heading level={1}>Hackathon rules</Heading>
+        </Stack>
+        <ButtonGroup ariaLabel="Page actions">
+          <Button variant="primary" data-testid="content-edit-button">Edit page</Button>
+          <Button variant="secondary" danger data-testid="content-delete-button">Delete page</Button>
+        </ButtonGroup>
+      </Stack>
       <Modal isOpen isDismissable>
         <AlertDialog
           variant="destructive"
@@ -35,6 +38,6 @@ export const DeleteConfirm: StoryObj = {
           </Text>
         </AlertDialog>
       </Modal>
-    </div>
+    </PageContainer>
   ),
 };
