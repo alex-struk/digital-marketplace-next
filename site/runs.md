@@ -37,6 +37,11 @@
 - 18:47:34 drive: step 14 recovery: taking the new target's sandbox down (sdlc sandbox down --target new --from proposal/build-slice-3-3)
 - 18:47:51 drive: step 15: `sdlc rule bind-adapter-new-14 --by agent:reviewer` — bind-adapter-new-14 is open at G3, held by agent:reviewer
 - 18:48:34 rule bind-adapter-new-14 approve at G3 by agent:reviewer (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 18:51:39 drive: step 18: `sdlc run plan --revise` — plan-9 was returned at G2 by agent:architect
+- 18:52:26 run plan: ok, cost 0.33237720000000004, turns 16, on claude claude-opus-5-5 (2.1.284 (Claude Code))
+- 18:52:26 propose plan-10 at G2
+- 18:52:28 drive: step 19: `sdlc rule plan-10 --by agent:architect` — plan-10 is open at G2, held by agent:architect
+- 18:53:10 rule plan-10 approve at G2 by agent:architect (agent) on claude claude-opus-5-5 (2.1.284 (Claude Code))
 
 # Run record 2026-09-30
 

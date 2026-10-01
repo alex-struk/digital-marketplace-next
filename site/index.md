@@ -372,6 +372,7 @@ Profile: rebuild
 - [gates-simulated-v1](proposals/gates-simulated-v1.md)
 - [intent-digital-marketplace-rebuild](proposals/intent-digital-marketplace-rebuild.md)
 - [plan](proposals/plan.md)
+- [plan-10](proposals/plan-10.md)
 - [plan-2](proposals/plan-2.md)
 - [plan-3](proposals/plan-3.md)
 - [plan-4](proposals/plan-4.md)
@@ -379,6 +380,7 @@ Profile: rebuild
 - [plan-6](proposals/plan-6.md)
 - [plan-7](proposals/plan-7.md)
 - [plan-8](proposals/plan-8.md)
+- [plan-9](proposals/plan-9.md)
 - [policy-agents-backend](proposals/policy-agents-backend.md)
 - [policy-agents-backend-claude](proposals/policy-agents-backend-claude.md)
 - [policy-calibrate-after](proposals/policy-calibrate-after.md)
@@ -416,10 +418,10 @@ Profile: rebuild
 
 ## Totals
 
-- Journal cost: $732.764734
-- Rulings cost: $403.242617
-- Total cost: $1136.007351
-- Agent-held rulings: 358
+- Journal cost: $733.097111
+- Rulings cost: $404.550781
+- Total cost: $1137.647892
+- Agent-held rulings: 360
 - Runner rulings (automatic, no seat held): 12
 - Human rulings: 16
 - Rulings whose seat this page does not recognise: 0

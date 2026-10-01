@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>plan-10 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">388</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">382</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">337</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>plan-10</h1>
+<p class="lede">G2 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G2</td></tr><tr><th scope="row">opened</th><td>2026-10-01 01:52</td></tr><tr><th scope="row">holder</th><td>agent:architect</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the right cut of the work, and does each slice stand on its own?</h2>
+<p><strong>Recommendation.</strong> I moved R-6.16 from Slice 11 to Slice 12, which is the correction the ruling asked for.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I moved R-6.16 from Slice 11 to Slice 12, which is the correction the ruling asked for. No other slice changes. The plan still has 21 slices in the same order. I couldn&#39;t run my script to check that each of the 248 accepted criteria sits in exactly one slice, because the command needed approval and nobody was here to give it. A text search shows R-6.16 now appears in Slice 12&#39;s criteria list and nowhere else, and that edit is the only change to any criteria list. The other three earlier moves (R-8.17 to Slice 7, R-6.6 to Slice 21, R-4.33 to Slice 6) are unchanged.</p>
+<p><strong>What changed</strong></p>
+<ul><li><strong><code>plan/tasks.md</code>:</strong></li><li>R-6.16 is out of Slice 11&#39;s criteria, and its clause is gone from Slice 11&#39;s delivers line. That line still lists the owner&#39;s archive notice, since Slice 11 builds that notice.</li><li>R-6.16 is now in Slice 12&#39;s criteria. Slice 12&#39;s delivers line now says the invitation to join the organization is a message the notification preference does not govern. So the invitation links to the reader&#39;s notification settings (built in Slice 3) without offering to unsubscribe.</li><li>Slice 12 already depends on Slice 11, which depends on Slice 3, so no dependency had to change.</li><li><strong><code>plan/plan.md</code>, awkward-placement entry:</strong> it now explains the move from the test&#39;s own steps. The test signs in as the owner, opens <code>/organizations/:orgId/edit</code>, adds a team member by email and reads the invitation. Slice 12 builds both the team tab and that invitation, so R-6.16 sits there. I first wrote a note that it used to be in Slice 11, then removed it, because the ruling asked that no Slice 11 / archive-notice wording be left for R-6.16.</li><li><strong><code>plan/plan.md</code>, the note on R-6.6 vs R-6.16:</strong> it is now headed &quot;slices 21 and 12&quot;. It names Slice 12&#39;s builder as the one who must not change the shared message footer without knowing Slice 21 reads it for R-6.6. It also names the organization invitation, instead of the archive notice, as an example message that lacks the Unsubscribe offer.</li><li><strong>Decision 0013 (<code>docs/decisions/0013-the-mail-path.md</code>):</strong> it now places R-6.16 in Slice 12, through the organization&#39;s edit screen, where adding a team member by email sends the invitation.</li></ul>
+<p>I wrote no new decision record. Nothing under the spec, the design, the constitution or the stack profile was touched. I assumed nothing new about the stack or the platform; the earlier assumptions in <code>plan/plan.md</code> stand as they were.</p>
+<p><strong>Left for others:</strong> instructions build-slice-3-3#1 and #2 belong to the build stage, as the ruling says, and remain open for build to act on. None of the conditions was addressed to a person.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:architect (persona agent · claude claude-opus-5-5) on 2026-10-01 01:53.</p>
+<div class="body"><p>The question is whether this is the right way to cut the work and whether each slice stands on its own. The only change is moving R-6.16 into Slice 12, which plan-9 asked for. R-6.16&#39;s test signs in as the organization owner, opens /organizations/:orgId/edit, adds a team member by email and reads the invitation. Slice 12 builds both the team tab and that invitation, and it reaches Slice 3&#39;s notification settings through Slice 11 -&gt; Slice 3 without any new dependency. On the branch, R-6.16 appears in Slice 12&#39;s criteria and in no other slice, and Slice 11 says nothing about it. plan/plan.md (the awkward-placement entry and the R-6.6 vs R-6.16 note) and decision record 0013 now say Slice 12 and the organization invitation. The criteria lists in plan/tasks.md hold 248 distinct criteria with no duplicates, which matches the accepted count. I could not run a script to compare the IDs themselves with the accepted set in the spec index. Tier is STANDARD, with no schema change and no new dependency, so nothing needed escalating. The failing egress check flags files written by build-stage work, not this plan, and the build conditions stay open. The ruling would change if a criterion turned out to be in no slice or in two, or if Slice 12 did not reach the invitation the test reads.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>condition-met plan-9#1: R-6.16 is moved from Slice 11 to Slice 12&#39;s criteria in plan/tasks.md. Slice 11&#39;s delivers line no longer mentions it, and Slice 12&#39;s delivers line now says the invitation to join the organization is a message the notification preference does not govern, so it links to the reader&#39;s notification settings (built in Slice 3) without offering to unsubscribe (plan/tasks.md lines 60-67).</li><li>condition-met plan-9#2: plan/plan.md (the awkward-placement entry near line 272, and the &#39;R-6.6 vs R-6.16 (slices 21 and 12)&#39; note near line 291) and docs/decisions/0013-the-mail-path.md (lines 46-50) now name Slice 12 and the organization invitation for R-6.16. No Slice 11 or archive-notice wording for R-6.16 is left.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
