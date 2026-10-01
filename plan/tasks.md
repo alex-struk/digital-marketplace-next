@@ -14,7 +14,7 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 
 ### Slice 2 · A person can sign in, finish signing up and sign out
 - criteria: R-4.1, R-4.2, R-4.3, R-4.17, R-4.24, R-6.1
-- delivers: sign-in and sign-up screens, OpenID Connect sign-in with PKCE from the single-page app through the sandbox Keycloak realm (public client, no secret in the browser), bearer-token checks on every `/api` route with authorization by the account kind and status held in `users`, `/api/sessions/current` creating the account on first sign-in by identity kind, the profile-completion screen with terms agreement and the new-opportunity notice choice, the return to the page sign-in began from, sign-out from the service and the identity provider, and the mail path every later slice uses — one configured sender, formatted and plain-text forms, test marking, the environment switch, fire-and-forget delivery that never fails the action, and skipping recipients with no address — shown first by the welcome message; the criteria about the one sender, the two forms, test marking and silent delivery failure (R-6.2 to R-6.5), the uniqueness of accounts and emails (R-4.6), the profile's fields (R-4.27, R-4.28), where sign-in lands (R-4.22), who the profile-completion page sends on to their dashboard (R-4.23), new accounts starting with new-opportunity notices off (R-6.20) and skipping recipients with no address (R-6.28) are built on here but answered for in slices 3, 6, 7, 8 and 14, whose screens their tests go through
+- delivers: sign-in and sign-up screens, OpenID Connect sign-in with PKCE from the single-page app through the sandbox Keycloak realm (public client, no secret in the browser), bearer-token checks on every `/api` route with authorization by the account kind and status held in `users`, `/api/sessions/current` creating the account on first sign-in by identity kind, the profile-completion screen with terms agreement and the new-opportunity notice choice, the return to the page sign-in began from, sign-out from the service and the identity provider, and the mail path every later slice uses — one configured sender, formatted and plain-text forms, test marking, the environment switch, fire-and-forget delivery that never fails the action, and skipping recipients with no address — shown first by the welcome message; the criteria about the one sender, the two forms, test marking and silent delivery failure (R-6.2 to R-6.5), the uniqueness of accounts and emails (R-4.6), the profile's fields (R-4.27, R-4.28), where sign-in lands (R-4.22), who the profile-completion page sends on to their dashboard (R-4.23), new accounts starting with new-opportunity notices off (R-6.20) and skipping recipients with no address (R-6.28) are built on here but answered for in slices 3, 6, 8 and 14, whose screens their tests go through
 - depends on: Slice 1
 
 ### Slice 3 · A person can keep their own profile, picture and notification choice
@@ -38,8 +38,8 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 5
 
 ### Slice 7 · Staff can draft, submit and publish a Code With Us opportunity
-- criteria: R-1.4, R-1.7, R-1.8, R-1.9, R-1.10, R-1.11, R-1.12, R-1.14, R-1.19, R-1.20, R-1.21, R-1.22, R-1.23, R-1.29, R-1.34, R-1.37, R-1.48, R-1.51, R-1.53, R-1.56, R-6.2, R-6.8, R-6.15, R-8.17, R-8.19, R-8.22, R-8.25, R-8.27
-- delivers: the program chooser, the Code With Us create form and manage page with its summary, opportunity and history tabs, the public Code With Us view, versioned saves, the full opportunity state model and its permitted-transition table for all three programs (with "suspended" mapped away in data), draft/submit-for-review/publish/delete with their permission rules, the attachment control with the upload size limit stated before a file is chosen and an oversize upload refused with a message naming it (R-8.17), and the submitted-for-review and published notices — the first messages to many recipients, batched and blind-copied
+- criteria: R-1.4, R-1.7, R-1.9, R-1.10, R-1.11, R-1.12, R-1.14, R-1.21, R-1.22, R-1.23, R-1.29, R-1.34, R-1.37, R-1.51, R-1.53, R-1.56, R-6.8, R-8.17, R-8.19, R-8.22, R-8.25, R-8.27
+- delivers: the program chooser, the Code With Us create form and manage page with its summary, opportunity and history tabs, the public Code With Us view, versioned saves, the full opportunity state model and its permitted-transition table for all three programs (with "suspended" mapped away in data), draft/submit-for-review/publish/delete with their permission rules, the attachment control with the upload size limit stated before a file is chosen and an oversize upload refused with a message naming it (R-8.17), and the submitted-for-review and published notices — the first messages to many recipients, batched and blind-copied; the program fixed at creation (R-1.8), the state values (R-1.19), the permitted-transition refusals (R-1.20), the administrator-only create-as-published rule (R-1.48), the blind-copy shape (R-6.15) and silent delivery failure (R-6.2) are built here but answered for in slices 9, 10, 14 and 18, whose screens their tests go through
 - depends on: Slice 3
 
 ### Slice 8 · Anyone can find opportunities and follow the ones they care about
@@ -48,14 +48,14 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 7
 
 ### Slice 9 · An opportunity's author and administrators can run it after publication
-- criteria: R-1.28, R-1.30, R-1.32, R-1.33, R-1.35, R-1.36, R-6.17
-- delivers: the addenda tab, private notes with files on the history tab, cancellation, the reporting figures (views, watchers, proposals) and full history for the author and administrators, and the notices to watchers, proposers and the author when an addendum is added or an opportunity is cancelled — with no message of any kind to a deactivated account
+- criteria: R-1.20, R-1.28, R-1.30, R-1.32, R-1.33, R-1.35, R-1.36, R-6.17
+- delivers: the addenda tab, private notes with files on the history tab, cancellation, the reporting figures (views, watchers, proposals) and full history for the author and administrators, and the notices to watchers, proposers and the author when an addendum is added or an opportunity is cancelled — with no message of any kind to a deactivated account; and the permitted-transition refusals Slice 7 built (R-1.20), answered for here because cancellation is the first action that leaves an opportunity in a final state
 - depends on: Slice 8
 
 ### Slice 10 · Staff can create Sprint With Us and Team With Us opportunities with an evaluation panel
-- criteria: R-1.13, R-1.15, R-1.16, R-1.17, R-1.18, R-1.43, R-1.55, R-5.1, R-5.9, R-5.16, R-5.17, R-5.18, R-5.37, R-7.17, R-7.29
-- delivers: the Sprint With Us and Team With Us create forms, manage pages and public views — budgets, phases, capabilities, resources and service areas, evaluation questions, evaluation weights — the evaluation panel tab with its membership, chair and role rules and the window in which it may change, notices to newly added panel members, the embedded scope content that stays empty rather than breaking the view when its page is missing, and the first screen that embeds another page's body, where that body is shown as formatted text with markup never executed and renders identically to the same page at its own address (R-7.17, whose renderer slice 1 built)
-- depends on: Slice 7
+- criteria: R-1.8, R-1.13, R-1.15, R-1.16, R-1.17, R-1.18, R-1.19, R-1.43, R-1.48, R-1.55, R-5.1, R-5.9, R-5.16, R-5.17, R-5.18, R-5.37, R-7.17, R-7.29
+- delivers: the Sprint With Us and Team With Us create forms, manage pages and public views — budgets, phases, capabilities, resources and service areas, evaluation questions, evaluation weights — the evaluation panel tab with its membership, chair and role rules and the window in which it may change, notices to newly added panel members, the embedded scope content that stays empty rather than breaking the view when its page is missing, and the first screen that embeds another page's body, where that body is shown as formatted text with markup never executed and renders identically to the same page at its own address (R-7.17, whose renderer slice 1 built); and, answered for here because their tests go through the Sprint With Us create screen and view, the program fixed at creation (R-1.8), the state values of every program (R-1.19, whose test also drives an opportunity to cancelled with the cancel action Slice 9 builds) and the administrator-only create-as-published rule in all three programs (R-1.48), all built in Slice 7
+- depends on: Slice 7, Slice 9
 
 ### Slice 11 · A vendor can register and look after an organization
 - criteria: R-3.1, R-3.2, R-3.3, R-3.6, R-3.15, R-3.18, R-3.19, R-3.20, R-3.21, R-3.22, R-3.23, R-3.24, R-8.13, R-8.21, R-8.28, R-8.30
@@ -73,7 +73,7 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 12
 
 ### Slice 14 · A vendor can propose on a Code With Us opportunity
-- criteria: R-1.31, R-2.1, R-2.2, R-2.3, R-2.4, R-2.7, R-2.9, R-2.11, R-2.12, R-2.13, R-2.14, R-2.15, R-2.23, R-2.24, R-2.25, R-4.23, R-6.3, R-6.4, R-6.5, R-8.20, R-8.31
+- criteria: R-1.31, R-2.1, R-2.2, R-2.3, R-2.4, R-2.7, R-2.9, R-2.11, R-2.12, R-2.13, R-2.14, R-2.15, R-2.23, R-2.24, R-2.25, R-4.23, R-6.2, R-6.3, R-6.4, R-6.5, R-8.20, R-8.31
 - delivers: the Code With Us proposal create and manage pages, individual or organization proponent, attachments, draft and submit with terms acceptance, one proposal per vendor and per organization, deadline guard, withdraw and resubmit, delete of drafts, proposal history, the vendor dashboard with own and organization proposals and its empty message, the profile-completion page's redirect (built in Slice 2) shown landing a vendor who has agreed before on this dashboard and a public sector employee on Slice 8's opportunities dashboard (R-4.23), staff seeing no proposal until the opportunity has closed, one read rule for files attached to opportunities and proposals, withdrawn when the attachment goes, and the service-wide mail rules verified across every screen that sends a message by this point
 - depends on: Slice 8, Slice 11
 
@@ -93,8 +93,8 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 16
 
 ### Slice 18 · The chair agrees a consensus and the questions stage is finalised
-- criteria: R-1.41, R-1.50, R-2.29, R-5.10, R-5.12, R-5.13, R-5.14, R-5.29, R-5.30, R-5.31, R-5.32, R-5.33
-- delivers: the consensus tab and per-proponent consensus screens for the chair, reopening and resubmitting until finalised, the explanation shown to an owner who is not on the panel, the single finalise action offered to the owner and administrators with its refusals naming the right next stage, screening in the top proponents that met every minimum, and the submitted and finalised notices
+- criteria: R-1.41, R-1.50, R-2.29, R-5.10, R-5.12, R-5.13, R-5.14, R-5.29, R-5.30, R-5.31, R-5.32, R-5.33, R-6.15
+- delivers: the consensus tab and per-proponent consensus screens for the chair, reopening and resubmitting until finalised, the explanation shown to an owner who is not on the panel, the single finalise action offered to the owner and administrators with its refusals naming the right next stage, screening in the top proponents that met every minimum, and the submitted and finalised notices; and, answered for here because its test reaches the owner's notice by walking Team With Us individual evaluation (Slice 17) and the chair's consensus submission, the blind-copy shape of every multi-recipient notice, the panel's and the owner's included (R-6.15, built in Slice 7)
 - depends on: Slice 17
 
 ### Slice 19 · Sprint With Us and Team With Us proposals go through their challenge stages to an award

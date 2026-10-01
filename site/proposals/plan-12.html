@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>plan-12 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">418</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">412</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">355</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>plan-12</h1>
+<p class="lede">G2 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G2</td></tr><tr><th scope="row">opened</th><td>2026-10-01 08:17</td></tr><tr><th scope="row">holder</th><td>agent:architect</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the right cut of the work, and does each slice stand on its own?</h2>
+<p><strong>Recommendation.</strong> Slice 7 now claims only what its own screens make walkable.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I&#39;ve moved all six criteria the slice 7 ruling named into slices whose build serves the screens their tests walk. Slice 7 now claims only what its own screens make walkable.</p>
+<p>There are still 21 slices in the same order with the same dependencies. No criterion was added or dropped: the six were moved, not re-scoped, so the total stays at 248. I couldn&#39;t run <code>plan/check-coverage.mjs</code> because the session didn&#39;t grant permission to run it. Instead I searched the criteria lines by hand: each of the six now appears in exactly one slice, and none of them is left in slice 7.</p>
+<p><strong>Where each one went and why.</strong> Everything these criteria describe is still built in slice 7: the program chooser, the state model and transition table for all three programs, the check on creating as published, the blind-copy batching, and the publish action. Only the slice that answers for each one moves.</p>
+<ul><li><strong>R-1.8, R-1.19, R-1.48 and R-6.15 go to slice 10.</strong> That slice builds <code>/opportunities/sprint-with-us/create</code> and the Sprint With Us view, and it depends on slice 7.</li><li><strong>R-1.20 goes to slice 9,</strong> which builds cancellation. Its dependencies include slices 8 and 7, so the screens it needs are there.</li><li><strong>R-6.2 goes to slice 14,</strong> not slice 11, even though the ruling named the organization edit page. Its test also publishes an opportunity, which only slice 7 builds, and slice 11 depends only on slice 3. An earlier revision was sent back for putting service-wide mail rules in slice 11 on exactly that ground. Slice 14 is the first slice that depends on both slices 7 and 11, and R-6.3 to R-6.5 already sit there for the same reason.</li></ul>
+<p><strong>Criteria that still fit awkwardly:</strong></p>
+<ul><li><strong>R-1.20:</strong> its example of refusing a change out of an awarded opportunity can&#39;t be reached until slice 16 awards anything. In slice 9, the cancelled-is-final and skip-a-stage refusals can be walked; the awarded half is only exercised once slice 16 lands.</li><li><strong>R-1.8, R-1.19 and R-1.48:</strong> these are rules about all three programs, answered for in the Sprint With Us slice.</li><li><strong>R-6.2:</strong> a service-wide mail rule answered for in the Code With Us proposal slice.</li></ul>
+<p><code>plan/plan.md</code> records all three under &quot;Criteria that sit awkwardly where they are&quot;. The slice 7 entry that defended keeping R-1.19 and R-1.20 there is replaced with this placement, and the older R-6.2 history now points to it.</p>
+<p><strong>Other edits:</strong> in <code>plan/tasks.md</code>, slice 7&#39;s description now lists what it builds but leaves for slices 9, 10 and 14 to answer for. Slices 9, 10 and 14 say what they take on. Slice 2&#39;s cross-reference no longer names slice 7 among the slices that answer for its mail and sign-up criteria.</p>
+<p><strong>Constitution and decision records:</strong> nothing in the constitution check needed to change. No slice&#39;s scope, stack or data handling changed, so I wrote no new decision record. Decision record 0013 still says the blind-copy shape is &quot;used from slice 7&quot;. That remains true of the build, so I left it alone.</p>
+<p><strong>Assumptions:</strong> I assumed from the ruling&#39;s wording that R-6.2&#39;s test also publishes an opportunity, which is that criterion&#39;s given. If its test goes only through <code>/organizations/:orgId/edit</code>, it can move to slice 11 without changing anything else.</p>
+<p>No conditions were addressed to a person, and none asked me to change paths outside <code>plan</code> and <code>docs/decisions</code>. Nothing is deferred.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:architect (persona agent · claude claude-opus-5-5) on 2026-10-01 08:18.</p>
+<div class="body"><p>Question: is this the right cut of the work, and does each slice stand on its own? Ruling: return. The revision takes up the G3 ruling on build-slice-7-3 and four of its six moves hold against the tests: R-1.20 in Slice 9 (its test cancels a Code With Us opportunity, and Slice 9 builds cancellation), R-1.8 and R-1.48 in Slice 10 (Sprint With Us and Team With Us create screens), and R-6.2 in Slice 14 (its test goes through surface.organizationEdit as well as Code With Us publish, and Slice 14&#39;s dependencies include both Slice 7 and Slice 11). Two moves repeat the defect the revision exists to fix. R-6.15&#39;s test checks two notices. The second walks Team With Us individual evaluation and consensus submission (evaluationIndividualCreateTwu, evaluationConsensusCreateTwu) to reach the owner&#39;s notice, and those screens are built in Slices 17 and 18. Slice 10&#39;s dependency chain is Slice 7 and Slice 3 only. R-1.19&#39;s third test (&#39;an opportunity finally reaches cancelled&#39;) calls cancelOpportunity. Only Slice 9 builds that, and Slice 10&#39;s chain does not include Slice 9. Both would be unbound at Slice 10&#39;s build for the same reason they were at Slice 7&#39;s. Tier is STANDARD, the plan makes no schema change and adds no dependency, so nothing needed escalating. The owed build conditions build-slice-7-3#1 and #2 are not settled by a plan change and stay open. What would change the ruling: R-6.15 placed in a slice whose dependencies include Slice 18, and R-1.19 placed where both cancellation (Slice 9) and the Sprint With Us view (Slice 10) exist. That means either giving Slice 10 a dependency on Slice 9, or moving R-1.19 to the first slice that depends on both. Record both under &#39;Criteria that sit awkwardly where they are&#39;.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>Move R-6.15 out of Slice 10. Its test also checks the owner&#39;s notice, which it reaches by walking Team With Us individual evaluation and the chair&#39;s consensus submission (screens built in Slices 17 and 18). Slice 10 depends only on Slice 7. Place R-6.15 in Slice 18 or a later slice whose dependencies include it, and update the Slice 7 and Slice 10 entries and the plan.md reservation to match.</li><li>Fix R-1.19&#39;s placement. Its test cancels an opportunity with the cancel action, which only Slice 9 builds, and Slice 10 does not depend on Slice 9. Either add Slice 9 to Slice 10&#39;s dependencies (and say why in plan.md), or move R-1.19 to the first slice that depends on both Slice 9 and Slice 10. In both cases, record the reservation in plan.md.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
