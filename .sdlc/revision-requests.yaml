@@ -232,3 +232,42 @@ requests:
     at: 2026-09-30T23:45:08.121Z
     taken: 2026-09-30T23:45:59.590Z
     taken_by: plan-8
+  - stage: bind-adapter
+    target: new
+    why: R-8.23's test fails with ENAMETOOLONG before reaching the service, because
+      the new target's offerFile passes the requested name to
+      tests/fixtures/upload.ts uploadFile, which writes a file of that name
+      under the OS temp directory, and a 256-character name exceeds the 255-byte
+      filename limit. The criterion asks only that the upload carry a
+      256-character name and be refused with the 1-255 characters message. Offer
+      the file without a file of that name on disk, for example Playwright's
+      setFiles({ name, mimeType, buffer }) payload, or the API upload with the
+      name as the form field.
+    from: build-slice-3-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-01T01:45:25.171Z
+  - stage: plan
+    why: "slice 3 claims R-8.17, R-6.6, R-6.16 and R-4.33, but verify reports each
+      unbound because its test acts through a screen no slice-3 build serves:
+      the attachment control on /opportunities/:program/:opportunityId/edit
+      (R-8.17), /admin/email-notification-reference (R-6.6),
+      /organizations/:orgId/edit (R-6.16), and
+      /content/terms-and-conditions/edit (R-4.33). Move each to the slice that
+      builds its screen, or bring that screen into slice 3 explicitly."
+    from: build-slice-3-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-01T01:45:25.171Z
+  - stage: design
+    why: design/DESIGN.md says the 'Stop emails about new opportunities?' question
+      is asked both from the profile checkbox and on arrival from the
+      unsubscribe link. R-4.29 asks for confirmation only on arrival from the
+      link and lets the box turn on or off at any time from the profile. The
+      R-4.29 acceptance test now passes against the behaviour that follows the
+      criterion (docs/decisions/0023-the-profile-in-slice-3.md records the
+      departure). Bring the design into line with R-4.29.
+    from: build-slice-3-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-01T01:45:25.171Z
