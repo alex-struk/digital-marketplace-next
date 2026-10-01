@@ -21,9 +21,10 @@
 // running build serves a signed-in person /dashboard (a greeting and nothing else), their
 // own profile at /users/me or /users/<their own id> (editable, with its picture picker) with
 // its Capabilities, Organizations, Notifications and Legal sections, another account's
-// /users/:userId to the administrator, and /sign-up/complete to a vendor still to complete a
-// profile; every other screen that needs a session — opportunities, proposals,
-// organizations, content management, evaluation, /users — answers "Page not found", and
+// /users/:userId and the list of accounts at /users to the administrator, and
+// /sign-up/complete to a vendor still to complete a profile; every other screen that needs
+// a session — opportunities, proposals, organizations, content management, evaluation —
+// answers "Page not found" (so does /users, to anyone but the administrator), and
 // /admin/email-notification-reference is not a screen at all (the service answers it 404
 // "Cannot GET", to the administrator too). Those screens' open() reports "unbound:
 // <page>.open — <reason>" only when the address really answers with that refusal, and
@@ -3591,6 +3592,283 @@ export default function create(
     };
   }
 
+  // ---------------------------------------------------------------- the list of accounts
+  //
+  // /users is the administrator's "Digital Marketplace Users" screen (the header's "Users"
+  // link): a "Search by name" box, an "Export contact list" button, and one table of every
+  // account — "Status | Account type | Name | Administrator", the name a link to
+  // /users/<id>, the last cell "Yes" or "No" — all of them at once, with no pager, and
+  // "<n> of <m> people shown" under it. Searching narrows the rows in place. Anyone else
+  // signed in is shown "Page not found" there, and a signed-out visitor is sent to
+  // /sign-in?redirectOnSuccess=/users.
+  //
+  // "Export contact list" opens a dialog: "Account types (required)" with "Public sector
+  // employees" and "Vendors", "Fields (required)" with "First name", "Last name", "Email
+  // address" and "Organization name", every box unticked to start with, and "Cancel" and
+  // "Export", the latter disabled until one type and one field are ticked. Export downloads
+  // dm-contacts-<date>.csv (from /api/contact-list) and closes the dialog.
+  const USER_LIST = "/users";
+
+  // On the list, or why not: the refusal this visitor was shown instead. Straight after
+  // signing in the client may still be loading the account when /users is asked for, so a
+  // "Page not found" is looked at once more before it is believed.
+  async function onUserList(): Promise<string> {
+    await ready();
+    const table = seen(page.getByRole("table")).first();
+    const loaded = async (): Promise<boolean> => {
+      await table.waitFor({ state: "visible", timeout: 8000 }).catch(() => undefined);
+      return (await table.count()) > 0;
+    };
+    if (await loaded()) return "";
+    if (new URL(page.url()).pathname === USER_LIST && (await notFoundShown())) {
+      await page.waitForTimeout(1500);
+      await page.reload({ waitUntil: "domcontentloaded" });
+      await ready();
+      if (await loaded()) return "";
+    }
+    return (await whyNotHere()) || `${page.url()} shows no table of accounts`;
+  }
+
+  async function userListOrUnbound(member: string): Promise<void> {
+    const why = await onUserList();
+    if (why) {
+      unbound(
+        `user-list.${member}`,
+        `${USER_LIST} did not show the list of accounts at ${page.url()}: ${why.replace(/\n+/g, " ")}; the list is the administrator's (signed in as the administrator it opens from the header's "Users" link; signed in as a public sector employee it answers "Page not found")`,
+      );
+    }
+  }
+
+  // Every row of the table as its cells' text, read in one pass. The table draws its rows
+  // after the accounts arrive; a search that leaves rows out says "<n> of <m> people shown"
+  // under it, which is the only sign a search that leaves none has finished.
+  async function userListRows(): Promise<string[][]> {
+    if (await onUserList()) return [];
+    await seen(page.getByRole("table").first().getByRole("cell").or(page.getByText(/\bof \d+ (people|person) shown\b/i)))
+      .first()
+      .waitFor({ state: "visible", timeout: 8000 })
+      .catch(() => undefined);
+    return seen(page.getByRole("table"))
+      .first()
+      .evaluate((table) =>
+        Array.from((table as HTMLTableElement).tBodies)
+          .flatMap((body) => Array.from(body.rows))
+          .map((row) => Array.from(row.cells).map((cell) => (cell.innerText ?? "").replace(/\s+/g, " ").trim()))
+          .filter((cells) => cells.length > 0),
+      )
+      .catch(() => [] as string[][]);
+  }
+
+  // Where each column sits, by its header, so the readers do not depend on the order.
+  async function userListColumns(): Promise<Record<"status" | "type" | "name" | "admin", number>> {
+    const headers = (await seen(page.getByRole("columnheader")).allInnerTexts()).map((each) => each.trim());
+    const at = (pattern: RegExp, fallback: number): number => {
+      const found = headers.findIndex((each) => pattern.test(each));
+      return found < 0 ? fallback : found;
+    };
+    return {
+      status: at(/^status$/i, 0),
+      type: at(/account\s*type/i, 1),
+      name: at(/^name$/i, 2),
+      admin: at(/admin/i, 3),
+    };
+  }
+
+  async function userListColumn(which: "status" | "type" | "name" | "admin"): Promise<string> {
+    const rows = await userListRows();
+    if (!rows.length) return "";
+    const at = (await userListColumns())[which];
+    return rows.map((cells) => cells[at] ?? "").join("\n");
+  }
+
+  // The export dialog, opened when it is not already.
+  async function exportDialog(member: string): Promise<Locator> {
+    await userListOrUnbound(member);
+    if (!(await dialog().count())) await press(`user-list.${member}`, /^\s*export contact list\s*$/i);
+    await dialog().waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    if (!(await dialog().count())) {
+      unbound(`user-list.${member}`, `"Export contact list" on ${page.url()} was pressed and no dialog opened`);
+    }
+    return dialog();
+  }
+
+  // What a test calls an account type or a field, as the dialog labels it.
+  function exportTypeLabel(said: string): RegExp {
+    const words = squash(said);
+    if (/vendor/.test(words)) return /^\s*vendors?\s*$/i;
+    if (!words || /gov|publicsector|staff|employee|admin|idir/.test(words)) return /^\s*public sector employees?\s*$/i;
+    return new RegExp(`^\\s*${said.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "i");
+  }
+
+  function exportFieldLabel(said: string): RegExp {
+    const words = squash(said);
+    if (!words || /email/.test(words)) return /^\s*email address\s*$/i;
+    if (/first|given/.test(words)) return /^\s*first name\s*$/i;
+    if (/last|surname|family/.test(words)) return /^\s*last name\s*$/i;
+    if (/org|company/.test(words)) return /^\s*organization name\s*$/i;
+    return new RegExp(`^\\s*${said.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\s*$`, "i");
+  }
+
+  // The state a test asked a box to be left in, or undefined to turn it over.
+  function exportBoxWanted(input: unknown): boolean | undefined {
+    if (typeof input === "boolean") return input;
+    const said = given(input, ["checked", "selected", "on", "include", "included", "enabled"]);
+    return said === undefined ? undefined : saysYes(said);
+  }
+
+  async function setExportBox(member: string, scope: Locator, label: RegExp, said: string, wanted: boolean | undefined): Promise<void> {
+    const box = seen(scope.getByRole("checkbox", { name: label }));
+    if (!(await box.count())) {
+      const offered = (await seen(scope.getByRole("checkbox")).evaluateAll((boxes) =>
+        boxes.map((each) => ((each as HTMLInputElement).labels?.[0]?.innerText ?? each.getAttribute("aria-label") ?? "").trim()),
+      )).join(", ");
+      unbound(`user-list.${member}`, `the export dialog has no box labelled ${label} (asked for "${said}"); it offers ${offered || "no boxes"}`);
+    }
+    const now = await box.first().isChecked();
+    if (now !== (wanted ?? !now)) await box.first().click();
+  }
+
+  // The list of names a test gave for a group of boxes ("userTypes": ["VENDOR"]), as text.
+  function namesGiven(value: unknown): string[] {
+    if (value === undefined || value === null) return [];
+    if (Array.isArray(value)) return value.map(textOf).filter(Boolean);
+    if (typeof value === "object") {
+      return Object.entries(record(value))
+        .filter(([, on]) => saysYes(on))
+        .map(([key]) => key);
+    }
+    return textOf(value).split(/\s*,\s*/).filter(Boolean);
+  }
+
+  const EXPORT_TYPE_KEYS = ["userTypes", "userType", "types", "type", "accountTypes", "accountType"];
+  const EXPORT_FIELD_KEYS = ["fields", "field", "columns", "column"];
+
+  const userListScreen: S.UserListPage = {
+    open: async () => {
+      await go(USER_LIST);
+      await onUserList();
+    },
+    searchByName: async (input) => {
+      const where = "user-list.search_by_name";
+      await userListOrUnbound("search_by_name");
+      const box = seen(page.getByRole("searchbox", { name: /search by name/i }).or(page.getByRole("textbox", { name: /search by name/i }))).first();
+      if (!(await box.count())) unbound(where, `no "Search by name" box on ${page.url()}`);
+      const words = typeof input === "string" ? input : givenText(input, ["name", "query", "search", "term", "text", "value"]);
+      await box.fill(words);
+      await page.waitForTimeout(300);
+      await settle();
+    },
+    openExportContactList: async () => {
+      await exportDialog("open_export_contact_list");
+    },
+    // A type named the way the criteria name accounts ("public sector employee", "GOV",
+    // "vendor") is the box it stands for; a state given ({ checked }) is set, otherwise the
+    // box is turned over.
+    toggleExportUserType: async (input) => {
+      const scope = await exportDialog("toggle_export_user_type");
+      const said = (typeof input === "string" ? input : givenText(input, [...EXPORT_TYPE_KEYS, "name", "label"])).trim();
+      await setExportBox("toggle_export_user_type", scope, exportTypeLabel(said), said, exportBoxWanted(input));
+    },
+    toggleExportField: async (input) => {
+      const scope = await exportDialog("toggle_export_field");
+      const said = (typeof input === "string" ? input : givenText(input, [...EXPORT_FIELD_KEYS, "fieldName", "name", "label"])).trim();
+      await setExportBox("toggle_export_field", scope, exportFieldLabel(said), said, exportBoxWanted(input));
+    },
+    // The types and fields the test gave are ticked (and the rest of each group unticked)
+    // before "Export" is pressed; a disabled "Export" is reported at once with what the
+    // dialog says. Pressed, it downloads the list and closes the dialog.
+    exportContactList: async (input) => {
+      const where = "user-list.export_contact_list";
+      const scope = await exportDialog("export_contact_list");
+      for (const key of Object.keys(record(input))) {
+        if (![...EXPORT_TYPE_KEYS, ...EXPORT_FIELD_KEYS].some((each) => squash(each) === squash(key))) {
+          unbound(where, `the export dialog has nothing for "${key}": it offers only account types and fields`);
+        }
+      }
+      const groups: [string[], (said: string) => RegExp, RegExp[]][] = [
+        [EXPORT_TYPE_KEYS, exportTypeLabel, [/^\s*public sector employees?\s*$/i, /^\s*vendors?\s*$/i]],
+        [EXPORT_FIELD_KEYS, exportFieldLabel, [/^\s*first name\s*$/i, /^\s*last name\s*$/i, /^\s*email address\s*$/i, /^\s*organization name\s*$/i]],
+      ];
+      for (const [keys, labelOf, every] of groups) {
+        const value = given(input, keys);
+        if (value === undefined) continue;
+        const wanted = namesGiven(value).map((said) => ({ said, label: labelOf(said) }));
+        for (const each of wanted) await setExportBox("export_contact_list", scope, each.label, each.said, true);
+        for (const label of every) {
+          if (wanted.some((each) => String(each.label) === String(label))) continue;
+          const box = seen(scope.getByRole("checkbox", { name: label }));
+          if ((await box.count()) && (await box.first().isChecked())) await box.first().click();
+        }
+      }
+      const control = await findControl(scope, /^\s*export\s*$/i);
+      if (!control) unbound(where, `the export dialog on ${page.url()} has no "Export" button`);
+      if (await isDisabled(control)) {
+        const said = lined(await scope.innerText().catch(() => "")).filter((line) => /choose|required|at least/i.test(line));
+        throw new Error(`${where} — "Export" is disabled in the export dialog on ${page.url()}; it says: ${said.join(" | ") || "nothing"}`);
+      }
+      const downloaded = page.waitForEvent("download", { timeout: 15000 }).catch(() => null);
+      await control.click();
+      await downloaded;
+      await settle();
+    },
+    cancelExport: async () => {
+      await userListOrUnbound("cancel_export");
+      await inDialog("user-list.cancel_export", /^\s*cancel\s*$/i);
+    },
+    // The account the test named — by seed handle, persona, identifier, address or name —
+    // opened from its name in the list.
+    openUserProfile: async (input) => {
+      const where = "user-list.open_user_profile";
+      await userListOrUnbound("open_user_profile");
+      const person = personOf(input);
+      const links = seen(page.getByRole("table").first().getByRole("link"));
+      const hrefs = await links.evaluateAll((each) => each.map((link) => link.getAttribute("href") ?? ""));
+      let at = person?.id ? hrefs.findIndex((href) => href.replace(/[?#].*$/, "").endsWith(`/users/${person.id}`)) : -1;
+      if (at < 0) {
+        const name = typeof input === "string" ? input : givenText(input, ["name", "userName", "displayName"]);
+        if (name) {
+          const texts = (await links.allInnerTexts()).map((each) => each.trim().toLowerCase());
+          at = texts.findIndex((each) => each === name.trim().toLowerCase());
+        }
+      }
+      if (at < 0) {
+        unbound(where, `no name in the list on ${page.url()} links to the account ${JSON.stringify(input)} (${hrefs.length} accounts listed)`);
+      }
+      await links.nth(at).click();
+      await page.waitForURL((url) => /^\/users\/[^/]+$/.test(url.pathname), { timeout: 10000 }).catch(() => undefined);
+      await ready();
+    },
+    // Each row as "Status | Account type | Name", one per line.
+    userRow: async () => {
+      const rows = await userListRows();
+      if (!rows.length) return "";
+      const at = await userListColumns();
+      return rows.map((cells) => [cells[at.status], cells[at.type], cells[at.name]].filter(Boolean).join(" | ")).join("\n");
+    },
+    statusBadge: () => userListColumn("status"),
+    accountType: () => userListColumn("type"),
+    // The Administrator column beside the name it belongs to: "Robin Placeholder: Yes".
+    adminCheck: async () => {
+      const rows = await userListRows();
+      if (!rows.length) return "";
+      const at = await userListColumns();
+      return rows.map((cells) => `${cells[at.name] ?? ""}: ${cells[at.admin] ?? ""}`).join("\n");
+    },
+    // The dialog's words while it is open; closed (cancelled, exported, never opened), nothing.
+    exportModal: async () => {
+      if (await onUserList()) return "";
+      return (await dialog().count()) ? (await dialog().innerText()).trim() : "";
+    },
+    // "disabled" while Export cannot be pressed, nothing once it can. The dialog is opened
+    // to look, as a person would.
+    exportDisabledUntilSelection: async () => {
+      const scope = await exportDialog("export_disabled_until_selection");
+      const control = await findControl(scope, /^\s*export\s*$/i);
+      if (!control) unbound("user-list.export_disabled_until_selection", `the export dialog on ${page.url()} has no "Export" button`);
+      return (await isDisabled(control)) ? "disabled" : "";
+    },
+  };
+
   const userProfile: S.UserProfilePage = {
     ...profileOfUserId,
     ...(readingsOfRefusedProfile as Pick<S.UserProfilePage, (typeof PROFILE_READINGS)[number]>),
@@ -4705,26 +4983,7 @@ export default function create(
 
     userNotice,
 
-    userList: absent<S.UserListPage>(
-      "user-list",
-      "/users",
-      'walked signed in as the administrator, /users answers "Page not found" (heading "Page not found", "The page you are looking for does not exist.", "Back to home"): the running build has no list of accounts',
-      [
-        "search_by_name",
-        "open_export_contact_list",
-        "toggle_export_user_type",
-        "toggle_export_field",
-        "export_contact_list",
-        "cancel_export",
-        "open_user_profile",
-        "user_row",
-        "status_badge",
-        "account_type",
-        "admin_check",
-        "export_modal",
-        "export_disabled_until_selection",
-      ],
-    ),
+    userList: userListScreen,
 
     userProfile,
 
