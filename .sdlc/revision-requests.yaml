@@ -352,3 +352,30 @@ requests:
       proposal: bind-adapter-new-21
     taken: 2026-10-01T06:01:07.789Z
     taken_by: bind-adapter-new-22
+  - stage: bind-adapter
+    target: new
+    why: the new adapter reads a manage screen's Opportunity tab (opportunityCwuEdit
+      readers used by R-1.4, R-1.21 and R-1.56) as the tab panel's innerText,
+      which never includes the values of inputs and textareas. Verify received
+      the form's labels ('Title(required) … Is remote work acceptable?
+      (required) Yes …') with no saved description or location in them. The
+      readers must take the values of the labelled fields (or the read-only
+      summary) in that panel, not only its text.
+    from: build-slice-7-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-01T08:11:14.787Z
+  - stage: plan
+    why: slice 7 (draft, submit and publish a Code With Us opportunity) claims
+      criteria whose tests can only be walked on screens other slices build.
+      R-1.8, R-1.19, R-1.48 and R-6.15 were unbound because
+      /opportunities/sprint-with-us/create and the Sprint With Us view do not
+      exist until slice 10. R-6.2 was unbound because /organizations/:orgId/edit
+      is not served. R-1.20 was unbound because there is no cancel action, which
+      this slice's build lists as not built. Move each to the slice that builds
+      its screen, or split out a Code With Us-only claim, so slice 7 claims only
+      what its build can make walkable.
+    from: build-slice-7-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-01T08:11:14.787Z
