@@ -1,0 +1,9 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 6 does not yet do what 1 of its criteria say. Each condition is
+  the criterion and what the running application did.
+conditions:
+  - "R-6.23: Error: vendors whose acceptance was not withdrawn"
+at: 2026-10-01T05:36:05.351Z
