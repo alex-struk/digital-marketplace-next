@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-24 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">414</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">408</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">353</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-24</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 07:45</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I rebound the remote-work control on the Code With Us form, and it now works.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rebound the remote-work control on the Code With Us form, and it now works. That form was the cause of most of the reported criteria. The other four reported members still can&#39;t be bound, because their screens don&#39;t exist on the target. The TypeScript check and the suite could not be run here: there are no installed packages, and installing them was refused.</p>
+<p><strong>The remote-work control (R-1.4, R-1.7, R-1.8, R-1.14, R-1.19, R-1.20, R-1.21, R-1.22, R-1.23, R-1.34, R-1.37, R-1.56, R-6.8).</strong> In every one of these the adapter threw &quot;no &#39;Is remote work acceptable?&#39; choice&quot; from the Code With Us form&#39;s <code>save_draft</code>, <code>submit_for_review</code> and <code>publish</code>. It was looking for a pair of Yes/No radio buttons. Signed in as the administrator, <code>/opportunities/code-with-us/create</code> shows a single checkbox labelled &quot;Remote OK: remote work is acceptable&quot;, between Location and &quot;Remote work description&quot;. The same box is on the edit form of a saved draft.</p>
+<ul><li><strong>The change:</strong> in <code>tests/adapters/new/index.ts</code>, <code>chooseRemote</code> now finds that checkbox by role and label and ticks or clears it to match the test&#39;s value. If the box is absent it falls back to the old Yes/No radios, and throws <code>unbound:</code> only when neither exists.</li><li><strong>How I checked it:</strong> I walked the flow by hand as the administrator. I entered a title, ticked &quot;Remote OK&quot;, filled in the description and pressed &quot;Save draft&quot;. It landed on the new draft&#39;s management screen with status Draft. I then deleted that draft so it doesn&#39;t remain on the target.</li><li><strong>Bindings:</strong> these members were already listed as <code>bound</code> in <code>bindings.yaml</code>. I only corrected the comment there that described the control as Yes/No radios.</li></ul>
+<p><strong>Still unbound, checked again:</strong></p>
+<ul><li><strong>Sprint With Us and Team With Us create (<code>opportunity-swu-create</code>, <code>opportunity-twu-create</code>, R-1.8, R-1.56, R-6.15).</strong> As the administrator, <code>/opportunities/sprint-with-us/create</code> and <code>/opportunities/team-with-us/create</code> both answer &quot;Page not found&quot;.</li><li><strong>The Code With Us proposal screen (<code>proposal-cwu-create</code>, R-8.22).</strong> <code>/opportunities/code-with-us/&lt;seeded published id&gt;/proposals/create</code> answers &quot;Page not found&quot; both as the administrator and as a vendor. As a vendor, the seeded published opportunity&#39;s page has no link or button to start a proposal; it shows only the opportunity&#39;s details, skills, key dates and addenda.</li><li><strong>The Team With Us evaluation screen (<code>evaluation-individual-create-twu</code>, R-6.15).</strong> I did not reopen it this time. It sits under Team With Us opportunity routes, every Team With Us screen I opened answered &quot;Page not found&quot;, and the earlier walk found the same.</li><li><code>/opportunities</code> itself also answers &quot;Page not found&quot; when signed in.</li></ul>
+<p>So the routes in <code>surface.yaml</code> that don&#39;t resolve on this target are every Sprint With Us and Team With Us screen, the Code With Us proposal screens and <code>/opportunities</code>. The existing reasons in <code>bindings.yaml</code> already say this, so I left them as they were.</p>
+<p><strong>Sign-in.</strong> Sign-in through the sandbox identity provider worked as the adapter expects, as both the administrator and a vendor: &quot;Sign in as a public sector employee&quot; or &quot;Sign in as a vendor&quot;, then the provider&#39;s &quot;Username&quot; / &quot;Password&quot; / &quot;Sign In&quot; form.</p>
+<p><strong>A stray directory.</strong> The browser tool wrote its snapshot files into <code>.playwright-mcp/</code> at the workspace root. That is outside my territory, so I left it alone; nothing of mine is in it, and it shouldn&#39;t be delivered.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 07:45.</p>
+<div class="body"><p>Question: does the adapter for target <code>new</code> bind every surface action and observation it can, and nothing else? Approve. The only code change is <code>chooseRemote</code> in tests/adapters/new/index.ts. It now finds the &#39;Remote OK: remote work is acceptable&#39; checkbox by role and label and ticks or clears it to match the test&#39;s value. If the box is absent it falls back to the earlier Yes/No radios, and it reports unbound only when neither exists. That is locating and setting a control. It makes no assertion and contains no business logic, and the only other edit is the descriptive comment in bindings.yaml. Nothing under tests/acceptance changed, and the runner&#39;s own typecheck of the proposal&#39;s commit passed with no diagnostics under adapters/new/. The members still unbound (Sprint With Us and Team With Us create, the Code With Us proposal-create screen, the Team With Us evaluation screen) carry real reasons: each names a route that answers &#39;Page not found&#39; on the target, or a missing entry point for a vendor. Each criterion involved (R-1.8, R-8.22, R-6.15) genuinely needs that screen, so none of these is a test reaching past its criterion. The failed egress check flags only pre-existing build-slice records and .sdlc/conditions.yaml, none of which this diff touches. The ruling would change if a verify run still reports the remote-work control missing on the Code With Us form after this change, since the author walked the flow by hand but could not run the suite.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

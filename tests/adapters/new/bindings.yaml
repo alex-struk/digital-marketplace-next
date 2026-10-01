@@ -88,7 +88,7 @@ pages:
   # Bound signed in as the administrator ("Save draft", "Publish" with its "Publish
   # opportunity" confirmation) and as a public sector employee ("Save draft", "Submit for
   # review"). Every input key goes to its field: title, teaser, location, remoteOk (the
-  # "Is remote work acceptable?" Yes/No radios), remoteDesc, reward, skills (the multi-pick
+  # "Remote OK: remote work is acceptable" box), remoteDesc, reward, skills (the multi-pick
   # "Skills" chooser), description and the four dates; a key no field takes is reported
   # unbound by name.
   opportunity-cwu-create:

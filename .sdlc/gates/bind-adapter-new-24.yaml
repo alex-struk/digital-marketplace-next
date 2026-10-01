@@ -1,0 +1,15 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the adapter for target `new` bind every surface action and observation it can, and nothing else? Approve. The only code change is `chooseRemote` in tests/adapters/new/index.ts. It now finds the 'Remote OK: remote work is acceptable' checkbox by role and label and ticks or clears it to match the test's value. If the box is absent it falls back to the earlier Yes/No radios, and it reports unbound only when neither exists. That is locating and setting a control. It makes no assertion and contains no business logic, and the only other edit is the descriptive comment in bindings.yaml. Nothing under tests/acceptance changed, and the runner's own typecheck of the proposal's commit passed with no diagnostics under adapters/new/. The members still unbound (Sprint With Us and Team With Us create, the Code With Us proposal-create screen, the Team With Us evaluation screen) carry real reasons: each names a route that answers 'Page not found' on the target, or a missing entry point for a vendor. Each criterion involved (R-1.8, R-8.22, R-6.15) genuinely needs that screen, so none of these is a test reaching past its criterion. The failed egress check flags only pre-existing build-slice records and .sdlc/conditions.yaml, none of which this diff touches. The ruling would change if a verify run still reports the remote-work control missing on the Code With Us form after this change, since the author walked the flow by hand but could not run the suite.
+conditions: []
+cost: 0.2803584
+turns: 1
+session: "ba7025a1-64be-4e45-a9f8-6b503e580a05"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T07:45:53.006Z
