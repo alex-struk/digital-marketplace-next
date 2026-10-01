@@ -1598,3 +1598,18 @@ conditions:
         typecheck on 4aadbd4eb passed.
       by: agent:reviewer
       at: 2026-10-01T10:03:33.795Z
+  - ref: derive-tests-opportunities-stale-15#1
+    text: "R-1.6: the criterion's 'when' covers anyone 'signed in or not', but
+      tests/acceptance/opportunities/R-1.6.spec.ts only opens the public page
+      signed out. Add a viewing by a signed-in persona that is not staff (e.g.
+      persona.vendor): read the count, open opportunityCwuView signed in as that
+      persona, sign out, read again, and assert an increase of exactly one. Keep
+      the anonymous case. If the surface truly cannot reach a signed-in viewing,
+      record a not-testable.yaml entry for R-1.6 carrying `clause: signed-in
+      visitor opens the public page` with the concrete surface gap instead."
+    from: derive-tests-opportunities-stale-15
+    family: derive-tests-opportunities-stale
+    gate: G3
+    stage: derive-tests
+    by: agent:reviewer
+    at: 2026-10-01T14:01:50.668Z
