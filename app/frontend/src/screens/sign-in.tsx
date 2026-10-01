@@ -37,19 +37,22 @@ function useOnwardIfSignedIn(returnTo: string | null): void {
  * sign-in-required): they will be brought back to it afterwards (R-4.17, R-4.22).
  */
 function SignInRequired({ returnTo }: { returnTo: string }) {
-  const toProfile = returnTo.split(/[?#]/)[0]?.startsWith("/users/") ?? false;
+  const [path, query = ""] = returnTo.split("#")[0]?.split("?") ?? [];
+  const toProfile = path?.startsWith("/users/") ?? false;
+  // Arriving from the unsubscribe offer in a message (notification-unsubscribe-landing ·
+  // sign-in-required): the change applies to whoever signs in (R-6.7).
+  const toUnsubscribe = toProfile && new URLSearchParams(query).has("unsubscribe");
+  const [title, description] = toUnsubscribe
+    ? [
+        "Sign in to unsubscribe",
+        "Once you have signed in you will be taken to your notification settings and asked to confirm. The change applies to the account you sign in with.",
+      ]
+    : toProfile
+      ? ["Sign in to see your profile", "Once you have signed in you will be taken back to your profile."]
+      : ["Sign in to see that page", "Once you have signed in you will be taken back to the page you were on."];
   return (
     <div data-testid="sign-in-required">
-      <InlineAlert
-        variant="info"
-        role="status"
-        title={toProfile ? "Sign in to see your profile" : "Sign in to see that page"}
-        description={
-          toProfile
-            ? "Once you have signed in you will be taken back to your profile."
-            : "Once you have signed in you will be taken back to the page you were on."
-        }
-      />
+      <InlineAlert variant="info" role="status" title={title} description={description} />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { PGlite } from "@electric-sql/pglite";
 import { PGLiteSocketServer } from "@electric-sql/pglite-socket";
 import knexFactory from "knex";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { freePort } from "./free-port";
 
 /**
  * The service as it is started, answering over HTTP, over the schema its own migrations
@@ -11,15 +12,14 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
  *
  * PostgreSQL is PGlite — the same engine, in process — so this needs no container.
  */
-const DB_PORT = 55435;
-const url = `postgresql://postgres:postgres@127.0.0.1:${DB_PORT}/postgres`;
-
 let database: PGlite;
 let socket: PGLiteSocketServer;
 let app: INestApplication;
 let origin: string;
 
 beforeAll(async () => {
+  const DB_PORT = await freePort();
+  const url = `postgresql://postgres:postgres@127.0.0.1:${DB_PORT}/postgres`;
   database = await PGlite.create();
   socket = new PGLiteSocketServer({ db: database, port: DB_PORT, host: "127.0.0.1" });
   await socket.start();

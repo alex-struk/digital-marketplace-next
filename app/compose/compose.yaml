@@ -61,6 +61,12 @@ services:
       SHOW_TEST_INDICATOR: "1"
       SERVICE_ORIGIN: http://localhost:4300
       DISABLE_NOTIFICATIONS: ${SDLC_ORACLE_DISABLE_NOTIFICATIONS:-0}
+      # Where an upload is written before it is stored, and removed from once it has been
+      # answered (R-8.16). In a sandbox namespace it is the backend's emptyDir volume; here a
+      # tmpfs plays that part, writable by the image's unprivileged user.
+      FILE_UPLOADS_DIR: /srv/uploads
+    tmpfs:
+      - /srv/uploads:uid=1000,gid=1000,mode=0700
     expose:
       - "3001"
     depends_on:
