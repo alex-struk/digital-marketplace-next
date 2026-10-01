@@ -19,11 +19,13 @@
 // behind a session were walked signed in (as the vendors, the public sector employee, the
 // administrator, the vendor still to complete a profile and the first-time accounts). The
 // running build serves a signed-in person /dashboard (a greeting and nothing else), their
-// own profile at /users/me or /users/<their own id> with its Notifications and Legal
-// sections, and /sign-up/complete to a vendor still to complete a profile; every other
-// screen that needs a session — opportunities, proposals, organizations, content
-// management, evaluation, /users, and another account's /users/:userId even for the
-// administrator — answers "Page not found". Those screens' open() reports "unbound:
+// own profile at /users/me or /users/<their own id> (editable, with its picture picker) with
+// its Capabilities, Organizations, Notifications and Legal sections, another account's
+// /users/:userId to the administrator, and /sign-up/complete to a vendor still to complete a
+// profile; every other screen that needs a session — opportunities, proposals,
+// organizations, content management, evaluation, /users — answers "Page not found", and
+// /admin/email-notification-reference is not a screen at all (the service answers it 404
+// "Cannot GET", to the administrator too). Those screens' open() reports "unbound:
 // <page>.open — <reason>" only when the address really answers with that refusal, and
 // their members report "unbound: <page>.<member> — <reason>". A member that is about the
 // refusal itself (refused_for_non_administrator, sign_in_required, not_found_page, ...)
@@ -284,7 +286,7 @@ export default function create(
   // What walking the target signed in found: only the dashboard and one's own account screens
   // are served to a signed-in person; everything else answers "Page not found".
   const NOBODY_SIGNS_IN =
-    'walked signed in (as the administrator, and as a vendor for a vendor\'s screens, with the seeded records\' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else) and their own account screens: every opportunity, proposal, organization, content-management and evaluation screen, /opportunities and /organizations included, answers "Page not found"';
+    'walked signed in (as the administrator, and as a vendor for a vendor\'s screens — the seeded organization owner for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else) and the account screens under /users: every opportunity, proposal, organization, content-management and evaluation screen, /opportunities and /organizations included, answers "Page not found"';
 
   // What each such address answered a signed-out visitor when it was last opened: /dashboard
   // and /sign-up/complete send them to /sign-in?redirectOnSuccess=…, and everything else
@@ -300,9 +302,9 @@ export default function create(
   const behindSession = (route: string): string =>
     `${route} is offered only to a signed-in person, and ${NOBODY_SIGNS_IN}; opened signed out (with the seeded record's identifier where it takes one) it ${signedOutAnswer(route)}`;
 
-  // A profile section the running build links to but does not draw.
+  // A profile section the running build links to but does not fill.
   const sectionRedrawn = (route: string, label: string): string =>
-    `walked signed in as a vendor, the "${label}" link under "Profile sections" on the profile goes to ${route}, which draws the Profile section again (heading "User Profile", the account facts and "Details") and nothing about ${label.toLowerCase()}; a public sector account's profile offers no "${label}" link at all, and another account's /users/:userId answers "Page not found", even to the administrator`;
+    `walked signed in as a vendor (the seeded organization owner among them), the "${label}" link under "Profile sections" on the profile goes to ${route}, which draws "My Organizations" and only the line "The organizations you own or belong to will be listed here once organizations can be registered on the Digital Marketplace." — no table, badge, invitation or control, though the seed gives that vendor organizations; a public sector account's profile offers no "${label}" link at all, the administrator is shown another account's profile without that section, and /organizations answers "Page not found"`;
 
   function absent<T>(
     pageId: string,
@@ -2820,10 +2822,17 @@ export default function create(
       }
       unbound(where, `no control named ${control} on ${page.url()} opens a file chooser; it offers ${await offered()}`);
     }
-    const chooser = page.waitForEvent("filechooser", { timeout: 10000 });
+    const chooser = page.waitForEvent("filechooser", { timeout: 5000 }).catch(() => null);
     await button.click();
-    await (await chooser).setFiles(path);
-    await settle();
+    const opened = await chooser;
+    if (opened) {
+      await opened.setFiles(path);
+      await settle();
+      return;
+    }
+    // Walked signed in: "Choose a profile picture" opened no file chooser by click, Enter or
+    // Space, and no file field a person can see sits beside it.
+    unbound(where, `the button ${control} on ${page.url()} opens no file chooser, and nothing a person can see takes a file`);
   }
 
   // The dialog on screen, or nothing when none is open.
@@ -2898,7 +2907,7 @@ export default function create(
       if (why) {
         unbound(
           where(member),
-          `${route} did not open as a screen at ${page.url()}: ${why.replace(/\n+/g, " ")}; the screen is offered only to a signed-in person who may have it; ${NOBODY_SIGNS_IN}, and /users/:userId opens only for the signed-in person's own identifier (another account's answers "Page not found", even to the administrator)`,
+          `${route} did not open as a screen at ${page.url()}: ${why.replace(/\n+/g, " ")}; the screen is offered only to a signed-in person who may have it; ${NOBODY_SIGNS_IN}, and /users/:userId opens for the signed-in person's own identifier and, to the administrator, for another account's`,
         );
       }
     };
@@ -3279,12 +3288,7 @@ export default function create(
     open: () => signUp.open(),
     changeAvatar: async (input) => {
       await onSignUpForm("change_avatar");
-      // While binding, pressing "Choose a profile picture" opened no file chooser, and the
-      // form's only file input is hidden and unlabelled; say so rather than leave a bare timeout.
-      await offerFile(signUp.where("change_avatar"), /avatar|choose image|upload image|picture|photo/i, input).catch((error: Error) => {
-        if (!/filechooser/i.test(error.message)) throw error;
-        unbound(signUp.where("change_avatar"), `signed in as a vendor still to agree, on the "Complete Your Profile" form at ${page.url()}, pressing "Choose a profile picture" opened no file chooser, and no labelled file field is offered`);
-      });
+      await offerFile(signUp.where("change_avatar"), /avatar|choose image|upload image|picture|photo/i, input);
     },
     acceptAppTerms: async (input) => {
       await onSignUpForm("accept_app_terms");
@@ -3360,10 +3364,14 @@ export default function create(
   // Legal), the account facts "Account type: …", "Status: …" and "Account ID: …" each on a
   // line, "Details" with read-only "Sign-in username", "Name", "Email address" (and "Job
   // title" for public sector staff) boxes, and for public sector staff a "Permissions"
-  // section. It offers no edit, save, deactivate or picture control. The Capabilities and
-  // Organizations links go to ?tab=capabilities and ?tab=organizations, which draw the
-  // Profile section again. A vendor still to complete a profile is sent from the profile to
-  // /sign-up/complete, and another account's identifier answers "Page not found".
+  // section. One's own profile offers "Edit profile", which opens "Edit your details" with a
+  // "Profile picture (optional)" group ("Choose a profile picture"), "Name(required)", "Email
+  // address(required)", "Job title (optional)", "Save changes" and "Cancel"; a vendor's also
+  // offers "Deactivate account". ?tab=capabilities draws "Capabilities" (see below), and
+  // ?tab=organizations "My Organizations" with a line saying organizations cannot yet be
+  // registered. A vendor still to complete a profile is sent from the profile to
+  // /sign-up/complete. Another account's /users/:userId opens for the administrator (the
+  // account facts and "Details", nothing to edit) and answers "Page not found" to anyone else.
   const SECTION_HEADINGS: Record<string, RegExp> = {
     capabilities: /capabilit/i,
     organizations: /organi[sz]ations/i,
@@ -3443,8 +3451,9 @@ export default function create(
         const picture = given(input, ["avatar", "image", "picture"]);
         const values = Object.keys(record(input)).length > 0;
         if (values || picture !== undefined) {
+          // The profile draws its boxes read-only until "Edit profile" is pressed.
           const name = await fieldLabelled(PROFILE_FIELDS.name, false);
-          if (!name || (await isDisabled(name))) {
+          if (!name || (await isDisabled(name)) || !(await name.isEditable().catch(() => false))) {
             const edit = await findControl(page, /^\s*edit( profile)?\s*$/i);
             if (edit) {
               await edit.click();
@@ -3460,6 +3469,14 @@ export default function create(
       cancelEditing: () => screen.press("cancel_editing", /^\s*cancel\s*$/i),
       changeAvatar: async (input?: unknown) => {
         await screen.on("change_avatar");
+        // The picture is chosen on the form "Edit profile" opens.
+        if (!(await findControl(page, /^\s*choose (a |a different )?profile picture\s*$/i))) {
+          const edit = await findControl(page, /^\s*edit( profile)?\s*$/i);
+          if (edit && !(await isDisabled(edit))) {
+            await edit.click();
+            await settle();
+          }
+        }
         await offerFile(w("change_avatar"), /avatar|choose image|upload image|picture|photo/i, input);
       },
       deactivateAccount: () => screen.press("deactivate_account", /deactivate( account)?/i),
@@ -3552,6 +3569,133 @@ export default function create(
     signInRequired: () => refusalShown(),
   };
 
+  // ---------------------------------------------------------------- the profile picture
+
+  // Walked signed in (as the administrator and as a vendor): the profile says "No profile
+  // picture has been added." or shows an image "Your current profile picture" (its address
+  // /api/files/<id>?type=blob). "Edit profile" opens "Edit your details", whose first group,
+  // "Profile picture (optional)", carries the rule "A JPEG or PNG image, up to 10 MB. A
+  // picture wider or taller than 500 pixels is made smaller to fit, keeping its proportions.
+  // Anyone can see your profile picture, including people who are not signed in." and a
+  // "Choose a profile picture" button, which opens no file chooser (click, Enter or Space),
+  // so choosing a picture reports unbound. A stored picture is shown as "Your current profile
+  // picture"; refusals are alerts in the group. Readings read what the page shows and never
+  // press "Save changes": saving is userProfileSelf.saveChanges, which a test calls itself.
+  const PICKER_GROUP = /^\s*(profile picture|logo)\b/i;
+  const PICKER_BUTTON = /^\s*choose (a |a different )?(profile picture|logo)\s*$/i;
+  const CURRENT_PICTURE = /^\s*your current profile picture\s*$|current logo/i;
+  const pickerGroup = (): Locator => seen(page.getByRole("group", { name: PICKER_GROUP })).first();
+
+  async function onPicker(member: string): Promise<void> {
+    const where = `file-image-picker.${member}`;
+    const at = new URL(page.url());
+    // On an organization's screens the picker is the logo's, and those screens are not
+    // served; reading the profile's picture instead would answer a different question.
+    if (originOf(page.url()) === originOf(baseURL) && /^\/organizations(\/|$)/.test(at.pathname)) {
+      unbound(where, `the browser is on ${at.pathname}, an organization screen, where the picker would be the logo's; ${NOBODY_SIGNS_IN}`);
+    }
+    const onProfile = originOf(page.url()) === originOf(baseURL) && /^\/(users\/[^/]+|sign-up\/complete)$/.test(at.pathname);
+    if (!onProfile) await go("/users/me");
+    await ready();
+    const why = await whyNotHere();
+    if (why) unbound(where, `/users/me did not open as a screen at ${page.url()}: ${why.replace(/\n+/g, " ")}; the picture picker is offered on one's own profile once signed in`);
+    await seen(page.getByText(/^\s*status:/i).or(page.getByRole("group", { name: PICKER_GROUP })))
+      .first()
+      .waitFor({ state: "visible", timeout: 10000 })
+      .catch(() => undefined);
+  }
+
+  // The picker as drawn on the edit form, opened with "Edit profile" when it is not up.
+  async function pickerShown(member: string): Promise<Locator> {
+    const where = `file-image-picker.${member}`;
+    await onPicker(member);
+    if (!(await pickerGroup().count())) {
+      const edit = await findControl(page, /^\s*edit profile\s*$/i);
+      if (edit && !(await isDisabled(edit))) {
+        await edit.click();
+        await settle();
+        await pickerGroup().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+      }
+    }
+    if (!(await pickerGroup().count())) {
+      unbound(where, `signed in, opened ${page.url()} and pressed "Edit profile" where offered; no "Profile picture" group is drawn; it offers ${await offered()}`);
+    }
+    return pickerGroup();
+  }
+
+  // The address of the stored picture as the page draws it, or nothing when it holds none.
+  async function storedPictureAddress(member: string): Promise<string> {
+    await onPicker(member);
+    const image = seen(page.getByRole("img", { name: CURRENT_PICTURE }));
+    if (!(await image.count())) return "";
+    return (await image.first().getAttribute("src")) ?? "";
+  }
+
+  async function storedPictureSize(member: string, side: "width" | "height"): Promise<string> {
+    const src = await storedPictureAddress(member);
+    if (!src) return "";
+    const size = await page.evaluate(async (href) => {
+      const image = new Image();
+      image.src = new URL(href, window.location.href).href;
+      await image.decode().catch(() => undefined);
+      return { width: image.naturalWidth, height: image.naturalHeight };
+    }, src);
+    return size[side] ? String(size[side]) : "";
+  }
+
+  const fileImagePicker: S.FileImagePickerPage = {
+    open: () => go("/users/me"),
+    chooseImage: async (input) => {
+      await pickerShown("choose_image");
+      await offerFile("file-image-picker.choose_image", PICKER_BUTTON, input);
+    },
+    imageAddress: () => storedPictureAddress("image_address"),
+    currentImage: () => storedPictureAddress("current_image"),
+    // The preview of a picture chosen and not yet saved, by what it says it shows.
+    chosenImagePreview: async () => {
+      await onPicker("chosen_image_preview");
+      const preview = seen(page.getByRole("img", { name: /^\s*preview of\b/i }));
+      if (!(await preview.count())) return "";
+      return (await preview.first().getAttribute("alt"))?.trim() ?? "";
+    },
+    // The rule the picker states against its button, on the edit form.
+    onlyJpegAndPngOffered: async () => {
+      const group = await pickerShown("only_jpeg_and_png_offered");
+      const button = seen(group.getByRole("button", { name: PICKER_BUTTON })).first();
+      if (await button.count()) {
+        const described = await button.evaluate((element) =>
+          (element.getAttribute("aria-describedby") ?? "")
+            .split(/\s+/)
+            .filter(Boolean)
+            .map((id) => document.getElementById(id)?.innerText ?? "")
+            .join("\n"),
+        );
+        if (described.trim()) return described.trim();
+      }
+      return (await paragraphs(group)).filter((words) => /jpe?g|png/i.test(words)).join("\n");
+    },
+    // The refusal the picker draws in its group, as it stands; none reads as nothing.
+    rejectedImageError: async () => {
+      await onPicker("rejected_image_error");
+      if (!(await pickerGroup().count())) return "";
+      const alerts = seen(pickerGroup().getByRole("alert"));
+      return (await alerts.allInnerTexts()).map((words) => words.trim()).filter(Boolean).join("\n");
+    },
+    // The stored picture asked for with no session (no cookie, no credentials): its type when
+    // it is answered, nothing when it is refused or there is no picture.
+    imageReadableWhenSignedOut: async () => {
+      const src = await storedPictureAddress("image_readable_when_signed_out");
+      if (!src) return "";
+      const answer = await page.evaluate(async (href) => {
+        const response = await fetch(new URL(href, window.location.href).href, { credentials: "omit" });
+        return { ok: response.ok, type: response.headers.get("content-type") ?? "" };
+      }, src);
+      return answer.ok ? answer.type || "answered" : "";
+    },
+    storedImageWidth: () => storedPictureSize("stored_image_width", "width"),
+    storedImageHeight: () => storedPictureSize("stored_image_height", "height"),
+  };
+
   // ---------------------------------------------------------------- the signed-in person's notices
 
   // A section of one's own account: /users/me?tab=… or /users/<own id>?tab=…. The client sends
@@ -3626,6 +3770,109 @@ export default function create(
     };
   }
   const userProfileSelfNotifications: S.UserProfileSelfNotificationsPage = noticesScreen("user-profile-self-notifications", "/users/me?tab=notifications");
+
+  // ---------------------------------------------------------------- the signed-in person's capabilities
+
+  // Walked signed in as a vendor: "Capabilities" over "Tick each capability you have. Your
+  // choices are saved as you make them, and you may leave them all unticked." and a list
+  // named "Capabilities", one item per capability: a box named for it ("Agile Coaching")
+  // and a "Show description of Agile Coaching" button, which turns into "Hide description of
+  // …" and draws the description as a paragraph under it. Ticking or unticking a box saves
+  // it at once and says so in a status line ("Saved. DevOps Engineering is recorded as a
+  // capability you hold." / "… is no longer recorded."). The same section is drawn at
+  // /users/<own id>?tab=capabilities. A public sector account's profile has no such section,
+  // and the administrator is shown another account's profile without it.
+  const CAPABILITY_KEYS = ["capability", "name", "title", "label", "capabilityName"];
+  const escapeText = (words: string): string => words.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  function capabilitiesScreen(pageId: string, route: string) {
+    const screen = accountSection(pageId, route);
+    const list = (): Locator => seen(page.getByRole("list", { name: /^\s*capabilities\s*$/i })).first();
+    // True when the list is drawn. An action needs it and reports unbound without it; a
+    // reading of a section that opened without it is the empty answer.
+    async function onList(member: string, needed: boolean): Promise<boolean> {
+      await screen.on(member);
+      await list().waitFor({ state: "visible", timeout: 10000 }).catch(() => undefined);
+      if (await list().count()) return true;
+      if (needed) {
+        unbound(
+          screen.where(member),
+          `signed in, opened ${page.url()}: it draws "${await firstHeading()}" and no list of capabilities to tick (walked as a vendor the list is there; a public sector account's profile has no Capabilities section, and another account's profile is drawn to the administrator without one)`,
+        );
+      }
+      return false;
+    }
+    const capabilityOf = (input: unknown): string => (typeof input === "string" ? input : givenText(input, CAPABILITY_KEYS)).trim();
+    async function boxFor(member: string, input: unknown): Promise<Locator> {
+      const name = capabilityOf(input);
+      if (!name) unbound(screen.where(member), `the input names no capability (looked for ${CAPABILITY_KEYS.join(", ")}; given ${JSON.stringify(input)})`);
+      const box = seen(list().getByRole("checkbox", { name: new RegExp(`^\\s*${escapeText(name)}\\s*$`, "i") }));
+      if (!(await box.count())) {
+        const names = await seen(list().getByRole("checkbox")).evaluateAll((boxes) =>
+          boxes.map((element) => element.getAttribute("aria-label") ?? (element as HTMLInputElement).labels?.[0]?.innerText ?? ""),
+        );
+        unbound(screen.where(member), `no capability named "${name}" on ${page.url()}; it lists ${names.filter(Boolean).join(", ") || "none"}`);
+      }
+      return box.first();
+    }
+    async function boxNames(onlyTicked: boolean): Promise<string[]> {
+      const boxes = seen(list().getByRole("checkbox"));
+      const out: string[] = [];
+      for (let i = 0; i < (await boxes.count()); i++) {
+        const box = boxes.nth(i);
+        if (onlyTicked && !(await box.isChecked())) continue;
+        const item = box.locator("xpath=ancestor::li[1]");
+        const first = lined(await item.innerText().catch(() => ""))[0] ?? "";
+        out.push(first);
+      }
+      return out.filter(Boolean);
+    }
+    return {
+      open: (params?: Record<string, string>) => screen.open(params),
+      toggleCapability: async (input?: unknown) => {
+        const where = screen.where("toggle_capability");
+        await onList("toggle_capability", true);
+        const box = await boxFor("toggle_capability", input);
+        if (await isDisabled(box)) throw new Error(`${where} — the box for "${capabilityOf(input)}" is disabled on ${page.url()}`);
+        const was = await box.isChecked();
+        const wanted = boxWanted(input, ["held", "selected", "ticked", "has"]);
+        if (wanted !== undefined && wanted === was) return;
+        await box.click();
+        // The choice is saved as it is made, and the status line says so.
+        await seen(page.getByRole("status").filter({ hasText: /saved|could not|failed|error/i }))
+          .first()
+          .waitFor({ state: "visible", timeout: 10000 })
+          .catch(() => undefined);
+        await settle();
+        if ((await box.isChecked()) === was) {
+          const said = (await page.getByRole("status").allInnerTexts().catch(() => [])).join(" ").trim();
+          throw new Error(`${where} — pressing "${capabilityOf(input)}" on ${page.url()} left it ${was ? "ticked" : "unticked"}${said ? `; it says: ${said}` : ""}`);
+        }
+      },
+      expandCapabilityDescription: async (input?: unknown) => {
+        const where = screen.where("expand_capability_description");
+        await onList("expand_capability_description", true);
+        const name = capabilityOf(input);
+        const of = name ? escapeText(name) : ".+";
+        const shown = seen(list().getByRole("button", { name: new RegExp(`^\\s*hide description of ${of}\\s*$`, "i") }));
+        if (name && (await shown.count())) return;
+        const toggle = seen(list().getByRole("button", { name: new RegExp(`^\\s*show description of ${of}\\s*$`, "i") }));
+        if (!(await toggle.count())) unbound(where, `no "Show description of ${name || "…"}" button on ${page.url()}`);
+        await toggle.first().click();
+        await settle();
+      },
+      // One line per capability the section lists, in its order.
+      capabilityRow: async () => ((await onList("capability_row", false)) ? (await boxNames(false)).join("\n") : ""),
+      // The capabilities whose boxes are ticked, one per line; none ticked reads as nothing.
+      capabilityChecked: async () => ((await onList("capability_checked", false)) ? (await boxNames(true)).join("\n") : ""),
+      // The descriptions drawn open, one per line; none open reads as nothing.
+      capabilityDescription: async () => {
+        if (!(await onList("capability_description", false))) return "";
+        return (await paragraphs(list())).join("\n");
+      },
+    };
+  }
+  const userProfileSelfCapabilities: S.UserProfileSelfCapabilitiesPage = capabilitiesScreen("user-profile-self-capabilities", "/users/me?tab=capabilities");
+  const userProfileCapabilities: S.UserProfileCapabilitiesPage = capabilitiesScreen("user-profile-capabilities", "/users/:userId?tab=capabilities");
 
   // ---------------------------------------------------------------- the signed-in person's policies and terms
 
@@ -4382,18 +4629,7 @@ export default function create(
 
     userProfile,
 
-    userProfileCapabilities: absent<S.UserProfileCapabilitiesPage>(
-      "user-profile-capabilities",
-      "/users/:userId?tab=capabilities",
-      sectionRedrawn("/users/:userId?tab=capabilities", "Capabilities"),
-      [
-        "toggle_capability",
-        "expand_capability_description",
-        "capability_row",
-        "capability_checked",
-        "capability_description",
-      ],
-    ),
+    userProfileCapabilities,
 
     userProfileNotifications: noticesScreen("user-profile-notifications", "/users/:userId?tab=notifications") as S.UserProfileNotificationsPage,
 
@@ -4401,18 +4637,7 @@ export default function create(
 
     userProfileSelf,
 
-    userProfileSelfCapabilities: absent<S.UserProfileSelfCapabilitiesPage>(
-      "user-profile-self-capabilities",
-      "/users/me?tab=capabilities",
-      sectionRedrawn("/users/me?tab=capabilities", "Capabilities"),
-      [
-        "toggle_capability",
-        "expand_capability_description",
-        "capability_row",
-        "capability_checked",
-        "capability_description",
-      ],
-    ),
+    userProfileSelfCapabilities,
 
     userProfileSelfNotifications,
 
@@ -4768,12 +4993,14 @@ export default function create(
       ],
     ),
 
-    // The service answers this address itself: signed out, 401 with the plain text "You do
-    // not have permission to perform this action.", which is what the refusal reads.
+    // The service answers this address itself, and is no screen: signed in as the
+    // administrator it answers 404 {"errors":["Cannot GET /admin/email-notification-reference"]},
+    // and /api/email-notification-reference and /api/admin/email-notification-reference are
+    // 404 too. The refusal reader reads whatever refusal the address gives a non-administrator.
     notificationEmailReference: absent<S.NotificationEmailReferencePage>(
       "notification-email-reference",
       "/admin/email-notification-reference",
-      `/admin/email-notification-reference is answered only to a signed-in administrator, and ${NOBODY_SIGNS_IN}; opened signed out the service answers it 401 "You do not have permission to perform this action."`,
+      `signed in as the administrator (test-admin) and opened /admin/email-notification-reference: the service answers it 404 {"errors":["Cannot GET /admin/email-notification-reference"]} rather than drawing a screen, the same addresses under /api answer 404 "not found", and no link on the administrator's dashboard or profile leads to an email reference; ${NOBODY_SIGNS_IN}`,
       ["open_reference", "message_group_title", "message_subject", "message_summary", "message_body"],
       ["refused_for_non_administrator"],
     ),
@@ -4924,22 +5151,7 @@ export default function create(
       },
     } as S.FileAttachmentControlPage,
 
-    fileImagePicker: absent<S.FileImagePickerPage>(
-      "file-image-picker",
-      "/users/me",
-      'walked signed in as vendors, the public sector employee and the administrator, the profile at /users/me says "No profile picture has been added." and offers no picture control; the only one is "Choose a profile picture" on /sign-up/complete, which opened no file chooser (the form\'s file input is hidden and unlabelled), and the organization screens answer "Page not found"',
-      [
-        "choose_image",
-        "image_address",
-        "current_image",
-        "chosen_image_preview",
-        "only_jpeg_and_png_offered",
-        "rejected_image_error",
-        "image_readable_when_signed_out",
-        "stored_image_width",
-        "stored_image_height",
-      ],
-    ),
+    fileImagePicker,
 
     fileEmbeddedImage: absent<S.FileEmbeddedImagePage>(
       "file-embedded-image",
