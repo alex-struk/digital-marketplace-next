@@ -18,8 +18,8 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 1
 
 ### Slice 3 · A person can keep their own profile, picture and notification choice
-- criteria: R-4.5, R-4.6, R-4.8, R-4.9, R-4.18, R-4.25, R-4.26, R-4.27, R-4.28, R-4.29, R-4.34, R-6.7, R-8.1, R-8.2, R-8.5, R-8.6, R-8.7, R-8.10, R-8.11, R-8.12, R-8.13, R-8.16, R-8.18, R-8.21, R-8.23, R-8.24, R-8.28, R-8.30
-- delivers: the profile at `/users/:userId` and `/users/me` with the sections each kind of account is offered (profile, capabilities, organizations placeholder, notifications, legal), editing one's own details, the profile-picture picker, vendor capabilities, the notifications section and the unsubscribe landing every message links to, self-deactivation with its notice and reactivation on next sign-in; and underneath the picture, the whole file store — upload at `/api/files` and `/api/avatars`, content-deduplicated storage in the database, read-access rules, description and download, size and name limits, image type checks and resizing, the upload working directory on the backend's `emptyDir` volume, downloads fetched by the single-page app with the bearer token, and correct refusals for malformed uploads
+- criteria: R-4.5, R-4.6, R-4.8, R-4.9, R-4.18, R-4.25, R-4.26, R-4.27, R-4.28, R-4.29, R-4.34, R-6.7, R-8.1, R-8.2, R-8.5, R-8.6, R-8.7, R-8.10, R-8.11, R-8.12, R-8.16, R-8.18, R-8.23, R-8.24
+- delivers: the profile at `/users/:userId` and `/users/me` with the sections each kind of account is offered (profile, capabilities, organizations placeholder, notifications, legal), editing one's own details, the profile-picture picker, vendor capabilities, the notifications section and the unsubscribe landing every message links to, self-deactivation with its notice and reactivation on next sign-in; and underneath the picture, the whole file store — upload at `/api/files` and `/api/avatars`, content-deduplicated storage in the database, read-access rules, description and download, size and name limits, image type checks and resizing (built here for the picture, answered for in Slice 11 — see below), the upload working directory on the backend's `emptyDir` volume, downloads fetched by the single-page app with the bearer token, and correct refusals for malformed uploads
 - depends on: Slice 2
 
 ### Slice 4 · An administrator can manage people's accounts
@@ -58,8 +58,8 @@ the openshift-ts stack profile with the two departures recorded in `docs/decisio
 - depends on: Slice 7
 
 ### Slice 11 · A vendor can register and look after an organization
-- criteria: R-3.1, R-3.2, R-3.3, R-3.6, R-3.15, R-3.18, R-3.19, R-3.20, R-3.21, R-3.22, R-3.23, R-3.24
-- delivers: the public organization list with role-dependent columns, registering an organization with its logo, the organization management page's profile tab with edit and archive offered only to the owner and administrators, the owner's archive notice, and the list of organizations a vendor may act for
+- criteria: R-3.1, R-3.2, R-3.3, R-3.6, R-3.15, R-3.18, R-3.19, R-3.20, R-3.21, R-3.22, R-3.23, R-3.24, R-8.13, R-8.21, R-8.28, R-8.30
+- delivers: the public organization list with role-dependent columns, registering an organization with its logo, the organization management page's profile tab at `/organizations/:orgId/edit` with edit and archive offered only to the owner and administrators, the owner's archive notice, and the list of organizations a vendor may act for; and the four image rules that cover both a profile picture and a logo — narrowing to 500 pixels (R-8.13), JPEG or PNG content only with an unresizable image kept at its size (R-8.21), readable by anyone so a logo shows on the public list (R-8.28) and the .jpg/.jpeg/.png name check (R-8.30) — answered for here, where both halves of each can be shown, on the image route Slice 3 built for the profile picture
 - depends on: Slice 3
 
 ### Slice 12 · An organization can build its team

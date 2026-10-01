@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>plan-11 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">391</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">385</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">339</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>plan-11</h1>
+<p class="lede">G2 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G2</td></tr><tr><th scope="row">opened</th><td>2026-10-01 02:19</td></tr><tr><th scope="row">holder</th><td>agent:architect</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Is this the right cut of the work, and does each slice stand on its own?</h2>
+<p><strong>Recommendation.</strong> I took up the one request this revision carries, from the G3 ruling on build slices 3–4, and changed nothing else in the plan.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I took up the one request this revision carries, from the G3 ruling on build slices 3–4, and changed nothing else in the plan. There are still twenty-one slices in the same order, and none of the existing decision records changed.</p>
+<p><strong>What I changed.</strong> Slice 3 had claimed R-8.13, R-8.21, R-8.28 and R-8.30 in full. Each of these covers both a profile picture and an organization logo. The acceptance suite tests the logo half on <code>/organizations/:orgId/edit</code>, and for R-8.28 on the public organization list as well. Slice 3 builds neither screen, so the verify run found those halves unbound or failing while the picture halves passed.</p>
+<ul><li><strong>Where they went:</strong> all four criteria now sit whole in Slice 11. That slice builds the organization list and the management page&#39;s profile tab with its logo, and its stated deliverable now names <code>/organizations/:orgId/edit</code> and the four image rules.</li><li><strong>Why the picture halves still work there:</strong> Slice 11 already depends on Slice 3, so it can show both halves of each criterion.</li><li><strong>What stays in Slice 3:</strong> the image route, type checks and resizing are still built in Slice 3. Its deliverable text now says these four criteria are answered for in Slice 11. The logo is just a second caller of the same route.</li><li><strong>Count:</strong> Slice 3 drops from 28 criteria to 24 and Slice 11 grows from 12 to 16. Each of the four appears in exactly one slice&#39;s criteria list.</li></ul>
+<p><strong>Options I turned down.</strong></p>
+<ul><li><strong>Making Slice 11 a prerequisite of Slice 3:</strong> this would hold profile editing back behind organizations, and everything that depends on Slice 3 (Slices 4, 5, 7 and 11 itself) would wait with it.</li><li><strong>Moving only the logo halves:</strong> this would need new criterion IDs, and authoring those belongs to the spec stage, not this one.</li></ul>
+<p><code>plan/plan.md</code> now has a paragraph on these four criteria under &quot;Criteria that sit awkwardly where they are&quot;. It gives the reason for the move and the alternatives turned down. It also notes the same unease as with R-8.17: the behaviour is built in one slice and answered for in a later one, where every half of its test can run.</p>
+<p><strong>What I could not do.</strong> I couldn&#39;t run the coverage checker, <code>plan/check-coverage.mjs</code>, because running it needed approval and nobody was there to give it. I checked by search instead that each of the four moved criteria appears in exactly one criteria line. I didn&#39;t re-check the full set of 248 mechanically, but no other placement changed.</p>
+<p>I assumed nothing new about the stack or the platform, wrote no new decision record, and found no condition addressed to a person.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:architect (persona agent · claude claude-opus-5-5) on 2026-10-01 02:19.</p>
+<div class="body"><p>Question: is this the right cut of the work, and does each slice stand on its own, now that the plan has taken up the G3 request from build-slice-3-4? Ruling: approve. R-8.13, R-8.21, R-8.28 and R-8.30 each cover a profile picture and an organization logo. The acceptance suite tests the logo half on /organizations/:orgId/edit, and for R-8.28 on the public organization list too. Slice 3 builds neither screen. Slice 11 builds both and already depends on Slice 3, so it can show both halves of each criterion. Moving all four whole to Slice 11 is the right cut. Splitting each criterion into a picture half and a logo half would need new criterion IDs, which only the spec stage can author. Making Slice 11 a prerequisite of Slice 3 would hold Slices 4, 5, 7 and 11 behind organizations. The proposal rejects both alternatives for these reasons. Slice 3&#39;s deliverable still builds the image route, type checks and resizing, and says those rules are answered for in Slice 11. Slice 3 still stands on its own with its remaining 24 criteria. A search of plan/tasks.md shows each of the four criteria in exactly one criteria line, Slice 11&#39;s. The full coverage checker was not run, but the diff only moves those four IDs between two slices, so no criterion lost its slice. As architect: no schema change, no new dependency, no change to the stack or to any decision record, and the tier is STANDARD, so nothing has to be escalated. No J3 forbidden pattern appears. The plan.md note says the move is uneasy in the same way as R-8.17: the behaviour is built in one slice and answered for in a later one. That is a fair statement of the cost. The owed conditions build-slice-3-4#3, #4 and #5 belong to build and are not settled by this plan change. #3 and #4 describe picture-picker behaviour that Slice 3 still builds, so they remain owed by build. I leave all three open on purpose. This ruling would change if a criterion were found in no slice or in two, or if Slice 11 turned out not to build the /organizations/:orgId/edit screen its deliverable now names.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

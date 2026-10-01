@@ -2,6 +2,7 @@
 
 | When | Proposal | Gate | Verdict | By | Made by | Cost | Sample |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| 2026-10-01T02:19:32.091Z | plan-11 | G2 | approve | agent:architect | persona agent · claude claude-opus-5-5 | $0.3352162 |  |
 | 2026-10-01T02:02:15.991Z | design-users-3 | G-DESIGN | approve | agent:ux-reviewer | persona agent · claude claude-opus-5-5 | $0.36282939999999997 | sample |
 | 2026-10-01T01:53:10.319Z | plan-10 | G2 | approve | agent:architect | persona agent · claude claude-opus-5-5 | $0.4457323999999999 |  |
 | 2026-10-01T01:51:36.266Z | plan-9 | G2 | return | agent:architect | persona agent · claude claude-opus-5-5 | $0.8624318 |  |
