@@ -2929,21 +2929,52 @@ export default function create(
   // or a number under a name that carries the unit (sizeMB, megabytes, sizeKB). A size the
   // test gave and this cannot read is left out rather than guessed, and the content (or the
   // harness's default) decides the file. Units are binary: the service's 10 MB is 10 × 1024².
+  //
+  // Walked as the administrator: POST /api/files stores a file of 10,485,760 bytes (201) and
+  // refuses one of 10,485,761 with 413 "The file is larger than 10 MB. Upload a file of 10 MB
+  // or smaller."; a size this did not read left the harness's few-byte default to be sent, which
+  // was stored, and refused_for_size then read '' (R-8.17). So a size is also read from any key
+  // that names one (fileSize, sizeInMegabytes, length), with its unit spelled out ("11
+  // megabytes") or relative to the limit ("over 10 MB", "10 MB + 1 byte"), and an input that
+  // only says the file is over the limit (oversized, tooLarge, exceedsLimit) is 11 MB.
   function bytesGiven(input: unknown): number | undefined {
-    const UNIT: Record<string, number> = { b: 1, byte: 1, bytes: 1, kb: 1024, kib: 1024, mb: 1024 ** 2, mib: 1024 ** 2, gb: 1024 ** 3, gib: 1024 ** 3 };
+    const UNIT: Record<string, number> = {
+      b: 1, byte: 1, bytes: 1,
+      k: 1024, kb: 1024, kib: 1024, kilobyte: 1024, kilobytes: 1024,
+      m: 1024 ** 2, mb: 1024 ** 2, mib: 1024 ** 2, megabyte: 1024 ** 2, megabytes: 1024 ** 2,
+      g: 1024 ** 3, gb: 1024 ** 3, gib: 1024 ** 3, gigabyte: 1024 ** 3, gigabytes: 1024 ** 3,
+    };
+    const amount = (said: string, scale: number): number | undefined => {
+      const one = /^\s*(\d+(?:\.\d+)?)\s*([a-z]*)\s*$/i.exec(said);
+      if (!one) return undefined;
+      const unit = one[2].toLowerCase();
+      const factor = unit ? UNIT[unit] : scale;
+      return factor === undefined ? undefined : Math.round(Number(one[1]) * factor);
+    };
     const read = (value: unknown, scale: number): number | undefined => {
       if (typeof value === "number" && Number.isFinite(value) && value >= 0) return Math.round(value * scale);
       if (typeof value !== "string") return undefined;
-      const said = /^\s*(\d+(?:\.\d+)?)\s*([a-z]*)\s*$/i.exec(value.replace(/[,_]/g, ""));
-      if (!said) return undefined;
-      const unit = said[2].toLowerCase();
-      const factor = unit ? UNIT[unit] : scale;
-      return factor === undefined ? undefined : Math.round(Number(said[1]) * factor);
+      const text = value.replace(/[,_]/g, "").trim();
+      const whole = amount(text, scale);
+      if (whole !== undefined) return whole;
+      // "10 MB + 1 byte", "10MB+1"
+      const sum = /^(.+?)\s*\+\s*(.+)$/.exec(text);
+      if (sum) {
+        const [a, b] = [amount(sum[1], scale), amount(sum[2], 1)];
+        if (a !== undefined && b !== undefined) return a + b;
+      }
+      // "over 10 MB", "more than 10 MB", "> 10 MB", "larger than 10 MB"
+      const over = /^(?:over|more than|larger than|bigger than|greater than|above|exceeding|>)\s*(.+)$/i.exec(text);
+      if (over) {
+        const limit = amount(over[1], scale);
+        if (limit !== undefined) return limit + 1;
+      }
+      return undefined;
     };
     const scaled: [string[], number][] = [
-      [["bytes", "size", "sizeBytes", "size_bytes", "sizeInBytes", "byteLength"], 1],
-      [["kilobytes", "sizeKB", "size_kb", "kb", "sizeKiB"], 1024],
-      [["megabytes", "sizeMB", "size_mb", "mb", "sizeMiB"], 1024 ** 2],
+      [["bytes", "size", "sizeBytes", "size_bytes", "sizeInBytes", "byteLength", "fileSize", "fileSizeBytes", "length", "byteSize"], 1],
+      [["kilobytes", "sizeKB", "size_kb", "kb", "sizeKiB", "sizeInKB", "sizeInKilobytes", "fileSizeKB"], 1024],
+      [["megabytes", "sizeMB", "size_mb", "mb", "sizeMiB", "sizeInMB", "sizeInMegabytes", "fileSizeMB"], 1024 ** 2],
     ];
     for (const [names, scale] of scaled) {
       const value = given(input, names);
@@ -2951,6 +2982,16 @@ export default function create(
       const bytes = read(value, scale);
       if (bytes !== undefined) return bytes;
     }
+    // Any other key that names a size, read with the unit its name or its value carries.
+    for (const [key, value] of Object.entries(record(input))) {
+      const name = squash(key);
+      if (!/size|bytes|megabyte|kilobyte/.test(name)) continue;
+      const scale = /mb|mib|megabyte/.test(name) ? 1024 ** 2 : /kb|kib|kilobyte/.test(name) ? 1024 : 1;
+      const bytes = read(value, scale);
+      if (bytes !== undefined) return bytes;
+    }
+    const over = given(input, ["oversized", "tooLarge", "tooBig", "overLimit", "overSizeLimit", "exceedsLimit", "exceedsSizeLimit", "largerThanLimit"]);
+    if (over === true) return 11 * 1024 ** 2;
     return undefined;
   }
 

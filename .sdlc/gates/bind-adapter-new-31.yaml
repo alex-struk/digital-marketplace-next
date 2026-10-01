@@ -1,0 +1,6 @@
+gate: G3
+verdict: approve
+by: tech-lead
+held_by: human
+note: "Ruled by the operator agent under Alex's standing delegation (2026-09-30). The change is narrow and harmless; the escalation is right that the request it answered cannot be answered by bind-adapter, which is blind to tests. Verify now names the line a test failed at (docs/decisions/0084), so R-8.17's next verify says which assertion read empty and routes from there."
+at: 2026-10-01T10:33:04.582Z

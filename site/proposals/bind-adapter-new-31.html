@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-31 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">429</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">423</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">362</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-31</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 10:31</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I changed how the adapter reads a file size from a test&#39;s input.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I changed how the adapter reads a file size from a test&#39;s input. R-8.17 was not re-run as a test: this workspace has no <code>tests/acceptance/</code> and no installed <code>node_modules</code>, so I can&#39;t confirm the change fixes it. Request 1 is answered from the running target instead. R-1.48 and R-1.9 stay unbound because both create screens are still missing.</p>
+<p><strong>Which step read &#39;&#39; in R-8.17.</strong> It was <code>fileUpload.refusedForSize</code>, not <code>sizeLimitStatedBeforeChoosing</code>. Signed in as the administrator, I checked both readers against the target:</p>
+<ul><li><strong>The size-limit reader works.</strong> On the seeded published Code With Us opportunity&#39;s form (<code>/opportunities/code-with-us/00000000-0000-4000-8000-000000000601/edit?tab=opportunity</code>) and on <code>/opportunities/code-with-us/create</code>, the &quot;Attachments&quot; section contains the line &quot;Any type of file, up to 10 MB each.&quot; The reader&#39;s own pattern returns exactly that line on both pages.</li><li><strong>The on-screen refusal works too.</strong> I attached an 11 MB file through the form&#39;s own file input. The section showed &quot;big.pdf is too large to attach … Attachments must be 10 MB or smaller.&quot; in an alert inside the section, which is where <code>uploadRefusedForSize</code> looks.</li><li><strong>The upload service draws the line at exactly 10 MB, counted as 10 × 1024 × 1024 bytes.</strong> <code>POST /api/files</code> stored files of 100, 10,000,001 and 10,485,760 bytes (201). It refused 10,485,761 bytes and up with 413: &quot;The file is larger than 10 MB. Upload a file of 10 MB or smaller.&quot;</li><li><strong>So <code>refusedForSize</code> returns &#39;&#39; only when the service stored the file.</strong> It reports any refusal in the 400s and returns nothing when the file was stored. With no read access stated, even a small file is refused with 400, which reads as non-empty. An empty reading therefore means the request was sent with valid read access and a file of 10 MB or less.</li><li><strong>The most likely cause is the adapter not recognising the test&#39;s size.</strong> When it can&#39;t read a size from the input, it sends a few-byte placeholder file, which the service stores. A size written in decimal megabytes that lands between 10,000,000 and 10,485,760 bytes would also be stored.</li></ul>
+<p><strong>What I changed.</strong> I only changed the function that reads a size from a test&#39;s input (<code>bytesGiven</code> in <code>tests/adapters/new/index.ts</code>). It now also reads:</p>
+<ul><li>any key whose name says it is a size, such as <code>fileSize</code>, <code>sizeInMegabytes</code> or <code>approxSizeMB</code>, using the unit the name carries;</li><li>units spelled out, such as &quot;11 megabytes&quot;;</li><li>sizes stated relative to the limit, such as &quot;over 10 MB&quot;, &quot;&gt; 10 MB&quot; or &quot;10 MB + 1 byte&quot; (the limit plus one byte);</li><li>flags like <code>oversized</code>, <code>tooLarge</code> or <code>exceedsLimit</code>, which become an 11 MB file.</li></ul>
+<p>I checked the new parsing by running the same logic as plain JavaScript against sample inputs. I couldn&#39;t typecheck it because no TypeScript compiler is installed here. <code>refusedForSize</code> still returns &#39;&#39; when the service really did store the file, because that empty result is a correct answer. Nothing else in the adapter or in <code>bindings.yaml</code> changed.</p>
+<p><strong>R-1.48 and R-1.9 stay unbound.</strong> I signed in again as the administrator and then as the public sector employee. <code>/opportunities/create</code> offers &quot;Create a Sprint With Us opportunity&quot; and &quot;Create a Team With Us opportunity&quot;. Following each link lands on &quot;Page not found&quot; at <code>/opportunities/sprint-with-us/create</code> and <code>/opportunities/team-with-us/create</code>. I also tried <code>/new</code> and the short <code>swu</code>/<code>twu</code> forms of both addresses, and every one answers &quot;Page not found&quot;. The existing reasons for <code>opportunity-swu-create.open</code> and <code>opportunity-twu-create.open</code> still hold, so I left them as they were.</p>
+<p>The administrator&#39;s dashboard has changed since the earlier walk. It now has &quot;Create an opportunity&quot; and an &quot;All opportunities&quot; table that lists only the seeded Code With Us opportunities. The stored unbound reasons still describe <code>/dashboard</code> as &quot;a greeting and nothing else&quot;. I didn&#39;t rewrite them because this revision was limited to the named conditions; whoever picks this up next may want to.</p>
+<p>These routes in <code>surface.yaml</code> did not resolve on the target: <code>/opportunities/sprint-with-us/create</code> and <code>/opportunities/team-with-us/create</code>.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by tech-lead (a person) on 2026-10-01 10:33.</p>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
