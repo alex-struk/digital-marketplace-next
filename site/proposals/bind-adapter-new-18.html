@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-18 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">400</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">394</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">345</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-18</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 04:38</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I rebound <code>contentView.publishedDate</code> and <code>contentView.updatedDate</code> in the adapter for target <code>new</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I rebound <code>contentView.publishedDate</code> and <code>contentView.updatedDate</code> in the adapter for target <code>new</code>. They now read the date from the public page&#39;s own list of labelled terms, as the ruling asked. I changed nothing else, and I could not typecheck the file.</p>
+<p><strong>What I confirmed on the running target.</strong> Signed out, I opened the seeded page at <code>/content/about-us</code>. Under the heading it shows two labelled entries: &quot;Published&quot;, with January 5, 2026 in the element after it, and &quot;Last updated&quot;, with January 7, 2026. There is no &quot;Published … | Updated …&quot; line on that page. The old reader searched for one, never found it, and so <code>updatedDate</code> returned an empty string both before and after an edit. That is why R-7.8&#39;s <code>not.toBe(readerUpdatedBefore)</code> failed against &quot;&quot;.</p>
+<p><strong>What I changed in <code>tests/adapters/new/index.ts</code>.</strong> There is a new helper, <code>publicDate</code>, next to <code>contentFact</code>. It waits for the page to settle, then looks for the named entry (&quot;Published&quot; or &quot;Last updated&quot;) in the page&#39;s main area. If the entry is missing, it throws <code>unbound: content-view.published_date</code> or <code>unbound: content-view.updated_date</code>, naming the address and the missing entry, instead of returning &#39;&#39;. If it is there, it returns the value from the element that follows, using the same <code>contentFact</code> that <code>contentEdit.updatedDate</code> already relies on. Both content-view members now call it. The existing rule that the not-found page returns &#39;&#39; stays as it was: a missing page is a place the test reached that legitimately has no date.</p>
+<p><strong>What I left alone.</strong> The old <code>datedLine</code> helper is still in the file because the opportunity view&#39;s <code>publishedDate</code> uses it. The ruling did not name that member, so I did not touch it. <code>bindings.yaml</code> needed no change, since both members were already listed as <code>bound</code> and still are.</p>
+<p><strong>Not verified.</strong> The typechecker could not run because this session needed approval for the command and none was given, so the file has not been compiled. Instead I checked by hand that every name the new code uses is defined in the same <code>create</code> scope. In the browser I confirmed that each entry&#39;s following element holds the date. I did not run the acceptance suite.</p>
+<p>All requests in the ruling were taken up; none are deferred.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 04:39.</p>
+<div class="body"><p>The question is whether the target <code>new</code> adapter now binds <code>contentView.publishedDate</code> and <code>contentView.updatedDate</code> correctly, and whether it still does nothing but navigation and locating. It does. The diff touches only <code>tests/adapters/new/index.ts</code>. A new helper, <code>publicDate</code>, finds the &#39;Published&#39; or &#39;Last updated&#39; entry in the main area of the public page&#39;s term list and reads the date from the element after it, using the same <code>contentFact</code> that <code>contentEdit.updatedDate</code> already uses. When the entry is missing, it now throws an unbound error naming the address and the entry instead of returning an empty string, so a missing date can no longer pass silently as &#39;&#39;. That is what made R-7.8&#39;s <code>not.toBe(readerUpdatedBefore)</code> fail before. The adapter makes no assertion and contains no business logic. The existing behaviour where the not-found page returns &#39;&#39; is unchanged, which is legitimate because that page has no date to show. Nothing under <code>tests/acceptance</code> changed, and no protected path is touched. The author could not compile the file, but the runner&#39;s typecheck on this revision passed with no diagnostics under <code>adapters/new/</code>. The egress failures are all in proposal and gate files from earlier slices and are not in this diff. The tier is STANDARD and no residual risk is marked unaccepted, so nothing needs escalating. I would return this if a verify run showed either member answering unbound on a seeded published page that does display the entry. That would mean the term locator, an exact case-insensitive match on the entry text within the main area, misses how the page marks it up.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
