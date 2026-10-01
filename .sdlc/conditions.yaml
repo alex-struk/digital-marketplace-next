@@ -1386,6 +1386,14 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-01T02:18:11.278Z
+    closed:
+      outcome: met
+      why: save() in app/frontend/src/screens/user-profile.tsx (lines 496-508) awaits
+        any pending picture check and, while a refusal stands, sends nothing and
+        bumps rejectionFocus so ImagePicker refocuses the same refusal alert;
+        covered by app/frontend/tests/profile.test.tsx:323.
+      by: agent:reviewer
+      at: 2026-10-01T02:34:27.019Z
   - ref: build-slice-3-4#4
     text: "R-8.21: when a picture is chosen, check the file's first bytes in the
       browser (JPEG FF D8 FF, or the 8-byte PNG signature) and show a refusal in
@@ -1400,6 +1408,16 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-01T02:18:11.278Z
+    closed:
+      outcome: met
+      why: checkChosenPicture in app/frontend/src/app/image-picker.tsx reads the first
+        IMAGE_SIGNATURE_LENGTH bytes and refuses content that imageKindOf (now
+        shared from app/backend/src/rules/files.ts) reads as neither JPEG nor
+        PNG, showing the refusal at choose time; the service check in
+        app/backend/src/files/images.ts is unchanged; covered by
+        app/frontend/tests/profile.test.tsx:342.
+      by: agent:reviewer
+      at: 2026-10-01T02:34:27.031Z
   - ref: build-slice-3-4#5
     text: When the summary describes the earlier egress fix, do not quote the
       wording that was replaced. The proposal page is itself checked by egress
@@ -1410,3 +1428,10 @@ conditions:
     stage: build
     by: agent:tech-lead
     at: 2026-10-01T02:18:11.278Z
+    closed:
+      outcome: met
+      why: the build-slice-3-5 proposal page describes the earlier egress fix without
+        quoting the replaced wording and does not appear among the egress E-2
+        hits.
+      by: agent:reviewer
+      at: 2026-10-01T02:34:27.042Z
