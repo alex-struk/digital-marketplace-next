@@ -38,3 +38,14 @@ I've added the delay proxy that R-6.24's test needs to the sandbox, but I couldn
 - that Caddy's config parses.
 
 **Verified.** `npm --prefix app run check` passes: typecheck plus 16, 332 and 194 unit tests across the three workspaces. I first had to install dependencies with `npm ci` under `app/`. I changed nothing outside `app/` and `docs/decisions/`.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+The question is whether slice 6 (announcing changed terms, and vendors accepting them again) does what its criteria say. The ruling is approve. The verify result is pass for all seven claimed criteria (R-4.16, R-4.33, R-6.18, R-6.23, R-6.24, R-6.28, R-7.13). It is recorded for build-slice-6-5 against application tree e1a13da, which matches the app/ tree at the branch head, so it is current. R-6.24 was unbound last revision and now passes, which confirms in practice the Toxiproxy and Caddy setup the author could not start locally. The code does what the criteria say and nothing beyond them. The announcement withdraws every vendor's acceptance (deactivated vendors included) and keeps lastAcceptedTermsAt. It answers before any vendor is read or mailed, by deferring that work with setImmediate. It mails each active vendor separately, skips a vendor with no address, and goes on past a vendor the mail server refuses. The message names all three programs and offers no unsubscribe. Only the terms-and-conditions managing screen carries the action. The legal section warns the vendor, re-reads the account when opened, and records a fresh acceptance. Unit tests cover the new seams: TermsAnnouncement against an in-memory store with the order of events asserted, a backend end-to-end test over migrations and seed, refreshHeldAccount's stale-answer guard, and the screens including an axe accessibility check. No secret or personal data appears in the code or its logs. The new log line prints only an error name. No protected path is touched. The egress failures are all in earlier slices' files, not this diff. The revision carries out build-slice-6-4#1 in full. The ruling would change if R-6.24 or any claimed criterion failed or was unbound on a current run.
+
+**Conditions:**
+- condition-met build-slice-6-4#1: The sandbox's mail now goes through Toxiproxy service mail-hold, which runs one proxy named smtp on 1025 forwarding to mail:1025 (app/compose/mail/toxiproxy.json). The backend's SMTP_HOST points at mail-hold. Caddy service mail-front (app/compose/mail/Caddyfile) is the only service published on 8025. It serves Mailpit at the root, chaos fault injection included, and Toxiproxy's control API under /hold with the prefix stripped (app/compose/compose.yaml). The change is recorded in docs/decisions/0028-mail-goes-through-a-delay-proxy.md and app/README.md. Verify for build-slice-6-5 passed R-6.24, R-6.28 and the other claimed criteria against tree e1a13da.
