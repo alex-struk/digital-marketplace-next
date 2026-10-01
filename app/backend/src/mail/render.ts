@@ -31,8 +31,42 @@ export function render(message: Message, look: Look): RenderedMessage {
   return {
     subject: subjectOf(message, look),
     html: renderHtml(message, look),
-    text: renderText(message),
+    text: renderText(message, look),
   };
+}
+
+/**
+ * Where a message's reader keeps their notification settings. The address names the reader as
+ * "me", so it acts on whoever is signed in when it is opened and carries nothing about whom the
+ * message was sent to (R-6.7).
+ */
+export function notificationSettingsAddress(look: Pick<Look, "serviceOrigin">): string {
+  return `${look.serviceOrigin}/users/me?tab=notifications`;
+}
+
+/** The same settings, opened with the question about stopping already asked (R-6.6, R-4.29). */
+export function unsubscribeAddress(look: Pick<Look, "serviceOrigin">): string {
+  return `${notificationSettingsAddress(look)}&unsubscribe`;
+}
+
+/**
+ * How every message ends. A message the notice choice governs offers to unsubscribe, opening
+ * the reader's own settings with the question asked (R-6.6). Every other message links to the
+ * settings without offering to unsubscribe, since nothing there stops it (R-6.16).
+ */
+export function footerOf(message: Message, look: Pick<Look, "serviceOrigin">): Block {
+  return message.governedByNoticeChoice
+    ? {
+        kind: "paragraph",
+        content: [
+          "You are receiving this email because you asked to be told about new opportunities. ",
+          { text: "Unsubscribe", href: unsubscribeAddress(look) },
+        ],
+      }
+    : {
+        kind: "paragraph",
+        content: [{ text: "Manage your notification settings", href: notificationSettingsAddress(look) }],
+      };
 }
 
 // ------------------------------------------------------------------------ formatted
@@ -90,6 +124,8 @@ export function renderHtml(message: Message, look: Look): string {
     `<img src="${escapeHtml(logoAddressOf(look))}" alt="Digital Marketplace" width="200" style="display: block; margin: 0 0 24px;">`,
     `<h1 style="${FONT} font-size: 24px; line-height: 1.3; margin: 0 0 16px;">${escapeHtml(message.title)}</h1>`,
     ...message.body.map(blockHtml),
+    `<hr style="border: 0; border-top: 1px solid #d8d8d8; margin: 24px 0 16px;">`,
+    blockHtml(footerOf(message, look)),
     "</div>",
     "</body>",
     "</html>",
@@ -120,6 +156,10 @@ function blockText(block: Block): string {
  * order, each link written out beside its label so a reader whose mail program shows plain
  * text can still follow it.
  */
-export function renderText(message: Message): string {
-  return [message.title, ...message.body.map(blockText)].join("\n\n") + "\n";
+export function renderText(message: Message, look: Pick<Look, "serviceOrigin">): string {
+  return (
+    [message.title, ...message.body.map(blockText), "---", blockText(footerOf(message, look))].join(
+      "\n\n",
+    ) + "\n"
+  );
 }

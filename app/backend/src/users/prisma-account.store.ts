@@ -121,7 +121,11 @@ export class PrismaAccountStore implements AccountStore {
     try {
       const row = await this.prisma.users.update({
         where: { id },
-        data: { ...change, updatedAt: new Date() },
+        data: {
+          ...change,
+          capabilities: change.capabilities ? [...change.capabilities] : undefined,
+          updatedAt: new Date(),
+        },
       });
       return asAccount(row);
     } catch (error) {

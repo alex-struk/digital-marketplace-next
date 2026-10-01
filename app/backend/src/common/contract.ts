@@ -151,6 +151,40 @@ export function withIdentityProviderCallback(document: ContractDocument): Contra
   return { ...document, paths };
 }
 
+/**
+ * The two upload addresses, whose multipart submissions the boundary hands on unread
+ * (decision record 0021). The handler reads the submission into the upload working directory
+ * itself (R-8.16) and checks it against the contract's FileUpload — a name, a read-access
+ * statement and a file — refusing what is missing or malformed as the requester's error, named
+ * (R-8.18, R-8.23, R-8.24). Validating it here would mean reading it twice and answering those
+ * refusals in the validator's words instead.
+ */
+export const UPLOAD_ROUTES = /^\/api\/(files|avatars)\/?(\?.*)?$/;
+
+export function isUploadRoute(path: string): boolean {
+  return UPLOAD_ROUTES.test(path);
+}
+
+/**
+ * A file's address, `/api/files/{id}`, takes any identifier rather than only a well-formed one,
+ * because a malformed identifier is answered exactly as one no file carries — not authorized,
+ * or not found for an administrator (R-8.12) — rather than as a malformed request.
+ */
+export function withAnyFileIdentifier(document: ContractDocument): ContractDocument {
+  const paths = { ...((document.paths as Record<string, unknown>) ?? {}) };
+  const file = paths["/api/files/{id}"] as Record<string, Record<string, unknown>> | undefined;
+  const read = file?.get;
+  if (!file || !read) return document;
+  const parameters = (Array.isArray(read.parameters) ? read.parameters : []).map(
+    (parameter: Record<string, unknown>) =>
+      parameter.$ref === "#/components/parameters/PathId"
+        ? { name: "id", in: "path", required: true, schema: { type: "string" } }
+        : parameter,
+  );
+  paths["/api/files/{id}"] = { ...file, get: { ...read, parameters } };
+  return { ...document, paths };
+}
+
 export function withoutTestOnlyRoutes(
   document: ContractDocument,
 ): ContractDocument {

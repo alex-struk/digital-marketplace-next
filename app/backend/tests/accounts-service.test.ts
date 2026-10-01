@@ -69,9 +69,16 @@ class AccountsInMemory implements AccountStore {
       name: change.name ?? current.name,
       email: change.email ?? current.email,
       jobTitle: change.jobTitle ?? current.jobTitle,
+      avatarImageFile:
+        change.avatarImageFile === undefined ? current.avatarImageFile : change.avatarImageFile,
+      capabilities: change.capabilities ?? current.capabilities,
       notificationsOn: iso(change.notificationsOn, current.notificationsOn),
       acceptedTermsAt: iso(change.acceptedTermsAt, current.acceptedTermsAt),
       lastAcceptedTermsAt: iso(change.lastAcceptedTermsAt, current.lastAcceptedTermsAt),
+      status: change.status ?? current.status,
+      deactivatedOn: iso(change.deactivatedOn, current.deactivatedOn),
+      deactivatedBy:
+        change.deactivatedBy === undefined ? current.deactivatedBy : change.deactivatedBy,
     };
     if (this.collides(next)) throw new DuplicateAccount();
     this.rows[index] = next;

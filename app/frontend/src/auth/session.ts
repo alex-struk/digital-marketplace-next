@@ -134,6 +134,32 @@ export async function signOut(): Promise<SignOutOutcome> {
   return endAtTheIdentityProvider(identity);
 }
 
+/** Where a person lands once they have deactivated their own account (R-4.9). */
+export const DEACTIVATED_OWN_ACCOUNT_NOTICE = "/notice/deactivatedOwnAccount";
+
+/**
+ * A person has just deactivated their own account, and the service has ended its session with
+ * it (R-4.9). The browser drops its tokens. When the service could not also end the identity
+ * provider's session, the browser goes there to end it, which sends it back to the notice;
+ * otherwise the caller shows the notice itself.
+ */
+export async function endAfterOwnDeactivation(
+  identityProviderSignedOut: boolean,
+): Promise<"signed-out" | "leaving"> {
+  if (identityProviderSignedOut || !identity) {
+    identity?.forget();
+    become({ status: "visitor" });
+    return "signed-out";
+  }
+  const client = identity;
+  if (await client.endSession()) {
+    become({ status: "visitor" });
+    return "signed-out";
+  }
+  await client.signOut({ returnTo: `${originOfThisApp()}${DEACTIVATED_OWN_ACCOUNT_NOTICE}` });
+  return "leaving";
+}
+
 /** Leaves a refused sign-in, ending the identity provider's session too, so another can be tried. */
 export async function leaveRefusedSignIn(returnTo: string): Promise<void> {
   become({ status: "visitor" });

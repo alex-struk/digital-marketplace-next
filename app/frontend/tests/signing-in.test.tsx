@@ -36,6 +36,9 @@ function account(overrides: Partial<Account> = {}): Account {
     acceptedTermsAt: null,
     lastAcceptedTermsAt: null,
     idpUsername: "test-vendor-17",
+    capabilities: [],
+    deactivatedOn: null,
+    deactivatedBy: null,
     ...overrides,
   };
 }
