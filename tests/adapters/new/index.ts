@@ -693,9 +693,10 @@ export default function create(
       return (await heading.count()) ? (await heading.first().innerText()).trim() : "";
     },
     pageBody: async () => ((await notFoundShown()) ? "" : pageBodyText()),
-    // Under the title: "Published Jan 5, 2026 9:00 AM | Updated Jan 7, 2026 9:00 AM".
-    publishedDate: async () => ((await notFoundShown()) ? "" : datedLine("Published")),
-    updatedDate: async () => ((await notFoundShown()) ? "" : datedLine("Updated")),
+    // Under the title, a list of terms: "Published" over "January 5, 2026", "Last updated"
+    // over "January 7, 2026".
+    publishedDate: async () => ((await notFoundShown()) ? "" : publicDate("published_date", "Published")),
+    updatedDate: async () => ((await notFoundShown()) ? "" : publicDate("updated_date", "Last updated")),
     readableWhenSignedOut: () => mainText(),
     notFoundForUnknownAddress: async () => ((await notFoundShown()) ? mainText() : ""),
   };
@@ -934,6 +935,16 @@ export default function create(
     const link = seen(value.getByRole("link")).first();
     const href = (await link.count()) ? ((await link.getAttribute("href")) ?? "") : "";
     return { words, href };
+  }
+
+  // A date on the public page, read from under its term; a page without the term is unbound.
+  async function publicDate(member: string, term: string): Promise<string> {
+    await ready();
+    const terms = seen(page.getByRole("main").getByRole("term")).filter({ hasText: new RegExp(`^\\s*${term}\\s*$`, "i") });
+    if (!(await terms.count())) {
+      unbound(`content-view.${member}`, `the page at ${page.url()} shows no "${term}" term under its title`);
+    }
+    return (await contentFact(term)).words;
   }
 
   // A reader on a page's screen: unbound when the screen was refused, its value otherwise.
