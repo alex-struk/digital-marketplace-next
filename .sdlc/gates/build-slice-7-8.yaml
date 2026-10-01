@@ -1,28 +1,18 @@
 gate: G3
-verdict: escalated
-by: runner:verify
-held_by: runner
-escalate_to: tech-lead
-rationale: "Slice 7 has failed verify 3 times. The failures below may not be the
-  application's: a test, the adapter, the criterion or the sandbox can each be
-  what is wrong (spec 7.1), and another build would not find out which."
+verdict: return
+by: agent:tech-lead
+held_by: agent
+rationale: |2-
+  Question: does slice 7 meet its criteria, now that the bind-adapter answers to the 7-7 return have been applied and verify still fails 5 of 18? Ruling: return, addressed to bind-adapter again, not to build. runner:verify's account said the failures may not be the application's, and reading the failures against the code bears that out. The application refuses correctly, yet each failure comes from the new-target adapter. (1) R-1.7 and R-1.22: the application refuses as the criteria ask ('Page not found' for an anonymous visitor at /opportunities/code-with-us/create; no Publish among a staff member's actions 'Edit', 'Submit for review', 'Delete'). The adapter now throws '— refused: …' (tests/adapters/new/index.ts:5688, :5695, and saveDraft), but both tests attempt the action and then read the outcome from an administrator's view, and neither catches. Both tests pass on target old (tests/results/old/latest.json), whose adapter returns quietly when refused. My 7-7 wording 'report it as a refusal' was carried out as a throw these tests cannot absorb. (2) R-8.19 and R-8.25 still read '' at existingAttachmentRow straight after addAttachment. The adapter now counts a row with an /api/files/ link as stored (index.ts:5815-5820). But the application renders that link only once the upload has finished (attachments.tsx:349, attachment.stored), and addAttachment returns after a generic settle() without waiting for it. (3) R-1.21: the application puts the 'This opportunity is incomplete' alert inside the section of whichever tab is open (opportunity-cwu-edit.tsx:237, :329-332). That alert is in-page state, and the opportunityTab text the test read does not contain it. Either submitForReview never pressed the control, or a reader reloaded the page and dropped the alert. R-8.17 now passes. R-1.51 is never asserted and is not ruled here. What would change the ruling: if a bind-adapter revision that returns quietly on refusals, waits for the upload, and keeps the R-1.21 alert on the page still reads these criteria as failing against application tree a21fb0c, the next return goes to build.
 conditions:
-  - "R-1.7: Error: opportunity-cwu-create.save_draft — refused:
-    /opportunities/code-with-us/create answered nobody signed in with Page not
-    found The page you are looking for does not exist. at
-    http://localhost:4300/opportunities/code-with-us/create; only a person who
-    may create an opportunity is offered the form — at
-    tests/acceptance/opportunities/R-1.7.spec.ts:16"
-  - 'R-1.21: Error: expect(received).toMatch(expected) — Received
-    string:  "Opportunity — at tests/acceptance/opportunities/R-1.21.spec.ts:78'
-  - "R-1.22: Error: opportunity-cwu-edit.publish — refused: no \"Publish\" among
-    the opportunity's actions for public-sector-staff on
-    http://localhost:4300/opportunities/code-with-us/cbe4ed54-3c5d-4cf6-8274-7e\
-    1364a52684/edit (Status: Draft; the actions offered are \"Edit\", \"Submit
-    for review\", \"Delete\") — at
-    tests/acceptance/opportunities/R-1.22.spec.ts:39"
-  - 'R-8.19: Error: expect(received).toContain(expected) // indexOf — Received
-    string:    "" — at tests/acceptance/files/R-8.19.spec.ts:22'
-  - 'R-8.25: Error: expect(received).toContain(expected) // indexOf — Received
-    string:    "" — at tests/acceptance/files/R-8.25.spec.ts:48'
-at: 2026-10-01T10:45:29.577Z
+  - "addressed-to bind-adapter: on target new, opportunityCwuCreate.saveDraft and opportunityCwuEdit.publish must return without throwing when the person is refused (the create page answers 'Page not found', or no Publish control is offered), so the test's own follow-up observation decides. The refusal can be recorded in a log, not as an error. R-1.7 and R-1.22 fail on target new with the error '— refused: …' thrown from index.ts:5688/:5695 and from saveDraft. Both tests call the action and then read the outcome from an administrator's dashboard or the opportunity's status, without a try/catch, and both pass on target old, whose adapter does not throw there."
+  - "addressed-to bind-adapter: fileAttachmentControl.addAttachment (and opportunityCwuCreate.addAttachment) on target new must not return until the added file's row carries its 'Download <name>' link to /api/files/ or shows the '<name> is too large to attach' / 'could not be attached' alert. The app renders that link only after the upload completes (app/frontend/src/app/attachments.tsx:349, attachment.stored). R-8.19 and R-8.25 still read '' at existingAttachmentRow() immediately after addAttachment, although isStored now accepts a linked 'New:' row (index.ts:5815-5820), because addAttachment returns after a generic settle()."
+  - "addressed-to bind-adapter: R-1.21 on target new read opportunityTab() without the word 'incomplete' after opportunityCwuEdit.submitForReview on a draft whose location was emptied. The app shows the alert 'This opportunity is incomplete' inside the open tab's section (opportunity-cwu-edit.tsx:237, :329-332). It is in-page state, and a page.goto or reload loses it. Check that submitForReview actually presses 'Submit for review' and leaves the page as it is, and that opportunityTab reads the current page without reloading when it is already on ?tab=opportunity. Report which of the two was the cause."
+cost: 1.7062167999999998
+turns: 33
+session: "bc43cd3e-fce5-479d-bb16-8dedf3681d36"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T10:48:05.550Z
