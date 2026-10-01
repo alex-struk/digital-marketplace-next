@@ -35,15 +35,27 @@ export interface NewAccount {
   readonly idpUsername: string;
 }
 
-/** A change to one's own account. Only the fields named are changed. */
+/** A change to an account. Only the fields named are changed. */
 export interface AccountChange {
   readonly name?: string;
   readonly email?: string;
   readonly jobTitle?: string;
+  readonly avatarImageFile?: string | null;
+  readonly capabilities?: readonly string[];
   readonly notificationsOn?: Date | null;
   readonly acceptedTermsAt?: Date;
   readonly lastAcceptedTermsAt?: Date;
+  readonly status?: AccountStatus;
+  readonly deactivatedOn?: Date | null;
+  readonly deactivatedBy?: string | null;
 }
+
+/** Whether a person may read a stored file, for an account that names one as its picture. */
+export interface PictureAccess {
+  mayRead(fileId: string, reader: { readonly id: string; readonly type: AccountKind }): Promise<boolean>;
+}
+
+export const PICTURE_ACCESS = Symbol("PictureAccess");
 
 /**
  * Where accounts are kept. The service is written against this rather than against Prisma, so

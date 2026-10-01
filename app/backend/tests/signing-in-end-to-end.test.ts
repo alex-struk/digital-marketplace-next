@@ -8,16 +8,17 @@ import knexFactory, { Knex } from "knex";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { CLIENT_ID, ISSUER, testRealm, TestRealm } from "./realm";
 import { SmtpCatcher } from "./smtp-catcher";
+import { freePort } from "./free-port";
 
 /**
  * Signing in, finishing signing up and signing out, against the service as it is started:
  * over the schema its own migrations made, with its tokens checked against a published key
  * set and its mail handed to a mail server. Nothing inside the service is stood in for.
  */
-const DB_PORT = 55436;
-const url = `postgresql://postgres:postgres@127.0.0.1:${DB_PORT}/postgres`;
+let DB_PORT = 0;
+let url = "";
 // PGlite answers one connection at a time, so the service is held to one.
-const serviceUrl = `${url}?connection_limit=1`;
+let serviceUrl = "";
 const VENDOR_ONE = "00000000-0000-4000-8000-000000000201";
 const DEACTIVATED = "00000000-0000-4000-8000-000000000205";
 
@@ -80,6 +81,9 @@ function account(id: string, idp: string, overrides: Record<string, unknown> = {
 }
 
 beforeAll(async () => {
+  DB_PORT = await freePort();
+  url = `postgresql://postgres:postgres@127.0.0.1:${DB_PORT}/postgres`;
+  serviceUrl = `${url}?connection_limit=1`;
   database = await PGlite.create();
   socket = new PGLiteSocketServer({ db: database, port: DB_PORT, host: "127.0.0.1" });
   await socket.start();

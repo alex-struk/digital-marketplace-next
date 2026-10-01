@@ -11,7 +11,9 @@ import { TOKEN_VERIFIER, TokenVerifier } from "./auth/token-verifier";
 import { JsonLogger } from "./common/logging";
 import { RefusalFilter } from "./common/refusals";
 import {
+  isUploadRoute,
   loadContract,
+  withAnyFileIdentifier,
   withCurrentSession,
   withIdentityProviderCallback,
   withoutTestOnlyRoutes,
@@ -38,14 +40,19 @@ export async function createApplication(): Promise<INestApplication> {
   // empty" and every correct answer becomes a violation. What the service answers with is
   // decision record 0010's; the day the contract carries those schemas, this comes back on
   // by setting `validateResponses` to true.
+  //
+  // The two upload addresses are the one exception: their multipart submissions are handed on
+  // unread, and read and checked by their handler (decision record 0021).
   app.use(
     contractValidator({
-      apiSpec: withIdentityProviderCallback(
-        withCurrentSession(withoutTestOnlyRoutes(loadContract())),
+      apiSpec: withAnyFileIdentifier(
+        withIdentityProviderCallback(withCurrentSession(withoutTestOnlyRoutes(loadContract()))),
       ) as never,
       validateRequests: true,
       validateResponses: false,
       validateSecurity: false,
+      fileUploader: false,
+      ignorePaths: (path: string) => isUploadRoute(path),
     }),
   );
 

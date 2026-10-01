@@ -134,6 +134,129 @@ export function asksForJobTitle(kind: AccountKind): boolean {
   return isPublicSector(kind);
 }
 
+// ------------------------------------------------------------------------ capabilities
+
+/**
+ * The service's own list of capabilities a vendor may hold (R-4.8). These are the names the
+ * kept data stores and the ones a Sprint With Us qualification counts across a team. The
+ * descriptions are the rebuild's own: the specification does not carry the old wording
+ * (design/DESIGN.md, users gap 7).
+ */
+export const CAPABILITIES: readonly { readonly name: string; readonly description: string }[] = [
+  {
+    name: "Agile Coaching",
+    description: "Helping teams adopt agile ways of working, and coaching them as they improve how they deliver.",
+  },
+  {
+    name: "Backend Development",
+    description: "Building and maintaining server-side services, application programming interfaces and data stores.",
+  },
+  {
+    name: "Delivery Management",
+    description: "Planning and guiding the delivery of a digital service, and removing what blocks the team.",
+  },
+  {
+    name: "DevOps Engineering",
+    description: "Automating how software is built, tested, deployed and run, and keeping it running well.",
+  },
+  {
+    name: "Frontend Development",
+    description: "Building accessible user interfaces for the web that work on any device.",
+  },
+  {
+    name: "Security Engineering",
+    description: "Designing and checking systems so that they protect people's information and resist attack.",
+  },
+  {
+    name: "Technical Architecture",
+    description: "Shaping how the parts of a system fit together so that it can grow and change safely.",
+  },
+  {
+    name: "User Experience Design",
+    description: "Designing services that are simple and clear to use, based on what people need.",
+  },
+  {
+    name: "User Research",
+    description: "Planning and running research with the people who use a service, and sharing what is learned.",
+  },
+];
+
+const CAPABILITY_NAMES = new Set(CAPABILITIES.map((capability) => capability.name));
+
+/**
+ * A set of capabilities to record: only names from the service's own list, each once. An empty
+ * set is valid (R-4.8). Returns null when anything else is offered.
+ */
+export function validCapabilities(value: unknown): string[] | null {
+  if (!Array.isArray(value)) return null;
+  const chosen: string[] = [];
+  for (const entry of value) {
+    if (typeof entry !== "string" || !CAPABILITY_NAMES.has(entry)) return null;
+    if (!chosen.includes(entry)) chosen.push(entry);
+  }
+  // Kept in the list's own order, so the same choice is always stored the same way.
+  return CAPABILITIES.map((capability) => capability.name).filter((name) => chosen.includes(name));
+}
+
+/** Only a vendor records capabilities, and only on their own account (R-4.8). */
+export function mayRecordCapabilities(kind: AccountKind): boolean {
+  return kind === "VENDOR";
+}
+
+// ------------------------------------------------------------------------ reading a profile
+
+export interface Viewer {
+  readonly id: string;
+  readonly type: AccountKind;
+}
+
+/**
+ * A person's account may be read only by that person or by an administrator (R-4.25).
+ */
+export function mayReadAccount(viewer: Viewer | null, accountId: string): boolean {
+  if (!viewer) return false;
+  return viewer.id === accountId || viewer.type === "ADMIN";
+}
+
+/** A profile's sections, in the order its navigation lists them. */
+export type ProfileSection = "profile" | "capabilities" | "organizations" | "notifications" | "legal";
+
+/**
+ * The sections a profile offers, by whose it is and who is looking (R-4.34, R-4.33): a vendor's
+ * own offers all five, a public sector employee's or an administrator's own offers the profile
+ * and notifications, and an administrator looking at somebody else's sees the profile alone.
+ */
+export function profileSections(
+  viewer: Viewer,
+  owner: { readonly id: string; readonly type: AccountKind },
+): readonly ProfileSection[] {
+  if (viewer.id !== owner.id) return ["profile"];
+  return isPublicSector(owner.type)
+    ? ["profile", "notifications"]
+    : ["profile", "capabilities", "organizations", "notifications", "legal"];
+}
+
+/**
+ * The section shown for the one asked for. A section the profile does not offer shows the
+ * profile section instead, with no error (R-4.34).
+ */
+export function profileSectionShown(
+  offered: readonly ProfileSection[],
+  asked: unknown,
+): ProfileSection {
+  return typeof asked === "string" && offered.includes(asked as ProfileSection)
+    ? (asked as ProfileSection)
+    : "profile";
+}
+
+/**
+ * A person may deactivate their own account (R-4.9). An administrator is offered no control to
+ * deactivate their own, though the service accepts the request (R-4.31).
+ */
+export function offersOwnDeactivation(kind: AccountKind): boolean {
+  return kind !== "ADMIN";
+}
+
 // ------------------------------------------------------------------------ finishing sign-up
 
 export interface TermsRecord {

@@ -7,6 +7,7 @@ import { PrismaService } from "../src/prisma/prisma.service";
 import { PrismaPageStore } from "../src/content/prisma-page.store";
 import { ContentService } from "../src/content/content.service";
 import { ContentController } from "../src/content/content.controller";
+import { freePort } from "./free-port";
 
 /**
  * Reading a page over the kept schema itself: the migration history is run, a page is put
@@ -14,8 +15,7 @@ import { ContentController } from "../src/content/content.controller";
  *
  * PostgreSQL here is PGlite — the same engine, in process — so this needs nothing but Node.
  */
-const PORT = 55434;
-const url = `postgresql://postgres:postgres@127.0.0.1:${PORT}/postgres`;
+let url = "";
 const ADMINISTRATOR = "00000000-0000-4000-8000-000000000101";
 const ORDINARY_PAGE = "00000000-0000-4000-8000-000000000501";
 
@@ -26,6 +26,8 @@ let prisma: PrismaService;
 let controller: ContentController;
 
 beforeAll(async () => {
+  const PORT = await freePort();
+  url = `postgresql://postgres:postgres@127.0.0.1:${PORT}/postgres`;
   database = await PGlite.create();
   socket = new PGLiteSocketServer({ db: database, port: PORT, host: "127.0.0.1" });
   await socket.start();

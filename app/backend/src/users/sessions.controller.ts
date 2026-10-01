@@ -3,7 +3,6 @@ import {
   Delete,
   ForbiddenException,
   Get,
-  Inject,
   NotFoundException,
   Param,
   Req,
@@ -11,16 +10,9 @@ import {
 } from "@nestjs/common";
 import type { Response } from "express";
 import { IdentifiedRequest } from "../auth/bearer-token";
-import { SESSION_COOKIE, ServiceSessions } from "../auth/service-sessions";
-import {
-  SignInFlowSettings,
-  cookiesOf,
-  endIdentityProviderSession,
-} from "../auth/sign-in-flow";
-import { SignedOutSessions } from "../auth/signed-out-sessions";
 import { Account } from "./account";
 import { AccountsService } from "./accounts.service";
-import { SIGN_IN_FLOW } from "./sign-in.controller";
+import { SessionEnding } from "./session-ending";
 
 /**
  * A session as the service answers with it (decision record 0011): the identity provider's
@@ -47,9 +39,7 @@ export const CURRENT = "current";
 export class SessionsController {
   constructor(
     private readonly accounts: AccountsService,
-    private readonly signedOut: SignedOutSessions,
-    private readonly sessions: ServiceSessions,
-    @Inject(SIGN_IN_FLOW) private readonly flow: SignInFlowSettings | null,
+    private readonly ending: SessionEnding,
   ) {}
 
   /**
@@ -80,23 +70,10 @@ export class SessionsController {
   ): Promise<SignedOut> {
     this.mustBeOwn(id, request);
     const identity = request.identity;
-    const cookieSession = cookiesOf(request.headers.cookie)[SESSION_COOKIE];
-    // Taken before the service's session is ended, which forgets it.
-    const refreshToken = identity
-      ? this.sessions.refreshTokenFor(cookieSession, identity.sessionId)
-      : null;
-    if (identity?.sessionId) this.signedOut.end(identity.sessionId, identity.expiresAt);
-    // The service's own session ends with it, whichever way the request was identified
-    // (decision record 0017), and the browser is told to drop its cookie.
-    this.sessions.end(cookieSession, identity?.sessionId ?? null);
-    response.clearCookie(SESSION_COOKIE, { path: "/", sameSite: "lax" });
-    // Then the identity provider's, with the refresh token sign-in was completed with, so the
-    // person is signed out of both by this one request (R-4.17; decision record 0018). When
-    // it cannot be ended from here, the answer says so and the page ends it itself.
-    const identityProviderSignedOut =
-      refreshToken !== null && this.flow !== null
-        ? await endIdentityProviderSession(this.flow, refreshToken)
-        : false;
+    // The service's own session ends, whichever way the request was identified (decision
+    // record 0017), and then the identity provider's, so the person is signed out of both by
+    // this one request (R-4.17; decision record 0018).
+    const identityProviderSignedOut = await this.ending.end(request, response);
     return { id: identity?.sessionId ?? null, user: null, identityProviderSignedOut };
   }
 
