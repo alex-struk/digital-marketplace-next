@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-7-6 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">425</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">419</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">358</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-7-6</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 09:20</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 7 (Staff can draft, submit and publish a Code With Us opportunity) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> # Slice 7, fifth revision: Code With Us drafting, submitting and publishing</p>
+<p>I fixed two places where the application departed from its criteria: R-1.10 and R-1.21.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<h2>Slice 7, fifth revision: Code With Us drafting, submitting and publishing</h2>
+<p>I fixed two places where the application departed from its criteria: R-1.10 and R-1.21. I could not show that R-8.17, R-8.19 or R-8.25 will now pass; the likely reasons are below. I could not start the stack, because <code>docker compose</code> needed an approval this session could not get. So everything here comes from reading the code and from unit tests, not from walking the running application. <code>npm --prefix app run check</code> passes: typecheck, 394 backend tests and 230 frontend tests.</p>
+<h3>What changed</h3>
+<p><strong>R-1.10 (over-long text refused, naming the field).</strong> The form capped the title, teaser, remote-work description and description with <code>maxLength</code>. A browser silently shortens what is typed or pasted into such a field. So an opportunity with a 201-character title went forward shortened, and no field error ever appeared, which matches the empty field error in the ruling. Those caps are gone. Each field still states its limit in its description. On Submit for review, Publish or Save changes, the over-long text is kept as typed and refused, with the field named in the error summary (<code>field-error</code>) and under the field. This departs from DESIGN.md, which says limits are enforced as the person types; it is recorded in <code>docs/decisions/0032</code>.</p>
+<p><strong>R-1.21 (incomplete draft told it is incomplete).</strong> The manage page hid its whole action bar on the Opportunity tab, because that tab is the open form. An author on that tab, or one who had just saved a change there, had no Submit for review. The ruling&#39;s received text began &quot;Opportunity&quot; and then a new line, and the only thing on that page that reads that way is the Opportunity tab&#39;s own section. So the test was evidently reading that tab and finding no refusal. Now:</p>
+<ul><li>Submit for review, Publish and Delete are offered on every tab, by the same permission rules. Only Edit is left off where the form is already open.</li><li>The result of an action (including the &quot;This opportunity is incomplete&quot; alert) appears inside the tab&#39;s section, just under its heading, rather than above the section where the story puts it. Its test id and <code>role=&quot;alert&quot;</code> are unchanged.</li></ul>
+<h3>Earlier conditions</h3>
+<ul><li><strong><code>build-slice-7-3#1</code> (dashboard table): met.</strong> <code>/dashboard</code> lists the person&#39;s own opportunities in <code>dashboard-opportunities-table</code>; each row has the title linking to the manage page and the status. An administrator sees every opportunity with a Created by column. The design has no tabs here, so there is no Opportunities tab.</li><li><strong><code>build-slice-7-3#2</code> (administrator can publish a draft): met.</strong> An administrator is offered Publish on a draft as well as on one under review, and is not offered Submit for review. A unit test covers it.</li><li><strong><code>build-slice-7-4#3</code> (recheck the five criteria): partly met.</strong> The recheck found and fixed R-1.10 and R-1.21. For R-8.17, R-8.19 and R-8.25 I found no fault on the Code With Us path. Choosing a file over 10 MB shows <code>attachment-size-error</code> at once, the 10 MB limit is stated before choosing, files upload with an empty read-access list, and a saved attachment appears as <code>attachment-download-link</code>.</li></ul>
+<p>I could not confirm these against the running application. Two explanations seem likely, and neither is this slice&#39;s to fix:</p>
+<ol><li><strong>The tests probably cover Sprint With Us and Team With Us too.</strong> R-8.19 says &quot;for all three programs alike&quot;, R-8.25 names Sprint With Us, and the attachment control&#39;s surface route is <code>/opportunities/:program/…</code>. Those programs&#39; forms and manage pages belong to slice 10, so here they show the not-found page and read as empty. If this is the cause, these criteria cannot pass before slice 10. That is a matter of where <code>plan/tasks.md</code> places them, which this stage cannot change.</li><li><strong>A test may use the seeded published opportunity as its own author.</strong> If it signs in as <code>test-gov</code> (who created that opportunity) and opens its Opportunity tab, the form is read-only with no attachment control. That is what R-1.56 and DESIGN.md&#39;s &quot;who is offered what&quot; table require, so I did not change it.</li></ol>
+<h3>Unit tests added</h3>
+<ul><li>A title or teaser over its limit is kept as typed, and Submit for review names Title and Teaser without sending anything.</li><li>On the Opportunity tab, Submit for review is offered without Edit, and the incomplete alert appears inside that tab&#39;s section.</li><li>A file attached on a draft&#39;s Opportunity tab is uploaded when the form is saved, sent with the change, and then shown as a download link to its own address.</li></ul>
+<h3>What the next slice will find</h3>
+<p>Sprint With Us and Team With Us opportunities are still answered &quot;not yet offered&quot; (decision record 0030), and their attachment controls and read rules do not exist yet. Slice 10 will need to add them, along with any program-spanning tests for R-1.10, R-8.17, R-8.19 and R-8.25.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by runner:verify (the runner, automatically) on 2026-10-01 09:29.</p>
+<div class="body"><p>Slice 7 does not yet do what 3 of its criteria say. Each condition is the criterion and what the running application did.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-8.17: Error: expect(received).toBeTruthy() — Received: &quot;&quot;</li><li>R-8.19: Error: expect(received).toContain(expected) // indexOf — Received string:    &quot;&quot;</li><li>R-8.25: Error: expect(received).toContain(expected) // indexOf — Received string:    &quot;&quot;</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
