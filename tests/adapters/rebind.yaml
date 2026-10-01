@@ -4346,6 +4346,11 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:41:22.234Z
+    closed: &a26
+      outcome: met
+      why: tests/adapters/new has changed since this was found
+      by: runner:verify
+      at: 2026-10-01T08:09:51.104Z
   - id: R-6.8
     target: new
     why: 'unbound: opportunity-cwu-create.publish — no "Is remote work acceptable?"
@@ -4366,6 +4371,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:41:22.234Z
+    closed: *a26
   - id: R-6.15
     target: new
     why: "unbound: opportunity-swu-create.open —
@@ -4415,6 +4421,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:41:22.234Z
+    closed: *a26
   - id: R-1.4
     target: new
     why: 'unbound: opportunity-cwu-create.publish — no "Is remote work acceptable?"
@@ -4435,6 +4442,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:41:22.234Z
+    closed: *a26
   - id: R-1.7
     target: new
     why: "unbound: opportunity-cwu-create.save_draft —
@@ -4464,6 +4472,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:41:22.234Z
+    closed: *a26
   - id: R-1.8
     target: new
     why: "unbound: opportunity-cwu-create.save_draft — no \"Is remote work
@@ -4524,6 +4533,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:41:22.234Z
+    closed: *a26
   - id: R-1.14
     target: new
     why: 'unbound: opportunity-cwu-create.publish — no "Is remote work acceptable?"
@@ -4544,6 +4554,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:41:22.234Z
+    closed: *a26
   - id: R-1.19
     target: new
     why: 'unbound: opportunity-cwu-create.save_draft — no "Is remote work
@@ -4581,6 +4592,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:41:22.234Z
+    closed: *a26
   - id: R-1.20
     target: new
     why: 'unbound: opportunity-cwu-create.publish — no "Is remote work acceptable?"
@@ -4601,6 +4613,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:41:22.234Z
+    closed: *a26
   - id: R-1.21
     target: new
     why: 'unbound: opportunity-cwu-create.save_draft — no "Is remote work
@@ -4622,6 +4635,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:41:22.234Z
+    closed: *a26
   - id: R-1.22
     target: new
     why: 'unbound: opportunity-cwu-create.save_draft — no "Is remote work
@@ -4643,6 +4657,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:41:22.234Z
+    closed: *a26
   - id: R-1.23
     target: new
     why: 'unbound: opportunity-cwu-create.publish — no "Is remote work acceptable?"
@@ -4663,6 +4678,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:41:22.234Z
+    closed: *a26
   - id: R-1.34
     target: new
     why: 'unbound: opportunity-cwu-create.save_draft — no "Is remote work
@@ -4684,6 +4700,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:41:22.234Z
+    closed: *a26
   - id: R-1.37
     target: new
     why: 'unbound: opportunity-cwu-create.submit_for_review — no "Is remote work
@@ -4705,6 +4722,7 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:41:22.234Z
+    closed: *a26
   - id: R-1.56
     target: new
     why: "unbound: opportunity-cwu-create.save_draft — no \"Is remote work
@@ -4767,3 +4785,52 @@ rebind:
     slice: 7
     by: runner:verify
     at: 2026-10-01T07:41:22.234Z
+    closed: *a26
+  - id: R-1.48
+    target: new
+    why: "unbound: opportunity-swu-create.open —
+      /opportunities/sprint-with-us/create is offered only to a signed-in
+      person, and walked signed in (as the administrator, as a public sector
+      employee, and as a vendor for a vendor's screens — the seeded organization
+      owner for the organization screens — with the seeded records'
+      identifiers), the running build serves a signed-in person /dashboard (a
+      greeting and nothing else), the account screens under /users, to the
+      administrator the content-management screens under /content, and to the
+      administrator and public sector staff only /opportunities/create,
+      /opportunities/code-with-us/create and
+      /opportunities/code-with-us/:opportunityId/edit; every other opportunity,
+      proposal, organization and evaluation screen — every Sprint With Us and
+      Team With Us screen (tried with the seeded closed, awarded and
+      at-consensus opportunities of both), the Code With Us proposal screens
+      (tried as a vendor with the seeded published Code With Us opportunity,
+      whose page offers no way to start one),
+      /opportunities/code-with-us/:opportunityId/complete, /opportunities and
+      /organizations included — answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen (it shows \"Page not found\" at
+      http://localhost:4300/opportunities/sprint-with-us/create); unbound:
+      opportunity-twu-create.open — /opportunities/team-with-us/create is
+      offered only to a signed-in person, and walked signed in (as the
+      administrator, as a public sector employee, and as a vendor for a vendor's
+      screens — the seeded organization owner for the organization screens —
+      with the seeded records' identifiers), the running build serves a
+      signed-in person /dashboard (a greeting and nothing else), the account
+      screens under /users, to the administrator the content-management screens
+      under /content, and to the administrator and public sector staff only
+      /opportunities/create, /opportunities/code-with-us/create and
+      /opportunities/code-with-us/:opportunityId/edit; every other opportunity,
+      proposal, organization and evaluation screen — every Sprint With Us and
+      Team With Us screen (tried with the seeded closed, awarded and
+      at-consensus opportunities of both), the Code With Us proposal screens
+      (tried as a vendor with the seeded published Code With Us opportunity,
+      whose page offers no way to start one),
+      /opportunities/code-with-us/:opportunityId/complete, /opportunities and
+      /organizations included — answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen (it shows \"Page not found\" at
+      http://localhost:4300/opportunities/team-with-us/create)"
+    found: unbound
+    adapter: 89f287d966332ba6a8459833e30edb669adc25bc
+    slice: 7
+    by: runner:verify
+    at: 2026-10-01T08:09:51.104Z

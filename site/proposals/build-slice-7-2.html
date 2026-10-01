@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-7-2 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">415</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">409</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">353</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-7-2</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 07:25</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 7 (Staff can draft, submit and publish a Code With Us opportunity) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I couldn&#39;t run the application against either failure: the stack wasn&#39;t running, and I didn&#39;t start it.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I&#39;ve revised slice 7 for R-1.48 and R-1.53. I couldn&#39;t run the application against either failure: the stack wasn&#39;t running, and I didn&#39;t start it. <code>npm --prefix app run check</code> passes, with every workspace&#39;s unit tests green. The R-1.53 fix answers its message exactly. The R-1.48 fix rests on an inference about which cause applies.</p>
+<p><strong>R-1.53.</strong> The suite couldn&#39;t find a field labelled &quot;Remote OK&quot; on the create page. The form asked &quot;Is remote work acceptable?&quot; as a Yes/No radio group with neither option chosen. I replaced that with a single checkbox labelled &quot;Remote OK: remote work is acceptable&quot;. It starts unticked, which means remote work is not acceptable. Its error line in the summary now reads &quot;Remote OK: …&quot;. This applies on the create page and on the manage page&#39;s Opportunity tab, which reuse the same form (<code>app/frontend/src/screens/opportunity-cwu-form.tsx</code>). The checkbox keeps the story&#39;s <code>opportunity-remote-field</code> test id, and the remote-work description is still required whenever the box is ticked. This departs from the design story, which draws a radio group.</p>
+<p><strong>R-1.48.</strong> The failure only said an expected value came back empty. I found two likely causes and fixed both:</p>
+<ul><li><strong>Blank remote answer on the form.</strong> With the old radio group, a person who never chose an option couldn&#39;t submit for review from the form, because R-1.11 refuses a blank answer to whether remote work is acceptable. A test as a non-administrator staff member would then never reach the manage page, so the opportunity&#39;s identifier would be empty. The checkbox always gives an answer, which removes that. The service still refuses a request that leaves it out. Starting at &quot;not acceptable&quot; also matches how the old application&#39;s form began.</li><li><strong>The other two programs.</strong> The criterion covers all three programs, but nothing answered creation for Sprint With Us or Team With Us. A new interim controller (<code>app/backend/src/opportunities/unbuilt-program-creation.controller.ts</code>) now applies the R-1.48 rule on both create addresses:</li><li>anyone who isn&#39;t public sector staff gets 401;</li><li>an unknown state gets 400;</li><li>a published creation by a non-administrator gets 401, with the same wording Code With Us uses.</li></ul>
+<p>Creations that are permitted get 501, &quot;not yet offered&quot;, because those opportunities belong to slice 10.</p>
+<p>Decision record 0030 sets out both choices and what would reverse them.</p>
+<p><strong>Unit tests.</strong></p>
+<ul><li><strong>Backend:</strong> a new test covers every branch of the interim refusal and checks the refusal shape.</li><li><strong>Frontend:</strong> a new test finds the checkbox by the name the suite looks for, shows it starts unticked, and shows ticking it sends <code>remoteOk: true</code> on a draft save.</li><li>The existing submit-for-review test now also checks that no &quot;Remote OK&quot; problem is raised when the box is left alone.</li></ul>
+<p><strong>Not built, and what&#39;s not mine.</strong></p>
+<ul><li>The success path of R-1.48 for Sprint With Us and Team With Us: whether staff can actually create a draft or an under-review opportunity there. That needs those programs&#39; opportunities, which the plan gives to slice 10. If the suite checks it, R-1.48 will still fail, and the fix is to move that part of the criterion or build slice 10.</li><li>Slice 10 should replace the interim controller with the programs&#39; own create paths, keep the same R-1.48 check, and use the same &quot;Remote OK&quot; checkbox on its forms. The Sprint With Us and Team With Us stories still draw the radio group.</li><li>I didn&#39;t touch the design catalogue or the spec; whether the stories should change to match the checkbox is for the design gate.</li></ul>
+<p>I installed dependencies only to run the check and removed them afterwards.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by runner:verify (the runner, automatically) on 2026-10-01 07:41.</p>
+<div class="body"><p>Slice 7 does not yet do what 6 of its criteria say. Each condition is the criterion and what the running application did.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>R-1.9: Error: expect(received).toContain(expected) // indexOf — Received string:    &quot;&quot;</li><li>R-1.48: Error: expect(received).toContain(expected) // indexOf — Received string:    &quot;&quot;</li><li>R-1.53: Error: unbound: opportunity-cwu-create.save_draft — no &quot;Is remote work acceptable?&quot; choice on <a href="http://localhost:4300/opportunities/code-with-us/create;">http://localhost:4300/opportunities/code-with-us/create;</a> it offers button &quot;Decrease&quot;, button &quot;Increase&quot;, button &quot;Select an item&quot;, button &quot;Add attachment&quot;, button &quot;Save draft&quot;, button &quot;Publish&quot;, link &quot;Skip to main content&quot;, link &quot;Dashboard&quot;, link &quot;Users&quot;, link &quot;Content&quot;, link &quot;My profile&quot;, link &quot;Sign out&quot;…</li><li>R-8.17: Error: expect(received).toBeTruthy() — Received: &quot;&quot;</li><li>R-8.19: Error: expect(received).toContain(expected) // indexOf — Received string:    &quot;&quot;</li><li>R-8.25: Error: unbound: opportunity-cwu-create.save_draft — no &quot;Is remote work acceptable?&quot; choice on <a href="http://localhost:4300/opportunities/code-with-us/create;">http://localhost:4300/opportunities/code-with-us/create;</a> it offers button &quot;Decrease&quot;, button &quot;Increase&quot;, button &quot;Select an item&quot;, button &quot;Add attachment&quot;, button &quot;Save draft&quot;, button &quot;Publish&quot;, link &quot;Skip to main content&quot;, link &quot;Dashboard&quot;, link &quot;Users&quot;, link &quot;Content&quot;, link &quot;My profile&quot;, link &quot;Sign out&quot;…</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
