@@ -1496,12 +1496,20 @@ pages:
     observations:
       delivery_refused: bound
 
+  # The delay proxy's control API is bound where observables.yaml delivery_delay puts it,
+  # ${SDLC_MAIL_API}/hold, the only address the contract gives. This sandbox does not serve
+  # it: GET/POST/DELETE on the catcher's /hold/proxies/smtp/toxics, /hold/proxies and
+  # /hold/version all answer the catcher's plain "404 page not found", and nothing answers
+  # on the proxy's usual control port 8474 or the ports around the catcher (8026-8027,
+  # 8474-8477, 18474, 28474; 1025 is the catcher's own SMTP port, 8080 the identity
+  # provider). A sandbox gap, not the target's: once the proxy is served there the binding
+  # works unchanged.
   mail-delivery-delay:
     actions:
-      slow_delivery: bound
-      restore_delivery_speed: bound
+      slow_delivery: "unbound: the delay proxy's control API is not served on this sandbox: POST ${SDLC_MAIL_API}/hold/proxies/smtp/toxics answers the mail catcher's plain 404, and no proxy answers on port 8474 or the ports around the catcher (sandbox gap)"
+      restore_delivery_speed: "unbound: the delay proxy's control API is not served on this sandbox: DELETE ${SDLC_MAIL_API}/hold/proxies/smtp/toxics/hold reaches only the mail catcher's plain 404, and no proxy answers on port 8474 or the ports around the catcher (sandbox gap)"
     observations:
-      delivery_slowed: bound
+      delivery_slowed: "unbound: the delay proxy's control API is not served on this sandbox: GET ${SDLC_MAIL_API}/hold/proxies/smtp/toxics answers the mail catcher's plain 404, and no proxy answers on port 8474 or the ports around the catcher (sandbox gap)"
 
   # The request pages below are bound to the service's own interface, as
   # spec/contract/openapi.yaml describes it, from the browser's session. Every address was

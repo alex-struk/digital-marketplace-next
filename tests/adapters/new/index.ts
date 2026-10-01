@@ -1856,10 +1856,15 @@ export default function create(
   };
 
   // The pass-through proxy in front of the catcher's SMTP port, controlled beside the
-  // catcher under /hold. Read on this machine's catcher: GET .../toxics answers [] while
-  // replies pass at full speed. A delay of three seconds on every reply is added as the
-  // toxic "hold" and removed by name; adding one already there, or removing one already
-  // gone, leaves the proxy as asked, so those answers count as done too.
+  // catcher under /hold (observables.yaml delivery_delay), and nowhere else: the contract
+  // gives no other address for it. On the sandbox this target was walked against there is
+  // no such proxy: every /hold address on the catcher answers its plain "404 page not
+  // found", and nothing answers on the proxy's usual control port (8474) or the ports
+  // around the catcher, so these members report unbound there until the sandbox serves it.
+  // Where it is served, GET .../toxics answers [] while replies pass at full speed; a delay
+  // of three seconds on every reply is added as the toxic "hold" and removed by name;
+  // adding one already there, or removing one already gone, leaves the proxy as asked, so
+  // those answers count as done too.
   const TOXICS = "/hold/proxies/smtp/toxics";
 
   async function hold(where: string, method: "GET" | "POST" | "DELETE"): Promise<unknown> {
@@ -1882,7 +1887,8 @@ export default function create(
       unbound(
         where,
         `the mail catcher answered 404 for ${method} ${TOXICS}, the same not-found it gives any address it does not ` +
-          `serve: the delay proxy's control API (observables.yaml delivery_delay) is not mounted beside this catcher`,
+          `serve: the delay proxy's control API (observables.yaml delivery_delay) is not mounted beside this catcher, ` +
+          `and no such proxy was found anywhere else on the sandbox (a sandbox gap, not the target's)`,
       );
     }
     if (!settled.includes(got.status)) unbound(where, `the mail delay proxy answered ${got.status} for ${method} ${TOXICS}`);
@@ -5021,9 +5027,13 @@ export default function create(
         await legal.on("app_terms_link");
         return hrefOf(page, APP_TERMS);
       },
+      // Only the affirmative "You agreed to the terms and conditions on <date>". Walked signed
+      // in as the vendor who never agreed, the section says "You have not agreed to the terms
+      // and conditions." and the vendor whose agreement was reset reads "You last agreed to
+      // terms and conditions on …"; neither is a standing acceptance, so both read as nothing.
       acceptedOnNotice: async () => {
         await legal.on("accepted_on_notice");
-        return linesMatching(/\bagreed to (the )?terms/i);
+        return linesMatching(/^\s*you agreed to (the )?terms/i);
       },
       termsUpdatedWarning: async () => {
         await legal.on("terms_updated_warning");
