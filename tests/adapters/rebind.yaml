@@ -2820,3 +2820,213 @@ rebind:
       why: tests/adapters/old has changed since this was found
       by: runner:calibrate
       at: 2026-09-30T21:52:14.144Z
+  - id: R-8.13
+    target: new
+    why: "unbound: file-image-picker.choose_image — walked signed in as vendors, the
+      public sector employee and the administrator, the profile at /users/me
+      says \"No profile picture has been added.\" and offers no picture control;
+      the only one is \"Choose a profile picture\" on /sign-up/complete, which
+      opened no file chooser (the form's file input is hidden and unlabelled),
+      and the organization screens answer \"Page not found\"; unbound:
+      organization-edit.edit_organization — /organizations/:orgId/edit did not
+      open as a screen at
+      http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/\
+      edit: Page not found The page you are looking for does not exist.; the
+      screen is offered only to a signed-in person who may have it; walked
+      signed in (as the administrator, and as a vendor for a vendor's screens,
+      with the seeded records' identifiers), the running build serves a
+      signed-in person only /dashboard (a greeting and nothing else) and their
+      own account screens: every opportunity, proposal, organization,
+      content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\", and /users/:userId
+      opens only for the signed-in person's own identifier (another account's
+      answers \"Page not found\", even to the administrator)"
+    found: unbound
+    adapter: 5088e169e1d75634ccea14e90a0358f63dd785a2
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T00:34:19.399Z
+  - id: R-8.17
+    target: new
+    why: "unbound: file-attachment-control.size_limit_stated_before_choosing —
+      /opportunities/:program/:opportunityId/edit?tab=opportunity is offered
+      only to a signed-in person, and walked signed in (as the administrator,
+      and as a vendor for a vendor's screens, with the seeded records'
+      identifiers), the running build serves a signed-in person only /dashboard
+      (a greeting and nothing else) and their own account screens: every
+      opportunity, proposal, organization, content-management and evaluation
+      screen, /opportunities and /organizations included, answers \"Page not
+      found\"; opened signed out (with the seeded record's identifier where it
+      takes one) it shows the \"Page not found\" screen"
+    found: unbound
+    adapter: 5088e169e1d75634ccea14e90a0358f63dd785a2
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T00:34:19.399Z
+  - id: R-8.21
+    target: new
+    why: "unbound: file-image-picker.current_image — walked signed in as vendors,
+      the public sector employee and the administrator, the profile at /users/me
+      says \"No profile picture has been added.\" and offers no picture control;
+      the only one is \"Choose a profile picture\" on /sign-up/complete, which
+      opened no file chooser (the form's file input is hidden and unlabelled),
+      and the organization screens answer \"Page not found\"; unbound:
+      organization-edit.edit_organization — /organizations/:orgId/edit did not
+      open as a screen at
+      http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/\
+      edit: Page not found The page you are looking for does not exist.; the
+      screen is offered only to a signed-in person who may have it; walked
+      signed in (as the administrator, and as a vendor for a vendor's screens,
+      with the seeded records' identifiers), the running build serves a
+      signed-in person only /dashboard (a greeting and nothing else) and their
+      own account screens: every opportunity, proposal, organization,
+      content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\", and /users/:userId
+      opens only for the signed-in person's own identifier (another account's
+      answers \"Page not found\", even to the administrator)"
+    found: unbound
+    adapter: 5088e169e1d75634ccea14e90a0358f63dd785a2
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T00:34:19.399Z
+  - id: R-8.28
+    target: new
+    why: "unbound: file-image-picker.choose_image — walked signed in as vendors, the
+      public sector employee and the administrator, the profile at /users/me
+      says \"No profile picture has been added.\" and offers no picture control;
+      the only one is \"Choose a profile picture\" on /sign-up/complete, which
+      opened no file chooser (the form's file input is hidden and unlabelled),
+      and the organization screens answer \"Page not found\"; unbound:
+      organization-edit.edit_organization — /organizations/:orgId/edit did not
+      open as a screen at
+      http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/\
+      edit: Page not found The page you are looking for does not exist.; the
+      screen is offered only to a signed-in person who may have it; walked
+      signed in (as the administrator, and as a vendor for a vendor's screens,
+      with the seeded records' identifiers), the running build serves a
+      signed-in person only /dashboard (a greeting and nothing else) and their
+      own account screens: every opportunity, proposal, organization,
+      content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\", and /users/:userId
+      opens only for the signed-in person's own identifier (another account's
+      answers \"Page not found\", even to the administrator)"
+    found: unbound
+    adapter: 5088e169e1d75634ccea14e90a0358f63dd785a2
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T00:34:19.399Z
+  - id: R-8.30
+    target: new
+    why: "unbound: file-image-picker.choose_image — walked signed in as vendors, the
+      public sector employee and the administrator, the profile at /users/me
+      says \"No profile picture has been added.\" and offers no picture control;
+      the only one is \"Choose a profile picture\" on /sign-up/complete, which
+      opened no file chooser (the form's file input is hidden and unlabelled),
+      and the organization screens answer \"Page not found\"; unbound:
+      organization-edit.edit_organization — /organizations/:orgId/edit did not
+      open as a screen at
+      http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/\
+      edit: Page not found The page you are looking for does not exist.; the
+      screen is offered only to a signed-in person who may have it; walked
+      signed in (as the administrator, and as a vendor for a vendor's screens,
+      with the seeded records' identifiers), the running build serves a
+      signed-in person only /dashboard (a greeting and nothing else) and their
+      own account screens: every opportunity, proposal, organization,
+      content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\", and /users/:userId
+      opens only for the signed-in person's own identifier (another account's
+      answers \"Page not found\", even to the administrator)"
+    found: unbound
+    adapter: 5088e169e1d75634ccea14e90a0358f63dd785a2
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T00:34:19.399Z
+  - id: R-6.6
+    target: new
+    why: "unbound: notification-email-reference.message_body —
+      /admin/email-notification-reference is answered only to a signed-in
+      administrator, and walked signed in (as the administrator, and as a vendor
+      for a vendor's screens, with the seeded records' identifiers), the running
+      build serves a signed-in person only /dashboard (a greeting and nothing
+      else) and their own account screens: every opportunity, proposal,
+      organization, content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out the
+      service answers it 401 \"You do not have permission to perform this
+      action.\""
+    found: unbound
+    adapter: 5088e169e1d75634ccea14e90a0358f63dd785a2
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T00:34:19.399Z
+  - id: R-6.16
+    target: new
+    why: "unbound: organization-edit.add_team_members — /organizations/:orgId/edit
+      did not open as a screen at
+      http://localhost:4300/organizations/00000000-0000-4000-8000-000000000301/\
+      edit: Page not found The page you are looking for does not exist.; the
+      screen is offered only to a signed-in person who may have it; walked
+      signed in (as the administrator, and as a vendor for a vendor's screens,
+      with the seeded records' identifiers), the running build serves a
+      signed-in person only /dashboard (a greeting and nothing else) and their
+      own account screens: every opportunity, proposal, organization,
+      content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\", and /users/:userId
+      opens only for the signed-in person's own identifier (another account's
+      answers \"Page not found\", even to the administrator)"
+    found: unbound
+    adapter: 5088e169e1d75634ccea14e90a0358f63dd785a2
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T00:34:19.399Z
+  - id: R-4.8
+    target: new
+    why: "unbound: user-profile-self-capabilities.toggle_capability — walked signed
+      in as a vendor, the \"Capabilities\" link under \"Profile sections\" on
+      the profile goes to /users/me?tab=capabilities, which draws the Profile
+      section again (heading \"User Profile\", the account facts and
+      \"Details\") and nothing about capabilities; a public sector account's
+      profile offers no \"Capabilities\" link at all, and another account's
+      /users/:userId answers \"Page not found\", even to the administrator"
+    found: unbound
+    adapter: 5088e169e1d75634ccea14e90a0358f63dd785a2
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T00:34:19.399Z
+  - id: R-4.25
+    target: new
+    why: "unbound: user-profile.email_field — /users/:userId did not open as a
+      screen at
+      http://localhost:4300/users/00000000-0000-4000-8000-000000000202: Page not
+      found The page you are looking for does not exist.; the screen is offered
+      only to a signed-in person who may have it; walked signed in (as the
+      administrator, and as a vendor for a vendor's screens, with the seeded
+      records' identifiers), the running build serves a signed-in person only
+      /dashboard (a greeting and nothing else) and their own account screens:
+      every opportunity, proposal, organization, content-management and
+      evaluation screen, /opportunities and /organizations included, answers
+      \"Page not found\", and /users/:userId opens only for the signed-in
+      person's own identifier (another account's answers \"Page not found\",
+      even to the administrator)"
+    found: unbound
+    adapter: 5088e169e1d75634ccea14e90a0358f63dd785a2
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T00:34:19.399Z
+  - id: R-4.33
+    target: new
+    why: "unbound: notification-terms-broadcast.open —
+      /content/terms-and-conditions/edit is offered only to a signed-in person,
+      and walked signed in (as the administrator, and as a vendor for a vendor's
+      screens, with the seeded records' identifiers), the running build serves a
+      signed-in person only /dashboard (a greeting and nothing else) and their
+      own account screens: every opportunity, proposal, organization,
+      content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen (it shows \"Page not found\" at
+      http://localhost:4300/content/terms-and-conditions/edit)"
+    found: unbound
+    adapter: 5088e169e1d75634ccea14e90a0358f63dd785a2
+    slice: 3
+    by: runner:verify
+    at: 2026-10-01T00:34:19.399Z

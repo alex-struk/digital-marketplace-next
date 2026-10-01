@@ -1,5 +1,11 @@
 # Run log
 
+# Run record 2026-10-01
+
+- 17:21:37 drive: step 2: `sdlc run verify --slice 3` — build-slice-3 is open at G3 and has no verify result for the application it carries; it is verified before it is ruled
+- 17:34:19 verify slice 3: returned — R-4.18, R-4.27, R-4.29, R-6.7, R-8.23 fail. Next: sdlc run build --slice 3 --revise
+- 17:34:20 run verify: regenerated 391 files in .sdlc, site, tests
+
 # Run record 2026-09-30
 
 - 17:41:29 oracle up old in configuration notifications_disabled: local port 3103
