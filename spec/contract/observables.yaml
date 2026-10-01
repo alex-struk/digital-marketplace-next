@@ -317,3 +317,8 @@ counters:
   observable:
     view_count: the number of times an opportunity has been opened
     watcher_count: the number of people watching an opportunity
+  # Views are named opportunity.<program>.<opportunity-id>.views and are read through the
+  # surface page opportunity-counters. The answer is an object from counter name to count;
+  # a counter never incremented is absent from it and reads as 0. Only an administrator or
+  # public sector staff may read counters.
+  surface: opportunity-counters
