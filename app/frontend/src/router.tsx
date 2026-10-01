@@ -18,6 +18,10 @@ import { NoticeScreen } from "./screens/notice";
 import { DashboardScreen } from "./screens/dashboard";
 import { UserListScreen } from "./screens/user-list";
 import { UserProfileScreen } from "./screens/user-profile";
+import { OpportunityProgramSelectScreen } from "./screens/opportunity-program-select";
+import { OpportunityCwuCreateScreen } from "./screens/opportunity-cwu-create";
+import { OpportunityCwuViewScreen } from "./screens/opportunity-cwu-view";
+import { OpportunityCwuEditScreen } from "./screens/opportunity-cwu-edit";
 
 /**
  * The addresses in `spec/contract/surface.yaml`, and nothing else. Every other address is the
@@ -122,6 +126,38 @@ const userListRoute = createRoute({
   component: UserListScreen,
 });
 
+// Opportunities. The fixed addresses — choosing a program, creating in one — are matched before
+// an opportunity's own address is.
+const opportunityProgramSelectRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/create",
+  component: OpportunityProgramSelectScreen,
+});
+
+const opportunityCwuCreateRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/code-with-us/create",
+  component: OpportunityCwuCreateScreen,
+});
+
+const opportunityCwuViewRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/code-with-us/$opportunityId",
+  component: function OpportunityCwuViewRoute() {
+    const { opportunityId } = opportunityCwuViewRoute.useParams();
+    return <OpportunityCwuViewScreen key={opportunityId} opportunityId={opportunityId} />;
+  },
+});
+
+const opportunityCwuEditRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/opportunities/code-with-us/$opportunityId/edit",
+  component: function OpportunityCwuEditRoute() {
+    const { opportunityId } = opportunityCwuEditRoute.useParams();
+    return <OpportunityCwuEditScreen key={opportunityId} opportunityId={opportunityId} />;
+  },
+});
+
 // "me" and an identifier share one route: the screen reads "me" as whoever is signed in.
 const userProfileRoute = createRoute({
   getParentRoute: () => rootRoute,
@@ -147,6 +183,10 @@ export const routeTree = rootRoute.addChildren([
   dashboardRoute,
   userListRoute,
   userProfileRoute,
+  opportunityProgramSelectRoute,
+  opportunityCwuCreateRoute,
+  opportunityCwuViewRoute,
+  opportunityCwuEditRoute,
 ]);
 
 export const router = createRouter({
