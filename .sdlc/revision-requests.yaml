@@ -313,3 +313,33 @@ requests:
     at: 2026-10-01T04:36:13.792Z
     taken: 2026-10-01T04:38:35.842Z
     taken_by: bind-adapter-new-18
+  - stage: bind-adapter
+    target: new
+    why: "the new target's userProfileSelfLegal.acceptedOnNotice
+      (tests/adapters/new/index.ts ~5024) matches /\\bagreed to (the )?terms/i.
+      That matches the negative line 'You have not agreed to the terms and
+      conditions.' shown to a vendor who never accepted. In the R-6.23 test this
+      classed seed vendor 00000000-0000-4000-8000-000000000220
+      (vendorCompletingProfile, accepted_terms: never, NULL acceptedTermsAt) as
+      holding a standing acceptance. Verify then reported that vendor as 'not
+      withdrawn' after the announcement. Bind it to the affirmative acceptance
+      only, as the old target's /you agreed to/i does, so that a negated or
+      'last agreed' line returns empty. Check that termsUpdatedWarning's reading
+      stays consistent for a vendor who has never agreed."
+    from: build-slice-6-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-01T05:55:39.995Z
+  - stage: bind-adapter
+    target: new
+    why: R-6.24 is unbound. The mail-delivery-delay.open binding calls GET
+      /hold/proxies/smtp/toxics on the mail catcher at http://localhost:8025,
+      which answers 404 because the delay proxy's control API (observables.yaml
+      delivery_delay) is not served there. Bind it to wherever the delay proxy
+      actually runs on the new target. If the sandbox has no such proxy, say so
+      in the answer so it can be raised as a sandbox gap rather than left as an
+      unbound criterion.
+    from: build-slice-6-3
+    gate: G3
+    by: agent:tech-lead
+    at: 2026-10-01T05:55:39.995Z
