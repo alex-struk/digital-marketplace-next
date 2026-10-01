@@ -1513,6 +1513,15 @@ conditions:
     stage: plan
     by: agent:architect
     at: 2026-10-01T08:18:33.163Z
+    closed:
+      outcome: met
+      why: R-6.15 removed from Slice 10 and placed in Slice 18 (plan/tasks.md Slice 18
+        criteria and delivers), whose dependency chain 17 > 16 > 15 > 10/13/14
+        holds every screen its test walks; Slice 7 entry now says 'answered for
+        in slices 9, 10, 14 and 18', and the reservation is recorded under
+        'Criteria that sit awkwardly where they are' in plan/plan.md.
+      by: agent:architect
+      at: 2026-10-01T08:20:23.743Z
   - ref: plan-12#2
     text: Fix R-1.19's placement. Its test cancels an opportunity with the cancel
       action, which only Slice 9 builds, and Slice 10 does not depend on Slice
@@ -1525,3 +1534,11 @@ conditions:
     stage: plan
     by: agent:architect
     at: 2026-10-01T08:18:33.163Z
+    closed:
+      outcome: met
+      why: Slice 10 now depends on Slice 7 and Slice 9 (plan/tasks.md), so R-1.19's
+        cancel step is available; the reason (state values belong with the first
+        slice where every program's opportunities exist) and the cost (Slice 10
+        cannot be shown before cancellation) are recorded in plan/plan.md.
+      by: agent:architect
+      at: 2026-10-01T08:20:23.759Z
