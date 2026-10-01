@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>bind-adapter-new-37 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">446</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">440</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">377</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>bind-adapter-new-37</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 13:59</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does this adapter bind every surface action and observation on new, and nothing else?</h2>
+<p><strong>Recommendation.</strong> I bound both members the contract adds on the new <code>opportunity-counters</code> page, <code>view_count</code> and <code>refused_when_not_permitted</code>.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I bound both members the contract adds on the new <code>opportunity-counters</code> page, <code>view_count</code> and <code>refused_when_not_permitted</code>. <code>reporting_views</code> and <code>reporting_watchers</code> stay unbound after a third look. I could not type-check the result: <code>tsc</code> was refused for approval in this session, so I checked by hand that every helper the new code uses exists in the adapter. A compile run is still owed before calibrate.</p>
+<p><strong>The new page.</strong> <code>opportunity-counters</code> is a request page, not a screen. Its route, <code>/api/counters?counters=opportunity.:program.:opportunityId.views</code>, resolved on the target. I added it to <code>tests/adapters/new/index.ts</code> the same way as the other request pages already there:</p>
+<ul><li><strong><code>open</code></strong> builds the counter name from the program and opportunity given. When the program is left out, it takes it from the seeded record.</li><li><strong><code>view_count</code></strong> asks the service fresh on every read. It returns the number, or &quot;0&quot; when the answer leaves the counter out. It returns nothing if the service did not answer 200.</li><li><strong><code>refused_when_not_permitted</code></strong> returns the status and body when the answer is 401 or 403, and nothing otherwise.</li></ul>
+<p>To bind it I opened the seeded published Code With Us opportunity on the target. The count read 0 signed out, 0 as a vendor, 1 after I opened the opportunity&#39;s public page as that vendor, and 1 as the administrator.</p>
+<p><strong>This target does not refuse anyone.</strong> The contract says only an administrator or public sector staff may read counters. On this target a vendor and a request with no session both get 200 with the count. So <code>refused_when_not_permitted</code> is bound, and here it correctly reads empty: I reached the place and nothing was refused. A test expecting a refusal will fail, and that failure is in the application, not the binding.</p>
+<p><strong>R-1.5 and R-1.6</strong> (<code>opportunity-cwu-edit.reporting_watchers</code> and <code>reporting_views</code>): still unbound. I signed in as the administrator and opened the published opportunity&#39;s public page, which moved its views counter to 1. Its manage Summary still showed only Proposal deadline, Reward, Published, Created by and Last changed by. I also checked the manage Summary of the seeded published Sprint With Us opportunity, which the earlier reason did not cover; it shows no views or watchers either. <code>?tab=reporting</code> and <code>?tab=metrics</code> load the same screen. I added this third look to both reasons in <code>bindings.yaml</code> and in the adapter&#39;s matching reason text.</p>
+<p>The application does count views; it just never shows the number on a screen, so I left these screen observations unbound rather than reading them from the API. The views count can be read through <code>opportunity-counters.view_count</code>.</p>
+<p>In <code>bindings.yaml</code> I added <code>opportunity-counters</code> with both observations bound, spelled as the contract spells them. Every page whose route I opened resolved on the target. I wrote nothing outside <code>tests/adapters/new/</code>, and the password was only ever typed as its variable name.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 14:00.</p>
+<div class="body"><p>Question: does the new-target adapter bind every surface member the contract adds, and nothing else? Approve. The two members of opportunity-counters are bound as reads only: view_count fetches /api/counters fresh on each read and turns an absent counter into &quot;0&quot;, which the contract itself specifies (spec/contract/observables.yaml, &#39;absent counter reads as 0&#39;), and refused_when_not_permitted returns the status and body only on 401/403. Neither asserts anything or decides a pass. On this target nobody is refused, so a refusal test will fail against the application, which is the right place for that failure. The unbound reasons for opportunity-cwu-edit.reporting_views (R-1.6) and reporting_watchers (R-1.5) are real: the reason names the missing observation, which is that no screen shows the count, backed by a third look at the Code With Us and Sprint With Us admin summaries after a public-page visit moved the view count to 1. Reading the counters API there would report a number the page never displays. Nothing under tests/acceptance changed, and the runner&#39;s typecheck on this revision passed with no diagnostics in adapters/new/. The open missing-test entries for R-1.5 (owed by calibrate) and R-1.6 (owed by derive-tests) belong to other stages, so this ruling adds no conditions. The ruling would change if a binding were found to assert an outcome, or if a screen on new were found to show the views or watchers count.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

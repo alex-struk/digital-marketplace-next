@@ -5809,7 +5809,7 @@ export default function create(
   // History, none of them a report; and the opportunity the screen loads from
   // /api/opportunities/code-with-us/:id carries no view, watcher or proposal count to show.
   const REPORTING_LOOKED =
-    "looked again as the administrator and as the owning public sector employee on the seeded published, lapsed-with-three-proposals, in-processing and awarded Code With Us opportunities (and on the published one after the administrator ticked \"Watch this opportunity\" on its page): the Summary carries only Proposal deadline, Reward, Published, Created by and Last changed by, the only sections are Summary, Opportunity, Addenda and History, and the opportunity the screen loads from /api/opportunities/code-with-us/:id carries no view, watcher or proposal count; looked once more as the administrator: ?tab=reporting and ?tab=proposals on the manage screen fall back to the same Summary, the public opportunity page, /dashboard and /opportunities show no count either, and /opportunities/code-with-us/:id/complete answers Page not found on the seeded lapsed, final-stage and in-processing ones. The application does count (GET /api/counters answers opportunity.code-with-us.<id>.views and .watchers with numbers), but no screen shows those numbers, and reading the API here would report a count the page never displays";
+    "looked again as the administrator and as the owning public sector employee on the seeded published, lapsed-with-three-proposals, in-processing and awarded Code With Us opportunities (and on the published one after the administrator ticked \"Watch this opportunity\" on its page): the Summary carries only Proposal deadline, Reward, Published, Created by and Last changed by, the only sections are Summary, Opportunity, Addenda and History, and the opportunity the screen loads from /api/opportunities/code-with-us/:id carries no view, watcher or proposal count; looked once more as the administrator: ?tab=reporting and ?tab=proposals on the manage screen fall back to the same Summary, the public opportunity page, /dashboard and /opportunities show no count either, and /opportunities/code-with-us/:id/complete answers Page not found on the seeded lapsed, final-stage and in-processing ones. The application does count (GET /api/counters answers opportunity.code-with-us.<id>.views and .watchers with numbers), but no screen shows those numbers, and reading the API here would report a count the page never displays; looked a third time as the administrator after opening the seeded published opportunity's public page, so its views counter read 1: the Summary still showed no count, and the Sprint With Us manage Summary of its seeded published opportunity carries none either. The view count is read through the opportunity-counters page instead";
   async function reportingCount(member: string, term: RegExp): Promise<string> {
     const shown = await summaryTerm(member, term);
     if (shown) return shown;
@@ -6314,6 +6314,40 @@ export default function create(
       if (!(await list.count())) return "";
       return lined(await list.first().innerText()).join("\n");
     },
+  };
+
+  // GET /api/counters?counters=opportunity.<program>.<id>.views answers an object from
+  // counter name to count; a counter never incremented is absent and reads as 0. This
+  // target answers it with 200 to a vendor and to nobody signed in as readily as to an
+  // administrator, so a refusal reads as nothing there. Asked afresh at every read.
+  const counters = requests("opportunity-counters");
+  let counterName = "";
+  async function askCounter(member: string): Promise<Answer> {
+    if (!counterName) unbound(`opportunity-counters.${member}`, "no opportunity was opened to count");
+    return counters.send(member, "GET", `${baseURL}/api/counters?counters=${encodeURIComponent(counterName)}`);
+  }
+  const opportunityCounters: S.OpportunityCountersPage = {
+    open: async (params) => {
+      const id = seededId(params?.opportunityId ?? "", "opportunities");
+      const seeded = Object.values(seedGroups.opportunities ?? {}).find((each) => String(each.id) === id) as
+        | (SeedRecord & { program?: unknown })
+        | undefined;
+      const program = String(params?.program ?? "") || (typeof seeded?.program === "string" ? seeded.program : "");
+      if (!id) unbound("opportunity-counters.open", "no opportunity was named");
+      if (!program) unbound("opportunity-counters.open", `no programme was named for opportunity ${id}`);
+      counterName = `opportunity.${program}.${id}.views`;
+      await askCounter("open");
+    },
+    viewCount: async () => {
+      const got = await askCounter("view_count");
+      if (got.status !== 200) return "";
+      const answered = parse(got.body);
+      if (!answered || typeof answered !== "object" || Array.isArray(answered)) return "";
+      const count = record(answered)[counterName];
+      return count === undefined || count === null ? "0" : String(count);
+    },
+    refusedWhenNotPermitted: async () =>
+      refusedText(await askCounter("refused_when_not_permitted"), (status) => status === 401 || status === 403),
   };
 
   const surface: S.Surface = {
@@ -7267,6 +7301,7 @@ export default function create(
     proposalEvaluationRequest,
     userAccountSelfRequest,
     userAccountRequest,
+    opportunityCounters,
   };
 
   return surface;
