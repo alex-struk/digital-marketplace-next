@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-6-4 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">410</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">404</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">350</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-6-4</h1>
+<p class="lede">G3 · <span class="chip return">return</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 06:03</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 6 (An administrator can announce changed terms, and vendors accept them again) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I made no change to the application on this revision.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made no change to the application on this revision. The ruling found nothing wrong with the application for slice 6. Both of its conditions are addressed to the bind-adapter stage, and it told this stage to leave them alone. I changed nothing under <code>app/</code> or <code>docs/decisions/</code>.</p>
+<p><strong>What the ruling found.</strong> Verify failed R-6.23 three times, and each time it listed one vendor as &quot;not withdrawn&quot;. That vendor, 00000000-0000-4000-8000-000000000220, is the seed&#39;s vendorCompletingProfile: it has never accepted the terms and has no stored acceptance date, so there was nothing to withdraw. The test still counted it as holding an acceptance. The test&#39;s pattern for an accepted vendor also matches the legal section&#39;s &quot;You have not agreed to the terms and conditions.&quot; That is a fault in the test&#39;s binding, not in the application.</p>
+<p>I thought about rewording that sentence so the pattern would stop matching it, and decided against it. The sentence is correct as it stands, and rewording it would only hide the binding fault from the stage that has to fix it. The other open criterion, R-6.24, isn&#39;t bound to the application at all: the test looks for a mail-delay proxy&#39;s control interface at the mail catcher&#39;s address, and nothing serves it there. That too belongs to bind-adapter, or is a sandbox gap if no such proxy exists.</p>
+<p><strong>State of what was already built.</strong> I re-ran <code>npm --prefix app run check</code>. The workspace had no installed dependencies, so I ran <code>npm ci</code> first. After that the check passed for every package: 16, 332 and 194 tests, all passing, and the typechecks passed too. The error lines in its output come from tests that deliberately exercise failure paths: a vendor list that can&#39;t be read, and a mail refusal. They are not failures.</p>
+<p>The slice already covers all seven criteria (R-4.16, R-4.33, R-6.18, R-6.23, R-6.24, R-6.28, R-7.13):</p>
+<ul><li>the action to announce changed terms, on the terms and conditions page&#39;s managing screen</li><li>withdrawal of every vendor&#39;s standing acceptance</li><li>the broadcast to active vendors naming all three programs, which skips a vendor with no address and carries on past one it can&#39;t reach</li><li>the vendor&#39;s legal section, with its terms-updated warning and re-acceptance</li></ul>
+<p>How it was built is recorded in <code>docs/decisions/0027-announcing-changed-terms.md</code>.</p>
+<p><strong>Not done here.</strong></p>
+<ul><li><strong>R-6.23:</strong> the accepted-vendor pattern needs rebinding so it ignores negative wording, and the never-agreed warning needs checking.</li><li><strong>R-6.24:</strong> the mail-delay check needs binding to wherever the delay proxy actually runs.</li></ul>
+<p>Both are filed with the stage that owns them. If R-6.23 still fails after the rebinding for a vendor who really had accepted, the fault comes back to the application.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip return">return</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 06:10.</p>
+<div class="body"><p>The question is whether slice 6 does what its seven criteria say. Verify, recorded against this proposal&#39;s application tree, passed R-7.13, R-6.18, R-6.23, R-6.28, R-4.16 and R-4.33, and reported R-6.24 unbound: the delay proxy&#39;s control interface answered 404 at the target&#39;s mail catcher, and no such proxy runs anywhere in the target&#39;s sandbox. An unbound result cannot be approved. The gap is in what build owns. The new target&#39;s sandbox is defined in app/compose/compose.yaml, which sends the backend&#39;s mail straight to Mailpit (SMTP_HOST: mail) and publishes only Mailpit on 8025, so there is nothing that can hold delivery back. The test does not overreach: R-6.24 asks that the administrator is told at once while messages are still being sent, and holding delivery is the only way to observe that from outside the application. The rest of the diff fits its criteria: the announcement is offered only on the terms page&#39;s managing screen, it withdraws every vendor&#39;s acceptance and keeps lastAcceptedTermsAt, it answers before reading recipients, the message names all three programs, the broadcast skips recipients with no address and carries on past refused ones, and the legal section&#39;s warning and re-acceptance are covered by unit and end-to-end tests. The ruling would become an approval once the sandbox carries the delay proxy and a verify run against the resulting tree shows R-6.24 bound and passing with the other six still passing.</p></div>
+<h3>Conditions</h3><ol class="conditions"><li>app/compose/compose.yaml: put a delay proxy on the new target&#39;s mail path, the way verify&#39;s unbound result for R-6.24 needs it. That result showed GET <a href="http://localhost:8025/hold/proxies/smtp/toxics">http://localhost:8025/hold/proxies/smtp/toxics</a> answering 404 from the mail catcher, and no proxy anywhere on the sandbox. 1) Add a Toxiproxy service (ghcr.io/shopify/toxiproxy) with one proxy named smtp, listening on 1025 and forwarding to the Mailpit container&#39;s port 1025, and point the backend&#39;s SMTP_HOST at the proxy, so every message goes through it. 2) Serve the published port 8025 through a small reverse proxy (Caddy, for example): Mailpit&#39;s own API at the root, unchanged, and Toxiproxy&#39;s control API (its port 8474) under the /hold prefix. Then GET <a href="http://localhost:8025/hold/proxies/smtp/toxics">http://localhost:8025/hold/proxies/smtp/toxics</a> answers 200 with [], POST to it adds a latency toxic named hold, DELETE <a href="http://localhost:8025/hold/proxies/smtp/toxics/hold">http://localhost:8025/hold/proxies/smtp/toxics/hold</a> removes it, and POST <a href="http://localhost:8025/hold/reset">http://localhost:8025/hold/reset</a> clears every toxic. Mailpit&#39;s chaos fault injection, which the R-6.28 and R-6.2 tests use, must keep working through the reverse proxy. Record in app/README.md or a new record under docs/decisions/ that the target&#39;s mail now goes through the delay proxy and how its control API is reached.</li></ol>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>
