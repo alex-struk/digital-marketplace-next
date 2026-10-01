@@ -711,22 +711,26 @@ pages:
       deactivated_own_account_notice: bound
       sign_in_failed_notice: bound
 
+  # Walked again signed in as the administrator: the header's "Users" link opens /users,
+  # "Digital Marketplace Users" — a search box, "Export contact list" and one unpaginated
+  # table of every account (Status | Account type | Name | Administrator). A public sector
+  # employee is shown "Page not found" there; signed out it redirects to /sign-in.
   user-list:
     actions:
-      search_by_name: "unbound: walked signed in as the administrator, /users answers 'Page not found' ('The page you are looking for does not exist.' / 'Back to home'): the running build has no list of accounts"
-      open_export_contact_list: "unbound: walked signed in as the administrator, /users answers 'Page not found' ('The page you are looking for does not exist.' / 'Back to home'): the running build has no list of accounts"
-      toggle_export_user_type: "unbound: walked signed in as the administrator, /users answers 'Page not found' ('The page you are looking for does not exist.' / 'Back to home'): the running build has no list of accounts"
-      toggle_export_field: "unbound: walked signed in as the administrator, /users answers 'Page not found' ('The page you are looking for does not exist.' / 'Back to home'): the running build has no list of accounts"
-      export_contact_list: "unbound: walked signed in as the administrator, /users answers 'Page not found' ('The page you are looking for does not exist.' / 'Back to home'): the running build has no list of accounts"
-      cancel_export: "unbound: walked signed in as the administrator, /users answers 'Page not found' ('The page you are looking for does not exist.' / 'Back to home'): the running build has no list of accounts"
-      open_user_profile: "unbound: walked signed in as the administrator, /users answers 'Page not found' ('The page you are looking for does not exist.' / 'Back to home'): the running build has no list of accounts"
+      search_by_name: bound
+      open_export_contact_list: bound
+      toggle_export_user_type: bound
+      toggle_export_field: bound
+      export_contact_list: bound
+      cancel_export: bound
+      open_user_profile: bound
     observations:
-      user_row: "unbound: walked signed in as the administrator, /users answers 'Page not found' ('The page you are looking for does not exist.' / 'Back to home'): the running build has no list of accounts"
-      status_badge: "unbound: walked signed in as the administrator, /users answers 'Page not found' ('The page you are looking for does not exist.' / 'Back to home'): the running build has no list of accounts"
-      account_type: "unbound: walked signed in as the administrator, /users answers 'Page not found' ('The page you are looking for does not exist.' / 'Back to home'): the running build has no list of accounts"
-      admin_check: "unbound: walked signed in as the administrator, /users answers 'Page not found' ('The page you are looking for does not exist.' / 'Back to home'): the running build has no list of accounts"
-      export_modal: "unbound: walked signed in as the administrator, /users answers 'Page not found' ('The page you are looking for does not exist.' / 'Back to home'): the running build has no list of accounts"
-      export_disabled_until_selection: "unbound: walked signed in as the administrator, /users answers 'Page not found' ('The page you are looking for does not exist.' / 'Back to home'): the running build has no list of accounts"
+      user_row: bound
+      status_badge: bound
+      account_type: bound
+      admin_check: bound
+      export_modal: bound
+      export_disabled_until_selection: bound
 
   # Walked signed in again (as the administrator and the organization-owner vendor). One's own
   # /users/<id> draws what /users/me draws: "User Profile" over a "Profile sections" navigation
