@@ -3294,3 +3294,295 @@ rebind:
     by: runner:verify
     at: 2026-10-01T02:53:15.019Z
     closed: *a21
+  - id: R-7.5
+    target: new
+    why: "unbound: content-list.page_title — /content is offered only to a signed-in
+      person, and walked signed in (as the administrator, and as a vendor for a
+      vendor's screens — the seeded organization owner for the organization
+      screens — with the seeded records' identifiers), the running build serves
+      a signed-in person only /dashboard (a greeting and nothing else) and the
+      account screens under /users: every opportunity, proposal, organization,
+      content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: 0e7991290a57fee2351feafc004ac4740e378b73
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:31:33.774Z
+  - id: R-7.7
+    target: new
+    why: "unbound: content-create.enter_title — /content/create is offered only to a
+      signed-in person, and walked signed in (as the administrator, and as a
+      vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person only /dashboard (a greeting and nothing
+      else) and the account screens under /users: every opportunity, proposal,
+      organization, content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: 0e7991290a57fee2351feafc004ac4740e378b73
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:31:33.774Z
+  - id: R-7.8
+    target: new
+    why: "unbound: content-edit.updated_date — /content/:slug/edit is offered only
+      to a signed-in person, and walked signed in (as the administrator, and as
+      a vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person only /dashboard (a greeting and nothing
+      else) and the account screens under /users: every opportunity, proposal,
+      organization, content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: 0e7991290a57fee2351feafc004ac4740e378b73
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:31:33.774Z
+  - id: R-7.9
+    target: new
+    why: "unbound: content-edit.page_address — /content/:slug/edit is offered only
+      to a signed-in person, and walked signed in (as the administrator, and as
+      a vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person only /dashboard (a greeting and nothing
+      else) and the account screens under /users: every opportunity, proposal,
+      organization, content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: 0e7991290a57fee2351feafc004ac4740e378b73
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:31:33.774Z
+  - id: R-7.10
+    target: new
+    why: "unbound: content-create.enter_title — /content/create is offered only to a
+      signed-in person, and walked signed in (as the administrator, and as a
+      vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person only /dashboard (a greeting and nothing
+      else) and the account screens under /users: every opportunity, proposal,
+      organization, content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: 0e7991290a57fee2351feafc004ac4740e378b73
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:31:33.774Z
+  - id: R-7.12
+    target: new
+    why: "unbound: content-list.page_count — the content management list
+      (administrators only) is offered only to a signed-in person, and walked
+      signed in (as the administrator, and as a vendor for a vendor's screens —
+      the seeded organization owner for the organization screens — with the
+      seeded records' identifiers), the running build serves a signed-in person
+      only /dashboard (a greeting and nothing else) and the account screens
+      under /users: every opportunity, proposal, organization,
+      content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      with the seeded record's identifier it shows the \"Not Found\" screen"
+    found: unbound
+    adapter: 0e7991290a57fee2351feafc004ac4740e378b73
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:31:33.774Z
+  - id: R-7.20
+    target: new
+    why: "unbound: content-create.enter_title — /content/create is offered only to a
+      signed-in person, and walked signed in (as the administrator, and as a
+      vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person only /dashboard (a greeting and nothing
+      else) and the account screens under /users: every opportunity, proposal,
+      organization, content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen; unbound: content-edit.start_editing —
+      /content/:slug/edit is offered only to a signed-in person, and walked
+      signed in (as the administrator, and as a vendor for a vendor's screens —
+      the seeded organization owner for the organization screens — with the
+      seeded records' identifiers), the running build serves a signed-in person
+      only /dashboard (a greeting and nothing else) and the account screens
+      under /users: every opportunity, proposal, organization,
+      content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: 0e7991290a57fee2351feafc004ac4740e378b73
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:31:33.774Z
+  - id: R-7.21
+    target: new
+    why: "unbound: content-create.enter_title — /content/create is offered only to a
+      signed-in person, and walked signed in (as the administrator, and as a
+      vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person only /dashboard (a greeting and nothing
+      else) and the account screens under /users: every opportunity, proposal,
+      organization, content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: 0e7991290a57fee2351feafc004ac4740e378b73
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:31:33.774Z
+  - id: R-7.22
+    target: new
+    why: "unbound: content-create.enter_title — /content/create is offered only to a
+      signed-in person, and walked signed in (as the administrator, and as a
+      vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person only /dashboard (a greeting and nothing
+      else) and the account screens under /users: every opportunity, proposal,
+      organization, content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: 0e7991290a57fee2351feafc004ac4740e378b73
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:31:33.774Z
+  - id: R-7.23
+    target: new
+    why: "unbound: content-edit.start_editing — /content/:slug/edit is offered only
+      to a signed-in person, and walked signed in (as the administrator, and as
+      a vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person only /dashboard (a greeting and nothing
+      else) and the account screens under /users: every opportunity, proposal,
+      organization, content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: 0e7991290a57fee2351feafc004ac4740e378b73
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:31:33.774Z
+  - id: R-7.24
+    target: new
+    why: "unbound: content-create.enter_title — /content/create is offered only to a
+      signed-in person, and walked signed in (as the administrator, and as a
+      vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person only /dashboard (a greeting and nothing
+      else) and the account screens under /users: every opportunity, proposal,
+      organization, content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: 0e7991290a57fee2351feafc004ac4740e378b73
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:31:33.774Z
+  - id: R-7.25
+    target: new
+    why: "unbound: content-edit.start_editing — /content/:slug/edit is offered only
+      to a signed-in person, and walked signed in (as the administrator, and as
+      a vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person only /dashboard (a greeting and nothing
+      else) and the account screens under /users: every opportunity, proposal,
+      organization, content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen; unbound: content-edit.fixed_page_warning —
+      /content/:slug/edit is offered only to a signed-in person, and walked
+      signed in (as the administrator, and as a vendor for a vendor's screens —
+      the seeded organization owner for the organization screens — with the
+      seeded records' identifiers), the running build serves a signed-in person
+      only /dashboard (a greeting and nothing else) and the account screens
+      under /users: every opportunity, proposal, organization,
+      content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: 0e7991290a57fee2351feafc004ac4740e378b73
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:31:33.774Z
+  - id: R-7.26
+    target: new
+    why: "unbound: content-create.enter_title — /content/create is offered only to a
+      signed-in person, and walked signed in (as the administrator, and as a
+      vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person only /dashboard (a greeting and nothing
+      else) and the account screens under /users: every opportunity, proposal,
+      organization, content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: 0e7991290a57fee2351feafc004ac4740e378b73
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:31:33.774Z
+  - id: R-7.27
+    target: new
+    why: "unbound: content-edit.published_by — /content/:slug/edit is offered only
+      to a signed-in person, and walked signed in (as the administrator, and as
+      a vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person only /dashboard (a greeting and nothing
+      else) and the account screens under /users: every opportunity, proposal,
+      organization, content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: 0e7991290a57fee2351feafc004ac4740e378b73
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:31:33.774Z
+  - id: R-7.28
+    target: new
+    why: "unbound: content-edit.start_editing — /content/:slug/edit is offered only
+      to a signed-in person, and walked signed in (as the administrator, and as
+      a vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person only /dashboard (a greeting and nothing
+      else) and the account screens under /users: every opportunity, proposal,
+      organization, content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: 0e7991290a57fee2351feafc004ac4740e378b73
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:31:33.774Z
+  - id: R-8.29
+    target: new
+    why: "unbound: content-create.enter_title — /content/create is offered only to a
+      signed-in person, and walked signed in (as the administrator, and as a
+      vendor for a vendor's screens — the seeded organization owner for the
+      organization screens — with the seeded records' identifiers), the running
+      build serves a signed-in person only /dashboard (a greeting and nothing
+      else) and the account screens under /users: every opportunity, proposal,
+      organization, content-management and evaluation screen, /opportunities and
+      /organizations included, answers \"Page not found\"; opened signed out
+      (with the seeded record's identifier where it takes one) it shows the
+      \"Page not found\" screen"
+    found: unbound
+    adapter: 0e7991290a57fee2351feafc004ac4740e378b73
+    slice: 5
+    by: runner:verify
+    at: 2026-10-01T03:31:33.774Z
