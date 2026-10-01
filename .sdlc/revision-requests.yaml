@@ -330,6 +330,8 @@ requests:
     gate: G3
     by: agent:tech-lead
     at: 2026-10-01T05:55:39.995Z
+    taken: 2026-10-01T05:58:43.299Z
+    taken_by: bind-adapter-new-21
   - stage: bind-adapter
     target: new
     why: R-6.24 is unbound. The mail-delivery-delay.open binding calls GET
@@ -343,3 +345,8 @@ requests:
     gate: G3
     by: agent:tech-lead
     at: 2026-10-01T05:55:39.995Z
+    deferred:
+      at: 2026-10-01T05:58:43.299Z
+      why: there is no delay proxy on this sandbox to bind to, so R-6.24 can only be
+        reported as a sandbox gap until one is provided.
+      proposal: bind-adapter-new-21
