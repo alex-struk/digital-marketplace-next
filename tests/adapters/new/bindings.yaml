@@ -15,12 +15,13 @@
 # session were walked signed in — as vendors (with and without proposals, the one whose
 # terms were reset, the one still to complete a profile, a first-time vendor), the public
 # sector employee, a first-time public sector employee and the administrator, with the
-# seeded records' identifiers. The running build serves a signed-in person /dashboard (a
-# greeting and nothing else), their own profile at /users/me or /users/<own id> with its
+# seeded records' identifiers. The running build serves a signed-in person /dashboard (to
+# staff, "Create an opportunity" over their opportunities' table), their own profile at /users/me or /users/<own id> with its
 # Notifications and Legal sections, the content-management screens (/content,
 # /content/create, /content/:slug/edit) to the administrator, and /sign-up/complete to a
-# vendor still to complete a profile. Every other screen that needs a session (the
-# opportunity, proposal, organization and evaluation screens, /users, and another account's
+# vendor still to complete a profile, and to the administrator and public sector staff the
+# program chooser, the Code With Us form and a Code With Us opportunity's management screen.
+# Every other screen that needs a session (the other opportunity screens, the proposal, organization and evaluation screens, /users, and another account's
 # /users/:userId even for the administrator) answers "Page not found", and so, when walked
 # signed in, did /opportunities, /organizations and /proposals themselves. A deactivated
 # vendor's sign-in ends on /notice/authFailure. A member about the refusal itself reads it.
@@ -40,14 +41,16 @@ pages:
       total_awarded_opportunity_value: bound
       readable_when_signed_out: bound
 
-  # Walked signed in as the public sector employee, a first-time public sector employee and
-  # the administrator: /dashboard is "Dashboard" over "You are signed in as <name>." and
-  # nothing else — no table, no link, no button. The readings reach it and report what is
-  # there, which is no rows and no message; the actions find nothing to press.
+  # Walked again on this build signed in as the administrator and as a public sector
+  # employee with no opportunities: /dashboard is "Dashboard", a "Create an opportunity"
+  # link to /opportunities/create, and to the administrator "All opportunities" — a table
+  # (Title, Program, Status, Last updated, Created by) of every opportunity, each title a
+  # link to its management screen; the public sector employee's "My opportunities" reads
+  # "You have not created any opportunities yet." with no table.
   opportunity-dashboard:
     actions:
-      create_opportunity: "unbound: signed in as the public sector employee and as the administrator, /dashboard reads only 'Dashboard' / 'You are signed in as <name>.' and offers no 'Create Opportunity' link or button (no control at all); /opportunities/create itself answers 'Page not found'"
-      open_opportunity: "unbound: signed in as the public sector employee and as the administrator, /dashboard reads only 'Dashboard' / 'You are signed in as <name>.' and carries no opportunity link; every seeded opportunity's page answers 'Page not found' to them"
+      create_opportunity: bound
+      open_opportunity: bound
     observations:
       my_opportunities_table: bound
       opportunity_status: bound
