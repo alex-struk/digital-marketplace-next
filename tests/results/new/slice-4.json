@@ -2,8 +2,8 @@
   "slice": 4,
   "proposal": "build-slice-4",
   "app_tree": "0b0c9d77cbbf16f89b3b83bb3a13b5476ecb89cb",
-  "at": "2026-10-01T02:53:02.795Z",
-  "verdict": "unbound",
+  "at": "2026-10-01T03:06:34.487Z",
+  "verdict": "pass-unasserted",
   "unasserted": [
     {
       "id": "R-4.13",
@@ -11,17 +11,7 @@
       "reason": "unobservable: the outcome is that the service offers no way to create an administrator where none exists, and that only a change to the stored data outside the service can. That is the absence of an action anywhere in the service, and no observation reports an absence of that kind — a test could only show that the particular controls it knows of do not do it, never that no other route exists. The given could be seeded (a seed with no administrator account), but that would not help: the claim a test would then have to settle is still the non-existence of a route, and the documented manual route lies outside the service by definition. This is a property to be accepted by a reader of the rebuilt system's routes, not settled by a test."
     }
   ],
-  "unbound": [
-    {
-      "id": "R-4.14",
-      "reason": "user-list.user_row — walked signed in as the administrator, /users answers \"Page not found\" (heading \"Page not found\", \"The page you are looking for does not exist.\", \"Back to home\"): the running build has no list of accounts"
-    },
-    {
-      "id": "R-4.32",
-      "reason": "user-list.open_export_contact_list — walked signed in as the administrator, /users answers \"Page not found\" (heading \"Page not found\", \"The page you are looking for does not exist.\", \"Back to home\"): the running build has no list of accounts"
-    }
-  ],
-  "adapter": "43ef2fbfc56500d55fc337f064aaffc1605b89bc",
+  "adapter": "0e7991290a57fee2351feafc004ac4740e378b73",
   "rows": [
     {
       "id": "R-4.4",
@@ -36,7 +26,7 @@
         }
       ],
       "file_sha": "7360c14b10f22ae5b918e7c9a1b12e8a9ea3d651",
-      "adapter": "43ef2fbfc56500d55fc337f064aaffc1605b89bc"
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
     },
     {
       "id": "R-4.12",
@@ -63,7 +53,7 @@
         }
       ],
       "file_sha": "d0d277f369a73d9e66bb9ce7b2527fbd2e376c7b",
-      "adapter": "43ef2fbfc56500d55fc337f064aaffc1605b89bc"
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
     },
     {
       "id": "R-4.13",
@@ -79,26 +69,23 @@
       "version": 1,
       "domain": "users",
       "file": "tests/acceptance/users/R-4.14.spec.ts",
-      "result": "unbound",
+      "result": "pass",
       "tests": [
         {
           "title": "an administrator can browse everyone registered with the service, showing each person's status, account kind, name and whether they are an administrator",
-          "status": "failed",
-          "error": "Error: unbound: user-list.user_row — walked signed in as the administrator, /users answers \"Page not found\" (heading \"Page not found\", \"The page you are looking for does not exist.\", \"Back to home\"): the running build has no list of accounts"
+          "status": "passed"
         },
         {
           "title": "everyone registered is listed by status, then account kind, then name",
-          "status": "failed",
-          "error": "Error: unbound: user-list.user_row — walked signed in as the administrator, /users answers \"Page not found\" (heading \"Page not found\", \"The page you are looking for does not exist.\", \"Back to home\"): the running build has no list of accounts"
+          "status": "passed"
         },
         {
           "title": "an administrator can narrow the list by typing part of a name",
-          "status": "failed",
-          "error": "Error: unbound: user-list.user_row — walked signed in as the administrator, /users answers \"Page not found\" (heading \"Page not found\", \"The page you are looking for does not exist.\", \"Back to home\"): the running build has no list of accounts"
+          "status": "passed"
         }
       ],
       "file_sha": "312431e4b9300abac886c8a5130a43ead5368569",
-      "adapter": "43ef2fbfc56500d55fc337f064aaffc1605b89bc"
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
     },
     {
       "id": "R-4.19",
@@ -117,7 +104,7 @@
         }
       ],
       "file_sha": "1037e517f2f0bc384e598506efd5cf9c3f372272",
-      "adapter": "43ef2fbfc56500d55fc337f064aaffc1605b89bc"
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
     },
     {
       "id": "R-4.20",
@@ -140,7 +127,7 @@
         }
       ],
       "file_sha": "f61428ec0f59343cf9775f1546d92faa2e542561",
-      "adapter": "43ef2fbfc56500d55fc337f064aaffc1605b89bc"
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
     },
     {
       "id": "R-4.21",
@@ -167,7 +154,7 @@
         }
       ],
       "file_sha": "77dd467a303b8ed79d4d1f3c07d2e5a9bb6c4d32",
-      "adapter": "43ef2fbfc56500d55fc337f064aaffc1605b89bc"
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
     },
     {
       "id": "R-4.30",
@@ -186,7 +173,7 @@
         }
       ],
       "file_sha": "b245f3913c51f20f99fe4fe5826e9d40b75f3648",
-      "adapter": "43ef2fbfc56500d55fc337f064aaffc1605b89bc"
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
     },
     {
       "id": "R-4.31",
@@ -201,23 +188,22 @@
         }
       ],
       "file_sha": "f86df56eff7d375a4d67f51887bbad9d04804765",
-      "adapter": "43ef2fbfc56500d55fc337f064aaffc1605b89bc"
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
     },
     {
       "id": "R-4.32",
       "version": 1,
       "domain": "users",
       "file": "tests/acceptance/users/R-4.32.spec.ts",
-      "result": "unbound",
+      "result": "pass",
       "tests": [
         {
           "title": "at least one kind and one field must be chosen before an administrator may export the contact list",
-          "status": "failed",
-          "error": "Error: unbound: user-list.open_export_contact_list — walked signed in as the administrator, /users answers \"Page not found\" (heading \"Page not found\", \"The page you are looking for does not exist.\", \"Back to home\"): the running build has no list of accounts"
+          "status": "passed"
         }
       ],
       "file_sha": "464c65b34b5f9e883e3212204c4640d90651ac9c",
-      "adapter": "43ef2fbfc56500d55fc337f064aaffc1605b89bc"
+      "adapter": "0e7991290a57fee2351feafc004ac4740e378b73"
     }
   ]
 }
