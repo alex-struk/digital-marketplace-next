@@ -34,3 +34,23 @@ So the routes in `surface.yaml` that don't resolve on this target are every Spri
 **Sign-in.** Sign-in through the sandbox identity provider worked as the adapter expects, as both the administrator and a vendor: "Sign in as a public sector employee" or "Sign in as a vendor", then the provider's "Username" / "Password" / "Sign In" form.
 
 **A stray directory.** The browser tool wrote its snapshot files into `.playwright-mcp/` at the workspace root. That is outside my territory, so I left it alone; nothing of mine is in it, and it shouldn't be delivered.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the adapter for target `new` bind every surface action and observation it can, and nothing else? Approve. The only code change is `chooseRemote` in tests/adapters/new/index.ts. It now finds the 'Remote OK: remote work is acceptable' checkbox by role and label and ticks or clears it to match the test's value. If the box is absent it falls back to the earlier Yes/No radios, and it reports unbound only when neither exists. That is locating and setting a control. It makes no assertion and contains no business logic, and the only other edit is the descriptive comment in bindings.yaml. Nothing under tests/acceptance changed, and the runner's own typecheck of the proposal's commit passed with no diagnostics under adapters/new/. The members still unbound (Sprint With Us and Team With Us create, the Code With Us proposal-create screen, the Team With Us evaluation screen) carry real reasons: each names a route that answers 'Page not found' on the target, or a missing entry point for a vendor. Each criterion involved (R-1.8, R-8.22, R-6.15) genuinely needs that screen, so none of these is a test reaching past its criterion. The failed egress check flags only pre-existing build-slice records and .sdlc/conditions.yaml, none of which this diff touches. The ruling would change if a verify run still reports the remote-work control missing on the Code With Us form after this change, since the author walked the flow by hand but could not run the suite.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `0de48c9ac7be0e606e12b5b910663c13b4c128e7`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
