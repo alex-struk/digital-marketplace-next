@@ -49,3 +49,24 @@ I rewrote the comment above `file-image-picker` to match. The readings stay boun
 - The other unbound criteria (R-8.13, R-8.17, R-6.6, R-6.16, R-4.33) and the accepted R-4.8 and R-4.25 bindings, as instructed. No page route resolved differently from before.
 - The 1×1 PNG left as the seeded administrator's profile picture is still there. The interface offers no way to remove it, and nothing outside `tests/adapters/new/` was mine to change.
 - The egress-check failure is in files this stage does not own.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does this adapter bind every surface action and observation on new, and nothing else, and does it carry out the two instructions bind-adapter-new-11 left owed? Ruling: approve. offerFile (tests/adapters/new/index.ts:2804-2835) no longer puts files into the hidden input in the picker's group. When pressing the control opens no file chooser it reports unbound, saying the button opens no file chooser and nothing a person can see takes a file. The only setInputFiles left is the path for a visible, labelled file field, which the condition allowed to stay. bindings.yaml marks user-profile.change_avatar, user-sign-up-complete.change_avatar, file-image-picker.choose_image and user-profile-self.change_avatar unbound with walked reasons, and that last one follows from the same code. savePicture, picturePending and the 'no save step' comments are gone. The six picker readings read only what the page draws and return empty where nothing is drawn, so saving stays with userProfileSelf.saveChanges, which the tests call themselves. The newly bound profile-edit, deactivation and capabilities members are navigation and locators. toggleCapability throws only when the click it was asked to make did not take, which is a failed action, not a pass/fail decision. Nothing under tests/acceptance changed, and the runner's typecheck of this revision passed with no diagnostics. What would change the ruling: evidence that the picker button does open a chooser in a Playwright run, which would make the unbound reasons false, or a binding found to decide an outcome rather than reach the page.
+
+**Conditions:**
+- condition-met bind-adapter-new-11#1: offerFile in tests/adapters/new/index.ts (lines 2825-2835) dropped the hidden-input fallback and reports unbound when no file chooser opens; bindings.yaml marks user-profile.change_avatar (line 747), user-sign-up-complete.change_avatar (line 681), file-image-picker.choose_image (line 1390) and user-profile-self.change_avatar (line 843) unbound with that reason
+- condition-met bind-adapter-new-11#2: savePicture and picturePending no longer appear anywhere under tests/adapters/new; the fileImagePicker readings (storedPictureAddress, storedPictureSize, rejectedImageError, imageReadableWhenSignedOut) read only the drawn page and never press Save changes, and the 'no save step' comments are removed
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `f5abb60cfc0b0cd39d30bceba014ad48b1e9edad`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
