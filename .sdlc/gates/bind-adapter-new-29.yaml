@@ -1,0 +1,16 @@
+gate: G3
+verdict: approve
+by: agent:reviewer
+held_by: agent
+rationale: |2-
+  Question: does the new adapter bind every surface action and observation, and nothing else, now that the last owed condition is addressed? Ruling: approve. Condition bind-adapter-new-28#1 is carried out: uploadGiven in tests/adapters/new/index.ts now forwards 'content' to fileGiven when it is a Uint8Array (which includes Buffer) as well as a string, and fileGiven (line 2916) already takes string | Uint8Array and passes it to uploadFile, so R-8.17's oversized Buffer now reaches the service as the oversized file. The rest of the diff is the work for conditions 1-4 carried from bind-adapter-new-28, which that ruling found matched what was asked: stored-row detection by /api/files/ link, refusal-versus-unbound for publish and the create screen keyed on the acting persona, and in-place editing of a draft. All of it is navigation, locating elements and reporting refusals, with no assertion of its own. Nothing under tests/acceptance changed, and the runner's typecheck passed with no diagnostics under adapters/new. The unbound reasons for opportunity-swu-create.open and opportunity-twu-create.open are real: both routes answer 'Page not found' signed in and signed out, which is the application lacking those screens. The fix has not been run against the target, and the next calibration is the first evidence for fileUpload.refusedForSize. What would change this ruling: a calibration showing R-8.17 still sends a small file, or still reads '' because of the binding, would bring it back to bind-adapter. The separate build-slice-7-7 request about which step of R-8.17 read '' remains open for its own run.
+conditions:
+  - "condition-met bind-adapter-new-28#1: uploadGiven in tests/adapters/new/index.ts (around line 2948) now passes 'content' to fileGiven when it is a string or a Uint8Array (Buffer included), so R-8.17's Buffer.alloc(just over 10 MiB) is uploaded as given instead of a default file; offerFile is unchanged; the runner typecheck on 4aadbd4eb passed."
+cost: 0.410002
+turns: 3
+session: "5c87542f-6b33-4b85-b770-8f00c7729aee"
+backend: claude
+model: "claude-opus-5-5"
+cli: "2.1.284 (Claude Code)"
+isolation: "none"
+at: 2026-10-01T10:03:33.762Z
