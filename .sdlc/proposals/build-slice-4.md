@@ -49,3 +49,14 @@ Nothing in the specification, plan, design or seed needed changing, and I touche
 - Organization names in the export come from seeded data only, since no screen yet creates organizations (slices 11 and 12).
 
 I removed the installed dependencies and build output before finishing, so `app/` holds only source.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does slice 4 do what its ten criteria say? Ruling: approve. The verify result is current for this proposal's application tree and is pass-unasserted: nine claimed criteria (R-4.4, R-4.12, R-4.14, R-4.19, R-4.20, R-4.21, R-4.30, R-4.31, R-4.32) passed and none failed. The one unasserted criterion, R-4.13, is recorded not-testable because its outcome is the absence of any route in the service, which no observation can establish. Its reason is real, and the slice can be accepted with it unasserted: the diff adds no administrator-creating route, the seed writes the first administrator, and app/README.md documents the manual stored-data change for an installation that has none, which is all the criterion asks for. Read against the criteria, the code does what they say. The user list and contact list answer administrators alone with 401 and no account data (R-4.21, R-4.32). The list is ordered status, then account kind, then name, and narrows by name only (R-4.14). Administrator rights switch an account between GOV and ADMIN and are refused for a vendor with the criterion's message (R-4.12). An administrator's deactivation records the date and the administrator and sends an email naming a contact address (R-4.30). A second deactivation is refused as already inactive, and the service accepts an administrator's request against their own account while the interface withholds the control, as R-4.31 v2 requires. Reactivation is offered and allowed only for an account an administrator deactivated, and sends the administrator-reactivated message (R-4.19, R-4.20). Nothing built belongs to another slice: organization creation stays with slices 11 and 12. The choices the specification leaves open are recorded in decision record 0024. No secret, personal data or real address is in the code; CONTACT_EMAIL defaults to an invented example.test address. Unit, service, end-to-end and screen tests cover the seams the slice created. The failing egress check flags files outside this proposal's application output (earlier slices' gates, proposals and generated site pages), not this diff. What would change the ruling: evidence of a route in the service that creates an administrator, or of a vendor being granted administrator rights through any path.
+
+**Conditions:**
+none
