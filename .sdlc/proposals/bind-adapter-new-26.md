@@ -32,3 +32,23 @@ isolation: "none"
 **Not done.** I could not run the TypeScript typecheck because running the compiler was not approved in this session. My only edits added plain text inside two existing quoted strings, with no new quote or substitution characters, so I don't expect them to break compilation, but that has not been checked.
 
 **Routes in `surface.yaml` that do not resolve on the target.** `/opportunities/sprint-with-us/create` and `/opportunities/team-with-us/create` both answer "Page not found" when signed in and when signed out. The other Sprint With Us and Team With Us screens behave the same way, as the earlier reasons already record. R-1.9 and R-1.48 can only be tested once the build actually serves these screens. That is a gap in the application, not something a binding can fix.
+
+## Ruling
+
+**Verdict:** approve
+**By:** agent:reviewer
+**Ruled on:** claude claude-opus-5-5 (2.1.284 (Claude Code))
+
+Question: does the adapter for target 'new' bind every surface action and observation it can, and nothing else? Approve. The only change is longer text in the unbound reasons for opportunitySwuCreate and opportunityTwuCreate in tests/adapters/new/index.ts. No locator, assertion or business logic is touched, and nothing under tests/acceptance changed. The reasons are real: they name the missing surface (/opportunities/sprint-with-us/create and /opportunities/team-with-us/create answer 'Page not found' for an administrator and for a public sector employee, including when the link on /opportunities/create is followed). That matches the application, whose frontend has no route or screen for either path (sprint-with-us and team-with-us appear only in the API types, the learn-more pages and the terms links). It is also consistent with the tech lead's earlier finding that these screens belong to Slice 10. The runner's typecheck on this revision passed with no diagnostics under adapters/new, so the binder's unchecked compile risk is settled. R-1.9 and R-1.48 stay unexercised because of a gap in the application or the slice plan, not in the adapter. This proposal settles none of the open instructions (build-slice-7-3#1, build-slice-7-3#2, build-slice-7-4#3), so they stay open. The ruling would change if a binding added an assertion, if a test file were touched, or if either screen proved to be served by the build.
+
+**Conditions:**
+none
+
+### Runner-owned typecheck evidence
+
+Proposal revision: `144f7473d46e3abcfe2e6ec21a28c49d271e89eb`
+Typecheck: **passed**; exit code: 0.
+Command (in `tests`): `node node_modules/typescript/bin/tsc --noEmit --incremental false --pretty false`
+Diagnostics below are those under `adapters/new/`, which this proposal answers for.
+
+    No diagnostics.
