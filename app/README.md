@@ -67,6 +67,14 @@ A page the service needs can be re-worded but neither moved nor removed. An imag
 into a body is stored readable by anyone and referred to as `@file/<identifier>`, which the
 renderer turns into the file's address only when the text is shown.
 
+## Changed terms
+
+The managing screen of `/content/terms-and-conditions` is the only one that offers "Notify vendors
+of updated terms". When an administrator confirms it, the screen calls `POST /api/emailNotifications`
+(`updateTerms`). That withdraws every vendor's standing acceptance, answers, and then emails each
+active vendor, one message each. A vendor sees the warning on their own legal section
+(`/users/me?tab=legal`) and agrees again from there (decision record 0027).
+
 ## The first administrator
 
 The service offers no way to make the first administrator (R-4.13). An administrator is made
