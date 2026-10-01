@@ -42,6 +42,31 @@ export async function uploadPicture(file: File): Promise<PictureAnswer> {
   }
 }
 
+/**
+ * Stores an image placed into a page's body as an ordinary file readable by anyone, so every
+ * reader of the page sees it (R-8.29). It is stored as soon as it is chosen, because its
+ * reference has to go into the text.
+ */
+export async function uploadEmbeddedImage(file: File): Promise<PictureAnswer> {
+  const form = new FormData();
+  form.append("name", file.name);
+  form.append("metadata", JSON.stringify([{ tag: "any" }]));
+  form.append("file", file, file.name);
+  try {
+    const { data, error, response } = await api.POST("/api/files", { body: form as never });
+    if (response.ok) {
+      const id = (data as { id?: unknown } | undefined)?.id;
+      return typeof id === "string" ? { kind: "stored", id } : { kind: "failed" };
+    }
+    if (response.status >= 400 && response.status < 500) {
+      return { kind: "refused", reasons: reasonsIn(error) };
+    }
+    return { kind: "failed" };
+  } catch {
+    return { kind: "failed" };
+  }
+}
+
 /** Where a stored file's content is read; a picture is shown straight from here. */
 export const fileAddress = fileContentAddress;
 

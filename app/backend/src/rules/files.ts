@@ -260,3 +260,36 @@ export function contentTypeForName(name: string): string {
 export function fileContentAddress(fileId: string): string {
   return `/api/files/${fileId}?type=blob`;
 }
+
+// ------------------------------------------------------------------------ images in formatted text
+
+/**
+ * How formatted text refers to an image stored in the service: an internal marker carrying the
+ * file's identifier, never a web address, so the same text renders wherever the service runs
+ * and whatever address it answers on (R-8.29).
+ */
+export const EMBEDDED_FILE_PREFIX = "@file/";
+
+/** The marker an inserted image's reference carries. */
+export function embeddedFileMarker(fileId: string): string {
+  return `${EMBEDDED_FILE_PREFIX}${fileId}`;
+}
+
+/** The image reference the body editor inserts, with alternative text for the author to replace. */
+export const EMBEDDED_IMAGE_PLACEHOLDER_ALT = "Describe this image";
+
+export function embeddedImageReference(fileId: string): string {
+  return `![${EMBEDDED_IMAGE_PLACEHOLDER_ALT}](${embeddedFileMarker(fileId)})`;
+}
+
+/**
+ * Where an image in formatted text is read from, decided only when the text is displayed. A
+ * marker naming a well-formed file identifier becomes that file's content address; anything
+ * else — including a marker that does not resolve — is left as it was written and treated as
+ * an ordinary address (R-8.29).
+ */
+export function resolveEmbeddedFile(source: string): string {
+  if (!source.startsWith(EMBEDDED_FILE_PREFIX)) return source;
+  const fileId = source.slice(EMBEDDED_FILE_PREFIX.length);
+  return isIdentifier(fileId) ? fileContentAddress(fileId) : source;
+}

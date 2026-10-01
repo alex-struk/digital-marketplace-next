@@ -19,6 +19,9 @@ function storeOf(options: {
   byAddress?: Record<string, Page>;
 }): PageStore & { asked: string[] } {
   const asked: string[] = [];
+  const unused = async (): Promise<never> => {
+    throw new Error("Reading a page changes nothing.");
+  };
   return {
     asked,
     async findByIdentifier(identifier) {
@@ -29,6 +32,13 @@ function storeOf(options: {
       asked.push(`address:${address}`);
       return options.byAddress?.[address] ?? null;
     },
+    async authorshipOf() {
+      return { createdBy: null, updatedBy: null };
+    },
+    list: unused,
+    create: unused,
+    publish: unused,
+    remove: unused,
   };
 }
 
