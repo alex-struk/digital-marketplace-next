@@ -1,6 +1,7 @@
 # 0008 · The pages a fresh installation carries, and the address of each
 
-- Status: accepted for the build (slice 1)
+- Status: accepted for the build (slice 1); the page set is superseded by decision record 0026
+  (twenty-two stored pages, the service level agreement page answered by the service)
 - Date: 2026-09-20
 
 ## Decision

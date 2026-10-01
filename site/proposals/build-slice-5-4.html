@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>build-slice-5-4 — digital-marketplace-next</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="masthead">
+  <span class="wordmark"><a href="../index.html">digital-marketplace-next</a></span>
+  <span class="project">state of the build</span>
+  <span class="spacer"></span>
+  <span class="profile">rebuild profile</span>
+</div>
+<div class="shell">
+<nav class="sidebar" aria-label="Sections"><h2 id="nav-state">State</h2><ul aria-labelledby="nav-state"><li><a href="../index.html">Overview</a></li><li><a href="../gates.html">Gate log <span class="count">402</span></a></li><li><a href="../proposals.html" aria-current="page">Proposals <span class="count">396</span></a></li><li><a href="../results.html">Results</a></li></ul><h2 id="nav-record">Record</h2><ul aria-labelledby="nav-record"><li><a href="../journal.html">Journal <span class="count">346</span></a></li><li><a href="../runs.html">Run log <span class="count">19</span></a></li></ul><h2 id="nav-domains">Domains</h2><ul aria-labelledby="nav-domains"><li><a href="../criteria/opportunities.html">opportunities <span class="count">57</span></a></li><li><a href="../criteria/proposals.html">proposals <span class="count">40</span></a></li><li><a href="../criteria/organizations.html">organizations <span class="count">35</span></a></li><li><a href="../criteria/users.html">users <span class="count">36</span></a></li><li><a href="../criteria/evaluation.html">evaluation <span class="count">37</span></a></li><li><a href="../criteria/notifications.html">notifications <span class="count">28</span></a></li><li><a href="../criteria/content.html">content <span class="count">31</span></a></li><li><a href="../criteria/files.html">files <span class="count">31</span></a></li></ul></nav>
+<main id="main">
+<div class="page-head"><h1>build-slice-5-4</h1>
+<p class="lede">G3 · <span class="chip approve">approve</span></p></div>
+<div class="scroll"><table><tbody><tr><th scope="row">gate</th><td>G3</td></tr><tr><th scope="row">opened</th><td>2026-10-01 04:40</td></tr><tr><th scope="row">holder</th><td>agent:reviewer</td></tr><tr><th scope="row">worked by</th><td>claude claude-opus-5-5 (2.1.284 (Claude Code))</td></tr></tbody></table></div>
+<div class="body"><h2>Does slice 5 (An administrator can write and manage the service&#39;s pages) do what its criteria say?</h2>
+<p><strong>Recommendation.</strong> I made no changes to the application in this revision: the ruling didn&#39;t ask for any.</p>
+<p><strong>Worked by:</strong> claude claude-opus-5-5 (2.1.284 (Claude Code))</p>
+<p>I made no changes to the application in this revision: the ruling didn&#39;t ask for any.</p>
+<p><strong>Why nothing changed:</strong> 17 of slice 5&#39;s 18 criteria passed. The one that failed, R-7.8, failed because of a fault in the test adapter, not in the app. The ruling also confirmed that the previous build&#39;s two changes need no revision:</p>
+<ul><li>the image-chooser fix for R-7.26 and R-8.29;</li><li>keeping the current title or body when a request leaves one out, which matches R-7.20 (it refuses an empty title, not a missing one).</li></ul>
+<p><strong>Why R-7.8 fails:</strong> the public page at <code>/content/&lt;address&gt;</code> shows its dates as a definition list, with &quot;Published&quot; and &quot;Last updated&quot; as terms and each date in the element after its term. The design specifies this layout (<code>design/DESIGN.md:1614</code>, <code>design/catalogue/content-view.default.stories.tsx:30</code>). I checked <code>app/frontend/src/screens/content-view.tsx</code> against the story and they match:</p>
+<ul><li>the dates use <code>data-testid=&quot;content-published-date&quot;</code> and <code>content-updated-date</code>;</li><li>the labels are the same as the design&#39;s.</li></ul>
+<p>The adapter&#39;s <code>contentView.updatedDate</code> instead looks for a line like <code>Updated &lt;date&gt;</code>. &quot;Last updated&quot; never matches that, so the adapter reads an empty string both before and after an edit, and the test fails. Changing the page to suit the adapter would move it away from the approved design, and three earlier builds had already changed the app over this same fault. So I left the page alone.</p>
+<p><strong>Not mine to do:</strong> rebinding <code>contentView.updatedDate</code> (and <code>publishedDate</code>, for consistency) in <code>tests/adapters/new/index.ts:698</code> to read the value after the &quot;Last updated&quot; and &quot;Published&quot; terms. That fix belongs to bind-adapter, the ruling has already filed it there, and I didn&#39;t touch the adapter. Once it&#39;s rebound, R-7.8 should pass against this tree. If it still fails after that, the fault is in the app again.</p>
+<p><strong>Check:</strong> <code>npm --prefix app run check</code> passes. Typechecking passes in the migrations, backend and frontend packages, and all unit tests pass: 16 in migrations, 315 in backend, 177 in frontend. Dependencies weren&#39;t installed in this workspace, so I installed them to run the check. I then deleted the <code>node_modules</code> folders because the app has no ignore file and they would otherwise have gone back with the proposal. That install may have rewritten the lockfile. I couldn&#39;t tell, because the workspace has no version control to compare against.</p>
+<p><strong>For the next slice:</strong> nothing new is missing from slice 5. It has everything it had when it was returned.</p></div>
+<section class="ruling"><h2>Ruling</h2>
+<p><span class="chip approve">approve</span> by agent:reviewer (persona agent · claude claude-opus-5-5) on 2026-10-01 04:49.</p>
+<div class="body"><p>Question: does slice 5 (an administrator can write and manage the service&#39;s pages) do what its 18 criteria say, and nothing more? Verify ran for this proposal (build-slice-5-4) against application tree 400635c and is current. All 18 claimed criteria passed, none failed, and none went unasserted. That includes R-7.8 (publishing a change keeps the old wording as an earlier version), which had failed before because the test adapter read the page&#39;s dates wrongly; it now passes against this unchanged tree. That confirms the build&#39;s reading that the page matched the design and the adapter was at fault. On the rest of what a merge answers for, the code does what the criteria say. The backend refuses every page request from anyone but an administrator before it looks at which page is named, with one 401 refusal in the same shape whether the page exists or not (R-7.10, R-7.16); the in-memory tests and the end-to-end tests both check this across visitor, public sector employee and vendor. Title, address and body are checked against the limits the criteria give, every failing field is named, and an address another page holds is refused, including when two requests race for it and hit the database&#39;s uniqueness rule (R-7.20 to R-7.22). Pages the service needs are refused a rename or a removal on the server as well as on the screen (R-7.25). Removing a page deletes every version in one transaction (R-7.9). Publishing a change adds a new version and takes no record of which version it was based on, as R-7.28 specifies. Only an administrator is told who published or changed a page (R-7.27). An inserted image is stored readable by anyone and written into the body as an @file/&lt;identifier&gt; marker, which becomes a download address only when the page is displayed (R-8.29). The always-answering service level agreement page (R-7.18) is answered without being stored, so the fresh-installation list still shows exactly twenty-two needed pages (R-7.12); decision record 0026 explains this and the tests cover it. Nothing built belongs to another slice. The only contract change, accepting an address as well as an identifier when changing or removing a page, follows from R-7.4 and is documented. Unit tests cover the new seams: the page rules, the page store interface, the controller over the database&#39;s real table layout, the editor&#39;s formatting functions, and the screens. I saw no secret, credential or personal data. The test tokens are generated by a test identity server, and the seeded names are placeholders. The build&#39;s worry that installing dependencies rewrote the lockfile is not borne out: no lockfile is in the diff&#39;s file list. The failed egress check (internal ticket numbers) points only at files from earlier proposals, slices 2 and 3, none of which this diff touches. What would change the ruling: a failure in a later verify run against this tree, or a lockfile or dependency change turning up on the branch that the diff summary does not show.</p></div>
+</section>
+</main>
+</div>
+<footer class="site">
+  <p>Generated by the agentic SDLC pipeline from the files in this repository. Styled with the B.C. Design System token set (@bcgov/design-tokens 5.0.0).</p>
+</footer>
+</body>
+</html>

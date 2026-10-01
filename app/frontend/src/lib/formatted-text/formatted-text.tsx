@@ -47,7 +47,7 @@ function renderInline(nodes: readonly Inline[], keyPrefix: string): ReactNode[] 
       case "image":
         // A body written without alternative text gets an empty one, so a reader is not
         // read a file name (the formatting guidance asks authors to describe their images).
-        return <img key={key} src={node.src} alt={node.alt} style={image} />;
+        return <img key={key} src={node.src} alt={node.alt} style={image} data-testid="content-body-image" />;
     }
   });
 }

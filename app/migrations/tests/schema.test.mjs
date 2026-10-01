@@ -18,7 +18,7 @@ import knexFactory from "knex";
  */
 
 const require = createRequire(import.meta.url);
-const { PAGE_SLUGS, PLACEHOLDER_BODY, PAGES_NOT_CREATED } = require("../lib/fixed-pages.cjs");
+const { PAGE_SLUGS, PLACEHOLDER_BODY, SERVICE_LEVEL_AGREEMENT_SLUG } = require("../lib/fixed-pages.cjs");
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const SEED_DIR = path.resolve(here, "../../../tests/seed");
@@ -98,6 +98,13 @@ describe("the kept schema", () => {
     expect(versions.length).toBeGreaterThanOrEqual(3);
     expect(versions[2].body).toContain("**formatted**");
   });
+
+  it("still counts twenty-two needed pages once the seed has put the old ones back (R-7.12)", async () => {
+    // 000-installation.sql restores the old application's twenty-two, each only where it is
+    // missing; the migrations must not have left a needed page of their own beside them.
+    const needed = await knex("content").where({ fixed: true }).select("slug");
+    expect(needed.map((row) => row.slug).sort()).toEqual([...PAGE_SLUGS].sort());
+  });
 });
 
 describe("what a fresh installation carries (R-7.12, R-7.18)", () => {
@@ -118,10 +125,8 @@ describe("what a fresh installation carries (R-7.12, R-7.18)", () => {
     }
   });
 
-  it("creates the service level agreement page, so its five links resolve (R-7.18)", async () => {
-    const page = await knex("content").where({ slug: "service-level-agreement" }).first();
-    expect(page).toBeTruthy();
-    expect(page.fixed).toBe(true);
+  it("stores no service level agreement page, which the service answers itself (R-7.18)", async () => {
+    expect(freshPageSlugs).not.toContain(SERVICE_LEVEL_AGREEMENT_SLUG);
   });
 
   it("creates the footer's five pages (R-7.19)", async () => {
@@ -130,10 +135,9 @@ describe("what a fresh installation carries (R-7.12, R-7.18)", () => {
     }
   });
 
-  it("creates none of the seven pages nothing links to", async () => {
-    for (const slug of PAGES_NOT_CREATED) {
-      expect(freshPageSlugs, slug).not.toContain(slug);
-    }
+  it("stores exactly the twenty-two needed pages and nothing else (R-7.12)", async () => {
+    expect([...freshPageSlugs].sort()).toEqual([...PAGE_SLUGS].sort());
+    expect(freshPageSlugs).toHaveLength(22);
   });
 
   it("leaves a page an installation already holds exactly as it is", async () => {
@@ -149,7 +153,7 @@ describe("what a fresh installation carries (R-7.12, R-7.18)", () => {
     const before = await countPages();
     const versionsBefore = await countVersions();
     await knex.raw(
-      `DELETE FROM "knex_migrations" WHERE "name" = '20260920000001_fixed_pages.cjs'`,
+      `DELETE FROM "knex_migrations" WHERE "name" = '20260930000005_the_twenty_two_needed_pages.cjs'`,
     );
     await knex.migrate.latest();
 
