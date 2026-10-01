@@ -17,6 +17,9 @@ export interface Account {
   readonly acceptedTermsAt: string | null;
   readonly lastAcceptedTermsAt: string | null;
   readonly idpUsername: string;
+  readonly capabilities: readonly string[];
+  readonly deactivatedOn: string | null;
+  readonly deactivatedBy: string | null;
 }
 
 const KINDS = new Set(["VENDOR", "GOV", "ADMIN"]);
@@ -39,7 +42,52 @@ export function readAccount(value: unknown): Account | null {
     acceptedTermsAt: textOrNull(record.acceptedTermsAt),
     lastAcceptedTermsAt: textOrNull(record.lastAcceptedTermsAt),
     idpUsername: typeof record.idpUsername === "string" ? record.idpUsername : "",
+    capabilities: Array.isArray(record.capabilities)
+      ? record.capabilities.filter((entry): entry is string => typeof entry === "string")
+      : [],
+    deactivatedOn: textOrNull(record.deactivatedOn),
+    deactivatedBy: textOrNull(record.deactivatedBy),
   };
+}
+
+/** What asking for somebody's account came back with. */
+export type AccountAnswer =
+  | { readonly kind: "found"; readonly account: Account }
+  | { readonly kind: "refused" };
+
+/**
+ * Somebody's account by its identifier. The service answers the person themselves and an
+ * administrator, and refuses everyone else (R-4.25); a refusal and an account that does not
+ * exist look the same here, because the screen shows both as the missing page.
+ */
+export async function fetchAccount(accountId: string): Promise<AccountAnswer> {
+  try {
+    const { data, response } = await api.GET("/api/users/{id}", {
+      params: { path: { id: accountId } },
+    });
+    const account = response.ok ? readAccount(data) : null;
+    return account ? { kind: "found", account } : { kind: "refused" };
+  } catch {
+    return { kind: "refused" };
+  }
+}
+
+/** What the service said to a person deactivating their own account (R-4.9). */
+export type DeactivationAnswer =
+  | { readonly kind: "deactivated"; readonly identityProviderSignedOut: boolean }
+  | { readonly kind: "refused" };
+
+export async function deactivateOwnAccount(accountId: string): Promise<DeactivationAnswer> {
+  try {
+    const { data, response } = await api.DELETE("/api/users/{id}", {
+      params: { path: { id: accountId } },
+    });
+    if (!response.ok) return { kind: "refused" };
+    const record = (typeof data === "object" && data !== null ? data : {}) as Record<string, unknown>;
+    return { kind: "deactivated", identityProviderSignedOut: record.identityProviderSignedOut === true };
+  } catch {
+    return { kind: "refused" };
+  }
 }
 
 /** What asking for the current session came back with. */
@@ -114,7 +162,7 @@ export type ChangeAnswer =
 
 export async function changeOwnAccount(
   accountId: string,
-  tag: "updateProfile" | "acceptTerms" | "updateNotifications",
+  tag: "updateProfile" | "updateCapabilities" | "acceptTerms" | "updateNotifications",
   value?: unknown,
 ): Promise<ChangeAnswer> {
   try {

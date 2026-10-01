@@ -23,6 +23,13 @@ export interface Message {
   /** The heading at the top of the body. */
   readonly title: string;
   readonly body: readonly Block[];
+  /**
+   * Whether the reader's new-opportunity notice choice governs this message. Only the
+   * announcement of a newly published opportunity is (spec/contract/observables.yaml,
+   * governed_by_notification_setting); only such a message ends with an offer to unsubscribe
+   * (R-6.6, R-6.16, decision record 0022).
+   */
+  readonly governedByNoticeChoice?: boolean;
 }
 
 /**

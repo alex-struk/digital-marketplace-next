@@ -4,8 +4,9 @@
 // This file is introspected, not authored: `npm run db:pull --workspace backend` runs
 // `prisma db pull` against a migrated database and writes what is there. Slice 2 pulled the
 // whole kept schema, because signing in reads and writes `users` and every other table
-// refers to it; the names below are Prisma's, not this project's. Nothing here is edited by
-// hand except this comment, which a pull replaces and which is put back afterwards.
+// refers to it; slice 3 pulled again after adding the three file read-access tables. The names
+// below are Prisma's, not this project's. Nothing here is edited by hand except this comment,
+// which a pull replaces and which is put back afterwards.
 
 generator client {
   provider = "prisma-client-js"
@@ -105,16 +106,19 @@ model fileBlobs {
 }
 
 model files {
-  id                                 String                   @id @db.Uuid
-  createdAt                          DateTime                 @db.Timestamptz(6)
-  createdBy                          String?                  @db.Uuid
+  id                                 String                    @id @db.Uuid
+  createdAt                          DateTime                  @db.Timestamptz(6)
+  createdBy                          String?                   @db.Uuid
   name                               String
   fileBlob                           String
-  users_files_createdByTousers       users?                   @relation("files_createdByTousers", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "files_createdby_foreign")
-  fileBlobs                          fileBlobs                @relation(fields: [fileBlob], references: [hash], onDelete: NoAction, onUpdate: NoAction, map: "files_fileblob_foreign")
+  filePermissionsPublic              filePermissionsPublic?
+  filePermissionsUser                filePermissionsUser[]
+  filePermissionsUserType            filePermissionsUserType[]
+  users_files_createdByTousers       users?                    @relation("files_createdByTousers", fields: [createdBy], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "files_createdby_foreign")
+  fileBlobs                          fileBlobs                 @relation(fields: [fileBlob], references: [hash], onDelete: NoAction, onUpdate: NoAction, map: "files_fileblob_foreign")
   organizations                      organizations[]
   twuProposalAttachments             twuProposalAttachments[]
-  users_users_avatarImageFileTofiles users[]                  @relation("users_avatarImageFileTofiles")
+  users_users_avatarImageFileTofiles users[]                   @relation("users_avatarImageFileTofiles")
 }
 
 model knex_migrations {
@@ -547,6 +551,7 @@ model users {
   cwuProposalStatuses                                    cwuProposalStatuses[]
   cwuProposals_cwuProposals_createdByTousers             cwuProposals[]                                           @relation("cwuProposals_createdByTousers")
   cwuProposals_cwuProposals_updatedByTousers             cwuProposals[]                                           @relation("cwuProposals_updatedByTousers")
+  filePermissionsUser                                    filePermissionsUser[]
   files_files_createdByTousers                           files[]                                                  @relation("files_createdByTousers")
   organizations                                          organizations[]
   sessions                                               sessions[]
@@ -751,4 +756,27 @@ model twuResourceQuestionResponseEvaluatorEvaluations {
   twuProposals          twuProposals @relation(fields: [proposal], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "twuresourcequestionresponseevaluatorevaluations_proposal_foreig")
 
   @@id([proposal, questionOrder, evaluationPanelMember])
+}
+
+model filePermissionsPublic {
+  file  String @id @db.Uuid
+  files files  @relation(fields: [file], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "filepermissionspublic_file_foreign")
+}
+
+model filePermissionsUser {
+  file  String @db.Uuid
+  user  String @db.Uuid
+  files files  @relation(fields: [file], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "filepermissionsuser_file_foreign")
+  users users  @relation(fields: [user], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "filepermissionsuser_user_foreign")
+
+  @@id([file, user])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model filePermissionsUserType {
+  file     String @db.Uuid
+  userType String
+  files    files  @relation(fields: [file], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "filepermissionsusertype_file_foreign")
+
+  @@id([file, userType])
 }
