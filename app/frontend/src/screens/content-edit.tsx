@@ -19,7 +19,9 @@ import { NotFound } from "../app/not-found";
 import { useScreenTitle } from "../app/screen-title";
 import { TitledAlert } from "../app/titled-alert";
 import { readMoment } from "../lib/dates";
+import { carriesTermsAnnouncement } from "@rules/content";
 import { PageForm } from "./content-form";
+import { TermsBroadcast } from "./terms-broadcast";
 import {
   ChangesPublishedNotice,
   ContentNotice,
@@ -34,7 +36,9 @@ import {
  * its current wording — no history and no way back to an earlier version (R-7.23). They can edit
  * it and publish the change (R-7.8), move it to a new address (R-7.24), and remove an ordinary
  * page (R-7.9). A page the service needs says so, keeps its address and offers no removal
- * (R-7.25). Anybody else, and an address no page holds, is shown the missing page (R-7.6).
+ * (R-7.25). The service's own terms and conditions page also offers the announcement of
+ * changed terms to vendors (R-7.13). Anybody else, and an address no page holds, is shown the
+ * missing page (R-7.6).
  */
 export function ContentEditScreen({ slug }: { slug: string }) {
   return (
@@ -283,6 +287,7 @@ function ManagingView({
         <TextField label="Address" isReadOnly value={page.slug} data-testid="content-slug-field" />
         <TextArea label="Body" isReadOnly value={page.body} data-testid="content-body-field" />
       </section>
+      {carriesTermsAnnouncement(page.slug) ? <TermsBroadcast /> : null}
       <Modal isOpen={asking} isDismissable onOpenChange={(open) => (removing ? undefined : setAsking(open))}>
         <AlertDialog
           variant="destructive"
