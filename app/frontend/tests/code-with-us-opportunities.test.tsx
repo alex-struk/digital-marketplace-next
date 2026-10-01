@@ -165,14 +165,40 @@ describe("the dashboard's opportunities (R-1.3, R-1.9)", () => {
     expect(screen.getByTestId("dashboard-create-opportunity")).toBeTruthy();
   });
 
-  it("lists every opportunity to an administrator, with who created it", async () => {
+  it("lists every opportunity in every program to an administrator, with who created it", async () => {
     const all = [...listing.slice(0, 2), { ...listing[2]!, createdBy: others, updatedBy: others }];
-    serve(() => json(200, all));
+    const sprint = {
+      id: "00000000-0000-4000-8000-000000000804",
+      program: "sprint-with-us",
+      createdAt: "2026-09-01T17:00:00.000Z",
+      updatedAt: "2026-09-01T17:00:00.000Z",
+      createdBy: others,
+      status: "EVAL_CC",
+      title: "A sprint",
+      location: "Kamloops",
+      remoteOk: false,
+      proposalDeadline: "2026-08-01",
+      totalMaxBudget: 500000,
+      subscribed: false,
+    };
+    serve((_method, path) =>
+      path === "/api/opportunities/code-with-us"
+        ? json(200, all)
+        : path === "/api/opportunities/sprint-with-us"
+          ? json(200, [sprint])
+          : json(200, []),
+    );
     resetSessionForTests({ status: "signed-in", account: administrator }, fakeIdentity());
     renderAt("/dashboard");
     const table = await screen.findByTestId("dashboard-opportunities-table");
-    expect(within(table).getAllByTestId("dashboard-opportunity-row")).toHaveLength(3);
-    expect(within(table).getByText("Jordan Placeholder")).toBeTruthy();
+    const rows = within(table).getAllByTestId("dashboard-opportunity-row");
+    expect(rows).toHaveLength(4);
+    expect(within(table).getAllByText("Jordan Placeholder")).toHaveLength(2);
+    const sprintRow = rows.find((row) => within(row).queryByText("A sprint"))!;
+    expect(within(sprintRow).getByText("Sprint With Us")).toBeTruthy();
+    expect(within(sprintRow).getByTestId("dashboard-opportunity-link").getAttribute("href")).toBe(
+      "/opportunities/sprint-with-us/00000000-0000-4000-8000-000000000804/edit",
+    );
   });
 
   it("says so when a member of staff has created nothing yet", async () => {

@@ -8,6 +8,8 @@ import { OpportunitiesModule } from "./opportunities/opportunities.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { StatusController } from "./status/status.controller";
 import { UsersModule } from "./users/users.module";
+import { WatchingModule } from "./watching/watching.module";
+import { CountersModule } from "./counters/counters.module";
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { UsersModule } from "./users/users.module";
     FilesModule,
     NotificationsModule,
     OpportunitiesModule,
+    WatchingModule,
+    CountersModule,
   ],
   controllers: [StatusController],
 })

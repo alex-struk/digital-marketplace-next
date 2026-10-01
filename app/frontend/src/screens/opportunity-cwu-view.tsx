@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
-import { Heading, Link, Text } from "@bcgov/design-system-react-components";
+import { useEffect, useRef, useState } from "react";
+import { Checkbox, Heading, Link, Text } from "@bcgov/design-system-react-components";
 import { mayManageOpportunity } from "@rules/opportunities";
+import { mayWatch } from "@rules/opportunity-list";
 import { CwuOpportunity, fetchCwuOpportunity } from "../api/opportunities";
+import { countView, setWatching } from "../api/watching";
 import { AttachmentList } from "../app/attachments";
 import { facts, page, stack, tight } from "../app/layout";
 import { Loading } from "../app/loading";
@@ -42,6 +44,14 @@ export function OpportunityCwuViewScreen({ opportunityId }: { opportunityId: str
       current = false;
     };
   }, [opportunityId, ready, viewerId]);
+
+  // Opening the page is one view, however often it is read again while open (R-1.6).
+  const counted = useRef(false);
+  useEffect(() => {
+    if (loaded.kind !== "found" || counted.current) return;
+    counted.current = true;
+    void countView("code-with-us", loaded.opportunity.id);
+  }, [loaded]);
 
   if (loaded.kind === "missing") return <NotFound />;
   if (loaded.kind === "loading") {
@@ -97,6 +107,9 @@ export function OpportunityCwuViewScreen({ opportunityId }: { opportunityId: str
       <Text elementType="p" size="small" color="secondary">
         Opportunity ID: <span data-testid="opportunity-identifier">{opportunity.id}</span>
       </Text>
+      {mayWatch(viewer, { createdBy: opportunity.createdBy?.id ?? null }) ? (
+        <WatchControl key={opportunity.id} opportunity={opportunity} />
+      ) : null}
       {manages ? (
         <div>
           <Link href={`/opportunities/code-with-us/${opportunity.id}/edit`} isButton buttonVariant="secondary">
@@ -141,6 +154,50 @@ export function OpportunityCwuViewScreen({ opportunityId }: { opportunityId: str
         </Heading>
         <Text elementType="p">No addenda have been added.</Text>
       </section>
+    </div>
+  );
+}
+
+/**
+ * Watching the opportunity, for anyone signed in who did not create it (R-1.5). Ticking or
+ * unticking saves at once, and the change is announced; a refusal puts the box back.
+ */
+function WatchControl({ opportunity }: { opportunity: CwuOpportunity }) {
+  const [watching, setWatched] = useState(opportunity.subscribed);
+  const [saving, setSaving] = useState(false);
+  const [status, setStatus] = useState<string | null>(null);
+
+  async function change(value: boolean) {
+    setWatched(value);
+    setSaving(true);
+    setStatus(null);
+    const saved = await setWatching("code-with-us", opportunity.id, value);
+    setSaving(false);
+    if (!saved) {
+      setWatched(!value);
+      setStatus("Your choice could not be saved. Please try again.");
+      return;
+    }
+    setStatus(
+      value
+        ? "You are watching this opportunity. You will be emailed whenever it changes."
+        : "You are no longer watching this opportunity.",
+    );
+  }
+
+  return (
+    <div style={tight}>
+      <Text elementType="p" size="small" color="secondary">
+        Watching sends you an email whenever this opportunity changes.
+      </Text>
+      <Checkbox
+        isSelected={watching}
+        onChange={(value) => (saving ? undefined : void change(value))}
+        data-testid="opportunity-watch-toggle"
+      >
+        Watch this opportunity
+      </Checkbox>
+      <div role="status">{status ? <Text elementType="p">{status}</Text> : null}</div>
     </div>
   );
 }
