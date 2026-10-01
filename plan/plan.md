@@ -159,10 +159,23 @@ flow:
 Every criterion is placed; these are placed with a reservation, and each reservation is worth a
 reader's attention.
 
-- **R-1.19 and R-1.20 (Slice 7)** define the full state model and the permitted-transition table
-  for all three programs, but most of the states they name are only reachable in slices 16–19. They
-  sit in Slice 7 because the model has to exist, whole, from the first saved opportunity; the later
-  stages are shown working in the slices that reach them.
+- **R-1.8, R-1.19, R-1.20, R-1.48, R-6.15 and R-6.2** were placed in Slice 7, which builds the
+  program choice, the full state model and permitted-transition table for all three programs, the
+  create-time publication check, the blind-copy batching and the publish action whose notice may
+  fail silently. A G3 ruling on the build of Slice 7 found each unbound there, because its test
+  walks a screen Slice 7 does not serve. All of that is still built in Slice 7; only where each is
+  answered for moves. R-1.8, R-1.19, R-1.48 and R-6.15 go through
+  `/opportunities/sprint-with-us/create` and the Sprint With Us view, so they sit in Slice 10, which
+  builds both and depends on Slice 7. R-1.20 needs a cancel action, so it sits in Slice 9, which
+  builds cancellation (closure: Slices 8, 7). Its "out of an awarded opportunity" example is only
+  reachable once Slice 16 awards; the cancelled-is-final and skip-a-stage refusals are walkable in
+  Slice 9, and the awarded half is exercised again when Slice 16 lands. R-6.2's test reaches
+  `/organizations/:orgId/edit` as well as publishing an opportunity, so it sits in Slice 14 with
+  R-6.3 to R-6.5, the first slice whose closure holds both Slice 7 and Slice 11 — Slice 11 alone
+  would not, for the reason given below. The fit is uneasy in the same way as for R-6.3 to R-6.5:
+  a rule about all three programs is answered for by the Sprint With Us slice, and a service-wide
+  mail rule by the Code With Us proposal slice, only because those are where their tests first can
+  run.
 - **R-1.1 (Slice 16)** is one sentence about three programs. Its Code With Us half is demonstrated
   in the same slice as the rest of Code With Us evaluation; its Sprint With Us and Team With Us
   half (the evaluators being told) is why Slice 16 waits for Slice 15.
@@ -211,7 +224,8 @@ reader's attention.
   that screen, while the machinery stays in Slice 2. R-4.6, R-4.27 and R-4.28 moved to Slice 3,
   which delivers profile editing and `/users/:userId`. R-4.22 moved to Slice 8, where the dashboard
   a returning person lands on, with its own-opportunities table, first exists. R-6.2 moved to Slice
-  7, because its given is publishing an opportunity through the Code With Us create screen. R-6.3 to
+  7, because its given is publishing an opportunity through the Code With Us create screen, and
+  later to Slice 14 (see the first item above). R-6.3 to
   R-6.5 speak of "any message", and the ruling named no single screen for them. The screens it named
   for the group were profile editing, Code With Us creation, organization editing and the dashboard.
   These three are placed in Slice 14. What guarantees the four screens exist before they are verified
