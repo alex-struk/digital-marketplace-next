@@ -1,0 +1,23 @@
+gate: G3
+verdict: return
+by: runner:verify
+held_by: runner
+rationale: Slice 3 does not yet do what 5 of its criteria say. Each condition is
+  the criterion and what the running application did.
+conditions:
+  - 'R-4.18: Error: expect(received).toContain(expected) // indexOf — Received
+    string:    "User Profile'
+  - 'R-4.27: Error: expect(received).toBeTruthy() — Received: ""'
+  - 'R-4.29: Error: expect(received).not.toBe(expected) // Object.is equality —
+    Expected: not "checked"'
+  - 'R-6.7: Error:
+    user-profile-self-notifications.toggle_new_opportunity_notifications —
+    pressing "Email me when new opportunities are posted" on
+    http://localhost:4300/users/me?tab=notifications left it unticked, and no
+    dialog opened'
+  - "R-8.23: Error: ENAMETOOLONG: name too long, open
+    '/tmp/sdlc-upload-oKZAJP/nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn\
+    nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn\
+    nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn\
+    nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn.pdf'"
+at: 2026-10-01T00:34:07.297Z
