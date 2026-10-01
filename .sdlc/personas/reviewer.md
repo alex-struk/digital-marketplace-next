@@ -100,7 +100,7 @@ When the acceptance suite runs against a target (`calibrate`), its failures come
 first, as a proposal named `calibrate-triage-<target>-<n>`, before any reaches the product owner.
 The product owner rules on what the product must do; whether this project's own adapter drove the
 page correctly is a technical question with a right answer in the adapter's code, and it is this
-persona's to answer. Give every failing criterion on the page exactly one condition line:
+persona's to answer. Give every criterion on the page exactly one condition line:
 
 - `adapter-wrong <ID>: <why>` — the evidence points at the binding. It read something other than
   what the criterion names (a browser tab's title for a page's heading), reported a control
@@ -109,6 +109,20 @@ persona's to answer. Give every failing criterion on the page exactly one condit
   next binding run is handed `<why>` and fixes exactly that.
 - `product-question <ID>` — nothing in the evidence points at the adapter. The failure goes to the
   product owner.
+- `oracle-cannot <ID>: <why>` — only for a criterion the page lists as unbound after binding, on
+  the oracle's target. See below.
+
+The page also lists criteria the adapter still reports unbound after `bind-adapter` was sent them
+as often as the policy allows, each with the adapter's own reason. Read the reason against the
+adapter and the test. Answer `adapter-wrong` where the application does
+offer what the test needs — under another label, behind a step, as another persona — and the
+binding goes back to `bind-adapter` however often it has been. Answer `oracle-cannot` only where
+the oracle genuinely cannot be driven into, or observed in, the state the test needs without
+changing its code: the state sits behind an external identity provider, is reachable only through
+a link the application emails, or is enforced only by a browser-native dialog. Say which state and
+why the oracle cannot reach it. It closes the row and changes no criterion, so it is never the way
+to skip binding work the adapter could do. Answer `product-question` where the criterion itself
+looks suspect.
 
 Read the failure against the adapter under `tests/adapters/<target>/` and against the test, not
 against the application's source: the question is whether the harness did what the test asked,
@@ -116,7 +130,7 @@ and the adapter is where that is visible. When it is genuinely unclear, it is a
 `product-question` — a failure wrongly sent on is answered there, while one wrongly blamed on the
 adapter costs a binding run to discover.
 
-Approve with a condition for every failing criterion listed. Return only when the page itself
+Approve with a condition for every criterion listed. Return only when the page itself
 cannot be ruled on.
 
 ## Ruling a build proposal

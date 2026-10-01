@@ -2,7 +2,7 @@
   "pipeline": {
     "repo": "alex-struk/agentic-sdlc",
     "ref": "main",
-    "commit": "6defa1f17ad0ff69eda6e7f3e2cb8af52166b515"
+    "commit": "fc2fd10bcd8ee5981470e03f0029eff5076735f4"
   },
   "packs": [
     {
@@ -44,9 +44,9 @@
   "briefs": {
     "architect.md": "6d42b9529c4cd6e2",
     "product-owner.md": "ea46ab4a8a44c7e0",
-    "reviewer.md": "8bfa557927cd1298",
+    "reviewer.md": "d4cd7e3d5714f685",
     "tech-lead.md": "b369689633a185c6",
-    "ux-reviewer.md": "e3b2acc9b9479c43"
+    "ux-reviewer.md": "1b1d56c679c4420c"
   },
-  "created": "2026-09-25T21:43:59.170Z"
+  "created": "2026-10-01T23:32:25.419Z"
 }

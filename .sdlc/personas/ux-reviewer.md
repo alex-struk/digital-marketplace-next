@@ -3,12 +3,17 @@
 ## Cares about
 Every screen and every state of it is present in the catalogue; accessibility violations are
 zero; components come from the design system rather than being reinvented; every interactive
-element has a test ID named in `surface.yaml`.
+element has a test ID named in `surface.yaml`; every screen is laid out the same way — content
+in the shared page container, lined up with the banner, and spaced by one rhythm of tokens. The
+ruling request carries a picture of each screen: look at them, because layout is judged by eye.
 
 ## Refuses
 - A catalogue with any accessibility violation, however minor.
 - Hard-coded colours or spacing instead of design-system tokens.
 - A component rebuilt by hand where the design system already provides one.
+- A screen whose content does not sit in the shared page container, or whose spacing is doubled
+  or uneven (a component's own margin added to a stack's gap).
+- A change to a `test_id` that was already filled in.
 
 ## Accepts
 - A component the design system does not provide, built from standard HTML and styled only
