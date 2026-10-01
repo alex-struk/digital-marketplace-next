@@ -23,8 +23,13 @@
 // its Capabilities, Organizations, Notifications and Legal sections, another account's
 // /users/:userId and the list of accounts at /users to the administrator, the content
 // management screens (/content, /content/create, /content/:slug/edit) to the administrator,
-// and /sign-up/complete to a vendor still to complete a profile; every other screen that
-// needs a session — opportunities, proposals, organizations, evaluation —
+// and /sign-up/complete to a vendor still to complete a profile. To the administrator and
+// public sector staff it also serves the program chooser (/opportunities/create), the Code
+// With Us form (/opportunities/code-with-us/create) and a Code With Us opportunity's
+// management screen (/opportunities/code-with-us/:opportunityId/edit, its ?tab= sections and
+// form, attachments included); a Code With Us opportunity's public page opens for anybody.
+// Every other screen that needs a session — Sprint With Us and Team With Us, proposals,
+// organizations, evaluation, a Code With Us report —
 // answers "Page not found" (so does /users, to anyone but the administrator), and
 // /admin/email-notification-reference is not a screen at all (the service answers it 404
 // "Cannot GET", to the administrator too). Those screens' open() reports "unbound:
@@ -285,10 +290,12 @@ export default function create(
 
   const camel = (name: string): string => name.replace(/_([a-z0-9])/g, (_match, c: string) => c.toUpperCase());
 
-  // What walking the target signed in found: only the dashboard and one's own account screens
-  // are served to a signed-in person; everything else answers "Page not found".
+  // What walking the target signed in found: the dashboard, one's own account screens, and
+  // to public sector staff and the administrator the program chooser, the Code With Us form
+  // and a Code With Us opportunity's management screen; everything else answers "Page not
+  // found".
   const NOBODY_SIGNS_IN =
-    'walked signed in (as the administrator, and as a vendor for a vendor\'s screens — the seeded organization owner for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person only /dashboard (a greeting and nothing else), the account screens under /users and, to the administrator, the content-management screens under /content: every opportunity, proposal, organization and evaluation screen, /opportunities and /organizations included, answers "Page not found"';
+    'walked signed in (as the administrator, as a public sector employee, and as a vendor for a vendor\'s screens — the seeded organization owner for the organization screens — with the seeded records\' identifiers), the running build serves a signed-in person /dashboard (a greeting and nothing else), the account screens under /users, to the administrator the content-management screens under /content, and to the administrator and public sector staff only /opportunities/create, /opportunities/code-with-us/create and /opportunities/code-with-us/:opportunityId/edit; every other opportunity, proposal, organization and evaluation screen — every Sprint With Us and Team With Us screen (tried with the seeded closed, awarded and at-consensus opportunities of both), the Code With Us proposal screens (tried as a vendor with the seeded published Code With Us opportunity, whose page offers no way to start one), /opportunities/code-with-us/:opportunityId/complete, /opportunities and /organizations included — answers "Page not found"';
 
   // What each such address answered a signed-out visitor when it was last opened: /dashboard
   // and /sign-up/complete send them to /sign-in?redirectOnSuccess=…, and everything else
@@ -3747,17 +3754,110 @@ export default function create(
   const cwuNew = signedInScreen("opportunity-cwu-create", "/opportunities/code-with-us/create");
   const CWU_FIELDS: Record<string, RegExp> = {
     title: /^\s*title\b/i,
+    teaser: /^\s*teaser\b/i,
+    summary: /^\s*teaser\b/i,
+    location: /^\s*location\b/i,
+    remoteDesc: /remote work description/i,
+    remoteDescription: /remote work description/i,
+    reward: /^\s*reward\b/i,
+    description: /^\s*description\b/i,
     proposalDeadline: /proposal\s*deadline/i,
     assignmentDate: /assignment\s*date/i,
-    startDate: /(proposed\s*|work\s*)?start\s*date/i,
+    startDate: /^\s*(proposed\s*|work\s*)?start\s*date/i,
     completionDate: /completion\s*date/i,
   };
-  async function cwuSubmit(member: string, input: unknown, name: RegExp): Promise<void> {
-    await cwuNew.on(member);
-    await fillFrom(cwuNew.where(member), input, CWU_FIELDS, ["attachment", "attachments", "file"]);
-    await press(cwuNew.where(member), name);
-    await confirmIfAsked(cwuNew.where(member), name);
+  const CWU_REMOTE = ["remoteOk", "remote", "remoteAllowed", "remoteWork", "remoteAcceptable"];
+  const CWU_SKILLS = ["skills", "mandatorySkills", "requiredSkills", "skill"];
+  const CWU_FILES = ["attachment", "attachments", "file", "files"];
+
+  // "Is remote work acceptable?" is a pair of radios ("Yes", "No") drawn under their own
+  // labels, which take the click; the radio itself sits beneath them.
+  async function chooseRemote(where: string, value: unknown): Promise<void> {
+    const group = seen(page.getByRole("radiogroup", { name: /remote work/i })).first();
+    if (!(await group.count())) unbound(where, `no "Is remote work acceptable?" choice on ${page.url()}; it offers ${await offered()}`);
+    const answer = saysYes(value) ? "Yes" : "No";
+    const radio = group.getByRole("radio", { name: answer, exact: true });
+    if (await radio.isChecked().catch(() => false)) return;
+    await group.getByText(answer, { exact: true }).first().click();
+    if (!(await radio.isChecked().catch(() => false))) await radio.check({ force: true }).catch(() => undefined);
   }
+
+  // "Skills (required)" opens a list of skills to pick from, and keeps it open while more are
+  // picked; each pick is drawn beside the button as a row of "Skills selections" with its
+  // own "Remove <skill>" button. The list given is the list kept: others are removed.
+  async function chooseSkills(where: string, value: unknown): Promise<void> {
+    const wanted = [value].flat().map(textOf).map((one) => one.trim()).filter(Boolean);
+    const picked = seen(page.getByRole("grid", { name: /skills selections/i }).getByRole("row"));
+    const already: string[] = [];
+    for (let i = 0; i < (await picked.count()); i++) already.push((await picked.nth(i).innerText()).trim().split("\n")[0]);
+    for (const old of already) {
+      if (wanted.some((one) => one.toLowerCase() === old.toLowerCase())) continue;
+      const remove = seen(page.getByRole("button", { name: new RegExp(`^remove ${escapeRx(old)}\\b`, "i") })).first();
+      if (await remove.count()) await remove.click();
+    }
+    const missing = wanted.filter((one) => !already.some((old) => old.toLowerCase() === one.toLowerCase()));
+    if (!missing.length) return;
+    const opener = seen(page.getByRole("button", { name: /skills/i })).first();
+    if (!(await opener.count())) unbound(where, `no "Skills" chooser on ${page.url()}; it offers ${await offered()}`);
+    await opener.click();
+    const list = seen(page.getByRole("listbox", { name: /skills/i })).last();
+    await list.waitFor({ state: "visible", timeout: 5000 }).catch(() => undefined);
+    for (const skill of missing) {
+      if (!(await list.isVisible().catch(() => false))) await opener.click();
+      const option = list.getByRole("option", { name: new RegExp(`^\\s*${escapeRx(skill)}\\s*$`, "i") });
+      if (!(await option.count())) {
+        const names = (await list.getByRole("option").allInnerTexts().catch(() => [] as string[])).map((one) => one.trim()).filter(Boolean);
+        await page.keyboard.press("Escape").catch(() => undefined);
+        unbound(where, `the "Skills" chooser on ${page.url()} offers no skill "${skill}"; it offers ${names.join(", ")}`);
+      }
+      await option.first().click();
+    }
+    if (await list.isVisible().catch(() => false)) await page.keyboard.press("Escape").catch(() => undefined);
+  }
+
+  const escapeRx = (words: string): string => words.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  // Every value the test gave, entered in the Code With Us form before anything is pressed.
+  async function fillCwuForm(where: string, input: unknown): Promise<void> {
+    const remote = given(input, CWU_REMOTE);
+    if (remote !== undefined && remote !== null) await chooseRemote(where, remote);
+    const skills = given(input, CWU_SKILLS);
+    if (skills !== undefined && skills !== null) await chooseSkills(where, skills);
+    await fillFrom(where, input, CWU_FIELDS, [...CWU_REMOTE, ...CWU_SKILLS, ...CWU_FILES]);
+    const files = given(input, CWU_FILES);
+    for (const file of [files ?? []].flat()) await addAttachmentFile(where, file);
+  }
+
+  // The form's own action, and the confirmation it asks for ("Publish this opportunity?"
+  // with "Publish opportunity"). An action the form accepts lands on the new opportunity's
+  // management screen; one it refuses stays on the form with its messages.
+  async function cwuSubmit(member: string, input: unknown, name: RegExp): Promise<void> {
+    const where = cwuNew.where(member);
+    await cwuNew.on(member);
+    await fillCwuForm(where, input);
+    await press(where, name);
+    await confirmIfAsked(where, /^\s*(publish|submit|save)( opportunity| for review| draft)?\s*$/i);
+    // Accepted, it lands on the new opportunity's management screen; refused, it stays on
+    // the form with an alert ("This opportunity has N problems").
+    const deadline = Date.now() + 10000;
+    while (Date.now() < deadline) {
+      if (/\/edit$/.test(new URL(page.url()).pathname)) break;
+      if (await seen(page.getByRole("alert")).count()) break;
+      await page.waitForTimeout(250);
+    }
+    await ready();
+  }
+
+  // "Add attachment" opens the file chooser; the file is listed as "New: <name>, <size>.",
+  // with a "Name for <name> (optional)" box, until the form is saved.
+  async function addAttachmentFile(where: string, input: unknown): Promise<void> {
+    const control = /^\s*add attachment\s*$/i;
+    if (!(await findControl(page, control))) {
+      unbound(where, `no "Add attachment" control on ${page.url()}; it offers ${await offered()}`);
+    }
+    await offerFile(where, control, input);
+  }
+
   const opportunityCwuCreate: S.OpportunityCwuCreatePage = {
     open: () => cwuNew.open(),
     saveDraft: (input) => cwuSubmit("save_draft", input, /^\s*save draft\s*$/i),
@@ -3765,14 +3865,7 @@ export default function create(
     publish: (input) => cwuSubmit("publish", input, /^\s*publish\s*$/i),
     addAttachment: async (input) => {
       await cwuNew.on("add_attachment");
-      if (!(await findControl(page, /add attachment/i))) {
-        const tab = seen(page.getByRole("tab", { name: /attachments/i }));
-        if (await tab.count()) {
-          await tab.first().click();
-          await settle();
-        }
-      }
-      await offerFile(cwuNew.where("add_attachment"), /add attachment|attach|choose file/i, input);
+      await addAttachmentFile(cwuNew.where("add_attachment"), input);
     },
     fieldError: () => cwuNew.messages("field_error"),
   };
@@ -5102,6 +5195,587 @@ export default function create(
     },
   };
 
+  // ---------------------------------------------------------------- choosing a program
+  //
+  // /opportunities/create, to the administrator and public sector staff: "Create an
+  // opportunity" over one region per program, each its name, a sentence, "Maximum budget:
+  // <amount>" and a "Create a <program> opportunity" link to that program's form. A vendor
+  // is shown "Page not found" there.
+  const programSelect = signedInScreen("opportunity-program-select", "/opportunities/create");
+  async function programRegions(member: string): Promise<Locator> {
+    await programSelect.on(member);
+    return seen(page.getByRole("main").getByRole("region"));
+  }
+  async function chooseProgram(member: string, program: string): Promise<void> {
+    await programSelect.on(member);
+    await press(programSelect.where(member), new RegExp(`^\\s*create an? ${program} opportunity\\s*$`, "i"));
+    await ready();
+  }
+  const opportunityProgramSelect: S.OpportunityProgramSelectPage = {
+    open: () => programSelect.open(),
+    chooseCodeWithUs: () => chooseProgram("choose_code_with_us", "Code With Us"),
+    chooseSprintWithUs: () => chooseProgram("choose_sprint_with_us", "Sprint With Us"),
+    chooseTeamWithUs: () => chooseProgram("choose_team_with_us", "Team With Us"),
+    // One block per program, its lines joined; blocks separated by a blank line.
+    programCard: async () => {
+      const regions = await programRegions("program_card");
+      const out: string[] = [];
+      for (let i = 0; i < (await regions.count()); i++) out.push(lined(await regions.nth(i).innerText()).join("\n"));
+      return out.join("\n\n");
+    },
+    // "Code With Us: Up to $70,000", one line per program.
+    maxBudget: async () => {
+      const regions = await programRegions("max_budget");
+      const out: string[] = [];
+      for (let i = 0; i < (await regions.count()); i++) {
+        const lines = lined(await regions.nth(i).innerText());
+        const budget = lines.find((line) => /^maximum budget\b/i.test(line));
+        if (budget) out.push(`${lines[0]}: ${budget.replace(/^maximum budget:?\s*/i, "")}`);
+      }
+      return out.join("\n");
+    },
+  };
+
+  // ---------------------------------------------------------------- reading term and definition
+
+  // A value this target draws as a term over its definition ("Proposal deadline" /
+  // "December 1, 2026 at 4:00 p.m. Pacific time"); a term the screen does not carry reads
+  // as nothing.
+  async function definitionOf(term: RegExp): Promise<string> {
+    await ready();
+    return page
+      .getByRole("main")
+      .evaluate(
+        (main, [source, flags]) => {
+          const wanted = new RegExp(source, flags);
+          for (const dt of Array.from(main.querySelectorAll("dt"))) {
+            if (!wanted.test((dt as HTMLElement).innerText.trim())) continue;
+            let next = dt.nextElementSibling;
+            while (next && next.tagName.toLowerCase() !== "dd") next = next.nextElementSibling;
+            return next ? (next as HTMLElement).innerText.trim() : "";
+          }
+          return "";
+        },
+        [term.source, term.flags] as const,
+      )
+      .catch(() => "");
+  }
+
+  // "Opportunity ID: <id>", drawn on both the public page and the management screen.
+  async function shownIdentifier(): Promise<string> {
+    const line = (await textLines()).find((one) => /^opportunity id:/i.test(one));
+    if (line) return line.replace(/^opportunity id:\s*/i, "").trim();
+    return /^\/opportunities\/[^/]+\/([^/?#]+)/.exec(new URL(page.url()).pathname)?.[1] ?? "";
+  }
+
+  // ---------------------------------------------------------------- a Code With Us opportunity's page
+  //
+  // /opportunities/code-with-us/:opportunityId: "Code With Us opportunity" over the title,
+  // then Status, Proposal deadline, Reward, Location, Remote work, Published, Created by and
+  // Last changed by as terms and definitions, "Opportunity ID: <id>", and the Description
+  // (with its Attachments), Skills, Key dates ("Assignment date: <date>", ...) and Addenda
+  // sections. Walked as the administrator, a public sector employee and a vendor on the
+  // seeded published, draft and awarded opportunities and on one just published: it offers
+  // no watch control and no way to start a proposal, and an awarded opportunity names no
+  // successful proponent anywhere on it.
+  const cwuView = signedInScreen(CWU_VIEW, "/opportunities/code-with-us/:opportunityId");
+  async function onCwuView(member: string): Promise<void> {
+    const refused = await refusalShown();
+    if (refused) unbound(cwuView.where(member), `the opportunity did not open at ${page.url()}: ${refused}`);
+  }
+  async function cwuViewTerm(member: string, term: RegExp): Promise<string> {
+    await onCwuView(member);
+    return definitionOf(term);
+  }
+  async function cwuKeyDate(member: string, label: RegExp): Promise<string> {
+    await onCwuView(member);
+    const region = seen(page.getByRole("region", { name: /^key dates$/i }));
+    if (!(await region.count())) return "";
+    for (const line of lined(await region.first().innerText())) {
+      const found = label.exec(line);
+      if (found) return line.slice(found.index + found[0].length).replace(/^\s*:\s*/, "").trim();
+    }
+    return "";
+  }
+  const CWU_VIEW_WALKED =
+    "walked as the administrator, a public sector employee and a vendor on the seeded published, draft and awarded Code With Us opportunities and on one just published";
+  const opportunityCwuView: S.OpportunityCwuViewPage = {
+    open: (params) => go("/opportunities/code-with-us/:opportunityId", params as unknown as Record<string, string>),
+    toggleWatch: async () => {
+      await onCwuView("toggle_watch");
+      const control = await findControl(page, /^\s*(watch|watching|unwatch|stop watching)( this opportunity)?\s*$/i);
+      if (!control) unbound(cwuView.where("toggle_watch"), `${CWU_VIEW_WALKED}: the page offers no control to watch the opportunity; on ${page.url()} it offers ${await offered()}`);
+      await control.click();
+      await settle();
+    },
+    startProposal: async () => {
+      await onCwuView("start_proposal");
+      const control = await findControl(page, /^\s*(start|create|submit|write)( a)? proposal\s*$/i);
+      if (!control) unbound(cwuView.where("start_proposal"), `${CWU_VIEW_WALKED}: the page offers no way to start a proposal, and /opportunities/code-with-us/:opportunityId/proposals/create answers "Page not found" to the vendor; on ${page.url()} it offers ${await offered()}`);
+      await control.click();
+      await settle();
+    },
+    opportunityIdentifier: async () => {
+      await onCwuView("opportunity_identifier");
+      return shownIdentifier();
+    },
+    status: () => cwuViewTerm("status", /^status$/i),
+    publishedDate: async () => {
+      const shown = await cwuViewTerm("published_date", /^published$/i);
+      return /^not yet published$/i.test(shown) ? "" : shown;
+    },
+    createdByName: () => cwuViewTerm("created_by_name", /^created by$/i),
+    lastChangedByName: () => cwuViewTerm("last_changed_by_name", /^last changed by$/i),
+    proposalDeadline: () => cwuViewTerm("proposal_deadline", /^proposal deadline$/i),
+    assignmentDate: () => cwuKeyDate("assignment_date", /^assignment date\b/i),
+    startDate: () => cwuKeyDate("start_date", /^start date\b/i),
+    reward: () => cwuViewTerm("reward", /^reward$/i),
+    // The Addenda section's entries; "No addenda have been added." is none.
+    addenda: async () => {
+      await onCwuView("addenda");
+      const region = seen(page.getByRole("region", { name: /^addenda$/i }));
+      if (!(await region.count())) return "";
+      return lined(await region.first().innerText())
+        .slice(1)
+        .filter((line) => !/^no addenda have been added\.?$/i.test(line))
+        .join("\n");
+    },
+    // An awarded opportunity's page names no winner (seen on the seeded awarded one), so
+    // these read as nothing on a page that opened.
+    successfulProponent: async () => {
+      await onCwuView("successful_proponent");
+      const said = (await textLines()).find((line) => /awarded to\s+\S/i.test(line));
+      return said ? (/awarded to\s+(.+)$/i.exec(said)?.[1] ?? "").replace(/\.$/, "").trim() : definitionOf(/^(successful proponent|awarded to)$/i);
+    },
+    successfulProponentContactDetails: async () => {
+      await onCwuView("successful_proponent_contact_details");
+      return awardDetail(`${CWU_VIEW}.successful_proponent_contact_details`, CONTACT_DETAIL);
+    },
+    successfulProponentScore: async () => {
+      await onCwuView("successful_proponent_score");
+      return awardDetail(`${CWU_VIEW}.successful_proponent_score`, SCORE_DETAIL);
+    },
+  };
+
+  // ---------------------------------------------------------------- managing a Code With Us opportunity
+  //
+  // /opportunities/code-with-us/:opportunityId/edit, to the administrator and to public
+  // sector staff for an opportunity they may manage (another staff member's draft answers
+  // "Page not found"): "Manage a Code With Us opportunity" over the title, "Status: <state>"
+  // and "Opportunity ID: <id>", an "Opportunity actions" group, and the sections as links
+  // under "Opportunity sections" (?tab=summary, opportunity, addenda, history). The actions
+  // offered follow the state: a draft offers "Edit", "Publish" (the administrator) or
+  // "Submit for review" (staff), and "Delete"; a published opportunity only "Edit"; an
+  // awarded one nothing. "Edit" goes to ?tab=opportunity, the form itself, with "Save
+  // changes" and "Cancel". Publishing and deleting ask first ("Publish opportunity",
+  // "Delete opportunity").
+  const CWU_EDIT = "opportunity-cwu-edit";
+  const cwuManage = signedInScreen(CWU_EDIT, "/opportunities/code-with-us/:opportunityId/edit");
+  const CWU_MANAGE_WALKED =
+    "walked as the administrator and as a public sector employee on the seeded draft, published, awarded and with-three-proposals Code With Us opportunities and on ones just saved and published";
+  function actionsGroup(): Locator {
+    return seen(page.getByRole("group", { name: /^opportunity actions$/i })).first();
+  }
+  // The management screen's own address, without the section it is on.
+  function manageAddress(): string {
+    const found = /^(\/opportunities\/[^/]+\/[^/?#]+\/edit)/.exec(new URL(page.url()).pathname);
+    return found ? baseURL + found[1] : "";
+  }
+  async function toSection(member: string, tab: string): Promise<boolean> {
+    await cwuManage.on(member);
+    const link = seen(page.getByRole("navigation", { name: /opportunity sections/i }).getByRole("link", { name: new RegExp(`^\\s*${tab}\\s*$`, "i") }));
+    if (!(await link.count())) return false;
+    const href = (await link.first().getAttribute("href")) ?? "";
+    if (!new URL(page.url()).search.includes(`tab=${tab.toLowerCase()}`)) {
+      if (href) await visit(href);
+      else await link.first().click();
+      await ready();
+    }
+    return true;
+  }
+  async function sectionText(member: string, tab: string): Promise<string> {
+    if (!(await toSection(member, tab))) return "";
+    const region = seen(page.getByRole("main").getByRole("region", { name: new RegExp(`^${tab}$`, "i") }));
+    return (await region.count()) ? lined(await region.first().innerText()).join("\n") : "";
+  }
+  async function manageAction(member: string, name: RegExp, confirm: RegExp | null): Promise<void> {
+    const where = cwuManage.where(member);
+    await cwuManage.on(member);
+    if (!(await actionsGroup().count())) await toSection(member, "Summary");
+    const group = actionsGroup();
+    const control = (await group.count()) ? seen(group.getByRole("button", { name })).first() : null;
+    if (!control || !(await control.count())) {
+      const status = (await textLines()).find((line) => /^status:/i.test(line)) ?? "no status shown";
+      const there = (await group.count()) ? (await group.getByRole("button").allInnerTexts()).map((one) => `"${one.trim()}"`).join(", ") : "nothing";
+      unbound(where, `no control named ${name} among the opportunity's actions on ${page.url()} (${status}; the actions offered are ${there}); ${CWU_MANAGE_WALKED}`);
+    }
+    if (await isDisabled(control)) throw new Error(`${where} — the control named ${name} is disabled on ${page.url()}`);
+    await control.click();
+    await settle();
+    if (confirm) await confirmIfAsked(where, confirm);
+    await ready();
+  }
+  // The form on ?tab=opportunity, filled from the input and saved.
+  async function saveCwuDetails(member: string, input: unknown): Promise<void> {
+    const where = cwuManage.where(member);
+    if (!Object.keys(record(input)).length) return;
+    await toCwuForm(member);
+    await fillCwuForm(where, input);
+    await press(where, /^\s*save changes\s*$/i);
+    await confirmIfAsked(where, /^\s*(save|publish)( changes)?\s*$/i);
+    await ready();
+  }
+  async function toCwuForm(member: string): Promise<void> {
+    if (!(await toSection(member, "Opportunity"))) {
+      unbound(cwuManage.where(member), `the management screen at ${page.url()} offers no "Opportunity" section; it offers ${await offered()}`);
+    }
+  }
+  async function cwuFormDate(member: string, label: RegExp): Promise<string> {
+    await toCwuForm(member);
+    const box = await fieldLabelled(label, false);
+    return box ? valueOf(box) : "";
+  }
+  async function summaryTerm(member: string, term: RegExp): Promise<string> {
+    await cwuManage.on(member);
+    if (!(await definitionOf(term))) await toSection(member, "Summary");
+    return definitionOf(term);
+  }
+  // Views, watchers and proposals: a draft's summary says "Views, watchers and proposals are
+  // counted once the opportunity is published." and a published one shows no count at all.
+  async function reportingCount(member: string, term: RegExp): Promise<string> {
+    const shown = await summaryTerm(member, term);
+    if (shown) return shown;
+    if ((await textLines()).some((line) => /counted once the opportunity is published/i.test(line))) return "";
+    return unbound(
+      cwuManage.where(member),
+      `the summary on ${page.url()} shows no ${term} count (it shows ${(await textLines()).filter((line) => !/^(summary|opportunity|addenda|history)$/i.test(line)).slice(0, 14).join(" / ")}); ${CWU_MANAGE_WALKED}`,
+    );
+  }
+  const opportunityCwuEdit: S.OpportunityCwuEditPage = {
+    open: (params) => cwuManage.open(params as unknown as Record<string, string>),
+    // "Edit" opens the form; whatever the input carries is entered and saved there.
+    editDetails: async (input) => {
+      await manageAction("edit_details", /^\s*edit\s*$/i, null);
+      if (Object.keys(record(input)).length) {
+        const where = cwuManage.where("edit_details");
+        await fillCwuForm(where, input);
+        await press(where, /^\s*save changes\s*$/i);
+        await confirmIfAsked(where, /^\s*(save|publish)( changes)?\s*$/i);
+        await ready();
+      }
+    },
+    submitForReview: async (input) => {
+      await saveCwuDetails("submit_for_review", input);
+      await manageAction("submit_for_review", /^\s*submit for review\s*$/i, /^\s*submit( for review| opportunity)?\s*$/i);
+    },
+    publish: async (input) => {
+      await saveCwuDetails("publish", input);
+      await manageAction("publish", /^\s*publish\s*$/i, /^\s*publish( opportunity)?\s*$/i);
+    },
+    cancelOpportunity: () => manageAction("cancel_opportunity", /^\s*cancel( opportunity)?\s*$/i, /^\s*cancel opportunity\s*$/i),
+    deleteOpportunity: () => manageAction("delete_opportunity", /^\s*delete( opportunity)?\s*$/i, /^\s*delete( opportunity)?\s*$/i),
+    addAddendum: async (input) => {
+      const where = cwuManage.where("add_addendum");
+      if (!(await toSection("add_addendum", "Addenda"))) {
+        unbound(where, `the management screen at ${page.url()} offers no "Addenda" section (a draft has none); ${CWU_MANAGE_WALKED}`);
+      }
+      const add = await findControl(page.getByRole("main"), /^\s*add( an)? addend(um|a)\s*$/i);
+      if (!add) {
+        unbound(where, `the Addenda section on ${page.url()} offers no control to add an addendum, only "${(await sectionText("add_addendum", "Addenda")).replace(/\n/g, " / ")}"; ${CWU_MANAGE_WALKED}`);
+      }
+      await add.click();
+      await settle();
+      const words = givenText(input, ["addendum", "text", "description", "body", "content"]) || textOf(input);
+      const box = seen(page.getByRole("textbox")).last();
+      if (words && (await box.count())) await box.fill(words);
+      await press(where, /^\s*(add|publish|save|submit)( addendum)?\s*$/i);
+      await confirmIfAsked(where, /^\s*(add|publish|save|submit)( addendum)?\s*$/i);
+    },
+    addNote: async (input) => {
+      const where = cwuManage.where("add_note");
+      if (!(await toSection("add_note", "History"))) unbound(where, `the management screen at ${page.url()} offers no "History" section`);
+      const add = await findControl(page.getByRole("main"), /^\s*add( a)? note\s*$/i);
+      if (!add) {
+        unbound(where, `the History section on ${page.url()} is a table of entries ("Date", "Entry", "By", "Note") with no control to add a note; ${CWU_MANAGE_WALKED}`);
+      }
+      await add.click();
+      await settle();
+      const words = givenText(input, ["note", "text", "body", "content"]) || textOf(input);
+      const box = seen(page.getByRole("textbox")).last();
+      if (words && (await box.count())) await box.fill(words);
+      await press(where, /^\s*(add|save|submit)( note)?\s*$/i);
+    },
+    opportunityIdentifier: async () => {
+      await cwuManage.on("opportunity_identifier");
+      return shownIdentifier();
+    },
+    createdByName: () => summaryTerm("created_by_name", /^created by$/i),
+    lastChangedByName: () => summaryTerm("last_changed_by_name", /^last changed by$/i),
+    summaryTab: () => sectionText("summary_tab", "Summary"),
+    opportunityTab: () => sectionText("opportunity_tab", "Opportunity"),
+    addendaTab: () => sectionText("addenda_tab", "Addenda"),
+    historyTab: () => sectionText("history_tab", "History"),
+    proposalsTab: async () => {
+      if (await toSection("proposals_tab", "Proposals")) return sectionText("proposals_tab", "Proposals");
+      return unbound(
+        cwuManage.where("proposals_tab"),
+        `the management screen at ${page.url()} offers only the sections ${(await seen(page.getByRole("navigation", { name: /opportunity sections/i }).getByRole("link")).allInnerTexts()).map((one) => `"${one.trim()}"`).join(", ")}, and ?tab=proposals shows the summary; ${CWU_MANAGE_WALKED}`,
+      );
+    },
+    reportingViews: () => reportingCount("reporting_views", /^views$/i),
+    reportingWatchers: () => reportingCount("reporting_watchers", /^watchers$/i),
+    reportingProposals: () => reportingCount("reporting_proposals", /^proposals$/i),
+    proposalDeadline: () => cwuFormDate("proposal_deadline", /proposal\s*deadline/i),
+    assignmentDate: () => cwuFormDate("assignment_date", /assignment\s*date/i),
+    startDate: () => cwuFormDate("start_date", /^\s*start\s*date/i),
+    completionDate: () => cwuFormDate("completion_date", /completion\s*date/i),
+  };
+
+  // ---------------------------------------------------------------- the attachment control
+  //
+  // On a Code With Us opportunity's form (?tab=opportunity of its management screen, and the
+  // create form): an "Attachments" region with "Any type of file, up to 10 MB each." and
+  // "Add attachment", which opens the file chooser. A stored attachment is a list item with
+  // its name in a read-only "Attachment name" box ("Already stored, so its name cannot be
+  // changed."), a "Download <name>" link to /api/files/<id>?type=blob and "Remove <name>". A
+  // file just added is "New: <name>, <size>. It is uploaded when you save." with a "Name for
+  // <name> (optional)" box, "Will be saved as: <name>" and "Remove <name>"; one over the
+  // limit is "New: <name>, <size>." with the alert "<name> is too large to attach". Changes
+  // are kept by the form's "Save changes" (or by the create form's own action). The Sprint
+  // With Us and Team With Us forms answer "Page not found".
+  const ATTACH = "file-attachment-control";
+  function attachmentRegion(): Locator {
+    return seen(page.getByRole("region", { name: /^attachments$/i })).first();
+  }
+  async function onAttachments(member: string): Promise<Locator> {
+    const where = `${ATTACH}.${member}`;
+    await ready();
+    const pathname = new URL(page.url()).pathname;
+    const wanted = attachmentsOf.opportunityId;
+    if (wanted && !pathname.includes(wanted) && !/\/create$/.test(pathname)) {
+      await go("/opportunities/:program/:opportunityId/edit?tab=opportunity", attachmentsOf);
+    }
+    const why = await whyNotHere();
+    if (why) {
+      unbound(where, `the form at ${page.url()} did not open: ${why.replace(/\n+/g, " ")}; the attachment control sits on an opportunity's form, offered only to the administrator and public sector staff, and ${NOBODY_SIGNS_IN}`);
+    }
+    if (!(await attachmentRegion().count()) || !(await findControl(attachmentRegion(), /^\s*add attachment\s*$/i))) {
+      const manage = manageAddress();
+      if (manage) await visit(`${manage}?tab=opportunity`);
+    }
+    const region = attachmentRegion();
+    if (!(await region.count())) unbound(where, `no "Attachments" part on the form at ${page.url()}; it offers ${await offered()}`);
+    return region;
+  }
+  function attachmentItems(region: Locator): Locator {
+    return seen(region.getByRole("listitem"));
+  }
+  async function itemsMatching(region: Locator, matches: (words: string) => boolean): Promise<Locator[]> {
+    const items = attachmentItems(region);
+    const out: Locator[] = [];
+    for (let i = 0; i < (await items.count()); i++) {
+      const words = await items.nth(i).innerText().catch(() => "");
+      if (matches(words)) out.push(items.nth(i));
+    }
+    return out;
+  }
+  const isNew = (words: string): boolean => /^\s*new:/im.test(words);
+  async function rowLines(rows: Locator[]): Promise<string> {
+    const out: string[] = [];
+    for (const row of rows) {
+      const words = lined(await row.innerText().catch(() => ""));
+      const box = row.getByRole("textbox");
+      const value = (await box.count()) ? (await box.first().inputValue().catch(() => "")).trim() : "";
+      out.push([...words, ...(value ? [value] : [])].join(" | "));
+    }
+    return out.join("\n");
+  }
+  // The row a test names: by the file's name, or the first of its kind.
+  async function rowNamed(region: Locator, input: unknown, test: (words: string) => boolean): Promise<Locator | null> {
+    const name = givenText(input, ["file", "fileName", "name", "attachment", "from"]) || (typeof input === "string" ? input : "");
+    const rows = await itemsMatching(region, test);
+    if (name) {
+      for (const row of rows) if ((await row.innerText().catch(() => "")).includes(name)) return row;
+      for (const row of rows) {
+        const box = row.getByRole("textbox");
+        if ((await box.count()) && (await box.first().inputValue().catch(() => "")) === name) return row;
+      }
+      return null;
+    }
+    return rows[0] ?? null;
+  }
+  // Keeps the form's changes: "Save changes" on a saved opportunity. The create form keeps
+  // them with its own action, so nothing is pressed there.
+  async function saveAttachments(where: string): Promise<void> {
+    if (/\/create$/.test(new URL(page.url()).pathname)) return;
+    await press(where, /^\s*save changes\s*$/i);
+    await confirmIfAsked(where, /^\s*(save|publish)( changes)?\s*$/i);
+    await seen(page.getByRole("status").filter({ hasText: /saved/i }))
+      .first()
+      .waitFor({ state: "visible", timeout: 10000 })
+      .catch(() => undefined);
+    await ready();
+  }
+  async function storedLinks(region: Locator): Promise<string[]> {
+    return seen(region.getByRole("link", { name: /^download\b/i }))
+      .evaluateAll((links) => links.map((link) => link.getAttribute("href") ?? ""))
+      .then((hrefs) => hrefs.filter((href) => href.includes("/api/files/")))
+      .catch(() => [] as string[]);
+  }
+  const fileAttachmentControl: S.FileAttachmentControlPage = {
+    open: async (params) => {
+      attachmentsOf = { program: String(params?.program ?? ""), opportunityId: String(params?.opportunityId ?? "") };
+      await page
+        .goto(leniently("/opportunities/:program/:opportunityId/edit?tab=opportunity", params), { waitUntil: "domcontentloaded" })
+        .catch(() => undefined);
+      await ready();
+    },
+    // The file is listed as new; it is stored when the form is saved, which the readers
+    // that need it stored (attachment_address, download_attachment, the public list) do.
+    addAttachment: async (input) => {
+      await onAttachments("add_attachment");
+      await addAttachmentFile(`${ATTACH}.add_attachment`, input);
+    },
+    renameNewAttachment: async (input) => {
+      const where = `${ATTACH}.rename_new_attachment`;
+      const region = await onAttachments("rename_new_attachment");
+      const row = await rowNamed(region, record(input).file ?? record(input).from ?? undefined, isNew);
+      if (!row) unbound(where, `no newly added attachment on ${page.url()} to rename; the list reads: ${(await rowLines(await itemsMatching(region, () => true))) || "nothing"}`);
+      const box = row.getByRole("textbox", { name: /^name for\b/i });
+      if (!(await box.count())) unbound(where, `the new attachment on ${page.url()} carries no "Name for …" box`);
+      const to = givenText(input, ["to", "newName", "name", "value"]) || (typeof input === "string" ? input : "");
+      await box.first().fill(to);
+      await box.first().blur().catch(() => undefined);
+      await settle();
+    },
+    removeNewAttachment: async (input) => {
+      const where = `${ATTACH}.remove_new_attachment`;
+      const region = await onAttachments("remove_new_attachment");
+      const row = await rowNamed(region, input, isNew);
+      if (!row) unbound(where, `no newly added attachment on ${page.url()} matches ${JSON.stringify(input)}`);
+      await press(where, /^\s*remove\b/i, row);
+    },
+    removeExistingAttachment: async (input) => {
+      const where = `${ATTACH}.remove_existing_attachment`;
+      const region = await onAttachments("remove_existing_attachment");
+      const row = await rowNamed(region, input, (words) => !isNew(words));
+      if (!row) unbound(where, `no stored attachment on ${page.url()} matches ${JSON.stringify(input)}; the list reads: ${(await rowLines(await itemsMatching(region, () => true))) || "nothing"}`);
+      await press(where, /^\s*remove\b/i, row);
+      await saveAttachments(where);
+    },
+    downloadAttachment: async (input) => {
+      const where = `${ATTACH}.download_attachment`;
+      let region = await onAttachments("download_attachment");
+      if ((await itemsMatching(region, isNew)).length) {
+        await saveAttachments(where);
+        region = await onAttachments("download_attachment");
+      }
+      const row = await rowNamed(region, input, (words) => !isNew(words));
+      const link = row ? seen(row.getByRole("link", { name: /^download\b/i })).first() : null;
+      if (!link || !(await link.count())) unbound(where, `no stored attachment with a "Download" link on ${page.url()} matches ${JSON.stringify(input)}`);
+      const download = page.waitForEvent("download", { timeout: 10000 }).catch(() => null);
+      await link.click();
+      await download;
+      await settle();
+    },
+    // The stored address of every attachment, saving a file only just added first.
+    attachmentAddress: async () => {
+      const where = `${ATTACH}.attachment_address`;
+      let region = await onAttachments("attachment_address");
+      if ((await itemsMatching(region, (words) => isNew(words) && !/too large/i.test(words))).length) {
+        await saveAttachments(where);
+        region = await onAttachments("attachment_address");
+      }
+      return (await storedLinks(region)).join("\n");
+    },
+    sizeLimitStatedBeforeChoosing: async () => {
+      const region = await onAttachments("size_limit_stated_before_choosing");
+      return lined(await region.innerText()).filter((line) => /\b\d+\s?(MB|KB|GB)\b.*\b(each|smaller|limit|up to)\b|\bup to \d+\s?(MB|KB|GB)\b/i.test(line) && !/^new:/i.test(line)).join("\n");
+    },
+    uploadRefusedForSize: async () => {
+      const region = await onAttachments("upload_refused_for_size");
+      const alerts = seen(region.getByRole("alert"));
+      const out: string[] = [];
+      for (let i = 0; i < (await alerts.count()); i++) out.push(...lined(await alerts.nth(i).innerText()));
+      return out.join("\n");
+    },
+    newAttachmentRow: async () => rowLines(await itemsMatching(await onAttachments("new_attachment_row"), isNew)),
+    existingAttachmentRow: async () =>
+      rowLines(await itemsMatching(await onAttachments("existing_attachment_row"), (words) => !isNew(words))),
+    // What a stored attachment's name box says about changing it, and whether it can be.
+    existingAttachmentNameReadOnly: async () => {
+      const rows = await itemsMatching(await onAttachments("existing_attachment_name_read_only"), (words) => !isNew(words));
+      const out: string[] = [];
+      for (const row of rows) {
+        const box = row.getByRole("textbox").first();
+        const locked = (await box.count())
+          ? (await box.evaluate((element) => (element as HTMLInputElement).readOnly || (element as HTMLInputElement).disabled).catch(() => false))
+          : false;
+        const note = lined(await row.innerText()).find((line) => /cannot be changed|read.?only/i.test(line));
+        if (locked || note) out.push(note ?? "read-only");
+      }
+      return out.join("\n");
+    },
+    // "Will be saved as: <name>" under each new attachment.
+    originalExtensionRestored: async () => {
+      const rows = await itemsMatching(await onAttachments("original_extension_restored"), isNew);
+      const out: string[] = [];
+      for (const row of rows) {
+        const line = lined(await row.innerText()).find((one) => /^will be saved as:/i.test(one));
+        if (line) out.push(line.replace(/^will be saved as:\s*/i, ""));
+      }
+      return out.join("\n");
+    },
+    // The message a name box is marked with, and any alert about a name; none reads as nothing.
+    fileNameError: async () => {
+      const region = await onAttachments("file_name_error");
+      const out: string[] = [];
+      const boxes = seen(region.getByRole("textbox"));
+      for (let i = 0; i < (await boxes.count()); i++) {
+        const said = await boxes
+          .nth(i)
+          .evaluate((element) => {
+            if (element.getAttribute("aria-invalid") !== "true") return "";
+            const ids = (element.getAttribute("aria-describedby") ?? element.getAttribute("aria-errormessage") ?? "").split(/\s+/).filter(Boolean);
+            return ids.map((id) => document.getElementById(id)?.innerText ?? "").join("\n");
+          })
+          .catch(() => "");
+        out.push(...lined(said));
+      }
+      const alerts = seen(region.getByRole("alert"));
+      for (let i = 0; i < (await alerts.count()); i++) {
+        const words = await alerts.nth(i).innerText();
+        if (/name/i.test(words) && !/too large/i.test(words)) out.push(...lined(words));
+      }
+      return [...new Set(out)].join("\n");
+    },
+    // The "Remove <name>" controls the attachments carry; none reads as nothing.
+    removeControlHiddenWhenNotRemovable: async () => {
+      const region = await onAttachments("remove_control_hidden_when_not_removable");
+      return (await seen(region.getByRole("button", { name: /^remove\b/i })).allInnerTexts().catch(() => [] as string[]))
+        .map((one) => one.trim())
+        .join("\n");
+    },
+    // The Attachments list under the public page's Description, saving the form first when
+    // it still holds a file only just added. "No attachments" reads as nothing.
+    attachmentListOnPublicView: async () => {
+      const where = `${ATTACH}.attachment_list_on_public_view`;
+      if (!PROGRAM_NAME[attachmentsOf.program] || !attachmentsOf.opportunityId) {
+        unbound(where, `no opportunity was opened (program and opportunityId; given ${JSON.stringify(attachmentsOf)})`);
+      }
+      const region = attachmentRegion();
+      if ((await region.count()) && (await itemsMatching(region, (words) => isNew(words) && !/too large/i.test(words))).length) {
+        await saveAttachments(where);
+      }
+      await go(`/opportunities/${attachmentsOf.program}/:opportunityId`, { opportunityId: attachmentsOf.opportunityId });
+      const refused = await refusalShown();
+      if (refused) unbound(where, `the opportunity's page did not open at ${page.url()}: ${refused}`);
+      const list = seen(page.getByRole("list", { name: /^attachments$/i }));
+      if (!(await list.count())) return "";
+      return lined(await list.first().innerText()).join("\n");
+    },
+  };
+
   const surface: S.Surface = {
     signIn,
     signOut,
@@ -5112,65 +5786,13 @@ export default function create(
 
     opportunityList,
 
-    opportunityProgramSelect: absent<S.OpportunityProgramSelectPage>(
-      "opportunity-program-select",
-      "/opportunities/create",
-      behindSession("/opportunities/create"),
-      ["choose_code_with_us", "choose_sprint_with_us", "choose_team_with_us", "program_card", "max_budget"],
-    ),
+    opportunityProgramSelect,
 
     opportunityCwuCreate,
 
-    opportunityCwuView: opportunityView<S.OpportunityCwuViewPage>(
-      CWU_VIEW,
-      "/opportunities/code-with-us/:opportunityId",
-      "code-with-us",
-      {
-        // "$5,000" over "Value".
-        reward: () => figureAbove(`${CWU_VIEW}.reward`, /^value$/i),
-        assignmentDate: () => figureAbove(`${CWU_VIEW}.assignment_date`, /^assignment date$/i),
-        startDate: () => figureAbove(`${CWU_VIEW}.start_date`, /^(work )?start date$/i),
-        successfulProponentContactDetails: () =>
-          awardDetail(`${CWU_VIEW}.successful_proponent_contact_details`, CONTACT_DETAIL),
-        successfulProponentScore: () => awardDetail(`${CWU_VIEW}.successful_proponent_score`, SCORE_DETAIL),
-      },
-    ),
+    opportunityCwuView,
 
-    opportunityCwuEdit: {
-      ...unboundMembers(
-        "opportunity-cwu-edit",
-        behindSignIn(
-          "the Code With Us management screen (and its ?tab=opportunity form, where the dates are read)",
-          'shows the "Not Found" screen (tried with the seeded awarded opportunity)',
-        ),
-        ["proposal_deadline", "assignment_date", "start_date", "completion_date"],
-      ),
-      ...absent<S.OpportunityCwuEditPage>(
-      "opportunity-cwu-edit",
-      "/opportunities/code-with-us/:opportunityId/edit",
-      behindSession("/opportunities/code-with-us/:opportunityId/edit"),
-      [
-        "edit_details",
-        "submit_for_review",
-        "publish",
-        "cancel_opportunity",
-        "delete_opportunity",
-        "add_addendum",
-        "add_note",
-        "opportunity_identifier",
-        "created_by_name",
-        "last_changed_by_name",
-        "summary_tab",
-        "opportunity_tab",
-        "addenda_tab",
-        "history_tab",
-        "proposals_tab",
-        "reporting_views",
-        "reporting_watchers",
-        "reporting_proposals",
-      ],
-    ),
-    } as S.OpportunityCwuEditPage,
+    opportunityCwuEdit,
 
     opportunityCwuComplete: absent<S.OpportunityCwuCompletePage>(
       "opportunity-cwu-complete",
@@ -6080,51 +6702,7 @@ export default function create(
     fileDescription,
     fileDownload,
 
-    // The control itself sits on the opportunity and proposal forms, all behind sign-in.
-    // What an opportunity's public page lists is read there, on its "Attachments" tab:
-    // "There are currently no attachments for this opportunity." when it has none.
-    fileAttachmentControl: {
-      ...absent<S.FileAttachmentControlPage>(
-      "file-attachment-control",
-      "/opportunities/:program/:opportunityId/edit?tab=opportunity",
-      behindSession("/opportunities/:program/:opportunityId/edit?tab=opportunity"),
-      [
-        "add_attachment",
-        "rename_new_attachment",
-        "remove_new_attachment",
-        "remove_existing_attachment",
-        "download_attachment",
-        "attachment_address",
-        "size_limit_stated_before_choosing",
-        "upload_refused_for_size",
-        "new_attachment_row",
-        "existing_attachment_row",
-        "existing_attachment_name_read_only",
-        "original_extension_restored",
-        "file_name_error",
-        "remove_control_hidden_when_not_removable",
-      ],
-    ),
-      // Opening goes to the management screen's form, which refuses a signed-out visitor
-      // (each control above says so when used); the opportunity it names is kept, so that
-      // its public page can be read.
-      open: async (params?: Record<string, string>) => {
-        attachmentsOf = { program: String(params?.program ?? ""), opportunityId: String(params?.opportunityId ?? "") };
-        await page
-          .goto(leniently("/opportunities/:program/:opportunityId/edit?tab=opportunity", params), { waitUntil: "domcontentloaded" })
-          .catch(() => undefined);
-        await settle();
-      },
-      attachmentListOnPublicView: async () => {
-        const where = "file-attachment-control.attachment_list_on_public_view";
-        if (!PROGRAM_NAME[attachmentsOf.program] || !attachmentsOf.opportunityId) {
-          unbound(where, `no opportunity was opened (program and opportunityId; given ${JSON.stringify(attachmentsOf)})`);
-        }
-        await go(`/opportunities/${attachmentsOf.program}/:opportunityId`, { opportunityId: attachmentsOf.opportunityId });
-        const section = await sectionBehind(where, "Attachments");
-        return /^there are currently no attachments/i.test(section) ? "" : section;
-      },
-    } as S.FileAttachmentControlPage,
+    fileAttachmentControl,
 
     fileImagePicker,
 
