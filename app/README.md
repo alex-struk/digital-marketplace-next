@@ -82,6 +82,19 @@ of updated terms". When an administrator confirms it, the screen calls `POST /ap
 active vendor, one message each. A vendor sees the warning on their own legal section
 (`/users/me?tab=legal`) and agrees again from there (decision record 0027).
 
+## Code With Us opportunities
+
+Public sector staff and administrators start at `/opportunities/create`, choose a program, and
+write a Code With Us opportunity at `/opportunities/code-with-us/create`. A draft saves whatever it
+holds; a staff member submits it for review, and only an administrator publishes. Each one is
+managed at `/opportunities/code-with-us/<id>/edit` (summary, the opportunity in its form, history)
+and read by anyone at `/opportunities/code-with-us/<id>` once published. Every save is a new
+version. The states and permitted changes of all three programs, and who may do what, are in
+`backend/src/rules/opportunities.ts`; the service's answers and refusals are decision record 0029.
+Submitting for review emails every administrator, publishing emails everyone with new-opportunity
+notices on, each in batches of `MAILER_BATCH_SIZE` (50) blind copies, and both confirm to the
+author.
+
 ## The first administrator
 
 The service offers no way to make the first administrator (R-4.13). An administrator is made
